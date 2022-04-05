@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1AC4F4F74
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10034F5133
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838188AbiDFAud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S1845402AbiDFBy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355739AbiDELz0 (ORCPT
+        with ESMTP id S1380517AbiDELmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:55:26 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388BDB879;
-        Tue,  5 Apr 2022 04:13:19 -0700 (PDT)
+        Tue, 5 Apr 2022 07:42:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B2A10CF2A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649157199; x=1680693199;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=32517Peu1iHVDouFzkQPCx+iZWRftDCxZE0lexD+4Kg=;
-  b=e1sl0XgvQrGgf/5wwHcW4wxu4KCf4fKar37EyzYccc3x+KOqERdrsT2J
-   buLBow4+RwJeOfhXMOPD0Bl6JNtrEyUuQn2D+dCQ89PxbMtnxkh5q0f4f
-   jO5/N/U/5SyFalo2hVZr0EBvBdy8nmMccmRjqkhG/vbp8j0SRwT+VVtGy
-   Ka6byebBayaTRpLH4XwoSvEzE8ZpsLB4Kf43zcyrfEAh6TWuK8nQqWCr+
-   40uLj0Qmn5wqKEu3w2szIEcpkEvXfoWDwkOQJLaWsdTmf56+HHGDwgUjb
-   lQc71z28QR+Ua1pCXcTmkb8HX9p69UBTIu0O1cyLYwxKCmn1sgVKm7i1l
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="321417246"
+  t=1649156827; x=1680692827;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e1INeSFg7esnR3hcJTDuT1auTFvTvVTZvHOFhQxsoT4=;
+  b=UERP7xjelMVBrbB6uANhWzPE/RQU/fOg9qnPa9dH1coLkYLrQKKZpJXP
+   tpky6uI47tSsuPhUTbVI53Qpr1nb0EsJLWLdRSuiV5qZQcHT8TFZz58M3
+   AYgllhpp6WLTRHGuLV4EiYf/t2NQfNN2szdHb6FOMh3pUZ/oDUn5s2Aoa
+   geJKEbtj65vWMmyekBuPPw/6N1xbLMcoIV10aXcZDAX7lw5kSD16x2EGh
+   gjrw+YSAtURoLrngm5qq+vG+IiKP04sIQHgzQlqPdUPSm+6gmUTpZvL4G
+   phPqdlIAIKXUafibAZyaxUSSX05IBZqAJjCKDMm0ZhRyld7uIg3DGLqid
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="258306556"
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="321417246"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:13:18 -0700
+   d="scan'208";a="258306556"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:07:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="523952439"
-Received: from chang-linux-3.sc.intel.com ([172.25.112.114])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 04:13:18 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     yang.zhong@intel.com, bonzini@gnu.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com
-Subject: [PATCH][Rebased for 5.16] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
-Date:   Tue,  5 Apr 2022 04:04:56 -0700
-Message-Id: <20220405110456.24877-1-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <164905801910825@kroah.com>
-References: <164905801910825@kroah.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+   d="scan'208";a="523416957"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 04:07:05 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbh1c-00036b-SH;
+        Tue, 05 Apr 2022 11:07:04 +0000
+Date:   Tue, 5 Apr 2022 19:07:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 26/40]
+ fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison
+ expression (different type sizes):
+Message-ID: <202204051933.fe6riDOF-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,44 +65,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Zhong <yang.zhong@intel.com>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: fc693b2e39df6567a0312f21bb9004e1d7983286 [26/40] netfs: Perform content encryption
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220405/202204051933.fe6riDOF-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/fc693b2e39df6567a0312f21bb9004e1d7983286
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout fc693b2e39df6567a0312f21bb9004e1d7983286
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
-This is backport for 5.16
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Upstream commit 063452fd94d153d4eb38ad58f210f3d37a09cca4
 
-ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
-permission bitmap of thread_group_leader()->fpu. But the code overwrites
-the bitmap with the requested feature bit only rather than adding it.
+sparse warnings: (new ones prefixed by >>)
+>> fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison expression (different type sizes):
+>> fs/netfs/crypto.c:76:31: sparse:    unsigned int *
+>> fs/netfs/crypto.c:76:31: sparse:    unsigned long *
 
-Fix the code to add the requested feature bit to the master bitmask.
+vim +76 fs/netfs/crypto.c
 
-Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Paolo Bonzini <bonzini@gnu.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
-[chang: Backport for 5.16]
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
----
- arch/x86/kernel/fpu/xstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    45	
+    46	/*
+    47	 * Populate a scatterlist from folios in an xarray.
+    48	 */
+    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
+    50					  struct scatterlist *sg, unsigned int n_sg)
+    51	{
+    52		struct scatterlist *p = sg;
+    53		struct folio *folio = NULL;
+    54		size_t seg, offset, skip = 0;
+    55		loff_t start = pos;
+    56		pgoff_t index = start >> PAGE_SHIFT;
+    57		int j;
+    58	
+    59		XA_STATE(xas, xa, index);
+    60	
+    61		sg_init_table(sg, n_sg);
+    62	
+    63		rcu_read_lock();
+    64	
+    65		xas_for_each(&xas, folio, ULONG_MAX) {
+    66			if (xas_retry(&xas, folio))
+    67				continue;
+    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
+    69				break;
+    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
+    71			     j < folio_nr_pages(folio); j++
+    72			     ) {
+    73				struct page *subpage = folio_file_page(folio, j);
+    74	
+    75				offset = (pos + skip) & ~PAGE_MASK;
+  > 76				seg = min(len, PAGE_SIZE - offset);
+    77	
+    78				sg_set_page(p++, subpage, seg, offset);
+    79	
+    80				len -= seg;
+    81				skip += seg;
+    82				if (len == 0)
+    83					break;
+    84			}
+    85			if (len == 0)
+    86				break;
+    87		}
+    88	
+    89		rcu_read_unlock();
+    90		if (len > 0) {
+    91			kdebug("*** Insufficient source (%zx)", len);
+    92			//WARN_ON(len > 0);
+    93			return -EIO;
+    94		}
+    95	
+    96		sg_mark_end(p - 1);
+    97		return p - sg;
+    98	}
+    99	
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index d28829403ed0..fc1ab0116f4e 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1626,7 +1626,7 @@ static int __xstate_request_perm(u64 permitted, u64 requested)
- 		return ret;
- 
- 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
--	WRITE_ONCE(fpu->perm.__state_perm, requested);
-+	WRITE_ONCE(fpu->perm.__state_perm, mask);
- 	/* Protected by sighand lock */
- 	fpu->perm.__state_size = ksize;
- 	fpu->perm.__user_state_size = usize;
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

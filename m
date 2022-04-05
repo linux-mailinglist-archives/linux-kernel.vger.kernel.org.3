@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249E74F462A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103A4F459E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385209AbiDEMbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
+        id S1385247AbiDEMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbiDEI5n (ORCPT
+        with ESMTP id S237365AbiDEI6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:57:43 -0400
+        Tue, 5 Apr 2022 04:58:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C453322BCE;
-        Tue,  5 Apr 2022 01:53:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242D624BCE;
+        Tue,  5 Apr 2022 01:53:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37416B81BC5;
-        Tue,  5 Apr 2022 08:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7778EC385A1;
-        Tue,  5 Apr 2022 08:53:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A8BDB81B92;
+        Tue,  5 Apr 2022 08:53:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA196C385A0;
+        Tue,  5 Apr 2022 08:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148784;
-        bh=otEFXiGvC1E/tcTu5TxydBsjeGhkNXXcQ5nD1iAGmUM=;
+        s=korg; t=1649148796;
+        bh=JYxTO2rIP6G3utofM/I3wsvMma8X+tPaET/r2PEszRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RVqF4MA81Vk7ttfytVWTgqImgjwkeXOU6D/FZRvo6eW1jN6I+HkpyhrqwcXkgZv3n
-         AUbnCfvxLpkrGc3jr+URlKk3Xg2R4xHfIiH9KqPYxrA3rW9ClMDk/ySYqnUqwou3YH
-         KkyrMB9kikRRFrv3hpg+CEFaorFbDQr7U8JrAApI=
+        b=CwxoksrzXIQIEYKhL+d1UCMfPECzEeCp3tvwrP5lsHKLYpEZ0Hg6z6OgNhfO8yX5s
+         gCbjbu8U80BKGNEAeYGvyWZBNkMP/RrXTdPc2ajabWD6RRY2gzABHG8QrPqHHsTMhw
+         1lMRK47LlCbg+1tPcXlbm8UWj0cZizWUrzTBGYtA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0481/1017] selftests/bpf: Use "__se_" prefix on architectures without syscall wrapper
-Date:   Tue,  5 Apr 2022 09:23:14 +0200
-Message-Id: <20220405070408.576924998@linuxfoundation.org>
+Subject: [PATCH 5.16 0485/1017] PCI: aardvark: Fix reading PCI_EXP_RTSTA_PME bit on emulated bridge
+Date:   Tue,  5 Apr 2022 09:23:18 +0200
+Message-Id: <20220405070408.695551923@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,38 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 046b841ea7c528931e7d2e74d5e668aa6c94c1fc ]
+[ Upstream commit 735f5ae49e1b44742cc63ca9b5c1ffde3e94ba91 ]
 
-On architectures that don't use a syscall wrapper, sys_* function names
-are set as an alias of __se_sys_* functions. Due to this, there is no
-BTF associated with sys_* function names. This results in some of the
-test progs failing to load. Set the SYS_PREFIX to "__se_" to fix this
-issue.
+The emulated bridge returns incorrect value for PCI_EXP_RTSTA register
+during readout in advk_pci_bridge_emul_pcie_conf_read() function: the
+correct bit is BIT(16), but we are setting BIT(23), because the code
+does
+  *value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16
+where
+  PCIE_MSG_PM_PME_MASK
+is
+  BIT(7).
 
-Fixes: 38261f369fb905 ("selftests/bpf: Fix probe_user test failure with clang build kernel")
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/013d632aacd3e41290445c0025db6a7055ec6e18.1643973917.git.naveen.n.rao@linux.vnet.ibm.com
+The code should probably have been something like
+  *value = (!!(isr0 & PCIE_MSG_PM_PME_MASK)) << 16,
+but we are better of using an if() and using the proper macro for this
+bit.
+
+Link: https://lore.kernel.org/r/20220110015018.26359-15-kabel@kernel.org
+Fixes: 8a3ebd8de328 ("PCI: aardvark: Implement emulated root PCI bridge config space")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 0b78bc9b1b4c..5bb11fe595a4 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -13,7 +13,7 @@
- #define SYS_PREFIX "__arm64_"
- #else
- #define SYSCALL_WRAPPER 0
--#define SYS_PREFIX ""
-+#define SYS_PREFIX "__se_"
- #endif
+diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+index 7aa6d6336223..a924564fdbbc 100644
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -844,7 +844,9 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
+ 	case PCI_EXP_RTSTA: {
+ 		u32 isr0 = advk_readl(pcie, PCIE_ISR0_REG);
+ 		u32 msglog = advk_readl(pcie, PCIE_MSG_LOG_REG);
+-		*value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16 | (msglog >> 16);
++		*value = msglog >> 16;
++		if (isr0 & PCIE_MSG_PM_PME_MASK)
++			*value |= PCI_EXP_RTSTA_PME;
+ 		return PCI_BRIDGE_EMUL_HANDLED;
+ 	}
  
- #endif
 -- 
 2.34.1
 

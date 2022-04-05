@@ -2,193 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB38A4F5282
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D914F5283
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850650AbiDFCyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S1850680AbiDFCy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1838546AbiDFAwK (ORCPT
+        with ESMTP id S1449305AbiDFAyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:52:10 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02CC19C593
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:57:01 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id kw18so856505pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=93hqF3zu4zfws/pXFt3afJAAZFw6d9ShnYeFOPkrFgM=;
-        b=rLsbGoMaSw/NaYYVVLR3+f4CrDv+UXu6+WPoFRLbCoyBXn9XKGoz3l2vLGcQ68TijN
-         +LdId9cQ67lLczOBjrrBvLOQSantj9vPoPKEUpVaqIspK76UFiDz/zCzXqf81M5R2Jt5
-         ghI6qqteOKSO7JqMiUPpfrpe4Gly17dh4yIvAqyiIXR5PEUNO8gcDkrcrIiRHdwio3bZ
-         3+y0ubNu0Kt66Z+CLfP5a/bgYdsJCG+CUUfr0b8nC1ECsHEv2+ZdAyg4ys/+NyZEHgle
-         Nxb4P1JGgpH8YmeMtOFMcOajAHOxRhj8maCFDHH1y++veu5DsG2Acrvt+iRgPpUZ3hr6
-         le1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=93hqF3zu4zfws/pXFt3afJAAZFw6d9ShnYeFOPkrFgM=;
-        b=I8xxr3PszKk+KZJ6D4nNr2gU0+IWgxwdq/uHw//Eb2CLiTOCDtBwnOOCqj1lmHxIcl
-         7aVWJ99lOnJiMp7Iyp7xaaaS2Zg7E+ZJPAbXeASoJI4065fn0e5mhVG8zPC2VoqKsLMw
-         ZZZ/Ao8QAA38w4jxfkpToUV8v5BskFsF4fipzCvXHqFSyhucGtDYwKrVUovPxS3XJn4K
-         OmlgU0Djtd8nJvUHkQ3+UKqo0+ghuZMK0dciz5DcuNMaia6uxQyU0yPgXOCwkCcPxnLE
-         +m/d50opYH29A4KvnmuzMyO6U4qxZqC5PAuuVJhE61FrHD+/Zp3zhpObj+aLjvETv2l9
-         38QQ==
-X-Gm-Message-State: AOAM5319ihgKdCMAYTCRlNVtgw3vIgKQiuuzRWFg1p8FMdnWitleCqCh
-        oaB0W/WFjZ6RfdOcMDImf9usSg==
-X-Google-Smtp-Source: ABdhPJxn4xro7q6C8KMaE8ZyoJ8mD8fxSdlsqvJl2vGEL3EncCGEWBOZ3n61hwnzUcjtPHBL57j4AQ==
-X-Received: by 2002:a17:902:e750:b0:154:5672:b918 with SMTP id p16-20020a170902e75000b001545672b918mr5529963plf.43.1649199420667;
-        Tue, 05 Apr 2022 15:57:00 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j13-20020a17090a840d00b001ca89db9e6esm3539167pjn.19.2022.04.05.15.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 15:57:00 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 22:56:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4] KVM, SEV: Add KVM_EXIT_SYSTEM_EVENT metadata for
- SEV-ES
-Message-ID: <YkzJN6kKMenpT0mm@google.com>
-References: <20220405183506.2138403-1-pgonda@google.com>
+        Tue, 5 Apr 2022 20:54:11 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C6919E3AB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:57:28 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nbs6h-000qES-8W; Wed, 06 Apr 2022 08:57:04 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 06 Apr 2022 08:57:03 +1000
+Date:   Wed, 6 Apr 2022 08:57:03 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-8-catalin.marinas@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405183506.2138403-1-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220405135758.774016-8-catalin.marinas@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Peter Gonda wrote:
-> SEV-ES guests can request termination using the GHCB's MSR protocol. See
-> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-
-s/EVINAL/EINVAL 
-
-> return code from KVM_RUN. By adding a KVM_EXIT_SYSTEM_EVENT to kvm_run
-> struct the userspace VMM can clearly see the guest has requested a SEV-ES
-> termination including the termination reason code set and reason code.
-
-Nit, phrase that last part as a command, nowhere in the changelog is it actually
-stated that the patch converts to use KVM_EXIT_SYSTEM_EVENT.
-
-And my personal preference is to lead with the "what", especially when there's
-already a fair amount of assumed knowledge, e.g. someone that's familiar with
-SEV-ES probably already knows the guest can request termination, or at least won't
-be surprised by the news, whereas leading with the SEV-ES and GHCB info is just
-going to add to the confusion of someone who's clueless about SEV-ES.
-
-  If an SEV-ES guest requests termination, exit to userspace with
-  KVM_EXIT_SYSTEM_EVENT and a dedicated SEV_TERM type instead of -EINVAL
-  so that userspace can take appropriate action.
-
-  See AMD's GHCB spec section '4.1.13 Termination Request' for more details.
-
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Brijesh Singh <brijesh.singh@amd.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Marc Orr <marcorr@google.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
+> ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
+> operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
+> alignment.
 > 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
 > ---
+>  include/linux/crypto.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> V4
->  * Switch to using KVM_SYSTEM_EVENT exit reason.
-> 
-> V3
->  * Add Documentation/ update.
->  * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
->    to KVM_SHUTDOWN_REQ.
-> 
-> V2
->  * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
-> 
-> Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
-> reason code set and reason code and then observing the codes from the
-> userspace VMM in the kvm_run.system_event fields.
-> 
-> ---
->  arch/x86/kvm/svm/sev.c   | 7 +++++--
->  include/uapi/linux/kvm.h | 1 +
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 75fa6dd268f0..039b241a9fb5 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2735,8 +2735,11 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
->  		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
->  			reason_set, reason_code);
->  
-> -		ret = -EINVAL;
-> -		break;
-> +		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
+> diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+> index 2324ab6f1846..654b9c355575 100644
+> --- a/include/linux/crypto.h
+> +++ b/include/linux/crypto.h
+> @@ -167,7 +167,7 @@
+>   * maintenance for non-coherent DMA (cache invalidation in particular) does not
+>   * affect data that may be accessed by the CPU concurrently.
+>   */
+> -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
+> +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
 
-Wrong exit reason.
+I think this should remain as ARCH_KMALLOC_MINALIGN with the
+comment above modified.  The reason is that we assume memory
+returned by kmalloc is already aligned to this value.
 
-> +		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM;
-> +		vcpu->run->system_event.flags = control->ghcb_gpa;
-> +
-> +		return 0;
->  	}
->  	default:
->  		/* Error, keep GHCB MSR value as-is */
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 8616af85dc5d..d9d24db12930 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -444,6 +444,7 @@ struct kvm_run {
->  #define KVM_SYSTEM_EVENT_SHUTDOWN       1
->  #define KVM_SYSTEM_EVENT_RESET          2
->  #define KVM_SYSTEM_EVENT_CRASH          3
-> +#define KVM_SYSTEM_EVENT_SEV_TERM       4
->  			__u32 type;
->  			__u64 flags;
+Ard, you added the comment regarding the DMA requirement, so
+does anything actually rely on this? If they do, they now need
+to do their own alignment.
 
-@type isn't properly padded, so this needs to be changed when using flags.   And
-we definitely want to grab more room than just a single u64.
-
-Per Paolo and I's combined powers[*], use bit 31 of the type to enumerate that ndata
-is valid, and then change the sub-struct to:
-
-		struct {
-#define KVM_SYSTEM_EVENT_SHUTDOWN       1
-#define KVM_SYSTEM_EVENT_RESET          2
-#define KVM_SYSTEM_EVENT_CRASH          3
-#define KVM_SYSTEM_EVENT_SEV_TERM	4
-#define KVM_SYSTEM_EVENT_NDATA_VALID	(1u << 31)
-			__u32 type;
-			__u32 ndata;
-			__u64 data[16];
-		} system_event;
-
-[*] https://lore.kernel.org/all/e0285020-49d9-8168-be4d-90940a30a048@redhat.com
-
-
->  		} system_event;
-> -- 
-> 2.35.1.1094.g7c7d902a7c-goog
-> 
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A034F45B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342C74F45DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389006AbiDEPU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S1389725AbiDEPVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346982AbiDEJps (ORCPT
+        with ESMTP id S1346993AbiDEJpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E947ADCA84;
-        Tue,  5 Apr 2022 02:32:12 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646C0DCAA9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:32:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E39A616D9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0EDB616C1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC2CC385A2;
         Tue,  5 Apr 2022 09:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71231C385A6;
-        Tue,  5 Apr 2022 09:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151131;
-        bh=Go6Z5f/W2tjhRUO6APCSVvZp9thB6QaQP0llR9z2jKo=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=hdsFI/q/QvQQgJTabRoqDsscN7FDlRBQbb5rEDsIwQT389IMRr5Vcrq7MnX0zCSXo
-         e4TwiVVhB/Qg/SmKJrpCxDg6oVJxnW16Zn2dCtAJQkl3/wpo2FafjYygnY+r4IYZZp
-         w7G7/274oFfHviHe4Kfv9/xUkx6MRAmwf6ouhLkiLloFXnWd2IvR3+CuIeowXI4E3X
-         cW3A4G/W23mqabqTYz/vKQNE1zuwUyyLlMlODDC/gXwdRheg1XHP9P08pwFT8bTFEM
-         xTeAP11kXG8PMs4ArP84n8ak/5vx/AG+opRv7nV/ra+MVD5Z5PzfOslAtnyFoC4xes
-         5yX+LBhnFaKFQ==
+        s=k20201202; t=1649151133;
+        bh=Z9FjRlyA0KX5ffVCEjuo3EpyFLIzmAgAwlpgdWulCmE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UWpkqp2myG2riMtTkEm/DY+Z/NNjDiiEcu2Dc9tmyQpzZlmX1qTB3B+cb3QmD+X2e
+         nruXUGzOQSp/ATsdEHTaL9DkHKuAjXhGjymMukwqrpH++v1ZEJN5fL2+SpMSDe3j2w
+         4EbHAcAJdoBYVQOay8iCBwmBZGHpoDLYOU27l99aeF/RfVGwZe5O+Ng85hyGTK3aru
+         zexDJhslyYLuxkI7RLqfb+X5T2DbbUYv6RAGyxuAJkZh2s6doLmLdocqbjiI8loGun
+         1QrlCpeI+x4mWjIvceAfOMRxtUyxtQQx9BdKyJo7Ns/lntXCcCpi9yd01fV2N7OI6A
+         suozhJm3iysWQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
-        krzysztof.kozlowski@linaro.org, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzk+dt@kernel.org
-In-Reply-To: <20220401153711.1057853-1-krzysztof.kozlowski@linaro.org>
-References: <20220401153711.1057853-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
-Message-Id: <164915113019.276837.6765844554684988945.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:10 +0100
+To:     axel.lin@ingics.com
+Cc:     cy_huang@richtek.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com
+In-Reply-To: <20220404022514.449231-1-axel.lin@ingics.com>
+References: <20220404022514.449231-1-axel.lin@ingics.com>
+Subject: Re: [PATCH] regulator: rtq2134: Fix missing active_discharge_on setting
+Message-Id: <164915113203.276837.10187918979668391155.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:12 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,9 +54,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 17:37:11 +0200, Krzysztof Kozlowski wrote:
-> Correct grammar in 'enable-gpios' description and remove useless comment
-> about regulator nodes, because these are obvious from patternProperties.
+On Mon, 4 Apr 2022 10:25:14 +0800, Axel Lin wrote:
+> The active_discharge_on setting was missed, so output discharge resistor
+> is always disabled. Fix it.
 > 
 > 
 
@@ -67,8 +66,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
-      commit: 41812783057c01e4e5f1eec649607e4773124dba
+[1/1] regulator: rtq2134: Fix missing active_discharge_on setting
+      commit: 17049bf9de55a42ee96fd34520aff8a484677675
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

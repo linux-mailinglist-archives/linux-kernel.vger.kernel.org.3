@@ -2,78 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28B34F5058
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83584F5130
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441969AbiDFBWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S1845351AbiDFByV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446290AbiDEPo0 (ORCPT
+        with ESMTP id S1446406AbiDEPof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:44:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6873EF4E;
-        Tue,  5 Apr 2022 07:13:36 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so1758569wme.0;
-        Tue, 05 Apr 2022 07:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+obo3dTEvSnGwmrHTDGj7IsutLaAztXJd9lK133Uuvo=;
-        b=VfYxeW309B7qGu5esco2QMkFCu6G6mGgJZ/7v8UJu4M3oqeTqLdCKy+aQe2MCk7aMO
-         kMEbJrfpFmDIoqqmXEHM59o6bABYuWObSqmDEae2x33PnucQV4FLMP4dzti02kwmj16w
-         Mi+f22V0Fo38phqCCyN1uib5VBjnpc4qiJHd7UpVqU2QJqWCF+MzPB53V6j7v3K4PgDS
-         jEhde1If7rpH2oZQ4zWvTsFrR7kMoiXns+bzZ7Ir5ppm+1rBWQVEQznuQWv4Y3EesLHW
-         TxVy/QJsb/wO9Xc+h3lcNoySiXAg7iH6z834ZpXcL2pGo5mzQyyhDmciuc6dJvXNEEV2
-         GU5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+obo3dTEvSnGwmrHTDGj7IsutLaAztXJd9lK133Uuvo=;
-        b=2SRcwYRL20JefCtUvoxJ5wH6USX9NQcVU/6I2U3SBR7RqOxJoFI5sB2VQQmKTRU4n0
-         s4+dUNviplt6pun83JzNWPHJlpHWu8oIDYfROqziJJuT1nZc/MC/H0FyG9hqQgdyh3up
-         /LI63tz0F2Hp6JqU/2C2BgIvr5euAP4rnUlz+Ca4JOw5QYSd1AyPpkTe46wIYmHLgFJ3
-         HD6ozh9rXS6jN05kMZhp03NzBKM3ZnOc0N6r/1UjhexYSLOzIxiyKbxG0LMpK+wDiEC2
-         CeT/BVAbcPH4LDweTWmuxCqnMd+80UI+/07Quz0h7AAj1jzRPUbNaDYlnUijY9pYVQ1E
-         w0YQ==
-X-Gm-Message-State: AOAM5307FeNzsOsgV6fbrZ67YKmceo5vLP1qq/JdN+6cFzrYtzRbURaM
-        ejy+AQl6155uXun0MI+M8UY=
-X-Google-Smtp-Source: ABdhPJx9lAFWKFLwVX4uuRpIb/oQ+eh5zJKhmje6V6snh6ssBRmVU4vm5p55cuHnRNjRe+OFr82cSw==
-X-Received: by 2002:a05:600c:3c9b:b0:38e:4c59:68b9 with SMTP id bg27-20020a05600c3c9b00b0038e4c5968b9mr3333948wmb.105.1649168014583;
-        Tue, 05 Apr 2022 07:13:34 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id p18-20020a1c5452000000b0038e70261309sm2347702wmi.1.2022.04.05.07.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 07:13:34 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <9dfc44d6-6b20-e864-8d4f-09ab7d489b97@redhat.com>
-Date:   Tue, 5 Apr 2022 16:13:33 +0200
+        Tue, 5 Apr 2022 11:44:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB42F55F0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:15:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAB3560AF3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065EEC385A1;
+        Tue,  5 Apr 2022 14:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649168111;
+        bh=9snd2J+IFOny+x+vO6FjBRT2ONIjM/C5Zx5DF6aGf3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=it+8FRw91Co+V+C46WDIbd4XicXEtbW66WkyVLbmmeKIfLREQlcs4iN8815gsav5W
+         WJsq9j51Kv2NZvE+OcGaQVfQ3bjVN5yMH58fDTzPEQmcRn3iSfR10Rb0iicccG6CMh
+         VbKyQ4L5eBRkEuX7BLifd/ZtECVTnuUR6wuTk9j0=
+Date:   Tue, 5 Apr 2022 16:15:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     xkernel.wang@foxmail.com
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8712: fix a potential memory leak in
+ r871xu_drv_init()
+Message-ID: <YkxO7HPTsF4CvPe6@kroah.com>
+References: <tencent_B8048C592777830380A23A7C4409F9DF1305@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 037/104] KVM: x86/mmu: Allow non-zero init value
- for shadow PTE
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b74b3660f9d16deafe83f2670539a8287bef988f.1646422845.git.isaku.yamahata@intel.com>
- <968de4765e63d8255ae1b3ac7062ffdca64706e4.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <968de4765e63d8255ae1b3ac7062ffdca64706e4.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_B8048C592777830380A23A7C4409F9DF1305@qq.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,51 +52,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 07:13, Kai Huang wrote:
->> @@ -617,9 +617,9 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->>   	int level = sptep_to_sp(sptep)->role.level;
->>   
->>   	if (!spte_has_volatile_bits(old_spte))
->> -		__update_clear_spte_fast(sptep, 0ull);
->> +		__update_clear_spte_fast(sptep, shadow_init_value);
->>   	else
->> -		old_spte = __update_clear_spte_slow(sptep, 0ull);
->> +		old_spte = __update_clear_spte_slow(sptep, shadow_init_value);
-
-(FWIW this one should also assume that the init_value is zero, and WARN 
-if not).
-
-> I guess it's better to have some comment here.  Allow non-zero init value for
-> shadow PTE doesn't necessarily mean the initial value should be used when one
-> PTE is zapped.  I think mmu_spte_clear_track_bits() is only called for mapping
-> of normal (shared) memory but not MMIO? Then perhaps it's better to have a
-> comment to explain we want "suppress #VE" set to get a real EPT violation for
-> normal memory access from guest?
+On Tue, Apr 05, 2022 at 12:43:07PM +0800, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 > 
->>   
->>   	if (!is_shadow_present_pte(old_spte))
->>   		return old_spte;
->> @@ -651,7 +651,7 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->>    */
->>   static void mmu_spte_clear_no_track(u64 *sptep)
->>   {
->> -	__update_clear_spte_fast(sptep, 0ull);
->> +	__update_clear_spte_fast(sptep, shadow_init_value);
->>   }
-> Similar here.  Seems mmu_spte_clear_no_track() is used to zap non-leaf PTE which
-> doesn't require state tracking, so theoretically it can be set to 0.  But this
-> seems is also called to zap MMIO PTE so looks need to set to shadow_init_value.
-> Anyway looks deserve a comment?
+> In r871xu_drv_init(), if r8712_init_drv_sw() fails, then the memory
+> allocated by r8712_alloc_io_queue() in r8712_usb_dvobj_init() is not
+> properly released as there is no action will be performed by
+> r8712_usb_dvobj_deinit().
+> To properly release it, we should call r8712_free_io_queue() in
+> r8712_usb_dvobj_deinit().
 > 
-> Btw, Above two changes to mmu_spte_clear_track_bits() and
-> mmu_spte_clear_track_bits() seems a little bit out-of-scope of what this patch
-> claims to do.  Allow non-zero init value for shadow PTE doesn't necessarily mean
-> the initial value should be used when one PTE is zapped. Maybe we can further
-> improve the patch title and commit message a little bit.  Such as: Allow non-
-> zero value for empty (or invalid?) PTE? Non-present seems doesn't fit here.
+> Besides, in r871xu_dev_remove(), r8712_usb_dvobj_deinit() will be called
+> by r871x_dev_unload() under condition `padapter->bup` and
+> r8712_free_io_queue() is called by r8712_free_drv_sw().
+> However, r8712_usb_dvobj_deinit() does not rely on `padapter->bup` and
+> calling r8712_free_io_queue() in r8712_free_drv_sw() is negative for
+> better understading the code.
+> So I move r8712_usb_dvobj_deinit() into r871xu_dev_remove(), and remove
+> r8712_free_io_queue() from r8712_free_drv_sw().
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  drivers/staging/rtl8712/os_intfs.c | 1 -
+>  drivers/staging/rtl8712/usb_intf.c | 6 +++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
-I think shadow_init_value is not named well.  Let's rename it to 
-shadow_nonpresent_value, and the commit to "Allow non-zero value for 
-non-present SPTE".  That explains why it's used for zapping.
+I've applied this patch, but dropped all of your other pending ones.
+Please fix up the remaining ones like this and resend.
 
-Paolo
+thanks,
+
+greg k-h

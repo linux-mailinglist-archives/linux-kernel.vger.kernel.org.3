@@ -2,165 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183804F4F63
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4915C4F4F5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837839AbiDFAsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S1354894AbiDFAqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377144AbiDEOPP (ORCPT
+        with ESMTP id S1381931AbiDEORE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:15:15 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2292F2108
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1649163570; x=1680699570;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pP154mYABesH/5eVYF68LUAphot9kEcC7f4mZJADsLs=;
-  b=WY9RgY7UhWn1YM/fsmjJOj7vVY4g0ZWVcTcyQRjPbnvMhukIT8BoN/A4
-   80OphB4P/Z6HNR77uXNMxHOAOJSOBMsVhhNzQH+13MkflwQQQPBwTf+nj
-   Jh9nlSDteYEZgrDls9krYihZF+D8EUDONzVmvQiDPBkMOWvX6b6okxwFd
-   XAhfunxnkZwzu43OR1ZDetu43ee5GTk4vZkzeV93tQRJA+TaS3vEQW+Xc
-   2QIIZXjSR8VH4quxNM4n/4ma/loGcbo8rrEr/4Nrznmfp2swLrFm6pkdP
-   MIgZ/C/9V+hCo8xmha4970jkirNCO1Xk+cxwXwiBDq6/00pC/isrOoeo7
+        Tue, 5 Apr 2022 10:17:04 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFDE1606AB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649163681; x=1680699681;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R/3O09Fvikb/UjlJkbEDyN5KSOd3qkHBI3aO3BM5jn0=;
+  b=BAGTaW8q9IjK1hayD7V6bPVvVxZNMp9BunuZZv5xRwuZEWuxtqNoAbms
+   gQim9dg+qHMoWZJ3eLdYeOcwcwQu0yO7ly3+5VsgVfP9ynn6WXvyZZKBz
+   vlgvuJino8ve6J3rH70uOsFeRJPKoBL9S6tr8UstYqgV6K6fhxVbI6eqM
+   JG4+X8ncwSqNMtu4pP4Dp//flPcBIN1tnnpwXQRDqAmPI2xenbW+6j9Dg
+   bSMU1xVQuUMz3Q9BZho9eMriP2tVzoM+oskao/Umk1j5Glzr6AY6s5/pV
+   GJOo/9IUwo//d7Wdensa6Nz4kIh6y1104OrIYR6Xsth2NX7sLITsKBhfU
    g==;
-X-IronPort-AV: E=Sophos;i="5.90,236,1643644800"; 
-   d="scan'208";a="197139024"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Apr 2022 20:59:29 +0800
-IronPort-SDR: DW2dIC3GrdrALPdOwW5PKA/9rD2WaFiV4BG7tEhFbp7KbEREfbV/6PP+pYre4lPg/RDZqxuIz8
- t+H/Ba67mHFgP6sx3rmolfGwD7QNsFKu17BJfnwPgTJYqD2k8/RzkWARbvKeNc/N9L8oVayVBr
- Nq8GJMYAgmeZDxwMV/mTh6lj85a8rYN41PLW12SrU/+/fePF896c5TX9q6rmbqle9mvdeg1B1X
- tndpfKOtS609zBL142LIpgHdVipgWP6SnI7bz+vn1mHEmBZzPl+b2AejgMnOOkli2D3FbT1l2K
- jxFSpvkZ3dPP6wl5sODP33WW
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Apr 2022 05:31:04 -0700
-IronPort-SDR: wA/SWfCAX6oBxAjTOQbnKNzu0gNAXclo88TArY4SYFq6fBNBdbE6/9bcVt6ikzjaL2ljOqZVa+
- N4RfBRnqjHSNOoZUJCJVAHu9/fFTm115HwGmjt84PteuK5rN0X93kvthDZ8fPUbDBVp6HehjKV
- myvElEDhVSnm9MQTmIogFyTELwJYxdnZRuiq8DENio2XMjf5C29XqOD7tEV+J6hSuNC4xNJ2wQ
- FE2UuPsu4RE2Y7UluczZmoRSQXsl6fldU/uBSNllo5LWKPr8kLYpfhXTSNvk5P3VjhD7c7Ythi
- Y9s=
-WDCIronportException: Internal
-Received: from shindev.dhcp.fujisawa.hgst.com (HELO shindev.fujisawa.hgst.com) ([10.149.52.173])
-  by uls-op-cesaip01.wdc.com with ESMTP; 05 Apr 2022 05:59:29 -0700
-From:   Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     linux-kernel@vger.kernel.org, Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH] bus: fsl-mc-msi: fix MSI descriptor mutex lock for msi_first_desc()
-Date:   Tue,  5 Apr 2022 21:59:29 +0900
-Message-Id: <20220405125929.688616-1-shinichiro.kawasaki@wdc.com>
-X-Mailer: git-send-email 2.35.1
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323914999"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="323914999"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:01:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="587920871"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 06:01:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbio5-0003Id-CI;
+        Tue, 05 Apr 2022 13:01:13 +0000
+Date:   Tue, 5 Apr 2022 21:00:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 33/40]
+ fs/netfs/buffered_write.c:28:40: sparse: sparse: incompatible types in
+ comparison expression (different type sizes):
+Message-ID: <202204052030.EJNYjMgU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit e8604b1447b4 ("bus: fsl-mc-msi: Simplify MSI descriptor
-handling") introduced a call to the helper function msi_first_desc(),
-which needs MSI descriptor mutex lock before call. However, the required
-mutex lock was not added. This resulted in lockdep assert WARNING [1].
-Fix this by adding the mutex lock and unlock around the function call.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: 073b0ba90614945b31bccfede6e00102b7eb460e [33/40] netfs: Implement buffered writes through netfs_file_write_iter()
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220405/202204052030.EJNYjMgU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/073b0ba90614945b31bccfede6e00102b7eb460e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 073b0ba90614945b31bccfede6e00102b7eb460e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
-[1]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[    8.542804] WARNING: CPU: 4 PID: 119 at kernel/irq/msi.c:274 msi_first_desc+0xd0/0x10c
-[    8.551428] Modules linked in:
-[    8.555184] CPU: 4 PID: 119 Comm: kworker/u32:1 Not tainted 5.18.0-rc1+ #5
-[    8.562755] Hardware name: SolidRun Ltd. SolidRun CEX7 Platform, BIOS EDK II Aug  9 2021
-[    8.571539] Workqueue: events_unbound deferred_probe_work_func
-[    8.578079] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    8.585736] pc : msi_first_desc+0xd0/0x10c
-[    8.590529] lr : msi_first_desc+0xcc/0x10c
-[    8.595321] sp : ffff800009856fb0
-[    8.599328] x29: ffff800009856fb0 x28: ffff3018789f0000 x27: ffff3018789f0000
-[    8.607175] x26: 1ffff0000130ae2a x25: 1fffe6030f13e0a4 x24: 1fffe6030f13e0a3
-[    8.615020] x23: ffff301878a09024 x22: ffff301860993800 x21: ffffc539150ec000
-[    8.622865] x20: 0000000000000000 x19: ffff301878a04880 x18: ffff30257b37b588
-[    8.630710] x17: 0000000000000000 x16: 1fffe6030c3d89a3 x15: 1fffe6030c3d8982
-[    8.638555] x14: 0000000000000004 x13: ffff301861ec4c14 x12: ffff70000130adc3
-[    8.646400] x11: 1ffff0000130adc2 x10: ffff70000130adc2 x9 : ffffc53911dd0790
-[    8.654245] x8 : ffff800009856e17 x7 : 0000000000000001 x6 : 0000000041b58ab3
-[    8.662089] x5 : ffff70000130ada2 x4 : 1ffff0000130add2 x3 : 1fffe6030c3d8802
-[    8.669933] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-[    8.677778] Call trace:
-[    8.680918]  msi_first_desc+0xd0/0x10c
-[    8.685364]  fsl_mc_msi_domain_alloc_irqs+0x7c/0xc0
-[    8.690938]  fsl_mc_populate_irq_pool+0x80/0x3cc
-[    8.696251]  dprc_scan_objects+0x370/0x560
-[    8.701042]  dprc_probe+0x54/0x210
-[    8.705137]  fsl_mc_driver_probe+0x60/0xc0
-[    8.709934]  really_probe+0x328/0x9bc
-[    8.714292]  __driver_probe_device+0x268/0x3d0
-[    8.719431]  driver_probe_device+0x64/0x154
-[    8.724310]  __device_attach_driver+0x194/0x250
-[    8.729536]  bus_for_each_drv+0x114/0x190
-[    8.734241]  __device_attach+0x198/0x34c
-[    8.738859]  device_initial_probe+0x20/0x30
-[    8.743738]  bus_probe_device+0x168/0x1e0
-[    8.748443]  device_add+0x858/0x12a0
-[    8.752713]  fsl_mc_device_add+0x4bc/0x950
-[    8.757505]  fsl_mc_bus_probe+0x464/0x740
-[    8.762210]  platform_probe+0xd0/0x1b0
-[    8.766653]  really_probe+0x328/0x9bc
-[    8.771010]  __driver_probe_device+0x268/0x3d0
-[    8.776149]  driver_probe_device+0x64/0x154
-[    8.781028]  __device_attach_driver+0x194/0x250
-[    8.786254]  bus_for_each_drv+0x114/0x190
-[    8.790958]  __device_attach+0x198/0x34c
-[    8.795576]  device_initial_probe+0x20/0x30
-[    8.800455]  bus_probe_device+0x168/0x1e0
-[    8.805159]  deferred_probe_work_func+0x16c/0x24c
-[    8.810558]  process_one_work+0x69c/0xf40
-[    8.815265]  worker_thread+0x3dc/0xc50
-[    8.819710]  kthread+0x2cc/0x340
-[    8.823635]  ret_from_fork+0x10/0x20
-[    8.827909] irq event stamp: 2082
-[    8.831915] hardirqs last  enabled at (2081): [<ffffc539131f6670>] _raw_spin_unlock_irqrestore+0x120/0x144
-[    8.842267] hardirqs last disabled at (2082): [<ffffc539131d5ef4>] el1_dbg+0x24/0x80
-[    8.850708] softirqs last  enabled at (2002): [<ffffc53910d90a38>] __do_softirq+0x528/0x8e0
-[    8.859753] softirqs last disabled at (1997): [<ffffc53910e3c3e8>] __irq_exit_rcu+0x3f8/0x680
 
-Fixes: e8604b1447b4 ("bus: fsl-mc-msi: Simplify MSI descriptor handling")
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-CC: stable@vger.kernel.org # v5.17+
----
- drivers/bus/fsl-mc/fsl-mc-msi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+sparse warnings: (new ones prefixed by >>)
+>> fs/netfs/buffered_write.c:28:40: sparse: sparse: incompatible types in comparison expression (different type sizes):
+>> fs/netfs/buffered_write.c:28:40: sparse:    unsigned long *
+>> fs/netfs/buffered_write.c:28:40: sparse:    unsigned int *
+>> fs/netfs/buffered_write.c:94:25: sparse: sparse: incompatible types in comparison expression (different signedness):
+>> fs/netfs/buffered_write.c:94:25: sparse:    unsigned long long *
+>> fs/netfs/buffered_write.c:94:25: sparse:    long long *
+   fs/netfs/buffered_write.c:95:25: sparse: sparse: incompatible types in comparison expression (different signedness):
+   fs/netfs/buffered_write.c:95:25: sparse:    unsigned long long *
+   fs/netfs/buffered_write.c:95:25: sparse:    long long *
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-msi.c b/drivers/bus/fsl-mc/fsl-mc-msi.c
-index 5e0e4393ce4d..b2d827ecf33a 100644
---- a/drivers/bus/fsl-mc/fsl-mc-msi.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-msi.c
-@@ -224,8 +224,13 @@ int fsl_mc_msi_domain_alloc_irqs(struct device *dev,  unsigned int irq_count)
- 	if (error)
- 		return error;
- 
-+	msi_lock_descs(dev);
- 	if (msi_first_desc(dev, MSI_DESC_ALL))
--		return -EINVAL;
-+		error = -EINVAL;
-+	msi_unlock_descs(dev);
-+
-+	if (error)
-+		return error;
- 
- 	/*
- 	 * NOTE: Calling this function will trigger the invocation of the
+vim +28 fs/netfs/buffered_write.c
+
+    18	
+    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
+    20						  unsigned int offset, size_t size,
+    21						  struct iov_iter *i)
+    22	{
+    23		size_t copied = 0, n;
+    24	
+    25		do {
+    26			unsigned int index   = offset / PAGE_SIZE;
+    27			unsigned int poffset = offset % PAGE_SIZE;
+  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
+    29	
+    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
+    31						       poffset, psize, i);
+    32			copied += n;
+    33			if (n < psize)
+    34				break;
+    35			size -= n;
+    36		} while (size);
+    37		return copied;
+    38	}
+    39	
+    40	/*
+    41	 * Initialise a new dirty folio group.  We have to round it out to any crypto
+    42	 * alignment.
+    43	 */
+    44	static void netfs_init_dirty_region(struct netfs_i_context *ctx,
+    45					    struct netfs_dirty_region *region,
+    46					    struct file *file,
+    47					    loff_t start, size_t len)
+    48	{
+    49		region->from		= start;
+    50		region->to		= start + len;
+    51		region->debug_id	= atomic_inc_return(&netfs_region_debug_ids);
+    52	
+    53		if (file && ctx->ops->init_dirty_region)
+    54			ctx->ops->init_dirty_region(region, file);
+    55	
+    56		trace_netfs_ref_region(region->debug_id, refcount_read(&region->ref),
+    57				       netfs_region_trace_new);
+    58	}
+    59	
+    60	/*
+    61	 * Return true if two dirty regions are compatible such that b can be merged
+    62	 * onto the end of a.
+    63	 */
+    64	bool netfs_are_regions_mergeable(struct netfs_i_context *ctx,
+    65					 struct netfs_dirty_region *a,
+    66					 struct netfs_dirty_region *b)
+    67	{
+    68		if (!netfs_mas_is_valid(a) || !netfs_mas_is_valid(b))
+    69			return a == b;
+    70		if (b->waiting_on_wb != a->waiting_on_wb)
+    71			return false;
+    72		if (b->from != a->to &&
+    73		    b->from < ctx->zero_point)
+    74			return false;
+    75		if (ctx->ops->are_regions_mergeable)
+    76			return ctx->ops->are_regions_mergeable(ctx, a, b);
+    77		return true;
+    78	}
+    79	
+    80	/*
+    81	 * Subsume the modifications into an existing target region.  Returns true if
+    82	 * we need to update the dirty_regions tree.
+    83	 */
+    84	static bool netfs_subsume_into_existing(struct netfs_i_context *ctx,
+    85						struct folio *folio,
+    86						struct ma_state *mas,
+    87						struct netfs_dirty_region **_target,
+    88						struct netfs_dirty_region **_to_put,
+    89						pgoff_t *_first, pgoff_t *_last,
+    90						size_t offset, size_t len)
+    91	{
+    92		struct netfs_dirty_region *target = *_target, *prev;
+    93	
+  > 94		target->from  = min(target->from, folio_pos(folio) + offset);
+    95		target->to    = max(target->to,   folio_pos(folio) + offset + len);
+    96		trace_netfs_dirty(ctx, target, NULL, *_first, *_last,
+    97				  netfs_dirty_trace_modified);
+    98	
+    99		/* We might have bridged to the previous region also. */
+   100		prev = mas_prev(mas, *_first - 1);
+   101		if (!netfs_mas_is_valid(prev))
+   102			return false;
+   103	
+   104		if (prev->to != target->from ||
+   105		    prev->waiting_on_wb != target->waiting_on_wb)
+   106			return false;
+   107	
+   108		*_first = mas->index;
+   109		prev->to = target->to;
+   110		*_to_put = target;
+   111		trace_netfs_dirty(ctx, prev, NULL, *_first, *_last,
+   112				  netfs_dirty_trace_merged_prev);
+   113		return true;
+   114	}
+   115	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

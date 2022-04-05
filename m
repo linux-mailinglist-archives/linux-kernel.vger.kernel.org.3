@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515B24F34AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEDE4F2EA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbiDEKgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S1353849AbiDEKJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240820AbiDEIce (ORCPT
+        with ESMTP id S241092AbiDEIcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF438AE5C;
-        Tue,  5 Apr 2022 01:25:03 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F27F140E9;
+        Tue,  5 Apr 2022 01:27:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD7160FF5;
-        Tue,  5 Apr 2022 08:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A942DC385A0;
-        Tue,  5 Apr 2022 08:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BE1D6117A;
+        Tue,  5 Apr 2022 08:27:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF32C385A1;
+        Tue,  5 Apr 2022 08:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147102;
-        bh=MkH5R5DF93Xd6h3fKtnqZk3hN/YKatJAjvoLBElU3d8=;
+        s=korg; t=1649147234;
+        bh=N4rx6pWwLPSG5htHGfFAx9Yk8l70kV+U477qUVm/Oh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kr5gCoosneFtXH6CxB/bhNk2D4S1qoyWBBrF8Da7RTeJNS6wsyyffPPjMmC7VDpgf
-         C09IBDCgZBFxO6zE5b0Yj0gKH1SYrX0LpB1//GpzpmI4BoVXkWsnvcsO+kSusDQ93D
-         cCOia93E77q4+oFxw4OkH3tNeKRKxb90hELM04h0=
+        b=uEgkqWOOuLzdb+RCTmca93e6VakHikx5MuTnQ88Czayf6DljRaPgY1LmlBxjfbVj6
+         A+9x/s/T50v3g0c5XiCGJUJ9vrjJuo1d0Hed/C6MZmk/7Svb1IubExZcR7xwBxxoXZ
+         53me2lL5y1ION1WdFZ7VN3ocOR4z29wX9JDU01wQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
+        stable@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 1000/1126] KVM: Prevent module exit until all VMs are freed
-Date:   Tue,  5 Apr 2022 09:29:07 +0200
-Message-Id: <20220405070436.843321635@linuxfoundation.org>
+Subject: [PATCH 5.17 1001/1126] KVM: x86: fix sending PV IPI
+Date:   Tue,  5 Apr 2022 09:29:08 +0200
+Message-Id: <20220405070436.873241661@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,75 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+From: Li RongQing <lirongqing@baidu.com>
 
-commit 5f6de5cbebee925a612856fce6f9182bb3eee0db upstream.
+commit c15e0ae42c8e5a61e9aca8aac920517cf7b3e94e upstream.
 
-Tie the lifetime the KVM module to the lifetime of each VM via
-kvm.users_count. This way anything that grabs a reference to the VM via
-kvm_get_kvm() cannot accidentally outlive the KVM module.
+If apic_id is less than min, and (max - apic_id) is greater than
+KVM_IPI_CLUSTER_SIZE, then the third check condition is satisfied but
+the new apic_id does not fit the bitmask.  In this case __send_ipi_mask
+should send the IPI.
 
-Prior to this commit, the lifetime of the KVM module was tied to the
-lifetime of /dev/kvm file descriptors, VM file descriptors, and vCPU
-file descriptors by their respective file_operations "owner" field.
-This approach is insufficient because references grabbed via
-kvm_get_kvm() do not prevent closing any of the aforementioned file
-descriptors.
+This is mostly theoretical, but it can happen if the apic_ids on three
+iterations of the loop are for example 1, KVM_IPI_CLUSTER_SIZE, 0.
 
-This fixes a long standing theoretical bug in KVM that at least affects
-async page faults. kvm_setup_async_pf() grabs a reference via
-kvm_get_kvm(), and drops it in an asynchronous work callback. Nothing
-prevents the VM file descriptor from being closed and the KVM module
-from being unloaded before this callback runs.
-
-Fixes: af585b921e5d ("KVM: Halt vcpu if page it tries to access is swapped out")
-Fixes: 3d3aab1b973b ("KVM: set owner of cpu and vm file operations")
+Fixes: aaffcfd1e82 ("KVM: X86: Implement PV IPIs in linux guest")
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Message-Id: <1646814944-51801-1-git-send-email-lirongqing@baidu.com>
 Cc: stable@vger.kernel.org
-Suggested-by: Ben Gardon <bgardon@google.com>
-[ Based on a patch from Ben implemented for Google's kernel. ]
-Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220303183328.1499189-2-dmatlack@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- virt/kvm/kvm_main.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/x86/kernel/kvm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -117,6 +117,8 @@ EXPORT_SYMBOL_GPL(kvm_debugfs_dir);
- 
- static const struct file_operations stat_fops_per_vm;
- 
-+static struct file_operations kvm_chardev_ops;
-+
- static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
- 			   unsigned long arg);
- #ifdef CONFIG_KVM_COMPAT
-@@ -1137,6 +1139,16 @@ static struct kvm *kvm_create_vm(unsigne
- 	preempt_notifier_inc();
- 	kvm_init_pm_notifier(kvm);
- 
-+	/*
-+	 * When the fd passed to this ioctl() is opened it pins the module,
-+	 * but try_module_get() also prevents getting a reference if the module
-+	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
-+	 */
-+	if (!try_module_get(kvm_chardev_ops.owner)) {
-+		r = -ENODEV;
-+		goto out_err;
-+	}
-+
- 	return kvm;
- 
- out_err:
-@@ -1226,6 +1238,7 @@ static void kvm_destroy_vm(struct kvm *k
- 	preempt_notifier_dec();
- 	hardware_disable_all();
- 	mmdrop(mm);
-+	module_put(kvm_chardev_ops.owner);
- }
- 
- void kvm_get_kvm(struct kvm *kvm)
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -517,7 +517,7 @@ static void __send_ipi_mask(const struct
+ 		} else if (apic_id < min && max - apic_id < KVM_IPI_CLUSTER_SIZE) {
+ 			ipi_bitmap <<= min - apic_id;
+ 			min = apic_id;
+-		} else if (apic_id < min + KVM_IPI_CLUSTER_SIZE) {
++		} else if (apic_id > min && apic_id < min + KVM_IPI_CLUSTER_SIZE) {
+ 			max = apic_id < max ? max : apic_id;
+ 		} else {
+ 			ret = kvm_hypercall4(KVM_HC_SEND_IPI, (unsigned long)ipi_bitmap,
 
 

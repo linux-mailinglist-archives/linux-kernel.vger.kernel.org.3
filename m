@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03294F4CB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34A44F4DD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579498AbiDEXbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S1583333AbiDEXwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243445AbiDEKfe (ORCPT
+        with ESMTP id S242159AbiDEKfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60013389D;
-        Tue,  5 Apr 2022 03:20:37 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C894B36B49;
+        Tue,  5 Apr 2022 03:20:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 729A0B81C8A;
-        Tue,  5 Apr 2022 10:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5377C385A1;
-        Tue,  5 Apr 2022 10:20:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 652E2616D7;
+        Tue,  5 Apr 2022 10:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745DAC385A1;
+        Tue,  5 Apr 2022 10:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154035;
-        bh=u2Mr+BJrOZfvY5gcwdfQ0/mfeezzxarWxhXLWj6Mubc=;
+        s=korg; t=1649154040;
+        bh=HQpRMrAehDtWeCK0JY9A9/XHa20QiNq1aSYK6C2zu8A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1aZQWY2ol7rrqfhNUQzgTO1Bt2rza4uUJDDKclu9oxjZbA1bAFwm7wkTfp93kJAd3
-         5WptFvvR7rNrOiinMspskrfWzJrL+B20nJpeqB8fNW4tPYm7JftnlqXicDPBn8UhMb
-         y7EIWEI0h8+hpX7eRHhPEYGcXwzP/LsBY5RYVZTA=
+        b=rkOnGlKWBwSJKrjDCSefmzxS8FQWRIi2nKo0p5GZb4twQriwTPBJptxG0ms9714uq
+         DBfibbxkbhYBLGpffn45NDe9ZJBv9PFwAN/FP3OXqDHo2P9jthA2Li03ER0ZANsTfC
+         ryIwb/sqyajIglb0agmjlonB6yASmJPUuBPD4B/k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 434/599] kdb: Fix the putarea helper function
-Date:   Tue,  5 Apr 2022 09:32:08 +0200
-Message-Id: <20220405070311.747206996@linuxfoundation.org>
+Subject: [PATCH 5.10 435/599] clk: qcom: gcc-msm8994: Fix gpll4 width
+Date:   Tue,  5 Apr 2022 09:32:09 +0200
+Message-Id: <20220405070311.777210676@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,45 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Thompson <daniel.thompson@linaro.org>
+From: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-[ Upstream commit c1cb81429df462eca1b6ba615cddd21dd3103c46 ]
+[ Upstream commit 71021db1c532c2545ae53b9ee85b37b7154f51d4 ]
 
-Currently kdb_putarea_size() uses copy_from_kernel_nofault() to write *to*
-arbitrary kernel memory. This is obviously wrong and means the memory
-modify ('mm') command is a serious risk to debugger stability: if we poke
-to a bad address we'll double-fault and lose our debug session.
+The gpll4 postdiv is actually a div4, so make sure that Linux is aware of
+this.
 
-Fix this the (very) obvious way.
+This fixes the following error messages:
 
-Note that there are two Fixes: tags because the API was renamed and this
-patch will only trivially backport as far as the rename (and this is
-probably enough). Nevertheless Christoph's rename did not introduce this
-problem so I wanted to record that!
+ mmc1: Card appears overclocked; req 200000000 Hz, actual 343999999 Hz
+ mmc1: Card appears overclocked; req 400000000 Hz, actual 687999999 Hz
 
-Fixes: fe557319aa06 ("maccess: rename probe_kernel_{read,write} to copy_{from,to}_kernel_nofault")
-Fixes: 5d5314d6795f ("kdb: core for kgdb back end (1 of 2)")
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220128144055.207267-1-daniel.thompson@linaro.org
+Fixes: aec89f78cf01 ("clk: qcom: Add support for msm8994 global clock controller")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Link: https://lore.kernel.org/r/20220319174940.341137-1-konrad.dybcio@somainline.org
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/debug/kdb/kdb_support.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-msm8994.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/debug/kdb/kdb_support.c b/kernel/debug/kdb/kdb_support.c
-index 6226502ce049..13417f0045f0 100644
---- a/kernel/debug/kdb/kdb_support.c
-+++ b/kernel/debug/kdb/kdb_support.c
-@@ -350,7 +350,7 @@ int kdb_getarea_size(void *res, unsigned long addr, size_t size)
-  */
- int kdb_putarea_size(unsigned long addr, void *res, size_t size)
- {
--	int ret = copy_from_kernel_nofault((char *)addr, (char *)res, size);
-+	int ret = copy_to_kernel_nofault((char *)addr, (char *)res, size);
- 	if (ret) {
- 		if (!KDB_STATE(SUPPRESS)) {
- 			kdb_printf("kdb_putarea: Bad address 0x%lx\n", addr);
+diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
+index 144d2ba7a9be..463a444c8a7e 100644
+--- a/drivers/clk/qcom/gcc-msm8994.c
++++ b/drivers/clk/qcom/gcc-msm8994.c
+@@ -108,6 +108,7 @@ static struct clk_alpha_pll gpll4_early = {
+ 
+ static struct clk_alpha_pll_postdiv gpll4 = {
+ 	.offset = 0x1dc0,
++	.width = 4,
+ 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data)
+ 	{
 -- 
 2.34.1
 

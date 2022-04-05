@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A2B4F46B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4337B4F4529
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381760AbiDEUlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S1355647AbiDEM5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356050AbiDEKWu (ORCPT
+        with ESMTP id S238451AbiDEJQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827C2AC044;
-        Tue,  5 Apr 2022 03:05:41 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081D4972A1;
+        Tue,  5 Apr 2022 02:01:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E35C56167E;
-        Tue,  5 Apr 2022 10:05:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018ECC385A2;
-        Tue,  5 Apr 2022 10:05:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 984F461562;
+        Tue,  5 Apr 2022 09:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F03C385A3;
+        Tue,  5 Apr 2022 09:01:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153140;
-        bh=9ZFDDhY/swhbtnUTI1swTrMLKGNPHHThkWr5qPxbwOQ=;
+        s=korg; t=1649149292;
+        bh=hgwv3Bsh45tJ1pWCJ/OiWav3TISg2Dhm7A/oWtm79mM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f6XievaABNZMfONiAbv7emK3iXl6bwBXnTP+KT0LLjU+bLLL59PGD6dNFcDrW21y/
-         Xk2uRXGQux8cn3+BBOWH6KRuW540EmnMMBuTeZ16W3vtDqo8Sy6qkD230WT9q1tbea
-         vWxDQQU0Lk04o/o2pUT2ufhJ7AUsbUk0VO3Utwvw=
+        b=S5ujDD/jHHn49JLU88rp16swnLpJo7NESgT9SKYcTk4+mz6aSGk+BbLZS1u34P7zv
+         xYpunkQwd57dT6vzY8+jPfrajaudV9VSIPjRwmKVoWUhVHdrDsHxSkh3CYxyanoew+
+         3rNjRwKRmtCaYpoRhjK8B12nYr2PPdkHBhhBo/s8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Milan Broz <gmazyland@gmail.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.10 079/599] dm integrity: set journal entry unused when shrinking device
-Date:   Tue,  5 Apr 2022 09:26:13 +0200
-Message-Id: <20220405070301.176421140@linuxfoundation.org>
+        stable@vger.kernel.org, Dirk Buchwalder <buchwalder@posteo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0662/1017] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
+Date:   Tue,  5 Apr 2022 09:26:15 +0200
+Message-Id: <20220405070413.933080407@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Dirk Buchwalder <buchwalder@posteo.de>
 
-commit cc09e8a9dec4f0e8299e80a7a2a8e6f54164a10b upstream.
+[ Upstream commit b77d8306d84f83d1da68028a68c91da9c867b6f6 ]
 
-Commit f6f72f32c22c ("dm integrity: don't replay journal data past the
-end of the device") skips journal replay if the target sector points
-beyond the end of the device. Unfortunatelly, it doesn't set the
-journal entry unused, which resulted in this BUG being triggered:
-BUG_ON(!journal_entry_is_unused(je))
+Use floor ops on SDCC1 APPS clock in order to round down selected clock
+frequency and avoid overclocking SD/eMMC cards.
 
-Fix this by calling journal_entry_set_unused() for this case.
+For example, currently HS200 cards were failling tuning as they were
+actually being clocked at 384MHz instead of 192MHz.
+This caused some boards to disable 1.8V I/O and force the eMMC into the
+standard HS mode (50MHz) and that appeared to work despite the eMMC being
+overclocked to 96Mhz in that case.
 
-Fixes: f6f72f32c22c ("dm integrity: don't replay journal data past the end of the device")
-Cc: stable@vger.kernel.org # v5.7+
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Tested-by: Milan Broz <gmazyland@gmail.com>
-[snitzer: revised header]
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+There was a previous commit to use floor ops on SDCC clocks, but it looks
+to have only covered SDCC2 clock.
+
+Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
+
+Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220210173100.505128-1-robimarko@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-integrity.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -2354,9 +2354,11 @@ static void do_journal_write(struct dm_i
- 					dm_integrity_io_error(ic, "invalid sector in journal", -EIO);
- 					sec &= ~(sector_t)(ic->sectors_per_block - 1);
- 				}
-+				if (unlikely(sec >= ic->provided_data_sectors)) {
-+					journal_entry_set_unused(je);
-+					continue;
-+				}
- 			}
--			if (unlikely(sec >= ic->provided_data_sectors))
--				continue;
- 			get_area_and_offset(ic, sec, &area, &offset);
- 			restore_last_bytes(ic, access_journal_data(ic, i, j), je);
- 			for (k = j + 1; k < ic->journal_section_entries; k++) {
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index b09d99343e09..541016db3c4b 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
+ 
+-- 
+2.34.1
+
 
 

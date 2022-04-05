@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB654F42C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EC94F3F18
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385590AbiDEMdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S235547AbiDEMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiDEJCP (ORCPT
+        with ESMTP id S235645AbiDEJCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092E365A9;
-        Tue,  5 Apr 2022 01:54:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:02:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA2613D1D;
+        Tue,  5 Apr 2022 01:54:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1F39B81BD9;
-        Tue,  5 Apr 2022 08:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE9FC385A1;
-        Tue,  5 Apr 2022 08:54:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B971CB81B92;
+        Tue,  5 Apr 2022 08:54:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CED3C385A0;
+        Tue,  5 Apr 2022 08:54:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148846;
-        bh=v4eLI41AdyjQ9o5HFb27oHRebt+0z8LfrZY/WbHi8qo=;
+        s=korg; t=1649148854;
+        bh=ABlTf+N6DH9ccUXpUU8Fl2Nw2NUrzJf1hK0bocX+03s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aKykuR0y6J9mdPyDZU4DgrFcrQ/1i4gVfAkGXBFovk1u0bcRtZOKHOUaYUGLBp3Iu
-         LMdDV69aPJ1R50/Jnm7r11rltSxLabBTdftCRfFVR/oWf1g5U4sjBlBkmxrkEo5o1L
-         UQj+CO6NuJhfCACX7kf7dETtxRYseqbcw0hyz1RM=
+        b=Assyde6JZhc49T7GdI8ZtDE7cAt0fJcfGf/VMhWbDx4MXtI06nbvOwcRsFaWDyMtg
+         VS9MthIIj2BuK3GonxEXadZvSYYgNgE3Yskf+SSwVTe7dLBZVcHOnfqfJcPvksvDLX
+         0f8CdxhignlFmtnRfjP/vobSdhnBrhhVoqMvdlwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yiqing Yao <yiqing.yao@amd.com>,
-        Monk Liu <Monk.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        Avneesh Pant <avneesh.pant@oracle.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0501/1017] drm/amd/pm: enable pm sysfs write for one VF mode
-Date:   Tue,  5 Apr 2022 09:23:34 +0200
-Message-Id: <20220405070409.170939495@linuxfoundation.org>
+Subject: [PATCH 5.16 0504/1017] IB/cma: Allow XRC INI QPs to set their local ACK timeout
+Date:   Tue,  5 Apr 2022 09:23:37 +0200
+Message-Id: <20220405070409.259809614@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,40 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yiqing Yao <yiqing.yao@amd.com>
+From: Håkon Bugge <haakon.bugge@oracle.com>
 
-[ Upstream commit e610941c45bad75aa839af015c27d236ab6749e5 ]
+[ Upstream commit 748663c8ccf6b2e5a800de19127c2cc1c4423fd2 ]
 
-[why]
-pm sysfs should be writable in one VF mode as is in passthrough
+XRC INI QPs should be able to adjust their local ACK timeout.
 
-[how]
-do not remove write access on pm sysfs if device is in one VF mode
-
-Fixes: 11c9cc95f818 ("amdgpu/pm: Make sysfs pm attributes as read-only for VFs")
-Signed-off-by: Yiqing Yao <yiqing.yao@amd.com>
-Reviewed-by: Monk Liu <Monk.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
+Link: https://lore.kernel.org/r/1644421175-31943-1-git-send-email-haakon.bugge@oracle.com
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/amdgpu_pm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/core/cma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-index d31719b3418f..8744bda59474 100644
---- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-+++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-@@ -2123,8 +2123,8 @@ static int default_attr_update(struct amdgpu_device *adev, struct amdgpu_device_
- 		}
- 	}
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index 41ec05c4b0d0..80a8e31e5b38 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -2642,7 +2642,7 @@ int rdma_set_ack_timeout(struct rdma_cm_id *id, u8 timeout)
+ {
+ 	struct rdma_id_private *id_priv;
  
--	/* setting should not be allowed from VF */
--	if (amdgpu_sriov_vf(adev)) {
-+	/* setting should not be allowed from VF if not in one VF mode */
-+	if (amdgpu_sriov_vf(adev) && !amdgpu_sriov_is_pp_one_vf(adev)) {
- 		dev_attr->attr.mode &= ~S_IWUGO;
- 		dev_attr->store = NULL;
- 	}
+-	if (id->qp_type != IB_QPT_RC)
++	if (id->qp_type != IB_QPT_RC && id->qp_type != IB_QPT_XRC_INI)
+ 		return -EINVAL;
+ 
+ 	id_priv = container_of(id, struct rdma_id_private, id);
 -- 
 2.34.1
 

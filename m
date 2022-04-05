@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C994F4A86
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60B74F4C5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573088AbiDEWsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S1578316AbiDEXTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352739AbiDEKFC (ORCPT
+        with ESMTP id S1358163AbiDEK2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF47A49FA4;
-        Tue,  5 Apr 2022 02:53:46 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374799D4FD;
+        Tue,  5 Apr 2022 03:16:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D868616DC;
-        Tue,  5 Apr 2022 09:53:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3CCC385A3;
-        Tue,  5 Apr 2022 09:53:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA07E617AC;
+        Tue,  5 Apr 2022 10:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D192FC385A0;
+        Tue,  5 Apr 2022 10:16:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152425;
-        bh=LHcQxs7YDYUfU/67ZI4UyYI/EQF43ch4sKzahqrifew=;
+        s=korg; t=1649153765;
+        bh=oQol12NXJTmIhclid5lByyWV5QiK2rwhkoALF3HfbRc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aAvkQP7UZuLM0fKuERgYwqUPtWFv1Bwa5uaq/uPxRbF+eO1p/xrLOrQR4SJA6wVXS
-         eb5W7DKcpSVmoQHVMDnydZUAtjyD3WpQGUMiGswauQMeDqR/FfY+ztuXfDL1GWBs/p
-         HJjixok4DfQtXfBY267/TcmL8XEswL1rlzst9JzU=
+        b=XFMQ+Dah5PmQGArpTYbp/omJP5yCyplEmzsIERL+8F+QSGUecgJN8MYYRbFQ7wy4S
+         ZqfEXlt2RjjJllKWUf2252o+EdWbW8C1s07tZyFvHesjWlD/Jf1zhRjcDkNiBrC5Hi
+         FoyZV6bFVDFM3nbzKsh5Ksda5NJhG3/uNyLOzJsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 771/913] KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
-Date:   Tue,  5 Apr 2022 09:30:33 +0200
-Message-Id: <20220405070402.943010262@linuxfoundation.org>
+        stable@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 340/599] PCI: Reduce warnings on possible RW1C corruption
+Date:   Tue,  5 Apr 2022 09:30:34 +0200
+Message-Id: <20220405070308.951211820@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,70 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
 
-commit 04dc4e6ce274fa729feda32aa957b27388a3870c upstream.
+[ Upstream commit 92c45b63ce22c8898aa41806e8d6692bcd577510 ]
 
-Move the check for an invalid root out of kvm_tdp_mmu_get_root() and into
-the one place it actually matters, tdp_mmu_next_root(), as the other user
-already has an implicit validity check.  A future bug fix will need to
-get references to invalid roots to honor mmu_notifier requests; there's
-no point in forcing what will be a common path to open code getting a
-reference to a root.
+For hardware that only supports 32-bit writes to PCI there is the
+possibility of clearing RW1C (write-one-to-clear) bits. A rate-limited
+messages was introduced by fb2659230120, but rate-limiting is not the best
+choice here. Some devices may not show the warnings they should if another
+device has just produced a bunch of warnings. Also, the number of messages
+can be a nuisance on devices which are otherwise working fine.
 
-No functional change intended.
+Change the ratelimit to a single warning per bus. This ensures no bus is
+'starved' of emitting a warning and also that there isn't a continuous
+stream of warnings. It would be preferable to have a warning per device,
+but the pci_dev structure is not available here, and a lookup from devfn
+would be far too slow.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211215011557.399940-3-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
+Fixes: fb2659230120 ("PCI: Warn on possible RW1C corruption for sub-32 bit config writes")
+Link: https://lore.kernel.org/r/20200806041455.11070-1-mark.tomlinson@alliedtelesis.co.nz
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |   12 ++++++++++--
- arch/x86/kvm/mmu/tdp_mmu.h |    3 ---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ drivers/pci/access.c | 9 ++++++---
+ include/linux/pci.h  | 1 +
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -121,9 +121,14 @@ static struct kvm_mmu_page *tdp_mmu_next
- 		next_root = list_first_or_null_rcu(&kvm->arch.tdp_mmu_roots,
- 						   typeof(*next_root), link);
- 
--	while (next_root && !kvm_tdp_mmu_get_root(kvm, next_root))
-+	while (next_root) {
-+		if (!next_root->role.invalid &&
-+		    kvm_tdp_mmu_get_root(kvm, next_root))
-+			break;
-+
- 		next_root = list_next_or_null_rcu(&kvm->arch.tdp_mmu_roots,
- 				&next_root->link, typeof(*next_root), link);
+diff --git a/drivers/pci/access.c b/drivers/pci/access.c
+index 46935695cfb9..8d0d1f61c650 100644
+--- a/drivers/pci/access.c
++++ b/drivers/pci/access.c
+@@ -160,9 +160,12 @@ int pci_generic_config_write32(struct pci_bus *bus, unsigned int devfn,
+ 	 * write happen to have any RW1C (write-one-to-clear) bits set, we
+ 	 * just inadvertently cleared something we shouldn't have.
+ 	 */
+-	dev_warn_ratelimited(&bus->dev, "%d-byte config write to %04x:%02x:%02x.%d offset %#x may corrupt adjacent RW1C bits\n",
+-			     size, pci_domain_nr(bus), bus->number,
+-			     PCI_SLOT(devfn), PCI_FUNC(devfn), where);
++	if (!bus->unsafe_warn) {
++		dev_warn(&bus->dev, "%d-byte config write to %04x:%02x:%02x.%d offset %#x may corrupt adjacent RW1C bits\n",
++			 size, pci_domain_nr(bus), bus->number,
++			 PCI_SLOT(devfn), PCI_FUNC(devfn), where);
++		bus->unsafe_warn = 1;
 +	}
  
- 	rcu_read_unlock();
+ 	mask = ~(((1 << (size * 8)) - 1) << ((where & 0x3) * 8));
+ 	tmp = readl(addr) & mask;
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 4519bd12643f..bc5a1150f072 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -638,6 +638,7 @@ struct pci_bus {
+ 	struct bin_attribute	*legacy_io;	/* Legacy I/O for this bus */
+ 	struct bin_attribute	*legacy_mem;	/* Legacy mem */
+ 	unsigned int		is_added:1;
++	unsigned int		unsafe_warn:1;	/* warned about RW1C config write */
+ };
  
-@@ -199,7 +204,10 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
- 
- 	role = page_role_for_level(vcpu, vcpu->arch.mmu->shadow_root_level);
- 
--	/* Check for an existing root before allocating a new one. */
-+	/*
-+	 * Check for an existing root before allocating a new one.  Note, the
-+	 * role check prevents consuming an invalid root.
-+	 */
- 	for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
- 		if (root->role.word == role.word &&
- 		    kvm_tdp_mmu_get_root(kvm, root))
---- a/arch/x86/kvm/mmu/tdp_mmu.h
-+++ b/arch/x86/kvm/mmu/tdp_mmu.h
-@@ -10,9 +10,6 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
- __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm *kvm,
- 						     struct kvm_mmu_page *root)
- {
--	if (root->role.invalid)
--		return false;
--
- 	return refcount_inc_not_zero(&root->tdp_mmu_root_count);
- }
- 
+ #define to_pci_bus(n)	container_of(n, struct pci_bus, dev)
+-- 
+2.34.1
+
 
 

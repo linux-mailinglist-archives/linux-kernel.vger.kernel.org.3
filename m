@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D3B4F4F80
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC164F5095
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838451AbiDFAvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S1842397AbiDFBbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356168AbiDEKXG (ORCPT
+        with ESMTP id S1356174AbiDEKXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E84BA33B;
-        Tue,  5 Apr 2022 03:07:23 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76112BA33C;
+        Tue,  5 Apr 2022 03:07:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EAD0B81BC0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11DD06172B;
+        Tue,  5 Apr 2022 10:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229C1C385A2;
         Tue,  5 Apr 2022 10:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79337C385A1;
-        Tue,  5 Apr 2022 10:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153240;
-        bh=aR1A0SezXpkQGZdReRE0MJZ9Tozm4kPC8Waf9Ta+wng=;
+        s=korg; t=1649153243;
+        bh=+ivZ1ndswnkWgvkuRzTjxp7/FEov5jP/8o+n0d4FE4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HHyxgE5y5Cqn0GAIjERw4F1we3eefSJKLvfV2urHdW1CIm5O+NWebrZ9XmJuQjUgm
-         kbLwXhs3SoSJd+0YwGK9C08GtpHfPDBenJHf3rpia8b6FN5gHO1e1XUOXsiu/r0TsZ
-         64L79ClePOcPx6Czv8h+nxJbKbkHUaBXyACSM55c=
+        b=zISKmR+4QQwQhiwwUYFX+4xM70TyeJjQP9/4m1PmNq9tJgJzA6C2tQZCTHAuigWpW
+         j6pO0m26QziD3RX0hwwyqh3k5gHnEGMLXvyAOsvtrMmx2bWeaGVP0UYquEVWnjD055
+         tzYeB8MVw3l5b8XoXyV0GoPeGYtluEcoJ0dw0S6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 151/599] hwrng: atmel - disable trng on failure path
-Date:   Tue,  5 Apr 2022 09:27:25 +0200
-Message-Id: <20220405070303.336180296@linuxfoundation.org>
+Subject: [PATCH 5.10 152/599] crypto: sun8i-ss - call finalize with bh disabled
+Date:   Tue,  5 Apr 2022 09:27:26 +0200
+Message-Id: <20220405070303.365798218@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,32 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit a223ea9f89ab960eb254ba78429efd42eaf845eb ]
+[ Upstream commit b169b3766242b6f3336e24a6c8ee1522978b57a7 ]
 
-Call atmel_trng_disable() on failure path of probe.
+Doing ipsec produces a spinlock recursion warning.
+This is due to not disabling BH during crypto completion function.
 
-Fixes: a1fa98d8116f ("hwrng: atmel - disable TRNG during suspend")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Fixes: f08fcced6d00 ("crypto: allwinner - Add sun8i-ss cryptographic offloader")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/hw_random/atmel-rng.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 3 +++
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c   | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/char/hw_random/atmel-rng.c b/drivers/char/hw_random/atmel-rng.c
-index ecb71c4317a5..8cf0ef501341 100644
---- a/drivers/char/hw_random/atmel-rng.c
-+++ b/drivers/char/hw_random/atmel-rng.c
-@@ -114,6 +114,7 @@ static int atmel_trng_probe(struct platform_device *pdev)
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+index 7c355bc2fb06..f783748462f9 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+@@ -11,6 +11,7 @@
+  * You could find a link for the datasheet in Documentation/arm/sunxi.rst
+  */
  
- err_register:
- 	clk_disable_unprepare(trng->clk);
-+	atmel_trng_disable(trng);
- 	return ret;
++#include <linux/bottom_half.h>
+ #include <linux/crypto.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/io.h>
+@@ -271,7 +272,9 @@ static int sun8i_ss_handle_cipher_request(struct crypto_engine *engine, void *ar
+ 	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
+ 
+ 	err = sun8i_ss_cipher(breq);
++	local_bh_disable();
+ 	crypto_finalize_skcipher_request(engine, breq, err);
++	local_bh_enable();
+ 
+ 	return 0;
  }
- 
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
+index 756d5a783548..c9edecd43ef9 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
+@@ -9,6 +9,7 @@
+  *
+  * You could find the datasheet in Documentation/arm/sunxi.rst
+  */
++#include <linux/bottom_half.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/scatterlist.h>
+@@ -440,6 +441,8 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
+ theend:
+ 	kfree(pad);
+ 	kfree(result);
++	local_bh_disable();
+ 	crypto_finalize_hash_request(engine, breq, err);
++	local_bh_enable();
+ 	return 0;
+ }
 -- 
 2.34.1
 

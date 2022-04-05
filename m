@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201434F469E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51E74F468A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbiDEUhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S1351820AbiDEUfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442389AbiDEPhh (ORCPT
+        with ESMTP id S1442795AbiDEPiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:37:37 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734BE11176C;
-        Tue,  5 Apr 2022 06:51:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649166709; x=1680702709;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=3CrOD25U3ySH2uSvK1Gaz4RsMlsq+CbHlHbLLw9go20=;
-  b=JljUFUuXV3jwSeCr5L3ws9/DyLSa+YFTffiph6whYqcM7I4RCAhY7SBp
-   YGyRRrnKBlq3P7vnEPwESzxPim8R5WTwFjlY+0Ux9UZW92cefpz0dfdnj
-   8UVn0cQBaeziusCF13lG9LX4DF5q2aIkFHUVZfjLGCM/9U1O7LiZApUOD
-   g=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Apr 2022 06:51:49 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:51:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:32 -0700
-Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:28 -0700
-From:   Satya Priya <quic_c_skakit@quicinc.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_jprakash@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V9 5/6] arm64: dts: qcom: pm8008: Add base dts file
-Date:   Tue, 5 Apr 2022 19:20:32 +0530
-Message-ID: <1649166633-25872-6-git-send-email-quic_c_skakit@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
+        Tue, 5 Apr 2022 11:38:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0017A2FF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:53:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3903761917
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839D0C385A4;
+        Tue,  5 Apr 2022 13:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649166801;
+        bh=xMWIMU6YpsG88G1LO4JJfGNWJqQMJm4kZ4LwZ/ipgw0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PtaE5dRTtJ1vqeyYdHFcjhXTUaKrpbuLjzwIiYPuC/e0gTXo7jwB19jTT9dcAseQd
+         pAwk2bF309VFcN8JyappoqcBz0zZvt+YVMcQPedn7zQnJPeEh7ffoxaT9Uo5ZfeBvW
+         pX1GH4ddKvPG6E418FpKzULf/PoLN/jy33E/lW6oFRgA97sBzdjH5ro0UWw3mFBXis
+         qepodz/QRlSjGdXvCeWViRVOjJa37hCJe7HtM4hTGdewx656k5GnFKnnXx2syxRRSV
+         hMdzYeFxqg8WBoPUt4vVIooMzmRjJI3Uy5AfNpf5jNT6dfPPkGUDTt+0rTobvALE5P
+         cD7tQw1ojHgiQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nbjcV-001lTU-3f; Tue, 05 Apr 2022 15:53:19 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 RESEND 0/2] Make headphone work on Huawei Matebook D15
+Date:   Tue,  5 Apr 2022 15:53:15 +0200
+Message-Id: <cover.1649166634.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add base DTS file for pm8008 with infra and regulator nodes.
+(resent, as the From/SoB at the patches were using my past e-mail. No changes here,
+except by having Hans ack and have the From/SoB fixed)
 
-Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
----
-Changes in V9:
- - Add single dt file for pm8008 instead of adding files like in V8.
+At Huawei Matebook D15 two different GPIOs are used to control the output:
+	- gpio0 controls the speaker output;
+	- gpio1 controls the headphone output.
 
- arch/arm64/boot/dts/qcom/pm8008.dtsi | 47 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/pm8008.dtsi
+Changing both at the same time cause spurious events that are mis-interpreted
+as input events, causing troubles on apps. So, a delay is needed before turning
+on such gpios.
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8008.dtsi b/arch/arm64/boot/dts/qcom/pm8008.dtsi
-new file mode 100644
-index 0000000..24bd832
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pm8008.dtsi
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+// Copyright (c) 2022, The Linux Foundation. All rights reserved.
-+
-+&pm8008_bus {
-+	pm8008: pm8008@8 {
-+		compatible = "qcom,pm8008";
-+		reg = <0x8>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		#interrupt-cells = <2>;
-+	};
-+
-+	pm8008_regulators: pm8008@9 {
-+		compatible = "qcom,pm8008-regulators";
-+		reg = <0x9>;
-+		#address-cells = <0>;
-+		#size-cells = <0>;
-+
-+		pm8008_l1: ldo1 {
-+			regulator-name = "pm8008_l1";
-+		};
-+
-+		pm8008_l2: ldo2 {
-+			regulator-name = "pm8008_l2";
-+		};
-+
-+		pm8008_l3: ldo3 {
-+			regulator-name = "pm8008_l3";
-+		};
-+
-+		pm8008_l4: ldo4 {
-+			regulator-name = "pm8008_l4";
-+		};
-+
-+		pm8008_l5: ldo5 {
-+			regulator-name = "pm8008_l5";
-+		};
-+
-+		pm8008_l6: ldo6 {
-+			regulator-name = "pm8008_l6";
-+		};
-+
-+		pm8008_l7: ldo7 {
-+			regulator-name = "pm8008_l7";
-+		};
-+	};
-+};
+With this patch, plugging a headphone causes a jack event to trigger the speaker
+supply, powering down the speaker and powering up the headphone output.
+Removing the headphone also triggers the power supply, powering up the speaker
+and powering down the headphone.
+
+
+Mauro Carvalho Chehab (2):
+  ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+  ASoC: Intel: sof_es8336: Huawei Matebook D15 uses a headphone gpio
+
+ sound/soc/intel/boards/sof_es8336.c | 68 ++++++++++++++++++++++++-----
+ 1 file changed, 58 insertions(+), 10 deletions(-)
+
 -- 
-2.7.4
+2.35.1
+
 

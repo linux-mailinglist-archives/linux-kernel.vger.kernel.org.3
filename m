@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612434F5268
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC7D4F5274
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850286AbiDFCsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S1454335AbiDFCu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1585759AbiDFAAP (ORCPT
+        with ESMTP id S1586235AbiDFABM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:00:15 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E265A68FAC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:24:21 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n18so347537plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AFohrDwPLJ24B3bsNYFKKfK0pUNl+4eRfrb3Wv82z8Q=;
-        b=kMa3GPA0lkk2iNEDUuwVMJ3d9K8pD/NCUfgKm4F3iVaENyQ8BHH0E2DbpSmnaP3oKr
-         ljk46BOQgavuqHkKGrgE3jRLv7og4JiojPJ8x4BzN9wiMlUUr7LWf0mJnAGvke9ALkQR
-         QJ0pRbRqnb4oQKbLt5+eBKeGIaULeaKS/FCP2RhtfX9Nkq9P8M2z2kqyYwaq0bG/8mkb
-         E8rKUre0zGiuwA9AEoLxg/vmQfVHGQxk9D9EBsT1pWbn8cZaxj0P7DZGK/bQMNiq034u
-         lS+VstGL2uJBCxA45sIpOkJTyDcc3iVGRUDSlmReWBx/PafRzKHFrB+wbYOjenbfJAZO
-         shlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AFohrDwPLJ24B3bsNYFKKfK0pUNl+4eRfrb3Wv82z8Q=;
-        b=Dm9DJUlMLNpi24sTxd0JEuHVcfu24KnTBo/QY+i0i7YLXHcdLGWd34TS7fEpHDVOSa
-         VIblzG15iKJ72VkwYflMv9ekg4CGTW45JJvhyUPJrsWqkxwJLQbOHZcdChN6c94zGH+Y
-         PjGfzMpApib7gPOMKftrhe6qgouS8djWePiIzzFQ9muWly3sspW+ZIA6eGtwjA1UWlff
-         EEjMBeOLu463KpvRJ+lpuOrTU8sX3JGTs+/wEiZ6pwMmxOR4iLXbLblty7TFQrpjFOY/
-         MJs7VusssDt7B3uWKU5RMcQHNZYH0uvT9ryN5Iyp+e43SsqncgGrHsnbYoCLZHn4hwks
-         CtnA==
-X-Gm-Message-State: AOAM531q9di+zTf1/dpFPaiURfY1U3XNRcjaOQnUiLgTUMWu4xgWd+K4
-        23TT2f/mMwKzAMVghpUQ8sEukQ==
-X-Google-Smtp-Source: ABdhPJy6s0kDnRB3ZIolWmKvR2DBkwHjL6Yfe8nTD97Ezla3Chsf/1YlYAWsX1sb7fcsxxSvM+W3fg==
-X-Received: by 2002:a17:902:9309:b0:156:983d:2193 with SMTP id bc9-20020a170902930900b00156983d2193mr5399926plb.158.1649197457026;
-        Tue, 05 Apr 2022 15:24:17 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id y13-20020a17090a390d00b001c995e0a481sm3446636pjb.30.2022.04.05.15.24.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 15:24:16 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 22:24:12 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v3 03/11] KVM: selftests: Test reading a single stat
-Message-ID: <YkzBjF3NyI9fyZad@google.com>
-References: <20220330174621.1567317-1-bgardon@google.com>
- <20220330174621.1567317-4-bgardon@google.com>
+        Tue, 5 Apr 2022 20:01:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9FE9BAF0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649197599; x=1680733599;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pW27kf6wGZKRVMIeWfA0Y9QPC3INAacHxabCny2Kt0o=;
+  b=eJwqEy6qWfmLCdkMS6go7DH6+xDH59/YEYAh9mTd03oeLxF12VG6jS3T
+   PWYZnglzbGedJ7XpXrZQd4/OcRlTci7405mwzE/7pHhm9x4BLGIVY0QW4
+   TbgDA3x2bAGB1ALX1u0jA8d6RFLWRNLl78uL+xUPClD7mZLQZWU1v13NP
+   YY8d9cShg9H78gRAss7sqP4sCXhmYePiv5jVb9XHndiFMv+xviAD8qnJN
+   tICpM3nAlrFaecY+KblfKOArtuH0mZPRkIo9lf71JSaJerGUBvgXWD7tO
+   X4vPgCoO+pDhtbp/FwB2eGyLHlumkzLVOvVvm3h7MK0IDxVcTjGKthEz3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240812303"
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="240812303"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 15:26:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="570123375"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 15:26:37 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbrdE-0003p3-QW;
+        Tue, 05 Apr 2022 22:26:36 +0000
+Date:   Wed, 06 Apr 2022 06:25:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/core] BUILD SUCCESS
+ 089c02ae2771a14af2928c59c56abfb9b885a8d7
+Message-ID: <624cc1e4.e2KxaWTIymi80O2A%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330174621.1567317-4-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,111 +63,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:46:13AM -0700, Ben Gardon wrote:
-> Retrieve the value of a single stat by name in the binary stats test to
-> ensure the kvm_util library functions work.
-> 
-> CC: Jing Zhang <jingzhangos@google.com>
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     |  1 +
->  .../selftests/kvm/kvm_binary_stats_test.c     |  3 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 53 +++++++++++++++++++
->  3 files changed, 57 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 4783fd1cd4cf..78c4407f36b4 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -402,6 +402,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
->  int vm_get_stats_fd(struct kvm_vm *vm);
->  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
->  void dump_vm_stats(struct kvm_vm *vm);
-> +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
->  
->  uint32_t guest_get_vcpuid(void);
->  
-> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> index afc4701ce8dd..97bde355f105 100644
-> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> @@ -177,6 +177,9 @@ static void vm_stats_test(struct kvm_vm *vm)
->  
->  	/* Dump VM stats */
->  	dump_vm_stats(vm);
-> +
-> +	/* Read a single stat. */
-> +	printf("remote_tlb_flush: %lu\n", vm_get_single_stat(vm, "remote_tlb_flush"));
->  }
->  
->  static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index f87df68b150d..9c4574381daa 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2705,3 +2705,56 @@ void dump_vm_stats(struct kvm_vm *vm)
->  	close(stats_fd);
->  }
->  
-> +static int vm_get_stat_data(struct kvm_vm *vm, const char *stat_name,
-> +			    uint64_t **data)
-> +{
-> +	struct kvm_stats_desc *stats_desc;
-> +	struct kvm_stats_header *header;
-> +	struct kvm_stats_desc *desc;
-> +	size_t size_desc;
-> +	int stats_fd;
-> +	int ret = -EINVAL;
-> +	int i;
-> +
-> +	*data = NULL;
-> +
-> +	stats_fd = vm_get_stats_fd(vm);
-> +
-> +	header = read_vm_stats_header(stats_fd);
-> +
-> +	stats_desc = read_vm_stats_desc(stats_fd, header);
-> +
-> +	size_desc = stats_desc_size(header);
-> +
-> +	/* Read kvm stats data one by one */
-> +	for (i = 0; i < header->num_desc; ++i) {
-> +		desc = (void *)stats_desc + (i * size_desc);
-> +
-> +		if (strcmp(desc->name, stat_name))
-> +			continue;
-> +
-> +		ret = read_stat_data(stats_fd, header, desc, data);
-> +	}
-> +
-> +	free(stats_desc);
-> +	free(header);
-> +
-> +	close(stats_fd);
-> +
-> +	return ret;
-> +}
-> +
-> +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
-> +{
-> +	uint64_t *data;
-> +	uint64_t value;
-> +	int ret;
-> +
-> +	ret = vm_get_stat_data(vm, stat_name, &data);
-> +	TEST_ASSERT(ret == 1, "Stat %s expected to have 1 element, but has %d",
-> +		    stat_name, ret);
-> +	value = *data;
-> +	free(data);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+branch HEAD: 089c02ae2771a14af2928c59c56abfb9b885a8d7  ftrace: Use preemption model accessors for trace header printout
 
-Allocating temporary storage for the data is unnecessary. Just read the
-stat directly into &value. You'll need to change read_stat_data() to
-accept another parameter that defines the number of elements the caller
-wants to read. Otherwise botched stats could trigger a buffer overflow.
+elapsed time: 760m
 
-> +	return value;
-> +}
-> +
-> -- 
-> 2.35.1.1021.g381101b075-goog
-> 
+configs tested: 90
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                         lpc18xx_defconfig
+mips                         db1xxx_defconfig
+sh                           se7343_defconfig
+sh                         ap325rxa_defconfig
+arm                        shmobile_defconfig
+m68k                        mvme16x_defconfig
+riscv                            allmodconfig
+mips                  maltasmvp_eva_defconfig
+sh                             sh03_defconfig
+powerpc                         wii_defconfig
+arm                             ezx_defconfig
+sh                        edosk7760_defconfig
+powerpc                     stx_gp3_defconfig
+m68k                        mvme147_defconfig
+ia64                             allyesconfig
+mips                         cobalt_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220405
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220405
+riscv                randconfig-c006-20220405
+mips                 randconfig-c004-20220405
+arm                  randconfig-c002-20220405
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220405
+riscv                randconfig-r042-20220405
+hexagon              randconfig-r041-20220405
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

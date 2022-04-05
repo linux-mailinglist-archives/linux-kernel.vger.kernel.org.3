@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8559E4F50FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A664A4F51A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844231AbiDFBqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S1846729AbiDFCIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351543AbiDEKCi (ORCPT
+        with ESMTP id S1358066AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:02:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F94D6EC64;
-        Tue,  5 Apr 2022 02:51:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB9B37BC7;
+        Tue,  5 Apr 2022 03:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F22DBCE1CA0;
-        Tue,  5 Apr 2022 09:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1611EC385C1;
-        Tue,  5 Apr 2022 09:51:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7671661562;
+        Tue,  5 Apr 2022 10:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87449C385A1;
+        Tue,  5 Apr 2022 10:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152312;
-        bh=IarqHDYKJbHBln3CcZKc26LuO7T/MvquBPPP1r30uhU=;
+        s=korg; t=1649153656;
+        bh=4+SY162WN04MNbANkR6cbdC7zaRPcARggpU/2SxLkDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RlYRI95rrs85MTWekBOPL1aGRy5KjHig+z2vFAm5EWVbLtmnXDfq3cCYZ+sIgfSue
-         2J/XjnXKbRAFfp7tXU/Je0Cw2rFbiDBEvV8YjEF0zhd8yN6RPT9tYM4Hd0M2aG+8tH
-         OWuzVhXzI9DyfolPRrodw2QybC/8evv7V64vGvOk=
+        b=sN0KHLa154BCvQkSXFIbhMKk0Gxl3fdJfm7L0t6MazaRHF8s8cdkl4KjAzBwheKvp
+         qk371v0EY+4cY87Zqn2wueSnCwbZW68aZvgMrkc5bn2A+tMtdwnSnxXZCL7C/fP/B1
+         NMMDlDU8uv59w7mfP/ssrkvOyMSVw451UAbQz+n0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        Avneesh Pant <avneesh.pant@oracle.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 730/913] ASoC: sh: rz-ssi: Make the data structures available before registering the handlers
-Date:   Tue,  5 Apr 2022 09:29:52 +0200
-Message-Id: <20220405070401.713076262@linuxfoundation.org>
+Subject: [PATCH 5.10 301/599] IB/cma: Allow XRC INI QPs to set their local ACK timeout
+Date:   Tue,  5 Apr 2022 09:29:55 +0200
+Message-Id: <20220405070307.791000825@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Håkon Bugge <haakon.bugge@oracle.com>
 
-[ Upstream commit 0788785c78342d422f93b1c9831c2b2b7f137937 ]
+[ Upstream commit 748663c8ccf6b2e5a800de19127c2cc1c4423fd2 ]
 
-Initialize the spinlock and make the data structures available before
-registering the interrupt handlers.
+XRC INI QPs should be able to adjust their local ACK timeout.
 
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Link: https://lore.kernel.org/r/20220110094711.8574-3-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
+Link: https://lore.kernel.org/r/1644421175-31943-1-git-send-email-haakon.bugge@oracle.com
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rz-ssi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/infiniband/core/cma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-index 37466f65c2b0..16de2633a873 100644
---- a/sound/soc/sh/rz-ssi.c
-+++ b/sound/soc/sh/rz-ssi.c
-@@ -977,6 +977,9 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 	ssi->playback.priv = ssi;
- 	ssi->capture.priv = ssi;
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index fbb0efbe25f8..3c40aa50cd60 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -2635,7 +2635,7 @@ int rdma_set_ack_timeout(struct rdma_cm_id *id, u8 timeout)
+ {
+ 	struct rdma_id_private *id_priv;
  
-+	spin_lock_init(&ssi->lock);
-+	dev_set_drvdata(&pdev->dev, ssi);
-+
- 	/* Error Interrupt */
- 	ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
- 	if (ssi->irq_int < 0)
-@@ -1024,8 +1027,6 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 	pm_runtime_resume_and_get(&pdev->dev);
+-	if (id->qp_type != IB_QPT_RC)
++	if (id->qp_type != IB_QPT_RC && id->qp_type != IB_QPT_XRC_INI)
+ 		return -EINVAL;
  
--	spin_lock_init(&ssi->lock);
--	dev_set_drvdata(&pdev->dev, ssi);
- 	ret = devm_snd_soc_register_component(&pdev->dev, &rz_ssi_soc_component,
- 					      rz_ssi_soc_dai,
- 					      ARRAY_SIZE(rz_ssi_soc_dai));
+ 	id_priv = container_of(id, struct rdma_id_private, id);
 -- 
 2.34.1
 

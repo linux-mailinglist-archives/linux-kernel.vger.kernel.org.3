@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAB64F2CC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0334F2A89
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiDEJna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S1343778AbiDEJMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239622AbiDEIUQ (ORCPT
+        with ESMTP id S239619AbiDEIUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E388B129;
-        Tue,  5 Apr 2022 01:17:33 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399E61C9;
+        Tue,  5 Apr 2022 01:17:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99065B81B92;
-        Tue,  5 Apr 2022 08:17:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C08C385A0;
-        Tue,  5 Apr 2022 08:17:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4BE0B81A37;
+        Tue,  5 Apr 2022 08:17:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50820C385A0;
+        Tue,  5 Apr 2022 08:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146651;
-        bh=ICPnzx6vA/X57pONJWjP2kR6lefOSYh2BJuEirZaUv4=;
+        s=korg; t=1649146659;
+        bh=TAIHegqTVYUQT1dYTJ1rIsOiROabndahkgbT+ieyP/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nNGhXMWgKX8Ps2IyoVs7x3FB7tY7BY16oZRE+VTdFMTwuJ6G/dO4uLlwC4oJ3P0bX
-         pHWtuJwPi92e0YczmzljraSRC8NVqdQ0Q1yrBG+5RfeWPmXpH8OxVF601S4dOgWyR4
-         KbpUjOAcNO7KCkPZRg7VSzfy1ymTRXPvjrxbYtLQ=
+        b=trfCNxebxu4h5BeVSn430F9N2T1/LiQoanTSQkBcUrOgiBs1q7wjPGzMsQE1Y7OOW
+         X3O8/veyMs3FkeCXDxSLVfOe/3JGi5P2XFvme0qXnR2/+ki2i2vUufDgVgjhcaDSpx
+         wKR2WHLfToySx9tPFGywaPMkXcfbLCNDGc/JRc2M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0800/1126] clk: qcom: gcc-msm8994: Fix gpll4 width
-Date:   Tue,  5 Apr 2022 09:25:47 +0200
-Message-Id: <20220405070431.052818778@linuxfoundation.org>
+Subject: [PATCH 5.17 0803/1126] vsock/virtio: enable VQs early on probe
+Date:   Tue,  5 Apr 2022 09:25:50 +0200
+Message-Id: <20220405070431.139174374@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,41 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Stefano Garzarella <sgarzare@redhat.com>
 
-[ Upstream commit 71021db1c532c2545ae53b9ee85b37b7154f51d4 ]
+[ Upstream commit 88704454ef8b00ea91537ae0d47d9348077e0e72 ]
 
-The gpll4 postdiv is actually a div4, so make sure that Linux is aware of
-this.
+virtio spec requires drivers to set DRIVER_OK before using VQs.
+This is set automatically after probe returns, but virtio-vsock
+driver uses VQs in the probe function to fill rx and event VQs
+with new buffers.
 
-This fixes the following error messages:
+Let's fix this, calling virtio_device_ready() before using VQs
+in the probe function.
 
- mmc1: Card appears overclocked; req 200000000 Hz, actual 343999999 Hz
- mmc1: Card appears overclocked; req 400000000 Hz, actual 687999999 Hz
-
-Fixes: aec89f78cf01 ("clk: qcom: Add support for msm8994 global clock controller")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Link: https://lore.kernel.org/r/20220319174940.341137-1-konrad.dybcio@somainline.org
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 0ea9e1d3a9e3 ("VSOCK: Introduce virtio_transport.ko")
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-msm8994.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/vmw_vsock/virtio_transport.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index f09499999eb3..6b702cdacbf2 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -77,6 +77,7 @@ static struct clk_alpha_pll gpll4_early = {
+diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+index 3954d3be9083..ba1c8cc0c467 100644
+--- a/net/vmw_vsock/virtio_transport.c
++++ b/net/vmw_vsock/virtio_transport.c
+@@ -627,6 +627,8 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
  
- static struct clk_alpha_pll_postdiv gpll4 = {
- 	.offset = 0x1dc0,
-+	.width = 4,
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll4",
+ 	vdev->priv = vsock;
+ 
++	virtio_device_ready(vdev);
++
+ 	mutex_lock(&vsock->tx_lock);
+ 	vsock->tx_run = true;
+ 	mutex_unlock(&vsock->tx_lock);
 -- 
 2.34.1
 

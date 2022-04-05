@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFD54F4CCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FC04F48C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579885AbiDEXdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S1385565AbiDEVtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356844AbiDEKY7 (ORCPT
+        with ESMTP id S1356905AbiDEKZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:24:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B910C12DE;
-        Tue,  5 Apr 2022 03:09:08 -0700 (PDT)
+        Tue, 5 Apr 2022 06:25:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B755C1CB1;
+        Tue,  5 Apr 2022 03:09:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 028EF6167E;
-        Tue,  5 Apr 2022 10:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E40BC385A6;
-        Tue,  5 Apr 2022 10:09:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9093A617A7;
+        Tue,  5 Apr 2022 10:09:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD81C385A0;
+        Tue,  5 Apr 2022 10:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153347;
-        bh=GOCjvPSffRKuugb0uITMfSMEobaooJl1sG41hMr87RY=;
+        s=korg; t=1649153353;
+        bh=IsYGMWcOLC2kDDO8OFJfhbKJ+skf8w8cVCluqFXU9Jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ExUDls5Xs2tZlpxU3m8yzNhDhDU5WmFPz3/jJSR7BPz5QQ2HaObEHBiu2wnaW+X/E
-         Gsd5ULEv+D4DpUc9WbHZiP3b1JEAzVqLc/07nLHM1PGr0LlCrw/0D8j19fZpvBwAPI
-         AzE5OAiNOl6HRUcAGezOsJN01GvgAuNkvw0TEK4w=
+        b=QtNTPIdbJRz95hv2cMnmc7rPI6Ls5P9iHZ/hb3bYy+KpkAt/jGei33j/cB7apvZ3N
+         JdAGOx4LJ9SObdzMA0Zp1yd0qpC+NKRNsjFQk5h5MFWt+0E7lLLg2GLwcpQVc79usI
+         BtTxGINaCxeeyEANGCaslC9Ggq6gmFPOLNTJtjSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 189/599] media: mtk-vcodec: potential dereference of null pointer
-Date:   Tue,  5 Apr 2022 09:28:03 +0200
-Message-Id: <20220405070304.466413862@linuxfoundation.org>
+Subject: [PATCH 5.10 191/599] ASoC: xilinx: xlnx_formatter_pcm: Handle sysclk setting
+Date:   Tue,  5 Apr 2022 09:28:05 +0200
+Message-Id: <20220405070304.524638747@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,36 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit e25a89f743b18c029bfbe5e1663ae0c7190912b0 ]
+[ Upstream commit 1c5091fbe7e0d0804158200b7feac5123f7b4fbd ]
 
-The return value of devm_kzalloc() needs to be checked.
-To avoid use of null pointer in case of thefailure of alloc.
+This driver did not set the MM2S Fs Multiplier Register to the proper
+value for playback streams. This needs to be set to the sample rate to
+MCLK multiplier, or random stream underflows can occur on the downstream
+I2S transmitter.
 
-Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Store the sysclk value provided via the set_sysclk callback and use that
+in conjunction with the sample rate in the hw_params callback to calculate
+the proper value to set for this register.
+
+Fixes: 6f6c3c36f091 ("ASoC: xlnx: add pcm formatter platform driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Link: https://lore.kernel.org/r/20220120195832.1742271-2-robert.hancock@calian.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/xilinx/xlnx_formatter_pcm.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-index cd27f637dbe7..cfc7ebed8fb7 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-@@ -102,6 +102,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
- 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
+diff --git a/sound/soc/xilinx/xlnx_formatter_pcm.c b/sound/soc/xilinx/xlnx_formatter_pcm.c
+index ce19a6058b27..5c4158069a5a 100644
+--- a/sound/soc/xilinx/xlnx_formatter_pcm.c
++++ b/sound/soc/xilinx/xlnx_formatter_pcm.c
+@@ -84,6 +84,7 @@ struct xlnx_pcm_drv_data {
+ 	struct snd_pcm_substream *play_stream;
+ 	struct snd_pcm_substream *capture_stream;
+ 	struct clk *axi_clk;
++	unsigned int sysclk;
+ };
  
- 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
-+	if (!fw)
-+		return ERR_PTR(-ENOMEM);
- 	fw->type = VPU;
- 	fw->ops = &mtk_vcodec_vpu_msg;
- 	fw->pdev = fw_pdev;
+ /*
+@@ -314,6 +315,15 @@ static irqreturn_t xlnx_s2mm_irq_handler(int irq, void *arg)
+ 	return IRQ_NONE;
+ }
+ 
++static int xlnx_formatter_set_sysclk(struct snd_soc_component *component,
++				     int clk_id, int source, unsigned int freq, int dir)
++{
++	struct xlnx_pcm_drv_data *adata = dev_get_drvdata(component->dev);
++
++	adata->sysclk = freq;
++	return 0;
++}
++
+ static int xlnx_formatter_pcm_open(struct snd_soc_component *component,
+ 				   struct snd_pcm_substream *substream)
+ {
+@@ -450,11 +460,25 @@ static int xlnx_formatter_pcm_hw_params(struct snd_soc_component *component,
+ 	u64 size;
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct xlnx_pcm_stream_param *stream_data = runtime->private_data;
++	struct xlnx_pcm_drv_data *adata = dev_get_drvdata(component->dev);
+ 
+ 	active_ch = params_channels(params);
+ 	if (active_ch > stream_data->ch_limit)
+ 		return -EINVAL;
+ 
++	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
++	    adata->sysclk) {
++		unsigned int mclk_fs = adata->sysclk / params_rate(params);
++
++		if (adata->sysclk % params_rate(params) != 0) {
++			dev_warn(component->dev, "sysclk %u not divisible by rate %u\n",
++				 adata->sysclk, params_rate(params));
++			return -EINVAL;
++		}
++
++		writel(mclk_fs, stream_data->mmio + XLNX_AUD_FS_MULTIPLIER);
++	}
++
+ 	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE &&
+ 	    stream_data->xfer_mode == AES_TO_PCM) {
+ 		val = readl(stream_data->mmio + XLNX_AUD_STS);
+@@ -552,6 +576,7 @@ static int xlnx_formatter_pcm_new(struct snd_soc_component *component,
+ 
+ static const struct snd_soc_component_driver xlnx_asoc_component = {
+ 	.name		= DRV_NAME,
++	.set_sysclk	= xlnx_formatter_set_sysclk,
+ 	.open		= xlnx_formatter_pcm_open,
+ 	.close		= xlnx_formatter_pcm_close,
+ 	.hw_params	= xlnx_formatter_pcm_hw_params,
 -- 
 2.34.1
 

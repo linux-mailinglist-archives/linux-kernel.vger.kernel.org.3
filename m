@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F10B4F43BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107024F4403
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386929AbiDEO2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S1386999AbiDEO2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238953AbiDEJdN (ORCPT
+        with ESMTP id S238955AbiDEJdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:33:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EE262FC;
-        Tue,  5 Apr 2022 02:20:54 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E075656B;
+        Tue,  5 Apr 2022 02:21:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1988B81C69;
-        Tue,  5 Apr 2022 09:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2C4C385A0;
-        Tue,  5 Apr 2022 09:20:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC18361574;
+        Tue,  5 Apr 2022 09:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87FBC385A2;
+        Tue,  5 Apr 2022 09:21:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150451;
-        bh=AIwGneCgQREljoh3n2S10EY9Q3wkZzrK2N0v2FayM6A=;
+        s=korg; t=1649150468;
+        bh=YZdqkHxdou06xEwB5O8wkX6sBT8EGjd1hPU579OKop8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PwIyu0KOzIoPIfWN9AglB6K3pxZby6h+Rjvi+6Y1hqCpQ1TMg1XCxPnT2wXCuB0q3
-         0VH3ivEcD3eCUkFRXZaS4xVc4F6zrIj0rF1BS+PXAbGatMFRZ5qsQVmBlARTwk/pk6
-         HeR53d/5QuAH0CasLtog5SE3Ty4RL986roHMoc3M=
+        b=z7ByhxvO57KrmiqMxSn+6JjcxJkX1RbGD8xDLq3fGln+aR4n/yQ95TdE9seqGrXSq
+         sI67NYbUn3RVwmtqGn6u9KidGHHLQMuWGCYDSB2+0cQ0DOGO5vbkbMTfO5xFhYYidN
+         N/PNjzdtS/Jot8t8Q0h3LszJ4vpn5QKlTFdMWs20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ang Tien Sung <tien.sung.ang@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.15 060/913] firmware: stratix10-svc: add missing callback parameter on RSU
-Date:   Tue,  5 Apr 2022 09:18:42 +0200
-Message-Id: <20220405070341.622007500@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.15 066/913] NFSD: prevent integer overflow on 32 bit systems
+Date:   Tue,  5 Apr 2022 09:18:48 +0200
+Message-Id: <20220405070341.801304195@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,35 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit b850b7a8b369322adf699ef48ceff4d902525c8c upstream.
+commit 23a9dbbe0faf124fc4c139615633b9d12a3a89ef upstream.
 
-Fix a bug whereby, the return response of parameter a1 from an
-SMC call is not properly set to the callback data during an
-INTEL_SIP_SMC_RSU_ERROR command.
+On a 32 bit system, the "len * sizeof(*p)" operation can have an
+integer overflow.
 
-Link: https://lore.kernel.org/lkml/20220216081513.28319-1-tien.sung.ang@intel.com
-Fixes: 6b50d882d38d ("firmware: add remote status update client support")
 Cc: stable@vger.kernel.org
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Link: https://lore.kernel.org/r/20220223144146.399263-1-dinguyen@kernel.org
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/stratix10-svc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/sunrpc/xdr.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -477,7 +477,7 @@ static int svc_normal_to_secure_thread(v
- 		case INTEL_SIP_SMC_RSU_ERROR:
- 			pr_err("%s: STATUS_ERROR\n", __func__);
- 			cbdata->status = BIT(SVC_STATUS_ERROR);
--			cbdata->kaddr1 = NULL;
-+			cbdata->kaddr1 = &res.a1;
- 			cbdata->kaddr2 = NULL;
- 			cbdata->kaddr3 = NULL;
- 			pdata->chan->scl->receive_cb(pdata->chan->scl, cbdata);
+--- a/include/linux/sunrpc/xdr.h
++++ b/include/linux/sunrpc/xdr.h
+@@ -731,6 +731,8 @@ xdr_stream_decode_uint32_array(struct xd
+ 
+ 	if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+ 		return -EBADMSG;
++	if (len > SIZE_MAX / sizeof(*p))
++		return -EBADMSG;
+ 	p = xdr_inline_decode(xdr, len * sizeof(*p));
+ 	if (unlikely(!p))
+ 		return -EBADMSG;
 
 

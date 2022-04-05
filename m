@@ -2,279 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CEE4F527A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6394F527B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850457AbiDFCxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S1850473AbiDFCxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835485AbiDFAbx (ORCPT
+        with ESMTP id S1835829AbiDFAdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:31:53 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8211F32AC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:46:48 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id x16so781765pfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PBFAM1H2rlnaIIdKrJyDL2Ds5ftRVoz3Ng6L/c5lFgc=;
-        b=TIPip8PSVDMp7s/pgmaOP9awbmRc4dtkTzmeh2cpwuqp24pUFaMX6gShrdlIKPmtGr
-         Bjgxt7jOckoL+I0xC9hsFXxerCp/4DKg1foYiruEpI98Vw/q4RZ/i7n2bNKxkdbOd0QK
-         zOIPiSSeHxsZqO5K5Qbki7d1B3s0H8AYJ8CpFyVaUp2+Z4gh0g8aSbtmUqlHg5ji5Szt
-         XSR8HoopsxIc+AfJ9MiI+3T/WFqfs5LGDf5TQ7A+T3duXzD2u5ppPEQRxREPC5zKU+BW
-         1IcuP6U3EFhfJVWnE1PP/JxypAuQPaY6oH4JKKFcjle+lizH3hJnb9GapaK/xqIuLMvU
-         jJ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PBFAM1H2rlnaIIdKrJyDL2Ds5ftRVoz3Ng6L/c5lFgc=;
-        b=ri3jLEICvNjVnxsDdOG3Dju7T5gUNkPR6qfxHQGJ3ClxkFEq9DNbkRdipK2/P0Ociz
-         vBAr2itOAl7JPvOmASVwQKOXqTHMh/dSgHnhQyxvptJWHa72CKqn1bvnk5EigSByofyn
-         6wl05gh7QyWeasmwTFVv2WO1PztJAn7QFb+RTBhmb01rwz1M/4rU9oWNuoGLlSy9HdiT
-         I53EU85ofHvM8Vn3Pb1FpX8gib/mXRfxf/iTIlMG5QZRC1mxGUS8RAO5B24OfMGAxBWz
-         XsCEIJSNA/NVNHK7YyUALQLDav+Chfsxpirvdgzmrm6wKGFIxc/xJGXai8gsHONGGnyk
-         Hl8Q==
-X-Gm-Message-State: AOAM530JjcPN4zBZ8CCzve5UfOFAQ+14GfLbKXnvPIieXFdRWwoofqDG
-        IBcggqbklO6WwJFgR9xY8GA0bw==
-X-Google-Smtp-Source: ABdhPJyqeDqfJsMhy64cIDy86djX31xX7i7AEfndWeaZac3H3bP1KlVuwkojjPTeonnc1EJCsWGF1A==
-X-Received: by 2002:a05:6a00:843:b0:4fe:3a5e:b347 with SMTP id q3-20020a056a00084300b004fe3a5eb347mr5780395pfk.64.1649198808042;
-        Tue, 05 Apr 2022 15:46:48 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm14104960pgn.35.2022.04.05.15.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 15:46:47 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 22:46:43 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v3 08/11] KVM: x86/MMU: Allow NX huge pages to be
- disabled on a per-vm basis
-Message-ID: <YkzG04NVKU/Pcy5v@google.com>
-References: <20220330174621.1567317-1-bgardon@google.com>
- <20220330174621.1567317-9-bgardon@google.com>
+        Tue, 5 Apr 2022 20:33:42 -0400
+Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF1C104A76
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=kuHtMKHl/c2qIGNhAGVZoANBI56QWLO5me7QncFB0/4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lw/b5SvbMVXuoNhOkN60MTNvRK0sDPou7k8Sm8/fDot5jNIhKwRd3eHlRDH4X++09rQEJw1wr+aKES2kF0F5dOMKeDQUZQ6F4HZOWGED0RDC4zr9xcZY9Qk6H8JLGIQho7PvJeTl8oKy7KnIOIiPnQQ7B7oSZHdV7nV34QwwpPvCV1hoQGTxbT/4rS1hlwLxnfvKtak1zmDmffa+AUzFsTThb4ap/GSRNi9jovUUtR5yK7ddvNvJrvphSyDebb/pwGdWdzuXAqm2VSIbgKe10iBQx3wYqNt0U7V+Z2fvGSGZwR7tJu3GBEoFohyivhXzK9FuIP48+lJCqFVNv9I8hQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=VbxZHvRlQ3ApM+hvxQitthNUVXoy1RKh/KVchJBGZGS=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=oGp9qOO4oZpK+WQMwTyI6AQctVQpLckSVRDCMM9EY4+URlBQmX+gpK78IfGzEbJ1WQOoAgSAqaV7gbPSvkBrQmDEU+odSwN0Z7UaU315n38j5LFqVI6pfJGjwXZEkE0sJ20imT5mnbnidmwOGI5FZKeajBcL6gMT9w9tZ6VAPJSnOE5tnZANcnkdMh7dqLfFizhLODK+mnLGixLVyp1AgVBsFojT0K3uAfCKlTIeoM31WO7VJJKdaVbU1W5+cjem8eiUyG/ev9ipDWUvQK/goHUd0yZOMuHWRMtTMakOWirSW07wdwQdxNy89lTohXsPGu8sAAXcWlEgAmiEApvXZw==
+X-YMail-OSG: KM__rusVM1mvT51zYphGFvuxV3vMoEUz.64XbPOnJeUfM3Q02p8tjzbCHPbxK90
+ xEbDliiZmXka7VwlPeFd9D1DD5e1OCiK71seGddNJdacxGYZBFqNL38S22jUAAh2NKwCZgZ3a1qm
+ b68mSbOJTcl892WIwb.mTv9vYc9nK6H9jOBvffECkgbEOIuJ2OTT0OCGlYe38K9gXdoiudYOOpHl
+ 2fh_s6WdkypLC5Nfeyk4z1adY.Se94Xlv.8WW64_g.Q6gsD7htFWlmyKKuIjT7IOL6GjWm9Szqd1
+ R3UV59okWBjij2lkAmEvm1OGVvxhNPUS.liSAj2FU0qfbfjIyuTRodjmQ44ijXaF_l.ncSA6E7D2
+ 52uqJTjoWIGYu33gu7Y9smglgLO03sxROpSKDJjLYSmqq5TZV191mqxNk6qpvwyo1.It_zg1CqAM
+ _I4TYKmrHvNzptK8N1w3ksNztLX_e0N5gHbhAJlQPW5Bw6ykmInAWc_WUaCDq_nMTrMNQ0.BQLAW
+ WCRbo_nap91myK7S6jaZMMJbCJQlKQ0d19nAP0GXwM.U0k4qdC3wPw9KG8_ejbIeSpZDDcf8IzrJ
+ 4bQvcIjmYkKtr30WANdICKGFIG6qoNp9Fg95.2kjpGHvmwHPuO6qR9YqjocDnUP97EQvkTGUoZTC
+ fmWLce.3nw8OaynFbR2KRNYiUriJl8uXIATVYpJyjRTwAIa8rjrwbAhxUP5NVN_nxvbt9B0qD1vL
+ iF5dcCV7zA.vqsgkTlPIKvL7geTOs3C_5Q.EkNfAn5PlCJi3y1zODah_iTZ4ecECSgQVOQRR_lvQ
+ 5sUCI4wSaPH5EOmTNV6q7bTyu3MxHVIaMUAIVoLi_8k4EtldfkqaEeKispwKxjk.YDkONtPJE0Cc
+ pE8iFJVkuJaeEnENzECZy3vMXBzWkyWrlOzxhd.x5VcN.LvY_kezvJ9przKkPd24eoo3B9kOZUKP
+ NS_jcRoQPrm.gnozfYxNufkt9qbgJaWqXnPjXRpcK_nHwdGqJ9SrZII7p1ZaQmL_NGh5eShl5Ak0
+ oCDgnLQHlke0.mPoBs.DXXK7r8bayP2uWHxez.cMKyi2mCozH06SzzozGsmV2DV4wRVeNnQ5NnD7
+ duFgvP9y0siotq8UHHEY2GCd5kkjmdaAUd1iyLgVlxPeMAd89ho9zCouqCHg9YuIHw3L_NEVlpyt
+ 6bEP0KxoUYtsVKOeWmn1lqMZxOkdMux8JF.jzEan8uwwC2iFVX62Zh.3mtBLMy4wCtI2ydJ7NwVg
+ kIvCoToLc5RDNWmOhaNfzcZ9SpG03jdgluv5cLh1oyTvjJti37BVGbQVSuFKambK6zz6fPT3JpqQ
+ Td7uMTzGQLDd3aM3r4lpQwkkq6ZgvfZuI74TGG1Qz72OiRGT6ElyxmqgTz9DPI0QPCS8zFtBd5wN
+ g7GXxswBII_DtM6v2a2SqBZlQJnDZCEbYwvF6Rsb7KLhj9nTdtNLv40B05j5uX6eOcjh6.gjicjh
+ 4n2hzMomOHjxFoL26zmw2HZQXDRB9WrXRegbN6o9ZS7S56GISCNn0e.GVx1_ANGl1Y9ITLgc3mkj
+ aeGxLxguvgu5LBpKKyxuQl92.GCrYlYGg9HBZk_gNpX.esY3Yg6VvCP7BctyRlX5CWY0a9REhZJK
+ YiZHe20QUET91dvI8o.O7mlwNgp2u8k7LNi3gGdWWoDQLdXbXVKDqqN8p.OkQ_PT6MQFWhvWD6Hq
+ lQi_UcfdeW3nTE0YTi7wBXLRaPZq2rA6YO6mbYysziXrkHmx9aCMWS1.7xLOO2J43QzBZ7VjWuOp
+ mr2bspwwUWdOji.Vpcv8AgMMWnL2l9RHnGmuIXsm.HAAsC.rmVV9vmPHZtotu0A2DOfy6b8a.kDo
+ 88dY442gAarDTf8zkzmeXacI80hqCh0bPv.qB_AqAuDz8UFgHzXk6kRu6lMfytQN56jEeBNu5Xav
+ WAcMHhj._SoyiuB1CBQ_SLZ1CY5EpL3Iyd3J9TY3sxDmLjffnDicxHqypaiKCVj_kLP6XvZDVPDC
+ iyDxzHS.Msc7c3OGGTk6..15qsMeGybeAzJrJPCL1fE309eHGaV_S4Jk04LwlcKG_q0pxqPS7NCO
+ lvKrLp6NdUSkWJWPqisJBlzCNx0nElmqBXE2hAc2_hYCT_zwuwkjKJLWpKiy5Q8p8ZXptLMQaK_n
+ h7bPvT_uLr4.6T.jmGFpAcr.PEWhdDEqORzK1ytMR5S1ocjyiSITC5gOz0z6sv3U1VufvspTMC_V
+ OyGNoO0g8_WnT_BFdlHO7W5vCSMmUK1kEBFdnH8P0oNSTwlTNikou0acFupkLZ0z2
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 22:47:36 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-4zttc (VZM Hermes SMTP Server) with ESMTPA ID eaa50fa1da4b68d1bc9a73fb183248ea;
+          Tue, 05 Apr 2022 22:47:33 +0000 (UTC)
+Message-ID: <5ce85845-824c-32fb-3807-6f9ab95ad6fe@schaufler-ca.com>
+Date:   Tue, 5 Apr 2022 15:47:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330174621.1567317-9-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [POC][USER SPACE][PATCH] Introduce LSM to protect pinned objects
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
+        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, tixxdz@gmail.com,
+        shuah@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, zohar@linux.ibm.com
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+ <20220405131116.3810418-1-roberto.sassu@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220405131116.3810418-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:46:18AM -0700, Ben Gardon wrote:
-> In some cases, the NX hugepage mitigation for iTLB multihit is not
-> needed for all guests on a host. Allow disabling the mitigation on a
-> per-VM basis to avoid the performance hit of NX hugepages on trusted
-> workloads.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+On 4/5/2022 6:11 AM, Roberto Sassu wrote:
+> Introduce a new LSM to protect pinned objects in a bpf filesystem
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+This is *not an LSM*. Do not call it an LSM. It is a set of
+eBPF programs. We have all the opportunities for confusion
+that we need. I suggested that you call this a BPF security
+module (BSM) earlier today. You have any number of things
+you can call this that won't be objectionable.
 
+> instance. This is useful for example to ensure that an LSM will always
+> enforce its policy, even despite root tries to unload the corresponding
+> eBPF program.
+
+How is this going to ensure that SELinux enforces its policy?
+AppArmor has no eBPF program that corresponds to its policy,
+neither does any other existing LSM, save BPF. Your claim is
+nonsensical in the face of LSM behavior.
+
+> Achieve the protection by denying inode unlink and unmount of the
+> protected bpf filesystem instance. Since protected inodes hold a
+> reference of the link of loaded programs (e.g. LSM hooks), denying
+> operations on them will prevent the ref count of the links from reaching
+> zero, ensuring that the programs remain always active.
+>
+> Enable the protection only for the instance created by the user space
+> counterpart of the LSM, and don't interfere with other instances, so
+> that their behavior remains unchanged.
+>
+> Suggested-by: Djalal Harouni <tixxdz@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  Documentation/virt/kvm/api.rst  | 11 +++++++++++
->  arch/x86/include/asm/kvm_host.h |  2 ++
->  arch/x86/kvm/mmu.h              | 10 ++++++----
->  arch/x86/kvm/mmu/mmu.c          |  2 +-
->  arch/x86/kvm/mmu/spte.c         |  7 ++++---
->  arch/x86/kvm/mmu/spte.h         |  3 ++-
->  arch/x86/kvm/mmu/tdp_mmu.c      |  3 ++-
->  arch/x86/kvm/x86.c              |  6 ++++++
->  include/uapi/linux/kvm.h        |  1 +
->  9 files changed, 35 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index b102ba7cf903..b40c3113b14b 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7844,6 +7844,17 @@ At this time, KVM_PMU_CAP_DISABLE is the only capability.  Setting
->  this capability will disable PMU virtualization for that VM.  Usermode
->  should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
->  
-> +8.36 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-> +---------------------------
+>   .gitignore       |  4 +++
+>   Makefile         | 18 ++++++++++++++
+>   bpffs_lsm_kern.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
+>   bpffs_lsm_user.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 145 insertions(+)
+>   create mode 100644 .gitignore
+>   create mode 100644 Makefile
+>   create mode 100644 bpffs_lsm_kern.c
+>   create mode 100644 bpffs_lsm_user.c
+>
+> diff --git a/.gitignore b/.gitignore
+> new file mode 100644
+> index 000000000000..7fa02964f1dc
+> --- /dev/null
+> +++ b/.gitignore
+> @@ -0,0 +1,4 @@
+> +*.o
+> +vmlinux.h
+> +bpffs_lsm_kern.skel.h
+> +bpffs_lsm_user
+> diff --git a/Makefile b/Makefile
+> new file mode 100644
+> index 000000000000..c3d805759db3
+> --- /dev/null
+> +++ b/Makefile
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +all: bpffs_lsm_user
 > +
-> +:Capability KVM_CAP_PMU_CAPABILITY
-> +:Architectures: x86
-> +:Type: vm
+> +clean:
+> +	rm -rf bpffs_lsm.skel.h vmlinux.h bpffs_lsm_kern.o bpffs_lsm_user
 > +
-> +This capability disables the NX huge pages mitigation for iTLB MULTIHIT.
+> +vmlinux.h:
+> +	/usr/sbin/bpftool btf dump file /sys/kernel/btf/vmlinux format c > \
+> +			  vmlinux.h
 > +
-> +The capability has no effect if the nx_huge_pages module parameter is not set.
+> +bpffs_lsm_kern.skel.h: bpffs_lsm_kern.o
+> +	bpftool gen skeleton $< > $@
 > +
->  9. Known KVM API problems
->  =========================
->  
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 676705ad1e23..dcff7709444d 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1246,6 +1246,8 @@ struct kvm_arch {
->  	hpa_t	hv_root_tdp;
->  	spinlock_t hv_root_tdp_lock;
->  #endif
+> +bpffs_lsm_kern.o: bpffs_lsm_kern.c vmlinux.h
+> +	clang -Wall -Werror -g -O2 -target bpf -c $< -o $@
 > +
-> +	bool disable_nx_huge_pages;
->  };
->  
->  struct kvm_vm_stat {
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index e6cae6f22683..69cffc86b888 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -173,10 +173,12 @@ struct kvm_page_fault {
->  int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
->  
->  extern int nx_huge_pages;
-> -static inline bool is_nx_huge_page_enabled(void)
-> +static inline bool is_nx_huge_page_enabled(struct kvm *kvm)
->  {
-> -	return READ_ONCE(nx_huge_pages);
-> +	return READ_ONCE(nx_huge_pages) &&
-> +	       !kvm->arch.disable_nx_huge_pages;
->  }
-> +void kvm_update_nx_huge_pages(struct kvm *kvm);
->  
->  static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  					u32 err, bool prefetch)
-> @@ -191,8 +193,8 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		.user = err & PFERR_USER_MASK,
->  		.prefetch = prefetch,
->  		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> -		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
-> -
-> +		.nx_huge_page_workaround_enabled =
-> +			is_nx_huge_page_enabled(vcpu->kvm),
->  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
->  		.req_level = PG_LEVEL_4K,
->  		.goal_level = PG_LEVEL_4K,
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index af428cb65b3f..eb7b935d3caa 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6202,7 +6202,7 @@ static void __set_nx_huge_pages(bool val)
->  	nx_huge_pages = itlb_multihit_kvm_mitigation = val;
->  }
->  
-> -static void kvm_update_nx_huge_pages(struct kvm *kvm)
-> +void kvm_update_nx_huge_pages(struct kvm *kvm)
->  {
->  	mutex_lock(&kvm->slots_lock);
->  	kvm_mmu_zap_all_fast(kvm);
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 4739b53c9734..877ad30bc7ad 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -116,7 +116,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  		spte |= spte_shadow_accessed_mask(spte);
->  
->  	if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
-> -	    is_nx_huge_page_enabled()) {
-> +	    is_nx_huge_page_enabled(vcpu->kvm)) {
->  		pte_access &= ~ACC_EXEC_MASK;
->  	}
->  
-> @@ -215,7 +215,8 @@ static u64 make_spte_executable(u64 spte)
->   * This is used during huge page splitting to build the SPTEs that make up the
->   * new page table.
->   */
-> -u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
-> +u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
-> +			      int index)
->  {
->  	u64 child_spte;
->  	int child_level;
-> @@ -243,7 +244,7 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
->  		 * When splitting to a 4K page, mark the page executable as the
->  		 * NX hugepage mitigation no longer applies.
->  		 */
-> -		if (is_nx_huge_page_enabled())
-> +		if (is_nx_huge_page_enabled(kvm))
->  			child_spte = make_spte_executable(child_spte);
->  	}
->  
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index 73f12615416f..e4142caff4b1 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -415,7 +415,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
->  	       u64 old_spte, bool prefetch, bool can_unsync,
->  	       bool host_writable, u64 *new_spte);
-> -u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
-> +u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
-> +			      int index);
->  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
->  u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
->  u64 mark_spte_for_access_track(u64 spte);
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index a2f9a34a0168..5d82a54924e6 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1469,7 +1469,8 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
->  	 * not been linked in yet and thus is not reachable from any other CPU.
->  	 */
->  	for (i = 0; i < PT64_ENT_PER_PAGE; i++)
-> -		sp->spt[i] = make_huge_page_split_spte(huge_spte, level, i);
-> +		sp->spt[i] = make_huge_page_split_spte(kvm, huge_spte,
-> +						       level, i);
->  
->  	/*
->  	 * Replace the huge spte with a pointer to the populated lower level
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 7a066cf92692..ea1d620b35df 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4268,6 +4268,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_SYS_ATTRIBUTES:
->  	case KVM_CAP_VAPIC:
->  	case KVM_CAP_ENABLE_CAP:
-> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
->  		r = 1;
->  		break;
->  	case KVM_CAP_EXIT_HYPERCALL:
-> @@ -6061,6 +6062,11 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  		}
->  		mutex_unlock(&kvm->lock);
->  		break;
-> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-> +		kvm->arch.disable_nx_huge_pages = true;
-> +		kvm_update_nx_huge_pages(kvm);
-> +		r = 0;
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		break;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 8616af85dc5d..12399c969b42 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1145,6 +1145,7 @@ struct kvm_ppc_resize_hpt {
->  #define KVM_CAP_PMU_CAPABILITY 212
->  #define KVM_CAP_DISABLE_QUIRKS2 213
->  #define KVM_CAP_VM_TSC_CONTROL 214
-> +#define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 215
->  
->  #ifdef KVM_CAP_IRQ_ROUTING
->  
-> -- 
-> 2.35.1.1021.g381101b075-goog
-> 
+> +bpffs_lsm_user: bpffs_lsm_user.c bpffs_lsm_kern.skel.h bpffs_lsm_kern.o
+> +	cc -Wall -Werror -g -o $@ $< -lbpf
+> diff --git a/bpffs_lsm_kern.c b/bpffs_lsm_kern.c
+> new file mode 100644
+> index 000000000000..b3ccb2a75c95
+> --- /dev/null
+> +++ b/bpffs_lsm_kern.c
+> @@ -0,0 +1,63 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Authors:
+> + * Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement an LSM to protect a bpf filesystem instance.
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_core_read.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +uint32_t monitored_pid = 0;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
+> +	__uint(map_flags, BPF_F_NO_PREALLOC);
+> +	__type(key, int);
+> +	__type(value, sizeof(uint8_t));
+> +} inode_storage_map SEC(".maps");
+> +
+> +SEC("lsm/sb_set_mnt_opts")
+> +int BPF_PROG(sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
+> +	     unsigned long kern_flags, unsigned long *set_kern_flags)
+> +{
+> +	u32 pid;
+> +
+> +	pid = bpf_get_current_pid_tgid() >> 32;
+> +	if (pid != monitored_pid)
+> +		return 0;
+> +
+> +	if (!bpf_inode_storage_get(&inode_storage_map, sb->s_root->d_inode, 0,
+> +				   BPF_LOCAL_STORAGE_GET_F_CREATE))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("lsm/inode_unlink")
+> +int BPF_PROG(inode_unlink, struct inode *dir, struct dentry *dentry)
+> +{
+> +	if (bpf_inode_storage_get(&inode_storage_map,
+> +				  dir->i_sb->s_root->d_inode, 0, 0))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("lsm/sb_umount")
+> +int BPF_PROG(sb_umount, struct vfsmount *mnt, int flags)
+> +{
+> +	if (bpf_inode_storage_get(&inode_storage_map,
+> +				  mnt->mnt_sb->s_root->d_inode, 0, 0))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> diff --git a/bpffs_lsm_user.c b/bpffs_lsm_user.c
+> new file mode 100644
+> index 000000000000..e20180cc5db9
+> --- /dev/null
+> +++ b/bpffs_lsm_user.c
+> @@ -0,0 +1,60 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement the user space side of the LSM for bpffs.
+> + */
+> +
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <stdio.h>
+> +#include <errno.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <limits.h>
+> +#include <sys/mount.h>
+> +#include <sys/stat.h>
+> +
+> +#include "bpffs_lsm_kern.skel.h"
+> +
+> +#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	char mntpoint[] = "/tmp/bpf_private_mountXXXXXX";
+> +	char path[PATH_MAX];
+> +	struct bpffs_lsm_kern *skel;
+> +	int ret, i;
+> +
+> +	skel = bpffs_lsm_kern__open_and_load();
+> +	if (!skel)
+> +		return -EINVAL;
+> +
+> +	ret = bpffs_lsm_kern__attach(skel);
+> +	if (ret < 0)
+> +		goto out_destroy;
+> +
+> +	mkdtemp(mntpoint);
+> +
+> +	skel->bss->monitored_pid = getpid();
+> +	ret = mount(mntpoint, mntpoint, "bpf", MOUNT_FLAGS, NULL);
+> +	skel->bss->monitored_pid = 0;
+> +
+> +	if (ret < 0)
+> +		goto out_destroy;
+> +
+> +	for (i = 0; i < skel->skeleton->prog_cnt; i++) {
+> +		snprintf(path, sizeof(path), "%s/%s", mntpoint,
+> +			 skel->skeleton->progs[i].name);
+> +		ret = bpf_link__pin(*skel->skeleton->progs[i].link, path);
+> +		if (ret < 0)
+> +			goto out_destroy;
+> +	}
+> +
+> +	ret = 0;
+> +out_destroy:
+> +	bpffs_lsm_kern__destroy(skel);
+> +	return ret;
+> +}

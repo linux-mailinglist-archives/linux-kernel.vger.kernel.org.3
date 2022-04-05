@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC61F4F4C1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FFD4F4E57
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575851AbiDEXJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S1588948AbiDFARx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354090AbiDEKLf (ORCPT
+        with ESMTP id S242984AbiDEKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE9B49245;
-        Tue,  5 Apr 2022 02:57:13 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5888A522E9;
+        Tue,  5 Apr 2022 03:21:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2E1FB817D3;
-        Tue,  5 Apr 2022 09:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CFFC385A1;
-        Tue,  5 Apr 2022 09:57:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9D0D616D7;
+        Tue,  5 Apr 2022 10:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01264C385A1;
+        Tue,  5 Apr 2022 10:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152630;
-        bh=GkMbuM0N3bx8zk89Q8KBknMKfuJoWp/romGhKcSfTfs=;
+        s=korg; t=1649154082;
+        bh=bKRvKT2uwprwwaMIb8ZYBT1jQu/BM5mAlsaR5Zha8cE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vb8a/aUIJwZv5XdqafCXu11kyW1oY9nqHqr783vO2+U5T1L+VLKug7Hj0uPfPjNp9
-         hXPCe+2uiLH4gXit5YxXw9J6dMQtZxKpySIVZFQ50SrTdI8ppuU4mdgFeQex5Mr71k
-         pYbrE+J4y2GtbCIORYFUtv9yv7NwT1FDeaidlITs=
+        b=F6c3Jl+grs+bG33J0stIRGkoQH8Y4hWB+vEZFtH2dP1bLmpGTpUOQNFDEejvNaqQZ
+         oXu7Lzxb0r9dYrVb8akYBy85+Bx/RZQGIp6rPNrPGVn1vdFlJEkVyZWzMWbISUDchc
+         EzkMWojh9V8s9mGgFwUcFoT65G5Q9qROO6Qkl1/s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+25ea042ae28f3888727a@syzkaller.appspotmail.com,
-        Eric Dumazet <edumazet@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 846/913] watch_queue: Free the page array when watch_queue is dismantled
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 414/599] staging: mt7621-dts: fix LEDs and pinctrl on GB-PC1 devicetree
 Date:   Tue,  5 Apr 2022 09:31:48 +0200
-Message-Id: <20220405070405.188001686@linuxfoundation.org>
+Message-Id: <20220405070311.152289517@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +56,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-commit b490207017ba237d97b735b2aa66dc241ccd18f5 upstream.
+[ Upstream commit 6256e18686158fa49e019297f990f1c1817aabf1 ]
 
-Commit 7ea1a0124b6d ("watch_queue: Free the alloc bitmap when the
-watch_queue is torn down") took care of the bitmap, but not the page
-array.
+Fix LED and pinctrl definitions on the GB-PC1 devicetree. Refer to the
+schematics of the device for more information.
 
-  BUG: memory leak
-  unreferenced object 0xffff88810d9bc140 (size 32):
-  comm "syz-executor335", pid 3603, jiffies 4294946994 (age 12.840s)
-  hex dump (first 32 bytes):
-    40 a7 40 04 00 ea ff ff 00 00 00 00 00 00 00 00  @.@.............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-     kmalloc_array include/linux/slab.h:621 [inline]
-     kcalloc include/linux/slab.h:652 [inline]
-     watch_queue_set_size+0x12f/0x2e0 kernel/watch_queue.c:251
-     pipe_ioctl+0x82/0x140 fs/pipe.c:632
-     vfs_ioctl fs/ioctl.c:51 [inline]
-     __do_sys_ioctl fs/ioctl.c:874 [inline]
-     __se_sys_ioctl fs/ioctl.c:860 [inline]
-     __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
-     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+LED fixes:
+- Change GPIO6 LED label from system to power as GPIO6 is connected to
+PLED.
+- Add default-on default-trigger to power LED.
+- Change GPIO8 LED label from status to system as GPIO8 is connected to
+SYS_LED.
+- Add disk-activity default-trigger to system LED.
+- Switch to the color:function naming scheme.
+- Remove lan1 and lan2 LEDs as they don't exist.
 
-Reported-by: syzbot+25ea042ae28f3888727a@syzkaller.appspotmail.com
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Cc: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/r/20220322004654.618274-1-eric.dumazet@gmail.com/
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Pinctrl fixes:
+- Claim state_default node under pinctrl node.
+- Change pinctrl0 node name to state-default.
+- Change gpio node name to gpio-pinmux to respect
+Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml.
+- Sort pin groups alphabetically.
+
+Misc fixes:
+- Fix formatting.
+- Use the status value "okay".
+- Define hexadecimal addresses in lower case.
+- Make hexadecimal addresses for memory easier to read.
+
+Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC1_V1.0_Schematic.pdf
+Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220311090320.3068-1-arinc.unal@arinc9.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/watch_queue.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/mt7621-dts/gbpc1.dts | 40 +++++++++++++---------------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -373,6 +373,7 @@ static void __put_watch_queue(struct kre
+diff --git a/drivers/staging/mt7621-dts/gbpc1.dts b/drivers/staging/mt7621-dts/gbpc1.dts
+index a7c0d3115d72..d48ca5a25c2c 100644
+--- a/drivers/staging/mt7621-dts/gbpc1.dts
++++ b/drivers/staging/mt7621-dts/gbpc1.dts
+@@ -11,7 +11,8 @@
  
- 	for (i = 0; i < wqueue->nr_pages; i++)
- 		__free_page(wqueue->notes[i]);
-+	kfree(wqueue->notes);
- 	bitmap_free(wqueue->notes_bitmap);
+ 	memory@0 {
+ 		device_type = "memory";
+-		reg = <0x0 0x1c000000>, <0x20000000 0x4000000>;
++		reg = <0x00000000 0x1c000000>,
++		      <0x20000000 0x04000000>;
+ 	};
  
- 	wfilter = rcu_access_pointer(wqueue->filter);
+ 	chosen {
+@@ -37,24 +38,16 @@
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
+-		system {
+-			label = "gb-pc1:green:system";
++		power {
++			label = "green:power";
+ 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "default-on";
+ 		};
+ 
+-		status {
+-			label = "gb-pc1:green:status";
++		system {
++			label = "green:system";
+ 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+-		};
+-
+-		lan1 {
+-			label = "gb-pc1:green:lan1";
+-			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
+-		};
+-
+-		lan2 {
+-			label = "gb-pc1:green:lan2";
+-			gpios = <&gpio 25 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "disk-activity";
+ 		};
+ 	};
+ };
+@@ -94,9 +87,8 @@
+ 
+ 		partition@50000 {
+ 			label = "firmware";
+-			reg = <0x50000 0x1FB0000>;
++			reg = <0x50000 0x1fb0000>;
+ 		};
+-
+ 	};
+ };
+ 
+@@ -122,9 +114,12 @@
+ };
+ 
+ &pinctrl {
+-	state_default: pinctrl0 {
+-		default_gpio: gpio {
+-			groups = "wdt", "rgmii2", "uart3";
++	pinctrl-names = "default";
++	pinctrl-0 = <&state_default>;
++
++	state_default: state-default {
++		gpio-pinmux {
++			groups = "rgmii2", "uart3", "wdt";
+ 			function = "gpio";
+ 		};
+ 	};
+@@ -133,12 +128,13 @@
+ &switch0 {
+ 	ports {
+ 		port@0 {
++			status = "okay";
+ 			label = "ethblack";
+-			status = "ok";
+ 		};
++
+ 		port@4 {
++			status = "okay";
+ 			label = "ethblue";
+-			status = "ok";
+ 		};
+ 	};
+ };
+-- 
+2.34.1
+
 
 

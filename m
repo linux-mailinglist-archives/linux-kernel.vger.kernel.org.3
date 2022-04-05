@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F704F2706
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E9D4F2761
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234437AbiDEH6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S234468AbiDEH6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbiDEHrV (ORCPT
+        with ESMTP id S233108AbiDEHr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B53972CA;
-        Tue,  5 Apr 2022 00:43:29 -0700 (PDT)
+        Tue, 5 Apr 2022 03:47:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1957B972FF;
+        Tue,  5 Apr 2022 00:43:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1468CB81A22;
-        Tue,  5 Apr 2022 07:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0DEC340EE;
-        Tue,  5 Apr 2022 07:43:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72172616C4;
+        Tue,  5 Apr 2022 07:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E033C340EE;
+        Tue,  5 Apr 2022 07:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144606;
-        bh=67+iwn21hU+eAf9Hn/ExM4fEOGIQZGPFuRfiibRg3lM=;
+        s=korg; t=1649144617;
+        bh=5GLxWDCGq3Rzt274EPTNttgW7QLApZtJxsJNkrorsb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rDq+k9gy3jfg4azHKN+k9IWPjM0GvHH7Yckfpfdaw4KqxguM01w6NkPWfA5mK/uQU
-         QDJix0QbsSjLTIT+f/Kqo4w04KPtlxLw3iStvWRFvxlQPTtFfPmJPHJfSUogR9GHkx
-         vXAOypGNx6m5eSMqUCT0Wyw/njtonxLZ/lGdrs8s=
+        b=HYP722hdm2tn3PB4Rwf++Uvp2N7uHs6BCiBCjA77mR75yQqpL+Dq3l1VjuAnp4Nq7
+         GGQ8sjlAE4tp34HaSl/a3QEtxfuX85T20DUS5sXCh/qzQ9vaW40Ao26tyI/n7IOWCr
+         OCwBaYVDSo8DiaxwVzfvOgcV14TgCZLTGOljY8hA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Minchan Kim <minchan@kernel.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
+        stable@vger.kernel.org, Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chinwen Chang <chinwen.chang@mediatek.com>,
+        Nicholas Tang <nicholas.tang@mediatek.com>,
+        Yee Lee <yee.lee@mediatek.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 0106/1126] mm: madvise: return correct bytes advised with process_madvise
-Date:   Tue,  5 Apr 2022 09:14:13 +0200
-Message-Id: <20220405070410.681670271@linuxfoundation.org>
+Subject: [PATCH 5.17 0110/1126] mm/kmemleak: reset tag when compare object pointer
+Date:   Tue,  5 Apr 2022 09:14:17 +0200
+Message-Id: <20220405070410.800091508@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -63,64 +60,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-commit 5bd009c7c9a9e888077c07535dc0c70aeab242c3 upstream.
+commit bfc8089f00fa526dea983844c880fa8106c33ac4 upstream.
 
-Patch series "mm: madvise: return correct bytes processed with
-process_madvise", v2.  With the process_madvise(), always choose to return
-non zero processed bytes over an error.  This can help the user to know on
-which VMA, passed in the 'struct iovec' vector list, is failed to advise
-thus can take the decission of retrying/skipping on that VMA.
+When we use HW-tag based kasan and enable vmalloc support, we hit the
+following bug.  It is due to comparison between tagged object and
+non-tagged pointer.
 
-This patch (of 2):
+We need to reset the kasan tag when we need to compare tagged object and
+non-tagged pointer.
 
-The process_madvise() system call returns error even after processing some
-VMA's passed in the 'struct iovec' vector list which leaves the user
-confused to know where to restart the advise next.  It is also against
-this syscall man page[1] documentation where it mentions that "return
-value may be less than the total number of requested bytes, if an error
-occurred after some iovec elements were already processed.".
+  kmemleak: [name:kmemleak&]Scan area larger than object 0xffffffe77076f440
+  CPU: 4 PID: 1 Comm: init Tainted: G S      W         5.15.25-android13-0-g5cacf919c2bc #1
+  Hardware name: MT6983(ENG) (DT)
+  Call trace:
+   add_scan_area+0xc4/0x244
+   kmemleak_scan_area+0x40/0x9c
+   layout_and_allocate+0x1e8/0x288
+   load_module+0x2c8/0xf00
+   __se_sys_finit_module+0x190/0x1d0
+   __arm64_sys_finit_module+0x20/0x30
+   invoke_syscall+0x60/0x170
+   el0_svc_common+0xc8/0x114
+   do_el0_svc+0x28/0xa0
+   el0_svc+0x60/0xf8
+   el0t_64_sync_handler+0x88/0xec
+   el0t_64_sync+0x1b4/0x1b8
+  kmemleak: [name:kmemleak&]Object 0xf5ffffe77076b000 (size 32768):
+  kmemleak: [name:kmemleak&]  comm "init", pid 1, jiffies 4294894197
+  kmemleak: [name:kmemleak&]  min_count = 0
+  kmemleak: [name:kmemleak&]  count = 0
+  kmemleak: [name:kmemleak&]  flags = 0x1
+  kmemleak: [name:kmemleak&]  checksum = 0
+  kmemleak: [name:kmemleak&]  backtrace:
+       module_alloc+0x9c/0x120
+       move_module+0x34/0x19c
+       layout_and_allocate+0x1c4/0x288
+       load_module+0x2c8/0xf00
+       __se_sys_finit_module+0x190/0x1d0
+       __arm64_sys_finit_module+0x20/0x30
+       invoke_syscall+0x60/0x170
+       el0_svc_common+0xc8/0x114
+       do_el0_svc+0x28/0xa0
+       el0_svc+0x60/0xf8
+       el0t_64_sync_handler+0x88/0xec
+       el0t_64_sync+0x1b4/0x1b8
 
-Consider a user passed 10 VMA's in the 'struct iovec' vector list of which
-9 are processed but one.  Then it just returns the error caused on that
-failed VMA despite the first 9 VMA's processed, leaving the user confused
-about on which VMA it is failed.  Returning the number of bytes processed
-here can help the user to know which VMA it is failed on and thus can
-retry/skip the advise on that VMA.
-
-[1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
-
-Link: https://lkml.kernel.org/r/cover.1647008754.git.quic_charante@quicinc.com
-Link: https://lkml.kernel.org/r/125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com
-Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Michal Hocko <mhocko@suse.com>
+Link: https://lkml.kernel.org/r/20220318034051.30687-1-Kuan-Ying.Lee@mediatek.com
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Chinwen Chang <chinwen.chang@mediatek.com>
+Cc: Nicholas Tang <nicholas.tang@mediatek.com>
+Cc: Yee Lee <yee.lee@mediatek.com>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/madvise.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ mm/kmemleak.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1440,8 +1440,7 @@ SYSCALL_DEFINE5(process_madvise, int, pi
- 		iov_iter_advance(&iter, iovec.iov_len);
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -796,6 +796,8 @@ static void add_scan_area(unsigned long
+ 	unsigned long flags;
+ 	struct kmemleak_object *object;
+ 	struct kmemleak_scan_area *area = NULL;
++	unsigned long untagged_ptr;
++	unsigned long untagged_objp;
+ 
+ 	object = find_and_get_object(ptr, 1);
+ 	if (!object) {
+@@ -804,6 +806,9 @@ static void add_scan_area(unsigned long
+ 		return;
  	}
  
--	if (ret == 0)
--		ret = total_len - iov_iter_count(&iter);
-+	ret = (total_len - iov_iter_count(&iter)) ? : ret;
++	untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
++	untagged_objp = (unsigned long)kasan_reset_tag((void *)object->pointer);
++
+ 	if (scan_area_cache)
+ 		area = kmem_cache_alloc(scan_area_cache, gfp_kmemleak_mask(gfp));
  
- release_mm:
- 	mmput(mm);
+@@ -815,8 +820,8 @@ static void add_scan_area(unsigned long
+ 		goto out_unlock;
+ 	}
+ 	if (size == SIZE_MAX) {
+-		size = object->pointer + object->size - ptr;
+-	} else if (ptr + size > object->pointer + object->size) {
++		size = untagged_objp + object->size - untagged_ptr;
++	} else if (untagged_ptr + size > untagged_objp + object->size) {
+ 		kmemleak_warn("Scan area larger than object 0x%08lx\n", ptr);
+ 		dump_object_info(object);
+ 		kmem_cache_free(scan_area_cache, area);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342C74F45DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B6B4F4412
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389725AbiDEPVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S1389671AbiDEPVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346993AbiDEJpt (ORCPT
+        with ESMTP id S1347023AbiDEJpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:49 -0400
+        Tue, 5 Apr 2022 05:45:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646C0DCAA9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:32:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B5FDCAB5
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:32:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0EDB616C1
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC2CC385A2;
-        Tue,  5 Apr 2022 09:32:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EBEC616DF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93376C385A0;
+        Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151133;
-        bh=Z9FjRlyA0KX5ffVCEjuo3EpyFLIzmAgAwlpgdWulCmE=;
+        s=k20201202; t=1649151134;
+        bh=5SNgnebEuo88t5BuI0Mgek4UqhCz6ONUb192n7FiN0Y=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UWpkqp2myG2riMtTkEm/DY+Z/NNjDiiEcu2Dc9tmyQpzZlmX1qTB3B+cb3QmD+X2e
-         nruXUGzOQSp/ATsdEHTaL9DkHKuAjXhGjymMukwqrpH++v1ZEJN5fL2+SpMSDe3j2w
-         4EbHAcAJdoBYVQOay8iCBwmBZGHpoDLYOU27l99aeF/RfVGwZe5O+Ng85hyGTK3aru
-         zexDJhslyYLuxkI7RLqfb+X5T2DbbUYv6RAGyxuAJkZh2s6doLmLdocqbjiI8loGun
-         1QrlCpeI+x4mWjIvceAfOMRxtUyxtQQx9BdKyJo7Ns/lntXCcCpi9yd01fV2N7OI6A
-         suozhJm3iysWQ==
+        b=Oo9fl/fH8xae4F4cmyDJZ2ie5I3demQAztu68AbOvXXC8uTrXxnalQaGqRqj0CkZ5
+         Bdsa9ewLXh9I7lYTMd7hv5wCN4v4Ip6wPgneKw+6ljf9fJ91Ehn3q6YmJuEv1JL0ls
+         VvUtUMeocgK/Rmxms+BcfXG7ag/gT/IPxsa9ENx7MTsCrtulr0X901gWO1fDlt/3uM
+         oZhJQtRYyg1h5KWzTS7eaqLCgxiNHzocI9y4HDkq/Q13SgD4Eg6H4m2+TaFupUSxFE
+         kXBpVwd9p1G1BreVp93TUtiKWAbyWak4ozrAa4nxAUlELnK4TC3crwN5ro+mhoL4n1
+         bu5BiCtvQWTCw==
 From:   Mark Brown <broonie@kernel.org>
 To:     axel.lin@ingics.com
-Cc:     cy_huang@richtek.com, linux-kernel@vger.kernel.org,
-        lgirdwood@gmail.com
-In-Reply-To: <20220404022514.449231-1-axel.lin@ingics.com>
-References: <20220404022514.449231-1-axel.lin@ingics.com>
-Subject: Re: [PATCH] regulator: rtq2134: Fix missing active_discharge_on setting
-Message-Id: <164915113203.276837.10187918979668391155.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:12 +0100
+Cc:     mani@kernel.org, cristian.ciocaltea@gmail.com,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com
+In-Reply-To: <20220403132235.123727-1-axel.lin@ingics.com>
+References: <20220403132235.123727-1-axel.lin@ingics.com>
+Subject: Re: [PATCH] regulator: atc260x: Fix missing active_discharge_on setting
+Message-Id: <164915113333.276837.13963154631042010035.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:13 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,8 +54,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 10:25:14 +0800, Axel Lin wrote:
-> The active_discharge_on setting was missed, so output discharge resistor
+On Sun, 3 Apr 2022 21:22:35 +0800, Axel Lin wrote:
+> Without active_discharge_on setting, the SWITCH1 discharge enable control
 > is always disabled. Fix it.
 > 
 > 
@@ -66,8 +66,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: rtq2134: Fix missing active_discharge_on setting
-      commit: 17049bf9de55a42ee96fd34520aff8a484677675
+[1/1] regulator: atc260x: Fix missing active_discharge_on setting
+      commit: 2316f0fc0ad2aa87a568ceaf3d76be983ee555c3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

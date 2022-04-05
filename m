@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB494F3000
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B402D4F31CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243773AbiDEJkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S244277AbiDEJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiDEIU4 (ORCPT
+        with ESMTP id S239827AbiDEIVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:56 -0400
+        Tue, 5 Apr 2022 04:21:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F37384;
-        Tue,  5 Apr 2022 01:18:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB570CDD;
+        Tue,  5 Apr 2022 01:19:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A47D460B0E;
-        Tue,  5 Apr 2022 08:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5E9C385A0;
-        Tue,  5 Apr 2022 08:18:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 699A260B0B;
+        Tue,  5 Apr 2022 08:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AFCC385A1;
+        Tue,  5 Apr 2022 08:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146737;
-        bh=3FDGENo31HR4d2ixNLW5MS9/VHe0brDMr3Xy9M1Mn4o=;
+        s=korg; t=1649146742;
+        bh=I5YM5bPQmLWfDLh3VlDSWIqwhMtlUv2kx2ZbvuNqEQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XognXUYyys/zZyTtrDNje6WMxvxllNNcnlLZhRAnqss8FtGcHMhygpw8XmlyLJxxn
-         VeQGCm81mJSrhTa2HRYDbcDqEbCyardfV6iBG/YAqJXBiwk2h9eMuywCu3iYgGWCV3
-         PlBEzj/h3qEqVczxOrCzj9a+2Ym4REU8qPqz7ylM=
+        b=Kkd3lSc0XLtWDlq1V/otBl0VM1LGFy9mamJ9Y28H20JHM2Az2QPlA2azMrJHYvgJT
+         8l/yY0GM2sB6C59t5lXMD3FgOUG7t/JxtDPbVYfv5OQ2LdHNYkdwlDPKYTX3oBETzT
+         6RVIT4tW8CYpCRif5vFoUcB3ltfoN5COKOzDrUDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0869/1126] spi: fsi: Implement a timeout for polling status
-Date:   Tue,  5 Apr 2022 09:26:56 +0200
-Message-Id: <20220405070433.047277673@linuxfoundation.org>
+Subject: [PATCH 5.17 0871/1126] locking/lockdep: Iterate lock_classes directly when reading lockdep files
+Date:   Tue,  5 Apr 2022 09:26:58 +0200
+Message-Id: <20220405070433.104106412@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,73 +55,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eddie James <eajames@linux.ibm.com>
+From: Waiman Long <longman@redhat.com>
 
-[ Upstream commit 89b35e3f28514087d3f1e28e8f5634fbfd07c554 ]
+[ Upstream commit fb7275acd6fb988313dddd8d3d19efa70d9015ad ]
 
-The data transfer routines must poll the status register to
-determine when more data can be shifted in or out. If the hardware
-gets into a bad state, these polling loops may never exit. Prevent
-this by returning an error if a timeout is exceeded.
+When dumping lock_classes information via /proc/lockdep, we can't take
+the lockdep lock as the lock hold time is indeterminate. Iterating
+over all_lock_classes without holding lock can be dangerous as there
+is a slight chance that it may branch off to other lists leading to
+infinite loop or even access invalid memory if changes are made to
+all_lock_classes list in parallel.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220317211426.38940-1-eajames@linux.ibm.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+To avoid this problem, iteration of lock classes is now done directly
+on the lock_classes array itself. The lock_classes_in_use bitmap is
+checked to see if the lock class is being used. To avoid iterating
+the full array all the times, a new max_lock_class_idx value is added
+to track the maximum lock_class index that is currently being used.
+
+We can theoretically take the lockdep lock for iterating all_lock_classes
+when other lockdep files (lockdep_stats and lock_stat) are accessed as
+the lock hold time will be shorter for them. For consistency, they are
+also modified to iterate the lock_classes array directly.
+
+Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220211035526.1329503-2-longman@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsi.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ kernel/locking/lockdep.c           | 14 +++++---
+ kernel/locking/lockdep_internals.h |  6 ++--
+ kernel/locking/lockdep_proc.c      | 51 +++++++++++++++++++++++++-----
+ 3 files changed, 56 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
-index b6c7467f0b59..d403a7a3021d 100644
---- a/drivers/spi/spi-fsi.c
-+++ b/drivers/spi/spi-fsi.c
-@@ -25,6 +25,7 @@
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 3c73eefdde63..4675a686f942 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -183,11 +183,9 @@ static DECLARE_BITMAP(list_entries_in_use, MAX_LOCKDEP_ENTRIES);
+ static struct hlist_head lock_keys_hash[KEYHASH_SIZE];
+ unsigned long nr_lock_classes;
+ unsigned long nr_zapped_classes;
+-#ifndef CONFIG_DEBUG_LOCKDEP
+-static
+-#endif
++unsigned long max_lock_class_idx;
+ struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
+-static DECLARE_BITMAP(lock_classes_in_use, MAX_LOCKDEP_KEYS);
++DECLARE_BITMAP(lock_classes_in_use, MAX_LOCKDEP_KEYS);
  
- #define SPI_FSI_BASE			0x70000
- #define SPI_FSI_INIT_TIMEOUT_MS		1000
-+#define SPI_FSI_STATUS_TIMEOUT_MS	100
- #define SPI_FSI_MAX_RX_SIZE		8
- #define SPI_FSI_MAX_TX_SIZE		40
- 
-@@ -299,6 +300,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
- 				 struct spi_transfer *transfer)
+ static inline struct lock_class *hlock_class(struct held_lock *hlock)
  {
- 	int rc = 0;
-+	unsigned long end;
- 	u64 status = 0ULL;
+@@ -338,7 +336,7 @@ static inline void lock_release_holdtime(struct held_lock *hlock)
+  * elements. These elements are linked together by the lock_entry member in
+  * struct lock_class.
+  */
+-LIST_HEAD(all_lock_classes);
++static LIST_HEAD(all_lock_classes);
+ static LIST_HEAD(free_lock_classes);
  
- 	if (transfer->tx_buf) {
-@@ -315,10 +317,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
- 			if (rc)
- 				return rc;
+ /**
+@@ -1252,6 +1250,7 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
+ 	struct lockdep_subclass_key *key;
+ 	struct hlist_head *hash_head;
+ 	struct lock_class *class;
++	int idx;
  
-+			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
- 			do {
- 				rc = fsi_spi_status(ctx, &status, "TX");
- 				if (rc)
- 					return rc;
+ 	DEBUG_LOCKS_WARN_ON(!irqs_disabled());
+ 
+@@ -1317,6 +1316,9 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
+ 	 * of classes.
+ 	 */
+ 	list_move_tail(&class->lock_entry, &all_lock_classes);
++	idx = class - lock_classes;
++	if (idx > max_lock_class_idx)
++		max_lock_class_idx = idx;
+ 
+ 	if (verbose(class)) {
+ 		graph_unlock();
+@@ -6000,6 +6002,8 @@ static void zap_class(struct pending_free *pf, struct lock_class *class)
+ 		WRITE_ONCE(class->name, NULL);
+ 		nr_lock_classes--;
+ 		__clear_bit(class - lock_classes, lock_classes_in_use);
++		if (class - lock_classes == max_lock_class_idx)
++			max_lock_class_idx--;
+ 	} else {
+ 		WARN_ONCE(true, "%s() failed for class %s\n", __func__,
+ 			  class->name);
+diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
+index ecb8662e7a4e..bbe9000260d0 100644
+--- a/kernel/locking/lockdep_internals.h
++++ b/kernel/locking/lockdep_internals.h
+@@ -121,7 +121,6 @@ static const unsigned long LOCKF_USED_IN_IRQ_READ =
+ 
+ #define MAX_LOCKDEP_CHAIN_HLOCKS (MAX_LOCKDEP_CHAINS*5)
+ 
+-extern struct list_head all_lock_classes;
+ extern struct lock_chain lock_chains[];
+ 
+ #define LOCK_USAGE_CHARS (2*XXX_LOCK_USAGE_STATES + 1)
+@@ -151,6 +150,10 @@ extern unsigned int nr_large_chain_blocks;
+ 
+ extern unsigned int max_lockdep_depth;
+ extern unsigned int max_bfs_queue_depth;
++extern unsigned long max_lock_class_idx;
 +
-+				if (time_after(jiffies, end))
-+					return -ETIMEDOUT;
- 			} while (status & SPI_FSI_STATUS_TDR_FULL);
++extern struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
++extern unsigned long lock_classes_in_use[];
  
- 			sent += nb;
-@@ -329,10 +335,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
- 		u8 *rx = transfer->rx_buf;
+ #ifdef CONFIG_PROVE_LOCKING
+ extern unsigned long lockdep_count_forward_deps(struct lock_class *);
+@@ -205,7 +208,6 @@ struct lockdep_stats {
+ };
  
- 		while (transfer->len > recv) {
-+			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
- 			do {
- 				rc = fsi_spi_status(ctx, &status, "RX");
- 				if (rc)
- 					return rc;
+ DECLARE_PER_CPU(struct lockdep_stats, lockdep_stats);
+-extern struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
+ 
+ #define __debug_atomic_inc(ptr)					\
+ 	this_cpu_inc(lockdep_stats.ptr);
+diff --git a/kernel/locking/lockdep_proc.c b/kernel/locking/lockdep_proc.c
+index b8d9a050c337..15fdc7fa5c68 100644
+--- a/kernel/locking/lockdep_proc.c
++++ b/kernel/locking/lockdep_proc.c
+@@ -24,14 +24,33 @@
+ 
+ #include "lockdep_internals.h"
+ 
++/*
++ * Since iteration of lock_classes is done without holding the lockdep lock,
++ * it is not safe to iterate all_lock_classes list directly as the iteration
++ * may branch off to free_lock_classes or the zapped list. Iteration is done
++ * directly on the lock_classes array by checking the lock_classes_in_use
++ * bitmap and max_lock_class_idx.
++ */
++#define iterate_lock_classes(idx, class)				\
++	for (idx = 0, class = lock_classes; idx <= max_lock_class_idx;	\
++	     idx++, class++)
 +
-+				if (time_after(jiffies, end))
-+					return -ETIMEDOUT;
- 			} while (!(status & SPI_FSI_STATUS_RDR_FULL));
+ static void *l_next(struct seq_file *m, void *v, loff_t *pos)
+ {
+-	return seq_list_next(v, &all_lock_classes, pos);
++	struct lock_class *class = v;
++
++	++class;
++	*pos = class - lock_classes;
++	return (*pos > max_lock_class_idx) ? NULL : class;
+ }
  
- 			rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
+ static void *l_start(struct seq_file *m, loff_t *pos)
+ {
+-	return seq_list_start_head(&all_lock_classes, *pos);
++	unsigned long idx = *pos;
++
++	if (idx > max_lock_class_idx)
++		return NULL;
++	return lock_classes + idx;
+ }
+ 
+ static void l_stop(struct seq_file *m, void *v)
+@@ -57,14 +76,16 @@ static void print_name(struct seq_file *m, struct lock_class *class)
+ 
+ static int l_show(struct seq_file *m, void *v)
+ {
+-	struct lock_class *class = list_entry(v, struct lock_class, lock_entry);
++	struct lock_class *class = v;
+ 	struct lock_list *entry;
+ 	char usage[LOCK_USAGE_CHARS];
++	int idx = class - lock_classes;
+ 
+-	if (v == &all_lock_classes) {
++	if (v == lock_classes)
+ 		seq_printf(m, "all lock classes:\n");
++
++	if (!test_bit(idx, lock_classes_in_use))
+ 		return 0;
+-	}
+ 
+ 	seq_printf(m, "%p", class->key);
+ #ifdef CONFIG_DEBUG_LOCKDEP
+@@ -220,8 +241,11 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
+ 
+ #ifdef CONFIG_PROVE_LOCKING
+ 	struct lock_class *class;
++	unsigned long idx;
+ 
+-	list_for_each_entry(class, &all_lock_classes, lock_entry) {
++	iterate_lock_classes(idx, class) {
++		if (!test_bit(idx, lock_classes_in_use))
++			continue;
+ 
+ 		if (class->usage_mask == 0)
+ 			nr_unused++;
+@@ -254,6 +278,7 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
+ 
+ 		sum_forward_deps += lockdep_count_forward_deps(class);
+ 	}
++
+ #ifdef CONFIG_DEBUG_LOCKDEP
+ 	DEBUG_LOCKS_WARN_ON(debug_atomic_read(nr_unused_locks) != nr_unused);
+ #endif
+@@ -345,6 +370,8 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
+ 	seq_printf(m, " max bfs queue depth:           %11u\n",
+ 			max_bfs_queue_depth);
+ #endif
++	seq_printf(m, " max lock class index:          %11lu\n",
++			max_lock_class_idx);
+ 	lockdep_stats_debug_show(m);
+ 	seq_printf(m, " debug_locks:                   %11u\n",
+ 			debug_locks);
+@@ -622,12 +649,16 @@ static int lock_stat_open(struct inode *inode, struct file *file)
+ 	if (!res) {
+ 		struct lock_stat_data *iter = data->stats;
+ 		struct seq_file *m = file->private_data;
++		unsigned long idx;
+ 
+-		list_for_each_entry(class, &all_lock_classes, lock_entry) {
++		iterate_lock_classes(idx, class) {
++			if (!test_bit(idx, lock_classes_in_use))
++				continue;
+ 			iter->class = class;
+ 			iter->stats = lock_stats(class);
+ 			iter++;
+ 		}
++
+ 		data->iter_end = iter;
+ 
+ 		sort(data->stats, data->iter_end - data->stats,
+@@ -645,6 +676,7 @@ static ssize_t lock_stat_write(struct file *file, const char __user *buf,
+ 			       size_t count, loff_t *ppos)
+ {
+ 	struct lock_class *class;
++	unsigned long idx;
+ 	char c;
+ 
+ 	if (count) {
+@@ -654,8 +686,11 @@ static ssize_t lock_stat_write(struct file *file, const char __user *buf,
+ 		if (c != '0')
+ 			return count;
+ 
+-		list_for_each_entry(class, &all_lock_classes, lock_entry)
++		iterate_lock_classes(idx, class) {
++			if (!test_bit(idx, lock_classes_in_use))
++				continue;
+ 			clear_lock_stats(class);
++		}
+ 	}
+ 	return count;
+ }
 -- 
 2.34.1
 

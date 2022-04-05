@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3EE4F48D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB024F4E5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387453AbiDEVvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S1589065AbiDFASZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348559AbiDEKr0 (ORCPT
+        with ESMTP id S1348617AbiDEKrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:47:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454C752E44;
+        Tue, 5 Apr 2022 06:47:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF28F58385;
         Tue,  5 Apr 2022 03:27:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8ED8CE0B18;
-        Tue,  5 Apr 2022 10:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A68FC385A0;
-        Tue,  5 Apr 2022 10:27:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63BA2617AF;
+        Tue,  5 Apr 2022 10:27:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F382C385A1;
+        Tue,  5 Apr 2022 10:27:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154432;
-        bh=oHWJVGZerJimRvn7YMHPGhT+6D1L6vxaa4SWJ8iflK4=;
+        s=korg; t=1649154434;
+        bh=DYk/1tgFYAREGxESYGyO/u0W/NU7F91T01lwHxf8//o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TfOk944POWLq+1CAZO8AjyBQ9TQDw/Ppi+FpQg2nYj5qQgyQEreXnJY2KvLJQJhkU
-         xnuZY+sym+6U4nzW1jnMFXjv/ckQ1yzNiRQmRQ0kfaIZ89OGeEF9kDVVQK9eZ7aMHK
-         Yr0KNhEQqkomkT1siiGPKWfeVR5KfqGseH2bw0AA=
+        b=b7Q3mO6/6cko8MFWfUYk3fPOU/hsnYW6pCkpEzP31+vzFYVukEPFipwzE90l2zHe3
+         z60sdpQZAHgPkGHDnIcRuuaQ69sGGDdCk+2bE05xYhA1g9CEiaRcgSiPHdX40ZxIJ5
+         K7n60JbW6kHCZn3CJvb03oCCJ7L7lzggLTgeRqtc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.10 577/599] ARM: 9187/1: JIVE: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:34:31 +0200
-Message-Id: <20220405070316.013498415@linuxfoundation.org>
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 578/599] mm/memcontrol: return 1 from cgroup.memory __setup() handler
+Date:   Tue,  5 Apr 2022 09:34:32 +0200
+Message-Id: <20220405070316.043091679@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -61,54 +63,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa upstream.
+commit 460a79e18842caca6fa0c415de4a3ac1e671ac50 upstream.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from jive_mtdset().
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; it just pollutes init's
+environment).
 
-Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
+The only reason that this particular __setup handler does not pollute
+init's environment is that the setup string contains a '.', as in
+"cgroup.memory".  This causes init/main.c::unknown_boottoption() to
+consider it to be an "Unused module parameter" and ignore it.  (This is
+for parsing of loadable module parameters any time after kernel init.)
+Otherwise the string "cgroup.memory=whatever" would be added to init's
+environment strings.
+
+Instead of relying on this '.' quirk, just return 1 to indicate that the
+boot option has been handled.
+
+Note that there is no warning message if someone enters:
+	cgroup.memory=anything_invalid
+
+Link: https://lkml.kernel.org/r/20220222005811.10672-1-rdunlap@infradead.org
+Fixes: f7e1cb6ec51b0 ("mm: memcontrol: account socket memory in unified hierarchy memory controller")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ben Dooks <ben-linux@fluff.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-s3c/mach-jive.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ mm/memcontrol.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/mach-s3c/mach-jive.c
-+++ b/arch/arm/mach-s3c/mach-jive.c
-@@ -236,11 +236,11 @@ static int __init jive_mtdset(char *opti
- 	unsigned long set;
- 
- 	if (options == NULL || options[0] == '\0')
--		return 0;
-+		return 1;
- 
- 	if (kstrtoul(options, 10, &set)) {
- 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
--		return 0;
-+		return 1;
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -7124,7 +7124,7 @@ static int __init cgroup_memory(char *s)
+ 		if (!strcmp(token, "nokmem"))
+ 			cgroup_memory_nokmem = true;
  	}
- 
- 	switch (set) {
-@@ -255,7 +255,7 @@ static int __init jive_mtdset(char *opti
- 		       "using default.", set);
- 	}
- 
 -	return 0;
 +	return 1;
  }
+ __setup("cgroup.memory=", cgroup_memory);
  
- /* parse the mtdset= option given to the kernel command line */
 
 

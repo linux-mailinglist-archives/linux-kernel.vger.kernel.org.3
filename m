@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C122A4F2CDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4274F2DA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353022AbiDEKF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:05:27 -0400
+        id S1353289AbiDEKF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:57 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239488AbiDEIbV (ORCPT
+        with ESMTP id S240494AbiDEIcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:31:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511BF69CD1;
-        Tue,  5 Apr 2022 01:23:34 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF40D7246C;
+        Tue,  5 Apr 2022 01:24:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52E2FB81BC3;
-        Tue,  5 Apr 2022 08:23:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EBEC385A0;
-        Tue,  5 Apr 2022 08:23:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 558E460FFC;
+        Tue,  5 Apr 2022 08:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F005C385A2;
+        Tue,  5 Apr 2022 08:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147007;
-        bh=Isa5lLGUypQQZmnkX08Z4fxZNNXOrlB9B2FkkAfrJds=;
+        s=korg; t=1649147068;
+        bh=8Lxz8YXku8+/UbywXNde6FytYLkgLbFrUsn5jXKeWto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MC/J1vMoKqcepF/fz97+nq2fmfuHkSlG5J7vDBCA3FjG4zBOrk7W7j0v8K+XZpM9L
-         srPjDON5t+SD27Zri5JyUOcOldm8/aaN5117ftb7M6qth8c9uSLeWP4+dRCw9l6Ne5
-         oklQjunnh98F9bVWkrMDQFc6waWE5svmCgWZpdV0=
+        b=l9bmCvbSwkrfxTzTzJKs0GEoVb/TDtXbdvJ8j1UJX86/nqC4gpb/wDmVKkXFbuHt9
+         rcYUe4NSnPHjxcOlTkkBij8NAPiAUBbMWniDPyYkjx6G8Xp3IfHPCIUqoiQaB9Phb3
+         2ixpQblbj1jhrO5QNADL6fj/5G+Qc58iGoATujZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Michael Neuling <mikey@neuling.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
         Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.17 0961/1126] powerpc/tm: Fix more userspace r13 corruption
-Date:   Tue,  5 Apr 2022 09:28:28 +0200
-Message-Id: <20220405070435.713928313@linuxfoundation.org>
+Subject: [PATCH 5.17 0963/1126] powerpc/lib/sstep: Fix build errors with newer binutils
+Date:   Tue,  5 Apr 2022 09:28:30 +0200
+Message-Id: <20220405070435.774343569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,114 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-commit 9d71165d3934e607070c4e48458c0cf161b1baea upstream.
+commit 8219d31effa7be5dbc7ff915d7970672e028c701 upstream.
 
-Commit cf13435b730a ("powerpc/tm: Fix userspace r13 corruption") fixes a
-problem in treclaim where a SLB miss can occur on the
-thread_struct->ckpt_regs while SCRATCH0 is live with the saved user r13
-value, clobbering it with the kernel r13 and ultimately resulting in
-kernel r13 being stored in ckpt_regs.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
 
-There is an equivalent problem in trechkpt where the user r13 value is
-loaded into r13 from chkpt_regs to be recheckpointed, but a SLB miss
-could occur on ckpt_regs accesses after that, which will result in r13
-being clobbered with a kernel value and that will get recheckpointed and
-then restored to user registers.
+  {standard input}: Assembler messages:
+  {standard input}:10576: Error: unrecognized opcode: `stbcx.'
+  {standard input}:10680: Error: unrecognized opcode: `lharx'
+  {standard input}:10694: Error: unrecognized opcode: `lbarx'
 
-The same memory page is accessed right before this critical window where
-a SLB miss could cause corruption, so hitting the bug requires the SLB
-entry be removed within a small window of instructions, which is
-possible if a SLB related MCE hits there. PAPR also permits the
-hypervisor to discard this SLB entry (because slb_shadow->persistent is
-only set to SLB_NUM_BOLTED) although it's not known whether any
-implementations would do this (KVM does not). So this is an extremely
-unlikely bug, only found by inspection.
+Rework to add assembler directives [1] around the instruction.  The
+problem with this might be that we can trick a power6 into
+single-stepping through an stbcx. for instance, and it will execute that
+in kernel mode.
 
-Fix this by also storing user r13 in a temporary location on the kernel
-stack and don't change the r13 register from kernel r13 until the RI=0
-critical section that does not fault.
+[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
 
-The SCRATCH0 change is not strictly part of the fix, it's only used in
-the RI=0 section so it does not have the same problem as the previous
-SCRATCH0 bug.
-
-Fixes: 98ae22e15b43 ("powerpc: Add helper functions for transactional memory context switching")
-Cc: stable@vger.kernel.org # v3.9+
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Acked-by: Michael Neuling <mikey@neuling.org>
+Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
+Cc: stable@vger.kernel.org # v4.14+
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220311024733.48926-1-npiggin@gmail.com
+Link: https://lore.kernel.org/r/20220224162215.3406642-3-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/tm.S |   25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ arch/powerpc/lib/sstep.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/arch/powerpc/kernel/tm.S
-+++ b/arch/powerpc/kernel/tm.S
-@@ -443,7 +443,8 @@ restore_gprs:
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -1097,7 +1097,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
  
- 	REST_GPR(0, r7)				/* GPR0 */
- 	REST_GPRS(2, 4, r7)			/* GPR2-4 */
--	REST_GPRS(8, 31, r7)			/* GPR8-31 */
-+	REST_GPRS(8, 12, r7)			/* GPR8-12 */
-+	REST_GPRS(14, 31, r7)			/* GPR14-31 */
+ #define __put_user_asmx(x, addr, err, op, cr)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	" op " %2,0,%3\n"		\
++		".machine pop\n"			\
+ 		"	mfcr	%1\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+@@ -1110,7 +1113,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
  
- 	/* Load up PPR and DSCR here so we don't run with user values for long */
- 	mtspr	SPRN_DSCR, r5
-@@ -479,18 +480,24 @@ restore_gprs:
- 	REST_GPR(6, r7)
- 
- 	/*
--	 * Store r1 and r5 on the stack so that we can access them after we
--	 * clear MSR RI.
-+	 * Store user r1 and r5 and r13 on the stack (in the unused save
-+	 * areas / compiler reserved areas), so that we can access them after
-+	 * we clear MSR RI.
- 	 */
- 
- 	REST_GPR(5, r7)
- 	std	r5, -8(r1)
--	ld	r5, GPR1(r7)
-+	ld	r5, GPR13(r7)
- 	std	r5, -16(r1)
-+	ld	r5, GPR1(r7)
-+	std	r5, -24(r1)
- 
- 	REST_GPR(7, r7)
- 
--	/* Clear MSR RI since we are about to use SCRATCH0. EE is already off */
-+	/* Stash the stack pointer away for use after recheckpoint */
-+	std	r1, PACAR1(r13)
-+
-+	/* Clear MSR RI since we are about to clobber r13. EE is already off */
- 	li	r5, 0
- 	mtmsrd	r5, 1
- 
-@@ -501,9 +508,9 @@ restore_gprs:
- 	 * until we turn MSR RI back on.
- 	 */
- 
--	SET_SCRATCH0(r1)
- 	ld	r5, -8(r1)
--	ld	r1, -16(r1)
-+	ld	r13, -16(r1)
-+	ld	r1, -24(r1)
- 
- 	/* Commit register state as checkpointed state: */
- 	TRECHKPT
-@@ -519,9 +526,9 @@ restore_gprs:
- 	 */
- 
- 	GET_PACA(r13)
--	GET_SCRATCH0(r1)
-+	ld	r1, PACAR1(r13)
- 
--	/* R1 is restored, so we are recoverable again.  EE is still off */
-+	/* R13, R1 is restored, so we are recoverable again.  EE is still off */
- 	li	r4, MSR_RI
- 	mtmsrd	r4, 1
- 
+ #define __get_user_asmx(x, addr, err, op)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	"op" %1,0,%2\n"			\
++		".machine pop\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+ 		"3:	li	%0,%3\n"		\
 
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AF14F4E94
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D64F4D0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835678AbiDFAcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S1454249AbiDEXi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358190AbiDEK2F (ORCPT
+        with ESMTP id S1358192AbiDEK2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:28:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FBB1F629;
-        Tue,  5 Apr 2022 03:16:38 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9E1F62C;
+        Tue,  5 Apr 2022 03:16:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56345B81B7A;
-        Tue,  5 Apr 2022 10:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4B4C385A1;
-        Tue,  5 Apr 2022 10:16:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F6161562;
+        Tue,  5 Apr 2022 10:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAC4C385A0;
+        Tue,  5 Apr 2022 10:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153796;
-        bh=C2iDyueRs+iO3TcFt7NP8EmWJUbFs7eGUQBM3p6j4XU=;
+        s=korg; t=1649153798;
+        bh=OtMJiNTcTHUQcPH4dSGJwZZlh+3lpDszUo2IbFnk9JM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ka2WgA2neBocVuivTq9RTQlfpc6i1TXcp09kEjGyTkGF1KaL89wcFgFsZZ/rFRXI1
-         H8S3A0BOTkOCEtF8816hLvtiRQLBwTE9fQ1qm5D2grfoq8UcdO76kGb8I5rYN+TSsZ
-         StpVQ3x8r1P8z2RbRvtmZpm6xBNho2eJkkMYbFas=
+        b=sL2zWAqjQ0a05nKr9CIFjZwL4cPxLqPVP64LiAgq0c5Zx1BozDNogjq5vdirgLtmy
+         ZuxLWr6emh3zW+VV1G9ApFAykzKAPzdLshPKMIQvum6ovTSPAM/w4nXbQWdQ9GY/K0
+         kpWxZBbegqTY/ZlMNrhVpytvQvGSkOHpTMBUybuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 350/599] ath10k: Fix error handling in ath10k_setup_msa_resources
-Date:   Tue,  5 Apr 2022 09:30:44 +0200
-Message-Id: <20220405070309.240779822@linuxfoundation.org>
+Subject: [PATCH 5.10 351/599] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
+Date:   Tue,  5 Apr 2022 09:30:45 +0200
+Message-Id: <20220405070309.270199607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -58,41 +58,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9747a78d5f758a5284751a10aee13c30d02bd5f1 ]
+[ Upstream commit 4528668ca331f7ce5999b7746657b46db5b3b785 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error path.
-
-Fixes: 727fec790ead ("ath10k: Setup the msa resources before qmi init")
+Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220308070238.19295-1-linmq006@gmail.com
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/snoc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/mips_cdmm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
-index daae470ecf5a..e5a296039f71 100644
---- a/drivers/net/wireless/ath/ath10k/snoc.c
-+++ b/drivers/net/wireless/ath/ath10k/snoc.c
-@@ -1477,11 +1477,11 @@ static int ath10k_setup_msa_resources(struct ath10k *ar, u32 msa_size)
- 	node = of_parse_phandle(dev->of_node, "memory-region", 0);
- 	if (node) {
- 		ret = of_address_to_resource(node, 0, &r);
-+		of_node_put(node);
- 		if (ret) {
- 			dev_err(dev, "failed to resolve msa fixed region\n");
- 			return ret;
- 		}
--		of_node_put(node);
- 
- 		ar->msa.paddr = r.start;
- 		ar->msa.mem_size = resource_size(&r);
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 626dedd110cb..fca0d0669aa9 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
+ 	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
+ 	if (np) {
+ 		err = of_address_to_resource(np, 0, &res);
++		of_node_put(np);
+ 		if (!err)
+ 			return res.start;
+ 	}
 -- 
 2.34.1
 

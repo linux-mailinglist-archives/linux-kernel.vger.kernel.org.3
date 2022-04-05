@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C647A4F4D7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21684F49E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582174AbiDEXmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S1451808AbiDEWau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352030AbiDEPLv (ORCPT
+        with ESMTP id S1352003AbiDEPLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 11:11:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6A010857C
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437FD10857E
         for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:25:40 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,35 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9RxnbEIrXzBC0NMsbr0LXTgI58lfBLedW2KkOWR443M=;
-        b=StmgCpnWJcyWAWVSMuwzQ4qK7xtyNzQ7IponkIaZJlAMzGBB6YToT0O6seLv9qvWKn9Fsv
-        WCW+36ZjElr84fG3Z9GnKAhBXp07h8AtWU7QlPiwli3dnO/SI5DfqujT8Y4byw0Wjq8Epm
-        V4jOwPDLLCdH4FVcttSCDyrQ2w0v/q6QACgAK4Cvx3NFiYgW2IAU0gJGXotvNZAA6FJHq7
-        fbt/vmNI2nx0DKYWO4/5wbd2uQXimpbf5ixVKH9m+ki6baWE9R25qZ78j2pZ38SIuhqb+U
-        UQTI5A5FHzZSigje1+3TXykAp1AhhZ9/Ekd2eLCCab9AairTNiviFR7cPABABA==
+        bh=vNeqajyflYseDN9U86copcD82UelhphMBtFer240cuQ=;
+        b=W7/pb8xYxRRmMWdND5mpwMKRennaa0wwlKgGgp6un5Dap/qjWXdJga/yVEx1Lsm8KYQYqi
+        +3c6JE15H0LAtHu33mG3Dep57WnXKRCrw+vyGSipCqT8Ff6HBsfEMkPSzHWhZurAUZZZhZ
+        bLNeJtV0WV7TG/oqVL6padKSmVJsvfZk3DoYS65pdMNxokLQu5HkAQfdTK/7oEYn7T/bKv
+        anAtrztsJMDz/1fUaT2Z8DEYDGwr71G/Uzbr77HUVN+EIrcqW9c2tloVxxxUU2+YIkNA+v
+        JTZPehM+N2Q6U22YJ0T07YG6XCgddWEk/GF7Yyb7piO7iQxhK1BL6VJm3daieA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1649165138;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9RxnbEIrXzBC0NMsbr0LXTgI58lfBLedW2KkOWR443M=;
-        b=+o9H3hvsRb1NxsQrtr1tzPik6Ga8+T69XjZQFtfT+maEhuk2j16bMOllKuNeUfDXDAyTaG
-        esjwVBya0Np3ZeDw==
+        bh=vNeqajyflYseDN9U86copcD82UelhphMBtFer240cuQ=;
+        b=xawPdNh+P1cLeleF+r1Cmfe51m5joVK55Sjm+xx2D1TUS1vEZYcezfancq6p9tzdDvD5Jn
+        GTT7zZcEs5mywaBw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: [PATCH printk v2 01/12] printk: rename cpulock functions
-Date:   Tue,  5 Apr 2022 15:31:24 +0206
-Message-Id: <20220405132535.649171-2-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v2 03/12] printk: get caller_id/timestamp after migration disable
+Date:   Tue,  5 Apr 2022 15:31:26 +0206
+Message-Id: <20220405132535.649171-4-john.ogness@linutronix.de>
 In-Reply-To: <20220405132535.649171-1-john.ogness@linutronix.de>
 References: <20220405132535.649171-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,300 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the printk cpulock is CPU-reentrant and since it is used
-in all contexts, its usage must be carefully considered and
-most likely will require programming locklessly. To avoid
-mistaking the printk cpulock as a typical lock, rename it to
-cpu_sync. The main functions then become:
+Currently the local CPU timestamp and caller_id for the record are
+collected while migration is enabled. Since this information is
+CPU-specific, it should be collected with migration disabled.
 
-    printk_cpu_sync_get_irqsave(flags);
-    printk_cpu_sync_put_irqrestore(flags);
-
-Add extra notes of caution in the function description to help
-developers understand the requirements for correct usage.
+Migration is disabled immediately after collecting this information
+anyway, so just move the information collection to after the
+migration disabling.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- include/linux/printk.h | 54 +++++++++++++++++++-------------
- kernel/printk/printk.c | 71 +++++++++++++++++++++---------------------
- lib/dump_stack.c       |  4 +--
- lib/nmi_backtrace.c    |  4 +--
- 4 files changed, 73 insertions(+), 60 deletions(-)
+ kernel/printk/printk.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 1522df223c0f..859323a52985 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -277,43 +277,55 @@ static inline void printk_trigger_flush(void)
- #endif
- 
- #ifdef CONFIG_SMP
--extern int __printk_cpu_trylock(void);
--extern void __printk_wait_on_cpu_lock(void);
--extern void __printk_cpu_unlock(void);
-+extern int __printk_cpu_sync_try_get(void);
-+extern void __printk_cpu_sync_wait(void);
-+extern void __printk_cpu_sync_put(void);
- 
- /**
-- * printk_cpu_lock_irqsave() - Acquire the printk cpu-reentrant spinning
-- *                             lock and disable interrupts.
-+ * printk_cpu_sync_get_irqsave() - Acquire the printk cpu-reentrant spinning
-+ *                                 lock and disable interrupts.
-  * @flags: Stack-allocated storage for saving local interrupt state,
-- *         to be passed to printk_cpu_unlock_irqrestore().
-+ *         to be passed to printk_cpu_sync_put_irqrestore().
-  *
-  * If the lock is owned by another CPU, spin until it becomes available.
-  * Interrupts are restored while spinning.
-+ *
-+ * CAUTION: This function must be used carefully. It does not behave like a
-+ * typical lock. Here are important things to watch out for...
-+ *
-+ *     * This function is reentrant on the same CPU. Therefore the calling
-+ *       code must not assume exclusive access to data if code accessing the
-+ *       data can run reentrant or within NMI context on the same CPU.
-+ *
-+ *     * If there exists usage of this function from NMI context, it becomes
-+ *       unsafe to perform any type of locking or spinning to wait for other
-+ *       CPUs after calling this function from any context. This includes
-+ *       using spinlocks or any other busy-waiting synchronization methods.
-  */
--#define printk_cpu_lock_irqsave(flags)		\
--	for (;;) {				\
--		local_irq_save(flags);		\
--		if (__printk_cpu_trylock())	\
--			break;			\
--		local_irq_restore(flags);	\
--		__printk_wait_on_cpu_lock();	\
-+#define printk_cpu_sync_get_irqsave(flags)		\
-+	for (;;) {					\
-+		local_irq_save(flags);			\
-+		if (__printk_cpu_sync_try_get())	\
-+			break;				\
-+		local_irq_restore(flags);		\
-+		__printk_cpu_sync_wait();		\
- 	}
- 
- /**
-- * printk_cpu_unlock_irqrestore() - Release the printk cpu-reentrant spinning
-- *                                  lock and restore interrupts.
-- * @flags: Caller's saved interrupt state, from printk_cpu_lock_irqsave().
-+ * printk_cpu_sync_put_irqrestore() - Release the printk cpu-reentrant spinning
-+ *                                    lock and restore interrupts.
-+ * @flags: Caller's saved interrupt state, from printk_cpu_sync_get_irqsave().
-  */
--#define printk_cpu_unlock_irqrestore(flags)	\
-+#define printk_cpu_sync_put_irqrestore(flags)	\
- 	do {					\
--		__printk_cpu_unlock();		\
-+		__printk_cpu_sync_put();	\
- 		local_irq_restore(flags);	\
--	} while (0)				\
-+	} while (0)
- 
- #else
- 
--#define printk_cpu_lock_irqsave(flags) ((void)flags)
--#define printk_cpu_unlock_irqrestore(flags) ((void)flags)
-+#define printk_cpu_sync_get_irqsave(flags) ((void)flags)
-+#define printk_cpu_sync_put_irqrestore(flags) ((void)flags)
- 
- #endif /* CONFIG_SMP */
- 
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index da03c15ecc89..13a1eebe72af 100644
+index 13a1eebe72af..9774a3f6bafb 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -3667,26 +3667,26 @@ EXPORT_SYMBOL_GPL(kmsg_dump_rewind);
- #endif
- 
- #ifdef CONFIG_SMP
--static atomic_t printk_cpulock_owner = ATOMIC_INIT(-1);
--static atomic_t printk_cpulock_nested = ATOMIC_INIT(0);
-+static atomic_t printk_cpu_sync_owner = ATOMIC_INIT(-1);
-+static atomic_t printk_cpu_sync_nested = ATOMIC_INIT(0);
+@@ -2041,7 +2041,7 @@ static inline void printk_delay(void)
+ static inline u32 printk_caller_id(void)
+ {
+ 	return in_task() ? task_pid_nr(current) :
+-		0x80000000 + raw_smp_processor_id();
++		0x80000000 + smp_processor_id();
+ }
  
  /**
-- * __printk_wait_on_cpu_lock() - Busy wait until the printk cpu-reentrant
-- *                               spinning lock is not owned by any CPU.
-+ * __printk_cpu_sync_wait() - Busy wait until the printk cpu-reentrant
-+ *                            spinning lock is not owned by any CPU.
-  *
-  * Context: Any context.
-  */
--void __printk_wait_on_cpu_lock(void)
-+void __printk_cpu_sync_wait(void)
+@@ -2123,7 +2123,6 @@ int vprintk_store(int facility, int level,
+ 		  const struct dev_printk_info *dev_info,
+ 		  const char *fmt, va_list args)
  {
- 	do {
- 		cpu_relax();
--	} while (atomic_read(&printk_cpulock_owner) != -1);
-+	} while (atomic_read(&printk_cpu_sync_owner) != -1);
- }
--EXPORT_SYMBOL(__printk_wait_on_cpu_lock);
-+EXPORT_SYMBOL(__printk_cpu_sync_wait);
+-	const u32 caller_id = printk_caller_id();
+ 	struct prb_reserved_entry e;
+ 	enum printk_info_flags flags = 0;
+ 	struct printk_record r;
+@@ -2133,10 +2132,14 @@ int vprintk_store(int facility, int level,
+ 	u8 *recursion_ptr;
+ 	u16 reserve_size;
+ 	va_list args2;
++	u32 caller_id;
+ 	u16 text_len;
+ 	int ret = 0;
+ 	u64 ts_nsec;
  
- /**
-- * __printk_cpu_trylock() - Try to acquire the printk cpu-reentrant
-- *                          spinning lock.
-+ * __printk_cpu_sync_try_get() - Try to acquire the printk cpu-reentrant
-+ *                               spinning lock.
-  *
-  * If no processor has the lock, the calling processor takes the lock and
-  * becomes the owner. If the calling processor is already the owner of the
-@@ -3695,7 +3695,7 @@ EXPORT_SYMBOL(__printk_wait_on_cpu_lock);
-  * Context: Any context. Expects interrupts to be disabled.
-  * Return: 1 on success, otherwise 0.
-  */
--int __printk_cpu_trylock(void)
-+int __printk_cpu_sync_try_get(void)
- {
- 	int cpu;
- 	int old;
-@@ -3705,79 +3705,80 @@ int __printk_cpu_trylock(void)
++	if (!printk_enter_irqsave(recursion_ptr, irqflags))
++		return 0;
++
  	/*
- 	 * Guarantee loads and stores from this CPU when it is the lock owner
- 	 * are _not_ visible to the previous lock owner. This pairs with
--	 * __printk_cpu_unlock:B.
-+	 * __printk_cpu_sync_put:B.
- 	 *
- 	 * Memory barrier involvement:
- 	 *
--	 * If __printk_cpu_trylock:A reads from __printk_cpu_unlock:B, then
--	 * __printk_cpu_unlock:A can never read from __printk_cpu_trylock:B.
-+	 * If __printk_cpu_sync_try_get:A reads from __printk_cpu_sync_put:B,
-+	 * then __printk_cpu_sync_put:A can never read from
-+	 * __printk_cpu_sync_try_get:B.
- 	 *
- 	 * Relies on:
- 	 *
--	 * RELEASE from __printk_cpu_unlock:A to __printk_cpu_unlock:B
-+	 * RELEASE from __printk_cpu_sync_put:A to __printk_cpu_sync_put:B
- 	 * of the previous CPU
- 	 *    matching
--	 * ACQUIRE from __printk_cpu_trylock:A to __printk_cpu_trylock:B
--	 * of this CPU
-+	 * ACQUIRE from __printk_cpu_sync_try_get:A to
-+	 * __printk_cpu_sync_try_get:B of this CPU
+ 	 * Since the duration of printk() can vary depending on the message
+ 	 * and state of the ringbuffer, grab the timestamp now so that it is
+@@ -2145,8 +2148,7 @@ int vprintk_store(int facility, int level,
  	 */
--	old = atomic_cmpxchg_acquire(&printk_cpulock_owner, -1,
--				     cpu); /* LMM(__printk_cpu_trylock:A) */
-+	old = atomic_cmpxchg_acquire(&printk_cpu_sync_owner, -1,
-+				     cpu); /* LMM(__printk_cpu_sync_try_get:A) */
- 	if (old == -1) {
- 		/*
- 		 * This CPU is now the owner and begins loading/storing
--		 * data: LMM(__printk_cpu_trylock:B)
-+		 * data: LMM(__printk_cpu_sync_try_get:B)
- 		 */
- 		return 1;
+ 	ts_nsec = local_clock();
  
- 	} else if (old == cpu) {
- 		/* This CPU is already the owner. */
--		atomic_inc(&printk_cpulock_nested);
-+		atomic_inc(&printk_cpu_sync_nested);
- 		return 1;
- 	}
- 
- 	return 0;
- }
--EXPORT_SYMBOL(__printk_cpu_trylock);
-+EXPORT_SYMBOL(__printk_cpu_sync_try_get);
- 
- /**
-- * __printk_cpu_unlock() - Release the printk cpu-reentrant spinning lock.
-+ * __printk_cpu_sync_put() - Release the printk cpu-reentrant spinning lock.
-  *
-  * The calling processor must be the owner of the lock.
-  *
-  * Context: Any context. Expects interrupts to be disabled.
-  */
--void __printk_cpu_unlock(void)
-+void __printk_cpu_sync_put(void)
- {
--	if (atomic_read(&printk_cpulock_nested)) {
--		atomic_dec(&printk_cpulock_nested);
-+	if (atomic_read(&printk_cpu_sync_nested)) {
-+		atomic_dec(&printk_cpu_sync_nested);
- 		return;
- 	}
+-	if (!printk_enter_irqsave(recursion_ptr, irqflags))
+-		return 0;
++	caller_id = printk_caller_id();
  
  	/*
- 	 * This CPU is finished loading/storing data:
--	 * LMM(__printk_cpu_unlock:A)
-+	 * LMM(__printk_cpu_sync_put:A)
- 	 */
- 
- 	/*
- 	 * Guarantee loads and stores from this CPU when it was the
- 	 * lock owner are visible to the next lock owner. This pairs
--	 * with __printk_cpu_trylock:A.
-+	 * with __printk_cpu_sync_try_get:A.
- 	 *
- 	 * Memory barrier involvement:
- 	 *
--	 * If __printk_cpu_trylock:A reads from __printk_cpu_unlock:B,
--	 * then __printk_cpu_trylock:B reads from __printk_cpu_unlock:A.
-+	 * If __printk_cpu_sync_try_get:A reads from __printk_cpu_sync_put:B,
-+	 * then __printk_cpu_sync_try_get:B reads from __printk_cpu_sync_put:A.
- 	 *
- 	 * Relies on:
- 	 *
--	 * RELEASE from __printk_cpu_unlock:A to __printk_cpu_unlock:B
-+	 * RELEASE from __printk_cpu_sync_put:A to __printk_cpu_sync_put:B
- 	 * of this CPU
- 	 *    matching
--	 * ACQUIRE from __printk_cpu_trylock:A to __printk_cpu_trylock:B
--	 * of the next CPU
-+	 * ACQUIRE from __printk_cpu_sync_try_get:A to
-+	 * __printk_cpu_sync_try_get:B of the next CPU
- 	 */
--	atomic_set_release(&printk_cpulock_owner,
--			   -1); /* LMM(__printk_cpu_unlock:B) */
-+	atomic_set_release(&printk_cpu_sync_owner,
-+			   -1); /* LMM(__printk_cpu_sync_put:B) */
- }
--EXPORT_SYMBOL(__printk_cpu_unlock);
-+EXPORT_SYMBOL(__printk_cpu_sync_put);
- #endif /* CONFIG_SMP */
-diff --git a/lib/dump_stack.c b/lib/dump_stack.c
-index 6b7f1bf6715d..83471e81501a 100644
---- a/lib/dump_stack.c
-+++ b/lib/dump_stack.c
-@@ -102,9 +102,9 @@ asmlinkage __visible void dump_stack_lvl(const char *log_lvl)
- 	 * Permit this cpu to perform nested stack dumps while serialising
- 	 * against other CPUs
- 	 */
--	printk_cpu_lock_irqsave(flags);
-+	printk_cpu_sync_get_irqsave(flags);
- 	__dump_stack(log_lvl);
--	printk_cpu_unlock_irqrestore(flags);
-+	printk_cpu_sync_put_irqrestore(flags);
- }
- EXPORT_SYMBOL(dump_stack_lvl);
- 
-diff --git a/lib/nmi_backtrace.c b/lib/nmi_backtrace.c
-index 199ab201d501..d01aec6ae15c 100644
---- a/lib/nmi_backtrace.c
-+++ b/lib/nmi_backtrace.c
-@@ -99,7 +99,7 @@ bool nmi_cpu_backtrace(struct pt_regs *regs)
- 		 * Allow nested NMI backtraces while serializing
- 		 * against other CPUs.
- 		 */
--		printk_cpu_lock_irqsave(flags);
-+		printk_cpu_sync_get_irqsave(flags);
- 		if (!READ_ONCE(backtrace_idle) && regs && cpu_in_idle(instruction_pointer(regs))) {
- 			pr_warn("NMI backtrace for cpu %d skipped: idling at %pS\n",
- 				cpu, (void *)instruction_pointer(regs));
-@@ -110,7 +110,7 @@ bool nmi_cpu_backtrace(struct pt_regs *regs)
- 			else
- 				dump_stack();
- 		}
--		printk_cpu_unlock_irqrestore(flags);
-+		printk_cpu_sync_put_irqrestore(flags);
- 		cpumask_clear_cpu(cpu, to_cpumask(backtrace_mask));
- 		return true;
- 	}
+ 	 * The sprintf needs to come first since the syslog prefix might be
 -- 
 2.30.2
 

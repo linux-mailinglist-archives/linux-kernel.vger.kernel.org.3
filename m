@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07C64F4FF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E604F50F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840148AbiDFBHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S1844068AbiDFBoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348926AbiDEJss (ORCPT
+        with ESMTP id S1348980AbiDEJsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:48 -0400
+        Tue, 5 Apr 2022 05:48:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADCFA0BED;
-        Tue,  5 Apr 2022 02:37:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983646264;
+        Tue,  5 Apr 2022 02:38:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E06E6B81C6C;
-        Tue,  5 Apr 2022 09:37:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3795CC385A4;
-        Tue,  5 Apr 2022 09:37:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5975EB81C6A;
+        Tue,  5 Apr 2022 09:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC78C385A3;
+        Tue,  5 Apr 2022 09:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151463;
-        bh=HQ8WKX/MD7XlNHXrBNKlaeo+5o71NqqaQvKlW8Fz6Qo=;
+        s=korg; t=1649151518;
+        bh=IfWMaRl05hOWBxfG40GcyKXtd4SGRrCitFCS7E/8zvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2wEt2sbL2OQLRjsDnUzkStMFXSmEV7fjX3fc9uFtyw6WAFvE6ZbTCB/VV0RF47BSD
-         qUpBqjrWZj6bpOVnVaT42okPdJZf2/cU5xmNMZQMIqkDKg48ZY/zvtS16L87BS7N1m
-         St7ZxGojZmtxDV6AaYieOqYJvtF7w/Cpv4g8IDXE=
+        b=TRO3VdIRCWtp7+brP0QBP83lCJgqF++qgJoE9gOrjTpqFGqfwwc6ZfYipUNtRP6vo
+         w5Qzqt8VDy6zZ/I+uspq/9wAvQLAv6MZesBAbDEWPZshkPyii8cgPx2VtOmqmA/25X
+         4EZ4ZOgTwb6N4dVmh4nYbMP1wcrLwFftZDDbbuSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 425/913] mt76: mt7615: fix a leftover race in runtime-pm
-Date:   Tue,  5 Apr 2022 09:24:47 +0200
-Message-Id: <20220405070352.584530780@linuxfoundation.org>
+        stable@vger.kernel.org, Xiao Yang <yangx.jy@fujitsu.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 443/913] RDMA/rxe: Check the last packet by RXE_END_MASK
+Date:   Tue,  5 Apr 2022 09:25:05 +0200
+Message-Id: <20220405070353.124994754@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,41 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Xiao Yang <yangx.jy@fujitsu.com>
 
-[ Upstream commit 42ce8d3b623162f3248db50a38359f294e6b06fd ]
+[ Upstream commit b1377cc37f6bebd57ce8747b7e16163a475af295 ]
 
-Fix a possible race in mt7615_pm_power_save_work() if rx/tx napi
-schedules ps_work and we are currently accessing device register
-on a different cpu.
+It's wrong to check the last packet by RXE_COMP_MASK because the flag is
+to indicate if responder needs to generate a completion.
 
-Fixes: db928f1ab9789 ("mt76: mt7663: rely on mt76_connac_pm_ref/mt76_connac_pm_unref in tx/rx napi")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 9fcd67d1772c ("IB/rxe: increment msn only when completing a request")
+Fixes: 8700e3e7c485 ("Soft RoCE driver")
+Link: https://lore.kernel.org/r/20211229034438.1854908-1-yangx.jy@fujitsu.com
+Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/infiniband/sw/rxe/rxe_resp.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-index f2704149834a..eb7bda91f2b3 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-@@ -2000,6 +2000,14 @@ void mt7615_pm_power_save_work(struct work_struct *work)
- 	    test_bit(MT76_HW_SCHED_SCANNING, &dev->mphy.state))
- 		goto out;
+diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+index 5501227ddc65..8ed172ab0beb 100644
+--- a/drivers/infiniband/sw/rxe/rxe_resp.c
++++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+@@ -830,6 +830,10 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
+ 			return RESPST_ERR_INVALIDATE_RKEY;
+ 	}
  
-+	if (mutex_is_locked(&dev->mt76.mutex))
-+		/* if mt76 mutex is held we should not put the device
-+		 * to sleep since we are currently accessing device
-+		 * register map. We need to wait for the next power_save
-+		 * trigger.
-+		 */
-+		goto out;
++	if (pkt->mask & RXE_END_MASK)
++		/* We successfully processed this new request. */
++		qp->resp.msn++;
 +
- 	if (time_is_after_jiffies(dev->pm.last_activity + delta)) {
- 		delta = dev->pm.last_activity + delta - jiffies;
- 		goto out;
+ 	/* next expected psn, read handles this separately */
+ 	qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
+ 	qp->resp.ack_psn = qp->resp.psn;
+@@ -837,11 +841,9 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
+ 	qp->resp.opcode = pkt->opcode;
+ 	qp->resp.status = IB_WC_SUCCESS;
+ 
+-	if (pkt->mask & RXE_COMP_MASK) {
+-		/* We successfully processed this new request. */
+-		qp->resp.msn++;
++	if (pkt->mask & RXE_COMP_MASK)
+ 		return RESPST_COMPLETE;
+-	} else if (qp_type(qp) == IB_QPT_RC)
++	else if (qp_type(qp) == IB_QPT_RC)
+ 		return RESPST_ACKNOWLEDGE;
+ 	else
+ 		return RESPST_CLEANUP;
 -- 
 2.34.1
 

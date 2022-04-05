@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BD14F4E4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347EF4F4E10
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588691AbiDFARA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S1587382AbiDFAIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356096AbiDEKW4 (ORCPT
+        with ESMTP id S1349267AbiDEJtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94164B2478;
-        Tue,  5 Apr 2022 03:06:08 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E19E1902E;
+        Tue,  5 Apr 2022 02:43:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4397AB81C8B;
-        Tue,  5 Apr 2022 10:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCA1C385A3;
-        Tue,  5 Apr 2022 10:06:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD3C615E5;
+        Tue,  5 Apr 2022 09:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FD9C385A1;
+        Tue,  5 Apr 2022 09:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153166;
-        bh=vCNxLByh22qWpvDtzrk7nKcRMnmgzftlBFDb7fx5dWY=;
+        s=korg; t=1649151809;
+        bh=CYBBhqqXnWioOKsqKoupoL8mV+Bt0Z2q89SwnPZ8n6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lUwiV5xyHTAkVuB5Q3pq6nFnxuRhdmpAyZ9w2ffxMN4yHVmsl0k2Jn2NUI8+w25ig
-         YghWYKtbolUGS/+EMui35oIlWHXEL2KuTJxikJU5IEQoBiyEPW/1z4eppG5K2S3OZv
-         O/i6VZt6PEv/o7TOZHwEtEQYUvnb6rNXUdqhOgQM=
+        b=GFJr/6ZSi7uqZ3Q9CwQZ4YChHWHImqL3CGVE7ta9H7XcRw4JIOVimnMEZ2MxqfRZK
+         XyV4/x7Lo7xqcKgLGebM/eDxR5SmJy9Kkv0rEKni7XHh4Ogq1iUhWdDkXW6HIa9/Bi
+         wy4irPnSDS7I7J7xq4C+3b4QZPVMchNYDx2OdgGI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.10 118/599] xtensa: fix stop_machine_cpuslocked call in patch_text
+        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 550/913] can: isotp: return -EADDRNOTAVAIL when reading from unbound socket
 Date:   Tue,  5 Apr 2022 09:26:52 +0200
-Message-Id: <20220405070302.351684079@linuxfoundation.org>
+Message-Id: <20220405070356.334244799@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit f406f2d03e07afc199dd8cf501f361dde6be8a69 upstream.
+[ Upstream commit 30ffd5332e06316bd69a654c06aa033872979b7c ]
 
-patch_text must invoke patch_text_stop_machine on all online CPUs, but
-it calls stop_machine_cpuslocked with NULL cpumask. As a result only one
-CPU runs patch_text_stop_machine potentially leaving stale icache
-entries on other CPUs. Fix that by calling stop_machine_cpuslocked with
-cpu_online_mask as the last argument.
+When reading from an unbound can-isotp socket the syscall blocked
+indefinitely. As unbound sockets (without given CAN address information)
+do not make sense anyway we directly return -EADDRNOTAVAIL on read()
+analogue to the known behavior from sendmsg().
 
-Cc: stable@vger.kernel.org
-Fixes: 64711f9a47d4 ("xtensa: implement jump_label support")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://github.com/linux-can/can-utils/issues/349
+Link: https://lore.kernel.org/all/20220316164258.54155-2-socketcan@hartkopp.net
+Suggested-by: Derek Will <derekrobertwill@gmail.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/xtensa/kernel/jump_label.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/can/isotp.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/arch/xtensa/kernel/jump_label.c
-+++ b/arch/xtensa/kernel/jump_label.c
-@@ -61,7 +61,7 @@ static void patch_text(unsigned long add
- 			.data = data,
- 		};
- 		stop_machine_cpuslocked(patch_text_stop_machine,
--					&patch, NULL);
-+					&patch, cpu_online_mask);
- 	} else {
- 		unsigned long flags;
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1005,12 +1005,16 @@ static int isotp_recvmsg(struct socket *
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct sk_buff *skb;
++	struct isotp_sock *so = isotp_sk(sk);
+ 	int err = 0;
+ 	int noblock;
  
+ 	noblock = flags & MSG_DONTWAIT;
+ 	flags &= ~MSG_DONTWAIT;
+ 
++	if (!so->bound)
++		return -EADDRNOTAVAIL;
++
+ 	skb = skb_recv_datagram(sk, flags, noblock, &err);
+ 	if (!skb)
+ 		return err;
 
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E0D4F321D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0A24F334E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344991AbiDEKk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S1352435AbiDEKEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235908AbiDEI1H (ORCPT
+        with ESMTP id S237059AbiDEI3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:27:07 -0400
+        Tue, 5 Apr 2022 04:29:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04ED17A80;
-        Tue,  5 Apr 2022 01:21:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E9315FC9;
+        Tue,  5 Apr 2022 01:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD5660FFB;
-        Tue,  5 Apr 2022 08:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA8AC385A1;
-        Tue,  5 Apr 2022 08:21:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F55561001;
+        Tue,  5 Apr 2022 08:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33467C385A0;
+        Tue,  5 Apr 2022 08:21:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146863;
-        bh=+wq173W039LLwt49okhsC1cU/Yg0EMixvemiQqA7vmw=;
+        s=korg; t=1649146871;
+        bh=hP7Ta8lHWxh6NeT9h5JeWb6KQ3S+wTrRwcg0WqNvRtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBtzE+yDNnS1BqP61fDXcuhy88dv9Uhd91uYdDmFl6UvwzMNpihC5BMomiRxXW4kq
-         unnoRM/mKOjxokKaHBNRXFH2hF3dqPSL1K5vQ1kKNC1aRGKhYt6aD0jr8sf6ywo5cJ
-         bnTpND8CryL3OVpYv2TGDCNndVN9trZ8Lj3FBFTI=
+        b=maMqZ1VJ+BT0/sHcM4x/Dvmnr8F3Bra5KY35fhaKqKfe/+sGip7FqK29MAKpMKCe9
+         PJM2Y1Ghvxqn66Gtzmd6W0zmt5WiRcgY+1zfweLsZM6KXsiLwJBBIO/Gg6ZcBV3v2d
+         J22m3hPAuAn2Q1jYtTMiYPuBt2PW81h0H6hFfnKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
         Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0915/1126] video: fbdev: omapfb: panel-dsi-cm: Use sysfs_emit() instead of snprintf()
-Date:   Tue,  5 Apr 2022 09:27:42 +0200
-Message-Id: <20220405070434.379901763@linuxfoundation.org>
+Subject: [PATCH 5.17 0917/1126] video: fbdev: udlfb: replace snprintf in show functions with sysfs_emit
+Date:   Tue,  5 Apr 2022 09:27:44 +0200
+Message-Id: <20220405070434.437944181@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,7 +57,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jing Yao <yao.jing2@zte.com.cn>
 
-[ Upstream commit f63658a59c3d439c8ad7b290f8ec270980e0f384 ]
+[ Upstream commit 81a998288956d09d7a7a2303d47e4d60ad55c401 ]
 
 Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
@@ -66,49 +66,49 @@ Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 ++++----
+ drivers/video/fbdev/udlfb.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-index 4b0793abdd84..a2c7c5cb1523 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-@@ -409,7 +409,7 @@ static ssize_t dsicm_num_errors_show(struct device *dev,
- 	if (r)
- 		return r;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", errors);
-+	return sysfs_emit(buf, "%d\n", errors);
+diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
+index b9cdd02c1000..90f48b71fd8f 100644
+--- a/drivers/video/fbdev/udlfb.c
++++ b/drivers/video/fbdev/udlfb.c
+@@ -1426,7 +1426,7 @@ static ssize_t metrics_bytes_rendered_show(struct device *fbdev,
+ 				   struct device_attribute *a, char *buf) {
+ 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
+ 	struct dlfb_data *dlfb = fb_info->par;
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			atomic_read(&dlfb->bytes_rendered));
  }
  
- static ssize_t dsicm_hw_revision_show(struct device *dev,
-@@ -439,7 +439,7 @@ static ssize_t dsicm_hw_revision_show(struct device *dev,
- 	if (r)
- 		return r;
- 
--	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x\n", id1, id2, id3);
-+	return sysfs_emit(buf, "%02x.%02x.%02x\n", id1, id2, id3);
+@@ -1434,7 +1434,7 @@ static ssize_t metrics_bytes_identical_show(struct device *fbdev,
+ 				   struct device_attribute *a, char *buf) {
+ 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
+ 	struct dlfb_data *dlfb = fb_info->par;
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			atomic_read(&dlfb->bytes_identical));
  }
  
- static ssize_t dsicm_store_ulps(struct device *dev,
-@@ -487,7 +487,7 @@ static ssize_t dsicm_show_ulps(struct device *dev,
- 	t = ddata->ulps_enabled;
- 	mutex_unlock(&ddata->lock);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", t);
-+	return sysfs_emit(buf, "%u\n", t);
+@@ -1442,7 +1442,7 @@ static ssize_t metrics_bytes_sent_show(struct device *fbdev,
+ 				   struct device_attribute *a, char *buf) {
+ 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
+ 	struct dlfb_data *dlfb = fb_info->par;
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			atomic_read(&dlfb->bytes_sent));
  }
  
- static ssize_t dsicm_store_ulps_timeout(struct device *dev,
-@@ -532,7 +532,7 @@ static ssize_t dsicm_show_ulps_timeout(struct device *dev,
- 	t = ddata->ulps_timeout;
- 	mutex_unlock(&ddata->lock);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", t);
-+	return sysfs_emit(buf, "%u\n", t);
+@@ -1450,7 +1450,7 @@ static ssize_t metrics_cpu_kcycles_used_show(struct device *fbdev,
+ 				   struct device_attribute *a, char *buf) {
+ 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
+ 	struct dlfb_data *dlfb = fb_info->par;
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			atomic_read(&dlfb->cpu_kcycles_used));
  }
  
- static DEVICE_ATTR(num_dsi_errors, S_IRUGO, dsicm_num_errors_show, NULL);
 -- 
 2.34.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08E24F44BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FEE4F475D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383564AbiDENaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S1350034AbiDEVJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345521AbiDEJWr (ORCPT
+        with ESMTP id S1358097AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89894C40B;
-        Tue,  5 Apr 2022 02:11:08 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC72B198;
+        Tue,  5 Apr 2022 03:15:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 667FAB81A22;
-        Tue,  5 Apr 2022 09:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE6DC385A4;
-        Tue,  5 Apr 2022 09:11:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 130C9B81C88;
+        Tue,  5 Apr 2022 10:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F143C385A0;
+        Tue,  5 Apr 2022 10:15:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149866;
-        bh=8Lxz8YXku8+/UbywXNde6FytYLkgLbFrUsn5jXKeWto=;
+        s=korg; t=1649153728;
+        bh=+fiwjdwdc0xeZY13tfgi2lJG8et6wcD0wv6mNjjcT8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xvc0BMWzatxUby+JCWnJHCtcqX5awlbVF6PF92a1B01oJQ40NrAkzADWG1gP3UZoj
-         B0FxWzN/6Q2EjCrS+dS/fLsHTuyQa/bh466OmCY6In/Yv+9szSmnGw0/1PEVOGUZoC
-         6nVFrRcNi02robhSXNWIe4V9m3W8u+4GjE4Kb8qQ=
+        b=V0x/vl1Tw7Qxm8gHC4Ul24kXq5iAQOe5slmmhghPBGt4l8vpJaEnpyYTNF/E26AIZ
+         gwkCDwTOpPR8Fb2zPQi4NodJvwBEm7mn7EASp2I5rGB9wikifTY67rXZIHz/JRO9x/
+         HQfgM+dYDOrXoTmdJkFdxjItVy1B5YCLNJlPnGOk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 0868/1017] powerpc/lib/sstep: Fix build errors with newer binutils
-Date:   Tue,  5 Apr 2022 09:29:41 +0200
-Message-Id: <20220405070420.001577709@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 288/599] mt76: mt7915: use proper aid value in mt7915_mcu_sta_basic_tlv
+Date:   Tue,  5 Apr 2022 09:29:42 +0200
+Message-Id: <20220405070307.404480951@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-commit 8219d31effa7be5dbc7ff915d7970672e028c701 upstream.
+[ Upstream commit abdb8bc94be4cf68aa71c9a8ee0bad9b3e6f52d3 ]
 
-Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-2.37.90.20220207) the following build error shows up:
+Similar to mt7915_mcu_wtbl_generic_tlv, rely on vif->bss_conf.aid for
+aid in sta mode and not on sta->aid.
 
-  {standard input}: Assembler messages:
-  {standard input}:10576: Error: unrecognized opcode: `stbcx.'
-  {standard input}:10680: Error: unrecognized opcode: `lharx'
-  {standard input}:10694: Error: unrecognized opcode: `lbarx'
-
-Rework to add assembler directives [1] around the instruction.  The
-problem with this might be that we can trick a power6 into
-single-stepping through an stbcx. for instance, and it will execute that
-in kernel mode.
-
-[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
-
-Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
-Cc: stable@vger.kernel.org # v4.14+
-Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224162215.3406642-3-anders.roxell@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/lib/sstep.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -1097,7 +1097,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+index 6e73964b8b0a..41054ee43dbf 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+@@ -1317,12 +1317,15 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+ 	case NL80211_IFTYPE_MESH_POINT:
+ 	case NL80211_IFTYPE_AP:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_STA);
++		basic->aid = cpu_to_le16(sta->aid);
+ 		break;
+ 	case NL80211_IFTYPE_STATION:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_AP);
++		basic->aid = cpu_to_le16(vif->bss_conf.aid);
+ 		break;
+ 	case NL80211_IFTYPE_ADHOC:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_IBSS_ADHOC);
++		basic->aid = cpu_to_le16(sta->aid);
+ 		break;
+ 	default:
+ 		WARN_ON(1);
+@@ -1330,7 +1333,6 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+ 	}
  
- #define __put_user_asmx(x, addr, err, op, cr)		\
- 	__asm__ __volatile__(				\
-+		".machine push\n"			\
-+		".machine power8\n"			\
- 		"1:	" op " %2,0,%3\n"		\
-+		".machine pop\n"			\
- 		"	mfcr	%1\n"			\
- 		"2:\n"					\
- 		".section .fixup,\"ax\"\n"		\
-@@ -1110,7 +1113,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
+ 	memcpy(basic->peer_addr, sta->addr, ETH_ALEN);
+-	basic->aid = cpu_to_le16(sta->aid);
+ 	basic->qos = sta->wme;
+ }
  
- #define __get_user_asmx(x, addr, err, op)		\
- 	__asm__ __volatile__(				\
-+		".machine push\n"			\
-+		".machine power8\n"			\
- 		"1:	"op" %1,0,%2\n"			\
-+		".machine pop\n"			\
- 		"2:\n"					\
- 		".section .fixup,\"ax\"\n"		\
- 		"3:	li	%0,%3\n"		\
+-- 
+2.34.1
+
 
 

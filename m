@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2764F4268
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE5D4F4170
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiDEULb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S1388678AbiDENcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358087AbiDEK16 (ORCPT
+        with ESMTP id S1345972AbiDEJXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1628A66F93;
-        Tue,  5 Apr 2022 03:15:16 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6415A7741;
+        Tue,  5 Apr 2022 02:12:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A72B561777;
-        Tue,  5 Apr 2022 10:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC751C385A0;
-        Tue,  5 Apr 2022 10:15:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F36161527;
+        Tue,  5 Apr 2022 09:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFF3C385A3;
+        Tue,  5 Apr 2022 09:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153715;
-        bh=skmWsrYxd1nFuzuoFoPRzkN5xCHd15UFXWjK8eJ6ccA=;
+        s=korg; t=1649149959;
+        bh=uwEM9yJd8yQV8YVnMIu1YlcaI8etPYsnFYaOdz+jFvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SRCJ3vSHldrDxXP97waiHLSdxTS97vGRcE2K2RVR29KT6dQHkcHvA4bauK8qJWCXk
-         z/lguWK7m9UrlNIysLRSIqAedwGknsRV4MzsSo0J/Hwz2iLKL0t5w2C7sgHSWeDFLE
-         KgFx5R64roaHK6HDr/eTm8tkptDEaPdYKSw4yeRU=
+        b=gR8awXETXVzoAu9p/kaKR7LEyXcRkTpYAxZ03i3VmBQBkS4Gr4xgAocCzE50+AT60
+         ZBC4ZJvrOzEiNPMOSpn+IxvTdW/xaFXclN5BkbwwvpKKHqBm2DQlSoHu5tbV1SCtHJ
+         jcIFle8jV7QahPAd+/FtyrIM44iHTPL6Ac0zHKl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 320/599] drm/amd/display: Remove vupdate_int_entry definition
-Date:   Tue,  5 Apr 2022 09:30:14 +0200
-Message-Id: <20220405070308.355568513@linuxfoundation.org>
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0903/1017] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
+Date:   Tue,  5 Apr 2022 09:30:16 +0200
+Message-Id: <20220405070421.029396714@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,159 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maíra Canal <maira.canal@usp.br>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 3679b8518cd213c25d555553ef212e233faf698c ]
+commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
 
-Remove the vupdate_int_entry definition and utilization to avoid the
-following warning by Clang:
+Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
+this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:410:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(0),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:404:2:
-note: previous initialization is here
-    vupdate_int_entry(0),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:411:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(1),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:405:2:
-note: previous initialization is here
-    vupdate_int_entry(1),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:412:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(2),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:406:2:
-note: previous initialization is here
-    vupdate_int_entry(2),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:413:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(3),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:407:2:
-note: previous initialization is here
-    vupdate_int_entry(3),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:414:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(4),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:408:2:
-note: previous initialization is here
-    vupdate_int_entry(4),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:415:2:
-warning: initializer overrides prior initialization of this subobject
-[-Winitializer-overrides]
-    vupdate_no_lock_int_entry(5),
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:280:39:
-note: expanded from macro 'vupdate_no_lock_int_entry'
-    [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:409:2:
-note: previous initialization is here
-    vupdate_int_entry(5),
-    ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn21/irq_service_dcn21.c:269:39:
-note: expanded from macro 'vupdate_int_entry'
-        [DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
-        ^~
-6 warnings generated.
+Note, it would've been better to forbid writing anything to SYNIC/STIMER
+MSRs, including zeroes, however, at least QEMU tries clearing
+HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
+'special' as writing zero there triggers an action, this also should not
+happen when SynIC wasn't activated.
 
-Fixes: 688f97ed3f5e ("drm/amd/display: Add vupdate_no_lock interrupts for DCN2.1")
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../amd/display/dc/irq/dcn21/irq_service_dcn21.c   | 14 --------------
- 1 file changed, 14 deletions(-)
+ arch/x86/kvm/hyperv.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn21/irq_service_dcn21.c b/drivers/gpu/drm/amd/display/dc/irq/dcn21/irq_service_dcn21.c
-index 0e0f494fbb5e..b037fd57fd36 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/dcn21/irq_service_dcn21.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/dcn21/irq_service_dcn21.c
-@@ -227,14 +227,6 @@ static const struct irq_source_info_funcs vupdate_no_lock_irq_info_funcs = {
- 		.funcs = &pflip_irq_info_funcs\
- 	}
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -236,7 +236,7 @@ static int synic_set_msr(struct kvm_vcpu
+ 	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
+ 	int ret;
  
--#define vupdate_int_entry(reg_num)\
--	[DC_IRQ_SOURCE_VUPDATE1 + reg_num] = {\
--		IRQ_REG_ENTRY(OTG, reg_num,\
--			OTG_GLOBAL_SYNC_STATUS, VUPDATE_INT_EN,\
--			OTG_GLOBAL_SYNC_STATUS, VUPDATE_EVENT_CLEAR),\
--		.funcs = &vblank_irq_info_funcs\
--	}
--
- /* vupdate_no_lock_int_entry maps to DC_IRQ_SOURCE_VUPDATEx, to match semantic
-  * of DCE's DC_IRQ_SOURCE_VUPDATEx.
-  */
-@@ -348,12 +340,6 @@ irq_source_info_dcn21[DAL_IRQ_SOURCES_NUMBER] = {
- 	dc_underflow_int_entry(6),
- 	[DC_IRQ_SOURCE_DMCU_SCP] = dummy_irq_entry(),
- 	[DC_IRQ_SOURCE_VBIOS_SW] = dummy_irq_entry(),
--	vupdate_int_entry(0),
--	vupdate_int_entry(1),
--	vupdate_int_entry(2),
--	vupdate_int_entry(3),
--	vupdate_int_entry(4),
--	vupdate_int_entry(5),
- 	vupdate_no_lock_int_entry(0),
- 	vupdate_no_lock_int_entry(1),
- 	vupdate_no_lock_int_entry(2),
--- 
-2.34.1
-
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || data))
+ 		return 1;
+ 
+ 	trace_kvm_hv_synic_set_msr(vcpu->vcpu_id, msr, data, host);
+@@ -282,6 +282,9 @@ static int synic_set_msr(struct kvm_vcpu
+ 	case HV_X64_MSR_EOM: {
+ 		int i;
+ 
++		if (!synic->active)
++			break;
++
+ 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
+ 			kvm_hv_notify_acked_sint(vcpu, i);
+ 		break;
+@@ -661,7 +664,7 @@ static int stimer_set_config(struct kvm_
+ 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+ 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
+ 
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || config))
+ 		return 1;
+ 
+ 	if (unlikely(!host && hv_vcpu->enforce_cpuid && new_config.direct_mode &&
+@@ -690,7 +693,7 @@ static int stimer_set_count(struct kvm_v
+ 	struct kvm_vcpu *vcpu = hv_stimer_to_vcpu(stimer);
+ 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
+ 
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || count))
+ 		return 1;
+ 
+ 	trace_kvm_hv_stimer_set_count(hv_stimer_to_vcpu(stimer)->vcpu_id,
 
 

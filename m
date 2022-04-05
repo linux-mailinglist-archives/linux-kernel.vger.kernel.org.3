@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9520F4F485A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF5A4F461A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381061AbiDEVhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S1391198AbiDENrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358203AbiDEK2F (ORCPT
+        with ESMTP id S1347301AbiDEJZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2EEDF11;
-        Tue,  5 Apr 2022 03:17:02 -0700 (PDT)
+        Tue, 5 Apr 2022 05:25:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F323DCE11;
+        Tue,  5 Apr 2022 02:15:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF73361777;
-        Tue,  5 Apr 2022 10:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C198C385A0;
-        Tue,  5 Apr 2022 10:17:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E298B81B75;
+        Tue,  5 Apr 2022 09:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86375C385A3;
+        Tue,  5 Apr 2022 09:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153821;
-        bh=4aZGSueq1nni+HIWlZFJGt9xx0C6ejjiA6qyw9yZHqA=;
+        s=korg; t=1649150074;
+        bh=EnA4E1E6YC+Ts/nEjs3dxfm5+HpqhwGpXCsmYHQ1Iew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ze3dA1yRCQ7R3ZMHmahNmNm/NOZgIBdG7VjxOZtqklT9+e5mpL/1JHxbL01Zt4n+p
-         XfT69Ms9Rvykda8YFfKZBP5YTP1eMj8Q8q+5uZp5xvU1lI09eVWeVXaKFgFOhccfDK
-         74AYOmsfyuu1OY8fEF/XR6zCG8Cp6bNPzxsbGBb4=
+        b=m1qiZ13RiF/lnyOwHEuCM3XeUnqPZzuh2Cp4qnt8E0SKLL+OOsPNtc8NLokr+1gfr
+         806yKNCR9QNt6rwVFdD62EVLP7UJq5VPYH6aSF8/mjQ/xyaX8C8Qx/q09hyEU5mTtr
+         WQpeF9J6/3xvEiA/gLGl6Vi6/6WwyfFKqi0iovh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 358/599] bpf, sockmap: Fix double uncharge the mem of sk_msg
-Date:   Tue,  5 Apr 2022 09:30:52 +0200
-Message-Id: <20220405070309.485312156@linuxfoundation.org>
+        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 0945/1017] ASoC: rockchip: i2s_tdm: Fixup config for SND_SOC_DAIFMT_DSP_A/B
+Date:   Tue,  5 Apr 2022 09:30:58 +0200
+Message-Id: <20220405070422.264642051@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Yufen <wangyufen@huawei.com>
+From: Meng Tang <tangmeng@uniontech.com>
 
-[ Upstream commit 2486ab434b2c2a14e9237296db00b1e1b7ae3273 ]
+commit 2f45a4e2897793cc6ae25f5fe78b485ce7fd01d0 upstream.
 
-If tcp_bpf_sendmsg is running during a tear down operation, psock may be
-freed.
+SND_SOC_DAIFMT_DSP_A: PCM delay 1 bit mode, L data MSB after FRM LRC
+SND_SOC_DAIFMT_DSP_B: PCM no delay mode, L data MSB during FRM LRC
 
-tcp_bpf_sendmsg()
- tcp_bpf_send_verdict()
-  sk_msg_return()
-  tcp_bpf_sendmsg_redir()
-   unlikely(!psock))
-     sk_msg_free()
+Fixes: 081068fd64140 (ASoC: rockchip: add support for i2s-tdm controller)
 
-The mem of msg has been uncharged in tcp_bpf_send_verdict() by
-sk_msg_return(), and would be uncharged by sk_msg_free() again. When psock
-is null, we can simply returning an error code, this would then trigger
-the sk_msg_free_nocharge in the error path of __SK_REDIRECT and would have
-the side effect of throwing an error up to user space. This would be a
-slight change in behavior from user side but would look the same as an
-error if the redirect on the socket threw an error.
-
-This issue can cause the following info:
-WARNING: CPU: 0 PID: 2136 at net/ipv4/af_inet.c:155 inet_sock_destruct+0x13c/0x260
-Call Trace:
- <TASK>
- __sk_destruct+0x24/0x1f0
- sk_psock_destroy+0x19b/0x1c0
- process_one_work+0x1b3/0x3c0
- worker_thread+0x30/0x350
- ? process_one_work+0x3c0/0x3c0
- kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x22/0x30
- </TASK>
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20220304081145.2037182-5-wangyufen@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Link: https://lore.kernel.org/r/20220318100146.23991-1-tangmeng@uniontech.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_bpf.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ sound/soc/rockchip/rockchip_i2s_tdm.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index c089e8166fa9..eaf2308c355a 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -218,10 +218,9 @@ int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
- 	struct sk_psock *psock = sk_psock_get(sk);
- 	int ret;
- 
--	if (unlikely(!psock)) {
--		sk_msg_free(sk, msg);
--		return 0;
--	}
-+	if (unlikely(!psock))
-+		return -EPIPE;
-+
- 	ret = ingress ? bpf_tcp_ingress(sk, psock, msg, bytes, flags) :
- 			tcp_bpf_push_locked(sk, msg, bytes, flags, false);
- 	sk_psock_put(sk, psock);
--- 
-2.34.1
-
+--- a/sound/soc/rockchip/rockchip_i2s_tdm.c
++++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
+@@ -469,14 +469,14 @@ static int rockchip_i2s_tdm_set_fmt(stru
+ 		txcr_val = I2S_TXCR_IBM_NORMAL;
+ 		rxcr_val = I2S_RXCR_IBM_NORMAL;
+ 		break;
+-	case SND_SOC_DAIFMT_DSP_A: /* PCM no delay mode */
+-		txcr_val = I2S_TXCR_TFS_PCM;
+-		rxcr_val = I2S_RXCR_TFS_PCM;
+-		break;
+-	case SND_SOC_DAIFMT_DSP_B: /* PCM delay 1 mode */
++	case SND_SOC_DAIFMT_DSP_A: /* PCM delay 1 mode */
+ 		txcr_val = I2S_TXCR_TFS_PCM | I2S_TXCR_PBM_MODE(1);
+ 		rxcr_val = I2S_RXCR_TFS_PCM | I2S_RXCR_PBM_MODE(1);
+ 		break;
++	case SND_SOC_DAIFMT_DSP_B: /* PCM no delay mode */
++		txcr_val = I2S_TXCR_TFS_PCM;
++		rxcr_val = I2S_RXCR_TFS_PCM;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		goto err_pm_put;
 
 

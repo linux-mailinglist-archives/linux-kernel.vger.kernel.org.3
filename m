@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506994F4522
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1C54F4591
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387454AbiDEOcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S1387280AbiDEOb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240394AbiDEJeU (ORCPT
+        with ESMTP id S240440AbiDEJe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:34:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2118301C;
-        Tue,  5 Apr 2022 02:23:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:34:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168684EF6;
+        Tue,  5 Apr 2022 02:23:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAD0A61659;
-        Tue,  5 Apr 2022 09:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5999C385A4;
-        Tue,  5 Apr 2022 09:23:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5049AB81C69;
+        Tue,  5 Apr 2022 09:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90346C385A4;
+        Tue,  5 Apr 2022 09:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150629;
-        bh=1DgkdNFO6r6H+hSygsx8JZmtOvDEknQ6vZRdHvFtBQA=;
+        s=korg; t=1649150634;
+        bh=q6y2/6h1VVSs/fCO23TCYlJkU4HL9siqv9Gt+YyZhSE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMvHHRE7cxFpc5KPlJGV2jewguDgDAthR0fM13EsZkQ7C873TmMO1Xm3dGdcQuVFg
-         ckH0jeBFNe5Q+24jfl2808RdiVr3lkp1RD5Zx1l0Z7/FzfrqeAqMmzKOd1FppPF7sI
-         1RKu8dlouGmD83/M0DmV3MPwNaN614e1KhYDqh50=
+        b=T0RhU76ExIkJ9unNrgVngw07Eg35RfOibXdeXTvt8OHrgX/5CEzgc87ixq322AP4c
+         pBkDbyX6P/0xrmUMCTlRkHTxydO2SGCcSOozBLptnqlFx5R8LKe2yW/aE485RpTZO2
+         XrVIaaNHY4NLw7LBhljpZk3lvKph0IFEAqKtdWL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 086/913] mempolicy: mbind_range() set_policy() after vma_merge()
-Date:   Tue,  5 Apr 2022 09:19:08 +0200
-Message-Id: <20220405070342.400563491@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 087/913] scsi: core: sd: Add silence_suspend flag to suppress some PM messages
+Date:   Tue,  5 Apr 2022 09:19:09 +0200
+Message-Id: <20220405070342.430963969@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,79 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugh Dickins <hughd@google.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 4e0906008cdb56381638aa17d9c32734eae6d37a upstream.
+commit af4edb1d50c6d1044cb34bc43621411b7ba2cffe upstream.
 
-v2.6.34 commit 9d8cebd4bcd7 ("mm: fix mbind vma merge problem") introduced
-vma_merge() to mbind_range(); but unlike madvise, mlock and mprotect, it
-put a "continue" to next vma where its precedents go to update flags on
-current vma before advancing: that left vma with the wrong setting in the
-infamous vma_merge() case 8.
+Kernel messages produced during runtime PM can cause a never-ending cycle
+because user space utilities (e.g. journald or rsyslog) write the messages
+back to storage, causing runtime resume, more messages, and so on.
 
-v3.10 commit 1444f92c8498 ("mm: merging memory blocks resets mempolicy")
-tried to fix that in vma_adjust(), without fully understanding the issue.
+Messages that tell of things that are expected to happen are arguably
+unnecessary, so add a flag to suppress them. This flag is used by the UFS
+driver.
 
-v3.11 commit 3964acd0dbec ("mm: mempolicy: fix mbind_range() &&
-vma_adjust() interaction") reverted that, and went about the fix in the
-right way, but chose to optimize out an unnecessary mpol_dup() with a
-prior mpol_equal() test.  But on tmpfs, that also pessimized out the vital
-call to its ->set_policy(), leaving the new mbind unenforced.
-
-The user visible effect was that the pages got allocated on the local
-node (happened to be 0), after the mbind() caller had specifically
-asked for them to be allocated on node 1.  There was not any page
-migration involved in the case reported: the pages simply got allocated
-on the wrong node.
-
-Just delete that optimization now (though it could be made conditional on
-vma not having a set_policy).  Also remove the "next" variable: it turned
-out to be blameless, but also pointless.
-
-Link: https://lkml.kernel.org/r/319e4db9-64ae-4bca-92f0-ade85d342ff@google.com
-Fixes: 3964acd0dbec ("mm: mempolicy: fix mbind_range() && vma_adjust() interaction")
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Acked-by: Oleg Nesterov <oleg@redhat.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20220228113652.970857-2-adrian.hunter@intel.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mempolicy.c |    8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/scsi/scsi_error.c  |    9 +++++++--
+ drivers/scsi/sd.c          |    6 ++++--
+ include/scsi/scsi_device.h |    1 +
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -783,7 +783,6 @@ static int vma_replace_policy(struct vm_
- static int mbind_range(struct mm_struct *mm, unsigned long start,
- 		       unsigned long end, struct mempolicy *new_pol)
- {
--	struct vm_area_struct *next;
- 	struct vm_area_struct *prev;
- 	struct vm_area_struct *vma;
- 	int err = 0;
-@@ -798,8 +797,7 @@ static int mbind_range(struct mm_struct
- 	if (start > vma->vm_start)
- 		prev = vma;
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -485,8 +485,13 @@ static void scsi_report_sense(struct scs
  
--	for (; vma && vma->vm_start < end; prev = vma, vma = next) {
--		next = vma->vm_next;
-+	for (; vma && vma->vm_start < end; prev = vma, vma = vma->vm_next) {
- 		vmstart = max(start, vma->vm_start);
- 		vmend   = min(end, vma->vm_end);
- 
-@@ -813,10 +811,6 @@ static int mbind_range(struct mm_struct
- 				 new_pol, vma->vm_userfaultfd_ctx);
- 		if (prev) {
- 			vma = prev;
--			next = vma->vm_next;
--			if (mpol_equal(vma_policy(vma), new_pol))
--				continue;
--			/* vma_merge() joined vma && vma->next, case 8 */
- 			goto replace;
+ 		if (sshdr->asc == 0x29) {
+ 			evt_type = SDEV_EVT_POWER_ON_RESET_OCCURRED;
+-			sdev_printk(KERN_WARNING, sdev,
+-				    "Power-on or device reset occurred\n");
++			/*
++			 * Do not print message if it is an expected side-effect
++			 * of runtime PM.
++			 */
++			if (!sdev->silence_suspend)
++				sdev_printk(KERN_WARNING, sdev,
++					    "Power-on or device reset occurred\n");
  		}
- 		if (vma->vm_start != vmstart) {
+ 
+ 		if (sshdr->asc == 0x2a && sshdr->ascq == 0x01) {
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3628,7 +3628,8 @@ static int sd_suspend_common(struct devi
+ 		return 0;
+ 
+ 	if (sdkp->WCE && sdkp->media_present) {
+-		sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
++		if (!sdkp->device->silence_suspend)
++			sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
+ 		ret = sd_sync_cache(sdkp, &sshdr);
+ 
+ 		if (ret) {
+@@ -3650,7 +3651,8 @@ static int sd_suspend_common(struct devi
+ 	}
+ 
+ 	if (sdkp->device->manage_start_stop) {
+-		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
++		if (!sdkp->device->silence_suspend)
++			sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
+ 		/* an error is not worth aborting a system sleep */
+ 		ret = sd_start_stop_device(sdkp, 0);
+ 		if (ignore_stop_errors)
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -206,6 +206,7 @@ struct scsi_device {
+ 	unsigned rpm_autosuspend:1;	/* Enable runtime autosuspend at device
+ 					 * creation time */
+ 	unsigned ignore_media_change:1; /* Ignore MEDIA CHANGE on resume */
++	unsigned silence_suspend:1;	/* Do not print runtime PM related messages */
+ 
+ 	bool offline_already;		/* Device offline message logged */
+ 
 
 

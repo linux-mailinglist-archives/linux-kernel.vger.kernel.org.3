@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8718B4F5075
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E532A4F51BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1841948AbiDFB0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S1847134AbiDFCNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573707AbiDETuA (ORCPT
+        with ESMTP id S242305AbiDETzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:50:00 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3EB14087
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:48:01 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso256603otd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=iJPD9APzDqLjV+qOf9rpHBZiLlNyWx7WzJ1mV8UJe7c=;
-        b=T1SO1Fz8TMPvB4YbIVayaKmOpzcbPI4uhFO6kGD5j3HJ59Foh+JcCdORHlXxNcIp4M
-         ZRmNdNuLv2/hIhMjYpHLvwxRgzsdd0tVTV0FlesVlNWEbpgqofyxQUWkVDB398yx/KQa
-         /szIDDLfRGu/b2gi8ib21FLRu7/H7mSRXrwrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=iJPD9APzDqLjV+qOf9rpHBZiLlNyWx7WzJ1mV8UJe7c=;
-        b=LkKFnNPUnQcYpIxdQsMi5iWrzs5Qfcsd3UcVv4hAvNtEc4pkf1ZvaRqu3RH4xKa+ll
-         +grAGit0yl2T+efWfz2Mk1AKdhICcIGWjwUhQ0Z99Cjs4cFkF0XWxbhXDr1mY3xfIDhD
-         v3H/63lFqauWwriEls7Mjr/zSQc47wBOhy6+rmafHxpP1BDb5G7m2W/vnS9DEJ0cNrDK
-         3NB+ndLHs9cLv2yhDEhBlISF1GSF+pRoA3LILZtmKTmbhOEZ3JxyiBDLfOqy4lAflGyo
-         lmx3CyGW+D5LzFer7PDSDa53QZVwihDSDcQfQUU3hUQhc19RiuPgOEgbYEh2hSPetv1o
-         vZdg==
-X-Gm-Message-State: AOAM532yLFwdS6Iz3tFOhiw7v5r9vlt3WPwjZoBzlGNxxdraUl9kvTWV
-        1qNNwEQnQ0vxc1OyVdh4w96zIHkvXHnpvbw9SIfP6w==
-X-Google-Smtp-Source: ABdhPJwR0A33UiSi8THY8lPeRPmOOiXc6cK6GctfIZWfsKcwOKJxED9C+HA79JYDyXPCBgczoDzz7MJSwix/UYHlFvY=
-X-Received: by 2002:a05:6830:61b:b0:5cc:e44:7dc3 with SMTP id
- w27-20020a056830061b00b005cc0e447dc3mr1771528oti.159.1649188080802; Tue, 05
- Apr 2022 12:48:00 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 5 Apr 2022 14:48:00 -0500
+        Tue, 5 Apr 2022 15:55:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0986A46B3A;
+        Tue,  5 Apr 2022 12:53:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99E9261899;
+        Tue,  5 Apr 2022 19:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A8CC385A1;
+        Tue,  5 Apr 2022 19:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649188424;
+        bh=ksIfVFjF0VhXvGOjeWph7+zGCs5no8Zk0CDK25rDXR0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nc8OjmuDJjbpD7Zx0INTlt+XDlZKmHGNaSSRGSH/aWhy0P/JXj0ZjTGtyIEvtWn5x
+         kKVcT7f6LAJKOrdKg13hSoB5+WFT0O3H2wbAdzQ+KkQU1JaaqJXAxUxrDkTq0Vwku3
+         RrOWWH5qot4yjkt/ZVEUBoqHbSXzYuukJNOE35pmV32CGgdY6pbYwFVQUavNmH6zVO
+         Mp0z3tNewufvLF6KGjFPtjt8Ai0NHkqAlEK5RmkztNGum5ZBmNOsKawHX7GimVzoY6
+         ByiQ/pC+lnDxfHtGygxl4Uk8cXgqWryykNFF0HSxMQz+J2WYbnwHFVPzhHpD9ezRXF
+         ZuJfEa8tKvu3w==
+Date:   Tue, 5 Apr 2022 12:53:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ariel Elior <aelior@marvell.com>,
+        Sudarsana Kalluru <skalluru@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH 03/11] bnx2x: Fix undefined behavior due to shift
+ overflowing the constant
+Message-ID: <20220405125342.1f4d0a1a@kernel.org>
+In-Reply-To: <20220405151517.29753-4-bp@alien8.de>
+References: <20220405151517.29753-1-bp@alien8.de>
+        <20220405151517.29753-4-bp@alien8.de>
 MIME-Version: 1.0
-In-Reply-To: <1649182627-8068-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1649182627-8068-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 5 Apr 2022 14:48:00 -0500
-Message-ID: <CAE-0n50OYgSfhMcw2N_dd8LzxBXxoGhb0ToASsHGY=VPDa0zVg@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: enhance both connect and disconnect
- pending_timeout handle
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,261 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-04-05 11:17:07)
-> HPD plugin handle is responsible for setting up main link and depend on
+On Tue,  5 Apr 2022 17:15:09 +0200 Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+>=20
+> Fix:
+>=20
+>   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: In function =E2=80=98=
+bnx2x_check_blocks_with_parity3=E2=80=99:
+>   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:4917:4: error: case la=
+bel does not reduce to an integer constant
+>       case AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY:
+>       ^~~~
+>=20
+> See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+> details as to why it triggers with older gccs only.
+>=20
+> Signed-off-by: Borislav Petkov <bp@suse.de>
 
-Is "HPD plugin handle" a function? Can you use the function name?
+I think this patch did not make it to netdev patchwork.
+Could you resend (as a non-series patch - drop the 03/11
+from the subject, that way build bot will not consider
+it a partial/broken posting)? Thanks!
 
-> user space frame work to start video stream. Similarly, HPD unplugged
-> handle is responsible for tearing down main link and depend on user space
-> frame work to stop video stream. Connect_pending_timeout and disconnect_
+> diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h b/drivers/ne=
+t/ethernet/broadcom/bnx2x/bnx2x_reg.h
+> index 5caa75b41b73..881ac33fe914 100644
+> --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h
+> +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h
+> @@ -6218,7 +6218,7 @@
+>  #define AEU_INPUTS_ATTN_BITS_GPIO0_FUNCTION_0			 (0x1<<2)
+>  #define AEU_INPUTS_ATTN_BITS_IGU_PARITY_ERROR			 (0x1<<12)
+>  #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_ROM_PARITY		 (0x1<<28)
+> -#define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY		 (0x1<<31)
+> +#define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY		 (0x1U<<31)
+>  #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_UMP_RX_PARITY		 (0x1<<29)
+>  #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_UMP_TX_PARITY		 (0x1<<30)
+>  #define AEU_INPUTS_ATTN_BITS_MISC_HW_INTERRUPT			 (0x1<<15)
 
-Is 'Connect_pending_timeout' actually 'dp_connect_pending_timeout()'? If
-so, it would be clearer if the function name is used.
-
-> pending_timeout are fired after 5 seconds timer expired to tear down main
-> link and video stream and restore DP driver state into known default
-> DISCONNECTED state in the case of frame work does not response uevent
-
-s/frame work/framework/
-s/response/respond to/
-
-> original from DP driver so that DP driver can recover gracefully.
-
-This part of the sentence doesn't make sense to me.
-
->
-> The original connect_pending_timeout and disconnect_pending_timeout were
-> not implemented correctly. This patch enhance both timeout functions to
-
-s/enhance/fixes/
-
-> tear down main link and video stream correctly once timer is fired.
->
-> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
->
-
-Nitpick: Drop newline.
-
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_ctrl.c    | 34 ++++++++++++++++++++++++--
->  drivers/gpu/drm/msm/dp/dp_ctrl.h    |  1 +
->  drivers/gpu/drm/msm/dp/dp_display.c | 48 +++++++++++++++++++++++++++----------
->  3 files changed, 68 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index dcd0126..3f4cf6d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1910,7 +1910,7 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
->         return ret;
->  }
->
-> -int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-> +int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl)
->  {
->         struct dp_ctrl_private *ctrl;
->         struct dp_io *dp_io;
-> @@ -1926,7 +1926,37 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
->
->         dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
->
-> -       dp_catalog_ctrl_reset(ctrl->catalog);
-> +       ret = dp_power_clk_enable(ctrl->power, DP_CTRL_PM, false);
-> +       if (ret) {
-> +               DRM_ERROR("Failed to disable link clocks. ret=%d\n", ret);
-> +       }
-> +
-> +       DRM_DEBUG_DP("Before, phy=%x init_count=%d power_on=%d\n",
-> +               (u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-
-Please don't recast pointer prints with %x. Use %p to print pointers.
-
-> +
-> +       phy_power_off(phy);
-> +
-> +       DRM_DEBUG_DP("After, phy=%x init_count=%d power_on=%d\n",
-> +               (u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-
-It doesn't look good to be peeking inside struct phy. I wonder why that
-isn't an opaque struct. Either way, please don't print the struct
-members.
-
-> +
-> +       return ret;
-> +}
-> +
-> +int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-> +{
-> +       struct dp_ctrl_private *ctrl;
-> +       struct dp_io *dp_io;
-> +       struct phy *phy;
-> +       int ret = 0;
-
-Drop useless assignment please
-
-> +
-> +       if (!dp_ctrl)
-
-How is this possible? Please remove useless checks.
-
-> +               return -EINVAL;
-> +
-> +       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-> +       dp_io = &ctrl->parser->io;
-> +       phy = dp_io->phy;
-> +
-> +       dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
->
->         ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, false);
->         if (ret)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 178b774..56bf7c5 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -593,10 +593,16 @@ static int dp_connect_pending_timeout(struct dp_display_private *dp, u32 data)
->
->         mutex_lock(&dp->event_mutex);
->
-> +       /*
-> +        * main link had been setup but video is not ready yet
-> +        * only tear down main link
-> +        */
->         state = dp->hpd_state;
->         if (state == ST_CONNECT_PENDING) {
-> -               dp->hpd_state = ST_CONNECTED;
->                 DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-> +               dp_ctrl_off_link(dp->ctrl);
-> +               dp_display_host_phy_exit(dp);
-> +               dp->hpd_state = ST_DISCONNECTED;
->         }
->
->         mutex_unlock(&dp->event_mutex);
-> @@ -645,6 +651,7 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->                 if (dp->link->sink_count == 0) {
->                         dp_display_host_phy_exit(dp);
->                 }
-> +               dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
-
-The name of this function is very confusing. It would be nice to rename
-it to something like dp_display_notify_disconnect() and skip
-
->                 mutex_unlock(&dp->event_mutex);
->                 return 0;
->         }
-> @@ -661,19 +668,19 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->                 return 0;
->         }
->
-> -       dp->hpd_state = ST_DISCONNECT_PENDING;
-> -
->         /* disable HPD plug interrupts */
->         dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
->
-> -       /*
-> -        * We don't need separate work for disconnect as
-> -        * connect/attention interrupts are disabled
-> -        */
-
-Why is this comment removed? Because a work is actually used? Why can't
-we call dp_display_send_hpd_notification() directly?
-
->         dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
->
-> -       /* start sentinel checking in case of missing uevent */
-> -       dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-> +       if (state == ST_DISPLAY_OFF) {
-> +               dp->hpd_state = ST_DISCONNECTED;
-> +
-
-Drop extra newline please
-
-> +       } else {
-> +               /* start sentinel checking in case of missing uevent */
-> +               dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-> +               dp->hpd_state = ST_DISCONNECT_PENDING;
-
-It looks like dp_add_event() should check the event and change
-dp->hpd_state sometimes. Then this code would be simply adding an event
-and dp_add_event() would be changing the hpd_state while scheduling the
-work.
-
-> +       }
->
->         /* signal the disconnect event early to ensure proper teardown */
->         dp_display_handle_plugged_change(&dp->dp_display, false);
-> @@ -695,10 +702,16 @@ static int dp_disconnect_pending_timeout(struct dp_display_private *dp, u32 data
->
->         mutex_lock(&dp->event_mutex);
->
-> +       /*
-> +        * main link had been set up and video is ready
-> +        * tear down main link, video stream and phy
-
-because disconnect event never came and we need to get back to a default
-sane state?
-
-> +        */
->         state =  dp->hpd_state;
->         if (state == ST_DISCONNECT_PENDING) {
-> -               dp->hpd_state = ST_DISCONNECTED;
->                 DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-> +               dp_ctrl_off(dp->ctrl);
-> +               dp_display_host_phy_exit(dp);
-> +               dp->hpd_state = ST_DISCONNECTED;
->         }
->
->         mutex_unlock(&dp->event_mutex);
-> @@ -1571,6 +1584,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
->
->         mutex_lock(&dp_display->event_mutex);
->
-> +       state =  dp_display->hpd_state;
-
-s/=  /= /
-
-Drop extra space after '=' please.
-
-> +       if (state == ST_DISCONNECTED) {
-> +               mutex_unlock(&dp_display->event_mutex);
-> +               return rc;
-> +       }
-> +
->         /* stop sentinel checking */
->         dp_del_event(dp_display, EV_CONNECT_PENDING_TIMEOUT);
->
-> @@ -1588,8 +1607,6 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
->                 return rc;
->         }
->
-> -       state =  dp_display->hpd_state;
-> -
->         if (state == ST_DISPLAY_OFF)
->                 dp_display_host_phy_init(dp_display);
->
-> @@ -1638,13 +1655,18 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
->         /* stop sentinel checking */
->         dp_del_event(dp_display, EV_DISCONNECT_PENDING_TIMEOUT);
->
-> +       state =  dp_display->hpd_state;
-
-s/=  /= /
-
-Drop extra space after '=' please.
-
-> +       if (state == ST_DISCONNECTED || state == ST_DISPLAY_OFF) {
-> +               mutex_unlock(&dp_display->event_mutex);
-> +               return rc;
-> +       }
-> +
->         dp_display_disable(dp_display, 0);
->
->         rc = dp_display_unprepare(dp);
->         if (rc)
->                 DRM_ERROR("DP display unprepare failed, rc=%d\n", rc);
->
-> -       state =  dp_display->hpd_state;
->         if (state == ST_DISCONNECT_PENDING) {
->                 /* completed disconnection */
->                 dp_display->hpd_state = ST_DISCONNECTED;

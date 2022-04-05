@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4550F4F3FFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F15C4F3DA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388011AbiDENUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S1384210AbiDENcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344287AbiDEJTE (ORCPT
+        with ESMTP id S1345737AbiDEJW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98336237E6
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:07:22 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id p15so25279275ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 02:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kJSjygeoIUEg15KEgznSTxJtmLSlX3j99Gbfk4k6bTw=;
-        b=BndCpHbRsWd6v9wYTuGwTQqEPbjP9eHNrRdtXrSGV8fG9UcpEcQ/yBmITbPMTE4+qm
-         sd6oJWbX1cCsjwY4F1Zmbei5RtCpG0eoriiJbERYskO8uAWG5dlcDnrtWhjAKvCDoZ9u
-         lmIaOv2I9muviE18eVTGJ10lQhNx6gE1arefCmnKLIXDoSaS/cvb+DxGhJCK8ZySH7lP
-         9eXGOIlDWyeyDCDmyuStxkgBcG/06bJMGSN/aI30KG6h7s1/TCvR473Fs6Q/c2xWepL5
-         YQNJaocsIHdlEDjig/56mixNPFNePdh0sbIzBj0g/MkffXf1EOx3u5Ipk8QQvkvau86f
-         8ERg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kJSjygeoIUEg15KEgznSTxJtmLSlX3j99Gbfk4k6bTw=;
-        b=QXx3aGcykxlv594c7Wia1IcayBF/f0s4gtjMemHdshgtKgEF9KZWyD9u8NepIJwhOe
-         6JoVgjkxf6uY8pHXTbBs6dNwE7f0RfdjrTuAlzXS4I2lr1561vwFhWLRcoRil7m6qCF7
-         h/mJlYjt/1iy/XYo+aAkcbcm0JKXYVpU0+yV73ZRtaQpUNedoKpHRwrG4PZx+wyfS8Dk
-         lZHayPcKAPeV6RpJLFO8D6A8mI4UGnD/oyiS9rFtmimdK0vkHfPBInNlHtsXRHHw6j9b
-         gi06iGa376kW6kaHya6O1A/BK1g4hkzkDaM2nI0+NrvTpcDIFB1DM6OrmLmCKV0LdjMG
-         4rzw==
-X-Gm-Message-State: AOAM5334kx8Q4E+yaDcsXWBFE7tKvGzOCm3WguoMkQf5+f/5Aap5oB7g
-        n9S8GdvozGOgmw+Qfd9RZe5FgyL9/aQ=
-X-Google-Smtp-Source: ABdhPJw9/2/4/0IARD1YEes9d1GNkT6ZQG5MG5TlQjfRSVS5zf4flLb6Q+lHMSGG8wYs+xRWXowjTA==
-X-Received: by 2002:a17:907:96a9:b0:6e0:db4a:ba8d with SMTP id hd41-20020a17090796a900b006e0db4aba8dmr2536171ejc.87.1649149641139;
-        Tue, 05 Apr 2022 02:07:21 -0700 (PDT)
-Received: from [192.168.0.151] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm5314719eji.67.2022.04.05.02.07.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 02:07:20 -0700 (PDT)
-Message-ID: <5420967d-5007-8ca7-7a8d-124b9ad96905@gmail.com>
-Date:   Tue, 5 Apr 2022 11:07:19 +0200
+        Tue, 5 Apr 2022 05:22:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E63C6EB3C;
+        Tue,  5 Apr 2022 02:12:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 494E8210F4;
+        Tue,  5 Apr 2022 09:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649149920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mVhpyElouVHiShzfKiMDpwTUsMQzwG3WoSbwcyg24Hk=;
+        b=o2qv6btz8dqtGvXVklb2rUqFn4/SpHgk1qtD2cB+/Na3YKuaNPlK0xJA+XEQs3GqIfrsWJ
+        i5L+/jIZaEkmbNq7j3ojQvfVjcdznGe3XGW3hPoaj5Cvjj6e/6zVr9wJq6IhUPdXrtTXij
+        3F5YLiidr96TCatmJROASTwlYMUqf9U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 029C0132B7;
+        Tue,  5 Apr 2022 09:11:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xLx0O98HTGJgKwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 05 Apr 2022 09:11:59 +0000
+Date:   Tue, 5 Apr 2022 11:11:58 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Bui Quang Minh <minhquangbui99@gmail.com>, cgroups@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] cgroup: Kill the parent controller when its last
+ child is killed
+Message-ID: <20220405091158.GA13806@blackbody.suse.cz>
+References: <20220404142535.145975-1-minhquangbui99@gmail.com>
+ <Ykss1N/VYX7femqw@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] staging: r8188eu: remove HAL_DEF_IS_SUPPORT_ANT_DIV
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220403165255.6900-1-straube.linux@gmail.com>
- <20220403165255.6900-2-straube.linux@gmail.com> <YksBcUBXbgzXmEBO@kroah.com>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <YksBcUBXbgzXmEBO@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ykss1N/VYX7femqw@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Apr 04, 2022 at 07:37:24AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> And the suggested behavior doesn't make much sense to me. It doesn't
+> actually solve the underlying problem but instead always make css
+> destructions recursive which can lead to surprises for normal use cases.
 
-On 4/4/22 16:32, Greg KH wrote:
->> +bool support_ant_div(struct adapter *adapter)
-> 
-> That's a very odd function name to add to the kernel's global namespace
-> :(
-> 
-> Pleas emake it more obvious what this is for, with the driver name as
-> part of the prefix?
-> 
+I also don't like the nested special-case use percpu_ref_kill().
 
-Looking again at this I notice it can be made a static function in 
-rtw_cmd.c.
+I looked at this and my supposed solution turned out to be a revert of
+commit 3c606d35fe97 ("cgroup: prevent mount hang due to memory
+controller lifetime"). So at the unmount time it's necessary to distinguish
+children that are in the process of removal from children than are online or
+pinned indefinitely.
 
-I'll rework the series and make the function static with a more
-descriptive name.
+What about:
 
-thanks,
-Michael
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2205,11 +2205,14 @@ static void cgroup_kill_sb(struct super_block *sb)
+        struct cgroup_root *root = cgroup_root_from_kf(kf_root);
+
+        /*
+-        * If @root doesn't have any children, start killing it.
++        * If @root doesn't have any children held by residual state (e.g.
++        * memory controller), start killing it, flush workqueue to filter out
++        * transiently offlined children.
+         * This prevents new mounts by disabling percpu_ref_tryget_live().
+         *
+         * And don't kill the default root.
+         */
++       flush_workqueue(cgroup_destroy_wq);
+        if (list_empty(&root->cgrp.self.children) && root != &cgrp_dfl_root &&
+            !percpu_ref_is_dying(&root->cgrp.self.refcnt)) {
+                cgroup_bpf_offline(&root->cgrp);
+
+(I suspect there's technically still possible a race between concurrent unmount
+and the last rmdir but the flush on kill_sb path should be affordable and it
+prevents unnecessarily conserved cgroup roots.)
+
+Michal

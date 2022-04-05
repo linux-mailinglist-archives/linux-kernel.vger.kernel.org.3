@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40EF4F46E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8011F4F4625
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353435AbiDEUvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S1377319AbiDEOEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242779AbiDEKfS (ORCPT
+        with ESMTP id S235949AbiDEJbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680E28E0A;
-        Tue,  5 Apr 2022 03:20:05 -0700 (PDT)
+        Tue, 5 Apr 2022 05:31:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB1FDC9;
+        Tue,  5 Apr 2022 02:18:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE8D6B81C98;
-        Tue,  5 Apr 2022 10:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F68C385A1;
-        Tue,  5 Apr 2022 10:20:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0EB1615E4;
+        Tue,  5 Apr 2022 09:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3CAC385A2;
+        Tue,  5 Apr 2022 09:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154002;
-        bh=0j/wEErfBcQgGljGCh1iEYUXjRQR4qsAs7iaKW8EU74=;
+        s=korg; t=1649150287;
+        bh=Po5jLrWVJ+xIKtQ51vyR2df5Kkp8zgB79iNNPxTe+7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=el4KNmps5qQn8apkKrI9sqbm33BnSlb4h08SU54xQ2+fBH/LOa3hlRd9WLNiJyIXO
-         nqFCpLpPZOrJ0oR3rezP0MEuTUdpINbTNqg2q7cFD783uU2o0YbNMvGlePfy9e04jX
-         L2oj0EP7QCu7B2nMQk+f48etSoO+FrAZGYQ4or1s=
+        b=JfKnyrsyTlWhe8Cq0tvKwsD9/LhgZ8AJgyUJZppVxFAlRirlAASE8ofBISA0VSnaV
+         8mzfbgliRvIS9EkbgyphjhkwxJue2/PUzrQIKeuZmWd+Hc+NJ4YHo5HN2D2PwBuORZ
+         hiVjK8P2w76IIlcC41PLNN/XiPczm1D2kgWk+7mw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 423/599] pinctrl: nomadik: Add missing of_node_put() in nmk_pinctrl_probe
-Date:   Tue,  5 Apr 2022 09:31:57 +0200
-Message-Id: <20220405070311.421058085@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.16 1005/1017] ice: xsk: Fix indexing in ice_tx_xsk_pool()
+Date:   Tue,  5 Apr 2022 09:31:58 +0200
+Message-Id: <20220405070424.033475739@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit c09ac191b1f97cfa06f394dbfd7a5db07986cefc ]
+commit 1ac2524de7b366633fc336db6c94062768d0ab03 upstream.
 
-This node pointer is returned by of_parse_phandle() with refcount
-incremented in this function. Calling of_node_put() to avoid
-the refcount leak.
+Ice driver tries to always create XDP rings array to be
+num_possible_cpus() sized, regardless of user's queue count setting that
+can be changed via ethtool -L for example.
 
-Fixes: 32e67eee670e ("pinctrl: nomadik: Allow prcm_base to be extracted from Device Tree")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307115116.25316-1-linmq006@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Currently, ice_tx_xsk_pool() calculates the qid by decrementing the
+ring->q_index by the count of XDP queues, but ring->q_index is set to 'i
++ vsi->alloc_txq'.
+
+When user did ethtool -L $IFACE combined 1, alloc_txq is 1, but
+vsi->num_xdp_txq is still num_possible_cpus(). Then, ice_tx_xsk_pool()
+will do OOB access and in the final result ring would not get xsk_pool
+pointer assigned. Then, each ice_xsk_wakeup() call will fail with error
+and it will not be possible to get into NAPI and do the processing from
+driver side.
+
+Fix this by decrementing vsi->alloc_txq instead of vsi->num_xdp_txq from
+ring-q_index in ice_tx_xsk_pool() so the calculation is reflected to the
+setting of ring->q_index.
+
+Fixes: 22bf877e528f ("ice: introduce XDP_TX fallback path")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220328142123.170157-5-maciej.fijalkowski@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/nomadik/pinctrl-nomadik.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik.c b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-index 657e35a75d84..6d77feda9090 100644
---- a/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-+++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-@@ -1883,8 +1883,10 @@ static int nmk_pinctrl_probe(struct platform_device *pdev)
- 	}
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -709,7 +709,7 @@ static inline struct xsk_buff_pool *ice_
+ 	struct ice_vsi *vsi = ring->vsi;
+ 	u16 qid;
  
- 	prcm_np = of_parse_phandle(np, "prcm", 0);
--	if (prcm_np)
-+	if (prcm_np) {
- 		npct->prcm_base = of_iomap(prcm_np, 0);
-+		of_node_put(prcm_np);
-+	}
- 	if (!npct->prcm_base) {
- 		if (version == PINCTRL_NMK_STN8815) {
- 			dev_info(&pdev->dev,
--- 
-2.34.1
-
+-	qid = ring->q_index - vsi->num_xdp_txq;
++	qid = ring->q_index - vsi->alloc_txq;
+ 
+ 	if (!ice_is_xdp_ena_vsi(vsi) || !test_bit(qid, vsi->af_xdp_zc_qps))
+ 		return NULL;
 
 

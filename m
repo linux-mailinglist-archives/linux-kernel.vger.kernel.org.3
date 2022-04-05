@@ -2,53 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE434F4A9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB594F4CB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457594AbiDEWrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S1579450AbiDEXbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354909AbiDEKQe (ORCPT
+        with ESMTP id S1349147AbiDEJtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EF51A3AA;
-        Tue,  5 Apr 2022 03:03:51 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A6ECF5;
+        Tue,  5 Apr 2022 02:41:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A04BFB81BC0;
-        Tue,  5 Apr 2022 10:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B14C385A1;
-        Tue,  5 Apr 2022 10:03:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A856164D;
+        Tue,  5 Apr 2022 09:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE95C385A2;
+        Tue,  5 Apr 2022 09:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153029;
-        bh=l+NxciS2SavS2cTgrzI35NkhgFF0jOkZeeASdvT/Inc=;
+        s=korg; t=1649151690;
+        bh=/P8TunVzWGpmmpgr6qat+AphEiaH/CrUmR30w+542Fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l+DlTtWqsNyIlDQ9gHkjeg15cDTr0I/12xuFXQYlDE7vYx7pyCrUCYcUp3r10Ql4O
-         b0L+O+wh6vUYCdpS5p4XyWCunCvlGIOcp3HGM+AsNqYx8amrB20MqNQ2iQ1Ky2sku8
-         aVwJfD5rDeLqaUl+5JhlzFXunUlJMADrFVp4ZE1k=
+        b=XciM5jLbygJN/CLzfbx3MvNtCxy9nz8PebMhc1bYpFM+gYxLx69nWkfcOof4olqM6
+         RcOCY6jSQOfNfTA3J97b9I5KWZoiLQIihW/qq9D61L2HZ1fS5f2EI/uVsYp0Y/cbiK
+         mOaB8omZRAOgKcgssrbH7mXCyMR/w8N004IMtatA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 074/599] mm: madvise: skip unmapped vma holes passed to process_madvise
-Date:   Tue,  5 Apr 2022 09:26:08 +0200
-Message-Id: <20220405070301.028073179@linuxfoundation.org>
+        stable@vger.kernel.org, Ping Fang <pifang@redhat.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 507/913] powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+Date:   Tue,  5 Apr 2022 09:26:09 +0200
+Message-Id: <20220405070355.054023170@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,57 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+From: Daniel Henrique Barboza <danielhb413@gmail.com>
 
-commit 08095d6310a7ce43256b4251577bc66a25c6e1a6 upstream.
+[ Upstream commit 749ed4a20657bcea66a6e082ca3dc0d228cbec80 ]
 
-The process_madvise() system call is expected to skip holes in vma passed
-through 'struct iovec' vector list.  But do_madvise, which
-process_madvise() calls for each vma, returns ENOMEM in case of unmapped
-holes, despite the VMA is processed.
+Executing node_set_online() when nid = NUMA_NO_NODE results in an
+undefined behavior. node_set_online() will call node_set_state(), into
+__node_set(), into set_bit(), and since NUMA_NO_NODE is -1 we'll end up
+doing a negative shift operation inside
+arch/powerpc/include/asm/bitops.h. This potential UB was detected
+running a kernel with CONFIG_UBSAN.
 
-Thus process_madvise() should treat ENOMEM as expected and consider the
-VMA passed to as processed and continue processing other vma's in the
-vector list.  Returning -ENOMEM to user, despite the VMA is processed,
-will be unable to figure out where to start the next madvise.
+The behavior was introduced by commit 10f78fd0dabb ("powerpc/numa: Fix a
+regression on memoryless node 0"), where the check for nid > 0 was
+removed to fix a problem that was happening with nid = 0, but the result
+is that now we're trying to online NUMA_NO_NODE nids as well.
 
-Link: https://lkml.kernel.org/r/4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com
-Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Checking for nid >= 0 will allow node 0 to be onlined while avoiding
+this UB with NUMA_NO_NODE.
+
+Fixes: 10f78fd0dabb ("powerpc/numa: Fix a regression on memoryless node 0")
+Reported-by: Ping Fang <pifang@redhat.com>
+Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220224182312.1012527-1-danielhb413@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/madvise.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ arch/powerpc/mm/numa.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1222,9 +1222,16 @@ SYSCALL_DEFINE5(process_madvise, int, pi
+diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+index 59d3cfcd7887..5fb829256b59 100644
+--- a/arch/powerpc/mm/numa.c
++++ b/arch/powerpc/mm/numa.c
+@@ -956,7 +956,9 @@ static int __init parse_numa_properties(void)
+ 			of_node_put(cpu);
+ 		}
  
- 	while (iov_iter_count(&iter)) {
- 		iovec = iov_iter_iovec(&iter);
-+		/*
-+		 * do_madvise returns ENOMEM if unmapped holes are present
-+		 * in the passed VMA. process_madvise() is expected to skip
-+		 * unmapped holes passed to it in the 'struct iovec' list
-+		 * and not fail because of them. Thus treat -ENOMEM return
-+		 * from do_madvise as valid and continue processing.
-+		 */
- 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
- 					iovec.iov_len, behavior);
--		if (ret < 0)
-+		if (ret < 0 && ret != -ENOMEM)
- 			break;
- 		iov_iter_advance(&iter, iovec.iov_len);
+-		node_set_online(nid);
++		/* node_set_online() is an UB if 'nid' is negative */
++		if (likely(nid >= 0))
++			node_set_online(nid);
  	}
+ 
+ 	get_n_mem_cells(&n_mem_addr_cells, &n_mem_size_cells);
+-- 
+2.34.1
+
 
 

@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E184F4ED8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CDF4F4871
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582575AbiDEXsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        id S1383485AbiDEVjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357407AbiDELQY (ORCPT
+        with ESMTP id S1358862AbiDELRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:16:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E0F28E09;
-        Tue,  5 Apr 2022 03:45:14 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7CE931EC02B9;
-        Tue,  5 Apr 2022 12:45:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649155509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6/5LBcy5siohW4oFuFeRpf6DCnAk2CessNOW+twB7uY=;
-        b=LGiTheZnyXcmHnN6XZzLCW/0mEVkEf7wOP1WEXJasS41X6E41rojW0fFU3DUbi95ouWOvL
-        +qP8ubIgpxNuiDJ8B7mOShS68hHBrzc1vZijoUZorxOdnSsPWpR5IuIr9pdd9saOH/pVq9
-        4QE0lYfd7DhP+R9IBCJqJS8WuA9tED4=
-Date:   Tue, 5 Apr 2022 12:45:11 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Richard Biener <rguenther@suse.de>
-Cc:     linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: older gccs and case labels producing integer constants
-Message-ID: <YkwdtxNCpiERLFGW@zn.tnic>
-References: <YkwQ6+tIH8GQpuct@zn.tnic>
- <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
- <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
- <YkwbygWj/C3XooMV@zn.tnic>
+        Tue, 5 Apr 2022 07:17:39 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8B5890B6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:49:26 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bg10so25873759ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 03:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7577hiEEV60XWnU+gm9ig1vjqa65ibu1AZU+K7+N5IQ=;
+        b=E+cn+nYJ0eiXQPg7n4oHQaZOzpWn0DzsXu6Eyo8UPMxYDv6mVqQAQ7PPnro/TdPijA
+         FB1YZYILpwko9Q603p48/DJrOPcBcCeYTQ1UrV8uvnGf8Qucx/2jh63VT2P/ouJudb3I
+         I8mXgcTc9T0+Cm5E8ug6Kwn5INkDW2q1bP93Qvigi9QClBrc7nDrxhKPVKQtZVUZWEiB
+         P4yLWkpWOfLcwXk+dj6s8iIJf+D/mY31Y7nQaFBefs/LxtcstHiq13dkfdiaEo8NAIeL
+         9P87QqFuF8mH9xpKuQ0yql9arUlaCMOPWvOKgYhpyVaooeRb8dp5W0Sw6RKNYr655mz6
+         DfhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7577hiEEV60XWnU+gm9ig1vjqa65ibu1AZU+K7+N5IQ=;
+        b=komZRqmWZBxlCjfEFf+l/EZGP4p5xYH+qA9E6yqzJ8ouUgY+L2Bt5GPN3Q310/WsXK
+         T9bDXbWDV+zMeg84VacGBOv02c2mP/J9+eu1fuO9v+7ixQXv+TTqGq6Kk1BXNKxPQFYg
+         rXCT5ZQCmswSiFAvTUk0kneqreV6GANv8+xwRbvciVhVLDoU/d81UId6PwxTeZO82VkE
+         PqLPQ+qZQLH6C/iQ11hgVjnzkCtxCLdIRUcEVzZJpDLBk14MyvBdy5EgV6OjUdxNq0BU
+         Y+GVAf0cknPXilLB4/IaBTh4j8noT03wRNK8idA4BQwz03hnvWimq8av3pw8habcTFB2
+         YTHQ==
+X-Gm-Message-State: AOAM531fkC4XgJ5x/dmgbeF+Mb5BldxT1oNQ/HJwE5h7shMiYzuFhTSW
+        LPVjPIh+t1c4CGfPTECv/c+i9QbVwFY=
+X-Google-Smtp-Source: ABdhPJzlWvczrjaKZjKGrm8PwiUl7ri7bCRqBl55s3ADRN2o7JLvUjYq6wkv+QrsdJTIEZtmGbh2Qw==
+X-Received: by 2002:a17:906:9b8f:b0:6db:ab62:4713 with SMTP id dd15-20020a1709069b8f00b006dbab624713mr2905921ejc.738.1649155765362;
+        Tue, 05 Apr 2022 03:49:25 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id j12-20020a50e0cc000000b0041cd813ac01sm2436702edl.28.2022.04.05.03.49.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 03:49:24 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH v2 0/4] staging: r8188eu: remove GetHalDefVar8188EUsb()
+Date:   Tue,  5 Apr 2022 12:49:06 +0200
+Message-Id: <20220405104910.9769-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YkwbygWj/C3XooMV@zn.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 12:36:58PM +0200, Borislav Petkov wrote:
-> On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
-> > Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
-> > compiler flags genommen werden?
-> 
-> Found it:
-> 
-> $ gcc -fsanitize=shift -c switch.c
-> switch.c: In function ‘foo’:
-> switch.c:10:7: error: case label does not reduce to an integer constant
->        case (((0xfc08) << 16) | (0x0101)):;
-> 
-> $ gcc --version
-> gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
-> Copyright (C) 2017 Free Software Foundation, Inc.
-> 
-> Something not fully backported?
+This series removes the function GetHalDefVar8188EUsb(). This is part
+of the ongoing effort to get rid of the unwanted hal layer.
 
-Ok, not really:
+Tested on x86_64 with Inter-Tech DMG-02.
 
-gcc-10 -fsanitize=shift -c switch.c
-switch.c: In function ‘foo’:
-switch.c:10:7: error: case label does not reduce to an integer constant
-   10 |       case (((0xfc08) << 16) | (0x0101)):;
-      |       ^~~~
+v2:
+- remove dead code first
+- use better function names
+- make one function static
 
-BUT!
+Michael Straube (4):
+  staging: r8188eu: cur_ant is set but never used
+  staging: r8188eu: remove HAL_DEF_IS_SUPPORT_ANT_DIV
+  staging: r8188eu: remove HAL_DEF_CURRENT_ANTENNA
+  staging: r8188eu: remove GetHalDefVar8188EUsb()
 
-when more switches are set with gcc-10 (full gcc cmdline from a kernel
-build), then that passes.
-
-But it doesn't pass with gcc-7.
-
-Weird...
+ drivers/staging/r8188eu/core/rtw_cmd.c       | 11 ++++++++---
+ drivers/staging/r8188eu/core/rtw_mlme.c      | 19 ++++++++++---------
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c  |  2 +-
+ drivers/staging/r8188eu/hal/usb_halinit.c    | 20 --------------------
+ drivers/staging/r8188eu/include/hal_intf.h   |  3 ---
+ drivers/staging/r8188eu/include/rtw_mlme.h   |  2 ++
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c |  8 +-------
+ 7 files changed, 22 insertions(+), 43 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.35.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

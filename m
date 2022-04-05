@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59604F4EC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD6C4F4869
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836543AbiDFAge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S1382900AbiDEVjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572876AbiDERNN (ORCPT
+        with ESMTP id S1458172AbiDERNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:13:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA1E32989
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:11:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BEE1D210FD;
-        Tue,  5 Apr 2022 17:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649178672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qXZaguQgzHHMZTiLw5gbfQ9kh4XyH0tzaiUaS6uMhFw=;
-        b=P1Niw4x7r4HvoVhVpJmYRniTerVWGNQa6wUn7Ui1YBWr3GPrTv/DDxtfkvC2CYjhu4hPwt
-        vRo+RBTSUTI2wSww9e+aNNtAJDjdZK/C+6YaX98Vj07u/ft/IbH09AI6kOOthu2Z+1MU0T
-        FXIgvSyFmpbK4wYkorchJoof5s0UgxM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649178672;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qXZaguQgzHHMZTiLw5gbfQ9kh4XyH0tzaiUaS6uMhFw=;
-        b=1mPAQK/8Tc5VWkJTuIOTeqpAAr7YKV2IrbOKQ8iV5kuhxX8JwS1ELK4F58khGigxtSLgop
-        AGReuck+EL/60AAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB5D113A04;
-        Tue,  5 Apr 2022 17:11:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AY4eKTB4TGK7HwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 05 Apr 2022 17:11:12 +0000
-Message-ID: <c56564cd-87f0-25c8-bb78-2bb8d8ad2655@suse.cz>
-Date:   Tue, 5 Apr 2022 19:11:12 +0200
+        Tue, 5 Apr 2022 13:13:09 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B3453E0D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:11:10 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so9791989otj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=BJlLixmapZXG3Z12MRft8f1o+ERnrNsMEOuO+htxHtOkkXNoC4g+Fj1hvUrrz2eiR4
+         bbLh9uCYeNiIVW87oZB/Hf2zirGPhRhZs4MZFYQKP0lT5uFogrweIdBUU638/F+vk8MM
+         1XdUXhdAsAizdg4UAkuu6oeBzHDIdwhMxz+vGg+2NqOPoCUyUnwMUPKELdYC0y2EEVnx
+         l302qabGpKEelNd6fdET2izAcrhjx6ZXdty+FKfxGQhRT1RWJZTm6vZ6qscVeEq76dyX
+         QL55dLz7mFEFaoJpPbnuJnPj9hVDedGHH2VDGUnoO0snxp7Lh/xCE0QEunJnYaWLh0gi
+         0wsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=Dn/eplyp4UcBQWmbHKgfjT9hs9arMkvvnV3nBEngz9yIfKM+46FZjFU80+Y2fuRpF6
+         FxF10FZKG8qlGQyqHml7rLdXg+7tjspvtIHif8q32RGfVbrf3JX/JB2cC5NcpLqTzKiL
+         5Y1uK/SYvtX+BOSuYxju2MmEx84UqjCWxncNT9xBxLQNQwSmHw1nAlQW9nSEMlXnSvi0
+         oKPod0XnFykfm0CsAFOJuUHq1euFrCfwPCl4T5cAOU6BunIH9T1aarf7Ftlm2eJjvOKN
+         hH//87Y1TP1+EeFcZu2vmAliWz27sdAiChrW0udcYdjJSDpUlbRxMgyfLoMmfz0K7Sb1
+         Y0cw==
+X-Gm-Message-State: AOAM531nHG143k1/i3WzAFUMmR8YOg3DdzCfrTDu4MQBHKxVSR26h3tq
+        vlL43u4tX90hsr6eTAX6Hg4OqA==
+X-Google-Smtp-Source: ABdhPJw3Dog+Ye6joupCF1nJ1gu6mLF/8uu2LULDI3pj1f67IYGzNXfMwLJXsBStJIdXMshXWyQ+wg==
+X-Received: by 2002:a9d:6442:0:b0:5b2:3851:597 with SMTP id m2-20020a9d6442000000b005b238510597mr1566869otl.247.1649178669314;
+        Tue, 05 Apr 2022 10:11:09 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id e4-20020a056808148400b002d9be41b179sm5680214oiw.50.2022.04.05.10.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 10:11:08 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 10:13:31 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] arm64: dts: qcom: sdm845: control RPMHPD
+ performance states with UFS
+Message-ID: <Ykx4u+E/vDNrQRUg@ripper>
+References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
+ <20220401145820.1003826-4-krzysztof.kozlowski@linaro.org>
+ <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] mm/page_alloc: add same penalty is enough to get
- round-robin order
-Content-Language: en-US
-To:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220123013537.20491-1-richard.weiyang@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220123013537.20491-1-richard.weiyang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,59 +88,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/22 02:35, Wei Yang wrote:
-> To make node order in round-robin in the same distance group, we add a
-> penalty to the first node we got in each round.
-> 
-> To get a round-robin order in the same distance group, we don't need to
-> decrease the penalty since:
-> 
->   * find_next_best_node() always iterates node in the same order
->   * distance matters more then penalty in find_next_best_node()
->   * in nodes with the same distance, the first one would be picked up
-> 
-> So it is fine to increase same penalty when we get the first node in the
-> same distance group.
+On Sun 03 Apr 17:02 PDT 2022, Dmitry Baryshkov wrote:
 
-With that logic I'm not even sure if we need nr_online_nodes as penalty or
-it could be just 1. Would you know?
-
+> On 01/04/2022 17:58, Krzysztof Kozlowski wrote:
+> > UFS, when scaling gears, should choose appropriate performance state of
+> > RPMHPD power domain controller.  Since UFS belongs to UFS_PHY_GDSC power
+> > domain, add necessary parent power domain to GCC.
 > 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  mm/page_alloc.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> This will cause all gcc GDSCs to be rooted in the CX. Are we sure that this
+> is an expected (and correct) change?
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c5952749ad40..f27afd517652 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6245,13 +6245,12 @@ static void build_thisnode_zonelists(pg_data_t *pgdat)
->  static void build_zonelists(pg_data_t *pgdat)
->  {
->  	static int node_order[MAX_NUMNODES];
-> -	int node, load, nr_nodes = 0;
-> +	int node, nr_nodes = 0;
->  	nodemask_t used_mask = NODE_MASK_NONE;
->  	int local_node, prev_node;
->  
->  	/* NUMA-aware ordering of nodes */
->  	local_node = pgdat->node_id;
-> -	load = nr_online_nodes;
->  	prev_node = local_node;
->  
->  	memset(node_order, 0, sizeof(node_order));
-> @@ -6263,11 +6262,10 @@ static void build_zonelists(pg_data_t *pgdat)
->  		 */
->  		if (node_distance(local_node, node) !=
->  		    node_distance(local_node, prev_node))
-> -			node_load[node] += load;
-> +			node_load[node] += nr_online_nodes;
->  
->  		node_order[nr_nodes++] = node;
->  		prev_node = node;
-> -		load--;
->  	}
->  
->  	build_zonelists_in_node_order(pgdat, node_order, nr_nodes);
 
+Per the last part of Rajendra's reply in [1], this should be fine.
+Naturally we might have to come up with some way to bind gdscs to one of
+multiple power-domains if that changes.
+
+[1] https://lore.kernel.org/all/5e572c50-d6fe-5a21-d09f-f11a072538c5@codeaurora.org/
+
+Regards,
+Bjorn
+
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >   arch/arm64/boot/dts/qcom/sdm845.dtsi | 17 ++++++++++++++++-
+> >   1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > index b31bf62e8680..c999b41c2605 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > @@ -1078,6 +1078,7 @@ gcc: clock-controller@100000 {
+> >   			#clock-cells = <1>;
+> >   			#reset-cells = <1>;
+> >   			#power-domain-cells = <1>;
+> > +			power-domains = <&rpmhpd SDM845_CX>;
+> >   		};
+> >   		qfprom@784000 {
+> > @@ -2336,8 +2337,22 @@ ufs_mem_hc: ufshc@1d84000 {
+> >   				<0 0>,
+> >   				<0 0>,
+> >   				<0 300000000>;
+> > -
+> > +			operating-points-v2 = <&ufs_opp_table>;
+> >   			status = "disabled";
+> > +
+> > +			ufs_opp_table: opp-table {
+> > +				compatible = "operating-points-v2";
+> > +
+> > +				opp-50000000 {
+> > +					opp-hz = /bits/ 64 <50000000>;
+> > +					required-opps = <&rpmhpd_opp_svs>;
+> > +				};
+> > +
+> > +				opp-200000000 {
+> > +					opp-hz = /bits/ 64 <200000000>;
+> > +					required-opps = <&rpmhpd_opp_nom>;
+> > +				};
+> > +			};
+> >   		};
+> >   		ufs_mem_phy: phy@1d87000 {
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

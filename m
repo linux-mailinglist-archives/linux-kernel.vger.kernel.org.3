@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6D04F4119
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D7F4F3DF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389340AbiDEOo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S1382436AbiDEMPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244220AbiDEJlK (ORCPT
+        with ESMTP id S244775AbiDEIwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:10 -0400
+        Tue, 5 Apr 2022 04:52:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8EBB08A;
-        Tue,  5 Apr 2022 02:25:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D09E5FB5;
+        Tue,  5 Apr 2022 01:43:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D31E9B81C9C;
-        Tue,  5 Apr 2022 09:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A86C385A2;
-        Tue,  5 Apr 2022 09:25:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5FAFB81A32;
+        Tue,  5 Apr 2022 08:43:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50584C385A1;
+        Tue,  5 Apr 2022 08:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150741;
-        bh=3oCwlJRD8vj5QipKcGadNX91kWBh0Lg0s35g0LB+Nho=;
+        s=korg; t=1649148221;
+        bh=1xsjRKMqP5RqWtFVtYhBnlBrA69egcb28RKZGj3GV+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AUqml6CB942Uz+TcM2tEP71YXgSwq+u+2n+8N53Aqk48GB2Z6pH52NQPqj3sspkzX
-         0PCA9UtwvU+5kcFInIEH4mzngmnOAl0A1EGJNULV/g+MroNAw5SijAI761/aFY1AnA
-         JRDTw6MONsFsjGEa2EnhdEN/QM2BCpVK9DQp2zvc=
+        b=e7VbB3JjJcEhgOp5D4D58e7RifoUVfWZGZgVoIC3PcGQDwxi45wg+/agPchsE/xIa
+         oC3IoVNeGJ6rMYXV+Rc4WwtbaK/P71QPmcKsZ1jeMW8x24YsnSvPIbaVUvDdmp46Jy
+         I4Rl3KXwjil/5ohDq+iHpcU7ciY0Ks6GmZpblhVw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.15 127/913] arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
-Date:   Tue,  5 Apr 2022 09:19:49 +0200
-Message-Id: <20220405070343.636808466@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        Robert Foss <robert.foss@linaro.org>,
+        Julian Grahsl <jgrahsl@snap.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0279/1017] media: camss: csid-170: fix non-10bit formats
+Date:   Tue,  5 Apr 2022 09:19:52 +0200
+Message-Id: <20220405070402.549655007@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Jonathan Marek <jonathan@marek.ca>
 
-commit de60edf1be3d42d4a1b303b41c7c53b2f865726e upstream.
+[ Upstream commit 14d510e040f85ff05734fd6db8bae44b47886464 ]
 
-Though GIC ARE option is disabled for no GIC-v2 compatibility,
-Cortex-A53 is free to implement the CPU interface as long as it
-communicates with the GIC using the stream protocol. This requires
-that the SoC integration mark out the PERIPHBASE[1] as reserved area
-within the SoC. See longer discussion in [2] for further information.
+Use the decode_format/data_type from the "format" struct instead of a
+hardcoded 10-bit format.
 
-Update the GIC register map to indicate offsets from PERIPHBASE based
-on [3]. Without doing this, systems like kvm will not function with
-gic-v2 emulation.
-
-[1] https://developer.arm.com/documentation/ddi0500/e/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
-[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
-[3] https://developer.arm.com/documentation/ddi0500/e/generic-interrupt-controller-cpu-interface/gic-programmers-model/memory-map
-
-Cc: stable@vger.kernel.org
-Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
-Reported-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220215201008.15235-5-nm@ti.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi |    5 ++++-
- arch/arm64/boot/dts/ti/k3-am64.dtsi      |    1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -59,7 +59,10 @@
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
- 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
--		      <0x00 0x01840000 0x00 0xC0000>;	/* GICR */
-+		      <0x00 0x01840000 0x00 0xC0000>,	/* GICR */
-+		      <0x01 0x00000000 0x00 0x2000>,	/* GICC */
-+		      <0x01 0x00010000 0x00 0x1000>,	/* GICH */
-+		      <0x01 0x00020000 0x00 0x2000>;	/* GICV */
- 		/*
- 		 * vcpumntirq:
- 		 * virtual CPU interface maintenance interrupt
---- a/arch/arm64/boot/dts/ti/k3-am64.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64.dtsi
-@@ -85,6 +85,7 @@
- 			 <0x00 0x68000000 0x00 0x68000000 0x00 0x08000000>, /* PCIe DAT0 */
- 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00200000>, /* OC SRAM */
- 			 <0x00 0x78000000 0x00 0x78000000 0x00 0x00800000>, /* Main R5FSS */
-+			 <0x01 0x00000000 0x01 0x00000000 0x00 0x00310000>, /* A53 PERIPHBASE */
- 			 <0x06 0x00000000 0x06 0x00000000 0x01 0x00000000>, /* PCIe DAT1 */
- 			 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>, /* FSS0 DAT3 */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index ac22ff29d2a9..aa65043c3303 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -366,7 +366,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
  
+-			val = DATA_TYPE_RAW_10BIT << TPG_DT_n_CFG_1_DATA_TYPE;
++			val = format->data_type << TPG_DT_n_CFG_1_DATA_TYPE;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
+ 
+ 			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
+@@ -382,8 +382,9 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 		val = 1 << RDI_CFG0_BYTE_CNTR_EN;
+ 		val |= 1 << RDI_CFG0_FORMAT_MEASURE_EN;
+ 		val |= 1 << RDI_CFG0_TIMESTAMP_EN;
++		/* note: for non-RDI path, this should be format->decode_format */
+ 		val |= DECODE_FORMAT_PAYLOAD_ONLY << RDI_CFG0_DECODE_FORMAT;
+-		val |= DATA_TYPE_RAW_10BIT << RDI_CFG0_DATA_TYPE;
++		val |= format->data_type << RDI_CFG0_DATA_TYPE;
+ 		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
+ 		val |= dt_id << RDI_CFG0_DT_ID;
+ 		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
+-- 
+2.34.1
+
 
 

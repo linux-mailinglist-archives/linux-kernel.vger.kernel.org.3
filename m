@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5525C4F4B87
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375744F48FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574900AbiDEXBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S1389231AbiDEV7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349059AbiDEJtD (ORCPT
+        with ESMTP id S1354933AbiDEKQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3B3954B5;
-        Tue,  5 Apr 2022 02:39:32 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEF321818;
+        Tue,  5 Apr 2022 03:04:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FF67B81C14;
-        Tue,  5 Apr 2022 09:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0219C385A1;
-        Tue,  5 Apr 2022 09:39:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46684B81C8B;
+        Tue,  5 Apr 2022 10:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B70F0C385A2;
+        Tue,  5 Apr 2022 10:04:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151570;
-        bh=vFLGFY6Y2m6hnjaomhJJXAPRRbtKFLzx3D6TYfGQzDk=;
+        s=korg; t=1649153046;
+        bh=kSdGlvD8ZiXBvi/chcD7vZ/P+j4sw/QMAyDaUs8nof0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D96o7GnKjnwvDpZSGlVfgfcFJrkTtnIh1nsF0sSS9INwO4bnnTelg/SRdFiVFDGS7
-         I0IxHWkr/+qhFGa/bR6E3ReWwYiO9VWC2IHzPwsgzJ/LrfuCZ1wpCJgoqwHR4yOYev
-         olKmbx3uRyUgrrK4k6j8f1G/NnPoOLgnC0J5igS8=
+        b=aGY7p+eBgZ7lMZjQjMgxyG1HC7bj/y7amrRs8X6VsChmazMBegYiyShzWqaFOmu2g
+         43azgj8Vs8qdHhEz+k74CXEOypfldziT7puyzVexVJ83LKYnaUT604/qai+GqOTw7T
+         qTEiqlXmG86dvcrb4pHJEomAYuW22lq/q8vDCtC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 464/913] iwlwifi: mvm: align locking in D3 test debugfs
-Date:   Tue,  5 Apr 2022 09:25:26 +0200
-Message-Id: <20220405070353.756715944@linuxfoundation.org>
+        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 034/599] iio: inkern: apply consumer scale on IIO_VAL_INT cases
+Date:   Tue,  5 Apr 2022 09:25:28 +0200
+Message-Id: <20220405070259.838133693@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Liam Beguin <liambeguin@gmail.com>
 
-[ Upstream commit 59e1221f470c2e5d2f2d4c95153edd577a7071c5 ]
+commit 1bca97ff95c732a516ebb68da72814194980e0a5 upstream.
 
-Since commit a05829a7222e ("cfg80211: avoid holding the RTNL when
-calling the driver") we're not only holding the RTNL when going
-in and out of suspend, but also the wiphy->mtx. Add that to the
-D3 test debugfs in iwlwifi since it's required for various calls
-to mac80211.
+When a consumer calls iio_read_channel_processed() and the channel has
+an integer scale, the scale channel scale is applied and the processed
+value is returned as expected.
 
-Fixes: a05829a7222e ("cfg80211: avoid holding the RTNL when calling the driver")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Fixes: a05829a7222e ("cfg80211: avoid holding the RTNL when calling the driver")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220129105618.fcec0204e162.Ib73bf787ab4d83581de20eb89b1f8dbfcaaad0e3@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+On the other hand, if the consumer calls iio_convert_raw_to_processed()
+the scaling factor requested by the consumer is not applied.
+
+This for example causes the consumer to process mV when expecting uV.
+Make sure to always apply the scaling factor requested by the consumer.
+
+Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
+Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+Reviewed-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220108205319.2046348-2-liambeguin@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/inkern.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-index d3013a51a509..00ca17f3b263 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-@@ -2499,7 +2499,9 @@ static int iwl_mvm_d3_test_open(struct inode *inode, struct file *file)
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -582,7 +582,7 @@ static int iio_convert_raw_to_processed_
  
- 	/* start pseudo D3 */
- 	rtnl_lock();
-+	wiphy_lock(mvm->hw->wiphy);
- 	err = __iwl_mvm_suspend(mvm->hw, mvm->hw->wiphy->wowlan_config, true);
-+	wiphy_unlock(mvm->hw->wiphy);
- 	rtnl_unlock();
- 	if (err > 0)
- 		err = -EINVAL;
-@@ -2555,7 +2557,9 @@ static int iwl_mvm_d3_test_release(struct inode *inode, struct file *file)
- 	iwl_fw_dbg_read_d3_debug_data(&mvm->fwrt);
- 
- 	rtnl_lock();
-+	wiphy_lock(mvm->hw->wiphy);
- 	__iwl_mvm_resume(mvm, true);
-+	wiphy_unlock(mvm->hw->wiphy);
- 	rtnl_unlock();
- 
- 	iwl_mvm_resume_tcm(mvm);
--- 
-2.34.1
-
+ 	switch (scale_type) {
+ 	case IIO_VAL_INT:
+-		*processed = raw64 * scale_val;
++		*processed = raw64 * scale_val * scale;
+ 		break;
+ 	case IIO_VAL_INT_PLUS_MICRO:
+ 		if (scale_val2 < 0)
 
 

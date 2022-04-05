@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFD84F3D9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB8B4F3F00
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382632AbiDEMQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S242223AbiDEO6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244897AbiDEIwp (ORCPT
+        with ESMTP id S1344632AbiDEJmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F9F2458B;
-        Tue,  5 Apr 2022 01:45:53 -0700 (PDT)
+        Tue, 5 Apr 2022 05:42:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAB3BE9EA;
+        Tue,  5 Apr 2022 02:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A4D2B81A32;
-        Tue,  5 Apr 2022 08:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510ECC385A4;
-        Tue,  5 Apr 2022 08:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5C56165C;
+        Tue,  5 Apr 2022 09:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03140C385A0;
+        Tue,  5 Apr 2022 09:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148350;
-        bh=4mNg/F94fD5ePGFoWZAISjOcsN7uVsRt2932zEV02wk=;
+        s=korg; t=1649150869;
+        bh=/fa+W8otdX4/pIC4YUsTrMT7cnva2we2YaIsU6eSU8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=outQIfS5CRnkTOG/lzNo5NxL+OjL7LGOMP2YRTxiAIqeRrqdNGGzDncLQpHSb3Tmp
-         nWXlDdmtZgG1Udv/sT5m04xKK5tsfaO16ywMzIw2Hgtkc1+KgQdrX/n6+g9Koy+gjz
-         duYs51evoI5OXXk4p/lSg2h6rlnyLOq7pI1JaDZc=
+        b=Il4NHh0D3FfRPmmTDON3R6umP+EBGn4ok1Q8GN0Uk8R38N3qq+CE+gWFXfw0a2iCK
+         AD0XfSvxECY/JaoKE0bHkwRzlkfCrOVAajDm8keKQ1G/xIjgK2+e2H2SMP9dQAIwsv
+         VYdR8YUA/Oxu7U8Wsodbmn2D4qWuWreJ3Gmikki8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0325/1017] cpuidle: qcom-spm: Check if any CPU is managed by SPM
-Date:   Tue,  5 Apr 2022 09:20:38 +0200
-Message-Id: <20220405070403.927275915@linuxfoundation.org>
+        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 5.15 178/913] drm/fb-helper: Mark screen buffers in system memory with FBINFO_VIRTFB
+Date:   Tue,  5 Apr 2022 09:20:40 +0200
+Message-Id: <20220405070345.189489718@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,78 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan@gerhold.net>
+From: Thomas Zimmermann <tzimmermann@suse.de>
 
-[ Upstream commit 0ee30ace67e425ab83a1673bf51f50b577328cf9 ]
+commit cd9f7f7ac5932129fe81b4c7559cfcb226ec7c5c upstream.
 
-At the moment, the "qcom-spm-cpuidle" platform device is always created,
-even if none of the CPUs is actually managed by the SPM. On non-qcom
-platforms this will result in infinite probe-deferral due to the
-failing qcom_scm_is_available() call.
+Mark screen buffers in system memory with FBINFO_VIRTFB. Otherwise, fbdev
+deferred I/O marks mmap'ed areas of system memory with VM_IO. (There's an
+inverse relationship between the two flags.)
 
-To avoid this, look through the CPU DT nodes and check if there is
-actually any CPU managed by a SPM (as indicated by the qcom,saw property).
-It should also be available because e.g. MSM8916 has qcom,saw defined
-but it's typically not enabled with ARM64/PSCI firmwares.
+For shadow buffers, also set the FBINFO_READS_FAST hint.
 
-This is needed in preparation of a follow-up change that calls
-qcom_scm_set_warm_boot_addr() a single time before registering any
-cpuidle drivers. Otherwise this call might be made even on devices
-that have this driver enabled but actually make use of PSCI.
+v3:
+	* change FB_ to FBINFO_ in commit description
+v2:
+	* updated commit description (Daniel)
+	* added Fixes tag
 
-Fixes: 60f3692b5f0b ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/86e3e09f-a8d7-3dff-3fc6-ddd7d30c5d78@samsung.com/
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211201130505.257379-2-stephan@gerhold.net
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: d536540f304c ("drm/fb-helper: Add generic fbdev emulation .fb_probe function")
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Cc: <stable@vger.kernel.org> # v4.19+
+Link: https://patchwork.freedesktop.org/patch/msgid/20220201115305.9333-1-tzimmermann@suse.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpuidle/cpuidle-qcom-spm.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/gpu/drm/drm_fb_helper.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index 01e77913a414..5f27dcc6c110 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -155,6 +155,22 @@ static struct platform_driver spm_cpuidle_driver = {
- 	},
- };
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -2346,6 +2346,7 @@ static int drm_fb_helper_generic_probe(s
+ 	fbi->fbops = &drm_fbdev_fb_ops;
+ 	fbi->screen_size = fb->height * fb->pitches[0];
+ 	fbi->fix.smem_len = fbi->screen_size;
++	fbi->flags = FBINFO_DEFAULT;
  
-+static bool __init qcom_spm_find_any_cpu(void)
-+{
-+	struct device_node *cpu_node, *saw_node;
-+
-+	for_each_of_cpu_node(cpu_node) {
-+		saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
-+		if (of_device_is_available(saw_node)) {
-+			of_node_put(saw_node);
-+			of_node_put(cpu_node);
-+			return true;
+ 	drm_fb_helper_fill_info(fbi, fb_helper, sizes);
+ 
+@@ -2353,19 +2354,21 @@ static int drm_fb_helper_generic_probe(s
+ 		fbi->screen_buffer = vzalloc(fbi->screen_size);
+ 		if (!fbi->screen_buffer)
+ 			return -ENOMEM;
++		fbi->flags |= FBINFO_VIRTFB | FBINFO_READS_FAST;
+ 
+ 		fbi->fbdefio = &drm_fbdev_defio;
+-
+ 		fb_deferred_io_init(fbi);
+ 	} else {
+ 		/* buffer is mapped for HW framebuffer */
+ 		ret = drm_client_buffer_vmap(fb_helper->buffer, &map);
+ 		if (ret)
+ 			return ret;
+-		if (map.is_iomem)
++		if (map.is_iomem) {
+ 			fbi->screen_base = map.vaddr_iomem;
+-		else
++		} else {
+ 			fbi->screen_buffer = map.vaddr;
++			fbi->flags |= FBINFO_VIRTFB;
 +		}
-+		of_node_put(saw_node);
-+	}
-+	return false;
-+}
-+
- static int __init qcom_spm_cpuidle_init(void)
- {
- 	struct platform_device *pdev;
-@@ -164,6 +180,10 @@ static int __init qcom_spm_cpuidle_init(void)
- 	if (ret)
- 		return ret;
  
-+	/* Make sure there is actually any CPU managed by the SPM */
-+	if (!qcom_spm_find_any_cpu())
-+		return 0;
-+
- 	pdev = platform_device_register_simple("qcom-spm-cpuidle",
- 					       -1, NULL, 0);
- 	if (IS_ERR(pdev)) {
--- 
-2.34.1
-
+ 		/*
+ 		 * Shamelessly leak the physical address to user-space. As
 
 

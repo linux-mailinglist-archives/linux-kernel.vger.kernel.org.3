@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A474F4126
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9704F436A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390248AbiDENhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S1380108AbiDEMxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343967AbiDEJQn (ORCPT
+        with ESMTP id S1343764AbiDEJMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAE4D5573;
-        Tue,  5 Apr 2022 02:02:10 -0700 (PDT)
+        Tue, 5 Apr 2022 05:12:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911B8275EF;
+        Tue,  5 Apr 2022 02:00:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDBA1B80DA1;
-        Tue,  5 Apr 2022 09:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51750C385A0;
-        Tue,  5 Apr 2022 09:02:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E3C2B818F3;
+        Tue,  5 Apr 2022 09:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93916C385A0;
+        Tue,  5 Apr 2022 09:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149327;
-        bh=PbU3Zy+C03rpWGayUy2MlpDNrRuZYXE7DvqU86BFgbo=;
+        s=korg; t=1649149225;
+        bh=E0sTsnsfYNAoV+LlZ2QFM+Pw4k3Bo2wovI1KqqBQ/KE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zy5RQS2jeJG3/HZF0ek9t+LIMLyfYtclN/kiY/dWkkTvYJ1JczavbFY1pSMrKa8N2
-         QN1drNQOiM5rQLJUBq0JdOERrVMoCh9jxHSgJ0rfP8y+/NUpxXX/gPLqLzlWcgCjgh
-         hd4+Rn8ToMAOW5hl4K890nQgUx+GmZJas3dpoqII=
+        b=kJQ5oAw3H+Y9Ygm+wKVtWDC/nEbnMoVNj0X6+l8NN68KCPF+W3hOhw83/J/5eIuM5
+         r8Jfn+9HThNzLY5QC8c4nNsceu9qdaeJ2PQwgILjBTacAV9WyJg8vru+JTABFR2eF0
+         3hNPxvzVlxsYJHcsCFxqX0pSbqIVdc6naoixT10Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0638/1017] ice: dont allow to run ice_send_event_to_aux() in atomic ctx
-Date:   Tue,  5 Apr 2022 09:25:51 +0200
-Message-Id: <20220405070413.221449890@linuxfoundation.org>
+Subject: [PATCH 5.16 0640/1017] kernel/resource: fix kfree() of bootmem memory again
+Date:   Tue,  5 Apr 2022 09:25:53 +0200
+Message-Id: <20220405070413.279967331@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,45 +59,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit 5a3156932da06f09953764de113419f254086faf ]
+[ Upstream commit 0cbcc92917c5de80f15c24d033566539ad696892 ]
 
-ice_send_event_to_aux() eventually descends to mutex_lock()
-(-> might_sched()), so it must not be called under non-task
-context. However, at least two fixes have happened already for the
-bug splats occurred due to this function being called from atomic
-context.
-To make the emergency landings softer, bail out early when executed
-in non-task context emitting a warn splat only once. This way we
-trade some events being potentially lost for system stability and
-avoid any related hangs and crashes.
+Since commit ebff7d8f270d ("mem hotunplug: fix kfree() of bootmem
+memory"), we could get a resource allocated during boot via
+alloc_resource().  And it's required to release the resource using
+free_resource().  Howerver, many people use kfree directly which will
+result in kernel BUG.  In order to fix this without fixing every call
+site, just leak a couple of bytes in such corner case.
 
-Fixes: 348048e724a0e ("ice: Implement iidc operations")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Tested-by: Michal Kubiak <michal.kubiak@intel.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Acked-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lkml.kernel.org/r/20220217083619.19305-1-linmiaohe@huawei.com
+Fixes: ebff7d8f270d ("mem hotunplug: fix kfree() of bootmem memory")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_idc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/resource.c | 41 ++++++++---------------------------------
+ 1 file changed, 8 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_idc.c b/drivers/net/ethernet/intel/ice/ice_idc.c
-index adcc9a251595..a2714988dd96 100644
---- a/drivers/net/ethernet/intel/ice/ice_idc.c
-+++ b/drivers/net/ethernet/intel/ice/ice_idc.c
-@@ -34,6 +34,9 @@ void ice_send_event_to_aux(struct ice_pf *pf, struct iidc_event *event)
+diff --git a/kernel/resource.c b/kernel/resource.c
+index 5ad3eba619ba..092a6154371b 100644
+--- a/kernel/resource.c
++++ b/kernel/resource.c
+@@ -56,14 +56,6 @@ struct resource_constraint {
+ 
+ static DEFINE_RWLOCK(resource_lock);
+ 
+-/*
+- * For memory hotplug, there is no way to free resource entries allocated
+- * by boot mem after the system is up. So for reusing the resource entry
+- * we need to remember the resource.
+- */
+-static struct resource *bootmem_resource_free;
+-static DEFINE_SPINLOCK(bootmem_resource_lock);
+-
+ static struct resource *next_resource(struct resource *p)
  {
- 	struct iidc_auxiliary_drv *iadrv;
+ 	if (p->child)
+@@ -160,36 +152,19 @@ __initcall(ioresources_init);
  
-+	if (WARN_ON_ONCE(!in_task()))
-+		return;
-+
- 	if (!pf->adev)
- 		return;
+ static void free_resource(struct resource *res)
+ {
+-	if (!res)
+-		return;
+-
+-	if (!PageSlab(virt_to_head_page(res))) {
+-		spin_lock(&bootmem_resource_lock);
+-		res->sibling = bootmem_resource_free;
+-		bootmem_resource_free = res;
+-		spin_unlock(&bootmem_resource_lock);
+-	} else {
++	/**
++	 * If the resource was allocated using memblock early during boot
++	 * we'll leak it here: we can only return full pages back to the
++	 * buddy and trying to be smart and reusing them eventually in
++	 * alloc_resource() overcomplicates resource handling.
++	 */
++	if (res && PageSlab(virt_to_head_page(res)))
+ 		kfree(res);
+-	}
+ }
  
+ static struct resource *alloc_resource(gfp_t flags)
+ {
+-	struct resource *res = NULL;
+-
+-	spin_lock(&bootmem_resource_lock);
+-	if (bootmem_resource_free) {
+-		res = bootmem_resource_free;
+-		bootmem_resource_free = res->sibling;
+-	}
+-	spin_unlock(&bootmem_resource_lock);
+-
+-	if (res)
+-		memset(res, 0, sizeof(struct resource));
+-	else
+-		res = kzalloc(sizeof(struct resource), flags);
+-
+-	return res;
++	return kzalloc(sizeof(struct resource), flags);
+ }
+ 
+ /* Return the conflict entry if you can't request it */
 -- 
 2.34.1
 

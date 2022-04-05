@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7A64F2153
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2624F20EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiDECu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S230201AbiDECx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiDECuq (ORCPT
+        with ESMTP id S230232AbiDECxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:50:46 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09982DE868
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:57:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dr20so23529538ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:57:34 -0700 (PDT)
+        Mon, 4 Apr 2022 22:53:05 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FA331A29F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:01:06 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id t13so9796497pgn.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 19:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8lHhYFW2wjM+XVs/ce0McLe3nK2usueM9y5Aj9STafs=;
-        b=FA3yAVlH7wWlUJcQ3bx0/NKcDywUaZwtbXLP0LgBSGRsj2d2snpgTAmXJYtAOj88Gp
-         CYtFbUBDTDcuvuZ6eF8j53jpAsLinkhtZ/Ef7Uhmox18cVGyrIEp9+qFcKK1GR7ahTX/
-         46ca7IWLXUxpUvV8Z7tJKIFbNnbydN6hr9cY+q8rAaP9tsLoMgJ8dqWI49WpKCiDRpTE
-         PsOSqjptGmbI4aFA5uNyW/woYfgGQRFmmcyMJSCyS7fEbURD8nDhaF9Hpqc7RVgDWTbv
-         FTwkLzXuSi1Xd9T4XDBVXpZaK/RmyVsS1OQLe+XLBuvnqnOFHJVS4qvUkD342N6xOgZB
-         9o0Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XCPmRc0IVgYgnGswAlG4yXz+KuFMoJ3P6+aO8i17Nyw=;
+        b=JegdvKFJkQly7ZyOveDWGt3k2Kyk57pEOEbrjKjqlmrb8+N+YI46tYuhBKqNuRYMro
+         9/zY4m8gN/H7O3MEMJvKvagY3bW6+TAP61AK+EbqU+iunqW56CxOIdlXHYEePfaLXvHo
+         fAmn8QSljckU4vKvpTPybkSn8jmlyKRYfzgTo3NOlY86VWS27hx7ohejcDgv28D1xnVr
+         QJS6lZE4K8+HG3gDQYEGqHFnqwP1EDMJkpvm9ZHYEDMeeJbT45cpU72jDzpeqMHW8PzC
+         9KoInl5KIBPSzgpVM0H3ep5cUrlvGTHSxLDMjqzVi/UH4VxEDup/tGbViIWle/Lr4I0L
+         t3xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8lHhYFW2wjM+XVs/ce0McLe3nK2usueM9y5Aj9STafs=;
-        b=zmhSTXfZ0+X5V3rcvlV8GVzONwjTrEHF0i48QZaYNn7uFn4LYRLCYArytbQzOUNQZe
-         AQyYhRL86ojhJVqbGV2YEBtWWdJfATlc8NNHitZFRr1GR0awSHIhnocQaJQQC2oqznv6
-         eTn9CC4CE33Kp+DZQvpiXnXNI8WuZyql1fvojBsVMgioUjMbEDkwR+xaqfBqY1IP3B11
-         XKIQevcMkgQOz1zxEsyae+9Iz559ueQYCe4hPIJB5z7qs/0qKJKhL+uEFjZhmWJDv9cz
-         WyebmJcFkFWxdFSIaTgO1A9iR1hCKO7vq7/MIs5ClWYsSKBDwyU7ytkMoNjOp8vSJZyj
-         obvA==
-X-Gm-Message-State: AOAM531yOFi5NkStuPKDxgf91y24yy1PjLhonOVy+URlaMZMVeKFJTaf
-        1QftVkLi2HtYjMsyXMnGDuyRNYTN0VfyJrL7dvgxcA==
-X-Google-Smtp-Source: ABdhPJzWg56tGOZzoo6mjBM60wGyjWHjZEk8WIMAmh9wb7iaHGuDP2UkNGGEbl/PJn03N2TZh9MDxqyZayUe0V0A/Ic=
-X-Received: by 2002:a17:907:1624:b0:6db:8caa:d71 with SMTP id
- hb36-20020a170907162400b006db8caa0d71mr1097692ejc.723.1649123853100; Mon, 04
- Apr 2022 18:57:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XCPmRc0IVgYgnGswAlG4yXz+KuFMoJ3P6+aO8i17Nyw=;
+        b=gp6zM+yOHAdL/Ogm05curz2IRkzjNCP/p9hOhuXfGmRhEE5tuKJ5MEdgTpQGi7eCxY
+         Ye+leXRgmK/9l0GZnG9G4K8NMq5XI883x+VBMRfjZkmPipU97/TSBvREgU8Rq18pxmbZ
+         Rq+28wDfISVS7xaQ3bABmxXmM5Lcr5qh9IHHMEQWO7+il41LX0dHyLT1KKW0EaNfYrub
+         wOvbrAKD0zv3s3KiBkOODKV0SRHwE8IAYG6cunCv0jTgDeKaN63j/VtJy2pRioPJ7rFR
+         Qyczu7aG9jk9/72l1sR2nvwjSpV0GIhV6dijdGoR1qnPuKm9KxYzf7xFUKEJ9xRrQHn3
+         za8w==
+X-Gm-Message-State: AOAM531DZ916yep6jGlAibn/yfvuNP35JCQ5bt9qg7JV1xkTNnZuVvaS
+        MHGYFyW3YWZ88S/NPAUy//c=
+X-Google-Smtp-Source: ABdhPJx8ODqukr4ThTQP2Zolc7rN01PScQwudBUJ4+CZTh017i28ntS57/D4l+okojym+X/7MmPsCg==
+X-Received: by 2002:a63:b24b:0:b0:398:9894:b8be with SMTP id t11-20020a63b24b000000b003989894b8bemr947415pgo.108.1649124066161;
+        Mon, 04 Apr 2022 19:01:06 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id q27-20020aa7961b000000b004fdf7a4d49esm6458763pfg.170.2022.04.04.19.01.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 19:01:05 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 11:00:58 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        kernel test robot <oliver.sang@intel.com>,
+        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
+        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zqiang <qiang.zhang@windriver.com>, linux-mm@kvack.org
+Subject: Re: [mm/slub] 555b8c8cb3:
+ WARNING:at_lib/stackdepot.c:#stack_depot_fetch
+Message-ID: <Ykui2prpzkMvaWBa@hyeyoo>
+References: <20220323090520.GG16885@xsang-OptiPlex-9020>
+ <20220324095218.GA2108184@odroid>
+ <YkcfNjZJSXNsAlLt@hyeyoo>
+ <YkpgjgM/aSXd29uj@hyeyoo>
+ <Ykqn2z9UVfxFwiU+@elver.google.com>
+ <8368021e-86c3-a93f-b29d-efed02135c41@suse.cz>
+ <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
-In-Reply-To: <20220404041101.6276-1-akihiko.odaki@gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 4 Apr 2022 18:57:22 -0700
-Message-ID: <CABXOdTe9u_DW=NZM1-J120Gu1gibDy8SsgHP3bJwwLsE_iuLAQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 9:11 PM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+On Mon, Apr 04, 2022 at 05:18:16PM +0200, Marco Elver wrote:
+> On Mon, 4 Apr 2022 at 16:20, Vlastimil Babka <vbabka@suse.cz> wrote:
+> >
+> > On 4/4/22 10:10, Marco Elver wrote:
+> > > On Mon, Apr 04, 2022 at 12:05PM +0900, Hyeonggon Yoo wrote:
+> > > (Maybe CONFIG_KCSAN_STRICT=y is going to yield something? I still doubt
+> > > it thought, this bug is related to corrupted stackdepot handle
+> > > somewhere...)
+> > >
+> > >> I noticed that it is not reproduced when KASAN=y and KFENCE=n (reproduced 0 of 181).
+> > >> and it was reproduced 56 of 196 when KASAN=n and KFENCE=y
+> > >>
+> > >> maybe this issue is related to kfence?
+> >
+> > Hmm kfence seems to be a good lead. If I understand kfence_guarded_alloc()
+> > correctly, it tries to set up something that really looks like a normal slab
+> > page? Especially the part with comment /* Set required slab fields. */
+> > But it doesn't seem to cover the debugging parts that SLUB sets up with
+> > alloc_debug_processing(). This includes alloc stack saving, thus, after
+> > commit 555b8c8cb3, a stackdepot handle setting. It probably normally doesn't
+> > matter as is_kfence_address() redirects processing of kfence-allocated
+> > objects so we don't hit any slub code that expects the debugging parts to be
+> > properly initialized.
+> >
+> > But here we are in mem_dump_obj() -> kmem_dump_obj() -> kmem_obj_info().
+> > Because kmem_valid_obj() returned true, fooled by folio_test_slab()
+> > returning true because of the /* Set required slab fields. */ code.
+> > Yet the illusion is not perfect and we read garbage instead of a valid
+> > stackdepot handle.
+> >
+> > IMHO we should e.g. add the appropriate is_kfence_address() test into
+> > kmem_valid_obj(), to exclude kfence-allocated objects? Sounds much simpler
+> > than trying to extend the illusion further to make kmem_dump_obj() work?
+> > Instead kfence could add its own specific handler to mem_dump_obj() to print
+> > its debugging data?
+> 
+> I think this explanation makes sense!  Indeed, KFENCE already records
+> allocation stacks internally anyway, so it should be straightforward
+> to convince it to just print that.
 >
-> The EC driver may not be initialized when cros_typec_probe is called,
-> particulary when CONFIG_CROS_EC_CHARDEV=m.
->
 
-Does this cause a crash ? If so, do you have a crash log ?
+Thank you both! Yeah the explanation makes sense... thats why KASAN/KCSAN couldn't yield anything -- it was not overwritten.
 
-Reason for asking is that I saw the following crash, and it would be
-good to know if the problem is the same.
+I'm writing a fix and will test if the bug disappears.
+This may take few days.
 
-<1>[    6.651137] #PF: error_code(0x0002) - not-present page
-<6>[    6.651139] PGD 0 P4D 0
-<4>[    6.651143] Oops: 0002 [#1] PREEMPT SMP NOPTI
-<4>[    6.651146] CPU: 0 PID: 1656 Comm: udevd Tainted: G     U
-    5.4.163-17384-g99ca1c60d20c #1
-<4>[    6.651147] Hardware name: HP Lantis/Lantis, BIOS
-Google_Lantis.13606.204.0 05/26/2021
-<4>[    6.651152] RIP: 0010:mutex_lock+0x2b/0x3c
-...
-<4>[    6.651174] Call Trace:
-<4>[    6.651180]  cros_ec_cmd_xfer+0x22/0xc1
-<4>[    6.651183]  cros_ec_cmd_xfer_status+0x19/0x59
-<4>[    6.651185]  cros_ec_command+0x82/0xc3
-<4>[    6.651189]  cros_typec_probe+0x8a/0x5a2 [cros_ec_typec]
+Thanks!
+Hyeonggon
 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
-
-Not sure if this is the best solution, but I don't know a better one.
-
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 4bd2752c0823..7cb2e35c4ded 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -1084,6 +1084,9 @@ static int cros_typec_probe(struct platform_device *pdev)
->         }
->
->         ec_dev = dev_get_drvdata(&typec->ec->ec->dev);
-> +       if (!ec_dev)
-> +               return -EPROBE_DEFER;
-> +
->         typec->typec_cmd_supported = cros_ec_check_features(ec_dev, EC_FEATURE_TYPEC_CMD);
->         typec->needs_mux_ack = cros_ec_check_features(ec_dev, EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK);
->
-> --
-> 2.35.1
->
+> Thanks,
+> -- Marco

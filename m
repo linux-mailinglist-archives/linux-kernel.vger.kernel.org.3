@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65E24F2E73
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699D74F2E80
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343707AbiDEI5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S1343591AbiDEI5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236581AbiDEIQv (ORCPT
+        with ESMTP id S235436AbiDEIQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154A171A0E;
-        Tue,  5 Apr 2022 01:04:22 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20576A94F3;
+        Tue,  5 Apr 2022 01:03:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA410B81A32;
-        Tue,  5 Apr 2022 08:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4EAC385A0;
-        Tue,  5 Apr 2022 08:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0A861753;
+        Tue,  5 Apr 2022 08:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44B5C385A3;
+        Tue,  5 Apr 2022 08:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145855;
-        bh=1jM21yZ+BgYEOLvnFtSOZ0SDZEHPRPg52RMBvutwdrI=;
+        s=korg; t=1649145803;
+        bh=a1m4cMTbuV1ChAmpSXyVBeKDPl09KCXziqzprdAqbWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sov6ui1WgyxHvlACHlb57teVPDXMI3XjVTcby3NZEnVhC6ilv33DFqWYmA45vDPZq
-         ZPmIBIDIuuWr3IvzZAlkQfKT6EKRm4zjtKLxTQtRZQyZSAhRrAc+HHeBvHp1GnO4s0
-         k20Jf6EHFxvidivLWHdH/Cu8FXAbbBWGKDAllI58=
+        b=c+ZsCLfiEy8+hylUcjX+nwP12SdKpsSYQpBPGeGilK6y+vKTzdgH1tq78eVKpDu2x
+         LKT9y0pb7I3+aiyvJA8jlhJpQUJQFQOLSJq+AFWg2FcM4yftgCE6wQz9hXK48+mGOg
+         BsFamjRp9CQ59i/dIE1RFEiBvoSBfExqXDGWg3aM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        stable@vger.kernel.org, Peter Chiu <chui-hao.chiu@mediatek.com>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0505/1126] mt76: mt7615: check sta_rates pointer in mt7615_sta_rate_tbl_update
-Date:   Tue,  5 Apr 2022 09:20:52 +0200
-Message-Id: <20220405070422.450128193@linuxfoundation.org>
+Subject: [PATCH 5.17 0508/1126] mt76: mt7915: fix mcs_map in mt7915_mcu_set_sta_he_mcs()
+Date:   Tue,  5 Apr 2022 09:20:55 +0200
+Message-Id: <20220405070422.539038765@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,35 +54,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Peter Chiu <chui-hao.chiu@mediatek.com>
 
-[ Upstream commit 6a6f457ed5fdf6777536c20644a9e42128a50ec2 ]
+[ Upstream commit ade25ca7950bc8930356d98ec89aa41560a9dab5 ]
 
-Check sta_rates pointer value in mt7615_sta_rate_tbl_update routine
-since minstrel_ht_update_rates can fail allocating rates array.
+Should use peer's bandwidth instead of chandef->width to
+get correct mcs_map.
 
-Fixes: 04b8e65922f63 ("mt76: add mac80211 driver for MT7615 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Fixes: 76be6c076c077 ("mt76: mt7915: add .set_bitrate_mask() callback")
+Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../net/wireless/mediatek/mt76/mt7915/mcu.c   | 29 +++++--------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-index 82d625a16a62..ce902b107ce3 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -683,6 +683,9 @@ static void mt7615_sta_rate_tbl_update(struct ieee80211_hw *hw,
- 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
- 	int i;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+index 1afeb7493268..f7b97b7ab21f 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+@@ -211,24 +211,12 @@ mt7915_mcu_get_sta_nss(u16 mcs_map)
  
-+	if (!sta_rates)
-+		return;
-+
- 	spin_lock_bh(&dev->mt76.lock);
- 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
- 		msta->rates[i].idx = sta_rates->rate[i].idx;
+ static void
+ mt7915_mcu_set_sta_he_mcs(struct ieee80211_sta *sta, __le16 *he_mcs,
+-			  const u16 *mask)
++			  u16 mcs_map)
+ {
+ 	struct mt7915_sta *msta = (struct mt7915_sta *)sta->drv_priv;
+-	struct cfg80211_chan_def *chandef = &msta->vif->phy->mt76->chandef;
++	enum nl80211_band band = msta->vif->phy->mt76->chandef.chan->band;
++	const u16 *mask = msta->vif->bitrate_mask.control[band].he_mcs;
+ 	int nss, max_nss = sta->rx_nss > 3 ? 4 : sta->rx_nss;
+-	u16 mcs_map;
+-
+-	switch (chandef->width) {
+-	case NL80211_CHAN_WIDTH_80P80:
+-		mcs_map = le16_to_cpu(sta->he_cap.he_mcs_nss_supp.rx_mcs_80p80);
+-		break;
+-	case NL80211_CHAN_WIDTH_160:
+-		mcs_map = le16_to_cpu(sta->he_cap.he_mcs_nss_supp.rx_mcs_160);
+-		break;
+-	default:
+-		mcs_map = le16_to_cpu(sta->he_cap.he_mcs_nss_supp.rx_mcs_80);
+-		break;
+-	}
+ 
+ 	for (nss = 0; nss < max_nss; nss++) {
+ 		int mcs;
+@@ -1345,11 +1333,9 @@ static void
+ mt7915_mcu_sta_he_tlv(struct sk_buff *skb, struct ieee80211_sta *sta,
+ 		      struct ieee80211_vif *vif)
+ {
+-	struct mt7915_sta *msta = (struct mt7915_sta *)sta->drv_priv;
+ 	struct mt7915_vif *mvif = (struct mt7915_vif *)vif->drv_priv;
+ 	struct ieee80211_he_cap_elem *elem = &sta->he_cap.he_cap_elem;
+-	enum nl80211_band band = msta->vif->phy->mt76->chandef.chan->band;
+-	const u16 *mcs_mask = msta->vif->bitrate_mask.control[band].he_mcs;
++	struct ieee80211_he_mcs_nss_supp mcs_map;
+ 	struct sta_rec_he *he;
+ 	struct tlv *tlv;
+ 	u32 cap = 0;
+@@ -1439,22 +1425,23 @@ mt7915_mcu_sta_he_tlv(struct sk_buff *skb, struct ieee80211_sta *sta,
+ 
+ 	he->he_cap = cpu_to_le32(cap);
+ 
++	mcs_map = sta->he_cap.he_mcs_nss_supp;
+ 	switch (sta->bandwidth) {
+ 	case IEEE80211_STA_RX_BW_160:
+ 		if (elem->phy_cap_info[0] &
+ 		    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G)
+ 			mt7915_mcu_set_sta_he_mcs(sta,
+ 						  &he->max_nss_mcs[CMD_HE_MCS_BW8080],
+-						  mcs_mask);
++						  le16_to_cpu(mcs_map.rx_mcs_80p80));
+ 
+ 		mt7915_mcu_set_sta_he_mcs(sta,
+ 					  &he->max_nss_mcs[CMD_HE_MCS_BW160],
+-					  mcs_mask);
++					  le16_to_cpu(mcs_map.rx_mcs_160));
+ 		fallthrough;
+ 	default:
+ 		mt7915_mcu_set_sta_he_mcs(sta,
+ 					  &he->max_nss_mcs[CMD_HE_MCS_BW80],
+-					  mcs_mask);
++					  le16_to_cpu(mcs_map.rx_mcs_80));
+ 		break;
+ 	}
+ 
 -- 
 2.34.1
 

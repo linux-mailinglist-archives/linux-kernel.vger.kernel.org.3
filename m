@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADA04F474D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F164F4511
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbiDEVHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S1441825AbiDENw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352798AbiDEKFJ (ORCPT
+        with ESMTP id S1347348AbiDEJ0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F88BC87C;
-        Tue,  5 Apr 2022 02:53:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:26:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0563DE93A;
+        Tue,  5 Apr 2022 02:15:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBA12616DC;
-        Tue,  5 Apr 2022 09:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3542C385A3;
-        Tue,  5 Apr 2022 09:53:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 794426164E;
+        Tue,  5 Apr 2022 09:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CA3C385A0;
+        Tue,  5 Apr 2022 09:15:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152431;
-        bh=hrfyozcs/WLlhiA2+tZKYGqLQASHhpJD8gwcdsqB+ks=;
+        s=korg; t=1649150121;
+        bh=ILBucAii6L59KbluEJs9UfkSEPcuI0aO3O8zzJAmlug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HqV3XAvOsAeJtooPtO49nSLP/EMow/S3Iibtg5ClfnSrSuyKJjCQdw9MfLPkM/gc8
-         Im4JLCCw//TNi5aqRDse4PPRFU3UhS6Jwz/3b9uqenNVpy3fb6Tmsl7vNBpKBhreki
-         hPUPVpAf1/FNzFOpCoDR6yEuEWO1YOQJIb8KNMB0=
+        b=vap5HGclvTVNBJ4j3sLXsnnrwQ5498yRBhg1x6+fVqJ8loxHRh9syOvFxbxqvMTn5
+         JGXt8+SrW5VM6xZYsR6iw2WSbr3lFkjDRDLYf8CszFQmwBAVk/lLaeZ8D9guBWri3y
+         i70wukyzrKhW7pLpoqncdhCgArj2z5K5zKADTFps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 773/913] KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP MMU
-Date:   Tue,  5 Apr 2022 09:30:35 +0200
-Message-Id: <20220405070403.002794639@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.16 0923/1017] can: mcba_usb: mcba_usb_start_xmit(): fix double dev_kfree_skb in error path
+Date:   Tue,  5 Apr 2022 09:30:36 +0200
+Message-Id: <20220405070421.615707346@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 3354ef5a592d219364cf442c2f784ce7ad7629fd upstream.
+commit 04c9b00ba83594a29813d6b1fb8fdc93a3915174 upstream.
 
-Explicitly check for present SPTEs when clearing dirty bits in the TDP
-MMU.  This isn't strictly required for correctness, as setting the dirty
-bit in a defunct SPTE will not change the SPTE from !PRESENT to PRESENT.
-However, the guarded MMU_WARN_ON() in spte_ad_need_write_protect() would
-complain if anyone actually turned on KVM's MMU debugging.
+There is no need to call dev_kfree_skb() when usb_submit_urb() fails
+because can_put_echo_skb() deletes original skb and
+can_free_echo_skb() deletes the cloned skb.
 
-Fixes: a6a0b05da9f3 ("kvm: x86/mmu: Support dirty logging for the TDP MMU")
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Message-Id: <20220226001546.360188-3-seanjc@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Link: https://lore.kernel.org/all/20220311080208.45047-1-hbh25y@gmail.com
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/can/usb/mcba_usb.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1316,6 +1316,9 @@ retry:
- 		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
- 			continue;
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -368,7 +368,6 @@ static netdev_tx_t mcba_usb_start_xmit(s
+ xmit_failed:
+ 	can_free_echo_skb(priv->netdev, ctx->ndx, NULL);
+ 	mcba_usb_free_ctx(ctx);
+-	dev_kfree_skb(skb);
+ 	stats->tx_dropped++;
  
-+		if (!is_shadow_present_pte(iter.old_spte))
-+			continue;
-+
- 		if (spte_ad_need_write_protect(iter.old_spte)) {
- 			if (is_writable_pte(iter.old_spte))
- 				new_spte = iter.old_spte & ~PT_WRITABLE_MASK;
+ 	return NETDEV_TX_OK;
 
 

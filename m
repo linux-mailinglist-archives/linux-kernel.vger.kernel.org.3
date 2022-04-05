@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42D24F37E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C1E4F3BA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359634AbiDELUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S1382036AbiDEMAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbiDEIQn (ORCPT
+        with ESMTP id S236594AbiDEIQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8557092D;
-        Tue,  5 Apr 2022 01:04:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DCE71ECD;
+        Tue,  5 Apr 2022 01:04:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE9CDB81B9C;
-        Tue,  5 Apr 2022 08:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44BDAC385A0;
-        Tue,  5 Apr 2022 08:03:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8575461748;
+        Tue,  5 Apr 2022 08:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2F4C385A0;
+        Tue,  5 Apr 2022 08:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145833;
-        bh=fCRnFLF8zwtu51VJX15c89qRwAQ61q0ACsOM/VyssFw=;
+        s=korg; t=1649145841;
+        bh=N+zWu7AI5IWaUS3GUluxulWeUVNUFJ71l/5vn5pCO2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqAZFxT2edDh/HPyK8yBUfMmLqd5hcXJ3VCL/ewHuJUWWpJpX7RmmtM7jAxkipwib
-         L2wl+FH4WeYXhU18NojSR9eGap9bIbDK1tywItAbAAwOedgOr9e4F6ASmbhWNz42o2
-         +A/XxBoeQ7qeidU2LBbL1U6hWeFvQYms1fw+mFsM=
+        b=KWzrGFLo44xPE86VgQ0sOS+0LtDFJPw58Ex13f7y1XCc75HPPmaxJdblYdj73q9rN
+         7f2I3lphzh3sslG1Pz+0Fw9fLAvmCoknWJembadGUHVpGSQKepcYjnLA1S/HWfGhjM
+         kzlFnKtH5N8BNAxyWM2EPzEJON9sgZh0PL962L/k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ryder Lee <ryder.lee@mediatek.com>,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0509/1126] mt76: mt7915: fix the nss setting in bitrates
-Date:   Tue,  5 Apr 2022 09:20:56 +0200
-Message-Id: <20220405070422.568385584@linuxfoundation.org>
+        stable@vger.kernel.org, Miroslav Lichvar <mlichvar@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0510/1126] ptp: unregister virtual clocks when unregistering physical clock.
+Date:   Tue,  5 Apr 2022 09:20:57 +0200
+Message-Id: <20220405070422.597451327@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,41 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: MeiChia Chiu <meichia.chiu@mediatek.com>
+From: Miroslav Lichvar <mlichvar@redhat.com>
 
-[ Upstream commit c41d2a075206fcbdc89695b874a6ac06160b4f1a ]
+[ Upstream commit bfcbb76b0f595ea9ede9f7a218086fef85242f10 ]
 
-without this change, the fixed MCS only supports 1 Nss.
+When unregistering a physical clock which has some virtual clocks,
+unregister the virtual clocks with it.
 
-Fixes: 70fd1333cd32f ("mt76: mt7915: rework .set_bitrate_mask() to support more options")
-Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
-Signed-off-by: MeiChia Chiu <meichia.chiu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+This fixes the following oops, which can be triggered by unloading
+a driver providing a PTP clock when it has enabled virtual clocks:
+
+BUG: unable to handle page fault for address: ffffffffc04fc4d8
+Oops: 0000 [#1] PREEMPT SMP NOPTI
+RIP: 0010:ptp_vclock_read+0x31/0xb0
+Call Trace:
+ timecounter_read+0xf/0x50
+ ptp_vclock_refresh+0x2c/0x50
+ ? ptp_clock_release+0x40/0x40
+ ptp_aux_kworker+0x17/0x30
+ kthread_worker_fn+0x9b/0x240
+ ? kthread_should_park+0x30/0x30
+ kthread+0xe2/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+
+Fixes: 73f37068d540 ("ptp: support ptp physical/virtual clocks conversion")
+Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Cc: Yangbo Lu <yangbo.lu@nxp.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/ptp/ptp_clock.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index f7b97b7ab21f..8ff2402c4817 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -2126,9 +2126,12 @@ mt7915_mcu_add_rate_ctrl_fixed(struct mt7915_dev *dev,
- 			phy.sgi |= gi << (i << (_he));				\
- 			phy.he_ltf |= mask->control[band].he_ltf << (i << (_he));\
- 		}								\
--		for (i = 0; i < ARRAY_SIZE(mask->control[band]._mcs); i++) 	\
--			nrates += hweight16(mask->control[band]._mcs[i]);  	\
--		phy.mcs = ffs(mask->control[band]._mcs[0]) - 1;			\
-+		for (i = 0; i < ARRAY_SIZE(mask->control[band]._mcs); i++) {	\
-+			if (!mask->control[band]._mcs[i])			\
-+				continue;					\
-+			nrates += hweight16(mask->control[band]._mcs[i]);	\
-+			phy.mcs = ffs(mask->control[band]._mcs[i]) - 1;		\
-+		}								\
- 	} while (0)
+diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+index 0e4bc8b9329d..b6f2cfd15dd2 100644
+--- a/drivers/ptp/ptp_clock.c
++++ b/drivers/ptp/ptp_clock.c
+@@ -317,11 +317,18 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
+ }
+ EXPORT_SYMBOL(ptp_clock_register);
  
- 	if (sta->he_cap.has_he) {
++static int unregister_vclock(struct device *dev, void *data)
++{
++	struct ptp_clock *ptp = dev_get_drvdata(dev);
++
++	ptp_vclock_unregister(info_to_vclock(ptp->info));
++	return 0;
++}
++
+ int ptp_clock_unregister(struct ptp_clock *ptp)
+ {
+ 	if (ptp_vclock_in_use(ptp)) {
+-		pr_err("ptp: virtual clock in use\n");
+-		return -EBUSY;
++		device_for_each_child(&ptp->dev, NULL, unregister_vclock);
+ 	}
+ 
+ 	ptp->defunct = 1;
 -- 
 2.34.1
 

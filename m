@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE834F4FAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA6D4F5039
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839060AbiDFA6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1840818AbiDFBM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349006AbiDEJsz (ORCPT
+        with ESMTP id S1349132AbiDEJtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66459DF41;
-        Tue,  5 Apr 2022 02:39:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714C4AC044;
+        Tue,  5 Apr 2022 02:41:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80DC3B81B7F;
-        Tue,  5 Apr 2022 09:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0254C385A2;
-        Tue,  5 Apr 2022 09:38:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F31161675;
+        Tue,  5 Apr 2022 09:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD2BC385A3;
+        Tue,  5 Apr 2022 09:41:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151540;
-        bh=TIY/MaJG64dJFYhgSREZ7Io2V0kw+HnjbuZ5wtzkwkI=;
+        s=korg; t=1649151670;
+        bh=s0Xl/tDZ/nn9ljOEmMoDjIHW5BTj9WeUhGDK0Dd9ojI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pmTpJlyYHfuOmgFW0VwPlHzwrVNL3zz7ir75eGGDTkrivWiWpdRpzt3K3Ias36kCQ
-         7aF3RwA2v2bu/LcW20kChCaWORhQe7F1gJodXo6pzc8IER51hNTFKgl5/go10kMDos
-         5ec0RiaLNlMSR2mGUgtI5DKAd935lepAJ6Jg1QoM=
+        b=fpROFFrMfgDvr6ZNya6F5LqqYvdPTDSH1nOQHwjvl9D0pBw6TmgwUEVFcVRNXL51c
+         naPp+XOtTq/VdYhBwkPpVTOrGHc7xhS4IEQ5/v+PDDpfOB+HQazKK5mpFbtmNVfVqv
+         4AAO5TGg4XfrFSHicsaGYJemn+WJy0DwTWI8UhyE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhiqian Guan <zhguan@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 450/913] libbpf: Use dynamically allocated buffer when receiving netlink messages
-Date:   Tue,  5 Apr 2022 09:25:12 +0200
-Message-Id: <20220405070353.337403206@linuxfoundation.org>
+Subject: [PATCH 5.15 451/913] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
+Date:   Tue,  5 Apr 2022 09:25:13 +0200
+Message-Id: <20220405070353.367451209@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,129 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9c3de619e13ee6693ec5ac74f50b7aa89056a70e ]
+[ Upstream commit 6a4760463dbc6b603690938c468839985189ce0a ]
 
-When receiving netlink messages, libbpf was using a statically allocated
-stack buffer of 4k bytes. This happened to work fine on systems with a 4k
-page size, but on systems with larger page sizes it can lead to truncated
-messages. The user-visible impact of this was that libbpf would insist no
-XDP program was attached to some interfaces because that bit of the netlink
-message got chopped off.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
-Fix this by switching to a dynamically allocated buffer; we borrow the
-approach from iproute2 of using recvmsg() with MSG_PEEK|MSG_TRUNC to get
-the actual size of the pending message before receiving it, adjusting the
-buffer as necessary. While we're at it, also add retries on interrupted
-system calls around the recvmsg() call.
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
-v2:
-  - Move peek logic to libbpf_netlink_recv(), don't double free on ENOMEM.
+Fix memory leak by calling kobject_put().
 
-Fixes: 8bbb77b7c7a2 ("libbpf: Add various netlink helpers")
-Reported-by: Zhiqian Guan <zhguan@redhat.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/bpf/20220211234819.612288-1-toke@redhat.com
+Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/netlink.c | 55 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 51 insertions(+), 4 deletions(-)
+ drivers/power/supply/ab8500_fg.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index 39f25e09b51e..69b353d55dbf 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -87,29 +87,75 @@ enum {
- 	NL_DONE,
- };
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 05fe9724ba50..57799a8079d4 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2545,8 +2545,10 @@ static int ab8500_fg_sysfs_init(struct ab8500_fg *di)
+ 	ret = kobject_init_and_add(&di->fg_kobject,
+ 		&ab8500_fg_ktype,
+ 		NULL, "battery");
+-	if (ret < 0)
++	if (ret < 0) {
++		kobject_put(&di->fg_kobject);
+ 		dev_err(di->dev, "failed to create sysfs entry\n");
++	}
  
-+static int netlink_recvmsg(int sock, struct msghdr *mhdr, int flags)
-+{
-+	int len;
-+
-+	do {
-+		len = recvmsg(sock, mhdr, flags);
-+	} while (len < 0 && (errno == EINTR || errno == EAGAIN));
-+
-+	if (len < 0)
-+		return -errno;
-+	return len;
-+}
-+
-+static int alloc_iov(struct iovec *iov, int len)
-+{
-+	void *nbuf;
-+
-+	nbuf = realloc(iov->iov_base, len);
-+	if (!nbuf)
-+		return -ENOMEM;
-+
-+	iov->iov_base = nbuf;
-+	iov->iov_len = len;
-+	return 0;
-+}
-+
- static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- 			       __dump_nlmsg_t _fn, libbpf_dump_nlmsg_t fn,
- 			       void *cookie)
- {
-+	struct iovec iov = {};
-+	struct msghdr mhdr = {
-+		.msg_iov = &iov,
-+		.msg_iovlen = 1,
-+	};
- 	bool multipart = true;
- 	struct nlmsgerr *err;
- 	struct nlmsghdr *nh;
--	char buf[4096];
- 	int len, ret;
- 
-+	ret = alloc_iov(&iov, 4096);
-+	if (ret)
-+		goto done;
-+
- 	while (multipart) {
- start:
- 		multipart = false;
--		len = recv(sock, buf, sizeof(buf), 0);
-+		len = netlink_recvmsg(sock, &mhdr, MSG_PEEK | MSG_TRUNC);
-+		if (len < 0) {
-+			ret = len;
-+			goto done;
-+		}
-+
-+		if (len > iov.iov_len) {
-+			ret = alloc_iov(&iov, len);
-+			if (ret)
-+				goto done;
-+		}
-+
-+		len = netlink_recvmsg(sock, &mhdr, 0);
- 		if (len < 0) {
--			ret = -errno;
-+			ret = len;
- 			goto done;
- 		}
- 
- 		if (len == 0)
- 			break;
- 
--		for (nh = (struct nlmsghdr *)buf; NLMSG_OK(nh, len);
-+		for (nh = (struct nlmsghdr *)iov.iov_base; NLMSG_OK(nh, len);
- 		     nh = NLMSG_NEXT(nh, len)) {
- 			if (nh->nlmsg_pid != nl_pid) {
- 				ret = -LIBBPF_ERRNO__WRNGPID;
-@@ -151,6 +197,7 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- 	}
- 	ret = 0;
- done:
-+	free(iov.iov_base);
  	return ret;
  }
- 
 -- 
 2.34.1
 

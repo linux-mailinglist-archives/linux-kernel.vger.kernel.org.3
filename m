@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8624F46A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321A84F4675
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351956AbiDEUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S237010AbiDEUbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351915AbiDEKD3 (ORCPT
+        with ESMTP id S1351969AbiDEKDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28101972DB;
-        Tue,  5 Apr 2022 02:52:33 -0700 (PDT)
+        Tue, 5 Apr 2022 06:03:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FFBA94C1;
+        Tue,  5 Apr 2022 02:52:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63BE9B81B97;
-        Tue,  5 Apr 2022 09:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F1FC385A6;
-        Tue,  5 Apr 2022 09:52:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C89B661743;
+        Tue,  5 Apr 2022 09:52:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96F6C385A1;
+        Tue,  5 Apr 2022 09:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152340;
-        bh=xuNZMXifvmTGhpPgK2BkPkaKp82sCR/h9SV2ylyFzog=;
+        s=korg; t=1649152359;
+        bh=4YhYlmlgU5yF/qSl658v/68xrg7u+cOGYTE7Fjs+AWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t1s0Yh3UbcB+5mPLIjUwL5XuptyawVmLuIxTMmFZuNEnqsaLcwclPFhGYnIMNjzf9
-         dhbT9UAPO8bIzKluUr1iR4X8FzNfhHO+JocXzfGbn2mVzk/twdNbJGSA86pBNacP3K
-         R8yL3nBvFPRi1/UVyjJvjGm8cQp825gk850VqN0o=
+        b=qWHdpTgxfGGtJlmGpsofnwZB5KwgmxPuNeQCkdYNDRgu4UpxfXy+Ll9xsIUlZeSpM
+         t9KeBMTZ4UpmHsSId/U63iXTBautSLF6Rfk95JVoqMt+/pUJFLNJ0wHKJnYUuHK9ba
+         DZ7kH3XjQVf9kcviG8sG5uVs6ihtUGEwp6mRmRjE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Kennedy <george.kennedy@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 739/913] video: fbdev: cirrusfb: check pixclock to avoid divide by zero
-Date:   Tue,  5 Apr 2022 09:30:01 +0200
-Message-Id: <20220405070401.986511973@linuxfoundation.org>
+        stable@vger.kernel.org, David Heidelberg <david@ixit.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        LogicalErzor <logicalerzor@gmail.com>
+Subject: [PATCH 5.15 741/913] ARM: dts: qcom: fix gic_irq_domain_translate warnings for msm8960
+Date:   Tue,  5 Apr 2022 09:30:03 +0200
+Message-Id: <20220405070402.046129133@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,81 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+From: David Heidelberg <david@ixit.cz>
 
-[ Upstream commit 5c6f402bdcf9e7239c6bc7087eda71ac99b31379 ]
+[ Upstream commit 6f7e221e7a5cfc3299616543fce42b36e631497b ]
 
-Do a sanity check on pixclock value to avoid divide by zero.
+IRQ types blindly copied from very similar APQ8064.
 
-If the pixclock value is zero, the cirrusfb driver will round up
-pixclock to get the derived frequency as close to maxclock as
-possible.
+Fixes warnings as:
+WARNING: CPU: 0 PID: 1 at drivers/irqchip/irq-gic.c:1080 gic_irq_domain_translate+0x118/0x120
+...
 
-Syzkaller reported a divide error in cirrusfb_check_pixclock.
-
-divide error: 0000 [#1] SMP KASAN PTI
-CPU: 0 PID: 14938 Comm: cirrusfb_test Not tainted 5.15.0-rc6 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2
-RIP: 0010:cirrusfb_check_var+0x6f1/0x1260
-
-Call Trace:
- fb_set_var+0x398/0xf90
- do_fb_ioctl+0x4b8/0x6f0
- fb_ioctl+0xeb/0x130
- __x64_sys_ioctl+0x19d/0x220
- do_syscall_64+0x3a/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Tested-by: LogicalErzor <logicalerzor@gmail.com> # boot-tested on Samsung S3
+Signed-off-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220108174229.60384-1-david@ixit.cz
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/cirrusfb.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/qcom-msm8960.dtsi | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/fbdev/cirrusfb.c b/drivers/video/fbdev/cirrusfb.c
-index 93802abbbc72..3d47c347b897 100644
---- a/drivers/video/fbdev/cirrusfb.c
-+++ b/drivers/video/fbdev/cirrusfb.c
-@@ -469,7 +469,7 @@ static int cirrusfb_check_mclk(struct fb_info *info, long freq)
- 	return 0;
- }
+diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+index 172ea3c70eac..c197927e7435 100644
+--- a/arch/arm/boot/dts/qcom-msm8960.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+@@ -146,7 +146,9 @@
+ 			reg		= <0x108000 0x1000>;
+ 			qcom,ipc	= <&l2cc 0x8 2>;
  
--static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
-+static int cirrusfb_check_pixclock(struct fb_var_screeninfo *var,
- 				   struct fb_info *info)
- {
- 	long freq;
-@@ -478,9 +478,7 @@ static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
- 	unsigned maxclockidx = var->bits_per_pixel >> 3;
+-			interrupts	= <0 19 0>, <0 21 0>, <0 22 0>;
++			interrupts	= <GIC_SPI 19 IRQ_TYPE_EDGE_RISING>,
++					  <GIC_SPI 21 IRQ_TYPE_EDGE_RISING>,
++					  <GIC_SPI 22 IRQ_TYPE_EDGE_RISING>;
+ 			interrupt-names	= "ack", "err", "wakeup";
  
- 	/* convert from ps to kHz */
--	freq = PICOS2KHZ(var->pixclock);
--
--	dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
-+	freq = PICOS2KHZ(var->pixclock ? : 1);
+ 			regulators {
+@@ -192,7 +194,7 @@
+ 				compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
+ 				reg = <0x16440000 0x1000>,
+ 				      <0x16400000 0x1000>;
+-				interrupts = <0 154 0x0>;
++				interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&gcc GSBI5_UART_CLK>, <&gcc GSBI5_H_CLK>;
+ 				clock-names = "core", "iface";
+ 				status = "disabled";
+@@ -318,7 +320,7 @@
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				reg = <0x16080000 0x1000>;
+-				interrupts = <0 147 0>;
++				interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
+ 				spi-max-frequency = <24000000>;
+ 				cs-gpios = <&msmgpio 8 0>;
  
- 	maxclock = cirrusfb_board_info[cinfo->btype].maxclock[maxclockidx];
- 	cinfo->multiplexing = 0;
-@@ -488,11 +486,13 @@ static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
- 	/* If the frequency is greater than we can support, we might be able
- 	 * to use multiplexing for the video mode */
- 	if (freq > maxclock) {
--		dev_err(info->device,
--			"Frequency greater than maxclock (%ld kHz)\n",
--			maxclock);
--		return -EINVAL;
-+		var->pixclock = KHZ2PICOS(maxclock);
-+
-+		while ((freq = PICOS2KHZ(var->pixclock)) > maxclock)
-+			var->pixclock++;
- 	}
-+	dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
-+
- 	/*
- 	 * Additional constraint: 8bpp uses DAC clock doubling to allow maximum
- 	 * pixel clock
 -- 
 2.34.1
 

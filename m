@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4C34F41E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5464A4F3F88
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356517AbiDENIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S1357122AbiDENId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344025AbiDEJQw (ORCPT
+        with ESMTP id S1344039AbiDEJQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C13B2603;
-        Tue,  5 Apr 2022 02:03:47 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA3413E10;
+        Tue,  5 Apr 2022 02:03:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBCDB614E4;
-        Tue,  5 Apr 2022 09:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B08C385A1;
-        Tue,  5 Apr 2022 09:03:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 205F361003;
+        Tue,  5 Apr 2022 09:03:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32050C385A0;
+        Tue,  5 Apr 2022 09:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149426;
-        bh=pLIQlGkUzPkW36H+QN7RfbIl6w439D/LXITrrVw3+x8=;
+        s=korg; t=1649149431;
+        bh=ryI4nmnWCITwgMxyxAhVGbPtmN7Hf4iB4cJjnuFKMfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TmwrsoVh2l2NNPAGjykVdX8sg8wNB9SJhWK7PZL7rs9iqw0G+ASG5kEuPlc9rSlOr
-         t0sjhxIMHOLrXlYCVZuZ+q/NKrCpnIKPrNmwxlgGrHu6DlOfUG02g3yoIplBPqzzs3
-         pN6V+QG6p016pSbqUiJjV6j28u62A8Y/nTj5NTfE=
+        b=Lohf1MQbTDkMvVweUrSz6E9G1AxJEKJLfW/i8czryPFEJoOLod3YzwHRIJh+F1mbH
+         awnipcyIiEC31Sdx8EpiU7/WkrGs4REmpthfWco0BHSCCMh9VRWzfcOYRA3LnzbvP+
+         cVIU9jDAxXEL1PSnIM7vLEItOTgXafg5PnKVjoWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Julius Werner <jwerner@chromium.org>,
+        David Gow <davidgow@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0709/1017] kgdbts: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:27:02 +0200
-Message-Id: <20220405070415.316309603@linuxfoundation.org>
+Subject: [PATCH 5.16 0710/1017] firmware: google: Properly state IOMEM dependency
+Date:   Tue,  5 Apr 2022 09:27:03 +0200
+Message-Id: <20220405070415.346082419@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -60,63 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: David Gow <davidgow@google.com>
 
-[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
+[ Upstream commit 37fd83916da2e4cae03d350015c82a67b1b334c4 ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled. A return of 0 causes the boot option/value to be
-listed as an Unknown kernel parameter and added to init's (limited)
-environment strings. So return 1 from kgdbts_option_setup().
+The Google Coreboot implementation requires IOMEM functions
+(memmremap, memunmap, devm_memremap), but does not specify this is its
+Kconfig. This results in build errors when HAS_IOMEM is not set, such as
+on some UML configurations:
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
+/usr/bin/ld: drivers/firmware/google/coreboot_table.o: in function `coreboot_table_probe':
+coreboot_table.c:(.text+0x311): undefined reference to `memremap'
+/usr/bin/ld: coreboot_table.c:(.text+0x34e): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/memconsole-coreboot.o: in function `memconsole_probe':
+memconsole-coreboot.c:(.text+0x12d): undefined reference to `memremap'
+/usr/bin/ld: memconsole-coreboot.c:(.text+0x17e): undefined reference to `devm_memremap'
+/usr/bin/ld: memconsole-coreboot.c:(.text+0x191): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_destroy.isra.0':
+vpd.c:(.text+0x300): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_init':
+vpd.c:(.text+0x382): undefined reference to `memremap'
+/usr/bin/ld: vpd.c:(.text+0x459): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_probe':
+vpd.c:(.text+0x59d): undefined reference to `memremap'
+/usr/bin/ld: vpd.c:(.text+0x5d3): undefined reference to `memunmap'
+collect2: error: ld returned 1 exit status
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
+Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
+Acked-By: anton ivanov <anton.ivanov@cambridgegreys.com>
+Acked-By: Julius Werner <jwerner@chromium.org>
+Signed-off-by: David Gow <davidgow@google.com>
+Link: https://lore.kernel.org/r/20220225041502.1901806-1-davidgow@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/kgdbts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/google/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index 67c5b452dd35..88b91ad8e541 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -1070,10 +1070,10 @@ static int kgdbts_option_setup(char *opt)
- {
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		printk(KERN_ERR "kgdbts: config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
--	return 0;
-+	return 1;
- }
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 931544c9f63d..983e07dc022e 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -21,7 +21,7 @@ config GOOGLE_SMI
  
- __setup("kgdbts=", kgdbts_option_setup);
+ config GOOGLE_COREBOOT_TABLE
+ 	tristate "Coreboot Table Access"
+-	depends on ACPI || OF
++	depends on HAS_IOMEM && (ACPI || OF)
+ 	help
+ 	  This option enables the coreboot_table module, which provides other
+ 	  firmware modules access to the coreboot table. The coreboot table
 -- 
 2.34.1
 

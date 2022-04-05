@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0426A4F4478
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249704F4554
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbiDEOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S1383067AbiDEMR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244570AbiDEJl2 (ORCPT
+        with ESMTP id S244970AbiDEIww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D35BBE18;
-        Tue,  5 Apr 2022 02:27:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839011CB13;
+        Tue,  5 Apr 2022 01:48:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06A49B81CAC;
-        Tue,  5 Apr 2022 09:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EC3C385A8;
-        Tue,  5 Apr 2022 09:27:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FCF461509;
+        Tue,  5 Apr 2022 08:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3118DC385A1;
+        Tue,  5 Apr 2022 08:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150827;
-        bh=4indgIxOVeCiK3xftlvX5TxwsieTy/0NnuibO7kTWwg=;
+        s=korg; t=1649148487;
+        bh=ffree4QTNFS/AnCZEfxj8SDurCR5FE0zgUbDPN8iszM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aHtWUZ0aDG550FkBn9kfYOruwh68tPX+8Q00WlZ0aQrasKLnA82hqT+h/8dhaGNRX
-         RYZBIh8MSFzxq2mQrsV98z+9ffHu9FdpNIVVim7Zzf2OGh4dvyNeh38fWm9yVLfQzQ
-         IJi/QxGuM2Yh+5KNo72+OGM0yZodClYcDoD4f8xk=
+        b=vH/i8zjDCdAsSnZQBGiP7ZFof7pysmPXbRdHvaslMkL695fwW3lbrTNwatxNJ+K4a
+         S1Nl8V5Na2uPEist03yJzWw0wURftb9L6+wHDpxLHXYSmX3MwoOuxaYyA95xpBtnzL
+         CVudvq8Xavht8m0oGfpPLphUhO225VKYBsT0C1AU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 195/913] crypto: sun8i-ss - really disable hash on A80
-Date:   Tue,  5 Apr 2022 09:20:57 +0200
-Message-Id: <20220405070345.703687177@linuxfoundation.org>
+Subject: [PATCH 5.16 0346/1017] media: ov5640: Fix set format, v4l2_mbus_pixelcode not updated
+Date:   Tue,  5 Apr 2022 09:20:59 +0200
+Message-Id: <20220405070404.552923884@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +57,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-[ Upstream commit 881fc7fba6c3e7d77d608b9a50b01a89d5e0c61b ]
+[ Upstream commit e738f5dd67eb8098d75345908a5e73782d0569a5 ]
 
-When adding hashes support to sun8i-ss, I have added them only on A83T.
-But I forgot that 0 is a valid algorithm ID, so hashes are enabled on A80 but
-with an incorrect ID.
-Anyway, even with correct IDs, hashes do not work on A80 and I cannot
-find why.
-So let's disable all of them on A80.
+In ov5640_set_fmt, pending_fmt_change will always be false, because the
+sensor format is saved before comparing it with the previous format:
+	fmt = &sensor->fmt;...
+	*fmt = *mbus_fmt;...
+	if (mbus_fmt->code != sensor->fmt.code)
+		sensor->pending_fmt_change = true;
+This causes the sensor to capture with the previous pixelcode.
 
-Fixes: d9b45418a917 ("crypto: sun8i-ss - support hash algorithms")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Also, changes might happen even for V4L2_SUBDEV_FORMAT_TRY, so fix that.
+
+Basically, revert back to the state before
+commit 071154499193 ("media: ov5640: Fix set format regression")
+as it was more clear, and then update format even when pixelcode does
+not change, as resolution might change.
+
+Fixes: 071154499193 ("media: ov5640: Fix set format regression")
+Fixes: 6949d864776e ("media: ov5640: do not change mode if format or frame interval is unchanged")
+Fixes: fb98e29ff1ea5 ("media: ov5640: fix mode change regression")
+
+Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Acked-by: Hugues Fruchet <hugues.fruchet@st.com>
+Tested-by: Hugues Fruchet <hugues.fruchet@st.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ov5640.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-index 80e89066dbd1..319fe3279a71 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-@@ -30,6 +30,8 @@
- static const struct ss_variant ss_a80_variant = {
- 	.alg_cipher = { SS_ALG_AES, SS_ALG_DES, SS_ALG_3DES,
- 	},
-+	.alg_hash = { SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP,
-+	},
- 	.op_mode = { SS_OP_ECB, SS_OP_CBC,
- 	},
- 	.ss_clks = {
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index ddbd71394db3..db5a19babe67 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2293,7 +2293,6 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+ 	const struct ov5640_mode_info *new_mode;
+ 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
+-	struct v4l2_mbus_framefmt *fmt;
+ 	int ret;
+ 
+ 	if (format->pad != 0)
+@@ -2311,12 +2310,10 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	if (ret)
+ 		goto out;
+ 
+-	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+-		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
+-	else
+-		fmt = &sensor->fmt;
+-
+-	*fmt = *mbus_fmt;
++	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
++		*v4l2_subdev_get_try_format(sd, sd_state, 0) = *mbus_fmt;
++		goto out;
++	}
+ 
+ 	if (new_mode != sensor->current_mode) {
+ 		sensor->current_mode = new_mode;
+@@ -2325,6 +2322,9 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	if (mbus_fmt->code != sensor->fmt.code)
+ 		sensor->pending_fmt_change = true;
+ 
++	/* update format even if code is unchanged, resolution might change */
++	sensor->fmt = *mbus_fmt;
++
+ 	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
+ 				 ov5640_calc_pixel_rate(sensor));
+ out:
 -- 
 2.34.1
 

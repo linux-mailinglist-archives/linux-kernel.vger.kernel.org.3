@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94424F410C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6D04F4119
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356995AbiDEMKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S1389340AbiDEOo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244761AbiDEIwh (ORCPT
+        with ESMTP id S244220AbiDEJlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3907E0B0;
-        Tue,  5 Apr 2022 01:43:35 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8EBB08A;
+        Tue,  5 Apr 2022 02:25:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FD74B81A32;
-        Tue,  5 Apr 2022 08:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5CAC385A0;
-        Tue,  5 Apr 2022 08:43:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D31E9B81C9C;
+        Tue,  5 Apr 2022 09:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A86C385A2;
+        Tue,  5 Apr 2022 09:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148213;
-        bh=/kvIRSziW0x3o2dd/pwWaUBnYSKR0XEkNQf4oUXD/mg=;
+        s=korg; t=1649150741;
+        bh=3oCwlJRD8vj5QipKcGadNX91kWBh0Lg0s35g0LB+Nho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zGheEi+otXcf3afYtCNJQVzgE+M0ic2amkZ2DWLhLFZ2yqyMS9KsfYyWGK78fWMv3
-         D6uFY2ZSsHYosbUUbu/rMHXr5h6xUdthx7oU32gi+p3WMqsN4fZTSyWdXc1EGKY4b9
-         uFsNzqevD3zyPjbYR70kr4PA68kKYq7k+sSXV7bs=
+        b=AUqml6CB942Uz+TcM2tEP71YXgSwq+u+2n+8N53Aqk48GB2Z6pH52NQPqj3sspkzX
+         0PCA9UtwvU+5kcFInIEH4mzngmnOAl0A1EGJNULV/g+MroNAw5SijAI761/aFY1AnA
+         JRDTw6MONsFsjGEa2EnhdEN/QM2BCpVK9DQp2zvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Liu <liupeng256@huawei.com>,
-        Marco Elver <elver@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0276/1017] kunit: make kunit_test_timeout compatible with comment
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Subject: [PATCH 5.15 127/913] arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
 Date:   Tue,  5 Apr 2022 09:19:49 +0200
-Message-Id: <20220405070402.459185133@linuxfoundation.org>
+Message-Id: <20220405070343.636808466@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,48 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Liu <liupeng256@huawei.com>
+From: Nishanth Menon <nm@ti.com>
 
-[ Upstream commit bdd015f7b71b92c2e4ecabac689642cc72553e04 ]
+commit de60edf1be3d42d4a1b303b41c7c53b2f865726e upstream.
 
-In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
-represent 5min.  However, it is wrong when dealing with arm64 whose
-default HZ = 250, or some other situations.  Use msecs_to_jiffies to fix
-this, and kunit_test_timeout will work as desired.
+Though GIC ARE option is disabled for no GIC-v2 compatibility,
+Cortex-A53 is free to implement the CPU interface as long as it
+communicates with the GIC using the stream protocol. This requires
+that the SoC integration mark out the PERIPHBASE[1] as reserved area
+within the SoC. See longer discussion in [2] for further information.
 
-Link: https://lkml.kernel.org/r/20220309083753.1561921-3-liupeng256@huawei.com
-Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
-Signed-off-by: Peng Liu <liupeng256@huawei.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Wang Kefeng <wangkefeng.wang@huawei.com>
-Cc: David Gow <davidgow@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Update the GIC register map to indicate offsets from PERIPHBASE based
+on [3]. Without doing this, systems like kvm will not function with
+gic-v2 emulation.
+
+[1] https://developer.arm.com/documentation/ddi0500/e/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
+[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
+[3] https://developer.arm.com/documentation/ddi0500/e/generic-interrupt-controller-cpu-interface/gic-programmers-model/memory-map
+
+Cc: stable@vger.kernel.org
+Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
+Reported-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220215201008.15235-5-nm@ti.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/kunit/try-catch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi |    5 ++++-
+ arch/arm64/boot/dts/ti/k3-am64.dtsi      |    1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 0dd434e40487..71e5c5853099 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
- 	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
- 	 * the task will be killed and an oops generated.
- 	 */
--	return 300 * MSEC_PER_SEC; /* 5 min */
-+	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
- }
+--- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+@@ -59,7 +59,10 @@
+ 		#interrupt-cells = <3>;
+ 		interrupt-controller;
+ 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
+-		      <0x00 0x01840000 0x00 0xC0000>;	/* GICR */
++		      <0x00 0x01840000 0x00 0xC0000>,	/* GICR */
++		      <0x01 0x00000000 0x00 0x2000>,	/* GICC */
++		      <0x01 0x00010000 0x00 0x1000>,	/* GICH */
++		      <0x01 0x00020000 0x00 0x2000>;	/* GICV */
+ 		/*
+ 		 * vcpumntirq:
+ 		 * virtual CPU interface maintenance interrupt
+--- a/arch/arm64/boot/dts/ti/k3-am64.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64.dtsi
+@@ -85,6 +85,7 @@
+ 			 <0x00 0x68000000 0x00 0x68000000 0x00 0x08000000>, /* PCIe DAT0 */
+ 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00200000>, /* OC SRAM */
+ 			 <0x00 0x78000000 0x00 0x78000000 0x00 0x00800000>, /* Main R5FSS */
++			 <0x01 0x00000000 0x01 0x00000000 0x00 0x00310000>, /* A53 PERIPHBASE */
+ 			 <0x06 0x00000000 0x06 0x00000000 0x01 0x00000000>, /* PCIe DAT1 */
+ 			 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>, /* FSS0 DAT3 */
  
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
--- 
-2.34.1
-
 
 

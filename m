@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A263F4F44C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072094F46E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355713AbiDEMuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S231560AbiDEUuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239084AbiDEJFh (ORCPT
+        with ESMTP id S1348764AbiDEJsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:05:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E355F4090C;
-        Tue,  5 Apr 2022 01:56:17 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DD462BF6;
+        Tue,  5 Apr 2022 02:34:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 296DE61572;
-        Tue,  5 Apr 2022 08:56:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB73C385A0;
-        Tue,  5 Apr 2022 08:56:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A865361654;
+        Tue,  5 Apr 2022 09:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B887FC385A2;
+        Tue,  5 Apr 2022 09:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148976;
-        bh=sguz78huzTlJ+6AdEbFDuzyeDjf7ZrfKYEM3mGzXiZQ=;
+        s=korg; t=1649151296;
+        bh=LVCpTc+RwSPQyhlk4X4jhh6UmKjjuZD/DGgSt8NF4zM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WTdn0gfF3X3Yp7CZPVDupN2GZvnUnEFxa/DoqhzhMW90xJ4JJmchloT+SorQTaO8P
-         XsmX+eyXPX61Ef1ZShtJsOBajn+W8ayTOqMSzZhS5lSiAxzE2qrGt5hhaqNWqQqAa4
-         0BMO2jZTm1FkA2OcsSQUlEm5MIceEk6+EJx6jaKc=
+        b=WRYFuqgL7vDMZVdLUlN/7QLTS7qMwd/AfF5FCF80+vgkAlYUGsuJtehn3kGg9tEWQ
+         Fmsy/bBU4prEqDmO6EZpfQQAYf2Q2XUKEdUGglGwtCNseAiN3ee9/SPCox+Z4ps5wN
+         L3iMQHCSnG3lu5o+tl5hmwCmqN0qgmkohKSFzdFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0512/1017] iwlwifi: yoyo: Avoid using dram data if allocation failed
+Subject: [PATCH 5.15 363/913] ASoC: fsl_spdif: Disable TX clock when stop
 Date:   Tue,  5 Apr 2022 09:23:45 +0200
-Message-Id: <20220405070409.496667498@linuxfoundation.org>
+Message-Id: <20220405070350.726533525@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-[ Upstream commit e2d53d10ef666859517360e711fd7761e7e984ce ]
+[ Upstream commit 6ddf611219ba8f7c8fa0d26b39710a641e7d37a5 ]
 
-The config set TLV setting depend on dram allocation
-and if allocation failed the data used in config set tlv
-should not set this.
-Adding the check if dram fragment is available or not.
+The TX clock source may be changed in next case, need to
+disable it when stop, otherwise the TX may not work after
+changing the clock source, error log is:
 
-Signed-off-by: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
-Fixes: 1a5daead217c ("iwlwifi: yoyo: support for ROM usniffer")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220204122220.44835d181528.I3e78ba29c13bbeada017fcb2a620f3552c1dfa30@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+aplay: pcm_write:2058: write error: Input/output error
+
+Fixes: a2388a498ad2 ("ASoC: fsl: Add S/PDIF CPU DAI driver")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Link: https://lore.kernel.org/r/1646879863-27711-1-git-send-email-shengjiu.wang@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ sound/soc/fsl/fsl_spdif.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-index 7ab98b419cc1..d412b6d0b28e 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-@@ -849,11 +849,18 @@ static void iwl_dbg_tlv_apply_config(struct iwl_fw_runtime *fwrt,
- 		case IWL_FW_INI_CONFIG_SET_TYPE_DBGC_DRAM_ADDR: {
- 			struct iwl_dbgc1_info dram_info = {};
- 			struct iwl_dram_data *frags = &fwrt->trans->dbg.fw_mon_ini[1].frags[0];
--			__le64 dram_base_addr = cpu_to_le64(frags->physical);
--			__le32 dram_size = cpu_to_le32(frags->size);
--			u64  dram_addr = le64_to_cpu(dram_base_addr);
-+			__le64 dram_base_addr;
-+			__le32 dram_size;
-+			u64 dram_addr;
- 			u32 ret;
- 
-+			if (!frags)
-+				break;
-+
-+			dram_base_addr = cpu_to_le64(frags->physical);
-+			dram_size = cpu_to_le32(frags->size);
-+			dram_addr = le64_to_cpu(dram_base_addr);
-+
- 			IWL_DEBUG_FW(fwrt, "WRT: dram_base_addr 0x%016llx, dram_size 0x%x\n",
- 				     dram_base_addr, dram_size);
- 			IWL_DEBUG_FW(fwrt, "WRT: config_list->addr_offset: %u\n",
+diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
+index 1c53719bb61e..8b5c3ba48516 100644
+--- a/sound/soc/fsl/fsl_spdif.c
++++ b/sound/soc/fsl/fsl_spdif.c
+@@ -598,6 +598,8 @@ static void fsl_spdif_shutdown(struct snd_pcm_substream *substream,
+ 		mask = SCR_TXFIFO_AUTOSYNC_MASK | SCR_TXFIFO_CTRL_MASK |
+ 			SCR_TXSEL_MASK | SCR_USRC_SEL_MASK |
+ 			SCR_TXFIFO_FSEL_MASK;
++		/* Disable TX clock */
++		regmap_update_bits(regmap, REG_SPDIF_STC, STC_TXCLK_ALL_EN_MASK, 0);
+ 	} else {
+ 		scr = SCR_RXFIFO_OFF | SCR_RXFIFO_CTL_ZERO;
+ 		mask = SCR_RXFIFO_FSEL_MASK | SCR_RXFIFO_AUTOSYNC_MASK|
 -- 
 2.34.1
 

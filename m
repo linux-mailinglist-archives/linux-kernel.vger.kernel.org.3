@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8937E4F4BDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545674F4E0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450580AbiDEXGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S1587261AbiDFAIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455464AbiDEQAE (ORCPT
+        with ESMTP id S1455481AbiDEQAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:00:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613DB56754;
-        Tue,  5 Apr 2022 08:15:43 -0700 (PDT)
+        Tue, 5 Apr 2022 12:00:05 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E94F1400B;
+        Tue,  5 Apr 2022 08:15:52 -0700 (PDT)
 Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED80F1EC0518;
-        Tue,  5 Apr 2022 17:15:37 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4A8E11EC0535;
+        Tue,  5 Apr 2022 17:15:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649171738;
+        t=1649171747;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=luB7TMkZKRRM3TEoQ4R8/NjdvmPgDZy3QgqEge4f+08=;
-        b=mp7uj8rh+qT1te6TN78hfnAl+SEVUwh/XB6GJNWc9jjOTScA1pWHFhh0ZXTQuN19oWTHAt
-        ZluQq13l01mFQlgLyrWKpDwy3POmPE8l05L0o16f1Nvi6ehaoKMst91nom7Kkc4rFaJxvW
-        nawuUPZxoz7+MBEmTz91CYxRmPaboIg=
+        bh=7LpwbTRZSZl3UcUUxK/gc+JLeRFgEvrqb5/MIf7cLWA=;
+        b=UliPEgQUaAlMXoOHtohjpWYugorgyctYyvye+BbeTMhPLfH3wh33PXgF0F95VjaFyiY4sT
+        dLx2BXmJC/1kxtwqOS5ZtrTBw0T22l+dKjSpkyO3hOoHkVPb1WlfcYQD3whjXnIr6DA9AH
+        MoJu5CL9vF/fVEoGvN5VLRXgThEIeD4=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ariel Elior <aelior@marvell.com>,
-        Sudarsana Kalluru <skalluru@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH 03/11] bnx2x: Fix undefined behavior due to shift overflowing the constant
-Date:   Tue,  5 Apr 2022 17:15:09 +0200
-Message-Id: <20220405151517.29753-4-bp@alien8.de>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH 05/11] i2c: ismt: Fix undefined behavior due to shift overflowing the constant
+Date:   Tue,  5 Apr 2022 17:15:11 +0200
+Message-Id: <20220405151517.29753-6-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
 References: <20220405151517.29753-1-bp@alien8.de>
@@ -60,39 +57,41 @@ From: Borislav Petkov <bp@suse.de>
 
 Fix:
 
-  drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: In function ‘bnx2x_check_blocks_with_parity3’:
-  drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:4917:4: error: case label does not reduce to an integer constant
-      case AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY:
-      ^~~~
+  drivers/i2c/busses/i2c-ismt.c: In function ‘ismt_hw_init’:
+  drivers/i2c/busses/i2c-ismt.c:770:2: error: case label does not reduce to an integer constant
+    case ISMT_SPGT_SPD_400K:
+    ^~~~
+  drivers/i2c/busses/i2c-ismt.c:773:2: error: case label does not reduce to an integer constant
+    case ISMT_SPGT_SPD_1M:
+    ^~~~
 
 See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
 details as to why it triggers with older gccs only.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Ariel Elior <aelior@marvell.com>
-Cc: Sudarsana Kalluru <skalluru@marvell.com>
-Cc: Manish Chopra <manishc@marvell.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
+Cc: Seth Heasley <seth.heasley@intel.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: linux-i2c@vger.kernel.org
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-ismt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h
-index 5caa75b41b73..881ac33fe914 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h
-@@ -6218,7 +6218,7 @@
- #define AEU_INPUTS_ATTN_BITS_GPIO0_FUNCTION_0			 (0x1<<2)
- #define AEU_INPUTS_ATTN_BITS_IGU_PARITY_ERROR			 (0x1<<12)
- #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_ROM_PARITY		 (0x1<<28)
--#define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY		 (0x1<<31)
-+#define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY		 (0x1U<<31)
- #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_UMP_RX_PARITY		 (0x1<<29)
- #define AEU_INPUTS_ATTN_BITS_MCP_LATCHED_UMP_TX_PARITY		 (0x1<<30)
- #define AEU_INPUTS_ATTN_BITS_MISC_HW_INTERRUPT			 (0x1<<15)
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index f4820fd3dc13..c0364314877e 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -145,8 +145,8 @@
+ #define ISMT_SPGT_SPD_MASK	0xc0000000	/* SMBus Speed mask */
+ #define ISMT_SPGT_SPD_80K	0x00		/* 80 kHz */
+ #define ISMT_SPGT_SPD_100K	(0x1 << 30)	/* 100 kHz */
+-#define ISMT_SPGT_SPD_400K	(0x2 << 30)	/* 400 kHz */
+-#define ISMT_SPGT_SPD_1M	(0x3 << 30)	/* 1 MHz */
++#define ISMT_SPGT_SPD_400K	(0x2U << 30)	/* 400 kHz */
++#define ISMT_SPGT_SPD_1M	(0x3U << 30)	/* 1 MHz */
+ 
+ 
+ /* MSI Control Register (MSICTL) bit definitions */
 -- 
 2.35.1
 

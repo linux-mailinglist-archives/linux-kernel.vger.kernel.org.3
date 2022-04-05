@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C84F4B62
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E438B4F4DFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574435AbiDEW4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S1586926AbiDFAGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384219AbiDEM1Q (ORCPT
+        with ESMTP id S1384127AbiDEM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:27:16 -0400
+        Tue, 5 Apr 2022 08:27:12 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0DF7486F;
-        Tue,  5 Apr 2022 04:35:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3161574BF;
+        Tue,  5 Apr 2022 04:35:18 -0700 (PDT)
 Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 235BYCGm000464;
-        Tue, 5 Apr 2022 20:34:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 235BYCGm000464
+        by conuserg-12.nifty.com with ESMTP id 235BYCGn000464;
+        Tue, 5 Apr 2022 20:34:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 235BYCGn000464
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1649158453;
-        bh=tlKllE+DeH+owxkSzZkT6wnBC6VcqxWAXsQhSEB8rk0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YdaL0ynmtbZVeMCw/+dhJuynpbARiMg258nxmjvJekOGt/BAROJZ5u5E6dzP9wHKk
-         z5WhiExOSraf3CMM3c6G+MBalNLwRSGDm+9bYdG5m0wFFYf8nRPWh9cmzKi924/NMO
-         AjCuGRYQZ8qtd70DvHof32c9rcC6cOiqixuQ3s7ZqYWWeS0/zYgRBTKEITtDktDB9X
-         a5r0Dly+Or5at2+zpXgdhCnEdSBqqQd6W6cWZmLP1hPR9XE/aYOGGg9WIK+12igwJn
-         wP97HdvKtkFIMPe+w69PRGXtEsrb+/Eo5STtoAHjICWMdV9YuDuv2bfDgpgRkmYk/z
-         fvA9GM3qVrezA==
+        bh=3DqNNvADXzvHcLCX0JSWQu0LGeQKS0pcjU6by571POs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IMM4BxXHf9E3neDAF1TWt3R+5eYjP6f7RQRZUvTHBnrIAQT4Pz/Q5AIfVvofrn4J4
+         7RoXYWZ8ok44JqyjEhkn9QipP1dxZoWTkOeerMrUH4Q59PunvHTHp323M4A+jQ3RTJ
+         T/extvRF5kV6xsvgaJuf2VjE4pDbPIf08E+3Hyo1Y7nz0OOvEbgyyfjqX5/1e9+oYn
+         gmiEx3+cCur7VXwUVAOmm0aaMuEMp5Gyrkw6DehiFLPZ0JbRwaN4RxyZFzieEQWlZG
+         4BqsexGyno2F1xP5ZzXbeZvfNaldzuMr6gY+u6rhOG7EMHmw2LqRT5Hs4qxz7IRtDc
+         7aFfq7GP3W8DA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
         Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <n.schier@avm.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev
-Subject: [PATCH v2 00/10] kbuild: misc cleanups
-Date:   Tue,  5 Apr 2022 20:33:48 +0900
-Message-Id: <20220405113359.2880241-1-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2 01/10] kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
+Date:   Tue,  5 Apr 2022 20:33:49 +0900
+Message-Id: <20220405113359.2880241-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220405113359.2880241-1-masahiroy@kernel.org>
+References: <20220405113359.2880241-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,32 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The genksyms command part in cmd_gensymtypes_{c,S} is duplicated.
+Factor it out into the 'genksyms' macro.
 
-This is a series of prerequisite cleanups of my next work.
+For the readability, I slightly refactor the arguments to genksyms.
 
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Masahiro Yamada (10):
-  kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
-  kbuild: do not remove empty *.symtypes explicitly
-  modpost: remove useless export_from_sec()
-  modpost: move export_from_secname() call to more relevant place
-  modpost: remove redundant initializes for static variables
-  modpost: remove annoying namespace_from_kstrtabns()
-  kbuild: get rid of duplication in the first line of *.mod files
-  kbuild: split the second line of *.mod into *.usyms
-  kbuild: refactor cmd_modversions_c
-  kbuild: refactor cmd_modversions_S
+Changes in v2:
+  - Fix the location of the closing parenthesis
 
- .gitignore                  |  1 +
- Makefile                    |  2 +-
- scripts/Makefile.build      | 86 ++++++++++++++++---------------------
- scripts/adjust_autoksyms.sh |  2 +-
- scripts/gen_autoksyms.sh    | 18 +++++---
- scripts/mod/modpost.c       | 49 ++++++---------------
- scripts/mod/modpost.h       |  4 --
- scripts/mod/sumversion.c    | 11 +----
- 8 files changed, 64 insertions(+), 109 deletions(-)
+ scripts/Makefile.build | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 9717e6f6fb31..31e0e33dfe5d 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -125,13 +125,14 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
+ $(obj)/%.i: $(src)/%.c FORCE
+ 	$(call if_changed_dep,cpp_i_c)
+ 
++genksyms = scripts/genksyms/genksyms		\
++	$(if $(1), -T $(2))			\
++	$(if $(CONFIG_MODULE_REL_CRCS), -R)	\
++	$(if $(KBUILD_PRESERVE), -p)		\
++	-r $(or $(wildcard $(2:.symtypes=.symref)), /dev/null)
++
+ # These mirror gensymtypes_S and co below, keep them in synch.
+-cmd_gensymtypes_c =                                                         \
+-    $(CPP) -D__GENKSYMS__ $(c_flags) $< |                                   \
+-    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+-     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+-     $(if $(KBUILD_PRESERVE),-p)                                            \
+-     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
++cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
+ 
+ quiet_cmd_cc_symtypes_c = SYM $(quiet_modtag) $@
+ cmd_cc_symtypes_c =                                                         \
+@@ -344,11 +345,7 @@ cmd_gensymtypes_S =                                                         \
+     $(CPP) $(a_flags) $< |                                                  \
+      grep "\<___EXPORT_SYMBOL\>" |                                          \
+      sed 's/.*___EXPORT_SYMBOL[[:space:]]*\([a-zA-Z0-9_]*\)[[:space:]]*,.*/EXPORT_SYMBOL(\1);/' ; } | \
+-    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - |                                \
+-    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+-     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+-     $(if $(KBUILD_PRESERVE),-p)                                            \
+-     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
++    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
+ 
+ quiet_cmd_cc_symtypes_S = SYM $(quiet_modtag) $@
+ cmd_cc_symtypes_S =                                                         \
 -- 
 2.32.0
 

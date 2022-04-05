@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1774F354D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC8A4F3048
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356871AbiDEKZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S1356925AbiDEKZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241211AbiDEIcy (ORCPT
+        with ESMTP id S241212AbiDEIcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5676E17A9B;
-        Tue,  5 Apr 2022 01:29:39 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 08:29:36 -0000
+        Tue, 5 Apr 2022 04:32:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612A617AA7;
+        Tue,  5 Apr 2022 01:29:41 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 08:29:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649147378;
+        s=2020; t=1649147380;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rVp4aRHgsclhL8EJ9iZFPn/4+bvKhNrDLh1shDagL2c=;
-        b=zMlfh/PxrJOZ8vGaMmjA4p2/ZaPgx5r3H0AbHeZgRL4TIdsXUpNL+jY6SyJ07jSg/j2y/u
-        88x2iZ9oRzVP10AEyJ5biBeq8J2fusLom50Rk0fuRJaf1f8gWnUICBqsrlQK4E65H6xuW8
-        XLGg6mH+me+vOvEfct+IcRNicAQtnWHe1SbmPnNhzBAzIEEqqukCpyr5wpRKOCGlvD3XEC
-        qidd4D5Us92VNhSDN4oif6qwp8vQhfxzQhfw+U3jYpj+5u3hCxLLFjxTKy6ZvXr7KKJbiV
-        pLGFqNnfXgr6sbLdpFmS19fFTt1BkdFK2OrKn3hPHGftJc83ZAzl43y1+VyEwg==
+        bh=CG5YoLwVtENTsJI0ZrkElUF1kAUax6t9VUJ60RvhJyU=;
+        b=wffzHuT9w4t8vE4ER/eAMk+5e/hBQx8EcbUsg7pU3enhphts0JZ6s2zwslkkAlVo907big
+        2pXR+XvNOjDvv7UMspTmLAV3ns+Z2HH9F02PvJpSUV/C7gjSKgwzUgVmNGHAeRtFYbK8us
+        pPzBT1YKCWup5r0g8QqsALJ88HlSUY94h8UHi6NvP1sUW/ko+SFf3ObzVh+v6Lt0cEvlbx
+        Crpawo91PVuXsp97UCNud7km3qmxm8GnZLozaxNvdULMdo68xtFYUgU3/CrVjR0do93E9u
+        0vP9C83d70JL22GkLV/z4yps34Pbx5yN0HXie9y40wNFgBh9+TsncbFcpw8qIQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649147378;
+        s=2020e; t=1649147380;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rVp4aRHgsclhL8EJ9iZFPn/4+bvKhNrDLh1shDagL2c=;
-        b=yaKJS7IpU3azwEtJ/GCcjVDTMoQMwXqhXPoCYVFBp11Ife3vzblPjEQ4gomMOEZmX9CK7d
-        pVzumFGcjVOvjDBA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=CG5YoLwVtENTsJI0ZrkElUF1kAUax6t9VUJ60RvhJyU=;
+        b=JDN0WqxdBfxFnEc3qfli09GyeYL47oKKnegWtayfWO47xAP0wIs9aW6Vv1T4kDOiTI+k69
+        6PTMTx8rgs36CCDQ==
+From:   "tip-bot2 for Vincent Mailhol" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] objtool: Fix SLS validation for kcov tail-call replacement
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/urgent] x86/bug: Prevent shadowing in __WARN_FLAGS
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220323230712.GA8939@worktop.programming.kicks-ass.net>
-References: <20220323230712.GA8939@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220324023742.106546-1-mailhol.vincent@wanadoo.fr>
+References: <20220324023742.106546-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Message-ID: <164914737698.389.9382250857229759152.tip-bot2@tip-bot2>
+Message-ID: <164914737896.389.7504824366044835648.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,63 +69,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     7a53f408902d913cd541b4f8ad7dbcd4961f5b82
-Gitweb:        https://git.kernel.org/tip/7a53f408902d913cd541b4f8ad7dbcd4961f5b82
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 23 Mar 2022 23:35:01 +01:00
+Commit-ID:     9ce02f0fc68326dd1f87a0a3a4c6ae7fdd39e6f6
+Gitweb:        https://git.kernel.org/tip/9ce02f0fc68326dd1f87a0a3a4c6ae7fdd39e6f6
+Author:        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+AuthorDate:    Thu, 24 Mar 2022 11:37:42 +09:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 05 Apr 2022 10:24:40 +02:00
 
-objtool: Fix SLS validation for kcov tail-call replacement
+x86/bug: Prevent shadowing in __WARN_FLAGS
 
-Since not all compilers have a function attribute to disable KCOV
-instrumentation, objtool can rewrite KCOV instrumentation in noinstr
-functions as per commit:
+The macro __WARN_FLAGS() uses a local variable named "f". This being a
+common name, there is a risk of shadowing other variables.
 
-  f56dae88a81f ("objtool: Handle __sanitize_cov*() tail calls")
+For example, GCC would yield:
 
-However, this has subtle interaction with the SLS validation from
-commit:
+| In file included from ./include/linux/bug.h:5,
+|                  from ./include/linux/cpumask.h:14,
+|                  from ./arch/x86/include/asm/cpumask.h:5,
+|                  from ./arch/x86/include/asm/msr.h:11,
+|                  from ./arch/x86/include/asm/processor.h:22,
+|                  from ./arch/x86/include/asm/timex.h:5,
+|                  from ./include/linux/timex.h:65,
+|                  from ./include/linux/time32.h:13,
+|                  from ./include/linux/time.h:60,
+|                  from ./include/linux/stat.h:19,
+|                  from ./include/linux/module.h:13,
+|                  from virt/lib/irqbypass.mod.c:1:
+| ./include/linux/rcupdate.h: In function 'rcu_head_after_call_rcu':
+| ./arch/x86/include/asm/bug.h:80:21: warning: declaration of 'f' shadows a parameter [-Wshadow]
+|    80 |         __auto_type f = BUGFLAG_WARNING|(flags);                \
+|       |                     ^
+| ./include/asm-generic/bug.h:106:17: note: in expansion of macro '__WARN_FLAGS'
+|   106 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+|       |                 ^~~~~~~~~~~~
+| ./include/linux/rcupdate.h:1007:9: note: in expansion of macro 'WARN_ON_ONCE'
+|  1007 |         WARN_ON_ONCE(func != (rcu_callback_t)~0L);
+|       |         ^~~~~~~~~~~~
+| In file included from ./include/linux/rbtree.h:24,
+|                  from ./include/linux/mm_types.h:11,
+|                  from ./include/linux/buildid.h:5,
+|                  from ./include/linux/module.h:14,
+|                  from virt/lib/irqbypass.mod.c:1:
+| ./include/linux/rcupdate.h:1001:62: note: shadowed declaration is here
+|  1001 | rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
+|       |                                               ~~~~~~~~~~~~~~~^
 
-  1cc1e4c8aab4 ("objtool: Add straight-line-speculation validation")
+For reference, sparse also warns about it, c.f. [1].
 
-In that when a tail-call instrucion is replaced with a RET an
-additional INT3 instruction is also written, but is not represented in
-the decoded instruction stream.
+This patch renames the variable from f to __flags (with two underscore
+prefixes as suggested in the Linux kernel coding style [2]) in order
+to prevent collisions.
 
-This then leads to false positive missing INT3 objtool warnings in
-noinstr code.
+[1] https://lore.kernel.org/all/CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com/
 
-Instead of adding additional struct instruction objects, mark the RET
-instruction with retpoline_safe to suppress the warning (since we know
-there really is an INT3).
+[2] Linux kernel coding style, section 12) Macros, Enums and RTL,
+paragraph 5) namespace collisions when defining local variables in
+macros resembling functions
+https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
 
-Fixes: 1cc1e4c8aab4 ("objtool: Add straight-line-speculation validation")
+Fixes: bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into_BUG_FLAGS() asm")
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220323230712.GA8939@worktop.programming.kicks-ass.net
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lkml.kernel.org/r/20220324023742.106546-1-mailhol.vincent@wanadoo.fr
 ---
- tools/objtool/check.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/x86/include/asm/bug.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index b848e1d..bd0c2c8 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1155,6 +1155,17 @@ static void annotate_call_site(struct objtool_file *file,
- 			               : arch_nop_insn(insn->len));
- 
- 		insn->type = sibling ? INSN_RETURN : INSN_NOP;
-+
-+		if (sibling) {
-+			/*
-+			 * We've replaced the tail-call JMP insn by two new
-+			 * insn: RET; INT3, except we only have a single struct
-+			 * insn here. Mark it retpoline_safe to avoid the SLS
-+			 * warning, instead of adding another insn.
-+			 */
-+			insn->retpoline_safe = true;
-+		}
-+
- 		return;
- 	}
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index 4d20a29..aaf0cb0 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -78,9 +78,9 @@ do {								\
+  */
+ #define __WARN_FLAGS(flags)					\
+ do {								\
+-	__auto_type f = BUGFLAG_WARNING|(flags);		\
++	__auto_type __flags = BUGFLAG_WARNING|(flags);		\
+ 	instrumentation_begin();				\
+-	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
++	_BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);		\
+ 	instrumentation_end();					\
+ } while (0)
  

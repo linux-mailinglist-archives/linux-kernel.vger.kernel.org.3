@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FBE4F4C26
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B114F4C5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576235AbiDEXKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S1578298AbiDEXTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452376AbiDEPyu (ORCPT
+        with ESMTP id S1452397AbiDEPyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:54:50 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3AF2DD63;
-        Tue,  5 Apr 2022 07:54:02 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j12so12116963wrb.5;
-        Tue, 05 Apr 2022 07:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+pnKCsRfb2rzqCckVdTkSoUT8v6CdUCSShmPSLzCyP0=;
-        b=LX4HOgTQVkwMDbSE3DgKngp+uhFQ8ZfVZwEpwb8isiAUd8/XQmnnc769W4bGAiZCC7
-         RWY38LhoMvuzKnd3jlxHJay7yUi68ecJ+e2aemylOEILuQurMuPkzYR0cixwAzcmtmxv
-         GUSmMyLT4xt5C/V5FCYhJTpWYL8PosCycpY1hUagZQqT+ej+TD2klvXzeb4yf9KTg1wC
-         haw47fZzkfqi/Cwb60l2uaYcl7RydVP6yRh0WTFfgx5v+zLEX3CKVvBBuEM3bEpJvYKk
-         5wOwoPdIZ94XVjIEQaLE22UZreCuWjLAkhaFTrZ1IilpGD+o6Z9A3TpmwCN0K71FIP8y
-         85yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+pnKCsRfb2rzqCckVdTkSoUT8v6CdUCSShmPSLzCyP0=;
-        b=lXpPkzeo3DPny55NikfnbAa6MpBqcVntXCk8BUP5BVTzVFofbo4ivp6qKp9ml7U2qI
-         D6LdFehhAVJCSFGFmJpPYuKGstfCgA+lFoYQAcP+hdeLxz/QbKtHQSk30J0AeLsPNjE0
-         fm9iDM84Fr8KxFiolN4juPGB22ERfJOvUerNy7EdPgay2Kb3KZL/Hk+vlGxtzSdghwqB
-         su4v6bIPs0jnAmYEHy0VHpi37WrQVWgQYH4KcP7svYqHIzGS/ucqhn58NBxSEFqL+jHt
-         0EilWjv7viKdpYd1Kjv3TOuVm9pObronaUy3Gf/wdgKcq+wU/7AHRDnVZ/jvvAA4s1RH
-         Rgdg==
-X-Gm-Message-State: AOAM533MSctd5Ido8gFWxQocw5r3w7skUVh1Nqt2GLaECau2NkNyp/hK
-        /SFIvzpkAsme0TBVUFMiww4=
-X-Google-Smtp-Source: ABdhPJx9J+H9RdYMUjeVJaoXCv7F9LT5FTx30HNzWlpNFGTPDHPZRSy8pztLyEdDBAXRD0EY+/Dy+w==
-X-Received: by 2002:a05:6000:15ce:b0:204:1113:b053 with SMTP id y14-20020a05600015ce00b002041113b053mr3006630wry.701.1649170440961;
-        Tue, 05 Apr 2022 07:54:00 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a05600c1d8e00b0038dbb5ecc8asm2467434wms.2.2022.04.05.07.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 07:54:00 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <4d2e9c6c-af14-18d1-0f07-f06196543640@redhat.com>
-Date:   Tue, 5 Apr 2022 16:53:59 +0200
+        Tue, 5 Apr 2022 11:54:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F22445514
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=IewJ5FbjVkowhuDQ9RQAlMe54keYpdgNViGTWxozKWc=; b=quO14FwJRbcL5PXhvDM7UO5Np8
+        PtFikFw6HNTT4VBrn26VikUuxpv/d0fYcF/gCGbgvlkziJu1LFdY58GW5SIo/Pv0T2GCaQH0ovd7B
+        XprFHaRU6Lu5djhouvH0bASHSBScaXWPghaeye7xQotILop2kX1t7BIu1P1dRq9RrVgGzUIOnhwoc
+        5du3aiiFn+lI8erbF0GxXx3xZ9vq+WLjHRK5DWi+llwGsj2Sp9v9CGKKgamybsPtF+Xu7JbZ2GCOn
+        f5IDKUMvxu3E67c5yAfpRfJJBjiFZ9S9GF4ZhijZi6Aox5zKLamm7VtYQS/y0RZ7JGcwxwnR//ylO
+        XF2q3NFQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbkZq-001scK-3i; Tue, 05 Apr 2022 14:54:38 +0000
+Message-ID: <663906a0-b464-10e9-529f-249eb0214cea@infradead.org>
+Date:   Tue, 5 Apr 2022 07:54:32 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 046/104] KVM: x86/tdp_mmu: refactor
- kvm_tdp_mmu_map()
+Subject: Re: [PATCH 1/2] ARM: vexpress/spc: Fix doxygen comments
 Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <8ac26dfbe645aa3e9a9f39c844dfec9c0ac841ec.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <8ac26dfbe645aa3e9a9f39c844dfec9c0ac841ec.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        kernel test robot <lkp@intel.com>
+References: <20220404130207.1162445-1-sudeep.holla@arm.com>
+ <008aae79-4a6c-721f-7ef5-7b73f6d7e000@infradead.org>
+ <20220405140800.baww2wrow3hdp5ho@bogus>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220405140800.baww2wrow3hdp5ho@bogus>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,105 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+
+
+On 4/5/22 07:08, Sudeep Holla wrote:
+> Hi Randy,
 > 
-> Factor out non-leaf SPTE population logic from kvm_tdp_mmu_map().  MapGPA
-> hypercall needs to populate non-leaf SPTE to record which GPA, private or
-> shared, is allowed in the leaf EPT entry.
+> On Mon, Apr 04, 2022 at 05:21:39PM -0700, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 4/4/22 06:02, Sudeep Holla wrote:
+>>> Kbuild bot reported the following doxygen build warning:
+>>>
+>>>   |  arch/arm/mach-versatile/spc.c:231: warning: This comment starts with
+>>>   |		'/**', but isn't a kernel-doc comment.
+>>>   |		Refer Documentation/doc-guide/kernel-doc.rst
+>>>   |  		* ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
+>>>
+>>> Fix the issue by dropping the parameters specified in the kernel doc.
+>>>
+>>> Cc: Liviu Dudau <liviu.dudau@arm.com>
+>>> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Link: https://lore.kernel.org/linux-doc/202204031026.4ogKxt89-lkp@intel.com
+>>> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+>>> ---
+>>>  arch/arm/mach-vexpress/spc.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
+>>> index 1c6500c4e6a1..8f99d47d4b89 100644
+>>> --- a/arch/arm/mach-vexpress/spc.c
+>>> +++ b/arch/arm/mach-vexpress/spc.c
+>>> @@ -228,7 +228,7 @@ static u32 standbywfi_cpu_mask(u32 cpu, u32 cluster)
+>>>  }
+>>>  
+>>>  /**
+>>> - * ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
+>>> + * ve_spc_cpu_in_wfi()
+>>
+>> This line still needs a "function short description," e.g.
+>>
+>> + * ve_spc_cpu_in_wfi() - fooble the barfloppity
+>>
+>> similar to what you did in patch 2/2.
 > 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> I did this intentionally, I can move only this from the other patch.
+> Since I saw few others w/o description, I addressed all at once in the
+> second patch and just remove warning reported in this patch. I am fine
+> either way.
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Oh, my bad. I didn't notice that it was the same function in
+both patches.
+So no problem there.
 
-and feel free to rebase/resubmit this one, with subject "KVM: 
-x86/tdp_mmu: extract tdp_mmu_populate_nonleaf()".
-
-Paolo
-
-> ---
->   arch/x86/kvm/mmu/tdp_mmu.c | 48 ++++++++++++++++++++++++--------------
->   1 file changed, 30 insertions(+), 18 deletions(-)
+>>
+>>>   *
+>>>   * @cpu: mpidr[7:0] bitfield describing CPU affinity level within cluster
+>>>   * @cluster: mpidr[15:8] bitfield describing cluster affinity level
+>>
+>> and I would s/doxygen/kernel-doc/ for both patches.
+>>
 > 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index b6ec2f112c26..8db262440d5c 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -955,6 +955,31 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
->   	return ret;
->   }
->   
-> +static bool tdp_mmu_populate_nonleaf(
-> +	struct kvm_vcpu *vcpu, struct tdp_iter *iter, bool account_nx)
-> +{
-> +	struct kvm_mmu_page *sp;
-> +	u64 *child_pt;
-> +	u64 new_spte;
-> +
-> +	WARN_ON(is_shadow_present_pte(iter->old_spte));
-> +	WARN_ON(is_removed_spte(iter->old_spte));
-> +
-> +	sp = alloc_tdp_mmu_page(vcpu, iter->gfn, iter->level - 1);
-> +	child_pt = sp->spt;
-> +
-> +	new_spte = make_nonleaf_spte(child_pt, !shadow_accessed_mask);
-> +
-> +	if (!tdp_mmu_set_spte_atomic(vcpu->kvm, iter, new_spte)) {
-> +		tdp_mmu_free_sp(sp);
-> +		return false;
-> +	}
-> +
-> +	tdp_mmu_link_page(vcpu->kvm, sp, account_nx);
-> +	trace_kvm_mmu_get_page(sp, true);
-> +	return true;
-> +}
-> +
->   /*
->    * Handle a TDP page fault (NPT/EPT violation/misconfiguration) by installing
->    * page tables and SPTEs to translate the faulting guest physical address.
-> @@ -963,9 +988,6 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->   {
->   	struct kvm_mmu *mmu = vcpu->arch.mmu;
->   	struct tdp_iter iter;
-> -	struct kvm_mmu_page *sp;
-> -	u64 *child_pt;
-> -	u64 new_spte;
->   	int ret;
->   
->   	kvm_mmu_hugepage_adjust(vcpu, fault);
-> @@ -1000,6 +1022,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->   		}
->   
->   		if (!is_shadow_present_pte(iter.old_spte)) {
-> +			bool account_nx;
-> +
->   			/*
->   			 * If SPTE has been frozen by another thread, just
->   			 * give up and retry, avoiding unnecessary page table
-> @@ -1008,22 +1032,10 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->   			if (is_removed_spte(iter.old_spte))
->   				break;
->   
-> -			sp = alloc_tdp_mmu_page(vcpu, iter.gfn, iter.level - 1);
-> -			child_pt = sp->spt;
-> -
-> -			new_spte = make_nonleaf_spte(child_pt,
-> -						     !shadow_accessed_mask);
-> -
-> -			if (tdp_mmu_set_spte_atomic(vcpu->kvm, &iter, new_spte)) {
-> -				tdp_mmu_link_page(vcpu->kvm, sp,
-> -						  fault->huge_page_disallowed &&
-> -						  fault->req_level >= iter.level);
-> -
-> -				trace_kvm_mmu_get_page(sp, true);
-> -			} else {
-> -				tdp_mmu_free_sp(sp);
-> +			account_nx = fault->huge_page_disallowed &&
-> +				fault->req_level >= iter.level;
-> +			if (!tdp_mmu_populate_nonleaf(vcpu, &iter, account_nx))
->   				break;
-> -			}
->   		}
->   	}
->   
+> Sure will do.
+> 
 
+thanks.
+-- 
+~Randy

@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F084F51B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE324F5031
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846996AbiDFCLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S1840809AbiDFBL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354820AbiDELOe (ORCPT
+        with ESMTP id S1356944AbiDELPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:14:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA7534645
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649154848; x=1680690848;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wE7WnuflTy23S/MzwsasqatqGxi2PSOTMG99EoSFEkA=;
-  b=XsUYguQX9Ge/gYJHknl+2zHzcHzx2vNbdHkTJh4EE92N9vAXNMuPmsQe
-   3sPG4l4A7Up5ZX7Fzx+IaEhSb3eRg4vsWC8krPfgfKUIWauAR/Edrt3+x
-   LJz5YHB80/FZpuHREFKeLmp3T7pw3SaBe7Vx16jhGbopYoT7+pHZhJ+Ih
-   qNUwBOSYh33JvMiJwkyPnnxFAgl61UbB4MfZWOKg6oof/LuezsWdZrAD/
-   Zb24FzvV5RKnyuPThsD3LE+i1m2wlh7OuVwJa49hMTtlOnMiMfunZh2u+
-   tq7Y01BpYETDGcc0h6k0+thLQdyLJP70N55QHFchKgdUpOLR7/XV9d57t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260413622"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="260413622"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 03:34:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="657886107"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2022 03:34:02 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbgVd-000347-TY;
-        Tue, 05 Apr 2022 10:34:01 +0000
-Date:   Tue, 5 Apr 2022 18:33:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] RISC-V: fix semicolon.cocci warnings
-Message-ID: <Ykwa7goC59ZOVumR@289769a4d63e>
-References: <202204051806.SNUnP4eo-lkp@intel.com>
+        Tue, 5 Apr 2022 07:15:55 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D416C546AC;
+        Tue,  5 Apr 2022 03:37:05 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 642EC1EC02B9;
+        Tue,  5 Apr 2022 12:37:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649155020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aAiETv6NNGhLTTzIDJkzKivJQy7gSmYaJopESRTcDRQ=;
+        b=F6XF/rJjfwXREbr0pfnpBYgpNjGCPYK6nNqwoTSXR6Gfdo/AZreDbP6b5t6kW4MpUzL89c
+        XCX8+pyP9quh9tkkJ0KxtKIpPJIolvLGZdQnpaGnI+4Ewz5fgr2HHJTH8/tVuS57trpB3v
+        JXBPpkUNIbGrrM98joAlAPTpsj4hG8Y=
+Date:   Tue, 5 Apr 2022 12:36:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Richard Biener <rguenther@suse.de>
+Cc:     linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: older gccs and case labels producing integer constants
+Message-ID: <YkwbygWj/C3XooMV@zn.tnic>
+References: <YkwQ6+tIH8GQpuct@zn.tnic>
+ <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
+ <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202204051806.SNUnP4eo-lkp@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
+> Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
+> compiler flags genommen werden?
 
-arch/riscv/kernel/smp.c:120:2-3: Unneeded semicolon
+Found it:
 
+$ gcc -fsanitize=shift -c switch.c
+switch.c: In function ‘foo’:
+switch.c:10:7: error: case label does not reduce to an integer constant
+       case (((0xfc08) << 16) | (0x0101)):;
 
- Remove unneeded semicolon.
+$ gcc --version
+gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
+Copyright (C) 2017 Free Software Foundation, Inc.
 
-Generated by: scripts/coccinelle/misc/semicolon.cocci
+Something not fully backported?
 
-CC: Anup Patel <apatel@ventanamicro.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
+Thx.
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   dab41b5c8f55fb8e864a5e10fd181dd0d4443778
-commit: 9951f846b51d68f916cfa08140171cbcc8c0d02b [9/29] RISC-V: Treat IPIs as normal Linux IRQs
-:::::: branch date: 29 hours ago
-:::::: commit date: 29 hours ago
+-- 
+Regards/Gruss,
+    Boris.
 
- arch/riscv/kernel/smp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -117,7 +117,7 @@ static irqreturn_t handle_IPI(int irq, v
- 	default:
- 		pr_warn("CPU%d: unhandled IPI%d\n", smp_processor_id(), ipi);
- 		break;
--	};
-+	}
- 
- 	return IRQ_HANDLED;
- }
+https://people.kernel.org/tglx/notes-about-netiquette

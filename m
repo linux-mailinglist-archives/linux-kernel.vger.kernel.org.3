@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A094F2E5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2534F2E61
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242101AbiDEIgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S237696AbiDEI3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235449AbiDEH7o (ORCPT
+        with ESMTP id S234613AbiDEH6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:44 -0400
+        Tue, 5 Apr 2022 03:58:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF28F5A156;
-        Tue,  5 Apr 2022 00:54:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94659A94C5;
+        Tue,  5 Apr 2022 00:52:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 395E3B81B18;
-        Tue,  5 Apr 2022 07:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E36C340EE;
-        Tue,  5 Apr 2022 07:54:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7ED2B81B14;
+        Tue,  5 Apr 2022 07:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209B4C34110;
+        Tue,  5 Apr 2022 07:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145267;
-        bh=IsYGMWcOLC2kDDO8OFJfhbKJ+skf8w8cVCluqFXU9Jw=;
+        s=korg; t=1649145176;
+        bh=w6IIUKVs89R5LQU7C6a2ZqdX/tYHmHkwDBHZ4jPxnts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ujv09Viq89SpK2Xe542aS4UoP4bXqOj9ZOR63ketVMRAHouZckWOv7deBgoBsCN0v
-         JWyIc05I1di1X4PJkirVVmmDVQohDGDvwxWv6m4X4/PacNLH23AvFyJqCE3rg+fEiu
-         qlC4ByBAYKF0U1W8M4Sgxr8lss+MQIoy3y+yT/Ps=
+        b=c9u2zBbEx0Die03jb+wy98vvKMRFaritjGyOZtQPs1BjGWTaxE2YtKs9rVJgnxJ5N
+         fUW1/tAg7Vt08TzVEV0y7KuQEmTL0ePwJLSEc36yVM/I+mfNxkgRV9f8MrW3ld9qIo
+         CrTD0uoNOGhf32Qh8IdNNlcMFdOLSIO2xh+crdFI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0306/1126] ASoC: xilinx: xlnx_formatter_pcm: Handle sysclk setting
-Date:   Tue,  5 Apr 2022 09:17:33 +0200
-Message-Id: <20220405070416.596209885@linuxfoundation.org>
+Subject: [PATCH 5.17 0313/1126] media: v4l: Avoid unaligned access warnings when printing 4cc modifiers
+Date:   Tue,  5 Apr 2022 09:17:40 +0200
+Message-Id: <20220405070416.803405485@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,90 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 1c5091fbe7e0d0804158200b7feac5123f7b4fbd ]
+[ Upstream commit 24bb30c8c894ec7213ad810b46e2a6a4c12136c1 ]
 
-This driver did not set the MM2S Fs Multiplier Register to the proper
-value for playback streams. This needs to be set to the sample rate to
-MCLK multiplier, or random stream underflows can occur on the downstream
-I2S transmitter.
+Pointers V4L2 pixelformat and dataformat fields in a few packed structs
+are directly passed to printk family of functions. This could result in an
+unaligned access albeit no such possibility appears to exist at the
+moment i.e. this clang warning appears to be a false positive.
 
-Store the sysclk value provided via the set_sysclk callback and use that
-in conjunction with the sample rate in the hw_params callback to calculate
-the proper value to set for this register.
+Address the warning by copying the pixelformat or dataformat value to a
+local variable first.
 
-Fixes: 6f6c3c36f091 ("ASoC: xlnx: add pcm formatter platform driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Link: https://lore.kernel.org/r/20220120195832.1742271-2-robert.hancock@calian.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e927e1e0f0dd ("v4l: ioctl: Use %p4cc printk modifier to print FourCC codes")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/xilinx/xlnx_formatter_pcm.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/media/v4l2-core/v4l2-ioctl.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/xilinx/xlnx_formatter_pcm.c b/sound/soc/xilinx/xlnx_formatter_pcm.c
-index ce19a6058b27..5c4158069a5a 100644
---- a/sound/soc/xilinx/xlnx_formatter_pcm.c
-+++ b/sound/soc/xilinx/xlnx_formatter_pcm.c
-@@ -84,6 +84,7 @@ struct xlnx_pcm_drv_data {
- 	struct snd_pcm_substream *play_stream;
- 	struct snd_pcm_substream *capture_stream;
- 	struct clk *axi_clk;
-+	unsigned int sysclk;
- };
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 9ac557b8e146..642cb90f457c 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -279,8 +279,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	const struct v4l2_vbi_format *vbi;
+ 	const struct v4l2_sliced_vbi_format *sliced;
+ 	const struct v4l2_window *win;
+-	const struct v4l2_sdr_format *sdr;
+ 	const struct v4l2_meta_format *meta;
++	u32 pixelformat;
+ 	u32 planes;
+ 	unsigned i;
  
- /*
-@@ -314,6 +315,15 @@ static irqreturn_t xlnx_s2mm_irq_handler(int irq, void *arg)
- 	return IRQ_NONE;
+@@ -299,8 +299,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+ 		mp = &p->fmt.pix_mp;
++		pixelformat = mp->pixelformat;
+ 		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+-			mp->width, mp->height, &mp->pixelformat,
++			mp->width, mp->height, &pixelformat,
+ 			prt_names(mp->field, v4l2_field_names),
+ 			mp->colorspace, mp->num_planes, mp->flags,
+ 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+@@ -343,14 +344,15 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 		break;
+ 	case V4L2_BUF_TYPE_SDR_CAPTURE:
+ 	case V4L2_BUF_TYPE_SDR_OUTPUT:
+-		sdr = &p->fmt.sdr;
+-		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
++		pixelformat = p->fmt.sdr.pixelformat;
++		pr_cont(", pixelformat=%p4cc\n", &pixelformat);
+ 		break;
+ 	case V4L2_BUF_TYPE_META_CAPTURE:
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		meta = &p->fmt.meta;
++		pixelformat = meta->dataformat;
+ 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+-			&meta->dataformat, meta->buffersize);
++			&pixelformat, meta->buffersize);
+ 		break;
+ 	}
  }
- 
-+static int xlnx_formatter_set_sysclk(struct snd_soc_component *component,
-+				     int clk_id, int source, unsigned int freq, int dir)
-+{
-+	struct xlnx_pcm_drv_data *adata = dev_get_drvdata(component->dev);
-+
-+	adata->sysclk = freq;
-+	return 0;
-+}
-+
- static int xlnx_formatter_pcm_open(struct snd_soc_component *component,
- 				   struct snd_pcm_substream *substream)
- {
-@@ -450,11 +460,25 @@ static int xlnx_formatter_pcm_hw_params(struct snd_soc_component *component,
- 	u64 size;
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct xlnx_pcm_stream_param *stream_data = runtime->private_data;
-+	struct xlnx_pcm_drv_data *adata = dev_get_drvdata(component->dev);
- 
- 	active_ch = params_channels(params);
- 	if (active_ch > stream_data->ch_limit)
- 		return -EINVAL;
- 
-+	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
-+	    adata->sysclk) {
-+		unsigned int mclk_fs = adata->sysclk / params_rate(params);
-+
-+		if (adata->sysclk % params_rate(params) != 0) {
-+			dev_warn(component->dev, "sysclk %u not divisible by rate %u\n",
-+				 adata->sysclk, params_rate(params));
-+			return -EINVAL;
-+		}
-+
-+		writel(mclk_fs, stream_data->mmio + XLNX_AUD_FS_MULTIPLIER);
-+	}
-+
- 	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE &&
- 	    stream_data->xfer_mode == AES_TO_PCM) {
- 		val = readl(stream_data->mmio + XLNX_AUD_STS);
-@@ -552,6 +576,7 @@ static int xlnx_formatter_pcm_new(struct snd_soc_component *component,
- 
- static const struct snd_soc_component_driver xlnx_asoc_component = {
- 	.name		= DRV_NAME,
-+	.set_sysclk	= xlnx_formatter_set_sysclk,
- 	.open		= xlnx_formatter_pcm_open,
- 	.close		= xlnx_formatter_pcm_close,
- 	.hw_params	= xlnx_formatter_pcm_hw_params,
 -- 
 2.34.1
 

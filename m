@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A064F4176
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720344F401F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356316AbiDEMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S1390177AbiDENhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242416AbiDEJHy (ORCPT
+        with ESMTP id S242408AbiDEJHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:07:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90A68FBF;
-        Tue,  5 Apr 2022 01:56:46 -0700 (PDT)
+        Tue, 5 Apr 2022 05:07:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E526AA49;
+        Tue,  5 Apr 2022 01:56:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B77A61562;
-        Tue,  5 Apr 2022 08:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E14C385A0;
-        Tue,  5 Apr 2022 08:56:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D94961572;
+        Tue,  5 Apr 2022 08:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF95CC385A0;
+        Tue,  5 Apr 2022 08:56:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148998;
-        bh=1+Mngr6KGkheShOg7khTz8KoT3VtqXQ7du3xbknMR0E=;
+        s=korg; t=1649149007;
+        bh=/P8TunVzWGpmmpgr6qat+AphEiaH/CrUmR30w+542Fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ihTi9/7BWMSJh3WJ4qym9odvvx+hjYqnGCiLi55h3uCt1X8CIhtbVyGEZfi2pjJlG
-         0o9DBPY7hgq0kDIccDzUVHlz6lbYq21IUqPQQscPZz26QGnYmT+58OXlB6LdB07c2h
-         PCkP6NksZzSsT+TGKgOYEVLWUvJzLgoTqVGJDNec=
+        b=1qQKjnNVytpUXwgHNWappBGfyHGqchqGTtOjjO5x56FBPd2SsJfeCGUZOjGO3UKm4
+         IS07dC8/XRLKiL7IjbY1AJXYdjBrF3MvnYXfrKb30AngiXuGQNkTDvo2IMgWEbOKae
+         UHGbzC3J7N4rbmc3PzY+1P8fvSTKQR5Dr2NzNS2k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Ping Fang <pifang@redhat.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0558/1017] RDMA/irdma: Remove incorrect masking of PD
-Date:   Tue,  5 Apr 2022 09:24:31 +0200
-Message-Id: <20220405070410.844796945@linuxfoundation.org>
+Subject: [PATCH 5.16 0561/1017] powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+Date:   Tue,  5 Apr 2022 09:24:34 +0200
+Message-Id: <20220405070410.932484127@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,46 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mustafa Ismail <mustafa.ismail@intel.com>
+From: Daniel Henrique Barboza <danielhb413@gmail.com>
 
-[ Upstream commit 17850f2b0b4b806e47cc44df94186bfc2cdd490b ]
+[ Upstream commit 749ed4a20657bcea66a6e082ca3dc0d228cbec80 ]
 
-The PD id is masked with 0x7fff, while PD can be 18 bits for GEN2 HW.
-Remove the masking as it should not be needed and can cause incorrect PD
-id to be used.
+Executing node_set_online() when nid = NUMA_NO_NODE results in an
+undefined behavior. node_set_online() will call node_set_state(), into
+__node_set(), into set_bit(), and since NUMA_NO_NODE is -1 we'll end up
+doing a negative shift operation inside
+arch/powerpc/include/asm/bitops.h. This potential UB was detected
+running a kernel with CONFIG_UBSAN.
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Link: https://lore.kernel.org/r/20220225163211.127-4-shiraz.saleem@intel.com
-Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+The behavior was introduced by commit 10f78fd0dabb ("powerpc/numa: Fix a
+regression on memoryless node 0"), where the check for nid > 0 was
+removed to fix a problem that was happening with nid = 0, but the result
+is that now we're trying to online NUMA_NO_NODE nids as well.
+
+Checking for nid >= 0 will allow node 0 to be onlined while avoiding
+this UB with NUMA_NO_NODE.
+
+Fixes: 10f78fd0dabb ("powerpc/numa: Fix a regression on memoryless node 0")
+Reported-by: Ping Fang <pifang@redhat.com>
+Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220224182312.1012527-1-danielhb413@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/verbs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/mm/numa.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
-index 8cd5f9261692..03d4da16604d 100644
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -2504,7 +2504,7 @@ static int irdma_dealloc_mw(struct ib_mw *ibmw)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ibmw->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = false;
- 	cqp_info->cqp_cmd = IRDMA_OP_DEALLOC_STAG;
-@@ -3016,7 +3016,7 @@ static int irdma_dereg_mr(struct ib_mr *ib_mr, struct ib_udata *udata)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ib_mr->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = true;
- 	if (iwpbl->pbl_allocated)
+diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+index 59d3cfcd7887..5fb829256b59 100644
+--- a/arch/powerpc/mm/numa.c
++++ b/arch/powerpc/mm/numa.c
+@@ -956,7 +956,9 @@ static int __init parse_numa_properties(void)
+ 			of_node_put(cpu);
+ 		}
+ 
+-		node_set_online(nid);
++		/* node_set_online() is an UB if 'nid' is negative */
++		if (likely(nid >= 0))
++			node_set_online(nid);
+ 	}
+ 
+ 	get_n_mem_cells(&n_mem_addr_cells, &n_mem_size_cells);
 -- 
 2.34.1
 

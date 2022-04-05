@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06F74F40FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5504A4F4014
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445059AbiDEUI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S1347339AbiDENvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358068AbiDEK15 (ORCPT
+        with ESMTP id S1345501AbiDEJWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C13BBEC;
-        Tue,  5 Apr 2022 03:14:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83F44BBBB;
+        Tue,  5 Apr 2022 02:11:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C4DCB81C6C;
-        Tue,  5 Apr 2022 10:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADE2C385A0;
-        Tue,  5 Apr 2022 10:14:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC68761577;
+        Tue,  5 Apr 2022 09:11:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FE5C385A2;
+        Tue,  5 Apr 2022 09:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153659;
-        bh=D9I+rGgfR4xsdgyZ9tEUcIy10T7OjvR2xyL8W/yW+GE=;
+        s=korg; t=1649149863;
+        bh=ikSxT9pj5gq8C7xxZTzQaN50E1eobY1Xe6l3yY+D4Jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=POtDXnvmlg3r2a7Oq1Z4h9Z8l5rsi14UKuh35Sd4A46YMMM/RIft13OV69t6RHXPg
-         C9VykEwgbmA1ONHJoDAuXnclt4POJj9XkW+M0JUImFAl8YHPGTUsAgSA1iwRwf75Jx
-         4H8HYvqLMxKqQReqWp8Uclm4c6eRukW9QskDClRM=
+        b=kwhA9gtnzPJeZABwqD8FurEq1fO6uJmdIXhdqvVbkbiTHJiVwpeMuhpxaOiLpEDbG
+         2Nk7GGrwsO7PPNm0ByDk9ruhJ6L14rxYd4NhVogJlwAwN8arN1NA9+9Ch83kHNS3jW
+         f7MFlWEjHcMHNfKXjU9Luj6gqUT7mLbmrmHryPKs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 284/599] powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
-Date:   Tue,  5 Apr 2022 09:29:38 +0200
-Message-Id: <20220405070307.287328947@linuxfoundation.org>
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.16 0867/1017] powerpc/lib/sstep: Fix sthcx instruction
+Date:   Tue,  5 Apr 2022 09:29:40 +0200
+Message-Id: <20220405070419.971576986@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,111 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-[ Upstream commit 5ebb74749202a25da4b3cc2eb15470225a05527c ]
+commit a633cb1edddaa643fadc70abc88f89a408fa834a upstream.
 
-On board rev A, the network interface labels for the switch ports
-written on the front panel are different than on rev B and later.
+Looks like there been a copy paste mistake when added the instruction
+'stbcx' twice and one was probably meant to be 'sthcx'. Changing to
+'sthcx' from 'stbcx'.
 
-This patch fixes network interface names for the switch ports according
-to labels that are written on the front panel of the board rev B.
-They start from ETH3 and end at ETH10.
-
-This patch also introduces a separate device tree for rev A.
-The main device tree is supposed to cover rev B and later.
-
-Fixes: e69eb0824d8c ("powerpc: dts: t1040rdb: add ports for Seville Ethernet switch")
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
+Cc: stable@vger.kernel.org # v4.14+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220121091447.3412907-1-bigunclemax@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220224162215.3406642-1-anders.roxell@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
- arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
- create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+ arch/powerpc/lib/sstep.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-new file mode 100644
-index 000000000000..73f8c998c64d
---- /dev/null
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * T1040RDB-REV-A Device Tree Source
-+ *
-+ * Copyright 2014 - 2015 Freescale Semiconductor Inc.
-+ *
-+ */
-+
-+#include "t1040rdb.dts"
-+
-+/ {
-+	model = "fsl,T1040RDB-REV-A";
-+	compatible = "fsl,T1040RDB-REV-A";
-+};
-+
-+&seville_port0 {
-+	label = "ETH5";
-+};
-+
-+&seville_port2 {
-+	label = "ETH7";
-+};
-+
-+&seville_port4 {
-+	label = "ETH9";
-+};
-+
-+&seville_port6 {
-+	label = "ETH11";
-+};
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-index af0c8a6f5613..b6733e7e6580 100644
---- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-@@ -119,7 +119,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_0>;
- 	phy-mode = "qsgmii";
--	label = "ETH5";
-+	label = "ETH3";
- 	status = "okay";
- };
- 
-@@ -135,7 +135,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_2>;
- 	phy-mode = "qsgmii";
--	label = "ETH7";
-+	label = "ETH5";
- 	status = "okay";
- };
- 
-@@ -151,7 +151,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_4>;
- 	phy-mode = "qsgmii";
--	label = "ETH9";
-+	label = "ETH7";
- 	status = "okay";
- };
- 
-@@ -167,7 +167,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_6>;
- 	phy-mode = "qsgmii";
--	label = "ETH11";
-+	label = "ETH9";
- 	status = "okay";
- };
- 
--- 
-2.34.1
-
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -3389,7 +3389,7 @@ int emulate_loadstore(struct pt_regs *re
+ 			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
+ 			break;
+ 		case 2:
+-			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
++			__put_user_asmx(op->val, ea, err, "sthcx.", cr);
+ 			break;
+ #endif
+ 		case 4:
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E844F396D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729204F396A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378517AbiDELeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S1378403AbiDELd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbiDEIw1 (ORCPT
+        with ESMTP id S244615AbiDEIw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36C61088;
-        Tue,  5 Apr 2022 01:41:26 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF796D7629;
+        Tue,  5 Apr 2022 01:41:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91DBC614E4;
-        Tue,  5 Apr 2022 08:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8F2C385A0;
-        Tue,  5 Apr 2022 08:41:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E66561504;
+        Tue,  5 Apr 2022 08:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63349C385A0;
+        Tue,  5 Apr 2022 08:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148086;
-        bh=9Y8hspwR757HQR50VmYUTmXqz6gF2M9OELzXprpEHMU=;
+        s=korg; t=1649148088;
+        bh=73g0vRZHkLoIdRK+kuziBsFo9/eHSDkmHeaOqenIWfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=loOaz+LqNDQZ77uhdaDrI6QHZJhk9o6YIvx0P1w1UseZD1+Ap0jaRv8W1h9gIpCMP
-         DaCd8xKOxYMIn++aYrwT18OADt52jeVfi+aWKkAEk3kJ4CCXaodmHI6sOBoBYADUKo
-         YH/U9NUCovzEuxyYnpPCtC+wBdh/IJ84eyk4plbk=
+        b=UZX+9RYPDd2056nyHZsFQqMlG22XqG0I+uQ+kMO4rWPHqqal78EMiU+3eVuPDzpJR
+         0TiXFi62sDt348GBk3vYh4UlcYsHRDX/aSdaihuojOyAdEKWSP4pXzIWnx3y2JAz7M
+         3wELVXb0XdU7d/v9VEB+OHocjh2tG14AmLOSVf3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0230/1017] nvme: fix the check for duplicate unique identifiers
-Date:   Tue,  5 Apr 2022 09:19:03 +0200
-Message-Id: <20220405070401.081684539@linuxfoundation.org>
+Subject: [PATCH 5.16 0231/1017] block: dont delete queue kobject before its children
+Date:   Tue,  5 Apr 2022 09:19:04 +0200
+Message-Id: <20220405070401.111268685@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,67 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit e2724cb9f0c406b8fb66efd3aa9e8b3edfd8d5c8 ]
+[ Upstream commit 0f69288253e9fc7c495047720e523b9f1aba5712 ]
 
-nvme_subsys_check_duplicate_ids should needs to return an error if any of
-the identifiers matches, not just if all of them match.  But it does not
-need to and should not look at the CSI value for this sanity check.
+kobjects aren't supposed to be deleted before their child kobjects are
+deleted.  Apparently this is usually benign; however, a WARN will be
+triggered if one of the child kobjects has a named attribute group:
 
-Rewrite the logic to be separate from nvme_ns_ids_equal and optimize it
-by reducing duplicate checks for non-present identifiers.
+    sysfs group 'modes' not found for kobject 'crypto'
+    WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:278 sysfs_remove_group+0x72/0x80
+    ...
+    Call Trace:
+      sysfs_remove_groups+0x29/0x40 fs/sysfs/group.c:312
+      __kobject_del+0x20/0x80 lib/kobject.c:611
+      kobject_cleanup+0xa4/0x140 lib/kobject.c:696
+      kobject_release lib/kobject.c:736 [inline]
+      kref_put include/linux/kref.h:65 [inline]
+      kobject_put+0x53/0x70 lib/kobject.c:753
+      blk_crypto_sysfs_unregister+0x10/0x20 block/blk-crypto-sysfs.c:159
+      blk_unregister_queue+0xb0/0x110 block/blk-sysfs.c:962
+      del_gendisk+0x117/0x250 block/genhd.c:610
 
-Fixes: ed754e5deeb1 ("nvme: track shared namespaces")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Keith Busch <kbusch@kernel.org>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Fix this by moving the kobject_del() and the corresponding
+kobject_uevent() to the correct place.
+
+Fixes: 2c2086afc2b8 ("block: Protect less code with sysfs_lock in blk_{un,}register_queue()")
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220124215938.2769-3-ebiggers@kernel.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ block/blk-sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 078ad43b94a1..1b39b50cb958 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1685,13 +1685,6 @@ static void nvme_config_discard(struct gendisk *disk, struct nvme_ns *ns)
- 		blk_queue_max_write_zeroes_sectors(queue, UINT_MAX);
- }
- 
--static bool nvme_ns_ids_valid(struct nvme_ns_ids *ids)
--{
--	return !uuid_is_null(&ids->uuid) ||
--		memchr_inv(ids->nguid, 0, sizeof(ids->nguid)) ||
--		memchr_inv(ids->eui64, 0, sizeof(ids->eui64));
--}
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index cd75b0f73dc6..2fe8da2a7216 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -949,9 +949,6 @@ void blk_unregister_queue(struct gendisk *disk)
+ 	 */
+ 	if (queue_is_mq(q))
+ 		blk_mq_unregister_dev(disk_to_dev(disk), q);
 -
- static bool nvme_ns_ids_equal(struct nvme_ns_ids *a, struct nvme_ns_ids *b)
- {
- 	return uuid_equal(&a->uuid, &b->uuid) &&
-@@ -3608,12 +3601,21 @@ static struct nvme_ns_head *nvme_find_ns_head(struct nvme_subsystem *subsys,
- static int nvme_subsys_check_duplicate_ids(struct nvme_subsystem *subsys,
- 		struct nvme_ns_ids *ids)
- {
-+	bool has_uuid = !uuid_is_null(&ids->uuid);
-+	bool has_nguid = memchr_inv(ids->nguid, 0, sizeof(ids->nguid));
-+	bool has_eui64 = memchr_inv(ids->eui64, 0, sizeof(ids->eui64));
- 	struct nvme_ns_head *h;
+-	kobject_uevent(&q->kobj, KOBJ_REMOVE);
+-	kobject_del(&q->kobj);
+ 	blk_trace_remove_sysfs(disk_to_dev(disk));
  
- 	lockdep_assert_held(&subsys->lock);
+ 	mutex_lock(&q->sysfs_lock);
+@@ -959,6 +956,11 @@ void blk_unregister_queue(struct gendisk *disk)
+ 		elv_unregister_queue(q);
+ 	disk_unregister_independent_access_ranges(disk);
+ 	mutex_unlock(&q->sysfs_lock);
++
++	/* Now that we've deleted all child objects, we can delete the queue. */
++	kobject_uevent(&q->kobj, KOBJ_REMOVE);
++	kobject_del(&q->kobj);
++
+ 	mutex_unlock(&q->sysfs_dir_lock);
  
- 	list_for_each_entry(h, &subsys->nsheads, entry) {
--		if (nvme_ns_ids_valid(ids) && nvme_ns_ids_equal(ids, &h->ids))
-+		if (has_uuid && uuid_equal(&ids->uuid, &h->ids.uuid))
-+			return -EINVAL;
-+		if (has_nguid &&
-+		    memcmp(&ids->nguid, &h->ids.nguid, sizeof(ids->nguid)) == 0)
-+			return -EINVAL;
-+		if (has_eui64 &&
-+		    memcmp(&ids->eui64, &h->ids.eui64, sizeof(ids->eui64)) == 0)
- 			return -EINVAL;
- 	}
- 
+ 	kobject_put(&disk_to_dev(disk)->kobj);
 -- 
 2.34.1
 

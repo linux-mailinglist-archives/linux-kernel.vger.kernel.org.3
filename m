@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910DE4F4836
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44554F439F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378086AbiDEVbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S1356024AbiDEMuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348816AbiDEJsj (ORCPT
+        with ESMTP id S238424AbiDEJFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C04BAD13A;
-        Tue,  5 Apr 2022 02:36:14 -0700 (PDT)
+        Tue, 5 Apr 2022 05:05:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1DB3204A;
+        Tue,  5 Apr 2022 01:56:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C87ACB81C6F;
-        Tue,  5 Apr 2022 09:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D16C385A3;
-        Tue,  5 Apr 2022 09:36:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4FD961476;
+        Tue,  5 Apr 2022 08:56:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB26C385A0;
+        Tue,  5 Apr 2022 08:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151371;
-        bh=uh6t0IM5JSArKmFLvESsXuzZXPxoy6hHcZn+C8QRKXs=;
+        s=korg; t=1649148960;
+        bh=XsRduxZtTDbtWyJYNuVfIxnpKzpREhUg0fNjCeY0/q8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uJIRBTjKqolzi648kiExuNtqtfyTLbov8Y/QCV3uaVvkXpQ1LdHLUKzjlX4wm3bnc
-         I0IMnVRn08smICWamq5P0j2Kh3PMy+F8ar950P/rwPkly+h28qER69wMnHhxxSAhhb
-         NExqL0kTRxaFJhtWbdTyyNd/lLXwyy0fTFVF/mfo=
+        b=Yq/BApXS47WlvthyDK7IaudL9zskd2b8w+SNtTdvYEWsaPiguGB2of/DQmb36279e
+         cCN8FgIVzIoYPxayQi0aGtgM9pboGsh6a/8pVIBkmcgn1vQ5rKhOGJe5eseA2nELup
+         3yFfELQ2av3NgO+XuInux+pR0BOuG7B8St5TSxyE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 391/913] Bluetooth: btintel: Fix WBS setting for Intel legacy ROM products
-Date:   Tue,  5 Apr 2022 09:24:13 +0200
-Message-Id: <20220405070351.567794770@linuxfoundation.org>
+Subject: [PATCH 5.16 0542/1017] net: dsa: realtek-smi: move to subdirectory
+Date:   Tue,  5 Apr 2022 09:24:15 +0200
+Message-Id: <20220405070410.376748345@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +61,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tedd Ho-Jeong An <tedd.an@intel.com>
+From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
-[ Upstream commit 55235304c2560d4a94ccfff2a47ea927b4114064 ]
+[ Upstream commit 319a70a5fea9590e9431dd57f56191996c4787f4 ]
 
-This patch adds the flag to identify the Intel legacy ROM products that
-don't support WBS like WP and StP.
-
-Fixes: 3df4dfbec0f29 ("Bluetooth: btintel: Move hci quirks to setup routine")
-Signed-off-by: Tedd Ho-Jeong An <tedd.an@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btintel.c | 11 ++++++++---
- drivers/bluetooth/btintel.h |  1 +
- drivers/bluetooth/btusb.c   |  6 ++++++
- 3 files changed, 15 insertions(+), 3 deletions(-)
+ MAINTAINERS                                   |  3 +--
+ drivers/net/dsa/Kconfig                       | 12 +----------
+ drivers/net/dsa/Makefile                      |  3 +--
+ drivers/net/dsa/realtek/Kconfig               | 20 +++++++++++++++++++
+ drivers/net/dsa/realtek/Makefile              |  3 +++
+ .../net/dsa/{ => realtek}/realtek-smi-core.c  |  0
+ .../net/dsa/{ => realtek}/realtek-smi-core.h  |  0
+ drivers/net/dsa/{ => realtek}/rtl8365mb.c     |  0
+ drivers/net/dsa/{ => realtek}/rtl8366.c       |  0
+ drivers/net/dsa/{ => realtek}/rtl8366rb.c     |  0
+ 10 files changed, 26 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/net/dsa/realtek/Kconfig
+ create mode 100644 drivers/net/dsa/realtek/Makefile
+ rename drivers/net/dsa/{ => realtek}/realtek-smi-core.c (100%)
+ rename drivers/net/dsa/{ => realtek}/realtek-smi-core.h (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8365mb.c (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8366.c (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8366rb.c (100%)
 
-diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-index e73d4c719b0a..d122cc973917 100644
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2263,10 +2263,15 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dd36acc87ce6..af9530d98717 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16147,8 +16147,7 @@ REALTEK RTL83xx SMI DSA ROUTER CHIPS
+ M:	Linus Walleij <linus.walleij@linaro.org>
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
+-F:	drivers/net/dsa/realtek-smi*
+-F:	drivers/net/dsa/rtl83*
++F:	drivers/net/dsa/realtek/*
  
- 			/* Apply the device specific HCI quirks
- 			 *
--			 * WBS for SdP - SdP and Stp have a same hw_varaint but
--			 * different fw_variant
-+			 * WBS for SdP - For the Legacy ROM products, only SdP
-+			 * supports the WBS. But the version information is not
-+			 * enough to use here because the StP2 and SdP have same
-+			 * hw_variant and fw_variant. So, this flag is set by
-+			 * the transport driver (btusb) based on the HW info
-+			 * (idProduct)
- 			 */
--			if (ver.hw_variant == 0x08 && ver.fw_variant == 0x22)
-+			if (!btintel_test_flag(hdev,
-+					       INTEL_ROM_LEGACY_NO_WBS_SUPPORT))
- 				set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED,
- 					&hdev->quirks);
+ REALTEK WIRELESS DRIVER (rtlwifi family)
+ M:	Ping-Ke Shih <pkshih@realtek.com>
+diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
+index 0029d279616f..37a3dabdce31 100644
+--- a/drivers/net/dsa/Kconfig
++++ b/drivers/net/dsa/Kconfig
+@@ -68,17 +68,7 @@ config NET_DSA_QCA8K
+ 	  This enables support for the Qualcomm Atheros QCA8K Ethernet
+ 	  switch chips.
  
-diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
-index 704e3b7bcb77..2b85ebf63321 100644
---- a/drivers/bluetooth/btintel.h
-+++ b/drivers/bluetooth/btintel.h
-@@ -147,6 +147,7 @@ enum {
- 	INTEL_BROKEN_INITIAL_NCMD,
- 	INTEL_BROKEN_SHUTDOWN_LED,
- 	INTEL_ROM_LEGACY,
-+	INTEL_ROM_LEGACY_NO_WBS_SUPPORT,
+-config NET_DSA_REALTEK_SMI
+-	tristate "Realtek SMI Ethernet switch family support"
+-	select NET_DSA_TAG_RTL4_A
+-	select NET_DSA_TAG_RTL8_4
+-	select FIXED_PHY
+-	select IRQ_DOMAIN
+-	select REALTEK_PHY
+-	select REGMAP
+-	help
+-	  This enables support for the Realtek SMI-based switch
+-	  chips, currently only RTL8366RB.
++source "drivers/net/dsa/realtek/Kconfig"
  
- 	__INTEL_NUM_FLAGS,
- };
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 0d5539066c0f..a68edbc7be0f 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -61,6 +61,7 @@ static struct usb_driver btusb_driver;
- #define BTUSB_QCA_WCN6855	0x1000000
- #define BTUSB_INTEL_BROKEN_SHUTDOWN_LED	0x2000000
- #define BTUSB_INTEL_BROKEN_INITIAL_NCMD 0x4000000
-+#define BTUSB_INTEL_NO_WBS_SUPPORT	0x8000000
- 
- static const struct usb_device_id btusb_table[] = {
- 	/* Generic Bluetooth USB device */
-@@ -384,9 +385,11 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x8087, 0x0033), .driver_info = BTUSB_INTEL_COMBINED },
- 	{ USB_DEVICE(0x8087, 0x07da), .driver_info = BTUSB_CSR },
- 	{ USB_DEVICE(0x8087, 0x07dc), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_NO_WBS_SUPPORT |
- 						     BTUSB_INTEL_BROKEN_INITIAL_NCMD |
- 						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_NO_WBS_SUPPORT |
- 						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0a2b), .driver_info = BTUSB_INTEL_COMBINED },
- 	{ USB_DEVICE(0x8087, 0x0aa7), .driver_info = BTUSB_INTEL_COMBINED |
-@@ -3863,6 +3866,9 @@ static int btusb_probe(struct usb_interface *intf,
- 		hdev->send = btusb_send_frame_intel;
- 		hdev->cmd_timeout = btusb_intel_cmd_timeout;
- 
-+		if (id->driver_info & BTUSB_INTEL_NO_WBS_SUPPORT)
-+			btintel_set_flag(hdev, INTEL_ROM_LEGACY_NO_WBS_SUPPORT);
+ config NET_DSA_SMSC_LAN9303
+ 	tristate
+diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
+index 8da1569a34e6..e73838c12256 100644
+--- a/drivers/net/dsa/Makefile
++++ b/drivers/net/dsa/Makefile
+@@ -9,8 +9,6 @@ obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
+ obj-$(CONFIG_NET_DSA_MT7530)	+= mt7530.o
+ obj-$(CONFIG_NET_DSA_MV88E6060) += mv88e6060.o
+ obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
+-obj-$(CONFIG_NET_DSA_REALTEK_SMI) += realtek-smi.o
+-realtek-smi-objs		:= realtek-smi-core.o rtl8366.o rtl8366rb.o rtl8365mb.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303) += lan9303-core.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_I2C) += lan9303_i2c.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_MDIO) += lan9303_mdio.o
+@@ -23,5 +21,6 @@ obj-y				+= microchip/
+ obj-y				+= mv88e6xxx/
+ obj-y				+= ocelot/
+ obj-y				+= qca/
++obj-y				+= realtek/
+ obj-y				+= sja1105/
+ obj-y				+= xrs700x/
+diff --git a/drivers/net/dsa/realtek/Kconfig b/drivers/net/dsa/realtek/Kconfig
+new file mode 100644
+index 000000000000..1c62212fb0ec
+--- /dev/null
++++ b/drivers/net/dsa/realtek/Kconfig
+@@ -0,0 +1,20 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menuconfig NET_DSA_REALTEK
++	tristate "Realtek Ethernet switch family support"
++	depends on NET_DSA
++	select NET_DSA_TAG_RTL4_A
++	select NET_DSA_TAG_RTL8_4
++	select FIXED_PHY
++	select IRQ_DOMAIN
++	select REALTEK_PHY
++	select REGMAP
++	help
++	  Select to enable support for Realtek Ethernet switch chips.
 +
- 		if (id->driver_info & BTUSB_INTEL_BROKEN_INITIAL_NCMD)
- 			btintel_set_flag(hdev, INTEL_BROKEN_INITIAL_NCMD);
- 
++config NET_DSA_REALTEK_SMI
++	tristate "Realtek SMI connected switch driver"
++	depends on NET_DSA_REALTEK
++	default y
++	help
++	  Select to enable support for registering switches connected
++	  through SMI.
+diff --git a/drivers/net/dsa/realtek/Makefile b/drivers/net/dsa/realtek/Makefile
+new file mode 100644
+index 000000000000..323b921bfce0
+--- /dev/null
++++ b/drivers/net/dsa/realtek/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_NET_DSA_REALTEK_SMI) 	+= realtek-smi.o
++realtek-smi-objs			:= realtek-smi-core.o rtl8366.o rtl8366rb.o rtl8365mb.o
+diff --git a/drivers/net/dsa/realtek-smi-core.c b/drivers/net/dsa/realtek/realtek-smi-core.c
+similarity index 100%
+rename from drivers/net/dsa/realtek-smi-core.c
+rename to drivers/net/dsa/realtek/realtek-smi-core.c
+diff --git a/drivers/net/dsa/realtek-smi-core.h b/drivers/net/dsa/realtek/realtek-smi-core.h
+similarity index 100%
+rename from drivers/net/dsa/realtek-smi-core.h
+rename to drivers/net/dsa/realtek/realtek-smi-core.h
+diff --git a/drivers/net/dsa/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8365mb.c
+rename to drivers/net/dsa/realtek/rtl8365mb.c
+diff --git a/drivers/net/dsa/rtl8366.c b/drivers/net/dsa/realtek/rtl8366.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8366.c
+rename to drivers/net/dsa/realtek/rtl8366.c
+diff --git a/drivers/net/dsa/rtl8366rb.c b/drivers/net/dsa/realtek/rtl8366rb.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8366rb.c
+rename to drivers/net/dsa/realtek/rtl8366rb.c
 -- 
 2.34.1
 

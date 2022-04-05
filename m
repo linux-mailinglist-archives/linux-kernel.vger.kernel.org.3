@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCF04F3A20
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9323B4F3A38
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379176AbiDELk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S1379395AbiDELks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244765AbiDEIwi (ORCPT
+        with ESMTP id S244777AbiDEIwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26F911C13;
-        Tue,  5 Apr 2022 01:43:36 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54313F4D;
+        Tue,  5 Apr 2022 01:43:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81BE560FFC;
-        Tue,  5 Apr 2022 08:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9912FC385A0;
-        Tue,  5 Apr 2022 08:43:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 912CBB81BC5;
+        Tue,  5 Apr 2022 08:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4310C385A0;
+        Tue,  5 Apr 2022 08:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148216;
-        bh=A2qwBWgC5bulOwxQ9UGNIGesob+YEhfQP+KL/rVuxJk=;
+        s=korg; t=1649148227;
+        bh=IQlQgUCjG42fAEaq4U78Y6LFtmOpKk1GRDjB9tZcYGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jWMZf42Efuw6b2dO5XSFX3qO/3Yo2v9+f7QPKU9ktVEzvAhgOCGuZevwJUB6/dIzW
-         91SjF96qTasLutLfh8+3FsXoAzaW4mL1F93NRB38spAyHJx9Jog/TBzg+bSNiCGPuE
-         JiSBOgouqptrNrWXQQxSHh1wiQy6Y/0imn7StzKA=
+        b=OZG1DBc5ndCjFKCNQ+n53JA6xRLFV7IjwjQEE4SRzusZ2dh09J6hIAITPJkZ+Dllb
+         XjseApgKDyQcKWPaHTdVJiP+h9JOembwqTByvTf8fMA2Gjm66KIwy8AbfCJuBfKyii
+         mUYk0VZ/tXZVi0nSK+54LdYWZzHj0swF3hf/p26k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        Robert Foss <robert.foss@linaro.org>,
+        Julian Grahsl <jgrahsl@snap.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0277/1017] pinctrl: samsung: Remove EINT handler for Exynos850 ALIVE and CMGP gpios
-Date:   Tue,  5 Apr 2022 09:19:50 +0200
-Message-Id: <20220405070402.489440084@linuxfoundation.org>
+Subject: [PATCH 5.16 0280/1017] media: camss: csid-170: dont enable unused irqs
+Date:   Tue,  5 Apr 2022 09:19:53 +0200
+Message-Id: <20220405070402.579620291@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,50 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Protsenko <semen.protsenko@linaro.org>
+From: Jonathan Marek <jonathan@marek.ca>
 
-[ Upstream commit 96f79935015cf3d7ca6fabf63cd13b8af45a7713 ]
+[ Upstream commit a6da362491e409de0978d733441e59db6584d69f ]
 
-GPIO_ALIVE and GPIO_CMGP blocks in Exynos850 SoC don't have EINT
-capabilities (like EINT_SVC register), and there are no corresponding
-interrupts wired to GIC. Instead those blocks have wake-up interrupts
-for each pin. The ".eint_gpio_init" callbacks were specified by mistake
-for these blocks, when porting pinctrl code from downstream kernel. That
-leads to error messages like this:
+csid_isr() only checks for the reset irq, so enabling any other irqs
+doesn't make sense. The "RDI irq" comment is also wrong, the register
+should be CSID_CSI2_RDIN_IRQ_MASK. Without this fix there may be an
+excessive amount of irqs.
 
-    samsung-pinctrl 11850000.pinctrl: irq number not available
-
-Remove ".eint_gpio_init" for pinctrl_alive and pinctrl_gpmc to fix this
-error. This change doesn't affect proper interrupt handling for related
-pins, as all those pins are handled in ".eint_wkup_init".
-
-Fixes: cdd3d945dcec ("pinctrl: samsung: Add Exynos850 SoC specific data")
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Link: https://lore.kernel.org/r/20220114203757.4860-1-semen.protsenko@linaro.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-index 6b77fd24571e..5c00be179082 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-@@ -504,13 +504,11 @@ static const struct samsung_pin_ctrl exynos850_pin_ctrl[] __initconst = {
- 		/* pin-controller instance 0 ALIVE data */
- 		.pin_banks	= exynos850_pin_banks0,
- 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks0),
--		.eint_gpio_init = exynos_eint_gpio_init,
- 		.eint_wkup_init = exynos_eint_wkup_init,
- 	}, {
- 		/* pin-controller instance 1 CMGP data */
- 		.pin_banks	= exynos850_pin_banks1,
- 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks1),
--		.eint_gpio_init = exynos_eint_gpio_init,
- 		.eint_wkup_init = exynos_eint_wkup_init,
- 	}, {
- 		/* pin-controller instance 2 AUD data */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index aa65043c3303..a006c8dbceb1 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -444,12 +444,6 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
+ 
+-	/* error irqs start at BIT(11) */
+-	writel_relaxed(~0u, csid->base + CSID_CSI2_RX_IRQ_MASK);
+-
+-	/* RDI irq */
+-	writel_relaxed(~0u, csid->base + CSID_TOP_IRQ_MASK);
+-
+ 	val = 1 << RDI_CTRL_HALT_CMD;
+ 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
+ }
 -- 
 2.34.1
 

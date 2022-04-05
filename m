@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFEE4F4737
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902994F4606
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348353AbiDEVEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S1392383AbiDEUG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352943AbiDEKFX (ORCPT
+        with ESMTP id S1358184AbiDEK2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0E3BF;
-        Tue,  5 Apr 2022 02:54:06 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458D69E9D5;
+        Tue,  5 Apr 2022 03:16:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2F04B818F3;
-        Tue,  5 Apr 2022 09:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0194C385A2;
-        Tue,  5 Apr 2022 09:54:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDE62B81B7A;
+        Tue,  5 Apr 2022 10:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68454C385A0;
+        Tue,  5 Apr 2022 10:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152442;
-        bh=i6ekhz8yvn0w0xbt01pqAW4L3Qfv2grJOD45n0DZ3D8=;
+        s=korg; t=1649153784;
+        bh=vC3HpaQC66yZXonEgmL5Uq5YOTH5rq+MgVEPdR036Wo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WcktfAjMTx31mNKEt8nzJBpvtLHrkBZdN4m1dlTqAtvXZkp9Vl50uMQWMfA2FjO+T
-         8wkFvid6uVrXCZSY98E9NJFpRf8Ml49COYIvwL6j48yET85P17v5PAceJ1+zRFGpPm
-         1bf2jr9x8PvDj3Pn9jvALKQ2sEkt3mK/6zw73Gzg=
+        b=RPsQraQ7SNI3hcqDJ6P+JEBa54aV+IfT8u3m5VB9JI+v0JcfX2EBCd4Xa0s0vjM1e
+         sNvSLQWfXySg8QqSdiY1ItobycgkT+vUAd0iNiVqD0RZlqusbPAA8YmwGmtTn3Ft6W
+         R39qvUfPzfqoyZ4mVABjTY5pzpgFDk40whuPkRi8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 777/913] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-Date:   Tue,  5 Apr 2022 09:30:39 +0200
-Message-Id: <20220405070403.124326505@linuxfoundation.org>
+        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 346/599] selftests/bpf: Make test_lwt_ip_encap more stable and faster
+Date:   Tue,  5 Apr 2022 09:30:40 +0200
+Message-Id: <20220405070309.124744738@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,127 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Felix Maurer <fmaurer@redhat.com>
 
-commit 47d3e5cdfe607ec6883eb0faa7acf05b8cb3f92a upstream.
+[ Upstream commit d23a8720327d33616f584d76c80824bfa4699be6 ]
 
-It has been proven on practice that at least Windows Server 2019 tries
-using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
-and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
-hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
-information is missing in TLFS as of 6.0b. Currently, KVM returns an error
-(HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
+In test_lwt_ip_encap, the ingress IPv6 encap test failed from time to
+time. The failure occured when an IPv4 ping through the IPv6 GRE
+encapsulation did not receive a reply within the timeout. The IPv4 ping
+and the IPv6 ping in the test used different timeouts (1 sec for IPv4
+and 6 sec for IPv6), probably taking into account that IPv6 might need
+longer to successfully complete. However, when IPv4 pings (with the
+short timeout) are encapsulated into the IPv6 tunnel, the delays of IPv6
+apply.
 
-Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
-all its parameters fit into RDX:R8 and this is handled by KVM correctly.
+The actual reason for the long delays with IPv6 was that the IPv6
+neighbor discovery sometimes did not complete in time. This was caused
+by the outgoing interface only having a tentative link local address,
+i.e., not having completed DAD for that lladdr. The ND was successfully
+retried after 1 sec but that was too late for the ping timeout.
 
-Cc: stable@vger.kernel.org # 5.14.x: 3244867af8c0: KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
-Cc: stable@vger.kernel.org # 5.14.x
-Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220222154642.684285-5-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The IPv6 addresses for the test were already added with nodad. However,
+for the lladdrs, DAD was still performed. We now disable DAD in the test
+netns completely and just assume that the two lladdrs on each veth pair
+do not collide. This removes all the delays for IPv6 traffic in the
+test.
+
+Without the delays, we can now also reduce the delay of the IPv6 ping to
+1 sec. This makes the whole test complete faster because we don't need
+to wait for the excessive timeout for each IPv6 ping that is supposed
+to fail.
+
+Fixes: 0fde56e4385b0 ("selftests: bpf: add test_lwt_ip_encap selftest")
+Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/4987d549d48b4e316cd5b3936de69c8d4bc75a4f.1646305899.git.fmaurer@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |   52 ++++++++++++++++++++++++++++++++------------------
- 1 file changed, 34 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/test_lwt_ip_encap.sh | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1889,6 +1889,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 	int sparse_banks_len;
- 	u32 vector;
- 	bool all_cpus;
-+	int i;
+diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+index b497bb85b667..6c69c42b1d60 100755
+--- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
++++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+@@ -120,6 +120,14 @@ setup()
+ 	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.default.rp_filter=0
+ 	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.default.rp_filter=0
  
- 	if (hc->code == HVCALL_SEND_IPI) {
- 		if (!hc->fast) {
-@@ -1909,9 +1910,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 
- 		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
- 	} else {
--		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
--					    sizeof(send_ipi_ex))))
--			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		if (!hc->fast) {
-+			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-+						    sizeof(send_ipi_ex))))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		} else {
-+			send_ipi_ex.vector = (u32)hc->ingpa;
-+			send_ipi_ex.vp_set.format = hc->outgpa;
-+			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
-+		}
- 
- 		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
- 					 send_ipi_ex.vp_set.format,
-@@ -1919,8 +1926,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 
- 		vector = send_ipi_ex.vector;
- 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
--		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
--			sizeof(sparse_banks[0]);
-+		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
- 
- 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
- 
-@@ -1930,12 +1936,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 		if (!sparse_banks_len)
- 			goto ret_success;
- 
--		if (kvm_read_guest(kvm,
--				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
--							vp_set.bank_contents),
--				   sparse_banks,
--				   sparse_banks_len))
--			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		if (!hc->fast) {
-+			if (kvm_read_guest(kvm,
-+					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
-+								vp_set.bank_contents),
-+					   sparse_banks,
-+					   sparse_banks_len * sizeof(sparse_banks[0])))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		} else {
-+			/*
-+			 * The lower half of XMM0 is already consumed, each XMM holds
-+			 * two sparse banks.
-+			 */
-+			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+			for (i = 0; i < sparse_banks_len; i++) {
-+				if (i % 2)
-+					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
-+				else
-+					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
-+			}
-+		}
- 	}
- 
- check_and_send_ipi:
-@@ -2097,6 +2118,7 @@ static bool is_xmm_fast_hypercall(struct
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
-+	case HVCALL_SEND_IPI_EX:
- 		return true;
- 	}
- 
-@@ -2264,14 +2286,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vc
- 		ret = kvm_hv_flush_tlb(vcpu, &hc);
- 		break;
- 	case HVCALL_SEND_IPI:
--		if (unlikely(hc.rep)) {
--			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
--			break;
--		}
--		ret = kvm_hv_send_ipi(vcpu, &hc);
--		break;
- 	case HVCALL_SEND_IPI_EX:
--		if (unlikely(hc.fast || hc.rep)) {
-+		if (unlikely(hc.rep)) {
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
++	# disable IPv6 DAD because it sometimes takes too long and fails tests
++	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.default.accept_dad=0
++
+ 	ip link add veth1 type veth peer name veth2
+ 	ip link add veth3 type veth peer name veth4
+ 	ip link add veth5 type veth peer name veth6
+@@ -289,7 +297,7 @@ test_ping()
+ 		ip netns exec ${NS1} ping  -c 1 -W 1 -I veth1 ${IPv4_DST} 2>&1 > /dev/null
+ 		RET=$?
+ 	elif [ "${PROTO}" == "IPv6" ] ; then
+-		ip netns exec ${NS1} ping6 -c 1 -W 6 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
++		ip netns exec ${NS1} ping6 -c 1 -W 1 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
+ 		RET=$?
+ 	else
+ 		echo "    test_ping: unknown PROTO: ${PROTO}"
+-- 
+2.34.1
+
 
 

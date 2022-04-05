@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6738F4F4854
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE774F4676
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380418AbiDEVg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S239935AbiDEUbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242760AbiDEKfQ (ORCPT
+        with ESMTP id S242757AbiDEKfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:35:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C19DF482;
-        Tue,  5 Apr 2022 03:19:17 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D0ADF484;
+        Tue,  5 Apr 2022 03:19:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39AC5B81C9A;
-        Tue,  5 Apr 2022 10:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E114C385A0;
-        Tue,  5 Apr 2022 10:19:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E22661676;
+        Tue,  5 Apr 2022 10:19:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464A6C385A0;
+        Tue,  5 Apr 2022 10:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153954;
-        bh=33NZsSJJ8AnEe2K5FZo3oYEbB5J35KI4bIowTRDBqLk=;
+        s=korg; t=1649153957;
+        bh=mNrzE2y4jaCJIXuG3CMdKKY1QnNmRPTne+P4BnMs2vQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FhkLbjA2cpZMQz6dOsWXkN87LngXmx6B6iD14rozxioUsCUjY7F63abuuI9BEAbJc
-         ZGHg3KjGXtxu8228Z2cZDWgdIXSqMJY8w9v0TWFO6eRiFYyp3MbYI9ZgmRhIyGiGNh
-         VgzC3rDqAWnchLqp/6AVxbXiVOHOn/ivykpCwyFA=
+        b=OySDktq2zJPzVgp9jSLLzaR/mHXNUmJ7Z5HjDSlrH4xkwecR+CZGCfwqCB5XCjT4H
+         etQY9lFuVbKnRdwDpvtbCs8HV7YRImqoEFYjvgS0B9N1YJ3O7QnMyGkSHOsswbSlLt
+         x1M8oS2SK1zKPhphtLZM8tWH+2qP20MASb4UXgj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Tanure <tanure@linux.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Peter Rosin <peda@axentia.se>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 369/599] i2c: meson: Fix wrong speed use from probe
-Date:   Tue,  5 Apr 2022 09:31:03 +0200
-Message-Id: <20220405070309.811230187@linuxfoundation.org>
+Subject: [PATCH 5.10 370/599] i2c: mux: demux-pinctrl: do not deactivate a master that is not active
+Date:   Tue,  5 Apr 2022 09:31:04 +0200
+Message-Id: <20220405070309.840620402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,57 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanure@linux.com>
+From: Peter Rosin <peda@axentia.se>
 
-[ Upstream commit cb13aa16f34f794a9cee2626862af8a95f0f0ee9 ]
+[ Upstream commit 1a22aabf20adf89cb216f566913196128766f25b ]
 
-Having meson_i2c_set_clk_div after i2c_add_adapter
-causes issues for client drivers that try to use
-the bus before the requested speed is applied.
+Attempting to rollback the activation of the current master when
+the current master has not been activated is bad. priv->cur_chan
+and priv->cur_adap are both still zeroed out and the rollback
+may result in attempts to revert an of changeset that has not been
+applied and do result in calls to both del and put the zeroed out
+i2c_adapter. Maybe it crashes, or whatever, but it's bad in any
+case.
 
-The bus can be used just after i2c_add_adapter, so
-move i2c_add_adapter to the final step as
-meson_i2c_set_clk_div needs to be called before
-the bus is used.
-
-Fixes: 09af1c2fa490 ("i2c: meson: set clock divider in probe instead of setting it for each transfer")
-Signed-off-by: Lucas Tanure <tanure@linux.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Fixes: e9d1a0a41d44 ("i2c: mux: demux-pinctrl: Fix an error handling path in 'i2c_demux_pinctrl_probe()'")
+Signed-off-by: Peter Rosin <peda@axentia.se>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-meson.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index ef73a42577cc..07eb819072c4 100644
---- a/drivers/i2c/busses/i2c-meson.c
-+++ b/drivers/i2c/busses/i2c-meson.c
-@@ -465,18 +465,18 @@ static int meson_i2c_probe(struct platform_device *pdev)
- 	 */
- 	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_START, 0);
+diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+index 5365199a31f4..f7a7405d4350 100644
+--- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+@@ -261,7 +261,7 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
  
--	ret = i2c_add_adapter(&i2c->adap);
--	if (ret < 0) {
--		clk_disable_unprepare(i2c->clk);
--		return ret;
--	}
--
- 	/* Disable filtering */
- 	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
- 			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
+ 	err = device_create_file(&pdev->dev, &dev_attr_available_masters);
+ 	if (err)
+-		goto err_rollback;
++		goto err_rollback_activation;
  
- 	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
+ 	err = device_create_file(&pdev->dev, &dev_attr_current_master);
+ 	if (err)
+@@ -271,8 +271,9 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
  
-+	ret = i2c_add_adapter(&i2c->adap);
-+	if (ret < 0) {
-+		clk_disable_unprepare(i2c->clk);
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
+ err_rollback_available:
+ 	device_remove_file(&pdev->dev, &dev_attr_available_masters);
+-err_rollback:
++err_rollback_activation:
+ 	i2c_demux_deactivate_master(priv);
++err_rollback:
+ 	for (j = 0; j < i; j++) {
+ 		of_node_put(priv->chan[j].parent_np);
+ 		of_changeset_destroy(&priv->chan[j].chgset);
 -- 
 2.34.1
 

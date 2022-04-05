@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B69D4F4FAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FC64F4FD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839167AbiDFA63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S1839716AbiDFBF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358211AbiDEK2G (ORCPT
+        with ESMTP id S1358237AbiDEK2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C320BD8;
-        Tue,  5 Apr 2022 03:17:07 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1BE26F7;
+        Tue,  5 Apr 2022 03:17:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36A51B81C98;
-        Tue,  5 Apr 2022 10:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B39AC385A2;
-        Tue,  5 Apr 2022 10:17:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88D9961777;
+        Tue,  5 Apr 2022 10:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEACC385A0;
+        Tue,  5 Apr 2022 10:17:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153824;
-        bh=CgVWNZ4s6TTDhylBTZIbCfgSt6/RIwAvVCsnksuYJjI=;
+        s=korg; t=1649153839;
+        bh=4pqGxkskrWE83X7/O4wtvxnLKOLOnMpMjiOgycSXnrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BgaAMXIapjOVu43bP6pt5SBlFvImqdEUVx7E5BCru64Kj0r+azVZyTcdFNuMyPFsg
-         pm2sD9Kj5lEv1rXF45b/FqSyt5fck3g2hHORHA3xVpEHiXYzlVLsr9RdwAUavNFreD
-         x32BeayWMdqP/g9S/lpIIa9NA9VD+aFLzvjBnRV8=
+        b=mjz33JUEOOpXn7e5jTI/4DLfUU+xRvJNkXlJ0LK3GeIh5ro7fAN5rlDyySVEdtoh5
+         DeQtra9AGg/hJUjRlysqTgZcxrTC4I0Xj5nnN46P93dWr/ejRPclDglJkqgNML5vbD
+         ORvvVJ/TbUG/N9PtC7aejJ1FhrleziUaee29MNt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 359/599] samples/bpf, xdpsock: Fix race when running for fix duration of time
-Date:   Tue,  5 Apr 2022 09:30:53 +0200
-Message-Id: <20220405070309.515064687@linuxfoundation.org>
+Subject: [PATCH 5.10 363/599] bareudp: use ipv6_mod_enabled to check if IPv6 enabled
+Date:   Tue,  5 Apr 2022 09:30:57 +0200
+Message-Id: <20220405070309.633052193@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,69 +56,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund@corigine.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 8fa42d78f6354bb96ad3a079dcbef528ca9fa9e0 ]
+[ Upstream commit e077ed58c243afc197bc2a2ba0e1ff61135e4ec2 ]
 
-When running xdpsock for a fix duration of time before terminating
-using --duration=<n>, there is a race condition that may cause xdpsock
-to terminate immediately.
+bareudp_create_sock() use AF_INET6 by default if IPv6 CONFIG enabled.
+But if user start kernel with ipv6.disable=1, the bareudp sock will
+created failed, which cause the interface open failed even with ethertype
+ip. e.g.
 
-When running for a fixed duration of time the check to determine when to
-terminate execution is in is_benchmark_done() and is being executed in
-the context of the poller thread,
+ # ip link add bareudp1 type bareudp dstport 2 ethertype ip
+ # ip link set bareudp1 up
+ RTNETLINK answers: Address family not supported by protocol
 
-    if (opt_duration > 0) {
-            unsigned long dt = (get_nsecs() - start_time);
+Fix it by using ipv6_mod_enabled() to check if IPv6 enabled. There is
+no need to check IS_ENABLED(CONFIG_IPV6) as ipv6_mod_enabled() will
+return false when CONFIG_IPV6 no enabled in include/linux/ipv6.h.
 
-            if (dt >= opt_duration)
-                    benchmark_done = true;
-    }
-
-However start_time is only set after the poller thread have been
-created. This leaves a small window when the poller thread is starting
-and calls is_benchmark_done() for the first time that start_time is not
-yet set. In that case start_time have its initial value of 0 and the
-duration check fails as it do not correlate correctly for the
-applications start time and immediately sets benchmark_done which in
-turn terminates the xdpsock application.
-
-Fix this by setting start_time before creating the poller thread.
-
-Fixes: d3f11b018f6c ("samples/bpf: xdpsock: Add duration option to specify how long to run")
-Signed-off-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220315102948.466436-1-niklas.soderlund@corigine.com
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Fixes: 571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Link: https://lore.kernel.org/r/20220315062618.156230-1-liuhangbin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/xdpsock_user.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/bareudp.c |   19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 2e4508a6cb3a..cf5b0a895225 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -1520,14 +1520,15 @@ int main(int argc, char **argv)
+--- a/drivers/net/bareudp.c
++++ b/drivers/net/bareudp.c
+@@ -140,14 +140,14 @@ static int bareudp_udp_encap_recv(struct
+ 	oiph = skb_network_header(skb);
+ 	skb_reset_network_header(skb);
  
- 	setlocale(LC_ALL, "");
+-	if (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
++	if (!ipv6_mod_enabled() || family == AF_INET)
+ 		err = IP_ECN_decapsulate(oiph, skb);
+ 	else
+ 		err = IP6_ECN_decapsulate(oiph, skb);
  
-+	prev_time = get_nsecs();
-+	start_time = prev_time;
+ 	if (unlikely(err)) {
+ 		if (log_ecn_error) {
+-			if  (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
++			if  (!ipv6_mod_enabled() || family == AF_INET)
+ 				net_info_ratelimited("non-ECT from %pI4 "
+ 						     "with TOS=%#x\n",
+ 						     &((struct iphdr *)oiph)->saddr,
+@@ -213,11 +213,12 @@ static struct socket *bareudp_create_soc
+ 	int err;
+ 
+ 	memset(&udp_conf, 0, sizeof(udp_conf));
+-#if IS_ENABLED(CONFIG_IPV6)
+-	udp_conf.family = AF_INET6;
+-#else
+-	udp_conf.family = AF_INET;
+-#endif
 +
- 	if (!opt_quiet) {
- 		ret = pthread_create(&pt, NULL, poller, NULL);
- 		if (ret)
- 			exit_with_error(ret);
++	if (ipv6_mod_enabled())
++		udp_conf.family = AF_INET6;
++	else
++		udp_conf.family = AF_INET;
++
+ 	udp_conf.local_udp_port = port;
+ 	/* Open UDP socket */
+ 	err = udp_sock_create(net, &udp_conf, &sock);
+@@ -439,7 +440,7 @@ static netdev_tx_t bareudp_xmit(struct s
  	}
  
--	prev_time = get_nsecs();
--	start_time = prev_time;
+ 	rcu_read_lock();
+-	if (IS_ENABLED(CONFIG_IPV6) && info->mode & IP_TUNNEL_INFO_IPV6)
++	if (ipv6_mod_enabled() && info->mode & IP_TUNNEL_INFO_IPV6)
+ 		err = bareudp6_xmit_skb(skb, dev, bareudp, info);
+ 	else
+ 		err = bareudp_xmit_skb(skb, dev, bareudp, info);
+@@ -469,7 +470,7 @@ static int bareudp_fill_metadata_dst(str
  
- 	if (opt_bench == BENCH_RXDROP)
- 		rx_drop_all();
--- 
-2.34.1
-
+ 	use_cache = ip_tunnel_dst_cache_usable(skb, info);
+ 
+-	if (!IS_ENABLED(CONFIG_IPV6) || ip_tunnel_info_af(info) == AF_INET) {
++	if (!ipv6_mod_enabled() || ip_tunnel_info_af(info) == AF_INET) {
+ 		struct rtable *rt;
+ 		__be32 saddr;
+ 
 
 

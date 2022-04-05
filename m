@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0A84F4679
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11E54F44A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242618AbiDEUcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S1357450AbiDEN30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358005AbiDEK1m (ORCPT
+        with ESMTP id S1345261AbiDEJWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AC7D8F61;
-        Tue,  5 Apr 2022 03:12:44 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC9A3E5C9;
+        Tue,  5 Apr 2022 02:10:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FA68B81C8A;
-        Tue,  5 Apr 2022 10:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08681C385A1;
-        Tue,  5 Apr 2022 10:12:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 231E561003;
+        Tue,  5 Apr 2022 09:10:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ADC4C385A2;
+        Tue,  5 Apr 2022 09:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153562;
-        bh=5XhvLEgUeP8Y6kdjc6mEd3wkiV9dCKWc/U9ieZiKdTo=;
+        s=korg; t=1649149801;
+        bh=GsAv312AdYmmt1e+wMqZIwMIBSqRjZ1+lgs4z1QfSXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0B+DMbGsPCxloxfppp92pD17vsqfNIUQlusK03GZWgDdQjYJB6WjLtCrERPjorkO9
-         QcARHLYx6AuuYXqv/igN7f/aQF9yXk1tR5DMOD7gG2TOlRg7gasSwa2AkxTvbPj+Z+
-         FutCA6/bo9KpHYy9VWpB0HBaliYfjIBX85HDjjWw=
+        b=lSeJOBgK80nxw8wQ7vV/hlN/sk36Ya6XJfLyfBK86/tifxY2YR6d33pKl7ldTNRUI
+         8ETtCA2FQ+7qvcjxFPFSZwMRU6UD3ShOTerYlbgiI3s/nj4yT7eQXULNchcMr0tJUy
+         FXInnObAOLhJ49xSXRT9STdqXgNPeeSPUh3GyX5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Steven Price <steven.price@arm.com>,
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 266/599] drm/panfrost: Check for error num after setting mask
+Subject: [PATCH 5.16 0847/1017] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
 Date:   Tue,  5 Apr 2022 09:29:20 +0200
-Message-Id: <20220405070306.753361724@linuxfoundation.org>
+Message-Id: <20220405070419.381404472@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 44ab30b056149bd59dd7989a593dd25ead6007fd ]
+[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+hdpvr_register_videodev is responsible to initialize a worker in
+hdpvr_device. However, the worker is only initialized at
+hdpvr_start_streaming other than hdpvr_register_videodev.
+When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
+will encounter one WARN in flush_work.The stack trace is as follows:
 
-Fixes: f3ba91228e8e ("drm/panfrost: Add initial panfrost driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-[Steve: fix Fixes: line]
-Reviewed-by: Steven Price <steven.price@arm.com>
-Signed-off-by: Steven Price <steven.price@arm.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220106030326.2620942-1-jiasheng@iscas.ac.cn
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
+
+Fix this by moving the initialization of dev->worker to the starting of
+hdpvr_register_videodev
+
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_gpu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gpu.c b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-index 2aae636f1cf5..107ad2d764ec 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gpu.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-@@ -359,8 +359,11 @@ int panfrost_gpu_init(struct panfrost_device *pfdev)
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 563128d11731..60e57e0f1927 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
  
- 	panfrost_gpu_init_features(pfdev);
+ 	dev->status = STATUS_STREAMING;
  
--	dma_set_mask_and_coherent(pfdev->dev,
-+	err = dma_set_mask_and_coherent(pfdev->dev,
- 		DMA_BIT_MASK(FIELD_GET(0xff00, pfdev->features.mmu_features)));
-+	if (err)
-+		return err;
+-	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ 	schedule_work(&dev->worker);
+ 
+ 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
+@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
+ 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
+ 	int res;
+ 
++	// initialize dev->worker
++	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
 +
- 	dma_set_max_seg_size(pfdev->dev, UINT_MAX);
- 
- 	irq = platform_get_irq_byname(to_platform_device(pfdev->dev), "gpu");
+ 	dev->cur_std = V4L2_STD_525_60;
+ 	dev->width = 720;
+ 	dev->height = 480;
 -- 
 2.34.1
 

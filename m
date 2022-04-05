@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C1E4F4E95
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840CC4F4866
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835694AbiDFAc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
+        id S1382548AbiDEVi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349427AbiDEJtv (ORCPT
+        with ESMTP id S1356149AbiDEKXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D856548;
-        Tue,  5 Apr 2022 02:45:35 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0105EBA30E;
+        Tue,  5 Apr 2022 03:07:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FF3D61576;
-        Tue,  5 Apr 2022 09:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233ABC385A2;
-        Tue,  5 Apr 2022 09:45:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABB87B81C98;
+        Tue,  5 Apr 2022 10:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2968C385A2;
+        Tue,  5 Apr 2022 10:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151934;
-        bh=Wo3qURxNOmx313HrkJXbHsYdZQWj33iWhYmabLSxV7w=;
+        s=korg; t=1649153221;
+        bh=twS32qAeCTY/7ABgIeeyA6EBH7JxCA+yeGiHVh5MOYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=11KXF/+c4RDrMkKF/XMfiWkGIGpFxLEE8sGocp3iMNklFO5lCvBY80T0mPXIWRwuN
-         oiJJDG4cPQ46cPnuMIxF3XiZktE+PfLd+qvc6cMWydHvdq/OePcb3XZ37EG2baCTk2
-         aZIyVfc0MTUAMzEF7yQO/RN3byIQPBbBQDcFsUXo=
+        b=uaNMzYDgnuf28LSll95TeeNj95U2saQFV/hfSDEKJLXvZ/XfXbJMCWpJlXoiw2OIw
+         7MyQXIbPk6vYXt9Pfn/Wpva1TnnRQ0+bNRL6tZtmhZKYM1GgSHldfek1hhtEH28u0B
+         KL7p10L7b3RiulQTvwW+UrLX29t7lWKXfxx9PIbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phillip Potter <phil@philpotter.co.uk>,
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Armin Wolf <W_Armin@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 577/913] staging: r8188eu: convert DBG_88E_LEVEL call in hal/rtl8188e_hal_init.c
+Subject: [PATCH 5.10 145/599] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
 Date:   Tue,  5 Apr 2022 09:27:19 +0200
-Message-Id: <20220405070357.142720926@linuxfoundation.org>
+Message-Id: <20220405070303.157959665@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phillip Potter <phil@philpotter.co.uk>
+From: Armin Wolf <W_Armin@gmx.de>
 
-[ Upstream commit 5ec394d58bdba731c2a33645be7018e71f72f287 ]
+[ Upstream commit 647d6f09bea7dacf4cdb6d4ea7e3051883955297 ]
 
-Convert DBG_88E_LEVEL macro call in hal/rtl8188e_hal_init.c to plain
-dev_dbg call, as although the information is potentially useful, we should
-be exposing it using standard kernel debugging functionality.
+If the watchdog was already enabled by the BIOS after booting, the
+watchdog infrastructure needs to regularly send keepalives to
+prevent a unexpected reset.
+WDOG_ACTIVE only serves as an status indicator for userspace,
+we want to use WDOG_HW_RUNNING instead.
 
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-Link: https://lore.kernel.org/r/20211129002041.865-6-phil@philpotter.co.uk
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Since my Fujitsu Esprimo P720 does not support the watchdog,
+this change is compile-tested only.
+
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Link: https://lore.kernel.org/r/20220131211935.3656-5-W_Armin@gmx.de
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
+ drivers/hwmon/sch56xx-common.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index 14758361960c..a677b2049ef3 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -573,7 +573,7 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
- 	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
- 	pFirmware->ulFwLength = fw->size;
- 	release_firmware(fw);
--	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, pFirmware->ulFwLength);
-+	dev_dbg(device, "!bUsedWoWLANFw, FmrmwareLen:%d+\n", pFirmware->ulFwLength);
+diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
+index 6c84780e358e..066b12990fbf 100644
+--- a/drivers/hwmon/sch56xx-common.c
++++ b/drivers/hwmon/sch56xx-common.c
+@@ -424,7 +424,7 @@ struct sch56xx_watchdog_data *sch56xx_watchdog_register(struct device *parent,
+ 	if (nowayout)
+ 		set_bit(WDOG_NO_WAY_OUT, &data->wddev.status);
+ 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
+-		set_bit(WDOG_ACTIVE, &data->wddev.status);
++		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
  
- Exit:
- 	return rtStatus;
+ 	/* Since the watchdog uses a downcounter there is no register to read
+ 	   the BIOS set timeout from (if any was set at all) ->
 -- 
 2.34.1
 

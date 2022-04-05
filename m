@@ -2,191 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480274F2081
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 02:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1879A4F20A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiDEAwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 20:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S229557AbiDECAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiDEAvw (ORCPT
+        with ESMTP id S229507AbiDEB76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 20:51:52 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3511E2AD0B8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 17:43:45 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id d3so8112441ilr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 17:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qk2vTGXRGqf3BpKwQtYdBLCMBP+WWND1mbOCTeq7Wd8=;
-        b=M8Y3mkCyz4+DCsjQDgiHQLuP6ZxBkxl0uN10+U2ZHu9akhKgM8UGUz5wmW7tJAPQP3
-         QTmFA2BUcbFUPrczakTRxGwXBdWfXzPfzDvgeaSSKTX2ETyxQaRXiOE8pcIv+QItZV1R
-         YcAIj9+gpFvBzBQxhy4lAJ7VtG96ODgzuR27VBTeIi8VzSBA5K9IB4Wn2REubsm/4ZEj
-         GWMbLa9EdZrL7Q04meUTwExAMH1Je0IY5Ff4RSMzfMEnJSIERJgUtGHNZW4s0xmMGGUW
-         EACEBdpiTsmDRnB6GQOWobQzAd3yXuZYlxfQkd9pW77edOHHriaRDYcIP8UOoF+xZbtl
-         sllA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qk2vTGXRGqf3BpKwQtYdBLCMBP+WWND1mbOCTeq7Wd8=;
-        b=aJKdt1gfLkXwChjVnZxIz0v+GzjmEHDi2e7eChY6DuScH6bY1S9gdeSf7ki+QAXDcR
-         d1Ko3VDZ95XVr6XX4KiCblUgAB9VLWOzF6PsvzNjmmxek9GsiWrdkTCXns0CMIK3ICOu
-         AlGF2gfp7lJeW+SNs5WYqGkeWkBTQJBJd9ggZJgdCkUtm/wQ5Ec1302uTwvRs1GHZ+ge
-         FELOtwgg+GPdDxl6hkGuBJ3/+EjuJkNQkU4e2qsVg+Od+Bo4Ykg6j5I3UxT638T9+VUH
-         ma/eqHX7/CHup0tS25ReBoKipMGdQzTEByAfYm5poJYyilUMOEPF4/nYwo8Rh3DWi6fG
-         mUWA==
-X-Gm-Message-State: AOAM531lERs9Ex2O1A5nt/KJ5DEAmPQwgfl/SWLxdU+SVk3sy06aeea5
-        PNYd5YsydURCTZVMI6vuHly0K2Q43qM2gA==
-X-Google-Smtp-Source: ABdhPJyjA0jJqHDz/DH9qTaHPbID/6l5iy6vv0UwOj0FN0hUEVJXEqnuhpyz8BqJv3fl3Gsmm5CxSA==
-X-Received: by 2002:a65:63d9:0:b0:374:6b38:c6b3 with SMTP id n25-20020a6563d9000000b003746b38c6b3mr636129pgv.195.1649118289900;
-        Mon, 04 Apr 2022 17:24:49 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a859100b001bc20ddcc67sm261755pjn.34.2022.04.04.17.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 17:24:49 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 00:24:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 22/46] x86/sev: Use SEV-SNP AP creation to start
- secondary CPUs
-Message-ID: <YkuMTdckSgSB9M6f@google.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-23-brijesh.singh@amd.com>
+        Mon, 4 Apr 2022 21:59:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5563568CE
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649121365; x=1680657365;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P7TngUwlH5TGDyK5h7dBrH4QJh3YwqOqlGAIIeRM8tM=;
+  b=iTj3yWeTZRARGk6jgYcVS6jz3Bl1SF5rIYG82f/cBiYZOm3aa4oLLpFw
+   8Wcv+NowjuKzsrnbqB9VoT15ynx1eBKprfhVW4TFyt8aaFea/6SFMhJrV
+   /YS2638MApivF4jMxdukOYa2FvKm9JWjeNpSB1ICUx9JJQJdaxndqs8GL
+   +ydJBP2Mz4Lwz1T9AulJ+AXF9V+SgYczBysvJcNc6Fg8VNc49XDDiEhUu
+   GNFdMv78rr5YWdoCYjMb2V41YyhH7vA5xiVsUfi5HJSIuAs5IYzVduref
+   u1eLd6p8S+z7YdfpOF1NgwYggjj2ARN3BYxlKP/JNv20Y5ooYu1n1pBu5
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="285589010"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="285589010"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:04:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="548850835"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 04 Apr 2022 17:04:39 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbWgY-0002TP-Kp;
+        Tue, 05 Apr 2022 00:04:38 +0000
+Date:   Tue, 5 Apr 2022 08:03:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 25/29] arch/riscv/kvm/aia.c:204:36:
+ sparse: sparse: incorrect type in argument 2 (different address spaces)
+Message-ID: <202204050835.ITBYCuGd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307213356.2797205-23-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022, Brijesh Singh wrote:
-> From: Tom Lendacky <thomas.lendacky@amd.com>
-> 
-> To provide a more secure way to start APs under SEV-SNP, use the SEV-SNP
-> AP Creation NAE event. This allows for guest control over the AP register
-> state rather than trusting the hypervisor with the SEV-ES Jump Table
-> address.
-> 
-> During native_smp_prepare_cpus(), invoke an SEV-SNP function that, if
-> SEV-SNP is active, will set/override apic->wakeup_secondary_cpu. This
-> will allow the SEV-SNP AP Creation NAE event method to be used to boot
-> the APs. As a result of installing the override when SEV-SNP is active,
-> this method of starting the APs becomes the required method. The override
-> function will fail to start the AP if the hypervisor does not have
-> support for AP creation.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   dab41b5c8f55fb8e864a5e10fd181dd0d4443778
+commit: 74de87a8890ab0c58f3e5142ff49d219872a0eb5 [25/29] RISC-V: KVM: Implement guest external interrupt line management
+config: riscv-randconfig-s032-20220404 (https://download.01.org/0day-ci/archive/20220405/202204050835.ITBYCuGd-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/avpatel/linux/commit/74de87a8890ab0c58f3e5142ff49d219872a0eb5
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 74de87a8890ab0c58f3e5142ff49d219872a0eb5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> @@ -823,6 +843,230 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
->  	pvalidate_pages(vaddr, npages, true);
->  }
->  
-> +static int snp_set_vmsa(void *va, bool vmsa)
-> +{
-> +	u64 attrs;
-> +
-> +	/*
-> +	 * Running at VMPL0 allows the kernel to change the VMSA bit for a page
-> +	 * using the RMPADJUST instruction. However, for the instruction to
-> +	 * succeed it must target the permissions of a lesser privileged
-> +	 * VMPL level, so use VMPL1 (refer to the RMPADJUST instruction in the
-> +	 * AMD64 APM Volume 3).
-> +	 */
-> +	attrs = 1;
-> +	if (vmsa)
-> +		attrs |= RMPADJUST_VMSA_PAGE_BIT;
-> +
-> +	return rmpadjust((unsigned long)va, RMP_PG_SIZE_4K, attrs);
-> +}
-> +
-> +#define __ATTR_BASE		(SVM_SELECTOR_P_MASK | SVM_SELECTOR_S_MASK)
-> +#define INIT_CS_ATTRIBS		(__ATTR_BASE | SVM_SELECTOR_READ_MASK | SVM_SELECTOR_CODE_MASK)
-> +#define INIT_DS_ATTRIBS		(__ATTR_BASE | SVM_SELECTOR_WRITE_MASK)
-> +
-> +#define INIT_LDTR_ATTRIBS	(SVM_SELECTOR_P_MASK | 2)
-> +#define INIT_TR_ATTRIBS		(SVM_SELECTOR_P_MASK | 3)
-> +
-> +static void *snp_alloc_vmsa_page(void)
-> +{
-> +	struct page *p;
-> +
-> +	/*
-> +	 * Allocate VMSA page to work around the SNP erratum where the CPU will
-> +	 * incorrectly signal an RMP violation #PF if a large page (2MB or 1GB)
-> +	 * collides with the RMP entry of VMSA page. The recommended workaround
-> +	 * is to not use a large page.
-> +	 */
-> +
-> +	/* Allocate an 8k page which is also 8k-aligned */
-> +	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
-> +	if (!p)
-> +		return NULL;
-> +
-> +	split_page(p, 1);
-> +
-> +	/* Free the first 4k. This page may be 2M/1G aligned and cannot be used. */
-> +	__free_page(p);
-> +
-> +	return page_address(p + 1);
-> +}
-> +
-> +static void snp_cleanup_vmsa(struct sev_es_save_area *vmsa)
-> +{
-> +	int err;
-> +
-> +	err = snp_set_vmsa(vmsa, false);
 
-Uh, so what happens if a malicious guest does RMPADJUST to convert a VMSA page
-back to a "normal" page while the host is trying to VMRUN that VMSA?  Does VMRUN
-fault?
+sparse warnings: (new ones prefixed by >>)
+>> arch/riscv/kvm/aia.c:204:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct aia_hgei_control [noderef] __percpu * @@
+   arch/riscv/kvm/aia.c:204:36: sparse:     expected void *
+   arch/riscv/kvm/aia.c:204:36: sparse:     got struct aia_hgei_control [noderef] __percpu *
 
-Can Linux refuse to support this madness and instead require the ACPI MP wakeup
-protocol being proposed/implemented for TDX?  That would allow KVM to have at
-least a chance of refusing to support AP "creation", which IMO is a CVE or three
-waiting to happen.  From a KVM perspective, I don't ever want to be running a
-guest-defined VMSA.
+vim +204 arch/riscv/kvm/aia.c
 
-https://lore.kernel.org/all/YWnbfCet84Vup6q9@google.com
+   200	
+   201	static void aia_hgei_exit(void)
+   202	{
+   203		/* Free per-CPU SGEI interrupt */
+ > 204		free_irq(hgei_parent_irq, &aia_hgei);
+   205	}
+   206	
 
-> +	if (err)
-> +		pr_err("clear VMSA page failed (%u), leaking page\n", err);
-> +	else
-> +		free_page((unsigned long)vmsa);
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

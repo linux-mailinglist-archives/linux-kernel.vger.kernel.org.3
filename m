@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417854F4273
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44CD4F42A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380713AbiDEMYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S1379653AbiDEPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245039AbiDEIxC (ORCPT
+        with ESMTP id S1346353AbiDEJov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D426CFD;
-        Tue,  5 Apr 2022 01:50:04 -0700 (PDT)
+        Tue, 5 Apr 2022 05:44:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE5DD9E94;
+        Tue,  5 Apr 2022 02:30:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28DAF61509;
-        Tue,  5 Apr 2022 08:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B594C385A0;
-        Tue,  5 Apr 2022 08:50:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3DC9B81CAE;
+        Tue,  5 Apr 2022 09:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CD9C385A0;
+        Tue,  5 Apr 2022 09:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148603;
-        bh=DqpbXeSy2wz6V4vXfGJ2xZky/5rTxcMKW6nSQNRNDwA=;
+        s=korg; t=1649151023;
+        bh=1xsjRKMqP5RqWtFVtYhBnlBrA69egcb28RKZGj3GV+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QEADStvl/VPjk1FsXKhTyE3SfzkD+Ks1CaB7t8cNvixzdtL8RveZKWYVNxCWxidTo
-         mWkmnXJJueDWncQxSFeUK27k9a7CGNvaebfY8CZHJ9sVf2M9Q+vQ/s+dJmk9XSAEhc
-         qT6CCk2HK0C7t1ZottUmuxLEBALKBw2HvqqzwETY=
+        b=Vy6R+J5c28tJE7nYqyWi4aPk2ISYRxha6PYtGSgBj+A6HkvFzM4RdjKYiAqe0lNGj
+         j4/gYls42YlZdHNlUhNeVcBr/Qa/fRLPT1e7XWcoY0vIpYaq4KmvQ9lGfgivYluxs+
+         CVh7FpbMWorSQ0PavSWpu3hvwiVWwsE3eNe+T78k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        Robert Foss <robert.foss@linaro.org>,
+        Julian Grahsl <jgrahsl@snap.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0414/1017] drm/locking: fix drm_modeset_acquire_ctx kernel-doc
-Date:   Tue,  5 Apr 2022 09:22:07 +0200
-Message-Id: <20220405070406.577801428@linuxfoundation.org>
+Subject: [PATCH 5.15 266/913] media: camss: csid-170: fix non-10bit formats
+Date:   Tue,  5 Apr 2022 09:22:08 +0200
+Message-Id: <20220405070347.830005965@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +59,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Jonathan Marek <jonathan@marek.ca>
 
-[ Upstream commit 6f043b5969a4d6d385ca429388ded37e30e0d179 ]
+[ Upstream commit 14d510e040f85ff05734fd6db8bae44b47886464 ]
 
-The stack_depot member was added without kernel-doc, leading to below
-warning. Fix it.
+Use the decode_format/data_type from the "format" struct instead of a
+hardcoded 10-bit format.
 
-./include/drm/drm_modeset_lock.h:74: warning: Function parameter or
-member 'stack_depot' not described in 'drm_modeset_acquire_ctx'
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: cd06ab2fd48f ("drm/locking: add backtrace for locking contended locks without backoff")
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220120094856.3004147-1-jani.nikula@intel.com
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/drm/drm_modeset_lock.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/drm/drm_modeset_lock.h b/include/drm/drm_modeset_lock.h
-index b84693fbd2b5..ec4f543c3d95 100644
---- a/include/drm/drm_modeset_lock.h
-+++ b/include/drm/drm_modeset_lock.h
-@@ -34,6 +34,7 @@ struct drm_modeset_lock;
-  * struct drm_modeset_acquire_ctx - locking context (see ww_acquire_ctx)
-  * @ww_ctx: base acquire ctx
-  * @contended: used internally for -EDEADLK handling
-+ * @stack_depot: used internally for contention debugging
-  * @locked: list of held locks
-  * @trylock_only: trylock mode used in atomic contexts/panic notifiers
-  * @interruptible: whether interruptible locking should be used.
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index ac22ff29d2a9..aa65043c3303 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -366,7 +366,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
+ 
+-			val = DATA_TYPE_RAW_10BIT << TPG_DT_n_CFG_1_DATA_TYPE;
++			val = format->data_type << TPG_DT_n_CFG_1_DATA_TYPE;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
+ 
+ 			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
+@@ -382,8 +382,9 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 		val = 1 << RDI_CFG0_BYTE_CNTR_EN;
+ 		val |= 1 << RDI_CFG0_FORMAT_MEASURE_EN;
+ 		val |= 1 << RDI_CFG0_TIMESTAMP_EN;
++		/* note: for non-RDI path, this should be format->decode_format */
+ 		val |= DECODE_FORMAT_PAYLOAD_ONLY << RDI_CFG0_DECODE_FORMAT;
+-		val |= DATA_TYPE_RAW_10BIT << RDI_CFG0_DATA_TYPE;
++		val |= format->data_type << RDI_CFG0_DATA_TYPE;
+ 		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
+ 		val |= dt_id << RDI_CFG0_DT_ID;
+ 		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
 -- 
 2.34.1
 

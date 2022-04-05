@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488114F3471
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12874F2FA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345257AbiDEKk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S1352957AbiDEKFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238734AbiDEIa4 (ORCPT
+        with ESMTP id S239125AbiDEIbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99BCE0B0;
-        Tue,  5 Apr 2022 01:22:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:31:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19740496B3;
+        Tue,  5 Apr 2022 01:23:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8138FB81BAF;
-        Tue,  5 Apr 2022 08:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E015BC385A0;
-        Tue,  5 Apr 2022 08:22:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5828CB81BD6;
+        Tue,  5 Apr 2022 08:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C48E5C385B4;
+        Tue,  5 Apr 2022 08:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146963;
-        bh=ppawhTxMMMVcV1N7BeWGj9uOleWrybjfaO/20N1Ey08=;
+        s=korg; t=1649146988;
+        bh=Iq2ZvXe9ADabMGnOc1m2KwnYvzAf0dQnMn6C1TUJ2QA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DolGDmwQtqbe9xtqg9ruOr/7ZhWzWjhnZ4UdJvgbx5dXI1fXfPIlt28Ohxu9Vpd5t
-         FJHQx/EnfNfYm56Zs1LuIAUtDA+fBSKPJGxl1oarWtm8c3pu5szpbVwsMaYJM3UwKo
-         QBZWZbLCDYQBuxHWrJ5zFXDWrd9xP5JnAIVxSLew=
+        b=jEY5HTEuUy52xcqnIf3YhC79PsF4NV9Ez311b1I8w7cw54TDTQpx4V2LMLcM7NTSW
+         djcUOZXEdhPSFzlrPnS5xcuq/JL5SNG7DDm/tb8Hlr4+W5/eeUAqb7LDXqp0aKIGcs
+         TVpkDAB+9/iAfYW15JKFCoAjZvL3p+MXHc/58NbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 0951/1126] KVM: x86: Reinitialize context if host userspace toggles EFER.LME
-Date:   Tue,  5 Apr 2022 09:28:18 +0200
-Message-Id: <20220405070435.418687174@linuxfoundation.org>
+Subject: [PATCH 5.17 0959/1126] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+Date:   Tue,  5 Apr 2022 09:28:26 +0200
+Message-Id: <20220405070435.653745066@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,46 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-commit d6174299365ddbbf491620c0b8c5ca1a6ef2eea5 upstream.
+commit 47d3e5cdfe607ec6883eb0faa7acf05b8cb3f92a upstream.
 
-While the guest runs, EFER.LME cannot change unless CR0.PG is clear, and
-therefore EFER.NX is the only bit that can affect the MMU role.  However,
-set_efer accepts a host-initiated change to EFER.LME even with CR0.PG=1.
-In that case, the MMU has to be reset.
+It has been proven on practice that at least Windows Server 2019 tries
+using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
+and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
+hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
+information is missing in TLFS as of 6.0b. Currently, KVM returns an error
+(HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
 
-Fixes: 11988499e62b ("KVM: x86: Skip EFER vs. guest CPUID checks for host-initiated writes")
-Cc: stable@vger.kernel.org
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
+all its parameters fit into RDX:R8 and this is handled by KVM correctly.
+
+Cc: stable@vger.kernel.org # 5.14.x: 3244867af8c0: KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
+Cc: stable@vger.kernel.org # 5.14.x
+Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220222154642.684285-5-vkuznets@redhat.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu.h |    1 +
- arch/x86/kvm/x86.c |    3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/hyperv.c |   52 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 18 deletions(-)
 
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -48,6 +48,7 @@
- 			       X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_PKE)
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1890,6 +1890,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 	int sparse_banks_len;
+ 	u32 vector;
+ 	bool all_cpus;
++	int i;
  
- #define KVM_MMU_CR0_ROLE_BITS (X86_CR0_PG | X86_CR0_WP)
-+#define KVM_MMU_EFER_ROLE_BITS (EFER_LME | EFER_NX)
+ 	if (hc->code == HVCALL_SEND_IPI) {
+ 		if (!hc->fast) {
+@@ -1910,9 +1911,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
  
- static __always_inline u64 rsvd_bits(int s, int e)
- {
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1656,8 +1656,7 @@ static int set_efer(struct kvm_vcpu *vcp
- 		return r;
+ 		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+ 	} else {
+-		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+-					    sizeof(send_ipi_ex))))
+-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		if (!hc->fast) {
++			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
++						    sizeof(send_ipi_ex))))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		} else {
++			send_ipi_ex.vector = (u32)hc->ingpa;
++			send_ipi_ex.vp_set.format = hc->outgpa;
++			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
++		}
+ 
+ 		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+ 					 send_ipi_ex.vp_set.format,
+@@ -1920,8 +1927,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 
+ 		vector = send_ipi_ex.vector;
+ 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+-		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
+-			sizeof(sparse_banks[0]);
++		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
+ 
+ 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+ 
+@@ -1931,12 +1937,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 		if (!sparse_banks_len)
+ 			goto ret_success;
+ 
+-		if (kvm_read_guest(kvm,
+-				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+-							vp_set.bank_contents),
+-				   sparse_banks,
+-				   sparse_banks_len))
+-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		if (!hc->fast) {
++			if (kvm_read_guest(kvm,
++					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
++								vp_set.bank_contents),
++					   sparse_banks,
++					   sparse_banks_len * sizeof(sparse_banks[0])))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		} else {
++			/*
++			 * The lower half of XMM0 is already consumed, each XMM holds
++			 * two sparse banks.
++			 */
++			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++			for (i = 0; i < sparse_banks_len; i++) {
++				if (i % 2)
++					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
++				else
++					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
++			}
++		}
  	}
  
--	/* Update reserved bits */
--	if ((efer ^ old_efer) & EFER_NX)
-+	if ((efer ^ old_efer) & KVM_MMU_EFER_ROLE_BITS)
- 		kvm_mmu_reset_context(vcpu);
+ check_and_send_ipi:
+@@ -2098,6 +2119,7 @@ static bool is_xmm_fast_hypercall(struct
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
++	case HVCALL_SEND_IPI_EX:
+ 		return true;
+ 	}
  
- 	return 0;
+@@ -2265,14 +2287,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vc
+ 		ret = kvm_hv_flush_tlb(vcpu, &hc);
+ 		break;
+ 	case HVCALL_SEND_IPI:
+-		if (unlikely(hc.rep)) {
+-			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			break;
+-		}
+-		ret = kvm_hv_send_ipi(vcpu, &hc);
+-		break;
+ 	case HVCALL_SEND_IPI_EX:
+-		if (unlikely(hc.fast || hc.rep)) {
++		if (unlikely(hc.rep)) {
+ 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 			break;
+ 		}
 
 

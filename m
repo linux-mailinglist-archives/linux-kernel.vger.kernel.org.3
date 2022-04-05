@@ -2,39 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935CD4F50F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1AC4F4F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844164AbiDFBqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S1838188AbiDFAud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357363AbiDELQV (ORCPT
+        with ESMTP id S1355739AbiDELz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:16:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60157DF53;
-        Tue,  5 Apr 2022 03:41:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 193ACD6E;
-        Tue,  5 Apr 2022 03:41:09 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A35C13F5A1;
-        Tue,  5 Apr 2022 03:41:07 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
-Subject: [PATCH v3 0/4] thunderbolt: Make iommu_dma_protection more accurate
-Date:   Tue,  5 Apr 2022 11:41:00 +0100
-Message-Id: <cover.1649089693.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 5 Apr 2022 07:55:26 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388BDB879;
+        Tue,  5 Apr 2022 04:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649157199; x=1680693199;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=32517Peu1iHVDouFzkQPCx+iZWRftDCxZE0lexD+4Kg=;
+  b=e1sl0XgvQrGgf/5wwHcW4wxu4KCf4fKar37EyzYccc3x+KOqERdrsT2J
+   buLBow4+RwJeOfhXMOPD0Bl6JNtrEyUuQn2D+dCQ89PxbMtnxkh5q0f4f
+   jO5/N/U/5SyFalo2hVZr0EBvBdy8nmMccmRjqkhG/vbp8j0SRwT+VVtGy
+   Ka6byebBayaTRpLH4XwoSvEzE8ZpsLB4Kf43zcyrfEAh6TWuK8nQqWCr+
+   40uLj0Qmn5wqKEu3w2szIEcpkEvXfoWDwkOQJLaWsdTmf56+HHGDwgUjb
+   lQc71z28QR+Ua1pCXcTmkb8HX9p69UBTIu0O1cyLYwxKCmn1sgVKm7i1l
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="321417246"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="321417246"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:13:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="523952439"
+Received: from chang-linux-3.sc.intel.com ([172.25.112.114])
+  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 04:13:18 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     yang.zhong@intel.com, bonzini@gnu.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com
+Subject: [PATCH][Rebased for 5.16] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
+Date:   Tue,  5 Apr 2022 04:04:56 -0700
+Message-Id: <20220405110456.24877-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <164905801910825@kroah.com>
+References: <164905801910825@kroah.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,45 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+From: Yang Zhong <yang.zhong@intel.com>
 
-Here's the third and hopefully final outing for this series, addressing
-Mika's review comments from last time and taking advantage of 5.18-rc1
-goodies to be even cleaner and more complete. I've also picked up
-Mario's AMD IOMMU patch to keep the whole topic together.
+This is backport for 5.16
 
-Unless there's other pending Thunderbolt development which might
-conflict, I suspect it would be simplest for the whole lot to go through
-the IOMMU tree.
+Upstream commit 063452fd94d153d4eb38ad58f210f3d37a09cca4
 
-Thanks,
-Robin.
+ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
+permission bitmap of thread_group_leader()->fpu. But the code overwrites
+the bitmap with the requested feature bit only rather than adding it.
 
+Fix the code to add the requested feature bit to the master bitmask.
 
-Mario Limonciello (1):
-  iommu/amd: Indicate whether DMA remap support is enabled
+Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Paolo Bonzini <bonzini@gnu.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
+[chang: Backport for 5.16]
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+---
+ arch/x86/kernel/fpu/xstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Robin Murphy (3):
-  iommu: Introduce device_iommu_capable()
-  iommu: Add capability for pre-boot DMA protection
-  thunderbolt: Make iommu_dma_protection more accurate
-
- drivers/iommu/amd/amd_iommu_types.h         |  4 ++
- drivers/iommu/amd/init.c                    |  3 ++
- drivers/iommu/amd/iommu.c                   |  4 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  2 +-
- drivers/iommu/arm/arm-smmu/arm-smmu.c       |  2 +-
- drivers/iommu/arm/arm-smmu/qcom_iommu.c     |  2 +-
- drivers/iommu/fsl_pamu_domain.c             |  2 +-
- drivers/iommu/intel/iommu.c                 |  4 +-
- drivers/iommu/iommu.c                       | 25 +++++++++++-
- drivers/iommu/s390-iommu.c                  |  2 +-
- drivers/thunderbolt/domain.c                | 12 ++----
- drivers/thunderbolt/nhi.c                   | 44 +++++++++++++++++++++
- include/linux/iommu.h                       | 10 ++++-
- include/linux/thunderbolt.h                 |  2 +
- 14 files changed, 100 insertions(+), 18 deletions(-)
-
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index d28829403ed0..fc1ab0116f4e 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1626,7 +1626,7 @@ static int __xstate_request_perm(u64 permitted, u64 requested)
+ 		return ret;
+ 
+ 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+-	WRITE_ONCE(fpu->perm.__state_perm, requested);
++	WRITE_ONCE(fpu->perm.__state_perm, mask);
+ 	/* Protected by sighand lock */
+ 	fpu->perm.__state_size = ksize;
+ 	fpu->perm.__user_state_size = usize;
 -- 
-2.28.0.dirty
+2.17.1
 

@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1879A4F20A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D74C4F20BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiDECAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S229504AbiDEB6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 21:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiDEB76 (ORCPT
+        with ESMTP id S229527AbiDEB6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 21:59:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5563568CE
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649121365; x=1680657365;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P7TngUwlH5TGDyK5h7dBrH4QJh3YwqOqlGAIIeRM8tM=;
-  b=iTj3yWeTZRARGk6jgYcVS6jz3Bl1SF5rIYG82f/cBiYZOm3aa4oLLpFw
-   8Wcv+NowjuKzsrnbqB9VoT15ynx1eBKprfhVW4TFyt8aaFea/6SFMhJrV
-   /YS2638MApivF4jMxdukOYa2FvKm9JWjeNpSB1ICUx9JJQJdaxndqs8GL
-   +ydJBP2Mz4Lwz1T9AulJ+AXF9V+SgYczBysvJcNc6Fg8VNc49XDDiEhUu
-   GNFdMv78rr5YWdoCYjMb2V41YyhH7vA5xiVsUfi5HJSIuAs5IYzVduref
-   u1eLd6p8S+z7YdfpOF1NgwYggjj2ARN3BYxlKP/JNv20Y5ooYu1n1pBu5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="285589010"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="285589010"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:04:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="548850835"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 04 Apr 2022 17:04:39 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbWgY-0002TP-Kp;
-        Tue, 05 Apr 2022 00:04:38 +0000
-Date:   Tue, 5 Apr 2022 08:03:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 25/29] arch/riscv/kvm/aia.c:204:36:
- sparse: sparse: incorrect type in argument 2 (different address spaces)
-Message-ID: <202204050835.ITBYCuGd-lkp@intel.com>
+        Mon, 4 Apr 2022 21:58:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F192D0FF7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=g3/9ifIMe8499bJjqwtI6WMMgnnCdftgJ1sOXpFYRfY=; b=c7/E1W/TluDz3qbEGO7TtEdECf
+        xdUiwylYxLnkjRVUhmmMUbUKeYVj6Wi6CDiTqMOt29O9v/cC9wk3GllU1k7jNEbOpyplvaukLBRpS
+        0zGzm1+qdBqAImKIdMQHEKZ37pbM88sNerMTS53Ydg73AW9Mta9neNrciHWO4Ken0lWq+22Uktff9
+        RkUKyfpYyjfbOFB8537CAl5RGjwQyy/IJqsslFTl6KsYzLyNnFyQ8aT90oJC+KeGk2AjAyMHmnuWj
+        DnsohtaZo34vTipUNBEfPkmD31QpJ73PYfwcxTgroBQCkrw73zMzqRJHcvTbdLJHheCVhplb8wPfC
+        aJDGKFvA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbWx6-006CUN-Sv; Tue, 05 Apr 2022 00:21:45 +0000
+Message-ID: <008aae79-4a6c-721f-7ef5-7b73f6d7e000@infradead.org>
+Date:   Mon, 4 Apr 2022 17:21:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] ARM: vexpress/spc: Fix doxygen comments
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        kernel test robot <lkp@intel.com>
+References: <20220404130207.1162445-1-sudeep.holla@arm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220404130207.1162445-1-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   dab41b5c8f55fb8e864a5e10fd181dd0d4443778
-commit: 74de87a8890ab0c58f3e5142ff49d219872a0eb5 [25/29] RISC-V: KVM: Implement guest external interrupt line management
-config: riscv-randconfig-s032-20220404 (https://download.01.org/0day-ci/archive/20220405/202204050835.ITBYCuGd-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/avpatel/linux/commit/74de87a8890ab0c58f3e5142ff49d219872a0eb5
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 74de87a8890ab0c58f3e5142ff49d219872a0eb5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi--
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/4/22 06:02, Sudeep Holla wrote:
+> Kbuild bot reported the following doxygen build warning:
+> 
+>   |  arch/arm/mach-versatile/spc.c:231: warning: This comment starts with
+>   |		'/**', but isn't a kernel-doc comment.
+>   |		Refer Documentation/doc-guide/kernel-doc.rst
+>   |  		* ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
+> 
+> Fix the issue by dropping the parameters specified in the kernel doc.
+> 
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/linux-doc/202204031026.4ogKxt89-lkp@intel.com
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  arch/arm/mach-vexpress/spc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
+> index 1c6500c4e6a1..8f99d47d4b89 100644
+> --- a/arch/arm/mach-vexpress/spc.c
+> +++ b/arch/arm/mach-vexpress/spc.c
+> @@ -228,7 +228,7 @@ static u32 standbywfi_cpu_mask(u32 cpu, u32 cluster)
+>  }
+>  
+>  /**
+> - * ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
+> + * ve_spc_cpu_in_wfi()
 
+This line still needs a "function short description," e.g.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/riscv/kvm/aia.c:204:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct aia_hgei_control [noderef] __percpu * @@
-   arch/riscv/kvm/aia.c:204:36: sparse:     expected void *
-   arch/riscv/kvm/aia.c:204:36: sparse:     got struct aia_hgei_control [noderef] __percpu *
++ * ve_spc_cpu_in_wfi() - fooble the barfloppity
 
-vim +204 arch/riscv/kvm/aia.c
+similar to what you did in patch 2/2.
 
-   200	
-   201	static void aia_hgei_exit(void)
-   202	{
-   203		/* Free per-CPU SGEI interrupt */
- > 204		free_irq(hgei_parent_irq, &aia_hgei);
-   205	}
-   206	
+>   *
+>   * @cpu: mpidr[7:0] bitfield describing CPU affinity level within cluster
+>   * @cluster: mpidr[15:8] bitfield describing cluster affinity level
 
+and I would s/doxygen/kernel-doc/ for both patches.
+
+thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

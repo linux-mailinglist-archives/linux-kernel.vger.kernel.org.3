@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3A54F4C19
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752894F48BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575793AbiDEXJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S1385054AbiDEVs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354206AbiDEKMP (ORCPT
+        with ESMTP id S243531AbiDEKgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3B054BC3;
-        Tue,  5 Apr 2022 02:58:41 -0700 (PDT)
+        Tue, 5 Apr 2022 06:36:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323954FA9;
+        Tue,  5 Apr 2022 03:22:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43267B817D3;
-        Tue,  5 Apr 2022 09:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF06C385A2;
-        Tue,  5 Apr 2022 09:58:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 519A7617CC;
+        Tue,  5 Apr 2022 10:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C0BC385A1;
+        Tue,  5 Apr 2022 10:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152719;
-        bh=QvVBerDKdoCVfQK/+ujmnOE/1XqAbYOn7pRFuVZg8nk=;
+        s=korg; t=1649154148;
+        bh=3m/KIQ3dfU4W25SXZqENH+2s+cwiIgEtA775dYS6wko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pf31a6kOcM3IjMNmdEGZR29P17fY229pkxC26NUipHk9JNLiNGHgPH+F4rB+6jKpI
-         VpWK55/s9eeRSICj0qNLz/+9W1z7ogB/fVIYjYVQgh9gzm6Z8oDsRvI24fOXoJvgnp
-         pU88W307X0WCSVTjtMlJrTyPA/imgNTH3w2bw8pI=
+        b=po2NxxiQlzd/qTf00P+HSd5b9VeHRLgwHYC0fKQNFyzw5j889sSOn11KNASkt8BeU
+         5naJkC0/5Etenqc8188uUAcxIJP3EXR6sPuQK6HSqJoZ2UDku+sUbHdDCdEePDmiX2
+         OIVFpMeYEop8dwI13u31OLlyalS37vIeX4pLxsG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH 5.15 879/913] bpf: Fix comment for helper bpf_current_task_under_cgroup()
-Date:   Tue,  5 Apr 2022 09:32:21 +0200
-Message-Id: <20220405070406.171460911@linuxfoundation.org>
+        stable@vger.kernel.org, Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 448/599] fs: fix fd table size alignment properly
+Date:   Tue,  5 Apr 2022 09:32:22 +0200
+Message-Id: <20220405070312.161043627@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +58,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hengqi Chen <hengqi.chen@gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit 58617014405ad5c9f94f464444f4972dabb71ca7 upstream.
+[ Upstream commit d888c83fcec75194a8a48ccd283953bdba7b2550 ]
 
-Fix the descriptions of the return values of helper bpf_current_task_under_cgroup().
+Jason Donenfeld reports that my commit 1c24a186398f ("fs: fd tables have
+to be multiples of BITS_PER_LONG") doesn't work, and the reason is an
+embarrassing brown-paper-bag bug.
 
-Fixes: c6b5fb8690fa ("bpf: add documentation for eBPF helpers (42-50)")
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220310155335.1278783-1-hengqi.chen@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Yes, we want to align the number of fds to BITS_PER_LONG, and yes, the
+reason they might not be aligned is because the incoming 'max_fd'
+argument might not be aligned.
+
+But aligining the argument - while simple - will cause a "infinitely
+big" maxfd (eg NR_OPEN_MAX) to just overflow to zero.  Which most
+definitely isn't what we want either.
+
+The obvious fix was always just to do the alignment last, but I had
+moved it earlier just to make the patch smaller and the code look
+simpler.  Duh.  It certainly made _me_ look simple.
+
+Fixes: 1c24a186398f ("fs: fd tables have to be multiples of BITS_PER_LONG")
+Reported-and-tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Fedor Pchelkin <aissur0002@gmail.com>
+Cc: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/bpf.h       |    4 ++--
- tools/include/uapi/linux/bpf.h |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ fs/file.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2276,8 +2276,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2276,8 +2276,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+diff --git a/fs/file.c b/fs/file.c
+index a47a1edb9404..8431dfde036c 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -301,10 +301,9 @@ static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
+ 	unsigned int count;
+ 
+ 	count = count_open_files(fdt);
+-	max_fds = ALIGN(max_fds, BITS_PER_LONG);
+ 	if (max_fds < NR_OPEN_DEFAULT)
+ 		max_fds = NR_OPEN_DEFAULT;
+-	return min(count, max_fds);
++	return ALIGN(min(count, max_fds), BITS_PER_LONG);
+ }
+ 
+ /*
+-- 
+2.34.1
+
 
 

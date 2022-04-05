@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B224F4CC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3928D4F4A6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579806AbiDEXdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S1456361AbiDEWpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358034AbiDEK14 (ORCPT
+        with ESMTP id S1358035AbiDEK14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:27:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C0D6949F;
-        Tue,  5 Apr 2022 03:13:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB6D694AC;
+        Tue,  5 Apr 2022 03:13:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4373461562;
-        Tue,  5 Apr 2022 10:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5713FC385A1;
-        Tue,  5 Apr 2022 10:13:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B3DE61562;
+        Tue,  5 Apr 2022 10:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3F5C385A0;
+        Tue,  5 Apr 2022 10:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153592;
-        bh=B8v8pNfUZ+uRQm2T0PwBEj/KLWQ6Ebx8iIUP4hU0hd4=;
+        s=korg; t=1649153595;
+        bh=6teVxoPhBawGeWELxNYk1AiLJDt6H6dR+P6fL/PEkA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HsVN7j8VRsyw5oAjX0zr2oKXUyo0FZq3c+Yrfcgd5NpMfbP3befwrA1yXpRdKu5fA
-         gLa6/xL3gxNGyFVDrI3YfWVi09ox0twth8Ueb501url/0DmGhCg1PP5ZBz0+iG7I7M
-         4iwip9Bkx78lrL9QrG5skho4hr/05kvH0N7u9gug=
+        b=pR800msCUzh6fRFGpsNAslH2rHhd973zmbs2enWnxSi2H1QVNvkLnbSR56X6d2Y4g
+         T+8LNL83ZTagMMBZzq3FrnQAQTSJscoiwrrrLi+6oyIr0NiJv4FGSmmd2Gkhv6KpQE
+         iLUdJn5lyrjM2I2nuBf/XMEgaleCUvBwsuKY6iBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 276/599] drm/amd/pm: return -ENOTSUPP if there is no get_dpm_ultimate_freq function
-Date:   Tue,  5 Apr 2022 09:29:30 +0200
-Message-Id: <20220405070307.050919719@linuxfoundation.org>
+Subject: [PATCH 5.10 277/599] ath9k_htc: fix uninit value bugs
+Date:   Tue,  5 Apr 2022 09:29:31 +0200
+Message-Id: <20220405070307.080278984@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,40 +57,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 430e6a0212b2a0eb1de5e9d47a016fa79edf3978 ]
+[ Upstream commit d1e0df1c57bd30871dd1c855742a7c346dbca853 ]
 
-clang static analysis reports this represenative problem
-amdgpu_smu.c:144:18: warning: The left operand of '*' is a garbage value
-        return clk_freq * 100;
-               ~~~~~~~~ ^
+Syzbot reported 2 KMSAN bugs in ath9k. All of them are caused by missing
+field initialization.
 
-If there is no get_dpm_ultimate_freq function,
-smu_get_dpm_freq_range returns success without setting the
-output min,max parameters.  So return an -ENOTSUPP error.
+In htc_connect_service() svc_meta_len and pad are not initialized. Based
+on code it looks like in current skb there is no service data, so simply
+initialize svc_meta_len to 0.
 
-Fixes: e5ef784b1e17 ("drm/amd/powerplay: revise calling chain on retrieving frequency range")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+htc_issue_send() does not initialize htc_frame_hdr::control array. Based
+on firmware code, it will initialize it by itself, so simply zero whole
+array to make KMSAN happy
+
+Fail logs:
+
+BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
+ hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
+ hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
+ htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
+ htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
+...
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1126 [inline]
+ htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
+...
+
+Bytes 4-7 of 18 are uninitialized
+Memory access of size 18 starts at ffff888027377e00
+
+BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
+ hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
+ hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
+ htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
+ htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
+...
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1126 [inline]
+ htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
+...
+
+Bytes 16-17 of 18 are uninitialized
+Memory access of size 18 starts at ffff888027377e00
+
+Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220115122733.11160-1-paskripkin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath9k/htc_hst.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-index e5893218fa4b..ee27970cfff9 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-@@ -115,7 +115,7 @@ int smu_get_dpm_freq_range(struct smu_context *smu,
- 			   uint32_t *min,
- 			   uint32_t *max)
- {
--	int ret = 0;
-+	int ret = -ENOTSUPP;
+diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
+index 510e61e97dbc..994ec48b2f66 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_hst.c
++++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
+@@ -30,6 +30,7 @@ static int htc_issue_send(struct htc_target *target, struct sk_buff* skb,
+ 	hdr->endpoint_id = epid;
+ 	hdr->flags = flags;
+ 	hdr->payload_len = cpu_to_be16(len);
++	memset(hdr->control, 0, sizeof(hdr->control));
  
- 	if (!min && !max)
- 		return -EINVAL;
+ 	status = target->hif->send(target->hif_dev, endpoint->ul_pipeid, skb);
+ 
+@@ -272,6 +273,10 @@ int htc_connect_service(struct htc_target *target,
+ 	conn_msg->dl_pipeid = endpoint->dl_pipeid;
+ 	conn_msg->ul_pipeid = endpoint->ul_pipeid;
+ 
++	/* To prevent infoleak */
++	conn_msg->svc_meta_len = 0;
++	conn_msg->pad = 0;
++
+ 	ret = htc_issue_send(target, skb, skb->len, 0, ENDPOINT0);
+ 	if (ret)
+ 		goto err;
 -- 
 2.34.1
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12F4F32A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCD84F313A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241517AbiDEKsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S1348125AbiDEKpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240531AbiDEIcG (ORCPT
+        with ESMTP id S240609AbiDEIcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524E73060;
-        Tue,  5 Apr 2022 01:24:32 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DC775E48;
+        Tue,  5 Apr 2022 01:24:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1DCA60FF7;
-        Tue,  5 Apr 2022 08:24:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BCB8C385A2;
-        Tue,  5 Apr 2022 08:24:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8E4B81B92;
+        Tue,  5 Apr 2022 08:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF2FC385A0;
+        Tue,  5 Apr 2022 08:24:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147071;
-        bh=Vsh+HEtCiPguM+o61XlDzjkagD1hYteDwNcaJuONtvk=;
+        s=korg; t=1649147074;
+        bh=cMqtRYjZEQdWC8J/EteWdfFdurSZ5k0jH4EvAFujZW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K5v3PPQ4SexbWujKjUq85TMR1s7Xqegy7+w2SpYg3sgDhdBJp0oiO4ELsmBg29/uM
-         L3RPkgImyLq47KFsv66BWrLuHD/FlCrRfM8vCvUgtQgw2/ItQS669oT/3Dq3BF1Tah
-         eo67JdO4PKmYrwIdtl6zCzBD+NZAOA/hmwYaA8+s=
+        b=HpaJI5ScOCcPDv2fpUznB3va1/MMDMUq9v5CaOuGFKrd2+oe21vw3huCCx3p+O2rp
+         QlQauPnwznaEO/XLKuoDCLuAq68BDa4tbvRjlmkuy8lTxb4ent81fXEn43s8gI52i1
+         ich5QAMaXM+jdnH64s/ey+oH+a4RE5xV6b5OIaWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0990/1126] scsi: qla2xxx: Fix N2N inconsistent PLOGI
-Date:   Tue,  5 Apr 2022 09:28:57 +0200
-Message-Id: <20220405070436.553346977@linuxfoundation.org>
+Subject: [PATCH 5.17 0991/1126] scsi: qla2xxx: Fix stuck session of PRLI reject
+Date:   Tue,  5 Apr 2022 09:28:58 +0200
+Message-Id: <20220405070436.582506710@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,15 +59,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-commit c13ce47c64ea8f14e77eecb40d1e7c2ac667f898 upstream.
+commit f3502e2e98a92981601edc3dadf4b0f43c79836b upstream.
 
-For N2N topology, ELS Passthrough is used to send PLOGI. On failure of ELS
-pass through PLOGI, driver flipped over to using LLIOCB PLOGI for N2N. This
-is not consistent. Delete the session to restart the connection where ELS
-pass through PLOGI would be used consistently.
+Remove stale recovery code that prevents normal path recovery.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-7-njavali@marvell.com
-Fixes: c76ae845ea83 ("scsi: qla2xxx: Add error handling for PLOGI ELS passthrough")
+Link: https://lore.kernel.org/r/20220310092604.22950-11-njavali@marvell.com
+Fixes: 1cbc0efcd9be ("scsi: qla2xxx: Fix retry for PRLI RJT with reason of BUSY")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Quinn Tran <qutran@marvell.com>
@@ -75,39 +72,24 @@ Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c |    7 -------
+ 1 file changed, 7 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2943,6 +2943,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
- 					set_bit(ISP_ABORT_NEEDED,
- 					    &vha->dpc_flags);
- 					qla2xxx_wake_dpc(vha);
-+					break;
- 				}
- 				fallthrough;
- 			default:
-@@ -2952,9 +2953,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
- 				    fw_status[0], fw_status[1], fw_status[2]);
- 
- 				fcport->flags &= ~FCF_ASYNC_SENT;
--				qla2x00_set_fcport_disc_state(fcport,
--				    DSC_LOGIN_FAILED);
--				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
-+				qlt_schedule_sess_for_deletion(fcport);
- 				break;
- 			}
- 			break;
-@@ -2966,8 +2965,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
- 			    fw_status[0], fw_status[1], fw_status[2]);
- 
- 			sp->fcport->flags &= ~FCF_ASYNC_SENT;
--			qla2x00_set_fcport_disc_state(fcport, DSC_LOGIN_FAILED);
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -2104,13 +2104,6 @@ qla24xx_handle_prli_done_event(struct sc
+ 		qla24xx_post_gpdb_work(vha, ea->fcport, 0);
+ 		break;
+ 	default:
+-		if ((ea->iop[0] == LSC_SCODE_ELS_REJECT) &&
+-		    (ea->iop[1] == 0x50000)) {   /* reson 5=busy expl:0x0 */
 -			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
-+			qlt_schedule_sess_for_deletion(fcport);
- 			break;
- 		}
- 
+-			ea->fcport->fw_login_state = DSC_LS_PLOGI_COMP;
+-			break;
+-		}
+-
+ 		sp = ea->sp;
+ 		ql_dbg(ql_dbg_disc, vha, 0x2118,
+ 		       "%s %d %8phC priority %s, fc4type %x prev try %s\n",
 
 

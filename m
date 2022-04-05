@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50474F4E14
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AD84F497F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587449AbiDFAJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S1391532AbiDEWSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242154AbiDEKag (ORCPT
+        with ESMTP id S1353975AbiDEKKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:30:36 -0400
+        Tue, 5 Apr 2022 06:10:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C21DDD946;
-        Tue,  5 Apr 2022 03:18:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C87C4E3A;
+        Tue,  5 Apr 2022 02:56:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85770617A4;
-        Tue,  5 Apr 2022 10:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93246C385A0;
-        Tue,  5 Apr 2022 10:18:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1609D616D7;
+        Tue,  5 Apr 2022 09:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25859C385A1;
+        Tue,  5 Apr 2022 09:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153901;
-        bh=Jf4PjsEHBrgGDU8e0I19DbGc3U4kngzVA4IrMT/RlIM=;
+        s=korg; t=1649152561;
+        bh=g+BIlF8aVqHMQOFVwronpp1v3eo4iKq0jRClRPv6cIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2WUuv/cihSX+IavIqcuYjnvI8btwILQJjEfw+owOM5yH08RKUUi+YF1hiXzj86pwm
-         +kGhlcJWthtXBn5igz/DuHlOo2hnKThYDIj/lAve3l//ViBhfxMIQQseHfLY28jc2n
-         iZ8KxzB3vI8unDyRgeQIpjLpd/o/itTs9dYJjS3k=
+        b=zMtrH3WbshfEJzOckV4BYePrkSOFzjt+4xNDSiiJ5CynqJAWLbSZo3aXNDscl+FZ5
+         UY+P8SADv0sauejqLRn96HATyGpd0hEqjfNiqakJ/og8ajyrrUsjF40qZj6qUu6GER
+         +rFilZiwegn4KALMVSD7fDBzcg0ryCWfZvyohXCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 388/599] pinctrl: renesas: r8a77470: Reduce size for narrow VIN1 channel
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.15 820/913] ubifs: Fix ui->dirty race between do_tmpfile() and writeback work
 Date:   Tue,  5 Apr 2022 09:31:22 +0200
-Message-Id: <20220405070310.377236055@linuxfoundation.org>
+Message-Id: <20220405070404.410883696@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-[ Upstream commit 9e04a0eda84fccab0ac22a33825ad53f47c968c7 ]
+commit 60eb3b9c9f11206996f57cb89521824304b305ad upstream.
 
-The second video-in channel on RZ/G1C has only 12 data lanes, but the
-pin control driver uses the vin_data union, which is meant for 24 data
-lanes, thus wasting space.
+'ui->dirty' is not protected by 'ui_mutex' in function do_tmpfile() which
+may race with ubifs_write_inode[wb_workfn] to access/update 'ui->dirty',
+finally dirty space is released twice.
 
-Fix this by using the vin_data12 union instead.
+	open(O_TMPFILE)                wb_workfn
+do_tmpfile
+  ubifs_budget_space(ino_req = { .dirtied_ino = 1})
+  d_tmpfile // mark inode(tmpfile) dirty
+  ubifs_jnl_update // without holding tmpfile's ui_mutex
+    mark_inode_clean(ui)
+      if (ui->dirty)
+        ubifs_release_dirty_inode_budget(ui)  // release first time
+                                   ubifs_write_inode
+				     mutex_lock(&ui->ui_mutex)
+                                     ubifs_release_dirty_inode_budget(ui)
+				     // release second time
+				     mutex_unlock(&ui->ui_mutex)
+      ui->dirty = 0
 
-This reduces kernel size by 96 bytes.
+Run generic/476 can reproduce following message easily
+(See reproducer in [Link]):
 
-Fixes: 50f3f2d73e3426ba ("pinctrl: sh-pfc: Reduce kernel size for narrow VIN channels")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/52716fa89139f6f92592633edb52804d4c5e18f0.1640269757.git.geert+renesas@glider.be
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  UBIFS error (ubi0:0 pid 2578): ubifs_assert_failed [ubifs]: UBIFS assert
+  failed: c->bi.dd_growth >= 0, in fs/ubifs/budget.c:554
+  UBIFS warning (ubi0:0 pid 2578): ubifs_ro_mode [ubifs]: switched to
+  read-only mode, error -22
+  Workqueue: writeback wb_workfn (flush-ubifs_0_0)
+  Call Trace:
+    ubifs_ro_mode+0x54/0x60 [ubifs]
+    ubifs_assert_failed+0x4b/0x80 [ubifs]
+    ubifs_release_budget+0x468/0x5a0 [ubifs]
+    ubifs_release_dirty_inode_budget+0x53/0x80 [ubifs]
+    ubifs_write_inode+0x121/0x1f0 [ubifs]
+    ...
+    wb_workfn+0x283/0x7b0
+
+Fix it by holding tmpfile ubifs inode lock during ubifs_jnl_update().
+Similar problem exists in whiteout renaming, but previous fix("ubifs:
+Rename whiteout atomically") has solved the problem.
+
+Fixes: 474b93704f32163 ("ubifs: Implement O_TMPFILE")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214765
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/renesas/pfc-r8a77470.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ubifs/dir.c |   60 ++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 30 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/pinctrl/renesas/pfc-r8a77470.c b/drivers/pinctrl/renesas/pfc-r8a77470.c
-index b3b116da1bb0..14005725a726 100644
---- a/drivers/pinctrl/renesas/pfc-r8a77470.c
-+++ b/drivers/pinctrl/renesas/pfc-r8a77470.c
-@@ -2121,7 +2121,7 @@ static const unsigned int vin0_clk_mux[] = {
- 	VI0_CLK_MARK,
- };
- /* - VIN1 ------------------------------------------------------------------- */
--static const union vin_data vin1_data_pins = {
-+static const union vin_data12 vin1_data_pins = {
- 	.data12 = {
- 		RCAR_GP_PIN(3,  1), RCAR_GP_PIN(3, 2),
- 		RCAR_GP_PIN(3,  3), RCAR_GP_PIN(3, 4),
-@@ -2131,7 +2131,7 @@ static const union vin_data vin1_data_pins = {
- 		RCAR_GP_PIN(3, 15), RCAR_GP_PIN(3, 16),
- 	},
- };
--static const union vin_data vin1_data_mux = {
-+static const union vin_data12 vin1_data_mux = {
- 	.data12 = {
- 		VI1_DATA0_MARK, VI1_DATA1_MARK,
- 		VI1_DATA2_MARK, VI1_DATA3_MARK,
--- 
-2.34.1
-
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -397,6 +397,32 @@ out_free:
+ 	return ERR_PTR(err);
+ }
+ 
++/**
++ * lock_2_inodes - a wrapper for locking two UBIFS inodes.
++ * @inode1: first inode
++ * @inode2: second inode
++ *
++ * We do not implement any tricks to guarantee strict lock ordering, because
++ * VFS has already done it for us on the @i_mutex. So this is just a simple
++ * wrapper function.
++ */
++static void lock_2_inodes(struct inode *inode1, struct inode *inode2)
++{
++	mutex_lock_nested(&ubifs_inode(inode1)->ui_mutex, WB_MUTEX_1);
++	mutex_lock_nested(&ubifs_inode(inode2)->ui_mutex, WB_MUTEX_2);
++}
++
++/**
++ * unlock_2_inodes - a wrapper for unlocking two UBIFS inodes.
++ * @inode1: first inode
++ * @inode2: second inode
++ */
++static void unlock_2_inodes(struct inode *inode1, struct inode *inode2)
++{
++	mutex_unlock(&ubifs_inode(inode2)->ui_mutex);
++	mutex_unlock(&ubifs_inode(inode1)->ui_mutex);
++}
++
+ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
+ 			 struct dentry *dentry, umode_t mode)
+ {
+@@ -404,7 +430,7 @@ static int ubifs_tmpfile(struct user_nam
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+ 	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1};
+ 	struct ubifs_budget_req ino_req = { .dirtied_ino = 1 };
+-	struct ubifs_inode *ui, *dir_ui = ubifs_inode(dir);
++	struct ubifs_inode *ui;
+ 	int err, instantiated = 0;
+ 	struct fscrypt_name nm;
+ 
+@@ -452,18 +478,18 @@ static int ubifs_tmpfile(struct user_nam
+ 	instantiated = 1;
+ 	mutex_unlock(&ui->ui_mutex);
+ 
+-	mutex_lock(&dir_ui->ui_mutex);
++	lock_2_inodes(dir, inode);
+ 	err = ubifs_jnl_update(c, dir, &nm, inode, 1, 0);
+ 	if (err)
+ 		goto out_cancel;
+-	mutex_unlock(&dir_ui->ui_mutex);
++	unlock_2_inodes(dir, inode);
+ 
+ 	ubifs_release_budget(c, &req);
+ 
+ 	return 0;
+ 
+ out_cancel:
+-	mutex_unlock(&dir_ui->ui_mutex);
++	unlock_2_inodes(dir, inode);
+ out_inode:
+ 	make_bad_inode(inode);
+ 	if (!instantiated)
+@@ -690,32 +716,6 @@ static int ubifs_dir_release(struct inod
+ 	return 0;
+ }
+ 
+-/**
+- * lock_2_inodes - a wrapper for locking two UBIFS inodes.
+- * @inode1: first inode
+- * @inode2: second inode
+- *
+- * We do not implement any tricks to guarantee strict lock ordering, because
+- * VFS has already done it for us on the @i_mutex. So this is just a simple
+- * wrapper function.
+- */
+-static void lock_2_inodes(struct inode *inode1, struct inode *inode2)
+-{
+-	mutex_lock_nested(&ubifs_inode(inode1)->ui_mutex, WB_MUTEX_1);
+-	mutex_lock_nested(&ubifs_inode(inode2)->ui_mutex, WB_MUTEX_2);
+-}
+-
+-/**
+- * unlock_2_inodes - a wrapper for unlocking two UBIFS inodes.
+- * @inode1: first inode
+- * @inode2: second inode
+- */
+-static void unlock_2_inodes(struct inode *inode1, struct inode *inode2)
+-{
+-	mutex_unlock(&ubifs_inode(inode2)->ui_mutex);
+-	mutex_unlock(&ubifs_inode(inode1)->ui_mutex);
+-}
+-
+ static int ubifs_link(struct dentry *old_dentry, struct inode *dir,
+ 		      struct dentry *dentry)
+ {
 
 

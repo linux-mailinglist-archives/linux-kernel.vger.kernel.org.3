@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1D34F3E4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB664F41FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351405AbiDEPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S1382543AbiDEMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344689AbiDEJmY (ORCPT
+        with ESMTP id S244909AbiDEIwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93843BF00F;
-        Tue,  5 Apr 2022 02:27:57 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A7245B5;
+        Tue,  5 Apr 2022 01:46:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F792B81C84;
-        Tue,  5 Apr 2022 09:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB5BC385A2;
-        Tue,  5 Apr 2022 09:27:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9025C6117A;
+        Tue,  5 Apr 2022 08:46:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97875C385A0;
+        Tue,  5 Apr 2022 08:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150875;
-        bh=fA6jlSOTDUzNe8YCEepk5YnDTbZKLllnbhM2A2nSFIA=;
+        s=korg; t=1649148362;
+        bh=KPm1yhX8itA60T9NSlrJoLLEguqqJLGw5Tnm4qUUNxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=185Zr/F9MRnqlvTftRAWhR0pYs9PFWXzZaadMMjgHL0quRH+YS60EXzT/e9xUbXHF
-         ImGzuwN0FrUBf8v/rKs3vh7s3CpCsZbwFrJj0taf5hzYhoSo3DtxIM4xm58wN0kbvX
-         sOPE8xz2OmY4WfGSbB7lqKWbrWzinOAIQyelKtQw=
+        b=TlF0VHVvuUmjnccvzTfALALwU38JxkqpWcH2D1VUbabIS3vQ6gXruWbETfD/RG9lB
+         nfsNGBOel06HRuIn9OIjOFy7FZNazxjTsvZmmK9tne1e1lKBG+y2Pq/pAXZQv6vUjR
+         JiKd/Z9W9qmG5C/Z2yYRuHFPIMElQ5LpBZBLe+80=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Hector Martin <marcan@marcan.st>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.15 180/913] brcmfmac: pcie: Release firmwares in the brcmf_pcie_setup error path
+        stable@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0329/1017] vsprintf: Fix potential unaligned access
 Date:   Tue,  5 Apr 2022 09:20:42 +0200
-Message-Id: <20220405070345.250153004@linuxfoundation.org>
+Message-Id: <20220405070404.047600293@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 5e90f0f3ead014867dade7a22f93958119f5efab upstream.
+[ Upstream commit d75b26f880f60ead301e79ba0f4a635c5a60767f ]
 
-This avoids leaking memory if brcmf_chip_get_raminfo fails. Note that
-the CLM blob is released in the device remove path.
+The %p4cc specifier in some cases might get an unaligned pointer.
+Due to this we need to make copy to local variable once to avoid
+potential crashes on some architectures due to improper access.
 
-Fixes: 82f93cf46d60 ("brcmfmac: get chip's default RAM info during PCIe setup")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220131160713.245637-2-marcan@marcan.st
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: af612e43de6d ("lib/vsprintf: Add support for printing V4L2 and DRM fourccs")
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220127181233.72910-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c |    2 ++
- 1 file changed, 2 insertions(+)
+ lib/vsprintf.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -1777,6 +1777,8 @@ static void brcmf_pcie_setup(struct devi
- 	ret = brcmf_chip_get_raminfo(devinfo->ci);
- 	if (ret) {
- 		brcmf_err(bus, "Failed to get RAM info\n");
-+		release_firmware(fw);
-+		brcmf_fw_nvram_free(nvram);
- 		goto fail;
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 58d5e567f836..01e61c85f274 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -49,6 +49,7 @@
+ 
+ #include <asm/page.h>		/* for PAGE_SIZE */
+ #include <asm/byteorder.h>	/* cpu_to_le16 */
++#include <asm/unaligned.h>
+ 
+ #include <linux/string_helpers.h>
+ #include "kstrtox.h"
+@@ -1771,7 +1772,7 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+ 	char output[sizeof("0123 little-endian (0x01234567)")];
+ 	char *p = output;
+ 	unsigned int i;
+-	u32 val;
++	u32 orig, val;
+ 
+ 	if (fmt[1] != 'c' || fmt[2] != 'c')
+ 		return error_string(buf, end, "(%p4?)", spec);
+@@ -1779,21 +1780,22 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+ 	if (check_pointer(&buf, end, fourcc, spec))
+ 		return buf;
+ 
+-	val = *fourcc & ~BIT(31);
++	orig = get_unaligned(fourcc);
++	val = orig & ~BIT(31);
+ 
+-	for (i = 0; i < sizeof(*fourcc); i++) {
++	for (i = 0; i < sizeof(u32); i++) {
+ 		unsigned char c = val >> (i * 8);
+ 
+ 		/* Print non-control ASCII characters as-is, dot otherwise */
+ 		*p++ = isascii(c) && isprint(c) ? c : '.';
  	}
  
+-	strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
++	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
+ 	p += strlen(p);
+ 
+ 	*p++ = ' ';
+ 	*p++ = '(';
+-	p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
++	p = special_hex_number(p, output + sizeof(output) - 2, orig, sizeof(u32));
+ 	*p++ = ')';
+ 	*p = '\0';
+ 
+-- 
+2.34.1
+
 
 

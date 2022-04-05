@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E8A4F4F97
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35F84F5167
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838688AbiDFA43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S1846155AbiDFCDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349927AbiDEJwF (ORCPT
+        with ESMTP id S1357993AbiDEK1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:52:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56DD31DEE;
-        Tue,  5 Apr 2022 02:50:07 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977365D5D9;
+        Tue,  5 Apr 2022 03:12:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6617EB81B97;
-        Tue,  5 Apr 2022 09:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCDE6C385A1;
-        Tue,  5 Apr 2022 09:50:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36BB16179E;
+        Tue,  5 Apr 2022 10:12:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429BFC385A1;
+        Tue,  5 Apr 2022 10:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152205;
-        bh=vb2rgtgo3AKuSL5FE0QmtfS6g/HFe+78n9tRIvZUl7Q=;
+        s=korg; t=1649153542;
+        bh=lYJIZpG9+uCGqrzFy8FRL9lrEPzdl6jxqDZR4PCvxOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pRAuGE6JMZD4vFVEj6AjQnMBUqvW/hXutHsQP1jIrdah/WYzdlHj4xEf8qNUySlBB
-         Zzxn3ofMxeaKOGRy08eVeTB2RB7sGwlxGnkyLC4yLP7OMpyRxGGC1wCuOaY2U7qqM/
-         VB7oi4JDahpO94TEEKP3qEBlB6ti9tRENFNK4puE=
+        b=LDJXt0yCkPvHtNtLUd2MXlnGhdbwQ94xAaizUJjo3y0iMmCMFj+5veNzkVqXpz1lo
+         mpyM6ro4g/YhjX0Btfj9SLizs2lXCZqdCJSuQzzp8qc4WM3EsqcHbxoj5sVp3hHFw7
+         50MR8N0RjQQVTvZ1RGwV1oNHxOGXrid6kYY5OfiE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Paul Moore <paul@paul-moore.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 692/913] selinux: use correct type for context length
+Subject: [PATCH 5.10 260/599] drm/meson: osd_afbcd: Add an exit callback to struct meson_afbcd_ops
 Date:   Tue,  5 Apr 2022 09:29:14 +0200
-Message-Id: <20220405070400.578773470@linuxfoundation.org>
+Message-Id: <20220405070306.575987204@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +56,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Göttsche <cgzones@googlemail.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit b97df7c098c531010e445da88d02b7bf7bf59ef6 ]
+[ Upstream commit 04b8a5d9cfd171f65df75f444b5617a372649edd ]
 
-security_sid_to_context() expects a pointer to an u32 as the address
-where to store the length of the computed context.
+Use this to simplify the driver shutdown. It will also come handy when
+fixing the error handling in meson_drv_bind_master().
 
-Reported by sparse:
-
-    security/selinux/xfrm.c:359:39: warning: incorrect type in arg 4
-                                    (different signedness)
-    security/selinux/xfrm.c:359:39:    expected unsigned int
-                                       [usertype] *scontext_len
-    security/selinux/xfrm.c:359:39:    got int *
-
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-[PM: wrapped commit description]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Fixes: d1b5e41e13a7e9 ("drm/meson: Add AFBCD module driver")
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211230235515.1627522-2-martin.blumenstingl@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/xfrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/meson/meson_drv.c       |  6 ++--
+ drivers/gpu/drm/meson/meson_osd_afbcd.c | 41 ++++++++++++++++---------
+ drivers/gpu/drm/meson/meson_osd_afbcd.h |  1 +
+ 3 files changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/security/selinux/xfrm.c b/security/selinux/xfrm.c
-index be83e5ce4469..debe15207d2b 100644
---- a/security/selinux/xfrm.c
-+++ b/security/selinux/xfrm.c
-@@ -347,7 +347,7 @@ int selinux_xfrm_state_alloc_acquire(struct xfrm_state *x,
- 	int rc;
- 	struct xfrm_sec_ctx *ctx;
- 	char *ctx_str = NULL;
--	int str_len;
-+	u32 str_len;
+diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
+index 2753067c08e6..728fea509412 100644
+--- a/drivers/gpu/drm/meson/meson_drv.c
++++ b/drivers/gpu/drm/meson/meson_drv.c
+@@ -396,10 +396,8 @@ static void meson_drv_unbind(struct device *dev)
+ 	drm_irq_uninstall(drm);
+ 	drm_dev_put(drm);
  
- 	if (!polsec)
- 		return 0;
+-	if (priv->afbcd.ops) {
+-		priv->afbcd.ops->reset(priv);
+-		meson_rdma_free(priv);
+-	}
++	if (priv->afbcd.ops)
++		priv->afbcd.ops->exit(priv);
+ }
+ 
+ static const struct component_master_ops meson_drv_master_ops = {
+diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.c b/drivers/gpu/drm/meson/meson_osd_afbcd.c
+index ffc6b584dbf8..0cdbe899402f 100644
+--- a/drivers/gpu/drm/meson/meson_osd_afbcd.c
++++ b/drivers/gpu/drm/meson/meson_osd_afbcd.c
+@@ -79,11 +79,6 @@ static bool meson_gxm_afbcd_supported_fmt(u64 modifier, uint32_t format)
+ 	return meson_gxm_afbcd_pixel_fmt(modifier, format) >= 0;
+ }
+ 
+-static int meson_gxm_afbcd_init(struct meson_drm *priv)
+-{
+-	return 0;
+-}
+-
+ static int meson_gxm_afbcd_reset(struct meson_drm *priv)
+ {
+ 	writel_relaxed(VIU_SW_RESET_OSD1_AFBCD,
+@@ -93,6 +88,16 @@ static int meson_gxm_afbcd_reset(struct meson_drm *priv)
+ 	return 0;
+ }
+ 
++static int meson_gxm_afbcd_init(struct meson_drm *priv)
++{
++	return 0;
++}
++
++static void meson_gxm_afbcd_exit(struct meson_drm *priv)
++{
++	meson_gxm_afbcd_reset(priv);
++}
++
+ static int meson_gxm_afbcd_enable(struct meson_drm *priv)
+ {
+ 	writel_relaxed(FIELD_PREP(OSD1_AFBCD_ID_FIFO_THRD, 0x40) |
+@@ -172,6 +177,7 @@ static int meson_gxm_afbcd_setup(struct meson_drm *priv)
+ 
+ struct meson_afbcd_ops meson_afbcd_gxm_ops = {
+ 	.init = meson_gxm_afbcd_init,
++	.exit = meson_gxm_afbcd_exit,
+ 	.reset = meson_gxm_afbcd_reset,
+ 	.enable = meson_gxm_afbcd_enable,
+ 	.disable = meson_gxm_afbcd_disable,
+@@ -269,6 +275,18 @@ static bool meson_g12a_afbcd_supported_fmt(u64 modifier, uint32_t format)
+ 	return meson_g12a_afbcd_pixel_fmt(modifier, format) >= 0;
+ }
+ 
++static int meson_g12a_afbcd_reset(struct meson_drm *priv)
++{
++	meson_rdma_reset(priv);
++
++	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
++			       VIU_SW_RESET_G12A_OSD1_AFBCD,
++			       VIU_SW_RESET);
++	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
++
++	return 0;
++}
++
+ static int meson_g12a_afbcd_init(struct meson_drm *priv)
+ {
+ 	int ret;
+@@ -286,16 +304,10 @@ static int meson_g12a_afbcd_init(struct meson_drm *priv)
+ 	return 0;
+ }
+ 
+-static int meson_g12a_afbcd_reset(struct meson_drm *priv)
++static void meson_g12a_afbcd_exit(struct meson_drm *priv)
+ {
+-	meson_rdma_reset(priv);
+-
+-	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
+-			       VIU_SW_RESET_G12A_OSD1_AFBCD,
+-			       VIU_SW_RESET);
+-	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
+-
+-	return 0;
++	meson_g12a_afbcd_reset(priv);
++	meson_rdma_free(priv);
+ }
+ 
+ static int meson_g12a_afbcd_enable(struct meson_drm *priv)
+@@ -380,6 +392,7 @@ static int meson_g12a_afbcd_setup(struct meson_drm *priv)
+ 
+ struct meson_afbcd_ops meson_afbcd_g12a_ops = {
+ 	.init = meson_g12a_afbcd_init,
++	.exit = meson_g12a_afbcd_exit,
+ 	.reset = meson_g12a_afbcd_reset,
+ 	.enable = meson_g12a_afbcd_enable,
+ 	.disable = meson_g12a_afbcd_disable,
+diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.h b/drivers/gpu/drm/meson/meson_osd_afbcd.h
+index 5e5523304f42..e77ddeb6416f 100644
+--- a/drivers/gpu/drm/meson/meson_osd_afbcd.h
++++ b/drivers/gpu/drm/meson/meson_osd_afbcd.h
+@@ -14,6 +14,7 @@
+ 
+ struct meson_afbcd_ops {
+ 	int (*init)(struct meson_drm *priv);
++	void (*exit)(struct meson_drm *priv);
+ 	int (*reset)(struct meson_drm *priv);
+ 	int (*enable)(struct meson_drm *priv);
+ 	int (*disable)(struct meson_drm *priv);
 -- 
 2.34.1
 

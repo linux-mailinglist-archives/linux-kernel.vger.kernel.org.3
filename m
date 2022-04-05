@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7947C4F46DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602604F44BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244397AbiDEUr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S1386028AbiDEMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348813AbiDEJsj (ORCPT
+        with ESMTP id S236535AbiDEJDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA09F6C7;
-        Tue,  5 Apr 2022 02:36:02 -0700 (PDT)
+        Tue, 5 Apr 2022 05:03:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F10C7B;
+        Tue,  5 Apr 2022 01:54:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD1DB81C86;
-        Tue,  5 Apr 2022 09:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D36C385A0;
-        Tue,  5 Apr 2022 09:35:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58B361562;
+        Tue,  5 Apr 2022 08:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE36CC385A0;
+        Tue,  5 Apr 2022 08:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151360;
-        bh=vfQKJU19UMrW5LwepiqtiviNOCGXgKRJ9KQlocnkT/4=;
+        s=korg; t=1649148893;
+        bh=7kR5Em9KAFPcdr/UzJk7L2Vdy1QzIZOvLSTG4t3zRps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ocq8ImcJ2WEHHTw0gASsHdFerZLGRemAoMjf5ioEQQ/ll4UBd1W7vZPuwhVQHNrAK
-         NQ3IcjYT/d4BN9L2qGwQPGIzF44zUQkrG9MxgAiV4P81wad66en5SaNk7qWy3Ng36J
-         HscK7w3jeklX+MA+D82iPRBG/FhTSnUR0g6d6+hI=
+        b=HhhzVP4fNzGh0o+/HHREXrjPVscwkvU8jDb8APttvFgYzX3EQ1FDA1BMowVNJbgvC
+         SxeUhiIcWKIP6uH//IQUjwDwlSLGfROmlNMup2DEr3wapxSrJfjVeyneHqL0R4wEXT
+         plUWhBt2kfzeQfIASUy531AVZHBR0oGAGNX63jcU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 370/913] ASoC: codecs: wcd934x: Add missing of_node_put() in wcd934x_codec_parse_data
-Date:   Tue,  5 Apr 2022 09:23:52 +0200
-Message-Id: <20220405070350.937503010@linuxfoundation.org>
+Subject: [PATCH 5.16 0520/1017] drm/msm/dsi/phy: fix 7nm v4.0 settings for C-PHY mode
+Date:   Tue,  5 Apr 2022 09:23:53 +0200
+Message-Id: <20220405070409.731669670@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 9531a631379169d57756b2411178c6238655df88 ]
+[ Upstream commit bb07af2ed2a47dc6c4d0681f275bb27d4f845465 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
-This is similar to commit 64b92de9603f
-("ASoC: wcd9335: fix a leaked reference by adding missing of_node_put")
+The dsi_7nm_phy_enable() disagrees with downstream for
+glbl_str_swi_cal_sel_ctrl and glbl_hstx_str_ctrl_0 values. Update
+programmed settings to match downstream driver. To remove the
+possibility for such errors in future drop less_than_1500_mhz
+assignment and specify settings explicitly.
 
-Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220316083631.14103-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 5ac178381d26 ("drm/msm/dsi: support CPHY mode for 7nm pll/phy")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20220217000837.435340-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd934x.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index 654d847a050e..7b99318070cf 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -5888,6 +5888,7 @@ static int wcd934x_codec_parse_data(struct wcd934x_codec *wcd)
- 	}
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+index 36eb6109cb88..6e506feb111f 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+@@ -864,20 +864,26 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
+ 	/* Alter PHY configurations if data rate less than 1.5GHZ*/
+ 	less_than_1500_mhz = (clk_req->bitclk_rate <= 1500000000);
  
- 	wcd->sidev = of_slim_get_device(wcd->sdev->ctrl, ifc_dev_np);
-+	of_node_put(ifc_dev_np);
- 	if (!wcd->sidev) {
- 		dev_err(dev, "Unable to get SLIM Interface device\n");
- 		return -EINVAL;
+-	/* For C-PHY, no low power settings for lower clk rate */
+-	if (phy->cphy_mode)
+-		less_than_1500_mhz = false;
+-
+ 	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_1) {
+ 		vreg_ctrl_0 = less_than_1500_mhz ? 0x53 : 0x52;
+-		glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
+-		glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
++		if (phy->cphy_mode) {
++			glbl_rescode_top_ctrl = 0x00;
++			glbl_rescode_bot_ctrl = 0x3c;
++		} else {
++			glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
++			glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
++		}
+ 		glbl_str_swi_cal_sel_ctrl = 0x00;
+ 		glbl_hstx_str_ctrl_0 = 0x88;
+ 	} else {
+ 		vreg_ctrl_0 = less_than_1500_mhz ? 0x5B : 0x59;
+-		glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
+-		glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
++		if (phy->cphy_mode) {
++			glbl_str_swi_cal_sel_ctrl = 0x03;
++			glbl_hstx_str_ctrl_0 = 0x66;
++		} else {
++			glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
++			glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
++		}
+ 		glbl_rescode_top_ctrl = 0x03;
+ 		glbl_rescode_bot_ctrl = 0x3c;
+ 	}
 -- 
 2.34.1
 

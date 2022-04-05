@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522204F43FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9AD4F44DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386694AbiDEPQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S1387166AbiDEPQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346721AbiDEJpX (ORCPT
+        with ESMTP id S1346727AbiDEJpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:45:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420C8DB48A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:31:28 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841D4DB494
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:31:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC8DEB81CC0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:31:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A514C385A3;
-        Tue,  5 Apr 2022 09:31:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1181F616D4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35960C385A4;
+        Tue,  5 Apr 2022 09:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151085;
-        bh=sths/yLUf6l8l/Q/YW2CkxyCzaOS6Ye289f/mAv1VcA=;
+        s=k20201202; t=1649151089;
+        bh=uiHlZ9B3W5lGU7aCGfu3OCnkS1lVxbCtOKddSVWv370=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GYDH1QLby77EqcvwL6yOSXoxj43pdwRO8odNEidkRfhT69oDRpMRLHq7FCg+YI+pM
-         Iwvsfi7rXPaSW+dYLBsVNoAdvrIzAo0Fp059rE64wF2ed79KXzwRldo8J0jYsIe7Zj
-         VculLap4vxSSG+gxBPiWV9BECNrhQAShI5MIVLCyPnnPU/E3nsCUS2+6c5ud/tcspn
-         v0EFlfGIC2ZkO6YQ4c12ilWm6R0qmKoVdHBwbsCybfiFUgLWiDBe6rbmMSOmg/V7Pc
-         XTnRxIshg1Qwmmks2bgKjm/crz8HKEd2VRDOWsqozvBiIW1W6piYA3rnk2hUlUS1Ea
-         jtb24YftzlIYA==
+        b=Aw/uVEikYg8w3z5RTaGTNwjjbtuQmJM8DVW6rEK0C8n4NeO/0vceVMQqZnybRJheT
+         oHX+s9DXOpjM3QFZQN92Se2ntxM/2zWzZN3Hd8OuXO+BBF90CtCu/kuY4aR8OQ7LfF
+         w1T0hYlrTiK2NNewvy9WGaslxhv1ltyZdKhQ/+9c2lXTviiWD2UxOK3f6J8YwSEhYG
+         lGO4Wa8wuHSL4F9QaS+c0PypM85PvX+WmfYiJEEdPMr5TkCFd5F3actAy/YxPG5rXq
+         7s7Yyy7treNrWRXWH9HaNSikWHwPG9Vjtuwidt5niqeRz9gsPldh1x3ms7giwpJ3pV
+         l4p3JRPez9bUg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>, steve@sk2.org,
-        nuno.sa@analog.com
-Cc:     wsa@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220325164828.1209201-1-steve@sk2.org>
-References: <20220325164828.1209201-1-steve@sk2.org>
-Subject: Re: [PATCH] ASoC: ada*, ssm*: use simple i2c probe function
-Message-Id: <164915108416.276574.1317659435834583998.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:31:24 +0100
+To:     Liam Girdwood <lgirdwood@gmail.com>, steve@sk2.org,
+        support.opensource@diasemi.com
+Cc:     patches@opensource.cirrus.com, wsa@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220325171243.1218003-1-steve@sk2.org>
+References: <20220325171243.1218003-1-steve@sk2.org>
+Subject: Re: [PATCH] ASoC: da[79]*: use simple i2c probe function
+Message-Id: <164915108791.276574.934197360062835441.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:31:27 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 17:48:28 +0100, Stephen Kitt wrote:
+On Fri, 25 Mar 2022 18:12:43 +0100, Stephen Kitt wrote:
 > The i2c probe functions here don't use the id information provided in
 > their second argument, so the single-parameter i2c probe function
 > ("probe_new") can be used instead.
@@ -71,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: ada*, ssm*: use simple i2c probe function
-      commit: b79bd63a66894ca6c75fb9827dc8f3f7fc1233e2
+[1/1] ASoC: da[79]*: use simple i2c probe function
+      commit: 89be5dc60d67b377be60b47dd12d1a3ee142aacb
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D734F50EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7AA4F5085
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844025AbiDFBm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S242805AbiDFB2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349506AbiDEKTR (ORCPT
+        with ESMTP id S1349207AbiDEJt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:19:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA974140C2;
-        Tue,  5 Apr 2022 03:04:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98432253D;
+        Tue,  5 Apr 2022 02:42:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 246E96167E;
-        Tue,  5 Apr 2022 10:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FD9C385A2;
-        Tue,  5 Apr 2022 10:04:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53261B818F3;
+        Tue,  5 Apr 2022 09:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A883DC385A1;
+        Tue,  5 Apr 2022 09:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153081;
-        bh=65v/Mhq1vJHIlp0/ueHvsif4fe6gAfi+72RU4MfFwZI=;
+        s=korg; t=1649151761;
+        bh=u8PxMLCYo4rYp2EXONipyGluuU3I5q0QkRQTH2Ha+LM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7acPTJNdWq8cHIvG38SQPnxxvIQn7juIaBpmKRW5A4eH36+Q23gGLpnQXphKjmQ9
-         0IlgEnF7b+ViDVoYksVvLO7ZHfdSBR/sus/LruMsiwrT3gVpk6sBBVD8S+lJ4GIc9S
-         rHguGuR2RX023f3NRXW3hrbkTP+17f3GVzX6CnRg=
+        b=1lVs05GRpXcBBO+qOUANVF2UhKmBtiCBn2AXDgUhP54FkG3ujQuYiD4dJ92wg93J0
+         b75qqRt3+Q0gO1/AM9lC4UTtIfoZxfd23IkfWFSf+rgBLs7a4kvedkABYRqiCxwKKz
+         OvzwYE4h5yGOdMs+ugNuGr/V6VT/BuL2kJVv/41I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <jbacik@fb.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 095/599] block: dont merge across cgroup boundaries if blkcg is enabled
-Date:   Tue,  5 Apr 2022 09:26:29 +0200
-Message-Id: <20220405070301.658077817@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 531/913] ath10k: Fix error handling in ath10k_setup_msa_resources
+Date:   Tue,  5 Apr 2022 09:26:33 +0200
+Message-Id: <20220405070355.766997510@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,112 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 6b2b04590b51aa4cf395fcd185ce439cab5961dc upstream.
+[ Upstream commit 9747a78d5f758a5284751a10aee13c30d02bd5f1 ]
 
-blk-iocost and iolatency are cgroup aware rq-qos policies but they didn't
-disable merges across different cgroups. This obviously can lead to
-accounting and control errors but more importantly to priority inversions -
-e.g. an IO which belongs to a higher priority cgroup or IO class may end up
-getting throttled incorrectly because it gets merged to an IO issued from a
-low priority cgroup.
+The device_node pointer is returned by of_parse_phandle() with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fix it by adding blk_cgroup_mergeable() which is called from merge paths and
-rejects cross-cgroup and cross-issue_as_root merges.
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error path.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
-Cc: stable@vger.kernel.org # v4.19+
-Cc: Josef Bacik <jbacik@fb.com>
-Link: https://lore.kernel.org/r/Yi/eE/6zFNyWJ+qd@slm.duckdns.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 727fec790ead ("ath10k: Setup the msa resources before qmi init")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220308070238.19295-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-merge.c          |   11 +++++++++++
- include/linux/blk-cgroup.h |   17 +++++++++++++++++
- 2 files changed, 28 insertions(+)
+ drivers/net/wireless/ath/ath10k/snoc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -7,6 +7,7 @@
- #include <linux/bio.h>
- #include <linux/blkdev.h>
- #include <linux/scatterlist.h>
-+#include <linux/blk-cgroup.h>
+diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
+index 9513ab696fff..f79dd9a71690 100644
+--- a/drivers/net/wireless/ath/ath10k/snoc.c
++++ b/drivers/net/wireless/ath/ath10k/snoc.c
+@@ -1556,11 +1556,11 @@ static int ath10k_setup_msa_resources(struct ath10k *ar, u32 msa_size)
+ 	node = of_parse_phandle(dev->of_node, "memory-region", 0);
+ 	if (node) {
+ 		ret = of_address_to_resource(node, 0, &r);
++		of_node_put(node);
+ 		if (ret) {
+ 			dev_err(dev, "failed to resolve msa fixed region\n");
+ 			return ret;
+ 		}
+-		of_node_put(node);
  
- #include <trace/events/block.h>
- 
-@@ -554,6 +555,9 @@ static inline unsigned int blk_rq_get_ma
- static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
- 		unsigned int nr_phys_segs)
- {
-+	if (!blk_cgroup_mergeable(req, bio))
-+		goto no_merge;
-+
- 	if (blk_integrity_merge_bio(req->q, req, bio) == false)
- 		goto no_merge;
- 
-@@ -650,6 +654,9 @@ static int ll_merge_requests_fn(struct r
- 	if (total_phys_segments > blk_rq_get_max_segments(req))
- 		return 0;
- 
-+	if (!blk_cgroup_mergeable(req, next->bio))
-+		return 0;
-+
- 	if (blk_integrity_merge_rq(q, req, next) == false)
- 		return 0;
- 
-@@ -861,6 +868,10 @@ bool blk_rq_merge_ok(struct request *rq,
- 	if (rq->rq_disk != bio->bi_disk)
- 		return false;
- 
-+	/* don't merge across cgroup boundaries */
-+	if (!blk_cgroup_mergeable(rq, bio))
-+		return false;
-+
- 	/* only merge integrity protected bio into ditto rq */
- 	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
- 		return false;
---- a/include/linux/blk-cgroup.h
-+++ b/include/linux/blk-cgroup.h
-@@ -24,6 +24,7 @@
- #include <linux/atomic.h>
- #include <linux/kthread.h>
- #include <linux/fs.h>
-+#include <linux/blk-mq.h>
- 
- /* percpu_counter batch for blkg_[rw]stats, per-cpu drift doesn't matter */
- #define BLKG_STAT_CPU_BATCH	(INT_MAX / 2)
-@@ -599,6 +600,21 @@ static inline void blkcg_clear_delay(str
- 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
- }
- 
-+/**
-+ * blk_cgroup_mergeable - Determine whether to allow or disallow merges
-+ * @rq: request to merge into
-+ * @bio: bio to merge
-+ *
-+ * @bio and @rq should belong to the same cgroup and their issue_as_root should
-+ * match. The latter is necessary as we don't want to throttle e.g. a metadata
-+ * update because it happens to be next to a regular IO.
-+ */
-+static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio)
-+{
-+	return rq->bio->bi_blkg == bio->bi_blkg &&
-+		bio_issue_as_root_blkg(rq->bio) == bio_issue_as_root_blkg(bio);
-+}
-+
- void blk_cgroup_bio_start(struct bio *bio);
- void blkcg_add_delay(struct blkcg_gq *blkg, u64 now, u64 delta);
- void blkcg_schedule_throttle(struct request_queue *q, bool use_memdelay);
-@@ -654,6 +670,7 @@ static inline void blkg_put(struct blkcg
- static inline bool blkcg_punt_bio_submit(struct bio *bio) { return false; }
- static inline void blkcg_bio_issue_init(struct bio *bio) { }
- static inline void blk_cgroup_bio_start(struct bio *bio) { }
-+static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio) { return true; }
- 
- #define blk_queue_for_each_rl(rl, q)	\
- 	for ((rl) = &(q)->root_rl; (rl); (rl) = NULL)
+ 		ar->msa.paddr = r.start;
+ 		ar->msa.mem_size = resource_size(&r);
+-- 
+2.34.1
+
 
 

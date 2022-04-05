@@ -2,103 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168154F4F7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A964F5178
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838404AbiDFAvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S1846452AbiDFCEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392323AbiDEPgD (ORCPT
+        with ESMTP id S1443051AbiDEPiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:36:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B89013D15;
-        Tue,  5 Apr 2022 06:48:39 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235DWShG013950;
-        Tue, 5 Apr 2022 13:48:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+btC4gU4s+nPb97YMonz7mX3kcm1fmY4AwI+1gHG20g=;
- b=bTphuem0PUznD8kg2rs+NuV0+FB3nebmNyXgnAM9OsljMjy3s3h2lRLhcHxo0qugHbiy
- kA5QLqUjwW6S8rEJmLh3Kqqh5D+AuHpCY0gnFVYDu7f3AHFch5GvGouQ0OTBK9vBFroA
- 2R8394cXhj8YWnq5pfS0B1H2xY7SHGjAjHBIFar2Gt1YlNmtmm6o96fnMBzJJc2higNO
- X0BRYdCCxBeCPBY9j70QrYn/fSNyHjWR909d0jWzJpUAS82Qs/t2FKcb6sGPUdDa4Cqe
- ojVTJ6P/en/C8WPiE90i1osoRr07UcVA+9M4MYdAwf1KPoHrpOCOpdosYE1injkmvIgM EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f85tcpbw6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 13:48:37 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 235DXZMf018785;
-        Tue, 5 Apr 2022 13:48:37 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f85tcpbvw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 13:48:37 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 235Dl5Je012330;
-        Tue, 5 Apr 2022 13:48:36 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma05wdc.us.ibm.com with ESMTP id 3f6e48ykm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 13:48:36 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 235DmZg24260488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 Apr 2022 13:48:35 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C44BC2805C;
-        Tue,  5 Apr 2022 13:48:35 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74D662805A;
-        Tue,  5 Apr 2022 13:48:30 +0000 (GMT)
-Received: from [9.211.32.125] (unknown [9.211.32.125])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  5 Apr 2022 13:48:30 +0000 (GMT)
-Message-ID: <7196af99-fcfa-c9a6-a245-c15268c6851b@linux.ibm.com>
-Date:   Tue, 5 Apr 2022 09:48:29 -0400
+        Tue, 5 Apr 2022 11:38:52 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4E144B5C;
+        Tue,  5 Apr 2022 06:54:15 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h4so19385760wrc.13;
+        Tue, 05 Apr 2022 06:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DtW73tEE2+XFkT3bPsX/7iGbHd2vWpPYT/i50JAUgmI=;
+        b=KRuBEqeehUWFQiE6Qb6pz2CZtRUAXww/24GIyCnvwpdbtfIKvDXbMg/G7g3DnY42x6
+         /iZbgKc5kKf24N8Ac4Mpu156t4HMYzU7Nm+RM3S3BnmbpSHNkHbZn/OOn478oWoEpF8E
+         De5/l0DXrm9uA/jpBI0/y5L4nLSqe4IWXKqb4B9WfjbhMRIsV28Dz8F/Eb2URXYcNzQM
+         AtiZNEnvnfUmIdfza2vc32Mep19NqVFUKjYP78+D97mljq2ztcdx3TyvTolE+C9Klo0g
+         A++9eTEGSW/RNdTwnTzk/7OBaYYwNf3nClqpPAgFLubykoDzWaSzpo9QnkjU9VSqUVjI
+         FKYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DtW73tEE2+XFkT3bPsX/7iGbHd2vWpPYT/i50JAUgmI=;
+        b=wg2+xuN2p/2bH9p0ysDY0PM6PYQ8n/7R/ZS4VFjHDTpKvINogCpTWx/9WCBTAuVo7j
+         PinirXoGTmofj2Ln5Gan1Gip4C4OocGgxWo9ob4Hebzu3IWGVWAYomgkiDu5ndSHpCJG
+         QFAJ0oW6NBPzGaWiTVhc5iXnMjD1+YO6NIaNpTn1gq3pgWIPuDudm9J/EU/9+FtU1sIu
+         xrpdDGHoP0pQg07hQI4Eqbw7zJ1eVlpNL2JkUzBA7Ge3jdsFYByX2WdTDB5XkDS3o5Mm
+         XQiZWc98z48LaZGT5nYfjLgplX4JvuwyDyHWNPGAvQqdBhwsCSAooD3JxOe2UnROC4Q/
+         mkDg==
+X-Gm-Message-State: AOAM530w4awfk3c2ymPRlPpwMmmXnYDUIurCvkyZUeqlNaQuxi3UlFmy
+        0sqjcuoEVA10yEhRf1DKOkA=
+X-Google-Smtp-Source: ABdhPJx7uWLB6seAta51fiSK0+njz9yI+4yOg/CEwF3nvoU2EuPI0t4kkYbH392xPZ7JN2jShsBA+w==
+X-Received: by 2002:a05:6000:156d:b0:204:c24:895f with SMTP id 13-20020a056000156d00b002040c24895fmr3015212wrz.339.1649166854425;
+        Tue, 05 Apr 2022 06:54:14 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k12-20020a5d628c000000b00203e2fbb2absm12132822wru.113.2022.04.05.06.54.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 06:54:13 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: echoaudio: remove redundant assignment to variable i
+Date:   Tue,  5 Apr 2022 14:54:12 +0100
+Message-Id: <20220405135412.199251-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 14/21] KVM: s390: pci: provide routines for
- enabling/disabling interrupt forwarding
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
- <20220404174349.58530-15-mjrosato@linux.ibm.com>
- <9a551f04c3878ecb3a26fed6aff2834fbfe41f18.camel@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <9a551f04c3878ecb3a26fed6aff2834fbfe41f18.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hT11Spx2r5AaBwzNTO_ciEBQkLoA00Hz
-X-Proofpoint-ORIG-GUID: Mn_KHom0Nmle7NXb8B0QGQ9sRPbMTF4a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_02,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0
- impostorscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204050079
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,51 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 9:39 AM, Niklas Schnelle wrote:
-> On Mon, 2022-04-04 at 13:43 -0400, Matthew Rosato wrote:
->> These routines will be wired into a kvm ioctl in order to respond to
->> requests to enable / disable a device for Adapter Event Notifications /
->> Adapter Interuption Forwarding.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/kvm/pci.c      | 247 +++++++++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/pci.h      |   1 +
->>   arch/s390/pci/pci_insn.c |   1 +
->>   3 files changed, 249 insertions(+)
->>
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index 01bd8a2f503b..f0fd68569a9d 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -11,6 +11,7 @@
->>   #include <linux/pci.h>
->>   #include <asm/pci.h>
->>   #include <asm/pci_insn.h>
->> +#include <asm/pci_io.h>
->>   #include "pci.h"
->>   
->>   struct zpci_aift *aift;
->> @@ -152,6 +153,252 @@ int kvm_s390_pci_aen_init(u8 nisc)
->>   	return rc;
->>   }
->>   
->> +/* Modify PCI: Register floating adapter interruption forwarding */
->> +static int kvm_zpci_set_airq(struct zpci_dev *zdev)
->> +{
->> +	u64 req = ZPCI_CREATE_REQ(zdev->fh, 0, ZPCI_MOD_FC_REG_INT);
->> +	struct zpci_fib fib = {};
-> 
-> Hmm this one uses '{}' as initializer while all current callers of
-> zpci_mod_fc() use '{0}'. As far as I know the empty braces are a GNU
-> extension so should work for the kernel but for consistency I'd go with
-> '{0}' or possibly '{.foo = bar, ...}' where that is more readable.
-> There too uninitialized fields will be set to 0. Unless of course there
-> is a conflicting KVM convention that I don't know about.
+The variable i is being assigned a value that is never read, it
+is being re-assigned in the following for-loop. The assignment is
+redundant and can be removed.
 
-No convention that I'm aware of, I previously had fib = {0} based on the 
-same rationale you describe and changed to fib = {} per review request 
-from Pierre a few versions back.  I don't have a strong preference, but 
-I did not note any functional difference between the two and see a bunch 
-of examples of both methods throughout the kernel.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ sound/pci/echoaudio/midi.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/sound/pci/echoaudio/midi.c b/sound/pci/echoaudio/midi.c
+index 7be5c3327b16..47b2c023ee3d 100644
+--- a/sound/pci/echoaudio/midi.c
++++ b/sound/pci/echoaudio/midi.c
+@@ -124,7 +124,6 @@ static int midi_service_irq(struct echoaudio *chip)
+ 		return 0;
+ 
+ 	/* Get the MIDI data from the comm page */
+-	i = 1;
+ 	received = 0;
+ 	for (i = 1; i <= count; i++) {
+ 		/* Get the MIDI byte */
+-- 
+2.35.1
 

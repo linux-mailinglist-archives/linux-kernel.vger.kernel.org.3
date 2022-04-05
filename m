@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C710B4F400C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1854F3EE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389213AbiDEOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S1389069AbiDEOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244217AbiDEJlK (ORCPT
+        with ESMTP id S244212AbiDEJlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:41:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585FABABBF;
-        Tue,  5 Apr 2022 02:25:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCAABB086;
+        Tue,  5 Apr 2022 02:25:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7EAB614F9;
-        Tue,  5 Apr 2022 09:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A8DC385A2;
-        Tue,  5 Apr 2022 09:25:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC3AD61368;
+        Tue,  5 Apr 2022 09:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB6BC385A2;
+        Tue,  5 Apr 2022 09:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150733;
-        bh=+3MwjoxU6y9Rz147dPjjPlPFEMsY7UQgaL93494ZQ1o=;
+        s=korg; t=1649150736;
+        bh=FUcnqxzjXH5u3vbw4nDqrygn9TouK/7YERh2EEo0v3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IIXIWI9DACj5S9BKMbhGExJZ2KR+MRJz1DosANVPVdwhk3Y89bEi6bH81h4p+rPiZ
-         yTnwlq28Ga0dgzbX7tx1gq72WW8+XfBhI4ZGXvK6neUuw/1kU0GaOaEYY01zwWIs+L
-         wga/tPcaL7+ycGfZiGSyd+uLL+L8jZgJvuDiysg0=
+        b=TAlWLhf/lZgqzogPazChfTbzWMOomfJ0Q/pzeVYATyJjKGY107wUXXHCEDtIeeXCa
+         uiRCRTvmiyXPLEKi0dzzbaaFCjAcAGC+YUs4wHuegdk5P9MmUJkv/MsMa87ThimS8z
+         ZKRnnq+KBRfKexNtiVIVdcKsYR+SJen5gJidNad8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.15 160/913] crypto: rsa-pkcs1pad - fix buffer overread in pkcs1pad_verify_complete()
-Date:   Tue,  5 Apr 2022 09:20:22 +0200
-Message-Id: <20220405070344.638617599@linuxfoundation.org>
+        stable@vger.kernel.org, Mingzhe Zou <mingzhe.zou@easystack.cn>,
+        Coly Li <colyli@suse.de>
+Subject: [PATCH 5.15 161/913] bcache: fixup multiple threads crash
+Date:   Tue,  5 Apr 2022 09:20:23 +0200
+Message-Id: <20220405070344.668773120@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,33 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Mingzhe Zou <mingzhe.zou@easystack.cn>
 
-commit a24611ea356c7f3f0ec926da11b9482ac1f414fd upstream.
+commit 887554ab96588de2917b6c8c73e552da082e5368 upstream.
 
-Before checking whether the expected digest_info is present, we need to
-check that there are enough bytes remaining.
+When multiple threads to check btree nodes in parallel, the main
+thread wait for all threads to stop or CACHE_SET_IO_DISABLE flag:
 
-Fixes: a49de377e051 ("crypto: Add hash param to pkcs1pad")
-Cc: <stable@vger.kernel.org> # v4.6+
-Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+wait_event_interruptible(check_state->wait,
+                         atomic_read(&check_state->started) == 0 ||
+                         test_bit(CACHE_SET_IO_DISABLE, &c->flags));
+
+However, the bch_btree_node_read and bch_btree_node_read_done
+maybe call bch_cache_set_error, then the CACHE_SET_IO_DISABLE
+will be set. If the flag already set, the main thread return
+error. At the same time, maybe some threads still running and
+read NULL pointer, the kernel will crash.
+
+This patch change the event wait condition, the main thread must
+wait for all threads to stop.
+
+Fixes: 8e7102273f597 ("bcache: make bch_btree_check() to be multithreaded")
+Signed-off-by: Mingzhe Zou <mingzhe.zou@easystack.cn>
+Cc: stable@vger.kernel.org # v5.7+
+Signed-off-by: Coly Li <colyli@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/rsa-pkcs1pad.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/bcache/btree.c     |    6 ++++--
+ drivers/md/bcache/writeback.c |    6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
---- a/crypto/rsa-pkcs1pad.c
-+++ b/crypto/rsa-pkcs1pad.c
-@@ -476,6 +476,8 @@ static int pkcs1pad_verify_complete(stru
- 	pos++;
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -2060,9 +2060,11 @@ int bch_btree_check(struct cache_set *c)
+ 		}
+ 	}
  
- 	if (digest_info) {
-+		if (digest_info->size > dst_len - pos)
-+			goto done;
- 		if (crypto_memneq(out_buf + pos, digest_info->data,
- 				  digest_info->size))
- 			goto done;
++	/*
++	 * Must wait for all threads to stop.
++	 */
+ 	wait_event_interruptible(check_state->wait,
+-				 atomic_read(&check_state->started) == 0 ||
+-				  test_bit(CACHE_SET_IO_DISABLE, &c->flags));
++				 atomic_read(&check_state->started) == 0);
+ 
+ 	for (i = 0; i < check_state->total_threads; i++) {
+ 		if (check_state->infos[i].result) {
+--- a/drivers/md/bcache/writeback.c
++++ b/drivers/md/bcache/writeback.c
+@@ -998,9 +998,11 @@ void bch_sectors_dirty_init(struct bcach
+ 		}
+ 	}
+ 
++	/*
++	 * Must wait for all threads to stop.
++	 */
+ 	wait_event_interruptible(state->wait,
+-		 atomic_read(&state->started) == 0 ||
+-		 test_bit(CACHE_SET_IO_DISABLE, &c->flags));
++		 atomic_read(&state->started) == 0);
+ 
+ out:
+ 	kfree(state);
 
 

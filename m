@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95FF4F36A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE154F36B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbiDELGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S239006AbiDELHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237689AbiDEInM (ORCPT
+        with ESMTP id S237691AbiDEInM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:43:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FE619C23;
-        Tue,  5 Apr 2022 01:35:44 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBDE19C2B;
+        Tue,  5 Apr 2022 01:35:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72E17B81B13;
-        Tue,  5 Apr 2022 08:35:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0FC1C385A0;
-        Tue,  5 Apr 2022 08:35:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ADDA614E4;
+        Tue,  5 Apr 2022 08:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86534C385A0;
+        Tue,  5 Apr 2022 08:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147742;
-        bh=wlmFr2b3C5Fy7AKv86kvgZ3YLzVJKOPbSeAkty2RuEU=;
+        s=korg; t=1649147744;
+        bh=n+BFEzwOApYau1OiRTnqO3M1ncuHVMLsMx7/cfFVaHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tpNx/Ew+S1XUl3+1bJn1sGi+R1NoymEmvKJimld2+tF5gKAs5RQrLtuydrOKY1QXs
-         CC+msd2GTSCcrX7daTUVgJ/ZrPR8RzhrUeHGFQISVx1meHJ98jRN+pyc3ODY08oo0T
-         z6fgmCF1NVWtpKYXa0a7ccTHy/DEFMwVspikuZWU=
+        b=a5Xeiy08yXDrGtH4L9uU6bDyW7y7AFEJizHoJNHSvx3fLJOjDQ9YLnymGYhhXDf5s
+         2aCYbr5mG6304aIY+lopIt1fHxB1S8ixbt4J1detX+oETK0kJdbCfc1bPnftW6rBwP
+         HnVUGaG6vx4MXO5UyoTCS1ZmdlL8Jm9lLwvBWUbw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 0104/1017] ALSA: cs4236: fix an incorrect NULL check on list iterator
-Date:   Tue,  5 Apr 2022 09:16:57 +0200
-Message-Id: <20220405070357.283347126@linuxfoundation.org>
+Subject: [PATCH 5.16 0105/1017] ALSA: hda: Avoid unsol event during RPM suspending
+Date:   Tue,  5 Apr 2022 09:16:58 +0200
+Message-Id: <20220405070357.313351047@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,57 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Mohan Kumar <mkumard@nvidia.com>
 
-commit 0112f822f8a6d8039c94e0bc9b264d7ffc5d4704 upstream.
+commit 6ddc2f749621d5d45ca03edc9f0616bcda136d29 upstream.
 
-The bug is here:
-	err = snd_card_cs423x_pnp(dev, card->private_data, pdev, cdev);
+There is a corner case with unsol event handling during codec runtime
+suspending state. When the codec runtime suspend call initiated, the
+codec->in_pm atomic variable would be 0, currently the codec runtime
+suspend function calls snd_hdac_enter_pm() which will just increments
+the codec->in_pm atomic variable. Consider unsol event happened just
+after this step and before snd_hdac_leave_pm() in the codec runtime
+suspend function. The snd_hdac_power_up_pm() in the unsol event
+flow in hdmi_present_sense_via_verbs() function would just increment
+the codec->in_pm atomic variable without calling pm_runtime_get_sync
+function.
 
-The list iterator value 'cdev' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+As codec runtime suspend flow is already in progress and in parallel
+unsol event is also accessing the codec verbs, as soon as codec
+suspend flow completes and clocks are  switched off before completing
+the unsol event handling as both functions doesn't wait for each other.
+This will result in below errors
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'cdev' as a dedicated pointer
-to point to the found element. And snd_card_cs423x_pnp() itself
-has NULL check for cdev.
+[  589.428020] tegra-hda 3510000.hda: azx_get_response timeout, switching
+to polling mode: last cmd=0x505f2f57
+[  589.428344] tegra-hda 3510000.hda: spurious response 0x80000074:0x5,
+last cmd=0x505f2f57
+[  589.428547] tegra-hda 3510000.hda: spurious response 0x80000065:0x5,
+last cmd=0x505f2f57
 
-Cc: stable@vger.kernel.org
-Fixes: c2b73d1458014 ("ALSA: cs4236: cs4232 and cs4236 driver merge to solve PnP BIOS detection")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327060822.4735-1-xiam0nd.tong@gmail.com
+To avoid this, the unsol event flow should not perform any codec verb
+related operations during RPM_SUSPENDING state.
+
+Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220329155940.26331-1-mkumard@nvidia.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/isa/cs423x/cs4236.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ sound/pci/hda/patch_hdmi.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/sound/isa/cs423x/cs4236.c
-+++ b/sound/isa/cs423x/cs4236.c
-@@ -494,7 +494,7 @@ static int snd_cs423x_pnpbios_detect(str
- 	static int dev;
- 	int err;
- 	struct snd_card *card;
--	struct pnp_dev *cdev;
-+	struct pnp_dev *cdev, *iter;
- 	char cid[PNP_ID_LEN];
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -1617,6 +1617,7 @@ static void hdmi_present_sense_via_verbs
+ 	struct hda_codec *codec = per_pin->codec;
+ 	struct hdmi_spec *spec = codec->spec;
+ 	struct hdmi_eld *eld = &spec->temp_eld;
++	struct device *dev = hda_codec_dev(codec);
+ 	hda_nid_t pin_nid = per_pin->pin_nid;
+ 	int dev_id = per_pin->dev_id;
+ 	/*
+@@ -1630,8 +1631,13 @@ static void hdmi_present_sense_via_verbs
+ 	int present;
+ 	int ret;
  
- 	if (pnp_device_is_isapnp(pdev))
-@@ -510,9 +510,11 @@ static int snd_cs423x_pnpbios_detect(str
- 	strcpy(cid, pdev->id[0].id);
- 	cid[5] = '1';
- 	cdev = NULL;
--	list_for_each_entry(cdev, &(pdev->protocol->devices), protocol_list) {
--		if (!strcmp(cdev->id[0].id, cid))
-+	list_for_each_entry(iter, &(pdev->protocol->devices), protocol_list) {
-+		if (!strcmp(iter->id[0].id, cid)) {
-+			cdev = iter;
- 			break;
-+		}
- 	}
- 	err = snd_cs423x_card_new(&pdev->dev, dev, &card);
- 	if (err < 0)
++#ifdef	CONFIG_PM
++	if (dev->power.runtime_status == RPM_SUSPENDING)
++		return;
++#endif
++
+ 	ret = snd_hda_power_up_pm(codec);
+-	if (ret < 0 && pm_runtime_suspended(hda_codec_dev(codec)))
++	if (ret < 0 && pm_runtime_suspended(dev))
+ 		goto out;
+ 
+ 	present = snd_hda_jack_pin_sense(codec, pin_nid, dev_id);
 
 

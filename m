@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61184F50E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BE64F4FD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843806AbiDFBmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S1839734AbiDFBFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357671AbiDEK0n (ORCPT
+        with ESMTP id S1357736AbiDEK1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:26:43 -0400
+        Tue, 5 Apr 2022 06:27:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBD534669;
-        Tue,  5 Apr 2022 03:10:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDB635269;
+        Tue,  5 Apr 2022 03:10:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FE706172B;
-        Tue,  5 Apr 2022 10:10:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6710AC385A0;
-        Tue,  5 Apr 2022 10:10:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 104046167E;
+        Tue,  5 Apr 2022 10:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25ECFC385A1;
+        Tue,  5 Apr 2022 10:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153435;
-        bh=zZUpulxjp8MFrormfip6zMCIpYZ6J5kv9bWMRs0bt64=;
+        s=korg; t=1649153438;
+        bh=TQEoHm3T90D3TYiPQ5EtdZqnIDcfq9Y8P3cxHI0wauA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wkDkRr04hN33TE5DkoCXEHbzkEP2d23SsNhSxwoxJRW4WHj74oeleKQpcEeH9w3cS
-         psb7kDjD2YVjHOPsD1/tCmTeJaoUsNjmwxgObo79up+Eg7g3wu7Eetvfdqmhsx9m0L
-         0RDJFq6UPuzI0sMAJ213RvUUXXnxKHH4rdZoMP8c=
+        b=i+yE7g8QZPYWe4wqmVkuve7Hvr8Z9z6SIr2aUiVAEjgPZWWNEDO7hwF+vcOlrvwxq
+         ijAmEjtevyTnOxBgzwiR7HK9YNJ9b4NZ18wU3OHKCnKdtim3kUSwL1Vmdojhtd7AId
+         Xc5nyLVC7D89L59ZwTSnDgxEzR+e/nvXaTC2ZVTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 222/599] ASoC: rt5663: check the return value of devm_kzalloc() in rt5663_parse_dp()
-Date:   Tue,  5 Apr 2022 09:28:36 +0200
-Message-Id: <20220405070305.448716395@linuxfoundation.org>
+Subject: [PATCH 5.10 223/599] ASoC: ti: davinci-i2s: Add check for clk_enable()
+Date:   Tue,  5 Apr 2022 09:28:37 +0200
+Message-Id: <20220405070305.477879352@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,36 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 4d06f92f38b799295ae22c98be7a20cac3e2a1a7 ]
+[ Upstream commit ed7c9fef11931fc5d32a83d68017ff390bf5c280 ]
 
-The function devm_kzalloc() in rt5663_parse_dp() can fail, so its return
-value should be checked.
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-Fixes: 457c25efc592 ("ASoC: rt5663: Add the function of impedance sensing")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Link: https://lore.kernel.org/r/20220225131030.27248-1-baijiaju1990@gmail.com
+Fixes: 5f9a50c3e55e ("ASoC: Davinci: McBSP: add device tree support for McBSP")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Link: https://lore.kernel.org/r/20220228031540.3571959-1-jiasheng@iscas.ac.cn
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5663.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/ti/davinci-i2s.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/rt5663.c b/sound/soc/codecs/rt5663.c
-index db8a41aaa385..4423e61bf1ab 100644
---- a/sound/soc/codecs/rt5663.c
-+++ b/sound/soc/codecs/rt5663.c
-@@ -3478,6 +3478,8 @@ static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
- 		table_size = sizeof(struct impedance_mapping_table) *
- 			rt5663->pdata.impedance_sensing_num;
- 		rt5663->imp_table = devm_kzalloc(dev, table_size, GFP_KERNEL);
-+		if (!rt5663->imp_table)
-+			return -ENOMEM;
- 		ret = device_property_read_u32_array(dev,
- 			"realtek,impedance_sensing_table",
- 			(u32 *)rt5663->imp_table, table_size);
+diff --git a/sound/soc/ti/davinci-i2s.c b/sound/soc/ti/davinci-i2s.c
+index dd34504c09ba..4895bcee1f55 100644
+--- a/sound/soc/ti/davinci-i2s.c
++++ b/sound/soc/ti/davinci-i2s.c
+@@ -708,7 +708,9 @@ static int davinci_i2s_probe(struct platform_device *pdev)
+ 	dev->clk = clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(dev->clk))
+ 		return -ENODEV;
+-	clk_enable(dev->clk);
++	ret = clk_enable(dev->clk);
++	if (ret)
++		goto err_put_clk;
+ 
+ 	dev->dev = &pdev->dev;
+ 	dev_set_drvdata(&pdev->dev, dev);
+@@ -730,6 +732,7 @@ static int davinci_i2s_probe(struct platform_device *pdev)
+ 	snd_soc_unregister_component(&pdev->dev);
+ err_release_clk:
+ 	clk_disable(dev->clk);
++err_put_clk:
+ 	clk_put(dev->clk);
+ 	return ret;
+ }
 -- 
 2.34.1
 

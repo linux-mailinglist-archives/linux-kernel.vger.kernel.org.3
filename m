@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68674F2855
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3413F4F2841
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiDEINp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S234005AbiDEILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbiDEH6h (ORCPT
+        with ESMTP id S233337AbiDEH5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACB5A5E9E;
-        Tue,  5 Apr 2022 00:52:38 -0700 (PDT)
+        Tue, 5 Apr 2022 03:57:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36184504C;
+        Tue,  5 Apr 2022 00:50:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 205136172C;
-        Tue,  5 Apr 2022 07:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2764DC340EE;
-        Tue,  5 Apr 2022 07:52:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BBECB81BAF;
+        Tue,  5 Apr 2022 07:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFFEC340EE;
+        Tue,  5 Apr 2022 07:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145157;
-        bh=QdZzKpYR0Ak0Jkw0efMXTY/uKg67msQsuJfRVbPyVW4=;
+        s=korg; t=1649145052;
+        bh=S9cmyvSafNm0XeTi5sEgSrscdGdc2H02qmOF7tU8Kz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0mHJb9yTjgJAwsn3tBEhqlW3XmUNawgFh4/4ygZZxACXXRYYpZUroHG/5z/jzkNtE
-         KJ/r3dwzoyQGBh5FLzvs+Mev3PgA5PbxKBO9l5ONQEvY9eg9ROoU3fYfg4Biz0JlRg
-         lOGVywluG2PmwiDOXXg3EKkh6Zk4cl3Yd2JzHIps=
+        b=w1DTVntSHDMojccmFFdqNBm5oLaIiI/AzVIg2MAeuWPPjoRG7GdytWnmHD4HCFIb7
+         pYx32UfdQNbKQMJphHXp8EHDqkLsWnjNUbjRQB3W3HK7hZT9/CwrVbZIEInRMkqIgi
+         iVj0q/zd3KL52gYINaDINFVPI4I1gZ95LAIXDhYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Zhipeng Tan <tanzhipeng@hust.edu.cn>,
+        Jicheng Shao <shaojicheng@hust.edu.cn>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0257/1126] crypto: ccp - ccp_dmaengine_unregister release dma channels
-Date:   Tue,  5 Apr 2022 09:16:44 +0200
-Message-Id: <20220405070415.154399786@linuxfoundation.org>
+Subject: [PATCH 5.17 0268/1126] f2fs: fix to enable ATGC correctly via gc_idle sysfs interface
+Date:   Tue,  5 Apr 2022 09:16:55 +0200
+Message-Id: <20220405070415.477113051@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,64 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dāvis Mosāns <davispuh@gmail.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 54cce8ecb9254f971b40a72911c6da403720a2d2 ]
+[ Upstream commit 7d19e3dab0002e527052b0aaf986e8c32e5537bf ]
 
-ccp_dmaengine_register adds dma_chan->device_node to dma_dev->channels list
-but ccp_dmaengine_unregister didn't remove them.
-That can cause crashes in various dmaengine methods that tries to use dma_dev->channels
+It needs to assign sbi->gc_mode with GC_IDLE_AT rather than GC_AT when
+user tries to enable ATGC via gc_idle sysfs interface, fix it.
 
-Fixes: 58ea8abf4904 ("crypto: ccp - Register the CCP as a DMA...")
-Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
-Acked-by: John Allen <john.allen@amd.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 093749e296e2 ("f2fs: support age threshold based garbage collection")
+Cc: Zhipeng Tan <tanzhipeng@hust.edu.cn>
+Signed-off-by: Jicheng Shao <shaojicheng@hust.edu.cn>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccp/ccp-dmaengine.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ fs/f2fs/sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-index d718db224be4..7d4b4ad1db1f 100644
---- a/drivers/crypto/ccp/ccp-dmaengine.c
-+++ b/drivers/crypto/ccp/ccp-dmaengine.c
-@@ -632,6 +632,20 @@ static int ccp_terminate_all(struct dma_chan *dma_chan)
- 	return 0;
- }
- 
-+static void ccp_dma_release(struct ccp_device *ccp)
-+{
-+	struct ccp_dma_chan *chan;
-+	struct dma_chan *dma_chan;
-+	unsigned int i;
-+
-+	for (i = 0; i < ccp->cmd_q_count; i++) {
-+		chan = ccp->ccp_dma_chan + i;
-+		dma_chan = &chan->dma_chan;
-+		tasklet_kill(&chan->cleanup_tasklet);
-+		list_del_rcu(&dma_chan->device_node);
-+	}
-+}
-+
- int ccp_dmaengine_register(struct ccp_device *ccp)
- {
- 	struct ccp_dma_chan *chan;
-@@ -736,6 +750,7 @@ int ccp_dmaengine_register(struct ccp_device *ccp)
- 	return 0;
- 
- err_reg:
-+	ccp_dma_release(ccp);
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 
- err_cache:
-@@ -752,6 +767,7 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
- 		return;
- 
- 	dma_async_device_unregister(dma_dev);
-+	ccp_dma_release(ccp);
- 
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 	kmem_cache_destroy(ccp->dma_cmd_cache);
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 8ac506671245..bdb1b5c05be2 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -481,7 +481,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 		} else if (t == GC_IDLE_AT) {
+ 			if (!sbi->am.atgc_enabled)
+ 				return -EINVAL;
+-			sbi->gc_mode = GC_AT;
++			sbi->gc_mode = GC_IDLE_AT;
+ 		} else {
+ 			sbi->gc_mode = GC_NORMAL;
+ 		}
 -- 
 2.34.1
 

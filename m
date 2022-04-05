@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35474F4F65
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E17C4F50D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837890AbiDFAs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S1843513AbiDFBlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452191AbiDEPyf (ORCPT
+        with ESMTP id S1452385AbiDEPyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:54:35 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06971D3077;
-        Tue,  5 Apr 2022 07:50:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:0:2f5a:2277:ba57:a2c0:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 626051F44FBD;
-        Tue,  5 Apr 2022 15:50:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649170224;
-        bh=aUWjMFcKdA/ahzvcq6qNxNOe4FMWkYYbLu73Qvpgl0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U+MGghngzjg05eWaLvwMsCBeWsVxk8Z5QWXjbrXvZkApCZU55ktgvN58ekEgDUBOs
-         Svvlhaa+vCXBfzpmkKdhxGBfu1h4SGk1lCodM/zrTrEc+6XB+qoXaVYhVZtdCO0TA3
-         Wl2p4r5KItJwaiT5T0BJhAw+k0dhSg8L0dApr7cZ3F0QTF9L1SwP5oPIL6a8J6CL+B
-         iH4dF0/9fvlECQ5hGngEpr0F0xx20+9UKhPnpEx1SKR6AkOCU8elAiLKFOZNicD4Ip
-         sFw5fQWkq58nAABH2RyrooFIsZDZp3TiTlfPVdFbXHAoOpZXGF+BW8lbaMuWS/4bTW
-         kkkkxz3gKn6gQ==
-Date:   Tue, 5 Apr 2022 16:50:20 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-trace-devel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Torsten Duwe <duwe@suse.de>
-Subject: Re: Corrupted function tracer in 5.17.0-rc1
-Message-ID: <20220405145020.55nopur6ccjyndnr@basti-XPS-13-9310>
-References: <20220404125212.tuby556kara5t56c@basti-XPS-13-9310>
- <20220404102607.5c9cb515@gandalf.local.home>
- <YksG6LXUCwIZhK8k@FVFF77S0Q05N>
- <20220404110633.1b246d55@gandalf.local.home>
+        Tue, 5 Apr 2022 11:54:51 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B514010BA
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:54:29 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id c4so11426192qtx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 07:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=GiOCB0LEnVJnuUDKgIp7T1dC76Lv7y/CQVx5+uI2YZc=;
+        b=M4hADWEp021dn2H8CsRC3C99oEW6F8vJHJoOMLrMCUtoe85gORP+719UDYi2PioJJ3
+         GAsgSFwUvRgL8dnof/nCYGHgPIa1D9XSoPsoIXWanp2KBItOXOVI2x5vt0aYpRQfdiZB
+         HHKE/qkU+hyMsvzIK6CkqHKMgoxN97q8Z4ea4nnIyD/gUD17zGKWZIafrQHusA3jX10q
+         BJf6b1JG5zF174+wAgF5T1WJ8R9h4qVTE22/B9YkTgcl1C4jAyXI50FDli44jMrzaNIQ
+         vCzcayMxf5CKvgNqsYxf6Mj6swmrVLwPvB11MJUtx/UVVPyWFX9kKiWXc7vUDesLtrlo
+         lVsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=GiOCB0LEnVJnuUDKgIp7T1dC76Lv7y/CQVx5+uI2YZc=;
+        b=g09kPDWAN+3TiYeGgjIWfqYv00sO8eLvJ4Sgv1NqSkmdupu8PUUd9o41rCe7lydEyd
+         qBvTmwXAnwpDZxPN+xujBWc6sHUyNlXOEHqXnannVUSgcPLyZkQhwwKs8Y4/n6w8yXEB
+         tf57W65FxX/xgRD5wCGeWLlYn+MJHyEt7XJ8J9yZKXdwAd8adk6TQL6X0O4z161aSfvO
+         m0Y2pw7LvFsOfo+ANcpLfx+2P3bYw/2XRTu7DDdubb0u5a0yGIF0sZxsqaKYNXM6v/8q
+         Se101ih24p1jgnZQxbya9qBNlIxafeJJs2Azsv2U2ckmCQRMdEj92iAKLopC/ItOO+Is
+         H+tw==
+X-Gm-Message-State: AOAM531lON/BkYf4KGQGdx38nqCUXZjyD+IZnwrN2PmWmedQJiPTfjy/
+        vyvzprp7lRuCIkpooVPJR1LQa8xMkqfYQw==
+X-Google-Smtp-Source: ABdhPJxWyKR68v2HR7slViur6n1YhBWHCXKEZdM79ZxGegD3hmcTEcx9ZnCjsvnh4vH3eih2OrSbyg==
+X-Received: by 2002:ac8:5dcd:0:b0:2eb:9458:4985 with SMTP id e13-20020ac85dcd000000b002eb94584985mr3329851qtx.85.1649170468792;
+        Tue, 05 Apr 2022 07:54:28 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id u62-20020a379241000000b0067ed2b0994dsm8201646qkd.54.2022.04.05.07.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:54:28 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 10:54:24 -0400
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH] staging: rtl8723bs: fix indentation
+Message-ID: <20220405145424.GA623343@euclid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404110633.1b246d55@gandalf.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Steven & Mark,
+Adhere to Linux kernel coding style.
 
-On 04.04.2022 11:06, Steven Rostedt wrote:
->On Mon, 4 Apr 2022 15:55:36 +0100
->Mark Rutland <mark.rutland@arm.com> wrote:
->
->> From the title, this is v5.17-rc1, which is known broken due to the mcount sort
->> issue that was subsequently fixed in commit:
->
->Ah, yes. I was thinking of 5.18-rc1 (which has just been released)
->
->>
->>   4ed308c445a1e3ab ("ftrace: Have architectures opt-in for mcount build time sorting")
->>
->> Is it possible to try with the final v5.17? Or at least try with that patch
->> cherry-picked?
->
->Right, 5.17-rc1 is known broken. Please try the latest, 5.17 and let us
->know if it is still an issue.
+Reported by checkpatch:
 
-Using 5.18-rc1 it works well, thanks for the quick help.
->
->Thanks,
->
->-- Steve
+WARNING: suspect code indent for conditional statements
 
-Greetings,
-Sebastian
+Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+---
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+index 04e29e228c1e..1bdbd0971f73 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+@@ -5143,17 +5143,9 @@ void link_timer_hdl(struct timer_list *t)
+ 	} else if (pmlmeinfo->state & WIFI_FW_AUTH_STATE) {
+ 		/* re-auth timer */
+ 		if (++pmlmeinfo->reauth_count > REAUTH_LIMIT) {
+-			/* if (pmlmeinfo->auth_algo != dot11AuthAlgrthm_Auto) */
+-			/*  */
+-				pmlmeinfo->state = 0;
+-				report_join_res(padapter, -1);
+-				return;
+-			/*  */
+-			/* else */
+-			/*  */
+-			/* 	pmlmeinfo->auth_algo = dot11AuthAlgrthm_Shared; */
+-			/* 	pmlmeinfo->reauth_count = 0; */
+-			/*  */
++			pmlmeinfo->state = 0;
++			report_join_res(padapter, -1);
++			return;
+ 		}
+ 
+ 		pmlmeinfo->auth_seq = 1;
+-- 
+2.25.1
+

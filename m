@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3224F526F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBE14F5266
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382318AbiDFCtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S1850209AbiDFCsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1585294AbiDEX7k (ORCPT
+        with ESMTP id S1585447AbiDEX74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:59:40 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724A6213508
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:16:21 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d7eaa730d9so5192907b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:16:21 -0700 (PDT)
+        Tue, 5 Apr 2022 19:59:56 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4F7FF4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:19:08 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so840247pjk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=NTGx3vO8sq1dXtBCR5+TJJ5C7vnKyf9ljgD3Rl3d4sc=;
-        b=h8iz4EugNtzHw+TkxpZpBYCGCCOw0O9FMz2im/z0uUrLEs+1T52HjzmQ59g+6fbKtW
-         DKg7PkBnEW/HsKPM93MnIaFOO4AJeFN+m4VQiDY9nglhzeWUyn99nm3Y+Tfj00E6o1LV
-         clW7XpypS22Xo9AG8ovaE+We/efPkEUIcnfi3gTtLrw3lQfMfztiIjqMECCWvzHOrY5a
-         mrkFMxmIFvKclS6MRmCe9hcPjAj1px/J8E40FJt/mK7p3ItlwQNHAdg7tKwEalQSnFhZ
-         BCqc5MBXlrTwZkAHrKMfLBINPchgzD+FarD1hUAIYdqXoj3yR4SBE9MF9IJLHrUOiWek
-         /2AQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Mb3Hz6A+dQKIIp0hbQkZNPT8r/kfRWqo9hHnNe02tSc=;
+        b=DJKVcAlgYQLRGDnF4oZDPo6kaUyeBcvUbtM9DQf4086nr63s8CV9xaA1pFyPyVd6zv
+         KsxOq1fTBSBLVdVE0CbjXdyfvsPtrQSojZ3Ik5EtcFOlwIq5JQgHzxbHR555WL9crepH
+         S72rxBu3yQnfLA+Xf5i9Hnhm5xnrtmZcwryoQPDPjxI+PAJgd+UNYC/EvIZh82CdY+qq
+         8FH2u9NSIAcodKHw8ZNc9P4332gvKphUsRzJgm9IKnYZTyiQl4gK6EDr2RbIq/9XSL0j
+         0zvL2UaSPEYpXMRAltbASNWRMwres9qAkSc5MNKP6PB+1a+E4jJDsFpqG+tuLHf5+s+l
+         L2cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=NTGx3vO8sq1dXtBCR5+TJJ5C7vnKyf9ljgD3Rl3d4sc=;
-        b=KkEP8cZic4vSeJOJGVLtIIxYEVxZm2fue/Y8tNcP9PRp+NXvPJUDrbEeSjWvnMphoA
-         DJBLxM2Fp4uQ+GJh7tceitBoyqapOrBUW6N+IWs+Xb2+WUhHOG2aGEIven27MNmrwvoQ
-         xI5gaotQKW2IhPaZi/Z+5DWQbiC6LxVq+FcBfUSBdqF0Tbbf19DvTC85MNVNwriw3ZK/
-         +jTB72x8o61w9jMxPeBM96PX1ZCFjzztq51dWpBCjhSHFJ66ey0adPP8Bx1crVSZOrSw
-         yzBPrK1+gTpp+JF1pv4Ux2l/QCXF3ZcT4LPqPi4zXqDKE0zQsZyLGfw4tn2900WK5sgz
-         9RXw==
-X-Gm-Message-State: AOAM533sWg4PpASTP8BYTg0pdpUzv90pe52kiowPFN5GzLt/1AXWBDhY
-        59gmLKuISeAdwGwQepA9l3tngRWcebpwa+rbQrg=
-X-Google-Smtp-Source: ABdhPJyBrG2/HD25BUflFAr/K23ubnstDkiGKDaIC/pKd8iPOdfQRe4MLYYSwsJVi03d+N4cc1D11pTqqJBArQ1QSb8=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:1397:2ffa:35b2:9631])
- (user=samitolvanen job=sendgmr) by 2002:a5b:ed1:0:b0:634:15f0:9e87 with SMTP
- id a17-20020a5b0ed1000000b0063415f09e87mr4349556ybs.392.1649196980591; Tue,
- 05 Apr 2022 15:16:20 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 15:16:18 -0700
-Message-Id: <20220405221618.633743-1-samitolvanen@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3441; h=from:subject;
- bh=/iQgT6IkB64+WL3JrTtJZgkW5s5WmdKdm+zLHBU/Yj8=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiTL+vZsW7RO18a8xqCkt9rrmxEyA4NPySbVUngQFI
- GoRLlPeJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYky/rwAKCRBMtfaEi7xW7sxGC/
- 9fJkMV8Rpp0ZqAPvqv/HJc8HUBS0A0GaV+mAW1Mc7A/GfLHYuxGAej4UZCoReOA/39x6QJvaKX14D2
- 6EJpSZDjN7cCi5wI7Py/0keVybKhdtWT0wR/jSk/ghcj8JNx+j2HCzCJPr8McUGQRKSv4wFDd7Tsk0
- ZdP7Dh0reCxpBtYULYfuOxSepm1RVcsazYCtw+k1eMzCIIhswdU6blnr0WS9KS1a2yf/uNNx/O9ZUb
- MSgPXA8pLH8iZAI4kGZgpRtsGwKiglvWb7mxA4vEgUrL8A0rt8hmLGuWH+AaPVVnBqKymT6/Rz9tFF
- RDm/syXq8piAt3sbjdYRww/3twDWf/rt99fVORCBV16i73UCi4U6+LTgTGUjQwZ1sOmenzX7TFuNmi
- SZAY9dsGF809rREBiSpK7NF8Yefj2T+I8Oa9mEHDhUBMD3kM4xi8lEffuaRaFuZAQSY6Ndjsgof+y8
- PjuLLtAIB6ZoKCYxhWWWWARBW6r8eWL0dW48vsLMceES8=
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v2] cfi: Use __builtin_function_start
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Mb3Hz6A+dQKIIp0hbQkZNPT8r/kfRWqo9hHnNe02tSc=;
+        b=ECisz1Es3GsCdqXinopLc0fA5sxZfPPvQD6ZpK5w6tkZ2liNQ2OwhVIHRwgyiCDvZ2
+         jc/4hwnLUldCbsSyQ3SxAFTnGJoUswURbK0LtWID92xi/kvUp071caMWe2P/eDKdNJjk
+         RcldkZHZNccxTN2hIFSi7RqZEd+ho6m4wLaxIxqtDb0Ze+eMD776WZxYRsmtO67qJCXK
+         YbruIqpy+KKFgi1aJRmHI90xebAz3AQAFeTH/+dYqGyA/o0WMAaIcBjbcty3IXxyckus
+         iq1JBZIKVJT5sNKW5dKFujypr737z+Jc++bYDiXQcEACrZAvYex9y/CwHUOBovlmfLQP
+         pVgQ==
+X-Gm-Message-State: AOAM5332FIcI6FMDzmnPBAhmmxtngh12B3sKH00FbXa8r57Uh9ovjADs
+        edMuBKTdJKojrbQ3SKrToPIsKw==
+X-Google-Smtp-Source: ABdhPJy+b1vR1UXlC3uR2Ml8TmaQn1bk7ySEIBS8UyT96phSNBkzKhPLn6QizSDq1o7c3oi0zmDf1A==
+X-Received: by 2002:a17:90a:280d:b0:1ca:b14e:35e4 with SMTP id e13-20020a17090a280d00b001cab14e35e4mr6485344pjd.158.1649197147763;
+        Tue, 05 Apr 2022 15:19:07 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id 207-20020a6217d8000000b004fdd5af8885sm16164740pfx.22.2022.04.05.15.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 15:19:06 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 22:19:03 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v3 02/11] KVM: selftests: Dump VM stats in binary stats
+ test
+Message-ID: <YkzAV8FPdSjzDOd1@google.com>
+References: <20220330174621.1567317-1-bgardon@google.com>
+ <20220330174621.1567317-3-bgardon@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330174621.1567317-3-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,99 +79,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang 14 added support for the __builtin_function_start function,
-which allows us to implement the function_nocfi macro without
-architecture-specific inline assembly and in a way that also works
-with static initializers.
+On Wed, Mar 30, 2022 at 10:46:12AM -0700, Ben Gardon wrote:
+> Add kvm_util library functions to read KVM stats through the binary
+> stats interface and then dump them to stdout when running the binary
+> stats test. Subsequent commits will extend the kvm_util code and use it
+> to make assertions in a test for NX hugepages.
+> 
+> CC: Jing Zhang <jingzhangos@google.com>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |   1 +
+>  .../selftests/kvm/kvm_binary_stats_test.c     |   3 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 143 ++++++++++++++++++
+>  3 files changed, 147 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 976aaaba8769..4783fd1cd4cf 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -401,6 +401,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
+>  
+>  int vm_get_stats_fd(struct kvm_vm *vm);
+>  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
+> +void dump_vm_stats(struct kvm_vm *vm);
+>  
+>  uint32_t guest_get_vcpuid(void);
+>  
+> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> index 17f65d514915..afc4701ce8dd 100644
+> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> @@ -174,6 +174,9 @@ static void vm_stats_test(struct kvm_vm *vm)
+>  	stats_test(stats_fd);
+>  	close(stats_fd);
+>  	TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
+> +
+> +	/* Dump VM stats */
+> +	dump_vm_stats(vm);
+>  }
+>  
+>  static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 11a692cf4570..f87df68b150d 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2562,3 +2562,146 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
+>  
+>  	return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
+>  }
+> +
+> +/* Caller is responsible for freeing the returned kvm_stats_header. */
+> +static struct kvm_stats_header *read_vm_stats_header(int stats_fd)
+> +{
+> +	struct kvm_stats_header *header;
+> +	ssize_t ret;
+> +
+> +	/* Read kvm stats header */
+> +	header = malloc(sizeof(*header));
+> +	TEST_ASSERT(header, "Allocate memory for stats header");
+> +
+> +	ret = read(stats_fd, header, sizeof(*header));
+> +	TEST_ASSERT(ret == sizeof(*header), "Read stats header");
+> +
+> +	return header;
+> +}
 
-Change CONFIG_CFI_CLANG to depend on Clang >=3D 14, define
-function_nocfi using __builtin_function_start, and remove the arm64
-inline assembly implementation.
+It seems like this helper could be used in kvm_binary_stats_test.c to
+eliminate duplicate code.
 
-Link: https://github.com/llvm/llvm-project/commit/ec2e26eaf63558934f5b73a6e=
-530edc453cf9508
-Link: https://github.com/ClangBuiltLinux/linux/issues/1353
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Will Deacon <will@kernel.org> # arm64
----
-v2:
-- Changed CFI_CLANG to depend on Clang 14 instead of
-  __builtin_function_start.
-- Squashed all three patches into one.
+> +
+> +static void dump_header(int stats_fd, struct kvm_stats_header *header)
+> +{
+> +	ssize_t ret;
+> +	char *id;
+> +
+> +	printf("flags: %u\n", header->flags);
+> +	printf("name size: %u\n", header->name_size);
+> +	printf("num_desc: %u\n", header->num_desc);
+> +	printf("id_offset: %u\n", header->id_offset);
+> +	printf("desc_offset: %u\n", header->desc_offset);
+> +	printf("data_offset: %u\n", header->data_offset);
+> +
+> +	/* Read kvm stats id string */
+> +	id = malloc(header->name_size);
+> +	TEST_ASSERT(id, "Allocate memory for id string");
+> +	ret = pread(stats_fd, id, header->name_size, header->id_offset);
+> +	TEST_ASSERT(ret == header->name_size, "Read id string");
+> +
+> +	printf("id: %s\n", id);
+> +
+> +	free(id);
+> +}
+> +
+> +static ssize_t stats_desc_size(struct kvm_stats_header *header)
+> +{
+> +	return sizeof(struct kvm_stats_desc) + header->name_size;
+> +}
+> +
+> +/* Caller is responsible for freeing the returned kvm_stats_desc. */
+> +static struct kvm_stats_desc *read_vm_stats_desc(int stats_fd,
+> +						 struct kvm_stats_header *header)
+> +{
+> +	struct kvm_stats_desc *stats_desc;
+> +	size_t size_desc;
+> +	ssize_t ret;
+> +
+> +	size_desc = header->num_desc * stats_desc_size(header);
+> +
+> +	/* Allocate memory for stats descriptors */
+> +	stats_desc = malloc(size_desc);
+> +	TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
+> +
+> +	/* Read kvm stats descriptors */
+> +	ret = pread(stats_fd, stats_desc, size_desc, header->desc_offset);
+> +	TEST_ASSERT(ret == size_desc, "Read KVM stats descriptors");
+> +
+> +	return stats_desc;
+> +}
 
----
- arch/Kconfig                      |  5 +----
- arch/arm64/include/asm/compiler.h | 16 ----------------
- include/linux/compiler-clang.h    | 10 ++++++++++
- 3 files changed, 11 insertions(+), 20 deletions(-)
+Same with this helper.
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 29b0167c088b..c1627bce4a3a 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
- config CFI_CLANG
- 	bool "Use Clang's Control Flow Integrity (CFI)"
- 	depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
--	# Clang >=3D 12:
--	# - https://bugs.llvm.org/show_bug.cgi?id=3D46258
--	# - https://bugs.llvm.org/show_bug.cgi?id=3D47479
--	depends on CLANG_VERSION >=3D 120000
-+	depends on CLANG_VERSION >=3D 140000
- 	select KALLSYMS
- 	help
- 	  This option enables Clang=E2=80=99s forward-edge Control Flow Integrity
-diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/com=
-piler.h
-index dc3ea4080e2e..6fb2e6bcc392 100644
---- a/arch/arm64/include/asm/compiler.h
-+++ b/arch/arm64/include/asm/compiler.h
-@@ -23,20 +23,4 @@
- #define __builtin_return_address(val)					\
- 	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
-=20
--#ifdef CONFIG_CFI_CLANG
--/*
-- * With CONFIG_CFI_CLANG, the compiler replaces function address
-- * references with the address of the function's CFI jump table
-- * entry. The function_nocfi macro always returns the address of the
-- * actual function instead.
-- */
--#define function_nocfi(x) ({						\
--	void *addr;							\
--	asm("adrp %0, " __stringify(x) "\n\t"				\
--	    "add  %0, %0, :lo12:" __stringify(x)			\
--	    : "=3Dr" (addr));						\
--	addr;								\
--})
--#endif
--
- #endif /* __ASM_COMPILER_H */
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.=
-h
-index babb1347148c..c84fec767445 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -69,6 +69,16 @@
- #define __nocfi		__attribute__((__no_sanitize__("cfi")))
- #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
-=20
-+#if defined(CONFIG_CFI_CLANG)
-+/*
-+ * With CONFIG_CFI_CLANG, the compiler replaces function address
-+ * references with the address of the function's CFI jump table
-+ * entry. The function_nocfi macro always returns the address of the
-+ * actual function instead.
-+ */
-+#define function_nocfi(x)	__builtin_function_start(x)
-+#endif
-+
- /*
-  * Turn individual warnings and errors on and off locally, depending
-  * on version.
---=20
-2.35.1.1094.g7c7d902a7c-goog
+> +
+> +/* Caller is responsible for freeing the memory *data. */
+> +static int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> +			  struct kvm_stats_desc *desc, uint64_t **data)
+> +{
+> +	u64 *stats_data;
+> +	ssize_t ret;
+> +
+> +	stats_data = malloc(desc->size * sizeof(*stats_data));
+> +
+> +	ret = pread(stats_fd, stats_data, desc->size * sizeof(*stats_data),
+> +		    header->data_offset + desc->offset);
+> +
+> +	/* ret is in bytes. */
+> +	ret = ret / sizeof(*stats_data);
+> +
+> +	TEST_ASSERT(ret == desc->size,
+> +		    "Read data of KVM stats: %s", desc->name);
+> +
+> +	*data = stats_data;
+> +
+> +	return ret;
+> +}
 
+Same with this helper.
+
+> +
+> +static void dump_stat(int stats_fd, struct kvm_stats_header *header,
+> +		      struct kvm_stats_desc *desc)
+> +{
+> +	u64 *stats_data;
+> +	ssize_t ret;
+> +	int i;
+> +
+> +	printf("\tflags: %u\n", desc->flags);
+> +	printf("\texponent: %u\n", desc->exponent);
+> +	printf("\tsize: %u\n", desc->size);
+> +	printf("\toffset: %u\n", desc->offset);
+> +	printf("\tbucket_size: %u\n", desc->bucket_size);
+> +	printf("\tname: %s\n", (char *)&desc->name);
+> +
+> +	ret = read_stat_data(stats_fd, header, desc, &stats_data);
+> +
+> +	printf("\tdata: %lu", *stats_data);
+> +	for (i = 1; i < ret; i++)
+> +		printf(", %lu", *(stats_data + i));
+> +	printf("\n\n");
+> +
+> +	free(stats_data);
+> +}
+> +
+> +void dump_vm_stats(struct kvm_vm *vm)
+> +{
+> +	struct kvm_stats_desc *stats_desc;
+> +	struct kvm_stats_header *header;
+> +	struct kvm_stats_desc *desc;
+> +	size_t size_desc;
+> +	int stats_fd;
+> +	int i;
+> +
+> +	stats_fd = vm_get_stats_fd(vm);
+> +
+> +	header = read_vm_stats_header(stats_fd);
+> +	dump_header(stats_fd, header);
+> +
+> +	stats_desc = read_vm_stats_desc(stats_fd, header);
+> +
+> +	size_desc = stats_desc_size(header);
+> +
+> +	/* Read kvm stats data one by one */
+> +	for (i = 0; i < header->num_desc; ++i) {
+> +		desc = (void *)stats_desc + (i * size_desc);
+> +		dump_stat(stats_fd, header, desc);
+> +	}
+> +
+> +	free(stats_desc);
+> +	free(header);
+> +
+> +	close(stats_fd);
+> +}
+> +
+> -- 
+> 2.35.1.1021.g381101b075-goog
+> 

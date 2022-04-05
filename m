@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25B64F3657
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290494F366B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345975AbiDELBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S1348172AbiDELCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235506AbiDEIjy (ORCPT
+        with ESMTP id S236921AbiDEIlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:39:54 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF25B87;
-        Tue,  5 Apr 2022 01:33:36 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id r2so14271902iod.9;
-        Tue, 05 Apr 2022 01:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mylkO58ZKq1iBj80uJdfaHLKrfd/MmPSeOlKdlAN2g0=;
-        b=iBAh71Mhiz3dylNCqZo+yDdLJKHX7Ups2H7UShUJq9aLEVD+v/UN+esg2OInSOp5eR
-         qvwe656xyvQiVAOv2OVxK5ZZSjQkfewL3pNXUdN70ByDSmVqmu0Zx3vT7wfK1MP0/MVt
-         HISlGvX/tlI0uOfIlc4Ma/qL76vQv2D0ceU5GVbmucnU65zfj/NtDmfkm4mFZtmcOw7O
-         W5Qheo8WSoFs5cJ75vHsokH98+9pTpwERAc2S5c0RQs50gBe2zf6ZHKwRRHPUgkeOr7C
-         NT4QV/TckpGkTeuxPaWu964ZgslgqYRXix0btKt7SxTt2WoZWgSqtC6jVDcZtqMwS99u
-         5iJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mylkO58ZKq1iBj80uJdfaHLKrfd/MmPSeOlKdlAN2g0=;
-        b=wFNy8fIYr79iTI/nb17r/AgAA3WR9idrtNSPWrGpqOy0gGxnQGmwxbuIe8pfRx8+DO
-         GwI5XElXHinVvzARs+u3drQ/V2AbMO10CzymwPI313mUwi+QW8ZjAP3NoV0auy38DilL
-         Fxowg1z+PWKaSDOUSB33wCOpsEPrZg5Gx891RXoPoAfzZmmY4lckz8kapx7B13Ciyo0x
-         uaM89+hgi/gaqq8pGawu1oXPt4RrJYKhNgl3mI4mD4IZ+EZYDVCK2KIGHjcULu+y7GUG
-         Wq5JWQ1KaGWcsAr52FF8YVfkT/jzduR0LBvjnNRl2XTs9bZCTeuzWT8tM8butIyglVr8
-         LbCA==
-X-Gm-Message-State: AOAM533QjB/5kQo/hqRvJr8KsTaZgEC4nUsawCpU+q4JbWULOGUKgjpN
-        PeG0YYkckQTZ2BAJN44LiBOxxQ3Vn5tuRA2DHeM=
-X-Google-Smtp-Source: ABdhPJz31mODfRf19/XwGfqFgcDFZs9wfyNoZm+PEmbmm8OtKipv6FNIiNgPJ1ZoLDVD0q2ZrQeH9IKSUdZPNp+Wevg=
-X-Received: by 2002:a05:6602:1341:b0:637:d4dc:6f85 with SMTP id
- i1-20020a056602134100b00637d4dc6f85mr1069163iov.155.1649147616151; Tue, 05
- Apr 2022 01:33:36 -0700 (PDT)
+        Tue, 5 Apr 2022 04:41:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7710114C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 01:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649147656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z65CXYbIBUl/IlVCrlM6BZQKF+ZppxomZMYuDllBYxE=;
+        b=FgxQGsUhQ6/Ul6iA5ukP1u5jptq6njHxozoGUJI7Ky1QS0VITiCW0eItR4vU/q6m/I5uiv
+        yhKiPpg6P/YPU1tE1bikZr/Lz5I42NNsSGkXxjdjXnjr0arQhnsTnC2/tPGLvPP5mlIXtg
+        5gRVyDk6jGBOohC/CwWAW8YaGuJ0gUQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-bYIfSXvxPQ2HCL19_IPyWQ-1; Tue, 05 Apr 2022 04:34:12 -0400
+X-MC-Unique: bYIfSXvxPQ2HCL19_IPyWQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1CF3F38025E9;
+        Tue,  5 Apr 2022 08:34:01 +0000 (UTC)
+Received: from localhost (dhcp-192-213.str.redhat.com [10.33.192.213])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 28080145D850;
+        Tue,  5 Apr 2022 08:33:43 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     zhenwei pi <pizhenwei@bytedance.com>, arei.gonglei@huawei.com,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        herbert@gondor.apana.org.au, helei.sig11@bytedance.com
+Subject: Re: [PATCH v3 0/4] Introduce akcipher service for virtio-crypto
+In-Reply-To: <20220405012015-mutt-send-email-mst@kernel.org>
+Organization: Red Hat GmbH
+References: <20220302033917.1295334-1-pizhenwei@bytedance.com>
+ <a9d1dfc1-080e-fba2-8fbb-28718b067e0d@bytedance.com>
+ <20220307040431-mutt-send-email-mst@kernel.org>
+ <87h778g8nn.fsf@redhat.com>
+ <20220405012015-mutt-send-email-mst@kernel.org>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Tue, 05 Apr 2022 10:33:42 +0200
+Message-ID: <87ee2cexp5.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220405131412.381b8a97@canb.auug.org.au>
-In-Reply-To: <20220405131412.381b8a97@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 5 Apr 2022 10:33:25 +0200
-Message-ID: <CANiq72kvTE2u=9ahNhSbnchfxT9_xrD8JBTJYbw=oe8j8zCbig@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Chun-Tse Shao <ctshao@google.com>, Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 5:14 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Tue, Apr 05 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+
+> On Mon, Apr 04, 2022 at 05:39:24PM +0200, Cornelia Huck wrote:
+>> On Mon, Mar 07 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+>> 
+>> > On Mon, Mar 07, 2022 at 10:42:30AM +0800, zhenwei pi wrote:
+>> >> Hi, Michael & Lei
+>> >> 
+>> >> The full patchset has been reviewed by Gonglei, thanks to Gonglei.
+>> >> Should I modify the virtio crypto specification(use "__le32 akcipher_algo;"
+>> >> instead of "__le32 reserve;" only, see v1->v2 change), and start a new issue
+>> >> for a revoting procedure?
+>> >
+>> > You can but not it probably will be deferred to 1.3. OK with you?
+>> >
+>> >> Also cc Cornelia Huck.
+>> 
+>> [Apologies, I'm horribly behind on my email backlog, and on virtio
+>> things in general :(]
+>> 
+>> The akcipher update had been deferred for 1.2, so I think it will be 1.3
+>> material. However, I just noticed while browsing the fine lwn.net merge
+>> window summary that this seems to have been merged already. That
+>> situation is less than ideal, although I don't expect any really bad
+>> problems, given that there had not been any negative feedback for the
+>> spec proposal that I remember.
 >
-> I fixed it up (see below) and can carry the fix as necessary. This
+> Let's open a 1.3 branch? What do you think?
 
-Looks fine, thanks Stephen!
+Yes, that's probably best, before things start piling up.
 
-I will likely rebase again for -rc2 like for -rc1 (done to avoid a
-build error on our side and a conflict on yours).
-
-Cheers,
-Miguel

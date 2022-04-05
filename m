@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7814F4741
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EE84F4598
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352460AbiDEVFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S1346044AbiDEOAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239531AbiDEKdB (ORCPT
+        with ESMTP id S238277AbiDEJ3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:33:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66409183AB;
-        Tue,  5 Apr 2022 03:19:01 -0700 (PDT)
+        Tue, 5 Apr 2022 05:29:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E848AD4C80;
+        Tue,  5 Apr 2022 02:16:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 035AC6179E;
-        Tue,  5 Apr 2022 10:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10167C385A1;
-        Tue,  5 Apr 2022 10:18:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C9F461645;
+        Tue,  5 Apr 2022 09:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6473FC385A2;
+        Tue,  5 Apr 2022 09:16:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153940;
-        bh=IZM0epmLHJUcEpoj61ISpmqpX59IF2/GRyx8ce+s4oU=;
+        s=korg; t=1649150181;
+        bh=sJSheh81ofmzuFi2QYxChCQ6v4L0lE96fuuZkjzo0JM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QaluAF2qCoeRuKYcufNnHC06xvxgpkb+m9XTh3p3U41zxMQjusBeikRa98ZFmUAIT
-         7vVaLp2SwFPA/VgPWMCe2K8VM3j3BLco/ZL0UjsfnitAQ/cJ/LDz3Iz+YbSpE23ah2
-         H3wbvaqEqYmcGvIoUP420ZBizQQWYs5d2Sg3rfWM=
+        b=0haG+PukZtQP1PagMaNY/INFNl/LJoVMogm0gnuJsg27HxfPmmnH2lumnSJj8D3XT
+         cynYMsOJqjgF8vdiTBnsn3n8BwFLyB0THTqjCeHNvwLmGJD+D07za5ODby3F3psgZj
+         FThRFVAcHqVh/LdUy3yj1Bl2z3kHWRzss3p+62Pw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 401/599] clk: at91: sama7g5: fix parents of PDMCs GCLK
-Date:   Tue,  5 Apr 2022 09:31:35 +0200
-Message-Id: <20220405070310.764681862@linuxfoundation.org>
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 0983/1017] dt-bindings: spi: mxic: The interrupt property is not mandatory
+Date:   Tue,  5 Apr 2022 09:31:36 +0200
+Message-Id: <20220405070423.381989035@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-[ Upstream commit 1a944729d8635fa59638f24e8727d5ccaa0c8c19 ]
+commit 90c204d3195a795f77f5bce767e311dd1c59ca17 upstream.
 
-Audio PLL can be used as parent by the GCLKs of PDMCs.
+The interrupt property is not mandatory at all, this property should not
+be part of the required properties list, so move it into the optional
+properties list.
 
-Fixes: cb783bbbcf54 ("clk: at91: sama7g5: add clock support for sama7g5")
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220304182616.1920392-1-codrin.ciubotariu@microchip.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 326e5c8d4a87 ("dt-binding: spi: Document Macronix controller bindings")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/linux-mtd/20211216111654.238086-8-miquel.raynal@bootlin.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/at91/sama7g5.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/spi/spi-mxic.txt |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index a092a940baa4..9d25b23fb99d 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -606,16 +606,16 @@ static const struct {
- 	{ .n  = "pdmc0_gclk",
- 	  .id = 68,
- 	  .r = { .max = 50000000  },
--	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
--	  .pp_mux_table = { 5, 8, },
-+	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
-+	  .pp_mux_table = { 5, 9, },
- 	  .pp_count = 2,
- 	  .pp_chg_id = INT_MIN, },
+--- a/Documentation/devicetree/bindings/spi/spi-mxic.txt
++++ b/Documentation/devicetree/bindings/spi/spi-mxic.txt
+@@ -8,11 +8,13 @@ Required properties:
+ - reg: should contain 2 entries, one for the registers and one for the direct
+        mapping area
+ - reg-names: should contain "regs" and "dirmap"
+-- interrupts: interrupt line connected to the SPI controller
+ - clock-names: should contain "ps_clk", "send_clk" and "send_dly_clk"
+ - clocks: should contain 3 entries for the "ps_clk", "send_clk" and
+ 	  "send_dly_clk" clocks
  
- 	{ .n  = "pdmc1_gclk",
- 	  .id = 69,
- 	  .r = { .max = 50000000, },
--	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
--	  .pp_mux_table = { 5, 8, },
-+	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
-+	  .pp_mux_table = { 5, 9, },
- 	  .pp_count = 2,
- 	  .pp_chg_id = INT_MIN, },
++Optional properties:
++- interrupts: interrupt line connected to the SPI controller
++
+ Example:
  
--- 
-2.34.1
-
+ 	spi@43c30000 {
 
 

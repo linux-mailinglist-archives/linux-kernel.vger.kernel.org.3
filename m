@@ -2,153 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6624F4C16
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3354F4D41
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575748AbiDEXJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S1581794AbiDEXk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573267AbiDESjv (ORCPT
+        with ESMTP id S1573273AbiDESlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:39:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F1D167E3;
-        Tue,  5 Apr 2022 11:37:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F453618D9;
-        Tue,  5 Apr 2022 18:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBF0C385A1;
-        Tue,  5 Apr 2022 18:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649183871;
-        bh=ecxdfLHsjhNU9D5i7w12o0NlOeCD+73hTDcvoCtkJ5s=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=I7hVimpq/KdIh6PL2TDi9XPQWvsln0l075vPn5GXZE+ZZjYEgqz0tQYBqn2YfpluS
-         C2YX/ZOD7g8+bjHhYbdb47ojZ7VEiVTwsNzXHCBGB4wFEbT2JOkbnjIelvq8lzw9kV
-         t7mrh0LpiUttzEYxlMAg4KAYAXLnmW7q+gqH+HOR/2JM9gAWZEKqxrX6Ye9RTAGk+o
-         Cljh7842uqol4AjzDw8uwHcr9Exm3IKv5GnKUYjAEn4CSD4oLE2+D26BxePu+gbiH3
-         W2Su7V7QxC21rFvm9BRcoafOeW51hwzcPI7eJfwnwtwAWKskLi9qwk638/LK/Uv62M
-         BIReAp2E5BMYw==
-Message-ID: <0f44fba956288bcad69e076f84118bc50f8e5d2f.camel@kernel.org>
-Subject: Re: [PATCH V3 14/30] x86/sgx: Support restricting of enclave page
- permissions
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, nathaniel@profian.com
-Date:   Tue, 05 Apr 2022 21:39:01 +0300
-In-Reply-To: <59910ad4-a898-4eb2-5e2b-856c686b53fb@intel.com>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
-         <8ed9ee98ca26c9eefde0fd49062bca6e7b9efe80.1648847675.git.reinette.chatre@intel.com>
-         <c9071aa19076c7c618294f0c9cb830a8be96ae09.camel@kernel.org>
-         <26ab773de8842d03b40caf8645ca86884b195901.camel@kernel.org>
-         <91a02d50b2cba34dfb058fd864ba20ef1e6a5554.camel@kernel.org>
-         <10303ca73ea02a300636580e87446766374f66cb.camel@kernel.org>
-         <6e0feeadc562b9e3f0a524040469d4f5c3484824.camel@kernel.org>
-         <ca08465b6fa8af4121592c6381023fda5e0ade70.camel@kernel.org>
-         <59910ad4-a898-4eb2-5e2b-856c686b53fb@intel.com>
+        Tue, 5 Apr 2022 14:41:55 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA8D20BEF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:39:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb5980c4f8so607227b3.23
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kpZJZ6BC0teJcS/Va/HLoxzrjVYiRhmbSvuUm1Ha8sQ=;
+        b=ZdvRyRnPU8Kh82lplK03SdRZOePvmaw21DelWV1zTSqS/wjCkoUIYoY61x69HDa0BB
+         BkENG+5p3VPqwecV9yEgRiRisNcnE3VeVVW7AOScnZd4XupmdoHFS5S2gKJLzE7GHY6A
+         zGXVjMCER8dEsCVSRHsmmtEvVKuVyK3GMttUBmYSjf/DRoGPcWgyJ5rDCC+Ru+9zo5Sw
+         1rj0cV0XTVzlX93A55tOHgnaoeRzXzMAf01FQGmrjBjD9UtlB3cKC05sNClQc/ugUTWR
+         4mJGO2ekgPApmCPfGhow69H81wYKXuudrt6rJEg4wFn2YrxJLtcu2iCzeQjtlpzeUEdN
+         /yNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kpZJZ6BC0teJcS/Va/HLoxzrjVYiRhmbSvuUm1Ha8sQ=;
+        b=IiwCt5cgNEL0Uvh7IQEK7m9TqvVQ2rzvTYE2S5ephqzMUqpgY68QZ8f9STdp1aiqcl
+         w51Qt+UeDuQ56j0/FrquGsUMus/creff+YvAZVCmH6FaC1PHAe3iBJSP4TDBoKxZGPwk
+         N9+cjCYliXxZ/zs1QJRpG0SPNIsOu8AulrHQguvyWciHiheL7Wmb5keuZhEtc6cd0AXq
+         b4Jin2EeNchTaaeMYkrXx5MXsTjHg8J6+VWheLrS9AlJoDsYm4msfxuCi5/Ud3P+R49F
+         vZhA7k6SJsyVgMZ51GFhHEJrwl7CC0pUs4RvsTUmfByiVk7gUQBIHRelRJoTI9M8W++L
+         TvyA==
+X-Gm-Message-State: AOAM530tc2Qz8ApGr16fpwyuEJ+T0kQEUwl37iOtZlPxpPHbcNAuib+7
+        HyopgpAQQ3ZTCiCgKtK1hNEsNI218WOYQ+M=
+X-Google-Smtp-Source: ABdhPJzp+IkXPL1X2MLlP92SbOMwqwQY57HoLXPf85DlePcIcZmNDwM+GbgvJ2bvPWH0yqVKexXNR2xK3S7Rwsc=
+X-Received: from pceballos.nyc.corp.google.com ([2620:0:1003:510:9936:68aa:f9b7:b13b])
+ (user=pceballos job=sendgmr) by 2002:a05:690c:821:b0:2eb:5d96:2709 with SMTP
+ id by1-20020a05690c082100b002eb5d962709mr3929236ywb.147.1649183996466; Tue,
+ 05 Apr 2022 11:39:56 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 14:39:53 -0400
+Message-Id: <20220405183953.2094007-1-pceballos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
+From:   Pablo Ceballos <pceballos@google.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Cc:     Pablo Ceballos <pceballos@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.4 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-05 at 09:49 -0700, Reinette Chatre wrote:
-> Hi Jarkko,
->=20
-> On 4/5/2022 7:52 AM, Jarkko Sakkinen wrote:
-> > n Tue, 2022-04-05 at 17:27 +0300, Jarkko Sakkinen wrote:
-> > > According to SDM having page type as regular is fine for EMODPR,
-> > > i.e. that's why I did not care about having it in SECINFO.
-> > >=20
-> > > Given that the opcode itself contains validation, I wonder
-> > > why this needs to be done:
-> > >=20
-> > > if (secinfo.flags & ~SGX_SECINFO_PERMISSION_MASK)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> > >=20
-> > > if (memchr_inv(secinfo.reserved, 0, sizeof(secinfo.reserved)))
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> > >=20
-> > > perm =3D secinfo.flags & SGX_SECINFO_PERMISSION_MASK;
-> > >=20
-> > > I.e. why duplicate validation and why does it have different
-> > > invariant than the opcode?
-> >=20
-> > Right it is done to prevent exceptions and also pseudo-code
-> > has this validation:
-> >=20
-> > IF (EPCM(DS:RCX).PT is not PT_REG) THEN #PF(DS:RCX); FI;=20
->=20
-> The current type of the page is validated - not the page type
-> provided in the parameters of the command.
->=20
-> >=20
-> > This is clearly wrong:
->=20
-> Could you please elaborate what is wrong? The hardware only checks
-> the permission bits and that is what is provided.
+This driver works around a problem with the HID usage sent by this
+device for the mute button. It prevents key events from being generated
+for that HID usage since they would be incorrect.
 
-I think it's for most a bit confusing that it takes a special Linux
-defined SECINFO instead of what you read from spec.=20
+Signed-off-by: Pablo Ceballos <pceballos@google.com>
+---
+ drivers/hid/Kconfig            | 12 ++++++++
+ drivers/hid/Makefile           |  1 +
+ drivers/hid/hid-google-atrus.c | 55 ++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-ids.h          |  1 +
+ 4 files changed, 69 insertions(+)
+ create mode 100644 drivers/hid/hid-google-atrus.c
 
->=20
-> >=20
-> > /*
-> > =C2=A0* Return valid permission fields from a secinfo structure provide=
-d by
-> > =C2=A0* user space. The secinfo structure is required to only have bits=
- in
-> > =C2=A0* the permission fields set.
-> > =C2=A0*/
-> > static int sgx_perm_from_user_secinfo(void __user *_secinfo, u64 *secin=
-fo_perm)
-> >=20
-> > It means that the API requires a malformed data as input.
->=20
-> It is not clear to me how this is malformed. The API requires that only
-> the permission bits are set in the secinfo, only the permission bits in s=
-ecinfo
-> is provided to the hardware, and the hardware only checks the permission =
-bits.
->=20
-> >=20
-> > Maybe it would be better idea then to replace secinfo with just the
-> > permission field?
->=20
-> That is what I implemented in V1 [1], but was asked to change to secinfo.=
- I could
-> go back to that if you prefer.
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index f5544157576c..d4b6be827d15 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -403,6 +403,18 @@ config HOLTEK_FF
+ 	  Say Y here if you have a Holtek On Line Grip based game controller
+ 	  and want to have force feedback support for it.
+ 
++config HID_GOOGLE_ATRUS
++	tristate "Google Hangouts Meet Speakermic"
++	depends on USB_HID
++	help
++	This selects a driver for the Google Hangouts Meet Speakermic.
++
++	This driver works around a problem with the HID usage sent by this
++	device for the mute button. It prevents key events from being generated
++	for that HID usage since they would be incorrect.
++
++	Say Y here if you have a Google Hangouts Meet Speakermic.
++
+ config HID_GOOGLE_HAMMER
+ 	tristate "Google Hammer Keyboard"
+ 	depends on USB_HID && LEDS_CLASS && CROS_EC
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 6d3e630e81af..2ee446b5b953 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -50,6 +50,7 @@ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
+ obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
+ obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
+ obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
++obj-$(CONFIG_HID_GOOGLE_ATRUS)  += hid-google-atrus.o
+ obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
+ obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
+ obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
+diff --git a/drivers/hid/hid-google-atrus.c b/drivers/hid/hid-google-atrus.c
+new file mode 100644
+index 000000000000..e136c70e9425
+--- /dev/null
++++ b/drivers/hid/hid-google-atrus.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  HID driver for Google Hangouts Meet Speakermic
++ *
++ *  Copyright 2022 Google LLC.
++ */
++
++#include <linux/hid.h>
++#include <linux/module.h>
++
++#include "hid-ids.h"
++
++/*
++ * This driver handles the telephony phone mute HID usage by ignoring it. This
++ * avoids the default handling by the hid-input driver which is to map this to
++ * a KEY_MICMUTE event. The issue is that this device implements the phone mute
++ * HID usage as a toggle switch, where 1 indicates muted, and 0 indicates
++ * unmuted. However, for an EV_KEY event 1 indicates the key has been pressed
++ * and 0 indicates it has been released.
++ */
++
++static int atrus_event(struct hid_device *hid, struct hid_field *field,
++		       struct hid_usage *usage, __s32 value)
++{
++	/*
++	 * Return 1 to indicate no further processing should be done for this
++	 * usage.
++	 */
++	return 1;
++}
++
++static const struct hid_device_id atrus_devices[] = {
++	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_ATRUS) },
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, atrus_devices);
++
++static const struct hid_usage_id atrus_usages[] = {
++	/* Handle only the Telephony Phone Mute usage. */
++	{ HID_UP_TELEPHONY | 0x2f, EV_KEY, HID_ANY_ID },
++	{ HID_TERMINATOR, HID_TERMINATOR, HID_TERMINATOR }
++};
++
++static struct hid_driver atrus_driver = {
++	.name = "atrus",
++	.id_table = atrus_devices,
++	.usage_table = atrus_usages,
++	.event = atrus_event,
++};
++module_hid_driver(atrus_driver);
++
++MODULE_AUTHOR("Pablo Ceballos <pcebalos@google.com>");
++MODULE_DESCRIPTION("Google Hangouts Meet Speakermic USB HID Driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 85975031389b..9f6fc5cfbeb9 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -506,6 +506,7 @@
+ #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
+ #define USB_DEVICE_ID_GOOGLE_DON	0x5050
+ #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
++#define USB_DEVICE_ID_GOOGLE_ATRUS	0x8001
+ 
+ #define USB_VENDOR_ID_GOTOP		0x08f2
+ #define USB_DEVICE_ID_SUPER_Q2		0x007f
+-- 
+2.35.1.1094.g7c7d902a7c-goog
 
-Yeah, if I was the one saying that, I was clearly wrong. But also
-perspective is now very different after using a lot of these
-features.
-
-Alternatively you could have a single "mod" ioctl given the disjoint
-nature how the parameters go to SECINFO.
-
-
-> Reinette
->=20
-> [1] https://lore.kernel.org/linux-sgx/44fe170cfd855760857660b9f56cae8c474=
-7cc15.1638381245.git.reinette.chatre@intel.com/
-
-BR, Jarkko

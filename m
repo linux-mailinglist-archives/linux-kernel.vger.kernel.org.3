@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8DD4F48A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74074F4E1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383572AbiDEVpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S1587781AbiDFAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358095AbiDEK16 (ORCPT
+        with ESMTP id S1358096AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8107B67D09;
-        Tue,  5 Apr 2022 03:15:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0727168302;
+        Tue,  5 Apr 2022 03:15:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18C9A6179E;
-        Tue,  5 Apr 2022 10:15:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25081C385A1;
-        Tue,  5 Apr 2022 10:15:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 980EC6179E;
+        Tue,  5 Apr 2022 10:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7C6C385A0;
+        Tue,  5 Apr 2022 10:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153720;
-        bh=F75QK3b5VpnA6kPG801y/3GqfGHfIZ0qKHqGfPz+aOo=;
+        s=korg; t=1649153726;
+        bh=otq49y8QEyJ+LXqzxJkfjS2K0k2wRoeqF2v+AnN+pbU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gaSc3Hiok4biqAqXsVG86fVrfahd7ON0Tolh5RLWeeTUYumjgl3Q4m8o8rgr3p0ay
-         tgWgj3p9GBFVQ8qT8UBuimOjVdenViowKM/do25IgfDycjGU12ECM28ZhAi/rX1kVT
-         zKwPvkiBrtlYqbv6T3y6zAPjDRH9Hqyt5FGbbsOM=
+        b=2L+DZyzxD1GzkNNqPKQs7mdo+YZ8VBKzh6tTNdZk1xtVMIKwCFQ/9kCauGlkpBchb
+         GabKWJZd/X9AD2VhOachvxmr2PIpQQdKAiJoyHpIpUcEX8UovlSVrPYdW0GTclkhzJ
+         s+S5p3N1fJ1WNnrQKHs8O2KSbW0zbETWFNYQH6/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 286/599] powerpc/perf: Dont use perf_hw_context for trace IMC PMU
-Date:   Tue,  5 Apr 2022 09:29:40 +0200
-Message-Id: <20220405070307.345828570@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 287/599] mt76: mt7915: use proper aid value in mt7915_mcu_wtbl_generic_tlv in sta mode
+Date:   Tue,  5 Apr 2022 09:29:41 +0200
+Message-Id: <20220405070307.375354224@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,50 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 0198322379c25215b2778482bf1221743a76e2b5 ]
+[ Upstream commit a56b1b0f145ef2d6bb9312dedf3ab8558ef50a5b ]
 
-Trace IMC (In-Memory collection counters) in powerpc is useful for
-application level profiling.
+mac80211 provides aid in vif->bss_conf.aid for sta mode and not in
+sta->aid. Fix mt7915_mcu_wtbl_generic_tlv routine using proper value for
+aid in sta mode.
 
-For trace_imc, presently task context (task_ctx_nr) is set to
-perf_hw_context. But perf_hw_context should only be used for CPU PMU.
-See commit 26657848502b ("perf/core: Verify we have a single
-perf_hw_context PMU").
-
-So for trace_imc, even though it is per thread PMU, it is preferred to
-use sw_context in order to be able to do application level monitoring.
-Hence change the task_ctx_nr to use perf_sw_context.
-
-Fixes: 012ae244845f ("powerpc/perf: Trace imc PMU functions")
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Reviewed-by: Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
-[mpe: Update subject & incorporate notes into change log, reflow comment]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220202041837.65968-1-atrajeev@linux.vnet.ibm.com
+Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/imc-pmu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
-index 7b25548ec42b..e8074d7f2401 100644
---- a/arch/powerpc/perf/imc-pmu.c
-+++ b/arch/powerpc/perf/imc-pmu.c
-@@ -1457,7 +1457,11 @@ static int trace_imc_event_init(struct perf_event *event)
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+index 9a7f317a098f..6e73964b8b0a 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+@@ -1259,8 +1259,11 @@ mt7915_mcu_wtbl_generic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+ 	generic = (struct wtbl_generic *)tlv;
  
- 	event->hw.idx = -1;
- 
--	event->pmu->task_ctx_nr = perf_hw_context;
-+	/*
-+	 * There can only be a single PMU for perf_hw_context events which is assigned to
-+	 * core PMU. Hence use "perf_sw_context" for trace_imc.
-+	 */
-+	event->pmu->task_ctx_nr = perf_sw_context;
- 	event->destroy = reset_global_refc;
- 	return 0;
- }
+ 	if (sta) {
++		if (vif->type == NL80211_IFTYPE_STATION)
++			generic->partial_aid = cpu_to_le16(vif->bss_conf.aid);
++		else
++			generic->partial_aid = cpu_to_le16(sta->aid);
+ 		memcpy(generic->peer_addr, sta->addr, ETH_ALEN);
+-		generic->partial_aid = cpu_to_le16(sta->aid);
+ 		generic->muar_idx = mvif->omac_idx;
+ 		generic->qos = sta->wme;
+ 	} else {
 -- 
 2.34.1
 

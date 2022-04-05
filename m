@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6934F4E30
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50474F4E14
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573261AbiDFANa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S1587449AbiDFAJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233525AbiDEKag (ORCPT
+        with ESMTP id S242154AbiDEKag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:30:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA5DDCE3C;
-        Tue,  5 Apr 2022 03:18:22 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C21DDD946;
+        Tue,  5 Apr 2022 03:18:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DD3B2CE0B18;
-        Tue,  5 Apr 2022 10:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55C5C385A0;
-        Tue,  5 Apr 2022 10:18:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85770617A4;
+        Tue,  5 Apr 2022 10:18:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93246C385A0;
+        Tue,  5 Apr 2022 10:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153899;
-        bh=MMP6k/LNUR1jVifTaiPGoAePLM2M7XdwQlkDS3TOkuU=;
+        s=korg; t=1649153901;
+        bh=Jf4PjsEHBrgGDU8e0I19DbGc3U4kngzVA4IrMT/RlIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nsOyAo16jkCFwii30y7gy7k8NY297pyT8x3/YbTYnAqUV69Zj3m5Ho/OtDuG6dF/6
-         yfLB29QbbO0YvduveYMw+ziAFnQ1DuoNeA4yzUwPN22ZG/IoOMatX+yVzng92+5nzh
-         fa5NrfL8wpbnFrq/rTGSfedohyniQZtxD4tNf33M=
+        b=2WUuv/cihSX+IavIqcuYjnvI8btwILQJjEfw+owOM5yH08RKUUi+YF1hiXzj86pwm
+         +kGhlcJWthtXBn5igz/DuHlOo2hnKThYDIj/lAve3l//ViBhfxMIQQseHfLY28jc2n
+         iZ8KxzB3vI8unDyRgeQIpjLpd/o/itTs9dYJjS3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 387/599] staging:iio:adc:ad7280a: Fix handing of device address bit reversing.
-Date:   Tue,  5 Apr 2022 09:31:21 +0200
-Message-Id: <20220405070310.347287044@linuxfoundation.org>
+Subject: [PATCH 5.10 388/599] pinctrl: renesas: r8a77470: Reduce size for narrow VIN1 channel
+Date:   Tue,  5 Apr 2022 09:31:22 +0200
+Message-Id: <20220405070310.377236055@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,42 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit f281e4ddbbc0b60f061bc18a2834e9363ba85f9f ]
+[ Upstream commit 9e04a0eda84fccab0ac22a33825ad53f47c968c7 ]
 
-The bit reversal was wrong for bits 1 and 3 of the 5 bits.
-Result is driver failure to probe if you have more than 2 daisy-chained
-devices.  Discovered via QEMU based device emulation.
+The second video-in channel on RZ/G1C has only 12 data lanes, but the
+pin control driver uses the vin_data union, which is meant for 24 data
+lanes, thus wasting space.
 
-Fixes tag is for when this moved from a macro to a function, but it
-was broken before that.
+Fix this by using the vin_data12 union instead.
 
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Fixes: 065a7c0b1fec ("Staging: iio: adc: ad7280a.c: Fixed Macro argument reuse")
-Reviewed-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Link: https://lore.kernel.org/r/20220206190328.333093-2-jic23@kernel.org
+This reduces kernel size by 96 bytes.
+
+Fixes: 50f3f2d73e3426ba ("pinctrl: sh-pfc: Reduce kernel size for narrow VIN channels")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/52716fa89139f6f92592633edb52804d4c5e18f0.1640269757.git.geert+renesas@glider.be
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/iio/adc/ad7280a.c | 4 ++--
+ drivers/pinctrl/renesas/pfc-r8a77470.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/iio/adc/ad7280a.c b/drivers/staging/iio/adc/ad7280a.c
-index fef0055b8990..20183b2ea127 100644
---- a/drivers/staging/iio/adc/ad7280a.c
-+++ b/drivers/staging/iio/adc/ad7280a.c
-@@ -107,9 +107,9 @@
- static unsigned int ad7280a_devaddr(unsigned int addr)
- {
- 	return ((addr & 0x1) << 4) |
--	       ((addr & 0x2) << 3) |
-+	       ((addr & 0x2) << 2) |
- 	       (addr & 0x4) |
--	       ((addr & 0x8) >> 3) |
-+	       ((addr & 0x8) >> 2) |
- 	       ((addr & 0x10) >> 4);
- }
- 
+diff --git a/drivers/pinctrl/renesas/pfc-r8a77470.c b/drivers/pinctrl/renesas/pfc-r8a77470.c
+index b3b116da1bb0..14005725a726 100644
+--- a/drivers/pinctrl/renesas/pfc-r8a77470.c
++++ b/drivers/pinctrl/renesas/pfc-r8a77470.c
+@@ -2121,7 +2121,7 @@ static const unsigned int vin0_clk_mux[] = {
+ 	VI0_CLK_MARK,
+ };
+ /* - VIN1 ------------------------------------------------------------------- */
+-static const union vin_data vin1_data_pins = {
++static const union vin_data12 vin1_data_pins = {
+ 	.data12 = {
+ 		RCAR_GP_PIN(3,  1), RCAR_GP_PIN(3, 2),
+ 		RCAR_GP_PIN(3,  3), RCAR_GP_PIN(3, 4),
+@@ -2131,7 +2131,7 @@ static const union vin_data vin1_data_pins = {
+ 		RCAR_GP_PIN(3, 15), RCAR_GP_PIN(3, 16),
+ 	},
+ };
+-static const union vin_data vin1_data_mux = {
++static const union vin_data12 vin1_data_mux = {
+ 	.data12 = {
+ 		VI1_DATA0_MARK, VI1_DATA1_MARK,
+ 		VI1_DATA2_MARK, VI1_DATA3_MARK,
 -- 
 2.34.1
 

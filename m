@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EE24F50BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35C44F5038
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843041AbiDFBjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S1573216AbiDFBMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348812AbiDEJsi (ORCPT
+        with ESMTP id S1348820AbiDEJsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:38 -0400
+        Tue, 5 Apr 2022 05:48:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9AC95A36;
-        Tue,  5 Apr 2022 02:35:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA3AFAC8;
+        Tue,  5 Apr 2022 02:36:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48419615E5;
-        Tue,  5 Apr 2022 09:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F77DC385A0;
-        Tue,  5 Apr 2022 09:35:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC71561680;
+        Tue,  5 Apr 2022 09:36:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0CF8C385A2;
+        Tue,  5 Apr 2022 09:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151357;
-        bh=hE0+M1yHyMNF+b58TMcf0wEYVHccPRvtpndBkcpj1nU=;
+        s=korg; t=1649151377;
+        bh=xZFlO/Ssj0ilwMz4LbbFsHCf7q/ubFY/jXMHM64j43U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hi0uxZeq+nukjseWr2Ug73wXu/b72jncipxVpywC2ormglUG9kWBsYpP50Aizz5RT
-         6NBVusC0vn0giAyFXDQaoMzTdLi/RXER4TjsJwfYv5Y+CRVTYjG/oLH0yFKnn/GalT
-         DNgnddgpIAIGKoRkRbvu5do64gmwwDclS7/Eclos=
+        b=pCBJjGAQuM+YAd+I5Vh8jCSDeV3J91J2lxmUYLjc8i2UW0DcI8YugfdHPRjt/BzG/
+         tKm74q69LCXn/qDlTiYjDU8CZTYifBMuCGYqpk/yU1MtMuxFxKPR3QuVhWdx77Tmni
+         0IoM1TWQR7TItR1Y84XtW1NRgoQqZbKegjgeT5rw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 387/913] udmabuf: validate ubuf->pagecount
-Date:   Tue,  5 Apr 2022 09:24:09 +0200
-Message-Id: <20220405070351.447460224@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 393/913] mtd: onenand: Check for error irq
+Date:   Tue,  5 Apr 2022 09:24:15 +0200
+Message-Id: <20220405070351.628038201@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,45 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 2b6dd600dd72573c23ea180b5b0b2f1813405882 ]
+[ Upstream commit 3e68f331c8c759c0daa31cc92c3449b23119a215 ]
 
-Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
-problem was in ubuf->pages == ZERO_PTR.
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq() effectively
+convert that into -EINVAL, even at probe time rather than later on.
+So it might be better to check just now.
 
-ubuf->pagecount is calculated from arguments passed from user-space. If
-user creates udmabuf with list.size == 0 then ubuf->pagecount will be
-also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
-
-Fix it by validating ubuf->pagecount before passing it to
-kmalloc_array().
-
-Fixes: fbb0de795078 ("Add udmabuf misc device")
-Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20211230142649.23022-1-paskripkin@gmail.com
-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Fixes: 2c22120fbd01 ("MTD: OneNAND: interrupt based wait support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220104162658.1988142-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma-buf/udmabuf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index c57a609db75b..e7330684d3b8 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -190,6 +190,10 @@ static long udmabuf_create(struct miscdevice *device,
- 		if (ubuf->pagecount > pglimit)
- 			goto err;
+diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+index 8b6f4da5d720..a4b8b65fe15f 100644
+--- a/drivers/mtd/nand/onenand/generic.c
++++ b/drivers/mtd/nand/onenand/generic.c
+@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
  	}
+ 
+ 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+-	info->onenand.irq = platform_get_irq(pdev, 0);
 +
-+	if (!ubuf->pagecount)
-+		goto err;
++	err = platform_get_irq(pdev, 0);
++	if (err < 0)
++		goto out_iounmap;
 +
- 	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->pages),
- 				    GFP_KERNEL);
- 	if (!ubuf->pages) {
++	info->onenand.irq = err;
+ 
+ 	info->mtd.dev.parent = &pdev->dev;
+ 	info->mtd.priv = &info->onenand;
 -- 
 2.34.1
 

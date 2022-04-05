@@ -2,278 +2,421 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA354F5239
+	by mail.lfdr.de (Postfix) with ESMTP id B03284F523A
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849708AbiDFCjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
+        id S1849732AbiDFCkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiDEWlF (ORCPT
+        with ESMTP id S1573664AbiDEWwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:41:05 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E121803
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:31:12 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 14:31:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649194270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5t9coCtrHLZaRLvVCW23S/dnkHR8+CSFeJXYtePJSP0=;
-        b=aX8QYH82/o+HKCK3eCPUmXu2ElVCc7r3dR6Y4bX5Y2FNjUVoDvwJ2ePeRJJ2bKLg2GtlKm
-        xg4QZlzuDeRdsBnqbQaFrHBGzckwqHwElEWKe6llBpIKqoCsTjl4TwA4uALVo1pcoExHdZ
-        Gp1Vt0ayxUj1Ja52jbHaKNEXLHfsnaE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Hillf Danton <hdanton@sina.com>, MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
-Message-ID: <Yky1FgLrlIOfpCZ+@carbon.dhcp.thefacebook.com>
-References: <20220402072103.5140-1-hdanton@sina.com>
- <20220403005618.5263-1-hdanton@sina.com>
- <20220404010948.GV1609613@dread.disaster.area>
- <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
- <20220405051710.GW1609613@dread.disaster.area>
- <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
- <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
+        Tue, 5 Apr 2022 18:52:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B42183B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:35:34 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id y6so273629plg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 14:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3T1DLNs454DRQUzm0Ou8rT4NITlZJwcCtRIhth0zBLg=;
+        b=dZmHadTOGH2sWttG/8o6yry7YYYDnFAlF3s85cSg04QUfWBiZwEu+ZFKK7bHAq2Nzw
+         0h401ttv6zohsw5jB+Tc2UGfvz6jvfT3KGOZAD5FEm4TMsV6B4icl5lM+1ruDwJY5mqK
+         rJIa8Bc8z5PKxidv6RtFMbTaAU6b5gKanaV/4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3T1DLNs454DRQUzm0Ou8rT4NITlZJwcCtRIhth0zBLg=;
+        b=dQBLsT75jzFg+3EHXsH8UuSfvD4Mv7wNpFHRARHTwzFCnJXn7+G7KuzUdW7ccVjP8a
+         RD+s97tVRp6zWihR4ntTQREAFJFTTs+ZKVtDg26tRng9z8Jg4GMTGNWOP2TOp6rEaCWo
+         LGDBUoXAZPYhg/tWkrENJhgmtQYVyEYnn6ph2KeSg5hcyS/aioQH6J+/0BDg1rWjEM3K
+         pJf9NQZGlSlNk9v4Ti8Ms8KHEeNtMldRpSk2FH5rYY1g3oHvYV8wH7hIPqQnhMq5uCO1
+         URBHbwBcLrjp7MaCEN78IXBRfqq33/NP/NcuVvFflZnn5QxTvPMmHAzgtv0pD5aYcYj8
+         YgSQ==
+X-Gm-Message-State: AOAM530iq/pQmnicXUPU1n5EusKzIYZD4o2q01p8SiXbLdHKt6xBVqAX
+        R/bpiDxjStWWIZ/FxgYjdIThow==
+X-Google-Smtp-Source: ABdhPJwvvmi6H06TfLDbKyMUjMOm74H9NrRlFsP8UZHH4zfLrtGFK8t0xDeYGGV6tyKLic3OjN+08w==
+X-Received: by 2002:a17:90b:4c44:b0:1c7:109c:b419 with SMTP id np4-20020a17090b4c4400b001c7109cb419mr6324577pjb.113.1649194534059;
+        Tue, 05 Apr 2022 14:35:34 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6b63:d403:e31b:da39])
+        by smtp.gmail.com with UTF8SMTPSA id g12-20020a056a001a0c00b004e1307b249csm16964755pfv.69.2022.04.05.14.35.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 14:35:33 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 14:35:31 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohitkr@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v6 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
+ rx macros and external codecs
+Message-ID: <Yky2Iwt+tvxvu4/S@google.com>
+References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:58:59PM -0700, Yang Shi wrote:
-> On Tue, Apr 5, 2022 at 9:36 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> >
-> > On Tue, Apr 05, 2022 at 03:17:10PM +1000, Dave Chinner wrote:
-> > > On Mon, Apr 04, 2022 at 12:08:25PM -0700, Roman Gushchin wrote:
-> > > > On Mon, Apr 04, 2022 at 11:09:48AM +1000, Dave Chinner wrote:
-> > > > > i.e. the amount of work that shrinkers need to do in a periodic scan
-> > > > > is largerly determined by the rate of shrinkable cache memory usage
-> > > > > growth rather than memory reclaim priority as it is now. Hence there
-> > > > > needs to be different high level "shrinker needs to do X amount of
-> > > > > work" calculation for periodic reclaim than there is now.
-> > > > >
-> > > > > e.g. we calculate a rolling average of the size of the cache and a
-> > > > > rate of change over a series of polling operations (i.e. calling
-> > > > > ->scan_count) and then when sustained growth is detected we start
-> > > > > trying to shrink the cache to limit the rate of growth of the cache.
-> > > > >
-> > > > > If the cache keeps growing, then it's objects are being repeatedly
-> > > > > referenced and it *should* keep growing. If it's one-off objects
-> > > > > that are causing the growth of the cache and so objects are being
-> > > > > reclaimed by the shrinker, then matching the periodic shrink scan to
-> > > > > the growth rate will substantially reduce the rate of growth of that
-> > > > > cache.
-> > > >
-> > > > A clever idea!
-> > > >
-> > > > It seems like we need to add some stats to the list_lru API or maybe to
-> > > > the shrinker API (and let list_lru to use it).
-> > > > E.g. total/scanned/reclaimed, maybe with a time decay
-> > > >
-> > > > I'm also thinking about:
-> > > > 1) adding a sysfs/debugfs interface to expose shrinkers current size and
-> > > >    statistics, with an ability to call into the reclaim manually.
-> > >
-> > > I've thought about it, too, and can see where it could be useful.
-> > > However, when I consider the list_lru memcg integration, I suspect
-> > > it becomes a "can't see the forest for the trees" problem. We're
-> > > going to end up with millions of sysfs objects with no obvious way
-> > > to navigate, iterate or search them if we just take the naive "sysfs
-> > > object + stats per list_lru instance" approach.
-> >
-> > Ok, I'll try to master something and share patches. I assume it would be useful
-> > to have statistics and be able to trigger a reclaim of a particular shrinker
-> > without creating a real memory pressure. I anticipate many interesting
-> > findings in the implementation of individual shrinkers...
-> >
-> > >
-> > > Also, if you look at commit 6a6b7b77cc0f mm: ("list_lru: transpose the
-> > > array of per-node per-memcg lru lists") that went into 5.18-rc1,
-> > > you'll get an idea of the amount of memory overhead just tracking
-> > > the list_lru x memcg infrastructure consumes at scale:
-> > >
-> > >     I had done a easy test to show the optimization.  I create 10k memory
-> > >     cgroups and mount 10k filesystems in the systems.  We use free command to
-> > >     show how many memory does the systems comsumes after this operation (There
-> > >     are 2 numa nodes in the system).
-> > >
-> > >             +-----------------------+------------------------+
-> > >             |      condition        |   memory consumption   |
-> > >             +-----------------------+------------------------+
-> > >             | without this patchset |        24464 MB        |
-> > >             +-----------------------+------------------------+
-> > >             |     after patch 1     |        21957 MB        | <--------+
-> > >             +-----------------------+------------------------+          |
-> > >             |     after patch 10    |         6895 MB        |          |
-> > >             +-----------------------+------------------------+          |
-> > >             |     after patch 12    |         4367 MB        |          |
-> > >             +-----------------------+------------------------+          |
-> > >                                                                         |
-> > >             The more the number of nodes, the more obvious the effect---+
-> >
-> > Yes, I know, I've reviewed this patchset. However, 10k cgroups _and_ 10k
-> > mounts look a bit artificial. It's hard to believe that there are 100M
-> > LRUs containing hot objects. If most of them are cold, it's actually
-> > a question how to efficiently reclaim them and free the wasted memory.
-> >
-> > >
-> > > If we now add sysfs objects and stats arrays to each of the
-> > > list_lrus that we initiate even now on 5.18-rc1, we're going to
-> > > massively blow out the memory footprint again.
-> >
-> > sysfs can be a config option, it doesn't have to be enabled in prod.
-> > But I agree, because of memory constraints we're very limited in the size
-> > of statistics which can be used for reclaim decisions.
-> >
-> > >
-> > > So, nice idea, but I'm not sure we can make it useful and not
-> > > consume huge amounts of memory....
-> > >
-> > > What might be more useful is a way of getting the kernel to tell us
-> > > what the, say, 20 biggest slab caches are in the system and then
-> > > provide a way to selectively shrink them. We generally don't really
-> > > care about tiny caches, just the ones consuming all the memory. This
-> > > isn't my idea - Kent has been looking at this because of how useless
-> > > OOM kill output is for debugging slab cache based OOM triggers. See
-> > > this branch for an example:
-> > >
-> > > https://evilpiepirate.org/git/bcachefs.git/log/?h=shrinker_to_text
-> > >
-> > > Even a sysfs entry that you echo a number into and it returns
-> > > the "top N" largest LRU lists. echo -1 into it and it returns every
-> > > single one if you want all the information.
-> > >
-> > > The whole "one sysfs file, one value" architecture falls completely
-> > > apart when we might have to indexing *millions* of internal
-> > > structures with many parameters per structure...
-> >
-> > It's a good point, I need to think what can we do here.
-> >
-> > Actually, if it's so hard and inefficient for a sysfs interface,
-> > it also means it's inefficient for the reclaim path. So if we have
-> > an ability to quickly find beefy LRU lists worth shrinking, it might
-> > improve the reclaim efficiency too.
-> >
-> > Actually, thinking of reducing the memory footprint, it would be great
-> > to combine LRU's belonging to different superblocks (of the same type).
-> > Pagecache analogy: we have an LRU for all pagecache pages, it's not
-> > per-file or per-sb. Not sure how easy/viable it is.
-> >
-> > >
-> > > > 2) formalizing a reference bit/counter API on the shrinkers level, so that
-> > > >    shrinker users can explicitly mark objects (re)-"activation".
-> > >
-> > > Not 100% certain what you are refering to here - something to do
-> > > with active object rotation? Or an active/inactive list split with period
-> > > demotion like we have for the page LRUs? Or workingset refault
-> > > detection? Can you explain in more detail?
-> >
-> > It's a vague thinking at this point, but you got me right, I was thinking about
-> > all the listed ideas above. In general I'm trying to understand whether
-> > the existing model is sufficient for a more or less effective management
-> > of hot/cold objects and if we can improve it borrowing some ideas from
-> > the page reclaim code.
-> > Shadow entries would be great but likely not possible because of the memory
-> > footprint.
-> >
-> > >
-> > > > 3) _maybe_ we need to change the shrinkers API from a number of objects to
-> > > >    bytes, so that releasing a small number of large objects can compete with
-> > > >    a releasing on many small objects. But I'm not sure.
-> > >
-> > > I think I suggested something similar a long time ago. We have
-> > > shrinkers that track things other than slab objects. e.g. IIRC the
-> > > ttm graphics allocator shrinker tracks sets of pages and frees
-> > > pages, not slab objects. The XFS buffer cache tracks variable sized
-> > > objects, from 512 bytes to 64KB in length, so the amount of memory
-> > > it frees is variable even if the number of handles it scans and
-> > > reclaims is fixed and consistent. Other subsystems have different
-> > > "non object" shrinker needs as well.
-> >
-> > It's true for many objects, because it's not unusual for kernel objects
-> > to have attached kmallocs or pin other objects in the memory. Unlikely
-> > we can be 100% accurate, but we might improve the "smoothness" of the
-> > reclaim process.
-> >
-> > >
-> > > The long and short of it is that two shrinkers might have the same
-> > > object count, but one might free 10x the amount of memory than the
-> > > other for the same amount of shrinking work. Being able to focus
-> > > reclaim work on caches that can free a lot of memory much more
-> > > quickly would be a great idea.
-> >
-> > Right. It's also about "bytes freed/seeks" ratio. Why would we reclaim
-> > expensive small objects if there are big and cheap.
-> >
-> > >
-> > > It also means that a shrinker that scans a fragmented slab can keep
-> > > going until a set number of slab pages have been freed, rather than
-> > > a set number of slab objects. We can push reclaim of fragmented slab
-> > > caches much harder when necessary if we are reclaiming by freed byte
-> > > counts...
-> >
-> > I thought about it, but it's tricky. If all slabs are almost full (fragmentation
-> > is low), we want to shrink aggressively, otherwise we end up allocating
-> > more slabs and fragmenting more memory. If slabs are almost empty (fragmentation
-> > is very high), we also want to shrink more aggressively with a hope to release
-> > physical memory, as you said. But setting a target in pages is dangerous: slab caches
-> > can be merged or slab pages can be pinned by objects belonging to a different
-> > memory cgroup, so it might be not possible to reclaim pages no matter how hard
-> > we're trying.
+On Tue, Apr 05, 2022 at 04:43:38PM +0530, Srinivasa Rao Mandadapu wrote:
+> SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
+> codecs like WCD938x, max98360a using soundwire masters and i2s bus.
+> Add these nodes for sc7280 based platforms audio use case.
+> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
 > 
-> Yeah, I agree it actually doesn't make too much sense to return the
-> number of reclaimed objects. Other part of vmscan returns the number
-> of base pages, the sizes of slab objects are varied, it may be much
-> smaller than a page, for example, dentry may be 192 bytes.
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+
+A change log would be helpful for reviewers
+
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts        |   6 ++
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |   8 ++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       |  88 ++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi           | 121 +++++++++++++++++++++++++
+>  4 files changed, 223 insertions(+)
 > 
-> Another problem which doesn't help the feedback loop is even though
-> bytes is returned instead of the number of objects, it doesn't mean
-> that much memory is actually freed and available for allocation.
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index e2efbdd..224a82d 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
 
-It might be not available for non-slab allocations, but at least new
-slab objects can be allocated without polluting more pages. So it
-might not be completely useless even if 0 pages were reclaimed.
+You might want to consider splitting this patch into one that
+adds the SoC specific bits and one for each board. It's cleaner
+and might allow to land the SoC specific bits even when the board
+specific part is still under discussion. It also might make the
+life easier for folks who want to pick the SoC specific parts,
+but aren't interested in the board bits (e.g. because they want
+to support a different board). Just a thought, the split is not
+strictly necessary.
 
-> IMHO
-> the number of really freed pages should be returned (I do understand
-> it is not that easy for now), and returning 0 should be fine.
+> @@ -84,6 +84,12 @@ ap_ts_pen_1v8: &i2c13 {
+>  	pins = "gpio51";
+>  };
+>  
+> +&wcd938x {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&us_euro_select>;
+> +	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+>  &tlmm {
+>  	tp_int_odl: tp-int-odl {
+>  		pins = "gpio7";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> index de646d9..c6a04c3 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> @@ -20,6 +20,14 @@
+>  #include "sc7280-chrome-common.dtsi"
+>  
+>  / {
+> +	max98360a: audio-codec-0 {
+> +		compatible = "maxim,max98360a";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&amp_en>;
+> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+> +		#sound-dai-cells = <0>;
+> +	};
+> +
 
-It's doable, there is already a mechanism in place which hooks into
-the slub/slab/slob release path and stops the slab reclaim as a whole
-if enough memory was freed.
+This node shouldn't be at top but with the other device nodes, in
+alphabetical order, i.e. before 'pwmleds'.
 
-> The
-> current logic (returning the number of objects) may feed up something
-> over-optimistic. I, at least, experienced once or twice that a
-> significant amount of slab caches were shrunk, but actually 0 pages
-> were freed actually. TBH the new slab controller may make it worse
-> since the page may be pinned by the objects from other memcgs.
+>  	chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index f912a89..83c76b2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -20,6 +20,41 @@
+>  		serial1 = &uart7;
+>  	};
+>  
+> +	max98360a: audio-codec-0 {
+> +		compatible = "maxim,max98360a";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&amp_en>;
+> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+> +		#sound-dai-cells = <0>;
+> +	};
+> +
+> +	wcd938x: audio-codec-1 {
+> +		compatible = "qcom,wcd9380-codec";
+> +		#sound-dai-cells = <1>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wcd938x_reset_active>, <&wcd938x_reset_sleep>;
+> +		reset-gpios = <&tlmm 83 GPIO_ACTIVE_HIGH>;
+> +
+> +		qcom,rx-device = <&wcd_rx>;
+> +		qcom,tx-device = <&wcd_tx>;
+> +
+> +		vdd-rxtx-supply = <&vreg_l18b_1p8>;
+> +		vdd-io-supply = <&vreg_l18b_1p8>;
+> +		vdd-buck-supply = <&vreg_l17b_1p8>;
+> +		vdd-mic-bias-supply = <&vreg_bob>;
+> +
+> +		qcom,micbias1-microvolt = <1800000>;
+> +		qcom,micbias2-microvolt = <1800000>;
+> +		qcom,micbias3-microvolt = <1800000>;
+> +		qcom,micbias4-microvolt = <1800000>;
+> +
+> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000
+> +							  500000 500000 500000>;
+> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
+> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+> +	};
+> +
+>  	gpio-keys {
+>  		compatible = "gpio-keys";
+>  		label = "gpio-keys";
+> @@ -373,6 +408,19 @@
+>  	status = "okay";
+>  };
+>  
+> +&rxmacro {
+> +	status = "okay";
+> +};
+> +
+> +&txmacro {
+> +	status = "okay";
+> +};
+> +
+> +&vamacro {
+> +	status = "okay";
+> +	vdd-micb-supply = <&vreg_bob>;
+> +};
+> +
+>  &sdhc_1 {
+>  	status = "okay";
+>  
+> @@ -574,6 +622,24 @@
+>  	drive-strength = <6>;
+>  };
+>  
+> +&swr0 {
+> +	wcd_rx: codec@0,4 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 4>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,rx-port-mapping = <1 2 3 4 5>;
+> +	};
+> +};
+> +
+> +&swr1 {
+> +	wcd_tx: codec@0,3 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 3>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,tx-port-mapping = <1 2 3 4>;
+> +	};
+> +};
+> +
+>  &tlmm {
+>  	amp_en: amp-en {
+>  		pins = "gpio63";
+> @@ -663,5 +729,27 @@
+>  		function = "gpio";
+>  		bias-pull-down;
+>  	};
+> +
+> +	us_euro_select: us-euro-select {
 
-Of course, the more dense the placement of objects is, the harder is to get
-the physical pages back. But usually it pays off by having a dramatically
-lower total number of slab pages.
+nit: in the schematic this is called 'us_euro_hs_sel'. IMO it's preferable
+to use the name from the schematic rather than inventing a new one, unless
+there's a good reason for it.
 
-If the total size of slab memory is not very high and more or less constant,
-we don't have to move large number of pages back and forth between slab- and
-non-slab users. So if we can satisfy new allocations using "old" pages, it's
-totally fine.
+> +		pins = "gpio81";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	wcd938x_reset_active: wcd938x-reset-active {
+
+same as above: the schematic calls this pin 'wcd_reset_n'
+
+drop the -active suffix
+
+> +		pins = "gpio83";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+
+A value of 16 seems pretty high. Is it really needed?
+
+> +		output-high;
+> +	};
+> +
+> +	wcd938x_reset_sleep: wcd938x-reset-sleep {
+> +		pins = "gpio83";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+
+see above
+
+> +		bias-disable;
+> +		output-low;
+> +	};
+>  };
+>  
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index db74fc3..78ec84c 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -822,6 +822,127 @@
+>  			#power-domain-cells = <1>;
+>  		};
+>  
+> +		rxmacro: codec@3200000 {
+
+These node are not at the correct position. They should be sorted by
+address and hence be inserted between 'lpasscc@3000000' and
+'interconnect@3c40000'.
+
+> +			compatible = "qcom,sc7280-lpass-rx-macro";
+> +			reg = <0 0x03200000 0 0x1000>;
+> +
+> +			status = "disabled";
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&rx_swr_active>;
+> +
+> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
+> +				 <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
+> +				 <&vamacro>;
+> +			clock-names = "mclk", "npl", "fsgen";
+> +
+> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
+> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
+> +			power-domain-names ="macro", "dcodec";
+> +
+> +			#clock-cells = <0>;
+> +			#sound-dai-cells = <1>;
+> +		};
+> +
+> +		txmacro: codec@3220000 {
+> +			compatible = "qcom,sc7280-lpass-tx-macro";
+> +			reg = <0 0x03220000 0 0x1000>;
+> +
+> +			status = "disabled";
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&tx_swr_active>;
+> +
+> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
+> +				 <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
+> +				 <&vamacro>;
+> +			clock-names = "mclk", "npl", "fsgen";
+> +
+> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
+> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
+> +			power-domain-names ="macro", "dcodec";
+> +
+> +			#clock-cells = <0>;
+> +			#sound-dai-cells = <1>;
+> +		};
+> +
+> +		vamacro: codec@3370000 {
+> +			compatible = "qcom,sc7280-lpass-va-macro";
+> +			reg = <0 0x03370000 0 0x1000>;
+> +
+> +			status = "disabled";
+> +			pinctrl-0 = <&dmic01_active>;
+> +			pinctrl-names = "default";
+> +
+> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>;
+> +			clock-names = "mclk";
+> +
+> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
+> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
+> +			power-domain-names ="macro", "dcodec";
+> +
+> +			#clock-cells = <0>;
+> +			#sound-dai-cells = <1>;
+> +		};
+> +
+> +		swr0: soundwire@3210000 {
+> +			compatible = "qcom,soundwire-v1.6.0";
+> +			reg = <0 0x03210000 0 0x2000>;
+> +
+> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&rxmacro>;
+> +			clock-names = "iface";
+> +
+> +			qcom,din-ports = <0>;
+> +			qcom,dout-ports = <5>;
+> +
+> +			resets = <&lpass_audiocc LPASS_AUDIO_SWR_RX_CGCR>;
+> +			reset-names = "swr_audio_cgcr";
+> +
+> +			qcom,ports-word-length =	/bits/ 8 <0x01 0x07 0x04 0xff 0xff>;
+> +			qcom,ports-sinterval-low =	/bits/ 8 <0x03 0x3f 0x1f 0x03 0x03>;
+> +			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x01>;
+> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00>;
+> +			qcom,ports-lane-control =	/bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
+> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0x00 0x01 0xff 0xff>;
+> +			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff>;
+> +			qcom,ports-hstop =		/bits/ 8 <0xff 0x06 0xff 0xff 0xff>;
+> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0x00>;
+> +
+> +			#sound-dai-cells = <1>;
+> +			#address-cells = <2>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		swr1: soundwire@3230000 {
+> +			compatible = "qcom,soundwire-v1.6.0";
+> +			reg = <0 0x03230000 0 0x2000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 130 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "swr_master_irq", "swr_wake_irq";
+> +			clocks = <&txmacro>;
+> +			clock-names = "iface";
+> +
+> +			qcom,din-ports = <3>;
+> +			qcom,dout-ports = <0>;
+> +
+> +			resets = <&lpass_audiocc LPASS_AUDIO_SWR_TX_CGCR>;
+> +			reset-names = "swr_audio_cgcr";
+> +
+> +			qcom,ports-sinterval-low =	/bits/ 8 <0x01 0x03 0x03>;
+> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x00 0x02>;
+> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x00>;
+> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff>;
+> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff>;
+> +			qcom,ports-word-length =	/bits/ 8 <0xff 0x0 0xff>;
+
+s/0x0/0x00/
+
+> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0xff>;
+> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff>;
+> +			qcom,ports-lane-control =	/bits/ 8 <0x00 0x01 0x00>;
+> +			qcom,port-offset = <1>;
+> +
+> +			#sound-dai-cells = <1>;
+> +			#address-cells = <2>;
+> +			#size-cells = <0>;
+> +		};
+
+add empty line
+
+>  		ipcc: mailbox@408000 {
+>  			compatible = "qcom,sc7280-ipcc", "qcom,ipcc";
+>  			reg = <0 0x00408000 0 0x1000>;

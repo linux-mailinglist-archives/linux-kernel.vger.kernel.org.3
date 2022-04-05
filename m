@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B104F473B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54134F4396
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349635AbiDEVEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S1380198AbiDEN34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358022AbiDEK1v (ORCPT
+        with ESMTP id S1345314AbiDEJWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:51 -0400
+        Tue, 5 Apr 2022 05:22:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C8968334;
-        Tue,  5 Apr 2022 03:13:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A43C43389;
+        Tue,  5 Apr 2022 02:10:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0DD06179E;
-        Tue,  5 Apr 2022 10:13:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16BBC385A1;
-        Tue,  5 Apr 2022 10:13:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9070C614FC;
+        Tue,  5 Apr 2022 09:10:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9930AC385A0;
+        Tue,  5 Apr 2022 09:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153582;
-        bh=t9kcOGRydPGLOmrxkJKyhL9e/RChrQb3otSRVxw7mAQ=;
+        s=korg; t=1649149824;
+        bh=jpH1FFqHwA9Rcvx435BbU8+Ijry2x5lxT/g9E4on9Sg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rKjJcma5JRYjFDPNAy+FcxbzbJZm5tadfkmO3Rav6nVl088ek143srVp1fxBZfWGz
-         Qvq2VUX09vt7oxvumBqRrpRSk6g+XjoNgfoFPMIsGUannDGzec5ec29OQLZJbE1vww
-         lBDO1dXx/9oBANwO0WDs+2yZKd545mRfT4DZMPVQ=
+        b=jxOtjWoivyK8oriC7ruazGHIU1QBCQCm7ioTEnR6Oarh9vt5UhRp90055mJLIriWk
+         oj9ofKr2fbaZWHXU4s0JvNHWcAauNt+S4ToefpoEq5dSK4VcLop82LbPXYv/Rc63Fo
+         I9tc5exSNNl2JUl/xENIWoMS7IHOkF8Kls4cUEIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 272/599] drm/edid: Dont clear formats if using deep color
-Date:   Tue,  5 Apr 2022 09:29:26 +0200
-Message-Id: <20220405070306.932383798@linuxfoundation.org>
+        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0854/1017] mmc: host: Return an error when ->enable_sdio_irq() ops is missing
+Date:   Tue,  5 Apr 2022 09:29:27 +0200
+Message-Id: <20220405070419.586137766@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 75478b3b393bcbdca4e6da76fe3a9f1a4133ec5d ]
+[ Upstream commit d6c9219ca1139b74541b2a98cee47a3426d754a9 ]
 
-The current code, when parsing the EDID Deep Color depths, that the
-YUV422 cannot be used, referring to the HDMI 1.3 Specification.
+Even if the current WARN() notifies the user that something is severely
+wrong, we can still end up in a PANIC() when trying to invoke the missing
+->enable_sdio_irq() ops. Therefore, let's also return an error code and
+prevent the host from being added.
 
-This specification, in its section 6.2.4, indeed states:
+While at it, move the code into a separate function to prepare for
+subsequent changes and for further host caps validations.
 
-  For each supported Deep Color mode, RGB 4:4:4 shall be supported and
-  optionally YCBCR 4:4:4 may be supported.
-
-  YCBCR 4:2:2 is not permitted for any Deep Color mode.
-
-This indeed can be interpreted like the code does, but the HDMI 1.4
-specification further clarifies that statement in its section 6.2.4:
-
-  For each supported Deep Color mode, RGB 4:4:4 shall be supported and
-  optionally YCBCR 4:4:4 may be supported.
-
-  YCBCR 4:2:2 is also 36-bit mode but does not require the further use
-  of the Deep Color modes described in section 6.5.2 and 6.5.3.
-
-This means that, even though YUV422 can be used with 12 bit per color,
-it shouldn't be treated as a deep color mode.
-
-This is also broken with YUV444 if it's supported by the display, but
-DRM_EDID_HDMI_DC_Y444 isn't set. In such a case, the code will clear
-color_formats of the YUV444 support set previously in
-drm_parse_cea_ext(), but will not set it back.
-
-Since the formats supported are already setup properly in
-drm_parse_cea_ext(), let's just remove the code modifying the formats in
-drm_parse_hdmi_deep_color_info()
-
-Fixes: d0c94692e0a3 ("drm/edid: Parse and handle HDMI deep color modes.")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220120151625.594595-3-maxime@cerno.tech
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20220303165142.129745-1-ulf.hansson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c |    8 --------
- 1 file changed, 8 deletions(-)
+ drivers/mmc/core/host.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -4960,16 +4960,8 @@ static void drm_parse_hdmi_deep_color_in
- 		  connector->name, dc_bpc);
- 	info->bpc = dc_bpc;
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+index cf140f4ec864..d739e2b631fe 100644
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -588,6 +588,16 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
  
--	/*
--	 * Deep color support mandates RGB444 support for all video
--	 * modes and forbids YCRCB422 support for all video modes per
--	 * HDMI 1.3 spec.
--	 */
--	info->color_formats = DRM_COLOR_FORMAT_RGB444;
--
- 	/* YCRCB444 is optional according to spec. */
- 	if (hdmi[6] & DRM_EDID_HDMI_DC_Y444) {
--		info->color_formats |= DRM_COLOR_FORMAT_YCRCB444;
- 		DRM_DEBUG("%s: HDMI sink does YCRCB444 in deep color.\n",
- 			  connector->name);
- 	}
+ EXPORT_SYMBOL(mmc_alloc_host);
+ 
++static int mmc_validate_host_caps(struct mmc_host *host)
++{
++	if (host->caps & MMC_CAP_SDIO_IRQ && !host->ops->enable_sdio_irq) {
++		dev_warn(host->parent, "missing ->enable_sdio_irq() ops\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ /**
+  *	mmc_add_host - initialise host hardware
+  *	@host: mmc host
+@@ -600,8 +610,9 @@ int mmc_add_host(struct mmc_host *host)
+ {
+ 	int err;
+ 
+-	WARN_ON((host->caps & MMC_CAP_SDIO_IRQ) &&
+-		!host->ops->enable_sdio_irq);
++	err = mmc_validate_host_caps(host);
++	if (err)
++		return err;
+ 
+ 	err = device_add(&host->class_dev);
+ 	if (err)
+-- 
+2.34.1
+
 
 

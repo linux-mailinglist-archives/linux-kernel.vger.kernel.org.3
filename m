@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9EE4F4411
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC674F443B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385038AbiDEMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S1384995AbiDEMan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbiDEIOX (ORCPT
+        with ESMTP id S235003AbiDEIOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:14:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33551986F5;
-        Tue,  5 Apr 2022 01:03:11 -0700 (PDT)
+        Tue, 5 Apr 2022 04:14:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288439BAEF;
+        Tue,  5 Apr 2022 01:03:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF22617D4;
-        Tue,  5 Apr 2022 08:03:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076E4C385A0;
-        Tue,  5 Apr 2022 08:03:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8978AB81B18;
+        Tue,  5 Apr 2022 08:03:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C551BC385A1;
+        Tue,  5 Apr 2022 08:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145789;
-        bh=xKmTIuWGghxPlamgA+4jpkdwdalBgdMukXmT3MDoh0Y=;
+        s=korg; t=1649145792;
+        bh=seiBGHh9QwPdT6SoSG5DhIi5R0FVf3d1hYryzIDXDX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oxGEe6a4fcS3d+6/+KsRtIL6YAqBqahdLlk/gTc+ga04568xBkRg5cFBG6uAWwOSw
-         XJTVQYUOB1JoAfm2QxGyOSDqe6JZIvoBEQ31LCmTeEUHqO8H2FtpOXPAveYk/7MN75
-         +tW/UjScEPdmr5T0mlEnsYA9FyNHJyzJz9Wk3TxM=
+        b=iAsBoB94yFeQpt6uslWyXpq78Vcfk6PhO+3SAu++cvAmRndDtFaoKbHryLW+5wf55
+         xehN4NvSnLrKbIs3DmuBC0+FjdtXJJ26CT6e0lDiYFr/aYvA9N/HowQHZ+ZggV7UL3
+         7yRbXPM6cQdxN+1pNV+FR9QQtw3jNCBA2HsDl4nI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0530/1126] cxl/core: Fix cxl_probe_component_regs() error message
-Date:   Tue,  5 Apr 2022 09:21:17 +0200
-Message-Id: <20220405070423.188083070@linuxfoundation.org>
+Subject: [PATCH 5.17 0531/1126] tools/testing/cxl: Fix root port to host bridge assignment
+Date:   Tue,  5 Apr 2022 09:21:18 +0200
+Message-Id: <20220405070423.217388650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,33 +56,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dan Williams <dan.j.williams@intel.com>
 
-[ Upstream commit d621bc2e7282f9955033a6359877fd4ac4be60e1 ]
+[ Upstream commit a4a0ce242fcd7022349212c4e2f795762e6ff050 ]
 
-Fix a '\n' vs '/n' typo.
+Mocked root-ports are meant to be round-robin assigned to host-bridges.
 
-Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
-Acked-by: Ben Widawsky <ben.widawsky@intel.com
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Link: https://lore.kernel.org/r/164298418268.3018233.17790073375430834911.stgit@dwillia2-desk3.amr.corp.intel.com
+Fixes: 67dcdd4d3b83 ("tools/testing/cxl: Introduce a mocked-up CXL port hierarchy")
+Link: https://lore.kernel.org/r/164298431629.3018233.14004377108116384485.stgit@dwillia2-desk3.amr.corp.intel.com
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/core/regs.c | 2 +-
+ tools/testing/cxl/test/cxl.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index e37e23bf4355..cdc0b75d94f2 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -49,7 +49,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
+index 736d99006fb7..f0a410962af0 100644
+--- a/tools/testing/cxl/test/cxl.c
++++ b/tools/testing/cxl/test/cxl.c
+@@ -511,7 +511,7 @@ static __init int cxl_test_init(void)
  
- 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
- 		dev_err(dev,
--			"Couldn't locate the CXL.cache and CXL.mem capability array header./n");
-+			"Couldn't locate the CXL.cache and CXL.mem capability array header.\n");
- 		return;
- 	}
+ 	for (i = 0; i < ARRAY_SIZE(cxl_root_port); i++) {
+ 		struct platform_device *bridge =
+-			cxl_host_bridge[i / NR_CXL_ROOT_PORTS];
++			cxl_host_bridge[i % ARRAY_SIZE(cxl_host_bridge)];
+ 		struct platform_device *pdev;
  
+ 		pdev = platform_device_alloc("cxl_root_port", i);
 -- 
 2.34.1
 

@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C1D4F4471
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21134F483D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389279AbiDENdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S1379420AbiDEVdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346396AbiDEJXq (ORCPT
+        with ESMTP id S1358065AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2C0DA09A;
-        Tue,  5 Apr 2022 02:13:24 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3C2DD77;
+        Tue,  5 Apr 2022 03:14:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACAA1615E5;
-        Tue,  5 Apr 2022 09:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFE0C385A2;
-        Tue,  5 Apr 2022 09:13:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B100161562;
+        Tue,  5 Apr 2022 10:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1297C385A1;
+        Tue,  5 Apr 2022 10:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150003;
-        bh=TEt6u2v2p7dI5no1Pgbez4k7Gzktp4YSlW5alzX4JkU=;
+        s=korg; t=1649153654;
+        bh=I5reYYcCwEetwFtpPqU2JE/buhhXTzbpgUmMYCyWh2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JOMgdS4Itj8oFFq2OfnLYMsHHdyA2CcW9sBIkHzheMLxMw2TouWoRHuAytFLW7Lmb
-         P8L1cM823Vj8vHE2e9su1MYqTQumlweujd3kYh8CopqiCJg1Rtp/sESsDNY1tqvLvl
-         dwCfNmIkCyIeD01S34yA6rf+yqJZ60s8l3NBxrZM=
+        b=EbSyh9bfkSTCvTu6Ou+/6Zrib8yDaT+Z4YF1TiGSChYNW6/9+uZFSeFzKrgakCpwZ
+         W3wW0MxlvvH7g+rCTMH5CYZEgH0ylxcdAHc7vjMs9Wv2rGbK4EE2SHaIXYvTyrHAST
+         Mt55nTwCnRKTAvcfnO7lAM54sWiyC2tiKfXd2wmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Bikash Hazarika <bhazarika@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0881/1017] scsi: qla2xxx: Fix wrong FDMI data for 64G adapter
+        stable@vger.kernel.org, Hersen Wu <hersenwu@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        Roman Li <Roman.Li@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 300/599] drm/amd/display: Add affected crtcs to atomic state for dsc mst unplug
 Date:   Tue,  5 Apr 2022 09:29:54 +0200
-Message-Id: <20220405070420.384917030@linuxfoundation.org>
+Message-Id: <20220405070307.760975476@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bikash Hazarika <bhazarika@marvell.com>
+From: Roman Li <Roman.Li@amd.com>
 
-commit 1cfbbacbee2d6ea3816386a483e3c7a96e5bd657 upstream.
+[ Upstream commit 128f8ed5902a287a6bb4afe0ffdae8a80b2a64ec ]
 
-Corrected transmission speed mask values for FC.
+[Why]
+When display topology changed on DSC hub we add all crtcs with dsc support to
+atomic state.
+Refer to patch:"drm/amd/display: Trigger modesets on MST DSC connectors"
+However the original implementation may skip crtc if the topology change
+caused by unplug.
+That potentially could lead to no-lightup or corruption on DSC hub after
+unplug event on one of the connectors.
 
-Supported Speed: 16 32 20 Gb/s ===> Should be 64 instead of 20
-Supported Speed: 16G 32G 48G   ===> Should be 64G instead of 48G
+[How]
+Update add_affected_mst_dsc_crtcs() to use old connector state
+if new connector state has no crtc (undergoes modeset due to unplug)
 
-Link: https://lore.kernel.org/r/20220110050218.3958-9-njavali@marvell.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Bikash Hazarika <bhazarika@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 44be939ff7ac58 ("drm/amd/display: Trigger modesets on MST DSC connectors")
+
+Reviewed-by: Hersen Wu <hersenwu@amd.com>
+Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
+Signed-off-by: Roman Li <Roman.Li@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -2891,7 +2891,11 @@ struct ct_fdmi2_hba_attributes {
- #define FDMI_PORT_SPEED_8GB		0x10
- #define FDMI_PORT_SPEED_16GB		0x20
- #define FDMI_PORT_SPEED_32GB		0x40
--#define FDMI_PORT_SPEED_64GB		0x80
-+#define FDMI_PORT_SPEED_20GB		0x80
-+#define FDMI_PORT_SPEED_40GB		0x100
-+#define FDMI_PORT_SPEED_128GB		0x200
-+#define FDMI_PORT_SPEED_64GB		0x400
-+#define FDMI_PORT_SPEED_256GB		0x800
- #define FDMI_PORT_SPEED_UNKNOWN		0x8000
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index b65364695219..e828f9414ba2 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -8615,10 +8615,13 @@ static int dm_update_plane_state(struct dc *dc,
+ static int add_affected_mst_dsc_crtcs(struct drm_atomic_state *state, struct drm_crtc *crtc)
+ {
+ 	struct drm_connector *connector;
+-	struct drm_connector_state *conn_state;
++	struct drm_connector_state *conn_state, *old_conn_state;
+ 	struct amdgpu_dm_connector *aconnector = NULL;
+ 	int i;
+-	for_each_new_connector_in_state(state, connector, conn_state, i) {
++	for_each_oldnew_connector_in_state(state, connector, old_conn_state, conn_state, i) {
++		if (!conn_state->crtc)
++			conn_state = old_conn_state;
++
+ 		if (conn_state->crtc != crtc)
+ 			continue;
  
- #define FC_CLASS_2	0x04
+-- 
+2.34.1
+
 
 

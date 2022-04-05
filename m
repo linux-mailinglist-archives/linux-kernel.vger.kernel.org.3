@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1B74F4621
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699F04F46B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbiDEMdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S1380008AbiDEUkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbiDEJCY (ORCPT
+        with ESMTP id S1348703AbiDEJs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:24 -0400
+        Tue, 5 Apr 2022 05:48:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57E4BF40;
-        Tue,  5 Apr 2022 01:54:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C735A39141;
+        Tue,  5 Apr 2022 02:34:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68DDFB81A0C;
-        Tue,  5 Apr 2022 08:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C69C385A0;
-        Tue,  5 Apr 2022 08:54:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D76DFB81C6F;
+        Tue,  5 Apr 2022 09:34:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352F6C385A3;
+        Tue,  5 Apr 2022 09:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148849;
-        bh=Gh6dRGFWFQmf8B5m9q8iVsCS75Ilgj6gFgKCUtVsgWU=;
+        s=korg; t=1649151265;
+        bh=kTf509aGxUC2L+Qqne7LOHBXyNCvMcSwY5mKQwAKabs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XewtgC7TrAFQxtaJFjGT8gAwDmu042+wb0oFSk0DvIjBJMvmaXx4RHrA/gbwDUQq4
-         tHdBC7VGO/nYUZnUmY6sV07Gjbkqzf/Dc4yPOLfaXc+Jw7Dck2/istCLQQZol1l4Cw
-         iy7czptLziIcBWHH+FotcLuxpmLZmHBBbfOPIbTo=
+        b=LuSR2FeT1dCKZohKSNiS98pagNhZA6vxaK0/mf61OduRGhR4jrH5800Lf0B8iGoHX
+         bzb3SKKQzZ46lXOPJtRuqf6FdPqn1l+jFZPf3dzSmDr7RvoXCtGSUcV8u60MnDXcig
+         NYwjDTILyiJ+/LArSsHQ6UY91MXfyreilol+waaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hersen Wu <hersenwu@amd.com>,
-        Jasdeep Dhillon <jdhillon@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0502/1017] drm/amd/display: Add affected crtcs to atomic state for dsc mst unplug
+Subject: [PATCH 5.15 353/913] media: saa7134: fix incorrect use to determine if list is empty
 Date:   Tue,  5 Apr 2022 09:23:35 +0200
-Message-Id: <20220405070409.200254124@linuxfoundation.org>
+Message-Id: <20220405070350.427357768@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,55 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Li <Roman.Li@amd.com>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 128f8ed5902a287a6bb4afe0ffdae8a80b2a64ec ]
+[ Upstream commit 9f1f4b642451d35667a4dc6a9c0a89d954b530a3 ]
 
-[Why]
-When display topology changed on DSC hub we add all crtcs with dsc support to
-atomic state.
-Refer to patch:"drm/amd/display: Trigger modesets on MST DSC connectors"
-However the original implementation may skip crtc if the topology change
-caused by unplug.
-That potentially could lead to no-lightup or corruption on DSC hub after
-unplug event on one of the connectors.
+'dev' will *always* be set by list_for_each_entry().
+It is incorrect to assume that the iterator value will be NULL if the
+list is empty.
 
-[How]
-Update add_affected_mst_dsc_crtcs() to use old connector state
-if new connector state has no crtc (undergoes modeset due to unplug)
+Instead of checking the pointer it should be checked if
+the list is empty.
 
-Fixes: 44be939ff7ac58 ("drm/amd/display: Trigger modesets on MST DSC connectors")
-
-Reviewed-by: Hersen Wu <hersenwu@amd.com>
-Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
-Signed-off-by: Roman Li <Roman.Li@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 79dd0c69f05f ("V4L: 925: saa7134 alsa is now a standalone module")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/pci/saa7134/saa7134-alsa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 0ec8051cdfb4..7cadb9e81d9d 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -10752,10 +10752,13 @@ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
- static int add_affected_mst_dsc_crtcs(struct drm_atomic_state *state, struct drm_crtc *crtc)
- {
- 	struct drm_connector *connector;
--	struct drm_connector_state *conn_state;
-+	struct drm_connector_state *conn_state, *old_conn_state;
- 	struct amdgpu_dm_connector *aconnector = NULL;
- 	int i;
--	for_each_new_connector_in_state(state, connector, conn_state, i) {
-+	for_each_oldnew_connector_in_state(state, connector, old_conn_state, conn_state, i) {
-+		if (!conn_state->crtc)
-+			conn_state = old_conn_state;
-+
- 		if (conn_state->crtc != crtc)
- 			continue;
+diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+index fb24d2ed3621..d3cde05a6eba 100644
+--- a/drivers/media/pci/saa7134/saa7134-alsa.c
++++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -1214,7 +1214,7 @@ static int alsa_device_exit(struct saa7134_dev *dev)
  
+ static int saa7134_alsa_init(void)
+ {
+-	struct saa7134_dev *dev = NULL;
++	struct saa7134_dev *dev;
+ 
+ 	saa7134_dmasound_init = alsa_device_init;
+ 	saa7134_dmasound_exit = alsa_device_exit;
+@@ -1229,7 +1229,7 @@ static int saa7134_alsa_init(void)
+ 			alsa_device_init(dev);
+ 	}
+ 
+-	if (dev == NULL)
++	if (list_empty(&saa7134_devlist))
+ 		pr_info("saa7134 ALSA: no saa7134 cards found\n");
+ 
+ 	return 0;
 -- 
 2.34.1
 

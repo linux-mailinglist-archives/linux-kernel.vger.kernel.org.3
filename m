@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899DF4F4E99
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A524F4906
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835763AbiDFAdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S241792AbiDEWAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351084AbiDEKBG (ORCPT
+        with ESMTP id S1358103AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:01:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCC16C4A9;
-        Tue,  5 Apr 2022 02:51:28 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F716BDF0;
+        Tue,  5 Apr 2022 03:15:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95347B81B76;
-        Tue,  5 Apr 2022 09:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47B4C385A2;
-        Tue,  5 Apr 2022 09:51:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8E9F6179E;
+        Tue,  5 Apr 2022 10:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E845DC385A2;
+        Tue,  5 Apr 2022 10:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152286;
-        bh=3mVceC6AcY9ncUUXgaCeHhUlEPjZyjB+lH7uocOn1Dw=;
+        s=korg; t=1649153734;
+        bh=HkL97IkRDVl1qVRDtmAyoUw5lW9Zl6osxxtIJjv0pGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2GMIxxJJao/iIo6G+izykjwbFc8OECSTVrs4PqziPYc88tVtAkNB1EVX40ISjrlXK
-         c4QPRPQwhb4yXf9KxFtZuxvFiH9tnFpSrvqq4AFkOdWQD8LYMJcOpPHbbPZFVP4qPj
-         Z2xBm+zY39mDiJxiPdFH9j8H+/7Zhqj+mx5eq+7Q=
+        b=gtJLS6TPIAxZVuXUdMMlX8xAJQSdAWOMwpTJguodFV0myd2g9DJtGGnsp2/ttLX3r
+         /BwTbXWgxdtQ2z28zSS7T7BrWO/VOAe5dpBHAWYy2y1FuIV69vppG/COACLJ7mbGoL
+         6oUdLgPap9br2nO9PlkV55sAlXQSsOC/pd2qNIaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 722/913] f2fs: compress: fix to print raw data size in error path of lz4 decompression
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 290/599] mt76: mt7615: check sta_rates pointer in mt7615_sta_rate_tbl_update
 Date:   Tue,  5 Apr 2022 09:29:44 +0200
-Message-Id: <20220405070401.474321389@linuxfoundation.org>
+Message-Id: <20220405070307.463836015@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit d284af43f703760e261b1601378a0c13a19d5f1f ]
+[ Upstream commit 6a6f457ed5fdf6777536c20644a9e42128a50ec2 ]
 
-In lz4_decompress_pages(), if size of decompressed data is not equal to
-expected one, we should print the size rather than size of target buffer
-for decompressed data, fix it.
+Check sta_rates pointer value in mt7615_sta_rate_tbl_update routine
+since minstrel_ht_update_rates can fail allocating rates array.
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: 04b8e65922f63 ("mt76: add mac80211 driver for MT7615 PCIe-based chipsets")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/compress.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7615/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 58d255d3a518..6adf04725954 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -312,10 +312,9 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
- 	}
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
+index 88cdc2badeae..defa207f53d6 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
+@@ -673,6 +673,9 @@ static void mt7615_sta_rate_tbl_update(struct ieee80211_hw *hw,
+ 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
+ 	int i;
  
- 	if (ret != PAGE_SIZE << dic->log_cluster_size) {
--		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid rlen:%zu, "
-+		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid ret:%d, "
- 					"expected:%lu\n", KERN_ERR,
--					F2FS_I_SB(dic->inode)->sb->s_id,
--					dic->rlen,
-+					F2FS_I_SB(dic->inode)->sb->s_id, ret,
- 					PAGE_SIZE << dic->log_cluster_size);
- 		return -EIO;
- 	}
++	if (!sta_rates)
++		return;
++
+ 	spin_lock_bh(&dev->mt76.lock);
+ 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
+ 		msta->rates[i].idx = sta_rates->rate[i].idx;
 -- 
 2.34.1
 

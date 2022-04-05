@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299FF4F490E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3FC4F4C48
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389842AbiDEWCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S1577874AbiDEXRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349411AbiDEJts (ORCPT
+        with ESMTP id S1355724AbiDEKVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FB0186D7;
-        Tue,  5 Apr 2022 02:45:01 -0700 (PDT)
+        Tue, 5 Apr 2022 06:21:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E3B83031;
+        Tue,  5 Apr 2022 03:05:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31D29615E5;
-        Tue,  5 Apr 2022 09:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D745C385A1;
-        Tue,  5 Apr 2022 09:45:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EF58616E7;
+        Tue,  5 Apr 2022 10:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3A8C385A1;
+        Tue,  5 Apr 2022 10:05:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151900;
-        bh=lLUB6/PLO7CaoHTOodfcqfI4F641Ksv26ccVQ4WLnvA=;
+        s=korg; t=1649153103;
+        bh=WNP6Khvhm5d3jm0balr1Rh0ZzmOjXFEoQMP607kv07Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JYKQn4xx321XcxPobA/oYu/gyaM0gzfa9V0RN78QslUcICh7HOTdzVBOZQuDXkXd5
-         8StZochu6tvWq8IchEXd86cig2+4xhL8zhHp70Ywt/71b3fMxf3VTsSUBTXqpF375k
-         r1lo24NQ6nhnbaA2AM2YIAntuIZo7NXdvBYZhgPI=
+        b=LZaaORXGZrzM8ACna2UqYMCn+X5a5WJdVs75my7PK07Tt9Tb/M10I2HXO8C7FeRyA
+         7ZJ3qBOhkt8Hy1+XlVjk/Q5u2YlzL5kdt2RZUk8yFuLc1GJ1N1BZlCThVip8x8XamD
+         8uMV3lna+ryZgURKTl71iHsyMOj1C/mqqEbUDgZg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yaliang Wang <Yaliang.Wang@windriver.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 534/913] MIPS: pgalloc: fix memory leak caused by pgd_free()
-Date:   Tue,  5 Apr 2022 09:26:36 +0200
-Message-Id: <20220405070355.856117025@linuxfoundation.org>
+        stable@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 5.10 103/599] mgag200 fix memmapsl configuration in GCTL6 register
+Date:   Tue,  5 Apr 2022 09:26:37 +0200
+Message-Id: <20220405070301.898742921@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yaliang Wang <Yaliang.Wang@windriver.com>
+From: Jocelyn Falempe <jfalempe@redhat.com>
 
-[ Upstream commit 2bc5bab9a763d520937e4f3fe8df51c6a1eceb97 ]
+commit 028a73e10705af1ffd51f2537460f616dc58680e upstream.
 
-pgd page is freed by generic implementation pgd_free() since commit
-f9cb654cb550 ("asm-generic: pgalloc: provide generic pgd_free()"),
-however, there are scenarios that the system uses more than one page as
-the pgd table, in such cases the generic implementation pgd_free() won't
-be applicable anymore. For example, when PAGE_SIZE_4KB is enabled and
-MIPS_VA_BITS_48 is not enabled in a 64bit system, the macro "PGD_ORDER"
-will be set as "1", which will cause allocating two pages as the pgd
-table. Well, at the same time, the generic implementation pgd_free()
-just free one pgd page, which will result in the memory leak.
+On some servers with MGA G200_SE_A (rev 42), booting with Legacy BIOS,
+the hardware hangs when using kdump and kexec into the kdump kernel.
+This happens when the uncompress code tries to write "Decompressing Linux"
+to the VGA Console.
 
-The memory leak can be easily detected by executing shell command:
-"while true; do ls > /dev/null; grep MemFree /proc/meminfo; done"
+It can be reproduced by writing to the VGA console (0xB8000) after
+booting to graphic mode, it generates the following error:
 
-Fixes: f9cb654cb550 ("asm-generic: pgalloc: provide generic pgd_free()")
-Signed-off-by: Yaliang Wang <Yaliang.Wang@windriver.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+kernel:NMI: PCI system error (SERR) for reason a0 on CPU 0.
+kernel:Dazed and confused, but trying to continue
+
+The root cause is the configuration of the MGA GCTL6 register
+
+According to the GCTL6 register documentation:
+
+bit 0 is gcgrmode:
+    0: Enables alpha mode, and the character generator addressing system is
+     activated.
+    1: Enables graphics mode, and the character addressing system is not
+     used.
+
+bit 1 is chainodd even:
+    0: The A0 signal of the memory address bus is used during system memory
+     addressing.
+    1: Allows A0 to be replaced by either the A16 signal of the system
+     address (ifmemmapsl is ‘00’), or by the hpgoddev (MISC<5>, odd/even
+     page select) field, described on page 3-294).
+
+bit 3-2 are memmapsl:
+    Memory map select bits 1 and 0. VGA.
+    These bits select where the video memory is mapped, as shown below:
+        00 => A0000h - BFFFFh
+        01 => A0000h - AFFFFh
+        10 => B0000h - B7FFFh
+        11 => B8000h - BFFFFh
+
+bit 7-4 are reserved.
+
+Current code set it to 0x05 => memmapsl to b01 => 0xa0000 (graphic mode)
+But on x86, the VGA console is at 0xb8000 (text mode)
+In arch/x86/boot/compressed/misc.c debug strings are written to 0xb8000
+As the driver doesn't use this mapping at 0xa0000, it is safe to set it to
+0xb8000 instead, to avoid kernel hang on G200_SE_A rev42, with kexec/kdump.
+
+Thus changing the value 0x05 to 0x0d
+
+Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Lyude Paul <lyude@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220119102905.1194787-1-jfalempe@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/include/asm/pgalloc.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/mgag200/mgag200_mode.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
-index c7925d0e9874..867e9c3db76e 100644
---- a/arch/mips/include/asm/pgalloc.h
-+++ b/arch/mips/include/asm/pgalloc.h
-@@ -15,6 +15,7 @@
+--- a/drivers/gpu/drm/mgag200/mgag200_mode.c
++++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
+@@ -1243,7 +1243,10 @@ static void mgag200_set_format_regs(stru
+ 	WREG_GFX(3, 0x00);
+ 	WREG_GFX(4, 0x00);
+ 	WREG_GFX(5, 0x40);
+-	WREG_GFX(6, 0x05);
++	/* GCTL6 should be 0x05, but we configure memmapsl to 0xb8000 (text mode),
++	 * so that it doesn't hang when running kexec/kdump on G200_SE rev42.
++	 */
++	WREG_GFX(6, 0x0d);
+ 	WREG_GFX(7, 0x0f);
+ 	WREG_GFX(8, 0x0f);
  
- #define __HAVE_ARCH_PMD_ALLOC_ONE
- #define __HAVE_ARCH_PUD_ALLOC_ONE
-+#define __HAVE_ARCH_PGD_FREE
- #include <asm-generic/pgalloc.h>
- 
- static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
-@@ -48,6 +49,11 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
- extern void pgd_init(unsigned long page);
- extern pgd_t *pgd_alloc(struct mm_struct *mm);
- 
-+static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
-+{
-+	free_pages((unsigned long)pgd, PGD_ORDER);
-+}
-+
- #define __pte_free_tlb(tlb,pte,address)			\
- do {							\
- 	pgtable_pte_page_dtor(pte);			\
--- 
-2.34.1
-
 
 

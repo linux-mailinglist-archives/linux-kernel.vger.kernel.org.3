@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192434F418E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4C14F4088
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357015AbiDEMUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S1344089AbiDEPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244984AbiDEIw5 (ORCPT
+        with ESMTP id S1345706AbiDEJnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDA8E0F6;
-        Tue,  5 Apr 2022 01:48:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:43:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD22C4E2F;
+        Tue,  5 Apr 2022 02:28:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B377614F9;
-        Tue,  5 Apr 2022 08:48:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E272C385A0;
-        Tue,  5 Apr 2022 08:48:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E98AEB81CAE;
+        Tue,  5 Apr 2022 09:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60471C385A3;
+        Tue,  5 Apr 2022 09:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148512;
-        bh=5Hg19Sf4g8LcZB1PsHOkiazYrJEl4v16h4W0vZCs8H8=;
+        s=korg; t=1649150935;
+        bh=KRNK4njVsHVBRUVwoLTSxSdSTi/Wg8AxT7cHVB6pSlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D7lOEZ2Yj7O7spmBanUyDu6VeaBUV1clkT7JYnzfM2CK1lhbynA+47L57eD4iLHI+
-         DY3CL3wrqIEFfm36/gmjG5oIwkB4uWJ6PD7b6xumE+kuS4Oeh6Et06yUf+d6BhrJqE
-         IwQlheuUkk7eQ4f4gpytmDcEqY0Q06NAwI8bcPg4=
+        b=ENaom5YincphP6p+n+kSZE9DVY9YJibAf4zuO77HBWXEDnZaBpnR+F0SveK9syKk9
+         MVaRxFnpVqpOTrmVE96tkwGmJ8E00ERF2RHCfohBQMyJWFCYP/Gfwdyve7ZWkmfuQw
+         aLvaBMWK2sk4zGz2D/vBIJnewgW0IwHwPO7TTMDY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0381/1017] ASoC: mediatek: use of_device_get_match_data()
-Date:   Tue,  5 Apr 2022 09:21:34 +0200
-Message-Id: <20220405070405.595516791@linuxfoundation.org>
+Subject: [PATCH 5.15 234/913] KEYS: trusted: Fix trusted key backends when building as module
+Date:   Tue,  5 Apr 2022 09:21:36 +0200
+Message-Id: <20220405070346.869676721@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@google.com>
+From: Andreas Rammhold <andreas@rammhold.de>
 
-[ Upstream commit 3667a037e50a31555276a7989435126e501f0f15 ]
+[ Upstream commit 969a26446bcd142faedfe8c6f41cd7668596c1fa ]
 
-Uses of_device_get_match_data() helper to clean some boilerplate code.
+Before this commit the kernel could end up with no trusted key sources
+even though both of the currently supported backends (TPM and TEE) were
+compiled as modules. This manifested in the trusted key type not being
+registered at all.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20211227062153.3887447-1-tzungbi@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+When checking if a CONFIG_… preprocessor variable is defined we only
+test for the builtin (=y) case and not the module (=m) case. By using
+the IS_REACHABLE() macro we do test for both cases.
+
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c         | 7 ++-----
- sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c | 7 ++-----
- sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c    | 7 ++-----
- 3 files changed, 6 insertions(+), 15 deletions(-)
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-index bda103211e0b..0ab8b050b305 100644
---- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-@@ -685,7 +685,6 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
- 	struct snd_soc_dai_link *dai_link;
- 	struct mt8183_da7219_max98357_priv *priv;
- 	struct pinctrl *pinctrl;
--	const struct of_device_id *match;
- 	int ret, i;
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..5b35f1b87644 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
  
- 	platform_node = of_parse_phandle(pdev->dev.of_node,
-@@ -695,11 +694,9 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	match = of_match_device(pdev->dev.driver->of_match_table, &pdev->dev);
--	if (!match || !match->data)
-+	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
-+	if (!card)
- 		return -EINVAL;
--
--	card = (struct snd_soc_card *)match->data;
- 	card->dev = &pdev->dev;
- 
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-index 9f0bf15fe465..8c81c5528f6e 100644
---- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-@@ -637,7 +637,6 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
- 	struct device_node *platform_node, *ec_codec, *hdmi_codec;
- 	struct snd_soc_dai_link *dai_link;
- 	struct mt8183_mt6358_ts3a227_max98357_priv *priv;
--	const struct of_device_id *match;
- 	int ret, i;
- 
- 	platform_node = of_parse_phandle(pdev->dev.of_node,
-@@ -647,11 +646,9 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	match = of_match_device(pdev->dev.driver->of_match_table, &pdev->dev);
--	if (!match || !match->data)
-+	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
-+	if (!card)
- 		return -EINVAL;
--
--	card = (struct snd_soc_card *)match->data;
- 	card->dev = &pdev->dev;
- 
- 	ec_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,ec-codec", 0);
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index 24a5d0adec1b..ab449d0e4e9b 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -1106,7 +1106,6 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 	struct device_node *platform_node, *hdmi_codec;
- 	int ret, i;
- 	struct snd_soc_dai_link *dai_link;
--	const struct of_device_id *match;
- 	struct mt8192_mt6359_priv *priv;
- 
- 	platform_node = of_parse_phandle(pdev->dev.of_node,
-@@ -1116,11 +1115,9 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	match = of_match_device(pdev->dev.driver->of_match_table, &pdev->dev);
--	if (!match || !match->data)
-+	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
-+	if (!card)
- 		return -EINVAL;
--
--	card = (struct snd_soc_card *)match->data;
- 	card->dev = &pdev->dev;
- 
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if IS_REACHABLE(CONFIG_TCG_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if IS_REACHABLE(CONFIG_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
 -- 
 2.34.1
 

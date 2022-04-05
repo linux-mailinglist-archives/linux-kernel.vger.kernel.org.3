@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9856A4F5175
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733C34F4F56
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846387AbiDFCEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S1837443AbiDFApt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354936AbiDEKQg (ORCPT
+        with ESMTP id S1356062AbiDEKWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848622C;
-        Tue,  5 Apr 2022 03:04:11 -0700 (PDT)
+        Tue, 5 Apr 2022 06:22:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2576AFB26;
+        Tue,  5 Apr 2022 03:05:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4087B81C86;
-        Tue,  5 Apr 2022 10:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD30C385A1;
-        Tue,  5 Apr 2022 10:04:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41437616E7;
+        Tue,  5 Apr 2022 10:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C947C385A1;
+        Tue,  5 Apr 2022 10:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153048;
-        bh=3z3jzRHy3464weK3HR2VtlPoQjepKQ2VowKCdolR2nc=;
+        s=korg; t=1649153148;
+        bh=snHYWxAODpPiNnfZch9ZVvvzENGs29YpUjIn62J5ic8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N1Bn+W02k0eBNlR9xJNshEzU3y4tFwqi3R9IF9hpWsxtXbXRv6eYXzloebkLUAxOh
-         Y6cECJzjcklrkCTv+zD28xd5mHRgBzWNUKHuBsOOL0ZflGt/9I7tK19JTurw0dFXC7
-         OomQ+FRLUjD/vduDBeDS6LgKkm1dcH1fovbHm1O0=
+        b=AIFfDY/Tr+2fTl9aR9oEv22NYYeidd30mC+Ey7Z/J1/T8mYEOvB+16EIv2OV3VDYc
+         3vBf7n3SSXd0Jp0LiReNaWzLZf4D99sd04LkBeK+Wx1jXFIANxlp9AeR1CQFoWABdb
+         7TPNMZ+7n2JFSDgREhzxbgKjSXkPykr2ZptBEN4g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 076/599] Revert "mm: madvise: skip unmapped vma holes passed to process_madvise"
-Date:   Tue,  5 Apr 2022 09:26:10 +0200
-Message-Id: <20220405070301.087589272@linuxfoundation.org>
+        stable@vger.kernel.org, Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 080/599] drbd: fix potential silent data corruption
+Date:   Tue,  5 Apr 2022 09:26:14 +0200
+Message-Id: <20220405070301.207270711@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -61,57 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+From: Lars Ellenberg <lars.ellenberg@linbit.com>
 
-commit e6b0a7b357659c332231621e4315658d062c23ee upstream.
+commit f4329d1f848ac35757d9cc5487669d19dfc5979c upstream.
 
-This reverts commit 08095d6310a7 ("mm: madvise: skip unmapped vma holes
-passed to process_madvise") as process_madvise() fails to return the
-exact processed bytes in other cases too.
+Scenario:
+---------
 
-As an example: if process_madvise() hits mlocked pages after processing
-some initial bytes passed in [start, end), it just returns EINVAL
-although some bytes are processed.  Thus making an exception only for
-ENOMEM is partially fixing the problem of returning the proper advised
-bytes.
+bio chain generated by blk_queue_split().
+Some split bio fails and propagates its error status to the "parent" bio.
+But then the (last part of the) parent bio itself completes without error.
 
-Thus revert this patch and return proper bytes advised.
+We would clobber the already recorded error status with BLK_STS_OK,
+causing silent data corruption.
 
-Link: https://lkml.kernel.org/r/e73da1304a88b6a8a11907045117cccf4c2b8374.1648046642.git.quic_charante@quicinc.com
-Fixes: 08095d6310a7ce ("mm: madvise: skip unmapped vma holes passed to process_madvise")
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reproducer:
+-----------
+
+How to trigger this in the real world within seconds:
+
+DRBD on top of degraded parity raid,
+small stripe_cache_size, large read_ahead setting.
+Drop page cache (sysctl vm.drop_caches=1, fadvise "DONTNEED",
+umount and mount again, "reboot").
+
+Cause significant read ahead.
+
+Large read ahead request is split by blk_queue_split().
+Parts of the read ahead that are already in the stripe cache,
+or find an available stripe cache to use, can be serviced.
+Parts of the read ahead that would need "too much work",
+would need to wait for a "stripe_head" to become available,
+are rejected immediately.
+
+For larger read ahead requests that are split in many pieces, it is very
+likely that some "splits" will be serviced, but then the stripe cache is
+exhausted/busy, and the remaining ones will be rejected.
+
+Signed-off-by: Lars Ellenberg <lars.ellenberg@linbit.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Cc: <stable@vger.kernel.org> # 4.13.x
+Link: https://lore.kernel.org/r/20220330185551.3553196-1-christoph.boehmwalder@linbit.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/madvise.c |    9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/block/drbd/drbd_req.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1222,16 +1222,9 @@ SYSCALL_DEFINE5(process_madvise, int, pi
- 
- 	while (iov_iter_count(&iter)) {
- 		iovec = iov_iter_iovec(&iter);
--		/*
--		 * do_madvise returns ENOMEM if unmapped holes are present
--		 * in the passed VMA. process_madvise() is expected to skip
--		 * unmapped holes passed to it in the 'struct iovec' list
--		 * and not fail because of them. Thus treat -ENOMEM return
--		 * from do_madvise as valid and continue processing.
--		 */
- 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
- 					iovec.iov_len, behavior);
--		if (ret < 0 && ret != -ENOMEM)
-+		if (ret < 0)
- 			break;
- 		iov_iter_advance(&iter, iovec.iov_len);
- 	}
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -177,7 +177,8 @@ void start_new_tl_epoch(struct drbd_conn
+ void complete_master_bio(struct drbd_device *device,
+ 		struct bio_and_error *m)
+ {
+-	m->bio->bi_status = errno_to_blk_status(m->error);
++	if (unlikely(m->error))
++		m->bio->bi_status = errno_to_blk_status(m->error);
+ 	bio_endio(m->bio);
+ 	dec_ap_bio(device);
+ }
 
 

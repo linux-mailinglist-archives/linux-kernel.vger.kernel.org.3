@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6C14F41E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2214F3DDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbiDEOdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S1388260AbiDEOd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238743AbiDEJcp (ORCPT
+        with ESMTP id S238760AbiDEJcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC7C2709;
-        Tue,  5 Apr 2022 02:19:59 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43982AFF;
+        Tue,  5 Apr 2022 02:20:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2921161654;
-        Tue,  5 Apr 2022 09:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E083C385A3;
-        Tue,  5 Apr 2022 09:19:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 710F5B81B75;
+        Tue,  5 Apr 2022 09:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D6DC385A4;
+        Tue,  5 Apr 2022 09:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150398;
-        bh=YUCc5UqSEUaFbLJxDPjS3UTbOuylShiOg0+98LUc49c=;
+        s=korg; t=1649150401;
+        bh=MVgAlWvP92ctLAd+b4nIN9lxSN72tSLbU4rwT1rGihY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B99IpNuDbtcSg8RjORkuJmwcD1vKs3ECnJwn/mxUUMKovGZYuNnxk+loWGhcciYe4
-         wuhG+axQ7fcQNpQuPF5C/XQqKMZ++OVot4lrvGD5+ZKzXeKlfluD2Qt3mFXL5AoYYk
-         MkjeOL/gkdQvItuH5lGwOEw7NMDyhxjpluoXTlB8=
+        b=s9bjq6+gVmKFpO1/5uBwpOvVlyIJBYSlWdvbCv6Ssm1UZryo0VaCZMs2b4Pow96tL
+         yoHIQM+dMDkDlX2K3QpeT/O03pcOUGjarRGomrBSS4X5yZDjkLJyQTv6h5BNOYwACF
+         lsocq5sDdSsbKfi75yi0fxJz97+itSoKcL+vsxDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 006/913] mm: kfence: fix missing objcg housekeeping for SLAB
-Date:   Tue,  5 Apr 2022 09:17:48 +0200
-Message-Id: <20220405070340.002225263@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
+Subject: [PATCH 5.15 007/913] hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
+Date:   Tue,  5 Apr 2022 09:17:49 +0200
+Message-Id: <20220405070340.032267794@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -59,43 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit ae085d7f9365de7da27ab5c0d16b12d51ea7fca9 upstream.
+commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 upstream.
 
-The objcg is not cleared and put for kfence object when it is freed,
-which could lead to memory leak for struct obj_cgroup and wrong
-statistics of NR_SLAB_RECLAIMABLE_B or NR_SLAB_UNRECLAIMABLE_B.
+The hyperv utilities use PTP clock interfaces and should depend a
+a kconfig symbol such that they will be built as a loadable module or
+builtin so that linker errors do not happen.
 
-Since the last freed object's objcg is not cleared,
-mem_cgroup_from_obj() could return the wrong memcg when this kfence
-object, which is not charged to any objcgs, is reallocated to other
-users.
+Prevents these build errors:
 
-A real word issue [1] is caused by this bug.
+ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
+hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
+ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
+hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
 
-Link: https://lore.kernel.org/all/000000000000cabcb505dae9e577@google.com/ [1]
-Reported-by: syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com
-Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Stephen Hemminger <sthemmin@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: linux-hyperv@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Cc: Petr Štetiar <ynezz@true.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/slab.c |    1 +
+ drivers/hv/Kconfig |    1 +
  1 file changed, 1 insertion(+)
 
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3429,6 +3429,7 @@ static __always_inline void __cache_free
+--- a/drivers/hv/Kconfig
++++ b/drivers/hv/Kconfig
+@@ -18,6 +18,7 @@ config HYPERV_TIMER
+ config HYPERV_UTILS
+ 	tristate "Microsoft Hyper-V Utilities driver"
+ 	depends on HYPERV && CONNECTOR && NLS
++	depends on PTP_1588_CLOCK_OPTIONAL
+ 	help
+ 	  Select this option to enable the Hyper-V Utilities.
  
- 	if (is_kfence_address(objp)) {
- 		kmemleak_free_recursive(objp, cachep->flags);
-+		memcg_slab_free_hook(cachep, &objp, 1);
- 		__kfence_free(objp);
- 		return;
- 	}
 
 

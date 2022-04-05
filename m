@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0854F449A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580FC4F454F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383732AbiDENbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S1452260AbiDEULD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345660AbiDEJWz (ORCPT
+        with ESMTP id S1357998AbiDEK1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:55 -0400
+        Tue, 5 Apr 2022 06:27:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1C0506CA;
-        Tue,  5 Apr 2022 02:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38787D5E82;
+        Tue,  5 Apr 2022 03:12:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D09CF615E4;
-        Tue,  5 Apr 2022 09:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74F1C385A2;
-        Tue,  5 Apr 2022 09:11:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9BF361562;
+        Tue,  5 Apr 2022 10:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C98C385A1;
+        Tue,  5 Apr 2022 10:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149893;
-        bh=cmQjIDOiyu6i0WOxV+vP3qJn8wa2woRKYCESBKH7hvg=;
+        s=korg; t=1649153551;
+        bh=sTL48zmqbZr44JUABz6vF+vf8dWkNx7tKk0S4/J51fY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FE5HcRJslkZg+oi3VoErQLv7pWfbxjbKn+EKaTymJKnMiKhtQJn/ajNNfAnzHFqDe
-         qVX7srfTob7oE88LZxnSOL52Fpuwe5hCKdfBAFZsLSSWYrBEOdWBavdlT6KhKtmLzH
-         970fII7aZp22xmDTJ/9wdDdE4bMWrl5yxMok7M78=
+        b=EjZHmCgr2riogcAuKpPvAc7Ug8owit4kr1hyc+u7KHgnouNVSzvEUFFkYNayEKBxT
+         na0xl471xCttiGAMlz6L/64fKZsHrDKOYhkTAzjqjK2beTSaF2OeNXL/ZSGbVF4ncy
+         2Z0n8R9DLzzPPdDt9dwOWpd20kdAxziWl7Z9j5FI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0841/1017] ARM: mmp: Fix failure to remove sram device
-Date:   Tue,  5 Apr 2022 09:29:14 +0200
-Message-Id: <20220405070419.204610040@linuxfoundation.org>
+Subject: [PATCH 5.10 262/599] drm/bridge: Add missing pm_runtime_disable() in __dw_mipi_dsi_probe
+Date:   Tue,  5 Apr 2022 09:29:16 +0200
+Message-Id: <20220405070306.634942843@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 4036b29a146b2749af3bb213b003eb69f3e5ecc4 ]
+[ Upstream commit 96211b7c56b109a52768e6cc5e23a1f79316eca0 ]
 
-Make sure in .probe() to set driver data before the function is left to
-make it possible in .remove() to undo the actions done.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
+Add missing pm_runtime_disable() for __dw_mipi_dsi_probe.
 
-This fixes a potential memory leak and stops returning an error code in
-.remove() that is ignored by the driver core anyhow.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 46fc51546d44 ("drm/bridge/synopsys: Add MIPI DSI host controller bridge")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220105104113.31415-1-linmq006@gmail.com
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-mmp/sram.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
-index 6794e2db1ad5..ecc46c31004f 100644
---- a/arch/arm/mach-mmp/sram.c
-+++ b/arch/arm/mach-mmp/sram.c
-@@ -72,6 +72,8 @@ static int sram_probe(struct platform_device *pdev)
- 	if (!info)
- 		return -ENOMEM;
- 
-+	platform_set_drvdata(pdev, info);
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (res == NULL) {
- 		dev_err(&pdev->dev, "no memory resource defined\n");
-@@ -107,8 +109,6 @@ static int sram_probe(struct platform_device *pdev)
- 	list_add(&info->node, &sram_bank_list);
- 	mutex_unlock(&sram_lock);
- 
--	platform_set_drvdata(pdev, info);
--
- 	dev_info(&pdev->dev, "initialized\n");
- 	return 0;
- 
-@@ -127,17 +127,19 @@ static int sram_remove(struct platform_device *pdev)
- 	struct sram_bank_info *info;
- 
- 	info = platform_get_drvdata(pdev);
--	if (info == NULL)
--		return -ENODEV;
- 
--	mutex_lock(&sram_lock);
--	list_del(&info->node);
--	mutex_unlock(&sram_lock);
-+	if (info->sram_size) {
-+		mutex_lock(&sram_lock);
-+		list_del(&info->node);
-+		mutex_unlock(&sram_lock);
-+
-+		gen_pool_destroy(info->gpool);
-+		iounmap(info->sram_virt);
-+		kfree(info->pool_name);
-+	}
- 
--	gen_pool_destroy(info->gpool);
--	iounmap(info->sram_virt);
--	kfree(info->pool_name);
- 	kfree(info);
-+
- 	return 0;
- }
- 
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index 6b268f9445b3..376fa6eb46f6 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -1172,6 +1172,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+ 	ret = mipi_dsi_host_register(&dsi->dsi_host);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register MIPI host: %d\n", ret);
++		pm_runtime_disable(dev);
+ 		dw_mipi_dsi_debugfs_remove(dsi);
+ 		return ERR_PTR(ret);
+ 	}
 -- 
 2.34.1
 

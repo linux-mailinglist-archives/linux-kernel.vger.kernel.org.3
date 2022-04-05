@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7E84F408F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B794F40FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386322AbiDEMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S1386354AbiDEMlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239085AbiDEJFh (ORCPT
+        with ESMTP id S239354AbiDEJFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:05:37 -0400
+        Tue, 5 Apr 2022 05:05:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8D41BEB5;
-        Tue,  5 Apr 2022 01:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DED3FBF6;
+        Tue,  5 Apr 2022 01:56:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B50BB81C19;
-        Tue,  5 Apr 2022 08:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D56C385A1;
-        Tue,  5 Apr 2022 08:56:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29E39B81C6A;
+        Tue,  5 Apr 2022 08:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CBBC385A3;
+        Tue,  5 Apr 2022 08:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148971;
-        bh=9n0s1PVnFShGn2pmObyGWleDrpp43npEIx1yGJvstUM=;
+        s=korg; t=1649148973;
+        bh=ikaKZbvRWV/crQmsUAovjojXBg7T3u4AmjkH0nSGrtY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2nSx4OWDHHdMhsVPBFVLV842grTzq7pGAhGCKsXp7Uu1EaZym20RF3/Hinyqi0tDK
-         OkYuz5A4KjCYkCmx7pb9VD0x/35xJ6EbhEuaF3q0PRDiSHinQfCnawWJ/IxLLEh2N/
-         HdRs2QTJg28JxZgr9xENk00E7BVUq//MC9FfrTrU=
+        b=Bb+wcrmso4Qrzy82cCiFMlBi2DiR9/NhHLu+Cv/IMs4k//9WTFc5lVr1rKcOIOhJu
+         cmF/GUi5AvquRWv24DREqWjLtZFge4QNDqQIPGR+Gx8oY80CVhrGSw95P5Q4XDkGMc
+         KBrFLQ5RWA6DvjVJR/28yBj+mzlaxEcwqbykztSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0546/1017] power: supply: sbs-charger: Dont cancel work that is not initialized
-Date:   Tue,  5 Apr 2022 09:24:19 +0200
-Message-Id: <20220405070410.493617207@linuxfoundation.org>
+        stable@vger.kernel.org, Ryder Lee <ryder.lee@mediatek.com>,
+        MeiChia Chiu <meichia.chiu@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0547/1017] mt76: mt7915: fix the muru tlv issue
+Date:   Tue,  5 Apr 2022 09:24:20 +0200
+Message-Id: <20220405070410.522934486@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,80 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: MeiChia Chiu <meichia.chiu@mediatek.com>
 
-[ Upstream commit de85193cff0d94d030a53656d8fcc41794807bef ]
+[ Upstream commit d98a72725bc96c98f68eac12e5a91ec349322c88 ]
 
-This driver can use an interrupt or polling in order get the charger's
-status.
+The muru enable/disable are only set after the first station connection.
+Without this patch, the firmware couldn't enable muru
+if the first connected station is non-HE type.
 
-When using polling, a delayed work is used.
-
-However, the remove() function unconditionally call
-cancel_delayed_work_sync(), even if the delayed work is not used and is not
-initialized.
-
-In order to fix it, use devm_delayed_work_autocancel() and remove the now
-useless remove() function.
-
-Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: 16bff457dd33a ("mt76: mt7915: rework mt7915_mcu_sta_muru_tlv()")
+Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
+Signed-off-by: MeiChia Chiu <meichia.chiu@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/sbs-charger.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
-index 6fa65d118ec1..b08f7d0c4181 100644
---- a/drivers/power/supply/sbs-charger.c
-+++ b/drivers/power/supply/sbs-charger.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
- #include <linux/bitops.h>
-+#include <linux/devm-helpers.h>
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+index 21fbe7a6141f..5ea82f05fd91 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+@@ -1515,9 +1515,6 @@ mt7915_mcu_sta_muru_tlv(struct sk_buff *skb, struct ieee80211_sta *sta,
+ 	    vif->type != NL80211_IFTYPE_AP)
+ 		return;
  
- #define SBS_CHARGER_REG_SPEC_INFO		0x11
- #define SBS_CHARGER_REG_STATUS			0x13
-@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
- 		if (ret)
- 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
- 	} else {
--		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
-+		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
-+						   sbs_delayed_work);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to init work for polling\n");
-+
- 		schedule_delayed_work(&chip->work,
- 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
- 	}
-@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
- 	return 0;
- }
+-	if (!sta->vht_cap.vht_supported)
+-		return;
+-
+ 	tlv = mt7915_mcu_add_tlv(skb, STA_REC_MURU, sizeof(*muru));
  
--static int sbs_remove(struct i2c_client *client)
--{
--	struct sbs_info *chip = i2c_get_clientdata(client);
--
--	cancel_delayed_work_sync(&chip->work);
--
--	return 0;
--}
--
- #ifdef CONFIG_OF
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-charger" },
-@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
+ 	muru = (struct sta_rec_muru *)tlv;
+@@ -1525,9 +1522,12 @@ mt7915_mcu_sta_muru_tlv(struct sk_buff *skb, struct ieee80211_sta *sta,
+ 	muru->cfg.mimo_dl_en = mvif->cap.he_mu_ebfer ||
+ 			       mvif->cap.vht_mu_ebfer ||
+ 			       mvif->cap.vht_mu_ebfee;
++	muru->cfg.mimo_ul_en = true;
++	muru->cfg.ofdma_dl_en = true;
  
- static struct i2c_driver sbs_driver = {
- 	.probe		= sbs_probe,
--	.remove		= sbs_remove,
- 	.id_table	= sbs_id,
- 	.driver = {
- 		.name	= "sbs-charger",
+-	muru->mimo_dl.vht_mu_bfee =
+-		!!(sta->vht_cap.cap & IEEE80211_VHT_CAP_MU_BEAMFORMEE_CAPABLE);
++	if (sta->vht_cap.vht_supported)
++		muru->mimo_dl.vht_mu_bfee =
++			!!(sta->vht_cap.cap & IEEE80211_VHT_CAP_MU_BEAMFORMEE_CAPABLE);
+ 
+ 	if (!sta->he_cap.has_he)
+ 		return;
+@@ -1535,13 +1535,11 @@ mt7915_mcu_sta_muru_tlv(struct sk_buff *skb, struct ieee80211_sta *sta,
+ 	muru->mimo_dl.partial_bw_dl_mimo =
+ 		HE_PHY(CAP6_PARTIAL_BANDWIDTH_DL_MUMIMO, elem->phy_cap_info[6]);
+ 
+-	muru->cfg.mimo_ul_en = true;
+ 	muru->mimo_ul.full_ul_mimo =
+ 		HE_PHY(CAP2_UL_MU_FULL_MU_MIMO, elem->phy_cap_info[2]);
+ 	muru->mimo_ul.partial_ul_mimo =
+ 		HE_PHY(CAP2_UL_MU_PARTIAL_MU_MIMO, elem->phy_cap_info[2]);
+ 
+-	muru->cfg.ofdma_dl_en = true;
+ 	muru->ofdma_dl.punc_pream_rx =
+ 		HE_PHY(CAP1_PREAMBLE_PUNC_RX_MASK, elem->phy_cap_info[1]);
+ 	muru->ofdma_dl.he_20m_in_40m_2g =
 -- 
 2.34.1
 

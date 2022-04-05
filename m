@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C9F4F305E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57854F3382
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352357AbiDEKE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1350940AbiDEKA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237375AbiDEI3S (ORCPT
+        with ESMTP id S240070AbiDEIWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:29:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6139E1A077;
-        Tue,  5 Apr 2022 01:21:18 -0700 (PDT)
+        Tue, 5 Apr 2022 04:22:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBD5DEC2;
+        Tue,  5 Apr 2022 01:19:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B134A60FF5;
-        Tue,  5 Apr 2022 08:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA89CC385A0;
-        Tue,  5 Apr 2022 08:21:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFB7EB81B92;
+        Tue,  5 Apr 2022 08:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FC2C385A1;
+        Tue,  5 Apr 2022 08:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146877;
-        bh=3YRw8iYUHTrJPyUg6ycWpIr1pqDiLYZGPxuK8HPfmRk=;
+        s=korg; t=1649146781;
+        bh=YtG+6EI3+FgkaM6u4nXFTkoCNBD5iXHVpVD+KDag51A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xwl2beqEF/B7u5RaQFEsRb1YjJ1Pt9QVqe3CyVgGAvDr7hxeElh1PN7VY88mw5fBs
-         J8BXmdDjDYZoA3121nRqBC0NlHiyZVMDIwx27sRySx0yeQSN87bq6YU9MgUqJGUzQV
-         UEsUSecjelFrtB0APxS2oFU3hCWhm3BeFQyxlTBQ=
+        b=zP91NtjvYnsyZjgOjno+6xe0nAT/S3kJqAS4m+GWoyFbeXq/9jTqBf3vcoQ4RgfHf
+         +EBlOkLvxV+3cgFVHwCVSlIBM7Lhz17F0OA6Qf+xsOCz/eUhr6KbTq/xKuff/0m/H0
+         qGeNssODTuaet0Mv3+i1a7Tazvni0YoyJYKRjZ/w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Rohith Surabattula <rohiths@microsoft.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0882/1126] btrfs: handle csum lookup errors properly on reads
-Date:   Tue,  5 Apr 2022 09:27:09 +0200
-Message-Id: <20220405070433.421300388@linuxfoundation.org>
+Subject: [PATCH 5.17 0887/1126] Adjust cifssb maximum read size
+Date:   Tue,  5 Apr 2022 09:27:14 +0200
+Message-Id: <20220405070433.564945778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,112 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Rohith Surabattula <rohiths@microsoft.com>
 
-[ Upstream commit 1784b7d502a94b561eae58249adde5f72c26eb3c ]
+[ Upstream commit 06a466565d54a1a42168f9033a062a3f5c40e73b ]
 
-Currently any error we get while trying to lookup csums during reads
-shows up as a missing csum, and then on the read completion side we
-print an error saying there was a csum mismatch and we increase the
-device corruption count.
+When session gets reconnected during mount then read size in super block fs context
+gets set to zero and after negotiate, rsize is not modified which results in
+incorrect read with requested bytes as zero. Fixes intermittent failure
+of xfstest generic/240
 
-However we could have gotten an EIO from the lookup.  We could also be
-inside of a memory constrained container and gotten a ENOMEM while
-trying to do the read.  In either case we don't want to make this look
-like a file system corruption problem, we want to make it look like the
-actual error it is.  Capture any negative value, convert it to the
-appropriate blk_status_t, free the csum array if we have one and bail.
+Note that stable requires a different version of this patch which will be
+sent to the stable mailing list.
 
-Note: a possible improvement would be to make the relocation code look
-up the owning inode and see if it's marked as NODATASUM and set
-EXTENT_NODATASUM there, that way if there's corruption and there isn't a
-checksum when we want it we can fail here rather than later.
-
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Rohith Surabattula <rohiths@microsoft.com>
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file-item.c | 36 ++++++++++++++++++++++--------------
- 1 file changed, 22 insertions(+), 14 deletions(-)
+ fs/cifs/cifsfs.c |  3 +++
+ fs/cifs/file.c   | 10 ++++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
-index 435c895015a2..77c8f298f52e 100644
---- a/fs/btrfs/file-item.c
-+++ b/fs/btrfs/file-item.c
-@@ -368,6 +368,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
- {
- 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
- 	struct extent_io_tree *io_tree = &BTRFS_I(inode)->io_tree;
-+	struct btrfs_bio *bbio = NULL;
- 	struct btrfs_path *path;
- 	const u32 sectorsize = fs_info->sectorsize;
- 	const u32 csum_size = fs_info->csum_size;
-@@ -377,6 +378,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
- 	u8 *csum;
- 	const unsigned int nblocks = orig_len >> fs_info->sectorsize_bits;
- 	int count = 0;
-+	blk_status_t ret = BLK_STS_OK;
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index 4691b2706ddf..6e5246122ee2 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -210,6 +210,9 @@ cifs_read_super(struct super_block *sb)
+ 	if (rc)
+ 		goto out_no_root;
+ 	/* tune readahead according to rsize if readahead size not set on mount */
++	if (cifs_sb->ctx->rsize == 0)
++		cifs_sb->ctx->rsize =
++			tcon->ses->server->ops->negotiate_rsize(tcon, cifs_sb->ctx);
+ 	if (cifs_sb->ctx->rasize)
+ 		sb->s_bdi->ra_pages = cifs_sb->ctx->rasize / PAGE_SIZE;
+ 	else
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index e7af802dcfa6..a2723f7cb5e9 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -3740,6 +3740,11 @@ cifs_send_async_read(loff_t offset, size_t len, struct cifsFileInfo *open_file,
+ 				break;
+ 		}
  
- 	if ((BTRFS_I(inode)->flags & BTRFS_INODE_NODATASUM) ||
- 	    test_bit(BTRFS_FS_STATE_NO_CSUMS, &fs_info->fs_state))
-@@ -400,7 +402,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
- 		return BLK_STS_RESOURCE;
- 
- 	if (!dst) {
--		struct btrfs_bio *bbio = btrfs_bio(bio);
-+		bbio = btrfs_bio(bio);
- 
- 		if (nblocks * csum_size > BTRFS_BIO_INLINE_CSUM_SIZE) {
- 			bbio->csum = kmalloc_array(nblocks, csum_size, GFP_NOFS);
-@@ -456,21 +458,27 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
- 
- 		count = search_csum_tree(fs_info, path, cur_disk_bytenr,
- 					 search_len, csum_dst);
--		if (count <= 0) {
--			/*
--			 * Either we hit a critical error or we didn't find
--			 * the csum.
--			 * Either way, we put zero into the csums dst, and skip
--			 * to the next sector.
--			 */
-+		if (count < 0) {
-+			ret = errno_to_blk_status(count);
-+			if (bbio)
-+				btrfs_bio_free_csum(bbio);
-+			break;
-+		}
++		if (cifs_sb->ctx->rsize == 0)
++			cifs_sb->ctx->rsize =
++				server->ops->negotiate_rsize(tlink_tcon(open_file->tlink),
++							     cifs_sb->ctx);
 +
-+		/*
-+		 * We didn't find a csum for this range.  We need to make sure
-+		 * we complain loudly about this, because we are not NODATASUM.
-+		 *
-+		 * However for the DATA_RELOC inode we could potentially be
-+		 * relocating data extents for a NODATASUM inode, so the inode
-+		 * itself won't be marked with NODATASUM, but the extent we're
-+		 * copying is in fact NODATASUM.  If we don't find a csum we
-+		 * assume this is the case.
-+		 */
-+		if (count == 0) {
- 			memset(csum_dst, 0, csum_size);
- 			count = 1;
+ 		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->rsize,
+ 						   &rsize, credits);
+ 		if (rc)
+@@ -4474,6 +4479,11 @@ static void cifs_readahead(struct readahead_control *ractl)
+ 			}
+ 		}
  
--			/*
--			 * For data reloc inode, we need to mark the range
--			 * NODATASUM so that balance won't report false csum
--			 * error.
--			 */
- 			if (BTRFS_I(inode)->root->root_key.objectid ==
- 			    BTRFS_DATA_RELOC_TREE_OBJECTID) {
- 				u64 file_offset;
-@@ -491,7 +499,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
- 	}
- 
- 	btrfs_free_path(path);
--	return BLK_STS_OK;
-+	return ret;
- }
- 
- int btrfs_lookup_csums_range(struct btrfs_root *root, u64 start, u64 end,
++		if (cifs_sb->ctx->rsize == 0)
++			cifs_sb->ctx->rsize =
++				server->ops->negotiate_rsize(tlink_tcon(open_file->tlink),
++							     cifs_sb->ctx);
++
+ 		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->rsize,
+ 						   &rsize, credits);
+ 		if (rc)
 -- 
 2.34.1
 

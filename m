@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5146D4F4191
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E864F42DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385012AbiDEMax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1386269AbiDEPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245756AbiDEI4z (ORCPT
+        with ESMTP id S1346701AbiDEJpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E6619C2B;
-        Tue,  5 Apr 2022 01:52:46 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBD8316;
+        Tue,  5 Apr 2022 02:31:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4409609D0;
-        Tue,  5 Apr 2022 08:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5472C385A0;
-        Tue,  5 Apr 2022 08:52:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C970616C1;
+        Tue,  5 Apr 2022 09:31:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67247C385A0;
+        Tue,  5 Apr 2022 09:31:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148765;
-        bh=G+tlzkSO4tf9ZQVjfwUjPYMxK5+NilPHHkn+It7OI2I=;
+        s=korg; t=1649151083;
+        bh=zTGxfhkK5wluCdAjhpp4Ym61n6JhTc9Lz1TCOvhc6Ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZQWL6/s5R3TdT1Oya95zqBKDaCaASNTkv/C4v2TpcAO5XuIlPXlceiYg2PTkR0S/E
-         ru2Yjqf6Gki8jEDk05fNL2ClcUqsC+CKETfr+84rZor9HTCWdKsIAB1nvTZVbMaxJl
-         RAFQAouh3mFmIll/9eCRlVg3NEg+p3lxAurhG/aQ=
+        b=oFVLaoE1KfX/sWJwJDFtaBr4aCAJIZRMlkZMowBpjqsYuzsHqwSrOl6b/8igfnO6x
+         ILy8tQkJU+O8s0BPVQ6IHfvWgZkj4TI0GE/GHS5WATmnDXHUkL0y/la6ZL/lte5U1O
+         Woyehf6hv6bhp/p7IlctEdw79B4rPYAXV73TNCro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0435/1017] RDMA/core: Set MR type in ib_reg_user_mr
+Subject: [PATCH 5.15 286/913] media: ov5648: Dont pack controls struct
 Date:   Tue,  5 Apr 2022 09:22:28 +0200
-Message-Id: <20220405070407.206922578@linuxfoundation.org>
+Message-Id: <20220405070348.431001363@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Gottlieb <maorg@nvidia.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 32a88d16615c2be295571c29273c4ac94cb75309 ]
+[ Upstream commit edd4fbff5378a8103470304809195dc8f4b1d42a ]
 
-Add missing assignment of MR type to IB_MR_TYPE_USER.
+Don't pack the driver specific struct containing control pointers. This
+lead to potential alignment issues when working with the pointers.
 
-Fixes: 33006bd4f37f ("IB/core: Introduce ib_reg_user_mr")
-Link: https://lore.kernel.org/r/be2e91bcd6e52dc36be289ae92f30d3a5cc6dcb1.1642491047.git.leonro@nvidia.com
-Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/core/verbs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/ov5648.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
-index c18634bec212..e821dc94a43e 100644
---- a/drivers/infiniband/core/verbs.c
-+++ b/drivers/infiniband/core/verbs.c
-@@ -2153,6 +2153,7 @@ struct ib_mr *ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
- 		return mr;
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 947d437ed0ef..78040f0ac02f 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -639,7 +639,7 @@ struct ov5648_ctrls {
+ 	struct v4l2_ctrl *pixel_rate;
  
- 	mr->device = pd->device;
-+	mr->type = IB_MR_TYPE_USER;
- 	mr->pd = pd;
- 	mr->dm = NULL;
- 	atomic_inc(&pd->usecnt);
+ 	struct v4l2_ctrl_handler handler;
+-} __packed;
++};
+ 
+ struct ov5648_sensor {
+ 	struct device *dev;
 -- 
 2.34.1
 

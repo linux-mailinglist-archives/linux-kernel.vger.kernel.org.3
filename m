@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBFB4F4A53
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C09A4F4DEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455160AbiDEWkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1583984AbiDEX5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349307AbiDEJtg (ORCPT
+        with ESMTP id S1356219AbiDEKXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:36 -0400
+        Tue, 5 Apr 2022 06:23:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9AFB99;
-        Tue,  5 Apr 2022 02:43:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10354AE3E;
+        Tue,  5 Apr 2022 03:07:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AC6061368;
-        Tue,  5 Apr 2022 09:43:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CF4C385A2;
-        Tue,  5 Apr 2022 09:43:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C1D06172B;
+        Tue,  5 Apr 2022 10:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA61C385A2;
+        Tue,  5 Apr 2022 10:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151831;
-        bh=uQoHJ3NW9CnApT7MV8GyRFwYt2MTapU0cySGZldJvYo=;
+        s=korg; t=1649153273;
+        bh=x/BbDqLS16fO//8ZLAlr4JSJFLAy2lcDbX54ZoBLp9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ax4sgprKOyNRtQSJ2FMKXrkV0l09CPyv9OShtF78PdE1sxz8azt/3oGl+n17o7iYS
-         1dGsdEdJ7D7PEN2OjiYZS08znanJabm+JAE4IgX9NDbzGQUX2tVqA+UK+m1jZYem3+
-         6rya1Nj1+7KqrbbHgPUr5/Hj1hrC2KLHzyIccLwU=
+        b=qzJIlItemYtHABHJH3NE5rupX2FkYiB8h5e1eJyRBc53TuC0AoBZnBSY8MfxV/8dd
+         o60D9XDdxNf+9DPn5/hvePDZm3eobhkPDXr5qbWIcLgvNid8Ikd9+r1WXy3uP5bDXS
+         T5ZaRTdVczrnheXrszcRARR0j6rCgjRwPoeH/imM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 557/913] Bluetooth: call hci_le_conn_failed with hdev lock in hci_le_conn_failed
-Date:   Tue,  5 Apr 2022 09:26:59 +0200
-Message-Id: <20220405070356.542777819@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Liguang Zhang <zhangliguang@linux.alibaba.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH 5.10 126/599] PCI: pciehp: Clear cmd_busy bit in polling mode
+Date:   Tue,  5 Apr 2022 09:27:00 +0200
+Message-Id: <20220405070302.589741179@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Liguang Zhang <zhangliguang@linux.alibaba.com>
 
-[ Upstream commit 9fa6b4cda3b414e990f008f45f9bcecbcb54d4d1 ]
+commit 92912b175178c7e895f5e5e9f1e30ac30319162b upstream.
 
-hci_le_conn_failed function's documentation says that the caller must
-hold hdev->lock. The only callsite that does not hold that lock is
-hci_le_conn_failed. The other 3 callsites hold the hdev->lock very
-locally. The solution is to hold the lock during the call to
-hci_le_conn_failed.
+Writes to a Downstream Port's Slot Control register are PCIe hotplug
+"commands."  If the Port supports Command Completed events, software must
+wait for a command to complete before writing to Slot Control again.
 
-Fixes: 3c857757ef6e ("Bluetooth: Add directed advertising support through connect()")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+pcie_do_write_cmd() sets ctrl->cmd_busy when it writes to Slot Control.  If
+software notification is enabled, i.e., PCI_EXP_SLTCTL_HPIE and
+PCI_EXP_SLTCTL_CCIE are set, ctrl->cmd_busy is cleared by pciehp_isr().
+
+But when software notification is disabled, as it is when pcie_init()
+powers off an empty slot, pcie_wait_cmd() uses pcie_poll_cmd() to poll for
+command completion, and it neglects to clear ctrl->cmd_busy, which leads to
+spurious timeouts:
+
+  pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x01c0 (issued 2264 msec ago)
+  pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x05c0 (issued 2288 msec ago)
+
+Clear ctrl->cmd_busy in pcie_poll_cmd() when it detects a Command Completed
+event (PCI_EXP_SLTSTA_CC).
+
+[bhelgaas: commit log]
+Fixes: a5dd4b4b0570 ("PCI: pciehp: Wait for hotplug command completion where necessary")
+Link: https://lore.kernel.org/r/20211111054258.7309-1-zhangliguang@linux.alibaba.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215143
+Link: https://lore.kernel.org/r/20211126173309.GA12255@wunner.de
+Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org	# v4.19+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/hci_conn.c | 2 ++
+ drivers/pci/hotplug/pciehp_hpc.c |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 2b5059a56cda..7a7e92be1652 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -541,7 +541,9 @@ static void le_conn_timeout(struct work_struct *work)
- 	if (conn->role == HCI_ROLE_SLAVE) {
- 		/* Disable LE Advertising */
- 		le_disable_advertising(hdev);
-+		hci_dev_lock(hdev);
- 		hci_le_conn_failed(conn, HCI_ERROR_ADVERTISING_TIMEOUT);
-+		hci_dev_unlock(hdev);
- 		return;
- 	}
- 
--- 
-2.34.1
-
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -98,6 +98,8 @@ static int pcie_poll_cmd(struct controll
+ 		if (slot_status & PCI_EXP_SLTSTA_CC) {
+ 			pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
+ 						   PCI_EXP_SLTSTA_CC);
++			ctrl->cmd_busy = 0;
++			smp_mb();
+ 			return 1;
+ 		}
+ 		msleep(10);
 
 

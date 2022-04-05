@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDB14F3A31
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DF64F3A2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379334AbiDELko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S1379252AbiDELki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244788AbiDEIwj (ORCPT
+        with ESMTP id S244791AbiDEIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BDD1A382;
-        Tue,  5 Apr 2022 01:43:58 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049C71DA7F;
+        Tue,  5 Apr 2022 01:44:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3B52B81A32;
-        Tue,  5 Apr 2022 08:43:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3075FC385A0;
-        Tue,  5 Apr 2022 08:43:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 951496117A;
+        Tue,  5 Apr 2022 08:44:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F792C385A0;
+        Tue,  5 Apr 2022 08:44:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148235;
-        bh=DxHVQy1Fc+e0le2fwHX1vbuTw7y/q9K+F6271ZOTKMA=;
+        s=korg; t=1649148241;
+        bh=GOCjvPSffRKuugb0uITMfSMEobaooJl1sG41hMr87RY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CWJZURdc1fL9wPImEJcnXfrtzXDnamN6/e6kDru9OrY8GIYsU70CQXwcvadS/VCbY
-         5N+1FGbxAaAV1ywxXVZ+rbK4G/TuSPaeYjwWW6rp8aZ1uWXo684JrnLSd7qFzktbor
-         yoNWZRJD/sFTAHGLv8lMggZQle0dpZgzBz2VMfSI=
+        b=dU69/yyIqs6voWRaD3Ov7ar1Yp/26QT0EhbyqpPOa544ZmzAYZ47dKUINLaOd8xJ8
+         UDuvRpoOf+RnZisYF0/d0kd5egHmf65pPB/JC+BSEF/Oh1yJMQeOlhqN9ZCZ/gVDoY
+         4+TEGqkAniWMszxfmnqKLK/0+rdAjrxOjic2guVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0283/1017] media: staging: media: imx: imx7-mipi-csis: Make subdev name unique
-Date:   Tue,  5 Apr 2022 09:19:56 +0200
-Message-Id: <20220405070402.669618359@linuxfoundation.org>
+Subject: [PATCH 5.16 0285/1017] media: mtk-vcodec: potential dereference of null pointer
+Date:   Tue,  5 Apr 2022 09:19:58 +0200
+Message-Id: <20220405070402.730368977@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,58 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 5be7f8c91d25089be847a71b336c13b5bb0db772 ]
+[ Upstream commit e25a89f743b18c029bfbe5e1663ae0c7190912b0 ]
 
-When multiple CSIS instances are present in a single graph, they are
-currently all named "imx7-mipi-csis.0", which breaks the entity name
-uniqueness requirement. Fix it by using the device name to create the
-subdev name.
+The return value of devm_kzalloc() needs to be checked.
+To avoid use of null pointer in case of thefailure of alloc.
 
-Fixes: 7807063b862b ("media: staging/imx7: add MIPI CSI-2 receiver subdev for i.MX7")
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-Tested-by: Jerome Brunet <jbrunet@baylibre.com> # On i.MX8MP
+Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 2b73fa55c938..9ea723bb5f20 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -32,7 +32,6 @@
- #include <media/v4l2-subdev.h>
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+index cd27f637dbe7..cfc7ebed8fb7 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+@@ -102,6 +102,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+ 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
  
- #define CSIS_DRIVER_NAME			"imx7-mipi-csis"
--#define CSIS_SUBDEV_NAME			CSIS_DRIVER_NAME
- 
- #define CSIS_PAD_SINK				0
- #define CSIS_PAD_SOURCE				1
-@@ -311,7 +310,6 @@ struct csi_state {
- 	struct reset_control *mrst;
- 	struct regulator *mipi_phy_regulator;
- 	const struct mipi_csis_info *info;
--	u8 index;
- 
- 	struct v4l2_subdev sd;
- 	struct media_pad pads[CSIS_PADS_NUM];
-@@ -1303,8 +1301,8 @@ static int mipi_csis_subdev_init(struct csi_state *state)
- 
- 	v4l2_subdev_init(sd, &mipi_csis_subdev_ops);
- 	sd->owner = THIS_MODULE;
--	snprintf(sd->name, sizeof(sd->name), "%s.%d",
--		 CSIS_SUBDEV_NAME, state->index);
-+	snprintf(sd->name, sizeof(sd->name), "csis-%s",
-+		 dev_name(state->dev));
- 
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	sd->ctrl_handler = NULL;
+ 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	if (!fw)
++		return ERR_PTR(-ENOMEM);
+ 	fw->type = VPU;
+ 	fw->ops = &mtk_vcodec_vpu_msg;
+ 	fw->pdev = fw_pdev;
 -- 
 2.34.1
 

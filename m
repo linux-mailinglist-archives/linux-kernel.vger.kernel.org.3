@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7AB4F32E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF144F310E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348945AbiDEKtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S1348861AbiDEKt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240415AbiDEIb4 (ORCPT
+        with ESMTP id S240437AbiDEIb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:31:56 -0400
+        Tue, 5 Apr 2022 04:31:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E1770F55;
-        Tue,  5 Apr 2022 01:24:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A789B716D6;
+        Tue,  5 Apr 2022 01:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD26761001;
-        Tue,  5 Apr 2022 08:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E806DC385A0;
-        Tue,  5 Apr 2022 08:24:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF64561496;
+        Tue,  5 Apr 2022 08:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC018C385A1;
+        Tue,  5 Apr 2022 08:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147059;
-        bh=CtNUPttv43ymyB/SUDL/IvZBJI2TaBEMgGHG76F1Mz0=;
+        s=korg; t=1649147062;
+        bh=yPbW51Y7C3MLYP3n2rknBoXxKAda+YKO1ZgJgoQD8m4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mMq4delP+YKJaxHwBgXf4SJTGNtbrqETPe5hvYOmEe6kN77tR0DYEZLIdDkYVyhHr
-         arCDnRzhK/AQahiscIaQdDGNqNDteunR+s7liZkXrxovnEJBAt+fq7kH6FWtMPG528
-         4V9YNNdzZeIWiLOeAuKHLyrDUWkpcSW+2wDw1OHk=
+        b=jYDcs5Et+YTKTIMelbpRMjxtKQYy9WyKhr6aMVWOGn+BhS+l1iuctrF3aszR3he8U
+         lHx/tGxY1a3CDPPULGYl7F4xbhVWmqK8m1GITYfd81RI9gOOxRuqrRssovF6+yay/J
+         Kn8RPBDOnT+kLDXXYdVs0EgwZvkhejAEUu5Bsx3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
+        Arun Easi <aeasi@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0987/1126] scsi: qla2xxx: Fix laggy FC remote port session recovery
-Date:   Tue,  5 Apr 2022 09:28:54 +0200
-Message-Id: <20220405070436.466283696@linuxfoundation.org>
+Subject: [PATCH 5.17 0988/1126] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
+Date:   Tue,  5 Apr 2022 09:28:55 +0200
+Message-Id: <20220405070436.495506569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,92 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-commit 713b415726f100f6644971e75ebfe1edbef1a390 upstream.
+commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
 
-For session recovery, driver relies on the dpc thread to initiate certain
-operations. The dpc thread runs exclusively without the Mailbox interface
-being occupied. A recent code change for heartbeat check via mailbox cmd 0
-is preventing the dpc thread from carrying out its operation. This patch
-allows the higher priority error recovery to run first before running the
-lower priority heartbeat check.
+At NVMe ELS request time, request structure is DMA mapped and never
+unmapped. Fix this by calling the unmap on ELS completion.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-9-njavali@marvell.com
-Fixes: d94d8158e184 ("scsi: qla2xxx: Add heartbeat check")
+Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
+Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    1 +
- drivers/scsi/qla2xxx/qla_os.c  |   20 +++++++++++++++++---
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4621,6 +4621,7 @@ struct qla_hw_data {
- 	struct workqueue_struct *wq;
- 	struct work_struct heartbeat_work;
- 	struct qlfc_fw fw_buf;
-+	unsigned long last_heartbeat_run_jiffies;
- 
- 	/* FCP_CMND priority support */
- 	struct qla_fcp_prio_cfg *fcp_prio_cfg;
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -7209,7 +7209,7 @@ skip:
- 	return do_heartbeat;
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -175,6 +175,18 @@ out:
+ 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
  }
  
--static void qla_heart_beat(struct scsi_qla_host *vha)
-+static void qla_heart_beat(struct scsi_qla_host *vha, u16 dpc_started)
- {
- 	struct qla_hw_data *ha = vha->hw;
- 
-@@ -7219,8 +7219,19 @@ static void qla_heart_beat(struct scsi_q
- 	if (vha->hw->flags.eeh_busy || qla2x00_chip_is_down(vha))
- 		return;
- 
--	if (qla_do_heartbeat(vha))
-+	/*
-+	 * dpc thread cannot run if heartbeat is running at the same time.
-+	 * We also do not want to starve heartbeat task. Therefore, do
-+	 * heartbeat task at least once every 5 seconds.
-+	 */
-+	if (dpc_started &&
-+	    time_before(jiffies, ha->last_heartbeat_run_jiffies + 5 * HZ))
-+		return;
++static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
++{
++	if (sp->flags & SRB_DMA_VALID) {
++		struct srb_iocb *nvme = &sp->u.iocb_cmd;
++		struct qla_hw_data *ha = sp->fcport->vha->hw;
 +
-+	if (qla_do_heartbeat(vha)) {
-+		ha->last_heartbeat_run_jiffies = jiffies;
- 		queue_work(ha->wq, &ha->heartbeat_work);
++		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
++				 fd->rqstlen, DMA_TO_DEVICE);
++		sp->flags &= ~SRB_DMA_VALID;
 +	}
- }
++}
++
+ static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
+ {
+ 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
+@@ -191,6 +203,8 @@ static void qla_nvme_release_ls_cmd_kref
+ 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
  
- /**************************************************************************
-@@ -7411,6 +7422,8 @@ qla2x00_timer(struct timer_list *t)
- 		start_dpc++;
+ 	fd = priv->fd;
++
++	qla_nvme_ls_unmap(sp, fd);
+ 	fd->done(fd, priv->comp_status);
+ out:
+ 	qla2x00_rel_sp(sp);
+@@ -361,6 +375,8 @@ static int qla_nvme_ls_req(struct nvme_f
+ 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
+ 	    fd->rqstlen, DMA_TO_DEVICE);
+ 
++	sp->flags |= SRB_DMA_VALID;
++
+ 	rval = qla2x00_start_sp(sp);
+ 	if (rval != QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x700e,
+@@ -368,6 +384,7 @@ static int qla_nvme_ls_req(struct nvme_f
+ 		wake_up(&sp->nvme_ls_waitq);
+ 		sp->priv = NULL;
+ 		priv->sp = NULL;
++		qla_nvme_ls_unmap(sp, fd);
+ 		qla2x00_rel_sp(sp);
+ 		return rval;
  	}
- 
-+	/* borrowing w to signify dpc will run */
-+	w = 0;
- 	/* Schedule the DPC routine if needed */
- 	if ((test_bit(ISP_ABORT_NEEDED, &vha->dpc_flags) ||
- 	    test_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags) ||
-@@ -7443,9 +7456,10 @@ qla2x00_timer(struct timer_list *t)
- 		    test_bit(RELOGIN_NEEDED, &vha->dpc_flags),
- 		    test_bit(PROCESS_PUREX_IOCB, &vha->dpc_flags));
- 		qla2xxx_wake_dpc(vha);
-+		w = 1;
- 	}
- 
--	qla_heart_beat(vha);
-+	qla_heart_beat(vha, w);
- 
- 	qla2x00_restart_timer(vha, WATCH_INTERVAL);
- }
 
 

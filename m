@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0603C4F3FEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F2A4F4051
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354524AbiDEUXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S1447114AbiDEUJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243469AbiDEKgr (ORCPT
+        with ESMTP id S1354468AbiDEKOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:36:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5800A546A7;
-        Tue,  5 Apr 2022 03:22:15 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595066A421;
+        Tue,  5 Apr 2022 03:00:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAFD0B81C99;
-        Tue,  5 Apr 2022 10:22:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371DFC385A0;
-        Tue,  5 Apr 2022 10:22:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA70361673;
+        Tue,  5 Apr 2022 10:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D4CC385A2;
+        Tue,  5 Apr 2022 10:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154132;
-        bh=gOYcQZhMbYIltHyjL+vacfpeKJfRnGNxkVJECrSSfcM=;
+        s=korg; t=1649152825;
+        bh=tgcIH8ngRpuHjfV9wDFrK09HvAFQoY9C83lectSVLG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vlKoE5UGjC5Ed9eliV9cerxrTxVfxrQna6FZk71dFUTk0Ui1HNSQwNDUoU27JjraJ
-         PtVCSDhwqLGrn6q8OPB2kqUZC+aUnY2MK8Rwxr1T2zJPO05a9KwS8NT54IxQhi0Bl6
-         beFJNSlYky7aqpJ5myx+kQ+ci7Q62BqQ/mGrqyAI=
+        b=GKHP+DhnKkl1zwsoRvwhCRnzaUxpvvtbJTkl6Pm4tXHLGMXmSDO+L74nSt5cF1ftx
+         7W47oRb3dC0qXjlP7wO0ajObkVI8hw43dUG33C9tN/LwF8poj9UK4JOh6Q+YBrcIDf
+         MEa71GzEd1n35n1m4mZoJjH66130LTp9gA3EiMNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 469/599] spi: tegra20: Use of_device_get_match_data()
-Date:   Tue,  5 Apr 2022 09:32:43 +0200
-Message-Id: <20220405070312.783892607@linuxfoundation.org>
+        stable@vger.kernel.org, David Stevens <stevensd@chromium.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.15 909/913] iommu/dma: Account for min_align_mask w/swiotlb
+Date:   Tue,  5 Apr 2022 09:32:51 +0200
+Message-Id: <20220405070407.067298408@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+From: David Stevens <stevensd@chromium.org>
 
-[ Upstream commit c9839acfcbe20ce43d363c2a9d0772472d9921c0 ]
+commit 2cbc61a1b1665c84282dbf2b1747ffa0b6248639 upstream.
 
-Use of_device_get_match_data() to simplify the code.
+Pass the non-aligned size to __iommu_dma_map when using swiotlb bounce
+buffers in iommu_dma_map_page, to account for min_align_mask.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Link: https://lore.kernel.org/r/20220315023138.2118293-1-chi.minghao@zte.com.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To deal with granule alignment, __iommu_dma_map maps iova_align(size +
+iova_off) bytes starting at phys - iova_off. If iommu_dma_map_page
+passes aligned size when using swiotlb, then this becomes
+iova_align(iova_align(orig_size) + iova_off). Normally iova_off will be
+zero when using swiotlb. However, this is not the case for devices that
+set min_align_mask. When iova_off is non-zero, __iommu_dma_map ends up
+mapping an extra page at the end of the buffer. Beyond just being a
+security issue, the extra page is not cleaned up by __iommu_dma_unmap.
+This causes problems when the IOVA is reused, due to collisions in the
+iommu driver.  Just passing the original size is sufficient, since
+__iommu_dma_map will take care of granule alignment.
+
+Fixes: 1f221a0d0dbf ("swiotlb: respect min_align_mask")
+Signed-off-by: David Stevens <stevensd@chromium.org>
+Link: https://lore.kernel.org/r/20210929023300.335969-8-stevensd@google.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-tegra20-slink.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/iommu/dma-iommu.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 669fc4286231..9e2b812b9025 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1006,14 +1006,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	struct resource		*r;
- 	int ret, spi_irq;
- 	const struct tegra_slink_chip_data *cdata = NULL;
--	const struct of_device_id *match;
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -806,7 +806,6 @@ static dma_addr_t iommu_dma_map_page(str
+ 	struct iommu_domain *domain = iommu_get_dma_domain(dev);
+ 	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+ 	struct iova_domain *iovad = &cookie->iovad;
+-	size_t aligned_size = size;
+ 	dma_addr_t iova, dma_mask = dma_get_mask(dev);
  
--	match = of_match_device(tegra_slink_of_match, &pdev->dev);
--	if (!match) {
--		dev_err(&pdev->dev, "Error: No device match found\n");
--		return -ENODEV;
--	}
--	cdata = match->data;
-+	cdata = of_device_get_match_data(&pdev->dev);
+ 	/*
+@@ -815,7 +814,7 @@ static dma_addr_t iommu_dma_map_page(str
+ 	 */
+ 	if (dev_use_swiotlb(dev) && iova_offset(iovad, phys | size)) {
+ 		void *padding_start;
+-		size_t padding_size;
++		size_t padding_size, aligned_size;
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(*tspi));
- 	if (!master) {
--- 
-2.34.1
-
+ 		aligned_size = iova_align(iovad, size);
+ 		phys = swiotlb_tbl_map_single(dev, phys, size, aligned_size,
+@@ -840,7 +839,7 @@ static dma_addr_t iommu_dma_map_page(str
+ 	if (!coherent && !(attrs & DMA_ATTR_SKIP_CPU_SYNC))
+ 		arch_sync_dma_for_device(phys, size, dir);
+ 
+-	iova = __iommu_dma_map(dev, phys, aligned_size, prot, dma_mask);
++	iova = __iommu_dma_map(dev, phys, size, prot, dma_mask);
+ 	if (iova == DMA_MAPPING_ERROR && is_swiotlb_buffer(dev, phys))
+ 		swiotlb_tbl_unmap_single(dev, phys, size, dir, attrs);
+ 	return iova;
 
 

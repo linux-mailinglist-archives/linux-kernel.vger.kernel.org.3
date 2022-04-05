@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02134F42EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1B64F4029
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380767AbiDEMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S1381116AbiDEMy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343895AbiDEJOv (ORCPT
+        with ESMTP id S1343892AbiDEJOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:14:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C46532FB;
-        Tue,  5 Apr 2022 02:01:15 -0700 (PDT)
+        Tue, 5 Apr 2022 05:14:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77FB8EB73;
+        Tue,  5 Apr 2022 02:01:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82E2B818F3;
-        Tue,  5 Apr 2022 09:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE11C385A0;
-        Tue,  5 Apr 2022 09:01:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AF18B80DA1;
+        Tue,  5 Apr 2022 09:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDDEC385A0;
+        Tue,  5 Apr 2022 09:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149272;
-        bh=3AAfmV1E7ZyolsYIXp/JwPHq9XUWn1MBMJ+mufJjPQw=;
+        s=korg; t=1649149278;
+        bh=/SISBbLGMqdhm3DxArSAl6lChO08xgYsqYDx0+KrR5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSrE6CEGW1Y83FVjG3ONkRb94fVRrU2NEtOWJylDN1jcFIPupMOsMWKQ7wA9XCSQq
-         MmRS6v+oPMYbNzMblDFSoFImoqnnbRkX3bqTcWrYP6up4FvfiEloDfQz5IclQ+Oscw
-         d5hT0MzrJ744Vs2hwBaRsbcSOpLO97O42KhUWM+M=
+        b=AMdFj1dHvX89fRgfoycJ1ezGAC+gAoP7tZOvSxXlH2oNHeG7ZvDYchRACU41u+vGg
+         M3U0+7W8gbKmxcTSlKfhd7NFFVKH8NW240EO+xMWw6R21e8gLht4F3xPMhIiIQhswP
+         FBw+ey3ws/QcPHabttgHzgVw2SFBoxUuaqTBJQL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org,
+        Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zev Weiss <zev@bewilderbeest.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0656/1017] iio: mma8452: Fix probe failing when an i2c_device_id is used
-Date:   Tue,  5 Apr 2022 09:26:09 +0200
-Message-Id: <20220405070413.755996961@linuxfoundation.org>
+Subject: [PATCH 5.16 0658/1017] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port type
+Date:   Tue,  5 Apr 2022 09:26:11 +0200
+Message-Id: <20220405070413.814598300@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,141 +57,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Zev Weiss <zev@bewilderbeest.net>
 
-[ Upstream commit a47ac019e7e8129b93a0b991e04b2a59872e053d ]
+[ Upstream commit a603ca60cebff8589882427a67f870ed946b3fc8 ]
 
-The mma8452_driver declares both of_match_table and i2c_driver.id_table
-match-tables, but its probe() function only checked for of matches.
+Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
+set up register mapping") fixed a bug that had, as a side-effect,
+prevented the 8250_aspeed_vuart driver from enabling the VUART's
+FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
+turn revealed what appears to be a hardware bug in the ASPEED VUART in
+which the host-side THRE bit doesn't get if the BMC-side receive FIFO
+trigger level is set to anything but one byte.  This causes problems
+for polled-mode writes from the host -- for example, Linux kernel
+console writes proceed at a glacial pace (less than 100 bytes per
+second) because the write path waits for a 10ms timeout to expire
+after every character instead of being able to continue on to the next
+character upon seeing THRE asserted.  (GRUB behaves similarly.)
 
-Add support for i2c_device_id matches. This fixes the driver not loading
-on some x86 tablets (e.g. the Nextbook Ares 8) where the i2c_client is
-instantiated by platform code using an i2c_device_id.
+As a workaround, introduce a new port type for the ASPEED VUART that's
+identical to PORT_16550A as it had previously been using, but with
+UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
+one byte, which (experimentally) seems to avoid the problematic THRE
+behavior.
 
-Drop of_match_ptr() protection to avoid unused warning.
-
-Fixes: c3cdd6e48e35 ("iio: mma8452: refactor for seperating chip specific data")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220208124336.511884-1-hdegoede@redhat.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to set up register mapping")
+Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Link: https://lore.kernel.org/r/20220211004203.14915-1-zev@bewilderbeest.net
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/accel/mma8452.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
+ drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
+ include/uapi/linux/serial_core.h            | 3 +++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/accel/mma8452.c b/drivers/iio/accel/mma8452.c
-index 09c7f10fefb6..21a99467f364 100644
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -176,6 +176,7 @@ static const struct mma8452_event_regs trans_ev_regs = {
-  * @enabled_events:		event flags enabled and handled by this driver
-  */
- struct mma_chip_info {
-+	const char *name;
- 	u8 chip_id;
- 	const struct iio_chan_spec *channels;
- 	int num_channels;
-@@ -1301,6 +1302,7 @@ enum {
+diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+index 2350fb3bb5e4..c2cecc6f47db 100644
+--- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
++++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+@@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+ 	port.port.irq = irq_of_parse_and_map(np, 0);
+ 	port.port.handle_irq = aspeed_vuart_handle_irq;
+ 	port.port.iotype = UPIO_MEM;
+-	port.port.type = PORT_16550A;
++	port.port.type = PORT_ASPEED_VUART;
+ 	port.port.uartclk = clk;
+ 	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
+ 		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 46e2079ad1aa..b34e84695c8c 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
+ 		.rxtrig_bytes	= {1, 32, 64, 112},
+ 		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
+ 	},
++	[PORT_ASPEED_VUART] = {
++		.name		= "ASPEED VUART",
++		.fifo_size	= 16,
++		.tx_loadsz	= 16,
++		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
++		.rxtrig_bytes	= {1, 4, 8, 14},
++		.flags		= UART_CAP_FIFO,
++	},
+ };
  
- static const struct mma_chip_info mma_chip_info_table[] = {
- 	[mma8451] = {
-+		.name = "mma8451",
- 		.chip_id = MMA8451_DEVICE_ID,
- 		.channels = mma8451_channels,
- 		.num_channels = ARRAY_SIZE(mma8451_channels),
-@@ -1325,6 +1327,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8452] = {
-+		.name = "mma8452",
- 		.chip_id = MMA8452_DEVICE_ID,
- 		.channels = mma8452_channels,
- 		.num_channels = ARRAY_SIZE(mma8452_channels),
-@@ -1341,6 +1344,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8453] = {
-+		.name = "mma8453",
- 		.chip_id = MMA8453_DEVICE_ID,
- 		.channels = mma8453_channels,
- 		.num_channels = ARRAY_SIZE(mma8453_channels),
-@@ -1357,6 +1361,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8652] = {
-+		.name = "mma8652",
- 		.chip_id = MMA8652_DEVICE_ID,
- 		.channels = mma8652_channels,
- 		.num_channels = ARRAY_SIZE(mma8652_channels),
-@@ -1366,6 +1371,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 		.enabled_events = MMA8452_INT_FF_MT,
- 	},
- 	[mma8653] = {
-+		.name = "mma8653",
- 		.chip_id = MMA8653_DEVICE_ID,
- 		.channels = mma8653_channels,
- 		.num_channels = ARRAY_SIZE(mma8653_channels),
-@@ -1380,6 +1386,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 		.enabled_events = MMA8452_INT_FF_MT,
- 	},
- 	[fxls8471] = {
-+		.name = "fxls8471",
- 		.chip_id = FXLS8471_DEVICE_ID,
- 		.channels = mma8451_channels,
- 		.num_channels = ARRAY_SIZE(mma8451_channels),
-@@ -1522,13 +1529,6 @@ static int mma8452_probe(struct i2c_client *client,
- 	struct mma8452_data *data;
- 	struct iio_dev *indio_dev;
- 	int ret;
--	const struct of_device_id *match;
--
--	match = of_match_device(mma8452_dt_ids, &client->dev);
--	if (!match) {
--		dev_err(&client->dev, "unknown device model\n");
--		return -ENODEV;
--	}
+ /* Uart divisor latch read */
+diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
+index c4042dcfdc0c..8885e69178bd 100644
+--- a/include/uapi/linux/serial_core.h
++++ b/include/uapi/linux/serial_core.h
+@@ -68,6 +68,9 @@
+ /* NVIDIA Tegra Combined UART */
+ #define PORT_TEGRA_TCU	41
  
- 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
- 	if (!indio_dev)
-@@ -1537,7 +1537,14 @@ static int mma8452_probe(struct i2c_client *client,
- 	data = iio_priv(indio_dev);
- 	data->client = client;
- 	mutex_init(&data->lock);
--	data->chip_info = match->data;
++/* ASPEED AST2x00 virtual UART */
++#define PORT_ASPEED_VUART	42
 +
-+	data->chip_info = device_get_match_data(&client->dev);
-+	if (!data->chip_info && id) {
-+		data->chip_info = &mma_chip_info_table[id->driver_data];
-+	} else {
-+		dev_err(&client->dev, "unknown device model\n");
-+		return -ENODEV;
-+	}
- 
- 	data->vdd_reg = devm_regulator_get(&client->dev, "vdd");
- 	if (IS_ERR(data->vdd_reg))
-@@ -1581,11 +1588,11 @@ static int mma8452_probe(struct i2c_client *client,
- 	}
- 
- 	dev_info(&client->dev, "registering %s accelerometer; ID 0x%x\n",
--		 match->compatible, data->chip_info->chip_id);
-+		 data->chip_info->name, data->chip_info->chip_id);
- 
- 	i2c_set_clientdata(client, indio_dev);
- 	indio_dev->info = &mma8452_info;
--	indio_dev->name = id->name;
-+	indio_dev->name = data->chip_info->name;
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->channels = data->chip_info->channels;
- 	indio_dev->num_channels = data->chip_info->num_channels;
-@@ -1810,7 +1817,7 @@ MODULE_DEVICE_TABLE(i2c, mma8452_id);
- static struct i2c_driver mma8452_driver = {
- 	.driver = {
- 		.name	= "mma8452",
--		.of_match_table = of_match_ptr(mma8452_dt_ids),
-+		.of_match_table = mma8452_dt_ids,
- 		.pm	= &mma8452_pm_ops,
- 	},
- 	.probe = mma8452_probe,
+ /* Intel EG20 */
+ #define PORT_PCH_8LINE	44
+ #define PORT_PCH_2LINE	45
 -- 
 2.34.1
 

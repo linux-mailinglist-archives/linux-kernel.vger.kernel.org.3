@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9314F236F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0F64F2373
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiDEGjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S230382AbiDEGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiDEGif (ORCPT
+        with ESMTP id S230385AbiDEGji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:38:35 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8B31B7A9
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:36:27 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a6so13628790ejk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:36:27 -0700 (PDT)
+        Tue, 5 Apr 2022 02:39:38 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB431DA5F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:37:29 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id p23so6146108edi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=p96Qb+2waIFdLUNr/Whq+HAPEFx29+6l7nktGBs3fKo=;
-        b=ajaM0BOA1d5m5mgqdFrSy0YhOtUIz+GW3qLjEJ1XA63aWgHxR9lXR/JCmpTKcaoteG
-         oYbV76JF0XPcYZRy5N96LvMabZtvVP8WMtBuUwh3Y5xhHevFtlMEmcZKB9IIluggE6Oc
-         4TS7fpyu09nVaBmU9VQzDNHVJZteJGr0Qo/0AAVVDDyNzVzI7kVtzuLgb2bmGbu8+3Hd
-         aKUyt1OBvnnAAf+lyzgrkjiGVsxYbUcq8TjZ8cclDoiQn6xVk3pdiXmmiXOrUHMQu3Ga
-         Fvh8fPy2xtS2jdvnqxCS+XTj8k2yeeGRP+d0QSuDgdcw6pzkciZwv/iYj43e1RTfX8hs
-         5dsg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LkNq85qPOI7aSExG2f6bqi9CbTw2Z98UufMNFS7y9hQ=;
+        b=DSWdCY9WQrJFA8E1FXKajVjnMTNqcnYl+Lm1lhCIRO14Mzfny7zw8kkter4IyxwbBl
+         m1DyDlEjPxcS9Yk8Zg633uV0t2BczWdgEdMo04414GmZoYjkdzjq8FJriMqkwbWnT9Dn
+         4xiai8JDrieEzl06R/RpxDPHDdBJYbqVSmKLNab0+3nKzuV++kr898f5Qy27NUDjdfZJ
+         7qm01gjW0cMM4nNdprpTTJwlJnyIP3NqJv9GAhD16x21Hl9F5feTTFsYClRpPwTzcmmr
+         iv4tCea8pbQ4MwyNdFBWToLkE0xWFPFnBYoyGD6ph/W15qFoKwplG49lnQ1SV98YlvJ5
+         ydFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=p96Qb+2waIFdLUNr/Whq+HAPEFx29+6l7nktGBs3fKo=;
-        b=0dZkalIGo5vn64E1xNS4AdGIIyDvrFBCL1v4HyjbGTo8n0xDyNqGqd1Ut7nMO9pKxy
-         Ode4j8zVmoNSR5+j7wwqgUZXoyGo4CyHCNK3+OCnZ33LWe9vfWk15zFmSGq7QTS2UQEM
-         P5aUMvQXGQz1keNP73g3wSYQH2c4Yzf5JHIK/zMIbpeseWH+eXi7sXkZh5LQUDSCCPgu
-         qz7C9MkZ6tmiNerjfjDP8GljvSwrVmCvQM51gKXfbZ2QlXRlUotE04OfZA9nxruL/pWW
-         N5NHzAny03U0pnB1ePpdLxZKhQCQqInQAvgAQDQ8qng0orWSRiTxR0JLI1rnUIu1vvxY
-         a0ow==
-X-Gm-Message-State: AOAM5338q5cP6JAFjKXFZsD7rAfWluIyVGiLfYthgjv54qYJwTSyP9XT
-        2svI07rktdXGtntHJ5FZO5Ly6g==
-X-Google-Smtp-Source: ABdhPJw0/GPBEvRsgoQi40HLx033wJQztRvi1gzWeoU492E6b4cgltXZiWyqL4htriqQ00lUp2kgBg==
-X-Received: by 2002:a17:907:d16:b0:6d6:e3b6:9cd8 with SMTP id gn22-20020a1709070d1600b006d6e3b69cd8mr1967623ejc.94.1649140586057;
-        Mon, 04 Apr 2022 23:36:26 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dn4-20020a17090794c400b006dbec4f4acbsm5228336ejc.6.2022.04.04.23.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 23:36:25 -0700 (PDT)
-Message-ID: <6c5c395c-0857-e70c-dbf4-d21fc4d2a619@linaro.org>
-Date:   Tue, 5 Apr 2022 08:36:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] dt-bindings: net: snps: remove duplicate name
-Content-Language: en-US
-To:     dj76.yang@samsung.com, "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>
-References: <20220405061922.27343-1-dj76.yang@samsung.com>
- <CGME20220405061903epcas2p345f2b2e656b3b1cbe5832e24dd4a67f3@epcms1p7>
- <20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817@epcms1p7>
+        bh=LkNq85qPOI7aSExG2f6bqi9CbTw2Z98UufMNFS7y9hQ=;
+        b=HojGZZjxug/F2adpZgwg7MOP+33WRTLtFnj85j4gHobp3I8ug6obLOmnRoimlwuszF
+         +waIWqlgupkImY9tzA0abCCBjuXkLMMeKf9yh5wuXOZsrHdbKQcE5mdqFUQ59iQMe2b0
+         /urQFUBqtacN47A0ckblQvdnJvzneAXFDBRJRPKiMSKvMP36ViTIEq8g2msUobmVoZvN
+         dXEmuufACIJHw8bDuAk9lvVyZ/ZK2yr6IBisBVh5fl+NTYnGvBJzuqtx2ifxumVOwq4W
+         56vysgh6dpGBrEGII757X0pFNLQRwSp15bd1mSUiO604b4IZtRBkVBiraffDpcPbaqN0
+         Rwfw==
+X-Gm-Message-State: AOAM531Xox9ZPK1V1KJdWDS/fB1VWgT6NDEe8+oLRtZGt+P038iUgXek
+        HChYusON/jxa3gmTbVKZdk+03g==
+X-Google-Smtp-Source: ABdhPJzg9caIzkwfLCmOHZ8f+qoNrlOeLzfVzAAQWR6C3qQe07kHQ6+GOH+nK92JINWvSt21UAXc/A==
+X-Received: by 2002:a05:6402:1c87:b0:41c:dd9c:2e94 with SMTP id cy7-20020a0564021c8700b0041cdd9c2e94mr2023264edb.2.1649140647593;
+        Mon, 04 Apr 2022 23:37:27 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id h7-20020a1709066d8700b006d4b4d137fbsm5225366ejt.50.2022.04.04.23.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 23:37:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817@epcms1p7>
-Content-Type: text/plain; charset=UTF-8
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: qcom: update maintainers (drop Akash and Mukesh)
+Date:   Tue,  5 Apr 2022 08:37:24 +0200
+Message-Id: <20220405063724.12850-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,23 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 08:29, Dongjin Yang wrote:
-> snps,dwmac has duplicated name for loongson,ls2k-dwmac and
-> loongson,ls7a-dwmac.
->  
-> Fixes: 68277749a013 ("dt-bindings: dwmac: Add bindings for new Loongson SoC and bridge chip")
-> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
-> ---
-> Notes:
->     v2: Update Fix tag and change history. 
->  
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->  
+Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
+address rejected: User unknown in virtual alias table), so switch
+maintainer to Bjorn (as active Qualcomm platform maintainer).
 
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
+Changes since v1:
+1. Add only Bjorn.
+---
+ Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml  | 3 +--
+ Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+index 1ca081b1664e..e64038e75fbc 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+@@ -7,8 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: GENI Serial Engine QUP Wrapper Controller
+ 
+ maintainers:
+-  - Mukesh Savaliya <msavaliy@codeaurora.org>
+-  - Akash Asthana <akashast@codeaurora.org>
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+ description: |
+  Generic Interface (GENI) based Qualcomm Universal Peripheral (QUP) wrapper
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+index 5a60fba14bba..b175099c3360 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+@@ -8,8 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: Qualcomm Quad Serial Peripheral Interface (QSPI)
+ 
+ maintainers:
+-  - Mukesh Savaliya <msavaliy@codeaurora.org>
+-  - Akash Asthana <akashast@codeaurora.org>
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+ description: The QSPI controller allows SPI protocol communication in single,
+   dual, or quad wire transmission modes for read/write access to slaves such
+-- 
+2.32.0
+

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989BD4F3093
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10CA4F31EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346803AbiDEJpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S1346733AbiDEJpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiDEITY (ORCPT
+        with ESMTP id S238902AbiDEIT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0350B7246C;
-        Tue,  5 Apr 2022 01:09:30 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20AA75224;
+        Tue,  5 Apr 2022 01:09:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 948356062B;
-        Tue,  5 Apr 2022 08:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F05CC385A1;
-        Tue,  5 Apr 2022 08:09:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 509F4B81A37;
+        Tue,  5 Apr 2022 08:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98D33C385A0;
+        Tue,  5 Apr 2022 08:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146169;
-        bh=dGJFby7CwqGK7QRBB72ycYFb+Cqu2SHdBW1KnfW31jI=;
+        s=korg; t=1649146180;
+        bh=L6R+J0LD9oqPr/GMoUdF+rh68PuAhKpNLIeYgwFQZmI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eGspAmtSlVo1grdb+3SeLIi2Zm8LcQBA4LYZiCUXkdVc7xW6o7iYi7PNmah3Q0LJ4
-         hcySzGSY4kIChbM5iJu6adsPu8ChlVj3Lu3VgmdGmxdY7oSNptzlS96GwMy7xSzK/m
-         BxD9MRGoU74QphGxEgIoToxXyisZ/ucgOtscRp78=
+        b=PtmyJ0hD+FaLnZwMMBiNdgtoUrCBn0jaIxPg4JuuSst7+PGnrDAzjSt6dAkuUHzAI
+         AvGphtbRP0SVMp6hZOoLclYOBo2awyhh1A2zGf2GZeuKSdWP/TGuGzFEe48tRe3TtE
+         QYf9Z4wEhLV89P6UrO8i6JC18O+zTMXir1myPAa4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Kizito <Jimmy.Kizito@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0666/1126] drm/amd/display: Fix double free during GPU reset on DC streams
-Date:   Tue,  5 Apr 2022 09:23:33 +0200
-Message-Id: <20220405070427.176651643@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>
+Subject: [PATCH 5.17 0669/1126] powerpc/xive: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:23:36 +0200
+Message-Id: <20220405070427.262809860@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,104 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 32685b32d825ca08c5dec826477332df886c4743 ]
+[ Upstream commit d64e3eab75a8e1e900c0fda2410a2df8893d8f85 ]
 
-[Why]
-The issue only occurs during the GPU reset code path.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
 
-We first backup the current state prior to commiting 0 streams
-internally from DM to DC. This state backup contains valid link
-encoder assignments.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings.
 
-DC will clear the link encoder assignments as part of current state
-(but not the backup, since it was a copied before the commit) and
-free the extra stream reference it held.
+Also, error return codes don't mean anything to obsolete_checksetup() --
+only non-zero (usually 1) or zero. So return 1 from xive_off() and
+xive_store_eoi_cmdline().
 
-DC requires that the link encoder assignments remain cleared/invalid
-prior to commiting. Since the backup still has valid assignments we
-call the interface post reset to clear them. This routine also
-releases the extra reference that the link encoder interface held -
-resulting in a double free (and eventually a NULL pointer dereference).
-
-[How]
-We'll have to do a full DC commit anyway after GPU reset because
-the stream count previously went to 0.
-
-We don't need to retain the assignment that we had backed up, so
-just copy off of the now clean current state assignment after the
-reset has occcurred with the new link_enc_cfg_copy() interface.
-
-Fixes: 6d63fcc2a334 ("drm/amd/display: Reset link encoder assignments for GPU reset")
-
-Reviewed-by: Jimmy Kizito <Jimmy.Kizito@amd.com>
-Acked-by: Alan Liu <HaoPing.Liu@amd.com>
-Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 243e25112d06 ("powerpc/xive: Native exploitation of the XIVE interrupt controller")
+Fixes: c21ee04f11ae ("powerpc/xive: Add a kernel parameter for StoreEOI")
+[lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru]
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>:
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220313065936.4363-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c     | 9 ++++++---
- drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 7 +++++++
- drivers/gpu/drm/amd/display/dc/inc/link_enc_cfg.h     | 5 +++++
- 3 files changed, 18 insertions(+), 3 deletions(-)
+ arch/powerpc/sysdev/xive/common.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index eae9f9e26f0e..b28b5c490860 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -2613,10 +2613,13 @@ static int dm_resume(void *handle)
- 		 * before the 0 streams commit.
- 		 *
- 		 * DC expects that link encoder assignments are *not* valid
--		 * when committing a state, so as a workaround it needs to be
--		 * cleared here.
-+		 * when committing a state, so as a workaround we can copy
-+		 * off of the current state.
-+		 *
-+		 * We lose the previous assignments, but we had already
-+		 * commit 0 streams anyway.
- 		 */
--		link_enc_cfg_init(dm->dc, dc_state);
-+		link_enc_cfg_copy(adev->dm.dc->current_state, dc_state);
- 
- 		if (dc_enable_dmub_notifications(adev->dm.dc))
- 			amdgpu_dm_outbox_init(adev);
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-index 00f72f66a7ef..72a3fded7142 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-@@ -272,6 +272,13 @@ void link_enc_cfg_init(
- 	state->res_ctx.link_enc_cfg_ctx.mode = LINK_ENC_CFG_STEADY;
+diff --git a/arch/powerpc/sysdev/xive/common.c b/arch/powerpc/sysdev/xive/common.c
+index 1ca5564bda9d..89c86f32aff8 100644
+--- a/arch/powerpc/sysdev/xive/common.c
++++ b/arch/powerpc/sysdev/xive/common.c
+@@ -1708,20 +1708,20 @@ __be32 *xive_queue_page_alloc(unsigned int cpu, u32 queue_shift)
+ static int __init xive_off(char *arg)
+ {
+ 	xive_cmdline_disabled = true;
+-	return 0;
++	return 1;
  }
+ __setup("xive=off", xive_off);
  
-+void link_enc_cfg_copy(const struct dc_state *src_ctx, struct dc_state *dst_ctx)
-+{
-+	memcpy(&dst_ctx->res_ctx.link_enc_cfg_ctx,
-+	       &src_ctx->res_ctx.link_enc_cfg_ctx,
-+	       sizeof(dst_ctx->res_ctx.link_enc_cfg_ctx));
-+}
-+
- void link_enc_cfg_link_encs_assign(
- 		struct dc *dc,
- 		struct dc_state *state,
-diff --git a/drivers/gpu/drm/amd/display/dc/inc/link_enc_cfg.h b/drivers/gpu/drm/amd/display/dc/inc/link_enc_cfg.h
-index a4e43b4826e0..59ceb9ed385d 100644
---- a/drivers/gpu/drm/amd/display/dc/inc/link_enc_cfg.h
-+++ b/drivers/gpu/drm/amd/display/dc/inc/link_enc_cfg.h
-@@ -39,6 +39,11 @@ void link_enc_cfg_init(
- 		const struct dc *dc,
- 		struct dc_state *state);
+ static int __init xive_store_eoi_cmdline(char *arg)
+ {
+ 	if (!arg)
+-		return -EINVAL;
++		return 1;
  
-+/*
-+ * Copies a link encoder assignment from another state.
-+ */
-+void link_enc_cfg_copy(const struct dc_state *src_ctx, struct dc_state *dst_ctx);
-+
- /*
-  * Algorithm for assigning available DIG link encoders to streams.
-  *
+ 	if (strncmp(arg, "off", 3) == 0) {
+ 		pr_info("StoreEOI disabled on kernel command line\n");
+ 		xive_store_eoi = false;
+ 	}
+-	return 0;
++	return 1;
+ }
+ __setup("xive.store-eoi=", xive_store_eoi_cmdline);
+ 
 -- 
 2.34.1
 

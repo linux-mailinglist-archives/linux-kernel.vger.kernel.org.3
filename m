@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AA14F4DB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6D14F4EA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582608AbiDEXsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S1835941AbiDFAeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443899AbiDEPk0 (ORCPT
+        with ESMTP id S1444179AbiDEPk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBD214DFC5;
-        Tue,  5 Apr 2022 07:02:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2E30B81BA9;
-        Tue,  5 Apr 2022 14:02:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BBD4C385A0;
-        Tue,  5 Apr 2022 14:02:02 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 10:02:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Ben Young Tae Kim <ytkim@qca.qualcomm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-Subject: [PATCH v2] Bluetooth: hci_qca: Use del_timer_sync() before freeing
-Message-ID: <20220405100200.64f56e50@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 5 Apr 2022 11:40:58 -0400
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28738B8D;
+        Tue,  5 Apr 2022 07:03:30 -0700 (PDT)
+Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 235E2k8J021295;
+        Tue, 5 Apr 2022 23:02:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8J021295
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649167367;
+        bh=3DqNNvADXzvHcLCX0JSWQu0LGeQKS0pcjU6by571POs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LfieR2VmMKTxTNyd2rEQ8kIzgpwQ0gGElm/+R4Gv+yUizsZAMUx7OlekL+Cq87W/w
+         oaeFGyDYwcDQqttYW2cDoatDLf+PgAPBsMGOgvbhcLfAnFi0XWqAPcD+JRfi0JXyyf
+         BjZimdPTSqSBoscR0piS+f9exDxwYD25UdNtjyImjudR175ZrZRHaFhv9IGjfp3OWE
+         kkpnQtRrh69J5UNewWEJ95BZ5LvGCym/qqCpJTFn5rd3SDRbhcKSoFitacvlRV+R5l
+         aOqfb4EVoT8vdO2BhH1u9woz+RhCizmkuLuIFpRYz8ox5IFg71M0uMm9/z7vJmZ/+L
+         qmQID8zdlEKWQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2 01/10] kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
+Date:   Tue,  5 Apr 2022 23:02:20 +0900
+Message-Id: <20220405140229.2895394-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
+References: <20220405140229.2895394-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+The genksyms command part in cmd_gensymtypes_{c,S} is duplicated.
+Factor it out into the 'genksyms' macro.
 
-While looking at a crash report on a timer list being corrupted, which
-usually happens when a timer is freed while still active. This is
-commonly triggered by code calling del_timer() instead of
-del_timer_sync() just before freeing.
+For the readability, I slightly refactor the arguments to genksyms.
 
-One possible culprit is the hci_qca driver, which does exactly that.
-
-Eric mentioned that wake_retrans_timer could be rearmed via the work
-queue, so also move the destruction of the work queue before
-del_timer_sync().
-
-Cc: Eric Dumazet <eric.dumazet@gmail.com>
-Cc: stable@vger.kernel.org
-Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for UART")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
-Changes since v1: https://lkml.kernel.org/r/20220404182236.1caa174e@rorschach.local.home
- - Moved destroy_workqueue() before del_timer_sync() calls (Eric Dumazet).
 
- drivers/bluetooth/hci_qca.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+  - Fix the location of the closing parenthesis
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index f6e91fb432a3..eab34e24d944 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -696,9 +696,9 @@ static int qca_close(struct hci_uart *hu)
- 	skb_queue_purge(&qca->tx_wait_q);
- 	skb_queue_purge(&qca->txq);
- 	skb_queue_purge(&qca->rx_memdump_q);
--	del_timer(&qca->tx_idle_timer);
--	del_timer(&qca->wake_retrans_timer);
- 	destroy_workqueue(qca->workqueue);
-+	del_timer_sync(&qca->tx_idle_timer);
-+	del_timer_sync(&qca->wake_retrans_timer);
- 	qca->hu = NULL;
+ scripts/Makefile.build | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
+
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 9717e6f6fb31..31e0e33dfe5d 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -125,13 +125,14 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
+ $(obj)/%.i: $(src)/%.c FORCE
+ 	$(call if_changed_dep,cpp_i_c)
  
- 	kfree_skb(qca->rx_skb);
++genksyms = scripts/genksyms/genksyms		\
++	$(if $(1), -T $(2))			\
++	$(if $(CONFIG_MODULE_REL_CRCS), -R)	\
++	$(if $(KBUILD_PRESERVE), -p)		\
++	-r $(or $(wildcard $(2:.symtypes=.symref)), /dev/null)
++
+ # These mirror gensymtypes_S and co below, keep them in synch.
+-cmd_gensymtypes_c =                                                         \
+-    $(CPP) -D__GENKSYMS__ $(c_flags) $< |                                   \
+-    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+-     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+-     $(if $(KBUILD_PRESERVE),-p)                                            \
+-     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
++cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
+ 
+ quiet_cmd_cc_symtypes_c = SYM $(quiet_modtag) $@
+ cmd_cc_symtypes_c =                                                         \
+@@ -344,11 +345,7 @@ cmd_gensymtypes_S =                                                         \
+     $(CPP) $(a_flags) $< |                                                  \
+      grep "\<___EXPORT_SYMBOL\>" |                                          \
+      sed 's/.*___EXPORT_SYMBOL[[:space:]]*\([a-zA-Z0-9_]*\)[[:space:]]*,.*/EXPORT_SYMBOL(\1);/' ; } | \
+-    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - |                                \
+-    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+-     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+-     $(if $(KBUILD_PRESERVE),-p)                                            \
+-     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
++    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
+ 
+ quiet_cmd_cc_symtypes_S = SYM $(quiet_modtag) $@
+ cmd_cc_symtypes_S =                                                         \
 -- 
-2.35.1
+2.32.0
 

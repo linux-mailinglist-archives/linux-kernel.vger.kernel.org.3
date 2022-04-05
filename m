@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AE54F4C24
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892CB4F4AC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576072AbiDEXKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S1450748AbiDEWvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352938AbiDEKFX (ORCPT
+        with ESMTP id S1358183AbiDEK2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C50377F1;
-        Tue,  5 Apr 2022 02:54:06 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C39E9D6;
+        Tue,  5 Apr 2022 03:16:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D54614E9;
-        Tue,  5 Apr 2022 09:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE94FC385A1;
-        Tue,  5 Apr 2022 09:54:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC38FB81C8A;
+        Tue,  5 Apr 2022 10:16:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40774C385A1;
+        Tue,  5 Apr 2022 10:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152445;
-        bh=Ytr58gnACPtIgX8wj6A+Rgu50Y/LfhHdm8jAbP6A5yc=;
+        s=korg; t=1649153787;
+        bh=qQkG5DprhOohE/vv7FqAicjZ5OSnoUow72LwglFkNNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cLETTHxeX29X5QdGoKj5F22l+kNJvB+nvl7FaNNM1o1AbDGGhi/tJ10ua2lJBZDWa
-         N10k9mXR69ovXM66iKRcPHWoYmKJGMEZsM6LP4yHR0bmttheL72rZNccRGRWXD2Qu0
-         BkCdhuu3VN9SQ1pdl6bBUEWO+sx82H+GpMgYgtao=
+        b=yLYXVX1IAkGu7jGj93lP0Hwmmtk/00flU1CTCSo66D0HzFYcvCQxYleGrvsnqsbgB
+         otJVshTEmNBOOiQSoPt2JG7ct+Brnhhz1RoDqnCJ+W1QubN1vIEewETQ9SDMAP3Yc3
+         DiH96Z4ZnzXP91D2WlDYQsv3BbXdUJo9jhhSHucg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Jingwen <chenjingwen6@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 778/913] powerpc/kasan: Fix early region not updated correctly
-Date:   Tue,  5 Apr 2022 09:30:40 +0200
-Message-Id: <20220405070403.154530407@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 347/599] platform/x86: huawei-wmi: check the return value of device_create_file()
+Date:   Tue,  5 Apr 2022 09:30:41 +0200
+Message-Id: <20220405070309.153077583@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Jingwen <chenjingwen6@huawei.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-commit dd75080aa8409ce10d50fb58981c6b59bf8707d3 upstream.
+[ Upstream commit c91a5b1c221a58d008485cf7d02ccce73108b119 ]
 
-The shadow's page table is not updated when PTE_RPN_SHIFT is 24
-and PAGE_SHIFT is 12. It not only causes false positives but
-also false negative as shown the following text.
+The function device_create_file() in huawei_wmi_battery_add() can fail,
+so its return value should be checked.
 
-Fix it by bringing the logic of kasan_early_shadow_page_entry here.
-
-1. False Positive:
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in pcpu_alloc+0x508/0xa50
-Write of size 16 at addr f57f3be0 by task swapper/0/1
-
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-12267-gdebe436e77c7 #1
-Call Trace:
-[c80d1c20] [c07fe7b8] dump_stack_lvl+0x4c/0x6c (unreliable)
-[c80d1c40] [c02ff668] print_address_description.constprop.0+0x88/0x300
-[c80d1c70] [c02ff45c] kasan_report+0x1ec/0x200
-[c80d1cb0] [c0300b20] kasan_check_range+0x160/0x2f0
-[c80d1cc0] [c03018a4] memset+0x34/0x90
-[c80d1ce0] [c0280108] pcpu_alloc+0x508/0xa50
-[c80d1d40] [c02fd7bc] __kmem_cache_create+0xfc/0x570
-[c80d1d70] [c0283d64] kmem_cache_create_usercopy+0x274/0x3e0
-[c80d1db0] [c2036580] init_sd+0xc4/0x1d0
-[c80d1de0] [c00044a0] do_one_initcall+0xc0/0x33c
-[c80d1eb0] [c2001624] kernel_init_freeable+0x2c8/0x384
-[c80d1ef0] [c0004b14] kernel_init+0x24/0x170
-[c80d1f10] [c001b26c] ret_from_kernel_thread+0x5c/0x64
-
-Memory state around the buggy address:
- f57f3a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->f57f3b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                               ^
- f57f3c00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3c80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-2. False Negative (with KASAN tests):
-==================================================================
-Before fix:
-    ok 45 - kmalloc_double_kzfree
-    # vmalloc_oob: EXPECTATION FAILED at lib/test_kasan.c:1039
-    KASAN failure expected in "((volatile char *)area)[3100]", but none occurred
-    not ok 46 - vmalloc_oob
-    not ok 1 - kasan
-
-==================================================================
-After fix:
-    ok 1 - kasan
-
-Fixes: cbd18991e24fe ("powerpc/mm: Fix an Oops in kasan_mmu_init()")
-Cc: stable@vger.kernel.org # 5.4.x
-Signed-off-by: Chen Jingwen <chenjingwen6@huawei.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211229035226.59159-1-chenjingwen6@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 355a070b09ab ("platform/x86: huawei-wmi: Add battery charging thresholds")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Link: https://lore.kernel.org/r/20220303022421.313-1-baijiaju1990@gmail.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/kasan/kasan_init_32.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/platform/x86/huawei-wmi.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@ -83,13 +83,12 @@ void __init
- kasan_update_early_region(unsigned long k_start, unsigned long k_end, pte_t pte)
+diff --git a/drivers/platform/x86/huawei-wmi.c b/drivers/platform/x86/huawei-wmi.c
+index a2d846c4a7ee..eac3e6b4ea11 100644
+--- a/drivers/platform/x86/huawei-wmi.c
++++ b/drivers/platform/x86/huawei-wmi.c
+@@ -470,10 +470,17 @@ static DEVICE_ATTR_RW(charge_control_thresholds);
+ 
+ static int huawei_wmi_battery_add(struct power_supply *battery)
  {
- 	unsigned long k_cur;
--	phys_addr_t pa = __pa(kasan_early_shadow_page);
+-	device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
+-	device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
++	int err = 0;
  
- 	for (k_cur = k_start; k_cur != k_end; k_cur += PAGE_SIZE) {
- 		pmd_t *pmd = pmd_off_k(k_cur);
- 		pte_t *ptep = pte_offset_kernel(pmd, k_cur);
+-	return 0;
++	err = device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
++	if (err)
++		return err;
++
++	err = device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
++	if (err)
++		device_remove_file(&battery->dev, &dev_attr_charge_control_start_threshold);
++
++	return err;
+ }
  
--		if ((pte_val(*ptep) & PTE_RPN_MASK) != pa)
-+		if (pte_page(*ptep) != virt_to_page(lm_alias(kasan_early_shadow_page)))
- 			continue;
- 
- 		__set_pte_at(&init_mm, k_cur, ptep, pte, 0);
+ static int huawei_wmi_battery_remove(struct power_supply *battery)
+-- 
+2.34.1
+
 
 

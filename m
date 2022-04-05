@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723BD4F4775
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0943F4F44A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236277AbiDEVLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1385983AbiDEMjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbiDEJsi (ORCPT
+        with ESMTP id S237090AbiDEJDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFEB9285C;
-        Tue,  5 Apr 2022 02:35:57 -0700 (PDT)
+        Tue, 5 Apr 2022 05:03:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126D812A90;
+        Tue,  5 Apr 2022 01:55:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47C35B81B75;
-        Tue,  5 Apr 2022 09:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99996C385A2;
-        Tue,  5 Apr 2022 09:35:54 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 67048CE1B55;
+        Tue,  5 Apr 2022 08:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C028C385A1;
+        Tue,  5 Apr 2022 08:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151355;
-        bh=GltpdBVeULqUGpBO1nAxh639HFSQaoT6tOmZcNXQin4=;
+        s=korg; t=1649148943;
+        bh=AAsSEO1J1nJ9LSk7knoQKpupQl5T0r4xnEirrlezuzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMi1m1bFpYsX3FR/wzkQdbKww6JeAYOoo6oi87k4NkgXLt/blrVPPLF86leV5MRQC
-         w9LYo3bxBiFVbNDKBgPPFdl9wWmD5CNpFzID6uRYegFIfzvt7++0AVM2k5CkeJsHWH
-         Y0tPnSSrOOFUTCDGYvX7e8tyYCoaBTMUEvMM8PME=
+        b=Dlghe8vhjlKEwPFCywNLCpWmRoxkxbnmCfnPeZrod7Ppu1yzqMPtE+ByR2pnLs64d
+         2rMaKRjaNPuzgBiTswFR4SohMXoqReRfea/8t9LDNTm1xF1DvVgxIXorKOEuzIO3+p
+         SkYSKFxGuwx3qiKymAsCxdi0Hc96Ik5AuSj7j6No=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Fu <fuweid89@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 386/913] bpftool: Only set obj->skeleton on complete success
-Date:   Tue,  5 Apr 2022 09:24:08 +0200
-Message-Id: <20220405070351.417249214@linuxfoundation.org>
+Subject: [PATCH 5.16 0537/1017] scsi: pm8001: Fix NCQ NON DATA command task initialization
+Date:   Tue,  5 Apr 2022 09:24:10 +0200
+Message-Id: <20220405070410.230977141@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Fu <fuweid89@gmail.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 0991f6a38f576aa9a5e34713e23c998a3310d4d0 ]
+[ Upstream commit aa028141ab0bc62c44a84d42f09db35d82df82a2 ]
 
-After `bpftool gen skeleton`, the ${bpf_app}.skel.h will provide that
-${bpf_app_name}__open helper to load bpf. If there is some error
-like ENOMEM, the ${bpf_app_name}__open will rollback(free) the allocated
-object, including `bpf_object_skeleton`.
+In the pm8001_chip_sata_req() and pm80xx_chip_sata_req() functions, all
+tasks with a DMA direction of DMA_NONE (no data transfer) are initialized
+using the ATAP value 0x04. However, NCQ NON DATA commands, while being
+DMA_NONE commands are NCQ commands and need to be initialized using the
+value 0x07 for ATAP, similarly to other NCQ commands.
 
-Since the ${bpf_app_name}__create_skeleton set the obj->skeleton first
-and not rollback it when error, it will cause double-free in
-${bpf_app_name}__destory at ${bpf_app_name}__open. Therefore, we should
-set the obj->skeleton before return 0;
+Make sure that NCQ NON DATA command tasks are initialized similarly to
+other NCQ commands by also testing the task "use_ncq" field in addition to
+the DMA direction. While at it, reorganize the code into a chain of if -
+else if - else to avoid useless affectations and debug messages.
 
-Fixes: 5dc7a8b21144 ("bpftool, selftests/bpf: Embed object file inside skeleton")
-Signed-off-by: Wei Fu <fuweid89@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220108084008.1053111-1-fuweid89@gmail.com
+Link: https://lore.kernel.org/r/20220220031810.738362-15-damien.lemoal@opensource.wdc.com
+Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/gen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 14 +++++++-------
+ drivers/scsi/pm8001/pm80xx_hwi.c | 13 ++++++-------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index d40d92bbf0e4..07fa502a4ac1 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -870,7 +870,6 @@ static int do_skeleton(int argc, char **argv)
- 			s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));\n\
- 			if (!s)						    \n\
- 				goto err;				    \n\
--			obj->skeleton = s;				    \n\
- 									    \n\
- 			s->sz = sizeof(*s);				    \n\
- 			s->name = \"%1$s\";				    \n\
-@@ -955,6 +954,7 @@ static int do_skeleton(int argc, char **argv)
- 		\n\
- 		\";							    \n\
- 									    \n\
-+			obj->skeleton = s;				    \n\
- 			return 0;					    \n\
- 		err:							    \n\
- 			bpf_object__destroy_skeleton(s);		    \n\
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index eca1ab198314..183c72547229 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4282,22 +4282,22 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
+ 	u32  opc = OPC_INB_SATA_HOST_OPSTART;
+ 	memset(&sata_cmd, 0, sizeof(sata_cmd));
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+-	if (task->data_dir == DMA_NONE) {
++
++	if (task->data_dir == DMA_NONE && !task->ata_task.use_ncq) {
+ 		ATAP = 0x04;  /* no data*/
+ 		pm8001_dbg(pm8001_ha, IO, "no data\n");
+ 	} else if (likely(!task->ata_task.device_control_reg_update)) {
+-		if (task->ata_task.dma_xfer) {
++		if (task->ata_task.use_ncq &&
++		    dev->sata_dev.class != ATA_DEV_ATAPI) {
++			ATAP = 0x07; /* FPDMA */
++			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
++		} else if (task->ata_task.dma_xfer) {
+ 			ATAP = 0x06; /* DMA */
+ 			pm8001_dbg(pm8001_ha, IO, "DMA\n");
+ 		} else {
+ 			ATAP = 0x05; /* PIO*/
+ 			pm8001_dbg(pm8001_ha, IO, "PIO\n");
+ 		}
+-		if (task->ata_task.use_ncq &&
+-			dev->sata_dev.class != ATA_DEV_ATAPI) {
+-			ATAP = 0x07; /* FPDMA */
+-			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
+-		}
+ 	}
+ 	if (task->ata_task.use_ncq && pm8001_get_ncq_tag(task, &hdr_tag)) {
+ 		task->ata_task.fis.sector_count |= (u8) (hdr_tag << 3);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 93a5af907856..8eef2c51e432 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4560,22 +4560,21 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
+ 	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[q_index];
+ 
+-	if (task->data_dir == DMA_NONE) {
++	if (task->data_dir == DMA_NONE && !task->ata_task.use_ncq) {
+ 		ATAP = 0x04; /* no data*/
+ 		pm8001_dbg(pm8001_ha, IO, "no data\n");
+ 	} else if (likely(!task->ata_task.device_control_reg_update)) {
+-		if (task->ata_task.dma_xfer) {
++		if (task->ata_task.use_ncq &&
++		    dev->sata_dev.class != ATA_DEV_ATAPI) {
++			ATAP = 0x07; /* FPDMA */
++			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
++		} else if (task->ata_task.dma_xfer) {
+ 			ATAP = 0x06; /* DMA */
+ 			pm8001_dbg(pm8001_ha, IO, "DMA\n");
+ 		} else {
+ 			ATAP = 0x05; /* PIO*/
+ 			pm8001_dbg(pm8001_ha, IO, "PIO\n");
+ 		}
+-		if (task->ata_task.use_ncq &&
+-		    dev->sata_dev.class != ATA_DEV_ATAPI) {
+-			ATAP = 0x07; /* FPDMA */
+-			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
+-		}
+ 	}
+ 	if (task->ata_task.use_ncq && pm8001_get_ncq_tag(task, &hdr_tag)) {
+ 		task->ata_task.fis.sector_count |= (u8) (hdr_tag << 3);
 -- 
 2.34.1
 

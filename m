@@ -2,137 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC7A4F232D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6FB4F233D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiDEGgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S230320AbiDEGhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiDEGgI (ORCPT
+        with ESMTP id S229968AbiDEGhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:36:08 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0FA11A2D;
-        Mon,  4 Apr 2022 23:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649140440;
-        bh=ko6FFCg3jTQWeYcbHsEzW71hBgUeVWbZQ08boagfVh8=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=VN1tSV6jLfLzmXOZlAnvO9bWT0yNLTouT0lzZ3D5RcATXZ8zc58gzv/lEq0zrYaTj
-         45rXW+yim5nJwk0VOfy1Pu8F0y8Q1JhChF/qeztUZgrHQwscqV9/ACKW7iCMx49n/d
-         m+Nv5rOBxcR8bYLmSf+EcfanK1PDHcCPHO/hn0G0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.146.134]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKKh-1nmLCr2YW1-00FfsL; Tue, 05
- Apr 2022 08:34:00 +0200
-Message-ID: <a564f6af-31fa-79a2-72c3-578f2c095b23@gmx.de>
-Date:   Tue, 5 Apr 2022 08:33:57 +0200
+        Tue, 5 Apr 2022 02:37:09 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3E4186E8
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:35:10 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id qh7so14507834ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVOlEoPcv7etW4yTPL40XZm6BrVD+zkvNhnS+k7d+84=;
+        b=Mm+uE6NCTSD9QA5M4JvptIzC/jYfYYbosJo0l2q/SG1Sma4kJVbKoOTalxBEg8miUX
+         3y73qyIPVcOKUJRz8imt/dH8uWiqNZseBtZFYcpE4cSoH6IZXqjA1lPSlYNG+A2v174z
+         v/+RAoNM8ilhJIDNHmF+MaGjkgbHSgkmIFGRDjijB1xL/67NxV1uwD9md9VQWkMG/0Vj
+         ot52LG1eAfXObUieCk/T4hIRvPE1LzoEotx4KotDoKgdZP1Vx8dPFwNUdmemwam8t1Qh
+         1BG5StidWK3+MF/gS3SkPQmwycDZcRhJmJoyJ4EwsKvsw1vJHp0SZ7ZFj47jZKVYnt6z
+         U2CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVOlEoPcv7etW4yTPL40XZm6BrVD+zkvNhnS+k7d+84=;
+        b=rSh8EFXQFf/1jiufR86CfMoLI7qFQ+7ykp6S0KFOrZsM0s0AcwyOUfjC422R+SOqpM
+         CGzQilzogEmBZzoAqRIr7fTVcsqduHpG7QS+5liykxKb5Px39mdOzX981Hy8+KUPkTOF
+         Pn4MFe1/okzvHQSA4oubcjQgtfzfpwb++W8OsVpx7ar64nv4tqj/jmDS82eWixWL5Gug
+         UvUeRJ9dr6UP8u5HQzHpBKbh9JzUOOyla6mQ3nDhwxU6O9t6+qWtgoulc4PfB7sxycku
+         QVLDwfaBqw8feHS/F73TVPp5WFbCs5Osg0eCMDrrggTxbK3F5tRj2IoQy6RIvCYdhDwy
+         5V8A==
+X-Gm-Message-State: AOAM532EK+xdi1OdTc5nPlbALJYRC6F3kb23gHFgug+Ma/6b+nHHJrRI
+        exfwlWGVOvLR2CP6e26OEhl3IA==
+X-Google-Smtp-Source: ABdhPJxS7iOzqhI4WwYQ6CeegQwQdBFBkNc8Qc3CdBWtS3OsJ+afGAEfmelMeHB71yUMdj8gRD9aDA==
+X-Received: by 2002:a17:907:6d92:b0:6e5:d50e:9170 with SMTP id sb18-20020a1709076d9200b006e5d50e9170mr1984668ejc.506.1649140508716;
+        Mon, 04 Apr 2022 23:35:08 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id bs7-20020a056402304700b004197e5d2350sm6086543edb.54.2022.04.04.23.35.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 23:35:07 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 0/9] dt-bindings: qcom: convert entire GSBI (QUP I2C/SPI/UART) to DT schema
+Date:   Tue,  5 Apr 2022 08:34:42 +0200
+Message-Id: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: =?UTF-8?Q?Re=3a_=5bBUG=5d_fbdev=3a_i740fb=3a_Divide_error_when_?=
- =?UTF-8?B?4oCYdmFyLT5waXhjbG9ja+KAmSBpcyB6ZXJv?=
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
- <631f03bd-0fdf-9cc8-bf37-89235fb84162@gmx.de>
- <CAMuHMdUiEo8q9x0C0x5zOM=ax1=S06=s0JjcJvZYD4aMGLmEaQ@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAMuHMdUiEo8q9x0C0x5zOM=ax1=S06=s0JjcJvZYD4aMGLmEaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LAaILEqFZDZfM0xhZS/NVXXhgIYpnWNV8s/9VbcsuBDSMWLiLPU
- DZEl7WtmMPSH8cqpob7Mqcset1jUEFargB3vc4YKvgOwul/QMVs26H26NIoXislvjl1VLP8
- J/FS1DeVpDfyjSG9fT4UzIKh1PDaExH0xAGvLK9bEKiwFs46zrvxRcsZAxNpfsxBe4CULZk
- mCKNkN4TMPSo3C9/DwOwA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nNDHsF5zKgA=:Cavb9VWG0o3bgfj+/23JAG
- CdzoDSBCCiU0SixsTW+rw5khbQnIbHo+FJfWnoXrFIPeSSXXEu0dIKRuz2oHEA2hNa3QIKXpc
- Q2g8k00gZUWpw0eWPAhSvfRokkPjP9ZnnzwmfxbwGPP8YA67Mt8oPBXQJBKUM5En51U6CS8gq
- BTAWGqW7XPIo9V3fdrm/mfTXrAPz8nYqJib6racy6wvyzE6PpMMHB4zq8MTegoQ7//xhd4Jj+
- FHaMjntSB0JRAaFe+cjvjQJdhQhuxlSijnV45+8icSnweIUnqIZF9EilbF21IxnxKs/BGXDXX
- omGknPgU09/frhQ+W3f6OmfoCU/ItnUvvY1Pz2STPiBWrsLQyd2WLUW5Pr/HgBpmcfDqokGmN
- sqKbyL1q5symTfH+DNm4w0uyaBvWt1Cb9S+VpijdbyZE59cYOc9hwSXGA2XiGzUss9KYrdgSb
- Ez2iIWLRc8Mhl7HvLJR2BTLbxO3IQhSTJcRoxtgnkn5/NrJtFhpSgGAJEedvG8qZSECi7c3Q7
- xzb1SgugiVqVBJcckUVxZW90ZW3o52jghWFXbnuG5YJcbXMVmJRb/i4aFI/JnliHSMPOYHS8j
- p5LTUoViXi/ft9an9ALLb2Ewmsu7RNn/KUuUXgKDfld6BuhA5G0LsA1k6cOJh+hr3wp0aqbUG
- mjAi+IyYNfPxlfbjf/GxS+/Ch4QQH8Lie/ib109z+fdHgXMUZAbMExlfyctyqkgePdSRkf5xI
- EuotQ2sjlpU/fMyR8o9zRz0Tzo+GVFZwsUEfaydgT3NhuhvlpaGWfY/bAkVR2gBZOWTuhRYn1
- 8A7yWCqfqkEICMlRwz5d/qDxxvoPAkvlNLbxmRx5UKCo9TWz+je0KPmHNjv9PVqlBe1mcvz1S
- AahcQCxp6hil3ckp33cAIY4kiAL8WHoeCwjzVyMYxxXgLK83PS7EHyKkZFpH+9Qfa/mfgQAYR
- IE7SOGZ729KudeTzoBZ87dpamju3Jrcw1X6HuM974ozniFGZGUpEIaf0mH82xilQL0s30ApAc
- 5DfAZZtFWkphHE7nRqCUDsQ1D7JxC0c9oJLcsqyMQ3njOzTD++XxLr1Uot/zUYS/RXCG8QjJU
- KBd9vT9B7OM87M=
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
+Hi,
 
-On 4/4/22 13:46, Geert Uytterhoeven wrote:
-> Hi Helge,
->
-> On Sun, Apr 3, 2022 at 5:41 PM Helge Deller <deller@gmx.de> wrote:
->> On 4/3/22 13:26, Zheyu Ma wrote:
->>> I found a bug in the function i740fb_set_par().
->>
->> Nice catch!
->>
->>> When the user calls the ioctl system call without setting the value to
->>> 'var->pixclock', the driver will throw a divide error.
->>>
->>> This bug occurs because the driver uses the value of 'var->pixclock'
->>> without checking it, as the following code snippet show:
->>>
->>> if ((1000000 / var->pixclock) > DACSPEED8) {
->>>      dev_err(info->device, "requested pixclock %i MHz out of range
->>> (max. %i MHz at 8bpp)\n",
->>>          1000000 / var->pixclock, DACSPEED8);
->>>     return -EINVAL;x
->>> }
->>>
->>> We can fix this by checking the value of 'var->pixclock' in the
->>> function i740fb_check_var() similar to commit
->>> b36b242d4b8ea178f7fd038965e3cac7f30c3f09, or we should set the lowest
->>> supported value when this field is zero.
->>> I have no idea about which solution is better.
->>
->> Me neither.
->> I think a solution like commit b36b242d4b8ea178f7fd038965e3cac7f30c3f09
->> is sufficient.
->>
->> Note that i740fb_set_par() is called in i740fb_resume() as well.
->> Since this doesn't comes form userspace I think adding a check for
->> the return value there isn't necessary.
->>
->> Would you mind sending a patch like b36b242d4b8ea178f7fd038965e3cac7f30=
-c3f09 ?
->
-> When passed an invalid value, .check_var() is supposed to
-> round up the invalid to a valid value, if possible.
+Changes since v3
+================
+1. Correct dmas in serial/UART bindings example.
+2. Use "const" in compatible for GSBI.
+3. Add review tags.
 
-I don't disagree.
-The main problem probably is: what is the next valid value?
-This needs to be analyzed on a per-driver base and ideally tested.
-Right now a division-by-zero is tiggered which is probably more worse.
+Changes since v2
+================
+1. Several new schema patches (GSBI, I2C and UART schema).
+2. Several DTS fixes for clocks and DMAs. The choice of dma tx-rx
+   and clocks core-iface was by more-or-less number of fixes needed.
+3. Add Kuldeep acks to patches without changes.
 
-That said, currently I'd prefer to apply the zero-checks patches over
-any untested patches. It's easy to revert such checks if a better solution
-becomes available.
+Changes since v1
+================
+1. Fix path in com/qcom,gsbi.txt.
+2. Merge clock-names in example, correct $ref path (Kuldeep).
 
-Thoughts?
+Merging
+=======
+1. The DTS patches are independent and silence warnings pointed
+    out by schema.
 
-> Commit b36b242d4b8ea178 ("video: fbdev: asiliantfb: Error out if
-> 'pixclock' equals zero") does not do that.
+2. The DT schema patches should be taken together as GSBI (final patch)
+   depends on previous bindings.
 
-Helge
+Best regards,
+Krzysztof
+
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+
+Krzysztof Kozlowski (9):
+  arm64: dts: qcom: align dmas in I2C/SPI/UART with DT schema
+  arm64: dts: qcom: align clocks in I2C/SPI with DT schema
+  ARM: dts: qcom: ipq4019: align dmas in SPI/UART with DT schema
+  ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
+  ARM: dts: qcom: msm8660: disable GSBI8
+  spi: dt-bindings: qcom,spi-qup: convert to dtschema
+  dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
+  dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+  dt-bindings: qcom: qcom,gsbi: convert to dtschema
+
+ .../devicetree/bindings/i2c/qcom,i2c-qup.txt  |  40 ------
+ .../devicetree/bindings/i2c/qcom,i2c-qup.yaml |  89 ++++++++++++
+ .../bindings/serial/qcom,msm-uartdm.txt       |  81 -----------
+ .../bindings/serial/qcom,msm-uartdm.yaml      | 112 +++++++++++++++
+ .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
+ .../bindings/soc/qcom/qcom,gsbi.yaml          | 132 ++++++++++++++++++
+ .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 --------------
+ .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 +++++++++++
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |  36 ++---
+ arch/arm/boot/dts/qcom-msm8660.dtsi           |   1 +
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  20 +--
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  40 +++---
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  68 ++++-----
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |  48 +++----
+ arch/arm64/boot/dts/qcom/msm8994.dtsi         |  42 +++---
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  36 ++---
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  92 ++++++------
+ 17 files changed, 606 insertions(+), 502 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+
+-- 
+2.32.0
+

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87A34F36EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF19B4F36E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240058AbiDELJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S237723AbiDELIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbiDEIa4 (ORCPT
+        with ESMTP id S238768AbiDEIa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461E3BA52;
-        Tue,  5 Apr 2022 01:22:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:30:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9993ED2C;
+        Tue,  5 Apr 2022 01:22:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44F71B81BC2;
-        Tue,  5 Apr 2022 08:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA99C385A0;
-        Tue,  5 Apr 2022 08:22:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 739866151F;
+        Tue,  5 Apr 2022 08:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C19FC385B0;
+        Tue,  5 Apr 2022 08:22:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146966;
-        bh=KBBEiaudzNuttpozFnSTnTmfgA9wXGUFOKNx4lDwuv0=;
+        s=korg; t=1649146968;
+        bh=FwQBUKInjP4jnvxbqXA+7tsKrzdHs2KgsX0dQYJAh1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z8zfv5IUEG++xVXrUEI2uEwnS3POE+JC45EylOPvZiq+g9dMjHfV2s/NGw6ECdGk3
-         yJylXe7FURDwNQBhnfdH+hvRQfYbOhQTeDbA4c7mTFcHDRgGtScz8Rwa8GVkOtKzc5
-         o4YvEQIk6X4/3v4xVv7vzjQaeQvEXnnRYSSplr40=
+        b=el2imaymldV+4hjcFpkBb8EFCeEGmMQn/4HFoOM+ODaY6MvdjSCStr7a5DVDaIqXK
+         1Ict76jSRwwqNNwpKoXRFZNQ+LeotuuEgcrVUfiX5xJ1YqBgvWGem5lQE/05asFRTS
+         V3sIBYwAaqTA81ujT3TUuqZk092SIB+pdO33r+sk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 0952/1126] KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap hook
-Date:   Tue,  5 Apr 2022 09:28:19 +0200
-Message-Id: <20220405070435.447273842@linuxfoundation.org>
+Subject: [PATCH 5.17 0953/1126] KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
+Date:   Tue,  5 Apr 2022 09:28:20 +0200
+Message-Id: <20220405070435.475532632@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,42 +56,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Christopherson <seanjc@google.com>
 
-commit 83b83a02073ec8d18c77a9bbe0881d710f7a9d32 upstream.
+commit 04dc4e6ce274fa729feda32aa957b27388a3870c upstream.
 
-Use the common TDP MMU zap helper when handling an MMU notifier unmap
-event, the two flows are semantically identical.  Consolidate the code in
-preparation for a future bug fix, as both kvm_tdp_mmu_unmap_gfn_range()
-and __kvm_tdp_mmu_zap_gfn_range() are guilty of not zapping SPTEs in
-invalid roots.
+Move the check for an invalid root out of kvm_tdp_mmu_get_root() and into
+the one place it actually matters, tdp_mmu_next_root(), as the other user
+already has an implicit validity check.  A future bug fix will need to
+get references to invalid roots to honor mmu_notifier requests; there's
+no point in forcing what will be a common path to open code getting a
+reference to a root.
 
 No functional change intended.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211215011557.399940-2-seanjc@google.com>
+Message-Id: <20211215011557.399940-3-seanjc@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |    9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c |   12 ++++++++++--
+ arch/x86/kvm/mmu/tdp_mmu.h |    3 ---
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1032,13 +1032,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcp
- bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
- 				 bool flush)
+@@ -121,9 +121,14 @@ static struct kvm_mmu_page *tdp_mmu_next
+ 		next_root = list_first_or_null_rcu(&kvm->arch.tdp_mmu_roots,
+ 						   typeof(*next_root), link);
+ 
+-	while (next_root && !kvm_tdp_mmu_get_root(kvm, next_root))
++	while (next_root) {
++		if (!next_root->role.invalid &&
++		    kvm_tdp_mmu_get_root(kvm, next_root))
++			break;
++
+ 		next_root = list_next_or_null_rcu(&kvm->arch.tdp_mmu_roots,
+ 				&next_root->link, typeof(*next_root), link);
++	}
+ 
+ 	rcu_read_unlock();
+ 
+@@ -200,7 +205,10 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
+ 
+ 	role = page_role_for_level(vcpu, vcpu->arch.mmu->shadow_root_level);
+ 
+-	/* Check for an existing root before allocating a new one. */
++	/*
++	 * Check for an existing root before allocating a new one.  Note, the
++	 * role check prevents consuming an invalid root.
++	 */
+ 	for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
+ 		if (root->role.word == role.word &&
+ 		    kvm_tdp_mmu_get_root(kvm, root))
+--- a/arch/x86/kvm/mmu/tdp_mmu.h
++++ b/arch/x86/kvm/mmu/tdp_mmu.h
+@@ -10,9 +10,6 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
+ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm *kvm,
+ 						     struct kvm_mmu_page *root)
  {
--	struct kvm_mmu_page *root;
+-	if (root->role.invalid)
+-		return false;
 -
--	for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false)
--		flush = zap_gfn_range(kvm, root, range->start, range->end,
--				      range->may_block, flush, false);
--
--	return flush;
-+	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
-+					   range->end, range->may_block, flush);
+ 	return refcount_inc_not_zero(&root->tdp_mmu_root_count);
  }
  
- typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
 
 

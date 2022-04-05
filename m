@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858D64F29E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7374F2E01
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346895AbiDEJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S1347506AbiDEJ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiDEIVa (ORCPT
+        with ESMTP id S239633AbiDEIUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2FE2196;
-        Tue,  5 Apr 2022 01:19:17 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B696220;
+        Tue,  5 Apr 2022 01:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB4360B12;
-        Tue,  5 Apr 2022 08:19:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F55C385A0;
-        Tue,  5 Apr 2022 08:19:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E383B81A32;
+        Tue,  5 Apr 2022 08:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC16C385A1;
+        Tue,  5 Apr 2022 08:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146756;
-        bh=fUO8fVrX1Jo52Tl8cdXg4tG8zouKK4Q2Jo6qUwezPwQ=;
+        s=korg; t=1649146676;
+        bh=YCzwUFyhUEJ/GM5eR1opJD1pGTH09ZAKXiiX9wurdYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f0G9tQllYSKIWjzEA5PgcYmqBdMdRs+VYP1uBp8qXa7DW521PLreQgWe5OH6nxFfV
-         hyFiddRPlBwTFjkPdKKHh34paHpXcZKjSg4Gxspcl9kyfBov7k8ByOLN8n7/pzGhVV
-         b2zSsDX+z/2Hwb4eMnhzO75orSdkNP5oNqgp+mb4=
+        b=w5hh1n7Xs/MzlwJLUN28xVdz3bi8A8rzNqZDIdzGRErvWAufyH1TcaaO2dKQDSEty
+         T8REizvK0O9rVkUw8MC3hmII1HvXYbb/gcFvXCyK6+7/zP+3dMcIluPTFQUy0/WQrZ
+         35sXPlqb1a/KH5VkqzvwRfgcmaURJTDUkABT9vy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0840/1126] rcu: Mark writes to the rcu_segcblist structures ->flags field
-Date:   Tue,  5 Apr 2022 09:26:27 +0200
-Message-Id: <20220405070432.210797778@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0849/1126] arm64: module: remove (NOLOAD) from linker script
+Date:   Tue,  5 Apr 2022 09:26:36 +0200
+Message-Id: <20220405070432.469188454@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,45 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul E. McKenney <paulmck@kernel.org>
+From: Fangrui Song <maskray@google.com>
 
-[ Upstream commit c09929031018913b5783872a8b8cdddef4a543c7 ]
+[ Upstream commit 4013e26670c590944abdab56c4fa797527b74325 ]
 
-KCSAN reports data races between the rcu_segcblist_clear_flags() and
-rcu_segcblist_set_flags() functions, though misreporting the latter
-as a call to rcu_segcblist_is_enabled() from call_rcu().  This commit
-converts the updates of this field to WRITE_ONCE(), relying on the
-resulting unmarked reads to continue to detect buggy concurrent writes
-to this field.
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt and .text.* sections which are always
+SHT_PROGBITS.
 
-Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error. Just remove (NOLOAD) to fix the error.
+
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://lore.kernel.org/r/20220218081209.354383-1-maskray@google.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/rcu_segcblist.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/module.lds.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/rcu/rcu_segcblist.h b/kernel/rcu/rcu_segcblist.h
-index e373fbe44da5..431cee212467 100644
---- a/kernel/rcu/rcu_segcblist.h
-+++ b/kernel/rcu/rcu_segcblist.h
-@@ -56,13 +56,13 @@ static inline long rcu_segcblist_n_cbs(struct rcu_segcblist *rsclp)
- static inline void rcu_segcblist_set_flags(struct rcu_segcblist *rsclp,
- 					   int flags)
- {
--	rsclp->flags |= flags;
-+	WRITE_ONCE(rsclp->flags, rsclp->flags | flags);
- }
+diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+index a11ccadd47d2..094701ec5500 100644
+--- a/arch/arm64/include/asm/module.lds.h
++++ b/arch/arm64/include/asm/module.lds.h
+@@ -1,8 +1,8 @@
+ SECTIONS {
+ #ifdef CONFIG_ARM64_MODULE_PLTS
+-	.plt 0 (NOLOAD) : { BYTE(0) }
+-	.init.plt 0 (NOLOAD) : { BYTE(0) }
+-	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
++	.plt 0 : { BYTE(0) }
++	.init.plt 0 : { BYTE(0) }
++	.text.ftrace_trampoline 0 : { BYTE(0) }
+ #endif
  
- static inline void rcu_segcblist_clear_flags(struct rcu_segcblist *rsclp,
- 					     int flags)
- {
--	rsclp->flags &= ~flags;
-+	WRITE_ONCE(rsclp->flags, rsclp->flags & ~flags);
- }
- 
- static inline bool rcu_segcblist_test_flags(struct rcu_segcblist *rsclp,
+ #ifdef CONFIG_KASAN_SW_TAGS
 -- 
 2.34.1
 

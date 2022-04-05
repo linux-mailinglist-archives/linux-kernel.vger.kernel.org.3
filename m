@@ -2,73 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C13A4F22D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EB24F22DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiDEGDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S230054AbiDEGGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiDEGDT (ORCPT
+        with ESMTP id S229462AbiDEGGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:03:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8587BA2;
-        Mon,  4 Apr 2022 23:01:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48E0E6150E;
-        Tue,  5 Apr 2022 06:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8E1C3410F;
-        Tue,  5 Apr 2022 06:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649138479;
-        bh=TROkkV3csxWy3veIJQ/VpuJhIKPjnekBvVg17ihEVxk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FYpHos6/tPmQ09v8CCj3KIhZhvxCkJVVbert6jYIM0d4DQqx8FAjCffGWTLw+aU60
-         bpMNcRXHDNYgjuJEVgKTGFoxsEK6stSpyvVJhr+R5qISu0fxIMUU7dfQYrdBe346P/
-         nl0jqjbjL4Ns15BANae4ydeC2eRMSu6fSrGbvXSgciS9VpYH8/9etbkfeeGju+Yi9W
-         CT/1TBxOwaZEzn9tg7XZ4OOaQSGIXUt1xOdf/7SMr85i41Hiy0+tjo8RLPlOQR2kBj
-         7r7ItFKzxYLkvYILDerSrscr+hIs0bjCSrITlJK6mgxx3QfNTVeV8D/OUczfaaVdtf
-         DXiJ0ymlTzRqg==
-Received: by mail-ua1-f44.google.com with SMTP id a20so4412968uaq.11;
-        Mon, 04 Apr 2022 23:01:19 -0700 (PDT)
-X-Gm-Message-State: AOAM5324QvzpvbPOG2U470fqhdrjlIvzqDVANzszLzSBY+TcpMwRZxYZ
-        GA0/HWE7sS9dRz9Yt/jHCY1j1WeSQezrGh6k6CI=
-X-Google-Smtp-Source: ABdhPJzEwejirUcgfMVM0V2N/D5LHD3Pqt/cFAfEXBnSL8enA4U3ENPw6qwODkglSrcGo6PdinWZTxXBFiX6W5FIF3s=
-X-Received: by 2002:ab0:2703:0:b0:35a:78c:f23a with SMTP id
- s3-20020ab02703000000b0035a078cf23amr477096uao.114.1649138478292; Mon, 04 Apr
- 2022 23:01:18 -0700 (PDT)
+        Tue, 5 Apr 2022 02:06:48 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2057.outbound.protection.outlook.com [40.107.223.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D446407
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:04:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M1Iffq7o1Rb08CeiU06azXt0Fag3aNaN4fKlOd84lWU/iNyBXJUE0b7I59SjYkMPgndoKTac9SLkEKjW+j42Sd++CYHebyfyVt7r0/dIbLPAZrZgT7waeYzpQR4aRhNMTCXTkQZzxrT5NIt73p63ADJmqpRcsuAHmR0dBE8QLq+1rfvO6/lis9RgoBs4Rx8FkNIukzcXO4lPeFptoK7WTmJod2W66wjoDeBgnSfke7GpEBunQrozqpyNdVlKGLgQpcBslYFF2omzkBVJJTp5q0/j9D8N996reE8YnQSmsjf5KE8GP3uBORzN/cgFLo7rYPs/mAAcDzo9+Ihio+4H7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JqN1wtyje2/x8RKIBTwm5Khri3jt8rCUj8LQxg8iF6s=;
+ b=T1b5UoTXY/ZZpAKFZUMhmfMHAYPnKW+ahIfSAO7LJoGFFOgR9LgVaVNSwMBRub2hSjkG0su0m4qoCTgMZMixfl3ocs+dZFKuoOkUS5ZbHZGuuOd1j/kh/YQNNWXCY4NxbXWPJ8kprhG4+qUz/yB4ROdyKakaC7rsNbdh1NiqGYasGpvkfyI4/AUEqIE1A/N2ToTMolspElONIK/WzIEXSpnMp7lwbCJ2PvMEGM/IoI6tTh4rN7ie5ijTWkO3ZpUUfu0aEQnBwMzwOPEAiaR01rR51NIQOIJ8JNo1XTrArKENhNzD5hOzNblQqn3LMnI9J5iHufpui9OBIS1VeTKtpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JqN1wtyje2/x8RKIBTwm5Khri3jt8rCUj8LQxg8iF6s=;
+ b=d+qccSYqllTRaeeoRsAuwKVQ9zodppaLH8VRqTBKzZueoIe8ZpXrAtoEDH2y0IbyTAt9fH2k4vttaG/CjiumkGlcOXUhBWB5uDlZTEoyNbvbUfcn3f7TRiL3A6ncPJWjVpdSgW92InAkvV5RnJqswcdZCKdgnZFiMy2ILUWm7cI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN6PR1201MB0001.namprd12.prod.outlook.com (2603:10b6:404:a7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 06:04:47 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5123.031; Tue, 5 Apr 2022
+ 06:04:46 +0000
+Message-ID: <65f33162-74ff-f205-aea9-3ed84dfddde1@amd.com>
+Date:   Tue, 5 Apr 2022 08:04:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] drm/radeon: change si_default_state table from global
+ to static
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, alexander.deucher@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+References: <20220404225710.972071-1-trix@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220404225710.972071-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6P191CA0096.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:209:8a::37) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <CAJF2gTRzOytFedvZM5-OwibUoYfRr50ieKjT-Asj9FfOevy2mQ@mail.gmail.com>
- <mhng-9d254a50-fd2e-47e7-a585-3a92a1e7b200@palmer-ri-x1c9>
-In-Reply-To: <mhng-9d254a50-fd2e-47e7-a585-3a92a1e7b200@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 5 Apr 2022 14:01:06 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQpx5oed5aaz-deyjO1juef8w1_Fp4t7ri604iWziM7PA@mail.gmail.com>
-Message-ID: <CAJF2gTQpx5oed5aaz-deyjO1juef8w1_Fp4t7ri604iWziM7PA@mail.gmail.com>
-Subject: Re: [PATCH V11 00/20] riscv: Add COMPAT mode support for rv64
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b6ce8cf1-5359-4531-a055-08da16ca2f45
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0001:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0001AFEA61F7EC5BF40E317583E49@BN6PR1201MB0001.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JKBSprnxktN9HczHXzDGvJWSIDeMEZj0PM1q99StpmnlVJIZ4mAt1ZJF6WsjFWBjcJ7FYM40AimShBgL7st+9bxBwrhX66z9x84AQnhrQDoI8ZbuoMiReoGa6PyijCQBDHIboi4gk1AevIIJUtt2lBQA2TbQpT0uNLWnKyb7WYrWDpHtag6r9DCFF6G9wsDyg2jA/ldlR+As0uT+0hMX3C0wSuwLW6zMg48nzG7w6rbLRuRI+jXo6alM8B5BlJcwkUY83PW5Wabu1OUDgIPTbrjCl7mBKNXKyNBvSE0ReTFA8gOf2PjUI2X33pyHQDf5lZWK8IcXDu5LQ8jWyie1YCNgxWmW8f2jddrEjqdbw3tITt2Q+Z4ipQCo2nWCf5Ac9fA/vJBd1ut0VTU4KcDnpvi8b4YWZwy3G17M8+juJeE2CgXCxwDqfRLcT1mV8OFvcOJVUCNegSHOBj/n6nBw7p0NS9oOYf40XTBu9ykF2ROMbiCILas09XV3l92rT+18XfDfI6dnjtoRBtp0pxGAFYgdHuxxXhUZsBlChgNcSL+HGDdhiOO6LtnGSaA4U0rIxnKxnOovjwIv8xFk7lCYKPHhrZCyz9cTuEIkOQ0wkTZfVRon7rJk7Aq2I2/nEh58gLqy8lx/sWzdVbvsCJ5V57i5XQfIGKtlaAwwVJ4N4RYmCu9ikaiw5knimFG+JZoq8wiDUVSZNuTOwnZNp+nYdSqDs2QbMVFQ3uAU1J796cc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(4326008)(86362001)(31696002)(6666004)(2616005)(6512007)(316002)(6506007)(508600001)(6486002)(2906002)(66574015)(26005)(66556008)(66476007)(38100700002)(36756003)(8676002)(31686004)(8936002)(30864003)(83380400001)(5660300002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFdwZWlxd3NDd3VIc09lUjVuZWZ6Vmk4aDV4Z0hObmcrT1l3eC8yc1dYZy85?=
+ =?utf-8?B?VGNOUG1uWVN1YUNURTYyUkZvNTV0Nnl0UE56d213U3VveDdsdTMyVml6SUcv?=
+ =?utf-8?B?UE9VRU1DSnJpWDJaMzRJQWVJbCs1QkRvVEJzQXQyMUxiQlZmMTZiNlRSOVRH?=
+ =?utf-8?B?WTkyZlBSbkR1Q0dsblYxZ1Biak5KZzkzazcyYzN5L2lQeVhaMFN1VDJyRVRU?=
+ =?utf-8?B?MXE1Ty95Nm1jMUcrTmZOYXBrdlJuRGFucUNuTlowSkdHenFDZ2VIQlZaZ0Nk?=
+ =?utf-8?B?Y05oZHpNandTZnMvazlzOUEvVGRnbWVEMDJxbUVSNnFDQnBmM2t3V01PdndX?=
+ =?utf-8?B?WVRJbGdBeTRaV1U1UDBaOEF4S09nS2N5UHRnUVNpZnJOQURwNC9SMkU4bWYx?=
+ =?utf-8?B?K3RSRjd0V2lGaVRyT01zMkhwOUdNN3pkNWdINmpTSWtPZTg3WnJneG14aFNG?=
+ =?utf-8?B?TE9LSHVKNHJQZE16SjFUUmNISkNqV2hXTTlvVGFWajNRNDN0dWV0M0EzRVVE?=
+ =?utf-8?B?OWVDZllDaVBJbEdIc3ZYNzU4aWg3ZXU2dGVKMXJIZkVGYXluTFk1TjRZQlVo?=
+ =?utf-8?B?WnVuSTF0d2w0RnVrUzRpR2Yyd2IrMXlyWkhHR05EeWxKT1hIYmRCenFURzVT?=
+ =?utf-8?B?R1JtOW1oTTBoZ0ZDUmI0eGVra3pGTkN0U0FvVjFndU1QemN4VkcxMURXR1g4?=
+ =?utf-8?B?aWF0QVhyVnVaUWtGdk5yNHVFYjV3NG10ZENvOFpITjFRVnUvMFUyMmY5VnJm?=
+ =?utf-8?B?dVBBTUhWeFVQMWRDT1BUaGRXUGZCMmZLbGNobkEwOU1vaHJQditmbWsvdTVC?=
+ =?utf-8?B?VStUZU9RNGM4YUZPWWxqemZqaEI5YjNsc2d6LzMyLy9UNjRYSEZqWEtaTnFF?=
+ =?utf-8?B?a2hOVUdkUnlQNEh5Qi9QQmVqRkJQLzd6QjFla3ZLczVVMDRoYVhmZkJ5N2ZY?=
+ =?utf-8?B?Nm5zbDhQNWdqeG1oY1g3U09sYy96dXF1NDQrbnlFeElBYXlKeVNzZDB0THVS?=
+ =?utf-8?B?T2xEMnZDSnp1Z1VBZVV5WDFMYUtRWW5WQmpiM3NIbWJOTjR6OUxJdjBySXlC?=
+ =?utf-8?B?Lys3K0Jqcm1UN1p2WHJXcHRQY1Z4RjRwdGxlTFl1SnJQVVBpK2R4UGpUalVC?=
+ =?utf-8?B?Ynd0eEtNWWRpZVJzRW9zS3RXbVF3NnREQ1RoYXg0RGo5WjNNTjhQaVdqUU8v?=
+ =?utf-8?B?eDFlRG9nS3BGVHM0RTArcWc3SWc0NWhLcWxhRjVFV2FFZDhCZnVnTGszWWdk?=
+ =?utf-8?B?RTlqVkUyem92YlVsNFZZSlJYVWpJb3FQU0F1cEl1WlhXaXJybnJEQk4wU3pr?=
+ =?utf-8?B?TUhOZkg2dXh1VWhUNWVCbmdvMnZNM1hodFIxRGhxU2Q3Njd6aDYvQUtZWEFn?=
+ =?utf-8?B?U09od2JBWHc2Nm9IdzU1Szl6M0RWNTRMWExwNmtNMVZKcWlPQzhoSTh5VE9J?=
+ =?utf-8?B?d0NjTkJXcU9lS3A2RGI1Uk5LSXBUbEVsU0FmZGQxUGpZL0FHWWtHUTBaRDRF?=
+ =?utf-8?B?UkVTakFjaWpwUXFCLzczR1BOdllhQ0JmUnVPWE1xb0FCREpkdWM4YWFqNjNG?=
+ =?utf-8?B?RzhBSEZtUkxNUWRTd0RzQ2x2ZFVQNzZrWHBWZElRVkcvbFZjMXUzUm9adjl2?=
+ =?utf-8?B?NEN3dmltdytjMkFTRU5TU3ZBU3d1ZW5nQ2luNlg2bHRNd2pFUnBjWm1oaVBz?=
+ =?utf-8?B?WE4vbEFuQzlScFBtVVRnTGozZHZIczNUYk1zbTdTSkZGU1k3cndFNkg4SXJl?=
+ =?utf-8?B?Y1RPTTQvK1dHRk16Qisycm5LL3lMckRJN043cmowdXhpbUZBTWdad0xSR2NG?=
+ =?utf-8?B?K2hLVFFHazZmK1cwbkVKd3U2QTRSeGM5dVFSMHQ4cVpsUlVLUWNoOXNGOXM1?=
+ =?utf-8?B?dDhZQmg0ZTl4bEUxSjBNdkJLVyt3TnVrMVIzUks3UlZzVEpmY204OTl4ZmdK?=
+ =?utf-8?B?NXBzWUtKK01zK28rN05YRkMxdzBCMkRHcXhvYkg1dElUenBPVmVpa3puZXph?=
+ =?utf-8?B?OGxRdWJsQzBDUDZabHVycXI4QStKcjdjTDRtM1MzOWFSOVVOUHBHZGJwaGxw?=
+ =?utf-8?B?TXJqTzMvWmpwYkNhK3dsdytZT3lQTTdVcmdsNGdzN255RWlscHdFNzlFcFZs?=
+ =?utf-8?B?ZlVVeG5HazhEV1gvSi92cS9icFhMdDNsMlREQW5UQU5SRUtnZjNsVWFhd3JU?=
+ =?utf-8?B?dGlzQ0NydHFoazdpdkVtMkR2ZDM3WWlUS1UwZlVOcThUN0V5UHdEeFVnWjgy?=
+ =?utf-8?B?ZnZFMjdNdEdGenVIN0ZJbkZYNDBOTlhtZmZZcnFyTTR1MTFGRkxCdnBqYTRP?=
+ =?utf-8?B?V3F3ZXpOcHVWajdhelJudUhVRTVBRDc4ZXNNUW1zcHZqRjZrZWdLUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6ce8cf1-5359-4531-a055-08da16ca2f45
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 06:04:45.9893
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gKFRmU2ituVMEid6NWvdmx6ohwt4qw1xj/Rj/7sAvyPJzEDYrhEgpge2qVa5dIqQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0001
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,586 +130,537 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
-
-On Tue, Apr 5, 2022 at 7:06 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+Am 05.04.22 um 00:57 schrieb Tom Rix:
+> Smatch reports these issues
+> si_blit_shaders.c:31:11: warning: symbol 'si_default_state'
+>    was not declared. Should it be static?
+> si_blit_shaders.c:253:11: warning: symbol 'si_default_size'
+>    was not declared. Should it be static?
 >
-> On Mon, 04 Apr 2022 07:28:50 PDT (-0700), guoren@kernel.org wrote:
-> > On Sat, Apr 2, 2022 at 10:04 PM Guo Ren <guoren@kernel.org> wrote:
-> >>
-> >> Hi Palmer,
-> >>
-> >> Sorry for the late reply, I still want COMPAT to catch up at 5.18..
-> >> I've pushed it into my next branch, and it would get in linux-next the
-> >> next day. You could have a look at that. The repo is:
-> >> https://github.com/c-sky/csky-linux/tree/linux-next
-> >>
-> >> We still need your sending pull request for COMPAT, thank you very muc=
-h.
+> Both symbols are only used in si.c.  Single file symbols
+> should be static.  So move the definition of
+> si_default_state and si_default_size to si_blit_shader.h
+> and change their storage-class-specifier to static.
 >
-> Sorry, but it was still failing the autobuilders on the previous
-> versions and Saturday night is way, way too late for a respin of a big
-> patch set.
-It's my fault to miss the arm64 auto builder problem, and I've fixed it in =
-v12.
-
+> Remove unneeded si_blit_shader.c
 >
-> > Seems we have already missed 5.18, I just prepared the 5.18-rc1 for
-> > you. It solved the arm64 compile problem and some conflicts, Hope you
-> > could put it into your for-next (5.19-rc1).
-> > https://github.com/c-sky/csky-linux/tree/riscv_compat_v12
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
+> ---
+> v2: move definitions to header
 >
-> This says v11, but that says v12.  I'm going to put the v11 that was
-> sent to the lists in a branch for the autobuilders to test again, but
-> LMK if there's a difference (maybe by sending the v12?).  Might take a
-> bit for me to get everything bumped and tested, my machine's super flaky
-> right now...
-v11 is based on 5.17-rc8, so you could abandon it.:
-https://github.com/c-sky/csky-linux/commits/riscv_compat_v11
-
-v12 is based on 5.18-rc1 (I haven't sent patches series to the list):
-https://github.com/c-sky/csky-linux/commits/riscv_compat_v12
-
-A new compile problem has been reported by Nathan and I've fixed it in
-v12. I will soon send out the v12 patchset series in the mail list.
-
-
-
-
-
+>   drivers/gpu/drm/radeon/Makefile          |   2 +-
+>   drivers/gpu/drm/radeon/si_blit_shaders.c | 253 -----------------------
+>   drivers/gpu/drm/radeon/si_blit_shaders.h | 223 +++++++++++++++++++-
+>   3 files changed, 222 insertions(+), 256 deletions(-)
+>   delete mode 100644 drivers/gpu/drm/radeon/si_blit_shaders.c
 >
-> >
-> >>
-> >> On Sat, Apr 2, 2022 at 9:53 PM <guoren@kernel.org> wrote:
-> >> >
-> >> > From: Guo Ren <guoren@linux.alibaba.com>
-> >> >
-> >> > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> >> > s390, mips, sparc) have supported COMPAT mode. But they all have
-> >> > history issues and can't use standard linux unistd.h. RISC-V would
-> >> > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> >> > /unistd.h.
-> >> >
-> >> > The patchset are based on v5.17-rc8, you can compare rv64-compat
-> >> > v.s. rv32-native in qemu with following steps:
-> >> >
-> >> >  - Prepare rv32 rootfs & fw_jump.bin by buildroot.org
-> >> >    $ git clone git://git.busybox.net/buildroot
-> >> >    $ cd buildroot
-> >> >    $ make qemu_riscv32_virt_defconfig O=3Dqemu_riscv32_virt_defconfi=
-g
-> >> >    $ make -C qemu_riscv32_virt_defconfig
-> >> >    $ make qemu_riscv64_virt_defconfig O=3Dqemu_riscv64_virt_defconfi=
-g
-> >> >    $ make -C qemu_riscv64_virt_defconfig
-> >> >    (Got fw_jump.bin & rootfs.ext2 in qemu_riscvXX_virt_defconfig/ima=
-ges)
-> >> >
-> >> >  - Prepare Linux rv32 & rv64 Image
-> >> >    $ git clone git@github.com:c-sky/csky-linux.git -b riscv_compat_v=
-11 linux
-> >> >    $ cd linux
-> >> >    $ echo "CONFIG_STRICT_KERNEL_RWX=3Dn" >> arch/riscv/configs/defco=
-nfig
-> >> >    $ echo "CONFIG_STRICT_MODULE_RWX=3Dn" >> arch/riscv/configs/defco=
-nfig
-> >> >    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv32-buildroot-linux-gnu- =
-O=3D../build-rv32/ rv32_defconfig
-> >> >    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv32-buildroot-linux-gnu- =
-O=3D../build-rv32/ Image
-> >> >    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv64-buildroot-linux-gnu- =
-O=3D../build-rv64/ defconfig
-> >> >    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv64-buildroot-linux-gnu- =
-O=3D../build-rv64/ Image
-> >> >
-> >> >  - Prepare Qemu:
-> >> >    $ git clone https://gitlab.com/qemu-project/qemu.git -b master li=
-nux
-> >> >    $ cd qemu
-> >> >    $ ./configure --target-list=3D"riscv64-softmmu riscv32-softmmu"
-> >> >    $ make
-> >> >
-> >> > Now let's compare rv64-compat with rv32-native memory footprint with=
- almost the same
-> >> > defconfig, rootfs, opensbi in one qemu.
-> >> >
-> >> >  - Run rv64 with rv32 rootfs in compat mode:
-> >> >    $ ./build/qemu-system-riscv64 -cpu rv64 -M virt -m 64m -nographic=
- -bios qemu_riscv64_virt_defconfig/images/fw_jump.bin -kernel build-rv64/Im=
-age -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=3Draw=
-,id=3Dhd0 -device virtio-blk-device,drive=3Dhd0 -append "rootwait root=3D/d=
-ev/vda ro console=3DttyS0 earlycon=3Dsbi" -netdev user,id=3Dnet0 -device vi=
-rtio-net-device,netdev=3Dnet0
-> >> >
-> >> > QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
-> >> > OpenSBI v0.9
-> >> > [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (g=
-uoren@guoren-Z87-HD3) (riscv64-unknown-linux-gnu-gcc (GCC) 10.2.0, GNU ld (=
-GNU Binutils) 2.37) #96 SMP Tue Dec 28 21:01:55 CST 2021
-> >> > [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x8020000=
-0
-> >> > [    0.000000] Machine model: riscv-virtio,qemu
-> >> > [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
-> >> > [    0.000000] printk: bootconsole [sbi0] enabled
-> >> > [    0.000000] efi: UEFI not found.
-> >> > [    0.000000] Zone ranges:
-> >> > [    0.000000]   DMA32    [mem 0x0000000080200000-0x0000000083ffffff=
-]
-> >> > [    0.000000]   Normal   empty
-> >> > [    0.000000] Movable zone start for each node
-> >> > [    0.000000] Early memory node ranges
-> >> > [    0.000000]   node   0: [mem 0x0000000080200000-0x0000000083fffff=
-f]
-> >> > [    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x000000=
-0083ffffff]
-> >> > [    0.000000] SBI specification v0.2 detected
-> >> > [    0.000000] SBI implementation ID=3D0x1 Version=3D0x9
-> >> > [    0.000000] SBI TIME extension detected
-> >> > [    0.000000] SBI IPI extension detected
-> >> > [    0.000000] SBI RFENCE extension detected
-> >> > [    0.000000] SBI v0.2 HSM extension detected
-> >> > [    0.000000] riscv: ISA extensions acdfhimsu
-> >> > [    0.000000] riscv: ELF capabilities acdfim
-> >> > [    0.000000] percpu: Embedded 17 pages/cpu s30696 r8192 d30744 u69=
-632
-> >> > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages=
-: 15655
-> >> > [    0.000000] Kernel command line: rootwait root=3D/dev/vda ro cons=
-ole=3DttyS0 earlycon=3Dsbi
-> >> > [    0.000000] Dentry cache hash table entries: 8192 (order: 4, 6553=
-6 bytes, linear)
-> >> > [    0.000000] Inode-cache hash table entries: 4096 (order: 3, 32768=
- bytes, linear)
-> >> > [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:o=
-ff
-> >> > [    0.000000] Virtual kernel memory layout:
-> >> > [    0.000000]       fixmap : 0xffffffcefee00000 - 0xffffffceff00000=
-0   (2048 kB)
-> >> > [    0.000000]       pci io : 0xffffffceff000000 - 0xffffffcf0000000=
-0   (  16 MB)
-> >> > [    0.000000]      vmemmap : 0xffffffcf00000000 - 0xffffffcffffffff=
-f   (4095 MB)
-> >> > [    0.000000]      vmalloc : 0xffffffd000000000 - 0xffffffdffffffff=
-f   (65535 MB)
-> >> > [    0.000000]       lowmem : 0xffffffe000000000 - 0xffffffe003e0000=
-0   (  62 MB)
-> >> > [    0.000000]       kernel : 0xffffffff80000000 - 0xfffffffffffffff=
-f   (2047 MB)
-> >> > [    0.000000] Memory: 52788K/63488K available (6184K kernel code, 8=
-88K rwdata, 1917K rodata, 294K init, 297K bss, 10700K reserved, 0K cma-rese=
-rved)
-> >> > [    0.000000] SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=
-=3D1, Nodes=3D1
-> >> > [    0.000000] rcu: Hierarchical RCU implementation.
-> >> > [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=3D8 to nr_=
-cpu_ids=3D1.
-> >> > [    0.000000] rcu:     RCU debug extended QS entry/exit.
-> >> > [    0.000000]  Tracing variant of Tasks RCU enabled.
-> >> > [    0.000000] rcu: RCU calculated value of scheduler-enlistment del=
-ay is 25 jiffies.
-> >> > [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_=
-cpu_ids=3D1
-> >> > [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-> >> > [    0.000000] riscv-intc: 64 local interrupts mapped
-> >> > [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handl=
-ers for 2 contexts.
-> >> > ...
-> >> > Welcome to Buildroot
-> >> > buildroot login: root
-> >> > # cat /proc/cpuinfo
-> >> > processor       : 0
-> >> > hart            : 0
-> >> > isa             : rv64imafdcsuh
-> >> > mmu             : sv48
-> >> >
-> >> > # file /bin/busybox
-> >> > /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, versi=
-on 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.s=
-o.1, for GNU/Linux 5.15.0, stripped
-> >> > # ca[   78.386630] random: fast init done
-> >> > # cat /proc/meminfo
-> >> > MemTotal:          53076 kB
-> >> > MemFree:           40264 kB
-> >> > MemAvailable:      40244 kB
-> >> > Buffers:             236 kB
-> >> > Cached:             1560 kB
-> >> > SwapCached:            0 kB
-> >> > Active:             1700 kB
-> >> > Inactive:            516 kB
-> >> > Active(anon):         40 kB
-> >> > Inactive(anon):      424 kB
-> >> > Active(file):       1660 kB
-> >> > Inactive(file):       92 kB
-> >> > Unevictable:           0 kB
-> >> > Mlocked:               0 kB
-> >> > SwapTotal:             0 kB
-> >> > SwapFree:              0 kB
-> >> > Dirty:                 0 kB
-> >> > Writeback:             0 kB
-> >> > AnonPages:           444 kB
-> >> > Mapped:             1188 kB
-> >> > Shmem:                44 kB
-> >> > KReclaimable:        952 kB
-> >> > Slab:               5744 kB
-> >> > SReclaimable:        952 kB
-> >> > SUnreclaim:         4792 kB
-> >> > KernelStack:         624 kB
-> >> > PageTables:          156 kB
-> >> > NFS_Unstable:          0 kB
-> >> > Bounce:                0 kB
-> >> > WritebackTmp:          0 kB
-> >> > CommitLimit:       26536 kB
-> >> > Committed_AS:       1748 kB
-> >> > VmallocTotal:   67108863 kB
-> >> > VmallocUsed:         652 kB
-> >> > VmallocChunk:          0 kB
-> >> > Percpu:               80 kB
-> >> > #
-> >> >
-> >> >  - Run rv32 with rv32 rootfs:
-> >> >    $ ./build/qemu-system-riscv32 -cpu rv32 -M virt -m 64m -nographic=
- -bios qemu_riscv32_virt_defconfig/images/fw_jump.bin -kernel build-rv32/Im=
-age -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=3Draw=
-,id=3Dhd0 -device virtio-blk-device,drive=3Dhd0 -append "rootwait root=3D/d=
-ev/vda ro console=3DttyS0 earlycon=3Dsbi" -netdev user,id=3Dnet0 -device vi=
-rtio-net-device,netdev=3Dnet0
-> >> >
-> >> > QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
-> >> > OpenSBI v0.9
-> >> > [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (g=
-uoren@guoren-Z87-HD3) (riscv32-buildroot-linux-gnu-gcc.br_real (Buildroot 2=
-021.11-201-g7600ca7960-dirty) 10.3.0, GNU ld (GNU Binutils) 2.36.1) #7 SMP =
-Tue Dec 28 21:02:21 CST 2021
-> >> > [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x8040000=
-0
-> >> > [    0.000000] Machine model: riscv-virtio,qemu
-> >> > [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
-> >> > [    0.000000] printk: bootconsole [sbi0] enabled
-> >> > [    0.000000] efi: UEFI not found.
-> >> > [    0.000000] Zone ranges:
-> >> > [    0.000000]   Normal   [mem 0x0000000080400000-0x0000000083ffffff=
-]
-> >> > [    0.000000] Movable zone start for each node
-> >> > [    0.000000] Early memory node ranges
-> >> > [    0.000000]   node   0: [mem 0x0000000080400000-0x0000000083fffff=
-f]
-> >> > [    0.000000] Initmem setup node 0 [mem 0x0000000080400000-0x000000=
-0083ffffff]
-> >> > [    0.000000] SBI specification v0.2 detected
-> >> > [    0.000000] SBI implementation ID=3D0x1 Version=3D0x9
-> >> > [    0.000000] SBI TIME extension detected
-> >> > [    0.000000] SBI IPI extension detected
-> >> > [    0.000000] SBI RFENCE extension detected
-> >> > [    0.000000] SBI v0.2 HSM extension detected
-> >> > [    0.000000] riscv: ISA extensions acdfhimsu
-> >> > [    0.000000] riscv: ELF capabilities acdfim
-> >> > [    0.000000] percpu: Embedded 12 pages/cpu s16600 r8192 d24360 u49=
-152
-> >> > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages=
-: 15240
-> >> > [    0.000000] Kernel command line: rootwait root=3D/dev/vda ro cons=
-ole=3DttyS0 earlycon=3Dsbi
-> >> > [    0.000000] Dentry cache hash table entries: 8192 (order: 3, 3276=
-8 bytes, linear)
-> >> > [    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384=
- bytes, linear)
-> >> > [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:o=
-ff
-> >> > [    0.000000] Virtual kernel memory layout:
-> >> > [    0.000000]       fixmap : 0x9dc00000 - 0x9e000000   (4096 kB)
-> >> > [    0.000000]       pci io : 0x9e000000 - 0x9f000000   (  16 MB)
-> >> > [    0.000000]      vmemmap : 0x9f000000 - 0x9fffffff   (  15 MB)
-> >> > [    0.000000]      vmalloc : 0xa0000000 - 0xbfffffff   ( 511 MB)
-> >> > [    0.000000]       lowmem : 0xc0000000 - 0xc3c00000   (  60 MB)
-> >> > [    0.000000] Memory: 51924K/61440K available (6117K kernel code, 6=
-95K rwdata, 1594K rodata, 255K init, 241K bss, 9516K reserved, 0K cma-reser=
-ved)
-> >> > [    0.000000] SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=
-=3D1, Nodes=3D1
-> >> > [    0.000000] rcu: Hierarchical RCU implementation.
-> >> > [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=3D8 to nr_=
-cpu_ids=3D1.
-> >> > [    0.000000] rcu:     RCU debug extended QS entry/exit.
-> >> > [    0.000000]  Tracing variant of Tasks RCU enabled.
-> >> > [    0.000000] rcu: RCU calculated value of scheduler-enlistment del=
-ay is 25 jiffies.
-> >> > [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_=
-cpu_ids=3D1
-> >> > [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-> >> > [    0.000000] riscv-intc: 32 local interrupts mapped
-> >> > [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handl=
-ers for 2 contexts.
-> >> > ...
-> >> > Welcome to Buildroot
-> >> > buildroot login: root
-> >> > # cat /proc/cpuinfo
-> >> > processor       : 0
-> >> > hart            : 0
-> >> > isa             : rv32imafdcsuh
-> >> > mmu             : sv32
-> >> >
-> >> > # file /bin/busybox
-> >> > /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, versi=
-on 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.s=
-o.1, for GNU/Linux 5.15.0, stripped
-> >> > [   79.320589] random: fast init done
-> >> > # cat /proc/meminfo
-> >> > MemTotal:          52176 kB
-> >> > MemFree:           41012 kB
-> >> > MemAvailable:      42176 kB
-> >> > Buffers:             644 kB
-> >> > Cached:             2724 kB
-> >> > SwapCached:            0 kB
-> >> > Active:             3128 kB
-> >> > Inactive:            752 kB
-> >> > Active(anon):         40 kB
-> >> > Inactive(anon):      516 kB
-> >> > Active(file):       3088 kB
-> >> > Inactive(file):      236 kB
-> >> > Unevictable:           0 kB
-> >> > Mlocked:               0 kB
-> >> > SwapTotal:             0 kB
-> >> > SwapFree:              0 kB
-> >> > Dirty:                 4 kB
-> >> > Writeback:             0 kB
-> >> > AnonPages:           556 kB
-> >> > Mapped:             2172 kB
-> >> > Shmem:                44 kB
-> >> > KReclaimable:        656 kB
-> >> > Slab:               3684 kB
-> >> > SReclaimable:        656 kB
-> >> > SUnreclaim:         3028 kB
-> >> > KernelStack:         312 kB
-> >> > PageTables:           88 kB
-> >> > NFS_Unstable:          0 kB
-> >> > Bounce:                0 kB
-> >> > WritebackTmp:          0 kB
-> >> > CommitLimit:       26088 kB
-> >> > Committed_AS:       2088 kB
-> >> > VmallocTotal:     524287 kB
-> >> > VmallocUsed:          12 kB
-> >> > VmallocChunk:          0 kB
-> >> > Percpu:               60 kB
-> >> > #
-> >> >
-> >> >  Some conclusions:
-> >> >  - kernel statics:
-> >> >    64: Memory: 52788K/63488K available (6184K kernel code, 888K rwda=
-ta, 1917K rodata, 294K init, 297K bss, 10700K reserved)
-> >> >    32: Memory: 51924K/61440K available (6117K kernel code, 695K rwda=
-ta, 1594K rodata, 255K init, 241K bss,  9516K reserved)
-> >> >    rv32 better than rv64:                  1%               22%     =
-      17%          13%        19%         11%
-> >> >    The code size is very similar, but data size rv32 would be better=
-.
-> >> >
-> >> >  - rv32 kernel runtime KernelStack, Slab... are smaller,
-> >> >    rv64: MemTotal: 53076 kB,        MemFree: 40264 kB
-> >> >    rv32: MemTotal: 52176 + 2048 kB, MemFree: 41012  + 2048 kB
-> >> >    rv32 better than rv64:       2%                         6%
-> >> >
-> >> >    (Because opensbi problem, we could add another 2MB for rv32.)
-> >> >    Overall in 64MB memory situation, rv64-compat is 6% worse than rv=
-32-native
-> >> >    at memory footprint. If the userspace memory usage increases, I t=
-hink
-> >> >    the gap will be further reduced.
-> >> >
-> >> > Changes in v11:
-> >> >  - Using arch instead of kconfig for commit subject by Masahiro Yama=
-da
-> >> >
-> >> > Changes in v10:
-> >> >  - Fixup arm64 compile error with compat_statfs definition
-> >> >  - Fixup compat_sys_fadvise64_64 function arguments error cause ltp =
-failure
-> >> >
-> >> > Changes in v9:
-> >> >  - Fixup rv32 call rv64 segment fault
-> >> >  - Ready for 5.18
-> >> >
-> >> > Changes in v8:
-> >> >  - Enhanced elf_check_arch with EI_CLASS
-> >> >  - Fixup SR_UXL doesn't exist in CONFIG_32BIT
-> >> >  - Add Tested-by with Heiko
-> >> >  - Update qemu compile tips with upstream repo
-> >> >
-> >> > Changes in v7:
-> >> >  - Re-construct compat_vdso/Makefile
-> >> >  - Fixup disable COMPAT compile error by csr.h's macro.
-> >> >  - Optimize coding convention for lo/hi in compat.h
-> >> >
-> >> > Changes in v6:
-> >> >  - Rebase on linux-5.17-rc5
-> >> >  - Optimize hw capability check for elf
-> >> >  - Optimize comment in thread_info.h
-> >> >  - Optimize start_thread with SR_UXL setting
-> >> >  - Optimize vdso.c with direct panic
-> >> >
-> >> > Changes in v5:
-> >> >  - Rebase on linux-5.17-rc2
-> >> >  - Include consolidate the fcntl patches by Christoph Hellwig
-> >> >  - Remove F_GETLK64/F_SETLK64/F_SETLKW64 from asm/compat.h
-> >> >  - Change COMPAT_RLIM_INFINITY from 0x7fffffff to 0xffffffff
-> >> >  - Bring back "Add hw-cap detect in setup_arch patch" in v1
-> >> >
-> >> > Changes in v4:
-> >> >  - Rebase on linux-5.17-rc1
-> >> >  - Optimize compat_sys_call_table implementation with Arnd's advice
-> >> >  - Add reviewed-by for Arnd. Thx :)
-> >> >  - Remove FIXME comment in elf.h
-> >> >  - Optimize Cleanup duplicate definitions in compat.h with Arnd's ad=
-vice
-> >> >
-> >> > Changes in v3:
-> >> >  - Rebase on newest master (pre linux-5.17-rc1)
-> >> >  - Using newest qemu version v7 for test
-> >> >  - Remove fcntl common modification
-> >> >  - Fixup SET_PERSONALITY in elf.h by Arnd
-> >> >  - Fixup KVM Kconfig
-> >> >  - Update Acked-by & Reviewed-by
-> >> >
-> >> > Changes in v2:
-> >> >  - Add __ARCH_WANT_COMPAT_STAT suggested
-> >> >  - Cleanup fcntl compatduplicate definitions
-> >> >  - Cleanup compat.h
-> >> >  - Move rv32_defconfig into Makefile
-> >> >  - Fixup rv64 rootfs boot failed, remove hw_compat_mode_detect
-> >> >  - Move SYSVIPC_COMPAT into init/Kconfig
-> >> >  - Simplify compat_elf_check
-> >> >
-> >> > Christoph Hellwig (3):
-> >> >   uapi: simplify __ARCH_FLOCK{,64}_PAD a little
-> >> >   uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
-> >> >   compat: consolidate the compat_flock{,64} definition
-> >> >
-> >> > Guo Ren (17):
-> >> >   arch: Add SYSVIPC_COMPAT for all architectures
-> >> >   fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
-> >> >   asm-generic: compat: Cleanup duplicate definitions
-> >> >   syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
-> >> >   riscv: Fixup difference with defconfig
-> >> >   riscv: compat: Add basic compat data type implementation
-> >> >   riscv: compat: Support TASK_SIZE for compat mode
-> >> >   riscv: compat: syscall: Add compat_sys_call_table implementation
-> >> >   riscv: compat: syscall: Add entry.S implementation
-> >> >   riscv: compat: process: Add UXL_32 support in start_thread
-> >> >   riscv: compat: Add elf.h implementation
-> >> >   riscv: compat: Add hw capability check for elf
-> >> >   riscv: compat: vdso: Add COMPAT_VDSO base code implementation
-> >> >   riscv: compat: vdso: Add setup additional pages implementation
-> >> >   riscv: compat: signal: Add rt_frame implementation
-> >> >   riscv: compat: ptrace: Add compat_arch_ptrace implement
-> >> >   riscv: compat: Add COMPAT Kbuild skeletal support
-> >> >
-> >> >  arch/arm64/Kconfig                            |   4 -
-> >> >  arch/arm64/include/asm/compat.h               |  93 +------
-> >> >  arch/arm64/include/asm/unistd.h               |   1 +
-> >> >  arch/mips/Kconfig                             |   5 -
-> >> >  arch/mips/include/asm/compat.h                |  41 +--
-> >> >  arch/mips/include/asm/unistd.h                |   2 +
-> >> >  arch/mips/include/uapi/asm/fcntl.h            |  30 +--
-> >> >  arch/parisc/Kconfig                           |   4 -
-> >> >  arch/parisc/include/asm/compat.h              |  45 +---
-> >> >  arch/parisc/include/asm/unistd.h              |   1 +
-> >> >  arch/powerpc/Kconfig                          |   5 -
-> >> >  arch/powerpc/include/asm/compat.h             |  50 +---
-> >> >  arch/powerpc/include/asm/unistd.h             |   1 +
-> >> >  arch/riscv/Kconfig                            |  19 ++
-> >> >  arch/riscv/Makefile                           |   9 +
-> >> >  arch/riscv/configs/rv32_defconfig             | 135 ----------
-> >> >  arch/riscv/include/asm/compat.h               | 129 ++++++++++
-> >> >  arch/riscv/include/asm/csr.h                  |   7 +
-> >> >  arch/riscv/include/asm/elf.h                  |  50 +++-
-> >> >  arch/riscv/include/asm/mmu.h                  |   1 +
-> >> >  arch/riscv/include/asm/pgtable.h              |  13 +-
-> >> >  arch/riscv/include/asm/processor.h            |   6 +-
-> >> >  arch/riscv/include/asm/syscall.h              |   1 +
-> >> >  arch/riscv/include/asm/thread_info.h          |   1 +
-> >> >  arch/riscv/include/asm/unistd.h               |  11 +
-> >> >  arch/riscv/include/asm/vdso.h                 |   9 +
-> >> >  arch/riscv/include/uapi/asm/unistd.h          |   2 +-
-> >> >  arch/riscv/kernel/Makefile                    |   3 +
-> >> >  arch/riscv/kernel/compat_signal.c             | 243 +++++++++++++++=
-+++
-> >> >  arch/riscv/kernel/compat_syscall_table.c      |  19 ++
-> >> >  arch/riscv/kernel/compat_vdso/.gitignore      |   2 +
-> >> >  arch/riscv/kernel/compat_vdso/Makefile        |  78 ++++++
-> >> >  arch/riscv/kernel/compat_vdso/compat_vdso.S   |   8 +
-> >> >  .../kernel/compat_vdso/compat_vdso.lds.S      |   3 +
-> >> >  arch/riscv/kernel/compat_vdso/flush_icache.S  |   3 +
-> >> >  .../compat_vdso/gen_compat_vdso_offsets.sh    |   5 +
-> >> >  arch/riscv/kernel/compat_vdso/getcpu.S        |   3 +
-> >> >  arch/riscv/kernel/compat_vdso/note.S          |   3 +
-> >> >  arch/riscv/kernel/compat_vdso/rt_sigreturn.S  |   3 +
-> >> >  arch/riscv/kernel/entry.S                     |  18 +-
-> >> >  arch/riscv/kernel/process.c                   |  37 +++
-> >> >  arch/riscv/kernel/ptrace.c                    |  87 ++++++-
-> >> >  arch/riscv/kernel/signal.c                    |  13 +-
-> >> >  arch/riscv/kernel/sys_riscv.c                 |   6 +-
-> >> >  arch/riscv/kernel/vdso.c                      | 105 +++++---
-> >> >  arch/riscv/kernel/vdso/vdso.S                 |   6 +-
-> >> >  arch/s390/Kconfig                             |   3 -
-> >> >  arch/s390/include/asm/compat.h                |  99 +------
-> >> >  arch/s390/include/asm/unistd.h                |   1 +
-> >> >  arch/sparc/Kconfig                            |   5 -
-> >> >  arch/sparc/include/asm/compat.h               |  61 ++---
-> >> >  arch/sparc/include/asm/unistd.h               |   1 +
-> >> >  arch/x86/Kconfig                              |   4 -
-> >> >  arch/x86/include/asm/compat.h                 | 104 ++------
-> >> >  arch/x86/include/asm/unistd.h                 |   1 +
-> >> >  fs/open.c                                     |  24 ++
-> >> >  fs/read_write.c                               |  16 ++
-> >> >  fs/stat.c                                     |   2 +-
-> >> >  fs/sync.c                                     |   9 +
-> >> >  include/asm-generic/compat.h                  | 113 ++++++++
-> >> >  include/linux/compat.h                        |  68 +++++
-> >> >  include/uapi/asm-generic/fcntl.h              |  23 +-
-> >> >  include/uapi/asm-generic/unistd.h             |   4 +-
-> >> >  init/Kconfig                                  |   4 +
-> >> >  mm/fadvise.c                                  |  11 +
-> >> >  mm/readahead.c                                |   7 +
-> >> >  tools/include/uapi/asm-generic/fcntl.h        |  21 +-
-> >> >  tools/include/uapi/asm-generic/unistd.h       |   4 +-
-> >> >  68 files changed, 1207 insertions(+), 698 deletions(-)
-> >> >  delete mode 100644 arch/riscv/configs/rv32_defconfig
-> >> >  create mode 100644 arch/riscv/include/asm/compat.h
-> >> >  create mode 100644 arch/riscv/kernel/compat_signal.c
-> >> >  create mode 100644 arch/riscv/kernel/compat_syscall_table.c
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/Makefile
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
-> >> >  create mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_of=
-fsets.sh
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/note.S
-> >> >  create mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
-> >> >
-> >> > --
-> >> > 2.25.1
-> >> >
-> >>
-> >>
-> >> --
-> >> Best Regards
-> >>  Guo Ren
-> >>
-> >> ML: https://lore.kernel.org/linux-csky/
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
+> diff --git a/drivers/gpu/drm/radeon/Makefile b/drivers/gpu/drm/radeon/Makefile
+> index 11c97edde54d..664381f4eb07 100644
+> --- a/drivers/gpu/drm/radeon/Makefile
+> +++ b/drivers/gpu/drm/radeon/Makefile
+> @@ -44,7 +44,7 @@ radeon-y += radeon_device.o radeon_asic.o radeon_kms.o \
+>   	evergreen.o evergreen_cs.o evergreen_blit_shaders.o \
+>   	evergreen_hdmi.o radeon_trace_points.o ni.o cayman_blit_shaders.o \
+>   	atombios_encoders.o radeon_semaphore.o radeon_sa.o atombios_i2c.o si.o \
+> -	si_blit_shaders.o radeon_prime.o cik.o cik_blit_shaders.o \
+> +	radeon_prime.o cik.o cik_blit_shaders.o \
+>   	r600_dpm.o rs780_dpm.o rv6xx_dpm.o rv770_dpm.o rv730_dpm.o rv740_dpm.o \
+>   	rv770_smc.o cypress_dpm.o btc_dpm.o sumo_dpm.o sumo_smc.o trinity_dpm.o \
+>   	trinity_smc.o ni_dpm.o si_smc.o si_dpm.o kv_smc.o kv_dpm.o ci_smc.o \
+> diff --git a/drivers/gpu/drm/radeon/si_blit_shaders.c b/drivers/gpu/drm/radeon/si_blit_shaders.c
+> deleted file mode 100644
+> index ec415e7dfa4b..000000000000
+> --- a/drivers/gpu/drm/radeon/si_blit_shaders.c
+> +++ /dev/null
+> @@ -1,253 +0,0 @@
+> -/*
+> - * Copyright 2011 Advanced Micro Devices, Inc.
+> - *
+> - * Permission is hereby granted, free of charge, to any person obtaining a
+> - * copy of this software and associated documentation files (the "Software"),
+> - * to deal in the Software without restriction, including without limitation
+> - * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> - * and/or sell copies of the Software, and to permit persons to whom the
+> - * Software is furnished to do so, subject to the following conditions:
+> - *
+> - * The above copyright notice and this permission notice (including the next
+> - * paragraph) shall be included in all copies or substantial portions of the
+> - * Software.
+> - *
+> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+> - * THE COPYRIGHT HOLDER(S) AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+> - * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+> - * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> - * DEALINGS IN THE SOFTWARE.
+> - *
+> - * Authors:
+> - *     Alex Deucher <alexander.deucher@amd.com>
+> - */
+> -
+> -#include <linux/types.h>
+> -#include <linux/bug.h>
+> -#include <linux/kernel.h>
+> -
+> -const u32 si_default_state[] =
+> -{
+> -	0xc0066900,
+> -	0x00000000,
+> -	0x00000060, /* DB_RENDER_CONTROL */
+> -	0x00000000, /* DB_COUNT_CONTROL */
+> -	0x00000000, /* DB_DEPTH_VIEW */
+> -	0x0000002a, /* DB_RENDER_OVERRIDE */
+> -	0x00000000, /* DB_RENDER_OVERRIDE2 */
+> -	0x00000000, /* DB_HTILE_DATA_BASE */
+> -
+> -	0xc0046900,
+> -	0x00000008,
+> -	0x00000000, /* DB_DEPTH_BOUNDS_MIN */
+> -	0x00000000, /* DB_DEPTH_BOUNDS_MAX */
+> -	0x00000000, /* DB_STENCIL_CLEAR */
+> -	0x00000000, /* DB_DEPTH_CLEAR */
+> -
+> -	0xc0036900,
+> -	0x0000000f,
+> -	0x00000000, /* DB_DEPTH_INFO */
+> -	0x00000000, /* DB_Z_INFO */
+> -	0x00000000, /* DB_STENCIL_INFO */
+> -
+> -	0xc0016900,
+> -	0x00000080,
+> -	0x00000000, /* PA_SC_WINDOW_OFFSET */
+> -
+> -	0xc00d6900,
+> -	0x00000083,
+> -	0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> -	0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> -	0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> -	0x00000000,
+> -	0x20002000,
+> -	0x00000000,
+> -	0x20002000,
+> -	0x00000000,
+> -	0x20002000,
+> -	0xaaaaaaaa, /* PA_SC_EDGERULE */
+> -	0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> -	0x0000000f, /* CB_TARGET_MASK */
+> -	0x0000000f, /* CB_SHADER_MASK */
+> -
+> -	0xc0226900,
+> -	0x00000094,
+> -	0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> -	0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x80000000,
+> -	0x20002000,
+> -	0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> -	0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> -
+> -	0xc0026900,
+> -	0x000000d9,
+> -	0x00000000, /* CP_RINGID */
+> -	0x00000000, /* CP_VMID */
+> -
+> -	0xc0046900,
+> -	0x00000100,
+> -	0xffffffff, /* VGT_MAX_VTX_INDX */
+> -	0x00000000, /* VGT_MIN_VTX_INDX */
+> -	0x00000000, /* VGT_INDX_OFFSET */
+> -	0x00000000, /* VGT_MULTI_PRIM_IB_RESET_INDX */
+> -
+> -	0xc0046900,
+> -	0x00000105,
+> -	0x00000000, /* CB_BLEND_RED */
+> -	0x00000000, /* CB_BLEND_GREEN */
+> -	0x00000000, /* CB_BLEND_BLUE */
+> -	0x00000000, /* CB_BLEND_ALPHA */
+> -
+> -	0xc0016900,
+> -	0x000001e0,
+> -	0x00000000, /* CB_BLEND0_CONTROL */
+> -
+> -	0xc00e6900,
+> -	0x00000200,
+> -	0x00000000, /* DB_DEPTH_CONTROL */
+> -	0x00000000, /* DB_EQAA */
+> -	0x00cc0010, /* CB_COLOR_CONTROL */
+> -	0x00000210, /* DB_SHADER_CONTROL */
+> -	0x00010000, /* PA_CL_CLIP_CNTL */
+> -	0x00000004, /* PA_SU_SC_MODE_CNTL */
+> -	0x00000100, /* PA_CL_VTE_CNTL */
+> -	0x00000000, /* PA_CL_VS_OUT_CNTL */
+> -	0x00000000, /* PA_CL_NANINF_CNTL */
+> -	0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> -	0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> -	0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> -	0x00000000, /*  */
+> -	0x00000000, /*  */
+> -
+> -	0xc0116900,
+> -	0x00000280,
+> -	0x00000000, /* PA_SU_POINT_SIZE */
+> -	0x00000000, /* PA_SU_POINT_MINMAX */
+> -	0x00000008, /* PA_SU_LINE_CNTL */
+> -	0x00000000, /* PA_SC_LINE_STIPPLE */
+> -	0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> -	0x00000000, /* VGT_HOS_CNTL */
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000, /* VGT_GS_MODE */
+> -
+> -	0xc0026900,
+> -	0x00000292,
+> -	0x00000000, /* PA_SC_MODE_CNTL_0 */
+> -	0x00000000, /* PA_SC_MODE_CNTL_1 */
+> -
+> -	0xc0016900,
+> -	0x000002a1,
+> -	0x00000000, /* VGT_PRIMITIVEID_EN */
+> -
+> -	0xc0016900,
+> -	0x000002a5,
+> -	0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> -
+> -	0xc0026900,
+> -	0x000002a8,
+> -	0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> -	0x00000000,
+> -
+> -	0xc0026900,
+> -	0x000002ad,
+> -	0x00000000, /* VGT_REUSE_OFF */
+> -	0x00000000,
+> -
+> -	0xc0016900,
+> -	0x000002d5,
+> -	0x00000000, /* VGT_SHADER_STAGES_EN */
+> -
+> -	0xc0016900,
+> -	0x000002dc,
+> -	0x0000aa00, /* DB_ALPHA_TO_MASK */
+> -
+> -	0xc0066900,
+> -	0x000002de,
+> -	0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -
+> -	0xc0026900,
+> -	0x000002e5,
+> -	0x00000000, /* VGT_STRMOUT_CONFIG */
+> -	0x00000000,
+> -
+> -	0xc01b6900,
+> -	0x000002f5,
+> -	0x76543210, /* PA_SC_CENTROID_PRIORITY_0 */
+> -	0xfedcba98, /* PA_SC_CENTROID_PRIORITY_1 */
+> -	0x00000000, /* PA_SC_LINE_CNTL */
+> -	0x00000000, /* PA_SC_AA_CONFIG */
+> -	0x00000005, /* PA_SU_VTX_CNTL */
+> -	0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> -	0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> -	0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> -	0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> -	0x00000000, /* PA_SC_AA_SAMPLE_LOCS_PIXEL_X0Y0_0 */
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0x00000000,
+> -	0xffffffff, /* PA_SC_AA_MASK_X0Y0_X1Y0 */
+> -	0xffffffff,
+> -
+> -	0xc0026900,
+> -	0x00000316,
+> -	0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> -	0x00000010, /*  */
+> -};
+> -
+> -const u32 si_default_size = ARRAY_SIZE(si_default_state);
+> diff --git a/drivers/gpu/drm/radeon/si_blit_shaders.h b/drivers/gpu/drm/radeon/si_blit_shaders.h
+> index c739e51e3961..829a2b6228b7 100644
+> --- a/drivers/gpu/drm/radeon/si_blit_shaders.h
+> +++ b/drivers/gpu/drm/radeon/si_blit_shaders.h
+> @@ -25,8 +25,227 @@
+>   #ifndef SI_BLIT_SHADERS_H
+>   #define SI_BLIT_SHADERS_H
+>   
+> -extern const u32 si_default_state[];
+> +static const u32 si_default_state[] = {
+> +	0xc0066900,
+> +	0x00000000,
+> +	0x00000060, /* DB_RENDER_CONTROL */
+> +	0x00000000, /* DB_COUNT_CONTROL */
+> +	0x00000000, /* DB_DEPTH_VIEW */
+> +	0x0000002a, /* DB_RENDER_OVERRIDE */
+> +	0x00000000, /* DB_RENDER_OVERRIDE2 */
+> +	0x00000000, /* DB_HTILE_DATA_BASE */
+>   
+> -extern const u32 si_default_size;
+> +	0xc0046900,
+> +	0x00000008,
+> +	0x00000000, /* DB_DEPTH_BOUNDS_MIN */
+> +	0x00000000, /* DB_DEPTH_BOUNDS_MAX */
+> +	0x00000000, /* DB_STENCIL_CLEAR */
+> +	0x00000000, /* DB_DEPTH_CLEAR */
+> +
+> +	0xc0036900,
+> +	0x0000000f,
+> +	0x00000000, /* DB_DEPTH_INFO */
+> +	0x00000000, /* DB_Z_INFO */
+> +	0x00000000, /* DB_STENCIL_INFO */
+> +
+> +	0xc0016900,
+> +	0x00000080,
+> +	0x00000000, /* PA_SC_WINDOW_OFFSET */
+> +
+> +	0xc00d6900,
+> +	0x00000083,
+> +	0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> +	0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> +	0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> +	0x00000000,
+> +	0x20002000,
+> +	0x00000000,
+> +	0x20002000,
+> +	0x00000000,
+> +	0x20002000,
+> +	0xaaaaaaaa, /* PA_SC_EDGERULE */
+> +	0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> +	0x0000000f, /* CB_TARGET_MASK */
+> +	0x0000000f, /* CB_SHADER_MASK */
+> +
+> +	0xc0226900,
+> +	0x00000094,
+> +	0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> +	0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x80000000,
+> +	0x20002000,
+> +	0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> +	0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> +
+> +	0xc0026900,
+> +	0x000000d9,
+> +	0x00000000, /* CP_RINGID */
+> +	0x00000000, /* CP_VMID */
+> +
+> +	0xc0046900,
+> +	0x00000100,
+> +	0xffffffff, /* VGT_MAX_VTX_INDX */
+> +	0x00000000, /* VGT_MIN_VTX_INDX */
+> +	0x00000000, /* VGT_INDX_OFFSET */
+> +	0x00000000, /* VGT_MULTI_PRIM_IB_RESET_INDX */
+> +
+> +	0xc0046900,
+> +	0x00000105,
+> +	0x00000000, /* CB_BLEND_RED */
+> +	0x00000000, /* CB_BLEND_GREEN */
+> +	0x00000000, /* CB_BLEND_BLUE */
+> +	0x00000000, /* CB_BLEND_ALPHA */
+> +
+> +	0xc0016900,
+> +	0x000001e0,
+> +	0x00000000, /* CB_BLEND0_CONTROL */
+> +
+> +	0xc00e6900,
+> +	0x00000200,
+> +	0x00000000, /* DB_DEPTH_CONTROL */
+> +	0x00000000, /* DB_EQAA */
+> +	0x00cc0010, /* CB_COLOR_CONTROL */
+> +	0x00000210, /* DB_SHADER_CONTROL */
+> +	0x00010000, /* PA_CL_CLIP_CNTL */
+> +	0x00000004, /* PA_SU_SC_MODE_CNTL */
+> +	0x00000100, /* PA_CL_VTE_CNTL */
+> +	0x00000000, /* PA_CL_VS_OUT_CNTL */
+> +	0x00000000, /* PA_CL_NANINF_CNTL */
+> +	0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> +	0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> +	0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> +	0x00000000, /*  */
+> +	0x00000000, /*  */
+> +
+> +	0xc0116900,
+> +	0x00000280,
+> +	0x00000000, /* PA_SU_POINT_SIZE */
+> +	0x00000000, /* PA_SU_POINT_MINMAX */
+> +	0x00000008, /* PA_SU_LINE_CNTL */
+> +	0x00000000, /* PA_SC_LINE_STIPPLE */
+> +	0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> +	0x00000000, /* VGT_HOS_CNTL */
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000, /* VGT_GS_MODE */
+> +
+> +	0xc0026900,
+> +	0x00000292,
+> +	0x00000000, /* PA_SC_MODE_CNTL_0 */
+> +	0x00000000, /* PA_SC_MODE_CNTL_1 */
+> +
+> +	0xc0016900,
+> +	0x000002a1,
+> +	0x00000000, /* VGT_PRIMITIVEID_EN */
+> +
+> +	0xc0016900,
+> +	0x000002a5,
+> +	0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> +
+> +	0xc0026900,
+> +	0x000002a8,
+> +	0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> +	0x00000000,
+> +
+> +	0xc0026900,
+> +	0x000002ad,
+> +	0x00000000, /* VGT_REUSE_OFF */
+> +	0x00000000,
+> +
+> +	0xc0016900,
+> +	0x000002d5,
+> +	0x00000000, /* VGT_SHADER_STAGES_EN */
+> +
+> +	0xc0016900,
+> +	0x000002dc,
+> +	0x0000aa00, /* DB_ALPHA_TO_MASK */
+> +
+> +	0xc0066900,
+> +	0x000002de,
+> +	0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +
+> +	0xc0026900,
+> +	0x000002e5,
+> +	0x00000000, /* VGT_STRMOUT_CONFIG */
+> +	0x00000000,
+> +
+> +	0xc01b6900,
+> +	0x000002f5,
+> +	0x76543210, /* PA_SC_CENTROID_PRIORITY_0 */
+> +	0xfedcba98, /* PA_SC_CENTROID_PRIORITY_1 */
+> +	0x00000000, /* PA_SC_LINE_CNTL */
+> +	0x00000000, /* PA_SC_AA_CONFIG */
+> +	0x00000005, /* PA_SU_VTX_CNTL */
+> +	0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> +	0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> +	0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> +	0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> +	0x00000000, /* PA_SC_AA_SAMPLE_LOCS_PIXEL_X0Y0_0 */
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0x00000000,
+> +	0xffffffff, /* PA_SC_AA_MASK_X0Y0_X1Y0 */
+> +	0xffffffff,
+> +
+> +	0xc0026900,
+> +	0x00000316,
+> +	0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> +	0x00000010, /*  */
+> +};
+> +
+> +static const u32 si_default_size = ARRAY_SIZE(si_default_state);
+>   
+>   #endif
 
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E4D4F2B5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ABD4F2DA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiDEJZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S1344016AbiDEJQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239654AbiDEIUY (ORCPT
+        with ESMTP id S239675AbiDEIU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D532231A;
-        Tue,  5 Apr 2022 01:18:24 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A08D;
+        Tue,  5 Apr 2022 01:18:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FE7860B0E;
-        Tue,  5 Apr 2022 08:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F1BC385A4;
-        Tue,  5 Apr 2022 08:18:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFB8CB81A37;
+        Tue,  5 Apr 2022 08:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6DFC385A1;
+        Tue,  5 Apr 2022 08:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146703;
-        bh=0koZQSOLgRW2kaRazCNUDwDk9THdGrokMdcTAp4Ow68=;
+        s=korg; t=1649146706;
+        bh=B/ptuIBjSOUNX8jU6o6Szs1rixvugMsl9zrW73w96CA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PD4ktcCQESHGqi3i90p/e+wQ/GDgMu4aYn4tBPSXpTRDbBgmnttUqLrzI5DxEa/bm
-         PBDf74q21y36Ze+8Nq1Q1CQEezM3OSKEr9o98K9XfDc1MMzvbvryOQM2BuP45FZHUQ
-         JLlvnSQgJUUbui6AejzHQpIVmB6s10z0kcmXvOkU=
+        b=mw1QmIf7Aa8ASc0d4YSL4KoKFh5mv9/obDrRxd2g8zNnzIWEbPW3L7DxupvAdOTqO
+         4uZ/lzRwilvPNZxrhaRf2C64tq9toaVgNuHz6ATJYJ7jAAi18x+hFukaDcGyj5QclP
+         evhhjcKmLr1/JfSsFx1z/zLlIi9jp3hwRrOtJKgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0858/1126] ACPICA: Avoid walking the ACPI Namespace if it is not there
-Date:   Tue,  5 Apr 2022 09:26:45 +0200
-Message-Id: <20220405070432.726370341@linuxfoundation.org>
+Subject: [PATCH 5.17 0859/1126] ACPI / x86: Add skip i2c clients quirk for Nextbook Ares 8
+Date:   Tue,  5 Apr 2022 09:26:46 +0200
+Message-Id: <20220405070432.754576203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,42 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit f38312c9b569322edf4baae467568206fe46d57b ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+The Nextbook Ares 8 is a x86 ACPI tablet which ships with Android x86
+as factory OS. Its DSDT contains a bunch of I2C devices which are not
+actually there, causing various resource conflicts (the Android x86
+kernel fork ignores I2C devices described in the DSDT).
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
+Add a ACPI_QUIRK_SKIP_I2C_CLIENTS for the Nextbook Ares 8 to the
+acpi_quirk_skip_dmi_ids table to woraround this.
 
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
-
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/acpi/x86/utils.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index 915c2433463d..e7c30ce06e18 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
- 
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
- 	}
- 
- 	/* Null child means "get first node" */
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index ffdeed5334d6..9b991294f1e5 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -284,6 +284,15 @@ static const struct dmi_system_id acpi_quirk_skip_dmi_ids[] = {
+ 		.driver_data = (void *)(ACPI_QUIRK_SKIP_I2C_CLIENTS |
+ 					ACPI_QUIRK_SKIP_ACPI_AC_AND_BATTERY),
+ 	},
++	{
++		/* Nextbook Ares 8 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Insyde"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "M890BAP"),
++		},
++		.driver_data = (void *)(ACPI_QUIRK_SKIP_I2C_CLIENTS |
++					ACPI_QUIRK_SKIP_ACPI_AC_AND_BATTERY),
++	},
+ 	{
+ 		/* Whitelabel (sold as various brands) TM800A550L */
+ 		.matches = {
 -- 
 2.34.1
 

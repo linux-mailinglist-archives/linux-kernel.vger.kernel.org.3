@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DAF4F44F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6B94F4845
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357400AbiDEUQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S1379114AbiDEVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349433AbiDEJtw (ORCPT
+        with ESMTP id S1356269AbiDEKXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9244E24BD1;
-        Tue,  5 Apr 2022 02:45:46 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEC9BAB9E;
+        Tue,  5 Apr 2022 03:08:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D7AA61675;
-        Tue,  5 Apr 2022 09:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DE1C385A2;
-        Tue,  5 Apr 2022 09:45:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3DDC617AA;
+        Tue,  5 Apr 2022 10:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE080C385A8;
+        Tue,  5 Apr 2022 10:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151945;
-        bh=zPCGveBQgJIlDVIMeFHkX0aMMcRrkc0ZJmZXhkmwY1w=;
+        s=korg; t=1649153285;
+        bh=WAcl/CMtJJoJE24n0Tw8tG1yq386lGcEloJ1rQ265JU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fmoh3PC9MkzVVgVISbnNSsyTDV8g6RlMqccTT0cT0nBLqfa0WK9fNdMMmLuCBQ+8M
-         pQ8YHjtZGJ3YRiiuYjYwxdlBeunIeRa6inmubpMZsULPGas/+PanBM+zHcBhSHTRjj
-         aGCDiDhowCQnT1yEaNYuqZeado5DEgPOiP7tXpJU=
+        b=AUqjI8gl5e3O0KQDs4eb5itPpb0V1JDtvrhtEJ4jm5RQ6B83X7LxfCeOtrqVS/vjT
+         O4lRmMEEWvUsc49YQeY8q9hvXoAVBkJehL1YUuSvXLrs3Jf+ADg0guw6aVzVvR1Zz1
+         tq/tHF52VHCnWLdom+AydWhd4afjJhAbDMpwffkc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 598/913] phy: dphy: Correct lpx parameter and its derivatives(ta_{get,go,sure})
-Date:   Tue,  5 Apr 2022 09:27:40 +0200
-Message-Id: <20220405070357.767344907@linuxfoundation.org>
+        stable@vger.kernel.org, Joel Jaeschke <joel.jaeschke@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 169/599] io_uring: terminate manual loop iterator loop correctly for non-vecs
+Date:   Tue,  5 Apr 2022 09:27:43 +0200
+Message-Id: <20220405070303.871680061@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,64 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Ying <victor.liu@nxp.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit 3153fa38e38af566cf6454a03b1dbadaf6f323c0 ]
+[ Upstream commit 5e929367468c8f97cd1ffb0417316cecfebef94b ]
 
-According to the comment of the function phy_mipi_dphy_get_default_config(),
-it uses minimum D-PHY timings based on MIPI D-PHY specification.  They are
-derived from the valid ranges specified in Section 6.9, Table 14, Page 41
-of the D-PHY specification (v1.2).  The table 14 explicitly mentions that
-the minimum T-LPX parameter is 50 nanoseconds and the minimum TA-SURE
-parameter is T-LPX nanoseconds.  Likewise, the kernel doc of the 'lpx' and
-'ta_sure' members of struct phy_configure_opts_mipi_dphy mentions that
-the minimum values are 50000 picoseconds and @lpx picoseconds respectively.
-Also, the function phy_mipi_dphy_config_validate() checks if cfg->lpx is
-less than 50000 picoseconds and if cfg->ta_sure is less than cfg->lpx,
-which hints the same minimum values.
+The fix for not advancing the iterator if we're using fixed buffers is
+broken in that it can hit a condition where we don't terminate the loop.
+This results in io-wq looping forever, asking to read (or write) 0 bytes
+for every subsequent loop.
 
-Without this patch, the function phy_mipi_dphy_get_default_config()
-wrongly sets cfg->lpx to 60000 picoseconds and cfg->ta_sure to 2 * cfg->lpx.
-So, let's correct them to 50000 picoseconds and cfg->lpx respectively.
-
-Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-as I don't have the hardwares.
-
-Fixes: dddc97e82303 ("phy: dphy: Add configuration helpers")
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Guido Günther <agx@sigxcpu.org>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
-Link: https://lore.kernel.org/r/20220216071257.1647703-1-victor.liu@nxp.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Reported-by: Joel Jaeschke <joel.jaeschke@gmail.com>
+Link: https://github.com/axboe/liburing/issues/549
+Fixes: 16c8d2df7ec0 ("io_uring: ensure symmetry in handling iter types in loop_rw_iter()")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/phy-core-mipi-dphy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/io_uring.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-index ccb4045685cd..929e86d6558e 100644
---- a/drivers/phy/phy-core-mipi-dphy.c
-+++ b/drivers/phy/phy-core-mipi-dphy.c
-@@ -64,10 +64,10 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
- 	cfg->hs_trail = max(4 * 8 * ui, 60000 + 4 * 4 * ui);
- 
- 	cfg->init = 100;
--	cfg->lpx = 60000;
-+	cfg->lpx = 50000;
- 	cfg->ta_get = 5 * cfg->lpx;
- 	cfg->ta_go = 4 * cfg->lpx;
--	cfg->ta_sure = 2 * cfg->lpx;
-+	cfg->ta_sure = cfg->lpx;
- 	cfg->wakeup = 1000;
- 
- 	cfg->hs_clk_rate = hs_clk_rate;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index fd188b972151..82f1311dab8e 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3220,13 +3220,15 @@ static ssize_t loop_rw_iter(int rw, struct io_kiocb *req, struct iov_iter *iter)
+ 				ret = nr;
+ 			break;
+ 		}
++		ret += nr;
+ 		if (!iov_iter_is_bvec(iter)) {
+ 			iov_iter_advance(iter, nr);
+ 		} else {
+-			req->rw.len -= nr;
+ 			req->rw.addr += nr;
++			req->rw.len -= nr;
++			if (!req->rw.len)
++				break;
+ 		}
+-		ret += nr;
+ 		if (nr != iovec.iov_len)
+ 			break;
+ 	}
 -- 
 2.34.1
 

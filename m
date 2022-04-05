@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C7A4F5271
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A3A4F5267
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390058AbiDFCtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S1850258AbiDFCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1585494AbiDEX76 (ORCPT
+        with ESMTP id S1585626AbiDFAAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:59:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73C5403D7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:20:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B10C76190D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 22:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA40C385A0;
-        Tue,  5 Apr 2022 22:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649197242;
-        bh=qJghuGy/OuEqalpvRzR2kBCn0g3XnrF0PtfYrf8Qnho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uEIBisQvUi2erYjNPoIy9BoeCr8KLxb26lSWeFpx5gGe2SeeYU9nkopCf90wWxg/v
-         RyV8YdIEIh5Pu9r3D8Pg78/08K26fFvnn0ONOh/Xxo1xBUxsGOr6clGX1QfidivmUG
-         35huDiCvB6dke3UbzIWt3oYTUC8FXIk5LMn6GIrkkZbtJI1j41EM8LUMBepuGwHNMZ
-         u7wO/3lkKQfQIQh+tLoJ1WCYX0dQVXYgB3kOKydJ5KWyFtR2QLMtNLszbFXl4O4/xF
-         dVpadq7flnYzS03d2nU5ql5kg5L0MoDQCYJKxDvs3tpguA+64XRZwvZ4eQQDV+9ZVA
-         JV1ntbdelGbZg==
-Date:   Tue, 5 Apr 2022 15:20:39 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
+        Tue, 5 Apr 2022 20:00:06 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB4B5DE40;
+        Tue,  5 Apr 2022 15:22:11 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 235MLeah002791
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 5 Apr 2022 18:21:40 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id DFA5915C3EB6; Tue,  5 Apr 2022 18:21:39 -0400 (EDT)
+Date:   Tue, 5 Apr 2022 18:21:39 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2] cfi: Use __builtin_function_start
-Message-ID: <YkzAtwW4KtZ22ySb@thelio-3990X>
-References: <20220405221618.633743-1-samitolvanen@google.com>
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <YkzA8/3sl86W5oCX@mit.edu>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+ <202204041451.CC4F6BF@keescook>
+ <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220405221618.633743-1-samitolvanen@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,100 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 03:16:18PM -0700, Sami Tolvanen wrote:
-> Clang 14 added support for the __builtin_function_start function,
-> which allows us to implement the function_nocfi macro without
-> architecture-specific inline assembly and in a way that also works
-> with static initializers.
+On Mon, Apr 04, 2022 at 04:26:44PM -0700, Linus Torvalds wrote:
+> > >     (a) "what about suid bits that user space cannot react to"
+> >
+> > What do you mean here? Do you mean setid bits on the file itself?
 > 
-> Change CONFIG_CFI_CLANG to depend on Clang >= 14, define
-> function_nocfi using __builtin_function_start, and remove the arm64
-> inline assembly implementation.
+> Right.
 > 
-> Link: https://github.com/llvm/llvm-project/commit/ec2e26eaf63558934f5b73a6e530edc453cf9508
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1353
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> Tested-by: Mark Rutland <mark.rutland@arm.com>
-> Acked-by: Will Deacon <will@kernel.org> # arm64
+> Maybe we don't care.
+> 
+> Maybe we do.
+> 
+> Is the user-space loader going to honor them? Is it going to ignore
+> them? I don't know. And it actually interacts with things like
+> 'nosuid', which the kernel does know about, and user space has a hard
+> time figuring out.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+So there *used* to be suidperl which was a setuid version of perl with
+some extra security checks.  (See [1] for more details.)  The suidperl
+binary would be used by #!/usr/bin/perl so it could honor setuid bits
+on perl scripts, but it was deprecated in Perl 5.8 and removed in Perl
+5.12 in 2010[2].
 
-> ---
-> v2:
-> - Changed CFI_CLANG to depend on Clang 14 instead of
->   __builtin_function_start.
-> - Squashed all three patches into one.
+[1] https://mattmccutchen.net/suidperl.html
+[2] https://metacpan.org/release/SHAY/perl-5.20.2/view/pod/perl5120delta.pod#Deprecations
+
+So it's possible that the user-space loader might try to honor them,
+and if there was such an example "in the field", it might be nice if
+there was a way for the kernel to advise userspace about the nosuid.
+But I'm not aware of any other shell script interpreter that tried do
+what perl did with suidperl.
+
+> So if the point is "give me an interface so that I can do the same
+> thing a kernel execve() loader would do", then those sgid/suid bits
+> actually may be exactly the kind of thing that user space wants the
+> kernel to react to - should it ignore them, or should it do something
+> special when it sees that they are set?
 > 
-> ---
->  arch/Kconfig                      |  5 +----
->  arch/arm64/include/asm/compiler.h | 16 ----------------
->  include/linux/compiler-clang.h    | 10 ++++++++++
->  3 files changed, 11 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 29b0167c088b..c1627bce4a3a 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
->  config CFI_CLANG
->  	bool "Use Clang's Control Flow Integrity (CFI)"
->  	depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
-> -	# Clang >= 12:
-> -	# - https://bugs.llvm.org/show_bug.cgi?id=46258
-> -	# - https://bugs.llvm.org/show_bug.cgi?id=47479
-> -	depends on CLANG_VERSION >= 120000
-> +	depends on CLANG_VERSION >= 140000
->  	select KALLSYMS
->  	help
->  	  This option enables Clang’s forward-edge Control Flow Integrity
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..6fb2e6bcc392 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -23,20 +23,4 @@
->  #define __builtin_return_address(val)					\
->  	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
->  
-> -#ifdef CONFIG_CFI_CLANG
-> -/*
-> - * With CONFIG_CFI_CLANG, the compiler replaces function address
-> - * references with the address of the function's CFI jump table
-> - * entry. The function_nocfi macro always returns the address of the
-> - * actual function instead.
-> - */
-> -#define function_nocfi(x) ({						\
-> -	void *addr;							\
-> -	asm("adrp %0, " __stringify(x) "\n\t"				\
-> -	    "add  %0, %0, :lo12:" __stringify(x)			\
-> -	    : "=r" (addr));						\
-> -	addr;								\
-> -})
-> -#endif
-> -
->  #endif /* __ASM_COMPILER_H */
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index babb1347148c..c84fec767445 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -69,6 +69,16 @@
->  #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->  #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
->  
-> +#if defined(CONFIG_CFI_CLANG)
-> +/*
-> + * With CONFIG_CFI_CLANG, the compiler replaces function address
-> + * references with the address of the function's CFI jump table
-> + * entry. The function_nocfi macro always returns the address of the
-> + * actual function instead.
-> + */
-> +#define function_nocfi(x)	__builtin_function_start(x)
-> +#endif
-> +
->  /*
->   * Turn individual warnings and errors on and off locally, depending
->   * on version.
-> -- 
-> 2.35.1.1094.g7c7d902a7c-goog
-> 
+> I'm not saying that they *should* be something we care about. All I'm
+> saying is that I want that *discussion* to happen.
+
+I'm not convinced we should.  I suppose *if* the shell script was
+suid, *and* the file system was mounted nosuid, then the check could
+return false, and that would be mostly harmless even if the script
+interpreter didn't support setuid.  But it's extra complexity, and in
+theory it could break a setuid script, where the setuid bit was
+previously a no-op, and it now might cause a problem for that user.
+
+	     	    	       	     	   - Ted

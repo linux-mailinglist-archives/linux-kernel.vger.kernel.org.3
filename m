@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C4C4F45AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AB14F4730
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiDEMoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S1346212AbiDEVDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242694AbiDEJIS (ORCPT
+        with ESMTP id S1348920AbiDEJsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39A96C975;
-        Tue,  5 Apr 2022 01:56:58 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC42EE4EC;
+        Tue,  5 Apr 2022 02:37:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0695161573;
-        Tue,  5 Apr 2022 08:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F88C385A0;
-        Tue,  5 Apr 2022 08:56:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2925961368;
+        Tue,  5 Apr 2022 09:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A09C385A2;
+        Tue,  5 Apr 2022 09:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149015;
-        bh=gv4ukajgun+ahxgtodnf+ysa9hRaoF0gRFwqX/nDtkM=;
+        s=korg; t=1649151449;
+        bh=ksj7NaMP7Eh/EV7FFmcfWjOot3c2gY7+vG8k34T7j4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HcBVmucWShF328CdQitZ/0gBAVRMIWpIrmwOiDuFy6QRPVNrSyYZNWVS8vTUi50ap
-         21xcoHaglJ6milUmktmzcn9tDdzVBRWLe7JOUb0jCh5waplMt8hdWmqYV1GoRTw0YO
-         83HBnI6adZm/oGw2HATx1mBxcGBvUu2K2FqpKVEw=
+        b=Gj6422Wb9976BZXx8dytej13MlfV/NY/kv48UuXqTi3J1+KNMhTXXxc4FWrpoPt3S
+         qIy4Iv5+2yiXEEF3GIoPJiFUrPNtssQ4YMGTxJvdK+9JWIq9Kq8iFyc1ty+crU0Dqg
+         gysFOl8Opwdgwute6G+HTFLl4SKLDhbzTbwUm1x4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0564/1017] KVM: x86/emulator: Defer not-present segment check in __load_segment_descriptor()
-Date:   Tue,  5 Apr 2022 09:24:37 +0200
-Message-Id: <20220405070411.021331167@linuxfoundation.org>
+Subject: [PATCH 5.15 420/913] powerpc/perf: Dont use perf_hw_context for trace IMC PMU
+Date:   Tue,  5 Apr 2022 09:24:42 +0200
+Message-Id: <20220405070352.435852317@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
+From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 
-[ Upstream commit ca85f002258fdac3762c57d12d5e6e401b6a41af ]
+[ Upstream commit 0198322379c25215b2778482bf1221743a76e2b5 ]
 
-Per Intel's SDM on the "Instruction Set Reference", when
-loading segment descriptor, not-present segment check should
-be after all type and privilege checks. But the emulator checks
-it first, then #NP is triggered instead of #GP if privilege fails
-and segment is not present. Put not-present segment check after
-type and privilege checks in __load_segment_descriptor().
+Trace IMC (In-Memory collection counters) in powerpc is useful for
+application level profiling.
 
-Fixes: 38ba30ba51a00 (KVM: x86 emulator: Emulate task switch in emulator.c)
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Message-Id: <52573c01d369f506cadcf7233812427cf7db81a7.1644292363.git.houwenlong.hwl@antgroup.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+For trace_imc, presently task context (task_ctx_nr) is set to
+perf_hw_context. But perf_hw_context should only be used for CPU PMU.
+See commit 26657848502b ("perf/core: Verify we have a single
+perf_hw_context PMU").
+
+So for trace_imc, even though it is per thread PMU, it is preferred to
+use sw_context in order to be able to do application level monitoring.
+Hence change the task_ctx_nr to use perf_sw_context.
+
+Fixes: 012ae244845f ("powerpc/perf: Trace imc PMU functions")
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Reviewed-by: Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
+[mpe: Update subject & incorporate notes into change log, reflow comment]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220202041837.65968-1-atrajeev@linux.vnet.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/emulate.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ arch/powerpc/perf/imc-pmu.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 28b1a4e57827..5705446c1213 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1614,11 +1614,6 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
- 		goto exception;
- 	}
+diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
+index e106909ff9c3..e7583fbcc8fa 100644
+--- a/arch/powerpc/perf/imc-pmu.c
++++ b/arch/powerpc/perf/imc-pmu.c
+@@ -1457,7 +1457,11 @@ static int trace_imc_event_init(struct perf_event *event)
  
--	if (!seg_desc.p) {
--		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
--		goto exception;
--	}
--
- 	dpl = seg_desc.dpl;
+ 	event->hw.idx = -1;
  
- 	switch (seg) {
-@@ -1658,6 +1653,10 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
- 	case VCPU_SREG_TR:
- 		if (seg_desc.s || (seg_desc.type != 1 && seg_desc.type != 9))
- 			goto exception;
-+		if (!seg_desc.p) {
-+			err_vec = NP_VECTOR;
-+			goto exception;
-+		}
- 		old_desc = seg_desc;
- 		seg_desc.type |= 2; /* busy */
- 		ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
-@@ -1682,6 +1681,11 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
- 		break;
- 	}
- 
-+	if (!seg_desc.p) {
-+		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
-+		goto exception;
-+	}
-+
- 	if (seg_desc.s) {
- 		/* mark segment as accessed */
- 		if (!(seg_desc.type & 1)) {
+-	event->pmu->task_ctx_nr = perf_hw_context;
++	/*
++	 * There can only be a single PMU for perf_hw_context events which is assigned to
++	 * core PMU. Hence use "perf_sw_context" for trace_imc.
++	 */
++	event->pmu->task_ctx_nr = perf_sw_context;
+ 	event->destroy = reset_global_refc;
+ 	return 0;
+ }
 -- 
 2.34.1
 

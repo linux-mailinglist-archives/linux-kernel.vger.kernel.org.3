@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9234F4C77
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCE24F4F4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442158AbiDEXVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S1837143AbiDFApD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357567AbiDEK0f (ORCPT
+        with ESMTP id S1357601AbiDEK0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:26:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6410CF3;
-        Tue,  5 Apr 2022 03:10:24 -0700 (PDT)
+        Tue, 5 Apr 2022 06:26:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9974231517;
+        Tue,  5 Apr 2022 03:10:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E638B81C89;
-        Tue,  5 Apr 2022 10:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A12FBC385A0;
-        Tue,  5 Apr 2022 10:10:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BFC7617A4;
+        Tue,  5 Apr 2022 10:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331D7C385A0;
+        Tue,  5 Apr 2022 10:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153422;
-        bh=fYNDHQIB3VWV6wB44zPrEUAyOUFk0YFODxvUTevPJjg=;
+        s=korg; t=1649153427;
+        bh=Qa3RGJUb/13qAmle082Sl0DJGE+PN6Kzlk1E+pmBBJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ox+tkfBe/b2k3SjHskBUgxwjCKUURwB9vkYCHyWkwOJt59DWSozWTB55Vqbmbf4eI
-         LspqUnsLVjPSc+wZfY5B3Xz6BVEwl951hXOB5xqOpCUB7XXoltwA1aX5WFnf2MSVGF
-         yLDSOlVS6kcthi9gubestgUQt+JPw3+nSwc9E8K8=
+        b=iF2+jJufP/I5bR4H4PQvTzLJ24GM2aO2CzMAuxzGuGJdH1iShE00SoFN0ZIZZ4/Zm
+         wtd88viFb/mpm5XB/JiQ/bT6UcqxuCQdAMVoyPHixthxslfsKMEv7XB7PkEsI79Y+0
+         3kzuCqYhlOL951lFTTEr8mrQ9YLieVnUeOv1yH9Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 218/599] media: cedrus: H265: Fix neighbour info buffer size
-Date:   Tue,  5 Apr 2022 09:28:32 +0200
-Message-Id: <20220405070305.330830619@linuxfoundation.org>
+Subject: [PATCH 5.10 219/599] media: cedrus: h264: Fix neighbour info buffer size
+Date:   Tue,  5 Apr 2022 09:28:33 +0200
+Message-Id: <20220405070305.361043377@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,40 +57,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-[ Upstream commit ee8b887329c78971967506f3ac79b9302c9f83c1 ]
+[ Upstream commit fecd363ae2d5042553370b0adf60c47e35c34a83 ]
 
-Neighbour info buffer size needs to be 794 kiB in H6. This is actually
-already indirectly mentioned in the comment, but smaller size is used
-nevertheless.
+According to BSP library source, H264 neighbour info buffer size needs
+to be 32 kiB for H6. This is similar to H265 decoding, which also needs
+double buffer size in comparison to older Cedrus core generations.
 
 Increase buffer size to cover H6 needs. Since increase is not that big
 in absolute numbers, it doesn't make sense to complicate logic for older
 generations.
 
-Bug was discovered using iommu, which reported access error when trying
-to play H265 video.
+Issue was discovered using iommu and cross checked with BSP library
+source.
 
-Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
+Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 10744fab7cea..368439cf5e17 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -23,7 +23,7 @@
-  * Subsequent BSP implementations seem to double the neighbor info buffer size
-  * for the H6 SoC, which may be related to 10 bit H265 support.
-  */
--#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(397 * SZ_1K)
-+#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(794 * SZ_1K)
- #define CEDRUS_H265_ENTRY_POINTS_BUF_SIZE	(4 * SZ_1K)
- #define CEDRUS_H265_MV_COL_BUF_UNIT_CTB_SIZE	160
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index de7442d4834d..d3e26bfe6c90 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
  
+ #define CEDRUS_H264_FRAME_NUM		18
+ 
+-#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
++#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
+ #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
+ 
+ static void cedrus_h264_write_sram(struct cedrus_dev *dev,
 -- 
 2.34.1
 

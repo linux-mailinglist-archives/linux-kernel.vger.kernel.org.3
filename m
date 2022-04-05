@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AB94F2C9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BD44F2A54
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352589AbiDEKEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1352844AbiDEKFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbiDEIa0 (ORCPT
+        with ESMTP id S238693AbiDEIax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AD322BF1;
-        Tue,  5 Apr 2022 01:22:00 -0700 (PDT)
+        Tue, 5 Apr 2022 04:30:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5A5340DB;
+        Tue,  5 Apr 2022 01:22:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A988361477;
-        Tue,  5 Apr 2022 08:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A2BC385A9;
-        Tue,  5 Apr 2022 08:21:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FB7AB81BC0;
+        Tue,  5 Apr 2022 08:22:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB8CC385A0;
+        Tue,  5 Apr 2022 08:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146919;
-        bh=RMc2It4dGYVyP7I6bfOhhGG9ID4xvoJkIC5CZ+LRjz8=;
+        s=korg; t=1649146957;
+        bh=XBhe4vqBgXyB671ZuqpkXp89YqTRRxpxJDnJqlGK3kw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGLvcWaoom+KLUeUvlsIXnkSNTEDF7EsYUxguIyBvq1Q/rCGcu7KlIKX5i1Nl8rXe
-         1V2WSnIlUIQQxlZJmxx0geRCPpUMMyDcP/ygna3oWEopwqBhlbRo+Krc4ea6TPs/M6
-         UT7xfvT+YAB9HawCEeXod/zPMYjp6JzGBPWXwL80=
+        b=gmDR8AUDML6Gt+LqqsrfMTxnV3TNV904R1h23DxJQs9YB8QGgtwAu0J0hOkH7xEpA
+         zd+W8sc6f0S2EA5ERNt0ucIV6sbLmslsirTs/Ovdp8rzgjvd6HjJcXRbB2zPbhCZcA
+         41RXVFk/c0M3mIyewgQoCWi0hvRrNu6I30/8Ta1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0937/1126] ASoC: SOF: Intel: hda: retrieve DMIC number for I2S boards
-Date:   Tue,  5 Apr 2022 09:28:04 +0200
-Message-Id: <20220405070435.015903073@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Kramer <mccleetus@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0949/1126] ALSA: hda/realtek: Add alc256-samsung-headphone fixup
+Date:   Tue,  5 Apr 2022 09:28:16 +0200
+Message-Id: <20220405070435.360633407@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,115 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Matt Kramer <mccleetus@gmail.com>
 
-[ Upstream commit 92c1b7c0f780f0084f7b114be316ae4e182676e5 ]
+[ Upstream commit ef248d9bd616b04df8be25539a4dc5db4b6c56f4 ]
 
-We currently extract the DMIC number only for HDaudio or SoundWire
-platforms. For I2S/TDM platforms, this wasn't necessary until now, but
-with devices with ES8336 we need to find a solution to detect dmics
-more reliably than with a DMI quirk.
+This fixes the near-silence of the headphone jack on the ALC256-based
+Samsung Galaxy Book Flex Alpha (NP730QCJ). The magic verbs were found
+through trial and error, using known ALC298 hacks as inspiration. The
+fixup is auto-enabled only when the NP730QCJ is detected. It can be
+manually enabled using model=alc256-samsung-headphone.
 
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Link: https://lore.kernel.org/r/20220308192610.392950-4-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Matt Kramer <mccleetus@gmail.com>
+Link: https://lore.kernel.org/r/3168355.aeNJFYEL58@linus
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/intel/hda.c | 46 +++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 21 deletions(-)
+ Documentation/sound/hd-audio/models.rst |  4 ++++
+ sound/pci/hda/patch_realtek.c           | 11 +++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index 848d1d563170..028751549f6d 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -432,11 +432,9 @@ static char *hda_model;
- module_param(hda_model, charp, 0444);
- MODULE_PARM_DESC(hda_model, "Use the given HDA board model.");
+diff --git a/Documentation/sound/hd-audio/models.rst b/Documentation/sound/hd-audio/models.rst
+index d25335993e55..9b52f50a6854 100644
+--- a/Documentation/sound/hd-audio/models.rst
++++ b/Documentation/sound/hd-audio/models.rst
+@@ -261,6 +261,10 @@ alc-sense-combo
+ huawei-mbx-stereo
+     Enable initialization verbs for Huawei MBX stereo speakers;
+     might be risky, try this at your own risk
++alc298-samsung-headphone
++    Samsung laptops with ALC298
++alc256-samsung-headphone
++    Samsung laptops with ALC256
  
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
--static int hda_dmic_num = -1;
--module_param_named(dmic_num, hda_dmic_num, int, 0444);
-+static int dmic_num_override = -1;
-+module_param_named(dmic_num, dmic_num_override, int, 0444);
- MODULE_PARM_DESC(dmic_num, "SOF HDA DMIC number");
--#endif
- 
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA)
- static bool hda_codec_use_common_hdmi = IS_ENABLED(CONFIG_SND_HDA_CODEC_HDMI);
-@@ -644,24 +642,35 @@ static int hda_init(struct snd_sof_dev *sdev)
- 	return ret;
- }
- 
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
--
--static int check_nhlt_dmic(struct snd_sof_dev *sdev)
-+static int check_dmic_num(struct snd_sof_dev *sdev)
- {
- 	struct nhlt_acpi_table *nhlt;
--	int dmic_num;
-+	int dmic_num = 0;
- 
- 	nhlt = intel_nhlt_init(sdev->dev);
- 	if (nhlt) {
- 		dmic_num = intel_nhlt_get_dmic_geo(sdev->dev, nhlt);
- 		intel_nhlt_free(nhlt);
--		if (dmic_num >= 1 && dmic_num <= 4)
--			return dmic_num;
- 	}
- 
--	return 0;
-+	/* allow for module parameter override */
-+	if (dmic_num_override != -1) {
-+		dev_dbg(sdev->dev,
-+			"overriding DMICs detected in NHLT tables %d by kernel param %d\n",
-+			dmic_num, dmic_num_override);
-+		dmic_num = dmic_num_override;
-+	}
-+
-+	if (dmic_num < 0 || dmic_num > 4) {
-+		dev_dbg(sdev->dev, "invalid dmic_number %d\n", dmic_num);
-+		dmic_num = 0;
-+	}
-+
-+	return dmic_num;
- }
- 
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
-+
- static const char *fixup_tplg_name(struct snd_sof_dev *sdev,
- 				   const char *sof_tplg_filename,
- 				   const char *idisp_str,
-@@ -697,16 +706,8 @@ static int dmic_topology_fixup(struct snd_sof_dev *sdev,
- 	const char *dmic_str;
- 	int dmic_num;
- 
--	/* first check NHLT for DMICs */
--	dmic_num = check_nhlt_dmic(sdev);
--
--	/* allow for module parameter override */
--	if (hda_dmic_num != -1) {
--		dev_dbg(sdev->dev,
--			"overriding DMICs detected in NHLT tables %d by kernel param %d\n",
--			dmic_num, hda_dmic_num);
--		dmic_num = hda_dmic_num;
--	}
-+	/* first check for DMICs (using NHLT or module parameter) */
-+	dmic_num = check_dmic_num(sdev);
- 
- 	switch (dmic_num) {
- 	case 1:
-@@ -1392,6 +1393,9 @@ struct snd_soc_acpi_mach *hda_machine_select(struct snd_sof_dev *sdev)
- 		if (!sof_pdata->tplg_filename)
- 			sof_pdata->tplg_filename = mach->sof_tplg_filename;
- 
-+		/* report to machine driver if any DMICs are found */
-+		mach->mach_params.dmic_num = check_dmic_num(sdev);
-+
- 		if (mach->link_mask) {
- 			mach->mach_params.links = mach->links;
- 			mach->mach_params.link_mask = mach->link_mask;
+ ALC66x/67x/892
+ ==============
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 6ff41d9b5bc9..16e90524a497 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6948,6 +6948,7 @@ enum {
+ 	ALC236_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
+ 	ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
++	ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC295_FIXUP_ASUS_MIC_NO_PRESENCE,
+ 	ALC269VC_FIXUP_ACER_VCOPPERBOX_PINS,
+ 	ALC269VC_FIXUP_ACER_HEADSET_MIC,
+@@ -8273,6 +8274,14 @@ static const struct hda_fixup alc269_fixups[] = {
+ 			{ }
+ 		},
+ 	},
++	[ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET] = {
++		.type = HDA_FIXUP_VERBS,
++		.v.verbs = (const struct hda_verb[]) {
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x08},
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x2fcf},
++			{ }
++		},
++	},
+ 	[ALC295_FIXUP_ASUS_MIC_NO_PRESENCE] = {
+ 		.type = HDA_FIXUP_PINS,
+ 		.v.pins = (const struct hda_pintbl[]) {
+@@ -9054,6 +9063,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x144d, 0xc740, "Samsung Ativ book 8 (NP870Z5G)", ALC269_FIXUP_ATIV_BOOK_8),
+ 	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc832, "Samsung Galaxy Book Flex Alpha (NP730QCJ)", ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x1458, 0xfa53, "Gigabyte BXBT-2807", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb120, "MSI Cubi MS-B120", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb171, "Cubi N 8GL (MS-B171)", ALC283_FIXUP_HEADSET_MIC),
+@@ -9400,6 +9410,7 @@ static const struct hda_model_fixup alc269_fixup_models[] = {
+ 	{.id = ALC298_FIXUP_HUAWEI_MBX_STEREO, .name = "huawei-mbx-stereo"},
+ 	{.id = ALC256_FIXUP_MEDION_HEADSET_NO_PRESENCE, .name = "alc256-medion-headset"},
+ 	{.id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc298-samsung-headphone"},
++	{.id = ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc256-samsung-headphone"},
+ 	{.id = ALC255_FIXUP_XIAOMI_HEADSET_MIC, .name = "alc255-xiaomi-headset"},
+ 	{.id = ALC274_FIXUP_HP_MIC, .name = "alc274-hp-mic-detect"},
+ 	{.id = ALC245_FIXUP_HP_X360_AMP, .name = "alc245-hp-x360-amp"},
 -- 
 2.34.1
 

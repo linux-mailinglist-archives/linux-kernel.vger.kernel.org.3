@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB1D4F4A03
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF804F4F0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453417AbiDEWdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S1836729AbiDFAjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388711AbiDENc5 (ORCPT
+        with ESMTP id S1389310AbiDENdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:32:57 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00F5DE7F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:34:26 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 235CYH0u099060;
-        Tue, 5 Apr 2022 07:34:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649162057;
-        bh=JBTQpzbP72ROzzwlT8NhQDrUfP1RBqzG2+BjUn/g6Do=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=KwgVbuVcWyxfIZ+4pGRHsr8xUf+IpgKaPnSsiVFSF2Rncegc7Lxe8dL78ITJoErA7
-         yIKAbFPV/RUnVYDDL9qqphedyyE22iICSA/rvG3UgKx6eh8bBk8mHWA7KliU/KYXph
-         HnjANKc6RS1fbzaZQM3uhDqrA8vvjxUBRKy3cT2Y=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 235CYHx1105259
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 5 Apr 2022 07:34:17 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 5
- Apr 2022 07:34:17 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 5 Apr 2022 07:34:17 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 235CYHbc106836;
-        Tue, 5 Apr 2022 07:34:17 -0500
-Date:   Tue, 5 Apr 2022 07:34:17 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-CC:     Nicolas Palix <nicolas.palix@imag.fr>,
-        <linux-kernel@vger.kernel.org>, <cocci@inria.fr>,
-        Kirill Smelkov <kirr@nexedi.com>
-Subject: Re: [PATCH] coccinelle: api/stream_open: Introduce metavariables for
- checks
-Message-ID: <20220405123417.n6mdou64qidgsfo5@doing>
-References: <20220404215926.14811-1-nm@ti.com>
- <alpine.DEB.2.22.394.2204050816560.2185@hadrien>
+        Tue, 5 Apr 2022 09:33:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D547BE886D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:37:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BE56D6E;
+        Tue,  5 Apr 2022 05:37:25 -0700 (PDT)
+Received: from [10.57.41.19] (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A44BC3F5A1;
+        Tue,  5 Apr 2022 05:37:24 -0700 (PDT)
+Message-ID: <e1dc64d3-d5b3-07f1-5fd6-c132fc247bb6@arm.com>
+Date:   Tue, 5 Apr 2022 13:37:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2204050816560.2185@hadrien>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ALSA: emu10k1: Stop using iommu_present()
+Content-Language: en-GB
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     perex@perex.cz, tiwai@suse.com, iommu@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <5ac9b54285b2189b848da2595408eb3cae8e5e9d.1649160813.git.robin.murphy@arm.com>
+ <s5ha6cz7lxt.wl-tiwai@suse.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <s5ha6cz7lxt.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08:17-20220405, Julia Lawall wrote:
+On 2022-04-05 13:29, Takashi Iwai wrote:
+> On Tue, 05 Apr 2022 14:13:33 +0200,
+> Robin Murphy wrote:
+>>
+>> iommu_get_domain_for_dev() is already perfectly happy to return NULL
+>> if the given device has no IOMMU. Drop the unnecessary check.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 > 
-> 
-> On Mon, 4 Apr 2022, Nishanth Menon wrote:
-> 
-> > Coccinelle spatch version 1.1.1 reports the following:
-> > warning: line 134: should no_llseek be a metavariable?
-> > warning: line 141: should noop_llseek be a metavariable?
-> > warning: line 223: should nonseekable_open be a metavariable?
-> > warning: line 290: should nonseekable_open be a metavariable?
-> > warning: line 338: should nonseekable_open be a metavariable?
-> >
-> > So, introduce the metavariable similar to other check instances.
-> 
-> This changes the semantic from matching the specific thing to anything.
-> So are you sure that it is what is wanted?  If it should always be the
-> specific thing, then you can get rid of the warning using eg symbol
-> no_llseek.
+> This will change the code behavior.  The current code does nothing if
+> no IOMMU is found, but after your removal of the check, the code
+> reaches to emu->iommu_workaround = true incorrectly.
 
-Aaah thank you. Will post a v2 with s/identifier/symbol. I still need to
-grok the nuance between the two in [1]. Thanks for clarifying.
+Ah, right you are - I should have looked more closely at the second 
+check, where of course "domain &&" wants tweaking to "!domain ||" as 
+well. I'll send a v2 in a bit...
 
-[...]
+Thanks,
+Robin.
 
-[1] https://coccinelle.gitlabpages.inria.fr/website/docs/main_grammar.html
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+> 
+> 
+> thanks,
+> 
+> Takashi
+> 
+>> ---
+>>   sound/pci/emu10k1/emu10k1_main.c | 3 ---
+>>   1 file changed, 3 deletions(-)
+>>
+>> diff --git a/sound/pci/emu10k1/emu10k1_main.c b/sound/pci/emu10k1/emu10k1_main.c
+>> index 86cc1ca025e4..5ffab343b89c 100644
+>> --- a/sound/pci/emu10k1/emu10k1_main.c
+>> +++ b/sound/pci/emu10k1/emu10k1_main.c
+>> @@ -1751,9 +1751,6 @@ static void snd_emu10k1_detect_iommu(struct snd_emu10k1 *emu)
+>>   
+>>   	emu->iommu_workaround = false;
+>>   
+>> -	if (!iommu_present(emu->card->dev->bus))
+>> -		return;
+>> -
+>>   	domain = iommu_get_domain_for_dev(emu->card->dev);
+>>   	if (domain && domain->type == IOMMU_DOMAIN_IDENTITY)
+>>   		return;
+>> -- 
+>> 2.28.0.dirty
+>>

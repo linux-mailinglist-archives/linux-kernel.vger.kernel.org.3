@@ -2,144 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3734F4E07
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4724F4EEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587203AbiDFAII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S1582794AbiDEXtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573261AbiDEShI (ORCPT
+        with ESMTP id S1573271AbiDESlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:37:08 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE8B167E3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:35:09 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id p9-20020a63f449000000b0035ec8c16f0bso58519pgk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=K74uTYo0p50+68Eav5hPTlnLwyyYs0SvA0+aQKwvrcM=;
-        b=KQEqtHlUIrCMPDEZNKiPS9MvgfELfDBKde+wsTIq1ryHFf4ypzTaT5ALjkqm0JVA/K
-         97yK54GjAMf/hbNvHEfcLoErQsv6rPoLKHy2OA9GpDLManJ08OL6cBliH1pE8PSbtm7x
-         Egplaa+kzgODwKtSCsT31nZ0UmtGrh8hUA9msDIyH4k5N+aHpal+4rr8KrD7SYUpXE3m
-         nBRZDzeYOKQosGLkqviomA/pOiSPf+ru1BtqjlgFBULpSQyd2phEdgIk9HV/Y5NxCLe8
-         iqooldC/WoJSZZ1Savcf5GCUvvf+FBFSipfwHPk+DR5bRvXG/cGwBk20mzlgOlgGncf3
-         D7Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=K74uTYo0p50+68Eav5hPTlnLwyyYs0SvA0+aQKwvrcM=;
-        b=eyHsI5p2G9koB164nx4oA1WN2qVz1gCJY3L6vPRx8n70/1SLrIjzxa+8a3HpjrgUzq
-         03p9sG9n1TWgo2qkwJhxlue3vezNzlA1pNBR6KGScV9DhFEn7AFg8ccI9YXl+vKIrZXL
-         r6XzcPddhtMBnA3sZvxaALIb6HEQj0mOjv53gLeUdov325kbQTHElENV+tgbA/3XTEXm
-         v0mevYBkJyrC+iyQWqoqJXLmVuh7+iojRZC/1mzwoACV3eRuQv9q0yrm1z/KUDYNoDdl
-         mIaM++WSHZnsmVSwkVSU2A/Rv6WcyPl848J07iNF9/pDjE1ILfz1JHkR4O9SfNqE5fV9
-         /llQ==
-X-Gm-Message-State: AOAM530xuYj0Kvs9MkEAyhCBlDvrs1k1vfQVNM+TPNEcO4h3X7TYdEyo
-        Grmj3KuhlLdmzecxB8ioBg5jlEsX7oQ=
-X-Google-Smtp-Source: ABdhPJwWLVGLr/vHL4lq1ATs4OZuBgElqxvfAYIpOrbOfXGyZoR0O+W+IABkWZEAFyqxM0aqFqnkdt8jf2k=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:9f5c:353e:771c:7686])
- (user=pgonda job=sendgmr) by 2002:a17:902:e545:b0:154:4d5b:2006 with SMTP id
- n5-20020a170902e54500b001544d5b2006mr4889343plf.94.1649183709169; Tue, 05 Apr
- 2022 11:35:09 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 11:35:06 -0700
-Message-Id: <20220405183506.2138403-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH V4] KVM, SEV: Add KVM_EXIT_SYSTEM_EVENT metadata for SEV-ES
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 14:41:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77622124B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:39:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 443B1616C5
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:39:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A454C385A3;
+        Tue,  5 Apr 2022 18:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649183944;
+        bh=v+twvuAPSyK4b9502wrkUr1BlR4MnKo9qztL8KChOdc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Pv/LoVtXOikiDXbs7bvRbuyDMtSYWg3kDLXSm5gSlnXCaEDv8ryyXjbIGSmiISwCQ
+         wyDN7BH5runsczVlOX1mNta4Ix1KXHlnwYSTfbvSChDhmoCtqbWI/rC6JkcF30GxzB
+         vewmoNYu8MPfREU7T8OFmhmpXRBDRyzYocN5V8D0CJ7EkS6/VrD9gcxqhEMK6tUJIb
+         pbT8gvjm3hS2sDVrm6MG4Mpgryubw25r2KH9VquuPGTDM1WP1paP5DiukvMJskpGxR
+         UenfyqZD+PyIRpqNBCM5nGzl9UfCzmD/yVMXA1/82JZhkTft9bMEj95fk+ZrP/tm3w
+         hsY3Qx5PU4bXg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nbo50-001tkq-8e; Tue, 05 Apr 2022 19:39:02 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Auger <eric.auger@redhat.com>
+Subject: [PATCH v2 1/3] irqchip/gic-v3: Exposes bit values for GICR_CTLR.{IR,CES}
+Date:   Tue,  5 Apr 2022 19:38:55 +0100
+Message-Id: <20220405183857.205960-2-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405183857.205960-1-maz@kernel.org>
+References: <20220405183857.205960-1-maz@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com, andre.przywara@arm.com, tglx@linutronix.de, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEV-ES guests can request termination using the GHCB's MSR protocol. See
-AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-return code from KVM_RUN. By adding a KVM_EXIT_SYSTEM_EVENT to kvm_run
-struct the userspace VMM can clearly see the guest has requested a SEV-ES
-termination including the termination reason code set and reason code.
+As we're about to expose GICR_CTLR.{IR,CES} to guests, populate
+the include file with the architectural values.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Marc Orr <marcorr@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
+Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
+ include/linux/irqchip/arm-gic-v3.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-V4
- * Switch to using KVM_SYSTEM_EVENT exit reason.
-
-V3
- * Add Documentation/ update.
- * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
-   to KVM_SHUTDOWN_REQ.
-
-V2
- * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
-
-Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
-reason code set and reason code and then observing the codes from the
-userspace VMM in the kvm_run.system_event fields.
-
----
- arch/x86/kvm/svm/sev.c   | 7 +++++--
- include/uapi/linux/kvm.h | 1 +
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 75fa6dd268f0..039b241a9fb5 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2735,8 +2735,11 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
- 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
- 			reason_set, reason_code);
+diff --git a/include/linux/irqchip/arm-gic-v3.h b/include/linux/irqchip/arm-gic-v3.h
+index 12d91f0dedf9..728691365464 100644
+--- a/include/linux/irqchip/arm-gic-v3.h
++++ b/include/linux/irqchip/arm-gic-v3.h
+@@ -127,6 +127,8 @@
+ #define GICR_PIDR2			GICD_PIDR2
  
--		ret = -EINVAL;
--		break;
-+		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-+		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM;
-+		vcpu->run->system_event.flags = control->ghcb_gpa;
-+
-+		return 0;
- 	}
- 	default:
- 		/* Error, keep GHCB MSR value as-is */
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 8616af85dc5d..d9d24db12930 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -444,6 +444,7 @@ struct kvm_run {
- #define KVM_SYSTEM_EVENT_SHUTDOWN       1
- #define KVM_SYSTEM_EVENT_RESET          2
- #define KVM_SYSTEM_EVENT_CRASH          3
-+#define KVM_SYSTEM_EVENT_SEV_TERM       4
- 			__u32 type;
- 			__u64 flags;
- 		} system_event;
+ #define GICR_CTLR_ENABLE_LPIS		(1UL << 0)
++#define GICR_CTLR_CES			(1UL << 1)
++#define GICR_CTLR_IR			(1UL << 2)
+ #define GICR_CTLR_RWP			(1UL << 3)
+ 
+ #define GICR_TYPER_CPU_NUMBER(r)	(((r) >> 8) & 0xffff)
 -- 
-2.35.1.1094.g7c7d902a7c-goog
+2.34.1
 

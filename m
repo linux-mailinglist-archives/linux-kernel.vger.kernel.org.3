@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CAE4F3A64
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFBE4F3A6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352474AbiDELpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S1381390AbiDELpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244845AbiDEIwn (ORCPT
+        with ESMTP id S244853AbiDEIwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B49422B18;
-        Tue,  5 Apr 2022 01:44:43 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0723B22BE9;
+        Tue,  5 Apr 2022 01:44:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC33A609D0;
-        Tue,  5 Apr 2022 08:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FBEC385A0;
-        Tue,  5 Apr 2022 08:44:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7623ACE1C6E;
+        Tue,  5 Apr 2022 08:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E151C385A1;
+        Tue,  5 Apr 2022 08:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148282;
-        bh=ANnWnXAWNmsF5BifAwyhc0RFu55PfW6rBe5GXpCYMlk=;
+        s=korg; t=1649148287;
+        bh=zTGxfhkK5wluCdAjhpp4Ym61n6JhTc9Lz1TCOvhc6Ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zb/KhT8mBVIBxd2jSGyWzLBnGnUWjHXybUZ8xtoEkMuCcL9/l0P9ugQdVm0SbJPE/
-         vZORj7tOYv+Y8FWgSMxSUETsGC8QOUYFjxt/QmzsqlPto9+6jiFvgwQWR3pnxbbNEw
-         CJ3iE9hrBTxJyz8j7CCxxC8tqmYWrCwUaiDuf8mI=
+        b=ZQpwZ3AtRm+7ga44TOn2S+mErVGsGfkaRF7SHqJ+AsC9t87feb1Vnex44gSGgxvxT
+         yhG+E12yJytqA4WR/+OshENcJMU59SaXIpzTF5JdraYzRX3KnjD3fBHU1trA9op0fS
+         90nYuJBz0FIvRovrsabNMOUoYmzWUQc2oKEm/I3U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0299/1017] media: v4l: Avoid unaligned access warnings when printing 4cc modifiers
-Date:   Tue,  5 Apr 2022 09:20:12 +0200
-Message-Id: <20220405070403.150447315@linuxfoundation.org>
+Subject: [PATCH 5.16 0300/1017] media: ov5648: Dont pack controls struct
+Date:   Tue,  5 Apr 2022 09:20:13 +0200
+Message-Id: <20220405070403.180167030@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,69 +59,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 24bb30c8c894ec7213ad810b46e2a6a4c12136c1 ]
+[ Upstream commit edd4fbff5378a8103470304809195dc8f4b1d42a ]
 
-Pointers V4L2 pixelformat and dataformat fields in a few packed structs
-are directly passed to printk family of functions. This could result in an
-unaligned access albeit no such possibility appears to exist at the
-moment i.e. this clang warning appears to be a false positive.
-
-Address the warning by copying the pixelformat or dataformat value to a
-local variable first.
+Don't pack the driver specific struct containing control pointers. This
+lead to potential alignment issues when working with the pointers.
 
 Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e927e1e0f0dd ("v4l: ioctl: Use %p4cc printk modifier to print FourCC codes")
+Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/media/i2c/ov5648.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 69b74d0e8a90..059d6debb25d 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -279,8 +279,8 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	const struct v4l2_vbi_format *vbi;
- 	const struct v4l2_sliced_vbi_format *sliced;
- 	const struct v4l2_window *win;
--	const struct v4l2_sdr_format *sdr;
- 	const struct v4l2_meta_format *meta;
-+	u32 pixelformat;
- 	u32 planes;
- 	unsigned i;
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 947d437ed0ef..78040f0ac02f 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -639,7 +639,7 @@ struct ov5648_ctrls {
+ 	struct v4l2_ctrl *pixel_rate;
  
-@@ -299,8 +299,9 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
- 		mp = &p->fmt.pix_mp;
-+		pixelformat = mp->pixelformat;
- 		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
--			mp->width, mp->height, &mp->pixelformat,
-+			mp->width, mp->height, &pixelformat,
- 			prt_names(mp->field, v4l2_field_names),
- 			mp->colorspace, mp->num_planes, mp->flags,
- 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
-@@ -343,14 +344,15 @@ static void v4l_print_format(const void *arg, bool write_only)
- 		break;
- 	case V4L2_BUF_TYPE_SDR_CAPTURE:
- 	case V4L2_BUF_TYPE_SDR_OUTPUT:
--		sdr = &p->fmt.sdr;
--		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
-+		pixelformat = p->fmt.sdr.pixelformat;
-+		pr_cont(", pixelformat=%p4cc\n", &pixelformat);
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 	case V4L2_BUF_TYPE_META_OUTPUT:
- 		meta = &p->fmt.meta;
-+		pixelformat = meta->dataformat;
- 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
--			&meta->dataformat, meta->buffersize);
-+			&pixelformat, meta->buffersize);
- 		break;
- 	}
- }
+ 	struct v4l2_ctrl_handler handler;
+-} __packed;
++};
+ 
+ struct ov5648_sensor {
+ 	struct device *dev;
 -- 
 2.34.1
 

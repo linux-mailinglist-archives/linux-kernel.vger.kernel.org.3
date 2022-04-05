@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684B94F4EBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9234F4C77
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836420AbiDFAgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1442158AbiDEXVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349537AbiDEJuK (ORCPT
+        with ESMTP id S1357567AbiDEK0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:50:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED1ED2;
-        Tue,  5 Apr 2022 02:48:12 -0700 (PDT)
+        Tue, 5 Apr 2022 06:26:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6410CF3;
+        Tue,  5 Apr 2022 03:10:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32AAFB818F3;
-        Tue,  5 Apr 2022 09:48:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 968E9C385A2;
-        Tue,  5 Apr 2022 09:48:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E638B81C89;
+        Tue,  5 Apr 2022 10:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A12FBC385A0;
+        Tue,  5 Apr 2022 10:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152090;
-        bh=PqrFbKAQyXKwl0v7cOGh1pHbYwGlR3OhlpPtiYy8umo=;
+        s=korg; t=1649153422;
+        bh=fYNDHQIB3VWV6wB44zPrEUAyOUFk0YFODxvUTevPJjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DjnDIsLm2/IpyMcKyttFE+2YHXypBVEb0tVDWehm/213GELyPOSLd8oH3Zfvm73l1
-         /TfhFb+Mi64HN6w3oBZvRZFeXof3qxL/FVYrk41UEgyQKlmp2gFnxEu/jLIQry3Yj6
-         v+Srcw6z1YjXyyecn8pCuOHwqs90p+8LGXrPd89s=
+        b=Ox+tkfBe/b2k3SjHskBUgxwjCKUURwB9vkYCHyWkwOJt59DWSozWTB55Vqbmbf4eI
+         LspqUnsLVjPSc+wZfY5B3Xz6BVEwl951hXOB5xqOpCUB7XXoltwA1aX5WFnf2MSVGF
+         yLDSOlVS6kcthi9gubestgUQt+JPw3+nSwc9E8K8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 650/913] SUNRPC dont resend a task on an offlined transport
+Subject: [PATCH 5.10 218/599] media: cedrus: H265: Fix neighbour info buffer size
 Date:   Tue,  5 Apr 2022 09:28:32 +0200
-Message-Id: <20220405070359.322380929@linuxfoundation.org>
+Message-Id: <20220405070305.330830619@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-[ Upstream commit 82ee41b85cef16b4be1f4732650012d9baaedddd ]
+[ Upstream commit ee8b887329c78971967506f3ac79b9302c9f83c1 ]
 
-When a task is being retried, due to an NFS error, if the assigned
-transport has been put offline and the task is relocatable pick a new
-transport.
+Neighbour info buffer size needs to be 794 kiB in H6. This is actually
+already indirectly mentioned in the comment, but smaller size is used
+nevertheless.
 
-Fixes: 6f081693e7b2b ("sunrpc: remove an offlined xprt using sysfs")
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Increase buffer size to cover H6 needs. Since increase is not that big
+in absolute numbers, it doesn't make sense to complicate logic for older
+generations.
+
+Bug was discovered using iommu, which reported access error when trying
+to play H265 video.
+
+Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/clnt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
-index 5da1d7e8468a..5d5627bf3b18 100644
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -1065,7 +1065,9 @@ rpc_task_get_next_xprt(struct rpc_clnt *clnt)
- static
- void rpc_task_set_transport(struct rpc_task *task, struct rpc_clnt *clnt)
- {
--	if (task->tk_xprt)
-+	if (task->tk_xprt &&
-+			!(test_bit(XPRT_OFFLINE, &task->tk_xprt->state) &&
-+                        (task->tk_flags & RPC_TASK_MOVEABLE)))
- 		return;
- 	if (task->tk_flags & RPC_TASK_NO_ROUND_ROBIN)
- 		task->tk_xprt = rpc_task_get_first_xprt(clnt);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 10744fab7cea..368439cf5e17 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -23,7 +23,7 @@
+  * Subsequent BSP implementations seem to double the neighbor info buffer size
+  * for the H6 SoC, which may be related to 10 bit H265 support.
+  */
+-#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(397 * SZ_1K)
++#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(794 * SZ_1K)
+ #define CEDRUS_H265_ENTRY_POINTS_BUF_SIZE	(4 * SZ_1K)
+ #define CEDRUS_H265_MV_COL_BUF_UNIT_CTB_SIZE	160
+ 
 -- 
 2.34.1
 

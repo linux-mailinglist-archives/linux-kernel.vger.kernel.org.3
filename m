@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A624F44F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646C34F454A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384966AbiDEPPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S1386106AbiDEPPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346515AbiDEJpJ (ORCPT
+        with ESMTP id S1346708AbiDEJpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5953DA6F4;
-        Tue,  5 Apr 2022 02:30:53 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7451ADAFFE;
+        Tue,  5 Apr 2022 02:31:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EA56B81CB4;
-        Tue,  5 Apr 2022 09:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2A3C385A0;
-        Tue,  5 Apr 2022 09:30:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11EFC616AE;
+        Tue,  5 Apr 2022 09:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212DDC385A4;
+        Tue,  5 Apr 2022 09:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151051;
-        bh=Bs37qhupQrzrwShQLMKh2eR5EW+wmQdn3FX3+6XNFbM=;
+        s=korg; t=1649151086;
+        bh=V1UOHCySsxvOsjmVNhtwQgiiy4jbORYVeLbhecPA394=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8uxzZo0gUjnttNn0MGIILS+q3DS2ukkZrPK2UP+X1gALWztrwe7aGv65wq79Mg9f
-         Pxzs6UaKLsTaLlrVElNqpb0eOtyHN06cDrWphYYsfNinYlh9otS1YmgAIRUdPqzAlw
-         z4M2wRoTL/71lJvkIQo5fPEmbJmAFC/C9R1nOBfY=
+        b=evB5eWLYNWDJSHelO4fyYmZ4bMb9PcSMWBNP5b3FlWt6hzYkF2vRti5qVt28CAd1N
+         cI+Jtm/wuoKNmaV+sXxwHferVHMCUiK405Hp4jTaOe/5jzDYbakl+yG6vtSrduYplw
+         Wf4fDd0pXYfPoB8KULnJGtKcB4jOwu5//hfmew88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 249/913] sched/uclamp: Fix iowait boost escaping uclamp restriction
-Date:   Tue,  5 Apr 2022 09:21:51 +0200
-Message-Id: <20220405070347.320837737@linuxfoundation.org>
+Subject: [PATCH 5.15 251/913] perf/core: Fix address filter parser for multiple filters
+Date:   Tue,  5 Apr 2022 09:21:53 +0200
+Message-Id: <20220405070347.380488944@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,41 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit d37aee9018e68b0d356195caefbb651910e0bbfa ]
+[ Upstream commit d680ff24e9e14444c63945b43a37ede7cd6958f9 ]
 
-iowait_boost signal is applied independently of util and doesn't take
-into account uclamp settings of the rq. An io heavy task that is capped
-by uclamp_max could still request higher frequency because
-sugov_iowait_apply() doesn't clamp the boost via uclamp_rq_util_with()
-like effective_cpu_util() does.
+Reset appropriate variables in the parser loop between parsing separate
+filters, so that they do not interfere with parsing the next filter.
 
-Make sure that iowait_boost honours uclamp requests by calling
-uclamp_rq_util_with() when applying the boost.
-
-Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+Fixes: 375637bc524952 ("perf/core: Introduce address range filtering")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Link: https://lore.kernel.org/r/20211216225320.2957053-3-qais.yousef@arm.com
+Link: https://lore.kernel.org/r/20220131072453.2839535-4-adrian.hunter@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/cpufreq_schedutil.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/events/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e7af18857371..7f6bb37d3a2f 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -289,6 +289,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- 	 * into the same scale so we can compare.
- 	 */
- 	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
-+	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
- 	if (sg_cpu->util < boost)
- 		sg_cpu->util = boost;
- }
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index b81652fc2cdd..62022380ad8d 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -10530,8 +10530,11 @@ perf_event_parse_addr_filter(struct perf_event *event, char *fstr,
+ 			}
+ 
+ 			/* ready to consume more filters */
++			kfree(filename);
++			filename = NULL;
+ 			state = IF_STATE_ACTION;
+ 			filter = NULL;
++			kernel = 0;
+ 		}
+ 	}
+ 
 -- 
 2.34.1
 

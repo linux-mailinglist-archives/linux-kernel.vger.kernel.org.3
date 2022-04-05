@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479F34F457F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3A74F46A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378351AbiDEU2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S1356374AbiDEUjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573572AbiDETWx (ORCPT
+        with ESMTP id S1573587AbiDETXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE7847551;
-        Tue,  5 Apr 2022 12:20:55 -0700 (PDT)
+        Tue, 5 Apr 2022 15:23:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F234B842;
+        Tue,  5 Apr 2022 12:21:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F09E260A5F;
-        Tue,  5 Apr 2022 19:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1686C385A1;
-        Tue,  5 Apr 2022 19:20:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43BAEB81FA5;
+        Tue,  5 Apr 2022 19:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BBCC385A0;
+        Tue,  5 Apr 2022 19:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186454;
-        bh=40bz7fgcSkfmSJmWJDKxd9JZxineBbUvX30XOIb7qbk=;
+        s=k20201202; t=1649186467;
+        bh=X85CZobPXWulW9mgO7+FK15JdkLRqeyY4fhr5BUdygo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ScUndJsO1iIF8TZnZGyatLX8D1Sre9qw03pcugwOP94pa2shH71KCYubeRtwLcte8
-         q9RYFCVt+6ZMZu+QFNAqmtzeaZqPzTNzF+0MMe1HSjLzlKAUfQJOCwSn5IPQyvFZwA
-         Vih4e+llhlS//shafvtvaB0Z5W9Dp2d+KmN/zlOSYwX9QOC2RhLZzyzN8RTJeMrYOv
-         hpyzzA2FW6n9d9mp4bD/8vGRDgPflyQ83mZ5r+BySLJASgExrd54G46yrVdy9Ui5KN
-         DXSaIWV0SsLsQ8K4bfs044u75kf+1m/5jdjNBj+fbaDli3Pysk4GHIOYY/Jhud32+3
-         2fSg1Jk/m2S2Q==
+        b=FroQz6bZzBiDzl4/Y8m8ivQwBBM15kgJDRQkBcOis27RIWqJXdO/Up+Ja0+ps5+1G
+         lybMxpr+MB0gRbaNM9Op70KXPihW9axLWkrm04rpRfRDHuT1Mp28xgJehOxjpBPHnQ
+         vmi+J8QmBbzd5p39I7Dv75ece+Qil/41XLC4pjfDJajYKp7hAnfjbXHyRlGETbSqAt
+         LoQYbDx2D33rSSgYWZsRVZrlcKs/KF9q8kvoMHh1IDXh5+c0i1N4DIPZs4QZpHPP4g
+         a56POnYOgmaSA8+WsW93I3VRAPJV1W8n7s7nIKHB8s+g7L95PiezKBoDInvKh7JoEK
+         9Mnv85xTgyntg==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 24/59] ceph: properly set DCACHE_NOKEY_NAME flag in lookup
-Date:   Tue,  5 Apr 2022 15:19:55 -0400
-Message-Id: <20220405192030.178326-25-jlayton@kernel.org>
+Subject: [PATCH v13 38/59] libceph: add CEPH_OSD_OP_ASSERT_VER support
+Date:   Tue,  5 Apr 2022 15:20:09 -0400
+Message-Id: <20220405192030.178326-39-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,36 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is required so that we know to invalidate these dentries when the
-directory is unlocked.
+...and record the user_version in the reply in a new field in
+ceph_osd_request, so we can populate the assert_ver appropriately.
+Shuffle the fields a bit too so that the new field fits in an
+existing hole on x86_64.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/dir.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ include/linux/ceph/osd_client.h | 6 +++++-
+ include/linux/ceph/rados.h      | 4 ++++
+ net/ceph/osd_client.c           | 5 +++++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index 8cc7a49ee508..897f8618151b 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -760,6 +760,17 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
- 	if (dentry->d_name.len > NAME_MAX)
- 		return ERR_PTR(-ENAMETOOLONG);
+diff --git a/include/linux/ceph/osd_client.h b/include/linux/ceph/osd_client.h
+index 4088601beacc..8c7f34df66d3 100644
+--- a/include/linux/ceph/osd_client.h
++++ b/include/linux/ceph/osd_client.h
+@@ -196,6 +196,9 @@ struct ceph_osd_req_op {
+ 			u32 src_fadvise_flags;
+ 			struct ceph_osd_data osd_data;
+ 		} copy_from;
++		struct {
++			u64 ver;
++		} assert_ver;
+ 	};
+ };
  
-+	if (IS_ENCRYPTED(dir)) {
-+		err = __fscrypt_prepare_readdir(dir);
-+		if (err)
-+			return ERR_PTR(err);
-+		if (!fscrypt_has_encryption_key(dir)) {
-+			spin_lock(&dentry->d_lock);
-+			dentry->d_flags |= DCACHE_NOKEY_NAME;
-+			spin_unlock(&dentry->d_lock);
-+		}
-+	}
-+
- 	/* can we conclude ENOENT locally? */
- 	if (d_really_is_negative(dentry)) {
- 		struct ceph_inode_info *ci = ceph_inode(dir);
+@@ -250,6 +253,7 @@ struct ceph_osd_request {
+ 	struct ceph_osd_client *r_osdc;
+ 	struct kref       r_kref;
+ 	bool              r_mempool;
++	bool		  r_linger;           /* don't resend on failure */
+ 	struct completion r_completion;       /* private to osd_client.c */
+ 	ceph_osdc_callback_t r_callback;
+ 
+@@ -262,9 +266,9 @@ struct ceph_osd_request {
+ 	struct ceph_snap_context *r_snapc;    /* for writes */
+ 	struct timespec64 r_mtime;            /* ditto */
+ 	u64 r_data_offset;                    /* ditto */
+-	bool r_linger;                        /* don't resend on failure */
+ 
+ 	/* internal */
++	u64 r_version;			      /* data version sent in reply */
+ 	unsigned long r_stamp;                /* jiffies, send or check time */
+ 	unsigned long r_start_stamp;          /* jiffies */
+ 	ktime_t r_start_latency;              /* ktime_t */
+diff --git a/include/linux/ceph/rados.h b/include/linux/ceph/rados.h
+index 43a7a1573b51..73c3efbec36c 100644
+--- a/include/linux/ceph/rados.h
++++ b/include/linux/ceph/rados.h
+@@ -523,6 +523,10 @@ struct ceph_osd_op {
+ 		struct {
+ 			__le64 cookie;
+ 		} __attribute__ ((packed)) notify;
++		struct {
++			__le64 unused;
++			__le64 ver;
++		} __attribute__ ((packed)) assert_ver;
+ 		struct {
+ 			__le64 offset, length;
+ 			__le64 src_offset;
+diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
+index acf6a19b6677..febdd728b2fb 100644
+--- a/net/ceph/osd_client.c
++++ b/net/ceph/osd_client.c
+@@ -1042,6 +1042,10 @@ static u32 osd_req_encode_op(struct ceph_osd_op *dst,
+ 		dst->copy_from.src_fadvise_flags =
+ 			cpu_to_le32(src->copy_from.src_fadvise_flags);
+ 		break;
++	case CEPH_OSD_OP_ASSERT_VER:
++		dst->assert_ver.unused = cpu_to_le64(0);
++		dst->assert_ver.ver = cpu_to_le64(src->assert_ver.ver);
++		break;
+ 	default:
+ 		pr_err("unsupported osd opcode %s\n",
+ 			ceph_osd_op_name(src->op));
+@@ -3804,6 +3808,7 @@ static void handle_reply(struct ceph_osd *osd, struct ceph_msg *msg)
+ 	 * one (type of) reply back.
+ 	 */
+ 	WARN_ON(!(m.flags & CEPH_OSD_FLAG_ONDISK));
++	req->r_version = m.user_version;
+ 	req->r_result = m.result ?: data_len;
+ 	finish_request(req);
+ 	mutex_unlock(&osd->lock);
 -- 
 2.35.1
 

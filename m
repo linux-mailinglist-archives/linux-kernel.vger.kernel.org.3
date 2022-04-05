@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8824F3E00
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D824F3FE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384004AbiDEM0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S1388164AbiDEPUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245173AbiDEIyM (ORCPT
+        with ESMTP id S1346935AbiDEJpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:54:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693E0113E;
-        Tue,  5 Apr 2022 01:51:47 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D794235DE8;
+        Tue,  5 Apr 2022 02:32:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 076FE61504;
-        Tue,  5 Apr 2022 08:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AB3C385A0;
-        Tue,  5 Apr 2022 08:51:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 746D0B81C6E;
+        Tue,  5 Apr 2022 09:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFBAC385B3;
+        Tue,  5 Apr 2022 09:32:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148706;
-        bh=YupnqndCtkR3vV2ScBcqo7c4sEwMK9OisE3c80HtMlU=;
+        s=korg; t=1649151126;
+        bh=arK/Jdx6Jya54jloe0rN7JBuzPaeDIP9HfZ2GK9PVNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rmJn8Msne5ku2e4sftIl93YnHiHxqaS0irG+YkCYwwJiM5cgX0pz2T3tEIYPEEALA
-         wmbxmAcNLs7E/zgG8cED7rHN8o/QfLopUMofJvk083ha6Vtfprj0Ipeuy8SHMhRetg
-         j6OSuxa25ryTu2dcEA0qxfZfyEl1v0yg/lVL4b4s=
+        b=1hyV24Xrr2lIrPgUrEjtXnWvRAaP/ecRJgGSG8br5fvp5pKWa6Upsc6OGElSrtDca
+         3LXLjlo81vZpiR43AF9eMaH76w+Bv8unyoNFPu1QPISRFaX3XciGW89ncNWAj5V8+J
+         Q3sQLQj1JWGg2gomGec/UI2PBiOjaXypYzizWpWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0452/1017] mt76: mt7915: use proper aid value in mt7915_mcu_wtbl_generic_tlv in sta mode
-Date:   Tue,  5 Apr 2022 09:22:45 +0200
-Message-Id: <20220405070407.715907378@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Nishanth Menon <nm@ti.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 304/913] firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL is not defined
+Date:   Tue,  5 Apr 2022 09:22:46 +0200
+Message-Id: <20220405070348.969205213@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit a56b1b0f145ef2d6bb9312dedf3ab8558ef50a5b ]
+[ Upstream commit 043cfff99a18933fda2fb2e163daee73cc07910b ]
 
-mac80211 provides aid in vif->bss_conf.aid for sta mode and not in
-sta->aid. Fix mt7915_mcu_wtbl_generic_tlv routine using proper value for
-aid in sta mode.
+Remove an extra ";" which breaks compilation.
 
-Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 53bf2b0e4e4c ("firmware: ti_sci: Add support for getting resource with subtype")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Link: https://lore.kernel.org/r/e6c3cb793e1a6a2a0ae2528d5a5650dfe6a4b6ff.1640276505.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/soc/ti/ti_sci_protocol.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index 8215b3d79bbd..8cdf689b383e 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -1263,8 +1263,11 @@ mt7915_mcu_wtbl_generic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	generic = (struct wtbl_generic *)tlv;
+diff --git a/include/linux/soc/ti/ti_sci_protocol.h b/include/linux/soc/ti/ti_sci_protocol.h
+index 0aad7009b50e..bd0d11af76c5 100644
+--- a/include/linux/soc/ti/ti_sci_protocol.h
++++ b/include/linux/soc/ti/ti_sci_protocol.h
+@@ -645,7 +645,7 @@ devm_ti_sci_get_of_resource(const struct ti_sci_handle *handle,
  
- 	if (sta) {
-+		if (vif->type == NL80211_IFTYPE_STATION)
-+			generic->partial_aid = cpu_to_le16(vif->bss_conf.aid);
-+		else
-+			generic->partial_aid = cpu_to_le16(sta->aid);
- 		memcpy(generic->peer_addr, sta->addr, ETH_ALEN);
--		generic->partial_aid = cpu_to_le16(sta->aid);
- 		generic->muar_idx = mvif->omac_idx;
- 		generic->qos = sta->wme;
- 	} else {
+ static inline struct ti_sci_resource *
+ devm_ti_sci_get_resource(const struct ti_sci_handle *handle, struct device *dev,
+-			 u32 dev_id, u32 sub_type);
++			 u32 dev_id, u32 sub_type)
+ {
+ 	return ERR_PTR(-EINVAL);
+ }
 -- 
 2.34.1
 

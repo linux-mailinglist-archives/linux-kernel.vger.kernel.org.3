@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8B74F3593
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAEA4F31F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345326AbiDEJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S1347557AbiDEJ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239566AbiDEIUO (ORCPT
+        with ESMTP id S239570AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8E36376;
-        Tue,  5 Apr 2022 01:16:32 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072956384;
+        Tue,  5 Apr 2022 01:16:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A00A60AFB;
-        Tue,  5 Apr 2022 08:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B323C385A0;
-        Tue,  5 Apr 2022 08:16:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 983AE60AFB;
+        Tue,  5 Apr 2022 08:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82316C385A0;
+        Tue,  5 Apr 2022 08:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146591;
-        bh=R8BSE0mKHCk/KFQuqrQfNXP7Z6hcnqedSgjDwk4Zock=;
+        s=korg; t=1649146597;
+        bh=skwGjJleA6WjxDdMKnkBNDhJLVUBgPnr7tJN0zUUfos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kj/fFUFyhXzQO2OhFbVpu6RmMNi9kNUPnOTUFXXkYEYWAcoWZy3O55O83Q7atjL5Z
-         887Deh7sY+2/51MVzc+pZz5Xlh9XWPD3fbj4EzCo7Vjg7dg9b5vR7dqoMc9yC1sZYx
-         FCFfOnAaq5d5j48hBr7OEQLA4FYbcM1Zaa9SYGs0=
+        b=rERXY6cI4vcy2iob7q2RfjO0RM/VIz4caK9hpFica1Y5NOViV51GcK/w0ogzMjqvb
+         Hh9ChAwPQEYhIsPOocB9/D593yf7UxC0n1l4gmDNUMO61pvGgLgFW05fUAimr6WbXa
+         WrHxMvqm3eHbsy2ukx7Q4urywXKSmg2McYdlj7Es=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
         "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0819/1126] net: hns3: add NULL pointer check for hns3_set/get_ringparam()
-Date:   Tue,  5 Apr 2022 09:26:06 +0200
-Message-Id: <20220405070431.602796664@linuxfoundation.org>
+Subject: [PATCH 5.17 0821/1126] net: sparx5: depends on PTP_1588_CLOCK_OPTIONAL
+Date:   Tue,  5 Apr 2022 09:26:08 +0200
+Message-Id: <20220405070431.660045388@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,57 +63,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Chen <chenhao288@hisilicon.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 4d07c5936c2508ddd1cfd49b0a91d94cb4d1f0e8 ]
+[ Upstream commit 08be6b13db23f68146c600dd5adfd92e99d9ec6e ]
 
-When pci devices init failed and haven't reinit, priv->ring is
-NULL and hns3_set/get_ringparam() will access priv->ring. it
-causes call trace.
+Fix build errors when PTP_1588_CLOCK=m and SPARX5_SWTICH=y.
 
-So, add NULL pointer check for hns3_set/get_ringparam() to
-avoid this situation.
+arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.o: in function `sparx5_get_ts_info':
+sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
+arc-linux-ld: sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
+arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_init':
+sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
+arc-linux-ld: sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
+arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_deinit':
+sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
+arc-linux-ld: sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
+arc-linux-ld: sparx5_ptp.c:(.text+0xf38): undefined reference to `ptp_clock_unregister'
+arc-linux-ld: sparx5_ptp.c:(.text+0xf46): undefined reference to `ptp_clock_unregister'
+arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o:sparx5_ptp.c:(.text+0xf46): more undefined references to `ptp_clock_unregister' follow
 
-Fixes: 5668abda0931 ("net: hns3: add support for set_ringparam")
-Signed-off-by: Hao Chen <chenhao288@hisilicon.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Fixes: 3cfa11bac9bb ("net: sparx5: add the basic sparx5 driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc: UNGLinuxDriver@microchip.com
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Steen Hegelund <steen.hegelund@microchip.com>
+Cc: Bjarni Jonasson <bjarni.jonasson@microchip.com>
+Cc: Lars Povlsen <lars.povlsen@microchip.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/microchip/sparx5/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index 1f6d6faeec24..cbf36cc86803 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -651,8 +651,8 @@ static void hns3_get_ringparam(struct net_device *netdev,
- 	struct hnae3_handle *h = priv->ae_handle;
- 	int rx_queue_index = h->kinfo.num_tqps;
- 
--	if (hns3_nic_resetting(netdev)) {
--		netdev_err(netdev, "dev resetting!");
-+	if (hns3_nic_resetting(netdev) || !priv->ring) {
-+		netdev_err(netdev, "failed to get ringparam value, due to dev resetting or uninited\n");
- 		return;
- 	}
- 
-@@ -1072,8 +1072,14 @@ static int hns3_check_ringparam(struct net_device *ndev,
- {
- #define RX_BUF_LEN_2K 2048
- #define RX_BUF_LEN_4K 4096
--	if (hns3_nic_resetting(ndev))
-+
-+	struct hns3_nic_priv *priv = netdev_priv(ndev);
-+
-+	if (hns3_nic_resetting(ndev) || !priv->ring) {
-+		netdev_err(ndev, "failed to set ringparam value, due to dev resetting or uninited\n");
- 		return -EBUSY;
-+	}
-+
- 
- 	if (param->rx_mini_pending || param->rx_jumbo_pending)
- 		return -EINVAL;
+diff --git a/drivers/net/ethernet/microchip/sparx5/Kconfig b/drivers/net/ethernet/microchip/sparx5/Kconfig
+index 7bdbb2d09a14..85b24edb65d5 100644
+--- a/drivers/net/ethernet/microchip/sparx5/Kconfig
++++ b/drivers/net/ethernet/microchip/sparx5/Kconfig
+@@ -4,6 +4,7 @@ config SPARX5_SWITCH
+ 	depends on HAS_IOMEM
+ 	depends on OF
+ 	depends on ARCH_SPARX5 || COMPILE_TEST
++	depends on PTP_1588_CLOCK_OPTIONAL
+ 	select PHYLINK
+ 	select PHY_SPARX5_SERDES
+ 	select RESET_CONTROLLER
 -- 
 2.34.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E54F4513
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8524F475A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358518AbiDENJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S1348244AbiDEVJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344127AbiDEJSS (ORCPT
+        with ESMTP id S1356139AbiDEKW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D9D37A3D;
-        Tue,  5 Apr 2022 02:04:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:22:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA89B82DB;
+        Tue,  5 Apr 2022 03:06:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6756BCE1C6A;
-        Tue,  5 Apr 2022 09:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80212C385A0;
-        Tue,  5 Apr 2022 09:04:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B4D3B81BC0;
+        Tue,  5 Apr 2022 10:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698A2C385A2;
+        Tue,  5 Apr 2022 10:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149450;
-        bh=+ZIW8t4x0ThwpjfSahCA2lfR+DiLR6YdOj+9nIWr+Hs=;
+        s=korg; t=1649153201;
+        bh=Jc+JzbY33FN9h8pyG2ldw03fJ9OJVncRfFwxDY8PMaw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ngFvj4SVZePFo2voBnLWpEtmjrJ66OYxoTxVrAfvcjcR+3grYcLnE1XYMUxfhOwtp
-         u6Wjp26LNt9Tdp6Ia9RhGhXPJKvcI3iynkciRF9CPoHBO2j2kPuCbHx7r6zax+63bf
-         KNsQlj3eZruacPm5lsPCZphTRcAjE34N3LE2iWto=
+        b=cRcBN7VuWCLHl/tVwMvLnN5CXZElXBW5knDGQCY9lD23YyHSshcrlGzI+LfzoQGis
+         48khSqBAW5WL83oxXVL2J3SYVGBQqoomWtmgk9CzXCc5pQQSUWOGsaQ9pbNhLpHjpm
+         wtew+7LcKicxRGY85hFPK4N4FeVfTw1EwIZAAgE0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Subject: [PATCH 5.16 0712/1017] jfs: fix divide error in dbNextAG
-Date:   Tue,  5 Apr 2022 09:27:05 +0200
-Message-Id: <20220405070415.404810808@linuxfoundation.org>
+        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 138/599] selftests/x86: Add validity check and allow field splitting
+Date:   Tue,  5 Apr 2022 09:27:12 +0200
+Message-Id: <20220405070302.948561867@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-[ Upstream commit 2cc7cc01c15f57d056318c33705647f87dcd4aab ]
+[ Upstream commit b06e15ebd5bfb670f93c7f11a29b8299c1178bc6 ]
 
-Syzbot reported divide error in dbNextAG(). The problem was in missing
-validation check for malicious image.
+Add check to test if CC has a string. CC can have multiple sub-strings
+like "ccache gcc". Erorr pops up if it is treated as single string and
+double quotes are used around it. This can be fixed by removing the
+quotes and not treating CC as a single string.
 
-Syzbot crafted an image with bmp->db_numag equal to 0. There wasn't any
-validation checks, but dbNextAG() blindly use bmp->db_numag in divide
-expression
-
-Fix it by validating bmp->db_numag in dbMount() and return an error if
-image is malicious
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220214184109.3739179-2-usama.anjum@collabora.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jfs/jfs_dmap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/x86/check_cc.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
-index 91f4ec93dab1..d8502f4989d9 100644
---- a/fs/jfs/jfs_dmap.c
-+++ b/fs/jfs/jfs_dmap.c
-@@ -148,6 +148,7 @@ static const s8 budtab[256] = {
-  *	0	- success
-  *	-ENOMEM	- insufficient memory
-  *	-EIO	- i/o error
-+ *	-EINVAL - wrong bmap data
-  */
- int dbMount(struct inode *ipbmap)
- {
-@@ -179,6 +180,12 @@ int dbMount(struct inode *ipbmap)
- 	bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
- 	bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
- 	bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
-+	if (!bmp->db_numag) {
-+		release_metapage(mp);
-+		kfree(bmp);
-+		return -EINVAL;
-+	}
-+
- 	bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
- 	bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
- 	bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
+diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
+index 3e2089c8cf54..8c669c0d662e 100755
+--- a/tools/testing/selftests/x86/check_cc.sh
++++ b/tools/testing/selftests/x86/check_cc.sh
+@@ -7,7 +7,7 @@ CC="$1"
+ TESTPROG="$2"
+ shift 2
+ 
+-if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
++if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+     echo 1
+ else
+     echo 0
 -- 
 2.34.1
 

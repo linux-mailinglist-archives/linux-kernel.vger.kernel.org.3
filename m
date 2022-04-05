@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061334F2A13
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DB54F2D9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350596AbiDEJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S1350512AbiDEJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbiDEISi (ORCPT
+        with ESMTP id S238081AbiDEISj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:38 -0400
+        Tue, 5 Apr 2022 04:18:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23C0B8239;
-        Tue,  5 Apr 2022 01:07:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153AAB82CF;
+        Tue,  5 Apr 2022 01:08:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63FC0B81A37;
-        Tue,  5 Apr 2022 08:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4FCC385A1;
-        Tue,  5 Apr 2022 08:07:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B229B81A32;
+        Tue,  5 Apr 2022 08:08:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90069C385A0;
+        Tue,  5 Apr 2022 08:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146077;
-        bh=eJrefJQk4zVnwzJreJENCV/Yc4osiJG3XfaSFOpJCWQ=;
+        s=korg; t=1649146079;
+        bh=uwMJn5PYzXABLSp9ORl7yBZwQM2OEnkHyq08SBv7TVk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tzKlOalw9581ClKFYFT4zirB1Ss9HCrBk5DWOS999JZ0M348aeFDUzZCUqL2oxyOs
-         Jzmqv4hdhJGmM05RIV3N+CR108dABnDjxtAycfyztzJM50/z4Ty/eFCn9TJLFGZzT4
-         5C4Twzj9f/IwAXocpPx9ofziuYh/v2pOsZ16z+QY=
+        b=ICg55WZA5hf/rc9Gh63HtZU8sx/AVEcsDbuaUUQv14MOocE15FWpLOWMmka4A+PDg
+         i+2fSH6/OCwe6TdO61CwJ0Ne4lanXixx1AS1RzzcNMiqsBpeRgs8V1cxlhJvsgxCuW
+         DXZ8JRbIbo/eDlq6fo4cSg7ZPJSi0DQl0/AWfdEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0596/1126] net: dsa: realtek-smi: fix kdoc warnings
-Date:   Tue,  5 Apr 2022 09:22:23 +0200
-Message-Id: <20220405070425.128618793@linuxfoundation.org>
+Subject: [PATCH 5.17 0597/1126] net: dsa: realtek-smi: move to subdirectory
+Date:   Tue,  5 Apr 2022 09:22:24 +0200
+Message-Id: <20220405070425.158109101@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,54 +63,148 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
-[ Upstream commit 0f0c6da03ba37739901ca5db4361c1ef1ae9463f ]
-
-Removed kdoc mark for incomplete struct description.
-Added a return description for rtl8366rb_drop_untagged.
+[ Upstream commit 319a70a5fea9590e9431dd57f56191996c4787f4 ]
 
 Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/realtek-smi-core.h | 4 ++--
- drivers/net/dsa/rtl8366rb.c        | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ MAINTAINERS                                   |  3 +--
+ drivers/net/dsa/Kconfig                       | 12 +----------
+ drivers/net/dsa/Makefile                      |  3 +--
+ drivers/net/dsa/realtek/Kconfig               | 20 +++++++++++++++++++
+ drivers/net/dsa/realtek/Makefile              |  3 +++
+ .../net/dsa/{ => realtek}/realtek-smi-core.c  |  0
+ .../net/dsa/{ => realtek}/realtek-smi-core.h  |  0
+ drivers/net/dsa/{ => realtek}/rtl8365mb.c     |  0
+ drivers/net/dsa/{ => realtek}/rtl8366.c       |  0
+ drivers/net/dsa/{ => realtek}/rtl8366rb.c     |  0
+ 10 files changed, 26 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/net/dsa/realtek/Kconfig
+ create mode 100644 drivers/net/dsa/realtek/Makefile
+ rename drivers/net/dsa/{ => realtek}/realtek-smi-core.c (100%)
+ rename drivers/net/dsa/{ => realtek}/realtek-smi-core.h (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8365mb.c (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8366.c (100%)
+ rename drivers/net/dsa/{ => realtek}/rtl8366rb.c (100%)
 
-diff --git a/drivers/net/dsa/realtek-smi-core.h b/drivers/net/dsa/realtek-smi-core.h
-index 5bfa53e2480a..faed387d8db3 100644
---- a/drivers/net/dsa/realtek-smi-core.h
-+++ b/drivers/net/dsa/realtek-smi-core.h
-@@ -25,7 +25,7 @@ struct rtl8366_mib_counter {
- 	const char	*name;
- };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cd0f68d4a34a..d9b2f1731ee0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16373,8 +16373,7 @@ M:	Linus Walleij <linus.walleij@linaro.org>
+ M:	Alvin Šipraga <alsi@bang-olufsen.dk>
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
+-F:	drivers/net/dsa/realtek-smi*
+-F:	drivers/net/dsa/rtl83*
++F:	drivers/net/dsa/realtek/*
  
--/**
-+/*
-  * struct rtl8366_vlan_mc - Virtual LAN member configuration
-  */
- struct rtl8366_vlan_mc {
-@@ -74,7 +74,7 @@ struct realtek_smi {
- 	void			*chip_data; /* Per-chip extra variant data */
- };
+ REALTEK WIRELESS DRIVER (rtlwifi family)
+ M:	Ping-Ke Shih <pkshih@realtek.com>
+diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
+index 0029d279616f..37a3dabdce31 100644
+--- a/drivers/net/dsa/Kconfig
++++ b/drivers/net/dsa/Kconfig
+@@ -68,17 +68,7 @@ config NET_DSA_QCA8K
+ 	  This enables support for the Qualcomm Atheros QCA8K Ethernet
+ 	  switch chips.
  
--/**
-+/*
-  * struct realtek_smi_ops - vtable for the per-SMI-chiptype operations
-  * @detect: detects the chiptype
-  */
-diff --git a/drivers/net/dsa/rtl8366rb.c b/drivers/net/dsa/rtl8366rb.c
-index ecc19bd5115f..4f8c06d7ab3a 100644
---- a/drivers/net/dsa/rtl8366rb.c
-+++ b/drivers/net/dsa/rtl8366rb.c
-@@ -1252,6 +1252,8 @@ rtl8366rb_port_bridge_leave(struct dsa_switch *ds, int port,
-  * @smi: SMI state container
-  * @port: the port to drop untagged and C-tagged frames on
-  * @drop: whether to drop or pass untagged and C-tagged frames
-+ *
-+ * Return: zero for success, a negative number on error.
-  */
- static int rtl8366rb_drop_untagged(struct realtek_smi *smi, int port, bool drop)
- {
+-config NET_DSA_REALTEK_SMI
+-	tristate "Realtek SMI Ethernet switch family support"
+-	select NET_DSA_TAG_RTL4_A
+-	select NET_DSA_TAG_RTL8_4
+-	select FIXED_PHY
+-	select IRQ_DOMAIN
+-	select REALTEK_PHY
+-	select REGMAP
+-	help
+-	  This enables support for the Realtek SMI-based switch
+-	  chips, currently only RTL8366RB.
++source "drivers/net/dsa/realtek/Kconfig"
+ 
+ config NET_DSA_SMSC_LAN9303
+ 	tristate
+diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
+index 8da1569a34e6..e73838c12256 100644
+--- a/drivers/net/dsa/Makefile
++++ b/drivers/net/dsa/Makefile
+@@ -9,8 +9,6 @@ obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
+ obj-$(CONFIG_NET_DSA_MT7530)	+= mt7530.o
+ obj-$(CONFIG_NET_DSA_MV88E6060) += mv88e6060.o
+ obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
+-obj-$(CONFIG_NET_DSA_REALTEK_SMI) += realtek-smi.o
+-realtek-smi-objs		:= realtek-smi-core.o rtl8366.o rtl8366rb.o rtl8365mb.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303) += lan9303-core.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_I2C) += lan9303_i2c.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_MDIO) += lan9303_mdio.o
+@@ -23,5 +21,6 @@ obj-y				+= microchip/
+ obj-y				+= mv88e6xxx/
+ obj-y				+= ocelot/
+ obj-y				+= qca/
++obj-y				+= realtek/
+ obj-y				+= sja1105/
+ obj-y				+= xrs700x/
+diff --git a/drivers/net/dsa/realtek/Kconfig b/drivers/net/dsa/realtek/Kconfig
+new file mode 100644
+index 000000000000..1c62212fb0ec
+--- /dev/null
++++ b/drivers/net/dsa/realtek/Kconfig
+@@ -0,0 +1,20 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menuconfig NET_DSA_REALTEK
++	tristate "Realtek Ethernet switch family support"
++	depends on NET_DSA
++	select NET_DSA_TAG_RTL4_A
++	select NET_DSA_TAG_RTL8_4
++	select FIXED_PHY
++	select IRQ_DOMAIN
++	select REALTEK_PHY
++	select REGMAP
++	help
++	  Select to enable support for Realtek Ethernet switch chips.
++
++config NET_DSA_REALTEK_SMI
++	tristate "Realtek SMI connected switch driver"
++	depends on NET_DSA_REALTEK
++	default y
++	help
++	  Select to enable support for registering switches connected
++	  through SMI.
+diff --git a/drivers/net/dsa/realtek/Makefile b/drivers/net/dsa/realtek/Makefile
+new file mode 100644
+index 000000000000..323b921bfce0
+--- /dev/null
++++ b/drivers/net/dsa/realtek/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_NET_DSA_REALTEK_SMI) 	+= realtek-smi.o
++realtek-smi-objs			:= realtek-smi-core.o rtl8366.o rtl8366rb.o rtl8365mb.o
+diff --git a/drivers/net/dsa/realtek-smi-core.c b/drivers/net/dsa/realtek/realtek-smi-core.c
+similarity index 100%
+rename from drivers/net/dsa/realtek-smi-core.c
+rename to drivers/net/dsa/realtek/realtek-smi-core.c
+diff --git a/drivers/net/dsa/realtek-smi-core.h b/drivers/net/dsa/realtek/realtek-smi-core.h
+similarity index 100%
+rename from drivers/net/dsa/realtek-smi-core.h
+rename to drivers/net/dsa/realtek/realtek-smi-core.h
+diff --git a/drivers/net/dsa/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8365mb.c
+rename to drivers/net/dsa/realtek/rtl8365mb.c
+diff --git a/drivers/net/dsa/rtl8366.c b/drivers/net/dsa/realtek/rtl8366.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8366.c
+rename to drivers/net/dsa/realtek/rtl8366.c
+diff --git a/drivers/net/dsa/rtl8366rb.c b/drivers/net/dsa/realtek/rtl8366rb.c
+similarity index 100%
+rename from drivers/net/dsa/rtl8366rb.c
+rename to drivers/net/dsa/realtek/rtl8366rb.c
 -- 
 2.34.1
 

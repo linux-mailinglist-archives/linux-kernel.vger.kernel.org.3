@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44274F26BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDAC4F2677
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiDEH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S235450AbiDEH7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiDEHrl (ORCPT
+        with ESMTP id S233344AbiDEHrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:41 -0400
+        Tue, 5 Apr 2022 03:47:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E698BB7C4;
-        Tue,  5 Apr 2022 00:43:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8628E18348;
+        Tue,  5 Apr 2022 00:43:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1735616BF;
-        Tue,  5 Apr 2022 07:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9725C340EE;
-        Tue,  5 Apr 2022 07:43:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB703616C4;
+        Tue,  5 Apr 2022 07:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1829C34110;
+        Tue,  5 Apr 2022 07:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144626;
-        bh=PwoYvdv/B8jGc1fJpLaxWKJ5aWs33AsXDs0Dcffi23s=;
+        s=korg; t=1649144637;
+        bh=Vzkuek3OGudFGGEQmXnCuyUEkLDe9dutJWVZUZbctRc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qk5YAqJpDu78BULHfc7PtXUqhZITz+cU1uKCwrTsJzswhio/nPrj6Lzfh9GvwjxjO
-         4ygTaKIGRXPn3uthXDaQcQG9n+hEW8LKL0kpdO5R2NO9AJKe6mQ3i/LQDsuhKqRxku
-         rC9xTSuXfQSQ9UUI+90FDZPHO6UT569usRCcIn78=
+        b=uN6XLtaoKoIX5H8zgkENG5dD9EpMjuAirJVrm1kgcfKPvRtc+wlfIt4f2SDjjABXB
+         OXDaQXtY/OdM+260gA7mtftMcJ9/lIYhNkCHcFdVLp4C7H5IJGqHin29XnxL2ARaat
+         RUhtXbA69jycG2Avp7S/CWTWSfGIwcsrHAyMVmZ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>
-Subject: [PATCH 5.17 0113/1126] dm: interlock pending dm_io and dm_wait_for_bios_completion
-Date:   Tue,  5 Apr 2022 09:14:20 +0200
-Message-Id: <20220405070410.887516282@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.17 0116/1126] tracing: Have trace event string test handle zero length strings
+Date:   Tue,  5 Apr 2022 09:14:23 +0200
+Message-Id: <20220405070410.976791998@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,139 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit 9f6dc633761006f974701d4c88da71ab68670749 upstream.
+commit eca344a7362e0f34f179298fd8366bcd556eede1 upstream.
 
-Commit d208b89401e0 ("dm: fix mempool NULL pointer race when
-completing IO") didn't go far enough.
+If a trace event has in its TP_printk():
 
-When bio_end_io_acct ends the count of in-flight I/Os may reach zero
-and the DM device may be suspended. There is a possibility that the
-suspend races with dm_stats_account_io.
+ "%*.s", len, len ? __get_str(string) : NULL
 
-Fix this by adding percpu "pending_io" counters to track outstanding
-dm_io. Move kicking of suspend queue to dm_io_dec_pending(). Also,
-rename md_in_flight_bios() to dm_in_flight_bios() and update it to
-iterate all pending_io counters.
+It is perfectly valid if len is zero and passing in the NULL.
+Unfortunately, the runtime string check at time of reading the trace sees
+the NULL and flags it as a bad string and produces a WARN_ON().
 
-Fixes: d208b89401e0 ("dm: fix mempool NULL pointer race when completing IO")
+Handle this case by passing into the test function if the format has an
+asterisk (star) and if so, if the length is zero, then mark it as safe.
+
+Link: https://lore.kernel.org/all/YjsWzuw5FbWPrdqq@bfoster/
+
 Cc: stable@vger.kernel.org
-Co-developed-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Reported-by: Brian Foster <bfoster@redhat.com>
+Tested-by: Brian Foster <bfoster@redhat.com>
+Fixes: 9a6944fee68e2 ("tracing: Add a verifier to check string pointers for trace events")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-core.h |    2 ++
- drivers/md/dm.c      |   35 +++++++++++++++++++++++------------
- 2 files changed, 25 insertions(+), 12 deletions(-)
+ kernel/trace/trace.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/md/dm-core.h
-+++ b/drivers/md/dm-core.h
-@@ -65,6 +65,8 @@ struct mapped_device {
- 	struct gendisk *disk;
- 	struct dax_device *dax_dev;
- 
-+	unsigned long __percpu *pending_io;
-+
- 	/*
- 	 * A list of ios that arrived while we were suspended.
- 	 */
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -507,10 +507,6 @@ static void end_io_acct(struct mapped_de
- 		dm_stats_account_io(&md->stats, bio_data_dir(bio),
- 				    bio->bi_iter.bi_sector, bio_sectors(bio),
- 				    true, duration, stats_aux);
--
--	/* nudge anyone waiting on suspend queue */
--	if (unlikely(wq_has_sleeper(&md->wait)))
--		wake_up(&md->wait);
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3663,12 +3663,17 @@ static char *trace_iter_expand_format(st
  }
  
- static struct dm_io *alloc_io(struct mapped_device *md, struct bio *bio)
-@@ -531,6 +527,7 @@ static struct dm_io *alloc_io(struct map
- 	io->magic = DM_IO_MAGIC;
- 	io->status = 0;
- 	atomic_set(&io->io_count, 1);
-+	this_cpu_inc(*md->pending_io);
- 	io->orig_bio = bio;
- 	io->md = md;
- 	spin_lock_init(&io->endio_lock);
-@@ -828,6 +825,12 @@ void dm_io_dec_pending(struct dm_io *io,
- 		stats_aux = io->stats_aux;
- 		free_io(md, io);
- 		end_io_acct(md, bio, start_time, &stats_aux);
-+		smp_wmb();
-+		this_cpu_dec(*md->pending_io);
-+
-+		/* nudge anyone waiting on suspend queue */
-+		if (unlikely(wq_has_sleeper(&md->wait)))
-+			wake_up(&md->wait);
- 
- 		if (io_error == BLK_STS_DM_REQUEUE)
- 			return;
-@@ -1622,6 +1625,11 @@ static void cleanup_mapped_device(struct
- 		blk_cleanup_disk(md->disk);
- 	}
- 
-+	if (md->pending_io) {
-+		free_percpu(md->pending_io);
-+		md->pending_io = NULL;
-+	}
-+
- 	cleanup_srcu_struct(&md->io_barrier);
- 
- 	mutex_destroy(&md->suspend_lock);
-@@ -1723,6 +1731,10 @@ static struct mapped_device *alloc_dev(i
- 	if (!md->wq)
- 		goto bad;
- 
-+	md->pending_io = alloc_percpu(unsigned long);
-+	if (!md->pending_io)
-+		goto bad;
-+
- 	dm_stats_init(&md->stats);
- 
- 	/* Populate the mapping, nobody knows we exist yet */
-@@ -2130,16 +2142,13 @@ void dm_put(struct mapped_device *md)
- }
- EXPORT_SYMBOL_GPL(dm_put);
- 
--static bool md_in_flight_bios(struct mapped_device *md)
-+static bool dm_in_flight_bios(struct mapped_device *md)
+ /* Returns true if the string is safe to dereference from an event */
+-static bool trace_safe_str(struct trace_iterator *iter, const char *str)
++static bool trace_safe_str(struct trace_iterator *iter, const char *str,
++			   bool star, int len)
  {
- 	int cpu;
--	struct block_device *part = dm_disk(md)->part0;
--	long sum = 0;
-+	unsigned long sum = 0;
+ 	unsigned long addr = (unsigned long)str;
+ 	struct trace_event *trace_event;
+ 	struct trace_event_call *event;
  
--	for_each_possible_cpu(cpu) {
--		sum += part_stat_local_read_cpu(part, in_flight[0], cpu);
--		sum += part_stat_local_read_cpu(part, in_flight[1], cpu);
--	}
-+	for_each_possible_cpu(cpu)
-+		sum += *per_cpu_ptr(md->pending_io, cpu);
- 
- 	return sum != 0;
- }
-@@ -2152,7 +2161,7 @@ static int dm_wait_for_bios_completion(s
- 	while (true) {
- 		prepare_to_wait(&md->wait, &wait, task_state);
- 
--		if (!md_in_flight_bios(md))
-+		if (!dm_in_flight_bios(md))
- 			break;
- 
- 		if (signal_pending_state(task_state, current)) {
-@@ -2164,6 +2173,8 @@ static int dm_wait_for_bios_completion(s
- 	}
- 	finish_wait(&md->wait, &wait);
- 
-+	smp_rmb();
++	/* Ignore strings with no length */
++	if (star && !len)
++		return true;
 +
- 	return r;
- }
- 
+ 	/* OK if part of the event data */
+ 	if ((addr >= (unsigned long)iter->ent) &&
+ 	    (addr < (unsigned long)iter->ent + iter->ent_size))
+@@ -3854,7 +3859,7 @@ void trace_check_vprintf(struct trace_it
+ 		 * instead. See samples/trace_events/trace-events-sample.h
+ 		 * for reference.
+ 		 */
+-		if (WARN_ONCE(!trace_safe_str(iter, str),
++		if (WARN_ONCE(!trace_safe_str(iter, str, star, len),
+ 			      "fmt: '%s' current_buffer: '%s'",
+ 			      fmt, show_buffer(&iter->seq))) {
+ 			int ret;
 
 

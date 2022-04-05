@@ -2,118 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FA44F427A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EBD4F3F37
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiDEURV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S239529AbiDETzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384276AbiDEPOy (ORCPT
+        with ESMTP id S1386953AbiDEPQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:14:54 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18320F58
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:29:17 -0700 (PDT)
-Received: from [192.168.137.80] (unknown [182.2.74.86])
-        by gnuweeb.org (Postfix) with ESMTPSA id 817617E342;
-        Tue,  5 Apr 2022 13:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1649165356;
-        bh=uhjmyqCr5OwOhwtddzDczmaKyd1OpK7B0pVdY6yUzsU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Xv/VvDq1G5l3g+F4JGca9f8EyByl27s/3e+PX1uX1km0gUENZt8pBz9XjfERXQJ4h
-         Pp0ipO6MfXvr9NL94dhv6mGiAlV0ocA6NLUH6uPKfBwiRy5Tf00a475qYPhglDEiJW
-         8xGBDRVOQLRCiv4UAZMLnZCwzpS/204A0zEz9Q0QGGxx+iqM3v+yTyxOrh6OAN9145
-         y9g/HsPoH3+9qAhlQn7dSJ+5zFJzcVqcGkrDkjmCraDoBnaJYqTQacmQpUE/2maBJ/
-         s8fXummwbYsvgENLZEkY7FQR/wEz7NOYhM/FfexN56gSHS9m6DxbPyIddEzuzifoab
-         xR52iQQyA0bEw==
-Message-ID: <df464935-9743-0f4c-1edb-e0204bab938e@gnuweeb.org>
-Date:   Tue, 5 Apr 2022 20:29:08 +0700
+        Tue, 5 Apr 2022 11:16:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6760682333;
+        Tue,  5 Apr 2022 06:33:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1205B81C6E;
+        Tue,  5 Apr 2022 13:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331FFC385A4;
+        Tue,  5 Apr 2022 13:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649165600;
+        bh=CBA2EAefza7sewFFjIzIq1z2XKbUW8pjGadNcSBPGto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H2G1wKcKFDPYZULBTu+9yrvlg6EOforRHsWSf+0zypgQ6tkuCbI9ZUGGfT6iT47ci
+         N/1V6LofCZLdmVERDu1rgsLQF6VO31znqXcDRODYDKG8NlioxCVLxFL/7AG1pe6k/6
+         PUExOebafCkZo14vPKGWvidkW/+1Pb6uAQDzJJGg=
+Date:   Tue, 5 Apr 2022 15:33:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zack Rusin <zackr@vmware.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ilya Trukhanov <lahvuun@gmail.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Jones <pjones@redhat.com>
+Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
+ if a FB is already registered"
+Message-ID: <YkxFHUdm/YeiVY+D@kroah.com>
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-19-daniel.vetter@ffwll.ch>
+ <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
+ <Ykv/k/WoVemoCJJA@phenom.ffwll.local>
+ <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
+ <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com>
+ <CAKMK7uHf6H8mhSm6eDHUruWK5Xc2cSPkJUX6v-jpeQfjS19dKw@mail.gmail.com>
+ <e124af06-4f24-277a-543a-82b383f48cea@redhat.com>
+ <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
+ <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Linux 5.18-rc1] WARNING: CPU: 1 PID: 0 at
- kernel/sched/fair.c:3355 update_blocked_averages
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <b86541ea-7d96-5a24-1b65-37c24c70d3ff@gnuweeb.org>
- <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 7:21 PM, Dietmar Eggemann wrote:
-> Maybe you could split the SCHED_WARN_ON so we know which signal causes this?
+On Tue, Apr 05, 2022 at 03:24:40PM +0200, Geert Uytterhoeven wrote:
+> Hi Daniel,
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299d67ab..0d45e09e5bfc 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -3350,9 +3350,9 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq
-> *cfs_rq)
->           * Make sure that rounding and/or propagation of PELT values never
->           * break this.
->           */
-> -       SCHED_WARN_ON(cfs_rq->avg.load_avg ||
-> -                     cfs_rq->avg.util_avg ||
-> -                     cfs_rq->avg.runnable_avg);
-> +       SCHED_WARN_ON(cfs_rq->avg.load_avg);
-> +       SCHED_WARN_ON(cfs_rq->avg.util_avg);
-> +       SCHED_WARN_ON(cfs_rq->avg.runnable_avg);
+> On Tue, Apr 5, 2022 at 1:48 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > On Tue, 5 Apr 2022 at 11:52, Javier Martinez Canillas
+> > <javierm@redhat.com> wrote:
+> > > On 4/5/22 11:24, Daniel Vetter wrote:
+> > > > On Tue, 5 Apr 2022 at 11:19, Javier Martinez Canillas
+> > > >> This is how I think that work, please let me know if you see something
+> > > >> wrong in my logic:
+> > > >>
+> > > >> 1) A PCI device of OF device is registered for the GPU, this attempt to
+> > > >>    match a registered driver but no driver was registered that match yet.
+> > > >>
+> > > >> 2) The efifb driver is built-in, will be initialized according to the link
+> > > >>    order of the objects under drivers/video and the fbdev driver is registered.
+> > > >>
+> > > >>    There is no platform device or PCI/OF device registered that matches.
+> > > >>
+> > > >> 3) The DRM driver is built-in, will be initialized according to the link
+> > > >>    order of the objects under drivers/gpu and the DRM driver is registered.
+> > > >>
+> > > >>    This matches the device registered in (1) and the DRM driver probes.
+> > > >>
+> > > >> 4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
+> > > >>    before registering the DRM device.
+> > > >>
+> > > >>    There are no conflicting drivers or platform device at this point.
+> > > >>
+> > > >> 5) Latter at some point the drivers/firmware/sysfb.c init function is
+> > > >>    executed, and this registers a platform device for the generic fb.
+> > > >>
+> > > >>    This device matches the efifb driver registered in (2) and the fbdev
+> > > >>    driver probes.
+> > > >>
+> > > >>    Since that happens *after* the DRM driver already matched, probed
+> > > >>    and registered the DRM device, that is a bug and what the reverted
+> > > >>    patch worked around.
+> > > >>
+> > > >> So we need to prevent (5) if (1) and (3) already happened. Having a flag
+> > > >> set in the fbdev core somewhere when remove_conflicting_framebuffers()
+> > > >> is called could be a solution indeed.
+> > > >>
+> > > >> That is, the fbdev core needs to know that a DRM driver already probed
+> > > >> and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
+> > > >>
+> > > >> I can attempt to write a patch for that.
+> > > >
+> > > > Ah yeah that could be an issue. I think the right fix is to replace
+> > > > the platform dev unregister with a sysfb_unregister() function in
+> > > > sysfb.c, which is synced with a common lock with the sysfb_init
+> > > > function and a small boolean. I think I can type that up quickly for
+> > > > v3.
+> > >
+> > > It's more complicated than that since sysfb is just *one* of the several
+> > > places where platform devices can be registered for video devices.
+> > >
+> > > For instance, the vga16fb driver registers its own platform device in
+> > > its module_init() function so that can also happen after the conflicting
+> > > framebuffers (and associated devices) were removed by a DRM driver probe.
+> > >
+> > > I tried to minimize the issue for that particular driver with commit:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0499f419b76f
+> > >
+> > > But the point stands, it all boils down to the fact that you have two
+> > > different subsystems registering video drivers and they don't know all
+> > > about each other to take a proper decision.
+> > >
+> > > Right now the drm_aperture_remove_conflicting_framebuffers() call signals
+> > > in one direction from DRM to fbdev but there isn't a communication in the
+> > > other direction, from fbdev to DRM.
+> > >
+> > > I believe the correct fix would be for the fbdev core to keep a list of
+> > > the apertures struct that are passed to remove_conflicting_framebuffers(),
+> > > that way it will know what apertures are not available anymore and prevent
+> > > to register any fbdev framebuffer that conflicts with one already present.
+> >
+> > Hm that still feels like reinventing a driver model, badly.
+> >
+> > I think there's two cleaner solutions:
+> > - move all the firmware driver platform_dev into sysfb.c, and then
+> > just bind the special cases against that (e.g. offb, vga16fb and all
+> > these). Then we'd have one sysfb_try_unregister(struct device *dev)
+> > interface that fbmem.c uses.
+> > - let fbmem.c call into each of these firmware device providers, which
+> > means some loops most likely (like we can't call into vga16fb), so
+> > probably need to move that into fbmem.c and it all gets a bit messy.
+> >
+> > > Let me know if you think that makes sense and I can attempt to write a fix.
+> >
+> > I still think unregistering the platform_dev properly makes the most
 > 
->          return true;
->   }
+> That doesn't sound very driver-model-aware to me. The device is what
+> the driver binds to; it does not cease to exist.
 
-error: corrupt patch at line 6
+I agree, that sounds odd.
 
-Trivial enough, fixed it. Compiling now...
+The device should always stick around (as the bus creates it), it's up
+to the driver to bind to the device as needed.
 
-ammarfaizi2@integral2:~/work/linux.work$ git log -n1
-commit 3123109284176b1532874591f7c81f3837bbdc17 (HEAD -> master, tag: v5.18-rc1, @torvalds/linux/master)
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun Apr 3 14:08:21 2022 -0700
+> > sense, and feels like the most proper linux device model solution
+> > instead of hacks on top - if the firmware fb is unuseable because a
+> > native driver has taken over, we should nuke that. And also the
+> > firmware fb driver would then just bind to that platform_dev if it
+> > exists, and only if it exists. Also I think it should be the
+> > responsibility of whichever piece of code that registers these
+> > platform devices to ensure that platform_dev actually still exists.
+> > That's why I think pushing all that code into sysfb.c is probably the
+> > cleanest solution.
+> 
+> Can't you unbind the generic driver first, and bind the specific driver
+> afterwards? Alike writing to sysfs unbind/driver_override/bind,
+> but from code?
 
-     Linux 5.18-rc1
-ammarfaizi2@integral2:~/work/linux.work$ git diff
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4bd299d67ab..0d45e09e5bfc 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3350,9 +3350,9 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-  	 * Make sure that rounding and/or propagation of PELT values never
-  	 * break this.
-  	 */
--	SCHED_WARN_ON(cfs_rq->avg.load_avg ||
--		      cfs_rq->avg.util_avg ||
--		      cfs_rq->avg.runnable_avg);
-+	SCHED_WARN_ON(cfs_rq->avg.load_avg);
-+	SCHED_WARN_ON(cfs_rq->avg.util_avg);
-+	SCHED_WARN_ON(cfs_rq->avg.runnable_avg);
-  
-  	return true;
-  }
-ammarfaizi2@integral2:~/work/linux.work$
+That too feels odd, what is so special about the fbdev code that the
+normal driver functions do not work for them?  It shouldn't matter if
+multiple subsystems register video devices, why can't we handle more
+than one fb device?
 
--- 
-Ammar Faizi
+thanks,
+
+greg k-h

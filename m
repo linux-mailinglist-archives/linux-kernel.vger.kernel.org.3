@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720C24F4D7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02D34F4B9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiDEXng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S1575346AbiDEXDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445342AbiDEPmv (ORCPT
+        with ESMTP id S1445942AbiDEPnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:42:51 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705A717E05;
-        Tue,  5 Apr 2022 07:08:33 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Tue, 5 Apr 2022 11:43:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2CF194819;
+        Tue,  5 Apr 2022 07:10:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E473822247;
-        Tue,  5 Apr 2022 16:08:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649167711;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 372BAB81C9B;
+        Tue,  5 Apr 2022 14:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8CFC385A6;
+        Tue,  5 Apr 2022 14:10:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OqzFRuQw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649167820;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6+1BpQJhWpIwzeox1bohwEoCNti4GjMewSwLvafwXw=;
-        b=FjoEbM8+1cMTX7ixD4Mw3f9fWtrhCqWB0k1AAf2hdMX7f6oCWMT1wXPAY4BKHa7SJ2Uefh
-        nRiJDlkMvxeECN0Hz+B+LZR9gyrz/dw/HfgISScMlZbgJrgFBhpSvJfVcPMr+lyrzY+sRR
-        5CsvQ+iUunnCwjuq9CnFA29BcFB2G4c=
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KY5AEKEkClJXCIcB/dp2K6YipiPmN6Pkkmc24/xM1sc=;
+        b=OqzFRuQwwJQY39ID/slPUumYo6AOavy60E9Jx/PhGjvSpalfA9QaWfYovGjvouaDvLKbcc
+        8Y9+iNUVaOEas6EsxLIxTQa2xEvq7DfBph6PJoYhE49AnrjBdLnH+SW111QD2coIaLxXyo
+        nuigC41yGXliUAzBh0XPKdNA1zzrexA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 61798ffe (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 5 Apr 2022 14:10:20 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        torvalds@linux-foundation.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] random: opportunistically initialize on /dev/urandom reads
+Date:   Tue,  5 Apr 2022 16:09:06 +0200
+Message-Id: <20220405140906.222350-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-Date:   Tue, 05 Apr 2022 16:08:30 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Codrin.Ciubotariu@microchip.com
-Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu.Beznea@microchip.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: at91: use dma safe buffers
-In-Reply-To: <74494dda-e0cd-aa73-7e58-e4359c1ba292@microchip.com>
-References: <20220303161724.3324948-1-michael@walle.cc>
- <46e1be55-9377-75b7-634d-9eadbebc98d7@microchip.com>
- <bc32f1107786ebcbfb4952e1a6142304@walle.cc>
- <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
- <27f124c9adaf8a4fbdfb7a38456c4a2e@walle.cc>
- <74494dda-e0cd-aa73-7e58-e4359c1ba292@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9e715ed06a28165446e29483cca7e3d0@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-05 15:58, schrieb Codrin.Ciubotariu@microchip.com:
-> On 05.04.2022 14:09, Michael Walle wrote:
->> Am 2022-04-05 12:02, schrieb Codrin.Ciubotariu@microchip.com:
->>> On 05.04.2022 12:38, Michael Walle wrote:
->>>> Am 2022-04-05 11:23, schrieb Codrin.Ciubotariu@microchip.com:
->>>>>> +       if (dev->use_dma) {
->>>>>> +               dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
->>>>> 
->>>>> If you want, you could just dev->buf = i2c_get_dma_safe...
->>>> 
->>>> But where is the error handling in that case? dev->buf will
->>>> be NULL, which is eventually passed to dma_map_single().
->>>> 
->>>> Also, I need the dma_buf for the i2c_put_dma_safe_msg_buf()
->>>> call anyway, because dev->buf will be modified during
->>>> processing.
->>> 
->>> You still:
->>>       if (!dev->buf) {
->>>               ret = -ENOMEM;
->>>               goto out;
->>>       }
->>> 
->>> So, at91_do_twi_transfer()/dma_map_single() will not be called.
->> 
->> Ahh, I misunderstood you. Yes, but as I said, I need the dma_buf
->> temporary variable anyway, because dev->buf is modified, eg. see
->> at91_twi_read_data_dma_callback().
-> at91_twi_read_data_dma_callback() is called as callback if
-> dma_async_issue_pending(dma->chan_rx) is called.
-> dma_async_issue_pending(dma->chan_rx) is called on
-> at91_twi_read_data_dma(), which is called in at91_do_twi_transfer(),
-> which we decided above to skip in case of error.
+In 6f98a4bfee72 ("random: block in /dev/urandom"), we tried to make a
+successful try_to_generate_entropy() call *required* if the RNG was not
+already initialized. Unfortunately, weird architectures and old
+userspaces combined in TCG test harnesses, making that change still not
+realistic, so it was reverted in 0313bc278dac ("Revert "random: block in
+/dev/urandom"").
 
-It is not about errors, you need the exact same pointer you
-got from i2c_get_dma_safe_msg_buf() to be passed to
-i2c_put_dma_safe_msg_buf(). And because (in some cases, it
-isn't really obvious) the dev->buf will be advanced a few
-bytes, I cannot pass dev->buf to i2c_put_dma_safe_msg_buf().
+However, rather than making a successful try_to_generate_entropy() call
+*required*, we can instead make it *best-effort*.
 
--michael
+If try_to_generate_entropy() fails, it fails, and nothing changes from
+the current behavior. If it succeeds, then /dev/urandom becomes safe to
+use for free. This way, we don't risk the regression potential that led
+to us reverting the required-try_to_generate_entropy() call before.
+
+Practically speaking, this means that at least on x86, /dev/urandom
+becomes safe. Probably other architectures with working cycle counters
+will also become safe. And architectures with slow or broken cycle
+counters at least won't be affected at all by this change.
+
+So it may not be the glorious "all things are unified!" change we were
+hoping for initially, but practically speaking, it makes a positive
+impact.
+
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index ee3ad2ba0942..388025d6d38d 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1534,6 +1534,13 @@ static ssize_t urandom_read(struct file *file, char __user *buf, size_t nbytes,
+ {
+ 	static int maxwarn = 10;
+ 
++	/*
++	 * Opportunistically attempt to initialize the RNG on platforms that
++	 * have fast cycle counters, but don't (for now) require it to succeed.
++	 */
++	if (!crng_ready())
++		try_to_generate_entropy();
++
+ 	if (!crng_ready() && maxwarn > 0) {
+ 		maxwarn--;
+ 		if (__ratelimit(&urandom_warning))
+-- 
+2.35.1
+

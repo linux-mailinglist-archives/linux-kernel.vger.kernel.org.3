@@ -2,94 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EED44F479E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A964F4753
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351004AbiDEVO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S1344168AbiDEVIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443712AbiDEPkL (ORCPT
+        with ESMTP id S1443877AbiDEPkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F0E18500D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 568556190C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C5BC385A4;
-        Tue,  5 Apr 2022 13:58:16 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 06/10] drivers/usb: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-Date:   Tue,  5 Apr 2022 14:57:54 +0100
-Message-Id: <20220405135758.774016-7-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220405135758.774016-1-catalin.marinas@arm.com>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
+        Tue, 5 Apr 2022 11:40:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856BF11D78E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UbTGWkO/rEjN35uuRu4kiIpkbVTt6nafNn/HUzlDHhs=; b=V4uwaUUhdLmPfn7O0b8gxkizRD
+        9ryrp6BgwX9pHnZyCJv8NE92yTA1lDTfgop4tL/t2QiDtXsgGdlKLAj6F8rfLcId0Io74OpqmpTui
+        1nZ15Wvi992swXhXh/vm8zWx5bmPQGcfCqmU/gqMTRbn3lxF5zxrpKlTKHKzwJEqdGnkfQp3h5UqH
+        KfOcBmnMDHX49zoe1jWo/1rRBoxCI299xCSvK3NOaM0ajQoCqwYPf8LfBOL0cmsPpVIIAVwkd2e4d
+        4E06VTxtZm6w8wD/lWkcgQwQFwmtDO8CavjnZsiWoAbfh84iu0azI5F5keJPCCdP7n7zJJQnNvWgI
+        FyzgT5cg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbjkE-006lpZ-BO; Tue, 05 Apr 2022 14:01:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E50B33001EA;
+        Tue,  5 Apr 2022 16:01:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CAC2A30C28E79; Tue,  5 Apr 2022 16:01:15 +0200 (CEST)
+Date:   Tue, 5 Apr 2022 16:01:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>, mbenes@suse.cz,
+        x86@kernel.org
+Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
+ __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
+ vlv_allow_gt_wake.cold+0x0
+Message-ID: <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
+References: <202204041241.Hw855BWm-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204041241.Hw855BWm-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
-operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
-alignment.
+On Mon, Apr 04, 2022 at 12:33:19PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   3123109284176b1532874591f7c81f3837bbdc17
+> commit: d31ed5d767c0452b4f49846d80a0bfeafa3a4ded kbuild: Fixup the IBT kbuild changes
+> date:   12 days ago
+> config: x86_64-randconfig-a011-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041241.Hw855BWm-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31ed5d767c0452b4f49846d80a0bfeafa3a4ded
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout d31ed5d767c0452b4f49846d80a0bfeafa3a4ded
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR: vlv_allow_gt_wake.cold+0x0
+>    drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: gen6_alloc_va_range.cold()+0x1c6: relocation to !ENDBR: i915_vma_unpin.cold+0x0
+> >> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: fence_update.cold()+0x14a: relocation to !ENDBR: i915_vma_revoke_fence.cold+0x0
+>    drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: eb_move_to_gpu.cold()+0x52: relocation to !ENDBR: i915_reset_gen7_sol_offsets.cold+0x0
+> >> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: __i915_gem_object_release_mmap_gtt.cold()+0xce: relocation to !ENDBR: i915_gem_mmap.cold+0x0
+>    drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: i915_ttm_io_mem_pfn.cold()+0x52: relocation to !ENDBR: i915_ttm_delayed_free.cold+0x0
+> >> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: ttm_vm_close.cold()+0x52: relocation to !ENDBR: ttm_vm_open.cold+0x0
+>    drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: ttm_vm_open.cold()+0x52: relocation to !ENDBR: i915_ttm_shrinker_release_pages.cold+0x0
 
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/buffer.c  | 8 ++++----
- drivers/usb/misc/usbtest.c | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Subject: objtool/ibt: Allow _THIS_IP_ at: sym+len
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue Apr  5 15:54:41 CEST 2022
 
-diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-index fbb087b728dc..e21d8d106977 100644
---- a/drivers/usb/core/buffer.c
-+++ b/drivers/usb/core/buffer.c
-@@ -34,13 +34,13 @@ void __init usb_init_pool_max(void)
+0day robot reported:
+
+  drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR: vlv_allow_gt_wake.cold+0x0
+
+Which turns out to be GCC placing a _THIS_IP_ past the end of the
+function:
+
+0000000000001d00 <__intel_wait_for_register_fw.cold>:
+    ...
+    1dce:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        1dd1: R_X86_64_32S      .text.unlikely+0x1df8
+    1dd5:       e8 00 00 00 00          call   1dda <__intel_wait_for_register_fw.cold+0xda>    1dd6: R_X86_64_PLT32    __trace_bprintk-0x4
+    ...
+    1df6:       0f 0b                   ud2
+
+Add an exception for this one weird case...
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ tools/objtool/check.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3198,6 +3198,8 @@ static void warn_noendbr(const char *msg
+ static void validate_ibt_dest(struct objtool_file *file, struct instruction *insn,
+ 			      struct instruction *dest)
  {
- 	/*
- 	 * The pool_max values must never be smaller than
--	 * ARCH_KMALLOC_MINALIGN.
-+	 * ARCH_DMA_MINALIGN.
- 	 */
--	if (ARCH_KMALLOC_MINALIGN <= 32)
-+	if (ARCH_DMA_MINALIGN <= 32)
- 		;			/* Original value is okay */
--	else if (ARCH_KMALLOC_MINALIGN <= 64)
-+	else if (ARCH_DMA_MINALIGN <= 64)
- 		pool_max[0] = 64;
--	else if (ARCH_KMALLOC_MINALIGN <= 128)
-+	else if (ARCH_DMA_MINALIGN <= 128)
- 		pool_max[0] = 0;	/* Don't use this pool */
- 	else
- 		BUILD_BUG();		/* We don't allow this */
-diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-index 150090ee4ec1..e13f7f6904ff 100644
---- a/drivers/usb/misc/usbtest.c
-+++ b/drivers/usb/misc/usbtest.c
-@@ -378,7 +378,7 @@ static void simple_fill_buf(struct urb *urb)
++	struct instruction *last, *next;
++
+ 	if (dest->func && dest->func == insn->func) {
+ 		/*
+ 		 * Anything from->to self is either _THIS_IP_ or IRET-to-self.
+@@ -3217,6 +3219,21 @@ static void validate_ibt_dest(struct obj
+ 	if (dest->noendbr)
+ 		return;
  
- static inline unsigned long buffer_offset(void *buf)
- {
--	return (unsigned long)buf & (ARCH_KMALLOC_MINALIGN - 1);
-+	return (unsigned long)buf & (ARCH_DMA_MINALIGN - 1);
++	/*
++	 * Occasionally, when the last instruction of the function is UD2, GCC
++	 * manages to generate a text reference to the instruction after it.
++	 */
++	last = next = insn;
++	for (;;) {
++		next = next_insn_same_sec(file, next);
++		if (!next || next->func != insn->func)
++			break;
++		last = next;
++	}
++	if (last->type == INSN_BUG &&
++	    last->offset + last->len == dest->offset)
++		return;
++
+ 	warn_noendbr("", insn->sec, insn->offset, dest);
  }
  
- static int check_guard_bytes(struct usbtest_dev *tdev, struct urb *urb)

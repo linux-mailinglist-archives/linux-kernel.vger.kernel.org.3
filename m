@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7407E4F51B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885854F50AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846933AbiDFCLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S1842936AbiDFBf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349430AbiDEJtv (ORCPT
+        with ESMTP id S1349434AbiDEJtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A572409D;
-        Tue,  5 Apr 2022 02:45:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C1325E97;
+        Tue,  5 Apr 2022 02:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50C89B81B76;
-        Tue,  5 Apr 2022 09:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90ACC385A1;
-        Tue,  5 Apr 2022 09:45:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BF39B817D3;
+        Tue,  5 Apr 2022 09:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DC3C385A1;
+        Tue,  5 Apr 2022 09:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151940;
-        bh=Zm16Ec5+JkAfJ2RL/XU+XJwcSvtoRmxywngEqyH/NpE=;
+        s=korg; t=1649151951;
+        bh=KoGQ+0vWP49KzgTOCU/ifdDn7F7KOjvEzSHR2vQTS+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NSw8/yY+GlA0vPyA/82T8KRlG22ljoiWskhLl/w/6mv+e21BgrEng/1kniJsExqGM
-         NjmDxlV2pbV71bqP4qse1cy4VRd9tlID1mUNlE6VIpaRsjqgIZetRqWb81x8pxO7oN
-         Jvbn8kC2AQchLfLs8Jy1fiplaObuf72J8QUECAzM=
+        b=x1MuDJkYW2q1tpPdxP80e5zm+yMzAGsnLMqxHyCWRBgCiKeIxkabFV2mPxeSI4quT
+         wyM8AoZ3KnetI3YQJpsgyCjZYlg/Pr2Q5Sl1Eb+hI1QbSfqanODojO1aKcIYeXxyGy
+         x7tYMH7o5EM0htBmYQVbHoJP1LLj2L7/tV5UoNRM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 596/913] pinctrl: renesas: checker: Fix miscalculation of number of states
-Date:   Tue,  5 Apr 2022 09:27:38 +0200
-Message-Id: <20220405070357.706973595@linuxfoundation.org>
+Subject: [PATCH 5.15 600/913] serial: 8250_mid: Balance reference count for PCI DMA device
+Date:   Tue,  5 Apr 2022 09:27:42 +0200
+Message-Id: <20220405070357.827072214@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,49 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit de9b861018d46af27a5edff8b6baef35c0c0ad4f ]
+[ Upstream commit 67ec6dd0b257bd81b4e9fcac89b29da72f6265e5 ]
 
-The checker failed to validate all enum IDs in the description of a
-register with fixed-width register fields, due to a miscalculation of
-the number of described states: each register field of n bits can have
-"1 << n" possible states, not "1".
+The pci_get_slot() increases its reference count, the caller
+must decrement the reference count by calling pci_dev_put().
 
-Increase SH_PFC_MAX_ENUMS accordingly, now more enum IDs are checked
-(SH-Mobile AG5 has more than 4000 enum IDs defined).
-
-Fixes: 12d057bad683b1c6 ("pinctrl: sh-pfc: checker: Add check for enum ID conflicts")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/6d8a6a05564f38f9d20464c1c17f96e52740cf6a.1645460429.git.geert+renesas@glider.be
+Fixes: 90b9aacf912a ("serial: 8250_pci: add Intel Tangier support")
+Fixes: f549e94effa1 ("serial: 8250_pci: add Intel Penwell ports")
+Reported-by: Qing Wang <wangqing@vivo.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Depends-on: d9eda9bab237 ("serial: 8250_pci: Intel MID UART support to its own driver")
+Link: https://lore.kernel.org/r/20220215100920.41984-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/renesas/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_mid.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
-index f29130957e49..bc17f3131de5 100644
---- a/drivers/pinctrl/renesas/core.c
-+++ b/drivers/pinctrl/renesas/core.c
-@@ -739,7 +739,7 @@ static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
+diff --git a/drivers/tty/serial/8250/8250_mid.c b/drivers/tty/serial/8250/8250_mid.c
+index efa0515139f8..e6c1791609dd 100644
+--- a/drivers/tty/serial/8250/8250_mid.c
++++ b/drivers/tty/serial/8250/8250_mid.c
+@@ -73,6 +73,11 @@ static int pnw_setup(struct mid8250 *mid, struct uart_port *p)
+ 	return 0;
+ }
  
- #ifdef DEBUG
- #define SH_PFC_MAX_REGS		300
--#define SH_PFC_MAX_ENUMS	3000
-+#define SH_PFC_MAX_ENUMS	5000
++static void pnw_exit(struct mid8250 *mid)
++{
++	pci_dev_put(mid->dma_dev);
++}
++
+ static int tng_handle_irq(struct uart_port *p)
+ {
+ 	struct mid8250 *mid = p->private_data;
+@@ -124,6 +129,11 @@ static int tng_setup(struct mid8250 *mid, struct uart_port *p)
+ 	return 0;
+ }
  
- static unsigned int sh_pfc_errors __initdata = 0;
- static unsigned int sh_pfc_warnings __initdata = 0;
-@@ -851,7 +851,8 @@ static void __init sh_pfc_check_cfg_reg(const char *drvname,
- 	sh_pfc_check_reg(drvname, cfg_reg->reg);
++static void tng_exit(struct mid8250 *mid)
++{
++	pci_dev_put(mid->dma_dev);
++}
++
+ static int dnv_handle_irq(struct uart_port *p)
+ {
+ 	struct mid8250 *mid = p->private_data;
+@@ -330,9 +340,9 @@ static int mid8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  
- 	if (cfg_reg->field_width) {
--		n = cfg_reg->reg_width / cfg_reg->field_width;
-+		fw = cfg_reg->field_width;
-+		n = (cfg_reg->reg_width / fw) << fw;
- 		/* Skip field checks (done at build time) */
- 		goto check_enum_ids;
- 	}
+ 	pci_set_drvdata(pdev, mid);
+ 	return 0;
++
+ err:
+-	if (mid->board->exit)
+-		mid->board->exit(mid);
++	mid->board->exit(mid);
+ 	return ret;
+ }
+ 
+@@ -342,8 +352,7 @@ static void mid8250_remove(struct pci_dev *pdev)
+ 
+ 	serial8250_unregister_port(mid->line);
+ 
+-	if (mid->board->exit)
+-		mid->board->exit(mid);
++	mid->board->exit(mid);
+ }
+ 
+ static const struct mid8250_board pnw_board = {
+@@ -351,6 +360,7 @@ static const struct mid8250_board pnw_board = {
+ 	.freq = 50000000,
+ 	.base_baud = 115200,
+ 	.setup = pnw_setup,
++	.exit = pnw_exit,
+ };
+ 
+ static const struct mid8250_board tng_board = {
+@@ -358,6 +368,7 @@ static const struct mid8250_board tng_board = {
+ 	.freq = 38400000,
+ 	.base_baud = 1843200,
+ 	.setup = tng_setup,
++	.exit = tng_exit,
+ };
+ 
+ static const struct mid8250_board dnv_board = {
 -- 
 2.34.1
 

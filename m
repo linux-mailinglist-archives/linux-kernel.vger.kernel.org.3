@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9F14F42E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6E74F4375
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243290AbiDEPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S245503AbiDEPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345568AbiDEJni (ORCPT
+        with ESMTP id S1345620AbiDEJnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:43:38 -0400
+        Tue, 5 Apr 2022 05:43:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB1BC3369;
-        Tue,  5 Apr 2022 02:29:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99723C29;
+        Tue,  5 Apr 2022 02:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 018CC6165C;
-        Tue,  5 Apr 2022 09:29:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168F2C385A0;
-        Tue,  5 Apr 2022 09:29:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4F4616BD;
+        Tue,  5 Apr 2022 09:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95817C385A0;
+        Tue,  5 Apr 2022 09:29:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150954;
-        bh=fR0LPZAFW7MV+r5mifjCwMPbuQwjL9+Zm/J+XCY09io=;
+        s=korg; t=1649150960;
+        bh=4lI4hnSkgIv5RGKjm3QIurZf7pNPW8XJsLWWlKGO3Bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VZgtBdLuZE55Hdl8HjUB8H+zquUvtIaEHjZX5JyKQYUOXz2JYjBOYLRk91ofmCD/T
-         oPCmx4Pmk3MbAkURdpS8J3XeSel27DxdY4P66uR6f7PaT5NnRrEVyrk7ccG2/cG72D
-         H1/0rypxKRzZ8Vu0WTb91dQkybop7xRF2QSj+V5A=
+        b=I2bmuKKPIJkhNIp4FcGghFj7RKZsX1QqIQJR4oZGL9U7YwxS/1Mj/mEEFMlAerbPA
+         muxszx6KKKkum2KqsBXYw58CTJ4trKe82wOkljtHlJ3x6M9wGD+IkX11zWT4DVl5E/
+         POBECA0EQJWA31u+wQjptfwRSjNTtEIrUIifuhOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brandon Wyman <bjwyman@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 240/913] hwmon: (pmbus) Add Vin unit off handling
-Date:   Tue,  5 Apr 2022 09:21:42 +0200
-Message-Id: <20220405070347.050547234@linuxfoundation.org>
+Subject: [PATCH 5.15 242/913] io_uring: dont check unrelated req->open.how in accept request
+Date:   Tue,  5 Apr 2022 09:21:44 +0200
+Message-Id: <20220405070347.111537778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,59 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brandon Wyman <bjwyman@gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit a5436af598779219b375c1977555c82def1c35d0 ]
+[ Upstream commit adf3a9e9f556613197583a1884f0de40a8bb6fb9 ]
 
-If there is an input undervoltage fault, reported in STATUS_INPUT
-command response, there is quite likely a "Unit Off For Insufficient
-Input Voltage" condition as well.
+Looks like a victim of too much copy/paste, we should not be looking
+at req->open.how in accept. The point is to check CLOEXEC and error
+out, which we don't invalid direct descriptors on exec. Hence any
+attempt to get a direct descriptor with CLOEXEC is invalid.
 
-Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
-attributes to include both bits in the mask for clearing faults.
+No harm is done here, as req->open.how.flags overlaps with
+req->accept.flags, but it's very confusing and might change if either of
+those command structs are modified.
 
-If an input undervoltage fault occurs, causing a unit off for
-insufficient input voltage, but the unit is off bit is not cleared, the
-STATUS_WORD will not be updated to clear the input fault condition.
-Including the unit is off bit (bit 3) allows for the input fault
-condition to completely clear.
-
-Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
-Link: https://lore.kernel.org/r/20220317232123.2103592-1-bjwyman@gmail.com
-Fixes: b4ce237b7f7d3 ("hwmon: (pmbus) Introduce infrastructure to detect sensors and limit registers")
-[groeck: Dropped unnecessary ()]
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: aaa4db12ef7b ("io_uring: accept directly into fixed file table")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus.h      | 1 +
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ fs/io_uring.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index e0aa8aa46d8c..ef3a8ecde4df 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
- /*
-  * STATUS_VOUT, STATUS_INPUT
-  */
-+#define PB_VOLTAGE_VIN_OFF		BIT(3)
- #define PB_VOLTAGE_UV_FAULT		BIT(4)
- #define PB_VOLTAGE_UV_WARNING		BIT(5)
- #define PB_VOLTAGE_OV_WARNING		BIT(6)
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index b1386a4df4cc..ca0bfaf2f691 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
- 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
- 		.attr = "lcrit",
- 		.alarm = "lcrit_alarm",
--		.sbit = PB_VOLTAGE_UV_FAULT,
-+		.sbit = PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF,
- 	}, {
- 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
- 		.attr = "max",
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 156c54ebb62b..70e85f64dc38 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5154,8 +5154,7 @@ static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	accept->nofile = rlimit(RLIMIT_NOFILE);
+ 
+ 	accept->file_slot = READ_ONCE(sqe->file_index);
+-	if (accept->file_slot && ((req->open.how.flags & O_CLOEXEC) ||
+-				  (accept->flags & SOCK_CLOEXEC)))
++	if (accept->file_slot && (accept->flags & SOCK_CLOEXEC))
+ 		return -EINVAL;
+ 	if (accept->flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
+ 		return -EINVAL;
 -- 
 2.34.1
 

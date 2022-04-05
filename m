@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091634F48F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C974F4EE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388861AbiDEV5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S1587179AbiDFAIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353858AbiDEKJi (ORCPT
+        with ESMTP id S1358402AbiDEK2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:09:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A484C3376;
-        Tue,  5 Apr 2022 02:55:40 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B08BA0BCC;
+        Tue,  5 Apr 2022 03:18:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2707461500;
-        Tue,  5 Apr 2022 09:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352E5C385A2;
-        Tue,  5 Apr 2022 09:55:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C39CFB81C98;
+        Tue,  5 Apr 2022 10:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0C4C385A0;
+        Tue,  5 Apr 2022 10:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152539;
-        bh=uwEM9yJd8yQV8YVnMIu1YlcaI8etPYsnFYaOdz+jFvI=;
+        s=korg; t=1649153877;
+        bh=m2IoJP+1rZGsRK63zzk0z+bTCLuNZ8qbNXqYGWwlq2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCPuPesTFA/W36H3rMeUmsFtTyD7JiUMTGnrAlqRpY7If7eX4zzu9AUs20UX9ZbGK
-         tjhTgE6WBeo7lS2gDpLHU1tGGOXsse2uIq/hUEgS6G1hbmGEV34FZkFqbIobU0G6i9
-         1UhHbNRUp0GY7DcYpU8V6mujDB8D1O6S6xclTowk=
+        b=nd29em+4M015ixqTQBqzgAS4MRqnIO77aWX6eYfDL40G2d10TTJruuHVMNSXwxuJS
+         wUvl24wPFbL0ugVWi2OF9H03s/q7WzhXLvNbLarwT4ky/83rxnew+XUoIoRrpcAZt/
+         q5DcDy/xPCFrOMGUGBrAdVPMIlfESBmelY5SavY0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 812/913] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
+        stable@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 380/599] fsi: aspeed: convert to devm_platform_ioremap_resource
 Date:   Tue,  5 Apr 2022 09:31:14 +0200
-Message-Id: <20220405070404.171468399@linuxfoundation.org>
+Message-Id: <20220405070310.139207610@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Yangtao Li <tiny.windzz@gmail.com>
 
-commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
+[ Upstream commit a3469912f4caeea32ecbe0bf472b14634fecb38e ]
 
-Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
-this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
+Use devm_platform_ioremap_resource() to simplify code.
 
-Note, it would've been better to forbid writing anything to SYNIC/STIMER
-MSRs, including zeroes, however, at least QEMU tries clearing
-HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
-'special' as writing zero there triggers an action, this also should not
-happen when SynIC wasn't activated.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Link: https://lore.kernel.org/r/20191228190631.26777-1-tiny.windzz@gmail.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/fsi/fsi-master-aspeed.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -236,7 +236,7 @@ static int synic_set_msr(struct kvm_vcpu
- 	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
- 	int ret;
+diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
+index dbad73162c83..5d2469d44607 100644
+--- a/drivers/fsi/fsi-master-aspeed.c
++++ b/drivers/fsi/fsi-master-aspeed.c
+@@ -525,7 +525,6 @@ static int tacoma_cabled_fsi_fixup(struct device *dev)
+ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ {
+ 	struct fsi_master_aspeed *aspeed;
+-	struct resource *res;
+ 	int rc, links, reg;
+ 	__be32 raw;
  
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || data))
- 		return 1;
+@@ -541,8 +540,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
  
- 	trace_kvm_hv_synic_set_msr(vcpu->vcpu_id, msr, data, host);
-@@ -282,6 +282,9 @@ static int synic_set_msr(struct kvm_vcpu
- 	case HV_X64_MSR_EOM: {
- 		int i;
+ 	aspeed->dev = &pdev->dev;
  
-+		if (!synic->active)
-+			break;
-+
- 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
- 			kvm_hv_notify_acked_sint(vcpu, i);
- 		break;
-@@ -661,7 +664,7 @@ static int stimer_set_config(struct kvm_
- 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
- 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	aspeed->base = devm_ioremap_resource(&pdev->dev, res);
++	aspeed->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(aspeed->base))
+ 		return PTR_ERR(aspeed->base);
  
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || config))
- 		return 1;
- 
- 	if (unlikely(!host && hv_vcpu->enforce_cpuid && new_config.direct_mode &&
-@@ -690,7 +693,7 @@ static int stimer_set_count(struct kvm_v
- 	struct kvm_vcpu *vcpu = hv_stimer_to_vcpu(stimer);
- 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
- 
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || count))
- 		return 1;
- 
- 	trace_kvm_hv_stimer_set_count(hv_stimer_to_vcpu(stimer)->vcpu_id,
+-- 
+2.34.1
+
 
 

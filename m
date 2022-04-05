@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552934F4A85
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182774F49FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1572994AbiDEWsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S1451938AbiDEWbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354466AbiDEKOT (ORCPT
+        with ESMTP id S243570AbiDEKhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E5E6A41E;
-        Tue,  5 Apr 2022 03:00:20 -0700 (PDT)
+        Tue, 5 Apr 2022 06:37:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6155523A;
+        Tue,  5 Apr 2022 03:22:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E43161673;
-        Tue,  5 Apr 2022 10:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B03AC385A1;
-        Tue,  5 Apr 2022 10:00:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25443B81C8B;
+        Tue,  5 Apr 2022 10:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D931C385A0;
+        Tue,  5 Apr 2022 10:22:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152820;
-        bh=mgtRBFgMqU+b1ionpcQaRy21ElERCcfUPd6hniBMnz8=;
+        s=korg; t=1649154159;
+        bh=s8/xIrkDVPpu/Ik0CaLR4xTK6dXoFBRjjLN1KpYrBYE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MkJGrmsTHa9vmfcBOhEpCdBCajt740dD2yJ2bnQHArwQBjL/1+gMKbJsH8PNh4aJs
-         Oz/tGMKOJIneTuzsUkf5mdQDfVzF2qGyYzig92wBMa0QNKHvKLCBIFT+HAEE5ULPWw
-         QMOtgw0mo6Td8tW5k/JHS3TfHFYKOg0n4f/xSziI=
+        b=x40NMN1HxwOfR3+tMAsNBJfFjtMmyzuN234B8h17qg+etkb/2wZSBbP5e1oabk53B
+         aE6vn4fPAjC1XH/0R7hKr+uLifN6H7+klsT3XHL9XXLiwu5RBBiS8Lto5SyYtCIbTe
+         rgnBZwAYYzcrcbMS600Rh6zpPqG8hl2bh9yfjlTY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Stevens <stevensd@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>, Joerg Roedel <jroedel@suse.de>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 907/913] iommu/dma: Check CONFIG_SWIOTLB more broadly
-Date:   Tue,  5 Apr 2022 09:32:49 +0200
-Message-Id: <20220405070407.005991513@linuxfoundation.org>
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 478/599] media: staging: media: zoran: move videodev alloc
+Date:   Tue,  5 Apr 2022 09:32:52 +0200
+Message-Id: <20220405070313.050146199@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +56,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-commit 2e727bffbe93750a13d2414f3ce43de2f21600d2 upstream.
+[ Upstream commit 82e3a496eb56da0b9f29fdc5b63cedb3289e91de ]
 
-Introduce a new dev_use_swiotlb function to guard swiotlb code, instead
-of overloading dev_is_untrusted. This allows CONFIG_SWIOTLB to be
-checked more broadly, so the swiotlb related code can be removed more
-aggressively.
+Move some code out of zr36057_init() and create new functions for handling
+zr->video_dev. This permit to ease code reading and fix a zr->video_dev
+memory leak.
 
-Signed-off-by: David Stevens <stevensd@chromium.org>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20210929023300.335969-6-stevensd@google.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/dma-iommu.c |   20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/staging/media/zoran/zoran.h        |  2 +-
+ drivers/staging/media/zoran/zoran_card.c   | 80 ++++++++++++++--------
+ drivers/staging/media/zoran/zoran_driver.c |  5 +-
+ 3 files changed, 54 insertions(+), 33 deletions(-)
 
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -317,6 +317,11 @@ static bool dev_is_untrusted(struct devi
- 	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
+diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
+index e7fe8da7732c..3f223e5b1872 100644
+--- a/drivers/staging/media/zoran/zoran.h
++++ b/drivers/staging/media/zoran/zoran.h
+@@ -314,6 +314,6 @@ static inline struct zoran *to_zoran(struct v4l2_device *v4l2_dev)
+ 
+ #endif
+ 
+-int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq);
++int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir);
+ void zoran_queue_exit(struct zoran *zr);
+ int zr_set_buf(struct zoran *zr);
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 721f1decb0a7..782bb4443fc1 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -802,6 +802,52 @@ int zoran_check_jpg_settings(struct zoran *zr,
+ 	return 0;
  }
  
-+static bool dev_use_swiotlb(struct device *dev)
++static int zoran_init_video_device(struct zoran *zr, struct video_device *video_dev, int dir)
 +{
-+	return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
++	int err;
++
++	/* Now add the template and register the device unit. */
++	*video_dev = zoran_template;
++	video_dev->v4l2_dev = &zr->v4l2_dev;
++	video_dev->lock = &zr->lock;
++	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
++
++	strscpy(video_dev->name, ZR_DEVNAME(zr), sizeof(video_dev->name));
++	/*
++	 * It's not a mem2mem device, but you can both capture and output from one and the same
++	 * device. This should really be split up into two device nodes, but that's a job for
++	 * another day.
++	 */
++	video_dev->vfl_dir = VFL_DIR_M2M;
++	zoran_queue_init(zr, &zr->vq, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++
++	err = video_register_device(video_dev, VFL_TYPE_VIDEO, video_nr[zr->id]);
++	if (err < 0)
++		return err;
++	video_set_drvdata(video_dev, zr);
++	return 0;
 +}
 +
- /* sysfs updates are serialised by the mutex of the group owning @domain */
- int iommu_dma_init_fq(struct iommu_domain *domain)
++static void zoran_exit_video_devices(struct zoran *zr)
++{
++	video_unregister_device(zr->video_dev);
++	kfree(zr->video_dev);
++}
++
++static int zoran_init_video_devices(struct zoran *zr)
++{
++	int err;
++
++	zr->video_dev = video_device_alloc();
++	if (!zr->video_dev)
++		return -ENOMEM;
++
++	err = zoran_init_video_device(zr, zr->video_dev, V4L2_CAP_VIDEO_CAPTURE);
++	if (err)
++		kfree(zr->video_dev);
++	return err;
++}
++
+ void zoran_open_init_params(struct zoran *zr)
  {
-@@ -731,7 +736,7 @@ static void iommu_dma_sync_single_for_cp
- {
- 	phys_addr_t phys;
- 
--	if (dev_is_dma_coherent(dev) && !dev_is_untrusted(dev))
-+	if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
- 		return;
- 
- 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
-@@ -747,7 +752,7 @@ static void iommu_dma_sync_single_for_de
- {
- 	phys_addr_t phys;
- 
--	if (dev_is_dma_coherent(dev) && !dev_is_untrusted(dev))
-+	if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
- 		return;
- 
- 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
-@@ -765,7 +770,7 @@ static void iommu_dma_sync_sg_for_cpu(st
- 	struct scatterlist *sg;
  	int i;
+@@ -873,17 +919,11 @@ static int zr36057_init(struct zoran *zr)
+ 	zoran_open_init_params(zr);
  
--	if (dev_is_untrusted(dev))
-+	if (dev_use_swiotlb(dev))
- 		for_each_sg(sgl, sg, nelems, i)
- 			iommu_dma_sync_single_for_cpu(dev, sg_dma_address(sg),
- 						      sg->length, dir);
-@@ -781,7 +786,7 @@ static void iommu_dma_sync_sg_for_device
- 	struct scatterlist *sg;
- 	int i;
- 
--	if (dev_is_untrusted(dev))
-+	if (dev_use_swiotlb(dev))
- 		for_each_sg(sgl, sg, nelems, i)
- 			iommu_dma_sync_single_for_device(dev,
- 							 sg_dma_address(sg),
-@@ -808,8 +813,7 @@ static dma_addr_t iommu_dma_map_page(str
- 	 * If both the physical buffer start address and size are
- 	 * page aligned, we don't need to use a bounce page.
- 	 */
--	if (IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev) &&
--	    iova_offset(iovad, phys | size)) {
-+	if (dev_use_swiotlb(dev) && iova_offset(iovad, phys | size)) {
- 		void *padding_start;
- 		size_t padding_size;
- 
-@@ -995,7 +999,7 @@ static int iommu_dma_map_sg(struct devic
- 			goto out;
+ 	/* allocate memory *before* doing anything to the hardware in case allocation fails */
+-	zr->video_dev = video_device_alloc();
+-	if (!zr->video_dev) {
+-		err = -ENOMEM;
+-		goto exit;
+-	}
+ 	zr->stat_com = dma_alloc_coherent(&zr->pci_dev->dev,
+ 					  BUZ_NUM_STAT_COM * sizeof(u32),
+ 					  &zr->p_sc, GFP_KERNEL);
+ 	if (!zr->stat_com) {
+-		err = -ENOMEM;
+-		goto exit_video;
++		return -ENOMEM;
+ 	}
+ 	for (j = 0; j < BUZ_NUM_STAT_COM; j++)
+ 		zr->stat_com[j] = cpu_to_le32(1); /* mark as unavailable to zr36057 */
+@@ -896,26 +936,9 @@ static int zr36057_init(struct zoran *zr)
+ 		goto exit_statcom;
  	}
  
--	if (dev_is_untrusted(dev))
-+	if (dev_use_swiotlb(dev))
- 		return iommu_dma_map_sg_swiotlb(dev, sg, nents, dir, attrs);
+-	/* Now add the template and register the device unit. */
+-	*zr->video_dev = zoran_template;
+-	zr->video_dev->v4l2_dev = &zr->v4l2_dev;
+-	zr->video_dev->lock = &zr->lock;
+-	zr->video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE;
+-
+-	strscpy(zr->video_dev->name, ZR_DEVNAME(zr), sizeof(zr->video_dev->name));
+-	/*
+-	 * It's not a mem2mem device, but you can both capture and output from one and the same
+-	 * device. This should really be split up into two device nodes, but that's a job for
+-	 * another day.
+-	 */
+-	zr->video_dev->vfl_dir = VFL_DIR_M2M;
+-
+-	zoran_queue_init(zr, &zr->vq);
+-
+-	err = video_register_device(zr->video_dev, VFL_TYPE_VIDEO, video_nr[zr->id]);
+-	if (err < 0)
++	err = zoran_init_video_devices(zr);
++	if (err)
+ 		goto exit_statcomb;
+-	video_set_drvdata(zr->video_dev, zr);
  
- 	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-@@ -1073,7 +1077,7 @@ static void iommu_dma_unmap_sg(struct de
- 	struct scatterlist *tmp;
- 	int i;
+ 	zoran_init_hardware(zr);
+ 	if (!pass_through) {
+@@ -930,9 +953,6 @@ static int zr36057_init(struct zoran *zr)
+ 	dma_free_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32) * 2, zr->stat_comb, zr->p_scb);
+ exit_statcom:
+ 	dma_free_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32), zr->stat_com, zr->p_sc);
+-exit_video:
+-	kfree(zr->video_dev);
+-exit:
+ 	return err;
+ }
  
--	if (dev_is_untrusted(dev)) {
-+	if (dev_use_swiotlb(dev)) {
- 		iommu_dma_unmap_sg_swiotlb(dev, sg, nents, dir, attrs);
- 		return;
- 	}
+@@ -964,7 +984,7 @@ static void zoran_remove(struct pci_dev *pdev)
+ 	dma_free_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32) * 2, zr->stat_comb, zr->p_scb);
+ 	pci_release_regions(pdev);
+ 	pci_disable_device(zr->pci_dev);
+-	video_unregister_device(zr->video_dev);
++	zoran_exit_video_devices(zr);
+ exit_free:
+ 	v4l2_ctrl_handler_free(&zr->hdl);
+ 	v4l2_device_unregister(&zr->v4l2_dev);
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 808196ea5b81..7f22596cc630 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -1006,7 +1006,7 @@ static const struct vb2_ops zr_video_qops = {
+ 	.wait_finish            = vb2_ops_wait_finish,
+ };
+ 
+-int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq)
++int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir)
+ {
+ 	int err;
+ 
+@@ -1014,7 +1014,8 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq)
+ 	INIT_LIST_HEAD(&zr->queued_bufs);
+ 
+ 	vq->dev = &zr->pci_dev->dev;
+-	vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	vq->type = dir;
++
+ 	vq->io_modes = VB2_USERPTR | VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
+ 	vq->drv_priv = zr;
+ 	vq->buf_struct_size = sizeof(struct zr_buffer);
+-- 
+2.34.1
+
 
 

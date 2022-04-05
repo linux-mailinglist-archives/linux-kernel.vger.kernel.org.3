@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22234F3E02
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678444F404A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352512AbiDEUXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S1390577AbiDENmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349759AbiDEJvQ (ORCPT
+        with ESMTP id S1345133AbiDEJWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:51:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FFB15839;
-        Tue,  5 Apr 2022 02:49:18 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C981AF33;
+        Tue,  5 Apr 2022 02:09:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40E87B81B76;
-        Tue,  5 Apr 2022 09:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8202EC385A1;
-        Tue,  5 Apr 2022 09:49:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC6261527;
+        Tue,  5 Apr 2022 09:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0B9C385A0;
+        Tue,  5 Apr 2022 09:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152155;
-        bh=vp5P+tlZ9AwejLKFANiTgrszGOHonIstSV2V0M0I7Kk=;
+        s=korg; t=1649149749;
+        bh=SXDpUl53LOcvA7vl1vjJ+tv7O0zHMaTxiH6T79oerk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eqmsmv9rQ7Ku/lVhsj7QaqRTBn+ZGdcCDOn0WL+CGsrmINWh7yu/QPjm4ZsniFawc
-         vnnFaD+w7n3vYmRX4Vo6XHneIcueeQbEBvyZPX/UgnxY3kRYpAXFdQw6F3SFCPeQFu
-         w1V2hKrdjpfxQW0sRAjNc2YaZYOyb15SB0MmZyEU=
+        b=TNzFMWzTggSyFycs2rGopa3fidi+5BDWAzAnJT3ideUkZn+HpswQdl211kHb7CNw2
+         vAqX9+V2fAWKcPDwlSw4zU5GuKw5vLpXO7O5v0QxuieTkfHE3Rf57DqaVZLbBzpFsr
+         WEL7cz2W53TauL89ol/QzzQvGSVsKW/v+tz/PDHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 676/913] net/sched: act_ct: fix ref leak when switching zones
-Date:   Tue,  5 Apr 2022 09:28:58 +0200
-Message-Id: <20220405070400.099531752@linuxfoundation.org>
+        stable@vger.kernel.org, Alexander Sergeyev <sergeev917@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0826/1017] ALSA: hda: Fix driver index handling at re-binding
+Date:   Tue,  5 Apr 2022 09:28:59 +0200
+Message-Id: <20220405070418.764497965@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit bcb74e132a76ce0502bb33d5b65533a4ed72d159 ]
+[ Upstream commit 69458e2c27800da7697c87ed908b65323ef3f3bd ]
 
-When switching zones or network namespaces without doing a ct clear in
-between, it is now leaking a reference to the old ct entry. That's
-because tcf_ct_skb_nfct_cached() returns false and
-tcf_ct_flow_table_lookup() may simply overwrite it.
+HD-audio driver handles the multiple instances and keeps the static
+index that is incremented at each probe.  This becomes a problem when
+user tries to re-bind the device via sysfs multiple times; as the
+device index isn't cleared unlike rmmod case, it points to the next
+element at re-binding, and eventually later you can't probe any more
+when it reaches to SNDRV_CARDS_MAX (usually 32).
 
-The fix is to, as the ct entry is not reusable, free it already at
-tcf_ct_skb_nfct_cached().
+This patch is an attempt to improve the handling at rebinding.
+Instead of a static device index, now we keep a bitmap and assigns to
+the first zero bit position.  At the driver remove, in return, the
+bitmap slot is cleared again, so that it'll be available for the next
+probe.
 
-Reported-by: Florian Westphal <fw@strlen.de>
-Fixes: 2f131de361f6 ("net/sched: act_ct: Fix flow table lookup after ct clear or switching zones")
-Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Alexander Sergeyev <sergeev917@gmail.com>
+Link: https://lore.kernel.org/r/20220209081912.20687-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/act_ct.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ sound/pci/hda/hda_intel.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-index 240b3c5d2eb1..553bf41671a6 100644
---- a/net/sched/act_ct.c
-+++ b/net/sched/act_ct.c
-@@ -583,22 +583,25 @@ static bool tcf_ct_skb_nfct_cached(struct net *net, struct sk_buff *skb,
- 	if (!ct)
- 		return false;
- 	if (!net_eq(net, read_pnet(&ct->ct_net)))
--		return false;
-+		goto drop_ct;
- 	if (nf_ct_zone(ct)->id != zone_id)
--		return false;
-+		goto drop_ct;
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index 3b6f2aacda45..1ffd96fbf230 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -2061,14 +2061,16 @@ static const struct hda_controller_ops pci_hda_ops = {
+ 	.position_check = azx_position_check,
+ };
  
- 	/* Force conntrack entry direction. */
- 	if (force && CTINFO2DIR(ctinfo) != IP_CT_DIR_ORIGINAL) {
- 		if (nf_ct_is_confirmed(ct))
- 			nf_ct_kill(ct);
++static DECLARE_BITMAP(probed_devs, SNDRV_CARDS);
++
+ static int azx_probe(struct pci_dev *pci,
+ 		     const struct pci_device_id *pci_id)
+ {
+-	static int dev;
+ 	struct snd_card *card;
+ 	struct hda_intel *hda;
+ 	struct azx *chip;
+ 	bool schedule_probe;
++	int dev;
+ 	int err;
  
--		nf_ct_put(ct);
--		nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
--
--		return false;
-+		goto drop_ct;
+ 	if (pci_match_id(driver_denylist, pci)) {
+@@ -2076,10 +2078,11 @@ static int azx_probe(struct pci_dev *pci,
+ 		return -ENODEV;
  	}
  
- 	return true;
-+
-+drop_ct:
-+	nf_ct_put(ct);
-+	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
-+
-+	return false;
- }
++	dev = find_first_zero_bit(probed_devs, SNDRV_CARDS);
+ 	if (dev >= SNDRV_CARDS)
+ 		return -ENODEV;
+ 	if (!enable[dev]) {
+-		dev++;
++		set_bit(dev, probed_devs);
+ 		return -ENOENT;
+ 	}
  
- /* Trim the skb to the length specified by the IP/IPv6 header,
+@@ -2146,7 +2149,7 @@ static int azx_probe(struct pci_dev *pci,
+ 	if (schedule_probe)
+ 		schedule_delayed_work(&hda->probe_work, 0);
+ 
+-	dev++;
++	set_bit(dev, probed_devs);
+ 	if (chip->disabled)
+ 		complete_all(&hda->probe_wait);
+ 	return 0;
+@@ -2369,6 +2372,7 @@ static void azx_remove(struct pci_dev *pci)
+ 		cancel_delayed_work_sync(&hda->probe_work);
+ 		device_lock(&pci->dev);
+ 
++		clear_bit(chip->dev_index, probed_devs);
+ 		pci_set_drvdata(pci, NULL);
+ 		snd_card_free(card);
+ 	}
 -- 
 2.34.1
 

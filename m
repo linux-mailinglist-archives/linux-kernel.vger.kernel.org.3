@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A344F457C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1BB4F4658
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358240AbiDEUXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
+        id S1387225AbiDENOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349457AbiDEJtx (ORCPT
+        with ESMTP id S1344239AbiDEJSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3225FE;
-        Tue,  5 Apr 2022 02:46:31 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F9349266;
+        Tue,  5 Apr 2022 02:06:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 605E9B81B7A;
-        Tue,  5 Apr 2022 09:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A02C385A2;
-        Tue,  5 Apr 2022 09:46:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F8D6B81BBF;
+        Tue,  5 Apr 2022 09:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEF2C385A5;
+        Tue,  5 Apr 2022 09:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151989;
-        bh=jQPU+iVWdRJO/Zf9E9j5Fx4xuwiHUlqhxnNThXYz8Sc=;
+        s=korg; t=1649149566;
+        bh=4iVXIPkT3ePxCznX2ZMKrI8so8HKS+0aauaqn24SB9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PEW259Ll+fAMDXZNdNeH4P14pwjN3tK5lQRp7cQqSbKYpga1YH5zlqqnaQ7VlBD/u
-         6V+SHLDGeVff5mVaUbLCl5vdHVg+SSBMBX3k6y33KRe3R/sVpPQanXKk6NfCcUrPpl
-         Pt65z9snhqvtZh5Vcnxv5ITCYnzkshBGFwJryxkA=
+        b=l+zQD2h5kYgWVs9fqIC1UriKd5ZtwHYYqcjnD2auAbERw2oyVtUWi1rBcr24VgqNL
+         EjncbdkYKtB5EtvO5B1/lIB5z02J/IQAazXvsIvBU6KpT3GB3Rqx71xIkIs6WUOjfM
+         5m7QMAB2YX7yrkrLRRRI2ayMpvOkmK1EffDl+iAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Kai Ye <yekai13@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 613/913] clk: qcom: clk-rcg2: Update the frac table for pixel clock
+Subject: [PATCH 5.16 0762/1017] crypto: hisilicon/sec - not need to enable sm4 extra mode at HW V3
 Date:   Tue,  5 Apr 2022 09:27:55 +0200
-Message-Id: <20220405070358.215951115@linuxfoundation.org>
+Message-Id: <20220405070416.877684130@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Kai Ye <yekai13@huawei.com>
 
-[ Upstream commit b527358cb4cd58a8279c9062b0786f1fab628fdc ]
+[ Upstream commit f8a2652826444d13181061840b96a5d975d5b6c6 ]
 
-Support the new numerator and denominator for pixel clock on SM8350 and
-support rgb101010, RGB888 use cases on SM8450.
+It is not need to enable sm4 extra mode in at HW V3. Here is fix it.
 
-Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220227175536.3131-2-tdas@codeaurora.org
+Signed-off-by: Kai Ye <yekai13@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-rcg2.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/hisilicon/sec2/sec_main.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index b831975a9606..f675fd969c4d 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -729,6 +729,7 @@ static const struct frac_entry frac_table_pixel[] = {
- 	{ 2, 9 },
- 	{ 4, 9 },
- 	{ 1, 1 },
-+	{ 2, 3 },
- 	{ }
- };
+diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
+index 90551bf38b52..03d239cfdf8c 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_main.c
++++ b/drivers/crypto/hisilicon/sec2/sec_main.c
+@@ -443,9 +443,11 @@ static int sec_engine_init(struct hisi_qm *qm)
  
+ 	writel(SEC_SAA_ENABLE, qm->io_base + SEC_SAA_EN_REG);
+ 
+-	/* Enable sm4 extra mode, as ctr/ecb */
+-	writel_relaxed(SEC_BD_ERR_CHK_EN0,
+-		       qm->io_base + SEC_BD_ERR_CHK_EN_REG0);
++	/* HW V2 enable sm4 extra mode, as ctr/ecb */
++	if (qm->ver < QM_HW_V3)
++		writel_relaxed(SEC_BD_ERR_CHK_EN0,
++			       qm->io_base + SEC_BD_ERR_CHK_EN_REG0);
++
+ 	/* Enable sm4 xts mode multiple iv */
+ 	writel_relaxed(SEC_BD_ERR_CHK_EN1,
+ 		       qm->io_base + SEC_BD_ERR_CHK_EN_REG1);
 -- 
 2.34.1
 

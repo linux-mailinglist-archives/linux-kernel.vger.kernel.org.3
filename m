@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161174F3967
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D266B4F3C2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378347AbiDELdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S233835AbiDEMFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244540AbiDEIwY (ORCPT
+        with ESMTP id S244147AbiDEIvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F97D64F4;
-        Tue,  5 Apr 2022 01:41:18 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6C3D3AC0;
+        Tue,  5 Apr 2022 01:40:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5037CB81C6A;
-        Tue,  5 Apr 2022 08:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C58C385A0;
-        Tue,  5 Apr 2022 08:41:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D605F614E5;
+        Tue,  5 Apr 2022 08:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B60C385A1;
+        Tue,  5 Apr 2022 08:39:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148075;
-        bh=G/l9aUJULJwmI7YT0KaZ81Zov+Y/RRth+XG3A6aSc6U=;
+        s=korg; t=1649147977;
+        bh=jdhV1ARZqjVBNBTFdsNBzGc69eetyP1wwgKMcVbjsh8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KG50vT1f4NFFCHup4nFL157LAtUIxSeWsvxj1YVCciIhAz4YUn7K0ruaP0cFdOQ8+
-         CTYzSBW43WpsBAx6hrnnY2ereV7EJ4hZcv3YeqBoNLHsQI5aCmVxytCEKaGuATfaxw
-         YF7OwY/fvccEdmWd/wTyyru9GtlPGgbCITdsKITQ=
+        b=uyFVOjnENXWNE4FZBoHN7vpI0NYmN8hc3e8lhgYXABrZPZIWVisFC+CBNG10Hf0pg
+         ZBiaZlgRue0gZeUtQt9HVjAnZ4hNgkpBDAO6/QuH/LclGBS/P/0c8k/33kYOZWjkLa
+         i69WsvaZqOgPxxRVr8CuKmqvgtLqmcX62eFMJJck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christoph Anton Mitterer <calestyo@scientia.org>,
-        David Sterba <dsterba@suse.com>, ree.com@vger.kernel.org
-Subject: [PATCH 5.16 0182/1017] btrfs: verify the tranisd of the to-be-written dirty extent buffer
-Date:   Tue,  5 Apr 2022 09:18:15 +0200
-Message-Id: <20220405070359.640646036@linuxfoundation.org>
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.16 0183/1017] xtensa: define update_mmu_tlb function
+Date:   Tue,  5 Apr 2022 09:18:16 +0200
+Message-Id: <20220405070359.671343382@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,96 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-commit 3777369ff1518b579560611a0d0c33f930154f64 upstream.
+commit 1c4664faa38923330d478f046dc743a00c1e2dec upstream.
 
-[BUG]
-There is a bug report that a bitflip in the transid part of an extent
-buffer makes btrfs to reject certain tree blocks:
+Before the commit f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault()
+codepaths") there was a call to update_mmu_cache in alloc_set_pte that
+used to invalidate TLB entry caching invalid PTE that caused a page
+fault. That commit removed that call so now invalid TLB entry survives
+causing repetitive page faults on the CPU that took the initial fault
+until that TLB entry is occasionally evicted. This issue is spotted by
+the xtensa TLB sanity checker.
 
-  BTRFS error (device dm-0): parent transid verify failed on 1382301696 wanted 262166 found 22
+Fix this issue by defining update_mmu_tlb function that flushes TLB entry
+for the faulting address.
 
-[CAUSE]
-Note the failed transid check, hex(262166) = 0x40016, while
-hex(22) = 0x16.
-
-It's an obvious bitflip.
-
-Furthermore, the reporter also confirmed the bitflip is from the
-hardware, so it's a real hardware caused bitflip, and such problem can
-not be detected by the existing tree-checker framework.
-
-As tree-checker can only verify the content inside one tree block, while
-generation of a tree block can only be verified against its parent.
-
-So such problem remain undetected.
-
-[FIX]
-Although tree-checker can not verify it at write-time, we still have a
-quick (but not the most accurate) way to catch such obvious corruption.
-
-Function csum_one_extent_buffer() is called before we submit metadata
-write.
-
-Thus it means, all the extent buffer passed in should be dirty tree
-blocks, and should be newer than last committed transaction.
-
-Using that we can catch the above bitflip.
-
-Although it's not a perfect solution, as if the corrupted generation is
-higher than the correct value, we have no way to catch it at all.
-
-Reported-by: Christoph Anton Mitterer <calestyo@scientia.org>
-Link: https://lore.kernel.org/linux-btrfs/2dfcbc130c55cc6fd067b93752e90bd2b079baca.camel@scientia.org/
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Qu Wenruo <wqu@sus,ree.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Cc: stable@vger.kernel.org # 5.12+
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/disk-io.c |   26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+ arch/xtensa/include/asm/pgtable.h |    4 ++++
+ arch/xtensa/mm/tlb.c              |    6 ++++++
+ 2 files changed, 10 insertions(+)
 
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -441,17 +441,31 @@ static int csum_one_extent_buffer(struct
- 	else
- 		ret = btrfs_check_leaf_full(eb);
+--- a/arch/xtensa/include/asm/pgtable.h
++++ b/arch/xtensa/include/asm/pgtable.h
+@@ -411,6 +411,10 @@ extern  void update_mmu_cache(struct vm_
  
--	if (ret < 0) {
--		btrfs_print_tree(eb, 0);
-+	if (ret < 0)
-+		goto error;
+ typedef pte_t *pte_addr_t;
+ 
++void update_mmu_tlb(struct vm_area_struct *vma,
++		    unsigned long address, pte_t *ptep);
++#define __HAVE_ARCH_UPDATE_MMU_TLB
 +
-+	/*
-+	 * Also check the generation, the eb reached here must be newer than
-+	 * last committed. Or something seriously wrong happened.
-+	 */
-+	if (unlikely(btrfs_header_generation(eb) <= fs_info->last_trans_committed)) {
-+		ret = -EUCLEAN;
- 		btrfs_err(fs_info,
--			"block=%llu write time tree block corruption detected",
--			eb->start);
--		WARN_ON(IS_ENABLED(CONFIG_BTRFS_DEBUG));
--		return ret;
-+			"block=%llu bad generation, have %llu expect > %llu",
-+			  eb->start, btrfs_header_generation(eb),
-+			  fs_info->last_trans_committed);
-+		goto error;
+ #endif /* !defined (__ASSEMBLY__) */
+ 
+ #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
+--- a/arch/xtensa/mm/tlb.c
++++ b/arch/xtensa/mm/tlb.c
+@@ -162,6 +162,12 @@ void local_flush_tlb_kernel_range(unsign
  	}
- 	write_extent_buffer(eb, result, 0, fs_info->csum_size);
- 
- 	return 0;
-+
-+error:
-+	btrfs_print_tree(eb, 0);
-+	btrfs_err(fs_info, "block=%llu write time tree block corruption detected",
-+		  eb->start);
-+	WARN_ON(IS_ENABLED(CONFIG_BTRFS_DEBUG));
-+	return ret;
  }
  
- /* Checksum all dirty extent buffers in one bio_vec */
++void update_mmu_tlb(struct vm_area_struct *vma,
++		    unsigned long address, pte_t *ptep)
++{
++	local_flush_tlb_page(vma, address);
++}
++
+ #ifdef CONFIG_DEBUG_TLB_SANITY
+ 
+ static unsigned get_pte_for_vaddr(unsigned vaddr)
 
 

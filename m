@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505DD4F426E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143174F3DE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389410AbiDEUF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S1388719AbiDENc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358109AbiDEK17 (ORCPT
+        with ESMTP id S1346025AbiDEJXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46378FFE;
-        Tue,  5 Apr 2022 03:15:43 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D93A94EF;
+        Tue,  5 Apr 2022 02:12:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47B1561777;
-        Tue,  5 Apr 2022 10:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536CFC385A1;
-        Tue,  5 Apr 2022 10:15:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10FCBB80DA1;
+        Tue,  5 Apr 2022 09:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BBDC385A0;
+        Tue,  5 Apr 2022 09:12:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153742;
-        bh=YIIjYNuNqtC8QLnqR4WnTEIhcQ4W4IebWPcPoV7WjgI=;
+        s=korg; t=1649149967;
+        bh=uvlY6re4qRA42gcweeLvEonqNIH1YFuQWJrOL96quZg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UpFDfZw7zv375JSL6swZ3umdO3kFfK0KMfjjjG3U5Sq6TRPk0QYRmG1jhoqFCgUUC
-         G36AF5C0QbCB1ZCx/52tC6C6ppd3RRnbVGUAvh8Uo1cVpHIF2ILBrX7WMaCogknjNU
-         epbHd6+9ROkDGZ3PUK5ye7wrIxWEIVJjLZxnzG7g=
+        b=P3XX0+0HhRtkDXdWU/tgVqPYTVaNKnccsJKmUo3Ei6SAXWHw3RvsqS07zEyaN0X+k
+         scM195kCzRk1qNlepxQEYdq1ICr3kWGNJ0+THc0rnEPq/5UcIKT11AOznbPvBlHv6W
+         Zzge30qT2+XbLteaihYhSKQKJAt7QJcvyb1upvdU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 324/599] power: supply: bq24190_charger: Fix bq24190_vbus_is_enabled() wrong false return
+        stable@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0905/1017] KVM: x86: fix sending PV IPI
 Date:   Tue,  5 Apr 2022 09:30:18 +0200
-Message-Id: <20220405070308.474830617@linuxfoundation.org>
+Message-Id: <20220405070421.088309561@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Li RongQing <lirongqing@baidu.com>
 
-[ Upstream commit f7731754fdce33dad19be746f647d6ac47c5d695 ]
+commit c15e0ae42c8e5a61e9aca8aac920517cf7b3e94e upstream.
 
-The datasheet says that the BQ24190_REG_POC_CHG_CONFIG bits can
-have a value of either 10(0x2) or 11(0x3) for OTG (5V boost regulator)
-mode.
+If apic_id is less than min, and (max - apic_id) is greater than
+KVM_IPI_CLUSTER_SIZE, then the third check condition is satisfied but
+the new apic_id does not fit the bitmask.  In this case __send_ipi_mask
+should send the IPI.
 
-Sofar bq24190_vbus_is_enabled() was only checking for 10 but some BIOS-es
-uses 11 when enabling the regulator at boot.
+This is mostly theoretical, but it can happen if the apic_ids on three
+iterations of the loop are for example 1, KVM_IPI_CLUSTER_SIZE, 0.
 
-Make bq24190_vbus_is_enabled() also check for 11 so that it does not
-wrongly returns false when the bits are set to 11.
-
-Fixes: 66b6bef2c4e0 ("power: supply: bq24190_charger: Export 5V boost converter as regulator")
-Cc: Bastien Nocera <hadess@hadess.net>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: aaffcfd1e82 ("KVM: X86: Implement PV IPIs in linux guest")
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Message-Id: <1646814944-51801-1-git-send-email-lirongqing@baidu.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/power/supply/bq24190_charger.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/kernel/kvm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index 845af0f44c02..8c3c378dce0d 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -41,6 +41,7 @@
- #define BQ24190_REG_POC_CHG_CONFIG_DISABLE		0x0
- #define BQ24190_REG_POC_CHG_CONFIG_CHARGE		0x1
- #define BQ24190_REG_POC_CHG_CONFIG_OTG			0x2
-+#define BQ24190_REG_POC_CHG_CONFIG_OTG_ALT		0x3
- #define BQ24190_REG_POC_SYS_MIN_MASK		(BIT(3) | BIT(2) | BIT(1))
- #define BQ24190_REG_POC_SYS_MIN_SHIFT		1
- #define BQ24190_REG_POC_SYS_MIN_MIN			3000
-@@ -552,7 +553,11 @@ static int bq24190_vbus_is_enabled(struct regulator_dev *dev)
- 	pm_runtime_mark_last_busy(bdi->dev);
- 	pm_runtime_put_autosuspend(bdi->dev);
- 
--	return ret ? ret : val == BQ24190_REG_POC_CHG_CONFIG_OTG;
-+	if (ret)
-+		return ret;
-+
-+	return (val == BQ24190_REG_POC_CHG_CONFIG_OTG ||
-+		val == BQ24190_REG_POC_CHG_CONFIG_OTG_ALT);
- }
- 
- static const struct regulator_ops bq24190_vbus_ops = {
--- 
-2.34.1
-
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -515,7 +515,7 @@ static void __send_ipi_mask(const struct
+ 		} else if (apic_id < min && max - apic_id < KVM_IPI_CLUSTER_SIZE) {
+ 			ipi_bitmap <<= min - apic_id;
+ 			min = apic_id;
+-		} else if (apic_id < min + KVM_IPI_CLUSTER_SIZE) {
++		} else if (apic_id > min && apic_id < min + KVM_IPI_CLUSTER_SIZE) {
+ 			max = apic_id < max ? max : apic_id;
+ 		} else {
+ 			ret = kvm_hypercall4(KVM_HC_SEND_IPI, (unsigned long)ipi_bitmap,
 
 

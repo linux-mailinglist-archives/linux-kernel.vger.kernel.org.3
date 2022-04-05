@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033034F4094
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165124F3EB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355700AbiDEMJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S1387354AbiDEObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244662AbiDEIwa (ORCPT
+        with ESMTP id S240441AbiDEJe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B41D76CC;
-        Tue,  5 Apr 2022 01:41:43 -0700 (PDT)
+        Tue, 5 Apr 2022 05:34:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ACF85645;
+        Tue,  5 Apr 2022 02:23:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A8461003;
-        Tue,  5 Apr 2022 08:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1581AC385A0;
-        Tue,  5 Apr 2022 08:41:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 346076164E;
+        Tue,  5 Apr 2022 09:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440E6C385A0;
+        Tue,  5 Apr 2022 09:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148102;
-        bh=RAUViBvGmuS5RTbopXWh3hkvE9oXTfd0Ghbb8YE3plM=;
+        s=korg; t=1649150637;
+        bh=nzGYsikKbXTo3ofPbBteuWmzrEF10M28ReEJiqZdw2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H7fc5JXA5EqjYTWLw8E8svBtbLuxF+roA7fClz5AWc4UoRYTUmkhhBo9CuhF6jquG
-         LrLpyBVFw7cVOzjyjMJA0TRsT2tBBa0+I0Usb+K+9QNqLIrPKeoDdX5NpbI1+vRtPD
-         bvI2dOwLhxSYGCR3WNENhnviJdAuTMnPXLtTm3GA=
+        b=rjkEl+I/2Tpbt/PiW9eTIN5PO1ZbJYg7RcpuM8+sKbXYoODuKr9XGn1PRLBy8nzpI
+         KFRFZGoRlMhV60/x76pfd59tfXlJY3xdQBRwrWMYAg4wDJtqAM3ivQdfGwtWjg/MDZ
+         DfQxKePcBwoXCU/5eyuPqDu4Zl15/AhxqGPMWNmI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0236/1017] crypto: sun8i-ss - call finalize with bh disabled
-Date:   Tue,  5 Apr 2022 09:19:09 +0200
-Message-Id: <20220405070401.262566067@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 088/913] scsi: ufs: Fix runtime PM messages never-ending cycle
+Date:   Tue,  5 Apr 2022 09:19:10 +0200
+Message-Id: <20220405070342.461308967@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit b169b3766242b6f3336e24a6c8ee1522978b57a7 ]
+commit 71bb9ab6e3511b7bb98678a19eb8cf1ccbf3ca2f upstream.
 
-Doing ipsec produces a spinlock recursion warning.
-This is due to not disabling BH during crypto completion function.
+Kernel messages produced during runtime PM can cause a never-ending cycle
+because user space utilities (e.g. journald or rsyslog) write the messages
+back to storage, causing runtime resume, more messages, and so on.
 
-Fixes: f08fcced6d00 ("crypto: allwinner - Add sun8i-ss cryptographic offloader")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Messages that tell of things that are expected to happen, are arguably
+unnecessary, so suppress them.
+
+UFS driver messages are changes to from dev_err() to dev_dbg() which means
+they will not display unless activated by dynamic debug of building with
+-DDEBUG.
+
+sdev->silence_suspend is set to skip messages from sd_suspend_common()
+"Synchronizing SCSI cache", "Stopping disk" and scsi_report_sense()
+"Power-on or device reset occurred" message (Note, that message appears
+when the LUN is accessed after runtime PM, not during runtime PM)
+
+ Example messages from Ubuntu 21.10:
+
+ $ dmesg | tail
+ [ 1620.380071] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[1, 1], lane[1, 1], pwr[SLOWAUTO_MODE, SLOWAUTO_MODE], rate = 0
+ [ 1620.408825] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[4, 4], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
+ [ 1620.409020] ufshcd 0000:00:12.5: ufshcd_find_max_sup_active_icc_level: Regulator capability was not set, actvIccLevel=0
+ [ 1620.409524] sd 0:0:0:0: Power-on or device reset occurred
+ [ 1622.938794] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+ [ 1622.939184] ufs_device_wlun 0:0:0:49488: Power-on or device reset occurred
+ [ 1625.183175] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[1, 1], lane[1, 1], pwr[SLOWAUTO_MODE, SLOWAUTO_MODE], rate = 0
+ [ 1625.208041] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[4, 4], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
+ [ 1625.208311] ufshcd 0000:00:12.5: ufshcd_find_max_sup_active_icc_level: Regulator capability was not set, actvIccLevel=0
+ [ 1625.209035] sd 0:0:0:0: Power-on or device reset occurred
+
+Note for stable: depends on patch "scsi: core: sd: Add silence_suspend flag
+to suppress some PM messages".
+
+Link: https://lore.kernel.org/r/20220228113652.970857-3-adrian.hunter@intel.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 3 +++
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c   | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/scsi/ufs/ufshcd.c |   21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 9ef1c85c4aaa..554e400d41ca 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -11,6 +11,7 @@
-  * You could find a link for the datasheet in Documentation/arm/sunxi.rst
-  */
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -576,7 +576,12 @@ static void ufshcd_print_pwr_info(struct
+ 		"INVALID MODE",
+ 	};
  
-+#include <linux/bottom_half.h>
- #include <linux/crypto.h>
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
-@@ -274,7 +275,9 @@ static int sun8i_ss_handle_cipher_request(struct crypto_engine *engine, void *ar
- 	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
+-	dev_err(hba->dev, "%s:[RX, TX]: gear=[%d, %d], lane[%d, %d], pwr[%s, %s], rate = %d\n",
++	/*
++	 * Using dev_dbg to avoid messages during runtime PM to avoid
++	 * never-ending cycles of messages written back to storage by user space
++	 * causing runtime resume, causing more messages and so on.
++	 */
++	dev_dbg(hba->dev, "%s:[RX, TX]: gear=[%d, %d], lane[%d, %d], pwr[%s, %s], rate = %d\n",
+ 		 __func__,
+ 		 hba->pwr_info.gear_rx, hba->pwr_info.gear_tx,
+ 		 hba->pwr_info.lane_rx, hba->pwr_info.lane_tx,
+@@ -4967,6 +4972,12 @@ static int ufshcd_slave_configure(struct
+ 		pm_runtime_get_noresume(&sdev->sdev_gendev);
+ 	else if (ufshcd_is_rpm_autosuspend_allowed(hba))
+ 		sdev->rpm_autosuspend = 1;
++	/*
++	 * Do not print messages during runtime PM to avoid never-ending cycles
++	 * of messages written back to storage by user space causing runtime
++	 * resume, causing more messages and so on.
++	 */
++	sdev->silence_suspend = 1;
  
- 	err = sun8i_ss_cipher(breq);
-+	local_bh_disable();
- 	crypto_finalize_skcipher_request(engine, breq, err);
-+	local_bh_enable();
+ 	ufshcd_crypto_setup_rq_keyslot_manager(hba, q);
  
- 	return 0;
- }
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-index 3c073eb3db03..1a71ed49d233 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-@@ -9,6 +9,7 @@
-  *
-  * You could find the datasheet in Documentation/arm/sunxi.rst
-  */
-+#include <linux/bottom_half.h>
- #include <linux/dma-mapping.h>
- #include <linux/pm_runtime.h>
- #include <linux/scatterlist.h>
-@@ -442,6 +443,8 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- theend:
- 	kfree(pad);
- 	kfree(result);
-+	local_bh_disable();
- 	crypto_finalize_hash_request(engine, breq, err);
-+	local_bh_enable();
- 	return 0;
- }
--- 
-2.34.1
-
+@@ -7199,7 +7210,13 @@ static u32 ufshcd_find_max_sup_active_ic
+ 
+ 	if (!hba->vreg_info.vcc || !hba->vreg_info.vccq ||
+ 						!hba->vreg_info.vccq2) {
+-		dev_err(hba->dev,
++		/*
++		 * Using dev_dbg to avoid messages during runtime PM to avoid
++		 * never-ending cycles of messages written back to storage by
++		 * user space causing runtime resume, causing more messages and
++		 * so on.
++		 */
++		dev_dbg(hba->dev,
+ 			"%s: Regulator capability was not set, actvIccLevel=%d",
+ 							__func__, icc_level);
+ 		goto out;
 
 

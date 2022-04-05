@@ -2,112 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F004F4339
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC194F4149
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380825AbiDEU2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S1442081AbiDEUHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384326AbiDEM1V (ORCPT
+        with ESMTP id S1384414AbiDEM1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:27:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A0B65A7;
-        Tue,  5 Apr 2022 04:41:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 46F141F745;
-        Tue,  5 Apr 2022 11:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649158869; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRRxg6udnXTabhP4kMhtiuHHu5+YdylTuzhfgNh5DT0=;
-        b=0wtAiHZ2XsShXe7cIptTg3k8X+4oHApryJqVK5hd+8cqRZjLseNjHnoZcQcoQxyD1OWXot
-        1ZeREICduo8y7r8BsKPU1y+qehLHwuE7pWYzuzwgfIeWIUC4Eykm5wBfzxrxDHVkTCnZCN
-        OIrZG9eU4ycjps7xaIJr/M1NryFB5rU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649158869;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRRxg6udnXTabhP4kMhtiuHHu5+YdylTuzhfgNh5DT0=;
-        b=9+UNg7nWIBJgpgt0CtdlOpv95TMNTWHUt1bUOVG/Ue0N2y64KaP0ZmC0jpV692HZP1gqMa
-        YEUb3/5QV6AuxfCw==
-Received: from murzim.suse.de (murzim.suse.de [10.160.4.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3FB16A3B94;
-        Tue,  5 Apr 2022 11:41:09 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 13:41:09 +0200 (CEST)
-From:   Richard Biener <rguenther@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-cc:     linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: older gccs and case labels producing integer constants
-In-Reply-To: <YkwdtxNCpiERLFGW@zn.tnic>
-Message-ID: <rppnr36-25n9-nors-3p6-3oos06219s8@fhfr.qr>
-References: <YkwQ6+tIH8GQpuct@zn.tnic> <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr> <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr> <YkwbygWj/C3XooMV@zn.tnic> <YkwdtxNCpiERLFGW@zn.tnic>
+        Tue, 5 Apr 2022 08:27:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5261E344F1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649158928; x=1680694928;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=spOVTBjTD6IjOwr93EwblCXM/4VjxZnqhXMg90AhUTg=;
+  b=UACx6q/bGUWbs0lD48QO7z80f3+az/c47GPWni/tnTO2lOu8i7sqCBjN
+   umWUcnqsVz/fbQyzGGed3YSWbkkVT/TupyKInEUrSaeHCk7/TMm0M0PIk
+   EgRuU+iOqeFBPtJHszPjYnzaX5D2lIoI2pCyJo2T5dTrhClFUN25dFIT7
+   q9CJAA5m7WD3H+s/96aCqwMSt0qr5ht0tYiqXohEmV/WmL6D2+I50Im9E
+   heyNVWF46ZbryvnpY+uGcAeiqGZPMJx2CNgPK2osuZ7Uu5817jVPxUtLN
+   A/b66e9C65BpNbIpP6RZs9K92FlXusNoP+ABFS8b+GV2NLOLrKILRUCXL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323901880"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="323901880"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:42:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="569847261"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 04:42:06 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbhZW-00038d-2I;
+        Tue, 05 Apr 2022 11:42:06 +0000
+Date:   Tue, 05 Apr 2022 19:42:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ b77b2981bb22c4449a0a6e86eeb9fbab36a2beae
+Message-ID: <624c2b0d.MPU0WPJjZVrlWPga%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1609908220-1777648094-1649158869=:27745"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: b77b2981bb22c4449a0a6e86eeb9fbab36a2beae  rcu-tasks: Handle sparse cpu_possible_mask
 
----1609908220-1777648094-1649158869=:27745
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+elapsed time: 929m
 
-On Tue, 5 Apr 2022, Borislav Petkov wrote:
+configs tested: 127
+configs skipped: 3
 
-> On Tue, Apr 05, 2022 at 12:36:58PM +0200, Borislav Petkov wrote:
-> > On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
-> > > Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
-> > > compiler flags genommen werden?
-> > 
-> > Found it:
-> > 
-> > $ gcc -fsanitize=shift -c switch.c
-> > switch.c: In function ‘foo’:
-> > switch.c:10:7: error: case label does not reduce to an integer constant
-> >        case (((0xfc08) << 16) | (0x0101)):;
-> > 
-> > $ gcc --version
-> > gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
-> > Copyright (C) 2017 Free Software Foundation, Inc.
-> > 
-> > Something not fully backported?
-> 
-> Ok, not really:
-> 
-> gcc-10 -fsanitize=shift -c switch.c
-> switch.c: In function ‘foo’:
-> switch.c:10:7: error: case label does not reduce to an integer constant
->    10 |       case (((0xfc08) << 16) | (0x0101)):;
->       |       ^~~~
-> 
-> BUT!
-> 
-> when more switches are set with gcc-10 (full gcc cmdline from a kernel
-> build), then that passes.
-> 
-> But it doesn't pass with gcc-7.
-> 
-> Weird...
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-As was noted in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66880
-this is invalid C99+ but compilers are not required to diagnose that
-(you get it diagnosed with -pedantic).  -fsanitize=shift exposes
-it though since the non-integral-constant gets instrumented.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                         s3c6400_defconfig
+mips                         db1xxx_defconfig
+openrisc                 simple_smp_defconfig
+arm                         at91_dt_defconfig
+sh                           se7751_defconfig
+mips                        vocore2_defconfig
+arm                         lpc18xx_defconfig
+sh                           se7343_defconfig
+sh                         ap325rxa_defconfig
+arm                       imx_v6_v7_defconfig
+arc                        vdk_hs38_defconfig
+m68k                       m5475evb_defconfig
+arc                           tb10x_defconfig
+sh                          sdk7786_defconfig
+powerpc                        cell_defconfig
+powerpc                      chrp32_defconfig
+csky                             alldefconfig
+mips                    maltaup_xpa_defconfig
+arm                           stm32_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                 mpc837x_mds_defconfig
+m68k                          multi_defconfig
+arm                             ezx_defconfig
+xtensa                       common_defconfig
+sh                        edosk7760_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                  iss476-smp_defconfig
+sh                           se7750_defconfig
+powerpc                      pcm030_defconfig
+sh                  sh7785lcr_32bit_defconfig
+xtensa                generic_kc705_defconfig
+m68k                       m5249evb_defconfig
+m68k                       m5275evb_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                      pasemi_defconfig
+sh                             sh03_defconfig
+ia64                          tiger_defconfig
+arm                       multi_v4t_defconfig
+mips                         cobalt_defconfig
+powerpc                      arches_defconfig
+i386                                defconfig
+sh                            migor_defconfig
+sh                 kfr2r09-romimage_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220405
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+parisc64                            defconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                               defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-Richard.
----1609908220-1777648094-1649158869=:27745--
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220405
+riscv                randconfig-c006-20220405
+mips                 randconfig-c004-20220405
+arm                  randconfig-c002-20220405
+arm                         lpc32xx_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                   bluestone_defconfig
+arm                  colibri_pxa300_defconfig
+mips                     loongson1c_defconfig
+arm                        neponset_defconfig
+mips                         tb0219_defconfig
+arm                       spear13xx_defconfig
+arm                         socfpga_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220405
+riscv                randconfig-r042-20220405
+hexagon              randconfig-r041-20220405
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

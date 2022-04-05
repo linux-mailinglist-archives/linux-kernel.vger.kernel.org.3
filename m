@@ -2,61 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8346F4F51CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406A14F51CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847348AbiDFCRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S1847274AbiDFCRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344947AbiDEUVv (ORCPT
+        with ESMTP id S1344944AbiDEUVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 16:21:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450076D3A1;
-        Tue,  5 Apr 2022 13:01:57 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 20:01:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649188916;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mEtlfWOGKIQVrZ7nidc8AY49/i8syn1s+vzgKiezmpM=;
-        b=uP/UqWBCcJPOT9vJhSWPYKELL1mtLfiBiNyg2cvC3O2s6n3eodY7/HA8nAgyh1OfzhkKnj
-        onGWPf69ihrGgYgXuP5C0gEpTbgeqqCCZcJmabVaqKIggTdfhmcW5tbjs5bzy4LUkl5fOg
-        wpLgnGNUXGpC8aQSnJToDDjHL3Zak5x0xcWzcQqmgfWs/JOzFVYAPDlDWlUhzVHV45beJa
-        a/OlX7t24Cq6Ap/T8sUZZrMHM6usi0waY7DJmapnu0l7zEH97hPJ0HPpeDdd438AcEFSDa
-        zAJVDz6cxfxVvwAisbgfvwI0x3c0LGFxYelIrGbuEafB4mNX6O20kzjPikIX0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649188916;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mEtlfWOGKIQVrZ7nidc8AY49/i8syn1s+vzgKiezmpM=;
-        b=YTmJtaUbjkkcdIyLYkFNt/SJHKp0n05jgQZd0qb5tr5TfJVa/xTPtvEQEtWNeFoRDqemxE
-        jLDCITIa1oHKkbDQ==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/build] x86/configs: Add x86 debugging Kconfig fragment plus docs
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        Tue, 5 Apr 2022 16:21:50 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2200D6D3BD;
+        Tue,  5 Apr 2022 13:02:33 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1nbpNh-00CFJb-3P; Tue, 05 Apr 2022 20:02:25 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
-References: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
-MIME-Version: 1.0
-Message-ID: <164918891525.389.9920170532036101413.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] imx8m{m,n}-venice-*: add missing uart-has-rtscts property to UARTs
+Date:   Tue,  5 Apr 2022 13:02:23 -0700
+Message-Id: <20220405200223.18384-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,96 +41,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/build branch of tip:
+Add the missing 'uart-has-rtscts' property to UART's that have hardware
+flow control capability.
 
-Commit-ID:     9f61ccc85afb061f65dd8ede7b8d4845b2f2dfce
-Gitweb:        https://git.kernel.org/tip/9f61ccc85afb061f65dd8ede7b8d4845b2f2dfce
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Thu, 31 Mar 2022 10:57:28 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 05 Apr 2022 21:54:04 +02:00
-
-x86/configs: Add x86 debugging Kconfig fragment plus docs
-
-The kernel has a wide variety of debugging options to help catch
-and squash bugs.  However, new debugging is added all the time and
-the existing options can be hard to find.
-
-Add a Kconfig fragment with the debugging options which tip
-maintainers expect to be used to test contributions.
-
-This should make it easier for contributors to test their code and
-find issues before submission.
-
-  [ bp: Add to "make help" output ]
-
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220331175728.299103A0@davehans-spike.ostc.intel.com
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 ---
- Documentation/process/maintainer-tip.rst | 14 ++++++++++++++
- arch/x86/Makefile                        |  1 +
- kernel/configs/x86_debug.config          | 18 ++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 kernel/configs/x86_debug.config
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi | 1 +
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts  | 3 +++
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts  | 3 +++
+ arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts  | 1 +
+ 4 files changed, 8 insertions(+)
 
-diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
-index c74f4a8..572a328 100644
---- a/Documentation/process/maintainer-tip.rst
-+++ b/Documentation/process/maintainer-tip.rst
-@@ -437,6 +437,20 @@ in a private repository which allows interested people to easily pull the
- series for testing. The usual way to offer this is a git URL in the cover
- letter of the patch series.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+index 426483ec1f88..7a5d45e80982 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+@@ -221,6 +221,7 @@
+ 	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_bten>;
+ 	cts-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
+ 	rts-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
  
-+Testing
-+^^^^^^^
-+
-+Code should be tested before submitting to the tip maintainers.  Anything
-+other than minor changes should be built, booted and tested with
-+comprehensive (and heavyweight) kernel debugging options enabled.
-+
-+These debugging options can be found in kernel/configs/x86_debug.config
-+and can be added to an existing kernel config by running:
-+
-+	make x86_debug.config
-+
-+Some of these options are x86-specific and can be left out when testing
-+on other architectures.
+ 	bluetooth {
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
+index ee78c189c556..a23801deb4cd 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
+@@ -716,6 +716,7 @@
+ 	dtr-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
+ 	dsr-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+ 	dcd-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ };
  
- Coding style notes
- ------------------
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 63d50f6..1abd7cc 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -313,5 +313,6 @@ define archhelp
-   echo  ''
-   echo  '  kvm_guest.config	- Enable Kconfig items for running this kernel as a KVM guest'
-   echo  '  xen.config		- Enable Kconfig items for running this kernel as a Xen guest'
-+  echo  '  x86_debug.config	- Enable tip tree debugging options for testing'
+@@ -731,6 +732,7 @@
+ 	pinctrl-0 = <&pinctrl_uart3>;
+ 	cts-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
+ 	rts-gpios = <&gpio4 9 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ };
  
- endef
-diff --git a/kernel/configs/x86_debug.config b/kernel/configs/x86_debug.config
-new file mode 100644
-index 0000000..45498c0
---- /dev/null
-+++ b/kernel/configs/x86_debug.config
-@@ -0,0 +1,18 @@
-+CONFIG_X86_DEBUG_FPU=y
-+CONFIG_LOCK_STAT=y
-+CONFIG_DEBUG_VM=y
-+CONFIG_DEBUG_VM_VMACACHE=y
-+CONFIG_DEBUG_VM_RB=y
-+CONFIG_DEBUG_SLAB=y
-+CONFIG_DEBUG_KMEMLEAK=y
-+CONFIG_DEBUG_PAGEALLOC=y
-+CONFIG_SLUB_DEBUG_ON=y
-+CONFIG_KMEMCHECK=y
-+CONFIG_DEBUG_OBJECTS=y
-+CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
-+CONFIG_GCOV_KERNEL=y
-+CONFIG_LOCKDEP=y
-+CONFIG_PROVE_LOCKING=y
-+CONFIG_SCHEDSTATS=y
-+CONFIG_VMLINUX_VALIDATION=y
-+CONFIG_DEBUG_INFO=y
+@@ -739,6 +741,7 @@
+ 	pinctrl-0 = <&pinctrl_uart4>;
+ 	cts-gpios = <&gpio5 11 GPIO_ACTIVE_LOW>;
+ 	rts-gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+index 49e15a671b67..6aa0eb463647 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+@@ -644,6 +644,7 @@
+ 	pinctrl-0 = <&pinctrl_uart1>;
+ 	rts-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
+ 	cts-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ };
+ 
+@@ -660,6 +661,7 @@
+ 	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_uart3_gpio>;
+ 	rts-gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
+ 	cts-gpios = <&gpio2 0 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ 
+ 	bluetooth {
+@@ -677,6 +679,7 @@
+ 	dtr-gpios = <&gpio4 3 GPIO_ACTIVE_LOW>;
+ 	dsr-gpios = <&gpio4 4 GPIO_ACTIVE_LOW>;
+ 	dcd-gpios = <&gpio4 6 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
+index 3c0e63d2e82d..2c1f591335ad 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
+@@ -625,6 +625,7 @@
+ 	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_uart3_gpio>;
+ 	rts-gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
+ 	cts-gpios = <&gpio2 0 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
+ 	status = "okay";
+ 
+ 	bluetooth {
+-- 
+2.17.1
+

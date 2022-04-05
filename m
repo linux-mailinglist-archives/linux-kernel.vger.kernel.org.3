@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F244F503C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01F14F5072
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840898AbiDFBNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S1841902AbiDFB0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349077AbiDEJtE (ORCPT
+        with ESMTP id S1349076AbiDEJtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A575AA9940;
-        Tue,  5 Apr 2022 02:40:06 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BF5A994E;
+        Tue,  5 Apr 2022 02:40:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 535C6B818F3;
-        Tue,  5 Apr 2022 09:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBC3C385A1;
-        Tue,  5 Apr 2022 09:40:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2957D61368;
+        Tue,  5 Apr 2022 09:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C3AC385A3;
+        Tue,  5 Apr 2022 09:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151604;
-        bh=jf/0EApObABORwS/DhG/9UsbVEQxtDbTazbrKwfT8wI=;
+        s=korg; t=1649151609;
+        bh=FGZclYLihe2uY2gGNy483xxhj8gpzginQPKgkKu7Nd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z7djd2FVzQ6M0GVtSFpu0P1KVwIDQdQ92SZIFFzWd2KDbGlyPZ/XkYQVqXRHlEtyf
-         v/UGbxtUgz98nmBfsDsyWpSdE00cfRM+HqgODEQ2SDngbDCS4RukBOQgN/LHkPZF7i
-         B3x3DNKIVTBPgOkD0Sh3nYrDzEmTlMALGW38Z0Ls=
+        b=EIEhWGJvVnYxaweWiA+OAbNAPcD5fSP3pMDxKRm0vq85s01SAuEH7fBUzaR/adCDy
+         mVNhsDlBkib5MzBewzrtWKSX7nb4XR5bVMdLbJNAnVgd2NPBYghqmzCd/AXQHv+bE9
+         /I1SXG/9yasH2LnFPgOKBT6MSZPdNUdoN35OERmk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Abhishek Sahu <abhsahu@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 475/913] drm/msm/dpu: fix dp audio condition
-Date:   Tue,  5 Apr 2022 09:25:37 +0200
-Message-Id: <20220405070354.093780241@linuxfoundation.org>
+Subject: [PATCH 5.15 477/913] vfio/pci: fix memory leak during D3hot to D0 transition
+Date:   Tue,  5 Apr 2022 09:25:39 +0200
+Message-Id: <20220405070354.153175102@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,39 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Abhishek Sahu <abhsahu@nvidia.com>
 
-[ Upstream commit 1e0505a5a7a2fea243f8e6d7e13fcde65f9e41bc ]
+[ Upstream commit eadf88ecf6ac7d6a9f47a76c6055d9a1987a8991 ]
 
-DP audio enablement code which is comparing intf_type,
-DRM_MODE_ENCODER_TMDS (= 2) with DRM_MODE_CONNECTOR_DisplayPort (= 10).
-Which would never succeed. Fix it to check for DRM_MODE_ENCODER_TMDS.
+If 'vfio_pci_core_device::needs_pm_restore' is set (PCI device does
+not have No_Soft_Reset bit set in its PMCSR config register), then
+the current PCI state will be saved locally in
+'vfio_pci_core_device::pm_save' during D0->D3hot transition and same
+will be restored back during D3hot->D0 transition.
+For saving the PCI state locally, pci_store_saved_state() is being
+used and the pci_load_and_free_saved_state() will free the allocated
+memory.
 
-Fixes: d13e36d7d222 ("drm/msm/dp: add audio support for Display Port on MSM")
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220217035358.465904-2-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+But for reset related IOCTLs, vfio driver calls PCI reset-related
+API's which will internally change the PCI power state back to D0. So,
+when the guest resumes, then it will get the current state as D0 and it
+will skip the call to vfio_pci_set_power_state() for changing the
+power state to D0 explicitly. In this case, the memory pointed by
+'pm_save' will never be freed. In a malicious sequence, the state changing
+to D3hot followed by VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be
+run in a loop and it can cause an OOM situation.
+
+This patch frees the earlier allocated memory first before overwriting
+'pm_save' to prevent the mentioned memory leak.
+
+Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
+Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+Link: https://lore.kernel.org/r/20220217122107.22434-2-abhsahu@nvidia.com
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vfio/pci/vfio_pci_core.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 0e9d3fa1544b..6bde3e234ec8 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -1107,7 +1107,7 @@ static void _dpu_encoder_virt_enable_helper(struct drm_encoder *drm_enc)
- 	}
- 
- 
--	if (dpu_enc->disp_info.intf_type == DRM_MODE_CONNECTOR_DisplayPort &&
-+	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS &&
- 		dpu_enc->cur_master->hw_mdptop &&
- 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select)
- 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select(
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index a03b5a99c2da..0c63091cc848 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -228,6 +228,19 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
+ 	if (!ret) {
+ 		/* D3 might be unsupported via quirk, skip unless in D3 */
+ 		if (needs_save && pdev->current_state >= PCI_D3hot) {
++			/*
++			 * The current PCI state will be saved locally in
++			 * 'pm_save' during the D3hot transition. When the
++			 * device state is changed to D0 again with the current
++			 * function, then pci_store_saved_state() will restore
++			 * the state and will free the memory pointed by
++			 * 'pm_save'. There are few cases where the PCI power
++			 * state can be changed to D0 without the involvement
++			 * of the driver. For these cases, free the earlier
++			 * allocated memory first before overwriting 'pm_save'
++			 * to prevent the memory leak.
++			 */
++			kfree(vdev->pm_save);
+ 			vdev->pm_save = pci_store_saved_state(pdev);
+ 		} else if (needs_restore) {
+ 			pci_load_and_free_saved_state(pdev, &vdev->pm_save);
 -- 
 2.34.1
 

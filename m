@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937AF4F2E7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021334F2AEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347218AbiDEKoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S1353802AbiDEKJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241073AbiDEIcr (ORCPT
+        with ESMTP id S241074AbiDEIcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CDCB91B2;
-        Tue,  5 Apr 2022 01:26:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66A1B91AC;
+        Tue,  5 Apr 2022 01:26:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D273DB81BC5;
-        Tue,  5 Apr 2022 08:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B33FC385A1;
-        Tue,  5 Apr 2022 08:26:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75986B81BAF;
+        Tue,  5 Apr 2022 08:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3AAC385A4;
+        Tue,  5 Apr 2022 08:26:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147201;
-        bh=lMpcs0ph7Pke3alSiUVj1ZRvc8/341MlEOwp6H0eadk=;
+        s=korg; t=1649147204;
+        bh=WEzZA7KphCwxsPg16crtXDZyTJfB5qhlsaeZdSfVPQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xPNZdVZOaloZ3Hs+l5TgTQaVi8QI3F7v24ENSilRJZ9vSheWs7UANiydO24Ow0cXb
-         8odJHCmt49+OqJciCYoCNwZAjTEMRD5OL7rvkqz35VfHvpc3hZZGbbHCZxz4OZe2JF
-         aSd5e7Q9DiS98pGo32SjvNC2gS2xllsyTEkcYIwk=
+        b=cSo9kjb6VUAIxXVf3yMIApMo+bdaO+TYkxR8+XQI3Hs5B0+iykw8BZNorLpmLxGFk
+         qwPuFWdS+FdJ81oMjj7gNZpO3ZevoteJohtou6efzVmSHlaJx7HZ87JR8tf4fwVfUN
+         txDWvR7BqjW/YZYbN9pNxSfN7Ns+6JxcQQ6EIrxA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.17 1037/1126] crypto: x86/poly1305 - Fixup SLS
-Date:   Tue,  5 Apr 2022 09:29:44 +0200
-Message-Id: <20220405070437.914200227@linuxfoundation.org>
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.17 1038/1126] crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
+Date:   Tue,  5 Apr 2022 09:29:45 +0200
+Message-Id: <20220405070437.942973993@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,207 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-commit 7ed7aa4de9421229be6d331ed52d5cd09c99f409 upstream.
+commit c8bd296cca3434b13b28b074eaeb78a23284de77 upstream.
 
-Due to being a perl generated asm file, it got missed by the mass
-convertion script.
+The algorithm __cbc-aes-neonbs requires a fallback so we need
+to select the config options for them or otherwise it will fail
+to register on boot-up.
 
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_init_x86_64()+0x3a: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_x86_64()+0xf2: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_emit_x86_64()+0x37: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: __poly1305_block()+0x6d: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: __poly1305_init_avx()+0x1e8: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx()+0x18a: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx()+0xaf8: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_emit_avx()+0x99: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx2()+0x18a: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx2()+0x776: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx512()+0x18a: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx512()+0x796: missing int3 after ret
-arch/x86/crypto/poly1305-x86_64-cryptogams.o: warning: objtool: poly1305_blocks_avx512()+0x10bd: missing int3 after ret
-
-Fixes: f94909ceb1ed ("x86: Prepare asm files for straight-line-speculation")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: 00b99ad2bac2 ("crypto: arm/aes-neonbs - Use generic cbc...")
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/crypto/poly1305-x86_64-cryptogams.pl |   38 +++++++++++++-------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ arch/arm/crypto/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/x86/crypto/poly1305-x86_64-cryptogams.pl
-+++ b/arch/x86/crypto/poly1305-x86_64-cryptogams.pl
-@@ -297,7 +297,7 @@ ___
- $code.=<<___;
- 	mov	\$1,%eax
- .Lno_key:
--	ret
-+	RET
- ___
- &end_function("poly1305_init_x86_64");
- 
-@@ -373,7 +373,7 @@ $code.=<<___;
- .cfi_adjust_cfa_offset	-48
- .Lno_data:
- .Lblocks_epilogue:
--	ret
-+	RET
- .cfi_endproc
- ___
- &end_function("poly1305_blocks_x86_64");
-@@ -399,7 +399,7 @@ $code.=<<___;
- 	mov	%rax,0($mac)	# write result
- 	mov	%rcx,8($mac)
- 
--	ret
-+	RET
- ___
- &end_function("poly1305_emit_x86_64");
- if ($avx) {
-@@ -429,7 +429,7 @@ ___
- 	&poly1305_iteration();
- $code.=<<___;
- 	pop $ctx
--	ret
-+	RET
- .size	__poly1305_block,.-__poly1305_block
- 
- .type	__poly1305_init_avx,\@abi-omnipotent
-@@ -594,7 +594,7 @@ __poly1305_init_avx:
- 
- 	lea	-48-64($ctx),$ctx	# size [de-]optimization
- 	pop %rbp
--	ret
-+	RET
- .size	__poly1305_init_avx,.-__poly1305_init_avx
- ___
- 
-@@ -747,7 +747,7 @@ $code.=<<___;
- .cfi_restore	%rbp
- .Lno_data_avx:
- .Lblocks_avx_epilogue:
--	ret
-+	RET
- .cfi_endproc
- 
- .align	32
-@@ -1452,7 +1452,7 @@ $code.=<<___	if (!$win64);
- ___
- $code.=<<___;
- 	vzeroupper
--	ret
-+	RET
- .cfi_endproc
- ___
- &end_function("poly1305_blocks_avx");
-@@ -1508,7 +1508,7 @@ $code.=<<___;
- 	mov	%rax,0($mac)	# write result
- 	mov	%rcx,8($mac)
- 
--	ret
-+	RET
- ___
- &end_function("poly1305_emit_avx");
- 
-@@ -1675,7 +1675,7 @@ $code.=<<___;
- .cfi_restore 	%rbp
- .Lno_data_avx2$suffix:
- .Lblocks_avx2_epilogue$suffix:
--	ret
-+	RET
- .cfi_endproc
- 
- .align	32
-@@ -2201,7 +2201,7 @@ $code.=<<___	if (!$win64);
- ___
- $code.=<<___;
- 	vzeroupper
--	ret
-+	RET
- .cfi_endproc
- ___
- if($avx > 2 && $avx512) {
-@@ -2792,7 +2792,7 @@ $code.=<<___	if (!$win64);
- .cfi_def_cfa_register	%rsp
- ___
- $code.=<<___;
--	ret
-+	RET
- .cfi_endproc
- ___
- 
-@@ -2893,7 +2893,7 @@ $code.=<<___	if ($flavour =~ /elf32/);
- ___
- $code.=<<___;
- 	mov	\$1,%eax
--	ret
-+	RET
- .size	poly1305_init_base2_44,.-poly1305_init_base2_44
- ___
- {
-@@ -3010,7 +3010,7 @@ poly1305_blocks_vpmadd52:
- 	jnz		.Lblocks_vpmadd52_4x
- 
- .Lno_data_vpmadd52:
--	ret
-+	RET
- .size	poly1305_blocks_vpmadd52,.-poly1305_blocks_vpmadd52
- ___
- }
-@@ -3451,7 +3451,7 @@ poly1305_blocks_vpmadd52_4x:
- 	vzeroall
- 
- .Lno_data_vpmadd52_4x:
--	ret
-+	RET
- .size	poly1305_blocks_vpmadd52_4x,.-poly1305_blocks_vpmadd52_4x
- ___
- }
-@@ -3824,7 +3824,7 @@ $code.=<<___;
- 	vzeroall
- 
- .Lno_data_vpmadd52_8x:
--	ret
-+	RET
- .size	poly1305_blocks_vpmadd52_8x,.-poly1305_blocks_vpmadd52_8x
- ___
- }
-@@ -3861,7 +3861,7 @@ poly1305_emit_base2_44:
- 	mov	%rax,0($mac)	# write result
- 	mov	%rcx,8($mac)
- 
--	ret
-+	RET
- .size	poly1305_emit_base2_44,.-poly1305_emit_base2_44
- ___
- }	}	}
-@@ -3916,7 +3916,7 @@ xor128_encrypt_n_pad:
- 
- .Ldone_enc:
- 	mov	$otp,%rax
--	ret
-+	RET
- .size	xor128_encrypt_n_pad,.-xor128_encrypt_n_pad
- 
- .globl	xor128_decrypt_n_pad
-@@ -3967,7 +3967,7 @@ xor128_decrypt_n_pad:
- 
- .Ldone_dec:
- 	mov	$otp,%rax
--	ret
-+	RET
- .size	xor128_decrypt_n_pad,.-xor128_decrypt_n_pad
- ___
- }
-@@ -4109,7 +4109,7 @@ avx_handler:
- 	pop	%rbx
- 	pop	%rdi
- 	pop	%rsi
--	ret
-+	RET
- .size	avx_handler,.-avx_handler
- 
- .section	.pdata
+--- a/arch/arm/crypto/Kconfig
++++ b/arch/arm/crypto/Kconfig
+@@ -102,6 +102,8 @@ config CRYPTO_AES_ARM_BS
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_AES
++	select CRYPTO_AES
++	select CRYPTO_CBC
+ 	select CRYPTO_SIMD
+ 	help
+ 	  Use a faster and more secure NEON based implementation of AES in CBC,
 
 

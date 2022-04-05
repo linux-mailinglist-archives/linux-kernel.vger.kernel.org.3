@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E324F3F47
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FDD4F431C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358610AbiDEODx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S1359373AbiDEOEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235765AbiDEJbC (ORCPT
+        with ESMTP id S235895AbiDEJbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:31:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C345220DE;
-        Tue,  5 Apr 2022 02:18:05 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C081CB36;
+        Tue,  5 Apr 2022 02:18:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 075E16164D;
-        Tue,  5 Apr 2022 09:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1953FC385A2;
-        Tue,  5 Apr 2022 09:18:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF66B81B14;
+        Tue,  5 Apr 2022 09:18:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A28C385A3;
+        Tue,  5 Apr 2022 09:18:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150284;
-        bh=Fk7dGV1XNcf85J/QIpn+aGzWIVRLnxGOtlxA3lFhd0I=;
+        s=korg; t=1649150290;
+        bh=p7BGkVpEGhExPG2zRoDFAJ0QEJp7WuVxdchXTmSI2EM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UUSQv3JZNQynooBn46iG7aZ5LIPbomeLpJ2BMuJh0DRP++Wag9btGUN5SuO/ajh1D
-         N27WhjsKhwv2PEiOr05QG+jhAlcm2YexRSszmazbvVGVFmhbEjRbbYD7M6LK5HYt6j
-         EJ0staYscdV1H8KzRSSotQZxYoEzZC9JIJKq/xac=
+        b=BS3e8L0SRw71rNBWEsk00n4J68tSJb3V+7EGMREoNwJZDCDYK+6pKdLwIn5aKKFIk
+         c7mtNqGi/Cxu5/U8b1oN7iQH3J7WwcqNFfRHhhxhX/VjfXOoUzXtXU0pE+wvKup+Zu
+         BvHeaDAY4iTvts90qON4S+ZVaFwN57nWuesUOuZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.16 1004/1017] xsk: Do not write NULL in SW ring at allocation failure
-Date:   Tue,  5 Apr 2022 09:31:57 +0200
-Message-Id: <20220405070424.004155049@linuxfoundation.org>
+        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.16 1006/1017] vdpa/mlx5: Avoid processing works if workqueue was destroyed
+Date:   Tue,  5 Apr 2022 09:31:59 +0200
+Message-Id: <20220405070424.062690700@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,50 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
+From: Eli Cohen <elic@nvidia.com>
 
-commit a95a4d9b39b0324402569ed7395aae59b8fd2b11 upstream.
+commit ad6dc1daaf29f97f23cc810d60ee01c0e83f4c6b upstream.
 
-For the case when xp_alloc_batch() is used but the batched allocation
-cannot be used, there is a slow path that uses the non-batched
-xp_alloc(). When it fails to allocate an entry, it returns NULL. The
-current code wrote this NULL into the entry of the provided results
-array (pointer to the driver SW ring usually) and returned. This might
-not be what the driver expects and to make things simpler, just write
-successfully allocated xdp_buffs into the SW ring,. The driver might
-have information in there that is still important after an allocation
-failure.
+If mlx5_vdpa gets unloaded while a VM is running, the workqueue will be
+destroyed. However, vhost might still have reference to the kick
+function and might attempt to push new works. This could lead to null
+pointer dereference.
 
-Note that at this point in time, there are no drivers using
-xp_alloc_batch() that could trigger this slow path. But one might get
-added.
+To fix this, set mvdev->wq to NULL just before destroying and verify
+that the workqueue is not NULL in mlx5_vdpa_kick_vq before attempting to
+push a new work.
 
-Fixes: 47e4075df300 ("xsk: Batched buffer allocation for the pool")
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220328142123.170157-2-maciej.fijalkowski@intel.com
+Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Link: https://lore.kernel.org/r/20220321141303.9586-1-elic@nvidia.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/xdp/xsk_buff_pool.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -584,9 +584,13 @@ u32 xp_alloc_batch(struct xsk_buff_pool
- 	u32 nb_entries1 = 0, nb_entries2;
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1680,7 +1680,7 @@ static void mlx5_vdpa_kick_vq(struct vdp
+ 		return;
  
- 	if (unlikely(pool->dma_need_sync)) {
-+		struct xdp_buff *buff;
-+
- 		/* Slow path */
--		*xdp = xp_alloc(pool);
--		return !!*xdp;
-+		buff = xp_alloc(pool);
-+		if (buff)
-+			*xdp = buff;
-+		return !!buff;
- 	}
+ 	if (unlikely(is_ctrl_vq_idx(mvdev, idx))) {
+-		if (!mvdev->cvq.ready)
++		if (!mvdev->wq || !mvdev->cvq.ready)
+ 			return;
  
- 	if (unlikely(pool->free_list_cnt)) {
+ 		wqent = kzalloc(sizeof(*wqent), GFP_ATOMIC);
+@@ -2673,9 +2673,12 @@ static void mlx5_vdpa_dev_del(struct vdp
+ 	struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(dev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
++	struct workqueue_struct *wq;
+ 
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+-	destroy_workqueue(mvdev->wq);
++	wq = mvdev->wq;
++	mvdev->wq = NULL;
++	destroy_workqueue(wq);
+ 	_vdpa_unregister_device(dev);
+ 	mgtdev->ndev = NULL;
+ }
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447654F2863
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA84F2864
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbiDEIOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S235059AbiDEIOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbiDEH7j (ORCPT
+        with ESMTP id S235388AbiDEH7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8C657165;
-        Tue,  5 Apr 2022 00:54:04 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C422257B01;
+        Tue,  5 Apr 2022 00:54:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CFC5B81B18;
-        Tue,  5 Apr 2022 07:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820EEC340EE;
-        Tue,  5 Apr 2022 07:54:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B6A9B81BAF;
+        Tue,  5 Apr 2022 07:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C931BC340EE;
+        Tue,  5 Apr 2022 07:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145241;
-        bh=EbOZ/oVGLOsnnwYomOpaf9hYYjlbnYBhs4SnLCj8OQc=;
+        s=korg; t=1649145247;
+        bh=PdTl2gDBiABNcwodj9dveqVoYd5A27vl2BOyA9QCatM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AFc63gOa4PiorzYNA/0oVo2IxVoWDcKDHN7/x+VdEkfOUrGc0TA8jCGW/i04fW3Ys
-         a3yzDJB52IlhJH9P2VDK8FwxGIMZf7fgRSw+1LwUN0ahkdmjZLV8GMFqbNG3EGYq70
-         Z2vgpe17R1lPO0DmDsA8U0ub5eMpK2k34jcIKV5E=
+        b=SFpW4COP+tYwt3rp5cSitkOPYaD36VFj13StkpFMBRvHuZp0Da5tOQ6MrR3Ysi8pT
+         jOdtyB8cr0GOIvV+o6MFHqa4YmKeWQXDeA3RW6r8tbehzL3pZRNbe5i/zZ8r5ms3kk
+         qBcb0FZlQk5pBTDbkDLJrNjUQnAwJsEJrEZboPxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, devicetree@vger.kernel.org,
         Maulik Shah <quic_mkshah@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0335/1126] arm64: dts: qcom: sm8150: Correct TCS configuration for apps rsc
-Date:   Tue,  5 Apr 2022 09:18:02 +0200
-Message-Id: <20220405070417.449490661@linuxfoundation.org>
+Subject: [PATCH 5.17 0337/1126] arm64: dts: qcom: sm8450: Update cpuidle states parameters
+Date:   Tue,  5 Apr 2022 09:18:04 +0200
+Message-Id: <20220405070417.507344638@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,37 +59,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maulik Shah <quic_mkshah@quicinc.com>
 
-[ Upstream commit 17ac8af678b6da6a8f1df7da8ebf2c5198741827 ]
+[ Upstream commit 6574702b0d394d2acc9ff808c4a79df8b9999173 ]
 
-Correct the TCS config by updating the number of TCSes for each type.
+This change updates/corrects below cpuidle parameters
+
+1. entry-latency, exit-latency and residency for various idle states.
+2. arm,psci-suspend-param which is same for CLUSTER_SLEEP_0/1 states.
+3. Add CLUSTER_SLEEP_1 in CLUSTER_PD.
 
 Cc: devicetree@vger.kernel.org
-Fixes: d8cf9372b654 ("arm64: dts: qcom: sm8150: Add apps shared nodes")
+Fixes: 5188049c9b36 ("arm64: dts: qcom: Add base SM8450 DTSI")
 Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+[bjorn: Split domain-idle-states, per Ulf's request]
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1641749107-31979-2-git-send-email-quic_mkshah@quicinc.com
+Link: https://lore.kernel.org/r/1641749107-31979-5-git-send-email-quic_mkshah@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 6012322a5984..78265646feff 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -3556,9 +3556,9 @@
- 			qcom,tcs-offset = <0xd00>;
- 			qcom,drv-id = <2>;
- 			qcom,tcs-config = <ACTIVE_TCS  2>,
--					  <SLEEP_TCS   1>,
--					  <WAKE_TCS    1>,
--					  <CONTROL_TCS 0>;
-+					  <SLEEP_TCS   3>,
-+					  <WAKE_TCS    3>,
-+					  <CONTROL_TCS 1>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 02b97e838c47..9ee055143f8a 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -203,9 +203,9 @@
+ 				compatible = "arm,idle-state";
+ 				idle-state-name = "silver-rail-power-collapse";
+ 				arm,psci-suspend-param = <0x40000004>;
+-				entry-latency-us = <274>;
+-				exit-latency-us = <480>;
+-				min-residency-us = <3934>;
++				entry-latency-us = <800>;
++				exit-latency-us = <750>;
++				min-residency-us = <4090>;
+ 				local-timer-stop;
+ 			};
  
- 			rpmhcc: clock-controller {
- 				compatible = "qcom,sm8150-rpmh-clk";
+@@ -213,9 +213,9 @@
+ 				compatible = "arm,idle-state";
+ 				idle-state-name = "gold-rail-power-collapse";
+ 				arm,psci-suspend-param = <0x40000004>;
+-				entry-latency-us = <327>;
+-				exit-latency-us = <1502>;
+-				min-residency-us = <4488>;
++				entry-latency-us = <600>;
++				exit-latency-us = <1550>;
++				min-residency-us = <4791>;
+ 				local-timer-stop;
+ 			};
+ 		};
+@@ -224,10 +224,10 @@
+ 			CLUSTER_SLEEP_0: cluster-sleep-0 {
+ 				compatible = "domain-idle-state";
+ 				idle-state-name = "cluster-l3-off";
+-				arm,psci-suspend-param = <0x4100c344>;
+-				entry-latency-us = <584>;
+-				exit-latency-us = <2332>;
+-				min-residency-us = <6118>;
++				arm,psci-suspend-param = <0x41000044>;
++				entry-latency-us = <1050>;
++				exit-latency-us = <2500>;
++				min-residency-us = <5309>;
+ 				local-timer-stop;
+ 			};
+ 
+@@ -235,9 +235,9 @@
+ 				compatible = "domain-idle-state";
+ 				idle-state-name = "cluster-power-collapse";
+ 				arm,psci-suspend-param = <0x4100c344>;
+-				entry-latency-us = <2893>;
+-				exit-latency-us = <4023>;
+-				min-residency-us = <9987>;
++				entry-latency-us = <2700>;
++				exit-latency-us = <3500>;
++				min-residency-us = <13959>;
+ 				local-timer-stop;
+ 			};
+ 		};
+@@ -315,7 +315,7 @@
+ 
+ 		CLUSTER_PD: cpu-cluster0 {
+ 			#power-domain-cells = <0>;
+-			domain-idle-states = <&CLUSTER_SLEEP_0>;
++			domain-idle-states = <&CLUSTER_SLEEP_0>, <&CLUSTER_SLEEP_1>;
+ 		};
+ 	};
+ 
 -- 
 2.34.1
 

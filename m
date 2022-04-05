@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D9F4F47AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF734F46A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358980AbiDEVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S1353869AbiDEUj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343763AbiDEKjl (ORCPT
+        with ESMTP id S1344429AbiDEKjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:39:41 -0400
+        Tue, 5 Apr 2022 06:39:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F26C5FC5;
-        Tue,  5 Apr 2022 03:24:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259932BB21;
+        Tue,  5 Apr 2022 03:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02075B81B18;
-        Tue,  5 Apr 2022 10:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C123C385A1;
-        Tue,  5 Apr 2022 10:24:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D216FB81C8A;
+        Tue,  5 Apr 2022 10:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E94CC385A0;
+        Tue,  5 Apr 2022 10:25:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154272;
-        bh=Ew4sFXFJL9/Fob+RXWFLC70dMuNHv4n2jRil1FCn0DY=;
+        s=korg; t=1649154311;
+        bh=bsogIIyNX9MIbiSags7L1UOyBmoamMHwJ1JzvDC/GJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFDKT16G0/Y7VMl9VYM7py5hphKz5Ur/drh/gqk3PBortRwo5ey8XiB5eIJwNamJl
-         o8qZA131Av402/bnC/C7tDVn3yOVTpbLbJWiXyFTDrtxOEYGkvsnXWlw5T6Nb2PbcO
-         HSuqzXaLV1EobQddGg4hjoWzhwJrisWxQ26c08eY=
+        b=ate5Wuxhcylp5fu6r5WuFheK2l0qRte9F1kODSp8dXaLAzYGUWN66AptqlTjeAoZY
+         ZEj+NFevfvMJWNb6jTPUYGjjI45uOIaseTUeWRVqa1gPe5ajaU4GFAiIUD+1w4aRgm
+         u5qRWEejOxatRsR30Tva6EVOYL+Yk3BNJIdHdI04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Bikash Hazarika <bhazarika@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 519/599] scsi: qla2xxx: Fix wrong FDMI data for 64G adapter
-Date:   Tue,  5 Apr 2022 09:33:33 +0200
-Message-Id: <20220405070314.283919431@linuxfoundation.org>
+Subject: [PATCH 5.10 527/599] scsi: qla2xxx: Fix hang due to session stuck
+Date:   Tue,  5 Apr 2022 09:33:41 +0200
+Message-Id: <20220405070314.522972647@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -47,50 +47,88 @@ User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bikash Hazarika <bhazarika@marvell.com>
+From: Quinn Tran <qutran@marvell.com>
 
-commit 1cfbbacbee2d6ea3816386a483e3c7a96e5bd657 upstream.
+commit c02aada06d19a215c8291bd968a99a270e96f734 upstream.
 
-Corrected transmission speed mask values for FC.
+User experienced device lost. The log shows Get port data base command was
+queued up, failed, and requeued again. Every time it is requeued, it set
+the FCF_ASYNC_ACTIVE. This prevents any recovery code from occurring
+because driver thinks a recovery is in progress for this session. In
+essence, this session is hung.  The reason it gets into this place is the
+session deletion got in front of this call due to link perturbation.
 
-Supported Speed: 16 32 20 Gb/s ===> Should be 64 instead of 20
-Supported Speed: 16G 32G 48G   ===> Should be 64G instead of 48G
+Break the requeue cycle and exit.  The session deletion code will trigger a
+session relogin.
 
-Link: https://lore.kernel.org/r/20220110050218.3958-9-njavali@marvell.com
+Link: https://lore.kernel.org/r/20220310092604.22950-8-njavali@marvell.com
+Fixes: 726b85487067 ("qla2xxx: Add framework for async fabric discovery")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Bikash Hazarika <bhazarika@marvell.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_def.h  |    4 ++++
+ drivers/scsi/qla2xxx/qla_init.c |   19 +++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
 --- a/drivers/scsi/qla2xxx/qla_def.h
 +++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -2796,7 +2796,11 @@ struct ct_fdmi2_hba_attributes {
- #define FDMI_PORT_SPEED_8GB		0x10
- #define FDMI_PORT_SPEED_16GB		0x20
- #define FDMI_PORT_SPEED_32GB		0x40
--#define FDMI_PORT_SPEED_64GB		0x80
-+#define FDMI_PORT_SPEED_20GB		0x80
-+#define FDMI_PORT_SPEED_40GB		0x100
-+#define FDMI_PORT_SPEED_128GB		0x200
-+#define FDMI_PORT_SPEED_64GB		0x400
-+#define FDMI_PORT_SPEED_256GB		0x800
- #define FDMI_PORT_SPEED_UNKNOWN		0x8000
+@@ -5175,4 +5175,8 @@ struct sff_8247_a0 {
+ #include "qla_gbl.h"
+ #include "qla_dbg.h"
+ #include "qla_inline.h"
++
++#define IS_SESSION_DELETED(_fcport) (_fcport->disc_state == DSC_DELETE_PEND || \
++				      _fcport->disc_state == DSC_DELETED)
++
+ #endif
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -570,6 +570,14 @@ qla2x00_async_adisc(struct scsi_qla_host
+ 	struct srb_iocb *lio;
+ 	int rval = QLA_FUNCTION_FAILED;
  
- #define FC_CLASS_2	0x04
++	if (IS_SESSION_DELETED(fcport)) {
++		ql_log(ql_log_warn, vha, 0xffff,
++		       "%s: %8phC is being delete - not sending command.\n",
++		       __func__, fcport->port_name);
++		fcport->flags &= ~FCF_ASYNC_ACTIVE;
++		return rval;
++	}
++
+ 	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT))
+ 		return rval;
+ 
+@@ -1316,8 +1324,15 @@ int qla24xx_async_gpdb(struct scsi_qla_h
+ 	struct port_database_24xx *pd;
+ 	struct qla_hw_data *ha = vha->hw;
+ 
+-	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT) ||
+-	    fcport->loop_id == FC_NO_LOOP_ID) {
++	if (IS_SESSION_DELETED(fcport)) {
++		ql_log(ql_log_warn, vha, 0xffff,
++		       "%s: %8phC is being delete - not sending command.\n",
++		       __func__, fcport->port_name);
++		fcport->flags &= ~FCF_ASYNC_ACTIVE;
++		return rval;
++	}
++
++	if (!vha->flags.online || fcport->flags & FCF_ASYNC_SENT) {
+ 		ql_log(ql_log_warn, vha, 0xffff,
+ 		    "%s: %8phC online %d flags %x - not sending command.\n",
+ 		    __func__, fcport->port_name, vha->flags.online, fcport->flags);
 
 

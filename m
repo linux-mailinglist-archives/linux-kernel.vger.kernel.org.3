@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35174F5091
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B18D4F4FA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842330AbiDFBar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S1838952AbiDFA5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352582AbiDEKEo (ORCPT
+        with ESMTP id S1352665AbiDEKEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7D6BB0AD;
-        Tue,  5 Apr 2022 02:53:27 -0700 (PDT)
+        Tue, 5 Apr 2022 06:04:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5483ABB910;
+        Tue,  5 Apr 2022 02:53:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B321461745;
-        Tue,  5 Apr 2022 09:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E09C385A2;
-        Tue,  5 Apr 2022 09:53:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 266BDCE1CA2;
+        Tue,  5 Apr 2022 09:53:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC72C385A1;
+        Tue,  5 Apr 2022 09:53:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152406;
-        bh=eAu7CtqUbejdrEQNt9DreNr/zKSssNpE1NjUjFYTwPA=;
+        s=korg; t=1649152414;
+        bh=dOC/qeva2LJb0df2IyTGuQKNhvG4/vpycOtEmcS+tso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U5v+EwKmJr9liLSdnbw5x6JNwIlXT8shL3U9m2zc38UN9I3brThRoMg4t8itmnIMU
-         QaQ0VSwJsDSxBaCHiqOhYjC63gykRvT/xoQjUhr0GP3qd6kRXizbsBKl/hY+60XWW+
-         FvFZJIEgJjlVkC+mKqhO0IWkGAbKmb7s2aPEFQUM=
+        b=K9X234PuAWJShF74rKwKyqALJ8eSez9UUIEfHOvNZ/W6yAbmUsIKg3GUqAB3q/RbB
+         YM3puXLyVlInKlbixudn3eAkJGMugNS9Rh8bkoDaqXgtz2bW1NGNoByIGcbju46Xuf
+         oyrZ0Jsnb2IspKDNCbFp8Peb7sDrPIEhJNh7c/cM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rander Wang <rander.wang@intel.com>,
-        Anthony I Gilea <i@cpp.in>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 765/913] ASoC: Intel: sof_sdw: fix quirks for 2022 HP Spectre x360 13"
-Date:   Tue,  5 Apr 2022 09:30:27 +0200
-Message-Id: <20220405070402.763474011@linuxfoundation.org>
+Subject: [PATCH 5.15 768/913] media: atomisp: fix bad usage at error handling logic
+Date:   Tue,  5 Apr 2022 09:30:30 +0200
+Message-Id: <20220405070402.853528449@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,52 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anthony I Gilea <i@cpp.in>
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-[ Upstream commit ce73ef6ec67104d1fcc4c5911d77ce83288a0998 ]
+[ Upstream commit fc0b582c858ed73f94c8f3375c203ea46f1f7402 ]
 
-HP changed the DMI identification for 2022 devices:
-Product Name: HP Spectre x360 Conv 13-ap0001na
-Product Name: 8709
-This patch relaxes the DMI_MATCH criterion to work with all versions of this product.
+As warned by sparse:
+	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
 
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Anthony I Gilea <i@cpp.in>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220304204532.54675-4-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The acc_fw interactor is used outside the loop, at the error handling
+logic. On most cases, this is actually safe there, but, if
+atomisp_css_set_acc_parameters() has an error, an attempt to use it
+will pick an invalid value for acc_fw.
+
+Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soundwire/dmi-quirks.c   | 2 +-
- sound/soc/intel/boards/sof_sdw.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
-index 0ca2a3e3a02e..747983743a14 100644
---- a/drivers/soundwire/dmi-quirks.c
-+++ b/drivers/soundwire/dmi-quirks.c
-@@ -59,7 +59,7 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Convertible"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Conv"),
- 		},
- 		.driver_data = (void *)intel_tgl_bios,
- 	},
-diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
-index 76759b209906..0bf3e56e1d58 100644
---- a/sound/soc/intel/boards/sof_sdw.c
-+++ b/sound/soc/intel/boards/sof_sdw.c
-@@ -184,7 +184,7 @@ static const struct dmi_system_id sof_sdw_quirk_table[] = {
- 		.callback = sof_sdw_quirk_cb,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Convertible"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Conv"),
- 		},
- 		.driver_data = (void *)(SOF_SDW_TGL_HDMI |
- 					SOF_SDW_PCH_DMIC |
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+index 9a1751895ab0..28cb271663c4 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
+ 	return 0;
+ }
+ 
++static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
++					      int i,
++					      struct atomisp_acc_fw *acc_fw)
++{
++	while (--i >= 0) {
++		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
++			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
++							 acc_flag_to_pipe[i].pipe_id);
++		}
++	}
++}
++
+ /*
+  * Appends the loaded acceleration binary extensions to the
+  * current ISP mode. Must be called just before sh_css_start().
+@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 								     acc_fw->fw,
+ 								     acc_flag_to_pipe[i].pipe_id,
+ 								     acc_fw->type);
+-				if (ret)
++				if (ret) {
++					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 					goto error;
++				}
+ 
+ 				ext_loaded = true;
+ 			}
+ 		}
+ 
+ 		ret = atomisp_css_set_acc_parameters(acc_fw);
+-		if (ret < 0)
++		if (ret < 0) {
++			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 			goto error;
++		}
+ 	}
+ 
+ 	if (!ext_loaded)
+@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	ret = atomisp_css_update_stream(asd);
+ 	if (ret) {
+ 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
++		atomisp_acc_unload_extensions(asd);
+ 		goto error;
+ 	}
+ 
+@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	return 0;
+ 
+ error:
+-	while (--i >= 0) {
+-		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
+-			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
+-							 acc_flag_to_pipe[i].pipe_id);
+-		}
+-	}
+-
+ 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
+ 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
+ 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
 -- 
 2.34.1
 

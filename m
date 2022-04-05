@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99974F3B75
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C54F3B79
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358998AbiDEL4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S1359714AbiDEL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244926AbiDEIws (ORCPT
+        with ESMTP id S244998AbiDEIxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DFD1BEBB;
-        Tue,  5 Apr 2022 01:46:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4839BE3F;
+        Tue,  5 Apr 2022 01:49:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25A8BB81B18;
-        Tue,  5 Apr 2022 08:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766EBC385A0;
-        Tue,  5 Apr 2022 08:46:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0D140CE1C2B;
+        Tue,  5 Apr 2022 08:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246FEC385A1;
+        Tue,  5 Apr 2022 08:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148402;
-        bh=Kby6M02Ko1M617/lfRgRpIE2CJqOpMZxo0TaBVxMgLM=;
+        s=korg; t=1649148537;
+        bh=dUPMWY3No3ZtlmW5feTBsUwdpyUR2ssd5bqEdS1TjXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kntFUn4hYroclTMbn0p20x4qvHaQ0uKSORsCGYOQAdVwrUWypEuOcbn/neSugb7hg
-         R1wbQ2iQIHhQB5M4YzIh5yyhH4pSUxmrsjKa54Du3BkWH1oeAcxwr/N8xdmmR3q7Ez
-         e3uwhW7gBEbzkT1Bk/UOiMgwPuadWjZukTLVb/e8=
+        b=fl0dC/Iy96KmL0TKHoU1eg7Io/rjcAIzPrzy529NxlewwRXP02E9z065klMH6XceV
+         1uQ3D5Acq+tXL6X5zhVsxHgkrrVeW3P5B8BuWLwvoPCbH8YmQp5kfgKTzL8iegs30v
+         H7+Zgo3rPMdevAdzwe2bPckaWtkFOKrC8Lnvvd9U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0342/1017] ASoC: codecs: wcd938x: fix kcontrol max values
-Date:   Tue,  5 Apr 2022 09:20:55 +0200
-Message-Id: <20220405070404.434785126@linuxfoundation.org>
+Subject: [PATCH 5.16 0343/1017] ASoC: codecs: wcd934x: fix kcontrol max values
+Date:   Tue,  5 Apr 2022 09:20:56 +0200
+Message-Id: <20220405070404.464710729@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,7 +58,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit b0217519236924f77a8382b4004e43ef8fd0dcbb ]
+[ Upstream commit 61163c3e7480106804269182e24db05244866493 ]
 
 set "HPH Type" Kcontrol max value of WCD_MBHC_HPH_STEREO instead of UINT_MAX.
 set "HPHL/R Impedance" Kcontrols max value to INT_MAX instead of UINT_MAX as
@@ -66,35 +66,35 @@ max field is integer type.
 
 Without this patch amixer for these controls will show -1 as max value to userspace.
 
-Fixes: bcee7ed09b8e ("ASoC: codecs: wcd938x: add Multi Button Headset Control support")
+Fixes: 9fb9b1690f0b ("ASoC: codecs: wcd934x: add mbhc support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220222183212.11580-8-srinivas.kandagatla@linaro.org
+Link: https://lore.kernel.org/r/20220222183212.11580-9-srinivas.kandagatla@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x.c | 6 +++---
+ sound/soc/codecs/wcd934x.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index 54671bbf7471..4480c118ed5d 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -3577,14 +3577,14 @@ static int wcd938x_hph_impedance_get(struct snd_kcontrol *kcontrol,
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index e63c6b723d76..68c9d694d379 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -3023,14 +3023,14 @@ static int wcd934x_hph_impedance_get(struct snd_kcontrol *kcontrol,
+ 	return 0;
  }
- 
  static const struct snd_kcontrol_new hph_type_detect_controls[] = {
 -	SOC_SINGLE_EXT("HPH Type", 0, 0, UINT_MAX, 0,
 +	SOC_SINGLE_EXT("HPH Type", 0, 0, WCD_MBHC_HPH_STEREO, 0,
- 		       wcd938x_get_hph_type, NULL),
+ 		       wcd934x_get_hph_type, NULL),
  };
  
  static const struct snd_kcontrol_new impedance_detect_controls[] = {
 -	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, UINT_MAX, 0,
 +	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, INT_MAX, 0,
- 		       wcd938x_hph_impedance_get, NULL),
+ 		       wcd934x_hph_impedance_get, NULL),
 -	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, UINT_MAX, 0,
 +	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, INT_MAX, 0,
- 		       wcd938x_hph_impedance_get, NULL),
+ 		       wcd934x_hph_impedance_get, NULL),
  };
  
 -- 

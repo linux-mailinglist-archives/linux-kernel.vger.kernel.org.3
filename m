@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8166B4F2899
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBD54F28A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbiDEIUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S239684AbiDEIU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiDEH77 (ORCPT
+        with ESMTP id S235662AbiDEH77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 03:59:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4601C137;
-        Tue,  5 Apr 2022 00:56:56 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFA51CB01;
+        Tue,  5 Apr 2022 00:57:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5898B81B18;
-        Tue,  5 Apr 2022 07:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E771C340EE;
-        Tue,  5 Apr 2022 07:56:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1C16615CD;
+        Tue,  5 Apr 2022 07:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFDAC340EE;
+        Tue,  5 Apr 2022 07:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145413;
-        bh=ybT7+5zSo63r+ZXukOXUPT5DtGFQtgkMrq0vaM9uPB4=;
+        s=korg; t=1649145419;
+        bh=kTf509aGxUC2L+Qqne7LOHBXyNCvMcSwY5mKQwAKabs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iswtb6I5gPohUooya1DGfG4xpu+OwFkAOEDNvHdqJRwCGw+obJDqQU4FoRS6SJ52h
-         0hc4lMySz2ZjadFYkh+oWNw13zeQetihrQclb//fiCtPu6cVxm/5GCz9pLEfd6loI3
-         imiZIII57ancwcqHzzvRTZO7w5lceL8nQonYHJ2w=
+        b=ou4HJmEr6GzE3lXpzTc+7WAZ2DK0l62D0dnQLsrWYDTTpbx4kYHo5uwRRGOf4umcB
+         lVLmt3iXBkg0blcFJrf0y4eRwIW/aDWlwiuEhD6EZzvB/CdN5lkaASLiuoQVKuybog
+         Is0ARflPHB9PD4glcvaWtjJDEFgsRIzInZjANcM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0397/1126] ASoC: fsi: Add check for clk_enable
-Date:   Tue,  5 Apr 2022 09:19:04 +0200
-Message-Id: <20220405070419.280872418@linuxfoundation.org>
+Subject: [PATCH 5.17 0399/1126] media: saa7134: fix incorrect use to determine if list is empty
+Date:   Tue,  5 Apr 2022 09:19:06 +0200
+Message-Id: <20220405070419.338997022@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,58 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 405afed8a728f23cfaa02f75bbc8bdd6b7322123 ]
+[ Upstream commit 9f1f4b642451d35667a4dc6a9c0a89d954b530a3 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+'dev' will *always* be set by list_for_each_entry().
+It is incorrect to assume that the iterator value will be NULL if the
+list is empty.
 
-Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220302062844.46869-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Instead of checking the pointer it should be checked if
+the list is empty.
+
+Fixes: 79dd0c69f05f ("V4L: 925: saa7134 alsa is now a standalone module")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/fsi.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ drivers/media/pci/saa7134/saa7134-alsa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
-index cdf3b7f69ba7..e9a1eb6bdf66 100644
---- a/sound/soc/sh/fsi.c
-+++ b/sound/soc/sh/fsi.c
-@@ -816,14 +816,27 @@ static int fsi_clk_enable(struct device *dev,
- 			return ret;
- 		}
+diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+index fb24d2ed3621..d3cde05a6eba 100644
+--- a/drivers/media/pci/saa7134/saa7134-alsa.c
++++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -1214,7 +1214,7 @@ static int alsa_device_exit(struct saa7134_dev *dev)
  
--		clk_enable(clock->xck);
--		clk_enable(clock->ick);
--		clk_enable(clock->div);
-+		ret = clk_enable(clock->xck);
-+		if (ret)
-+			goto err;
-+		ret = clk_enable(clock->ick);
-+		if (ret)
-+			goto disable_xck;
-+		ret = clk_enable(clock->div);
-+		if (ret)
-+			goto disable_ick;
+ static int saa7134_alsa_init(void)
+ {
+-	struct saa7134_dev *dev = NULL;
++	struct saa7134_dev *dev;
  
- 		clock->count++;
+ 	saa7134_dmasound_init = alsa_device_init;
+ 	saa7134_dmasound_exit = alsa_device_exit;
+@@ -1229,7 +1229,7 @@ static int saa7134_alsa_init(void)
+ 			alsa_device_init(dev);
  	}
  
- 	return ret;
-+
-+disable_ick:
-+	clk_disable(clock->ick);
-+disable_xck:
-+	clk_disable(clock->xck);
-+err:
-+	return ret;
- }
+-	if (dev == NULL)
++	if (list_empty(&saa7134_devlist))
+ 		pr_info("saa7134 ALSA: no saa7134 cards found\n");
  
- static int fsi_clk_disable(struct device *dev,
+ 	return 0;
 -- 
 2.34.1
 

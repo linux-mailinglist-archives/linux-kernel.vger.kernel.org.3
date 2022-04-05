@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7839D4F441A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F564F45BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385304AbiDEOi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S1385477AbiDEOjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242788AbiDEJiG (ORCPT
+        with ESMTP id S243065AbiDEJiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:38:06 -0400
+        Tue, 5 Apr 2022 05:38:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7DEA5EA9;
-        Tue,  5 Apr 2022 02:24:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C6DA8EEC;
+        Tue,  5 Apr 2022 02:24:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E669B81C99;
-        Tue,  5 Apr 2022 09:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8179DC385A4;
-        Tue,  5 Apr 2022 09:24:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A96A7B81C9D;
+        Tue,  5 Apr 2022 09:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0432AC385A3;
+        Tue,  5 Apr 2022 09:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150667;
-        bh=7Rkrs3sSrSyd8jDFyNshJ53iysc72CbfSpCQdoARRUk=;
+        s=korg; t=1649150673;
+        bh=Ok4o6pfqdJRnWy+3ovBLWBNkxP9BwuXReBNWtb04gb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EC8MsUSmfEv1HVnjKef2HEStGV6gmuUcWc7gUeTh/xJtWuMa9bdOY582YKoBQKyz+
-         U19czmT/ZK2IRSJzRw7m6dQhw0vkNQclRBqYm06QPJi9GxWpEeDoHs/EvNVn9Lw/km
-         hbzAIh/62hPiD6ZEEggCEZ96eT4UuyYUGHsWH4Yw=
+        b=D9Xh7COX55SQTv/6w7fLemBwj62TfXld+kDbH59vz9qPmDe0p7FcxruVAXqRFk6wt
+         qCTLlVFp7EZE8pMypDgO6rZt99fMaYZQlNMW6c6d91AD6yz2aPhPAGKJL5t9yA9a9V
+         8aj/Un0nxtNsm5p61E7K7QI31tbvnMmSoPE7QOtg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pekka Pessi <ppessi@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>
-Subject: [PATCH 5.15 138/913] mailbox: tegra-hsp: Flush whole channel
-Date:   Tue,  5 Apr 2022 09:20:00 +0200
-Message-Id: <20220405070343.968248510@linuxfoundation.org>
+        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <jbacik@fb.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 140/913] block: dont merge across cgroup boundaries if blkcg is enabled
+Date:   Tue,  5 Apr 2022 09:20:02 +0200
+Message-Id: <20220405070344.029318292@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,41 +54,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pekka Pessi <ppessi@nvidia.com>
+From: Tejun Heo <tj@kernel.org>
 
-commit 60de2d2dc284e0dd1c2c897d08625bde24ef3454 upstream.
+commit 6b2b04590b51aa4cf395fcd185ce439cab5961dc upstream.
 
-The txdone can re-fill the mailbox. Keep polling the mailbox during the
-flush until all the messages have been delivered.
+blk-iocost and iolatency are cgroup aware rq-qos policies but they didn't
+disable merges across different cgroups. This obviously can lead to
+accounting and control errors but more importantly to priority inversions -
+e.g. an IO which belongs to a higher priority cgroup or IO class may end up
+getting throttled incorrectly because it gets merged to an IO issued from a
+low priority cgroup.
 
-This fixes an issue with the Tegra Combined UART (TCU) where output can
-get truncated under high traffic load.
+Fix it by adding blk_cgroup_mergeable() which is called from merge paths and
+rejects cross-cgroup and cross-issue_as_root merges.
 
-Signed-off-by: Pekka Pessi <ppessi@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-Fixes: 91b1b1c3da8a ("mailbox: tegra-hsp: Add support for shared mailboxes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
+Cc: stable@vger.kernel.org # v4.19+
+Cc: Josef Bacik <jbacik@fb.com>
+Link: https://lore.kernel.org/r/Yi/eE/6zFNyWJ+qd@slm.duckdns.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mailbox/tegra-hsp.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ block/blk-merge.c          |   11 +++++++++++
+ include/linux/blk-cgroup.h |   17 +++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
---- a/drivers/mailbox/tegra-hsp.c
-+++ b/drivers/mailbox/tegra-hsp.c
-@@ -412,6 +412,11 @@ static int tegra_hsp_mailbox_flush(struc
- 		value = tegra_hsp_channel_readl(ch, HSP_SM_SHRD_MBOX);
- 		if ((value & HSP_SM_SHRD_MBOX_FULL) == 0) {
- 			mbox_chan_txdone(chan, 0);
-+
-+			/* Wait until channel is empty */
-+			if (chan->active_req != NULL)
-+				continue;
-+
- 			return 0;
- 		}
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -7,6 +7,7 @@
+ #include <linux/bio.h>
+ #include <linux/blkdev.h>
+ #include <linux/scatterlist.h>
++#include <linux/blk-cgroup.h>
  
+ #include <trace/events/block.h>
+ 
+@@ -561,6 +562,9 @@ static inline unsigned int blk_rq_get_ma
+ static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
+ 		unsigned int nr_phys_segs)
+ {
++	if (!blk_cgroup_mergeable(req, bio))
++		goto no_merge;
++
+ 	if (blk_integrity_merge_bio(req->q, req, bio) == false)
+ 		goto no_merge;
+ 
+@@ -657,6 +661,9 @@ static int ll_merge_requests_fn(struct r
+ 	if (total_phys_segments > blk_rq_get_max_segments(req))
+ 		return 0;
+ 
++	if (!blk_cgroup_mergeable(req, next->bio))
++		return 0;
++
+ 	if (blk_integrity_merge_rq(q, req, next) == false)
+ 		return 0;
+ 
+@@ -863,6 +870,10 @@ bool blk_rq_merge_ok(struct request *rq,
+ 	if (rq->rq_disk != bio->bi_bdev->bd_disk)
+ 		return false;
+ 
++	/* don't merge across cgroup boundaries */
++	if (!blk_cgroup_mergeable(rq, bio))
++		return false;
++
+ 	/* only merge integrity protected bio into ditto rq */
+ 	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
+ 		return false;
+--- a/include/linux/blk-cgroup.h
++++ b/include/linux/blk-cgroup.h
+@@ -24,6 +24,7 @@
+ #include <linux/atomic.h>
+ #include <linux/kthread.h>
+ #include <linux/fs.h>
++#include <linux/blk-mq.h>
+ 
+ /* percpu_counter batch for blkg_[rw]stats, per-cpu drift doesn't matter */
+ #define BLKG_STAT_CPU_BATCH	(INT_MAX / 2)
+@@ -604,6 +605,21 @@ static inline void blkcg_clear_delay(str
+ 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
+ }
+ 
++/**
++ * blk_cgroup_mergeable - Determine whether to allow or disallow merges
++ * @rq: request to merge into
++ * @bio: bio to merge
++ *
++ * @bio and @rq should belong to the same cgroup and their issue_as_root should
++ * match. The latter is necessary as we don't want to throttle e.g. a metadata
++ * update because it happens to be next to a regular IO.
++ */
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio)
++{
++	return rq->bio->bi_blkg == bio->bi_blkg &&
++		bio_issue_as_root_blkg(rq->bio) == bio_issue_as_root_blkg(bio);
++}
++
+ void blk_cgroup_bio_start(struct bio *bio);
+ void blkcg_add_delay(struct blkcg_gq *blkg, u64 now, u64 delta);
+ void blkcg_schedule_throttle(struct request_queue *q, bool use_memdelay);
+@@ -659,6 +675,7 @@ static inline void blkg_put(struct blkcg
+ static inline bool blkcg_punt_bio_submit(struct bio *bio) { return false; }
+ static inline void blkcg_bio_issue_init(struct bio *bio) { }
+ static inline void blk_cgroup_bio_start(struct bio *bio) { }
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio) { return true; }
+ 
+ #define blk_queue_for_each_rl(rl, q)	\
+ 	for ((rl) = &(q)->root_rl; (rl); (rl) = NULL)
 
 

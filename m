@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E886C4F2B50
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AB94F2C9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352511AbiDEKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S1352589AbiDEKEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238143AbiDEIaX (ORCPT
+        with ESMTP id S238239AbiDEIa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DF220BCB;
-        Tue,  5 Apr 2022 01:21:37 -0700 (PDT)
+        Tue, 5 Apr 2022 04:30:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AD322BF1;
+        Tue,  5 Apr 2022 01:22:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699C160B06;
-        Tue,  5 Apr 2022 08:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E40C385A0;
-        Tue,  5 Apr 2022 08:21:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A988361477;
+        Tue,  5 Apr 2022 08:21:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A2BC385A9;
+        Tue,  5 Apr 2022 08:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146896;
-        bh=fwLcSYhjpEckNUeRMKC+GvUQzd+OndIHzBsm1iYLhc0=;
+        s=korg; t=1649146919;
+        bh=RMc2It4dGYVyP7I6bfOhhGG9ID4xvoJkIC5CZ+LRjz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jd3BmGWSvGpS/KqLXcmaOvAIC6mhbUurzUFmFfUIXzXNbUSZ6TvRf9Z4Bf18KTbTJ
-         27Esz+CvgK3FqwzALAdX3pfXaKCPJXVqDUXnN6Gyxwj4x+I2jAwWmAifrepUcg+VrD
-         SYtG9W7/Cup8D2MHjlntH5rp3Xhx66luVYRTUMqs=
+        b=KGLvcWaoom+KLUeUvlsIXnkSNTEDF7EsYUxguIyBvq1Q/rCGcu7KlIKX5i1Nl8rXe
+         1V2WSnIlUIQQxlZJmxx0geRCPpUMMyDcP/ygna3oWEopwqBhlbRo+Krc4ea6TPs/M6
+         UT7xfvT+YAB9HawCEeXod/zPMYjp6JzGBPWXwL80=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0929/1126] ASoC: amd: vg: fix for pm resume callback sequence
-Date:   Tue,  5 Apr 2022 09:27:56 +0200
-Message-Id: <20220405070434.785285521@linuxfoundation.org>
+Subject: [PATCH 5.17 0937/1126] ASoC: SOF: Intel: hda: retrieve DMIC number for I2S boards
+Date:   Tue,  5 Apr 2022 09:28:04 +0200
+Message-Id: <20220405070435.015903073@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,117 +58,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 83b713619ee1b15e09eae11a92a7f3305534223d ]
+[ Upstream commit 92c1b7c0f780f0084f7b114be316ae4e182676e5 ]
 
-The previous condition is used to cross check only the active
-stream status for I2S HS instance playback and capture use cases.
+We currently extract the DMIC number only for HDaudio or SoundWire
+platforms. For I2S/TDM platforms, this wasn't necessary until now, but
+with devices with ES8336 we need to find a solution to detect dmics
+more reliably than with a DMI quirk.
 
-Modified logic to invoke sequence for two i2s controller instances.
-
-This also fixes warnings reported by kernel robot:
-"warning: variable 'frmt_val' set but not used"
-"warning: variable 'reg_val' set but not used"
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Link: https://lore.kernel.org/r/20220225193054.24916-1-Vijendar.Mukunda@amd.com
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Link: https://lore.kernel.org/r/20220308192610.392950-4-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/amd/vangogh/acp5x-pcm-dma.c | 66 +++++++++++++--------------
- 1 file changed, 33 insertions(+), 33 deletions(-)
+ sound/soc/sof/intel/hda.c | 46 +++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 21 deletions(-)
 
-diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-index 6abcc2133a2c..bfca4cf423cf 100644
---- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-+++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-@@ -426,51 +426,51 @@ static int acp5x_audio_remove(struct platform_device *pdev)
- static int __maybe_unused acp5x_pcm_resume(struct device *dev)
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index 848d1d563170..028751549f6d 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -432,11 +432,9 @@ static char *hda_model;
+ module_param(hda_model, charp, 0444);
+ MODULE_PARM_DESC(hda_model, "Use the given HDA board model.");
+ 
+-#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
+-static int hda_dmic_num = -1;
+-module_param_named(dmic_num, hda_dmic_num, int, 0444);
++static int dmic_num_override = -1;
++module_param_named(dmic_num, dmic_num_override, int, 0444);
+ MODULE_PARM_DESC(dmic_num, "SOF HDA DMIC number");
+-#endif
+ 
+ #if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA)
+ static bool hda_codec_use_common_hdmi = IS_ENABLED(CONFIG_SND_HDA_CODEC_HDMI);
+@@ -644,24 +642,35 @@ static int hda_init(struct snd_sof_dev *sdev)
+ 	return ret;
+ }
+ 
+-#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
+-
+-static int check_nhlt_dmic(struct snd_sof_dev *sdev)
++static int check_dmic_num(struct snd_sof_dev *sdev)
  {
- 	struct i2s_dev_data *adata;
--	u32 val, reg_val, frmt_val;
-+	struct i2s_stream_instance *rtd;
-+	u32 val;
+ 	struct nhlt_acpi_table *nhlt;
+-	int dmic_num;
++	int dmic_num = 0;
  
--	reg_val = 0;
--	frmt_val = 0;
- 	adata = dev_get_drvdata(dev);
+ 	nhlt = intel_nhlt_init(sdev->dev);
+ 	if (nhlt) {
+ 		dmic_num = intel_nhlt_get_dmic_geo(sdev->dev, nhlt);
+ 		intel_nhlt_free(nhlt);
+-		if (dmic_num >= 1 && dmic_num <= 4)
+-			return dmic_num;
+ 	}
  
- 	if (adata->play_stream && adata->play_stream->runtime) {
--		struct i2s_stream_instance *rtd =
--			adata->play_stream->runtime->private_data;
-+		rtd = adata->play_stream->runtime->private_data;
- 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
--		switch (rtd->i2s_instance) {
--		case I2S_HS_INSTANCE:
--			reg_val = ACP_HSTDM_ITER;
--			frmt_val = ACP_HSTDM_TXFRMT;
--			break;
--		case I2S_SP_INSTANCE:
--		default:
--			reg_val = ACP_I2STDM_ITER;
--			frmt_val = ACP_I2STDM_TXFRMT;
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
-+		}
+-	return 0;
++	/* allow for module parameter override */
++	if (dmic_num_override != -1) {
++		dev_dbg(sdev->dev,
++			"overriding DMICs detected in NHLT tables %d by kernel param %d\n",
++			dmic_num, dmic_num_override);
++		dmic_num = dmic_num_override;
 +	}
-+	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
-+		rtd = adata->i2ssp_play_stream->runtime->private_data;
-+		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
- 		}
--		acp_writel((rtd->xfer_resolution  << 3),
--			   rtd->acp5x_base + reg_val);
- 	}
++
++	if (dmic_num < 0 || dmic_num > 4) {
++		dev_dbg(sdev->dev, "invalid dmic_number %d\n", dmic_num);
++		dmic_num = 0;
++	}
++
++	return dmic_num;
+ }
  
- 	if (adata->capture_stream && adata->capture_stream->runtime) {
--		struct i2s_stream_instance *rtd =
--			adata->capture_stream->runtime->private_data;
-+		rtd = adata->capture_stream->runtime->private_data;
- 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
--		switch (rtd->i2s_instance) {
--		case I2S_HS_INSTANCE:
--			reg_val = ACP_HSTDM_IRER;
--			frmt_val = ACP_HSTDM_RXFRMT;
--			break;
--		case I2S_SP_INSTANCE:
--		default:
--			reg_val = ACP_I2STDM_IRER;
--			frmt_val = ACP_I2STDM_RXFRMT;
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
- 		}
--		acp_writel((rtd->xfer_resolution  << 3),
--			   rtd->acp5x_base + reg_val);
- 	}
--	if (adata->tdm_mode == TDM_ENABLE) {
--		acp_writel(adata->tdm_fmt, adata->acp5x_base + frmt_val);
--		val = acp_readl(adata->acp5x_base + reg_val);
--		acp_writel(val | 0x2, adata->acp5x_base + reg_val);
-+	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
-+		rtd = adata->i2ssp_capture_stream->runtime->private_data;
-+		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
-+		}
- 	}
- 	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
- 	return 0;
++#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA) || IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
++
+ static const char *fixup_tplg_name(struct snd_sof_dev *sdev,
+ 				   const char *sof_tplg_filename,
+ 				   const char *idisp_str,
+@@ -697,16 +706,8 @@ static int dmic_topology_fixup(struct snd_sof_dev *sdev,
+ 	const char *dmic_str;
+ 	int dmic_num;
+ 
+-	/* first check NHLT for DMICs */
+-	dmic_num = check_nhlt_dmic(sdev);
+-
+-	/* allow for module parameter override */
+-	if (hda_dmic_num != -1) {
+-		dev_dbg(sdev->dev,
+-			"overriding DMICs detected in NHLT tables %d by kernel param %d\n",
+-			dmic_num, hda_dmic_num);
+-		dmic_num = hda_dmic_num;
+-	}
++	/* first check for DMICs (using NHLT or module parameter) */
++	dmic_num = check_dmic_num(sdev);
+ 
+ 	switch (dmic_num) {
+ 	case 1:
+@@ -1392,6 +1393,9 @@ struct snd_soc_acpi_mach *hda_machine_select(struct snd_sof_dev *sdev)
+ 		if (!sof_pdata->tplg_filename)
+ 			sof_pdata->tplg_filename = mach->sof_tplg_filename;
+ 
++		/* report to machine driver if any DMICs are found */
++		mach->mach_params.dmic_num = check_dmic_num(sdev);
++
+ 		if (mach->link_mask) {
+ 			mach->mach_params.links = mach->links;
+ 			mach->mach_params.link_mask = mach->link_mask;
 -- 
 2.34.1
 

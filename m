@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6DB4F4643
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6994F45CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384341AbiDENcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S1384558AbiDENcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345794AbiDEJXC (ORCPT
+        with ESMTP id S1345872AbiDEJXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D99D0E8;
-        Tue,  5 Apr 2022 02:12:14 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34744A5E8D;
+        Tue,  5 Apr 2022 02:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85C82B80DA1;
-        Tue,  5 Apr 2022 09:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3B2C385A0;
-        Tue,  5 Apr 2022 09:12:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C647561527;
+        Tue,  5 Apr 2022 09:12:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF47C385A2;
+        Tue,  5 Apr 2022 09:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149932;
-        bh=Y1PEmIAZMnzpISyH6SBsQsjo9DqagN4V+23i6TnvIKo=;
+        s=korg; t=1649149943;
+        bh=m7G20AubjvcX73uuvdxB1UoNXmtJuvwEgYN+98yPEXM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pn+YF36P/YHALl7dIVHsuby+A8dAOxIXXFc8pGo8Aw7G67CQhQtDrfG8SbuRd9JxC
-         ggYK+9gKuULOfn0XTpuRljGwaYoz6aq0tiMThY56Em+1pVcFte7yOpddAOVrEVCwhX
-         JKJbVAd27fAL4PXHeHG7kryh8HJuQOgwFizA2Tv0=
+        b=JbmDxpelTCX1Ok1gIedzMdHZM6VIHrP1gnNEGXyysLQmouGs1RS4wqgxewtKRedio
+         3oWm9jxuou6r+jCdEKKjLwl6VkPpgSM8ZRPInLunhBel28XMLXCBu/U5HdAyqbhUBt
+         KXRTmPYyU9uDe5K5L48Tuk6p0TGK0Pc1suxRaKpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marco Patalano <mpatalan@redhat.com>,
+        stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Arun Easi <aeasi@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0894/1017] scsi: qla2xxx: Fix crash during module load unload test
-Date:   Tue,  5 Apr 2022 09:30:07 +0200
-Message-Id: <20220405070420.764804490@linuxfoundation.org>
+Subject: [PATCH 5.16 0897/1017] scsi: qla2xxx: Reduce false trigger to login
+Date:   Tue,  5 Apr 2022 09:30:10 +0200
+Message-Id: <20220405070420.852885310@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,58 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Quinn Tran <qutran@marvell.com>
 
-commit 0972252450f90db56dd5415a20e2aec21a08d036 upstream.
+commit d2646eed7b19a206912f49101178cbbaa507256c upstream.
 
-During purex packet handling the driver was incorrectly freeing a
-pre-allocated structure. Fix this by skipping that entry.
+While a session is in the middle of a relogin, a late RSCN can be delivered
+from switch. RSCN trigger fabric scan where the scan logic can trigger
+another session login while a login is in progress.  Reduce the extra
+trigger to prevent multiple logins to the same session.
 
-System crashed with the following stack during a module unload test.
-
-Call Trace:
-	sbitmap_init_node+0x7f/0x1e0
-	sbitmap_queue_init_node+0x24/0x150
-	blk_mq_init_bitmaps+0x3d/0xa0
-	blk_mq_init_tags+0x68/0x90
-	blk_mq_alloc_map_and_rqs+0x44/0x120
-	blk_mq_alloc_set_map_and_rqs+0x63/0x150
-	blk_mq_alloc_tag_set+0x11b/0x230
-	scsi_add_host_with_dma.cold+0x3f/0x245
-	qla2x00_probe_one+0xd5a/0x1b80 [qla2xxx]
-
-Call Trace with slub_debug and debug kernel:
-	kasan_report_invalid_free+0x50/0x80
-	__kasan_slab_free+0x137/0x150
-	slab_free_freelist_hook+0xc6/0x190
-	kfree+0xe8/0x2e0
-	qla2x00_free_device+0x3bb/0x5d0 [qla2xxx]
-	qla2x00_remove_one+0x668/0xcf0 [qla2xxx]
-
-Link: https://lore.kernel.org/r/20220310092604.22950-6-njavali@marvell.com
-Fixes: 62e9dd177732 ("scsi: qla2xxx: Change in PUREX to handle FPIN ELS requests")
+Link: https://lore.kernel.org/r/20220310092604.22950-10-njavali@marvell.com
+Fixes: bee8b84686c4 ("scsi: qla2xxx: Reduce redundant ADISC command for RSCNs")
 Cc: stable@vger.kernel.org
-Reported-by: Marco Patalano <mpatalan@redhat.com>
-Tested-by: Marco Patalano <mpatalan@redhat.com>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/qla2xxx/qla_init.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -3896,6 +3896,8 @@ qla24xx_free_purex_list(struct purex_lis
- 	spin_lock_irqsave(&list->lock, flags);
- 	list_for_each_entry_safe(item, next, &list->head, list) {
- 		list_del(&item->list);
-+		if (item == &item->vha->default_item)
-+			continue;
- 		kfree(item);
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -1644,7 +1644,8 @@ int qla24xx_fcport_handle_login(struct s
+ 	    fcport->login_gen, fcport->loop_id, fcport->scan_state,
+ 	    fcport->fc4_type);
+ 
+-	if (fcport->scan_state != QLA_FCPORT_FOUND)
++	if (fcport->scan_state != QLA_FCPORT_FOUND ||
++	    fcport->disc_state == DSC_DELETE_PEND)
+ 		return 0;
+ 
+ 	if ((fcport->loop_id != FC_NO_LOOP_ID) &&
+@@ -1665,7 +1666,7 @@ int qla24xx_fcport_handle_login(struct s
+ 	if (vha->host->active_mode == MODE_TARGET && !N2N_TOPO(vha->hw))
+ 		return 0;
+ 
+-	if (fcport->flags & FCF_ASYNC_SENT) {
++	if (fcport->flags & (FCF_ASYNC_SENT | FCF_ASYNC_ACTIVE)) {
+ 		set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+ 		return 0;
  	}
- 	spin_unlock_irqrestore(&list->lock, flags);
 
 

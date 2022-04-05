@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3354F4D41
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17894F4CDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581794AbiDEXk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S1580826AbiDEXew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573273AbiDESlz (ORCPT
+        with ESMTP id S1573280AbiDESml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:41:55 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA8D20BEF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:39:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb5980c4f8so607227b3.23
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:39:57 -0700 (PDT)
+        Tue, 5 Apr 2022 14:42:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8820BE2;
+        Tue,  5 Apr 2022 11:40:42 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k23so25103945ejd.3;
+        Tue, 05 Apr 2022 11:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=kpZJZ6BC0teJcS/Va/HLoxzrjVYiRhmbSvuUm1Ha8sQ=;
-        b=ZdvRyRnPU8Kh82lplK03SdRZOePvmaw21DelWV1zTSqS/wjCkoUIYoY61x69HDa0BB
-         BkENG+5p3VPqwecV9yEgRiRisNcnE3VeVVW7AOScnZd4XupmdoHFS5S2gKJLzE7GHY6A
-         zGXVjMCER8dEsCVSRHsmmtEvVKuVyK3GMttUBmYSjf/DRoGPcWgyJ5rDCC+Ru+9zo5Sw
-         1rj0cV0XTVzlX93A55tOHgnaoeRzXzMAf01FQGmrjBjD9UtlB3cKC05sNClQc/ugUTWR
-         4mJGO2ekgPApmCPfGhow69H81wYKXuudrt6rJEg4wFn2YrxJLtcu2iCzeQjtlpzeUEdN
-         /yNg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
+        b=KJEMIj4e7Nkf5NRQSkeGOdWSQ/71GPeTAtj19TfSQfaw192KiobZULMM0yawIDtQ+1
+         kRjZ1hHKMIFz5w9uzoszb/2UfxMFLVuhv1pcx3l2FbrdwFg0o9IdUwBssH6gMmasF+sC
+         tAYmb4Zc+PawW5CU655i1OQPBPDNcC4ClfHWIMZ2+DO3B8slsGym7/pz3iqIyZLr1GZ5
+         MLbeRvJiT+5mT7bKd/c/7BGNhUV9FRT6Rbo4IITF2Ehl994/2iaeC7VBC13O0Owz00Gp
+         EuxD4peu6TSeWZYYpDmgXNCmVOuyQzE+ikHq9qi/Eo1WQKNiWby277cISSVlNRAYEi5t
+         uS3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=kpZJZ6BC0teJcS/Va/HLoxzrjVYiRhmbSvuUm1Ha8sQ=;
-        b=IiwCt5cgNEL0Uvh7IQEK7m9TqvVQ2rzvTYE2S5ephqzMUqpgY68QZ8f9STdp1aiqcl
-         w51Qt+UeDuQ56j0/FrquGsUMus/creff+YvAZVCmH6FaC1PHAe3iBJSP4TDBoKxZGPwk
-         N9+cjCYliXxZ/zs1QJRpG0SPNIsOu8AulrHQguvyWciHiheL7Wmb5keuZhEtc6cd0AXq
-         b4Jin2EeNchTaaeMYkrXx5MXsTjHg8J6+VWheLrS9AlJoDsYm4msfxuCi5/Ud3P+R49F
-         vZhA7k6SJsyVgMZ51GFhHEJrwl7CC0pUs4RvsTUmfByiVk7gUQBIHRelRJoTI9M8W++L
-         TvyA==
-X-Gm-Message-State: AOAM530tc2Qz8ApGr16fpwyuEJ+T0kQEUwl37iOtZlPxpPHbcNAuib+7
-        HyopgpAQQ3ZTCiCgKtK1hNEsNI218WOYQ+M=
-X-Google-Smtp-Source: ABdhPJzp+IkXPL1X2MLlP92SbOMwqwQY57HoLXPf85DlePcIcZmNDwM+GbgvJ2bvPWH0yqVKexXNR2xK3S7Rwsc=
-X-Received: from pceballos.nyc.corp.google.com ([2620:0:1003:510:9936:68aa:f9b7:b13b])
- (user=pceballos job=sendgmr) by 2002:a05:690c:821:b0:2eb:5d96:2709 with SMTP
- id by1-20020a05690c082100b002eb5d962709mr3929236ywb.147.1649183996466; Tue,
- 05 Apr 2022 11:39:56 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 14:39:53 -0400
-Message-Id: <20220405183953.2094007-1-pceballos@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
-From:   Pablo Ceballos <pceballos@google.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     Pablo Ceballos <pceballos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
+        b=uZesIecNDcIzvRGNc4Ut8tOwqMxFct/6xP//ptwnYFa9EEGNauwgslks77sTiOJ2S0
+         OLngnbl8ZNnsKMcJ1cAyGmCLGGkiThM0paJLWlfAcKTmsubhfFuvzWcON0ANGO4R5m8x
+         lgrFuPPD//BeWY4RaEoS1Dbj2AeI0J2Ocv1Tcw9K34VG+CaxVJpNQl7MNV2Px749cZJ+
+         +vBfmknG+LxviOrurta+GpJbCuAieX95zTnasK32TXt53FzqpTyw0MdSFubmPil/wPkG
+         AiSrLE6QPfYbPlEfRkr6q1N0mkHC+gsD4eOchf9JA3tQ6DaSFcZA8qX9LsUtwlYhnKbO
+         RrvA==
+X-Gm-Message-State: AOAM530XDR3afXN9stxLruiZg5NTvNzsVNVtlEpiHeO5n4nPdRRKUwGO
+        uH1zvvcUzJ6ZlW2+yu+X4j0=
+X-Google-Smtp-Source: ABdhPJyyOku7BguihhRDVr/2uQVz3QRhlNTGjiETo2Ny1XHm1wtZufdXrCu7Vy7i491eGogKd7Bkqg==
+X-Received: by 2002:a17:907:6e14:b0:6e7:f589:b7b4 with SMTP id sd20-20020a1709076e1400b006e7f589b7b4mr4991013ejc.222.1649184040612;
+        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
+Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm5795532ejc.25.2022.04.05.11.40.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
+Date:   Tue, 05 Apr 2022 20:40:38 +0200
+Message-ID: <4386971.LvFx2qVVIh@jernej-laptop>
+In-Reply-To: <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com> <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,127 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver works around a problem with the HID usage sent by this
-device for the mute button. It prevents key events from being generated
-for that HID usage since they would be incorrect.
+Hi Benjamin!
 
-Signed-off-by: Pablo Ceballos <pceballos@google.com>
----
- drivers/hid/Kconfig            | 12 ++++++++
- drivers/hid/Makefile           |  1 +
- drivers/hid/hid-google-atrus.c | 55 ++++++++++++++++++++++++++++++++++
- drivers/hid/hid-ids.h          |  1 +
- 4 files changed, 69 insertions(+)
- create mode 100644 drivers/hid/hid-google-atrus.c
+Dne torek, 05. april 2022 ob 18:07:41 CEST je Benjamin Gaignard napisal(a):
+> Le 27/02/2022 =E0 15:49, Jernej Skrabec a =E9crit :
+> > First two patches add 10-bit formats to UAPI, third extends filtering
+> > mechanism, fourth fixes incorrect assumption, fifth moves register
+> > configuration code to proper place, sixth and seventh enable 10-bit
+> > VP9 decoding on Allwinner H6 and last increases core frequency on
+> > Allwinner H6.
+> >=20
+> > I'm sending this as RFC to get some comments:
+> > 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+> > 2. is extended filtering mechanism ok?
+> >=20
+> > I would also like if these patches are tested on some more HW.
+> > Additionally, can someone test tiled P010?
+> >=20
+> > Please take a look.
+>=20
+> Hi Jernej,
+>=20
+> I have create a branch to test this series with VP9 and HEVC:
+> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_=
+imx
+> 8m Feel free to pick what I may need in it.
+>=20
+> That doesn't improve fluster scores, I think more dev are still needed in
+> GST before getting something fully functional.
+> Anyway I able to select P010 pixel format if the input is a 10bit bitstre=
+am.
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index f5544157576c..d4b6be827d15 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -403,6 +403,18 @@ config HOLTEK_FF
- 	  Say Y here if you have a Holtek On Line Grip based game controller
- 	  and want to have force feedback support for it.
- 
-+config HID_GOOGLE_ATRUS
-+	tristate "Google Hangouts Meet Speakermic"
-+	depends on USB_HID
-+	help
-+	This selects a driver for the Google Hangouts Meet Speakermic.
-+
-+	This driver works around a problem with the HID usage sent by this
-+	device for the mute button. It prevents key events from being generated
-+	for that HID usage since they would be incorrect.
-+
-+	Say Y here if you have a Google Hangouts Meet Speakermic.
-+
- config HID_GOOGLE_HAMMER
- 	tristate "Google Hammer Keyboard"
- 	depends on USB_HID && LEDS_CLASS && CROS_EC
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 6d3e630e81af..2ee446b5b953 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -50,6 +50,7 @@ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
- obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
- obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
- obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
-+obj-$(CONFIG_HID_GOOGLE_ATRUS)  += hid-google-atrus.o
- obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
- obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
- obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
-diff --git a/drivers/hid/hid-google-atrus.c b/drivers/hid/hid-google-atrus.c
-new file mode 100644
-index 000000000000..e136c70e9425
---- /dev/null
-+++ b/drivers/hid/hid-google-atrus.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  HID driver for Google Hangouts Meet Speakermic
-+ *
-+ *  Copyright 2022 Google LLC.
-+ */
-+
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+
-+#include "hid-ids.h"
-+
-+/*
-+ * This driver handles the telephony phone mute HID usage by ignoring it. This
-+ * avoids the default handling by the hid-input driver which is to map this to
-+ * a KEY_MICMUTE event. The issue is that this device implements the phone mute
-+ * HID usage as a toggle switch, where 1 indicates muted, and 0 indicates
-+ * unmuted. However, for an EV_KEY event 1 indicates the key has been pressed
-+ * and 0 indicates it has been released.
-+ */
-+
-+static int atrus_event(struct hid_device *hid, struct hid_field *field,
-+		       struct hid_usage *usage, __s32 value)
-+{
-+	/*
-+	 * Return 1 to indicate no further processing should be done for this
-+	 * usage.
-+	 */
-+	return 1;
-+}
-+
-+static const struct hid_device_id atrus_devices[] = {
-+	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-+		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_ATRUS) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, atrus_devices);
-+
-+static const struct hid_usage_id atrus_usages[] = {
-+	/* Handle only the Telephony Phone Mute usage. */
-+	{ HID_UP_TELEPHONY | 0x2f, EV_KEY, HID_ANY_ID },
-+	{ HID_TERMINATOR, HID_TERMINATOR, HID_TERMINATOR }
-+};
-+
-+static struct hid_driver atrus_driver = {
-+	.name = "atrus",
-+	.id_table = atrus_devices,
-+	.usage_table = atrus_usages,
-+	.event = atrus_event,
-+};
-+module_hid_driver(atrus_driver);
-+
-+MODULE_AUTHOR("Pablo Ceballos <pcebalos@google.com>");
-+MODULE_DESCRIPTION("Google Hangouts Meet Speakermic USB HID Driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 85975031389b..9f6fc5cfbeb9 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -506,6 +506,7 @@
- #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
- #define USB_DEVICE_ID_GOOGLE_DON	0x5050
- #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
-+#define USB_DEVICE_ID_GOOGLE_ATRUS	0x8001
- 
- #define USB_VENDOR_ID_GOTOP		0x08f2
- #define USB_DEVICE_ID_SUPER_Q2		0x007f
--- 
-2.35.1.1094.g7c7d902a7c-goog
+What kind of improvements do you expect? Actually, this series is designed =
+to=20
+change nothing for platforms, where 10-bit format is not added into the lis=
+t=20
+of supported formats. I think reasons are quite obvious. First, not every=20
+device may support 10-bit output. Second, as you might already figured it o=
+ut,=20
+registers in this series are set only for legacy cores. I have no idea, wha=
+t=20
+needs to be done for newer ones, since I don't have them. Anyway, I tested=
+=20
+this with fluster and only one additional test passes, because it is the on=
+ly=20
+one for 10-bit YUV420.
+
+Best regards,
+Jernej
+
 

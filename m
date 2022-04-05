@@ -2,302 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941CA4F2165
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EB54F21D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiDECxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S229770AbiDEC0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiDECvA (ORCPT
+        with ESMTP id S229693AbiDEC0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:51:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828E32DE859
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649123866; x=1680659866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FOADr1ud3k4/nTNBXrw6Raun3jnoK5uDvcCwnJ1QY6k=;
-  b=iHFtTimFrfnPanCq+x+v/lNlso84GQ66tan9Mqe26z4+ypQGTl4hLxcf
-   OPPE2e5RofnAlJo+VD5zoTGlEjpu4ZlmcQBWca5tU42HjxAQaU5hE82lr
-   Tk4vsx94pPNZzsP658Y1ehnVPbiMfl3C/NHEye53uj3sPZ9ulEvocSU9j
-   MpY5vWrJF1rsefmTXVPrXNKM/QeKPTcRSD/YCe+GMDqnyY2WEd1jkosaX
-   VEznnamaQBl59W6lQyK1skHPL6pMyIdtVypgAJVs7c9bfMo5iJMlnnSyI
-   6kii6k8na+0+avY7uivMgravWU8n07iWh3rXc2o3xZReQK5rZjr6sw/SR
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260623155"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="260623155"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:08:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="587749317"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:08:06 -0700
-Date:   Mon, 4 Apr 2022 17:10:19 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-Cc:     "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
-        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] staging: r8188eu: add space around arithmatic sign
-Message-ID: <20220405001019.GA1200980@alison-desk>
-References: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 22:26:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3119EC6C;
+        Mon,  4 Apr 2022 18:21:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0DACBCE1B6A;
+        Tue,  5 Apr 2022 00:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410E3C2BBE4;
+        Tue,  5 Apr 2022 00:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649117460;
+        bh=DHiPZaDwe+oVVKHgNILgr/HliqIK5s3t6QSGEV7Tdp4=;
+        h=Date:To:From:Subject:From;
+        b=SGVglnOIGf6R+OQ9CnIvYNsKwXaTnxV/twiYR3gN98bxlObXgBMQjU7uSDSMVvbpU
+         YnjP2r04YE+tLc2FuQA8ptFAqA7HLgBUN+z9SXOE9KFP4lTxS8jygoYebQ4LLy7Qy0
+         B2uo5SBep06fUAG2pbnJ7aq+gSxDUOfCiEryxqOU=
+Date:   Mon, 04 Apr 2022 17:10:59 -0700
+To:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, akpm@linux-foundation.org
+From:   Andrew Morton <akpm@linux-foundation.org>
+Subject: mmotm 2022-04-04-17-10 uploaded
+Message-Id: <20220405001100.410E3C2BBE4@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 07:39:16AM -0700, Alaa Mohamed wrote:
-> Reported by checkpatch:
-> 
-> CHECK: spaces preferred around that '+' , '-' and '*'
-> 
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+The mm-of-the-moment snapshot 2022-04-04-17-10 has been uploaded to
 
-Hi Alaa,
+   https://www.ozlabs.org/~akpm/mmotm/
 
-I see you already picked up an ACK on this!
+mmotm-readme.txt says
 
-I'm going to comment on the format since I'm aware this is your
-first patchset! The grouping is good - 2 cleanups in same file.
-Please search in the tutorial for further info on how to present these
-as a patchset. You can also peruse the outreachy list for formats of
-patchsets as well. I'd expect to see a cover letter.
+README for mm-of-the-moment:
 
-The other thing I noticed was this: 
->> [PATCH 1/2] staging: r8188eu: add space around arithmatic sign
->> [PATCH 2/2] staging: r8188eu: Add line after declarations
-to which I was going to say - 'Well which is the actual preference
-for this file or driver: 'add' or 'Add', ie. uppercase or lowercase?  
+https://www.ozlabs.org/~akpm/mmotm/
 
-Looking at the history, it's mixed. So, I guess I'll just suggest
-you don't mix it within a patchset.  If a maintainer cares, and try
-to set a pattern for the file or driver..
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-spelling fixup please:
-s/arithmatic/arithmetic
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
-and perhpas this would be clearer:
-s/sign/operator   (They are arithmetic operators, not signs.)
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-Alison
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-> ---
->  drivers/staging/r8188eu/core/rtw_br_ext.c | 58 +++++++++++------------
->  1 file changed, 29 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> index d68611ef22f8..7c664f80fa99 100644
-> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> @@ -87,19 +87,19 @@ static int skb_pull_and_merge(struct sk_buff *skb, unsigned char *src, int len)
->  	int tail_len;
->  	unsigned long end, tail;
->  
-> -	if ((src+len) > skb_tail_pointer(skb) || skb->len < len)
-> +	if ((src + len) > skb_tail_pointer(skb) || skb->len < len)
->  		return -1;
->  
->  	tail = (unsigned long)skb_tail_pointer(skb);
-> -	end = (unsigned long)src+len;
-> +	end = (unsigned long)src + len;
->  	if (tail < end)
->  		return -1;
->  
-> -	tail_len = (int)(tail-end);
-> +	tail_len = (int)(tail - end);
->  	if (tail_len > 0)
-> -		memmove(src, src+len, tail_len);
-> +		memmove(src, src + len, tail_len);
->  
-> -	skb_trim(skb, skb->len-len);
-> +	skb_trim(skb, skb->len - len);
->  	return 0;
->  }
->  
-> @@ -117,7 +117,7 @@ static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
->  	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
->  
->  	networkAddr[0] = NAT25_IPV4;
-> -	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
-> +	memcpy(networkAddr + 7, (unsigned char *)ipAddr, 4);
->  }
->  
->  static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
-> @@ -126,8 +126,8 @@ static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
->  	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
->  
->  	networkAddr[0] = NAT25_PPPOE;
-> -	memcpy(networkAddr+1, (unsigned char *)sid, 2);
-> -	memcpy(networkAddr+3, (unsigned char *)ac_mac, 6);
-> +	memcpy(networkAddr + 1, (unsigned char *)sid, 2);
-> +	memcpy(networkAddr + 3, (unsigned char *)ac_mac, 6);
->  }
->  
->  static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
-> @@ -136,17 +136,17 @@ static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
->  	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
->  
->  	networkAddr[0] = NAT25_IPV6;
-> -	memcpy(networkAddr+1, (unsigned char *)ipAddr, 16);
-> +	memcpy(networkAddr + 1, (unsigned char *)ipAddr, 16);
->  }
->  
->  static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
->  {
->  	while (len > 0) {
-> -		if (*data == tag && *(data+1) == len8b && len >= len8b*8)
-> -			return data+2;
-> +		if (*data == tag && *(data + 1) == len8b && len >= len8b * 8)
-> +			return data + 2;
->  
-> -		len -= (*(data+1))*8;
-> -		data += (*(data+1))*8;
-> +		len -= (*(data + 1)) * 8;
-> +		data += (*(data + 1)) * 8;
->  	}
->  	return NULL;
->  }
-> @@ -158,7 +158,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
->  
->  	if (icmphdr->icmp6_type == NDISC_ROUTER_SOLICITATION) {
->  		if (len >= 8) {
-> -			mac = scan_tlv(&data[8], len-8, 1, 1);
-> +			mac = scan_tlv(&data[8], len - 8, 1, 1);
->  			if (mac) {
->  				memcpy(mac, replace_mac, 6);
->  				return 1;
-> @@ -166,7 +166,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
->  		}
->  	} else if (icmphdr->icmp6_type == NDISC_ROUTER_ADVERTISEMENT) {
->  		if (len >= 16) {
-> -			mac = scan_tlv(&data[16], len-16, 1, 1);
-> +			mac = scan_tlv(&data[16], len - 16, 1, 1);
->  			if (mac) {
->  				memcpy(mac, replace_mac, 6);
->  				return 1;
-> @@ -174,7 +174,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
->  		}
->  	} else if (icmphdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
->  		if (len >= 24) {
-> -			mac = scan_tlv(&data[24], len-24, 1, 1);
-> +			mac = scan_tlv(&data[24], len - 24, 1, 1);
->  			if (mac) {
->  				memcpy(mac, replace_mac, 6);
->  				return 1;
-> @@ -182,7 +182,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
->  		}
->  	} else if (icmphdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT) {
->  		if (len >= 24) {
-> -			mac = scan_tlv(&data[24], len-24, 2, 1);
-> +			mac = scan_tlv(&data[24], len - 24, 2, 1);
->  			if (mac) {
->  				memcpy(mac, replace_mac, 6);
->  				return 1;
-> @@ -190,7 +190,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
->  		}
->  	} else if (icmphdr->icmp6_type == NDISC_REDIRECT) {
->  		if (len >= 40) {
-> -			mac = scan_tlv(&data[40], len-40, 2, 1);
-> +			mac = scan_tlv(&data[40], len - 40, 2, 1);
->  			if (mac) {
->  				memcpy(mac, replace_mac, 6);
->  				return 1;
-> @@ -396,7 +396,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  			tmp = be32_to_cpu(iph->saddr);
->  			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
->  			/* record source IP address and , source mac address into db */
-> -			__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
-> +			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
->  			return 0;
->  		default:
->  			return -1;
-> @@ -421,7 +421,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  			arp_ptr += arp->ar_hln;
->  			sender = (unsigned int *)arp_ptr;
->  			__nat25_generate_ipv4_network_addr(networkAddr, sender);
-> -			__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
-> +			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
->  			return 0;
->  		default:
->  			return -1;
-> @@ -458,22 +458,22 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  							    sizeof(tag_buf))
->  								return -1;
->  
-> -							memcpy(tag->tag_data+MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN,
-> +							memcpy(tag->tag_data + MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN,
->  								pOldTag->tag_data, old_tag_len);
->  
-> -							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN+old_tag_len) < 0)
-> +							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN + old_tag_len) < 0)
->  								return -1;
->  
-> -							ph->length = htons(ntohs(ph->length)-TAG_HDR_LEN-old_tag_len);
-> +							ph->length = htons(ntohs(ph->length) - TAG_HDR_LEN - old_tag_len);
->  						}
->  
->  						tag->tag_type = PTT_RELAY_SID;
-> -						tag->tag_len = htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
-> +						tag->tag_len = htons(MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN + old_tag_len);
->  
->  						/*  insert the magic_code+client mac in relay tag */
->  						pMagic = (unsigned short *)tag->tag_data;
->  						*pMagic = htons(MAGIC_CODE);
-> -						memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN, ETH_ALEN);
-> +						memcpy(tag->tag_data + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
->  
->  						/* Add relay tag */
->  						if (__nat25_add_pppoe_tag(skb, tag) < 0)
-> @@ -486,7 +486,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  							return -2;
->  
->  						if (priv->pppoe_connection_in_progress == 0)
-> -							memcpy(priv->pppoe_addr, skb->data+ETH_ALEN, ETH_ALEN);
-> +							memcpy(priv->pppoe_addr, skb->data + ETH_ALEN, ETH_ALEN);
->  
->  						priv->pppoe_connection_in_progress = WAIT_TIME_PPPOE;
->  					}
-> @@ -496,11 +496,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  			} else {	/*  session phase */
->  				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
->  
-> -				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
-> +				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
->  
->  				if (!priv->ethBrExtInfo.addPPPoETag &&
->  				    priv->pppoe_connection_in_progress &&
-> -				    !memcmp(skb->data+ETH_ALEN, priv->pppoe_addr, ETH_ALEN))
-> +				    !memcmp(skb->data + ETH_ALEN, priv->pppoe_addr, ETH_ALEN))
->  					priv->pppoe_connection_in_progress = 0;
->  			}
->  			return 0;
-> @@ -548,7 +548,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  		case NAT25_INSERT:
->  			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
->  				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
-> -				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
-> +				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
->  
->  				if (iph->nexthdr == IPPROTO_ICMPV6 &&
->  						skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
-> -- 
-> 2.35.1
-> 
-> 
+
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
+
+	https://github.com/hnaz/linux-mm
+
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
+
+A git copy of this tree is also available at
+
+	https://github.com/hnaz/linux-mm
+
+
+
+This mmotm tree contains the following patches against 5.18-rc1:
+(patches marked "*" will be included in linux-next)
+
+* mm-migrate-use-thp_order-instead-of-hpage_pmd_order-for-new-page-allocation.patch
+* highmem-fix-checks-in-__kmap_local_sched_inout.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* mm-secretmem-fix-panic-when-growing-a-memfd_secret.patch
+* mm-secretmem-fix-panic-when-growing-a-memfd_secret-fix.patch
+* mailmap-update-vasily-averins-email-address.patch
+* memcg-sync-flush-only-if-periodic-flush-is-delayed.patch
+* mm-list_lruc-revert-mm-list_lru-optimize-memcg_reparent_list_lru_node.patch
+* mm-sparsemem-fix-mem_section-will-never-be-null-gcc-12-warning.patch
+* mm-avoid-pointless-invalidate_range_start-end-on-mremapold_size=0.patch
+* mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace.patch
+* mm-munlock-remove-fields-to-fix-htmldocs-warnings.patch
+* mm-hwpoison-fix-race-between-hugetlb-free-demotion-and-memory_failure_hugetlb.patch
+* irq_work-use-kasan_record_aux_stack_noalloc-record-callstack.patch
+* userfaultfd-mark-uffd_wp-regardless-of-vm_write-flag.patch
+* mm-fix-unexpected-zeroed-page-mapping-with-zram-swap.patch
+* mm-compaction-fix-compiler-warning-when-config_compaction=n.patch
+* hugetlb-do-not-demote-poisoned-hugetlb-pages.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+  mm.patch
+* tools-vm-page_owner_sortc-use-fprintf-to-send-error-messages-to-stderr.patch
+* tools-vm-page_owner_sortc-support-for-multi-value-selection-in-single-argument.patch
+* tools-vm-page_owner_sortc-support-sorting-blocks-by-multiple-keys.patch
+* mm-rmap-fix-missing-swap_free-in-try_to_unmap-after-arch_unmap_one-failed.patch
+* mm-hugetlb-take-src_mm-write_protect_seq-in-copy_hugetlb_page_range.patch
+* mm-memory-slightly-simplify-copy_present_pte.patch
+* mm-rmap-split-page_dup_rmap-into-page_dup_file_rmap-and-page_try_dup_anon_rmap.patch
+* mm-rmap-convert-rmap-flags-to-a-proper-distinct-rmap_t-type.patch
+* mm-rmap-remove-do_page_add_anon_rmap.patch
+* mm-rmap-pass-rmap-flags-to-hugepage_add_anon_rmap.patch
+* mm-rmap-drop-compound-parameter-from-page_add_new_anon_rmap.patch
+* mm-rmap-use-page_move_anon_rmap-when-reusing-a-mapped-pageanon-page-exclusively.patch
+* mm-huge_memory-remove-outdated-vm_warn_on_once_page-from-unmap_page.patch
+* mm-page-flags-reuse-pg_mappedtodisk-as-pg_anon_exclusive-for-pageanon-pages.patch
+* mm-remember-exclusively-mapped-anonymous-pages-with-pg_anon_exclusive.patch
+* mm-gup-disallow-follow_pagefoll_pin.patch
+* mm-support-gup-triggered-unsharing-of-anonymous-pages.patch
+* mm-gup-trigger-fault_flag_unshare-when-r-o-pinning-a-possibly-shared-anonymous-page.patch
+* mm-gup-sanity-check-with-config_debug_vm-that-anonymous-pages-are-exclusive-when-unpinning.patch
+* mm-swap-remember-pg_anon_exclusive-via-a-swp-pte-bit.patch
+* mm-debug_vm_pgtable-add-tests-for-__have_arch_pte_swp_exclusive.patch
+* x86-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* arm64-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* s390-pgtable-cleanup-description-of-swp-pte-layout.patch
+* s390-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* powerpc-pgtable-remove-_page_bit_swap_type-for-book3s.patch
+* powerpc-pgtable-support-__have_arch_pte_swp_exclusive-for-book3s.patch
+* mm-create-new-mm-swaph-header-file.patch
+* mm-create-new-mm-swaph-header-file-fix.patch
+* mm-drop-swap_dirty_folio.patch
+* mm-move-responsibility-for-setting-swp_fs_ops-to-swap_activate.patch
+* mm-reclaim-mustnt-enter-fs-for-swp_fs_ops-swap-space.patch
+* mm-introduce-swap_rw-and-use-it-for-reads-from-swp_fs_ops-swap-space.patch
+* mm-perform-async-writes-to-swp_fs_ops-swap-space-using-swap_rw.patch
+* doc-update-documentation-for-swap_activate-and-swap_rw.patch
+* mm-submit-multipage-reads-for-swp_fs_ops-swap-space.patch
+* mm-submit-multipage-write-for-swp_fs_ops-swap-space.patch
+* vfs-add-fmode_can_odirect-file-flag.patch
+* mm-shmem-make-shmem_init-return-void.patch
+* mm-shmem-make-shmem_init-return-void-fix.patch
+* mm-memcg-remove-unneeded-nr_scanned.patch
+* mm-memcg-mz-already-removed-from-rb_tree-if-not-null.patch
+* mm-memcg-set-memcg-after-css-verified-and-got-reference.patch
+* mm-memcg-set-pos-explicitly-for-reclaim-and-reclaim.patch
+* mm-memcg-move-generation-assignment-and-comparison-together.patch
+* mm-memcg-non-hierarchical-mode-is-deprecated.patch
+* mm-use-mmap_assert_write_locked-instead-of-open-coding-it.patch
+* mm-mmu_gather-limit-free-batch-count-and-add-schedule-point-in-tlb_batch_pages_flush.patch
+* mm-debug_vm_pgtable-drop-protection_map-usage.patch
+* mm-mmap-clarify-protection_map-indices.patch
+* mm-modify-the-method-to-search-addr-in-unmapped_area_topdown.patch
+* mm-mmapc-use-helper-mlock_future_check.patch
+* mm-mprotect-use-mmu_gather.patch
+* mm-mprotect-do-not-flush-when-not-required-architecturally.patch
+* mm-avoid-unnecessary-flush-on-change_huge_pmd.patch
+* mm-mremap-use-helper-mlock_future_check.patch
+* mm-mremap-avoid-unneeded-do_munmap-call.patch
+* mm-vmalloc-fix-a-comment.patch
+* documentation-sysctl-document-page_lock_unfairness.patch
+* mm-page_alloc-simplify-update-of-pgdat-in-wake_all_kswapds.patch
+* mm-page_alloc-add-same-penalty-is-enough-to-get-round-robin-order.patch
+* mm-discard-__gfp_atomic.patch
+* mm-page_alloc-simplify-pageblock-migratetype-check-in-__free_one_page.patch
+* mm-wrap-__find_buddy_pfn-with-a-necessary-buddy-page-validation.patch
+* mm-remove-unnecessary-void-conversions.patch
+* mm-khugepaged-sched-to-numa-node-when-collapse-huge-page.patch
+* hugetlb-remove-use-of-list-iterator-variable-after-loop.patch
+* mm-hugetlb_vmemmap-introduce-arch_want_hugetlb_page_free_vmemmap.patch
+* arm64-mm-hugetlb-enable-hugetlb_page_free_vmemmap-for-arm64.patch
+* mm-hugetlb_vmemmap-cleanup-hugetlb_vmemmap-related-functions.patch
+* mm-hugetlb_vmemmap-cleanup-hugetlb_free_vmemmap_enabled.patch
+* mm-hugetlb_vmemmap-cleanup-config_hugetlb_page_free_vmemmap.patch
+* sched-coredumph-clarify-the-use-of-mmf_vm_hugepage.patch
+* mm-khugepaged-remove-redundant-check-for-vm_no_khugepaged.patch
+* mm-khugepaged-skip-dax-vma.patch
+* mm-thp-only-regular-file-could-be-thp-eligible.patch
+* mm-khugepaged-make-khugepaged_enter-void-function.patch
+* mm-khugepaged-move-some-khugepaged_-functions-to-khugepagedc.patch
+* mm-khugepaged-introduce-khugepaged_enter_vma-helper.patch
+* mm-mmap-register-suitable-readonly-file-vmas-for-khugepaged.patch
+* mm-vmscan-reclaim-only-affects-managed_zones.patch
+* mm-vmscan-make-sure-wakeup_kswapd-with-managed-zone.patch
+* mm-vmscan-make-sure-wakeup_kswapd-with-managed-zone-v2.patch
+* mm-vmscan-sc-reclaim_idx-must-be-a-valid-zone-index.patch
+* mm-z3fold-declare-z3fold_mount-with-__init.patch
+* mm-z3fold-remove-obsolete-comment-in-z3fold_alloc.patch
+* mm-z3fold-minor-clean-up-for-z3fold_free.patch
+* mm-z3fold-remove-unneeded-page_mapcount_reset-and-clearpageprivate.patch
+* mm-z3fold-remove-confusing-local-variable-l-reassignment.patch
+* mm-z3fold-move-decrement-of-pool-pages_nr-into-__release_z3fold_page.patch
+* mm-z3fold-remove-redundant-list_del_init-of-zhdr-buddy-in-z3fold_free.patch
+* mm-z3fold-remove-unneeded-page_headless-check-in-free_handle.patch
+* mm-compaction-use-helper-isolation_suitable.patch
+* drivers-base-nodec-fix-compaction-sysfs-file-leak.patch
+* mm-add-selftests-for-migration-entries.patch
+* mm-migration-remove-unneeded-local-variable-mapping_locked.patch
+* mm-migration-remove-unneeded-out-label.patch
+* mm-migration-remove-unneeded-local-variable-page_lru.patch
+* mm-migration-fix-the-confusing-pagetranshuge-check.patch
+* mm-migration-use-helper-function-vma_lookup-in-add_page_for_migration.patch
+* mm-migration-use-helper-macro-min-in-do_pages_stat.patch
+* mm-migration-avoid-unneeded-nodemask_t-initialization.patch
+* mm-migration-remove-some-duplicated-codes-in-migrate_pages.patch
+* mm-migration-fix-potential-page-refcounts-leak-in-migrate_pages.patch
+* mm-migration-fix-potential-invalid-node-access-for-reclaim-based-migration.patch
+* mm-migration-fix-possible-do_pages_stat_array-racing-with-memory-offline.patch
+* ksm-count-ksm-merging-pages-for-each-process.patch
+* ksm-count-ksm-merging-pages-for-each-process-fix.patch
+* mm-vmstat-add-events-for-ksm-cow.patch
+* mm-untangle-config-dependencies-for-demote-on-reclaim.patch
+* mm-page_alloc-do-not-calculate-nodes-total-pages-and-memmap-pages-when-empty.patch
+* mm-memory_hotplug-reset-nodes-state-when-empty-during-offline.patch
+* mm-memory_hotplug-refactor-hotadd_init_pgdat-and-try_online_node.patch
+* mm-memory_hotplug-refactor-hotadd_init_pgdat-and-try_online_node-checkpatch-fixes.patch
+* mm-rmap-fix-cache-flush-on-thp-pages.patch
+* dax-fix-cache-flush-on-pmd-mapped-pages.patch
+* mm-rmap-introduce-pfn_mkclean_range-to-cleans-ptes.patch
+* mm-pvmw-add-support-for-walking-devmap-pages.patch
+* dax-fix-missing-writeprotect-the-pte-entry.patch
+* mm-simplify-follow_invalidate_pte.patch
+* zram-add-a-huge_idle-writeback-mode.patch
+* damon-vaddr-test-tweak-code-to-make-the-logic-clearer.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* ia64-fix-typos-in-comments.patch
+* ia64-ptrace-fix-typos-in-comments.patch
+* ia64-replace-comments-with-c99-initializers.patch
+* ocfs2-replace-usage-of-found-with-dedicated-list-iterator-variable.patch
+* ocfs2-remove-usage-of-list-iterator-variable-after-the-loop-body.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* proc-fix-dentry-inode-overinstantiating-under-proc-pid-net.patch
+* proc-fix-dentry-inode-overinstantiating-under-proc-pid-net-checkpatch-fixes.patch
+* fs-proc-kcorec-remove-check-of-list-iterator-against-head-past-the-loop-body.patch
+* fs-proc-kcorec-remove-check-of-list-iterator-against-head-past-the-loop-body-fix.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* kernel-pid_namespace-use-null-instead-of-using-plain-integer-as-pointer.patch
+* get_maintainer-honor-mailmap-for-in-file-emails.patch
+* lib-test_meminit-optimize-do_kmem_cache_rcu_persistent-test.patch
+* lib-kconfigdebug-remove-more-config__value-indirections.patch
+* lib-test_stringc-add-strspn-and-strcspn-tests.patch
+* lib-stringc-simplify-strspn.patch
+* pipe-make-poll_usage-boolean-and-annotate-its-access.patch
+* list-fix-a-data-race-around-ep-rdllist.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* fatfs-remove-redundant-judgment.patch
+* add-fat-messages-to-printk-index.patch
+* add-fat-messages-to-printk-index-checkpatch-fixes.patch
+* fat-add-ratelimit-to-fat_ent_bread.patch
+* kexec-remove-redundant-assignments.patch
+* rapidio-remove-unnecessary-use-of-list-iterator.patch
+* taskstats-version-12-with-thread-group-and-exe-info.patch
+* taskstats-version-12-with-thread-group-and-exe-info-fix.patch
+* fs-sysv-check-sbi-s_firstdatazone-in-complete_read_super.patch
+* ipc-mqueue-use-get_tree_nodev-in-mqueue_get_tree.patch
+  linux-next.patch
+  linux-next-rejects.patch
+* mm-oom_killc-fix-vm_oom_kill_table-ifdeffery.patch
+* selftests-vm-add-test-for-soft-dirty-pte-bit.patch
+* kselftest-vm-override-targets-from-arguments.patch

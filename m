@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F168B4F4266
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69684F4000
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382856AbiDENaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S1345210AbiDEN1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345135AbiDEJWS (ORCPT
+        with ESMTP id S1345141AbiDEJWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:22:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB71EC63;
-        Tue,  5 Apr 2022 02:09:15 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C58B1AD93;
+        Tue,  5 Apr 2022 02:09:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48C2A615E5;
-        Tue,  5 Apr 2022 09:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B254C385A0;
-        Tue,  5 Apr 2022 09:09:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FABB615E4;
+        Tue,  5 Apr 2022 09:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A864C385A0;
+        Tue,  5 Apr 2022 09:09:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149754;
-        bh=QzSIcaDzb8HnSCLtk/JYXGW98gjjpvoITr3c8rYkXFs=;
+        s=korg; t=1649149757;
+        bh=+wq173W039LLwt49okhsC1cU/Yg0EMixvemiQqA7vmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iHpjXvvsk7ZDesGDilGlGYgKVrNXbPfl215snxWKR5ZNDVj6GuNNcdXx1UAEVIPxd
-         Yh1o7qRst1eM7UQEV+LXpaXmWXkKGuBtCQfQ+NGeP3DDBzgX1vyXbyLNZoN04EzIgP
-         oiYGAc2AiI2KQsyhQjKudKti+3EM5uaPXlIHdfGM=
+        b=ZQ5MAMhD0G8jKoctsm7fVQLBvSgwRsK/uRIsVykm9E16rsAkOvLcUNzo28gU2+KUb
+         tFPYbpQkSRs1iz0ySr9oV9+21q9YCVuewSKmtXbL549zZDTQbjAuxWlVmEdrHe+dA8
+         3YcWaNAc0QLt660CwXr/MIMO8bbfhTBFAeV8U2iU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0828/1017] arm64: defconfig: build imx-sdma as a module
-Date:   Tue,  5 Apr 2022 09:29:01 +0200
-Message-Id: <20220405070418.823495051@linuxfoundation.org>
+Subject: [PATCH 5.16 0829/1017] video: fbdev: omapfb: panel-dsi-cm: Use sysfs_emit() instead of snprintf()
+Date:   Tue,  5 Apr 2022 09:29:02 +0200
+Message-Id: <20220405070418.852461854@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,37 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Jing Yao <yao.jing2@zte.com.cn>
 
-[ Upstream commit e95622289f263662240544a9f0009b25c19e64d4 ]
+[ Upstream commit f63658a59c3d439c8ad7b290f8ec270980e0f384 ]
 
-This avoids firmware load error and sysfs fallback reported as follows:
+Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
-[    0.199448] imx-sdma 302c0000.dma-controller: Direct firmware load
- for imx/sdma/sdma-imx7d.bin failed with error -2
-[    0.199487] imx-sdma 302c0000.dma-controller: Falling back to sysfs
- fallback for: imx/sdma/sdma-imx7d.bin
-
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/configs/defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index f2e2b9bdd702..d1fdf68be26e 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -931,7 +931,7 @@ CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
- CONFIG_FSL_EDMA=y
--CONFIG_IMX_SDMA=y
-+CONFIG_IMX_SDMA=m
- CONFIG_K3_DMA=y
- CONFIG_MV_XOR=y
- CONFIG_MV_XOR_V2=y
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+index 4b0793abdd84..a2c7c5cb1523 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+@@ -409,7 +409,7 @@ static ssize_t dsicm_num_errors_show(struct device *dev,
+ 	if (r)
+ 		return r;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", errors);
++	return sysfs_emit(buf, "%d\n", errors);
+ }
+ 
+ static ssize_t dsicm_hw_revision_show(struct device *dev,
+@@ -439,7 +439,7 @@ static ssize_t dsicm_hw_revision_show(struct device *dev,
+ 	if (r)
+ 		return r;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x\n", id1, id2, id3);
++	return sysfs_emit(buf, "%02x.%02x.%02x\n", id1, id2, id3);
+ }
+ 
+ static ssize_t dsicm_store_ulps(struct device *dev,
+@@ -487,7 +487,7 @@ static ssize_t dsicm_show_ulps(struct device *dev,
+ 	t = ddata->ulps_enabled;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static ssize_t dsicm_store_ulps_timeout(struct device *dev,
+@@ -532,7 +532,7 @@ static ssize_t dsicm_show_ulps_timeout(struct device *dev,
+ 	t = ddata->ulps_timeout;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static DEVICE_ATTR(num_dsi_errors, S_IRUGO, dsicm_num_errors_show, NULL);
 -- 
 2.34.1
 

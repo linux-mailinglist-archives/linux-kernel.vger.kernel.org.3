@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013874F24F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6884F242D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiDEHnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S231495AbiDEHRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiDEHmA (ORCPT
+        with ESMTP id S231493AbiDEHQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:42:00 -0400
+        Tue, 5 Apr 2022 03:16:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082A290FDC;
-        Tue,  5 Apr 2022 00:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB8CDFD8;
+        Tue,  5 Apr 2022 00:13:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CC2161668;
-        Tue,  5 Apr 2022 07:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86D4C340EE;
-        Tue,  5 Apr 2022 07:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144398;
-        bh=y4HzoPUx0g/Wg4u5UKwImFP7XoKjSKux0f3xg0dQGf0=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2828615F2;
+        Tue,  5 Apr 2022 07:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C693C34110;
+        Tue,  5 Apr 2022 07:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649142836;
+        bh=hq9Ro/6wNi6Bjr9TXkTjcr4R5bOTWBzCrcnIPIywIr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v7XlfogBc6W+7QymHx9o7sPty9VR62+r6I9U2kno1RFlkbXNdlxDnzbk0HvQcSHYF
-         a1lfvColACtCHddoVcXOiKUMQNH5n2bAibGFU2T2OV4lI+IKbJQjQESqjEjYEKTcg1
-         tp/F2cdbjdtf4HoHZz9YGzjaZ5dSkcF6GQh0EWOk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konstantin Klubnichkin <kitsok@yandex-team.ru>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.17 0031/1126] iio: adc: aspeed: Add divider flag to fix incorrect voltage reading.
-Date:   Tue,  5 Apr 2022 09:12:58 +0200
-Message-Id: <20220405070408.467175161@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
-User-Agent: quilt/0.66
+        b=kLLifNES58YAya08PsQCLUQ7pqPzfzz9WtyBHjwuWWLImu27zg/rZ2BjQgpW9zeoT
+         q50zE/PJKFrU5ABhVUnlWatCs+NZ0IUf91CKYP9AxDuY/tG5tO8CZjPEH6AVLf+xXm
+         E3741Qn+xWrHdc8T31lrgNUzkTF2PZjlGqwH0bbweHv/bfMSfmB2uxsXitKbxHzICN
+         LFG66MH1akvM+4N62lLUJpc5RRQPNiaficg9zP4Y8GdnV2LkCNJVdFkUN2CnzweA1k
+         8ofpFOnAbn42fDesJ16PmeHGa4WR3ze0qpavoV8lyd3aTkeRa0BB7ZAyVgY4yej0mx
+         csOMzAS+1N77Q==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH V12 04/20] arch: Add SYSVIPC_COMPAT for all architectures
+Date:   Tue,  5 Apr 2022 15:12:58 +0800
+Message-Id: <20220405071314.3225832-5-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
+References: <20220405071314.3225832-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -57,43 +61,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Billy Tsai <billy_tsai@aspeedtech.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-commit 571426631acf46e2999c7ecd1e9d048172969a43 upstream.
+The existing per-arch definitions are pretty much historic cruft.
+Move SYSVIPC_COMPAT into init/Kconfig.
 
-The formula for the ADC sampling period in ast2400/ast2500 is:
-ADC clock period = PCLK * 2 * (ADC0C[31:17] + 1) * (ADC0C[9:0])
-When ADC0C[9:0] is set to 0 the sampling voltage will be lower than
-expected, because the hardware may not have enough time to
-charge/discharge to a stable voltage. This patch use the flag
-CLK_DIVIDER_ONE_BASED which will use the raw value read from the
-register, with the value of zero considered invalid to conform to the
-corrected formula.
-
-Fixes: 573803234e72 ("iio: Aspeed ADC")
-Reported-by: Konstantin Klubnichkin <kitsok@yandex-team.ru>
-Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Link: https://lore.kernel.org/r/20220221012705.22008-1-billy_tsai@aspeedtech.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Acked-by: Helge Deller <deller@gmx.de>  # parisc
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
 ---
- drivers/iio/adc/aspeed_adc.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm64/Kconfig   | 4 ----
+ arch/mips/Kconfig    | 5 -----
+ arch/parisc/Kconfig  | 4 ----
+ arch/powerpc/Kconfig | 5 -----
+ arch/s390/Kconfig    | 3 ---
+ arch/sparc/Kconfig   | 5 -----
+ arch/x86/Kconfig     | 4 ----
+ init/Kconfig         | 4 ++++
+ 8 files changed, 4 insertions(+), 30 deletions(-)
 
---- a/drivers/iio/adc/aspeed_adc.c
-+++ b/drivers/iio/adc/aspeed_adc.c
-@@ -539,7 +539,9 @@ static int aspeed_adc_probe(struct platf
- 	data->clk_scaler = devm_clk_hw_register_divider(
- 		&pdev->dev, clk_name, clk_parent_name, scaler_flags,
- 		data->base + ASPEED_REG_CLOCK_CONTROL, 0,
--		data->model_data->scaler_bit_width, 0, &data->clk_lock);
-+		data->model_data->scaler_bit_width,
-+		data->model_data->need_prescaler ? CLK_DIVIDER_ONE_BASED : 0,
-+		&data->clk_lock);
- 	if (IS_ERR(data->clk_scaler))
- 		return PTR_ERR(data->clk_scaler);
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 57c4c995965f..ff674808681a 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -2122,10 +2122,6 @@ config DMI
  
-
+ endmenu
+ 
+-config SYSVIPC_COMPAT
+-	def_bool y
+-	depends on COMPAT && SYSVIPC
+-
+ menu "Power management options"
+ 
+ source "kernel/power/Kconfig"
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index de3b32a507d2..0055482cd20f 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3198,16 +3198,12 @@ config MIPS32_COMPAT
+ config COMPAT
+ 	bool
+ 
+-config SYSVIPC_COMPAT
+-	bool
+-
+ config MIPS32_O32
+ 	bool "Kernel support for o32 binaries"
+ 	depends on 64BIT
+ 	select ARCH_WANT_OLD_COMPAT_IPC
+ 	select COMPAT
+ 	select MIPS32_COMPAT
+-	select SYSVIPC_COMPAT if SYSVIPC
+ 	help
+ 	  Select this option if you want to run o32 binaries.  These are pure
+ 	  32-bit binaries as used by the 32-bit Linux/MIPS port.  Most of
+@@ -3221,7 +3217,6 @@ config MIPS32_N32
+ 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION
+ 	select COMPAT
+ 	select MIPS32_COMPAT
+-	select SYSVIPC_COMPAT if SYSVIPC
+ 	help
+ 	  Select this option if you want to run n32 binaries.  These are
+ 	  64-bit binaries using 32-bit quantities for addressing and certain
+diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+index 52e550b45692..93cb07a4446f 100644
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -331,10 +331,6 @@ config COMPAT
+ 	def_bool y
+ 	depends on 64BIT
+ 
+-config SYSVIPC_COMPAT
+-	def_bool y
+-	depends on COMPAT && SYSVIPC
+-
+ config AUDIT_ARCH
+ 	def_bool y
+ 
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 174edabb74fa..6edb294a34ef 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -298,11 +298,6 @@ config COMPAT
+ 	select ARCH_WANT_OLD_COMPAT_IPC
+ 	select COMPAT_OLD_SIGACTION
+ 
+-config SYSVIPC_COMPAT
+-	bool
+-	depends on COMPAT && SYSVIPC
+-	default y
+-
+ config SCHED_OMIT_FRAME_POINTER
+ 	bool
+ 	default y
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 77b5a03de13a..555b7ea5ecf5 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -399,9 +399,6 @@ config COMPAT
+ 	  (and some other stuff like libraries and such) is needed for
+ 	  executing 31 bit applications.  It is safe to say "Y".
+ 
+-config SYSVIPC_COMPAT
+-	def_bool y if COMPAT && SYSVIPC
+-
+ config SMP
+ 	def_bool y
+ 
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 9200bc04701c..9c1cce74953a 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -488,9 +488,4 @@ config COMPAT
+ 	select ARCH_WANT_OLD_COMPAT_IPC
+ 	select COMPAT_OLD_SIGACTION
+ 
+-config SYSVIPC_COMPAT
+-	bool
+-	depends on COMPAT && SYSVIPC
+-	default y
+-
+ source "drivers/sbus/char/Kconfig"
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index b0142e01002e..65690b950f5f 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2872,10 +2872,6 @@ config COMPAT
+ if COMPAT
+ config COMPAT_FOR_U64_ALIGNMENT
+ 	def_bool y
+-
+-config SYSVIPC_COMPAT
+-	def_bool y
+-	depends on SYSVIPC
+ endif
+ 
+ endmenu
+diff --git a/init/Kconfig b/init/Kconfig
+index ddcbefe535e9..9fa3ee6bf12a 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -390,6 +390,10 @@ config SYSVIPC_SYSCTL
+ 	depends on SYSCTL
+ 	default y
+ 
++config SYSVIPC_COMPAT
++	def_bool y
++	depends on COMPAT && SYSVIPC
++
+ config POSIX_MQUEUE
+ 	bool "POSIX Message Queues"
+ 	depends on NET
+-- 
+2.25.1
 

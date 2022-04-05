@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48B14F5079
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B414F5045
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842038AbiDFB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
+        id S1841089AbiDFBPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243764AbiDEKhl (ORCPT
+        with ESMTP id S1354220AbiDEKMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:37:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C86574B3;
-        Tue,  5 Apr 2022 03:23:10 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705BA64E8;
+        Tue,  5 Apr 2022 02:59:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B5F67CE0B18;
-        Tue,  5 Apr 2022 10:23:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7023C385A3;
-        Tue,  5 Apr 2022 10:23:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 293EAB817D3;
+        Tue,  5 Apr 2022 09:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DEE5C385A1;
+        Tue,  5 Apr 2022 09:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154187;
-        bh=jyHeGkeBUgv0uibiiSn4ARBIL2VuEVNmQ8Khl1BNBug=;
+        s=korg; t=1649152738;
+        bh=TYA85x5KePZrtgYFgh6mR2q5VCFcpvIyZhFCo2/nG68=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vp2Kvc3AQwHpjdXqek+x720GpPCH4PM4LoQgZ/OkTtOaqKlHHSQDeOOFIPmpICVkw
-         dk7HvbEiSzhuGTVprgyo/Hz5+39C2JhhCUTZvcbtACjS6UJGV7V7cAl2dzUtb09NTG
-         BgHSWvCZXIB0rdYY4A4N2YnMJsjnfmIBW/kc0ze0=
+        b=mphnfcTySsEPDMZGld5Rklu7Sr/pzTbd/8zBJXh7Sn07A6Ubd+jJLuLxFuRnC8hkC
+         oqoWRS8ZhqFMNADzy+6uWUNINOkaUT2kZIPQur0+i7SYbHJznrxf4auz4vHlcdDCAi
+         XAs4KfBJu5c4w9yYYHoJai59jCBNmWXo0XPUyTdk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 451/599] gcc-plugins/stackleak: Exactly match strings instead of prefixes
-Date:   Tue,  5 Apr 2022 09:32:25 +0200
-Message-Id: <20220405070312.250922248@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.15 885/913] dt-bindings: pinctrl: pinctrl-microchip-sgpio: Fix example
+Date:   Tue,  5 Apr 2022 09:32:27 +0200
+Message-Id: <20220405070406.349744134@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-[ Upstream commit 27e9faf415dbf94af19b9c827842435edbc1fbbc ]
+commit a6ff90f3fbd4d902aad8777f0329cef3a2768bde upstream.
 
-Since STRING_CST may not be NUL terminated, strncmp() was used for check
-for equality. However, this may lead to mismatches for longer section
-names where the start matches the tested-for string. Test for exact
-equality by checking for the presences of NUL termination.
+The blamed commit adds support for irq, but the reqisters for irq are
+outside of the memory size. They are at address 0x108. Therefore update
+the memory size to cover all the registers used by the device.
 
-Cc: Alexander Popov <alex.popov@linux.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 01a9350bdd49fb ("dt-bindings: pinctrl: pinctrl-microchip-sgpio: Add irq support")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Link: https://lore.kernel.org/r/20220204153535.465827-2-horatiu.vultur@microchip.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/gcc-plugins/stackleak_plugin.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
-index 48e141e07956..dacd697ffd38 100644
---- a/scripts/gcc-plugins/stackleak_plugin.c
-+++ b/scripts/gcc-plugins/stackleak_plugin.c
-@@ -431,6 +431,23 @@ static unsigned int stackleak_cleanup_execute(void)
- 	return 0;
- }
- 
-+/*
-+ * STRING_CST may or may not be NUL terminated:
-+ * https://gcc.gnu.org/onlinedocs/gccint/Constant-expressions.html
-+ */
-+static inline bool string_equal(tree node, const char *string, int length)
-+{
-+	if (TREE_STRING_LENGTH(node) < length)
-+		return false;
-+	if (TREE_STRING_LENGTH(node) > length + 1)
-+		return false;
-+	if (TREE_STRING_LENGTH(node) == length + 1 &&
-+	    TREE_STRING_POINTER(node)[length] != '\0')
-+		return false;
-+	return !memcmp(TREE_STRING_POINTER(node), string, length);
-+}
-+#define STRING_EQUAL(node, str)	string_equal(node, str, strlen(str))
-+
- static bool stackleak_gate(void)
- {
- 	tree section;
-@@ -440,13 +457,13 @@ static bool stackleak_gate(void)
- 	if (section && TREE_VALUE(section)) {
- 		section = TREE_VALUE(TREE_VALUE(section));
- 
--		if (!strncmp(TREE_STRING_POINTER(section), ".init.text", 10))
-+		if (STRING_EQUAL(section, ".init.text"))
- 			return false;
--		if (!strncmp(TREE_STRING_POINTER(section), ".devinit.text", 13))
-+		if (STRING_EQUAL(section, ".devinit.text"))
- 			return false;
--		if (!strncmp(TREE_STRING_POINTER(section), ".cpuinit.text", 13))
-+		if (STRING_EQUAL(section, ".cpuinit.text"))
- 			return false;
--		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
-+		if (STRING_EQUAL(section, ".meminit.text"))
- 			return false;
- 	}
- 
--- 
-2.34.1
-
+--- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
+@@ -138,7 +138,7 @@ examples:
+       clocks = <&sys_clk>;
+       pinctrl-0 = <&sgpio2_pins>;
+       pinctrl-names = "default";
+-      reg = <0x1101059c 0x100>;
++      reg = <0x1101059c 0x118>;
+       microchip,sgpio-port-ranges = <0 0>, <16 18>, <28 31>;
+       bus-frequency = <25000000>;
+       sgpio_in2: gpio@0 {
 
 

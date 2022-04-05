@@ -2,113 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AE64F20C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5764F20B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiDECFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S229499AbiDEBwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 21:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiDECF0 (ORCPT
+        with ESMTP id S229457AbiDEBws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:05:26 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA8135081;
-        Mon,  4 Apr 2022 18:22:13 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t21so11901663oie.11;
-        Mon, 04 Apr 2022 18:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y7CfRmOu2mFNhlP27BBXPAgEnRTv2JAfJlw4FzS8AkI=;
-        b=Z/ADUipXSo6cCCoApgoWmuri8ib7Z2ZRmbnR54h8/VrIGaueK5QGu/WZtyWNFshPcu
-         iAUxF22NOgckmUzcLG64u90kuydHGTVHt9OYXf690baDj9sOYSCj/jaZkbYXeWXHpMmB
-         fAHEsMsaWg7XOguwyTv9/4z8MTuyMLKrHnwV08vQpUkIZUwgrbHKz3AVmSD3jtcNlM/x
-         0UinNkINbSntmhwlU0tlzyGj/QAvnPpxiM0jFhKpPSABVsY/8/XIx1H5kYyTNNFKFogR
-         jNANubjJDZQhCftsvAm3pWtbim5rG5UTWikV3yCU0eXPRTt1v5MNXIOEz9cyijS6kP55
-         XDvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y7CfRmOu2mFNhlP27BBXPAgEnRTv2JAfJlw4FzS8AkI=;
-        b=LP6A0w0tgaMTEoQt/CdUYE9qBQGsBNo8Z8vLuS1o6ayplFYbJkgXfpjiEJBQxTFFi0
-         3mLGOevxCl0Boeg3O9XU3vXF7wA+GIxscRcvhwPdp82+jZz7tElpf/TfHhSrUHkXGAq6
-         WgGgq7VZny1ApersE8krX2x/FJIQ6kqDOyqAF5ffCi+SoLDRn/5m5xBynQ/a57xkMoVu
-         XC7o8KVTX7GKXtgLrKFGYbGEFokgX6zSo8puN0Hq6WAlQ4JrCgcDu633lI+DhJUspOL+
-         NJOEzWTt4a1L0JgLrD2uqSD7mYT0h7tDkV9Ibz0shwdKw6HfMgp9ZSyVxRH+giCXTYV2
-         CRfw==
-X-Gm-Message-State: AOAM530rmVfmY6W3K8TkJ6OG7BU288KIniTRaJ6ZMm4jBTWEnAsoS/fX
-        WUNj4NyB7KSdmCOF5NMT8j51dUJYBEwLoMu6qa2UkD5rZSc=
-X-Google-Smtp-Source: ABdhPJyefORiL8A7gzvpS7dFgoDZqSwDNKY91Ji/hlxmeFS27O7LqO1jBzOIggw1AkXZ8Y44Dm+GJ8fQng2R1BpN3QQ=
-X-Received: by 2002:a17:90a:5298:b0:1ca:7fb3:145 with SMTP id
- w24-20020a17090a529800b001ca7fb30145mr1036706pjh.200.1649119741666; Mon, 04
- Apr 2022 17:49:01 -0700 (PDT)
+        Mon, 4 Apr 2022 21:52:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FA9386347;
+        Mon,  4 Apr 2022 18:07:47 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXTf92gnvz4xXK;
+        Tue,  5 Apr 2022 10:53:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649120003;
+        bh=yWJj/XDly7PKBcBsIePwdijaqceEq7HoP2lgWDGUzjE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oZySHRRqJoqMe0goHMP66Ql+m2+0q3c8gww/7QVi+MZFoTWHqTeBgi9TpY2eRnnm6
+         wp2Zn47wayZsgwnh6hqJQb7jtrfKpnEMLgANRZ1CAJlvXDF1qla1k5jjpcgM0UFMqm
+         98/q8uvVAQcYMUjDwVgXpMV8uihbFemo3f3JS11wrre2Pf6dwZa5gnQoMLbzgiKmbT
+         D4oybWFSxPZukv+gOxkpYc8BhDyeaCJOURTFjOL/dOMY6uD5Js/r/xKA7fKXJOh2VM
+         YpqyAqNFeCda1qywMI2OHQIQSw2DY69ls+hPgCRQ01fy9p+2VzVA3uHBXMSCnxEmMp
+         KUBE7+uoUPvAA==
+Date:   Tue, 5 Apr 2022 10:53:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Juha-Pekka =?UTF-8?B?SGVpa2tpbMOk?= 
+        <juha-pekka.heikkila@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20220405105319.2eb47e9d@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220404200250.321455-1-shy828301@gmail.com> <YkuKbMbSecBVsa1k@casper.infradead.org>
-In-Reply-To: <YkuKbMbSecBVsa1k@casper.infradead.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 4 Apr 2022 17:48:49 -0700
-Message-ID: <CAHbLzkoWPN+ahrvu2JrvoDpf8J_QGR6Ug6BbPnC11C82Lb-NaA@mail.gmail.com>
-Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>, Zi Yan <ziy@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/j==zcLUSd_ZwS9jYUrBZVK3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 5:16 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Mon, Apr 04, 2022 at 01:02:42PM -0700, Yang Shi wrote:
-> > The readonly FS THP relies on khugepaged to collapse THP for suitable
-> > vmas.  But it is kind of "random luck" for khugepaged to see the
-> > readonly FS vmas (see report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/) since currently the vmas are registered to khugepaged when:
->
-> I still don't see the point.  The effort should be put into
-> supporting large folios, not in making this hack work better.
+--Sig_/j==zcLUSd_ZwS9jYUrBZVK3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The series makes sense even though the hack is replaced by large
-folios IMHO. The problem is the file VMAs may be not registered by
-khugepaged consistently for some THP modes, for example, always,
-regardless of whether it's readonly or the hack is gone or not. IIUC
-even though the hack is replaced by the large folios, we still have
-khugepaged to collapse pmd-mappable huge pages for both anonymous vmas
-and file vmas, right? Or are you thinking about killing khugepaged
-soon with supporting large folios?
+Hi all,
 
-Anyway it may make things clearer if the cover letter is rephrased to:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-When khugepaged collapses file THPs, its behavior is not consistent.
-It is kind of "random luck" for khugepaged to see the file vmas (see
-report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/)
-since currently the vmas are registered to khugepaged when:
-  - Anon huge pmd page fault
-  - VMA merge
-  - MADV_HUGEPAGE
-  - Shmem mmap
+  drivers/gpu/drm/i915/i915_pci.c
 
-If the above conditions are not met, even though khugepaged is enabled
-it won't see any file vma at all.  MADV_HUGEPAGE could be specified
-explicitly to tell khugepaged to collapse this area, but when
-khugepaged mode is "always" it should scan suitable vmas as long as
-VM_NOHUGEPAGE is not set.
+between commit:
 
-So make sure file vmas are registered to khugepaged to make the
-behavior more consistent.
+  132aaaf01788 ("drm/i915: add needs_compact_pt flag")
+
+from Linus' tree and commits:
+
+  072ce4164f97 ("drm/i915/dg2: Tile 4 plane format support")
+  412c942bdfae ("drm/i915/ats-m: add ATS-M platform info")
+
+from the drm-intel tree.
+
+I fixed it up (I think, see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/i915_pci.c
+index c32c0c6661c8,8e321d300e0c..000000000000
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@@ -1040,25 -1038,35 +1040,36 @@@ static const struct intel_device_info x
+  	.require_force_probe =3D 1,
+  };
+ =20
++ #define DG2_FEATURES \
++ 	XE_HP_FEATURES, \
++ 	XE_HPM_FEATURES, \
++ 	DGFX_FEATURES, \
++ 	.graphics.rel =3D 55, \
++ 	.media.rel =3D 55, \
++ 	PLATFORM(INTEL_DG2), \
++ 	.has_4tile =3D 1, \
++ 	.has_64k_pages =3D 1, \
+++	.needs_compact_pt =3D 1, \
++ 	.has_guc_deprivilege =3D 1, \
++ 	.platform_engine_mask =3D \
++ 		BIT(RCS0) | BIT(BCS0) | \
++ 		BIT(VECS0) | BIT(VECS1) | \
++ 		BIT(VCS0) | BIT(VCS2)
++=20
+  __maybe_unused
+  static const struct intel_device_info dg2_info =3D {
+- 	XE_HP_FEATURES,
+- 	XE_HPM_FEATURES,
++ 	DG2_FEATURES,
+  	XE_LPD_FEATURES,
+- 	DGFX_FEATURES,
+- 	.graphics.rel =3D 55,
+- 	.media.rel =3D 55,
+- 	PLATFORM(INTEL_DG2),
+- 	.has_guc_deprivilege =3D 1,
+- 	.has_64k_pages =3D 1,
+- 	.needs_compact_pt =3D 1,
+- 	.platform_engine_mask =3D
+- 		BIT(RCS0) | BIT(BCS0) |
+- 		BIT(VECS0) | BIT(VECS1) |
+- 		BIT(VCS0) | BIT(VCS2),
+- 	.require_force_probe =3D 1,
+  	.display.cpu_transcoder_mask =3D BIT(TRANSCODER_A) | BIT(TRANSCODER_B) |
+  			       BIT(TRANSCODER_C) | BIT(TRANSCODER_D),
++ 	.require_force_probe =3D 1,
++ };
++=20
++ __maybe_unused
++ static const struct intel_device_info ats_m_info =3D {
++ 	DG2_FEATURES,
++ 	.display =3D { 0 },
++ 	.require_force_probe =3D 1,
+  };
+ =20
+  #undef PLATFORM
+
+--Sig_/j==zcLUSd_ZwS9jYUrBZVK3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLkwAACgkQAVBC80lX
+0GwCmwf/YLukNlv4VfvGolLJqjb0d4+V3vRIOgWor4TZgbiIvKvEI7wcYjf1Xotp
+hw7jpLNt7ameGWV5+pKmYmUybFgjJJofMSI0cQaYkByRfT7Yml3Ov29TbNV3Pfu+
+lSCt7asqLuubKGMfov41OxfkDtKK6aaCbAOPmO0yORo6rHVWkce1hRHSCXTfBGKX
+nNrqGYiHCZud8k8V7he8P3Zf2tBqz4FJ1o5nzoKled5MT8mSux8NyFTinbDdwIAe
+3hbbWcOgqQqlROVkTcjLWbDP4F4xFMUFTofnZzaS1nBRpmK+ZN3a8dbRzaP/jISD
+B0q4OkRNTVifbgmONUvcm9I+VX65uw==
+=R9kd
+-----END PGP SIGNATURE-----
+
+--Sig_/j==zcLUSd_ZwS9jYUrBZVK3--

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6F14F3B8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D814F3797
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380439AbiDEL62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S1356742AbiDELPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245019AbiDEIxC (ORCPT
+        with ESMTP id S237087AbiDEIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4844D9D;
-        Tue,  5 Apr 2022 01:49:36 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A21B0A57;
+        Tue,  5 Apr 2022 01:05:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81EA160FFB;
-        Tue,  5 Apr 2022 08:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96349C385A1;
-        Tue,  5 Apr 2022 08:49:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 452806167A;
+        Tue,  5 Apr 2022 08:05:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4810AC385A1;
+        Tue,  5 Apr 2022 08:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148576;
-        bh=m0gxXestR9TuCF6pwebEyOfHf08GivCI31KBId5HBac=;
+        s=korg; t=1649145905;
+        bh=bpHXttM/e3cLQHkW0j8q0tlu0YafmBGpQxC5mr2uDeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CwXOhh2jae1aaO0AzlLf6CAo6z0BIwPCQk0s2Np/wjeVxcV2Hdprq02iDWYoPjaFr
-         LhAX9a3slRIX/kke3H45VZ81pvmpgPYBlMVcwv4t5ICw5uBhhimvLukl0Ii/UxLuYz
-         jfhP2x6oZZe9q4syd/GzfLkZEOeQPAljwj2e83XA=
+        b=ZVfQtl1VROnkz3WEW/lgQO2wNlzse7Ntvc0gJQDc/jD/MGrdXd6ICVjbZ25bKNjes
+         0vvMt8vqAyVaC+jrSdHRHywM+BDk78HH+CU7XvFQJLK2ZQfO+FU9E7bcPNDFqFHREO
+         sv6rOf2N3Rqq3xBg5ldmGe02kgkCLTt/ThyjqynI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0405/1017] ath10k: fix memory overwrite of the WoWLAN wakeup packet pattern
-Date:   Tue,  5 Apr 2022 09:21:58 +0200
-Message-Id: <20220405070406.310457627@linuxfoundation.org>
+Subject: [PATCH 5.17 0572/1126] drm/msm/dpu: add DSPP blocks teardown
+Date:   Tue,  5 Apr 2022 09:21:59 +0200
+Message-Id: <20220405070424.423744398@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Gong <quic_wgong@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit e3fb3d4418fce5484dfe7995fcd94c18b10a431a ]
+[ Upstream commit d5c5e78f217172e87d8fb2c3418dd8b58b4adfcb ]
 
-In function ath10k_wow_convert_8023_to_80211(), it will do memcpy for
-the new->pattern, and currently the new->pattern and new->mask is same
-with the old, then the memcpy of new->pattern will also overwrite the
-old->pattern, because the header format of new->pattern is 802.11,
-its length is larger than the old->pattern which is 802.3. Then the
-operation of "Copy frame body" will copy a mistake value because the
-body memory has been overwrite when memcpy the new->pattern.
+Add missing calls to dpu_hw_dspp_destroy() to free resources allocated
+for DSPP hardware blocks.
 
-Assign another empty value to new_pattern to avoid the overwrite issue.
-
-Tested-on: QCA6174 hw3.2 SDIO WLAN.RMH.4.4.1-00049
-
-Fixes: fa3440fa2fa1 ("ath10k: convert wow pattern from 802.3 to 802.11")
-Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20211222031347.25463-1-quic_wgong@quicinc.com
+Fixes: e47616df008b ("drm/msm/dpu: add support for color processing blocks in dpu driver")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20220121210618.3482550-3-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/wow.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath10k/wow.c b/drivers/net/wireless/ath/ath10k/wow.c
-index 7d65c115669f..20b9aa8ddf7d 100644
---- a/drivers/net/wireless/ath/ath10k/wow.c
-+++ b/drivers/net/wireless/ath/ath10k/wow.c
-@@ -337,14 +337,15 @@ static int ath10k_vif_wow_set_wakeups(struct ath10k_vif *arvif,
- 			if (patterns[i].mask[j / 8] & BIT(j % 8))
- 				bitmask[j] = 0xff;
- 		old_pattern.mask = bitmask;
--		new_pattern = old_pattern;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+index f9c83d6e427a..24fbaf562d41 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+@@ -35,6 +35,14 @@ int dpu_rm_destroy(struct dpu_rm *rm)
+ {
+ 	int i;
  
- 		if (ar->wmi.rx_decap_mode == ATH10K_HW_TXRX_NATIVE_WIFI) {
--			if (patterns[i].pkt_offset < ETH_HLEN)
-+			if (patterns[i].pkt_offset < ETH_HLEN) {
- 				ath10k_wow_convert_8023_to_80211(&new_pattern,
- 								 &old_pattern);
--			else
-+			} else {
-+				new_pattern = old_pattern;
- 				new_pattern.pkt_offset += WOW_HDR_LEN - ETH_HLEN;
-+			}
- 		}
++	for (i = 0; i < ARRAY_SIZE(rm->dspp_blks); i++) {
++		struct dpu_hw_dspp *hw;
++
++		if (rm->dspp_blks[i]) {
++			hw = to_dpu_hw_dspp(rm->dspp_blks[i]);
++			dpu_hw_dspp_destroy(hw);
++		}
++	}
+ 	for (i = 0; i < ARRAY_SIZE(rm->pingpong_blks); i++) {
+ 		struct dpu_hw_pingpong *hw;
  
- 		if (WARN_ON(new_pattern.pattern_len > WOW_MAX_PATTERN_SIZE))
 -- 
 2.34.1
 

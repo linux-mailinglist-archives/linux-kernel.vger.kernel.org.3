@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC1A4F5054
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7407E4F51B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455807AbiDFBVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S1846933AbiDFCLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357170AbiDEKZr (ORCPT
+        with ESMTP id S1349430AbiDEJtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:25:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3834D24B;
-        Tue,  5 Apr 2022 03:09:40 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A572409D;
+        Tue,  5 Apr 2022 02:45:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FCF3B81C8B;
-        Tue,  5 Apr 2022 10:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD99C385A1;
-        Tue,  5 Apr 2022 10:09:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50C89B81B76;
+        Tue,  5 Apr 2022 09:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90ACC385A1;
+        Tue,  5 Apr 2022 09:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153378;
-        bh=dmkBpNsmsSzevzQW9+ydYvYdMF/i7OZPFPTzbGQ1ZaY=;
+        s=korg; t=1649151940;
+        bh=Zm16Ec5+JkAfJ2RL/XU+XJwcSvtoRmxywngEqyH/NpE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a+dCaJx38xaNEpOAmkea9jXHAFO30T7PeHqURmrRTN816gtDCWV3iKLZ665nfWtDz
-         eA3P0qlE1dl2IS31WQ7lUZbBhphzdMYnnGa03jNb/JE4bxqSD4+O7kCaRv7S+kS6Of
-         lIKa0cd+iFaM6ePBRTXuY0OcOBOKFu3X/H2DPkZ8=
+        b=NSw8/yY+GlA0vPyA/82T8KRlG22ljoiWskhLl/w/6mv+e21BgrEng/1kniJsExqGM
+         NjmDxlV2pbV71bqP4qse1cy4VRd9tlID1mUNlE6VIpaRsjqgIZetRqWb81x8pxO7oN
+         Jvbn8kC2AQchLfLs8Jy1fiplaObuf72J8QUECAzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 163/599] crypto: ccree - Fix use after free in cc_cipher_exit()
-Date:   Tue,  5 Apr 2022 09:27:37 +0200
-Message-Id: <20220405070303.691280861@linuxfoundation.org>
+Subject: [PATCH 5.15 596/913] pinctrl: renesas: checker: Fix miscalculation of number of states
+Date:   Tue,  5 Apr 2022 09:27:38 +0200
+Message-Id: <20220405070357.706973595@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit 3d950c34074ed74d2713c3856ba01264523289e6 ]
+[ Upstream commit de9b861018d46af27a5edff8b6baef35c0c0ad4f ]
 
-kfree_sensitive(ctx_p->user.key) will free the ctx_p->user.key. But
-ctx_p->user.key is still used in the next line, which will lead to a
-use after free.
+The checker failed to validate all enum IDs in the description of a
+register with fixed-width register fields, due to a miscalculation of
+the number of described states: each register field of n bits can have
+"1 << n" possible states, not "1".
 
-We can call kfree_sensitive() after dev_dbg() to avoid the uaf.
+Increase SH_PFC_MAX_ENUMS accordingly, now more enum IDs are checked
+(SH-Mobile AG5 has more than 4000 enum IDs defined).
 
-Fixes: 63ee04c8b491 ("crypto: ccree - add skcipher support")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 12d057bad683b1c6 ("pinctrl: sh-pfc: checker: Add check for enum ID conflicts")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/6d8a6a05564f38f9d20464c1c17f96e52740cf6a.1645460429.git.geert+renesas@glider.be
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccree/cc_cipher.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/renesas/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/ccree/cc_cipher.c b/drivers/crypto/ccree/cc_cipher.c
-index dafa6577a845..c289e4d5cbdc 100644
---- a/drivers/crypto/ccree/cc_cipher.c
-+++ b/drivers/crypto/ccree/cc_cipher.c
-@@ -254,8 +254,8 @@ static void cc_cipher_exit(struct crypto_tfm *tfm)
- 		&ctx_p->user.key_dma_addr);
+diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
+index f29130957e49..bc17f3131de5 100644
+--- a/drivers/pinctrl/renesas/core.c
++++ b/drivers/pinctrl/renesas/core.c
+@@ -739,7 +739,7 @@ static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
  
- 	/* Free key buffer in context */
--	kfree_sensitive(ctx_p->user.key);
- 	dev_dbg(dev, "Free key buffer in context. key=@%p\n", ctx_p->user.key);
-+	kfree_sensitive(ctx_p->user.key);
- }
+ #ifdef DEBUG
+ #define SH_PFC_MAX_REGS		300
+-#define SH_PFC_MAX_ENUMS	3000
++#define SH_PFC_MAX_ENUMS	5000
  
- struct tdes_keys {
+ static unsigned int sh_pfc_errors __initdata = 0;
+ static unsigned int sh_pfc_warnings __initdata = 0;
+@@ -851,7 +851,8 @@ static void __init sh_pfc_check_cfg_reg(const char *drvname,
+ 	sh_pfc_check_reg(drvname, cfg_reg->reg);
+ 
+ 	if (cfg_reg->field_width) {
+-		n = cfg_reg->reg_width / cfg_reg->field_width;
++		fw = cfg_reg->field_width;
++		n = (cfg_reg->reg_width / fw) << fw;
+ 		/* Skip field checks (done at build time) */
+ 		goto check_enum_ids;
+ 	}
 -- 
 2.34.1
 

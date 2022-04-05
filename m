@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E604F50F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C104F5127
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844068AbiDFBoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1845037AbiDFBxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348980AbiDEJsv (ORCPT
+        with ESMTP id S1348994AbiDEJsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983646264;
-        Tue,  5 Apr 2022 02:38:40 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83784BE34;
+        Tue,  5 Apr 2022 02:38:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5975EB81C6A;
-        Tue,  5 Apr 2022 09:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC78C385A3;
-        Tue,  5 Apr 2022 09:38:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A3F3615E5;
+        Tue,  5 Apr 2022 09:38:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22029C385A2;
+        Tue,  5 Apr 2022 09:38:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151518;
-        bh=IfWMaRl05hOWBxfG40GcyKXtd4SGRrCitFCS7E/8zvI=;
+        s=korg; t=1649151526;
+        bh=4GVNTj2YOOxt86du6z4LnhR8s7JceT8i+SaFiQdlXpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TRO3VdIRCWtp7+brP0QBP83lCJgqF++qgJoE9gOrjTpqFGqfwwc6ZfYipUNtRP6vo
-         w5Qzqt8VDy6zZ/I+uspq/9wAvQLAv6MZesBAbDEWPZshkPyii8cgPx2VtOmqmA/25X
-         4EZ4ZOgTwb6N4dVmh4nYbMP1wcrLwFftZDDbbuSg=
+        b=R3QNB2cvd8TPd4MLu1iY2GvbOOv3rsBykY41gKfsRNdJ8s9S2fnqAZaplMrTQNuGR
+         DdMrVRGsQwqUQqKzAnY2HAh+EbEpfUKAJV0gdzayxTkd9Hg20FMIEarhjwUpEfxoQO
+         FEA1aGYZNI1v+38qCDmK/+3hn1xIWwO0BrEgUpao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiao Yang <yangx.jy@fujitsu.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 443/913] RDMA/rxe: Check the last packet by RXE_END_MASK
-Date:   Tue,  5 Apr 2022 09:25:05 +0200
-Message-Id: <20220405070353.124994754@linuxfoundation.org>
+Subject: [PATCH 5.15 446/913] cxl/regs: Fix size of CXL Capability Header Register
+Date:   Tue,  5 Apr 2022 09:25:08 +0200
+Message-Id: <20220405070353.216070330@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,52 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiao Yang <yangx.jy@fujitsu.com>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[ Upstream commit b1377cc37f6bebd57ce8747b7e16163a475af295 ]
+[ Upstream commit 74b0fe80409733055971bbfaf33c80a33fddeeb3 ]
 
-It's wrong to check the last packet by RXE_COMP_MASK because the flag is
-to indicate if responder needs to generate a completion.
+In CXL 2.0, 8.2.5.1 CXL Capability Header Register: this register
+is given as 32 bits.
 
-Fixes: 9fcd67d1772c ("IB/rxe: increment msn only when completing a request")
-Fixes: 8700e3e7c485 ("Soft RoCE driver")
-Link: https://lore.kernel.org/r/20211229034438.1854908-1-yangx.jy@fujitsu.com
-Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+8.2.3 which covers the CXL 2.0 Component registers, including the
+CXL Capability Header Register states that access restrictions
+specified in Section 8.2.2 apply.
+
+8.2.2 includes:
+* A 32 bit register shall be accessed as a 4 Byte quantity.
+...
+If these rules are not followed, the behavior is undefined.
+
+Discovered during review of CXL QEMU emulation. Alex Bennée pointed
+out there was a comment saying that 4 byte registers must be read
+with a 4 byte read, but 8 byte reads were being emulated.
+
+https://lore.kernel.org/qemu-devel/87bkzyd3c7.fsf@linaro.org/
+
+Fixing that, led to this code failing. Whilst a given hardware
+implementation 'might' work with an 8 byte read, it should not be relied
+upon. The QEMU emulation v5 will return 0 and log the wrong access width.
+
+The code moved, so one fixes tag for where this will directly apply and
+also a reference to the earlier introduction of the code for backports.
+
+Fixes: 0f06157e0135 ("cxl/core: Move register mapping infrastructure")
+Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Alex Bennée <alex.bennee@linaro.org>
+Reviewed-by: Ben Widawsky <ben.widawsky@intel.com>
+Link: https://lore.kernel.org/r/20220201153437.2873-1-Jonathan.Cameron@huawei.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rxe/rxe_resp.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/cxl/core/regs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index 5501227ddc65..8ed172ab0beb 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -830,6 +830,10 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
- 			return RESPST_ERR_INVALIDATE_RKEY;
- 	}
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index b8aa583a7642..2e7027a3fef3 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -35,7 +35,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+ 			      struct cxl_component_reg_map *map)
+ {
+ 	int cap, cap_count;
+-	u64 cap_array;
++	u32 cap_array;
  
-+	if (pkt->mask & RXE_END_MASK)
-+		/* We successfully processed this new request. */
-+		qp->resp.msn++;
-+
- 	/* next expected psn, read handles this separately */
- 	qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
- 	qp->resp.ack_psn = qp->resp.psn;
-@@ -837,11 +841,9 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
- 	qp->resp.opcode = pkt->opcode;
- 	qp->resp.status = IB_WC_SUCCESS;
+ 	*map = (struct cxl_component_reg_map) { 0 };
  
--	if (pkt->mask & RXE_COMP_MASK) {
--		/* We successfully processed this new request. */
--		qp->resp.msn++;
-+	if (pkt->mask & RXE_COMP_MASK)
- 		return RESPST_COMPLETE;
--	} else if (qp_type(qp) == IB_QPT_RC)
-+	else if (qp_type(qp) == IB_QPT_RC)
- 		return RESPST_ACKNOWLEDGE;
- 	else
- 		return RESPST_CLEANUP;
+@@ -45,7 +45,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+ 	 */
+ 	base += CXL_CM_OFFSET;
+ 
+-	cap_array = readq(base + CXL_CM_CAP_HDR_OFFSET);
++	cap_array = readl(base + CXL_CM_CAP_HDR_OFFSET);
+ 
+ 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
+ 		dev_err(dev,
 -- 
 2.34.1
 

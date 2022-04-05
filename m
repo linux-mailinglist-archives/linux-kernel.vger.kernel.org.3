@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445E74F3127
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1C84F3259
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356580AbiDEKYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S1355501AbiDEKUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241240AbiDEIc5 (ORCPT
+        with ESMTP id S241241AbiDEIc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729E95FE7;
-        Tue,  5 Apr 2022 01:30:16 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95C95FEA;
+        Tue,  5 Apr 2022 01:30:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F9B260FF5;
-        Tue,  5 Apr 2022 08:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2066AC385A2;
-        Tue,  5 Apr 2022 08:30:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88274B81BC0;
+        Tue,  5 Apr 2022 08:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5098C385A1;
+        Tue,  5 Apr 2022 08:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147415;
-        bh=W5KT8gJMhEm4bt1ufYnqIkD9RSkVG+G0ErDT+4VMW4U=;
+        s=korg; t=1649147418;
+        bh=FS92GdhlqFolm6H9zkgGxTMyWEWC8GNBnkat2V1mfM4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=01F8xcqDx6AMbu6X9FjLNf8QKXt2HzY7JGVgxG5rnQLinwpW93e6lbk5K/JHYRg9l
-         pFtwpZ9Zotm0+9eumjqlOXO20MQ2ZHHuh+D4y+HtxZe8+PcldTz8Lye8QlMLccQR1R
-         WD9zOyRLq5mpFgaf0pTqfDMTfs+/1kwcrqrmj7yU=
+        b=tW5YSbbNQeiUQy3ZXSkGrjbY9Hw8XL9I/XEWdAOhISb931KFIpjZzZ5kghfPLrwyp
+         kxo1XR0R3jfIF3wF+HmsObIfvg9QpeB8VU1RoTt74+tIre/oh8EU2KKHoYWB5nQ/Eu
+         dRkP8Dd+Pd/vEHfZir+b/G+dQli8eYIJlC8bLaXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.17 1115/1126] ice: xsk: Fix indexing in ice_tx_xsk_pool()
-Date:   Tue,  5 Apr 2022 09:31:02 +0200
-Message-Id: <20220405070440.159433907@linuxfoundation.org>
+        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.17 1116/1126] vdpa/mlx5: Avoid processing works if workqueue was destroyed
+Date:   Tue,  5 Apr 2022 09:31:03 +0200
+Message-Id: <20220405070440.188924327@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,48 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Eli Cohen <elic@nvidia.com>
 
-commit 1ac2524de7b366633fc336db6c94062768d0ab03 upstream.
+commit ad6dc1daaf29f97f23cc810d60ee01c0e83f4c6b upstream.
 
-Ice driver tries to always create XDP rings array to be
-num_possible_cpus() sized, regardless of user's queue count setting that
-can be changed via ethtool -L for example.
+If mlx5_vdpa gets unloaded while a VM is running, the workqueue will be
+destroyed. However, vhost might still have reference to the kick
+function and might attempt to push new works. This could lead to null
+pointer dereference.
 
-Currently, ice_tx_xsk_pool() calculates the qid by decrementing the
-ring->q_index by the count of XDP queues, but ring->q_index is set to 'i
-+ vsi->alloc_txq'.
+To fix this, set mvdev->wq to NULL just before destroying and verify
+that the workqueue is not NULL in mlx5_vdpa_kick_vq before attempting to
+push a new work.
 
-When user did ethtool -L $IFACE combined 1, alloc_txq is 1, but
-vsi->num_xdp_txq is still num_possible_cpus(). Then, ice_tx_xsk_pool()
-will do OOB access and in the final result ring would not get xsk_pool
-pointer assigned. Then, each ice_xsk_wakeup() call will fail with error
-and it will not be possible to get into NAPI and do the processing from
-driver side.
-
-Fix this by decrementing vsi->alloc_txq instead of vsi->num_xdp_txq from
-ring-q_index in ice_tx_xsk_pool() so the calculation is reflected to the
-setting of ring->q_index.
-
-Fixes: 22bf877e528f ("ice: introduce XDP_TX fallback path")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220328142123.170157-5-maciej.fijalkowski@intel.com
+Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Link: https://lore.kernel.org/r/20220321141303.9586-1-elic@nvidia.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -712,7 +712,7 @@ static inline struct xsk_buff_pool *ice_
- 	struct ice_vsi *vsi = ring->vsi;
- 	u16 qid;
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1669,7 +1669,7 @@ static void mlx5_vdpa_kick_vq(struct vdp
+ 		return;
  
--	qid = ring->q_index - vsi->num_xdp_txq;
-+	qid = ring->q_index - vsi->alloc_txq;
+ 	if (unlikely(is_ctrl_vq_idx(mvdev, idx))) {
+-		if (!mvdev->cvq.ready)
++		if (!mvdev->wq || !mvdev->cvq.ready)
+ 			return;
  
- 	if (!ice_is_xdp_ena_vsi(vsi) || !test_bit(qid, vsi->af_xdp_zc_qps))
- 		return NULL;
+ 		wqent = kzalloc(sizeof(*wqent), GFP_ATOMIC);
+@@ -2707,9 +2707,12 @@ static void mlx5_vdpa_dev_del(struct vdp
+ 	struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(dev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
++	struct workqueue_struct *wq;
+ 
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+-	destroy_workqueue(mvdev->wq);
++	wq = mvdev->wq;
++	mvdev->wq = NULL;
++	destroy_workqueue(wq);
+ 	_vdpa_unregister_device(dev);
+ 	mgtdev->ndev = NULL;
+ }
 
 

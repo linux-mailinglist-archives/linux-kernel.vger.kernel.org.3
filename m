@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6D14F4EA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675814F4908
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835941AbiDFAeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S1387472AbiDEWAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444179AbiDEPk6 (ORCPT
+        with ESMTP id S1443917AbiDEPk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:58 -0400
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28738B8D;
-        Tue,  5 Apr 2022 07:03:30 -0700 (PDT)
-Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 235E2k8J021295;
-        Tue, 5 Apr 2022 23:02:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8J021295
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649167367;
-        bh=3DqNNvADXzvHcLCX0JSWQu0LGeQKS0pcjU6by571POs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LfieR2VmMKTxTNyd2rEQ8kIzgpwQ0gGElm/+R4Gv+yUizsZAMUx7OlekL+Cq87W/w
-         oaeFGyDYwcDQqttYW2cDoatDLf+PgAPBsMGOgvbhcLfAnFi0XWqAPcD+JRfi0JXyyf
-         BjZimdPTSqSBoscR0piS+f9exDxwYD25UdNtjyImjudR175ZrZRHaFhv9IGjfp3OWE
-         kkpnQtRrh69J5UNewWEJ95BZ5LvGCym/qqCpJTFn5rd3SDRbhcKSoFitacvlRV+R5l
-         aOqfb4EVoT8vdO2BhH1u9woz+RhCizmkuLuIFpRYz8ox5IFg71M0uMm9/z7vJmZ/+L
-         qmQID8zdlEKWQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 01/10] kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
-Date:   Tue,  5 Apr 2022 23:02:20 +0900
-Message-Id: <20220405140229.2895394-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
-References: <20220405140229.2895394-1-masahiroy@kernel.org>
+        Tue, 5 Apr 2022 11:40:28 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3ED14DFE5;
+        Tue,  5 Apr 2022 07:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649167344;
+  x=1680703344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Quhq+ANDcyqCuN52eIRgLzLh2IoR3G+Ogb7BY7KkCbE=;
+  b=JfWw2js+sHio6dbd67N4f+BKvGcgXqC+jL6zGIBTKIXzryvcIE7qzxyL
+   fAQhMiRTFUrAJ9Wa9Uqfp6pjIffGUKwtBeQ6kq96gPt0Rcx4I/SQa6+tq
+   /4wesHmr64EULkm16LIV+z66YSSuwmFC/PzXL8EuTqLIbViL5BoPaBUqM
+   MtOqJqtCNazap6UZeRrAMa2IfhYQDY98cmlHqo9nrqZ99WVlsnTUi5tsv
+   ZAz3dFApD9DyI+D9oPjtyKzsvhacBT2JvmJ8EVp/x4TIpKfI2wC/zqp6Y
+   037kX7KxN0Pk+KkpeKGXDQrZUbxYVdVVHYyPgtan+kxbYXgNOylSg7HWN
+   g==;
+Date:   Tue, 5 Apr 2022 16:02:21 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
+Message-ID: <20220405140221.GC28574@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-10-vincent.whitchurch@axis.com>
+ <YiuPvkQroV/WdFpx@sirena.org.uk>
+ <20220317151326.GA7832@axis.com>
+ <YjN1ksNGujV611Ka@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YjN1ksNGujV611Ka@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The genksyms command part in cmd_gensymtypes_{c,S} is duplicated.
-Factor it out into the 'genksyms' macro.
+On Thu, Mar 17, 2022 at 05:53:22PM +0000, Mark Brown wrote:
+> On Thu, Mar 17, 2022 at 04:13:26PM +0100, Vincent Whitchurch wrote:
+> > On Fri, Mar 11, 2022 at 06:06:54PM +0000, Mark Brown wrote:
+> 
+> > > > +    @classmethod
+> > > > +    def setUpClass(cls) -> None:
+> > > > +        insmod("tps6286x-regulator")
+> 
+> > > Shouldn't this get figured out when the device gets created in DT (if it
+> > > doesn't I guess the tests found a bug...)?
+> 
+> > The system isn't set up to load modules automatically.  The reason for
+> > this is to give the test cases full control of when the module is loaded
+> > and unload, since the tests could want to load the module with specific
+> > options.
+> 
+> That seems like the uncommon case which could remove the module if it
+> explicitly needed it.
 
-For the readability, I slightly refactor the arguments to genksyms.
+Another reason was to get the tests to test module unloading since I've
+seen a lot of especially new driver writers forget to test that, but I
+realise that for most normal drivers that should be mostly covered by
+the fact that we test device unbinding.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v2:
-  - Fix the location of the closing parenthesis
-
- scripts/Makefile.build | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 9717e6f6fb31..31e0e33dfe5d 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -125,13 +125,14 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
- $(obj)/%.i: $(src)/%.c FORCE
- 	$(call if_changed_dep,cpp_i_c)
- 
-+genksyms = scripts/genksyms/genksyms		\
-+	$(if $(1), -T $(2))			\
-+	$(if $(CONFIG_MODULE_REL_CRCS), -R)	\
-+	$(if $(KBUILD_PRESERVE), -p)		\
-+	-r $(or $(wildcard $(2:.symtypes=.symref)), /dev/null)
-+
- # These mirror gensymtypes_S and co below, keep them in synch.
--cmd_gensymtypes_c =                                                         \
--    $(CPP) -D__GENKSYMS__ $(c_flags) $< |                                   \
--    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
--     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
--     $(if $(KBUILD_PRESERVE),-p)                                            \
--     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
-+cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
- 
- quiet_cmd_cc_symtypes_c = SYM $(quiet_modtag) $@
- cmd_cc_symtypes_c =                                                         \
-@@ -344,11 +345,7 @@ cmd_gensymtypes_S =                                                         \
-     $(CPP) $(a_flags) $< |                                                  \
-      grep "\<___EXPORT_SYMBOL\>" |                                          \
-      sed 's/.*___EXPORT_SYMBOL[[:space:]]*\([a-zA-Z0-9_]*\)[[:space:]]*,.*/EXPORT_SYMBOL(\1);/' ; } | \
--    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - |                                \
--    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
--     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
--     $(if $(KBUILD_PRESERVE),-p)                                            \
--     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
-+    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
- 
- quiet_cmd_cc_symtypes_S = SYM $(quiet_modtag) $@
- cmd_cc_symtypes_S =                                                         \
--- 
-2.32.0
-
+So I went ahead and implemented this and it seems to work.  As you
+hinted earlier, this also means that the modalias stuff gets tested, and
+as we know that's been broken in the recent past for a bunch of drivers,
+so that's another advantage to automatic module loading, besides the
+boilerplate reduction in the tests.

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEE24F4352
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8991A4F3F7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347215AbiDEOBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S1347516AbiDEOBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiDEJ3O (ORCPT
+        with ESMTP id S238257AbiDEJ3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:29:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFDDE0AE5;
-        Tue,  5 Apr 2022 02:16:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD717E0AC6;
+        Tue,  5 Apr 2022 02:16:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E341615E4;
-        Tue,  5 Apr 2022 09:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E4ACC385A4;
-        Tue,  5 Apr 2022 09:16:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2625761645;
+        Tue,  5 Apr 2022 09:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F82C385A0;
+        Tue,  5 Apr 2022 09:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150178;
-        bh=wYBk6rN2/OlxhSRKIP2CH/M6OSQISZIo3MuzDWbA440=;
+        s=korg; t=1649150184;
+        bh=xkf/rrk0Agfy1tGepNsRW+yZt/Bt1vEa7GGHxXk1btg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h18OSoniMswnEPn7Jxjbk2yyGQkTyajiqC5V5v8b80qnd5N2igIMAGEvmIE0xSiAI
-         06JJEKVvaN3iQdRzWlPaWj7OqynsJdnBs8m9FDuALj+f1qWqspMy+BKP1qlVEzjBbT
-         7RNPEUsJxCfcdvIemKhouTtrxqsu6YnDSF2P201U=
+        b=AHoN5fmKDT2Vu3sHMtXdJu9IVi1rPiIbB5m/DziWWhz1pMhshdzZ+VsH1q32U/XKv
+         ffGaeQCA1Hm+wVuytpNLsOhP0iwMvta2t01ldde83M7hqHG/+ybhqGeRC2ZqWWwEQs
+         +DfafPLcHYF8OtHE/a7aLxWEUiTeCVqQxAYJnd2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.16 0982/1017] dt-bindings: mtd: nand-controller: Fix a comment in the examples
-Date:   Tue,  5 Apr 2022 09:31:35 +0200
-Message-Id: <20220405070423.352898253@linuxfoundation.org>
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.16 0984/1017] media: dt-binding: media: hynix,hi846: use $defs/port-base port description
+Date:   Tue,  5 Apr 2022 09:31:37 +0200
+Message-Id: <20220405070423.410932720@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,33 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Martin Kepplinger <martin.kepplinger@puri.sm>
 
-commit 0e7f1b557974ce297e5e4c9d4245720fbb489886 upstream.
+commit 6492eba4fafb5a9715ecf78b7155e88f8f88909a upstream.
 
-The controller properties should be in the controller 'parent' node,
-while properties in the children nodes are specific to the NAND
-*chip*. This error was already present during the yaml conversion.
+This fixes "make dt_binding_check":
 
-Fixes: 2d472aba15ff ("mtd: nand: document the NAND controller/NAND chip DT representation")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/linux-mtd/20211216111654.238086-3-miquel.raynal@bootlin.com
+    Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
+camera@20: port:endpoint: Unevaluated properties are not allowed
+('link-frequencies', 'data-lanes' were unexpected)
+    From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+
+[Sakari Ailus: Reword commit message]
+
+Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/mtd/nand-controller.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-+++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-@@ -184,7 +184,7 @@ examples:
-         nand-use-soft-ecc-engine;
-         nand-ecc-algo = "bch";
+diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+index 85a8877c2f38..5d0fc18a2ea2 100644
+--- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+@@ -49,7 +49,8 @@ properties:
+     description: Definition of the regulator used for the VDDD power supply.
  
--        /* controller specific properties */
-+        /* NAND chip specific properties */
-       };
+   port:
+-    $ref: /schemas/graph.yaml#/properties/port
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
  
-       nand@1 {
+     properties:
+       endpoint:
+-- 
+2.35.1
+
 
 

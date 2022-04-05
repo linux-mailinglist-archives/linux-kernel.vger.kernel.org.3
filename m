@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5B64F3E22
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497694F423D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389547AbiDEPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S1389646AbiDEPVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347104AbiDEJqB (ORCPT
+        with ESMTP id S1347114AbiDEJqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:46:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34436D4E3;
-        Tue,  5 Apr 2022 02:32:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42276678;
+        Tue,  5 Apr 2022 02:32:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4A8616AE;
-        Tue,  5 Apr 2022 09:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289B6C385A4;
-        Tue,  5 Apr 2022 09:32:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F5261368;
+        Tue,  5 Apr 2022 09:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E035C385A4;
+        Tue,  5 Apr 2022 09:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151143;
-        bh=4sUt83BgTOE5J9hysaJUhknfGWeSQ6S+Ynto5f4x3DY=;
+        s=k20201202; t=1649151146;
+        bh=Pj7W+vm9/Lp1bs2VNWguTcW8ZdW7M9VQ5AaH3adc3cU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Pm8J9hUCvcDjpvYrEvJzkvHiV/px742+iYYyeBW9xSpfsX1ALiIM519J15mSPWlvd
-         QCphgPP/Cep4YhtKPiicISTkYl+4QeLqWrMM9BtEeOGkKUQkz13Bqwe1mH2B7FLUuh
-         qdOflx/MdupPABcek0e9lKPBzJ0W2C3RH+pcBZs6o1ZtQfJxUteMyq0/6bUmBDvle8
-         J3eKkdjVEtCmA9yR34C/Vzf62Dzc3IHY5h4d1KGO68Cg+3ph+5E00f8Th72kH75ZMx
-         wLmCgunuohj4lt1ii5+WDdT3GR19VA1SICgtIwC7PlVH1Yt52e35Esoawppjwfqkb5
-         /POA2/BXHzpCw==
+        b=MotvbsnzwbhrK0F96wxCU4WtMKr5Li9cva2QeU7vbqBzNNCZ74ZEqfcnHRnklX1Ks
+         1RjW7+s842jpmtTRWjJW7bbm0ZXczhjVSm/DV2GkO1JORw8SAk+pfMQEgqbybE7sMp
+         VFmS4vjQPxZctOd88jnYFpJ963+3sSdGp8zz7wYfjLFiLXqFwhOg0Tw+Wodx68CMJU
+         9JfurBnTcvQjSznoeN/pFk/cumt3gWH8e9B//XHfMtDQbWlg7Ulg5zQUTjDvlA/MZ1
+         IWKfY366iShazYN8iw506M9lADcVXGe9JAY9SYciqAfM4YG3llW9m0zWxoKogUUZ5a
+         AytJp4LOMbHLg==
 From:   Mark Brown <broonie@kernel.org>
-To:     leilk.liu@mediatek.com
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        matthias.bgg@gmail.com
-In-Reply-To: <20220321013922.24067-1-leilk.liu@mediatek.com>
-References: <20220321013922.24067-1-leilk.liu@mediatek.com>
-Subject: Re: [PATCH V6 0/3] spi: mediatek: add single/quad mode support
-Message-Id: <164915114188.276894.4149061684421416704.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:21 +0100
+To:     jakobkoschel@gmail.com
+Cc:     linux-kernel@vger.kernel.org, bjohannesmeyer@gmail.com,
+        rppt@kernel.org, c.giuffrida@vu.nl, h.j.bos@vu.nl,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20220324072534.63420-1-jakobkoschel@gmail.com>
+References: <20220324072534.63420-1-jakobkoschel@gmail.com>
+Subject: Re: [PATCH] spi: spidev: replace usage of found with dedicated list iterator variable
+Message-Id: <164915114510.276894.6837144397974645999.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:25 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,17 +55,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 09:39:19 +0800, Leilk Liu wrote:
-> This series of patches are based on spi for-next, and provide 3 patches to support MT7986.
+On Thu, 24 Mar 2022 08:25:34 +0100, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
 > 
-> V6:
->  1. remove SPI_CFG3_IPM_PIN_MODE_OFFSET.
->  2. add Reviewed-by: AngeloGioacchino Del Regno
-> 
-> V5:
->  1. remove 3 patches that already applied.
->  2. use devm_clk_get_optional.
->  3. remove of_mtk_spi_parse_dt()
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
 > 
 > [...]
 
@@ -76,12 +72,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: mediatek: add spi memory support for ipm design
-      commit: 9f763fd20da7d892ffaedac0c58d821922f8a674
-[2/3] dt-bindings: spi: support hclk
-      commit: a4765dfb80a7333aaac394a5ba20056d11b55636
-[3/3] spi: mediatek: support hclk
-      commit: a740f4e684c020ea57a8a198a9322d739f7ab6d5
+[1/1] spi: spidev: replace usage of found with dedicated list iterator variable
+      commit: d50d7e91c6e5ccd71f21ba1aec3fef7ee4229fd6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

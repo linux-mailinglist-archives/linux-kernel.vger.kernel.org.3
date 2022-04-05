@@ -2,148 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480254F21A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B944F211A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiDEDOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 23:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S230035AbiDEDQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 23:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiDEDLv (ORCPT
+        with ESMTP id S230174AbiDEDQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 23:11:51 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F57C33E34;
-        Mon,  4 Apr 2022 20:04:48 -0700 (PDT)
-X-UUID: c4b5aafc4076432f8e1a3f4932de0a97-20220405
-X-UUID: c4b5aafc4076432f8e1a3f4932de0a97-20220405
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1780051827; Tue, 05 Apr 2022 11:04:43 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 5 Apr 2022 11:04:41 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 5 Apr
- 2022 11:04:41 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 5 Apr 2022 11:04:40 +0800
-Message-ID: <808d08a6dbbca1c0f1699643deb52b71b8b74669.camel@mediatek.com>
-Subject: Re: [v3 19/19] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <broonie@kernel.org>,
-        <robh+dt@kernel.org>
-CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 5 Apr 2022 11:04:33 +0800
-In-Reply-To: <a497b403-5b20-9a2f-498e-b43727b26675@collabora.com>
-References: <20220313151023.21229-1-jiaxin.yu@mediatek.com>
-         <20220313151023.21229-20-jiaxin.yu@mediatek.com>
-         <a497b403-5b20-9a2f-498e-b43727b26675@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 4 Apr 2022 23:16:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A377414020;
+        Mon,  4 Apr 2022 20:14:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXXmj2Llfz4xXt;
+        Tue,  5 Apr 2022 13:14:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649128456;
+        bh=KBuiQEmterFTPPldXufIwLpX/nw+FNXbdbxT2HKR7Lo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KNiSWF0ygUeIiVASCvtp4LcqbShEwPZ7zpPbwcVvcVpFThMsA+jHIbNU/YMhIJy6m
+         BWHfGkPIvtCaBbvRrMRpYIxwJe0RYcZHGKGo0SqltnPMmSSi5JoyZxTnjleJVOgSU0
+         pml1qDDZoNRpv1rxXI2kGSK9tKfUsX2JV3P7LImbQFHVsaO9jWV6+jNFgOwgNsEXxR
+         oV/b7VmDrdDXHEbkHoCoObXW5foba7s9OaumF1bvoAyUwpBu23pF/LhVVsHlq84BOe
+         MdZsWEn5I1tIRHnzWlUvjnDzgTxU/8UGKwmIVYqge5Lh41fq8roYgd1JfG3X/H/MOC
+         amiiuyRqjXGIg==
+Date:   Tue, 5 Apr 2022 13:14:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Chun-Tse Shao <ctshao@google.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20220405131412.381b8a97@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QaTbaPSIQKm2oYtkqwbmX_w";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-14 at 11:18 +0100, AngeloGioacchino Del Regno wrote:
-> Il 13/03/22 16:10, Jiaxin Yu ha scritto:
-> > This fixes the following build errors when mt6358 is configured as
-> > module:
-> > 
-> > > > ERROR: modpost: "mt6358_set_mtkaif_protocol"
-> > > > [sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.ko]
-> > > > undefined!
-> > > > ERROR: modpost: "mt6358_set_mtkaif_protocol"
-> > > > [sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.ko]
-> > > > undefined!
-> > 
-> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> 
-> Hello Jiaxin,
-> 
-> Can you please add a Fixes tag to this patch and send it separately
-> from
-> the MT8186 series?
-> 
-> After adding the Fixes tag:
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> 
-> Thanks,
-> Angelo
-> 
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello, Angelo
+Hi all,
 
-Sorry for the late reply. I've sent this out separately.
+Today's linux-next merge of the rust tree got a conflict in:
 
-Link: 
-https://lore.kernel.org/lkml/20220319120325.11882-1-jiaxin.yu@mediatek.com/
+  Makefile
 
-> > ---
-> >   sound/soc/codecs/mt6358.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/sound/soc/codecs/mt6358.c b/sound/soc/codecs/mt6358.c
-> > index 1fdd2f8cf877..61f2a7632fd4 100644
-> > --- a/sound/soc/codecs/mt6358.c
-> > +++ b/sound/soc/codecs/mt6358.c
-> > @@ -107,6 +107,7 @@ int mt6358_set_mtkaif_protocol(struct
-> > snd_soc_component *cmpnt,
-> >   	priv->mtkaif_protocol = mtkaif_protocol;
-> >   	return 0;
-> >   }
-> > +EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_protocol);
-> >   
-> >   static void playback_gpio_set(struct mt6358_priv *priv)
-> >   {
-> > @@ -273,6 +274,7 @@ int mt6358_mtkaif_calibration_enable(struct
-> > snd_soc_component *cmpnt)
-> >   			   1 << RG_AUD_PAD_TOP_DAT_MISO_LOOPBACK_SFT);
-> >   	return 0;
-> >   }
-> > +EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_enable);
-> >   
-> >   int mt6358_mtkaif_calibration_disable(struct snd_soc_component
-> > *cmpnt)
-> >   {
-> > @@ -296,6 +298,7 @@ int mt6358_mtkaif_calibration_disable(struct
-> > snd_soc_component *cmpnt)
-> >   	capture_gpio_reset(priv);
-> >   	return 0;
-> >   }
-> > +EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_disable);
-> >   
-> >   int mt6358_set_mtkaif_calibration_phase(struct snd_soc_component
-> > *cmpnt,
-> >   					int phase_1, int phase_2)
-> > @@ -310,6 +313,7 @@ int mt6358_set_mtkaif_calibration_phase(struct
-> > snd_soc_component *cmpnt,
-> >   			   phase_2 << RG_AUD_PAD_TOP_PHASE_MODE2_SFT);
-> >   	return 0;
-> >   }
-> > +EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_calibration_phase);
-> >   
-> >   /* dl pga gain */
-> >   enum {
-> 
-> 
+between commit:
 
+  703f8d8fad36 ("kbuild: Allow kernel installation packaging to override pk=
+g-config")
+
+from the kbuild tree and commit:
+
+  241608fc4d70 ("Kbuild: add Rust support")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Makefile
+index d9336e783be3,40182fcc211a..000000000000
+--- a/Makefile
++++ b/Makefile
+@@@ -436,7 -443,7 +443,8 @@@ els
+  HOSTCC	=3D gcc
+  HOSTCXX	=3D g++
+  endif
+ +HOSTPKG_CONFIG	=3D pkg-config
++ HOSTRUSTC =3D rustc
+ =20
+  KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototypes=
+ \
+  			 -O2 -fomit-frame-pointer -std=3Dgnu11 \
+@@@ -534,7 -578,23 +579,23 @@@ KBUILD_LDFLAGS_MODULE :
+  KBUILD_LDFLAGS :=3D
+  CLANG_FLAGS :=3D
+ =20
++ ifeq ($(KBUILD_CLIPPY),1)
++ 	RUSTC_OR_CLIPPY_QUIET :=3D CLIPPY
++ 	RUSTC_OR_CLIPPY =3D $(CLIPPY_DRIVER)
++ else
++ 	RUSTC_OR_CLIPPY_QUIET :=3D RUSTC
++ 	RUSTC_OR_CLIPPY =3D $(RUSTC)
++ endif
++=20
++ ifdef RUST_LIB_SRC
++ 	export RUST_LIB_SRC
++ endif
++=20
++ export RUSTC_BOOTSTRAP :=3D 1
++=20
+ -export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC
+ +export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC HOSTPKG_CONFIG
++ export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGE=
+N CARGO
++ export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
+  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX =
+YACC AWK INSTALLKERNEL
+  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLtAQACgkQAVBC80lX
+0GxY4Af/XU0Ei0CRfR4gxT1/1B1cr+7e926vN1zR76EKwV/v3Daou3MmwWgSJPhD
+1T728yLzQZGVhJwtkx43GOxasc7kzY6d4Y3CeL+EGZ/d3zlPAsvnR0bK+tEJqKCB
+P7cW24l7gU71WgzY0lMoiXLHSdAiAv+J21PP08017lxBXC9pYVfFxZ8iaCIY+okQ
+IIKw3qNQdKP8/ify2gSKSbK939IPJhJUuyisYbxyaZ9BoeEKaH5FtC+BmCGsgt0A
+QOAwNePh+XJ3d9aTdZJln1l+k+fAdo3seVB5tfA6u/MRSh7g/dtgByoenNrU2/Xa
+iB7La8ZA7Xm0dPJ3Awne5jWlljThjQ==
+=yVY2
+-----END PGP SIGNATURE-----
+
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w--

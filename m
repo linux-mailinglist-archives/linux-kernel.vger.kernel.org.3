@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E64F44F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9664F4F43DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388247AbiDEOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S1388107AbiDEOdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238891AbiDEJdC (ORCPT
+        with ESMTP id S238887AbiDEJdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:33:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6162ECF4;
-        Tue,  5 Apr 2022 02:20:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A6DE45;
+        Tue,  5 Apr 2022 02:20:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11674B81B75;
-        Tue,  5 Apr 2022 09:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFC8C385A2;
-        Tue,  5 Apr 2022 09:20:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2CB0B81C15;
+        Tue,  5 Apr 2022 09:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B8FC385A0;
+        Tue,  5 Apr 2022 09:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150434;
-        bh=Utz1YvWbSMLmkIEVCdwmAdUPQ3ARE9UXbQLDcRmNtww=;
+        s=korg; t=1649150440;
+        bh=eg+x736kktKum9CLjZaUEIRNFMQuDWNp3YHLcTRCvkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09koD/JTbYXOQXStxL8zs1m9nyHJf7dih1HQWLkrviguHaQ8VKcYjTf8TDAaNJy19
-         uPRDW+o6O/mekfRPf+EtybG1MMiOlYB6O57G5lq9ZCJEPRASLQvxptuJCsyBJws22J
-         UdWLQJ77BGls0CYbkQXN4vC2AFjh/o16kCMOlBeQ=
+        b=dXmzEHy16VWg0aEIRAIZZvr5Z4FoWRYgNL9grYfxvXszvVFxkppJhMDNVvChkA8RO
+         sLbXIGSzaTHW9UszMIjaDL2+WMOUlD9eReYaN+hR0HAQA0Slzee9iXNMdOoI3dG9yu
+         Je4BRXR1hO0N1sZQWrrL7baE61Xaaa8zopj8NPOM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
         Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 5.15 055/913] KEYS: fix length validation in keyctl_pkey_params_get_2()
-Date:   Tue,  5 Apr 2022 09:18:37 +0200
-Message-Id: <20220405070341.470126690@linuxfoundation.org>
+Subject: [PATCH 5.15 057/913] KEYS: asymmetric: properly validate hash_algo and encoding
+Date:   Tue,  5 Apr 2022 09:18:39 +0200
+Message-Id: <20220405070341.532131325@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,64 +59,186 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-commit c51abd96837f600d8fd940b6ab8e2da578575504 upstream.
+commit 590bfb57b2328951d5833979e7ca1d5fde2e609a upstream.
 
-In many cases, keyctl_pkey_params_get_2() is validating the user buffer
-lengths against the wrong algorithm properties.  Fix it to check against
-the correct properties.
+It is insecure to allow arbitrary hash algorithms and signature
+encodings to be used with arbitrary signature algorithms.  Notably,
+ECDSA, ECRDSA, and SM2 all sign/verify raw hash values and don't
+disambiguate between different hash algorithms like RSA PKCS#1 v1.5
+padding does.  Therefore, they need to be restricted to certain sets of
+hash algorithms (ideally just one, but in practice small sets are used).
+Additionally, the encoding is an integral part of modern signature
+algorithms, and is not supposed to vary.
 
-Probably this wasn't noticed before because for all asymmetric keys of
-the "public_key" subtype, max_data_size == max_sig_size == max_enc_size
-== max_dec_size.  However, this isn't necessarily true for the
-"asym_tpm" subtype (it should be, but it's not strictly validated).  Of
-course, future key types could have different values as well.
+Therefore, tighten the checks of hash_algo and encoding done by
+software_key_determine_akcipher().
 
-Fixes: 00d60fd3b932 ("KEYS: Provide keyctls to drive the new key type ops for asymmetric keys [ver #2]")
-Cc: <stable@vger.kernel.org> # v4.20+
+Also rearrange the parameters to software_key_determine_akcipher() to
+put the public_key first, as this is the most important parameter and it
+often determines everything else.
+
+Fixes: 299f561a6693 ("x509: Add support for parsing x509 certs with ECDSA keys")
+Fixes: 215525639631 ("X.509: support OSCCA SM2-with-SM3 certificate verification")
+Fixes: 0d7a78643f69 ("crypto: ecrdsa - add EC-RDSA (GOST 34.10) algorithm")
+Cc: stable@vger.kernel.org
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+Tested-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/keys/keyctl_pkey.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ crypto/asymmetric_keys/public_key.c |  111 ++++++++++++++++++++++++------------
+ 1 file changed, 76 insertions(+), 35 deletions(-)
 
---- a/security/keys/keyctl_pkey.c
-+++ b/security/keys/keyctl_pkey.c
-@@ -135,15 +135,23 @@ static int keyctl_pkey_params_get_2(cons
+--- a/crypto/asymmetric_keys/public_key.c
++++ b/crypto/asymmetric_keys/public_key.c
+@@ -60,39 +60,83 @@ static void public_key_destroy(void *pay
+ }
  
- 	switch (op) {
- 	case KEYCTL_PKEY_ENCRYPT:
-+		if (uparams.in_len  > info.max_dec_size ||
-+		    uparams.out_len > info.max_enc_size)
+ /*
+- * Determine the crypto algorithm name.
++ * Given a public_key, and an encoding and hash_algo to be used for signing
++ * and/or verification with that key, determine the name of the corresponding
++ * akcipher algorithm.  Also check that encoding and hash_algo are allowed.
+  */
+-static
+-int software_key_determine_akcipher(const char *encoding,
+-				    const char *hash_algo,
+-				    const struct public_key *pkey,
+-				    char alg_name[CRYPTO_MAX_ALG_NAME])
++static int
++software_key_determine_akcipher(const struct public_key *pkey,
++				const char *encoding, const char *hash_algo,
++				char alg_name[CRYPTO_MAX_ALG_NAME])
+ {
+ 	int n;
+ 
+-	if (strcmp(encoding, "pkcs1") == 0) {
+-		/* The data wangled by the RSA algorithm is typically padded
+-		 * and encoded in some manner, such as EMSA-PKCS1-1_5 [RFC3447
+-		 * sec 8.2].
++	if (!encoding)
++		return -EINVAL;
++
++	if (strcmp(pkey->pkey_algo, "rsa") == 0) {
++		/*
++		 * RSA signatures usually use EMSA-PKCS1-1_5 [RFC3447 sec 8.2].
++		 */
++		if (strcmp(encoding, "pkcs1") == 0) {
++			if (!hash_algo)
++				n = snprintf(alg_name, CRYPTO_MAX_ALG_NAME,
++					     "pkcs1pad(%s)",
++					     pkey->pkey_algo);
++			else
++				n = snprintf(alg_name, CRYPTO_MAX_ALG_NAME,
++					     "pkcs1pad(%s,%s)",
++					     pkey->pkey_algo, hash_algo);
++			return n >= CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
++		}
++		if (strcmp(encoding, "raw") != 0)
 +			return -EINVAL;
-+		break;
- 	case KEYCTL_PKEY_DECRYPT:
- 		if (uparams.in_len  > info.max_enc_size ||
- 		    uparams.out_len > info.max_dec_size)
- 			return -EINVAL;
- 		break;
- 	case KEYCTL_PKEY_SIGN:
-+		if (uparams.in_len  > info.max_data_size ||
-+		    uparams.out_len > info.max_sig_size)
++		/*
++		 * Raw RSA cannot differentiate between different hash
++		 * algorithms.
++		 */
++		if (hash_algo)
 +			return -EINVAL;
-+		break;
- 	case KEYCTL_PKEY_VERIFY:
--		if (uparams.in_len  > info.max_sig_size ||
--		    uparams.out_len > info.max_data_size)
-+		if (uparams.in_len  > info.max_data_size ||
-+		    uparams.in2_len > info.max_sig_size)
- 			return -EINVAL;
- 		break;
- 	default:
-@@ -151,7 +159,7 @@ static int keyctl_pkey_params_get_2(cons
++	} else if (strncmp(pkey->pkey_algo, "ecdsa", 5) == 0) {
++		if (strcmp(encoding, "x962") != 0)
++			return -EINVAL;
++		/*
++		 * ECDSA signatures are taken over a raw hash, so they don't
++		 * differentiate between different hash algorithms.  That means
++		 * that the verifier should hard-code a specific hash algorithm.
++		 * Unfortunately, in practice ECDSA is used with multiple SHAs,
++		 * so we have to allow all of them and not just one.
+ 		 */
+ 		if (!hash_algo)
+-			n = snprintf(alg_name, CRYPTO_MAX_ALG_NAME,
+-				     "pkcs1pad(%s)",
+-				     pkey->pkey_algo);
+-		else
+-			n = snprintf(alg_name, CRYPTO_MAX_ALG_NAME,
+-				     "pkcs1pad(%s,%s)",
+-				     pkey->pkey_algo, hash_algo);
+-		return n >= CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
+-	}
+-
+-	if (strcmp(encoding, "raw") == 0 ||
+-	    strcmp(encoding, "x962") == 0) {
+-		strcpy(alg_name, pkey->pkey_algo);
+-		return 0;
++			return -EINVAL;
++		if (strcmp(hash_algo, "sha1") != 0 &&
++		    strcmp(hash_algo, "sha224") != 0 &&
++		    strcmp(hash_algo, "sha256") != 0 &&
++		    strcmp(hash_algo, "sha384") != 0 &&
++		    strcmp(hash_algo, "sha512") != 0)
++			return -EINVAL;
++	} else if (strcmp(pkey->pkey_algo, "sm2") == 0) {
++		if (strcmp(encoding, "raw") != 0)
++			return -EINVAL;
++		if (!hash_algo)
++			return -EINVAL;
++		if (strcmp(hash_algo, "sm3") != 0)
++			return -EINVAL;
++	} else if (strcmp(pkey->pkey_algo, "ecrdsa") == 0) {
++		if (strcmp(encoding, "raw") != 0)
++			return -EINVAL;
++		if (!hash_algo)
++			return -EINVAL;
++		if (strcmp(hash_algo, "streebog256") != 0 &&
++		    strcmp(hash_algo, "streebog512") != 0)
++			return -EINVAL;
++	} else {
++		/* Unknown public key algorithm */
++		return -ENOPKG;
+ 	}
+-
+-	return -ENOPKG;
++	if (strscpy(alg_name, pkey->pkey_algo, CRYPTO_MAX_ALG_NAME) < 0)
++		return -EINVAL;
++	return 0;
+ }
+ 
+ static u8 *pkey_pack_u32(u8 *dst, u32 val)
+@@ -113,9 +157,8 @@ static int software_key_query(const stru
+ 	u8 *key, *ptr;
+ 	int ret, len;
+ 
+-	ret = software_key_determine_akcipher(params->encoding,
+-					      params->hash_algo,
+-					      pkey, alg_name);
++	ret = software_key_determine_akcipher(pkey, params->encoding,
++					      params->hash_algo, alg_name);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -179,9 +222,8 @@ static int software_key_eds_op(struct ke
+ 
+ 	pr_devel("==>%s()\n", __func__);
+ 
+-	ret = software_key_determine_akcipher(params->encoding,
+-					      params->hash_algo,
+-					      pkey, alg_name);
++	ret = software_key_determine_akcipher(pkey, params->encoding,
++					      params->hash_algo, alg_name);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -340,9 +382,8 @@ int public_key_verify_signature(const st
+ 			return -EKEYREJECTED;
  	}
  
- 	params->in_len  = uparams.in_len;
--	params->out_len = uparams.out_len;
-+	params->out_len = uparams.out_len; /* Note: same as in2_len */
- 	return 0;
- }
+-	ret = software_key_determine_akcipher(sig->encoding,
+-					      sig->hash_algo,
+-					      pkey, alg_name);
++	ret = software_key_determine_akcipher(pkey, sig->encoding,
++					      sig->hash_algo, alg_name);
+ 	if (ret < 0)
+ 		return ret;
  
 
 

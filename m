@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE5D4F4170
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505DD4F426E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388678AbiDENcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S1389410AbiDEUF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345972AbiDEJXN (ORCPT
+        with ESMTP id S1358109AbiDEK17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:13 -0400
+        Tue, 5 Apr 2022 06:27:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6415A7741;
-        Tue,  5 Apr 2022 02:12:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46378FFE;
+        Tue,  5 Apr 2022 03:15:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F36161527;
-        Tue,  5 Apr 2022 09:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFF3C385A3;
-        Tue,  5 Apr 2022 09:12:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47B1561777;
+        Tue,  5 Apr 2022 10:15:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536CFC385A1;
+        Tue,  5 Apr 2022 10:15:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149959;
-        bh=uwEM9yJd8yQV8YVnMIu1YlcaI8etPYsnFYaOdz+jFvI=;
+        s=korg; t=1649153742;
+        bh=YIIjYNuNqtC8QLnqR4WnTEIhcQ4W4IebWPcPoV7WjgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gR8awXETXVzoAu9p/kaKR7LEyXcRkTpYAxZ03i3VmBQBkS4Gr4xgAocCzE50+AT60
-         ZBC4ZJvrOzEiNPMOSpn+IxvTdW/xaFXclN5BkbwwvpKKHqBm2DQlSoHu5tbV1SCtHJ
-         jcIFle8jV7QahPAd+/FtyrIM44iHTPL6Ac0zHKl8=
+        b=UpFDfZw7zv375JSL6swZ3umdO3kFfK0KMfjjjG3U5Sq6TRPk0QYRmG1jhoqFCgUUC
+         G36AF5C0QbCB1ZCx/52tC6C6ppd3RRnbVGUAvh8Uo1cVpHIF2ILBrX7WMaCogknjNU
+         epbHd6+9ROkDGZ3PUK5ye7wrIxWEIVJjLZxnzG7g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 0903/1017] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
-Date:   Tue,  5 Apr 2022 09:30:16 +0200
-Message-Id: <20220405070421.029396714@linuxfoundation.org>
+        stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 324/599] power: supply: bq24190_charger: Fix bq24190_vbus_is_enabled() wrong false return
+Date:   Tue,  5 Apr 2022 09:30:18 +0200
+Message-Id: <20220405070308.474830617@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
+[ Upstream commit f7731754fdce33dad19be746f647d6ac47c5d695 ]
 
-Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
-this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
+The datasheet says that the BQ24190_REG_POC_CHG_CONFIG bits can
+have a value of either 10(0x2) or 11(0x3) for OTG (5V boost regulator)
+mode.
 
-Note, it would've been better to forbid writing anything to SYNIC/STIMER
-MSRs, including zeroes, however, at least QEMU tries clearing
-HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
-'special' as writing zero there triggers an action, this also should not
-happen when SynIC wasn't activated.
+Sofar bq24190_vbus_is_enabled() was only checking for 10 but some BIOS-es
+uses 11 when enabling the regulator at boot.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Make bq24190_vbus_is_enabled() also check for 11 so that it does not
+wrongly returns false when the bits are set to 11.
+
+Fixes: 66b6bef2c4e0 ("power: supply: bq24190_charger: Export 5V boost converter as regulator")
+Cc: Bastien Nocera <hadess@hadess.net>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/power/supply/bq24190_charger.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -236,7 +236,7 @@ static int synic_set_msr(struct kvm_vcpu
- 	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
- 	int ret;
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index 845af0f44c02..8c3c378dce0d 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -41,6 +41,7 @@
+ #define BQ24190_REG_POC_CHG_CONFIG_DISABLE		0x0
+ #define BQ24190_REG_POC_CHG_CONFIG_CHARGE		0x1
+ #define BQ24190_REG_POC_CHG_CONFIG_OTG			0x2
++#define BQ24190_REG_POC_CHG_CONFIG_OTG_ALT		0x3
+ #define BQ24190_REG_POC_SYS_MIN_MASK		(BIT(3) | BIT(2) | BIT(1))
+ #define BQ24190_REG_POC_SYS_MIN_SHIFT		1
+ #define BQ24190_REG_POC_SYS_MIN_MIN			3000
+@@ -552,7 +553,11 @@ static int bq24190_vbus_is_enabled(struct regulator_dev *dev)
+ 	pm_runtime_mark_last_busy(bdi->dev);
+ 	pm_runtime_put_autosuspend(bdi->dev);
  
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || data))
- 		return 1;
- 
- 	trace_kvm_hv_synic_set_msr(vcpu->vcpu_id, msr, data, host);
-@@ -282,6 +282,9 @@ static int synic_set_msr(struct kvm_vcpu
- 	case HV_X64_MSR_EOM: {
- 		int i;
- 
-+		if (!synic->active)
-+			break;
+-	return ret ? ret : val == BQ24190_REG_POC_CHG_CONFIG_OTG;
++	if (ret)
++		return ret;
 +
- 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
- 			kvm_hv_notify_acked_sint(vcpu, i);
- 		break;
-@@ -661,7 +664,7 @@ static int stimer_set_config(struct kvm_
- 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
- 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
++	return (val == BQ24190_REG_POC_CHG_CONFIG_OTG ||
++		val == BQ24190_REG_POC_CHG_CONFIG_OTG_ALT);
+ }
  
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || config))
- 		return 1;
- 
- 	if (unlikely(!host && hv_vcpu->enforce_cpuid && new_config.direct_mode &&
-@@ -690,7 +693,7 @@ static int stimer_set_count(struct kvm_v
- 	struct kvm_vcpu *vcpu = hv_stimer_to_vcpu(stimer);
- 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
- 
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || count))
- 		return 1;
- 
- 	trace_kvm_hv_stimer_set_count(hv_stimer_to_vcpu(stimer)->vcpu_id,
+ static const struct regulator_ops bq24190_vbus_ops = {
+-- 
+2.34.1
+
 
 

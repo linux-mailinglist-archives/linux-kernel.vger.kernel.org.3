@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9110C4F4401
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E5F4F441C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387193AbiDEOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S1387221AbiDEOav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240305AbiDEJeC (ORCPT
+        with ESMTP id S240384AbiDEJeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:34:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA936E34B;
-        Tue,  5 Apr 2022 02:23:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:34:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50754814BE;
+        Tue,  5 Apr 2022 02:23:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6CB16165C;
-        Tue,  5 Apr 2022 09:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2FCEC385A2;
-        Tue,  5 Apr 2022 09:23:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1B65B81C69;
+        Tue,  5 Apr 2022 09:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B258C385A2;
+        Tue,  5 Apr 2022 09:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150621;
-        bh=/vSptA5YddKrMRYEVwozcLIsPiINX27TrXq69pfeqmQ=;
+        s=korg; t=1649150623;
+        bh=oQCCMyAG9uXwmvosH2y0DN3mABh0AUvwuzkV1JR0Ik0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zFBOHa2fxaiXd01QzwZCuF+2ArZcMEqmsscE9Y/145DO9e8VHVbb2zPHcOdZS+Ref
-         jQeqjgnfAkI9Ce5O5Mok6nYJsWmPRWOCAdXx08MiTU05ApUkDTJU5nENQ96MOizu4k
-         NBWzs69g/ya+wCG4zZ/rc+O0eyuc+zKN12YqnT4o=
+        b=mVr7G+BW/IAe/nfof+CxiFJ+JWWQwA+p8C2gF72dAvbBTtnUctBoKPq/+EL5UMkFY
+         9rld8aagnOefnGc9IpJSj8VsTXdlJLfgndBEfJPLQp5Mgek1EfjTfkQvqoSE8Ox9De
+         7yoHEI3PP9Knw9ID1ou1gqUfRNQg2JfmS6srpel8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
-        Anand Jain <anand.jain@oracle.com>
-Subject: [PATCH 5.15 119/913] powerpc/kvm: Fix kvm_use_magic_page
-Date:   Tue,  5 Apr 2022 09:19:41 +0200
-Message-Id: <20220405070343.394194028@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Subject: [PATCH 5.15 120/913] PCI: fu740: Force 2.5GT/s for initial device probe
+Date:   Tue,  5 Apr 2022 09:19:42 +0200
+Message-Id: <20220405070343.424752095@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,33 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Ben Dooks <ben.dooks@codethink.co.uk>
 
-commit 0c8eb2884a42d992c7726539328b7d3568f22143 upstream.
+commit a382c757ec5ef83137a86125f43a4c43dc2ab50b upstream.
 
-When switching from __get_user to fault_in_pages_readable, commit
-9f9eae5ce717 broke kvm_use_magic_page: like __get_user,
-fault_in_pages_readable returns 0 on success.
+The fu740 PCIe core does not probe any devices on the SiFive Unmatched
+board without this fix (or having U-Boot explicitly start the PCIe via
+either boot-script or user command). The fix is to start the link at
+2.5GT/s speeds and once the link is up then change the maximum speed back
+to the default.
 
-Fixes: 9f9eae5ce717 ("powerpc/kvm: Prefer fault_in_pages_readable function")
-Cc: stable@vger.kernel.org # v4.18+
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Signed-off-by: Anand Jain <anand.jain@oracle.com>
+The U-Boot driver claims to set the link-speed to 2.5GT/s to get the probe
+to work (and U-Boot does print link up at 2.5GT/s) in the following code:
+https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+
+Link: https://lore.kernel.org/r/20220318152430.526320-1-ben.dooks@codethink.co.uk
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/kvm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/dwc/pcie-fu740.c |   51 +++++++++++++++++++++++++++++++-
+ 1 file changed, 50 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/kernel/kvm.c
-+++ b/arch/powerpc/kernel/kvm.c
-@@ -669,7 +669,7 @@ static void __init kvm_use_magic_page(vo
- 	on_each_cpu(kvm_map_magic_page, &features, 1);
+--- a/drivers/pci/controller/dwc/pcie-fu740.c
++++ b/drivers/pci/controller/dwc/pcie-fu740.c
+@@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct
+ {
+ 	struct device *dev = pci->dev;
+ 	struct fu740_pcie *afp = dev_get_drvdata(dev);
++	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
++	int ret;
++	u32 orig, tmp;
++
++	/*
++	 * Force 2.5GT/s when starting the link, due to some devices not
++	 * probing at higher speeds. This happens with the PCIe switch
++	 * on the Unmatched board when U-Boot has not initialised the PCIe.
++	 * The fix in U-Boot is to force 2.5GT/s, which then gets cleared
++	 * by the soft reset done by this driver.
++	 */
++	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
++	dw_pcie_dbi_ro_wr_en(pci);
++
++	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
++	orig = tmp & PCI_EXP_LNKCAP_SLS;
++	tmp &= ~PCI_EXP_LNKCAP_SLS;
++	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
++	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
  
- 	/* Quick self-test to see if the mapping works */
--	if (!fault_in_pages_readable((const char *)KVM_MAGIC_PAGE, sizeof(u32))) {
-+	if (fault_in_pages_readable((const char *)KVM_MAGIC_PAGE, sizeof(u32))) {
- 		kvm_patching_worked = false;
- 		return;
- 	}
+ 	/* Enable LTSSM */
+ 	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
+-	return 0;
++
++	ret = dw_pcie_wait_for_link(pci);
++	if (ret) {
++		dev_err(dev, "error: link did not start\n");
++		goto err;
++	}
++
++	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
++	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
++		dev_dbg(dev, "changing speed back to original\n");
++
++		tmp &= ~PCI_EXP_LNKCAP_SLS;
++		tmp |= orig;
++		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
++
++		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
++		tmp |= PORT_LOGIC_SPEED_CHANGE;
++		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
++
++		ret = dw_pcie_wait_for_link(pci);
++		if (ret) {
++			dev_err(dev, "error: link did not start at new speed\n");
++			goto err;
++		}
++	}
++
++	ret = 0;
++err:
++	WARN_ON(ret);	/* we assume that errors will be very rare */
++	dw_pcie_dbi_ro_wr_dis(pci);
++	return ret;
+ }
+ 
+ static int fu740_pcie_host_init(struct pcie_port *pp)
 
 

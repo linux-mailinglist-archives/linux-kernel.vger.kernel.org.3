@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8375E4F51EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64B34F520E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573461AbiDFC1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S243774AbiDFC3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351921AbiDEVYT (ORCPT
+        with ESMTP id S1379706AbiDEVdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 17:24:19 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A58545AD8;
-        Tue,  5 Apr 2022 14:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1649192633; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+gXLZmqhdPrOBrGZGktTeGHOT6E2+rkUcU65w77U9Q=;
-        b=icYQV0HoG9hcJUDeXuXeIU1WoXR6RQR8NP3K1VENb68F67Fe9qy7Gpm8XDNK8j16fqLl4N
-        kfR9fgtlPy/TXgEMLtLBxyy9fbdqmL1pEz43M9c99nYM+sfaV8N8a9AHvYeQsoWYW4L+bc
-        rFYBlHPAcvbgiPNfgIvsDiTEuof8ogg=
-Date:   Tue, 05 Apr 2022 22:03:38 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 0/3] Ingenic DRM bridge_atomic_enable proposal
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Message-Id: <26XV9R.735J8E0AH281@crapouillou.net>
-In-Reply-To: <20220321133651.291592-1-cbranchereau@gmail.com>
-References: <20220321133651.291592-1-cbranchereau@gmail.com>
+        Tue, 5 Apr 2022 17:33:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC8153719
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649192736; x=1680728736;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JqaYMwGEXpddZ7ZUFSouvDUJd/m68Tphv68XwazE8qo=;
+  b=nIGjD87JSoDd67nMWMhmcTxu0jbipTx6LICpSqLI817qTpz4KFvEsJHU
+   XJqL1qCYBRovLfeKQr73rsxZnuvh5/XKFp+oNcHzBlUjaf62/lK4r/vQy
+   tFL0yiT1i2hxV/bFM9an7v3xC47ozp7ggbRIW/ouyRtLCv3TB3uCd4cw8
+   zTj8nl5btIuhCNnlpJvxbRaUxHEpVwdwuII19nBNt7VK7XUU3E6gQJB7P
+   1V2AvkA9/KI6lP31gYabEWylzq+RBB+elbcoBrHoi5T5VyQ+pF/r78A4b
+   tUeAEzdoaYxtGk8rHkxzZoyu7LaXU+Qd0TO8/JDmdeCNkpjPIZfFgmLy2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243004874"
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="243004874"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:05:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="722213854"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2022 14:05:34 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbqMn-0003kp-KL;
+        Tue, 05 Apr 2022 21:05:33 +0000
+Date:   Wed, 6 Apr 2022 05:05:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
+ 'imx93_clk_of_match'
+Message-ID: <202204060405.Le0PCoYZ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Hi Peng,
 
-Merged to drm-misc-next.
+FYI, the error/warning still remains.
 
-Thanks,
--Paul
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
+date:   5 weeks ago
+config: hexagon-randconfig-r032-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060405.Le0PCoYZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 24defbe194b650218680fcd9dec8cd103537b531
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Le lun., mars 21 2022 at 14:36:48 +0100, Christophe Branchereau=20
-<cbranchereau@gmail.com> a =E9crit :
-> Hello,
->=20
-> v5 :
->=20
-> - this set doesn't include the nv3052c bindings doc anymore,
->   as it's already applied
->=20
-> - nv3052c panel driver : removed empty lines, proceed to turn it off
->   even is sleeping in fails instead of stopping there
->=20
-> - abt panel : switched to REGCACHE_FLAT so we can disable sleep mode
->   in .enable with regmap_set_bits() instead of doing it at init time
->=20
-> - ingenic-drm-drv : added ingenic_drm_bridge_atomic_disable to balance
->   out ingenic_drm_bridge_atomic_enable
->=20
-> Tested working on the rg350m and rg280m
->=20
-> Christophe Branchereau (3):
->   drm/ingenic : add ingenic_drm_bridge_atomic_enable and disable
->   drm/panel: Add panel driver for NewVision NV3052C based LCDs
->   drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and
->     .disable
->=20
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  34 +-
->  drivers/gpu/drm/panel/Kconfig                 |   9 +
->  drivers/gpu/drm/panel/Makefile                |   1 +
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c  |  31 +-
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c |  31 +-
->  .../gpu/drm/panel/panel-newvision-nv3052c.c   | 484=20
-> ++++++++++++++++++
->  6 files changed, 572 insertions(+), 18 deletions(-)
->  create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
->=20
-> --
-> 2.35.1
->=20
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
+   static const struct of_device_id imx93_clk_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
+vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
+
+   323	
+ > 324	static const struct of_device_id imx93_clk_of_match[] = {
+   325		{ .compatible = "fsl,imx93-ccm" },
+   326		{ /* Sentinel */ },
+   327	};
+   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+   329	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

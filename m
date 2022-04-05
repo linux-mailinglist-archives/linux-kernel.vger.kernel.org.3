@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F0C4F4557
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062354F4832
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359160AbiDENKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S233284AbiDEV3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344187AbiDEJSg (ORCPT
+        with ESMTP id S1356222AbiDEKXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23D76663E;
-        Tue,  5 Apr 2022 02:05:08 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A5ABAB8B;
+        Tue,  5 Apr 2022 03:08:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4355DCE1C6C;
-        Tue,  5 Apr 2022 09:05:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629E8C385A0;
-        Tue,  5 Apr 2022 09:05:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D650D616E7;
+        Tue,  5 Apr 2022 10:07:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E26CCC385A1;
+        Tue,  5 Apr 2022 10:07:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149505;
-        bh=eI/tG81nC1saJgPatTgG7icD/lGlD5gWAo+K+jBtukE=;
+        s=korg; t=1649153279;
+        bh=AfgH4Qyrq4ocyIyW87RMBy6AWuM7pyFE0B/1ED0rGfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NYwbQ+n135CdF7gGZ8YINtciQmS7JB3mTvNmNDWUKDeqGJve+iXxmhRUUfc1wIbU7
-         sot8GE0QWAlogecUyJy4aSPHFxIMUuyvVduVloORvPgbCzq7nine2ewmEyBbdmHuNz
-         UbynodvtsQGYgkWTMSki57YyJq7qemc3dVrhNUcw=
+        b=IL0DJoI0vbUYMn0r91Bgl/+RTCllXBl8zJB358bTjuiV0T8ANtq4ku/rescbAiG7S
+         h0lU4FHCHTK5eyUoilgvP3WWpenRzf6CAUo3s8xOyWz41zyfrDqnHi59y5uKoqkyko
+         CLnvUmDKAkPltdcHT7z8T5mAAEw/bCI7fEKVF8HM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0739/1017] qlcnic: dcb: default to returning -EOPNOTSUPP
-Date:   Tue,  5 Apr 2022 09:27:32 +0200
-Message-Id: <20220405070416.200180255@linuxfoundation.org>
+Subject: [PATCH 5.10 159/599] clocksource/drivers/timer-microchip-pit64b: Use notrace
+Date:   Tue,  5 Apr 2022 09:27:33 +0200
+Message-Id: <20220405070303.573361255@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit 1521db37f0d42334a88e8ff28198a27d1ed5cd7b ]
+[ Upstream commit ff10ee97cb203262e88d9c8bc87369cbd4004a0c ]
 
-Clang static analysis reports this issue
-qlcnic_dcb.c:382:10: warning: Assigned value is
-  garbage or undefined
-  mbx_out = *val;
-          ^ ~~~~
+Use notrace for mchp_pit64b_sched_read_clk() to avoid recursive call of
+prepare_ftrace_return() when issuing:
+echo function_graph > /sys/kernel/debug/tracing/current_tracer
 
-val is set in the qlcnic_dcb_query_hw_capability() wrapper.
-If there is no query_hw_capability op in dcp, success is
-returned without setting the val.
-
-For this and similar wrappers, return -EOPNOTSUPP.
-
-Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 625022a5f160 ("clocksource/drivers/timer-microchip-pit64b: Add Microchip PIT64B support")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220304133601.2404086-3-claudiu.beznea@microchip.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/clocksource/timer-microchip-pit64b.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-index 5d79ee4370bc..7519773eaca6 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-@@ -51,7 +51,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->get_hw_capability)
- 		return dcb->ops->get_hw_capability(dcb);
- 
--	return 0;
-+	return -EOPNOTSUPP;
+diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksource/timer-microchip-pit64b.c
+index 59e11ca8ee73..5c9485cb4e05 100644
+--- a/drivers/clocksource/timer-microchip-pit64b.c
++++ b/drivers/clocksource/timer-microchip-pit64b.c
+@@ -121,7 +121,7 @@ static u64 mchp_pit64b_clksrc_read(struct clocksource *cs)
+ 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
  }
  
- static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
-@@ -65,7 +65,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->attach)
- 		return dcb->ops->attach(dcb);
- 
--	return 0;
-+	return -EOPNOTSUPP;
+-static u64 mchp_pit64b_sched_read_clk(void)
++static u64 notrace mchp_pit64b_sched_read_clk(void)
+ {
+ 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
  }
- 
- static inline int
-@@ -74,7 +74,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
- 	if (dcb && dcb->ops->query_hw_capability)
- 		return dcb->ops->query_hw_capability(dcb, buf);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
-@@ -89,7 +89,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
- 	if (dcb && dcb->ops->query_cee_param)
- 		return dcb->ops->query_cee_param(dcb, buf, type);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
-@@ -97,7 +97,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->get_cee_cfg)
- 		return dcb->ops->get_cee_cfg(dcb);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
 -- 
 2.34.1
 

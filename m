@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0748F4F4A2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA4D4F4E48
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448275AbiDEWfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S1588644AbiDFAQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449825AbiDEPup (ORCPT
+        with ESMTP id S1450182AbiDEPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:50:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2C01107833;
-        Tue,  5 Apr 2022 07:36:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2EF623A;
-        Tue,  5 Apr 2022 07:36:05 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C05F63F5A1;
-        Tue,  5 Apr 2022 07:36:04 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     benve@cisco.com, neescoba@cisco.com, jgg@ziepe.ca
-Cc:     linux-rdma@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA/usnic: Refactor usnic_uiom_alloc_pd()
-Date:   Tue,  5 Apr 2022 15:35:59 +0100
-Message-Id: <ef607cb3f5a09920b86971b8c8e60af8c647457e.1649169359.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
+        Tue, 5 Apr 2022 11:51:19 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607491BA46F;
+        Tue,  5 Apr 2022 07:39:40 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id 8so9358288ilq.4;
+        Tue, 05 Apr 2022 07:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u/cO9n221kA+5ADZGdYnf+fYVWdb03GaAd0bxZEtbWk=;
+        b=MzQwaTornZRnR7GuZfl0GZwph6GH8tWgEbCituXvQX40VL/XmXvrRmKIQY6iKlsfSa
+         0Dv9GxL9KDMnR0Tot7B+e8OibqFGRTemBt5ikaubRHbq3SG4nIFZwSiXe9i93yqv1tYS
+         j8Cdxq/NQ4CM47pBPl8gxNP9vigDbtE6S9Sf3GkxlUO+7SDmtzt1dGtJPAGjs/9NyIJh
+         GzD6CqSrVRfr0Hx9po1gGBbuQLtPvpAAGbH9uwGR3hMO5aIBmlwrfHtccEi60hUKZ4ak
+         p82hT8o9SsUDJh+bfE6Pg08evMuzcL3YrAxRem7+SCLg5D2RPDdot+Nn3iAzkJC31ZZl
+         Bhqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u/cO9n221kA+5ADZGdYnf+fYVWdb03GaAd0bxZEtbWk=;
+        b=sb79zo1q+vhylwK6Z8mg+74qTVaRH7oe7UTyH/8atWTlNWRPtnyA15rl2PoSuitebv
+         cv7qLJ2ydTJ1BN+Osq+4T+k+QWRnaIeSiYj9TQLbgUiEwpoWvu6S0eVupGHxJBebRHRh
+         D9lgvBnsSL6lLwOO7oSTu2gHYFWxowu4zvAjTPwpw69jQUIS3u3HZ5UCrHu5Y4pDsziq
+         bdmEWbQlbHmE42AN/VTKN9V95NbKExJfhrdJ5mLKbTCUW9M012ca2VA8d7O7wgo69dKg
+         6zomPs1p2WXtxoGKeI9a82REnX2FuAOfaPdxgKMeyW7PTyYzl94VVYaXARYsoyVEv7iI
+         r0vQ==
+X-Gm-Message-State: AOAM5337T0DfG8d4FVKFsYsSgpe/bKztMY1JGkpowVKw5hJa2bZb+e1W
+        UDTzLRVeGZ7KPAGbyF6lFnHC3x4DCjTzQ0QVJY0=
+X-Google-Smtp-Source: ABdhPJyLSwS3gzvbWUvgnsZHY5oFlCEmIY5mpJYVzgiyLEFiDb2hEM9naW3CpjZf8nK9nUhDxM162/gpsl29HLJzf30=
+X-Received: by 2002:a92:3405:0:b0:2c8:70ad:fa86 with SMTP id
+ b5-20020a923405000000b002c870adfa86mr1949268ila.268.1649169579699; Tue, 05
+ Apr 2022 07:39:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404131818.1817794-1-gch981213@gmail.com> <20220404131818.1817794-5-gch981213@gmail.com>
+ <1649088538.050456.1436949.nullmailer@robh.at.kernel.org> <CAJsYDVLaXAoL=TcPun6rckcA_cdUS-zFy_7M6uCpfzX+jbQEag@mail.gmail.com>
+ <20220405092024.25d97c33@xps13>
+In-Reply-To: <20220405092024.25d97c33@xps13>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Tue, 5 Apr 2022 22:39:28 +0800
+Message-ID: <CAJsYDVKVaZtrUr5C_BCr+oVECJ1xJwfh5TOMpo-w3xgkYCBYSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Rob Herring <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Roger Quadros <rogerq@kernel.org>,
+        Yu Kuai <yukuai3@huawei.com>,
+        linux-mediatek@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-mtd@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than hard-coding pci_bus_type, pass the PF device through to
-usnic_uiom_alloc_pd() and retrieve its bus there. This prepares for
-iommu_domain_alloc() changing to take a device rather than a bus_type.
+Hi!
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/infiniband/hw/usnic/usnic_ib_verbs.c | 3 +--
- drivers/infiniband/hw/usnic/usnic_uiom.c     | 5 ++---
- drivers/infiniband/hw/usnic/usnic_uiom.h     | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
+On Tue, Apr 5, 2022 at 3:20 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> You can try including spi-nand.yaml (like you do with
+> spi-controller.yaml). You should no longer need to define
+> nand-ecc-engine then as it is already described there?
 
-diff --git a/drivers/infiniband/hw/usnic/usnic_ib_verbs.c b/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
-index d3a9670bf971..06aae6a79c3d 100644
---- a/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
-+++ b/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
-@@ -442,7 +442,7 @@ int usnic_ib_alloc_pd(struct ib_pd *ibpd, struct ib_udata *udata)
- {
- 	struct usnic_ib_pd *pd = to_upd(ibpd);
- 
--	pd->umem_pd = usnic_uiom_alloc_pd();
-+	pd->umem_pd = usnic_uiom_alloc_pd(ibpd->device->dev.parent);
- 	if (IS_ERR(pd->umem_pd))
- 		return PTR_ERR(pd->umem_pd);
- 
-@@ -706,4 +706,3 @@ int usnic_ib_mmap(struct ib_ucontext *context,
- 	usnic_err("No VF %u found\n", vfid);
- 	return -EINVAL;
- }
--
-diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
-index 8c48027614a1..e212929369df 100644
---- a/drivers/infiniband/hw/usnic/usnic_uiom.c
-+++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
-@@ -40,7 +40,6 @@
- #include <linux/iommu.h>
- #include <linux/workqueue.h>
- #include <linux/list.h>
--#include <linux/pci.h>
- #include <rdma/ib_verbs.h>
- 
- #include "usnic_log.h"
-@@ -439,7 +438,7 @@ void usnic_uiom_reg_release(struct usnic_uiom_reg *uiomr)
- 	__usnic_uiom_release_tail(uiomr);
- }
- 
--struct usnic_uiom_pd *usnic_uiom_alloc_pd(void)
-+struct usnic_uiom_pd *usnic_uiom_alloc_pd(struct device *dev)
- {
- 	struct usnic_uiom_pd *pd;
- 	void *domain;
-@@ -448,7 +447,7 @@ struct usnic_uiom_pd *usnic_uiom_alloc_pd(void)
- 	if (!pd)
- 		return ERR_PTR(-ENOMEM);
- 
--	pd->domain = domain = iommu_domain_alloc(&pci_bus_type);
-+	pd->domain = domain = iommu_domain_alloc(dev->bus);
- 	if (!domain) {
- 		usnic_err("Failed to allocate IOMMU domain");
- 		kfree(pd);
-diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.h b/drivers/infiniband/hw/usnic/usnic_uiom.h
-index 9407522179e9..5a9acf941510 100644
---- a/drivers/infiniband/hw/usnic/usnic_uiom.h
-+++ b/drivers/infiniband/hw/usnic/usnic_uiom.h
-@@ -80,7 +80,7 @@ struct usnic_uiom_chunk {
- 	struct scatterlist		page_list[];
- };
- 
--struct usnic_uiom_pd *usnic_uiom_alloc_pd(void);
-+struct usnic_uiom_pd *usnic_uiom_alloc_pd(struct device *dev);
- void usnic_uiom_dealloc_pd(struct usnic_uiom_pd *pd);
- int usnic_uiom_attach_dev_to_pd(struct usnic_uiom_pd *pd, struct device *dev);
- void usnic_uiom_detach_dev_from_pd(struct usnic_uiom_pd *pd,
+This doesn't work. I added
+- $ref: /schemas/mtd/spi-nand.yaml#
+to the allOf property and dt_binding_check complains the following:
+
+Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.example.dtb:
+spi@1100d000: compatible:0: 'spi-nand' was expected
+From schema: /home/user/src/kernels/linux/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+
+BTW I still can't get dt_binding_check to complain anything about
+spi-nand. Here's the command I used:
+
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- DT_CHECKER_FLAGS=-m
+dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+
 -- 
-2.28.0.dirty
-
+Regards,
+Chuanhong Guo

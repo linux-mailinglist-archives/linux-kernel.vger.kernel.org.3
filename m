@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215984F2E58
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B4E4F2C83
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354289AbiDEKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S1354362AbiDEKN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241159AbiDEIcw (ORCPT
+        with ESMTP id S241171AbiDEIcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:52 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F222167C7;
-        Tue,  5 Apr 2022 01:28:59 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 08:28:56 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4320B17040;
+        Tue,  5 Apr 2022 01:29:03 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 08:29:00 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649147337;
+        s=2020; t=1649147341;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aRspjOD+sp4wLkw4s0WLBmG5G07DJy71EvKofdBLPA4=;
-        b=gok3LcuSKj4zHHuSDoKXqImYIYgLzOiqWQmeaO0TT7se7k1AS6iHAf0DLX7gCwbSZ8So9o
-        3PSKYhQa+td4Dz5gi2y6hCbTg8mbMDjVO39IQfj4fU1lR6Teav0I6/Jo5cVpzz3pvHQ/f1
-        otDThHBB5ChCpFRrCZuOzlTHh2uz6tsKh8mE7BypSn4GgsDZoEe6yT9BrflLOL5zBmQRb8
-        Y4UGPw9EGMyHIKD3PD8fsK5LTe4/FngmAuofjAzR6hdlY8hsVtQfkt8ezHnR6cYENWz1Uy
-        0iLeDoF0pPk8kqrltGxJI3I3nSjwr0YR90BPow/iSpki8FEkybVBAU5SXqlvdw==
+        bh=Nxx2Wto6f2mz0XCSsSZ+6fkmOz447qGXO8hO/llqmMc=;
+        b=W8wmjmRe6E62Nimh/DLGGw2Ucq2ff9vNzPPpH19jZCEEENA0PGEkGRmuvyVmeeleHsZLlg
+        I/AzYHCJh0vlLc/OxrZ2KAyDpLrrPJlU56SZZ11+fkBcZLZbNLcbdNE/Gces9jsYUZQPx6
+        62FBvVxkMFYAj1rTqNFhhW2aaNTB3x5rX3LIu6YM9lG3ZKZym0tSWZ2e9P3VhX85q68++M
+        Yfi5/ZTcNqHONflTNFCTtWYAWeHMHVC9okHEEt7TIokdkKHYXZsrWP8/eE8bpROMTbmN7r
+        RuFfGN5cyzsayLWkokRg+PugMb43hfkISBNylp5BgKeOmSDIdkRHlTMnkmwrGA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649147337;
+        s=2020e; t=1649147341;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aRspjOD+sp4wLkw4s0WLBmG5G07DJy71EvKofdBLPA4=;
-        b=VxaaUtbIbDRsVByCzaPodikw8WVDkI1rGgzMxON0+tAuOIy8nh02YGsBmagANhYfrPGO0J
-        oo2+TPEhpRMsjrDA==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+        bh=Nxx2Wto6f2mz0XCSsSZ+6fkmOz447qGXO8hO/llqmMc=;
+        b=2mxeFg4e5XQkBiH+GhZ0zIBoqcvrPLYzoWNbfpEEqGh4gDBck+evAPHVKJbdl8NP3/Ge5b
+        gvjAgNd0rCOcV7Cg==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/urgent] x86/percpu: Remove volatile from arch_raw_cpu_ptr().
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+Subject: [tip: locking/urgent] x86,static_call: Fix __static_call_return0 for i386
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220328145810.86783-2-bigeasy@linutronix.de>
-References: <20220328145810.86783-2-bigeasy@linutronix.de>
+In-Reply-To: <20220318204419.GT8939@worktop.programming.kicks-ass.net>
+References: <20220318204419.GT8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <164914733657.389.13602692959226451396.tip-bot2@tip-bot2>
+Message-ID: <164914734085.389.319468284703922010.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,71 +67,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/urgent branch of tip:
 
-Commit-ID:     1c1e7e3c23dd25f938302428eeb22c3dda2c3427
-Gitweb:        https://git.kernel.org/tip/1c1e7e3c23dd25f938302428eeb22c3dda2c3427
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Mon, 28 Mar 2022 16:58:08 +02:00
+Commit-ID:     1cd5f059d956e6f614ba6666ecdbcf95db05d5f5
+Gitweb:        https://git.kernel.org/tip/1cd5f059d956e6f614ba6666ecdbcf95db05d5f5
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 18 Mar 2022 21:24:38 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 05 Apr 2022 09:59:38 +02:00
+CommitterDate: Tue, 05 Apr 2022 09:59:37 +02:00
 
-x86/percpu: Remove volatile from arch_raw_cpu_ptr().
+x86,static_call: Fix __static_call_return0 for i386
 
-The volatile attribute in the inline assembly of arch_raw_cpu_ptr()
-forces the compiler to always generate the code, even if the compiler
-can decide upfront that its result is not needed.
+Paolo reported that the instruction sequence that is used to replace:
 
-For instance invoking __intel_pmu_disable_all(false) (like
-intel_pmu_snapshot_arch_branch_stack() does) leads to loading the
-address of &cpu_hw_events into the register while compiler knows that it
-has no need for it. This ends up with code like:
+    call __static_call_return0
 
-|	movq	$cpu_hw_events, %rax			#, tcp_ptr__
-|	add	%gs:this_cpu_off(%rip), %rax		# this_cpu_off, tcp_ptr__
-|	xorl	%eax, %eax				# tmp93
+namely:
 
-It also creates additional code within local_lock() with !RT &&
-!LOCKDEP which is not desired.
+    66 66 48 31 c0	data16 data16 xor %rax,%rax
 
-By removing the volatile attribute the compiler can place the
-function freely and avoid it if it is not needed in the end.
-By using the function twice the compiler properly caches only the
-variable offset and always loads the CPU-offset.
+decodes to something else on i386, namely:
 
-this_cpu_ptr() also remains properly placed within a preempt_disable()
-sections because
-- arch_raw_cpu_ptr() assembly has a memory input ("m" (this_cpu_off))
-- prempt_{dis,en}able() fundamentally has a 'barrier()' in it
+    66 66 48		data16 dec %ax
+    31 c0		xor    %eax,%eax
 
-Therefore this_cpu_ptr() is already properly serialized and does not
-rely on the 'volatile' attribute.
+Which is a nonsensical sequence that happens to have the same outcome.
+*However* an important distinction is that it consists of 2
+instructions which is a problem when the thing needs to be overwriten
+with a regular call instruction again.
 
-Remove volatile from arch_raw_cpu_ptr().
+As such, replace the instruction with something that decodes the same
+on both i386 and x86_64.
 
-[ bigeasy: Added Linus' explanation why this_cpu_ptr() is not moved out
-  of a preempt_disable() section without the 'volatile' attribute. ]
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
+Reported-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220328145810.86783-2-bigeasy@linutronix.de
+Link: https://lkml.kernel.org/r/20220318204419.GT8939@worktop.programming.kicks-ass.net
 ---
- arch/x86/include/asm/percpu.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/static_call.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index a3c33b7..13c0d63 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -38,9 +38,9 @@
- #define arch_raw_cpu_ptr(ptr)				\
- ({							\
- 	unsigned long tcp_ptr__;			\
--	asm volatile("add " __percpu_arg(1) ", %0"	\
--		     : "=r" (tcp_ptr__)			\
--		     : "m" (this_cpu_off), "0" (ptr));	\
-+	asm ("add " __percpu_arg(1) ", %0"		\
-+	     : "=r" (tcp_ptr__)				\
-+	     : "m" (this_cpu_off), "0" (ptr));		\
- 	(typeof(*(ptr)) __kernel __force *)tcp_ptr__;	\
- })
- #else
+diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
+index 531fb4c..aa72cef 100644
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -12,10 +12,9 @@ enum insn_type {
+ };
+ 
+ /*
+- * data16 data16 xorq %rax, %rax - a single 5 byte instruction that clears %rax
+- * The REX.W cancels the effect of any data16.
++ * cs cs cs xorl %eax, %eax - a single 5 byte instruction that clears %[er]ax
+  */
+-static const u8 xor5rax[] = { 0x66, 0x66, 0x48, 0x31, 0xc0 };
++static const u8 xor5rax[] = { 0x2e, 0x2e, 0x2e, 0x31, 0xc0 };
+ 
+ static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
+ 

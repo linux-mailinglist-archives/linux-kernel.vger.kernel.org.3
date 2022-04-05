@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22D24F4CA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A924F4B85
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579189AbiDEX0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S1574869AbiDEXBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354937AbiDEKQg (ORCPT
+        with ESMTP id S1349173AbiDEJtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754562AE08;
-        Tue,  5 Apr 2022 03:04:15 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0137679;
+        Tue,  5 Apr 2022 02:42:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00BC9616E7;
-        Tue,  5 Apr 2022 10:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF34C385A2;
-        Tue,  5 Apr 2022 10:04:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B0A07CE1C6F;
+        Tue,  5 Apr 2022 09:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76E1C385A1;
+        Tue,  5 Apr 2022 09:42:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153054;
-        bh=o7AP/mczemchuXo0tATB5IVkecPPmtTYKUbdBPS5QO4=;
+        s=korg; t=1649151725;
+        bh=TtJ6sFR2YeP4tCJrB/dl20FNpSQJNjqdHrikirjH4Lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DP0NTeNARDozpWrldnVP9csvk90NvE1LPRqJUrJy7AizZ8SZBksYyAJMzGNUXQi64
-         IWNhm+L/c6ceIei6hRstRpjeZOSXxpmBR75Ln2AVJSrEtTMzgM3xL7Magk7DhpGTU9
-         AtD5pkrpWj3QzAju8+86SCC0BBjOzAtW4iPEAe98=
+        b=Dd8MFm9Fa3UdRjNvDojTbkBMJBIwvpFS3K8jzqWVF2Zcg1Hclhde/Ff7Sigt3+kfZ
+         mqz+r3ZkIU3u5yMGolSsthC5cdtC/xHSYiH5qOpbFXacy9r6xqMZ8KI43sRJ5bGmBl
+         QIT8nReeqqfweBWuNV3xmpeNx03vPsJIEYmDu+To=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.10 086/599] arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
-Date:   Tue,  5 Apr 2022 09:26:20 +0200
-Message-Id: <20220405070301.388085537@linuxfoundation.org>
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 519/913] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
+Date:   Tue,  5 Apr 2022 09:26:21 +0200
+Message-Id: <20220405070355.411181404@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Rob Clark <robdclark@chromium.org>
 
-commit a06ed27f3bc63ab9e10007dc0118d910908eb045 upstream.
+[ Upstream commit cca96584b35765bf9eb5f38ca55a144ea2ba0de4 ]
 
-Though GIC ARE option is disabled for no GIC-v2 compatibility,
-Cortex-A72 is free to implement the CPU interface as long as it
-communicates with the GIC using the stream protocol. This requires
-that the SoC integration mark out the PERIPHBASE[1] as reserved area
-within the SoC. See longer discussion in [2] for further information.
-
-Update the GIC register map to indicate offsets from PERIPHBASE based
-on [3]. Without doing this, systems like kvm will not function with
-gic-v2 emulation.
-
-[1] https://developer.arm.com/documentation/100095/0002/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
-[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
-[3] https://developer.arm.com/documentation/100095/0002/way1382452674438
-
-Cc: stable@vger.kernel.org # 5.10+
-Fixes: 2d87061e70de ("arm64: dts: ti: Add Support for J721E SoC")
-Reported-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220215201008.15235-3-nm@ti.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220305173405.914989-1-robdclark@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi |    5 ++++-
- arch/arm64/boot/dts/ti/k3-j721e.dtsi      |    1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -108,7 +108,10 @@
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
- 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
--		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
-+		      <0x00 0x01900000 0x00 0x100000>,	/* GICR */
-+		      <0x00 0x6f000000 0x00 0x2000>,	/* GICC */
-+		      <0x00 0x6f010000 0x00 0x1000>,	/* GICH */
-+		      <0x00 0x6f020000 0x00 0x2000>;	/* GICV */
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index b681c45520bb..f54bfdb1ebff 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -658,19 +658,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	const u32 *regs = a6xx_protect;
+-	unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
+-
+-	BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+-	BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
++	unsigned i, count, count_max;
  
- 		/* vcpumntirq: virtual CPU interface maintenance interrupt */
- 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
---- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-@@ -136,6 +136,7 @@
- 			 <0x00 0x0e000000 0x00 0x0e000000 0x00 0x01800000>, /* PCIe Core*/
- 			 <0x00 0x10000000 0x00 0x10000000 0x00 0x10000000>, /* PCIe DAT */
- 			 <0x00 0x64800000 0x00 0x64800000 0x00 0x00800000>, /* C71 */
-+			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
- 			 <0x44 0x00000000 0x44 0x00000000 0x00 0x08000000>, /* PCIe2 DAT */
- 			 <0x44 0x10000000 0x44 0x10000000 0x00 0x08000000>, /* PCIe3 DAT */
- 			 <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
+ 	if (adreno_is_a650(adreno_gpu)) {
+ 		regs = a650_protect;
+ 		count = ARRAY_SIZE(a650_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+ 	} else if (adreno_is_a660_family(adreno_gpu)) {
+ 		regs = a660_protect;
+ 		count = ARRAY_SIZE(a660_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
++	} else {
++		regs = a6xx_protect;
++		count = ARRAY_SIZE(a6xx_protect);
++		count_max = 32;
++		BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+ 	}
+ 
+ 	/*
+-- 
+2.34.1
+
 
 

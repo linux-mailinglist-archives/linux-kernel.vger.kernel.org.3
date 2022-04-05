@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C934F50C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC034F5197
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843163AbiDFBjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S1442981AbiDFCFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358080AbiDEK16 (ORCPT
+        with ESMTP id S1353204AbiDEKFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691065F8EC;
-        Tue,  5 Apr 2022 03:14:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:05:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D505BF001;
+        Tue,  5 Apr 2022 02:54:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CABEB81C6C;
-        Tue,  5 Apr 2022 10:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB8DC385A0;
-        Tue,  5 Apr 2022 10:14:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F16BB81B13;
+        Tue,  5 Apr 2022 09:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B3FC385A3;
+        Tue,  5 Apr 2022 09:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153692;
-        bh=zPWrYRe2kserw8d5T0psiCy1Z66Wq7qYVweymDsP5yU=;
+        s=korg; t=1649152465;
+        bh=+HUe292oJtIoFzYs/0U5TUefxruWskV51tku2/Elhtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TJoa9+10Z+OQ+0d2ZhJEgKBaSfR7oprfn8SEGdkE4fBQCWNOygRRsjwXAJxcBx/qY
-         PUV8QW67m14/WyLw5Pw0iCOSD6ZURx0N8mlPkYV8UxyVZH1furK4ORnw6u//hYq93K
-         e+bjYC3cItVnxFX7HYMRUNBdoPlC2p1B8IQzhT/w=
+        b=QYK8E37eNkpnhiWNVhS13piP+hjYKnCPipQvm0eZkkffylOJENoxtC8GgVX090rWA
+         YxxmJUh7iwBzBvrQr4BmaflIme/JLvFd61BlYzjJH4W1x5iN3srse1w++8ndBC1Hxo
+         VtgsVStOTaCiYcnLj1RDTmmsCRaSpNu4/qkZql9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 312/599] scsi: pm8001: Fix le32 values handling in pm80xx_set_sas_protocol_timer_config()
-Date:   Tue,  5 Apr 2022 09:30:06 +0200
-Message-Id: <20220405070308.117505370@linuxfoundation.org>
+Subject: [PATCH 5.15 747/913] ARM: dts: imx7: Use audio_mclk_post_div instead audio_mclk_root_clk
+Date:   Tue,  5 Apr 2022 09:30:09 +0200
+Message-Id: <20220405070402.225450085@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,109 +55,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Abel Vesa <abel.vesa@nxp.com>
 
-[ Upstream commit ca374f5d92b8ae778f6a37dd3e7ed809bbf7a953 ]
+[ Upstream commit 4cb7df64c732b2b9918424095c11660c2a8c4a33 ]
 
-All fields of the SASProtocolTimerConfig structure have the __le32 type.
-As such, use cpu_to_le32() to initialize them. This change suppresses many
-sparse warnings:
+The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
+but according to the reference manual, there is no such gate. Moreover,
+the consumer driver of the mentioned clock might gate it and leave
+the ECSPI2 (the true owner of that gate) hanging. So lets use the
+audio_mclk_post_div, which is the parent.
 
-warning: incorrect type in assignment (different base types)
-   expected restricted __le32 [addressable] [usertype] pageCode
-   got int
-
-Note that the check to limit the value of the STP_IDLE_TMO field is removed
-as this field is initialized using the fixed (and small) value defined by
-the STP_IDLE_TIME macro.
-
-The pm8001_dbg() calls printing the values of the SASProtocolTimerConfig
-structure fileds are changed to use le32_to_cpu() to present the values in
-human readable form.
-
-Link: https://lore.kernel.org/r/20220220031810.738362-9-damien.lemoal@opensource.wdc.com
-Fixes: a6cb3d012b98 ("[SCSI] pm80xx: thermal, sas controller config and error handling update")
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 52 +++++++++++++++-----------------
- 1 file changed, 25 insertions(+), 27 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi     | 4 ++--
+ arch/arm/boot/dts/imx7-mba7.dtsi        | 2 +-
+ arch/arm/boot/dts/imx7d-nitrogen7.dts   | 2 +-
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts | 4 ++--
+ arch/arm/boot/dts/imx7d-pico-pi.dts     | 4 ++--
+ arch/arm/boot/dts/imx7d-sdb.dts         | 4 ++--
+ arch/arm/boot/dts/imx7s-warp.dts        | 4 ++--
+ 7 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 1b1033b4e310..f9736e02010d 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1243,43 +1243,41 @@ pm80xx_set_sas_protocol_timer_config(struct pm8001_hba_info *pm8001_ha)
- 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
- 	payload.tag = cpu_to_le32(tag);
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index 62b771c1d5a9..f1c60b0cb143 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -40,7 +40,7 @@
  
--	SASConfigPage.pageCode        =  SAS_PROTOCOL_TIMER_CONFIG_PAGE;
--	SASConfigPage.MST_MSI         =  3 << 15;
--	SASConfigPage.STP_SSP_MCT_TMO =  (STP_MCT_TMO << 16) | SSP_MCT_TMO;
--	SASConfigPage.STP_FRM_TMO     = (SAS_MAX_OPEN_TIME << 24) |
--				(SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER;
--	SASConfigPage.STP_IDLE_TMO    =  STP_IDLE_TIME;
--
--	if (SASConfigPage.STP_IDLE_TMO > 0x3FFFFFF)
--		SASConfigPage.STP_IDLE_TMO = 0x3FFFFFF;
--
--
--	SASConfigPage.OPNRJT_RTRY_INTVL =         (SAS_MFD << 16) |
--						SAS_OPNRJT_RTRY_INTVL;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =  (SAS_DOPNRJT_RTRY_TMO << 16)
--						| SAS_COPNRJT_RTRY_TMO;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =  (SAS_DOPNRJT_RTRY_THR << 16)
--						| SAS_COPNRJT_RTRY_THR;
--	SASConfigPage.MAX_AIP =  SAS_MAX_AIP;
-+	SASConfigPage.pageCode = cpu_to_le32(SAS_PROTOCOL_TIMER_CONFIG_PAGE);
-+	SASConfigPage.MST_MSI = cpu_to_le32(3 << 15);
-+	SASConfigPage.STP_SSP_MCT_TMO =
-+		cpu_to_le32((STP_MCT_TMO << 16) | SSP_MCT_TMO);
-+	SASConfigPage.STP_FRM_TMO =
-+		cpu_to_le32((SAS_MAX_OPEN_TIME << 24) |
-+			    (SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER);
-+	SASConfigPage.STP_IDLE_TMO = cpu_to_le32(STP_IDLE_TIME);
-+
-+	SASConfigPage.OPNRJT_RTRY_INTVL =
-+		cpu_to_le32((SAS_MFD << 16) | SAS_OPNRJT_RTRY_INTVL);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_TMO << 16) | SAS_COPNRJT_RTRY_TMO);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_THR << 16) | SAS_COPNRJT_RTRY_THR);
-+	SASConfigPage.MAX_AIP = cpu_to_le32(SAS_MAX_AIP);
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -293,7 +293,7 @@
+ 		compatible = "fsl,sgtl5000";
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_sai1_mclk>;
+ 		VDDA-supply = <&reg_module_3v3_avdd>;
+diff --git a/arch/arm/boot/dts/imx7-mba7.dtsi b/arch/arm/boot/dts/imx7-mba7.dtsi
+index 5e6bef230dc7..b55a7792a839 100644
+--- a/arch/arm/boot/dts/imx7-mba7.dtsi
++++ b/arch/arm/boot/dts/imx7-mba7.dtsi
+@@ -264,7 +264,7 @@
+ 	tlv320aic32x4: audio-codec@18 {
+ 		compatible = "ti,tlv320aic32x4";
+ 		reg = <0x18>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		ldoin-supply = <&reg_audio_3v3>;
+ 		iov-supply = <&reg_audio_3v3>;
+diff --git a/arch/arm/boot/dts/imx7d-nitrogen7.dts b/arch/arm/boot/dts/imx7d-nitrogen7.dts
+index e0751e6ba3c0..a31de900139d 100644
+--- a/arch/arm/boot/dts/imx7d-nitrogen7.dts
++++ b/arch/arm/boot/dts/imx7d-nitrogen7.dts
+@@ -288,7 +288,7 @@
+ 	codec: wm8960@1a {
+ 		compatible = "wlf,wm8960";
+ 		reg = <0x1a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		wlf,shared-lrclk;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+index 7b2198a9372c..d917dc4f2f22 100644
+--- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
++++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+@@ -31,7 +31,7 @@
  
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.pageCode 0x%08x\n",
--		   SASConfigPage.pageCode);
-+		   le32_to_cpu(SASConfigPage.pageCode));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MST_MSI  0x%08x\n",
--		   SASConfigPage.MST_MSI);
-+		   le32_to_cpu(SASConfigPage.MST_MSI));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_SSP_MCT_TMO  0x%08x\n",
--		   SASConfigPage.STP_SSP_MCT_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_SSP_MCT_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_FRM_TMO  0x%08x\n",
--		   SASConfigPage.STP_FRM_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_FRM_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_IDLE_TMO  0x%08x\n",
--		   SASConfigPage.STP_IDLE_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_IDLE_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.OPNRJT_RTRY_INTVL  0x%08x\n",
--		   SASConfigPage.OPNRJT_RTRY_INTVL);
-+		   le32_to_cpu(SASConfigPage.OPNRJT_RTRY_INTVL));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO  0x%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR  0x%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MAX_AIP  0x%08x\n",
--		   SASConfigPage.MAX_AIP);
-+		   le32_to_cpu(SASConfigPage.MAX_AIP));
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&sgtl5000>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -41,7 +41,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		VDDA-supply = <&reg_2p5v>;
+ 		VDDIO-supply = <&reg_vref_1v8>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-pico-pi.dts b/arch/arm/boot/dts/imx7d-pico-pi.dts
+index 70bea95c06d8..f263e391e24c 100644
+--- a/arch/arm/boot/dts/imx7d-pico-pi.dts
++++ b/arch/arm/boot/dts/imx7d-pico-pi.dts
+@@ -31,7 +31,7 @@
  
- 	memcpy(&payload.cfg_pg, &SASConfigPage,
- 			 sizeof(SASProtocolTimerConfig_t));
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&sgtl5000>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -41,7 +41,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		VDDA-supply = <&reg_2p5v>;
+ 		VDDIO-supply = <&reg_vref_1v8>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
+index 4a0d83784d7d..e5f1bdbe7992 100644
+--- a/arch/arm/boot/dts/imx7d-sdb.dts
++++ b/arch/arm/boot/dts/imx7d-sdb.dts
+@@ -385,14 +385,14 @@
+ 	codec: wm8960@1a {
+ 		compatible = "wlf,wm8960";
+ 		reg = <0x1a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		wlf,shared-lrclk;
+ 		wlf,hp-cfg = <2 2 3>;
+ 		wlf,gpio-cfg = <1 3>;
+ 		assigned-clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_SRC>,
+ 				  <&clks IMX7D_PLL_AUDIO_POST_DIV>,
+-				  <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++				  <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		assigned-clock-parents = <&clks IMX7D_PLL_AUDIO_POST_DIV>;
+ 		assigned-clock-rates = <0>, <884736000>, <12288000>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7s-warp.dts b/arch/arm/boot/dts/imx7s-warp.dts
+index 569bbd84e371..558b064da743 100644
+--- a/arch/arm/boot/dts/imx7s-warp.dts
++++ b/arch/arm/boot/dts/imx7s-warp.dts
+@@ -75,7 +75,7 @@
+ 
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -232,7 +232,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_sai1_mclk>;
+ 		VDDA-supply = <&vgen4_reg>;
 -- 
 2.34.1
 

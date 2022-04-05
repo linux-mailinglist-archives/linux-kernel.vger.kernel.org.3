@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52474F495C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325EF4F49D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238286AbiDEWLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S1450989AbiDEW33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356350AbiDEKXi (ORCPT
+        with ESMTP id S1349444AbiDEJtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E97BB92B;
-        Tue,  5 Apr 2022 03:08:13 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DFF26AE2;
+        Tue,  5 Apr 2022 02:46:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3F01B81C89;
-        Tue,  5 Apr 2022 10:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46632C385A1;
-        Tue,  5 Apr 2022 10:08:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88BF261368;
+        Tue,  5 Apr 2022 09:46:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9535DC385A1;
+        Tue,  5 Apr 2022 09:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153290;
-        bh=MrLe2UYgNO94N6ATEUfHk2MCCetEx4kGlyIszj4eOj4=;
+        s=korg; t=1649151962;
+        bh=LyU0UCjIMK28Y/+3dy2ewi5N3bhvr2nkJBhF+Msbu9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Koq6UJ5kI9Y81XHFydiX3AZMUD9OhaWpybvah3B55SgQgsHUe/AVzjl5Zo6OgcOXu
-         hU1r3mmeoPrTf82ZEcnIWVG99R7KVsirIMbctmYpKggPW9kuhAks5r7OpGBAR16rZo
-         /LTLtworcOZH+CZQcuPPgxX1UwAKZvIWD+tWnFVU=
+        b=zW+kGawfPQpxI7jhp5XoM4Ut+8anmAbUWstN3lA42xNcrgJouIYGgoNyuFykwPEMp
+         ybPlcc2UZ/Eygx6MP6epByvJqbNH8zJjA2MI91akGlOgzCe68MyBZB56tuunAn/ctv
+         RZNExar+TX68WRNNTJ1eUFvd6XAwts0Agpbq0oF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 171/599] watch_queue: Actually free the watch
-Date:   Tue,  5 Apr 2022 09:27:45 +0200
-Message-Id: <20220405070303.930876837@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 604/913] iio: adc: Add check for devm_request_threaded_irq
+Date:   Tue,  5 Apr 2022 09:27:46 +0200
+Message-Id: <20220405070357.945319330@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 3d8dcf278b1ee1eff1e90be848fa2237db4c07a7 ]
+[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
 
-free_watch() does everything barring actually freeing the watch object.  Fix
-this by adding the missing kfree.
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value and return
+error if fails.
 
-kmemleak produces a report something like the following.  Note that as an
-address can be seen in the first word, the watch would appear to have gone
-through call_rcu().
-
-BUG: memory leak
-unreferenced object 0xffff88810ce4a200 (size 96):
-  comm "syz-executor352", pid 3605, jiffies 4294947473 (age 13.720s)
-  hex dump (first 32 bytes):
-    e0 82 48 0d 81 88 ff ff 00 00 00 00 00 00 00 00  ..H.............
-    80 a2 e4 0c 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8214e6cc>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8214e6cc>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8214e6cc>] keyctl_watch_key+0xec/0x2e0 security/keys/keyctl.c:1800
-    [<ffffffff8214ec84>] __do_sys_keyctl+0x3c4/0x490 security/keys/keyctl.c:2016
-    [<ffffffff84493a25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84493a25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-and-tested-by: syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
+Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/watch_queue.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/adc/twl6030-gpadc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 45a8eb90e5fc..a662abccf52c 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -398,6 +398,7 @@ static void free_watch(struct rcu_head *rcu)
- 	put_watch_queue(rcu_access_pointer(watch->queue));
- 	atomic_dec(&watch->cred->user->nr_watches);
- 	put_cred(watch->cred);
-+	kfree(watch);
- }
+diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
+index c6416ad795ca..256177b15c51 100644
+--- a/drivers/iio/adc/twl6030-gpadc.c
++++ b/drivers/iio/adc/twl6030-gpadc.c
+@@ -911,6 +911,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				twl6030_gpadc_irq_handler,
+ 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
++	if (ret)
++		return ret;
  
- static void __put_watch(struct kref *kref)
+ 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
+ 	if (ret < 0) {
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A414F4918
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D15C4F48AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390369AbiDEWDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1383786AbiDEVqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349490AbiDEJt5 (ORCPT
+        with ESMTP id S1357964AbiDEK1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D94D2;
-        Tue,  5 Apr 2022 02:47:34 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE0BC5580;
+        Tue,  5 Apr 2022 03:11:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06252B81B76;
-        Tue,  5 Apr 2022 09:47:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E67C385A2;
-        Tue,  5 Apr 2022 09:47:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A536179E;
+        Tue,  5 Apr 2022 10:11:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E80E3C385A1;
+        Tue,  5 Apr 2022 10:11:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152051;
-        bh=H/Bje5hmDtCNNdNb6F1c/bsu09pr84sD2glYE/vcp/I=;
+        s=korg; t=1649153504;
+        bh=+tmigAPgxOUXyG8vpQNW9jGjOLFsVPcicykoJQBLNEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n34SxCyMYE4G3uCImPwO0n0ghUQFcx8wSdrV38E2w604haFZaVNSWVcP9DMg5PaTw
-         B8UBLBm0vdoeJIE748KQZkVG9e1gJpMVxbeAFVWfiaImLv7azccXvV7bMHwL7xwIxR
-         eoOnZwApbwParEDFc1SMSjubz81dx/liEWmV1+k8=
+        b=HDySaSklepmCmz+IAQq3fbIIhcA6PTVjViPgszJ84Ygz1ryrdIZqU5dkC2ljIL4AC
+         tErCwK9K9VYmv7NShSQMz+50aWI2i85O1YNKsdT96uTdvCmqmk1OH4B77AiG5jTTFN
+         pEjNKxK2tUNDLzJ2xUJzhmElpowuabnusR/BhD+I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 637/913] pinctrl: microchip-sgpio: lock RMW access
-Date:   Tue,  5 Apr 2022 09:28:19 +0200
-Message-Id: <20220405070358.935138311@linuxfoundation.org>
+Subject: [PATCH 5.10 206/599] soc: qcom: ocmem: Fix missing put_device() call in of_get_ocmem
+Date:   Tue,  5 Apr 2022 09:28:20 +0200
+Message-Id: <20220405070304.971991708@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,108 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 7996c5f5ec7a20b3f6b8fae93fcf3cb8f1c01743 ]
+[ Upstream commit 0ff027027e05a866491bbb53494f0e2a61354c85 ]
 
-Protect any RMW access to the registers by a spinlock.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling path.
 
-Fixes: 7e5ea974e61c ("pinctrl: pinctrl-microchip-sgpio: Add pinctrl driver for Microsemi Serial GPIO")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220226204507.2511633-2-michael@walle.cc
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 01f937ffc468 ("soc: qcom: ocmem: don't return NULL in of_get_ocmem")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220107073126.2335-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-microchip-sgpio.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/soc/qcom/ocmem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-index 78765faa245a..dfa374195694 100644
---- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
-+++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-@@ -18,6 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/property.h>
- #include <linux/reset.h>
-+#include <linux/spinlock.h>
- 
- #include "core.h"
- #include "pinconf.h"
-@@ -115,6 +116,7 @@ struct sgpio_priv {
- 	u32 clock;
- 	u32 __iomem *regs;
- 	const struct sgpio_properties *properties;
-+	spinlock_t lock;
- };
- 
- struct sgpio_port_addr {
-@@ -216,6 +218,7 @@ static void sgpio_output_set(struct sgpio_priv *priv,
- 			     int value)
- {
- 	unsigned int bit = SGPIO_SRC_BITS * addr->bit;
-+	unsigned long flags;
- 	u32 clr, set;
- 
- 	switch (priv->properties->arch) {
-@@ -234,7 +237,10 @@ static void sgpio_output_set(struct sgpio_priv *priv,
- 	default:
- 		return;
+diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
+index f1875dc31ae2..85f82e195ef8 100644
+--- a/drivers/soc/qcom/ocmem.c
++++ b/drivers/soc/qcom/ocmem.c
+@@ -206,6 +206,7 @@ struct ocmem *of_get_ocmem(struct device *dev)
+ 	ocmem = platform_get_drvdata(pdev);
+ 	if (!ocmem) {
+ 		dev_err(dev, "Cannot get ocmem\n");
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-ENODEV);
  	}
-+
-+	spin_lock_irqsave(&priv->lock, flags);
- 	sgpio_clrsetbits(priv, REG_PORT_CONFIG, addr->port, clr, set);
-+	spin_unlock_irqrestore(&priv->lock, flags);
- }
- 
- static int sgpio_output_get(struct sgpio_priv *priv,
-@@ -562,10 +568,13 @@ static void microchip_sgpio_irq_settype(struct irq_data *data,
- 	struct sgpio_bank *bank = gpiochip_get_data(chip);
- 	unsigned int gpio = irqd_to_hwirq(data);
- 	struct sgpio_port_addr addr;
-+	unsigned long flags;
- 	u32 ena;
- 
- 	sgpio_pin_to_addr(bank->priv, gpio, &addr);
- 
-+	spin_lock_irqsave(&bank->priv->lock, flags);
-+
- 	/* Disable interrupt while changing type */
- 	ena = sgpio_readl(bank->priv, REG_INT_ENABLE, addr.bit);
- 	sgpio_writel(bank->priv, ena & ~BIT(addr.port), REG_INT_ENABLE, addr.bit);
-@@ -582,6 +591,8 @@ static void microchip_sgpio_irq_settype(struct irq_data *data,
- 
- 	/* Possibly re-enable interrupts */
- 	sgpio_writel(bank->priv, ena, REG_INT_ENABLE, addr.bit);
-+
-+	spin_unlock_irqrestore(&bank->priv->lock, flags);
- }
- 
- static void microchip_sgpio_irq_setreg(struct irq_data *data,
-@@ -592,13 +603,16 @@ static void microchip_sgpio_irq_setreg(struct irq_data *data,
- 	struct sgpio_bank *bank = gpiochip_get_data(chip);
- 	unsigned int gpio = irqd_to_hwirq(data);
- 	struct sgpio_port_addr addr;
-+	unsigned long flags;
- 
- 	sgpio_pin_to_addr(bank->priv, gpio, &addr);
- 
-+	spin_lock_irqsave(&bank->priv->lock, flags);
- 	if (clear)
- 		sgpio_clrsetbits(bank->priv, reg, addr.bit, BIT(addr.port), 0);
- 	else
- 		sgpio_clrsetbits(bank->priv, reg, addr.bit, 0, BIT(addr.port));
-+	spin_unlock_irqrestore(&bank->priv->lock, flags);
- }
- 
- static void microchip_sgpio_irq_mask(struct irq_data *data)
-@@ -814,6 +828,7 @@ static int microchip_sgpio_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	priv->dev = dev;
-+	spin_lock_init(&priv->lock);
- 
- 	reset = devm_reset_control_get_optional_shared(&pdev->dev, "switch");
- 	if (IS_ERR(reset))
+ 	return ocmem;
 -- 
 2.34.1
 

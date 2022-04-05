@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628264F4E4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A45B4F4EB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588666AbiDFAQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S1836316AbiDFAfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242983AbiDEKfX (ORCPT
+        with ESMTP id S1354047AbiDEKLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552015159C;
-        Tue,  5 Apr 2022 03:21:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2384C43B;
+        Tue,  5 Apr 2022 02:56:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C1D0DCE1C9D;
-        Tue,  5 Apr 2022 10:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE301C385A1;
-        Tue,  5 Apr 2022 10:21:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 882ED6157A;
+        Tue,  5 Apr 2022 09:56:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADCFC385A2;
+        Tue,  5 Apr 2022 09:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154071;
-        bh=GJWTx2va9kVPJ+UsHarwUFYycQHMaT1jG3zkI1xGkhM=;
+        s=korg; t=1649152617;
+        bh=UO2eg/kU3zQNVWeY1pHzVEaHjxnStJIMnFDNAI8p7yE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q55aI/fAz+Fx406NumGvvgsXOg9L4mTrGSdLnUHK5xs9/8pFzFR6HH8g8b7+PEb5z
-         Sgle4GO3KJBTknA3/FOCg2WO1RWgZuQGbbmR2sl5DbZswBhQfW7b5bK13ZAWUaGEN0
-         PBz0DJobBFjeAFgFX0/e7kE8ymE3FDfEufo5Br6w=
+        b=xQ7iOwh3k3EzqvxYH1MLniPG8AuFbpqTq81ZZGKAUwYsNWqWnQudD5XN1F1t22+5e
+         +ef4dqMX1GVg+ZuBai25h4mKTUnowogYDsmWTy03m5wpItFQPx7YgYYVdcM8d1e045
+         WCC8RJqMAKax0N/FR0kMaxSnNydK/F6sZYQDRCB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 410/599] clk: loongson1: Terminate clk_div_table with sentinel element
+        Xiaolong Huang <butterflyhuangxx@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.15 842/913] rxrpc: fix some null-ptr-deref bugs in server_key.c
 Date:   Tue,  5 Apr 2022 09:31:44 +0200
-Message-Id: <20220405070311.033626747@linuxfoundation.org>
+Message-Id: <20220405070405.068531899@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-[ Upstream commit 3eb00f89162e80083dfcaa842468b510462cfeaa ]
+commit ff8376ade4f668130385839cef586a0990f8ef87 upstream.
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div = 0).
+Some function calls are not implemented in rxrpc_no_security, there are
+preparse_server_key, free_preparse_server_key and destroy_server_key.
+When rxrpc security type is rxrpc_no_security, user can easily trigger a
+null-ptr-deref bug via ioctl. So judgment should be added to prevent it
 
-Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Link: https://lore.kernel.org/r/20220218000922.134857-3-j.neuschaefer@gmx.net
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The crash log:
+user@syzkaller:~$ ./rxrpc_preparse_s
+[   37.956878][T15626] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[   37.957645][T15626] #PF: supervisor instruction fetch in kernel mode
+[   37.958229][T15626] #PF: error_code(0x0010) - not-present page
+[   37.958762][T15626] PGD 4aadf067 P4D 4aadf067 PUD 4aade067 PMD 0
+[   37.959321][T15626] Oops: 0010 [#1] PREEMPT SMP
+[   37.959739][T15626] CPU: 0 PID: 15626 Comm: rxrpc_preparse_ Not tainted 5.17.0-01442-gb47d5a4f6b8d #43
+[   37.960588][T15626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
+[   37.961474][T15626] RIP: 0010:0x0
+[   37.961787][T15626] Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+[   37.962480][T15626] RSP: 0018:ffffc9000d9abdc0 EFLAGS: 00010286
+[   37.963018][T15626] RAX: ffffffff84335200 RBX: ffff888012a1ce80 RCX: 0000000000000000
+[   37.963727][T15626] RDX: 0000000000000000 RSI: ffffffff84a736dc RDI: ffffc9000d9abe48
+[   37.964425][T15626] RBP: ffffc9000d9abe48 R08: 0000000000000000 R09: 0000000000000002
+[   37.965118][T15626] R10: 000000000000000a R11: f000000000000000 R12: ffff888013145680
+[   37.965836][T15626] R13: 0000000000000000 R14: ffffffffffffffec R15: ffff8880432aba80
+[   37.966441][T15626] FS:  00007f2177907700(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
+[   37.966979][T15626] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   37.967384][T15626] CR2: ffffffffffffffd6 CR3: 000000004aaf1000 CR4: 00000000000006f0
+[   37.967864][T15626] Call Trace:
+[   37.968062][T15626]  <TASK>
+[   37.968240][T15626]  rxrpc_preparse_s+0x59/0x90
+[   37.968541][T15626]  key_create_or_update+0x174/0x510
+[   37.968863][T15626]  __x64_sys_add_key+0x139/0x1d0
+[   37.969165][T15626]  do_syscall_64+0x35/0xb0
+[   37.969451][T15626]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   37.969824][T15626] RIP: 0033:0x43a1f9
+
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Tested-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Acked-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2022-March/005069.html
+Fixes: 12da59fcab5a ("rxrpc: Hand server key parsing off to the security class")
+Link: https://lore.kernel.org/r/164865013439.2941502.8966285221215590921.stgit@warthog.procyon.org.uk
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/loongson1/clk-loongson1c.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/rxrpc/server_key.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-index 703f87622cf5..1ebf740380ef 100644
---- a/drivers/clk/loongson1/clk-loongson1c.c
-+++ b/drivers/clk/loongson1/clk-loongson1c.c
-@@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
- 	[1] = { .val = 1, .div = 4 },
- 	[2] = { .val = 2, .div = 3 },
- 	[3] = { .val = 3, .div = 3 },
-+	[4] = { /* sentinel */ }
- };
+--- a/net/rxrpc/server_key.c
++++ b/net/rxrpc/server_key.c
+@@ -84,6 +84,9 @@ static int rxrpc_preparse_s(struct key_p
  
- void __init ls1x_clk_init(void)
--- 
-2.34.1
-
+ 	prep->payload.data[1] = (struct rxrpc_security *)sec;
+ 
++	if (!sec->preparse_server_key)
++		return -EINVAL;
++
+ 	return sec->preparse_server_key(prep);
+ }
+ 
+@@ -91,7 +94,7 @@ static void rxrpc_free_preparse_s(struct
+ {
+ 	const struct rxrpc_security *sec = prep->payload.data[1];
+ 
+-	if (sec)
++	if (sec && sec->free_preparse_server_key)
+ 		sec->free_preparse_server_key(prep);
+ }
+ 
+@@ -99,7 +102,7 @@ static void rxrpc_destroy_s(struct key *
+ {
+ 	const struct rxrpc_security *sec = key->payload.data[1];
+ 
+-	if (sec)
++	if (sec && sec->destroy_server_key)
+ 		sec->destroy_server_key(key);
+ }
+ 
 
 

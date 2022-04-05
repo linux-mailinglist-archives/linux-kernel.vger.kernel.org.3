@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE99E4F3FD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC12B4F3DD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387025AbiDEPQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S244984AbiDEMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346728AbiDEJpX (ORCPT
+        with ESMTP id S245014AbiDEIxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E1DB495;
-        Tue,  5 Apr 2022 02:31:33 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0507ECDD;
+        Tue,  5 Apr 2022 01:49:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B443F616AE;
-        Tue,  5 Apr 2022 09:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD743C385A3;
-        Tue,  5 Apr 2022 09:31:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9767360FFB;
+        Tue,  5 Apr 2022 08:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B02C385A0;
+        Tue,  5 Apr 2022 08:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151092;
-        bh=yV2hPjB/jtmxLEg8vq2KEb0Zc5FmKz4KI8HVcPMVrYE=;
+        s=korg; t=1649148568;
+        bh=XoLi14Jvj17Qay94bQj6Gt2sk1ZC6Zgsi2JS+PwQfOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s08NUPWJCvfZnHH9dQgj0o+xETptsz9s3mM6+UE8wBJXimTavkDnFbya+hiADxPbC
-         ZZ1ExCMC5UQ2g53F8hXmh5NxvB13VM+zcHD4hmrFXZuV+wxsoF+NA4KEh1K2eT0otL
-         bBoli8PvJwJ9xBkeQJDRQMyDQ2tvW32a31PZwra8=
+        b=orwezfakQtyGZw2sgPi68j8gXDoZp6jJVyFGy4CA/ilzWn3b29hc+1XSy5CQovqPh
+         rny3I5VhZW2SqUOxDf70IChreMZ2AR4h+dv05C+EJ8zNFUOOY46hNGBGgG3oxgWN42
+         qSodbzr1iWnLD6B/6SmzluEiVoFB+Qy6PrjpS57s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mel Gorman <mgorman@techsingularity.net>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 253/913] sched/fair: Improve consistency of allowed NUMA balance calculations
-Date:   Tue,  5 Apr 2022 09:21:55 +0200
-Message-Id: <20220405070347.439697995@linuxfoundation.org>
+Subject: [PATCH 5.16 0403/1017] drm/bridge: nwl-dsi: Fix PM disable depth imbalance in nwl_dsi_probe
+Date:   Tue,  5 Apr 2022 09:21:56 +0200
+Message-Id: <20220405070406.249577530@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mel Gorman <mgorman@techsingularity.net>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 2cfb7a1b031b0e816af7a6ee0c6ab83b0acdf05a ]
+[ Upstream commit b146e343a9e05605b491b1bf4a2b62a39d5638d8 ]
 
-There are inconsistencies when determining if a NUMA imbalance is allowed
-that should be corrected.
+The pm_runtime_enable will increase power disable depth.
+Thus a pairing decrement is needed on the error handling
+path to keep it balanced according to context.
 
-o allow_numa_imbalance changes types and is not always examining
-  the destination group so both the type should be corrected as
-  well as the naming.
-o find_idlest_group uses the sched_domain's weight instead of the
-  group weight which is different to find_busiest_group
-o find_busiest_group uses the source group instead of the destination
-  which is different to task_numa_find_cpu
-o Both find_idlest_group and find_busiest_group should account
-  for the number of running tasks if a move was allowed to be
-  consistent with task_numa_find_cpu
-
-Fixes: 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA nodes")
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Link: https://lore.kernel.org/r/20220208094334.16379-2-mgorman@techsingularity.net
+Fixes: 44cfc6233447 ("drm/bridge: Add NWL MIPI DSI host controller support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220105104826.1418-1-linmq006@gmail.com
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/bridge/nwl-dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6420580f2730..02766f3fe206 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9005,9 +9005,10 @@ static bool update_pick_idlest(struct sched_group *idlest,
-  * This is an approximation as the number of running tasks may not be
-  * related to the number of busy CPUs due to sched_setaffinity.
-  */
--static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-+static inline bool
-+allow_numa_imbalance(unsigned int running, unsigned int weight)
- {
--	return (dst_running < (dst_weight >> 2));
-+	return (running < (weight >> 2));
- }
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index af07eeb47ca0..6e484d836cfe 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -1204,6 +1204,7 @@ static int nwl_dsi_probe(struct platform_device *pdev)
  
- /*
-@@ -9141,12 +9142,13 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
- 				return idlest;
- #endif
- 			/*
--			 * Otherwise, keep the task on this node to stay close
--			 * its wakeup source and improve locality. If there is
--			 * a real need of migration, periodic load balance will
--			 * take care of it.
-+			 * Otherwise, keep the task close to the wakeup source
-+			 * and improve locality if the number of running tasks
-+			 * would remain below threshold where an imbalance is
-+			 * allowed. If there is a real need of migration,
-+			 * periodic load balance will take care of it.
- 			 */
--			if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->span_weight))
-+			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, local_sgs.group_weight))
- 				return NULL;
- 		}
- 
-@@ -9352,7 +9354,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 		/* Consider allowing a small imbalance between NUMA groups */
- 		if (env->sd->flags & SD_NUMA) {
- 			env->imbalance = adjust_numa_imbalance(env->imbalance,
--				busiest->sum_nr_running, busiest->group_weight);
-+				local->sum_nr_running + 1, local->group_weight);
- 		}
- 
- 		return;
+ 	ret = nwl_dsi_select_input(dsi);
+ 	if (ret < 0) {
++		pm_runtime_disable(dev);
+ 		mipi_dsi_host_unregister(&dsi->dsi_host);
+ 		return ret;
+ 	}
 -- 
 2.34.1
 

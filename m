@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC784F43BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649DD4F4434
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382305AbiDEUEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S1380065AbiDEU2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573551AbiDETWf (ORCPT
+        with ESMTP id S1573557AbiDETWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65443B2B0;
-        Tue,  5 Apr 2022 12:20:36 -0700 (PDT)
+        Tue, 5 Apr 2022 15:22:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B844F3F899;
+        Tue,  5 Apr 2022 12:20:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59D9EB81F6B;
-        Tue,  5 Apr 2022 19:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611E1C385A0;
-        Tue,  5 Apr 2022 19:20:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2623ECE1FB8;
+        Tue,  5 Apr 2022 19:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA51CC385A0;
+        Tue,  5 Apr 2022 19:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186434;
-        bh=WUMUKws9bRjZTrkHwsGynA7tUQA6j+UO+nipvx8/Pxc=;
+        s=k20201202; t=1649186439;
+        bh=aGm/yYftJrMv8Wm0z7akYN9TTrAtUh82JqGdEA2ekKU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ViqzZ1njQjHURsQFB+bQws/EXFJXBVZ0713Vy6dx/7ZW2JLu/xJiUvM59gv19WtuH
-         jfUpil6gly2i2pNknMzzqQLgdSP/9zSp1jWAsMzq31/yBk1ZmtSHwQo8W93YF+gpoH
-         q6gA5ImURC+5w6E7ZP7KxFXbq5yPmvGsDpR55YX9rpAnUorWYz8YyWWxca89/CYEGb
-         dCmAQsLRhI+xEKB9lYpcxr7hUR7Dp1hQy01Plzo+DQB9eu66rhzwF1tqLuh0RVcn/E
-         8dUtp6FjBKqDcfNtEjqOTl56bgrKgfjt0ySudygn2hIFJ1pt3dBuGefss3n3vS2CxR
-         5uhc00PJzXdlQ==
+        b=NKs1Yjzs98L8zGRRD0FwzP0xrAX0EHlKhwSsFbQXrX9BBZav9La1egDgcBTZ/jvwi
+         NK2BWI0205CvUtsRTaOKah9SErtfgrKJby9ltId9RE8vBdZLKVVkNiZXr7HifE+w7i
+         /3OgKwab9ZpJH2mHMUfrLu59chPIn6/KRr9Ae85+Qpz41FGwqurBQYvkDDWITlUFQ9
+         G2i3w9IMdIS+wkv/c9dcmPAEg8ksaNnbS1ywDpp3BrW/AXFJQDhgYIdK+Wts5KG0tq
+         I4bbEgTFPNoo4wOa3asis/p4fI/3Rp0XZNu8ZRPP6WBwfOr6rUkLNJbcXhXBq0bq3p
+         jEMuvqeP5AhzQ==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Subject: [PATCH v13 02/59] libceph: define struct ceph_sparse_extent and add some helpers
-Date:   Tue,  5 Apr 2022 15:19:33 -0400
-Message-Id: <20220405192030.178326-3-jlayton@kernel.org>
+        lhenriques@suse.de, Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH v13 08/59] fs: change test in inode_insert5 for adding to the sb list
+Date:   Tue,  5 Apr 2022 15:19:39 -0400
+Message-Id: <20220405192030.178326-9-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,124 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the OSD sends back a sparse read reply, it contains an array of
-these structures. Define the structure and add a couple of helpers for
-dealing with them.
+The inode_insert5 currently looks at I_CREATING to decide whether to
+insert the inode into the sb list. This test is a bit ambiguous though
+as I_CREATING state is not directly related to that list.
 
-Also add a place in struct ceph_osd_req_op to store the extent buffer,
-and code to free it if it's populated when the req is torn down.
+This test is also problematic for some upcoming ceph changes to add
+fscrypt support. We need to be able to allocate an inode using new_inode
+and insert it into the hash later if we end up using it, and doing that
+now means that we double add it and corrupt the list.
 
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
+What we really want to know in this test is whether the inode is already
+in its superblock list, and then add it if it isn't. Have it test for
+list_empty instead and ensure that we always initialize the list by
+doing it in inode_init_once. It's only ever removed from the list with
+list_del_init, so that should be sufficient.
+
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- include/linux/ceph/osd_client.h | 43 ++++++++++++++++++++++++++++++++-
- net/ceph/osd_client.c           | 13 ++++++++++
- 2 files changed, 55 insertions(+), 1 deletion(-)
+ fs/inode.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/ceph/osd_client.h b/include/linux/ceph/osd_client.h
-index 3122c1a3205f..1dd02240d00d 100644
---- a/include/linux/ceph/osd_client.h
-+++ b/include/linux/ceph/osd_client.h
-@@ -29,6 +29,17 @@ typedef void (*ceph_osdc_callback_t)(struct ceph_osd_request *);
- 
- #define CEPH_HOMELESS_OSD	-1
- 
-+/*
-+ * A single extent in a SPARSE_READ reply.
-+ *
-+ * Note that these come from the OSD as little-endian values. On BE arches,
-+ * we convert them in-place after receipt.
-+ */
-+struct ceph_sparse_extent {
-+	u64	off;
-+	u64	len;
-+} __packed;
-+
- /*
-  * A given osd we're communicating with.
-  *
-@@ -104,6 +115,8 @@ struct ceph_osd_req_op {
- 			u64 offset, length;
- 			u64 truncate_size;
- 			u32 truncate_seq;
-+			int sparse_ext_cnt;
-+			struct ceph_sparse_extent *sparse_ext;
- 			struct ceph_osd_data osd_data;
- 		} extent;
- 		struct {
-@@ -507,6 +520,20 @@ extern struct ceph_osd_request *ceph_osdc_new_request(struct ceph_osd_client *,
- 				      u32 truncate_seq, u64 truncate_size,
- 				      bool use_mempool);
- 
-+int __ceph_alloc_sparse_ext_map(struct ceph_osd_req_op *op, int cnt);
-+
-+/*
-+ * How big an extent array should we preallocate for a sparse read? This is
-+ * just a starting value.  If we get more than this back from the OSD, the
-+ * receiver will reallocate.
-+ */
-+#define CEPH_SPARSE_EXT_ARRAY_INITIAL  16
-+
-+static inline int ceph_alloc_sparse_ext_map(struct ceph_osd_req_op *op)
-+{
-+	return __ceph_alloc_sparse_ext_map(op, CEPH_SPARSE_EXT_ARRAY_INITIAL);
-+}
-+
- extern void ceph_osdc_get_request(struct ceph_osd_request *req);
- extern void ceph_osdc_put_request(struct ceph_osd_request *req);
- 
-@@ -562,5 +589,19 @@ int ceph_osdc_list_watchers(struct ceph_osd_client *osdc,
- 			    struct ceph_object_locator *oloc,
- 			    struct ceph_watch_item **watchers,
- 			    u32 *num_watchers);
--#endif
- 
-+/* Find offset into the buffer of the end of the extent map */
-+static inline u64 ceph_sparse_ext_map_end(struct ceph_osd_req_op *op)
-+{
-+	struct ceph_sparse_extent *ext;
-+
-+	/* No extents? No data */
-+	if (op->extent.sparse_ext_cnt == 0)
-+		return 0;
-+
-+	ext = &op->extent.sparse_ext[op->extent.sparse_ext_cnt - 1];
-+
-+	return ext->off + ext->len - op->extent.offset;
-+}
-+
-+#endif
-diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
-index 17c792b32343..c150683f2a2f 100644
---- a/net/ceph/osd_client.c
-+++ b/net/ceph/osd_client.c
-@@ -378,6 +378,7 @@ static void osd_req_op_data_release(struct ceph_osd_request *osd_req,
- 	case CEPH_OSD_OP_READ:
- 	case CEPH_OSD_OP_WRITE:
- 	case CEPH_OSD_OP_WRITEFULL:
-+		kfree(op->extent.sparse_ext);
- 		ceph_osd_data_release(&op->extent.osd_data);
- 		break;
- 	case CEPH_OSD_OP_CALL:
-@@ -1141,6 +1142,18 @@ struct ceph_osd_request *ceph_osdc_new_request(struct ceph_osd_client *osdc,
+diff --git a/fs/inode.c b/fs/inode.c
+index 9d9b422504d1..743420a55e5f 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -422,6 +422,7 @@ void inode_init_once(struct inode *inode)
+ 	INIT_LIST_HEAD(&inode->i_io_list);
+ 	INIT_LIST_HEAD(&inode->i_wb_list);
+ 	INIT_LIST_HEAD(&inode->i_lru);
++	INIT_LIST_HEAD(&inode->i_sb_list);
+ 	__address_space_init_once(&inode->i_data);
+ 	i_size_ordered_init(inode);
  }
- EXPORT_SYMBOL(ceph_osdc_new_request);
+@@ -1021,7 +1022,6 @@ struct inode *new_inode_pseudo(struct super_block *sb)
+ 		spin_lock(&inode->i_lock);
+ 		inode->i_state = 0;
+ 		spin_unlock(&inode->i_lock);
+-		INIT_LIST_HEAD(&inode->i_sb_list);
+ 	}
+ 	return inode;
+ }
+@@ -1165,7 +1165,6 @@ struct inode *inode_insert5(struct inode *inode, unsigned long hashval,
+ {
+ 	struct hlist_head *head = inode_hashtable + hash(inode->i_sb, hashval);
+ 	struct inode *old;
+-	bool creating = inode->i_state & I_CREATING;
  
-+int __ceph_alloc_sparse_ext_map(struct ceph_osd_req_op *op, int cnt)
-+{
-+	op->extent.sparse_ext_cnt = cnt;
-+	op->extent.sparse_ext = kmalloc_array(cnt,
-+					      sizeof(*op->extent.sparse_ext),
-+					      GFP_NOFS);
-+	if (!op->extent.sparse_ext)
-+		return -ENOMEM;
-+	return 0;
-+}
-+EXPORT_SYMBOL(__ceph_alloc_sparse_ext_map);
+ again:
+ 	spin_lock(&inode_hash_lock);
+@@ -1199,7 +1198,13 @@ struct inode *inode_insert5(struct inode *inode, unsigned long hashval,
+ 	inode->i_state |= I_NEW;
+ 	hlist_add_head_rcu(&inode->i_hash, head);
+ 	spin_unlock(&inode->i_lock);
+-	if (!creating)
 +
- /*
-  * We keep osd requests in an rbtree, sorted by ->r_tid.
-  */
++	/*
++	 * Add it to the list if it wasn't already in,
++	 * e.g. new_inode. We hold I_NEW at this point, so
++	 * we should be safe to test i_sb_list locklessly.
++	 */
++	if (list_empty(&inode->i_sb_list))
+ 		inode_sb_list_add(inode);
+ unlock:
+ 	spin_unlock(&inode_hash_lock);
 -- 
 2.35.1
 

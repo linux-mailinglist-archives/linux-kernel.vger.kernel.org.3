@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1115D4F3085
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307D14F30D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350772AbiDEJ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S1345622AbiDEJnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbiDEIWM (ORCPT
+        with ESMTP id S239616AbiDEIUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:22:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029522BDA;
-        Tue,  5 Apr 2022 01:19:36 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B730206;
+        Tue,  5 Apr 2022 01:17:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587D9609D0;
-        Tue,  5 Apr 2022 08:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60106C385A1;
-        Tue,  5 Apr 2022 08:19:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40B53B81A32;
+        Tue,  5 Apr 2022 08:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC861C385A1;
+        Tue,  5 Apr 2022 08:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146775;
-        bh=gLx6LyEARQOPG7EoCVpdTIUT4WgJnC0gWdY0sjo1HKo=;
+        s=korg; t=1649146665;
+        bh=hOasPOHGeymPIR9CFGjXih8tpW9A6b/MeZtf9fDUetE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xt478UPJIelN95JpjNch9NVNNL7OvIVuVZLQhl56mB7nLdMV0Zj8PPpZri6n0pUTC
-         /88ZQlkFT0VPLvgJLbocr4rVjOcOWgyR3WB5SFcUL/tqwIupZN58+EYtFzi/DC087P
-         7r6teU6pXOTGZ2skWfOoJf99SPe8ozEz49lBihAU=
+        b=KIPgJo39hNDl5k/MQ2uJcYBnPXZl8culwnG/eCyueGWw4uQ1OchW5IFQnoDunCSXE
+         3gCVVUMCCOxCXvcwwaAMBdkBIQXdW4tbGFTQa3mIc05Iv22ytwSBU13OsPOac/b5AV
+         VhuRvFriGeqDdydEjdj5mm6iRXKUcKtGTnkt2J2M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Srujana Challa <schalla@marvell.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0836/1126] crypto: octeontx2 - CN10K CPT to RNM workaround
-Date:   Tue,  5 Apr 2022 09:26:23 +0200
-Message-Id: <20220405070432.095684505@linuxfoundation.org>
+Subject: [PATCH 5.17 0837/1126] gcc-plugins/stackleak: Exactly match strings instead of prefixes
+Date:   Tue,  5 Apr 2022 09:26:24 +0200
+Message-Id: <20220405070432.124437321@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,88 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srujana Challa <schalla@marvell.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit bd9305b0cb69bfe98885a63a9e6231ae92e822e2 ]
+[ Upstream commit 27e9faf415dbf94af19b9c827842435edbc1fbbc ]
 
-When software sets CPT_AF_CTL[RNM_REQ_EN]=1 and RNM in not producing
-entropy(i.e., RNM_ENTROPY_STATUS[NORMAL_CNT] < 0x40), the first cycle of
-the response may be lost due to a conditional clocking issue. Due to
-this, the subsequent random number stream will be corrupted. So, this
-patch adds support to ensure RNM_ENTROPY_STATUS[NORMAL_CNT] = 0x40
-before writing CPT_AF_CTL[RNM_REQ_EN] = 1, as a workaround.
+Since STRING_CST may not be NUL terminated, strncmp() was used for check
+for equality. However, this may lead to mismatches for longer section
+names where the start matches the tested-for string. Test for exact
+equality by checking for the presences of NUL termination.
 
-Signed-off-by: Srujana Challa <schalla@marvell.com>
-Signed-off-by: Shijith Thotton <sthotton@marvell.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Alexander Popov <alex.popov@linux.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../marvell/octeontx2/otx2_cptpf_ucode.c      | 43 ++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ scripts/gcc-plugins/stackleak_plugin.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-index 1b4d425bbf0e..7fd4503d9cfc 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-@@ -1076,6 +1076,39 @@ static void delete_engine_grps(struct pci_dev *pdev,
- 		delete_engine_group(&pdev->dev, &eng_grps->grp[i]);
+diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
+index e9db7dcb3e5f..b04aa8e91a41 100644
+--- a/scripts/gcc-plugins/stackleak_plugin.c
++++ b/scripts/gcc-plugins/stackleak_plugin.c
+@@ -429,6 +429,23 @@ static unsigned int stackleak_cleanup_execute(void)
+ 	return 0;
  }
  
-+#define PCI_DEVID_CN10K_RNM 0xA098
-+#define RNM_ENTROPY_STATUS  0x8
-+
-+static void rnm_to_cpt_errata_fixup(struct device *dev)
++/*
++ * STRING_CST may or may not be NUL terminated:
++ * https://gcc.gnu.org/onlinedocs/gccint/Constant-expressions.html
++ */
++static inline bool string_equal(tree node, const char *string, int length)
 +{
-+	struct pci_dev *pdev;
-+	void __iomem *base;
-+	int timeout = 5000;
-+
-+	pdev = pci_get_device(PCI_VENDOR_ID_CAVIUM, PCI_DEVID_CN10K_RNM, NULL);
-+	if (!pdev)
-+		return;
-+
-+	base = pci_ioremap_bar(pdev, 0);
-+	if (!base)
-+		goto put_pdev;
-+
-+	while ((readq(base + RNM_ENTROPY_STATUS) & 0x7F) != 0x40) {
-+		cpu_relax();
-+		udelay(1);
-+		timeout--;
-+		if (!timeout) {
-+			dev_warn(dev, "RNM is not producing entropy\n");
-+			break;
-+		}
-+	}
-+
-+	iounmap(base);
-+
-+put_pdev:
-+	pci_dev_put(pdev);
++	if (TREE_STRING_LENGTH(node) < length)
++		return false;
++	if (TREE_STRING_LENGTH(node) > length + 1)
++		return false;
++	if (TREE_STRING_LENGTH(node) == length + 1 &&
++	    TREE_STRING_POINTER(node)[length] != '\0')
++		return false;
++	return !memcmp(TREE_STRING_POINTER(node), string, length);
 +}
++#define STRING_EQUAL(node, str)	string_equal(node, str, strlen(str))
 +
- int otx2_cpt_get_eng_grp(struct otx2_cpt_eng_grps *eng_grps, int eng_type)
+ static bool stackleak_gate(void)
  {
+ 	tree section;
+@@ -438,13 +455,13 @@ static bool stackleak_gate(void)
+ 	if (section && TREE_VALUE(section)) {
+ 		section = TREE_VALUE(TREE_VALUE(section));
  
-@@ -1189,9 +1222,17 @@ int otx2_cpt_create_eng_grps(struct otx2_cptpf_dev *cptpf,
+-		if (!strncmp(TREE_STRING_POINTER(section), ".init.text", 10))
++		if (STRING_EQUAL(section, ".init.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".devinit.text", 13))
++		if (STRING_EQUAL(section, ".devinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".cpuinit.text", 13))
++		if (STRING_EQUAL(section, ".cpuinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
++		if (STRING_EQUAL(section, ".meminit.text"))
+ 			return false;
+ 	}
  
- 	if (is_dev_otx2(pdev))
- 		goto unlock;
-+
-+	/*
-+	 * Ensure RNM_ENTROPY_STATUS[NORMAL_CNT] = 0x40 before writing
-+	 * CPT_AF_CTL[RNM_REQ_EN] = 1 as a workaround for HW errata.
-+	 */
-+	rnm_to_cpt_errata_fixup(&pdev->dev);
-+
- 	/*
- 	 * Configure engine group mask to allow context prefetching
--	 * for the groups.
-+	 * for the groups and enable random number request, to enable
-+	 * CPT to request random numbers from RNM.
- 	 */
- 	otx2_cpt_write_af_reg(&cptpf->afpf_mbox, pdev, CPT_AF_CTL,
- 			      OTX2_CPT_ALL_ENG_GRPS_MASK << 3 | BIT_ULL(16),
 -- 
 2.34.1
 

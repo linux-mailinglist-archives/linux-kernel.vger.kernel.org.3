@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441784F453D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A364D4F4482
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387384AbiDEOb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S1383602AbiDEORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240502AbiDEJe1 (ORCPT
+        with ESMTP id S239523AbiDEJdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:34:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09FA85BD3;
-        Tue,  5 Apr 2022 02:24:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C24E39B;
+        Tue,  5 Apr 2022 02:22:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EE1F61574;
-        Tue,  5 Apr 2022 09:24:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918E4C385A2;
-        Tue,  5 Apr 2022 09:24:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAEA61574;
+        Tue,  5 Apr 2022 09:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38CA9C385A0;
+        Tue,  5 Apr 2022 09:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150642;
-        bh=hzFTItGk6MhMLG5gB5eFJka/S3aQMbJUpwbjLiXXVC0=;
+        s=korg; t=1649150539;
+        bh=8QYO2AMThjA538+hdzVx+um+o/IV7h3ewMsPaWlZaLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YG9gp4nmXE0t73DZZuXcZ1GVVyeek6TwFcOclTL/n1fqI679eKQDcAfbuZXHoN7zq
-         WCUYVr+quHTWQW+5OAKVoh4XuZhgYO9b9gdXd2Eb1A+I2sXZSlt6db0WS7U3nqyfH2
-         ezEET91yGv/+E3JV8eaqXNsOiOSZ4WCzLo8ydcpQ=
+        b=jSXFWi9jmFSa00VaoRBJjKpTMmidWsZGJqZQuB3DxJq4HiWji1UbLS8GfhqE2odXE
+         vcdruSfBMXxMrQPds/hmjWRkGIElp5LzLKTwBE/ivzOaz/rXNBIcPqkV4uHA+tnnXW
+         f1u5jLel2pUTbWIYyrFQPQxuR9dvX5v4Y0FWz5bA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 090/913] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
-Date:   Tue,  5 Apr 2022 09:19:12 +0200
-Message-Id: <20220405070342.521365590@linuxfoundation.org>
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 093/913] riscv: dts: canaan: Fix SPI3 bus width
+Date:   Tue,  5 Apr 2022 09:19:15 +0200
+Message-Id: <20220405070342.616711474@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,41 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
+commit 6846d656106add3aeefcd6eda0dc885787deaa6e upstream.
 
-To detect for the DMA_NONE (no data transfer) DMA direction,
-sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
-test does not include the ATA_CMD_NCQ_NON_DATA command as this command
-protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
-not as ATA_PROT_NODATA.
+According to the K210 Standalone SDK Programming guide:
+https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf
 
-To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
-direction, use "!ata_is_data()".
+Section 15.4.3.3:
+SPI0 and SPI1 supports: standard, dual, quad and octal transfers.
+SPI3 supports: standard, dual and quad transfers (octal is not supported).
 
-Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
-Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
+In order to support quad transfers (Quad SPI), SPI3 must have four IO wires
+connected to the SPI flash.
+
+Update the device tree to specify the correct bus width.
+
+Tested on maix bit, maix dock and maixduino, which all have the same
+SPI flash (gd25lq128d) connected to SPI3. maix go is untested, but it
+would not make sense for this k210 board to be designed differently.
+
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: 8f5b0e79f3e5 ("riscv: Add SiPeed MAIXDUINO board device tree")
+Fixes: 8194f08bda18 ("riscv: Add SiPeed MAIX GO board device tree")
+Fixes: a40f920964c4 ("riscv: Add SiPeed MAIX DOCK board device tree")
+Fixes: 97c279bcf813 ("riscv: Add SiPeed MAIX BiT board device tree")
 Cc: stable@vger.kernel.org
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/libsas/sas_ata.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/boot/dts/canaan/sipeed_maix_bit.dts  |    2 ++
+ arch/riscv/boot/dts/canaan/sipeed_maix_dock.dts |    2 ++
+ arch/riscv/boot/dts/canaan/sipeed_maix_go.dts   |    2 ++
+ arch/riscv/boot/dts/canaan/sipeed_maixduino.dts |    2 ++
+ 4 files changed, 8 insertions(+)
 
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -197,7 +197,7 @@ static unsigned int sas_ata_qc_issue(str
- 		task->total_xfer_len = qc->nbytes;
- 		task->num_scatter = qc->n_elem;
- 		task->data_dir = qc->dma_dir;
--	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
-+	} else if (!ata_is_data(qc->tf.protocol)) {
- 		task->data_dir = DMA_NONE;
- 	} else {
- 		for_each_sg(qc->sg, sg, qc->n_elem, si)
+--- a/arch/riscv/boot/dts/canaan/sipeed_maix_bit.dts
++++ b/arch/riscv/boot/dts/canaan/sipeed_maix_bit.dts
+@@ -203,6 +203,8 @@
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <50000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
+ 		m25p,fast-read;
+ 		broken-flash-reset;
+ 	};
+--- a/arch/riscv/boot/dts/canaan/sipeed_maix_dock.dts
++++ b/arch/riscv/boot/dts/canaan/sipeed_maix_dock.dts
+@@ -205,6 +205,8 @@
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <50000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
+ 		m25p,fast-read;
+ 		broken-flash-reset;
+ 	};
+--- a/arch/riscv/boot/dts/canaan/sipeed_maix_go.dts
++++ b/arch/riscv/boot/dts/canaan/sipeed_maix_go.dts
+@@ -213,6 +213,8 @@
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <50000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
+ 		m25p,fast-read;
+ 		broken-flash-reset;
+ 	};
+--- a/arch/riscv/boot/dts/canaan/sipeed_maixduino.dts
++++ b/arch/riscv/boot/dts/canaan/sipeed_maixduino.dts
+@@ -178,6 +178,8 @@
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <50000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
+ 		m25p,fast-read;
+ 		broken-flash-reset;
+ 	};
 
 

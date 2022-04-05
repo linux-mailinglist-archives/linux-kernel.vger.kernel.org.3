@@ -2,175 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6232F4F4996
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041F64F4C3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442892AbiDEWT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S239315AbiDEXNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573246AbiDEScj (ORCPT
+        with ESMTP id S1573252AbiDESeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:32:39 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6A813F81
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:30:40 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so275147pjk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G8+4mXlfXEhZHOhFIRvGTNgBOyulQouXw+I2k4OPfSs=;
-        b=JEAiwwWf8T9LZvKvUJKSgjehqTRQAgWTmIg0Kl3BSYJYTC+v/3bm2x1/9Hy8KfSmg+
-         cHSPWpCpQx/B9uyWSDx7KDa583awqWBLkdvoEKwQ/QBUVRp4lZ6Cj73ZO0l8R1jsuMTu
-         f4CTIP1KefeADG3WAL+m7kzbPsENWR2ewqxk3Vv6zcy974PyQLpH4p1GEvsWlPaOBnDD
-         BG/d5Cparj8Y2vpN7tIW/k4gGVthNC5Ac8769ebux1ZwYDdSobMpJ6R2kheemPJpQheC
-         Hjen7QcB7kjlOMvcpc1sK+TrMXslHzsMWklqEGe8pGwPZ2paBwziGZrdbb+U0gJgoIyn
-         aHEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G8+4mXlfXEhZHOhFIRvGTNgBOyulQouXw+I2k4OPfSs=;
-        b=hcEj6KZ6e/i+rZPKeKjNZk5us24nzCkBCwPbndVzCRaGLDlcptwqqFHtJv1kEKmnwh
-         2QSFr5OqkXF98LbG8rRKE265xwLyEtn534MrSf+F4giIENqXTEercm618g3EvCJfE4oO
-         9btpGo+MN3M5F+soYBFspSMzzfXnwdkZzn09h+iSL5qD4l6CIwIZXD+dxaMokT1R5Lkl
-         qsmVftKqHcuoFFyjCOauHw4i3sM21z6qI43yFOiG5DDtoog1vTigTSppre9wsFJ/x9ag
-         SZNU1Za+z+axrl5BXR7B3vhYy9mgRg0KIGQbBzpwP2aZZ2KqSOsB4opZb57q1Ni+GhUp
-         mKoQ==
-X-Gm-Message-State: AOAM532XWeM+ogalsLU8/lEHDG/q/xwWYMAY/uTrHXI0d0RZKfQgfktR
-        CGaxog8ZZDvD8YJlvadvMPxt1A==
-X-Google-Smtp-Source: ABdhPJyua072a4AGX8ZFGYAQtmIMqiU1fY+N03i9KlJ21rU1Sdp03j8ltrsaSuySC/JcuYQKVUW/ZQ==
-X-Received: by 2002:a17:902:8217:b0:156:9c4f:90eb with SMTP id x23-20020a170902821700b001569c4f90ebmr4788820pln.121.1649183440130;
-        Tue, 05 Apr 2022 11:30:40 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i7-20020a628707000000b004fa6eb33b02sm16131023pfe.49.2022.04.05.11.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 11:30:39 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 18:30:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Quentin Perret <qperret@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YkyKywkQYbr9U0CA@google.com>
-References: <YkQzfjgTQaDd2E2T@google.com>
- <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
- <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
- <YksIQYdG41v3KWkr@google.com>
- <Ykslo2eo2eRXrpFR@google.com>
- <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
- <Ykwbqv90C7+8K+Ao@google.com>
- <54acbba9-f4fd-48c1-9028-d596d9f63069@www.fastmail.com>
+        Tue, 5 Apr 2022 14:34:36 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C74813F6F;
+        Tue,  5 Apr 2022 11:32:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hYrH2F9nCHNyaZ/pIuU2C3PCoy/uZVu0EjGMSYJNJgP4S+rMvp/HR09g24MV1jTNyK50iVjrJQQyq0sS0AH+GS0kbcwXHY1L9T+AjRUKYPs66z7QcNNIBwXsNpwWgofGRJxfY1mW/eUUnVXaBzLPjUWBwKYUlM/RFd2PnTOzkmyULc98xJKQkvqz44Gyh9yEi7i6L//hcun5W0TBq/3iCH7hyHas24bv/4PyeGwByyVQsTkAb0rwEsdsTm/ZVHdUxJvXLUToANRGLKnYDwrAIhK/u7q5AXcfIMMMIOhH7FyBqnFieD0Hhxhcmcy1vsdT8d/2JuIpv+oOOa/6RJjBkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zIW66FtLtyRL6AQP7SjLFr33sMFJ1cRKJ151pIJvpo0=;
+ b=hC7jdwHbQvf1aAUB4pKSyHmkLCUMIEPY2+yD5qEyH3JzTu/jFnOrpRODqen0XMgFEs3/pAUWQpNjz1LBlMDHRHxoosz7ZJOO0/LPR6QOsQjNDIU0OIisMtILBKko2NQTnp11aZkF/o32x+AVozKBNv45tpAXHZJ6R5/5ri2UQPKkPURvn3PELNY/ZSy9+mEpq7ciaoNY+E1r2fsU/kfZq5VeJMSZc52QHgxHMiAKdSjvOd8d6MyYiOKh6a1P6LUNNERWBbbrchlrVsnQKbWl9uRCaz+Jog1lUSHSvWIfnZi50hX0Fnz5xl7OHtvlt70huq7UDaO2iNvXSVzOtNoHLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zIW66FtLtyRL6AQP7SjLFr33sMFJ1cRKJ151pIJvpo0=;
+ b=nU7TK2zlBTPExkF6jBxivGliOnNInhvlz8xWH+k/TKF0eqMC7FkKsZ33jzJ1eqWSS+dkXbo2dxmT+wQCURy9yN2Udr1InxZi8H1sNve7gwwblUx8107c7vx1K2Qe2z5FKgaS5bEd9BnKv/26rIkQXVpdlPsvSE9fyJTZ/qa4BWY=
+Received: from BN6PR22CA0033.namprd22.prod.outlook.com (2603:10b6:404:37::19)
+ by BN9PR12MB5065.namprd12.prod.outlook.com (2603:10b6:408:132::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 18:32:35 +0000
+Received: from BN8NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:37:cafe::56) by BN6PR22CA0033.outlook.office365.com
+ (2603:10b6:404:37::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Tue, 5 Apr 2022 18:32:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT041.mail.protection.outlook.com (10.13.177.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 18:32:33 +0000
+Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 13:32:32 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <bp@alien8.de>, <yazen.ghannam@amd.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <bilbao@vt.edu>, Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH 0/2] x86/mce: Simplify AMD MCEs severity grading and include messages for panic cases
+Date:   Tue, 5 Apr 2022 13:32:11 -0500
+Message-ID: <20220405183212.354606-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54acbba9-f4fd-48c1-9028-d596d9f63069@www.fastmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 49e29d01-8f3f-4920-05be-08da1732a6a2
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5065:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB5065F2641D366453E83DC678F8E49@BN9PR12MB5065.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: buwXvagm+UZeHzjajuO+s6ILMCnzyy5XCbAipNL6cbQHv6+DIBR6ifJcSaGhwmM8aF9hFJOduWc3Ur3edAw/peGdHzSela0OYlzoZP8PM4j12ep0duZJxqfuJTmMiLU8wauvVwI+puAPwzNe4ClrBuQ9b2LuETy1HIu0UkvJBE7ZSm59AlHNwGVp9gapaOQ/AGgj8l5Ab71jucbcyA6W7VTeijAJGb2vlknEjH9hDR5r8dFnzVdeCJnkBqD7Xlxs3+O6OGb/2PDF+qXv2PnVlD3OhXlvRLGOYPPovFVw9v2DLJBZ/I5ynYhConZcBY5hw9mTl+2MjPcd2PQPzM2aBESr9cblXI3e/L6cUoJeRa6mVHnYsP5eqPgig6MGz1xFTAfJovmkWPj47j14GRYLNZ6XDoJta2vDyzx4/ENl7EiIC/3ICbCK/SKAyCmBQU6jhbLF62e5acX1LD+7b54hUrkwJat7Z6Y8DrhGABr+KjHQNAVAKvItSDbZc/G0kILD0zqnvDRR9hyBYgYvFNZnvJBF60ty+vCkkqXTRcK4gaHbjNIKB7Uu7xPgkYCdLInBsLNJjPJFXMR2MFm43xw15Eay0Nr0ww05S6b+2T7L/PRa5ID9ej+gePr1X3sMZpZytGuYvdCRvrbrZ3ztqhf+Oft1ZpsqNr9nqs4QdvdKNWBlVZy5NEEGGur5yzsHpaOR30YElmskjDOTZSFN8wukkQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(70586007)(36860700001)(16526019)(356005)(186003)(2906002)(26005)(8936002)(8676002)(36756003)(110136005)(15650500001)(6636002)(1076003)(316002)(2616005)(54906003)(336012)(426003)(70206006)(83380400001)(4744005)(47076005)(4326008)(81166007)(82310400005)(6666004)(44832011)(40460700003)(5660300002)(86362001)(508600001)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 18:32:33.7005
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49e29d01-8f3f-4920-05be-08da1732a6a2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5065
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Andy Lutomirski wrote:
-> On Tue, Apr 5, 2022, at 3:36 AM, Quentin Perret wrote:
-> > On Monday 04 Apr 2022 at 15:04:17 (-0700), Andy Lutomirski wrote:
-> >> The best I can come up with is a special type of shared page that is not
-> >> GUP-able and maybe not even mmappable, having a clear option for
-> >> transitions to fail, and generally preventing the nasty cases from
-> >> happening in the first place.
-> >
-> > Right, that sounds reasonable to me.
-> 
-> At least as a v1, this is probably more straightforward than allowing mmap().
-> Also, there's much to be said for a simpler, limited API, to be expanded if
-> genuinely needed, as opposed to starting out with a very featureful API.
+This patchset simplifies the grading of machine errors on AMD's MCE
+grading logic mce_severity_amd(), which helps the MCE handler determine
+what actions to take. If the error is graded as a PANIC, the EDAC driver
+will not decode; so we also include new error messages to describe the MCE
+and help debugging critical errors.
 
-Regarding "genuinely needed", IMO the same applies to supporting this at all.
-Without numbers from something at least approximating a real use case, we're just
-speculating on which will be the most performant approach.
+Carlos Bilbao (2):
+  x86/mce: x86/mce: Simplify AMD severity grading logic
+  x86/mce: Add messages for panic errors in AMD's MCE grading
+---
+ arch/x86/kernel/cpu/mce/severity.c | 113 ++++++++++++-----------------
+ 1 file changed, 48 insertions(+), 65 deletions(-)
 
-> >> Maybe there could be a special mode for the private memory fds in which
-> >> specific pages are marked as "managed by this fd but actually shared".
-> >> pread() and pwrite() would work on those pages, but not mmap().  (Or maybe
-> >> mmap() but the resulting mappings would not permit GUP.)  And
-> >> transitioning them would be a special operation on the fd that is specific
-> >> to pKVM and wouldn't work on TDX or SEV.
-> >
-> > Aha, didn't think of pread()/pwrite(). Very interesting.
-> 
-> There are plenty of use cases for which pread()/pwrite()/splice() will be as
-> fast or even much faster than mmap()+memcpy().
+-- 
+2.31.1
 
-...
-
-> resume guest
-> *** host -> hypervisor -> guest ***
-> Guest unshares the page.
-> *** guest -> hypervisor ***
-> Hypervisor removes PTE.  TLBI.
-> *** hypervisor -> guest ***
-> 
-> Obviously considerable cleverness is needed to make a virt IOMMU like this
-> work well, but still.
-> 
-> Anyway, my suggestion is that the fd backing proposal get slightly modified
-> to get it ready for multiple subtypes of backing object, which should be a
-> pretty minimal change.  Then, if someone actually needs any of this
-> cleverness, it can be added later.  In the mean time, the
-> pread()/pwrite()/splice() scheme is pretty good.
-
-Tangentially related to getting private-fd ready for multiple things, what about
-implementing the pread()/pwrite()/splice() scheme in pKVM itself?  I.e. read() on
-the VM fd, with the offset corresponding to gfn in some way.
-
-Ditto for mmap() on the VM fd, though that would require additional changes outside
-of pKVM.
-
-That would allow pKVM to support in-place conversions without the private-fd having
-to differentiate between the type of protected VM, and without having to provide
-new APIs from the private-fd.  TDX, SNP, etc... Just Work by not supporting the pKVM
-APIs.
-
-And assuming we get multiple consumers down the road, pKVM will need to be able to
-communicate the "true" state of a page to other consumers, because in addition to
-being a consumer, pKVM is also an owner/enforcer analogous to the TDX Module and
-the SEV PSP.

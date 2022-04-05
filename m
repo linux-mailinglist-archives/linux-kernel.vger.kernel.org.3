@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0574F4A66
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43564F4C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455758AbiDEWnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S1576585AbiDEXKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355885AbiDEKWN (ORCPT
+        with ESMTP id S1349392AbiDEJtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:13 -0400
+        Tue, 5 Apr 2022 05:49:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBCCA94E6;
-        Tue,  5 Apr 2022 03:05:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A908B15A38;
+        Tue,  5 Apr 2022 02:44:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C05E56179D;
-        Tue,  5 Apr 2022 10:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A16C385A1;
-        Tue,  5 Apr 2022 10:05:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 462BE6164D;
+        Tue,  5 Apr 2022 09:44:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A56C385A2;
+        Tue,  5 Apr 2022 09:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153118;
-        bh=uFktpmXq//VwMEg/Xye+cAieCQG7ieCXEqG53n4shp0=;
+        s=korg; t=1649151889;
+        bh=/QAlbnO1eNnDrzOkcmzLTG7zRvW4gaOjytGF8jHWc7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k1edwaR86fqUkCCb2wYi7sS4HwmwkfkyLqdF8Gemhg2DZE6GuKupMlKJj95AcNZ1W
-         +ussXk/ZKsYr9NOVMV7sPrBy/O7pZ1ZAMr715lgSGp7ITZ8TLBfzEyY3PU+os50qgJ
-         DfcGnQn+UvKUZLGwLvzeYkKhqtkkT8g+Pka9BnGI=
+        b=e3Ur3uDdjlOuyAs0X5oEXcoKhRs6rtdPaiEPeeZ5X8cVz+aDlcby8mKXR56V6QTQH
+         xgPrGr23N1VPNM54Ut8gUi/aCHd5xOnnmIs3wdUlM3gHmxe5wQ9pHFIsAfEeE5BaLz
+         FwwO4vOEclhLEAGinD3ugvfOeeWkrUEv5C2zCLOs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, Song Liu <song@kernel.org>
-Subject: [PATCH 5.10 107/599] lib/raid6/test: fix multiple definition linking error
-Date:   Tue,  5 Apr 2022 09:26:41 +0200
-Message-Id: <20220405070302.019502809@linuxfoundation.org>
+        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 540/913] bpf, sockmap: Fix memleak in sk_psock_queue_msg
+Date:   Tue,  5 Apr 2022 09:26:42 +0200
+Message-Id: <20220405070356.035060358@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dirk Müller <dmueller@suse.de>
+From: Wang Yufen <wangyufen@huawei.com>
 
-commit a5359ddd052860bacf957e65fe819c63e974b3a6 upstream.
+[ Upstream commit 938d3480b92fa5e454b7734294f12a7b75126f09 ]
 
-GCC 10+ defaults to -fno-common, which enforces proper declaration of
-external references using "extern". without this change a link would
-fail with:
+If tcp_bpf_sendmsg is running during a tear down operation we may enqueue
+data on the ingress msg queue while tear down is trying to free it.
 
-  lib/raid6/test/algos.c:28: multiple definition of `raid6_call';
-  lib/raid6/test/test.c:22: first defined here
+ sk1 (redirect sk2)                         sk2
+ -------------------                      ---------------
+tcp_bpf_sendmsg()
+ tcp_bpf_send_verdict()
+  tcp_bpf_sendmsg_redir()
+   bpf_tcp_ingress()
+                                          sock_map_close()
+                                           lock_sock()
+    lock_sock() ... blocking
+                                           sk_psock_stop
+                                            sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+                                           release_sock(sk);
+    lock_sock()
+    sk_mem_charge()
+    get_page()
+    sk_psock_queue_msg()
+     sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED);
+      drop_sk_msg()
+    release_sock()
 
-the pq.h header that is included already includes an extern declaration
-so we can just remove the redundant one here.
+While drop_sk_msg(), the msg has charged memory form sk by sk_mem_charge
+and has sg pages need to put. To fix we use sk_msg_free() and then kfee()
+msg.
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Dirk Müller <dmueller@suse.de>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This issue can cause the following info:
+WARNING: CPU: 0 PID: 9202 at net/core/stream.c:205 sk_stream_kill_queues+0xc8/0xe0
+Call Trace:
+ <IRQ>
+ inet_csk_destroy_sock+0x55/0x110
+ tcp_rcv_state_process+0xe5f/0xe90
+ ? sk_filter_trim_cap+0x10d/0x230
+ ? tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_rcv+0xc3a/0xce0
+ ip_protocol_deliver_rcu+0x3d/0x230
+ ip_local_deliver_finish+0x54/0x60
+ ip_local_deliver+0xfd/0x110
+ ? ip_protocol_deliver_rcu+0x230/0x230
+ ip_rcv+0xd6/0x100
+ ? ip_local_deliver+0x110/0x110
+ __netif_receive_skb_one_core+0x85/0xa0
+ process_backlog+0xa4/0x160
+ __napi_poll+0x29/0x1b0
+ net_rx_action+0x287/0x300
+ __do_softirq+0xff/0x2fc
+ do_softirq+0x79/0x90
+ </IRQ>
+
+WARNING: CPU: 0 PID: 531 at net/ipv4/af_inet.c:154 inet_sock_destruct+0x175/0x1b0
+Call Trace:
+ <TASK>
+ __sk_destruct+0x24/0x1f0
+ sk_psock_destroy+0x19b/0x1c0
+ process_one_work+0x1b3/0x3c0
+ ? process_one_work+0x3c0/0x3c0
+ worker_thread+0x30/0x350
+ ? process_one_work+0x3c0/0x3c0
+ kthread+0xe6/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+ </TASK>
+
+Fixes: 9635720b7c88 ("bpf, sockmap: Fix memleak on ingress msg enqueue")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20220304081145.2037182-2-wangyufen@huawei.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/raid6/test/test.c |    1 -
- 1 file changed, 1 deletion(-)
+ include/linux/skmsg.h | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
---- a/lib/raid6/test/test.c
-+++ b/lib/raid6/test/test.c
-@@ -19,7 +19,6 @@
- #define NDISKS		16	/* Including P and Q */
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index b4256847c707..73bedd128d52 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -310,21 +310,16 @@ static inline void sock_drop(struct sock *sk, struct sk_buff *skb)
+ 	kfree_skb(skb);
+ }
  
- const char raid6_empty_zero_page[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
--struct raid6_calls raid6_call;
+-static inline void drop_sk_msg(struct sk_psock *psock, struct sk_msg *msg)
+-{
+-	if (msg->skb)
+-		sock_drop(psock->sk, msg->skb);
+-	kfree(msg);
+-}
+-
+ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
+ {
+ 	spin_lock_bh(&psock->ingress_lock);
+ 	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
+ 		list_add_tail(&msg->list, &psock->ingress_msg);
+-	else
+-		drop_sk_msg(psock, msg);
++	else {
++		sk_msg_free(psock->sk, msg);
++		kfree(msg);
++	}
+ 	spin_unlock_bh(&psock->ingress_lock);
+ }
  
- char *dataptrs[NDISKS];
- char data[NDISKS][PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
+-- 
+2.34.1
+
 
 

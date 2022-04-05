@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B812B4F2CEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8724F2C09
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343606AbiDEJMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S1345758AbiDEJoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239594AbiDEIUP (ORCPT
+        with ESMTP id S239597AbiDEIUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25BAA18D;
-        Tue,  5 Apr 2022 01:16:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14125186;
+        Tue,  5 Apr 2022 01:17:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F223609D0;
-        Tue,  5 Apr 2022 08:16:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E88BC385A0;
-        Tue,  5 Apr 2022 08:16:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1444609D0;
+        Tue,  5 Apr 2022 08:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF41FC385A0;
+        Tue,  5 Apr 2022 08:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146618;
-        bh=WDCh1frB76ZgY5mu6uFLH7Bvag6zbMU6kBLWN9Pw2bs=;
+        s=korg; t=1649146624;
+        bh=IECC3XuBdG5GLST7u+ger1qa2WxBbPkq2C29u83lBFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SHXccYvEi2azUnYiVbRf8Q0iEC1kzElgt878SbXN+XysVxfldAieAqXHda07uBJc6
-         W1j/MT8J6WhpwUFWYH9kGU2seWhyS8TB1q6I7qFIRj9ho1J1vxq/9Ob2+sFJDNZBNi
-         dA9Ok9Rae+mTxL6s+vrBCvNVnz0Ld2DLLrIuiVpc=
+        b=Zng7dvsT3BbkKlLrOCUC5/a6clnWxbcYS6WoIR8rGdlxaLEil/0sufPwK9ynkxfOU
+         5PhRuXVrjmYotPp7Z/1wRb0yCVPd18eSXeUN90PnWhqKiXy6UVtoPvPEXDhPz9il8e
+         Xz6VwUy//c1rYdhxnJLPkzvzIO7AHbdvnz7cKosE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0828/1126] NFSv4/pNFS: Fix another issue with a list iterator pointing to the head
-Date:   Tue,  5 Apr 2022 09:26:15 +0200
-Message-Id: <20220405070431.864937855@linuxfoundation.org>
+        stable@vger.kernel.org, Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 5.17 0830/1126] fs: fd tables have to be multiples of BITS_PER_LONG
+Date:   Tue,  5 Apr 2022 09:26:17 +0200
+Message-Id: <20220405070431.922595376@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,117 +57,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 7c9d845f0612e5bcd23456a2ec43be8ac43458f1 ]
+[ Upstream commit 1c24a186398f59c80adb9a967486b65c1423a59d ]
 
-In nfs4_callback_devicenotify(), if we don't find a matching entry for
-the deviceid, we're left with a pointer to 'struct nfs_server' that
-actually points to the list of super blocks associated with our struct
-nfs_client.
-Furthermore, even if we have a valid pointer, nothing pins the super
-block, and so the struct nfs_server could end up getting freed while
-we're using it.
+This has always been the rule: fdtables have several bitmaps in them,
+and as a result they have to be sized properly for bitmaps.  We walk
+those bitmaps in chunks of 'unsigned long' in serveral cases, but even
+when we don't, we use the regular kernel bitops that are defined to work
+on arrays of 'unsigned long', not on some byte array.
 
-Since all we want is a pointer to the struct pnfs_layoutdriver_type,
-let's skip all the iteration over super blocks, and just use APIs to
-find the layout driver directly.
+Now, the distinction between arrays of bytes and 'unsigned long'
+normally only really ends up being noticeable on big-endian systems, but
+Fedor Pchelkin and Alexey Khoroshilov reported that copy_fd_bitmaps()
+could be called with an argument that wasn't even a multiple of
+BITS_PER_BYTE.  And then it fails to do the proper copy even on
+little-endian machines.
 
-Reported-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Fixes: 1be5683b03a7 ("pnfs: CB_NOTIFY_DEVICEID")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+The bug wasn't in copy_fd_bitmap(), but in sane_fdtable_size(), which
+didn't actually sanitize the fdtable size sufficiently, and never made
+sure it had the proper BITS_PER_LONG alignment.
+
+That's partly because the alignment historically came not from having to
+explicitly align things, but simply from previous fdtable sizes, and
+from count_open_files(), which counts the file descriptors by walking
+them one 'unsigned long' word at a time and thus naturally ends up doing
+sizing in the proper 'chunks of unsigned long'.
+
+But with the introduction of close_range(), we now have an external
+source of "this is how many files we want to have", and so
+sane_fdtable_size() needs to do a better job.
+
+This also adds that explicit alignment to alloc_fdtable(), although
+there it is mainly just for documentation at a source code level.  The
+arithmetic we do there to pick a reasonable fdtable size already aligns
+the result sufficiently.
+
+In fact,clang notices that the added ALIGN() in that function doesn't
+actually do anything, and does not generate any extra code for it.
+
+It turns out that gcc ends up confusing itself by combining a previous
+constant-sized shift operation with the variable-sized shift operations
+in roundup_pow_of_two().  And probably due to that doesn't notice that
+the ALIGN() is a no-op.  But that's a (tiny) gcc misfeature that doesn't
+matter.  Having the explicit alignment makes sense, and would actually
+matter on a 128-bit architecture if we ever go there.
+
+This also adds big comments above both functions about how fdtable sizes
+have to have that BITS_PER_LONG alignment.
+
+Fixes: 60997c3d45d9 ("close_range: add CLOSE_RANGE_UNSHARE")
+Reported-by: Fedor Pchelkin <aissur0002@gmail.com>
+Reported-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Link: https://lore.kernel.org/all/20220326114009.1690-1-aissur0002@gmail.com/
+Tested-and-acked-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback_proc.c | 27 +++++++++------------------
- fs/nfs/pnfs.c          | 11 +++++++++++
- fs/nfs/pnfs.h          |  2 ++
- 3 files changed, 22 insertions(+), 18 deletions(-)
+ fs/file.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-index c343666d9a42..6464dde03705 100644
---- a/fs/nfs/callback_proc.c
-+++ b/fs/nfs/callback_proc.c
-@@ -358,12 +358,11 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 				  struct cb_process_state *cps)
- {
- 	struct cb_devicenotifyargs *args = argp;
-+	const struct pnfs_layoutdriver_type *ld = NULL;
- 	uint32_t i;
- 	__be32 res = 0;
--	struct nfs_client *clp = cps->clp;
--	struct nfs_server *server = NULL;
- 
--	if (!clp) {
-+	if (!cps->clp) {
- 		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
- 		goto out;
- 	}
-@@ -371,23 +370,15 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 	for (i = 0; i < args->ndevs; i++) {
- 		struct cb_devicenotifyitem *dev = &args->devs[i];
- 
--		if (!server ||
--		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
--			rcu_read_lock();
--			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
--				if (server->pnfs_curr_ld &&
--				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
--					rcu_read_unlock();
--					goto found;
--				}
--			rcu_read_unlock();
--			continue;
-+		if (!ld || ld->id != dev->cbd_layout_type) {
-+			pnfs_put_layoutdriver(ld);
-+			ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
-+			if (!ld)
-+				continue;
- 		}
--
--	found:
--		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
-+		nfs4_delete_deviceid(ld, cps->clp, &dev->cbd_dev_id);
- 	}
--
-+	pnfs_put_layoutdriver(ld);
- out:
- 	kfree(args->devs);
- 	return res;
-diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
-index 7c9090a28e5c..7ddd003ab8b1 100644
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -92,6 +92,17 @@ find_pnfs_driver(u32 id)
- 	return local;
+diff --git a/fs/file.c b/fs/file.c
+index 97d212a9b814..c01c29417ae6 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -87,6 +87,21 @@ static void copy_fdtable(struct fdtable *nfdt, struct fdtable *ofdt)
+ 	copy_fd_bitmaps(nfdt, ofdt, ofdt->max_fds);
  }
  
-+const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
-+{
-+	return find_pnfs_driver(id);
-+}
-+
-+void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld)
-+{
-+	if (ld)
-+		module_put(ld->owner);
-+}
-+
- void
- unset_pnfs_layoutdriver(struct nfs_server *nfss)
++/*
++ * Note how the fdtable bitmap allocations very much have to be a multiple of
++ * BITS_PER_LONG. This is not only because we walk those things in chunks of
++ * 'unsigned long' in some places, but simply because that is how the Linux
++ * kernel bitmaps are defined to work: they are not "bits in an array of bytes",
++ * they are very much "bits in an array of unsigned long".
++ *
++ * The ALIGN(nr, BITS_PER_LONG) here is for clarity: since we just multiplied
++ * by that "1024/sizeof(ptr)" before, we already know there are sufficient
++ * clear low bits. Clang seems to realize that, gcc ends up being confused.
++ *
++ * On a 128-bit machine, the ALIGN() would actually matter. In the meantime,
++ * let's consider it documentation (and maybe a test-case for gcc to improve
++ * its code generation ;)
++ */
+ static struct fdtable * alloc_fdtable(unsigned int nr)
  {
-diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
-index f4d7548d67b2..07f11489e4e9 100644
---- a/fs/nfs/pnfs.h
-+++ b/fs/nfs/pnfs.h
-@@ -234,6 +234,8 @@ struct pnfs_devicelist {
+ 	struct fdtable *fdt;
+@@ -102,6 +117,7 @@ static struct fdtable * alloc_fdtable(unsigned int nr)
+ 	nr /= (1024 / sizeof(struct file *));
+ 	nr = roundup_pow_of_two(nr + 1);
+ 	nr *= (1024 / sizeof(struct file *));
++	nr = ALIGN(nr, BITS_PER_LONG);
+ 	/*
+ 	 * Note that this can drive nr *below* what we had passed if sysctl_nr_open
+ 	 * had been set lower between the check in expand_files() and here.  Deal
+@@ -269,11 +285,25 @@ static unsigned int count_open_files(struct fdtable *fdt)
+ 	return i;
+ }
  
- extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
- extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
-+extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
-+extern void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld);
++/*
++ * Note that a sane fdtable size always has to be a multiple of
++ * BITS_PER_LONG, since we have bitmaps that are sized by this.
++ *
++ * 'max_fds' will normally already be properly aligned, but it
++ * turns out that in the close_range() -> __close_range() ->
++ * unshare_fd() -> dup_fd() -> sane_fdtable_size() we can end
++ * up having a 'max_fds' value that isn't already aligned.
++ *
++ * Rather than make close_range() have to worry about this,
++ * just make that BITS_PER_LONG alignment be part of a sane
++ * fdtable size. Becuase that's really what it is.
++ */
+ static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
+ {
+ 	unsigned int count;
  
- /* nfs4proc.c */
- extern size_t max_response_pages(struct nfs_server *server);
+ 	count = count_open_files(fdt);
++	max_fds = ALIGN(max_fds, BITS_PER_LONG);
+ 	if (max_fds < NR_OPEN_DEFAULT)
+ 		max_fds = NR_OPEN_DEFAULT;
+ 	return min(count, max_fds);
 -- 
 2.34.1
 

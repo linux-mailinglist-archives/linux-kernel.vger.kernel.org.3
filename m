@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257314F434C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31F34F4079
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356470AbiDEMuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S1376532AbiDEUYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243352AbiDEJIy (ORCPT
+        with ESMTP id S1354639AbiDEKO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E42A94DA;
-        Tue,  5 Apr 2022 01:57:59 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC196A42D;
+        Tue,  5 Apr 2022 03:01:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1241561562;
-        Tue,  5 Apr 2022 08:57:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6D7C385A3;
-        Tue,  5 Apr 2022 08:57:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80295B818F6;
+        Tue,  5 Apr 2022 10:01:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1EAC385A1;
+        Tue,  5 Apr 2022 10:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149078;
-        bh=fcPtDvDT8Ft1Afq4K2jhGPG0nrBzmkGQ6/6ppmfMs/4=;
+        s=korg; t=1649152916;
+        bh=GPaqH+1yLPZ4DKefbUNcGzaeDWSOf2VM3/SZ0PIjg+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GbLTdrtqxoRxdxEONMtrelNpPBjDBjegqdqSVqGIO5Sv9vqN897kO70B3mZB6wfUL
-         wt3+vgZfoKlvbyFjkwrru1imVPqAz4pHLGHZlnfCi+H0NzgC0YKXS5+p1WcY9algzE
-         UCcgXzgKTSWsUVtWmGEuUH2hNWDF+LYB4Imc4a60=
+        b=v0rjlYdR9iXt0zGFhuU9VCERsJmZP6Rjoat2inqOu3r9YjgfE5FNH16j0oaxRt4wM
+         6D4YGZNOCaNOu65uP0eBPaYCa45aqvlR7LX7hAU2intBmfSQ69swypVlaNYHZfbyPn
+         U0nJsvGicKSRJPhQSHHVA3zU5WieRdSAfCUZMEIo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0585/1017] scsi: mpt3sas: Fix incorrect 4GB boundary check
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
+Subject: [PATCH 5.10 004/599] hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
 Date:   Tue,  5 Apr 2022 09:24:58 +0200
-Message-Id: <20220405070411.644251399@linuxfoundation.org>
+Message-Id: <20220405070258.943153862@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,112 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 208cc9fe6f21112b5cc6cb87065fb8ab66e79316 ]
+commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 upstream.
 
-The driver must perform its 4GB boundary check using the pool's DMA address
-instead of using the virtual address.
+The hyperv utilities use PTP clock interfaces and should depend a
+a kconfig symbol such that they will be built as a loadable module or
+builtin so that linker errors do not happen.
 
-Link: https://lore.kernel.org/r/20220303140230.13098-1-sreekanth.reddy@broadcom.com
-Fixes: d6adc251dd2f ("scsi: mpt3sas: Force PCIe scatterlist allocations to be within same 4 GB region")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Prevents these build errors:
+
+ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
+hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
+ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
+hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
+
+Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Stephen Hemminger <sthemmin@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: linux-hyperv@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Cc: Petr Štetiar <ynezz@true.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/hv/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 0d37c4aca175..c38e68943205 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -5737,14 +5737,13 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
-  */
+--- a/drivers/hv/Kconfig
++++ b/drivers/hv/Kconfig
+@@ -17,6 +17,7 @@ config HYPERV_TIMER
+ config HYPERV_UTILS
+ 	tristate "Microsoft Hyper-V Utilities driver"
+ 	depends on HYPERV && CONNECTOR && NLS
++	depends on PTP_1588_CLOCK_OPTIONAL
+ 	help
+ 	  Select this option to enable the Hyper-V Utilities.
  
- static int
--mpt3sas_check_same_4gb_region(long reply_pool_start_address, u32 pool_sz)
-+mpt3sas_check_same_4gb_region(dma_addr_t start_address, u32 pool_sz)
- {
--	long reply_pool_end_address;
-+	dma_addr_t end_address;
- 
--	reply_pool_end_address = reply_pool_start_address + pool_sz;
-+	end_address = start_address + pool_sz - 1;
- 
--	if (upper_32_bits(reply_pool_start_address) ==
--		upper_32_bits(reply_pool_end_address))
-+	if (upper_32_bits(start_address) == upper_32_bits(end_address))
- 		return 1;
- 	else
- 		return 0;
-@@ -5805,7 +5804,7 @@ _base_allocate_pcie_sgl_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 		}
- 
- 		if (!mpt3sas_check_same_4gb_region(
--		    (long)ioc->pcie_sg_lookup[i].pcie_sgl, sz)) {
-+		    ioc->pcie_sg_lookup[i].pcie_sgl_dma, sz)) {
- 			ioc_err(ioc, "PCIE SGLs are not in same 4G !! pcie sgl (0x%p) dma = (0x%llx)\n",
- 			    ioc->pcie_sg_lookup[i].pcie_sgl,
- 			    (unsigned long long)
-@@ -5860,8 +5859,8 @@ _base_allocate_chain_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 			    GFP_KERNEL, &ctr->chain_buffer_dma);
- 			if (!ctr->chain_buffer)
- 				return -EAGAIN;
--			if (!mpt3sas_check_same_4gb_region((long)
--			    ctr->chain_buffer, ioc->chain_segment_sz)) {
-+			if (!mpt3sas_check_same_4gb_region(
-+			    ctr->chain_buffer_dma, ioc->chain_segment_sz)) {
- 				ioc_err(ioc,
- 				    "Chain buffers are not in same 4G !!! Chain buff (0x%p) dma = (0x%llx)\n",
- 				    ctr->chain_buffer,
-@@ -5897,7 +5896,7 @@ _base_allocate_sense_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    GFP_KERNEL, &ioc->sense_dma);
- 	if (!ioc->sense)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->sense, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->sense_dma, sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Sense Pool! sense (0x%p) sense_dma = (0x%llx)\n",
- 		    ioc->sense, (unsigned long long) ioc->sense_dma));
-@@ -5930,7 +5929,7 @@ _base_allocate_reply_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    &ioc->reply_dma);
- 	if (!ioc->reply)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_free, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_dma, sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Reply Pool! Reply (0x%p) Reply dma = (0x%llx)\n",
- 		    ioc->reply, (unsigned long long) ioc->reply_dma));
-@@ -5965,7 +5964,7 @@ _base_allocate_reply_free_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    GFP_KERNEL, &ioc->reply_free_dma);
- 	if (!ioc->reply_free)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_free, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_free_dma, sz)) {
- 		dinitprintk(ioc,
- 		    pr_err("Bad Reply Free Pool! Reply Free (0x%p) Reply Free dma = (0x%llx)\n",
- 		    ioc->reply_free, (unsigned long long) ioc->reply_free_dma));
-@@ -6004,7 +6003,7 @@ _base_allocate_reply_post_free_array(struct MPT3SAS_ADAPTER *ioc,
- 	    GFP_KERNEL, &ioc->reply_post_free_array_dma);
- 	if (!ioc->reply_post_free_array)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_post_free_array,
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_post_free_array_dma,
- 	    reply_post_free_array_sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Reply Free Pool! Reply Free (0x%p) Reply Free dma = (0x%llx)\n",
-@@ -6069,7 +6068,7 @@ base_alloc_rdpq_dma_pool(struct MPT3SAS_ADAPTER *ioc, int sz)
- 			 * resources and set DMA mask to 32 and allocate.
- 			 */
- 			if (!mpt3sas_check_same_4gb_region(
--				(long)ioc->reply_post[i].reply_post_free, sz)) {
-+				ioc->reply_post[i].reply_post_free_dma, sz)) {
- 				dinitprintk(ioc,
- 				    ioc_err(ioc, "bad Replypost free pool(0x%p)"
- 				    "reply_post_free_dma = (0x%llx)\n",
--- 
-2.34.1
-
 
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E53C4F2B3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D614F2D0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351644AbiDEKDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S238579AbiDEJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237672AbiDEISL (ORCPT
+        with ESMTP id S237912AbiDEISb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702786C1C2;
-        Tue,  5 Apr 2022 01:07:14 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C672B7C67;
+        Tue,  5 Apr 2022 01:07:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3AB2617EF;
-        Tue,  5 Apr 2022 08:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE7ECC385A0;
-        Tue,  5 Apr 2022 08:07:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D90617E9;
+        Tue,  5 Apr 2022 08:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F73C385A0;
+        Tue,  5 Apr 2022 08:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146033;
-        bh=Kyl7WwVpB8rx6UXPlcwsF5gF1Siff+yJfYsF1gx6lsk=;
+        s=korg; t=1649146063;
+        bh=3qdf/YGOydzROeLMZ/l/QehLiZgVpZTS8qAOFdD208M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OTt0LoWQdjTyAjp0SyscCPkp4vtEl/ii9X2MtSUsqgFDmFcPb4jqZ50LC/6kh4Hcr
-         oeipDHaSVsMvWvGW/BaM5ew+SHAtVmC7PJCtLwh9ApB+JGAuy3TKgAeNSypG34dV9I
-         usmdfxWPvNwX9/9iZHsJD3Xbg8o+FfgOLoAheAq0=
+        b=1xo/Yu+s5xi3WzDeFYXd87FlEDCkFuWo910VcyKunSQ3V3krWjRt9YE6jaOKXIP1X
+         ZQ3Agoud4bK4Ao1JK+vOF2gwMBPkNLRzanpkMgcrSLYl/KzP8iXLzdjZK4kF+TNu4a
+         fE6qKS9xbmcHk7wj5EhKPQjxA6hi2c85vo+CuVMY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0591/1126] scsi: pm8001: Fix NCQ NON DATA command completion handling
-Date:   Tue,  5 Apr 2022 09:22:18 +0200
-Message-Id: <20220405070424.981457616@linuxfoundation.org>
+Subject: [PATCH 5.17 0592/1126] scsi: pm8001: Fix abort all task initialization
+Date:   Tue,  5 Apr 2022 09:22:19 +0200
+Message-Id: <20220405070425.011139474@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,57 +58,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 1d6736c3e162061dc811c76e605f35ef3234bffa ]
+[ Upstream commit 7f12845c8389855dbcc67baa068b6832dc4a396e ]
 
-NCQ NON DATA is an NCQ command with the DMA_NONE DMA direction and so a
-register-device-to-host-FIS response is expected for it.
+In pm80xx_send_abort_all(), the n_elem field of the ccb used is not
+initialized to 0. This missing initialization sometimes lead to the task
+completion path seeing the ccb with a non-zero n_elem resulting in the
+execution of invalid dma_unmap_sg() calls in pm8001_ccb_task_free(),
+causing a crash such as:
 
-However, for an IO_SUCCESS case, mpi_sata_completion() expects a
-set-device-bits-FIS for any ata task with an use_ncq field true, which
-includes NCQ NON DATA commands.
+[  197.676341] RIP: 0010:iommu_dma_unmap_sg+0x6d/0x280
+[  197.700204] RSP: 0018:ffff889bbcf89c88 EFLAGS: 00010012
+[  197.705485] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff83d0bda0
+[  197.712687] RDX: 0000000000000002 RSI: 0000000000000000 RDI: ffff88810dffc0d0
+[  197.719887] RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8881c790098b
+[  197.727089] R10: ffffed1038f20131 R11: 0000000000000001 R12: 0000000000000000
+[  197.734296] R13: ffff88810dffc0d0 R14: 0000000000000010 R15: 0000000000000000
+[  197.741493] FS:  0000000000000000(0000) GS:ffff889bbcf80000(0000) knlGS:0000000000000000
+[  197.749659] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  197.755459] CR2: 00007f16c1b42734 CR3: 0000000004814000 CR4: 0000000000350ee0
+[  197.762656] Call Trace:
+[  197.765127]  <IRQ>
+[  197.767162]  pm8001_ccb_task_free+0x5f1/0x820 [pm80xx]
+[  197.772364]  ? do_raw_spin_unlock+0x54/0x220
+[  197.776680]  pm8001_mpi_task_abort_resp+0x2ce/0x4f0 [pm80xx]
+[  197.782406]  process_oq+0xe85/0x7890 [pm80xx]
+[  197.786817]  ? lock_acquire+0x194/0x490
+[  197.790697]  ? handle_irq_event+0x10e/0x1b0
+[  197.794920]  ? mpi_sata_completion+0x2d70/0x2d70 [pm80xx]
+[  197.800378]  ? __wake_up_bit+0x100/0x100
+[  197.804340]  ? lock_is_held_type+0x98/0x110
+[  197.808565]  pm80xx_chip_isr+0x94/0x130 [pm80xx]
+[  197.813243]  tasklet_action_common.constprop.0+0x24b/0x2f0
+[  197.818785]  __do_softirq+0x1b5/0x82d
+[  197.822485]  ? do_raw_spin_unlock+0x54/0x220
+[  197.826799]  __irq_exit_rcu+0x17e/0x1e0
+[  197.830678]  irq_exit_rcu+0xa/0x20
+[  197.834114]  common_interrupt+0x78/0x90
+[  197.840051]  </IRQ>
+[  197.844236]  <TASK>
+[  197.848397]  asm_common_interrupt+0x1e/0x40
 
-Fix this to correctly treat NCQ NON DATA commands as non-data by also
-testing for the DMA_NONE DMA direction.
+Avoid this issue by always initializing the ccb n_elem field to 0 in
+pm8001_send_abort_all(), pm8001_send_read_log() and
+pm80xx_send_abort_all().
 
-Link: https://lore.kernel.org/r/20220220031810.738362-16-damien.lemoal@opensource.wdc.com
-Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Link: https://lore.kernel.org/r/20220220031810.738362-17-damien.lemoal@opensource.wdc.com
+Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
 Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 3 ++-
- drivers/scsi/pm8001/pm80xx_hwi.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
+ 2 files changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 9d982eb970fe..8095eb0b04f7 100644
+index 8095eb0b04f7..d853e8d0195a 100644
 --- a/drivers/scsi/pm8001/pm8001_hwi.c
 +++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -2418,7 +2418,8 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 				len = sizeof(struct pio_setup_fis);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "PIO read len = %d\n", len);
--			} else if (t->ata_task.use_ncq) {
-+			} else if (t->ata_task.use_ncq &&
-+				   t->data_dir != DMA_NONE) {
- 				len = sizeof(struct set_dev_bits_fis);
- 				pm8001_dbg(pm8001_ha, IO, "FPDMA len = %d\n",
- 					   len);
+@@ -1788,6 +1788,7 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
+ 
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 
+@@ -1849,6 +1850,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
+ 	pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
+ 	pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
+ 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 4c19691a2bce..a5a1db6ed463 100644
+index a5a1db6ed463..908dbac20b48 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -2511,7 +2511,8 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
- 				len = sizeof(struct pio_setup_fis);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "PIO read len = %d\n", len);
--			} else if (t->ata_task.use_ncq) {
-+			} else if (t->ata_task.use_ncq &&
-+				   t->data_dir != DMA_NONE) {
- 				len = sizeof(struct set_dev_bits_fis);
- 				pm8001_dbg(pm8001_ha, IO, "FPDMA len = %d\n",
- 					   len);
+@@ -1802,6 +1802,7 @@ static void pm80xx_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
+ 
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 
 -- 
 2.34.1
 

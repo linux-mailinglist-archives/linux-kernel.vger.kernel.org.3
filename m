@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4EA4F3DD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4C34F41E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353716AbiDEUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S1356517AbiDENIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356097AbiDEKW4 (ORCPT
+        with ESMTP id S1344025AbiDEJQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD06FB3DC0;
-        Tue,  5 Apr 2022 03:06:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C13B2603;
+        Tue,  5 Apr 2022 02:03:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69AAC61500;
-        Tue,  5 Apr 2022 10:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B6EC385A2;
-        Tue,  5 Apr 2022 10:06:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBCDB614E4;
+        Tue,  5 Apr 2022 09:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B08C385A1;
+        Tue,  5 Apr 2022 09:03:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153168;
-        bh=p9Up1pKixUzPNTVM3bn7wF1Y6Yvz1yHN+lyh/GIlfco=;
+        s=korg; t=1649149426;
+        bh=pLIQlGkUzPkW36H+QN7RfbIl6w439D/LXITrrVw3+x8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yckrU2yvLiXoDhtH8D3jzVmQp0Ub/IqqJefb32rvNWjHLPzJ3ex7Rbv7Ax7NsRpIp
-         POd62DtBkqpA69DPL+IBwmb3Yroc/KSfO5aV0eVOdOsmza43DTB31yHi0ZxvWuAKua
-         8RVK0WPJEbNjAaKwacnnrUFV4NbOlVM0cgOxcE+M=
+        b=TmwrsoVh2l2NNPAGjykVdX8sg8wNB9SJhWK7PZL7rs9iqw0G+ASG5kEuPlc9rSlOr
+         t0sjhxIMHOLrXlYCVZuZ+q/NKrCpnIKPrNmwxlgGrHu6DlOfUG02g3yoIplBPqzzs3
+         pN6V+QG6p016pSbqUiJjV6j28u62A8Y/nTj5NTfE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        dann frazier <dann.frazier@canonical.com>
-Subject: [PATCH 5.10 127/599] PCI: xgene: Revert "PCI: xgene: Fix IB window setup"
-Date:   Tue,  5 Apr 2022 09:27:01 +0200
-Message-Id: <20220405070302.620225933@linuxfoundation.org>
+        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0709/1017] kgdbts: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:27:02 +0200
+Message-Id: <20220405070415.316309603@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,46 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 825da4e9cec68713fbb02dc6f71fe1bf65fe8050 upstream.
+[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
 
-Commit c7a75d07827a ("PCI: xgene: Fix IB window setup") tried to
-fix the damages that 6dce5aa59e0b ("PCI: xgene: Use inbound resources
-for setup") caused, but actually didn't improve anything for some
-plarforms (at least Mustang and m400 are still broken).
+__setup() handlers should return 1 to indicate that the boot option
+has been handled. A return of 0 causes the boot option/value to be
+listed as an Unknown kernel parameter and added to init's (limited)
+environment strings. So return 1 from kgdbts_option_setup().
 
-Given that 6dce5aa59e0b has been reverted, revert this patch as well,
-restoring the PCIe support on XGene to its pre-5.5, working state.
+Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
+  kgdboc=kbd kgdbts=", will be passed to user space.
 
-Link: https://lore.kernel.org/r/YjN8pT5e6/8cRohQ@xps13.dannf
-Link: https://lore.kernel.org/r/20220321104843.949645-3-maz@kernel.org
-Fixes: c7a75d07827a ("PCI: xgene: Fix IB window setup")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: stable@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>
-Cc: Toan Le <toan@os.amperecomputing.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Krzysztof Wilczyński <kw@linux.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Stéphane Graber <stgraber@ubuntu.com>
-Cc: dann frazier <dann.frazier@canonical.com>
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc7
+     kgdboc=kbd
+     kgdbts=
+
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
+Cc: kgdb-bugreport@lists.sourceforge.net
+Cc: Jason Wessel <jason.wessel@windriver.com>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-xgene.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/kgdbts.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/pci/controller/pci-xgene.c
-+++ b/drivers/pci/controller/pci-xgene.c
-@@ -467,7 +467,7 @@ static int xgene_pcie_select_ib_reg(u8 *
- 		return 1;
+diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
+index 67c5b452dd35..88b91ad8e541 100644
+--- a/drivers/misc/kgdbts.c
++++ b/drivers/misc/kgdbts.c
+@@ -1070,10 +1070,10 @@ static int kgdbts_option_setup(char *opt)
+ {
+ 	if (strlen(opt) >= MAX_CONFIG_LEN) {
+ 		printk(KERN_ERR "kgdbts: config string too long\n");
+-		return -ENOSPC;
++		return 1;
  	}
+ 	strcpy(config, opt);
+-	return 0;
++	return 1;
+ }
  
--	if ((size > SZ_1K) && (size < SZ_4G) && !(*ib_reg_mask & (1 << 0))) {
-+	if ((size > SZ_1K) && (size < SZ_1T) && !(*ib_reg_mask & (1 << 0))) {
- 		*ib_reg_mask |= (1 << 0);
- 		return 0;
- 	}
+ __setup("kgdbts=", kgdbts_option_setup);
+-- 
+2.34.1
+
 
 

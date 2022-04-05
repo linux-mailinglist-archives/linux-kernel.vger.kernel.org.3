@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B2B4F45A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01A64F45E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245267AbiDEUVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S1386624AbiDEMy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349087AbiDEJtG (ORCPT
+        with ESMTP id S1343904AbiDEJPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1BFA995A;
-        Tue,  5 Apr 2022 02:40:31 -0700 (PDT)
+        Tue, 5 Apr 2022 05:15:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2999157D;
+        Tue,  5 Apr 2022 02:01:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C749B81C14;
-        Tue,  5 Apr 2022 09:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF46C385A2;
-        Tue,  5 Apr 2022 09:40:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DC761564;
+        Tue,  5 Apr 2022 09:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFC4C385A0;
+        Tue,  5 Apr 2022 09:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151629;
-        bh=VcKJ1b7hlR38oeDFWrv/Bduu0TTbaFFTrfTsQgagKYE=;
+        s=korg; t=1649149280;
+        bh=6xtwrumsABCWlitwow9aJliVJSSME1aC9rJzVcirnrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zV4AgYfoSL1ppVq97sswIi6sFgXUBD3anT6iLXVyetmnddkFYm1EXiOL8TLzkYrOa
-         eV5517oCDIelfXxtmlAwnvWWMNFhIGvwN0WOf2Swa0NiA8+5KECcmLU9btPNKKG/o3
-         e/0sKu3aNhtSpyzf/cAHXVdQZvE0Z0t1wBps8xno=
+        b=EnLJjDWZOtWL99EKVUzMeg++L+CSPowC6CG/EGTqg5O+sKKbK3pnaen3o83/S8UZ6
+         j1Vz0A0wEqfAe6a/adtU2jDHVVNv338hh1sxmVsgKOE8qczjUjSuwYp0CYvi1AhmLY
+         gm2hzVTlL204jF/nIg5YDA1g3cXrPfrtevZFWLa0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Andre Nash <alnash@fb.com>,
+        Neil Spring <ntspring@fb.com>, Wei Wang <weiwan@google.com>,
+        Yuchung Cheng <ycheng@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 483/913] scsi: pm8001: Fix le32 values handling in pm80xx_set_sas_protocol_timer_config()
+Subject: [PATCH 5.16 0632/1017] tcp: ensure PMTU updates are processed during fastopen
 Date:   Tue,  5 Apr 2022 09:25:45 +0200
-Message-Id: <20220405070354.333407463@linuxfoundation.org>
+Message-Id: <20220405070413.043618621@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,109 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit ca374f5d92b8ae778f6a37dd3e7ed809bbf7a953 ]
+[ Upstream commit ed0c99dc0f499ff8b6e75b5ae6092ab42be1ad39 ]
 
-All fields of the SASProtocolTimerConfig structure have the __le32 type.
-As such, use cpu_to_le32() to initialize them. This change suppresses many
-sparse warnings:
+tp->rx_opt.mss_clamp is not populated, yet, during TFO send so we
+rise it to the local MSS. tp->mss_cache is not updated, however:
 
-warning: incorrect type in assignment (different base types)
-   expected restricted __le32 [addressable] [usertype] pageCode
-   got int
+tcp_v6_connect():
+  tp->rx_opt.mss_clamp = IPV6_MIN_MTU - headers;
+  tcp_connect():
+     tcp_connect_init():
+       tp->mss_cache = min(mtu, tp->rx_opt.mss_clamp)
+     tcp_send_syn_data():
+       tp->rx_opt.mss_clamp = tp->advmss
 
-Note that the check to limit the value of the STP_IDLE_TMO field is removed
-as this field is initialized using the fixed (and small) value defined by
-the STP_IDLE_TIME macro.
+After recent fixes to ICMPv6 PTB handling we started dropping
+PMTU updates higher than tp->mss_cache. Because of the stale
+tp->mss_cache value PMTU updates during TFO are always dropped.
 
-The pm8001_dbg() calls printing the values of the SASProtocolTimerConfig
-structure fileds are changed to use le32_to_cpu() to present the values in
-human readable form.
+Thanks to Wei for helping zero in on the problem and the fix!
 
-Link: https://lore.kernel.org/r/20220220031810.738362-9-damien.lemoal@opensource.wdc.com
-Fixes: a6cb3d012b98 ("[SCSI] pm80xx: thermal, sas controller config and error handling update")
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: c7bb4b89033b ("ipv6: tcp: drop silly ICMPv6 packet too big messages")
+Reported-by: Andre Nash <alnash@fb.com>
+Reported-by: Neil Spring <ntspring@fb.com>
+Reviewed-by: Wei Wang <weiwan@google.com>
+Acked-by: Yuchung Cheng <ycheng@google.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220321165957.1769954-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 52 +++++++++++++++-----------------
- 1 file changed, 25 insertions(+), 27 deletions(-)
+ net/ipv4/tcp_output.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index ed6b5e7c2136..69789aa73fd1 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1246,43 +1246,41 @@ pm80xx_set_sas_protocol_timer_config(struct pm8001_hba_info *pm8001_ha)
- 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
- 	payload.tag = cpu_to_le32(tag);
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 2e6e5a70168e..3a8126dfcd4d 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3719,6 +3719,7 @@ static void tcp_connect_queue_skb(struct sock *sk, struct sk_buff *skb)
+  */
+ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
+ {
++	struct inet_connection_sock *icsk = inet_csk(sk);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_fastopen_request *fo = tp->fastopen_req;
+ 	int space, err = 0;
+@@ -3733,8 +3734,10 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
+ 	 * private TCP options. The cost is reduced data space in SYN :(
+ 	 */
+ 	tp->rx_opt.mss_clamp = tcp_mss_clamp(tp, tp->rx_opt.mss_clamp);
++	/* Sync mss_cache after updating the mss_clamp */
++	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
  
--	SASConfigPage.pageCode        =  SAS_PROTOCOL_TIMER_CONFIG_PAGE;
--	SASConfigPage.MST_MSI         =  3 << 15;
--	SASConfigPage.STP_SSP_MCT_TMO =  (STP_MCT_TMO << 16) | SSP_MCT_TMO;
--	SASConfigPage.STP_FRM_TMO     = (SAS_MAX_OPEN_TIME << 24) |
--				(SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER;
--	SASConfigPage.STP_IDLE_TMO    =  STP_IDLE_TIME;
--
--	if (SASConfigPage.STP_IDLE_TMO > 0x3FFFFFF)
--		SASConfigPage.STP_IDLE_TMO = 0x3FFFFFF;
--
--
--	SASConfigPage.OPNRJT_RTRY_INTVL =         (SAS_MFD << 16) |
--						SAS_OPNRJT_RTRY_INTVL;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =  (SAS_DOPNRJT_RTRY_TMO << 16)
--						| SAS_COPNRJT_RTRY_TMO;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =  (SAS_DOPNRJT_RTRY_THR << 16)
--						| SAS_COPNRJT_RTRY_THR;
--	SASConfigPage.MAX_AIP =  SAS_MAX_AIP;
-+	SASConfigPage.pageCode = cpu_to_le32(SAS_PROTOCOL_TIMER_CONFIG_PAGE);
-+	SASConfigPage.MST_MSI = cpu_to_le32(3 << 15);
-+	SASConfigPage.STP_SSP_MCT_TMO =
-+		cpu_to_le32((STP_MCT_TMO << 16) | SSP_MCT_TMO);
-+	SASConfigPage.STP_FRM_TMO =
-+		cpu_to_le32((SAS_MAX_OPEN_TIME << 24) |
-+			    (SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER);
-+	SASConfigPage.STP_IDLE_TMO = cpu_to_le32(STP_IDLE_TIME);
-+
-+	SASConfigPage.OPNRJT_RTRY_INTVL =
-+		cpu_to_le32((SAS_MFD << 16) | SAS_OPNRJT_RTRY_INTVL);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_TMO << 16) | SAS_COPNRJT_RTRY_TMO);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_THR << 16) | SAS_COPNRJT_RTRY_THR);
-+	SASConfigPage.MAX_AIP = cpu_to_le32(SAS_MAX_AIP);
+-	space = __tcp_mtu_to_mss(sk, inet_csk(sk)->icsk_pmtu_cookie) -
++	space = __tcp_mtu_to_mss(sk, icsk->icsk_pmtu_cookie) -
+ 		MAX_TCP_OPTION_SPACE;
  
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.pageCode 0x%08x\n",
--		   SASConfigPage.pageCode);
-+		   le32_to_cpu(SASConfigPage.pageCode));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MST_MSI  0x%08x\n",
--		   SASConfigPage.MST_MSI);
-+		   le32_to_cpu(SASConfigPage.MST_MSI));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_SSP_MCT_TMO  0x%08x\n",
--		   SASConfigPage.STP_SSP_MCT_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_SSP_MCT_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_FRM_TMO  0x%08x\n",
--		   SASConfigPage.STP_FRM_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_FRM_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_IDLE_TMO  0x%08x\n",
--		   SASConfigPage.STP_IDLE_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_IDLE_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.OPNRJT_RTRY_INTVL  0x%08x\n",
--		   SASConfigPage.OPNRJT_RTRY_INTVL);
-+		   le32_to_cpu(SASConfigPage.OPNRJT_RTRY_INTVL));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO  0x%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR  0x%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MAX_AIP  0x%08x\n",
--		   SASConfigPage.MAX_AIP);
-+		   le32_to_cpu(SASConfigPage.MAX_AIP));
- 
- 	memcpy(&payload.cfg_pg, &SASConfigPage,
- 			 sizeof(SASProtocolTimerConfig_t));
+ 	space = min_t(size_t, space, fo->size);
 -- 
 2.34.1
 

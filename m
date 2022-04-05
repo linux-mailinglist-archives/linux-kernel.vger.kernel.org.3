@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1024F4251
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A7A4F4333
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243995AbiDEOxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S244889AbiDEOyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244532AbiDEJl1 (ORCPT
+        with ESMTP id S244528AbiDEJl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:41:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1CDBB932;
-        Tue,  5 Apr 2022 02:26:36 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0885BB935;
+        Tue,  5 Apr 2022 02:26:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E947B81C9D;
-        Tue,  5 Apr 2022 09:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2008C385A3;
-        Tue,  5 Apr 2022 09:26:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C9C161684;
+        Tue,  5 Apr 2022 09:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCC9C385A2;
+        Tue,  5 Apr 2022 09:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150794;
-        bh=5SKEbDrLT6+O1PlKgj+zrudt8PadU0+bYVvcmroswKE=;
+        s=korg; t=1649150799;
+        bh=zRmSmzz9vDRdCW6CbMwaehqfUXppBLkYD3vwE3+vKG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gXRpsE1vZXnNj0WtHqoa9rXQxFEQHJHZ1I7RuPoChXoyH56tNKQx6HrRGl7EqBREx
-         a4FeOtS3j3hzEMomPAj1a4XBaxbEaRInPJBjwXcf3HydRInrcnuNklSZ9W7DJpIR/a
-         cYNRb5HsIZKeiNXhxB4HFLwbnIyXv4vrC/h3Gah0=
+        b=gXNlzMfKcT+wDUA5zvKnf+K9XprpbdnDNLz8d+KnUo7bS2g72x08q6xJdxfwd1GRf
+         cEt4dhswI8caf0gbCYvn2PU3ZvdCRgTL0BYPAcnBduISwIhwwx43sz/1haHH+Ww56v
+         fWqQZHyo5JFz02ipFUx2SLaGJ/7gOjgNZUz70Das=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: [PATCH 5.15 184/913] drm/i915/opregion: check port number bounds for SWSCI display power state
-Date:   Tue,  5 Apr 2022 09:20:46 +0200
-Message-Id: <20220405070345.370483428@linuxfoundation.org>
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Richard Zhu <hongxing.zhu@nxp.com>
+Subject: [PATCH 5.15 186/913] PCI: imx6: Allow to probe when dw_pcie_wait_for_link() fails
+Date:   Tue,  5 Apr 2022 09:20:48 +0200
+Message-Id: <20220405070345.431700530@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,57 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-commit 24a644ebbfd3b13cda702f98907f9dd123e34bf9 upstream.
+commit f81f095e87715e198471f4653952fe5e3f824874 upstream.
 
-The mapping from enum port to whatever port numbering scheme is used by
-the SWSCI Display Power State Notification is odd, and the memory of it
-has faded. In any case, the parameter only has space for ports numbered
-[0..4], and UBSAN reports bit shift beyond it when the platform has port
-F or more.
+The intention of commit 886a9c134755 ("PCI: dwc: Move link handling into
+common code") was to standardize the behavior of link down as explained
+in its commit log:
 
-Since the SWSCI functionality is supposed to be obsolete for new
-platforms (i.e. ones that might have port F or more), just bail out
-early if the mapped and mangled port number is beyond what the Display
-Power State Notification can support.
+"The behavior for a link down was inconsistent as some drivers would fail
+probe in that case while others succeed. Let's standardize this to
+succeed as there are usecases where devices (and the link) appear later
+even without hotplug. For example, a reconfigured FPGA device."
 
-Fixes: 9c4b0a683193 ("drm/i915: add opregion function to notify bios of encoder enable/disable")
-Cc: <stable@vger.kernel.org> # v3.13+
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4800
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/cc363f42d6b5a5932b6d218fefcc8bdfb15dbbe5.1644489329.git.jani.nikula@intel.com
+The pci-imx6 still fails to probe when the link is not present, which
+causes the following warning:
+
+imx6q-pcie 8ffc000.pcie: Phy link never came up
+imx6q-pcie: probe of 8ffc000.pcie failed with error -110
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 30 at drivers/regulator/core.c:2257 _regulator_put.part.0+0x1b8/0x1dc
+Modules linked in:
+CPU: 0 PID: 30 Comm: kworker/u2:2 Not tainted 5.15.0-next-20211103 #1
+Hardware name: Freescale i.MX6 SoloX (Device Tree)
+Workqueue: events_unbound async_run_entry_fn
+[<c0111730>] (unwind_backtrace) from [<c010bb74>] (show_stack+0x10/0x14)
+[<c010bb74>] (show_stack) from [<c0f90290>] (dump_stack_lvl+0x58/0x70)
+[<c0f90290>] (dump_stack_lvl) from [<c012631c>] (__warn+0xd4/0x154)
+[<c012631c>] (__warn) from [<c0f87b00>] (warn_slowpath_fmt+0x74/0xa8)
+[<c0f87b00>] (warn_slowpath_fmt) from [<c076b4bc>] (_regulator_put.part.0+0x1b8/0x1dc)
+[<c076b4bc>] (_regulator_put.part.0) from [<c076b574>] (regulator_put+0x2c/0x3c)
+[<c076b574>] (regulator_put) from [<c08c3740>] (release_nodes+0x50/0x178)
+
+Fix this problem by ignoring the dw_pcie_wait_for_link() error like
+it is done on the other dwc drivers.
+
+Tested on imx6sx-sdb and imx6q-sabresd boards.
+
+Link: https://lore.kernel.org/r/20220106103645.2790803-1-festevam@gmail.com
+Fixes: 886a9c134755 ("PCI: dwc: Move link handling into common code")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Richard Zhu <hongxing.zhu@nxp.com>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_opregion.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/pci/controller/dwc/pci-imx6.c |   10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
---- a/drivers/gpu/drm/i915/display/intel_opregion.c
-+++ b/drivers/gpu/drm/i915/display/intel_opregion.c
-@@ -376,6 +376,21 @@ int intel_opregion_notify_encoder(struct
- 		return -EINVAL;
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -779,9 +779,7 @@ static int imx6_pcie_start_link(struct d
+ 	/* Start LTSSM. */
+ 	imx6_pcie_ltssm_enable(dev);
+ 
+-	ret = dw_pcie_wait_for_link(pci);
+-	if (ret)
+-		goto err_reset_phy;
++	dw_pcie_wait_for_link(pci);
+ 
+ 	if (pci->link_gen == 2) {
+ 		/* Allow Gen2 mode after the link is up. */
+@@ -817,11 +815,7 @@ static int imx6_pcie_start_link(struct d
+ 		}
+ 
+ 		/* Make sure link training is finished as well! */
+-		ret = dw_pcie_wait_for_link(pci);
+-		if (ret) {
+-			dev_err(dev, "Failed to bring link up!\n");
+-			goto err_reset_phy;
+-		}
++		dw_pcie_wait_for_link(pci);
+ 	} else {
+ 		dev_info(dev, "Link: Gen2 disabled\n");
  	}
- 
-+	/*
-+	 * The port numbering and mapping here is bizarre. The now-obsolete
-+	 * swsci spec supports ports numbered [0..4]. Port E is handled as a
-+	 * special case, but port F and beyond are not. The functionality is
-+	 * supposed to be obsolete for new platforms. Just bail out if the port
-+	 * number is out of bounds after mapping.
-+	 */
-+	if (port > 4) {
-+		drm_dbg_kms(&dev_priv->drm,
-+			    "[ENCODER:%d:%s] port %c (index %u) out of bounds for display power state notification\n",
-+			    intel_encoder->base.base.id, intel_encoder->base.name,
-+			    port_name(intel_encoder->port), port);
-+		return -EINVAL;
-+	}
-+
- 	if (!enable)
- 		parm |= 4 << 8;
- 
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E303B4F2C31
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0574F2D99
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiDEJFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S239768AbiDEJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238354AbiDEISx (ORCPT
+        with ESMTP id S238389AbiDEITD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:53 -0400
+        Tue, 5 Apr 2022 04:19:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697A8DAA;
-        Tue,  5 Apr 2022 01:08:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51185FE3;
+        Tue,  5 Apr 2022 01:08:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A069F60A1E;
-        Tue,  5 Apr 2022 08:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AA5C385A1;
-        Tue,  5 Apr 2022 08:08:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B38360919;
+        Tue,  5 Apr 2022 08:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8E0C385A1;
+        Tue,  5 Apr 2022 08:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146121;
-        bh=iOy1mNW6EnbHS4QhamoV2p28aXccAJlzHWxZ/5jreW0=;
+        s=korg; t=1649146123;
+        bh=u8PxMLCYo4rYp2EXONipyGluuU3I5q0QkRQTH2Ha+LM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oHc2StOFTy05foe8NJ0Wmiam+MDDBLNd5F2JY1JW1NEdVQxm9NexvG5JzDTkyCFA8
-         eoi7cXF6/FbbtNGsv36p9i10LuaowViVJdSs80ldDREx8rpSOxJ9Pz9zqrPcSRmK3T
-         pUfXKkO7+tpe6tlcQWZPQESbZEX+dHMiWepDNdZ8=
+        b=aLTWkoG+cfNCvyLaENYLfF3fsRaTbQWDO39fmsPTlUf01RWLR7PP10ke0TmkKs6j1
+         l04o0mxkPDJhRVr8z4yEe9R55fgLRxQGbGdJeKZhcUToLo2iN/hjkH4BYNRLGhiC92
+         766XUIbsTDXQkQjJcFFb8Mun9NAipKHSYb9EoQ68=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0650/1126] vxcan: enable local echo for sent CAN frames
-Date:   Tue,  5 Apr 2022 09:23:17 +0200
-Message-Id: <20220405070426.710048885@linuxfoundation.org>
+Subject: [PATCH 5.17 0651/1126] ath10k: Fix error handling in ath10k_setup_msa_resources
+Date:   Tue,  5 Apr 2022 09:23:18 +0200
+Message-Id: <20220405070426.739189547@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,44 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 259bdba27e32368b4404f69d613b1c1014c07cbf ]
+[ Upstream commit 9747a78d5f758a5284751a10aee13c30d02bd5f1 ]
 
-The vxcan driver provides a pair of virtual CAN interfaces to exchange
-CAN traffic between different namespaces - analogue to veth.
+The device_node pointer is returned by of_parse_phandle() with refcount
+incremented. We should use of_node_put() on it when done.
 
-In opposite to the vcan driver the local sent CAN traffic on this interface
-is not echo'ed back but only sent to the remote peer. This is unusual and
-can be easily fixed by removing IFF_ECHO from the netdevice flags that
-are set for vxcan interfaces by default at startup.
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error path.
 
-Without IFF_ECHO set on driver level, the local sent CAN frames are echo'ed
-in af_can.c in can_send(). This patch makes vxcan interfaces adopt the
-same local echo behavior and procedures as known from the vcan interfaces.
-
-Fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
-Link: https://lore.kernel.org/all/20220309120416.83514-5-socketcan@hartkopp.net
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 727fec790ead ("ath10k: Setup the msa resources before qmi init")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220308070238.19295-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/vxcan.c | 2 +-
+ drivers/net/wireless/ath/ath10k/snoc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-index 47ccc15a3486..191ffa7776e8 100644
---- a/drivers/net/can/vxcan.c
-+++ b/drivers/net/can/vxcan.c
-@@ -148,7 +148,7 @@ static void vxcan_setup(struct net_device *dev)
- 	dev->hard_header_len	= 0;
- 	dev->addr_len		= 0;
- 	dev->tx_queue_len	= 0;
--	dev->flags		= (IFF_NOARP|IFF_ECHO);
-+	dev->flags		= IFF_NOARP;
- 	dev->netdev_ops		= &vxcan_netdev_ops;
- 	dev->needs_free_netdev	= true;
+diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
+index 9513ab696fff..f79dd9a71690 100644
+--- a/drivers/net/wireless/ath/ath10k/snoc.c
++++ b/drivers/net/wireless/ath/ath10k/snoc.c
+@@ -1556,11 +1556,11 @@ static int ath10k_setup_msa_resources(struct ath10k *ar, u32 msa_size)
+ 	node = of_parse_phandle(dev->of_node, "memory-region", 0);
+ 	if (node) {
+ 		ret = of_address_to_resource(node, 0, &r);
++		of_node_put(node);
+ 		if (ret) {
+ 			dev_err(dev, "failed to resolve msa fixed region\n");
+ 			return ret;
+ 		}
+-		of_node_put(node);
  
+ 		ar->msa.paddr = r.start;
+ 		ar->msa.mem_size = resource_size(&r);
 -- 
 2.34.1
 

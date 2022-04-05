@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0344F4417
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1E94F466D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387637AbiDENPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S1387690AbiDENP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344269AbiDEJTD (ORCPT
+        with ESMTP id S1344268AbiDEJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:19:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF842229F;
-        Tue,  5 Apr 2022 02:06:39 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEF122516;
+        Tue,  5 Apr 2022 02:06:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00C16B80DA1;
-        Tue,  5 Apr 2022 09:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6123DC385A0;
-        Tue,  5 Apr 2022 09:06:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 290A961573;
+        Tue,  5 Apr 2022 09:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33283C385A1;
+        Tue,  5 Apr 2022 09:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149596;
-        bh=Y0U/1oukvFPpkPm6qQ6VpXiB5QKiZkyncQiMEoo+SMs=;
+        s=korg; t=1649149599;
+        bh=ThcIY0zq6RhVB53fDcAQkxm2HC765FXv1b3Kt7m7ARQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SY5+jGcNscn3rG3eLieJJo5wE048Vju71j5fWipWO1oZqtrH2caDjBtgug1+oPa7s
-         ECvVO97uap6ygiE6avmMzFJ/DenE3k0RaM8jjmKikfFrXTj2Wbzt67HTLzsJNArET2
-         V+VF3/RkIlU1wrqHajylTWHJuECb6lkGH1IfPTX4=
+        b=wzXaJOnQzElSByFGWViwAzCnDabopYcZK1zEalCzS6TLHPxj23k9zA92xD5zNcavY
+         AMcTA97i7rR64NCbB26PN2htlhJGZbnN5h+ZU3u6693LLnbNNyLlEE/oVSXZBP+i+U
+         Xvv2d0n7XpOgdIe+AHYWbFmJE/cKPe6tiLnetQ+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Kawata <akirakawata1@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0772/1017] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-Date:   Tue,  5 Apr 2022 09:28:05 +0200
-Message-Id: <20220405070417.175617375@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Zhang Wensheng <zhangwensheng5@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0773/1017] bfq: fix use-after-free in bfq_dispatch_request
+Date:   Tue,  5 Apr 2022 09:28:06 +0200
+Message-Id: <20220405070417.205596278@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,117 +55,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Kawata <akirakawata1@gmail.com>
+From: Zhang Wensheng <zhangwensheng5@huawei.com>
 
-[ Upstream commit 0da1d5002745cdc721bc018b582a8a9704d56c42 ]
+[ Upstream commit ab552fcb17cc9e4afe0e4ac4df95fc7b30e8490a ]
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=197921
+KASAN reports a use-after-free report when doing normal scsi-mq test
 
-As pointed out in the discussion of buglink, we cannot calculate AT_PHDR
-as the sum of load_addr and exec->e_phoff.
+[69832.239032] ==================================================================
+[69832.241810] BUG: KASAN: use-after-free in bfq_dispatch_request+0x1045/0x44b0
+[69832.243267] Read of size 8 at addr ffff88802622ba88 by task kworker/3:1H/155
+[69832.244656]
+[69832.245007] CPU: 3 PID: 155 Comm: kworker/3:1H Not tainted 5.10.0-10295-g576c6382529e #8
+[69832.246626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[69832.249069] Workqueue: kblockd blk_mq_run_work_fn
+[69832.250022] Call Trace:
+[69832.250541]  dump_stack+0x9b/0xce
+[69832.251232]  ? bfq_dispatch_request+0x1045/0x44b0
+[69832.252243]  print_address_description.constprop.6+0x3e/0x60
+[69832.253381]  ? __cpuidle_text_end+0x5/0x5
+[69832.254211]  ? vprintk_func+0x6b/0x120
+[69832.254994]  ? bfq_dispatch_request+0x1045/0x44b0
+[69832.255952]  ? bfq_dispatch_request+0x1045/0x44b0
+[69832.256914]  kasan_report.cold.9+0x22/0x3a
+[69832.257753]  ? bfq_dispatch_request+0x1045/0x44b0
+[69832.258755]  check_memory_region+0x1c1/0x1e0
+[69832.260248]  bfq_dispatch_request+0x1045/0x44b0
+[69832.261181]  ? bfq_bfqq_expire+0x2440/0x2440
+[69832.262032]  ? blk_mq_delay_run_hw_queues+0xf9/0x170
+[69832.263022]  __blk_mq_do_dispatch_sched+0x52f/0x830
+[69832.264011]  ? blk_mq_sched_request_inserted+0x100/0x100
+[69832.265101]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
+[69832.266206]  ? blk_mq_do_dispatch_ctx+0x570/0x570
+[69832.267147]  ? __switch_to+0x5f4/0xee0
+[69832.267898]  blk_mq_sched_dispatch_requests+0xdf/0x140
+[69832.268946]  __blk_mq_run_hw_queue+0xc0/0x270
+[69832.269840]  blk_mq_run_work_fn+0x51/0x60
+[69832.278170]  process_one_work+0x6d4/0xfe0
+[69832.278984]  worker_thread+0x91/0xc80
+[69832.279726]  ? __kthread_parkme+0xb0/0x110
+[69832.280554]  ? process_one_work+0xfe0/0xfe0
+[69832.281414]  kthread+0x32d/0x3f0
+[69832.282082]  ? kthread_park+0x170/0x170
+[69832.282849]  ret_from_fork+0x1f/0x30
+[69832.283573]
+[69832.283886] Allocated by task 7725:
+[69832.284599]  kasan_save_stack+0x19/0x40
+[69832.285385]  __kasan_kmalloc.constprop.2+0xc1/0xd0
+[69832.286350]  kmem_cache_alloc_node+0x13f/0x460
+[69832.287237]  bfq_get_queue+0x3d4/0x1140
+[69832.287993]  bfq_get_bfqq_handle_split+0x103/0x510
+[69832.289015]  bfq_init_rq+0x337/0x2d50
+[69832.289749]  bfq_insert_requests+0x304/0x4e10
+[69832.290634]  blk_mq_sched_insert_requests+0x13e/0x390
+[69832.291629]  blk_mq_flush_plug_list+0x4b4/0x760
+[69832.292538]  blk_flush_plug_list+0x2c5/0x480
+[69832.293392]  io_schedule_prepare+0xb2/0xd0
+[69832.294209]  io_schedule_timeout+0x13/0x80
+[69832.295014]  wait_for_common_io.constprop.1+0x13c/0x270
+[69832.296137]  submit_bio_wait+0x103/0x1a0
+[69832.296932]  blkdev_issue_discard+0xe6/0x160
+[69832.297794]  blk_ioctl_discard+0x219/0x290
+[69832.298614]  blkdev_common_ioctl+0x50a/0x1750
+[69832.304715]  blkdev_ioctl+0x470/0x600
+[69832.305474]  block_ioctl+0xde/0x120
+[69832.306232]  vfs_ioctl+0x6c/0xc0
+[69832.306877]  __se_sys_ioctl+0x90/0xa0
+[69832.307629]  do_syscall_64+0x2d/0x40
+[69832.308362]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[69832.309382]
+[69832.309701] Freed by task 155:
+[69832.310328]  kasan_save_stack+0x19/0x40
+[69832.311121]  kasan_set_track+0x1c/0x30
+[69832.311868]  kasan_set_free_info+0x1b/0x30
+[69832.312699]  __kasan_slab_free+0x111/0x160
+[69832.313524]  kmem_cache_free+0x94/0x460
+[69832.314367]  bfq_put_queue+0x582/0x940
+[69832.315112]  __bfq_bfqd_reset_in_service+0x166/0x1d0
+[69832.317275]  bfq_bfqq_expire+0xb27/0x2440
+[69832.318084]  bfq_dispatch_request+0x697/0x44b0
+[69832.318991]  __blk_mq_do_dispatch_sched+0x52f/0x830
+[69832.319984]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
+[69832.321087]  blk_mq_sched_dispatch_requests+0xdf/0x140
+[69832.322225]  __blk_mq_run_hw_queue+0xc0/0x270
+[69832.323114]  blk_mq_run_work_fn+0x51/0x60
+[69832.323942]  process_one_work+0x6d4/0xfe0
+[69832.324772]  worker_thread+0x91/0xc80
+[69832.325518]  kthread+0x32d/0x3f0
+[69832.326205]  ret_from_fork+0x1f/0x30
+[69832.326932]
+[69832.338297] The buggy address belongs to the object at ffff88802622b968
+[69832.338297]  which belongs to the cache bfq_queue of size 512
+[69832.340766] The buggy address is located 288 bytes inside of
+[69832.340766]  512-byte region [ffff88802622b968, ffff88802622bb68)
+[69832.343091] The buggy address belongs to the page:
+[69832.344097] page:ffffea0000988a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88802622a528 pfn:0x26228
+[69832.346214] head:ffffea0000988a00 order:2 compound_mapcount:0 compound_pincount:0
+[69832.347719] flags: 0x1fffff80010200(slab|head)
+[69832.348625] raw: 001fffff80010200 ffffea0000dbac08 ffff888017a57650 ffff8880179fe840
+[69832.354972] raw: ffff88802622a528 0000000000120008 00000001ffffffff 0000000000000000
+[69832.356547] page dumped because: kasan: bad access detected
+[69832.357652]
+[69832.357970] Memory state around the buggy address:
+[69832.358926]  ffff88802622b980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[69832.360358]  ffff88802622ba00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[69832.361810] >ffff88802622ba80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[69832.363273]                       ^
+[69832.363975]  ffff88802622bb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
+[69832.375960]  ffff88802622bb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[69832.377405] ==================================================================
 
-: The AT_PHDR of ELF auxiliary vectors should point to the memory address
-: of program header. But binfmt_elf.c calculates this address as follows:
-:
-: NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
-:
-: which is wrong since e_phoff is the file offset of program header and
-: load_addr is the memory base address from PT_LOAD entry.
-:
-: The ld.so uses AT_PHDR as the memory address of program header. In normal
-: case, since the e_phoff is usually 64 and in the first PT_LOAD region, it
-: is the correct program header address.
-:
-: But if the address of program header isn't equal to the first PT_LOAD
-: address + e_phoff (e.g.  Put the program header in other non-consecutive
-: PT_LOAD region), ld.so will try to read program header from wrong address
-: then crash or use incorrect program header.
+In bfq_dispatch_requestfunction, it may have function call:
 
-This is because exec->e_phoff
-is the offset of PHDRs in the file and the address of PHDRs in the
-memory may differ from it. This patch fixes the bug by calculating the
-address of program headers from PT_LOADs directly.
+bfq_dispatch_request
+	__bfq_dispatch_request
+		bfq_select_queue
+			bfq_bfqq_expire
+				__bfq_bfqd_reset_in_service
+					bfq_put_queue
+						kmem_cache_free
+In this function call, in_serv_queue has beed expired and meet the
+conditions to free. In the function bfq_dispatch_request, the address
+of in_serv_queue pointing to has been released. For getting the value
+of idle_timer_disabled, it will get flags value from the address which
+in_serv_queue pointing to, then the problem of use-after-free happens;
 
-Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220127124014.338760-2-akirakawata1@gmail.com
+Fix the problem by check in_serv_queue == bfqd->in_service_queue, to
+get the value of idle_timer_disabled if in_serve_queue is equel to
+bfqd->in_service_queue. If the space of in_serv_queue pointing has
+been released, this judge will aviod use-after-free problem.
+And if in_serv_queue may be expired or finished, the idle_timer_disabled
+will be false which would not give effects to bfq_update_dispatch_stats.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+Link: https://lore.kernel.org/r/20220303070334.3020168-1-zhangwensheng5@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/binfmt_elf.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ block/bfq-iosched.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index d19762dc90fe..c4de845f86c8 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -170,8 +170,8 @@ static int padzero(unsigned long elf_bss)
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 8c0950c9a1a2..7eecd3200d83 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5061,7 +5061,7 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+ 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
+ 	struct request *rq;
+ 	struct bfq_queue *in_serv_queue;
+-	bool waiting_rq, idle_timer_disabled;
++	bool waiting_rq, idle_timer_disabled = false;
  
- static int
- create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
--		unsigned long load_addr, unsigned long interp_load_addr,
--		unsigned long e_entry)
-+		unsigned long interp_load_addr,
-+		unsigned long e_entry, unsigned long phdr_addr)
- {
- 	struct mm_struct *mm = current->mm;
- 	unsigned long p = bprm->p;
-@@ -257,7 +257,7 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
- 	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
- 	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
--	NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
-+	NEW_AUX_ENT(AT_PHDR, phdr_addr);
- 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
- 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
- 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
-@@ -823,7 +823,7 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- static int load_elf_binary(struct linux_binprm *bprm)
- {
- 	struct file *interpreter = NULL; /* to shut gcc up */
-- 	unsigned long load_addr = 0, load_bias = 0;
-+	unsigned long load_addr, load_bias = 0, phdr_addr = 0;
- 	int load_addr_set = 0;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
-@@ -1180,6 +1180,17 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 				reloc_func_desc = load_bias;
- 			}
- 		}
-+
-+		/*
-+		 * Figure out which segment in the file contains the Program
-+		 * Header table, and map to the associated memory address.
-+		 */
-+		if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
-+		    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
-+			phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
-+				    elf_ppnt->p_vaddr;
-+		}
-+
- 		k = elf_ppnt->p_vaddr;
- 		if ((elf_ppnt->p_flags & PF_X) && k < start_code)
- 			start_code = k;
-@@ -1215,6 +1226,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	}
+ 	spin_lock_irq(&bfqd->lock);
  
- 	e_entry = elf_ex->e_entry + load_bias;
-+	phdr_addr += load_bias;
- 	elf_bss += load_bias;
- 	elf_brk += load_bias;
- 	start_code += load_bias;
-@@ -1278,8 +1290,8 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		goto out;
- #endif /* ARCH_HAS_SETUP_ADDITIONAL_PAGES */
+@@ -5069,14 +5069,15 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+ 	waiting_rq = in_serv_queue && bfq_bfqq_wait_request(in_serv_queue);
  
--	retval = create_elf_tables(bprm, elf_ex,
--			  load_addr, interp_load_addr, e_entry);
-+	retval = create_elf_tables(bprm, elf_ex, interp_load_addr,
-+				   e_entry, phdr_addr);
- 	if (retval < 0)
- 		goto out;
+ 	rq = __bfq_dispatch_request(hctx);
+-
+-	idle_timer_disabled =
+-		waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
++	if (in_serv_queue == bfqd->in_service_queue) {
++		idle_timer_disabled =
++			waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
++	}
  
+ 	spin_unlock_irq(&bfqd->lock);
+-
+-	bfq_update_dispatch_stats(hctx->queue, rq, in_serv_queue,
+-				  idle_timer_disabled);
++	bfq_update_dispatch_stats(hctx->queue, rq,
++			idle_timer_disabled ? in_serv_queue : NULL,
++				idle_timer_disabled);
+ 
+ 	return rq;
+ }
 -- 
 2.34.1
 

@@ -2,76 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DBC4F424A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F19A4F4190
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237731AbiDET5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 15:57:10 -0400
+        id S1445800AbiDEUIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:08:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455142AbiDEP7k (ORCPT
+        with ESMTP id S1455441AbiDEQAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:59:40 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8179B108772
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:11:25 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p10so23731807lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=knadBC5/9Dlj8rbZddGyUUv9/Z5ol7Dtv9U1ioqP9jA=;
-        b=4WXxBwXx7EL1bnbBadqVFwnRXzEoKBnMCPyQY1ZoY51R3YnPyJSrpchjfB6SICDwsJ
-         5alKgXGkZ0+I2dyFvgJGXRqq9S7J0CWijdEsqtbZyqcsb9/kzsafqkVrI8xVxcY72nkg
-         UGCEDmkItzRH77RJhiDAiVZmPMq9iBdIfg9uaN8BHGlPsTQynByp4OpSEyaEevxlFS77
-         Qef8G+zninZ7IFRAGP9u/2MlkCD19bQzY1o2vc3fSvDaAeHrUE7NH83wxI08mKsTZK7G
-         sJ5I+oQd+gn/b/mCW4Ct/uXiaXcZ1hOSLpsU3SjMOep+xv/JHCQbkqq7/lg9kEhzrpAK
-         li0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=knadBC5/9Dlj8rbZddGyUUv9/Z5ol7Dtv9U1ioqP9jA=;
-        b=Qslq5YwGcXsLmb1Pm3TapmUIbLb0aK8j5tnQjiOgvSaSc2GPEAUuTY49t6RoWKg7+3
-         RioNGzuKHAqXz6MuiIkNGGRbgFFV3gGn7Kxw6rqQtexzvsmlxpaRP06fvMWs8O5KK74N
-         oGSOYoijNyqP/51dfRs08CioBgKw0fuz9l7ERQv3zLWC4cKmPE95Q521rXxuGhPNeuhZ
-         9LZZHpvSR2eLZYqbXOKgPcKJ7onyShYkXFMJRQFV8RuQ0qUeCP4QsDrcsU0hFd6zuDoa
-         se6fAMleGjRhhUk+gDeRgZkjXEWLk6e4y8e656aZH7D0Z4/bbboedJNXWMGgnHb5DYEr
-         b4Yg==
-X-Gm-Message-State: AOAM531yXbWu3ryuB4hxiMFkoSkPm5t/mlCWFYk1WVzfaYrjPSDbv74j
-        9ugVk9MRyy3YeD8sceeWsN8qww==
-X-Google-Smtp-Source: ABdhPJzACQiDfI4qUdkgsvTX0RPVvPl+IFhGVEeH45oKkhd6o7WfMVVtWugGdQVsuaBLCEHNpE0Tsw==
-X-Received: by 2002:a05:6512:3a83:b0:44a:5878:24d6 with SMTP id q3-20020a0565123a8300b0044a587824d6mr2899935lfu.426.1649171480237;
-        Tue, 05 Apr 2022 08:11:20 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:5cd5:d9c8:ef4:b0ed? ([2001:861:44c0:66c0:5cd5:d9c8:ef4:b0ed])
-        by smtp.gmail.com with ESMTPSA id x23-20020a056512047700b0044a3c53e12dsm1533643lfd.169.2022.04.05.08.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 08:11:19 -0700 (PDT)
-Message-ID: <a27da359-3922-e4ee-16d2-b4cb6fc06ca8@baylibre.com>
-Date:   Tue, 5 Apr 2022 17:11:18 +0200
+        Tue, 5 Apr 2022 12:00:02 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1133E17077
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:15:29 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F21321EC04AD;
+        Tue,  5 Apr 2022 17:15:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649171724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=Hu6/55Y5RP0JeHRRHFzJWTLf8RYPBg7nbGCBlr4S73o=;
+        b=MnDYNBG22EWthkUZ/Ya63+V8MCVMmDtfcDxQItzPpBKA0JdMvsrm3P8FFsQ3YUnama26/p
+        Ot7+9BAebypZI1hG1PVISCd2eCHJECNaDOg9OBvmKFaVjqSM/Oft4sjf9A2M/35kxznZIP
+        inB4ZisU32YbZ5siQHNo3JdtyjO1oic=
+From:   Borislav Petkov <bp@alien8.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/11] treewide: Fix a bunch of shift overflows
+Date:   Tue,  5 Apr 2022 17:15:06 +0200
+Message-Id: <20220405151517.29753-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
-Content-Language: en-US
-To:     tanure@linux.com, Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220326102229.421718-1-tanure@linux.com>
- <7hee2lu82n.fsf@baylibre.com>
- <CAJX_Q+1Y5pO_AGaFSXfo-J3EdGQeM2XYXzvsUtjtAFEXdwKEdQ@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CAJX_Q+1Y5pO_AGaFSXfo-J3EdGQeM2XYXzvsUtjtAFEXdwKEdQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,79 +47,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Borislav Petkov <bp@suse.de>
 
-On 28/03/2022 23:51, Lucas Tanure wrote:
-> 
-> 
-> On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com <mailto:khilman@baylibre.com>> wrote:
-> 
->     Hi Lucas,
-> 
->     Lucas Tanure <tanure@linux.com <mailto:tanure@linux.com>> writes:
-> 
->      > The default duty cycle of 33% is less than the required
->      > by the I2C specs for the LOW period of the SCL clock.
->      >
->      > So, for 100Khz or less, use 50%H/50%L duty cycle, and
->      > for the clock above 100Khz, use 40%H/60%L duty cycle.
->      > That ensures the low period of SCL is always more than
->      > the minimum required by the specs at any given frequency.
-> 
->     Thanks for the fixes!
-> 
->     This is going to affect all SoCs, so ould you please summarize how your
->     changes were tested, and on which SoCs & boards?
-> 
->     Thanks,
-> 
->     Kevin
-> 
-> 
-> Hi,
-> 
-> I only tested against vim3 board, measured the bus with an saleae logic pro 16.
-> The measurements were with 100k, 400k and a few in between frequencies.
-> 
-> Is that enough?
+Hi all,
 
-I did a few measures on the Libre Computer Le Potato S905X board:
+so this is the result of me trying to make allmodconfig actually build
+here.
 
-i2c_AO:
+Due to some recent changes which added -fsanitize-shift to the build
+options of an allmodconfig, it started failing here with an old gcc
+because getting an overflow while shifting is undefined C99 behavior.
 
-Before the patchset, I got:
-- 100KHz: 1.66uS HIGH, 6.75uS LOW, 20%/80%, Freq 118KHz /!\
-- 400KHz: Unable to decode, clock line is invalid, Data line is also invalid
+gcc warns/errors out with -Werror about this only on newer versions
+where -pedantic is present while older ones do so even without it. The
+whole details here:
 
-With the patchset
-- 100KHz: 4.25uS HIGH, 6.58uS LOW, 40%/60%, Freq 92KHz
-- 400KHz: 0.33uS HIGH, 3.00uS LOW, 10%/90%, Freq 300KHz
+  https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic
 
-i2c_B:
+Fixing all those is trivial so please pick up at your convenience.
 
-Before the patchset, I got:
-- 100KHz: 2.25uS HIGH, 5.41uS LOW, 29%/71%, Freq 130KHz /!\
-- 400KHz: 0.42uS HIGH, 1.66uS LOW, 20%/80%, Freq 480KHz /!\
+In order to avoid spamming people unnecessarily, I'm not CCing everyone
+on each patch but only the relevant maintainers and lists.
 
-With the patchset
-- 100KHz: 4.75uS HIGH, 5.42uS LOW, 46%/54%, Freq 98KHz
-- 400KHz: 0.66uS HIGH, 2.00uS LOW, 24%/75%, Freq 375KHz
+Thx.
 
+Borislav Petkov (11):
+  scsi: aacraid: Fix undefined behavior due to shift overflowing the
+    constant
+  ALSA: usb-audio: Fix undefined behavior due to shift overflowing the
+    constant
+  bnx2x: Fix undefined behavior due to shift overflowing the constant
+  drm/r128: Fix undefined behavior due to shift overflowing the constant
+  i2c: ismt: Fix undefined behavior due to shift overflowing the
+    constant
+  brcmfmac: sdio: Fix undefined behavior due to shift overflowing the
+    constant
+  usb: typec: tcpm: Fix undefined behavior due to shift overflowing the
+    constant
+  mt76: Fix undefined behavior due to shift overflowing the constant
+  perf/imx_ddr: Fix undefined behavior due to shift overflowing the
+    constant
+  IB/mlx5: Fix undefined behavior due to shift overflowing the constant
+  drm/i915: Fix undefined behavior due to shift overflowing the constant
 
-So this fixes the frequency, before they were invalid.
-And it fixes 400KHz on i2c_AO...
+ .../gpu/drm/i915/gt/uc/abi/guc_actions_abi.h   |  2 +-
+ .../i915/gt/uc/abi/guc_communication_ctb_abi.h |  2 +-
+ .../gpu/drm/i915/gt/uc/abi/guc_messages_abi.h  |  2 +-
+ drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h     |  2 +-
+ drivers/gpu/drm/i915/i915_reg.h                | 18 +++++++++---------
+ drivers/gpu/drm/r128/r128_drv.h                |  4 ++--
+ drivers/i2c/busses/i2c-ismt.c                  |  4 ++--
+ .../net/ethernet/broadcom/bnx2x/bnx2x_reg.h    |  2 +-
+ .../broadcom/brcm80211/brcmfmac/sdio.c         |  2 +-
+ .../net/wireless/mediatek/mt76/mt76x2/pci.c    |  2 +-
+ drivers/perf/fsl_imx8_ddr_perf.c               |  2 +-
+ drivers/scsi/aacraid/aacraid.h                 |  2 +-
+ include/linux/mlx5/port.h                      |  2 +-
+ include/linux/usb/pd_bdo.h                     |  2 +-
+ sound/usb/usbaudio.h                           |  2 +-
+ 15 files changed, 25 insertions(+), 25 deletions(-)
 
-I do not understand why behavior is different between i2c_AO & i2c_B, they
-are feed with the same clock so it should be the same.
-
-Did you check on both i2c interfaces ? can you share your results ?
-
-Neil
-
-> 
-> Thanks
-> Lucas
-> 
-> 
-> 
+-- 
+2.35.1
 

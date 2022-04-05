@@ -2,473 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F254F46EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8554F4709
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378815AbiDEUxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S1379251AbiDEUxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573603AbiDETXY (ORCPT
+        with ESMTP id S1573657AbiDETha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:23:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD7051E65;
-        Tue,  5 Apr 2022 12:21:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E949FB81FAA;
-        Tue,  5 Apr 2022 19:21:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89D5C385A0;
-        Tue,  5 Apr 2022 19:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186481;
-        bh=3k0F7k/flOmPH0AUjNjEF/MgnBNUhqWecKWs+ePIhNk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P5FnZITw0s3+Sx4qA/1VH9O15GScBDQIXZ8nCsBNvFSg+Vdhw4RJy65/ZWY3F26tN
-         +4wgSvFIxpRxMqVvwbddLycn5sm2fBqSX5enOuz3/nMZgjvkBRpfQRrYgzu933ABhM
-         bUK5j/4dRoKo1aXvdEQ2xwqAH6w6EtGLxLAWsiyaqei8j1uOyT26UhA7GPFBwnCiRG
-         AZhTCWYQdeUim6IHONerJIOdP5WGysPM9ji91K1ZdR8dlYKo0QlOQA4XDLf2epbYld
-         WMc4FowZckPvSYyRxcnzH2Oqmsgyxbw6BKk8z5M7VgDtLUaArwCmukYNRcf/Vk/woY
-         5qWycATSrxwYQ==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     idryomov@gmail.com, xiubli@redhat.com
-Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Subject: [PATCH v13 54/59] ceph: add read/modify/write to ceph_sync_write
-Date:   Tue,  5 Apr 2022 15:20:25 -0400
-Message-Id: <20220405192030.178326-55-jlayton@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
-References: <20220405192030.178326-1-jlayton@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 15:37:30 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DF6245BD;
+        Tue,  5 Apr 2022 12:35:29 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1nboxN-00CFHs-0R; Tue, 05 Apr 2022 19:35:13 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tim Harvey <tharvey@gateworks.com>, stable@vger.kernel.org
+Subject: [PATCH v2] ARM: dts: imx8mm-venice-gw{71xx,72xx,73xx}: fix OTG controller OC mode
+Date:   Tue,  5 Apr 2022 12:35:09 -0700
+Message-Id: <20220405193509.8231-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing a synchronous write on an encrypted inode, we have no
-guarantee that the caller is writing crypto block-aligned data. When
-that happens, we must do a read/modify/write cycle.
+The GW71xx, GW72xx and GW73xx boards have USB1 routed to a USB OTG
+connectors and USB2 routed to a USB hub.
 
-First, expand the range to cover complete blocks. If we had to change
-the original pos or length, issue a read to fill the first and/or last
-pages, and fetch the version of the object from the result.
+The OTG connector has a over-currently protection with an active-low
+pin and the USB1 to HUB connection has no over-current protection (as
+the HUB itself implements this for its downstream ports).
 
-We then copy data into the pages as usual, encrypt the result and issue
-a write prefixed by an assertion that the version hasn't changed. If it has
-changed then we restart the whole thing again.
+Add proper dt nodes to specify the over-current pin polarity for USB1
+and disable over-current protection for USB2.
 
-If there is no object at that position in the file (-ENOENT), we prefix
-the write on an exclusive create of the object instead.
-
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 ---
- fs/ceph/file.c | 319 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 290 insertions(+), 29 deletions(-)
+v2: add gw71xx as well
+---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi | 2 ++
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi | 2 ++
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi | 2 ++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 69ac67c93552..522189ed6642 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -1540,18 +1540,16 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 	struct inode *inode = file_inode(file);
- 	struct ceph_inode_info *ci = ceph_inode(inode);
- 	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
--	struct ceph_vino vino;
-+	struct ceph_osd_client *osdc = &fsc->client->osdc;
- 	struct ceph_osd_request *req;
- 	struct page **pages;
- 	u64 len;
- 	int num_pages;
- 	int written = 0;
--	int flags;
- 	int ret;
- 	bool check_caps = false;
- 	struct timespec64 mtime = current_time(inode);
- 	size_t count = iov_iter_count(from);
--	size_t off;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+index 73addc0b8e57..6671b99177e5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+@@ -146,12 +146,14 @@
  
- 	if (ceph_snap(file_inode(file)) != CEPH_NOSNAP)
- 		return -EROFS;
-@@ -1571,29 +1569,236 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 	if (ret < 0)
- 		dout("invalidate_inode_pages2_range returned %d\n", ret);
+ &usbotg1 {
+ 	dr_mode = "otg";
++	over-current-active-low;
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	status = "okay";
+ };
  
--	flags = /* CEPH_OSD_FLAG_ORDERSNAP | */ CEPH_OSD_FLAG_WRITE;
--
- 	while ((len = iov_iter_count(from)) > 0) {
- 		size_t left;
- 		int n;
-+		u64 write_pos = pos;
-+		u64 write_len = len;
-+		u64 objnum, objoff;
-+		u32 xlen;
-+		u64 assert_ver;
-+		bool rmw;
-+		bool first, last;
-+		struct iov_iter saved_iter = *from;
-+		size_t off;
-+
-+		ceph_fscrypt_adjust_off_and_len(inode, &write_pos, &write_len);
-+
-+		/* clamp the length to the end of first object */
-+		ceph_calc_file_object_mapping(&ci->i_layout, write_pos,
-+						write_len, &objnum, &objoff,
-+						&xlen);
-+		write_len = xlen;
-+
-+		/* adjust len downward if it goes beyond current object */
-+		if (pos + len > write_pos + write_len)
-+			len = write_pos + write_len - pos;
+ &usbotg2 {
+ 	dr_mode = "host";
++	disable-over-current;
+ 	status = "okay";
+ };
  
--		vino = ceph_vino(inode);
--		req = ceph_osdc_new_request(&fsc->client->osdc, &ci->i_layout,
--					    vino, pos, &len, 0, 1,
--					    CEPH_OSD_OP_WRITE, flags, snapc,
--					    ci->i_truncate_seq,
--					    ci->i_truncate_size,
--					    false);
--		if (IS_ERR(req)) {
--			ret = PTR_ERR(req);
--			break;
--		}
-+		/*
-+		 * If we had to adjust the length or position to align with a
-+		 * crypto block, then we must do a read/modify/write cycle. We
-+		 * use a version assertion to redrive the thing if something
-+		 * changes in between.
-+		 */
-+		first = pos != write_pos;
-+		last = (pos + len) != (write_pos + write_len);
-+		rmw = first || last;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+index 1e7badb2a82e..b6b3578a0f89 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+@@ -211,12 +211,14 @@
  
--		num_pages = calc_pages_for(pos, len);
-+		dout("sync_write ino %llx %lld~%llu adjusted %lld~%llu -- %srmw\n",
-+		     ci->i_vino.ino, pos, len, write_pos, write_len, rmw ? "" : "no ");
-+
-+		/*
-+		 * The data is emplaced into the page as it would be if it were in
-+		 * an array of pagecache pages.
-+		 */
-+		num_pages = calc_pages_for(write_pos, write_len);
- 		pages = ceph_alloc_page_vector(num_pages, GFP_KERNEL);
- 		if (IS_ERR(pages)) {
- 			ret = PTR_ERR(pages);
--			goto out;
-+			break;
-+		}
-+
-+		/* Do we need to preload the pages? */
-+		if (rmw) {
-+			u64 first_pos = write_pos;
-+			u64 last_pos = (write_pos + write_len) - CEPH_FSCRYPT_BLOCK_SIZE;
-+			u64 read_len = CEPH_FSCRYPT_BLOCK_SIZE;
-+			struct ceph_osd_req_op *op;
-+
-+			/* We should only need to do this for encrypted inodes */
-+			WARN_ON_ONCE(!IS_ENCRYPTED(inode));
-+
-+			/* No need to do two reads if first and last blocks are same */
-+			if (first && last_pos == first_pos)
-+				last = false;
-+
-+			/*
-+			 * Allocate a read request for one or two extents, depending
-+			 * on how the request was aligned.
-+			 */
-+			req = ceph_osdc_new_request(osdc, &ci->i_layout,
-+					ci->i_vino, first ? first_pos : last_pos,
-+					&read_len, 0, (first && last) ? 2 : 1,
-+					CEPH_OSD_OP_SPARSE_READ, CEPH_OSD_FLAG_READ,
-+					NULL, ci->i_truncate_seq,
-+					ci->i_truncate_size, false);
-+			if (IS_ERR(req)) {
-+				ceph_release_page_vector(pages, num_pages);
-+				ret = PTR_ERR(req);
-+				break;
-+			}
-+
-+			/* Something is misaligned! */
-+			if (read_len != CEPH_FSCRYPT_BLOCK_SIZE) {
-+				ceph_osdc_put_request(req);
-+				ceph_release_page_vector(pages, num_pages);
-+				ret = -EIO;
-+				break;
-+			}
-+
-+			/* Add extent for first block? */
-+			op = &req->r_ops[0];
-+
-+			if (first) {
-+				osd_req_op_extent_osd_data_pages(req, 0, pages,
-+							 CEPH_FSCRYPT_BLOCK_SIZE,
-+							 offset_in_page(first_pos),
-+							 false, false);
-+				/* We only expect a single extent here */
-+				ret = __ceph_alloc_sparse_ext_map(op, 1);
-+				if (ret) {
-+					ceph_osdc_put_request(req);
-+					ceph_release_page_vector(pages, num_pages);
-+					break;
-+				}
-+			}
-+
-+			/* Add extent for last block */
-+			if (last) {
-+				/* Init the other extent if first extent has been used */
-+				if (first) {
-+					op = &req->r_ops[1];
-+					osd_req_op_extent_init(req, 1, CEPH_OSD_OP_SPARSE_READ,
-+							last_pos, CEPH_FSCRYPT_BLOCK_SIZE,
-+							ci->i_truncate_size,
-+							ci->i_truncate_seq);
-+				}
-+
-+				ret = __ceph_alloc_sparse_ext_map(op, 1);
-+				if (ret) {
-+					ceph_osdc_put_request(req);
-+					ceph_release_page_vector(pages, num_pages);
-+					break;
-+				}
-+
-+				osd_req_op_extent_osd_data_pages(req, first ? 1 : 0,
-+							&pages[num_pages - 1],
-+							CEPH_FSCRYPT_BLOCK_SIZE,
-+							offset_in_page(last_pos),
-+							false, false);
-+			}
-+
-+			ret = ceph_osdc_start_request(osdc, req, false);
-+			if (!ret)
-+				ret = ceph_osdc_wait_request(osdc, req);
-+
-+			/* FIXME: length field is wrong if there are 2 extents */
-+			ceph_update_read_metrics(&fsc->mdsc->metric,
-+						 req->r_start_latency,
-+						 req->r_end_latency,
-+						 read_len, ret);
-+
-+			/* Ok if object is not already present */
-+			if (ret == -ENOENT) {
-+				/*
-+				 * If there is no object, then we can't assert
-+				 * on its version. Set it to 0, and we'll use an
-+				 * exclusive create instead.
-+				 */
-+				ceph_osdc_put_request(req);
-+				assert_ver = 0;
-+				ret = 0;
-+
-+				/*
-+				 * zero out the soon-to-be uncopied parts of the
-+				 * first and last pages.
-+				 */
-+				if (first)
-+					zero_user_segment(pages[0], 0,
-+							  offset_in_page(first_pos));
-+				if (last)
-+					zero_user_segment(pages[num_pages - 1],
-+							  offset_in_page(last_pos),
-+							  PAGE_SIZE);
-+			} else {
-+				if (ret < 0) {
-+					ceph_osdc_put_request(req);
-+					ceph_release_page_vector(pages, num_pages);
-+					break;
-+				}
-+
-+				op = &req->r_ops[0];
-+				if (op->extent.sparse_ext_cnt == 0) {
-+					if (first)
-+						zero_user_segment(pages[0], 0,
-+								  offset_in_page(first_pos));
-+					else
-+						zero_user_segment(pages[num_pages - 1],
-+								  offset_in_page(last_pos),
-+								  PAGE_SIZE);
-+				} else if (op->extent.sparse_ext_cnt != 1 ||
-+					   ceph_sparse_ext_map_end(op) !=
-+						CEPH_FSCRYPT_BLOCK_SIZE) {
-+					ret = -EIO;
-+					ceph_osdc_put_request(req);
-+					ceph_release_page_vector(pages, num_pages);
-+					break;
-+				}
-+
-+				if (first && last) {
-+					op = &req->r_ops[1];
-+					if (op->extent.sparse_ext_cnt == 0) {
-+						zero_user_segment(pages[num_pages - 1],
-+								  offset_in_page(last_pos),
-+								  PAGE_SIZE);
-+					} else if (op->extent.sparse_ext_cnt != 1 ||
-+						   ceph_sparse_ext_map_end(op) !=
-+							CEPH_FSCRYPT_BLOCK_SIZE) {
-+						ret = -EIO;
-+						ceph_osdc_put_request(req);
-+						ceph_release_page_vector(pages, num_pages);
-+						break;
-+					}
-+				}
-+
-+				/* Grab assert version. It must be non-zero. */
-+				assert_ver = req->r_version;
-+				WARN_ON_ONCE(ret > 0 && assert_ver == 0);
-+
-+				ceph_osdc_put_request(req);
-+				if (first) {
-+					ret = ceph_fscrypt_decrypt_block_inplace(inode,
-+							pages[0],
-+							CEPH_FSCRYPT_BLOCK_SIZE,
-+							offset_in_page(first_pos),
-+							first_pos >> CEPH_FSCRYPT_BLOCK_SHIFT);
-+					if (ret < 0) {
-+						ceph_release_page_vector(pages, num_pages);
-+						break;
-+					}
-+				}
-+				if (last) {
-+					ret = ceph_fscrypt_decrypt_block_inplace(inode,
-+							pages[num_pages - 1],
-+							CEPH_FSCRYPT_BLOCK_SIZE,
-+							offset_in_page(last_pos),
-+							last_pos >> CEPH_FSCRYPT_BLOCK_SHIFT);
-+					if (ret < 0) {
-+						ceph_release_page_vector(pages, num_pages);
-+						break;
-+					}
-+				}
-+			}
- 		}
+ &usbotg1 {
+ 	dr_mode = "otg";
++	over-current-active-low;
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	status = "okay";
+ };
  
- 		left = len;
-@@ -1601,43 +1806,98 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 		for (n = 0; n < num_pages; n++) {
- 			size_t plen = min_t(size_t, left, PAGE_SIZE - off);
+ &usbotg2 {
+ 	dr_mode = "host";
++	disable-over-current;
+ 	vbus-supply = <&reg_usb_otg2_vbus>;
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+index 7a5d45e80982..89fc2c595056 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+@@ -239,12 +239,14 @@
  
-+			/* copy the data */
- 			ret = copy_page_from_iter(pages[n], off, plen, from);
--			off = 0;
- 			if (ret != plen) {
- 				ret = -EFAULT;
- 				break;
- 			}
-+			off = 0;
- 			left -= ret;
- 		}
--
- 		if (ret < 0) {
-+			dout("sync_write write failed with %d\n", ret);
- 			ceph_release_page_vector(pages, num_pages);
--			goto out;
-+			break;
- 		}
+ &usbotg1 {
+ 	dr_mode = "otg";
++	over-current-active-low;
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	status = "okay";
+ };
  
--		req->r_inode = inode;
-+		if (IS_ENCRYPTED(inode)) {
-+			ret = ceph_fscrypt_encrypt_pages(inode, pages,
-+							 write_pos, write_len,
-+							 GFP_KERNEL);
-+			if (ret < 0) {
-+				dout("encryption failed with %d\n", ret);
-+				ceph_release_page_vector(pages, num_pages);
-+				break;
-+			}
-+		}
- 
--		osd_req_op_extent_osd_data_pages(req, 0, pages, len,
--						 offset_in_page(pos),
--						 false, true);
-+		req = ceph_osdc_new_request(osdc, &ci->i_layout,
-+					    ci->i_vino, write_pos, &write_len,
-+					    rmw ? 1 : 0, rmw ? 2 : 1,
-+					    CEPH_OSD_OP_WRITE,
-+					    CEPH_OSD_FLAG_WRITE,
-+					    snapc, ci->i_truncate_seq,
-+					    ci->i_truncate_size, false);
-+		if (IS_ERR(req)) {
-+			ret = PTR_ERR(req);
-+			ceph_release_page_vector(pages, num_pages);
-+			break;
-+		}
- 
-+		dout("sync_write write op %lld~%llu\n", write_pos, write_len);
-+		osd_req_op_extent_osd_data_pages(req, rmw ? 1 : 0, pages, write_len,
-+						 offset_in_page(write_pos), false,
-+						 true);
-+		req->r_inode = inode;
- 		req->r_mtime = mtime;
--		ret = ceph_osdc_start_request(&fsc->client->osdc, req, false);
-+
-+		/* Set up the assertion */
-+		if (rmw) {
-+			/*
-+			 * Set up the assertion. If we don't have a version number,
-+			 * then the object doesn't exist yet. Use an exclusive create
-+			 * instead of a version assertion in that case.
-+			 */
-+			if (assert_ver) {
-+				osd_req_op_init(req, 0, CEPH_OSD_OP_ASSERT_VER, 0);
-+				req->r_ops[0].assert_ver.ver = assert_ver;
-+			} else {
-+				osd_req_op_init(req, 0, CEPH_OSD_OP_CREATE,
-+						CEPH_OSD_OP_FLAG_EXCL);
-+			}
-+		}
-+
-+		ret = ceph_osdc_start_request(osdc, req, false);
- 		if (!ret)
--			ret = ceph_osdc_wait_request(&fsc->client->osdc, req);
-+			ret = ceph_osdc_wait_request(osdc, req);
- 
- 		ceph_update_write_metrics(&fsc->mdsc->metric, req->r_start_latency,
- 					  req->r_end_latency, len, ret);
--out:
- 		ceph_osdc_put_request(req);
- 		if (ret != 0) {
-+			dout("sync_write osd write returned %d\n", ret);
-+			/* Version changed! Must re-do the rmw cycle */
-+			if ((assert_ver && (ret == -ERANGE || ret == -EOVERFLOW)) ||
-+			     (!assert_ver && ret == -EEXIST)) {
-+				/* We should only ever see this on a rmw */
-+				WARN_ON_ONCE(!rmw);
-+
-+				/* The version should never go backward */
-+				WARN_ON_ONCE(ret == -EOVERFLOW);
-+
-+				*from = saved_iter;
-+
-+				/* FIXME: limit number of times we loop? */
-+				continue;
-+			}
- 			ceph_set_error_write(ci);
- 			break;
- 		}
--
- 		ceph_clear_error_write(ci);
- 		pos += len;
- 		written += len;
-+		dout("sync_write written %d\n", written);
- 		if (pos > i_size_read(inode)) {
- 			check_caps = ceph_inode_set_size(inode, pos);
- 			if (check_caps)
-@@ -1652,6 +1912,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 		ret = written;
- 		iocb->ki_pos = pos;
- 	}
-+	dout("sync_write returning %d\n", ret);
- 	return ret;
- }
- 
+ &usbotg2 {
+ 	dr_mode = "host";
++	disable-over-current;
+ 	vbus-supply = <&reg_usb_otg2_vbus>;
+ 	status = "okay";
+ };
 -- 
-2.35.1
+2.17.1
 

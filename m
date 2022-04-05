@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686584F41B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39A64F4213
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344405AbiDENFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S244452AbiDENES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238839AbiDEJQR (ORCPT
+        with ESMTP id S238747AbiDEJQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:16:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4061CF4B7;
-        Tue,  5 Apr 2022 02:01:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC392D1CED;
+        Tue,  5 Apr 2022 02:01:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74BD8B818F3;
-        Tue,  5 Apr 2022 09:01:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B04C385A1;
-        Tue,  5 Apr 2022 09:01:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D454B81A22;
+        Tue,  5 Apr 2022 09:01:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F1EC385A0;
+        Tue,  5 Apr 2022 09:01:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149300;
-        bh=KoGQ+0vWP49KzgTOCU/ifdDn7F7KOjvEzSHR2vQTS+U=;
+        s=korg; t=1649149308;
+        bh=nHD0pg0JPdDBQlubw4lET+r6B3XXrvHryuZbDJCYbcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V9YmgRW+s6inMPeYwYHPM8NXcObQ5fTD5dQB4e6r9rC/kVFcpYGEOHEUCKdANRpGH
-         bZJZ1k54PzktQ7ENUYqZDDYAxYCOSNSyzqfSp7VPwpzoVxKE8u6BPlTGf1bHlCEmJe
-         z3N1sy+houiSxOXA96qWTkETeS7COzEWbUoGjclE=
+        b=FRu8R2S5m9o8Lap9wGsgH0GjpbT83S8H0v4SgFeclbSf7cLx5+4eGdEe9e7f9C92G
+         oX8JruHOsX+tWzuUGflaWMwukwtd06l0j+RZ7jAmGTqp6OBaa5xvJ6gnHYWRSM9JzP
+         Ie5blp7kR+WcwN4dDyOGo5k9PWx/3smAYE7sUfBE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0665/1017] serial: 8250_mid: Balance reference count for PCI DMA device
-Date:   Tue,  5 Apr 2022 09:26:18 +0200
-Message-Id: <20220405070414.021776769@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0668/1017] serial: 8250: Fix race condition in RTS-after-send handling
+Date:   Tue,  5 Apr 2022 09:26:21 +0200
+Message-Id: <20220405070414.110149314@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,91 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 67ec6dd0b257bd81b4e9fcac89b29da72f6265e5 ]
+[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
+Set em485->active_timer = NULL isn't always enough to take out the stop
+timer. While there is a check that it acts in the right state (i.e.
+waiting for RTS-after-send to pass after sending some chars) but the
+following might happen:
 
-Fixes: 90b9aacf912a ("serial: 8250_pci: add Intel Tangier support")
-Fixes: f549e94effa1 ("serial: 8250_pci: add Intel Penwell ports")
-Reported-by: Qing Wang <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Depends-on: d9eda9bab237 ("serial: 8250_pci: Intel MID UART support to its own driver")
-Link: https://lore.kernel.org/r/20220215100920.41984-1-andriy.shevchenko@linux.intel.com
+ - CPU1: some chars send, shifter becomes empty, stop tx timer armed
+ - CPU0: more chars send before RTS-after-send expired
+ - CPU0: shifter empty irq, port lock taken
+ - CPU1: tx timer triggers, waits for port lock
+ - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
+   releases lock()
+ - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
+   tear down RTS too early
+
+This fix bases on research done by Steffen Trumtrar.
+
+Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_mid.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_mid.c b/drivers/tty/serial/8250/8250_mid.c
-index efa0515139f8..e6c1791609dd 100644
---- a/drivers/tty/serial/8250/8250_mid.c
-+++ b/drivers/tty/serial/8250/8250_mid.c
-@@ -73,6 +73,11 @@ static int pnw_setup(struct mid8250 *mid, struct uart_port *p)
- 	return 0;
- }
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index b34e84695c8c..344fbe7426f6 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1623,6 +1623,18 @@ static inline void start_tx_rs485(struct uart_port *port)
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct uart_8250_em485 *em485 = up->em485;
  
-+static void pnw_exit(struct mid8250 *mid)
-+{
-+	pci_dev_put(mid->dma_dev);
-+}
++	/*
++	 * While serial8250_em485_handle_stop_tx() is a noop if
++	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
++	 * the timer is still armed and triggers only after the current bunch of
++	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
++	 * So cancel the timer. There is still a theoretical race condition if
++	 * the timer is already running and only comes around to check for
++	 * em485->active_timer when &em485->stop_tx_timer is armed again.
++	 */
++	if (em485->active_timer == &em485->stop_tx_timer)
++		hrtimer_try_to_cancel(&em485->stop_tx_timer);
 +
- static int tng_handle_irq(struct uart_port *p)
- {
- 	struct mid8250 *mid = p->private_data;
-@@ -124,6 +129,11 @@ static int tng_setup(struct mid8250 *mid, struct uart_port *p)
- 	return 0;
- }
+ 	em485->active_timer = NULL;
  
-+static void tng_exit(struct mid8250 *mid)
-+{
-+	pci_dev_put(mid->dma_dev);
-+}
-+
- static int dnv_handle_irq(struct uart_port *p)
- {
- 	struct mid8250 *mid = p->private_data;
-@@ -330,9 +340,9 @@ static int mid8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	pci_set_drvdata(pdev, mid);
- 	return 0;
-+
- err:
--	if (mid->board->exit)
--		mid->board->exit(mid);
-+	mid->board->exit(mid);
- 	return ret;
- }
- 
-@@ -342,8 +352,7 @@ static void mid8250_remove(struct pci_dev *pdev)
- 
- 	serial8250_unregister_port(mid->line);
- 
--	if (mid->board->exit)
--		mid->board->exit(mid);
-+	mid->board->exit(mid);
- }
- 
- static const struct mid8250_board pnw_board = {
-@@ -351,6 +360,7 @@ static const struct mid8250_board pnw_board = {
- 	.freq = 50000000,
- 	.base_baud = 115200,
- 	.setup = pnw_setup,
-+	.exit = pnw_exit,
- };
- 
- static const struct mid8250_board tng_board = {
-@@ -358,6 +368,7 @@ static const struct mid8250_board tng_board = {
- 	.freq = 38400000,
- 	.base_baud = 1843200,
- 	.setup = tng_setup,
-+	.exit = tng_exit,
- };
- 
- static const struct mid8250_board dnv_board = {
+ 	if (em485->tx_stopped) {
 -- 
 2.34.1
 

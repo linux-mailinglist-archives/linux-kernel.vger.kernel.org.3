@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1176D4F4F95
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75A14F5081
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838636AbiDFA4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S1842218AbiDFB1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356151AbiDEKXA (ORCPT
+        with ESMTP id S1356163AbiDEKXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB11BA306;
-        Tue,  5 Apr 2022 03:06:59 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7A1BA336;
+        Tue,  5 Apr 2022 03:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E264616E7;
-        Tue,  5 Apr 2022 10:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B393C385A1;
-        Tue,  5 Apr 2022 10:06:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 515F0B81B7A;
+        Tue,  5 Apr 2022 10:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2301C385A1;
+        Tue,  5 Apr 2022 10:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153218;
-        bh=gC9mmqjdDsldH0jwpnx+SrEPMbxFmXtb97UEUB0tsx4=;
+        s=korg; t=1649153238;
+        bh=AaFYa00Ma6AmyJcieok/RX9YdAizD7Cu65u7n1BBs5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJwBvBYQzSP5ZBfXV8oNcaGoEpVZCQNKLlJ6mjua7P8Pw+IbCgDpWcwPw5Nhwy1dQ
-         zm+D7uVZwrF/vEYfaW+j1BOGrn2ePCONSZE8znCKW0f7k1md8SAhrCX1vX4f3BajFY
-         qGyBv/cd3zUBfhZ+v6lz+8LxHVCFzTY/klJqzTHM=
+        b=SmaAKmiPlidkwmykdThkk2O4zBrNv6jERosrDmU4AkLlF6IAMX5xju1Z5o0TkMORy
+         046Yya2/+pb4Qfs7jZKatCd+FbB3Dg9rOgOcFtb/nZCJ1WbOWU/OUhanYGiuZBe3xn
+         aETl31E8rruqPv7DXaIPrLxLDzSDl/6E5hYZgtpc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Alan Tull <atull@opensource.altera.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 144/599] hwmon: (pmbus) Add mutex to regulator ops
-Date:   Tue,  5 Apr 2022 09:27:18 +0200
-Message-Id: <20220405070303.128456382@linuxfoundation.org>
+Subject: [PATCH 5.10 150/599] spi: spi-zynqmp-gqspi: Handle error for dma_set_mask
+Date:   Tue,  5 Apr 2022 09:27:24 +0200
+Message-Id: <20220405070303.306722182@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -58,69 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 686d303ee6301261b422ea51e64833d7909a2c36 ]
+[ Upstream commit 13262fc26c1837c51a5131dbbdd67a2387f8bfc7 ]
 
-On PMBUS devices with multiple pages, the regulator ops need to be
-protected with the update mutex. This prevents accidentally changing
-the page in a separate thread while operating on the PMBUS_OPERATION
-register.
+As the potential failure of the dma_set_mask(),
+it should be better to check it and return error
+if fails.
 
-Tested on Infineon xdpe11280 while a separate thread polls for sensor
-data.
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Link: https://lore.kernel.org/r/b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io
-Fixes: ddbb4db4ced1b ("hwmon: (pmbus) Add regulator support")
-Cc: Alan Tull <atull@opensource.altera.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 126bdb606fd2 ("spi: spi-zynqmp-gqspi: return -ENOMEM if dma_map_single fails")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220302092051.121343-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/spi/spi-zynqmp-gqspi.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 71798fde2ef0..7a13057007d9 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2255,10 +2255,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
- 	int ret;
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index 1dd2af9cc237..3d3ac48243eb 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1165,7 +1165,10 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 		goto clk_dis_all;
+ 	}
  
-+	mutex_lock(&data->update_lock);
- 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-+	mutex_unlock(&data->update_lock);
+-	dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
++	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
++	if (ret)
++		goto clk_dis_all;
 +
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2269,11 +2273,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
-+	int ret;
- 
--	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
--				      PB_OPERATION_CONTROL_ON,
--				      enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_lock(&data->update_lock);
-+	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-+				     PB_OPERATION_CONTROL_ON,
-+				     enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_unlock(&data->update_lock);
-+
-+	return ret;
- }
- 
- static int pmbus_regulator_enable(struct regulator_dev *rdev)
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
+ 	ctlr->mem_ops = &zynqmp_qspi_mem_ops;
 -- 
 2.34.1
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDBE4F3B6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99974F3B75
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357930AbiDEL4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S1358998AbiDEL4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244927AbiDEIws (ORCPT
+        with ESMTP id S244926AbiDEIws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E1424969;
-        Tue,  5 Apr 2022 01:46:42 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DFD1BEBB;
+        Tue,  5 Apr 2022 01:46:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 444CEB81B18;
-        Tue,  5 Apr 2022 08:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4E3C385A1;
-        Tue,  5 Apr 2022 08:46:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A8BB81B18;
+        Tue,  5 Apr 2022 08:46:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766EBC385A0;
+        Tue,  5 Apr 2022 08:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148400;
-        bh=UtAF4TJdgd6LI56pIhGRnVTmygJzn7Y55xHYTWv0Fco=;
+        s=korg; t=1649148402;
+        bh=Kby6M02Ko1M617/lfRgRpIE2CJqOpMZxo0TaBVxMgLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2Rcp6fX8is9IxRhFFCWU8nSP8i6RiONqb7kCvwWuST7h7+czE4olmiscTi8ktZai
-         wI3u93/grtqKvYQG6LOz4uPhn/Q7V4ymDnpBqbcRvSy7Is8n/vj+MrGYILTw76fUNk
-         L/rMMyox1PbwZGg3T//za1ai0IqYf4uDV0gDg+5Y=
+        b=kntFUn4hYroclTMbn0p20x4qvHaQ0uKSORsCGYOQAdVwrUWypEuOcbn/neSugb7hg
+         R1wbQ2iQIHhQB5M4YzIh5yyhH4pSUxmrsjKa54Du3BkWH1oeAcxwr/N8xdmmR3q7Ez
+         e3uwhW7gBEbzkT1Bk/UOiMgwPuadWjZukTLVb/e8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0341/1017] ASoC: codecs: wc938x: fix accessing array out of bounds for enum type
-Date:   Tue,  5 Apr 2022 09:20:54 +0200
-Message-Id: <20220405070404.405359777@linuxfoundation.org>
+Subject: [PATCH 5.16 0342/1017] ASoC: codecs: wcd938x: fix kcontrol max values
+Date:   Tue,  5 Apr 2022 09:20:55 +0200
+Message-Id: <20220405070404.434785126@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,45 +58,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit cc587b7c8fbbe128f6bd0dad025a0caea5e6d164 ]
+[ Upstream commit b0217519236924f77a8382b4004e43ef8fd0dcbb ]
 
-Accessing enums using integer would result in array out of bounds access
-on platforms like aarch64 where sizeof(long) is 8 compared to enum size
-which is 4 bytes.
+set "HPH Type" Kcontrol max value of WCD_MBHC_HPH_STEREO instead of UINT_MAX.
+set "HPHL/R Impedance" Kcontrols max value to INT_MAX instead of UINT_MAX as
+max field is integer type.
 
-Fix this by using enumerated items instead of integers.
+Without this patch amixer for these controls will show -1 as max value to userspace.
 
-Fixes: e8ba1e05bdc0 ("ASoC: codecs: wcd938x: add basic controls")
+Fixes: bcee7ed09b8e ("ASoC: codecs: wcd938x: add Multi Button Headset Control support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220222183212.11580-7-srinivas.kandagatla@linaro.org
+Link: https://lore.kernel.org/r/20220222183212.11580-8-srinivas.kandagatla@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wcd938x.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index bbc261ab2025..54671bbf7471 100644
+index 54671bbf7471..4480c118ed5d 100644
 --- a/sound/soc/codecs/wcd938x.c
 +++ b/sound/soc/codecs/wcd938x.c
-@@ -2504,7 +2504,7 @@ static int wcd938x_tx_mode_get(struct snd_kcontrol *kcontrol,
- 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
- 
--	ucontrol->value.integer.value[0] = wcd938x->tx_mode[path];
-+	ucontrol->value.enumerated.item[0] = wcd938x->tx_mode[path];
- 
- 	return 0;
+@@ -3577,14 +3577,14 @@ static int wcd938x_hph_impedance_get(struct snd_kcontrol *kcontrol,
  }
-@@ -2528,7 +2528,7 @@ static int wcd938x_rx_hph_mode_get(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
  
--	ucontrol->value.integer.value[0] = wcd938x->hph_mode;
-+	ucontrol->value.enumerated.item[0] = wcd938x->hph_mode;
+ static const struct snd_kcontrol_new hph_type_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPH Type", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPH Type", 0, 0, WCD_MBHC_HPH_STEREO, 0,
+ 		       wcd938x_get_hph_type, NULL),
+ };
  
- 	return 0;
- }
+ static const struct snd_kcontrol_new impedance_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+-	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+ };
+ 
 -- 
 2.34.1
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC504F4B68
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091634F48F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574529AbiDEW4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S1388861AbiDEV5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358314AbiDEK2P (ORCPT
+        with ESMTP id S1353858AbiDEKJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:15 -0400
+        Tue, 5 Apr 2022 06:09:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB5113E8E;
-        Tue,  5 Apr 2022 03:17:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A484C3376;
+        Tue,  5 Apr 2022 02:55:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD3436176C;
-        Tue,  5 Apr 2022 10:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00B1C385A0;
-        Tue,  5 Apr 2022 10:17:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2707461500;
+        Tue,  5 Apr 2022 09:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352E5C385A2;
+        Tue,  5 Apr 2022 09:55:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153872;
-        bh=JiEiktOT5sIoAL4/JxpO7gXkYxhl538h8WZSyCiN6Eo=;
+        s=korg; t=1649152539;
+        bh=uwEM9yJd8yQV8YVnMIu1YlcaI8etPYsnFYaOdz+jFvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c3EA0KWvGELfeR4SJWV88wR2xAiA6kMOkkbDaz0IoXSIRK3C6HkIZ/kHsb8PRor/4
-         iOaeQvo+JLl/KLHWWJo/eiMisOB2isW+XV7y6YCYYpwDfkC1hXKwzDzzzvHkARs56v
-         YtLJ34F7MQC6dTzbgFYtcyKq4fMAT1d9uc1vFhmo=
+        b=CCPuPesTFA/W36H3rMeUmsFtTyD7JiUMTGnrAlqRpY7If7eX4zzu9AUs20UX9ZbGK
+         tjhTgE6WBeo7lS2gDpLHU1tGGOXsse2uIq/hUEgS6G1hbmGEV34FZkFqbIobU0G6i9
+         1UhHbNRUp0GY7DcYpU8V6mujDB8D1O6S6xclTowk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 378/599] mxser: fix xmit_buf leak in activate when LSR == 0xff
-Date:   Tue,  5 Apr 2022 09:31:12 +0200
-Message-Id: <20220405070310.078982813@linuxfoundation.org>
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 812/913] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
+Date:   Tue,  5 Apr 2022 09:31:14 +0200
+Message-Id: <20220405070404.171468399@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,76 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
+commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
 
-When LSR is 0xff in ->activate() (rather unlike), we return an error.
-Provided ->shutdown() is not called when ->activate() fails, nothing
-actually frees the buffer in this case.
+Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
+this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
 
-Fix this by properly freeing the buffer in a designated label. We jump
-there also from the "!info->type" if now too.
+Note, it would've been better to forbid writing anything to SYNIC/STIMER
+MSRs, including zeroes, however, at least QEMU tries clearing
+HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
+'special' as writing zero there triggers an action, this also should not
+happen when SynIC wasn't activated.
 
-Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/mxser.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/x86/kvm/hyperv.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 3703987c4666..8344265a1948 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -858,6 +858,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	struct mxser_port *info = container_of(port, struct mxser_port, port);
- 	unsigned long page;
- 	unsigned long flags;
-+	int ret;
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -236,7 +236,7 @@ static int synic_set_msr(struct kvm_vcpu
+ 	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
+ 	int ret;
  
- 	page = __get_free_page(GFP_KERNEL);
- 	if (!page)
-@@ -867,9 +868,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || data))
+ 		return 1;
  
- 	if (!info->ioaddr || !info->type) {
- 		set_bit(TTY_IO_ERROR, &tty->flags);
--		free_page(page);
- 		spin_unlock_irqrestore(&info->slock, flags);
--		return 0;
-+		ret = 0;
-+		goto err_free_xmit;
- 	}
- 	info->port.xmit_buf = (unsigned char *) page;
+ 	trace_kvm_hv_synic_set_msr(vcpu->vcpu_id, msr, data, host);
+@@ -282,6 +282,9 @@ static int synic_set_msr(struct kvm_vcpu
+ 	case HV_X64_MSR_EOM: {
+ 		int i;
  
-@@ -895,8 +896,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 		if (capable(CAP_SYS_ADMIN)) {
- 			set_bit(TTY_IO_ERROR, &tty->flags);
- 			return 0;
--		} else
--			return -ENODEV;
-+		}
++		if (!synic->active)
++			break;
 +
-+		ret = -ENODEV;
-+		goto err_free_xmit;
- 	}
+ 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
+ 			kvm_hv_notify_acked_sint(vcpu, i);
+ 		break;
+@@ -661,7 +664,7 @@ static int stimer_set_config(struct kvm_
+ 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+ 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
  
- 	/*
-@@ -941,6 +944,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	spin_unlock_irqrestore(&info->slock, flags);
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || config))
+ 		return 1;
  
- 	return 0;
-+err_free_xmit:
-+	free_page(page);
-+	info->port.xmit_buf = NULL;
-+	return ret;
- }
+ 	if (unlikely(!host && hv_vcpu->enforce_cpuid && new_config.direct_mode &&
+@@ -690,7 +693,7 @@ static int stimer_set_count(struct kvm_v
+ 	struct kvm_vcpu *vcpu = hv_stimer_to_vcpu(stimer);
+ 	struct kvm_vcpu_hv_synic *synic = to_hv_synic(vcpu);
  
- /*
--- 
-2.34.1
-
+-	if (!synic->active && !host)
++	if (!synic->active && (!host || count))
+ 		return 1;
+ 
+ 	trace_kvm_hv_stimer_set_count(hv_stimer_to_vcpu(stimer)->vcpu_id,
 
 

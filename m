@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939B34F4EB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9054C4F4DC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836272AbiDFAf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S1583057AbiDEXu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241264AbiDEKfO (ORCPT
+        with ESMTP id S1354157AbiDEKMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:14 -0400
+        Tue, 5 Apr 2022 06:12:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BECC27CD2;
-        Tue,  5 Apr 2022 03:20:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD265517CD;
+        Tue,  5 Apr 2022 02:57:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6697B81BC5;
-        Tue,  5 Apr 2022 10:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38723C385A0;
-        Tue,  5 Apr 2022 10:20:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96728B817D3;
+        Tue,  5 Apr 2022 09:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3723C385A2;
+        Tue,  5 Apr 2022 09:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154010;
-        bh=H3Dt4cJJwR/zpCWMq7h5pmwL4k+5EyFj/mhPC5rRNJU=;
+        s=korg; t=1649152663;
+        bh=4djunoAxJHOaDgEd2iZ0RMBXmqeYYQMugjYVYuIJyBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HLN91hsnZUlk11EsyvlV3fPw6z60bkNaefvKHWBUO/dl+cnG9fP3pMRjyl1q4VadY
-         MBDYdS378TFPFRkcAZLoS9AjQ/GGPm6y6A1tLZ2+1bsuoQxPSNEBBnBn4Wmf2oVBDm
-         XzsK2kv14FKQTZQYnkCxkXrJBuWXy1S6GZSP6iT8=
+        b=gklaGWidsgBKAWIlwDgw0AOIl4O0mPMrkEf7ZPK/V4eGc/5X0c5F87q07xBnzGNEp
+         c1fU2dO1v7wyTvoRv1/ZuOpk6Rv1/6Jrp4WJDeBoCXR+ifzUjyjy3SVQvv3+1cekPP
+         ZcnUNjr2cjjphx7qMKEAztok+8Z96TNvGIGvRbTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jingoo Han <jg1.han@samsung.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 425/599] tty: hvc: fix return value of __setup handler
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 857/913] riscv module: remove (NOLOAD)
 Date:   Tue,  5 Apr 2022 09:31:59 +0200
-Message-Id: <20220405070311.479937375@linuxfoundation.org>
+Message-Id: <20220405070405.516609341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,50 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Fangrui Song <maskray@google.com>
 
-[ Upstream commit 53819a0d97aace1425bb042829e3446952a9e8a9 ]
+commit 60210a3d86dc57ce4a76a366e7841dda746a33f7 upstream.
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled or 0 to indicate that it was not handled.
-Add a pr_warn() message if the option value is invalid and then
-always return 1.
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt, .got, and .got.plt sections which are always
+SHT_PROGBITS.
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 86b40567b917 ("tty: replace strict_strtoul() with kstrtoul()")
-Cc: Jingoo Han <jg1.han@samsung.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Julian Wiedmann <jwi@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308024228.20477-1-rdunlap@infradead.org
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error (later changed to a warning). Just remove (NOLOAD) to
+fix the warning.
+
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1597
+Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/hvc/hvc_iucv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/module.lds.h |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
-index 2af1e5751bd6..796fbff623f6 100644
---- a/drivers/tty/hvc/hvc_iucv.c
-+++ b/drivers/tty/hvc/hvc_iucv.c
-@@ -1470,7 +1470,9 @@ static int __init hvc_iucv_init(void)
-  */
- static	int __init hvc_iucv_config(char *val)
- {
--	 return kstrtoul(val, 10, &hvc_iucv_devices);
-+	if (kstrtoul(val, 10, &hvc_iucv_devices))
-+		pr_warn("hvc_iucv= invalid parameter value '%s'\n", val);
-+	return 1;
+--- a/arch/riscv/include/asm/module.lds.h
++++ b/arch/riscv/include/asm/module.lds.h
+@@ -2,8 +2,8 @@
+ /* Copyright (C) 2017 Andes Technology Corporation */
+ #ifdef CONFIG_MODULE_SECTIONS
+ SECTIONS {
+-	.plt (NOLOAD) : { BYTE(0) }
+-	.got (NOLOAD) : { BYTE(0) }
+-	.got.plt (NOLOAD) : { BYTE(0) }
++	.plt : { BYTE(0) }
++	.got : { BYTE(0) }
++	.got.plt : { BYTE(0) }
  }
- 
- 
--- 
-2.34.1
-
+ #endif
 
 

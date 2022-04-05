@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5779F4F50F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F179E4F50A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843787AbiDFBmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S1842784AbiDFBep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355232AbiDEKSh (ORCPT
+        with ESMTP id S1349194AbiDEJt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:18:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D52D93;
-        Tue,  5 Apr 2022 03:04:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2853521E39;
+        Tue,  5 Apr 2022 02:42:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFB86B81C86;
-        Tue,  5 Apr 2022 10:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65696C385A1;
-        Tue,  5 Apr 2022 10:04:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 074B5CE1C6F;
+        Tue,  5 Apr 2022 09:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE47C385A1;
+        Tue,  5 Apr 2022 09:42:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153070;
-        bh=Y44RZZtZoW5GEwA5ktM/IoJ5Tnlzo8j8Re6ddG35/IE=;
+        s=korg; t=1649151747;
+        bh=vC3HpaQC66yZXonEgmL5Uq5YOTH5rq+MgVEPdR036Wo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xRA2GAmk89KJENgJ2KGbAOfr+vwO3x+FSmkbhiTMJQcv+wyX9MSZ0bN1M5Go9LYLc
-         qczhe1FuiISYolCCdA7vQpw/Y+1OEpRJe9Z1hfn1DKa1FRND8HGP3QBM9Z6knffBTh
-         OebHQbwEY8+TlQM7Wj4GUuc30mH2D4chzRJwD0es=
+        b=qK1FZV5cf/lhr+U1lbjTqBgupu2epqisnZsifQ9rNEJHbJthbDi121r+qvLDvJ81f
+         QH1M4p6MatEDJ5Q427YtR8g11BpzomFWeowXg3KA6OEts+uZ40Cjo2uSEbkIXC37iY
+         j7PbG5dUxw/NlXzNqJ9E9w9Lx6B+WgWJc1zqsMXY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Lin Ma <linma@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 092/599] drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
-Date:   Tue,  5 Apr 2022 09:26:26 +0200
-Message-Id: <20220405070301.566657774@linuxfoundation.org>
+        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 526/913] selftests/bpf: Make test_lwt_ip_encap more stable and faster
+Date:   Tue,  5 Apr 2022 09:26:28 +0200
+Message-Id: <20220405070355.618225207@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,87 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Felix Maurer <fmaurer@redhat.com>
 
-commit efe4186e6a1b54bf38b9e05450d43b0da1fd7739 upstream.
+[ Upstream commit d23a8720327d33616f584d76c80824bfa4699be6 ]
 
-When a 6pack device is detaching, the sixpack_close() will act to cleanup
-necessary resources. Although del_timer_sync() in sixpack_close()
-won't return if there is an active timer, one could use mod_timer() in
-sp_xmit_on_air() to wake up timer again by calling userspace syscall such
-as ax25_sendmsg(), ax25_connect() and ax25_ioctl().
+In test_lwt_ip_encap, the ingress IPv6 encap test failed from time to
+time. The failure occured when an IPv4 ping through the IPv6 GRE
+encapsulation did not receive a reply within the timeout. The IPv4 ping
+and the IPv6 ping in the test used different timeouts (1 sec for IPv4
+and 6 sec for IPv6), probably taking into account that IPv6 might need
+longer to successfully complete. However, when IPv4 pings (with the
+short timeout) are encapsulated into the IPv6 tunnel, the delays of IPv6
+apply.
 
-This unexpected waked handler, sp_xmit_on_air(), realizes nothing about
-the undergoing cleanup and may still call pty_write() to use driver layer
-resources that have already been released.
+The actual reason for the long delays with IPv6 was that the IPv6
+neighbor discovery sometimes did not complete in time. This was caused
+by the outgoing interface only having a tentative link local address,
+i.e., not having completed DAD for that lladdr. The ND was successfully
+retried after 1 sec but that was too late for the ping timeout.
 
-One of the possible race conditions is shown below:
+The IPv6 addresses for the test were already added with nodad. However,
+for the lladdrs, DAD was still performed. We now disable DAD in the test
+netns completely and just assume that the two lladdrs on each veth pair
+do not collide. This removes all the delays for IPv6 traffic in the
+test.
 
-      (USE)                      |      (FREE)
-ax25_sendmsg()                   |
- ax25_queue_xmit()               |
-  ...                            |
-  sp_xmit()                      |
-   sp_encaps()                   | sixpack_close()
-    sp_xmit_on_air()             |  del_timer_sync(&sp->tx_t)
-     mod_timer(&sp->tx_t,...)    |  ...
-                                 |  unregister_netdev()
-                                 |  ...
-     (wait a while)              | tty_release()
-                                 |  tty_release_struct()
-                                 |   release_tty()
-    sp_xmit_on_air()             |    tty_kref_put(tty_struct) //FREE
-     pty_write(tty_struct) //USE |    ...
+Without the delays, we can now also reduce the delay of the IPv6 ping to
+1 sec. This makes the whole test complete faster because we don't need
+to wait for the excessive timeout for each IPv6 ping that is supposed
+to fail.
 
-The corresponding fail log is shown below:
-===============================================================
-BUG: KASAN: use-after-free in __run_timers.part.0+0x170/0x470
-Write of size 8 at addr ffff88800a652ab8 by task swapper/2/0
-...
-Call Trace:
-  ...
-  queue_work_on+0x3f/0x50
-  pty_write+0xcd/0xe0pty_write+0xcd/0xe0
-  sp_xmit_on_air+0xb2/0x1f0
-  call_timer_fn+0x28/0x150
-  __run_timers.part.0+0x3c2/0x470
-  run_timer_softirq+0x3b/0x80
-  __do_softirq+0xf1/0x380
-  ...
-
-This patch reorders the del_timer_sync() after the unregister_netdev()
-to avoid UAF bugs. Because the unregister_netdev() is well synchronized,
-it flushs out any pending queues, waits the refcount of net_device
-decreases to zero and removes net_device from kernel. There is not any
-running routines after executing unregister_netdev(). Therefore, we could
-not arouse timer from userspace again.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Lin Ma <linma@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0fde56e4385b0 ("selftests: bpf: add test_lwt_ip_encap selftest")
+Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/4987d549d48b4e316cd5b3936de69c8d4bc75a4f.1646305899.git.fmaurer@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hamradio/6pack.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_lwt_ip_encap.sh | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -674,14 +674,14 @@ static void sixpack_close(struct tty_str
- 	 */
- 	netif_stop_queue(sp->dev);
+diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+index b497bb85b667..6c69c42b1d60 100755
+--- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
++++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+@@ -120,6 +120,14 @@ setup()
+ 	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.default.rp_filter=0
+ 	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.default.rp_filter=0
  
-+	unregister_netdev(sp->dev);
++	# disable IPv6 DAD because it sometimes takes too long and fails tests
++	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.default.accept_dad=0
 +
- 	del_timer_sync(&sp->tx_t);
- 	del_timer_sync(&sp->resync_t);
- 
- 	/* Free all 6pack frame buffers. */
- 	kfree(sp->rbuff);
- 	kfree(sp->xbuff);
--
--	unregister_netdev(sp->dev);
- }
- 
- /* Perform I/O control on an active 6pack channel. */
+ 	ip link add veth1 type veth peer name veth2
+ 	ip link add veth3 type veth peer name veth4
+ 	ip link add veth5 type veth peer name veth6
+@@ -289,7 +297,7 @@ test_ping()
+ 		ip netns exec ${NS1} ping  -c 1 -W 1 -I veth1 ${IPv4_DST} 2>&1 > /dev/null
+ 		RET=$?
+ 	elif [ "${PROTO}" == "IPv6" ] ; then
+-		ip netns exec ${NS1} ping6 -c 1 -W 6 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
++		ip netns exec ${NS1} ping6 -c 1 -W 1 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
+ 		RET=$?
+ 	else
+ 		echo "    test_ping: unknown PROTO: ${PROTO}"
+-- 
+2.34.1
+
 
 

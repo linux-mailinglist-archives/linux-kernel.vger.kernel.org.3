@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A694F3960
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884164F3961
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378230AbiDELcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S244188AbiDELcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244433AbiDEIwG (ORCPT
+        with ESMTP id S244415AbiDEIwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:06 -0400
+        Tue, 5 Apr 2022 04:52:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A832AD5E9A;
-        Tue,  5 Apr 2022 01:41:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F57D5E8B;
+        Tue,  5 Apr 2022 01:41:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBA1FB81C15;
-        Tue,  5 Apr 2022 08:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF6CC385A1;
-        Tue,  5 Apr 2022 08:40:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B882B81C19;
+        Tue,  5 Apr 2022 08:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8167C385A0;
+        Tue,  5 Apr 2022 08:40:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148033;
-        bh=mosdTcOT6RSLCeVL6avH9J0yKmMDzV2xBu0IjWr+Kk8=;
+        s=korg; t=1649148036;
+        bh=dJqjmaqKxFV7sUbqP5+pRkKSgwrc/ZXn1ubpRSJTH04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uah0iEzbLFDgQNs8NFbmWv0SmQOEdCqkhbKO5ZRMWQESkhlKxjX4dVCUm1dcHgyvP
-         94hF0okC9sYqHy6ho9r7zhC01a8tOPqRrq05vzEyr7rCUcrlmA26iL+PLqq+d3mGWa
-         nkA5tqNGs3AKRPHxz55YMLWlprNIpREu6a2uD0eY=
+        b=FoQxibeYd0wyXtgExbi2nC+q7/N3FSAYcY8/O2iTEiQ4kKz+mvTDG2XipnYlSBwC5
+         jaNsEvt+5eU3/Zqtn6w7m2sWe8UxjU+czXeTtYj+rmw7hi9MnnP311C0SAPyjOuKKs
+         6tNaVCaJo8s/kse9mYSvoMJw0TQv0p+Hc1IswePw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Shijith Thotton <sthotton@marvell.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0210/1017] thermal: int340x: Check for NULL after calling kmemdup()
-Date:   Tue,  5 Apr 2022 09:18:43 +0200
-Message-Id: <20220405070400.484742119@linuxfoundation.org>
+Subject: [PATCH 5.16 0211/1017] crypto: octeontx2 - remove CONFIG_DM_CRYPT check
+Date:   Tue,  5 Apr 2022 09:18:44 +0200
+Message-Id: <20220405070400.514428164@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,43 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Shijith Thotton <sthotton@marvell.com>
 
-[ Upstream commit 38b16d6cfe54c820848bcfc999bc5e8a7da1cefb ]
+[ Upstream commit 2d841af23ae8f398c85dd1ff2dc24b5ec8ba4569 ]
 
-As the potential failure of the allocation, kmemdup() may return NULL.
+No issues were found while using the driver with dm-crypt enabled. So
+CONFIG_DM_CRYPT check in the driver can be removed.
 
-Then, 'bin_attr_data_vault.private' will be NULL, but
-'bin_attr_data_vault.size' is not 0, which is not consistent.
+This also fixes the NULL pointer dereference in driver release if
+CONFIG_DM_CRYPT is enabled.
 
-Therefore, it is better to check the return value of kmemdup() to
-avoid the confusion.
+...
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+...
+Call trace:
+ crypto_unregister_alg+0x68/0xfc
+ crypto_unregister_skciphers+0x44/0x60
+ otx2_cpt_crypto_exit+0x100/0x1a0
+ otx2_cptvf_remove+0xf8/0x200
+ pci_device_remove+0x3c/0xd4
+ __device_release_driver+0x188/0x234
+ device_release_driver+0x2c/0x4c
+...
 
-Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 6f03f0e8b6c8 ("crypto: octeontx2 - register with linux crypto framework")
+Signed-off-by: Shijith Thotton <sthotton@marvell.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../crypto/marvell/octeontx2/otx2_cptvf_algs.c  | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 68f61a738930..7ec2d6c7fe42 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -468,6 +468,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
- 				   obj->package.elements[0].buffer.length,
- 				   GFP_KERNEL);
-+	if (!priv->data_vault) {
-+		kfree(buffer.pointer);
-+		return;
-+	}
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+index 877a948469bd..570074e23b60 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+@@ -1634,16 +1634,13 @@ static inline int cpt_register_algs(void)
+ {
+ 	int i, err = 0;
+ 
+-	if (!IS_ENABLED(CONFIG_DM_CRYPT)) {
+-		for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
+-			otx2_cpt_skciphers[i].base.cra_flags &=
+-							~CRYPTO_ALG_DEAD;
+-
+-		err = crypto_register_skciphers(otx2_cpt_skciphers,
+-						ARRAY_SIZE(otx2_cpt_skciphers));
+-		if (err)
+-			return err;
+-	}
++	for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
++		otx2_cpt_skciphers[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
 +
- 	bin_attr_data_vault.private = priv->data_vault;
- 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
- 	kfree(buffer.pointer);
++	err = crypto_register_skciphers(otx2_cpt_skciphers,
++					ARRAY_SIZE(otx2_cpt_skciphers));
++	if (err)
++		return err;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(otx2_cpt_aeads); i++)
+ 		otx2_cpt_aeads[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
 -- 
 2.34.1
 

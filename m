@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A984F50CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48B14F5079
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843328AbiDFBkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
+        id S1842038AbiDFB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354208AbiDEKMP (ORCPT
+        with ESMTP id S243764AbiDEKhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A666254BF4;
-        Tue,  5 Apr 2022 02:58:48 -0700 (PDT)
+        Tue, 5 Apr 2022 06:37:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C86574B3;
+        Tue,  5 Apr 2022 03:23:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4318C6157A;
-        Tue,  5 Apr 2022 09:58:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49237C385A1;
-        Tue,  5 Apr 2022 09:58:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B5F67CE0B18;
+        Tue,  5 Apr 2022 10:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7023C385A3;
+        Tue,  5 Apr 2022 10:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152727;
-        bh=wYBk6rN2/OlxhSRKIP2CH/M6OSQISZIo3MuzDWbA440=;
+        s=korg; t=1649154187;
+        bh=jyHeGkeBUgv0uibiiSn4ARBIL2VuEVNmQ8Khl1BNBug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kqdA7UoXE7+CT6hSqmUR3IUMOz2If/Gdcwl54m45zl8Xw8nXmKhwq9njXmnGo2L1Q
-         08kQiMksI7bqyHVqiCzY9lMgsEbrai8JFCWZ0ePKP5+KOq58aKzkMZMR6a9XuXikT4
-         tgjIxub75vYRyR3yw1NZ9AMjtCdC481Ipg4ySSro=
+        b=vp2Kvc3AQwHpjdXqek+x720GpPCH4PM4LoQgZ/OkTtOaqKlHHSQDeOOFIPmpICVkw
+         dk7HvbEiSzhuGTVprgyo/Hz5+39C2JhhCUTZvcbtACjS6UJGV7V7cAl2dzUtb09NTG
+         BgHSWvCZXIB0rdYY4A4N2YnMJsjnfmIBW/kc0ze0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.15 882/913] dt-bindings: mtd: nand-controller: Fix a comment in the examples
-Date:   Tue,  5 Apr 2022 09:32:24 +0200
-Message-Id: <20220405070406.260629987@linuxfoundation.org>
+        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 451/599] gcc-plugins/stackleak: Exactly match strings instead of prefixes
+Date:   Tue,  5 Apr 2022 09:32:25 +0200
+Message-Id: <20220405070312.250922248@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Kees Cook <keescook@chromium.org>
 
-commit 0e7f1b557974ce297e5e4c9d4245720fbb489886 upstream.
+[ Upstream commit 27e9faf415dbf94af19b9c827842435edbc1fbbc ]
 
-The controller properties should be in the controller 'parent' node,
-while properties in the children nodes are specific to the NAND
-*chip*. This error was already present during the yaml conversion.
+Since STRING_CST may not be NUL terminated, strncmp() was used for check
+for equality. However, this may lead to mismatches for longer section
+names where the start matches the tested-for string. Test for exact
+equality by checking for the presences of NUL termination.
 
-Fixes: 2d472aba15ff ("mtd: nand: document the NAND controller/NAND chip DT representation")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/linux-mtd/20211216111654.238086-3-miquel.raynal@bootlin.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alexander Popov <alex.popov@linux.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/mtd/nand-controller.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/gcc-plugins/stackleak_plugin.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
---- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-+++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-@@ -184,7 +184,7 @@ examples:
-         nand-use-soft-ecc-engine;
-         nand-ecc-algo = "bch";
+diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
+index 48e141e07956..dacd697ffd38 100644
+--- a/scripts/gcc-plugins/stackleak_plugin.c
++++ b/scripts/gcc-plugins/stackleak_plugin.c
+@@ -431,6 +431,23 @@ static unsigned int stackleak_cleanup_execute(void)
+ 	return 0;
+ }
  
--        /* controller specific properties */
-+        /* NAND chip specific properties */
-       };
++/*
++ * STRING_CST may or may not be NUL terminated:
++ * https://gcc.gnu.org/onlinedocs/gccint/Constant-expressions.html
++ */
++static inline bool string_equal(tree node, const char *string, int length)
++{
++	if (TREE_STRING_LENGTH(node) < length)
++		return false;
++	if (TREE_STRING_LENGTH(node) > length + 1)
++		return false;
++	if (TREE_STRING_LENGTH(node) == length + 1 &&
++	    TREE_STRING_POINTER(node)[length] != '\0')
++		return false;
++	return !memcmp(TREE_STRING_POINTER(node), string, length);
++}
++#define STRING_EQUAL(node, str)	string_equal(node, str, strlen(str))
++
+ static bool stackleak_gate(void)
+ {
+ 	tree section;
+@@ -440,13 +457,13 @@ static bool stackleak_gate(void)
+ 	if (section && TREE_VALUE(section)) {
+ 		section = TREE_VALUE(TREE_VALUE(section));
  
-       nand@1 {
+-		if (!strncmp(TREE_STRING_POINTER(section), ".init.text", 10))
++		if (STRING_EQUAL(section, ".init.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".devinit.text", 13))
++		if (STRING_EQUAL(section, ".devinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".cpuinit.text", 13))
++		if (STRING_EQUAL(section, ".cpuinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
++		if (STRING_EQUAL(section, ".meminit.text"))
+ 			return false;
+ 	}
+ 
+-- 
+2.34.1
+
 
 

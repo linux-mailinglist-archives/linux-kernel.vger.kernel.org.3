@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAEA4F31F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBEC4F33ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347557AbiDEJ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S1346087AbiDEJo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239570AbiDEIUO (ORCPT
+        with ESMTP id S239567AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072956384;
-        Tue,  5 Apr 2022 01:16:38 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3D063C2;
+        Tue,  5 Apr 2022 01:16:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 983AE60AFB;
-        Tue,  5 Apr 2022 08:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82316C385A0;
-        Tue,  5 Apr 2022 08:16:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A56C60AFB;
+        Tue,  5 Apr 2022 08:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D859C385A1;
+        Tue,  5 Apr 2022 08:16:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146597;
-        bh=skwGjJleA6WjxDdMKnkBNDhJLVUBgPnr7tJN0zUUfos=;
+        s=korg; t=1649146599;
+        bh=eI/tG81nC1saJgPatTgG7icD/lGlD5gWAo+K+jBtukE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rERXY6cI4vcy2iob7q2RfjO0RM/VIz4caK9hpFica1Y5NOViV51GcK/w0ogzMjqvb
-         Hh9ChAwPQEYhIsPOocB9/D593yf7UxC0n1l4gmDNUMO61pvGgLgFW05fUAimr6WbXa
-         WrHxMvqm3eHbsy2ukx7Q4urywXKSmg2McYdlj7Es=
+        b=Y1txjd9P56lwRpgg+vcGKlsWnrEOJ9OWt+5q1IvEAS3a5hOEgxvORd09SgFzAlKuD
+         IPF2TfLJRGGBn4mW64EQriYowA6CGnZ+oEAgswAH+3Slc8zKBmq0TSHW/veOQ4yLhR
+         iG+s/GP7axS3NFIKq61m/tzSIM8CgWBOhXGK1s/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0821/1126] net: sparx5: depends on PTP_1588_CLOCK_OPTIONAL
-Date:   Tue,  5 Apr 2022 09:26:08 +0200
-Message-Id: <20220405070431.660045388@linuxfoundation.org>
+Subject: [PATCH 5.17 0822/1126] qlcnic: dcb: default to returning -EOPNOTSUPP
+Date:   Tue,  5 Apr 2022 09:26:09 +0200
+Message-Id: <20220405070431.689061562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -63,54 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 08be6b13db23f68146c600dd5adfd92e99d9ec6e ]
+[ Upstream commit 1521db37f0d42334a88e8ff28198a27d1ed5cd7b ]
 
-Fix build errors when PTP_1588_CLOCK=m and SPARX5_SWTICH=y.
+Clang static analysis reports this issue
+qlcnic_dcb.c:382:10: warning: Assigned value is
+  garbage or undefined
+  mbx_out = *val;
+          ^ ~~~~
 
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.o: in function `sparx5_get_ts_info':
-sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
-arc-linux-ld: sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_init':
-sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
-arc-linux-ld: sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_deinit':
-sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf38): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf46): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o:sparx5_ptp.c:(.text+0xf46): more undefined references to `ptp_clock_unregister' follow
+val is set in the qlcnic_dcb_query_hw_capability() wrapper.
+If there is no query_hw_capability op in dcp, success is
+returned without setting the val.
 
-Fixes: 3cfa11bac9bb ("net: sparx5: add the basic sparx5 driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: UNGLinuxDriver@microchip.com
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Steen Hegelund <steen.hegelund@microchip.com>
-Cc: Bjarni Jonasson <bjarni.jonasson@microchip.com>
-Cc: Lars Povlsen <lars.povlsen@microchip.com>
+For this and similar wrappers, return -EOPNOTSUPP.
+
+Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
+Signed-off-by: Tom Rix <trix@redhat.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/sparx5/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/Kconfig b/drivers/net/ethernet/microchip/sparx5/Kconfig
-index 7bdbb2d09a14..85b24edb65d5 100644
---- a/drivers/net/ethernet/microchip/sparx5/Kconfig
-+++ b/drivers/net/ethernet/microchip/sparx5/Kconfig
-@@ -4,6 +4,7 @@ config SPARX5_SWITCH
- 	depends on HAS_IOMEM
- 	depends on OF
- 	depends on ARCH_SPARX5 || COMPILE_TEST
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select PHYLINK
- 	select PHY_SPARX5_SERDES
- 	select RESET_CONTROLLER
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+index 5d79ee4370bc..7519773eaca6 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+@@ -51,7 +51,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_hw_capability)
+ 		return dcb->ops->get_hw_capability(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
+@@ -65,7 +65,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->attach)
+ 		return dcb->ops->attach(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int
+@@ -74,7 +74,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
+ 	if (dcb && dcb->ops->query_hw_capability)
+ 		return dcb->ops->query_hw_capability(dcb, buf);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
+@@ -89,7 +89,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
+ 	if (dcb && dcb->ops->query_cee_param)
+ 		return dcb->ops->query_cee_param(dcb, buf, type);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+@@ -97,7 +97,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_cee_cfg)
+ 		return dcb->ops->get_cee_cfg(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
 -- 
 2.34.1
 

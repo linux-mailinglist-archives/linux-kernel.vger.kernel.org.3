@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65A94F3ED1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FA24F3FE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376735AbiDEMwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S1358124AbiDEUQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244603AbiDEJKF (ORCPT
+        with ESMTP id S1354669AbiDEKPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:10:05 -0400
+        Tue, 5 Apr 2022 06:15:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9D2AC4E;
-        Tue,  5 Apr 2022 01:59:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB32E6C480;
+        Tue,  5 Apr 2022 03:02:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65652B81BBF;
-        Tue,  5 Apr 2022 08:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26B3C385A0;
-        Tue,  5 Apr 2022 08:59:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83571B81C99;
+        Tue,  5 Apr 2022 10:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D310CC385A1;
+        Tue,  5 Apr 2022 10:02:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149188;
-        bh=WsW6LYCcpbPQgKzCuxo3ZJJAg7nrkIEDruFN5ptLGag=;
+        s=korg; t=1649152941;
+        bh=kqaUHqM6O4hl0lTDnmR2y1n4YeTkZq5aA0IYcX8trSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J8ADRWG/Z4AxqrDBKuZ43p/Y4GPm+0qcKg16IPM0OD4GrsRPPOzJ2ELVUNMDMDkYZ
-         ps7lBLj57zoCyZ+C/mNMl0p9lPBreA4HfNafUoh2vosq699HN02dyj1RzKWjb8imza
-         r7ncXYQpLcBdlnAnbKuYzyIhgxCp7zdP2QYW4EHM=
+        b=UEVQwqHod0tOyQAXp3QMYA80CKNqqQJi555gfKK4X3cD2xtTEQtaaAebKt5aDKm5F
+         KkGF4gyZdIToAJK9n8Fypq6x9gz5LaBQKcAhohlh0ByCrDZhEWbLt+O8W0vgk5VMM/
+         scJQuG0dPTwAvvmCEW1v1UEF4f3ZJNNeJ0PTkiSY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0625/1017] netfilter: conntrack: Add and use nf_ct_set_auto_assign_helper_warned()
-Date:   Tue,  5 Apr 2022 09:25:38 +0200
-Message-Id: <20220405070412.833959655@linuxfoundation.org>
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.10 045/599] SUNRPC: avoid race between mod_timer() and del_timer_sync()
+Date:   Tue,  5 Apr 2022 09:25:39 +0200
+Message-Id: <20220405070300.168786032@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,66 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Sutter <phil@nwl.cc>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 31d0bb9763efad30377505f3467f958d1ebe1e3d ]
+commit 3848e96edf4788f772d83990022fa7023a233d83 upstream.
 
-The function sets the pernet boolean to avoid the spurious warning from
-nf_ct_lookup_helper() when assigning conntrack helpers via nftables.
+xprt_destory() claims XPRT_LOCKED and then calls del_timer_sync().
+Both xprt_unlock_connect() and xprt_release() call
+ ->release_xprt()
+which drops XPRT_LOCKED and *then* xprt_schedule_autodisconnect()
+which calls mod_timer().
 
-Fixes: 1a64edf54f55 ("netfilter: nft_ct: add helper set support")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This may result in mod_timer() being called *after* del_timer_sync().
+When this happens, the timer may fire long after the xprt has been freed,
+and run_timer_softirq() will probably crash.
+
+The pairing of ->release_xprt() and xprt_schedule_autodisconnect() is
+always called under ->transport_lock.  So if we take ->transport_lock to
+call del_timer_sync(), we can be sure that mod_timer() will run first
+(if it runs at all).
+
+Cc: stable@vger.kernel.org
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/netfilter/nf_conntrack_helper.h | 1 +
- net/netfilter/nf_conntrack_helper.c         | 6 ++++++
- net/netfilter/nft_ct.c                      | 3 +++
- 3 files changed, 10 insertions(+)
+ net/sunrpc/xprt.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/net/netfilter/nf_conntrack_helper.h b/include/net/netfilter/nf_conntrack_helper.h
-index 37f0fbefb060..9939c366f720 100644
---- a/include/net/netfilter/nf_conntrack_helper.h
-+++ b/include/net/netfilter/nf_conntrack_helper.h
-@@ -177,4 +177,5 @@ void nf_nat_helper_unregister(struct nf_conntrack_nat_helper *nat);
- int nf_nat_helper_try_module_get(const char *name, u16 l3num,
- 				 u8 protonum);
- void nf_nat_helper_put(struct nf_conntrack_helper *helper);
-+void nf_ct_set_auto_assign_helper_warned(struct net *net);
- #endif /*_NF_CONNTRACK_HELPER_H*/
-diff --git a/net/netfilter/nf_conntrack_helper.c b/net/netfilter/nf_conntrack_helper.c
-index ae4488a13c70..ceb38a7b37cb 100644
---- a/net/netfilter/nf_conntrack_helper.c
-+++ b/net/netfilter/nf_conntrack_helper.c
-@@ -556,6 +556,12 @@ static const struct nf_ct_ext_type helper_extend = {
- 	.id	= NF_CT_EXT_HELPER,
- };
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -2037,7 +2037,14 @@ static void xprt_destroy(struct rpc_xprt
+ 	 */
+ 	wait_on_bit_lock(&xprt->state, XPRT_LOCKED, TASK_UNINTERRUPTIBLE);
  
-+void nf_ct_set_auto_assign_helper_warned(struct net *net)
-+{
-+	nf_ct_pernet(net)->auto_assign_helper_warned = true;
-+}
-+EXPORT_SYMBOL_GPL(nf_ct_set_auto_assign_helper_warned);
-+
- void nf_conntrack_helper_pernet_init(struct net *net)
- {
- 	struct nf_conntrack_net *cnet = nf_ct_pernet(net);
-diff --git a/net/netfilter/nft_ct.c b/net/netfilter/nft_ct.c
-index 99b1de14ff7e..54ecb9fbf2de 100644
---- a/net/netfilter/nft_ct.c
-+++ b/net/netfilter/nft_ct.c
-@@ -1040,6 +1040,9 @@ static int nft_ct_helper_obj_init(const struct nft_ctx *ctx,
- 	if (err < 0)
- 		goto err_put_helper;
++	/*
++	 * xprt_schedule_autodisconnect() can run after XPRT_LOCKED
++	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
++	 * can only run *before* del_time_sync(), never after.
++	 */
++	spin_lock(&xprt->transport_lock);
+ 	del_timer_sync(&xprt->timer);
++	spin_unlock(&xprt->transport_lock);
  
-+	/* Avoid the bogus warning, helper will be assigned after CT init */
-+	nf_ct_set_auto_assign_helper_warned(ctx->net);
-+
- 	return 0;
- 
- err_put_helper:
--- 
-2.34.1
-
+ 	/*
+ 	 * Destroy sockets etc from the system workqueue so they can
 
 

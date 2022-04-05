@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7644F4809
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53014F469D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376520AbiDEVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S234312AbiDEUhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349445AbiDEJtw (ORCPT
+        with ESMTP id S1356150AbiDEKXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6D275D9;
-        Tue,  5 Apr 2022 02:46:07 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC8CBA316;
+        Tue,  5 Apr 2022 03:07:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB5B6B818F3;
-        Tue,  5 Apr 2022 09:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47496C385A1;
-        Tue,  5 Apr 2022 09:46:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65FA6B81C98;
+        Tue,  5 Apr 2022 10:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4549C385A1;
+        Tue,  5 Apr 2022 10:07:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151964;
-        bh=Bv9v+Tnf3Dh6X7vGckUAUcNQxLN677ajywRcYzE3GBk=;
+        s=korg; t=1649153224;
+        bh=BcSDo9r3IFVheWMF8RqV0FJSBjYtjvRasfb3M1YVooo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y5TMLqW2dGJDofblcgG2ul74bLDA3oFgjAtU/PxpGjBlZB8+aBXXCMuaqubX7fY4g
-         9/kYVVZiFH1ZykQW8R7FWI0iPvToo8COFTga+jyQNBwvCKu9c+rTbaByWb6YJwgJZX
-         nWyZZoIdM2/u2raduFKn4zXnoVSGg8M0TwHXRhLA=
+        b=wXnKDTTBAUycApl018fTHgrcjZ9XBdFBP1idxk3RyGf5jhf4YnuCRZ+VDxW3ct98l
+         GW/oh3Wiek/Y+vrE2ooZfwerl7fTaGTqy6c2k8hxtYETrkIeahIJNVgiredmqAbdx3
+         4rt2CqC1ECJMnYRpINtLoeAvC2w8zELoyQp4B2fI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Straube <straube.linux@gmail.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 578/913] staging: r8188eu: release_firmware is not called if allocation fails
+Subject: [PATCH 5.10 146/599] nvme: cleanup __nvme_check_ids
 Date:   Tue,  5 Apr 2022 09:27:20 +0200
-Message-Id: <20220405070357.172299852@linuxfoundation.org>
+Message-Id: <20220405070303.187179042@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Straube <straube.linux@gmail.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 39850edf2befe27bcb3d6c37b6ee76d2ee4df903 ]
+[ Upstream commit fd8099e7918cd2df39ef306dd1d1af7178a15b81 ]
 
-In function load_firmware() release_firmware() is not called if the
-allocation of pFirmware->szFwBuffer fails or if fw->size is greater
-than FW_8188E_SIZE.
+Pass the actual nvme_ns_ids used for the comparison instead of the
+ns_head that isn't needed and use a more descriptive function name.
 
-Move the call to release_firmware() to the exit label at the end of
-the function to fix this.
-
-Fixes: 8cd574e6af54 ("staging: r8188eu: introduce new hal dir for RTL8188eu driver")
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
-Link: https://lore.kernel.org/r/20220107103620.15648-4-straube.linux@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvme/host/core.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index a677b2049ef3..9f2b86f9b660 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -572,10 +572,10 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
- 	}
- 	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
- 	pFirmware->ulFwLength = fw->size;
--	release_firmware(fw);
- 	dev_dbg(device, "!bUsedWoWLANFw, FmrmwareLen:%d+\n", pFirmware->ulFwLength);
- 
- Exit:
-+	release_firmware(fw);
- 	return rtStatus;
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 71c85c99e86c..853b9a24f744 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -3681,16 +3681,15 @@ static struct nvme_ns_head *nvme_find_ns_head(struct nvme_subsystem *subsys,
+ 	return NULL;
  }
  
+-static int __nvme_check_ids(struct nvme_subsystem *subsys,
+-		struct nvme_ns_head *new)
++static int nvme_subsys_check_duplicate_ids(struct nvme_subsystem *subsys,
++		struct nvme_ns_ids *ids)
+ {
+ 	struct nvme_ns_head *h;
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 
+ 	list_for_each_entry(h, &subsys->nsheads, entry) {
+-		if (nvme_ns_ids_valid(&new->ids) &&
+-		    nvme_ns_ids_equal(&new->ids, &h->ids))
++		if (nvme_ns_ids_valid(ids) && nvme_ns_ids_equal(ids, &h->ids))
+ 			return -EINVAL;
+ 	}
+ 
+@@ -3724,7 +3723,7 @@ static struct nvme_ns_head *nvme_alloc_ns_head(struct nvme_ctrl *ctrl,
+ 	head->ids = *ids;
+ 	kref_init(&head->ref);
+ 
+-	ret = __nvme_check_ids(ctrl->subsys, head);
++	ret = nvme_subsys_check_duplicate_ids(ctrl->subsys, &head->ids);
+ 	if (ret) {
+ 		dev_err(ctrl->device,
+ 			"duplicate IDs for nsid %d\n", nsid);
 -- 
 2.34.1
 

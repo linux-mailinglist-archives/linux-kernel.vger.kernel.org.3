@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879294F2C0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0464F2B8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344547AbiDEKj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S1351319AbiDEKCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDEIYg (ORCPT
+        with ESMTP id S234193AbiDEIYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:24:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C56E12753;
-        Tue,  5 Apr 2022 01:20:08 -0700 (PDT)
+        Tue, 5 Apr 2022 04:24:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D95712AC8;
+        Tue,  5 Apr 2022 01:20:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B1A6B81BB0;
-        Tue,  5 Apr 2022 08:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC59BC385A1;
-        Tue,  5 Apr 2022 08:20:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3428760FFB;
+        Tue,  5 Apr 2022 08:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DABC385A2;
+        Tue,  5 Apr 2022 08:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146806;
-        bh=a+hYV3dWe1oVsX+cvNgh7RLaS51GSRre3hs0wbTB+k0=;
+        s=korg; t=1649146819;
+        bh=Yw9KpInkgsNYhh+OCNup/aC8fKxzxvvo6UbYxOjbCnQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GAr1qwiOt4MUhXQZLdDYOMfmr4CqQqVw38OytPPEVtLi65u96WkKuoO44bLzv2vr1
-         y+ZHqM6mjHH7BBOvo6qInTzGFwOkrTAlBxakzs/fJ8pQnmdvtuJy5zLP2vlHzZXq6p
-         GkhG+CPVKcHW/pYZs/CBe9/LS2bK+odSLSmZq2dM=
+        b=nbEHyq/KmI0HilHKuvRBzjE7cGj7JK8JPtPIGPiyjnjZzYL7ohfSZ5rqy7ji7oKMu
+         1g2uy8cryi+wDS5WgXw7f3C/b99iiHAQF55yrMv1C0rQkeLpsQeAcc50NTNV38Xpp5
+         6XPbJa1pzLg20rTIagQimbrdb4mTacDVrjmp896Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Reddy Muralidhar <muralidhar.reddy@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0896/1126] ASoC: SOF: Intel: match sdw version on link_slaves_found
-Date:   Tue,  5 Apr 2022 09:27:23 +0200
-Message-Id: <20220405070433.822977108@linuxfoundation.org>
+Subject: [PATCH 5.17 0900/1126] media: iommu/mediatek: Return ENODEV if the device is NULL
+Date:   Tue,  5 Apr 2022 09:27:27 +0200
+Message-Id: <20220405070433.942304612@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -60,82 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bard Liao <yung-chuan.liao@linux.intel.com>
+From: Yong Wu <yong.wu@mediatek.com>
 
-[ Upstream commit f67c0c0d3b9048d86ea6ae52e36a2b78c48f265d ]
+[ Upstream commit 2fb0feed51085db77606de9b9477c96894328809 ]
 
-Codecs with the same part id, manufacturer id and part id, but different
-sdw version should be treated as different codecs. For example, rt711 and
-rt711-sdca are different. So, we should match sdw version as well.
+The platform device is created at:
+of_platform_default_populate_init:  arch_initcall_sync
+  ->of_platform_populate
+        ->of_platform_device_create_pdata
 
-Reported-by: Reddy Muralidhar <muralidhar.reddy@intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220120232157.199919-2-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+When entering our probe, all the devices should be already created.
+if it is null, means NODEV. Currently we don't get the fail case.
+It's a minor fix, no need add fixes tags.
+
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Acked-by: Joerg Roedel <jroedel@suse.de>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/intel/hda.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/iommu/mtk_iommu.c    | 2 +-
+ drivers/iommu/mtk_iommu_v1.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index 1385695d7745..848d1d563170 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -1188,7 +1188,7 @@ static bool link_slaves_found(struct snd_sof_dev *sdev,
- 	struct hdac_bus *bus = sof_to_bus(sdev);
- 	struct sdw_intel_slave_id *ids = sdw->ids;
- 	int num_slaves = sdw->num_slaves;
--	unsigned int part_id, link_id, unique_id, mfg_id;
-+	unsigned int part_id, link_id, unique_id, mfg_id, version;
- 	int i, j, k;
- 
- 	for (i = 0; i < link->num_adr; i++) {
-@@ -1198,12 +1198,14 @@ static bool link_slaves_found(struct snd_sof_dev *sdev,
- 		mfg_id = SDW_MFG_ID(adr);
- 		part_id = SDW_PART_ID(adr);
- 		link_id = SDW_DISCO_LINK_ID(adr);
-+		version = SDW_VERSION(adr);
- 
- 		for (j = 0; j < num_slaves; j++) {
- 			/* find out how many identical parts were reported on that link */
- 			if (ids[j].link_id == link_id &&
- 			    ids[j].id.part_id == part_id &&
--			    ids[j].id.mfg_id == mfg_id)
-+			    ids[j].id.mfg_id == mfg_id &&
-+			    ids[j].id.sdw_version == version)
- 				reported_part_count++;
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 25b834104790..77ae20ff9b35 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -848,7 +848,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 		plarbdev = of_find_device_by_node(larbnode);
+ 		if (!plarbdev) {
+ 			of_node_put(larbnode);
+-			return -EPROBE_DEFER;
++			return -ENODEV;
  		}
+ 		data->larb_imu[id].dev = &plarbdev->dev;
  
-@@ -1212,21 +1214,24 @@ static bool link_slaves_found(struct snd_sof_dev *sdev,
- 
- 			if (ids[j].link_id != link_id ||
- 			    ids[j].id.part_id != part_id ||
--			    ids[j].id.mfg_id != mfg_id)
-+			    ids[j].id.mfg_id != mfg_id ||
-+			    ids[j].id.sdw_version != version)
- 				continue;
- 
- 			/* find out how many identical parts are expected */
- 			for (k = 0; k < link->num_adr; k++) {
- 				u64 adr2 = link->adr_d[k].adr;
--				unsigned int part_id2, link_id2, mfg_id2;
-+				unsigned int part_id2, link_id2, mfg_id2, version2;
- 
- 				mfg_id2 = SDW_MFG_ID(adr2);
- 				part_id2 = SDW_PART_ID(adr2);
- 				link_id2 = SDW_DISCO_LINK_ID(adr2);
-+				version2 = SDW_VERSION(adr2);
- 
- 				if (link_id2 == link_id &&
- 				    part_id2 == part_id &&
--				    mfg_id2 == mfg_id)
-+				    mfg_id2 == mfg_id &&
-+				    version2 == version)
- 					expected_part_count++;
- 			}
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index 1467ba1e4417..68bf02f87cfd 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -604,7 +604,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 		plarbdev = of_find_device_by_node(larbnode);
+ 		if (!plarbdev) {
+ 			of_node_put(larbnode);
+-			return -EPROBE_DEFER;
++			return -ENODEV;
+ 		}
+ 		data->larb_imu[i].dev = &plarbdev->dev;
  
 -- 
 2.34.1

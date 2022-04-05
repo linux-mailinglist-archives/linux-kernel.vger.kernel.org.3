@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4144F4678
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEF44F43B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241899AbiDEUcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S1387938AbiDENUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349485AbiDEJtz (ORCPT
+        with ESMTP id S1344282AbiDEJTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A421BF;
-        Tue,  5 Apr 2022 02:47:21 -0700 (PDT)
+        Tue, 5 Apr 2022 05:19:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333DDBC4;
+        Tue,  5 Apr 2022 02:07:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8EE24CE1BE5;
-        Tue,  5 Apr 2022 09:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91DBC385A2;
-        Tue,  5 Apr 2022 09:47:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C51B961003;
+        Tue,  5 Apr 2022 09:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2467C385A1;
+        Tue,  5 Apr 2022 09:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152038;
-        bh=LtbL+NctI2lPnOdJskINY7IUF608Dvnr7ibw88k9yPA=;
+        s=korg; t=1649149630;
+        bh=3FDGENo31HR4d2ixNLW5MS9/VHe0brDMr3Xy9M1Mn4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1v6LPeZdOQn0Dzoam0+G6Nk0t3slNnP3tRybiWyHwFEFOzs2t+q40Ug8wi8mR40xM
-         UgS+BCpMcT/x67hsbFnI7/5a9qldaLLlykxjLnpePorUnjLcF/l/BcO/fVcefxLHLh
-         luOHDXzas2YKYWnhi1E83ispN8NhDJBz/7wd/I6I=
+        b=ZZ7oQfllXcJzBBrcWU0Sb1wvf4tdmiEttm/q6y02BdNMGwOV8AKt08PM7v9dMgGPV
+         PV06oNDNdCkDqKKS3tQjXZv5dMVnx4QB5F+OXWnZHd4z+oswWonZeq9pEZs/VXwH3y
+         /4oBFX8gQpWz7sOqI3LjZozJ3BK2SOOsDF6HUBc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 633/913] pinctrl: mediatek: paris: Fix "argument" argument type for mtk_pinconf_get()
-Date:   Tue,  5 Apr 2022 09:28:15 +0200
-Message-Id: <20220405070358.814319010@linuxfoundation.org>
+Subject: [PATCH 5.16 0783/1017] spi: fsi: Implement a timeout for polling status
+Date:   Tue,  5 Apr 2022 09:28:16 +0200
+Message-Id: <20220405070417.497911175@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Eddie James <eajames@linux.ibm.com>
 
-[ Upstream commit 19bce7ce0a593c7024030a0cda9e23facea3c93d ]
+[ Upstream commit 89b35e3f28514087d3f1e28e8f5634fbfd07c554 ]
 
-For mtk_pinconf_get(), the "argument" argument is typically returned by
-pinconf_to_config_argument(), which holds the value for a given pinconf
-parameter. It certainly should not have the type of "enum pin_config_param",
-which describes the type of the pinconf parameter itself.
+The data transfer routines must poll the status register to
+determine when more data can be shifted in or out. If the hardware
+gets into a bad state, these polling loops may never exit. Prevent
+this by returning an error if a timeout is exceeded.
 
-Change the type to u32, which matches the return type of
-pinconf_to_config_argument().
-
-Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-4-wenst@chromium.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220317211426.38940-1-eajames@linux.ibm.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/spi/spi-fsi.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index 5bdf8b7acd23..bcf359256ed4 100644
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -184,8 +184,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- }
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index b6c7467f0b59..d403a7a3021d 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -25,6 +25,7 @@
  
- static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
--			   enum pin_config_param param,
--			   enum pin_config_param arg)
-+			   enum pin_config_param param, u32 arg)
+ #define SPI_FSI_BASE			0x70000
+ #define SPI_FSI_INIT_TIMEOUT_MS		1000
++#define SPI_FSI_STATUS_TIMEOUT_MS	100
+ #define SPI_FSI_MAX_RX_SIZE		8
+ #define SPI_FSI_MAX_TX_SIZE		40
+ 
+@@ -299,6 +300,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 				 struct spi_transfer *transfer)
  {
- 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
- 	const struct mtk_pin_desc *desc;
+ 	int rc = 0;
++	unsigned long end;
+ 	u64 status = 0ULL;
+ 
+ 	if (transfer->tx_buf) {
+@@ -315,10 +317,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 			if (rc)
+ 				return rc;
+ 
++			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+ 			do {
+ 				rc = fsi_spi_status(ctx, &status, "TX");
+ 				if (rc)
+ 					return rc;
++
++				if (time_after(jiffies, end))
++					return -ETIMEDOUT;
+ 			} while (status & SPI_FSI_STATUS_TDR_FULL);
+ 
+ 			sent += nb;
+@@ -329,10 +335,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 		u8 *rx = transfer->rx_buf;
+ 
+ 		while (transfer->len > recv) {
++			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+ 			do {
+ 				rc = fsi_spi_status(ctx, &status, "RX");
+ 				if (rc)
+ 					return rc;
++
++				if (time_after(jiffies, end))
++					return -ETIMEDOUT;
+ 			} while (!(status & SPI_FSI_STATUS_RDR_FULL));
+ 
+ 			rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
 -- 
 2.34.1
 

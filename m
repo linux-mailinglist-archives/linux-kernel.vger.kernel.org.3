@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED37D4F3B8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E574F3BA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380583AbiDEL6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S1382021AbiDEMA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbiDEIxA (ORCPT
+        with ESMTP id S236953AbiDEIRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FF222A;
-        Tue,  5 Apr 2022 01:49:14 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233C5AFAEB;
+        Tue,  5 Apr 2022 01:04:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7874C60FFB;
-        Tue,  5 Apr 2022 08:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FCCC385A1;
-        Tue,  5 Apr 2022 08:49:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6363B81BB6;
+        Tue,  5 Apr 2022 08:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F13FC385A1;
+        Tue,  5 Apr 2022 08:04:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148553;
-        bh=b3BkvZVFyR26lTuw4D/JdxL66ef+wVKfp5X6RgCspSc=;
+        s=korg; t=1649145894;
+        bh=Fo2VUN7idF8pzKr+Cx20drHaaXF7A7bvOqOOrv8RvPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGubeEHiXtBa+XYoGcghRd3d9LA5PpATdWa6sznFzeouLzY6ubqUM9ppM5B7lqOzf
-         RTbKlxk9eGHedFb2J9zzgO+T7MD0kYFjQ3QY0fARJt1t3PzKyky0KQqeosztSy3wLQ
-         ftDEGSZteKruYFL1jxAbfFi/3vZFnK1W4vRwMYco=
+        b=sXpK6TYNwwxubvMs235Jcp5gcYFdyf1vtatE0nE4jCTPgN/RMGaIeurCCsGpB/p5R
+         hoeE/7Y58ictZY+d8c7CKmrPyZw8Y/9T+7otw17Mu3Umeo7FLCvlfIrCaxw4ZKzVyh
+         NAc5NlcNbiyNi7yZA40aJ2LzaUgOdviSi0RNyqn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0398/1017] drm/meson: osd_afbcd: Add an exit callback to struct meson_afbcd_ops
-Date:   Tue,  5 Apr 2022 09:21:51 +0200
-Message-Id: <20220405070406.099230088@linuxfoundation.org>
+Subject: [PATCH 5.17 0568/1126] drm/msm/dp: stop link training after link training 2 failed
+Date:   Tue,  5 Apr 2022 09:21:55 +0200
+Message-Id: <20220405070424.306388258@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,142 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit 04b8a5d9cfd171f65df75f444b5617a372649edd ]
+[ Upstream commit 9051d629dbf7a998a40f7eac65a9512b01bc3bb8 ]
 
-Use this to simplify the driver shutdown. It will also come handy when
-fixing the error handling in meson_drv_bind_master().
+Each DP link training contains link training 1 followed by link
+training 2.  There is maximum of 5 retries of DP link training
+before declared link training failed. It is required to stop link
+training at end of link training 2 if it is failed so that next
+link training 1 can start freshly. This patch fixes link compliance
+test  case 4.3.1.13 (Source Device Link Training EQ Fallback Test).
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Fixes: d1b5e41e13a7e9 ("drm/meson: Add AFBCD module driver")
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211230235515.1627522-2-martin.blumenstingl@googlemail.com
+Changes in v10:
+--  group into one series
+
+Changes in v11:
+-- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
+
+Fixes: 2e0adc765d88 ("drm/msm/dp: do not end dp link training until video is ready")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/1642531648-8448-5-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_drv.c       |  6 ++--
- drivers/gpu/drm/meson/meson_osd_afbcd.c | 41 ++++++++++++++++---------
- drivers/gpu/drm/meson/meson_osd_afbcd.h |  1 +
- 3 files changed, 30 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index 7f41a33592c8..923377f856de 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -380,10 +380,8 @@ static void meson_drv_unbind(struct device *dev)
- 	free_irq(priv->vsync_irq, drm);
- 	drm_dev_put(drm);
- 
--	if (priv->afbcd.ops) {
--		priv->afbcd.ops->reset(priv);
--		meson_rdma_free(priv);
--	}
-+	if (priv->afbcd.ops)
-+		priv->afbcd.ops->exit(priv);
- }
- 
- static const struct component_master_ops meson_drv_master_ops = {
-diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.c b/drivers/gpu/drm/meson/meson_osd_afbcd.c
-index ffc6b584dbf8..0cdbe899402f 100644
---- a/drivers/gpu/drm/meson/meson_osd_afbcd.c
-+++ b/drivers/gpu/drm/meson/meson_osd_afbcd.c
-@@ -79,11 +79,6 @@ static bool meson_gxm_afbcd_supported_fmt(u64 modifier, uint32_t format)
- 	return meson_gxm_afbcd_pixel_fmt(modifier, format) >= 0;
- }
- 
--static int meson_gxm_afbcd_init(struct meson_drm *priv)
--{
--	return 0;
--}
--
- static int meson_gxm_afbcd_reset(struct meson_drm *priv)
- {
- 	writel_relaxed(VIU_SW_RESET_OSD1_AFBCD,
-@@ -93,6 +88,16 @@ static int meson_gxm_afbcd_reset(struct meson_drm *priv)
- 	return 0;
- }
- 
-+static int meson_gxm_afbcd_init(struct meson_drm *priv)
-+{
-+	return 0;
-+}
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 9c80b493f974..8d1ea694d06c 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1748,6 +1748,9 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
+ 				/* end with failure */
+ 				break; /* lane == 1 already */
+ 			}
 +
-+static void meson_gxm_afbcd_exit(struct meson_drm *priv)
-+{
-+	meson_gxm_afbcd_reset(priv);
-+}
-+
- static int meson_gxm_afbcd_enable(struct meson_drm *priv)
- {
- 	writel_relaxed(FIELD_PREP(OSD1_AFBCD_ID_FIFO_THRD, 0x40) |
-@@ -172,6 +177,7 @@ static int meson_gxm_afbcd_setup(struct meson_drm *priv)
++			/* stop link training before start re training  */
++			dp_ctrl_clear_training_pattern(ctrl);
+ 		}
+ 	}
  
- struct meson_afbcd_ops meson_afbcd_gxm_ops = {
- 	.init = meson_gxm_afbcd_init,
-+	.exit = meson_gxm_afbcd_exit,
- 	.reset = meson_gxm_afbcd_reset,
- 	.enable = meson_gxm_afbcd_enable,
- 	.disable = meson_gxm_afbcd_disable,
-@@ -269,6 +275,18 @@ static bool meson_g12a_afbcd_supported_fmt(u64 modifier, uint32_t format)
- 	return meson_g12a_afbcd_pixel_fmt(modifier, format) >= 0;
- }
- 
-+static int meson_g12a_afbcd_reset(struct meson_drm *priv)
-+{
-+	meson_rdma_reset(priv);
-+
-+	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
-+			       VIU_SW_RESET_G12A_OSD1_AFBCD,
-+			       VIU_SW_RESET);
-+	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
-+
-+	return 0;
-+}
-+
- static int meson_g12a_afbcd_init(struct meson_drm *priv)
- {
- 	int ret;
-@@ -286,16 +304,10 @@ static int meson_g12a_afbcd_init(struct meson_drm *priv)
- 	return 0;
- }
- 
--static int meson_g12a_afbcd_reset(struct meson_drm *priv)
-+static void meson_g12a_afbcd_exit(struct meson_drm *priv)
- {
--	meson_rdma_reset(priv);
--
--	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
--			       VIU_SW_RESET_G12A_OSD1_AFBCD,
--			       VIU_SW_RESET);
--	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
--
--	return 0;
-+	meson_g12a_afbcd_reset(priv);
-+	meson_rdma_free(priv);
- }
- 
- static int meson_g12a_afbcd_enable(struct meson_drm *priv)
-@@ -380,6 +392,7 @@ static int meson_g12a_afbcd_setup(struct meson_drm *priv)
- 
- struct meson_afbcd_ops meson_afbcd_g12a_ops = {
- 	.init = meson_g12a_afbcd_init,
-+	.exit = meson_g12a_afbcd_exit,
- 	.reset = meson_g12a_afbcd_reset,
- 	.enable = meson_g12a_afbcd_enable,
- 	.disable = meson_g12a_afbcd_disable,
-diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.h b/drivers/gpu/drm/meson/meson_osd_afbcd.h
-index 5e5523304f42..e77ddeb6416f 100644
---- a/drivers/gpu/drm/meson/meson_osd_afbcd.h
-+++ b/drivers/gpu/drm/meson/meson_osd_afbcd.h
-@@ -14,6 +14,7 @@
- 
- struct meson_afbcd_ops {
- 	int (*init)(struct meson_drm *priv);
-+	void (*exit)(struct meson_drm *priv);
- 	int (*reset)(struct meson_drm *priv);
- 	int (*enable)(struct meson_drm *priv);
- 	int (*disable)(struct meson_drm *priv);
 -- 
 2.34.1
 

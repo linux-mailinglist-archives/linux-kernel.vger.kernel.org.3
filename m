@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3890E4F3945
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CFB4F391F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377848AbiDELas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S1377622AbiDEL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243962AbiDEIvW (ORCPT
+        with ESMTP id S243858AbiDEIvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA68CD338;
-        Tue,  5 Apr 2022 01:39:55 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79EDCA0FA;
+        Tue,  5 Apr 2022 01:39:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C8ACB81B92;
-        Tue,  5 Apr 2022 08:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1699C385A3;
-        Tue,  5 Apr 2022 08:38:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BBD5CCE1BCE;
+        Tue,  5 Apr 2022 08:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95FFC385A3;
+        Tue,  5 Apr 2022 08:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147933;
-        bh=9hCBRRhKdCVoieEBBCzN/gKOJEsz/ukjx7l7GEHMlns=;
+        s=korg; t=1649147936;
+        bh=e1bQVDK7ZCYqbZ5aVCcAEwCJB5LlrMPnBXSml3bLJm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U1IaPhFMeKwpL2UNrazrU4k+gD64YrIfdYbcSVSzDxH4dNH9LN+fT53lPIDkyxDFY
-         8KRzLRkvzWlylPt77hIjUzmtqk1H8iiSGLd759Lih+dQHpE0RmmDW6Zg5wS8+q4ruQ
-         7d364HTCORM/n7/d5ei3ujjSFMGE00z8TUvVledQ=
+        b=qBR/QQPNDugl4/Rt0tY0cBRKTshRbWERZPjPQcyT73sWw71sKCY/t4E71Baa8dPhS
+         tUA6P42aqh7j/T/p14c17wvlGM0d+ZFPOznovCtZBjvfi4zTxenVEehIQhbc64koaX
+         EDvBM1ESwoYQtA5eiFt5qA8yfrrEhGTc2cghzo8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ameer Hamza <amhamza.mgc@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        stable@vger.kernel.org,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.16 0174/1017] media: venus: vdec: fixed possible memory leak issue
-Date:   Tue,  5 Apr 2022 09:18:07 +0200
-Message-Id: <20220405070359.394359234@linuxfoundation.org>
+Subject: [PATCH 5.16 0175/1017] media: venus: hfi_cmds: List HDR10 property as unsupported for v1 and v3
+Date:   Tue,  5 Apr 2022 09:18:08 +0200
+Message-Id: <20220405070359.425255248@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,48 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ameer Hamza <amhamza.mgc@gmail.com>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-commit 8403fdd775858a7bf04868d43daea0acbe49ddfc upstream.
+commit 22beb839f48d841ec75974872863dc253d37c21c upstream.
 
-The venus_helper_alloc_dpb_bufs() implementation allows an early return
-on an error path when checking the id from ida_alloc_min() which would
-not release the earlier buffer allocation.
+The HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI HFI property is not supported
+on Venus v1 and v3.
 
-Move the direct kfree() from the error checking of dma_alloc_attrs() to
-the common fail path to ensure that allocations are released on all
-error paths in this function.
-
-Addresses-Coverity: 1494120 ("Resource leak")
-
-cc: stable@vger.kernel.org # 5.16+
-Fixes: 40d87aafee29 ("media: venus: vdec: decoded picture buffer handling during reconfig sequence")
-Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+cc: stable@vger.kernel.org # 5.13+
+Fixes: 9172652d72f8 ("media: venus: venc: Add support for CLL and Mastering display controls")
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/hfi_cmds.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -189,7 +189,6 @@ int venus_helper_alloc_dpb_bufs(struct v
- 		buf->va = dma_alloc_attrs(dev, buf->size, &buf->da, GFP_KERNEL,
- 					  buf->attrs);
- 		if (!buf->va) {
--			kfree(buf);
- 			ret = -ENOMEM;
- 			goto fail;
- 		}
-@@ -209,6 +208,7 @@ int venus_helper_alloc_dpb_bufs(struct v
- 	return 0;
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -1054,6 +1054,8 @@ static int pkt_session_set_property_1x(s
+ 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*info);
+ 		break;
+ 	}
++	case HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI:
++		return -ENOTSUPP;
  
- fail:
-+	kfree(buf);
- 	venus_helper_free_dpb_bufs(inst);
- 	return ret;
- }
+ 	/* FOLLOWING PROPERTIES ARE NOT IMPLEMENTED IN CORE YET */
+ 	case HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS:
 
 

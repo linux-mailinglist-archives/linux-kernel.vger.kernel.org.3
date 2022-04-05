@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A6F4F3DAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E5F4F3F60
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387594AbiDEPTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S1387882AbiDEPUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346788AbiDEJp3 (ORCPT
+        with ESMTP id S1346818AbiDEJpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973B0DBD05;
-        Tue,  5 Apr 2022 02:31:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA47F09
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:32:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8F1B81CBE;
-        Tue,  5 Apr 2022 09:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C1AC385A4;
-        Tue,  5 Apr 2022 09:31:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1521616C1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433DAC385A3;
+        Tue,  5 Apr 2022 09:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151110;
-        bh=akJwXD5N3s4UPZe2aQccirJblgU77qRMdXJ8Vx02u74=;
+        s=k20201202; t=1649151120;
+        bh=32KftyjLHc+wRCInz68XbmVh1oirhRGgVlh1CMTN5Ew=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=QY5Z55casbm5lR6qsgeuDF3G8adn/VXiErF+RjsEtRsfg4GpaCYaLtvuCO7PosAxH
-         kkHB4iFMUltTTxoOVUAWWxvmuuENoZDt3kuzHs39r1ZJlxfJo0FdygNGNwcPqzn05n
-         alNWru1jDELUfjINuCrFeKn+QHu7c7guZdOzI3Ydp+JBlBhvMWG3hlkDXFuvqSvHwJ
-         U7Q/Eb5Lx3JOF0FPj5sUmQgVwgZuTweYoqr0Xm5Xuss8HGf8VTC/aTBs55mnupUSb6
-         0Gns2AVqDzFaYzE8FSOdZR42prBZ4S4Y3h/Je4fBzLhPxmb93jke+bOB178wwnQJwf
-         mSfQ0BvfzW62w==
+        b=psUKn07cuZDJfOnD3dalSfcruMZLkfwu+O9xmt90SeQHtNaMpsjcfI2aayf5zEZCb
+         ffaigjl2HJUNHoza4gORu5FvWKkNKM3/KkLE7QdorP+Akb92/TJN8K8QrUejT2nmAE
+         KFzfWdtNzMHU0Kjd6e7T9/euiB41GCKxRDRyDO8wWg4LJIOVUZa+c3FyGaTEelCP0G
+         PhRSfr/YL+CKYxc2TYAPH4UTi0VYYS1d3FTdglUZ7EO/J2GNzOCTKm1VrdmsCBRTS3
+         Z07Cip77HYRWlhkmsM2USTAmFvat6M6rJk7xOASRPLp4KkK3ZWrExhXuO+t+LhTmGn
+         QgpybYwy8eNtg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Rob Herring <robh+dt@kernel.org>, povik+lin@cutebit.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kettenis@openbsd.org,
-        marcan@marcan.st, alsa-devel@alsa-project.org, sven@svenpeter.dev,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220331000449.41062-1-povik+lin@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
-Subject: Re: (subset) [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-Message-Id: <164915110754.276574.17127953624002951420.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:31:47 +0100
+To:     rafael@kernel.org, gregkh@linuxfoundation.org,
+        rikard.falkeborn@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20220330214110.36337-1-rikard.falkeborn@gmail.com>
+References: <20220330214110.36337-1-rikard.falkeborn@gmail.com>
+Subject: Re: [PATCH] regmap: Constify static regmap_bus structs
+Message-Id: <164915111899.276817.15619096499857459314.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:31:58 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,31 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 02:04:44 +0200, Martin Povišer wrote:
-> I put together a machine-level ASoC driver for recent Apple Macs (the
-> ones with ARM64 SoCs) and want to gauge opinions.
+On Wed, 30 Mar 2022 23:41:10 +0200, Rikard Falkeborn wrote:
+> The only usage of these is to pass their address to __regmap_init() or
+> __devm_regmap_init(), both which takes pointers to const struct
+> regmap_bus. Make them const to allow the compiler to put them in
+> read-only memory.
 > 
-> Commit 1 is the binding. It is some subset of simple-audio-card with
-> the extra distinction of allowing multiple CPU/CODEC DAIs per a DAI
-> link. I want to draw special attention to the issue of describing
-> speaker topologies. The way it now works is that the driver expects
-> the speakers to be declared in a fixed order in the sound-dai= list.
-> This populates a topology the driver expects on a particular machine
-> model. Mark (in CC) has made the suggestion of keeping the topology
-> descriptions with the codec nodes themselves in some generic manner,
-> akin to how sound-name-prefix= already helps identify codecs to the
-> user.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
 Thanks!
 
-[4/5] ASoC: Introduce snd_soc_of_get_dai_link_cpus
-      commit: 900dedd7e47cc3f8d93dfa0ae6ac6cf49eda0c97
+[1/1] regmap: Constify static regmap_bus structs
+      commit: bd941dfaae3503c6b707d8544696205f759e57a3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

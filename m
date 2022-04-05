@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7794F4CC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFCB4F4917
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579611AbiDEXcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S1390301AbiDEWDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349288AbiDEJtd (ORCPT
+        with ESMTP id S1349342AbiDEJtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AF810FDA;
-        Tue,  5 Apr 2022 02:43:43 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1C6334;
+        Tue,  5 Apr 2022 02:44:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F01BBB818F3;
-        Tue,  5 Apr 2022 09:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1CBC385A3;
-        Tue,  5 Apr 2022 09:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBCE061675;
+        Tue,  5 Apr 2022 09:44:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E79C385A2;
+        Tue,  5 Apr 2022 09:44:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151820;
-        bh=K42QkayVvGfoqUO3AMD2fmm46tyYo/VhVx5kCxI5O6w=;
+        s=korg; t=1649151851;
+        bh=yZ+WimmexbVpDWgdZiQrjWS7LEoQpVE2+xeHGJ7M12k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qw7GAi+EhIpsWQWFKwAvNrqUGl146OHTkFru69AM7JXWxQZn1lf4WfazidhQIhWAJ
-         O9AJnxlfdg/Dz51kCz7gxzhnuIzRv6Mr0G0Sb184gM+3XXv8TsoZB8Ijj/BZcmPluq
-         ri7DreL5KtY5hs/eYqhZv/7FmdiOpjIFRh9YUr+A=
+        b=b/56oO+u1GkTTDTNjzrBsFhyEqFuGsSy84UErdjGCERJiconwuSwp0yvjo9OgFBe4
+         VtBc9FCS2yHfAMJET5KhphkRCcNXmYKPW9Is9HkbNEqx8cFW2MAAPL+ZoaUkh3vO7B
+         o+08V4wFHWH5rrWbvfm8yX4j3vsnQvynAyZxUSks=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 536/913] power: ab8500_chargalg: Use CLOCK_MONOTONIC
-Date:   Tue,  5 Apr 2022 09:26:38 +0200
-Message-Id: <20220405070355.916061620@linuxfoundation.org>
+Subject: [PATCH 5.15 537/913] RDMA/irdma: Prevent some integer underflows
+Date:   Tue,  5 Apr 2022 09:26:39 +0200
+Message-Id: <20220405070355.945964593@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,56 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit c22fca40522e2be8af168f3087d87d85e404ea72 ]
+[ Upstream commit 6f6dbb819dfc1a35bcb8b709b5c83a3ea8beff75 ]
 
-The HRTimer in the AB8500 charging code is using CLOCK_REALTIME
-to set an alarm some hours forward in time +/- 5 min for a safety
-timer.
+My static checker complains that:
 
-I have observed that this will sometimes fire sporadically
-early when charging a battery with the result that
-charging stops.
+    drivers/infiniband/hw/irdma/ctrl.c:3605 irdma_sc_ceq_init()
+    warn: can subtract underflow 'info->dev->hmc_fpm_misc.max_ceqs'?
 
-As CLOCK_REALTIME can be subject to adjustments of time from
-sources such as NTP, this cannot be trusted and will likely
-for example fire events if the clock is set forward some hours
-by say NTP.
+It appears that "info->dev->hmc_fpm_misc.max_ceqs" comes from the firmware
+in irdma_sc_parse_fpm_query_buf() so, yes, there is a chance that it could
+be zero.  Even if we trust the firmware, it's easy enough to change the
+condition just as a hardenning measure.
 
-Use CLOCK_MONOTONIC as indicated in other instances and the
-problem goes away. Also initialize the timer to REL mode
-as this is what will be used later.
-
-Fixes: 257107ae6b9b ("ab8500-chargalg: Use hrtimer")
-Cc: Lee Jones <lee.jones@linaro.org>
-Suggested-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: 3f49d6842569 ("RDMA/irdma: Implement HW Admin Queue OPs")
+Link: https://lore.kernel.org/r/20220307125928.GE16710@kili
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/ab8500_chargalg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/irdma/ctrl.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index ff4b26b1ceca..b809fa5abbba 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -2019,11 +2019,11 @@ static int ab8500_chargalg_probe(struct platform_device *pdev)
- 	psy_cfg.drv_data = di;
+diff --git a/drivers/infiniband/hw/irdma/ctrl.c b/drivers/infiniband/hw/irdma/ctrl.c
+index f1e5515256e0..1ac7067e21be 100644
+--- a/drivers/infiniband/hw/irdma/ctrl.c
++++ b/drivers/infiniband/hw/irdma/ctrl.c
+@@ -431,7 +431,7 @@ enum irdma_status_code irdma_sc_qp_create(struct irdma_sc_qp *qp, struct irdma_c
  
- 	/* Initilialize safety timer */
--	hrtimer_init(&di->safety_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
-+	hrtimer_init(&di->safety_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	di->safety_timer.function = ab8500_chargalg_safety_timer_expired;
+ 	cqp = qp->dev->cqp;
+ 	if (qp->qp_uk.qp_id < cqp->dev->hw_attrs.min_hw_qp_id ||
+-	    qp->qp_uk.qp_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt - 1))
++	    qp->qp_uk.qp_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt))
+ 		return IRDMA_ERR_INVALID_QP_ID;
  
- 	/* Initilialize maintenance timer */
--	hrtimer_init(&di->maintenance_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
-+	hrtimer_init(&di->maintenance_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	di->maintenance_timer.function =
- 		ab8500_chargalg_maintenance_timer_expired;
+ 	wqe = irdma_sc_cqp_get_next_send_wqe(cqp, scratch);
+@@ -2551,10 +2551,10 @@ static enum irdma_status_code irdma_sc_cq_create(struct irdma_sc_cq *cq,
+ 	enum irdma_status_code ret_code = 0;
  
+ 	cqp = cq->dev->cqp;
+-	if (cq->cq_uk.cq_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt - 1))
++	if (cq->cq_uk.cq_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt))
+ 		return IRDMA_ERR_INVALID_CQ_ID;
+ 
+-	if (cq->ceq_id > (cq->dev->hmc_fpm_misc.max_ceqs - 1))
++	if (cq->ceq_id >= (cq->dev->hmc_fpm_misc.max_ceqs))
+ 		return IRDMA_ERR_INVALID_CEQ_ID;
+ 
+ 	ceq = cq->dev->ceq[cq->ceq_id];
+@@ -3656,7 +3656,7 @@ enum irdma_status_code irdma_sc_ceq_init(struct irdma_sc_ceq *ceq,
+ 	    info->elem_cnt > info->dev->hw_attrs.max_hw_ceq_size)
+ 		return IRDMA_ERR_INVALID_SIZE;
+ 
+-	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
++	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs))
+ 		return IRDMA_ERR_INVALID_CEQ_ID;
+ 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
+ 
+@@ -4205,7 +4205,7 @@ enum irdma_status_code irdma_sc_ccq_init(struct irdma_sc_cq *cq,
+ 	    info->num_elem > info->dev->hw_attrs.uk_attrs.max_hw_cq_size)
+ 		return IRDMA_ERR_INVALID_SIZE;
+ 
+-	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
++	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs ))
+ 		return IRDMA_ERR_INVALID_CEQ_ID;
+ 
+ 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
 -- 
 2.34.1
 

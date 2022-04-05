@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF71D4F51B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4154F4F6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846964AbiDFCLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S1837987AbiDFAti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455499AbiDEQAG (ORCPT
+        with ESMTP id S1455525AbiDEQAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:00:06 -0400
+        Tue, 5 Apr 2022 12:00:07 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A385DA15;
-        Tue,  5 Apr 2022 08:16:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A37166AD3;
+        Tue,  5 Apr 2022 08:16:16 -0700 (PDT)
 Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 093DF1EC053B;
-        Tue,  5 Apr 2022 17:15:57 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E1B731EC0576;
+        Tue,  5 Apr 2022 17:16:10 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649171757;
+        t=1649171771;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UDL2dhmJrCNToj/HGsyDQ7DuZlLclp5wFLMD60mJIDk=;
-        b=S/B6B6pYfurNbBNbI4KbkkR3uHedbbjg7UNT2jV1Q4qeYZQwaEBUHwRMr+grYfQGCMjRML
-        YS/NXOyWYq3sbQxeJQczSgnmOErjoLD349KtuAenIDbryMtxYVeOHUmj4ivD68y7y/gmlb
-        KVZ7pAR54/PR/seX/1pPg+SYhJXY0Hs=
+        bh=AKDLQe/dPEsrthvk8DnqVfdROlALev9E4MPr2/mYC3c=;
+        b=avwuDCDJzrRV5vhJCZCf6wLf1RWpmroqdHmBeTIQDKxladtn0DJ9zGp9itab8MYMyEbYss
+        TOfTXejLUEN1L5nDRn7AZ7D7YF8ChYFuSTeKDiX2nmMJ1bkc/eI1mD4LrIpU4B8EAchEpu
+        cnSlgQKOVSckOX99hnMsH9UATzmK88A=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 07/11] usb: typec: tcpm: Fix undefined behavior due to shift overflowing the constant
-Date:   Tue,  5 Apr 2022 17:15:13 +0200
-Message-Id: <20220405151517.29753-8-bp@alien8.de>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 10/11] IB/mlx5: Fix undefined behavior due to shift overflowing the constant
+Date:   Tue,  5 Apr 2022 17:15:16 +0200
+Message-Id: <20220405151517.29753-11-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
 References: <20220405151517.29753-1-bp@alien8.de>
@@ -56,34 +57,36 @@ From: Borislav Petkov <bp@suse.de>
 
 Fix:
 
-  drivers/usb/typec/tcpm/tcpm.c: In function ‘run_state_machine’:
-  drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not reduce to an integer constant
-     case BDO_MODE_TESTDATA:
-     ^~~~
+  drivers/infiniband/hw/mlx5/main.c: In function ‘translate_eth_legacy_proto_oper’:
+  drivers/infiniband/hw/mlx5/main.c:370:2: error: case label does not reduce to an integer constant
+    case MLX5E_PROT_MASK(MLX5E_50GBASE_KR2):
+    ^~~~
 
 See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
 details as to why it triggers with older gccs only.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: linux-rdma@vger.kernel.org
+Cc: netdev@vger.kernel.org
 ---
- include/linux/usb/pd_bdo.h | 2 +-
+ include/linux/mlx5/port.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/usb/pd_bdo.h b/include/linux/usb/pd_bdo.h
-index 033fe3e17141..7c25b88d79f9 100644
---- a/include/linux/usb/pd_bdo.h
-+++ b/include/linux/usb/pd_bdo.h
-@@ -15,7 +15,7 @@
- #define BDO_MODE_CARRIER2	(5 << 28)
- #define BDO_MODE_CARRIER3	(6 << 28)
- #define BDO_MODE_EYE		(7 << 28)
--#define BDO_MODE_TESTDATA	(8 << 28)
-+#define BDO_MODE_TESTDATA	(8U << 28)
+diff --git a/include/linux/mlx5/port.h b/include/linux/mlx5/port.h
+index 28a928b0684b..e96ee1e348cb 100644
+--- a/include/linux/mlx5/port.h
++++ b/include/linux/mlx5/port.h
+@@ -141,7 +141,7 @@ enum mlx5_ptys_width {
+ 	MLX5_PTYS_WIDTH_12X	= 1 << 4,
+ };
  
- #define BDO_MODE_MASK(mode)	((mode) & 0xf0000000)
- 
+-#define MLX5E_PROT_MASK(link_mode) (1 << link_mode)
++#define MLX5E_PROT_MASK(link_mode) (1U << link_mode)
+ #define MLX5_GET_ETH_PROTO(reg, out, ext, field)	\
+ 	(ext ? MLX5_GET(reg, out, ext_##field) :	\
+ 	MLX5_GET(reg, out, field))
 -- 
 2.35.1
 

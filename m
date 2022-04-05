@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B524F3B64
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F56B4F3B77
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353615AbiDELzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
+        id S1359268AbiDEL5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244814AbiDEIwl (ORCPT
+        with ESMTP id S244976AbiDEIww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A133BBCD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 01:44:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 5 Apr 2022 04:52:52 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E55C1D0DD;
+        Tue,  5 Apr 2022 01:48:24 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9172461509
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D46C385A7;
-        Tue,  5 Apr 2022 08:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649148258;
-        bh=nRMo+z2lBnIeY2gWA47akGjKJTExBImxtqaJZH6LZRY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ovHq+AmOb8oZDAWUl+4rgcc4gCndwuQhRTKEqQVdjzw5XyCv0rAVlwZ53MA5rtR6K
-         QBD754frewQOGxu4lI7foMOe0xE19P7cJmEtaxetu2jZ56bYJxRe0SHOvpO7cVxsP3
-         8XdcpSOIuEEgQMTXfQu9oMzAsCnwfKeRNCVckSntstTibsr1/O0WzK4SYvdEo04tvo
-         k1DMtCn9f+Ia67PGwyBXbs38aGaX9aNg6LYqANyK9JCLkdBIRen3qPrpjFA1gJIrM0
-         4dEvT2xbyZbhplrWROhEVpJ5bgyhzbROfjxDffvo3QowqRMwRSvq1RXMWh/OuJpijP
-         qpoGZh/q2dA0g==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nbenP-001IBq-EM; Tue, 05 Apr 2022 10:44:15 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v2 2/2] ASoC: Intel: sof_es8336: Huawei Matebook D15 uses a headphone gpio
-Date:   Tue,  5 Apr 2022 10:44:13 +0200
-Message-Id: <01ca33a28b8f7ef084bfa1317ada0cca1b0589f6.1649147890.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1649147890.git.mchehab@kernel.org>
-References: <cover.1649147890.git.mchehab@kernel.org>
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D943E221D4;
+        Tue,  5 Apr 2022 10:48:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649148502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x/+zyXUcDmdndIIui1WDqypJvYDMYDrXZERNBQ0ecKk=;
+        b=aveEuHEhPZQK2Uwn++JVqUY23++YtQ2Iog5KE9xDadFiSBB9b3U5iB3yh8MN6rQH3Ij9Jq
+        W4neXVvnU1lja2kSQ35ur8KKaEpcANmZUPVFd3h1XfmeGmmaenwP4aZ/Jaw3UgCKWoM+A7
+        hJOlxIxVSNwizXEPqxE9Sj9Sd59uUbo=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 05 Apr 2022 10:48:21 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Richard Cochran <richardcochran@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
+        grygorii.strashko@ti.com, kuba@kernel.org, kurt@linutronix.de,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        mlichvar@redhat.com, netdev@vger.kernel.org,
+        qiangqing.zhang@nxp.com, vladimir.oltean@nxp.com,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
+In-Reply-To: <20220405055954.GB91955@hoboy.vegasvil.org>
+References: <20220104014215.GA20062@hoboy.vegasvil.org>
+ <20220404150508.3945833-1-michael@walle.cc> <YksMvHgXZxA+YZci@lunn.ch>
+ <e5a6f6193b86388ed7a081939b8745be@walle.cc>
+ <20220405055954.GB91955@hoboy.vegasvil.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d38744cbe67474b3c83b84547ec3cb4f@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Am 2022-04-05 07:59, schrieb Richard Cochran:
+> On Mon, Apr 04, 2022 at 07:12:11PM +0200, Michael Walle wrote:
+> 
+>> That would make sense. I guess what bothers me with the current
+>> mechanism is that a feature addition to the PHY in the *future* (the
+>> timestamping support) might break a board - or at least changes the
+>> behavior by suddenly using PHY timestamping.
+> 
+> That is a good point, but then something will break in any case.
 
-Based on experimental tests, Huawei Matebook D15 actually uses
-both gpio0 and gpio1: the first one controls the speaker, while
-the other one controls the headphone.
+Can the ethernet driver select the default one? So any current
+driver which has "if phy_has_hwtstamp() forward_ioctl;" can set
+it to PHY while newer drivers can (or should actually) leave it as
+MAC.
 
-Add a quirk for that.
+This doesn't really fix the problem per se. But at least new
+drivers won't be affected. For my problem at hand, I'd need to
+convince Microchip to default to MAC although the driver is
+already in the tree (but there is no user of it in mainline
+right now).
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1649147890.git.mchehab@kernel.org/
-
- sound/soc/intel/boards/sof_es8336.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index bcd80870d252..79cf9777c4fc 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -292,6 +292,14 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
- 		},
- 		.driver_data = (void *)(SOF_ES8336_TGL_GPIO_QUIRK)
- 	},
-+	{
-+		.callback = sof_es8336_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
-+			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
-+		},
-+		.driver_data = (void *)(SOF_ES8336_HEADPHONE_GPIO)
-+	},
- 	{}
- };
- 
--- 
-2.35.1
-
+-michael

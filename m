@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6234F3E19
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FFC4F3FD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384320AbiDEM1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S1384638AbiDEM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245196AbiDEIyN (ORCPT
+        with ESMTP id S245208AbiDEIyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5739F114E;
-        Tue,  5 Apr 2022 01:52:01 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C315FB5;
+        Tue,  5 Apr 2022 01:52:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A89614E5;
-        Tue,  5 Apr 2022 08:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02641C385A1;
-        Tue,  5 Apr 2022 08:51:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A79D8B81BC0;
+        Tue,  5 Apr 2022 08:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CB8C385A1;
+        Tue,  5 Apr 2022 08:52:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148720;
-        bh=xZqW6bhmtjzrBnDxdcWjv2+8BAXwYVWbAoDYitT4kk0=;
+        s=korg; t=1649148723;
+        bh=ZpYxQzMbWq9VFdzbyTTC+uP5ynNLub8AhNQdYd8W74o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GNQl/O/Q1rb71iRzTPSfOggBECPh+YvTQfcQOATymqBFYOZFn7ldiYJfB6x7wAzx6
-         ZKT0tGKaCKr6WzjM9CaSXABZxBphulJJ5HXKEytVipy+imNF+jwk1fCwX26RJFJa12
-         OMXJw1W9qdR9p58flyjUxwNGijqAzKqGlBsDTUqo=
+        b=Zx+bAoK7wfYOQNaWmj1B9YdS044gGFrP6V4hUkxo06CfTDUg8DhPadwPvcur16h3c
+         svAA574J0Bot3s0l7csdx115TED66Pr8ghYmK02cczmtwTMNoB504O7Fwp2ZQREHDF
+         QovkXVB0nSpNvtJNCkYV7EFNuUGuC/M0T7h5VrpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0456/1017] mt76: mt7921: do not always disable fw runtime-pm
-Date:   Tue,  5 Apr 2022 09:22:49 +0200
-Message-Id: <20220405070407.834793000@linuxfoundation.org>
+Subject: [PATCH 5.16 0457/1017] mt76: mt7921: fix a leftover race in runtime-pm
+Date:   Tue,  5 Apr 2022 09:22:50 +0200
+Message-Id: <20220405070407.864554065@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,42 +56,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit b44eeb8cbdf2b88f2844f11e4f263b0abed5b5b0 ]
+[ Upstream commit 591cdccebdd4d02eb46d400dea911136400cc567 ]
 
-After commit 'd430dffbe9dd ("mt76: mt7921: fix a possible race
-enabling/disabling runtime-pm")', runtime-pm is always disabled in the
-fw even if the user requests to enable it toggling debugfs node since
-mt7921_pm_interface_iter routine will use pm->enable to configure the fw.
-Fix the issue moving enable variable configuration before running
-mt7921_pm_interface_iter routine.
+Fix a possible race in mt7921_pm_power_save_work() if rx/tx napi
+schedules ps_work and we are currently accessing device register
+on a different cpu.
 
-Fixes: d430dffbe9dd ("mt76: mt7921: fix a possible race enabling/disabling runtime-pm")
+Fixes: 1d8efc741df8 ("mt76: mt7921: introduce Runtime PM support")
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-index 86fd7292b229..45a393070e46 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-@@ -291,13 +291,12 @@ mt7921_pm_set(void *data, u64 val)
- 	pm->enable = false;
- 	mt76_connac_pm_wake(&dev->mphy, pm);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+index fc21a78b37c4..1fea9266d4b8 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+@@ -1472,6 +1472,14 @@ void mt7921_pm_power_save_work(struct work_struct *work)
+ 	    test_bit(MT76_HW_SCHED_SCANNING, &mphy->state))
+ 		goto out;
  
-+	pm->enable = val;
- 	ieee80211_iterate_active_interfaces(mt76_hw(dev),
- 					    IEEE80211_IFACE_ITER_RESUME_ALL,
- 					    mt7921_pm_interface_iter, dev);
- 
- 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
--
--	pm->enable = val;
- 	mt76_connac_power_save_sched(&dev->mphy, pm);
- out:
- 	mutex_unlock(&dev->mt76.mutex);
++	if (mutex_is_locked(&dev->mt76.mutex))
++		/* if mt76 mutex is held we should not put the device
++		 * to sleep since we are currently accessing device
++		 * register map. We need to wait for the next power_save
++		 * trigger.
++		 */
++		goto out;
++
+ 	if (time_is_after_jiffies(dev->pm.last_activity + delta)) {
+ 		delta = dev->pm.last_activity + delta - jiffies;
+ 		goto out;
 -- 
 2.34.1
 

@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D524A4F251B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133FE4F2466
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiDEHp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S230359AbiDEHRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiDEHoI (ORCPT
+        with ESMTP id S231652AbiDEHQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:44:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388B7939B1;
-        Tue,  5 Apr 2022 00:40:29 -0700 (PDT)
+        Tue, 5 Apr 2022 03:16:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D502C39;
+        Tue,  5 Apr 2022 00:14:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BF3161682;
-        Tue,  5 Apr 2022 07:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6737DC340EE;
-        Tue,  5 Apr 2022 07:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144428;
-        bh=nYF/5LlqJxR+dXjtyHU6EiTxJe3DQ65PTODezaKI2RE=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39C4E615FB;
+        Tue,  5 Apr 2022 07:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AE7C34111;
+        Tue,  5 Apr 2022 07:14:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649142891;
+        bh=0gzQGGxdHWRt9A+64eem+dLQzBOPjB9Pfn9kxqzAZaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m2y/eKiudXYRp4kHdvGBvEBFUFBYkZPA6jWJFZzW4/24PA79I0WPFc/ZcKkg9RP9m
-         CqXNJ+jfjkx5vEJNEMqaTZGjaMBs5CT1vybKza5JlguvP+EgLmA+oO7TK5F2UOptMl
-         jKEDqJ9hydXrHUGEKKORNUFeyD5m+H2Ctn80xlgE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 5.17 0041/1126] clk: uniphier: Fix fixed-rate initialization
-Date:   Tue,  5 Apr 2022 09:13:08 +0200
-Message-Id: <20220405070408.765008192@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
-User-Agent: quilt/0.66
+        b=pAxwn75t4d3o6bXrhGs0jyZfoZT/W4uV6ltpOG9V709KVwAGveEPeUdJIe4F2zoxj
+         2h/D7oY4VEZOWvLcSjxHATfYjAK4V8mF/iE2hhCNTAlHC/PpvsdQG5I76ke7gVOZpE
+         IgUwxEfszo8G/RiWC83JD9VlkN0EDkmBu/XnKwmmQEgi8Slw1f9bhSb/2XZ0ePMPll
+         3mdIKhzsMMyN5eDcYj6QK+hNVesoO4XvMVXpEPNlEbvi4p3L+YKgAmCVge6rc/9pj/
+         CceP22NTsvPdEzjszer2MHrUM1Jf1rcC+42aHbUQi12xYqvNCSebSw3ZevKbAThtZj
+         1hLN0W37SAzKQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V12 14/20] riscv: compat: Add elf.h implementation
+Date:   Tue,  5 Apr 2022 15:13:08 +0800
+Message-Id: <20220405071314.3225832-15-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
+References: <20220405071314.3225832-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,35 +60,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-commit ca85a66710a8a1f6b0719397225c3e9ee0abb692 upstream.
+Implement necessary type and macro for compat elf. See the code
+comment for detail.
 
-Fixed-rate clocks in UniPhier don't have any parent clocks, however,
-initial data "init.flags" isn't initialized, so it might be determined
-that there is a parent clock for fixed-rate clock.
-
-This sets init.flags to zero as initialization.
-
-Cc: <stable@vger.kernel.org>
-Fixes: 734d82f4a678 ("clk: uniphier: add core support code for UniPhier clock driver")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1646808918-30899-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 ---
- drivers/clk/uniphier/clk-uniphier-fixed-rate.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/include/asm/elf.h | 41 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
---- a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-+++ b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-@@ -24,6 +24,7 @@ struct clk_hw *uniphier_clk_register_fix
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index f53c40026c7a..a234656cfb5d 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -8,6 +8,8 @@
+ #ifndef _ASM_RISCV_ELF_H
+ #define _ASM_RISCV_ELF_H
  
- 	init.name = name;
- 	init.ops = &clk_fixed_rate_ops;
-+	init.flags = 0;
- 	init.parent_names = NULL;
- 	init.num_parents = 0;
++#include <uapi/linux/elf.h>
++#include <linux/compat.h>
+ #include <uapi/asm/elf.h>
+ #include <asm/auxvec.h>
+ #include <asm/byteorder.h>
+@@ -18,11 +20,13 @@
+  */
+ #define ELF_ARCH	EM_RISCV
  
-
++#ifndef ELF_CLASS
+ #ifdef CONFIG_64BIT
+ #define ELF_CLASS	ELFCLASS64
+ #else
+ #define ELF_CLASS	ELFCLASS32
+ #endif
++#endif
+ 
+ #define ELF_DATA	ELFDATA2LSB
+ 
+@@ -31,6 +35,8 @@
+  */
+ #define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+ 
++#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++
+ #define CORE_DUMP_USE_REGSET
+ #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
+ 
+@@ -43,8 +49,14 @@
+ #define ELF_ET_DYN_BASE		((TASK_SIZE / 3) * 2)
+ 
+ #ifdef CONFIG_64BIT
++#ifdef CONFIG_COMPAT
++#define STACK_RND_MASK		(test_thread_flag(TIF_32BIT) ? \
++				 0x7ff >> (PAGE_SHIFT - 12) : \
++				 0x3ffff >> (PAGE_SHIFT - 12))
++#else
+ #define STACK_RND_MASK		(0x3ffff >> (PAGE_SHIFT - 12))
+ #endif
++#endif
+ /*
+  * This yields a mask that user programs can use to figure out what
+  * instruction set this CPU supports.  This could be done in user space,
+@@ -60,11 +72,19 @@ extern unsigned long elf_hwcap;
+  */
+ #define ELF_PLATFORM	(NULL)
+ 
++#define COMPAT_ELF_PLATFORM	(NULL)
++
+ #ifdef CONFIG_MMU
+ #define ARCH_DLINFO						\
+ do {								\
++	/*							\
++	 * Note that we add ulong after elf_addr_t because	\
++	 * casting current->mm->context.vdso triggers a cast	\
++	 * warning of cast from pointer to integer for		\
++	 * COMPAT ELFCLASS32.					\
++	 */							\
+ 	NEW_AUX_ENT(AT_SYSINFO_EHDR,				\
+-		(elf_addr_t)current->mm->context.vdso);		\
++		(elf_addr_t)(ulong)current->mm->context.vdso);	\
+ 	NEW_AUX_ENT(AT_L1I_CACHESIZE,				\
+ 		get_cache_size(1, CACHE_TYPE_INST));		\
+ 	NEW_AUX_ENT(AT_L1I_CACHEGEOMETRY,			\
+@@ -90,4 +110,23 @@ do {							\
+ 		*(struct user_regs_struct *)regs;	\
+ } while (0);
+ 
++#ifdef CONFIG_COMPAT
++
++#define SET_PERSONALITY(ex)					\
++do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
++		set_thread_flag(TIF_32BIT);			\
++	else							\
++		clear_thread_flag(TIF_32BIT);			\
++	if (personality(current->personality) != PER_LINUX32)	\
++		set_personality(PER_LINUX |			\
++			(current->personality & (~PER_MASK)));	\
++} while (0)
++
++#define COMPAT_ELF_ET_DYN_BASE		((TASK_SIZE_32 / 3) * 2)
++
++/* rv32 registers */
++typedef compat_ulong_t			compat_elf_greg_t;
++typedef compat_elf_greg_t		compat_elf_gregset_t[ELF_NGREG];
++
++#endif /* CONFIG_COMPAT */
+ #endif /* _ASM_RISCV_ELF_H */
+-- 
+2.25.1
 

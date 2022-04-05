@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC9F4F4823
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CCF4F476A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376643AbiDEV05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S1355496AbiDEVLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349861AbiDEJvt (ORCPT
+        with ESMTP id S1357991AbiDEK1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:51:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014528E14;
-        Tue,  5 Apr 2022 02:49:51 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAB6D4456;
+        Tue,  5 Apr 2022 03:12:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CA5DB818F3;
-        Tue,  5 Apr 2022 09:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9407EC385A1;
-        Tue,  5 Apr 2022 09:49:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C0F0B81C89;
+        Tue,  5 Apr 2022 10:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74510C385A1;
+        Tue,  5 Apr 2022 10:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152189;
-        bh=aHqT1HFZ5CvSbqfy/C/L/NOwod6STlMUwvXPGsSKQro=;
+        s=korg; t=1649153539;
+        bh=Df5cw4uZOewNOibhwguds9r4nlmhDAJTRW1n8V1PLUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OSLzjBUQXqYSnClEP1pmPMPyJSrjOV6PoNDs6UACNuX/2TKJxG8K3HsfOstOCoAWL
-         YR6lEaJEnPE/ADLxXb7/as/6Pe1T7y7mBs2hwThTRcJxPkHAIiFPjDmwzsXxaxspRG
-         /ySbFjATalvMB/1clDijQ4CRUvBnp5h/g1JpyGeY=
+        b=ar+7zCg3OZzSuz0OsBk1/cY0RtXZsu7BSIOHvOC6PPG6tSgUbhDPZd/60DkDpvF5X
+         B2Pl/BRd+ID72bMvhLXTbzMfWodPGsx6MRX5X/AfPzGnDXgKSVVtgaaiCTNHKJHu7M
+         KWvARFrPBHxW1Yq5IZfOrX/mG3AI8mm6+vJx0F+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 687/913] rcu: Mark writes to the rcu_segcblist structures ->flags field
-Date:   Tue,  5 Apr 2022 09:29:09 +0200
-Message-Id: <20220405070400.427411819@linuxfoundation.org>
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 259/599] ARM: configs: multi_v5_defconfig: re-enable CONFIG_V4L_PLATFORM_DRIVERS
+Date:   Tue,  5 Apr 2022 09:29:13 +0200
+Message-Id: <20220405070306.545970135@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul E. McKenney <paulmck@kernel.org>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit c09929031018913b5783872a8b8cdddef4a543c7 ]
+[ Upstream commit f5eb04d7a0e419d61f784de3ced708259ddb71d7 ]
 
-KCSAN reports data races between the rcu_segcblist_clear_flags() and
-rcu_segcblist_set_flags() functions, though misreporting the latter
-as a call to rcu_segcblist_is_enabled() from call_rcu().  This commit
-converts the updates of this field to WRITE_ONCE(), relying on the
-resulting unmarked reads to continue to detect buggy concurrent writes
-to this field.
+Commit 06b93644f4d1 ("media: Kconfig: add an option to filter in/out
+platform drivers") introduced CONFIG_MEDIA_PLATFORM_SUPPORT, to allow
+more fine grained control over the inclusion of certain Kconfig files.
+multi_v5_defconfig was selecting some drivers described in
+drivers/media/platform/Kconfig, which now wasn't included anymore.
 
-Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>
+Explicitly set the new symbol in multi_v5_defconfig to bring those
+drivers back.
+This enables some new V4L2 and VIDEOBUF2 features, but as modules only.
+
+Fixes: 06b93644f4d1 ("media: Kconfig: add an option to filter in/out platform drivers")
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Link: https://lore.kernel.org/r/20220317183043.948432-3-andre.przywara@arm.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/rcu_segcblist.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/configs/multi_v5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/rcu_segcblist.h b/kernel/rcu/rcu_segcblist.h
-index 9a19328ff251..5d405943823e 100644
---- a/kernel/rcu/rcu_segcblist.h
-+++ b/kernel/rcu/rcu_segcblist.h
-@@ -56,13 +56,13 @@ static inline long rcu_segcblist_n_cbs(struct rcu_segcblist *rsclp)
- static inline void rcu_segcblist_set_flags(struct rcu_segcblist *rsclp,
- 					   int flags)
- {
--	rsclp->flags |= flags;
-+	WRITE_ONCE(rsclp->flags, rsclp->flags | flags);
- }
- 
- static inline void rcu_segcblist_clear_flags(struct rcu_segcblist *rsclp,
- 					     int flags)
- {
--	rsclp->flags &= ~flags;
-+	WRITE_ONCE(rsclp->flags, rsclp->flags & ~flags);
- }
- 
- static inline bool rcu_segcblist_test_flags(struct rcu_segcblist *rsclp,
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index e00be9faa23b..4393e689f235 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -187,6 +187,7 @@ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_MEDIA_SUPPORT=y
+ CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_PLATFORM_SUPPORT=y
+ CONFIG_V4L_PLATFORM_DRIVERS=y
+ CONFIG_VIDEO_ASPEED=m
+ CONFIG_VIDEO_ATMEL_ISI=m
 -- 
 2.34.1
 

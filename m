@@ -2,386 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838EB4F21AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BA04F222C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiDEEIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 00:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S231195AbiDEELN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 00:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiDEEIq (ORCPT
+        with ESMTP id S230421AbiDEEK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 00:08:46 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F1C32B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:06:44 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id d10so8621937edj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 21:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=k33GZGWU+w9uUOgE7RI/0gXQX1NT8yDgH8ann6GGs8w=;
-        b=bxGBiyEIZStrtD3+4iQ1HCM1sWxhlXV10+iqEn/qlNsNX+5jYs2oeIrAi38GhH3C/S
-         c4jmU83itAIPmrqzQsT48+z9H0vZrIhLoIvwKeWHiAcWWZh6Rg0n8hISzOGzlrM8qjss
-         GUH0oG8ecLJJgWZesSFb6l0iqdc7YCTiHwoTZ+UwPKDeDaddbqwYkO+PhnucQWqqOI5z
-         aXQuqLdPO5kq9uzkL7RUjUz6OOsmFI8eWqAFhel/n5OnlxRJSpL34TAzn+pq0PyA+dVp
-         SntH10wmVLUg7gRuVFaDTOSkTQXEU5W3v4ZPNRSzW+wAc7bhj7EjZGWtG2NJu4+Z+vzc
-         Xt1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=k33GZGWU+w9uUOgE7RI/0gXQX1NT8yDgH8ann6GGs8w=;
-        b=UVTYutM1PGGimTy+KfqvQbJ2cxGtlxHcgRl47s98kUM7AOVDsTcDR+y1t1BcB5ffxb
-         8A+BpDd3uhXhXlxAaWzA62ak2a5kqGuHMWwN61/endv6ozDiCP/L4rU6i0Q0I/BmPIy+
-         Kcs8RjR0JQeLYAnf+AHtvjZFFLYGPLg2r6/YZ+qhrziYdT3rrlZwZ+SN5NO4UZT4tBE4
-         dF927l3PyxwAYB1nPckJXATuOacXEY/z6wEhyKRNebybU8/fr988pZw/5zxEZQYMiyyt
-         1IYNuTxK4P5gLtEQdEHcMRAyDQu5//cbPtcC5eVwt8aqlgLgSh5NeswElmoEHbusL/w4
-         +XmA==
-X-Gm-Message-State: AOAM533T6qehSYjGlbHwKxriLVm1I5AwF1YS77FijnZwE52CsUK4I+Cs
-        DPo1E7RXf5E66+ZLE98gBncPWagt6HOFFVehmS0=
-X-Google-Smtp-Source: ABdhPJzIwxH2Bdxpe3kP5X875Mjtstqa6tDNBqcHYydSExz556mCkxa77yqXPypcDIe5L5yfy2+OGnvw8Xqzcr2Wdek=
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
- el4-20020a056402360400b0041cc4e62988mr1477962edb.157.1649131602779; Mon, 04
- Apr 2022 21:06:42 -0700 (PDT)
+        Tue, 5 Apr 2022 00:10:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06325FF1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649131725; x=1680667725;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zy4hoaYdClT/GTDOV0288HGQLnqQ9tl6vaEkZT0kWr4=;
+  b=PvHJ4XxUAJ0DZQNsvhlfE6FQc1Cbi5kqwS6IiUsKnRPYc0tGKA6V9aSD
+   UxP8+EP8VlvBsepBOhRk4ZX7n9X/OSWgOn2TMCFicpqwJzVf6i1JjHt5x
+   dvXLtbFoA3wC5VB0/UmGSa3NLWLymcUjeYFi8t5SpXYPAhTF0+KE/CE6z
+   9uyQFwCNcW0uXrxwxsXzb17+Q3jk8SYccJyjqIaBG8yoBm19fzswD/WXb
+   zwtiKzNbw/GxxTXXnqD9gm3uAJjt2e2lPCiFVlGpra/wTRqUy96gWEVlD
+   cyh3mjn67l3u3Y7/Cv+eX66FDTyVWqUMxv1oPm1x10VxMV11nYOpMxdlV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260357865"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="260357865"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 21:08:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="523839920"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 04 Apr 2022 21:08:43 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbaUl-0002c5-3l;
+        Tue, 05 Apr 2022 04:08:43 +0000
+Date:   Tue, 5 Apr 2022 12:07:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 8/40]
+ fs/netfs/internal.h:164:36: warning: format '%lx' expects argument of type
+ 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'}
+Message-ID: <202204051231.5tNC2hZE-lkp@intel.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 5 Apr 2022 05:06:31 +0100
-Message-ID: <CAHpNFcMO+-rxX=T4GPX9C8hb81AfMP8KhEaxiozFx3URRcf89Q@mail.gmail.com>
-Subject: Device Cache Align 'code align also speeds up prefetch' RS 128Bit
- Buffer to Cache Align = Pure, 32Bit,64Bit,128Bit Align Quads & Float Quads -
- HDD,SSD & Subject: Hardware Dual Encrypt & Decrypt : Hardware Accelerators
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DMAC yep Security Align 128Bits to Cache Array
-Align that 128Bit Buffer to Cache Align = Pure, 32Bit,64Bit,128Bit
-Align Quads & Float Quads -
-HDD,SDD normally have the EIDD DDI Equivalent
-Device Cache Align 'code align also speeds up prefetch' Radio AKA Wifi
-is also aligned & Internet protocols
-
-RS
-
-https://lkml.org/lkml/2022/4/4/1254
-https://lore.kernel.org/all/20220404194510.9206-2-mario.limonciello@amd.com/
-
-Subject: Hardware Dual Encrypt & Decrypt : Hardware Accelerators
-
-
-(indirect) - Plan & method RS
-
-Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
-
-AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
-accelerated with a joint AES Crypto module,
-
-Processor feature & package : Module list:
-
-2 Decryption pipelines working in parallel,
-With a Shared cache & RAM Module
-Modulus & Semi-parallel modulating decryption & Encryption combined
-with Encapsulation Cypher IP Protocol packet
-
-Parallax Cryptographic Processing Unit: RS
-
-The capacity To Multiply decryption on specific hardware in situations
-such as lower Bit precision is to be implemented as follows:
-
-On AES-NI & ARM Cryptographic processors; In particular PPS(ARM+) & SiMD ..
-
-The capacity to exploit the fact that the nonce is 16Bit to 64Bit &
-full float upto 128Bit for legal decryption (client) means there is a
-simple method to use:
-
-In situations that a AES-NI & ARM Cryptographic unit can process 2
-threads on a 256Bit Function we can do both the main 128Bit/192Bit &
-the nonce 16Bit to 64Bit & Enable a single instruction Roll to
-Synchronise both The main HASH & Nonce.
-
-AES & Crypto hardware can utilise the CPU/GPU/Processor FPU & SiMD to
-decrypt the nonce (smaller so fast) & in the same 8bto to 64Bits of
-code; Inline & parallax the cryptographic function.
-
-With a 256Bit AES-NI & Cryptographic unit : Parallel Decryption &
-Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
-
-(c)Rupert S
-
-*reference* https://bit.ly/VESA_BT
-
-Dual Encrypt & Decrypt : Hardware Accelerators (indirect)
-https://lkml.org/lkml/2022/4/4/1153
-https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@benyossef.com/T/#u,
-
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
-http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
-
-Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
-OCB, CCM, EAX, CWC, GCM, PCFB, CS
-https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
-
-*****
-
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-GEA-2 > GEA-3 is therefor 64Bit Safe (Mobile calls) & 128Bit Safe
-(Reasonable security)
-SHA2, SHA3therefor 128Bit Safe (Reasonable security Mobile) ++
-AES & PolyChaCha both provide a premise of 128Bit++
-
-So by reason alone GEA has a place in our hearts.
-
-*
-
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
-
-Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
-
-ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
-'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
-Implementation'
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-*
-
-Time differentiated : Interleave, Inversion & differentiating Elliptic curve.
-
-We will be able to know and test the Cypher : PRINCIPLE OF INTENT TO TRUST
-
-We know of a cypher but : (Principle RS)
-
-We blend the cypher..
-Interleaved pages of a cypher obfuscate : PAL CScam does this
-
-Timed : Theoretically unique to you in principle for imprecision, But
-we cannot really have imprecise in Crypto!
-
-But we can have a set time & in effect Elliptic curve a transient variable T,
-With this, Interleave the resulting pages (RAM Buffer Concept)
-
-Invert them over Time Var = T
-
-We can do all & principally this is relatively simple.
-
-(c)RS
-
-*
-
-Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
-
-AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
-accelerated with a joint AES Crypto module,
-
-Processor feature & package : Module list:
-
-2 Decryption pipelines working in parallel,
-With a Shared cache & RAM Module
-Modulus & Semi-parallel modulating decryption & Encryption combined
-with Encapsulation Cypher IP Protocol packet
-
-Parallax Cryptographic Processing Unit: RS
-
-The capacity To Multiply decryption on specific hardware in situations
-such as lower Bit precision is to be implemented as follows:
-
-On AES-NI & ARM Cryptographic processors; In particular PSP+PPS(ARM+) & SiMD ..
-
-The capacity to exploit the fact that the nonce is 16Bit to 64Bit &
-full float upto 128Bit for legal decryption (client) means there is a
-simple method to use:
-
-In situations that a AES-NI & ARM Cryptographic unit can process 2
-threads on a 256Bit Function we can do both the main 128Bit/192Bit &
-the nonce 16Bit to 64Bit & Enable a single instruction Roll to
-Synchronise both The main HASH & Nonce.
-
-AES & Crypto hardware can utilise the CPU/GPU/Processor FPU & SiMD to
-decrypt the nonce (smaller so fast) & in the same 8bto to 64Bits of
-code; Inline & parallax the cryptographic function.
-
-With a 256Bit AES-NI & Cryptographic unit : Parallel Decryption &
-Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
-
-(c)Rupert S
-
-*reference*
-
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
-http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
-
-Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
-OCB, CCM, EAX, CWC, GCM, PCFB, CS
-https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
-
-
-*
-
-Example of use:
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-*
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/11/ihmtes.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-Integral to Telecoms Security TRNG
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-Dev/Random : Importance
-
-Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
-implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
-GEA-2 Implementations we will improve with our /Dev/Random
-
-Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
-(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
-will improve with our /Dev/Random
-
-We can improve GPRS 2G to 5G networks still need to save power, GPRS
-Doubles a phones capacity to run all day,
-
-Code can and will be improved, Proposals include:
-
-Blake2
-ChaCha
-SM4
-SHA2
-SHA3
-
-Elliptic Encipher
-AES
-Poly ChaCha
-
-Firstly we need a good solid & stable /dev/random
-
-So we can examine the issue with a true SEED!
-
-Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-TRNG Samples & Method DRAND Proud!
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
-
-https://github.com/P1sec/gea-implementation
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: cae8dd85733f703374474ed433b8263263d4fa7f [8/40] netfs: Provide invalidatepage and releasepage calls
+config: parisc-randconfig-r003-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051231.5tNC2hZE-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/cae8dd85733f703374474ed433b8263263d4fa7f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout cae8dd85733f703374474ed433b8263263d4fa7f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash fs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:29,
+                    from arch/parisc/include/asm/bug.h:5,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/parisc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/swap.h:5,
+                    from fs/netfs/misc.c:8:
+   fs/netfs/misc.c: In function 'netfs_invalidate_folio':
+>> fs/netfs/internal.h:164:36: warning: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     164 | #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
+         |                                    ^~~~~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   fs/netfs/internal.h:164:26: note: in expansion of macro 'no_printk'
+     164 | #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
+         |                          ^~~~~~~~~
+   fs/netfs/misc.c:18:9: note: in expansion of macro '_enter'
+      18 |         _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
+         |         ^~~~~~
+   fs/netfs/internal.h:164:36: warning: format '%lx' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     164 | #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
+         |                                    ^~~~~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   fs/netfs/internal.h:164:26: note: in expansion of macro 'no_printk'
+     164 | #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
+         |                          ^~~~~~~~~
+   fs/netfs/misc.c:18:9: note: in expansion of macro '_enter'
+      18 |         _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
+         |         ^~~~~~
+
+
+vim +164 fs/netfs/internal.h
+
+3d3c95046742e4 David Howells 2020-05-13  162  
+3d3c95046742e4 David Howells 2020-05-13  163  #else
+3d3c95046742e4 David Howells 2020-05-13 @164  #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
+
+:::::: The code at line 164 was first introduced by commit
+:::::: 3d3c95046742e4eebaa4b891b0b01cbbed94ebbd netfs: Provide readahead and readpage netfs helpers
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641DF4F5136
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1034F5080
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845469AbiDFBy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S1842187AbiDFB1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349029AbiDEJs7 (ORCPT
+        with ESMTP id S1348924AbiDEJss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CD3A8897;
-        Tue,  5 Apr 2022 02:39:11 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFDAEE4F1;
+        Tue,  5 Apr 2022 02:37:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F46C61368;
-        Tue,  5 Apr 2022 09:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D546C385A2;
-        Tue,  5 Apr 2022 09:39:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6891661577;
+        Tue,  5 Apr 2022 09:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B90AC385A2;
+        Tue,  5 Apr 2022 09:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151550;
-        bh=D9I+rGgfR4xsdgyZ9tEUcIy10T7OjvR2xyL8W/yW+GE=;
+        s=korg; t=1649151457;
+        bh=XSfy//YYcopjlaHQsWH9cy6ABdbOfQiF+txQ3zMQlmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EnKb0mw2MBcBx5oxXsd2XRJdiRnK01METHlLTMZaaUYqN8gSUPgWu5Gc5qg//BG5W
-         70R5RBw0ksd6rzdJc59lumiiNpVx8PS5FtUn9/2wUCm7xxr2kqa2QUDLpP/9tou1fd
-         l7YAgCvICrbVoJeIh25yL4YO4g1JEzHpqtEzpJLU=
+        b=XMmxQcEhfjmuGwb1GWrwo18lraIAVbzBZajDB40bP3mwN8jKyCc+2uEYMSDniqPq7
+         OmwqZ0dLZEjtSXVq6+cO5/LjMcnm+R0tIvd5udgr4f960b9fVTAcw3ssgJlozJVK3s
+         y/mrazUHDc/eY6jToowZUBQ5tDUxDGv2GfQCnRdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 418/913] powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
-Date:   Tue,  5 Apr 2022 09:24:40 +0200
-Message-Id: <20220405070352.376273359@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 423/913] mt76: mt7915: use proper aid value in mt7915_mcu_sta_basic_tlv
+Date:   Tue,  5 Apr 2022 09:24:45 +0200
+Message-Id: <20220405070352.525143221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,108 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 5ebb74749202a25da4b3cc2eb15470225a05527c ]
+[ Upstream commit abdb8bc94be4cf68aa71c9a8ee0bad9b3e6f52d3 ]
 
-On board rev A, the network interface labels for the switch ports
-written on the front panel are different than on rev B and later.
+Similar to mt7915_mcu_wtbl_generic_tlv, rely on vif->bss_conf.aid for
+aid in sta mode and not on sta->aid.
 
-This patch fixes network interface names for the switch ports according
-to labels that are written on the front panel of the board rev B.
-They start from ETH3 and end at ETH10.
-
-This patch also introduces a separate device tree for rev A.
-The main device tree is supposed to cover rev B and later.
-
-Fixes: e69eb0824d8c ("powerpc: dts: t1040rdb: add ports for Seville Ethernet switch")
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220121091447.3412907-1-bigunclemax@gmail.com
+Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
- arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
- create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+ drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-new file mode 100644
-index 000000000000..73f8c998c64d
---- /dev/null
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * T1040RDB-REV-A Device Tree Source
-+ *
-+ * Copyright 2014 - 2015 Freescale Semiconductor Inc.
-+ *
-+ */
-+
-+#include "t1040rdb.dts"
-+
-+/ {
-+	model = "fsl,T1040RDB-REV-A";
-+	compatible = "fsl,T1040RDB-REV-A";
-+};
-+
-+&seville_port0 {
-+	label = "ETH5";
-+};
-+
-+&seville_port2 {
-+	label = "ETH7";
-+};
-+
-+&seville_port4 {
-+	label = "ETH9";
-+};
-+
-+&seville_port6 {
-+	label = "ETH11";
-+};
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-index af0c8a6f5613..b6733e7e6580 100644
---- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-@@ -119,7 +119,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_0>;
- 	phy-mode = "qsgmii";
--	label = "ETH5";
-+	label = "ETH3";
- 	status = "okay";
- };
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+index b157db9f8903..e9d854e3293e 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+@@ -1454,12 +1454,15 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+ 	case NL80211_IFTYPE_MESH_POINT:
+ 	case NL80211_IFTYPE_AP:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_STA);
++		basic->aid = cpu_to_le16(sta->aid);
+ 		break;
+ 	case NL80211_IFTYPE_STATION:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_AP);
++		basic->aid = cpu_to_le16(vif->bss_conf.aid);
+ 		break;
+ 	case NL80211_IFTYPE_ADHOC:
+ 		basic->conn_type = cpu_to_le32(CONNECTION_IBSS_ADHOC);
++		basic->aid = cpu_to_le16(sta->aid);
+ 		break;
+ 	default:
+ 		WARN_ON(1);
+@@ -1467,7 +1470,6 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+ 	}
  
-@@ -135,7 +135,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_2>;
- 	phy-mode = "qsgmii";
--	label = "ETH7";
-+	label = "ETH5";
- 	status = "okay";
- };
- 
-@@ -151,7 +151,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_4>;
- 	phy-mode = "qsgmii";
--	label = "ETH9";
-+	label = "ETH7";
- 	status = "okay";
- };
- 
-@@ -167,7 +167,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_6>;
- 	phy-mode = "qsgmii";
--	label = "ETH11";
-+	label = "ETH9";
- 	status = "okay";
- };
+ 	memcpy(basic->peer_addr, sta->addr, ETH_ALEN);
+-	basic->aid = cpu_to_le16(sta->aid);
+ 	basic->qos = sta->wme;
+ }
  
 -- 
 2.34.1

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19B64F2D83
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4484F2D6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240465AbiDEIqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S237641AbiDEIm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbiDEIIq (ORCPT
+        with ESMTP id S230282AbiDEICa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:08:46 -0400
+        Tue, 5 Apr 2022 04:02:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2186C1D9;
-        Tue,  5 Apr 2022 01:02:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF12254FA9;
+        Tue,  5 Apr 2022 01:00:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F606617DA;
-        Tue,  5 Apr 2022 08:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA68C385A6;
-        Tue,  5 Apr 2022 08:02:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55D446177F;
+        Tue,  5 Apr 2022 08:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E087C34110;
+        Tue,  5 Apr 2022 08:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145734;
-        bh=G+tlzkSO4tf9ZQVjfwUjPYMxK5+NilPHHkn+It7OI2I=;
+        s=korg; t=1649145631;
+        bh=5ViWBbsLPxdn3zqyYlQXpfb56RiI3TzY2TRM9WAalvU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vC6fAK027n6rzoJgQEDiBAkix6a9U4ARcWoEw9rwajiqPz1l0qG4Xf+ObUX5Mxu+T
-         zQr4EhBYqDRsIqG/5zB+H8M2B2FeSdo1GwZk4QvDT27FzWzc15TgcArokAk69fniT3
-         DbsCq3a2s/l7ytbuyOy/lsifvzshMsJnSMBVyddY=
+        b=gXMn3DghpYyPV/BB/aGRtvB/iul++SpI/BGgowFWnmHSSEIOmN8qASfHljD6HBNOH
+         4fJM7dIzwhSsD7wG2vKXAxKZ6lXbJ2Gd477K2BZoCeIRzuHc18/SHOnd5ip2WkwQ/I
+         um9eRkRZiw9PQrybWuL1mFCJFs5RxW4a9BpVeydU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0472/1126] RDMA/core: Set MR type in ib_reg_user_mr
-Date:   Tue,  5 Apr 2022 09:20:19 +0200
-Message-Id: <20220405070421.481416891@linuxfoundation.org>
+Subject: [PATCH 5.17 0474/1126] selftests/net: timestamping: Fix bind_phc check
+Date:   Tue,  5 Apr 2022 09:20:21 +0200
+Message-Id: <20220405070421.539916834@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,34 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Gottlieb <maorg@nvidia.com>
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
 
-[ Upstream commit 32a88d16615c2be295571c29273c4ac94cb75309 ]
+[ Upstream commit 678dfd5280341d877ca646499bfdc82a3d8b4356 ]
 
-Add missing assignment of MR type to IB_MR_TYPE_USER.
+timestamping checks socket options during initialisation. For the field
+bind_phc of the socket option SO_TIMESTAMPING it expects the value -1 if
+PHC is not bound. Actually the value of bind_phc is 0 if PHC is not
+bound. This results in the following output:
 
-Fixes: 33006bd4f37f ("IB/core: Introduce ib_reg_user_mr")
-Link: https://lore.kernel.org/r/be2e91bcd6e52dc36be289ae92f30d3a5cc6dcb1.1642491047.git.leonro@nvidia.com
-Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+SIOCSHWTSTAMP: tx_type 0 requested, got 0; rx_filter 0 requested, got 0
+SO_TIMESTAMP 0
+SO_TIMESTAMPNS 0
+SO_TIMESTAMPING flags 0, bind phc 0
+   not expected, flags 0, bind phc -1
+
+This is fixed by setting default value and expected value of bind_phc to
+0.
+
+Fixes: 2214d7032479 ("selftests/net: timestamping: support binding PHC")
+Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/core/verbs.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/timestamping.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
-index c18634bec212..e821dc94a43e 100644
---- a/drivers/infiniband/core/verbs.c
-+++ b/drivers/infiniband/core/verbs.c
-@@ -2153,6 +2153,7 @@ struct ib_mr *ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
- 		return mr;
- 
- 	mr->device = pd->device;
-+	mr->type = IB_MR_TYPE_USER;
- 	mr->pd = pd;
- 	mr->dm = NULL;
- 	atomic_inc(&pd->usecnt);
+diff --git a/tools/testing/selftests/net/timestamping.c b/tools/testing/selftests/net/timestamping.c
+index aee631c5284e..044bc0e9ed81 100644
+--- a/tools/testing/selftests/net/timestamping.c
++++ b/tools/testing/selftests/net/timestamping.c
+@@ -325,8 +325,8 @@ int main(int argc, char **argv)
+ 	struct ifreq device;
+ 	struct ifreq hwtstamp;
+ 	struct hwtstamp_config hwconfig, hwconfig_requested;
+-	struct so_timestamping so_timestamping_get = { 0, -1 };
+-	struct so_timestamping so_timestamping = { 0, -1 };
++	struct so_timestamping so_timestamping_get = { 0, 0 };
++	struct so_timestamping so_timestamping = { 0, 0 };
+ 	struct sockaddr_in addr;
+ 	struct ip_mreq imr;
+ 	struct in_addr iaddr;
 -- 
 2.34.1
 

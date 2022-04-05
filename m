@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C124F369E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAEC4F3694
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352083AbiDELFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1352179AbiDELFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiDEImt (ORCPT
+        with ESMTP id S237583AbiDEImt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9F213DEF;
-        Tue,  5 Apr 2022 01:35:14 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15814035;
+        Tue,  5 Apr 2022 01:35:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC4E9614E4;
-        Tue,  5 Apr 2022 08:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8CAC385A0;
-        Tue,  5 Apr 2022 08:35:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67D93B81B92;
+        Tue,  5 Apr 2022 08:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1550C385A0;
+        Tue,  5 Apr 2022 08:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147713;
-        bh=3+T0dHYlWnxkv9+tQQbQeXrBLw+wctKVVybJaCYl/y0=;
+        s=korg; t=1649147716;
+        bh=u2nGEvtwicBX4OYSzCM0UB7N5/sxr44UItVD1FL1gQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jEOhF+U5KeCf7k0RJWBY0Ey/mqjCjjms7nF2rX8visNrRQywkpDKbAqPgAwYRO5pv
-         La6799c19nGJT9rKP/KwvCwS8CAg4u/iInMQxYJVNmrdk5K7Ktve0KNuVcCcBElHSz
-         LHSb8NBqmB6V/g70qodgK4KXqGpt2KPu1PN7kuJM=
+        b=FtHPLqdVt54KSZdVXIMmKTKLItEcTAeZw7GqJaid8uEfIhbU/mVB+ascpSLsMVUP3
+         UQJaF03ZvTFDmKkjwQBg1v01iDum1q0hkPAiIQf4MfRqfZrAdGEaBbl1oKY9FMezWw
+         g6ESQktZecmy3yN9EUEXBvCi0WMT5G8XN1L4kDt4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Manish Chopra <manishc@marvell.com>,
         Ariel Elior <aelior@marvell.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 0095/1017] qed: display VF trust config
-Date:   Tue,  5 Apr 2022 09:16:48 +0200
-Message-Id: <20220405070357.016230077@linuxfoundation.org>
+Subject: [PATCH 5.16 0096/1017] qed: validate and restrict untrusted VFs vlan promisc mode
+Date:   Tue,  5 Apr 2022 09:16:49 +0200
+Message-Id: <20220405070357.046215659@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,10 +57,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Manish Chopra <manishc@marvell.com>
 
-commit 4e6e6bec7440b9b76f312f28b1f4e944eebb3abc upstream.
+commit cbcc44db2cf7b836896733acc0e5ea966136ed22 upstream.
 
-Driver does support SR-IOV VFs trust configuration but
-it does not display it when queried via ip link utility.
+Today when VFs are put in promiscuous mode, they can request PF
+to configure device for them to receive all VLANs traffic regardless
+of what vlan is configured by the PF (via ip link) and PF allows this
+config request regardless of whether VF is trusted or not.
+
+>From security POV, when VLAN is configured for VF through PF (via ip link),
+honour such config requests from VF only when they are configured to be
+trusted, otherwise restrict such VFs vlan promisc mode config.
 
 Cc: stable@vger.kernel.org
 Fixes: f990c82c385b ("qed*: Add support for ndo_set_vf_trust")
@@ -69,18 +75,88 @@ Signed-off-by: Ariel Elior <aelior@marvell.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qed/qed_sriov.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c |   28 ++++++++++++++++++++++++++--
+ drivers/net/ethernet/qlogic/qed/qed_sriov.h |    1 +
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
 --- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
 +++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-@@ -4719,6 +4719,7 @@ static int qed_get_vf_config(struct qed_
- 	tx_rate = vf_info->tx_rate;
- 	ivi->max_tx_rate = tx_rate ? tx_rate : link.speed;
- 	ivi->min_tx_rate = qed_iov_get_vf_min_rate(hwfn, vf_id);
-+	ivi->trusted = vf_info->is_trusted_request;
+@@ -2984,12 +2984,16 @@ static int qed_iov_pre_update_vport(stru
+ 	u8 mask = QED_ACCEPT_UCAST_UNMATCHED | QED_ACCEPT_MCAST_UNMATCHED;
+ 	struct qed_filter_accept_flags *flags = &params->accept_flags;
+ 	struct qed_public_vf_info *vf_info;
++	u16 tlv_mask;
++
++	tlv_mask = BIT(QED_IOV_VP_UPDATE_ACCEPT_PARAM) |
++		   BIT(QED_IOV_VP_UPDATE_ACCEPT_ANY_VLAN);
  
+ 	/* Untrusted VFs can't even be trusted to know that fact.
+ 	 * Simply indicate everything is configured fine, and trace
+ 	 * configuration 'behind their back'.
+ 	 */
+-	if (!(*tlvs & BIT(QED_IOV_VP_UPDATE_ACCEPT_PARAM)))
++	if (!(*tlvs & tlv_mask))
+ 		return 0;
+ 
+ 	vf_info = qed_iov_get_public_vf_info(hwfn, vfid, true);
+@@ -3006,6 +3010,13 @@ static int qed_iov_pre_update_vport(stru
+ 			flags->tx_accept_filter &= ~mask;
+ 	}
+ 
++	if (params->update_accept_any_vlan_flg) {
++		vf_info->accept_any_vlan = params->accept_any_vlan;
++
++		if (vf_info->forced_vlan && !vf_info->is_trusted_configured)
++			params->accept_any_vlan = false;
++	}
++
  	return 0;
  }
+ 
+@@ -5150,6 +5161,12 @@ static void qed_iov_handle_trust_change(
+ 
+ 		params.update_ctl_frame_check = 1;
+ 		params.mac_chk_en = !vf_info->is_trusted_configured;
++		params.update_accept_any_vlan_flg = 0;
++
++		if (vf_info->accept_any_vlan && vf_info->forced_vlan) {
++			params.update_accept_any_vlan_flg = 1;
++			params.accept_any_vlan = vf_info->accept_any_vlan;
++		}
+ 
+ 		if (vf_info->rx_accept_mode & mask) {
+ 			flags->update_rx_mode_config = 1;
+@@ -5165,13 +5182,20 @@ static void qed_iov_handle_trust_change(
+ 		if (!vf_info->is_trusted_configured) {
+ 			flags->rx_accept_filter &= ~mask;
+ 			flags->tx_accept_filter &= ~mask;
++			params.accept_any_vlan = false;
+ 		}
+ 
+ 		if (flags->update_rx_mode_config ||
+ 		    flags->update_tx_mode_config ||
+-		    params.update_ctl_frame_check)
++		    params.update_ctl_frame_check ||
++		    params.update_accept_any_vlan_flg) {
++			DP_VERBOSE(hwfn, QED_MSG_IOV,
++				   "vport update config for %s VF[abs 0x%x rel 0x%x]\n",
++				   vf_info->is_trusted_configured ? "trusted" : "untrusted",
++				   vf->abs_vf_id, vf->relative_vf_id);
+ 			qed_sp_vport_update(hwfn, &params,
+ 					    QED_SPQ_MODE_EBLOCK, NULL);
++		}
+ 	}
+ }
+ 
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.h
+@@ -62,6 +62,7 @@ struct qed_public_vf_info {
+ 	bool is_trusted_request;
+ 	u8 rx_accept_mode;
+ 	u8 tx_accept_mode;
++	bool accept_any_vlan;
+ };
+ 
+ struct qed_iov_vf_init_params {
 
 

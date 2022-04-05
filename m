@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AF44F4A45
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECA74F4C84
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454662AbiDEWjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S1578637AbiDEXYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349489AbiDEJt5 (ORCPT
+        with ESMTP id S1349505AbiDEJt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4362725C5;
-        Tue,  5 Apr 2022 02:47:27 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F201C9;
+        Tue,  5 Apr 2022 02:47:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D37D461577;
-        Tue,  5 Apr 2022 09:47:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9395C385A1;
-        Tue,  5 Apr 2022 09:47:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FFABB81B76;
+        Tue,  5 Apr 2022 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3A6C385A2;
+        Tue,  5 Apr 2022 09:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152046;
-        bh=2valnc8op0vBurNY+QIL/EnW2wscb8NHYd9VGwj8E/o=;
+        s=korg; t=1649152076;
+        bh=oAyDcBuvjmsJalWEXosrvxoNCoCAuiWwe1NdEN4k2bk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=INjGMO3aO5Aoi3Pl6X3h6bPrWEme141kaEbzbv2Uprhb9IyMYQGbvqud2NbP9ipb5
-         1yh3lJoAdGPg9x96ffgo81t8KvzbgnBNK0D4CKke2s/neGqPOTDy1Pc/zokxJhqj5T
-         RvfW2Np033w3uLwoRjTd2jDyHa7EgDCoNAaPmrQs=
+        b=bkVZdfOvdnBR3Vm4YqGwMNzdpudBFSUioPXPWheIWZs1R8UHosysHsqBtvquZJKHF
+         XIE/HO0C+cL5OrhoDxxiwKt4rHSYlUaTmXJsXECW589/XhNgPV4hxS/ya5wq2fKfCC
+         ABZQ10OPAXSW5lhDqNJNO265SAzNNCzWP/qBYr24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 618/913] nvdimm/region: Fix default alignment for small regions
-Date:   Tue,  5 Apr 2022 09:28:00 +0200
-Message-Id: <20220405070358.365277244@linuxfoundation.org>
+Subject: [PATCH 5.15 619/913] clk: actions: Terminate clk_div_table with sentinel element
+Date:   Tue,  5 Apr 2022 09:28:01 +0200
+Message-Id: <20220405070358.395006809@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,39 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-[ Upstream commit d9d290d7e659e9db3e4518040cc18b97f5535f4a ]
+[ Upstream commit d8a441e53e2434b1401e52dfd66b05263e442edc ]
 
-In preparation for removing BLK aperture support the NVDIMM unit tests
-discovered that the default alignment can be set higher than the
-capacity of the region. Fall back to PAGE_SIZE in that case.
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div = 0).
 
-Given this has not been seen in the wild, elide notifying -stable.
+In owl-s900.s, the { 0, 8 } element was probably meant to be just that,
+so this patch changes { 0, 8 } to { 0, 0 }.
 
-Fixes: 2522afb86a8c ("libnvdimm/region: Introduce an 'align' attribute")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/164688416128.2879318.17890707310125575258.stgit@dwillia2-desk3.amr.corp.intel.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
+Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Link: https://lore.kernel.org/r/20220218000922.134857-2-j.neuschaefer@gmx.net
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvdimm/region_devs.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/clk/actions/owl-s700.c | 1 +
+ drivers/clk/actions/owl-s900.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-index 9ccf3d608799..70ad891a76ba 100644
---- a/drivers/nvdimm/region_devs.c
-+++ b/drivers/nvdimm/region_devs.c
-@@ -1025,6 +1025,9 @@ static unsigned long default_align(struct nd_region *nd_region)
- 		}
- 	}
+diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700.c
+index a2f34d13fb54..6ea7da1d6d75 100644
+--- a/drivers/clk/actions/owl-s700.c
++++ b/drivers/clk/actions/owl-s700.c
+@@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] = {
  
-+	if (nd_region->ndr_size < MEMREMAP_COMPAT_ALIGN_MAX)
-+		align = PAGE_SIZE;
-+
- 	mappings = max_t(u16, 1, nd_region->ndr_mappings);
- 	div_u64_rem(align, mappings, &remainder);
- 	if (remainder)
+ static struct clk_div_table rmii_div_table[] = {
+ 	{0, 4},   {1, 10},
++	{0, 0}
+ };
+ 
+ /* divider clocks */
+diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900.c
+index 790890978424..5144ada2c7e1 100644
+--- a/drivers/clk/actions/owl-s900.c
++++ b/drivers/clk/actions/owl-s900.c
+@@ -140,7 +140,7 @@ static struct clk_div_table rmii_ref_div_table[] = {
+ 
+ static struct clk_div_table usb3_mac_div_table[] = {
+ 	{ 1, 2 }, { 2, 3 }, { 3, 4 },
+-	{ 0, 8 },
++	{ 0, 0 }
+ };
+ 
+ static struct clk_div_table i2s_div_table[] = {
 -- 
 2.34.1
 

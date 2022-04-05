@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE9D4F4E00
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF764F4A61
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586997AbiDFAGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S237419AbiDEWld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242359AbiDEKcm (ORCPT
+        with ESMTP id S1354187AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:32:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491D9DE92E;
-        Tue,  5 Apr 2022 03:18:49 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C652B33;
+        Tue,  5 Apr 2022 02:58:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7BBDB81C98;
-        Tue,  5 Apr 2022 10:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40616C385A0;
-        Tue,  5 Apr 2022 10:18:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7BBFB817D3;
+        Tue,  5 Apr 2022 09:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AC9C385A1;
+        Tue,  5 Apr 2022 09:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153926;
-        bh=LyU0UCjIMK28Y/+3dy2ewi5N3bhvr2nkJBhF+Msbu9w=;
+        s=korg; t=1649152685;
+        bh=f19IgujV/yw7D/q+fpx39ycuktKtJQPW23eKnN0ZCdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHFsjodAqc5T/rW7IHW7DlzEd/KWkwNHWxSvveE/sEqRKffP9WTavSHLi4pMxPetE
-         x/F0xhC1yeN6AZo+H9FpPCh7UKicuHrXxMCypqbfO/0k5diDyVsD15BRAMjI/4+7JU
-         u9CJiDo+cZW/guCD2LSfITTBKhq3lbATOUUrfon8=
+        b=xl8GJnBeQ/3DzyJ7GtataMBRZvZgIjmR/fDXc1n31XSAqJNr5ztof5Rc1phJ2Dd0r
+         ruuUsxH/BauAxHhllWf0SsLrEeb9FHyXI5eXCO14wixA9oPHfRkuFn7OyyCzzHH//q
+         BiJ5hmHEW5t+uz4VIb9Qb59DlcE63OUSjXjFoueU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 396/599] iio: adc: Add check for devm_request_threaded_irq
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 828/913] wireguard: queueing: use CFI-safe ptr_ring cleanup function
 Date:   Tue,  5 Apr 2022 09:31:30 +0200
-Message-Id: <20220405070310.615265669@linuxfoundation.org>
+Message-Id: <20220405070404.649763119@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
+commit ec59f128a9bd4255798abb1e06ac3b442f46ef68 upstream.
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value and return
-error if fails.
+We make too nuanced use of ptr_ring to entirely move to the skb_array
+wrappers, but we at least should avoid the naughty function pointer cast
+when cleaning up skbs. Otherwise RAP/CFI will honk at us. This patch
+uses the __skb_array_destroy_skb wrapper for the cleanup, rather than
+directly providing kfree_skb, which is what other drivers in the same
+situation do too.
 
-Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: PaX Team <pageexec@freemail.hu>
+Fixes: 886fcee939ad ("wireguard: receive: use ring buffer for incoming handshakes")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/twl6030-gpadc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireguard/queueing.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
-index c6416ad795ca..256177b15c51 100644
---- a/drivers/iio/adc/twl6030-gpadc.c
-+++ b/drivers/iio/adc/twl6030-gpadc.c
-@@ -911,6 +911,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
- 	ret = devm_request_threaded_irq(dev, irq, NULL,
- 				twl6030_gpadc_irq_handler,
- 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
-+	if (ret)
-+		return ret;
+--- a/drivers/net/wireguard/queueing.c
++++ b/drivers/net/wireguard/queueing.c
+@@ -4,6 +4,7 @@
+  */
  
- 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
- 	if (ret < 0) {
--- 
-2.34.1
-
+ #include "queueing.h"
++#include <linux/skb_array.h>
+ 
+ struct multicore_worker __percpu *
+ wg_packet_percpu_multicore_worker_alloc(work_func_t function, void *ptr)
+@@ -42,7 +43,7 @@ void wg_packet_queue_free(struct crypt_q
+ {
+ 	free_percpu(queue->worker);
+ 	WARN_ON(!purge && !__ptr_ring_empty(&queue->ring));
+-	ptr_ring_cleanup(&queue->ring, purge ? (void(*)(void*))kfree_skb : NULL);
++	ptr_ring_cleanup(&queue->ring, purge ? __skb_array_destroy_skb : NULL);
+ }
+ 
+ #define NEXT(skb) ((skb)->prev)
 
 

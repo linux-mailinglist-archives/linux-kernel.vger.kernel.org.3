@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54134F4396
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AC64F475B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380198AbiDEN34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S1348530AbiDEVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345314AbiDEJWZ (ORCPT
+        with ESMTP id S1358028AbiDEK1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A43C43389;
-        Tue,  5 Apr 2022 02:10:25 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63029689A6;
+        Tue,  5 Apr 2022 03:13:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9070C614FC;
-        Tue,  5 Apr 2022 09:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9930AC385A0;
-        Tue,  5 Apr 2022 09:10:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2CF461777;
+        Tue,  5 Apr 2022 10:13:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D1FC385A0;
+        Tue,  5 Apr 2022 10:13:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149824;
-        bh=jpH1FFqHwA9Rcvx435BbU8+Ijry2x5lxT/g9E4on9Sg=;
+        s=korg; t=1649153587;
+        bh=0C40SgLp/lwFglandYY9iJGkhMxzFWz9IyNwKsYpjig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jxOtjWoivyK8oriC7ruazGHIU1QBCQCm7ioTEnR6Oarh9vt5UhRp90055mJLIriWk
-         oj9ofKr2fbaZWHXU4s0JvNHWcAauNt+S4ToefpoEq5dSK4VcLop82LbPXYv/Rc63Fo
-         I9tc5exSNNl2JUl/xENIWoMS7IHOkF8Kls4cUEIg=
+        b=quUteL8t85uHezbky+H8CeGFlvc2KLpeBN3XuaVkVEmPxv5kGdNO7XOYNmbwS217l
+         0XawKcyT/JafqUPyuYMmRxgAN7aGr+o87kdrktYsh5aCY7WvKR6L8q2LX1fC15SegU
+         fj4U8QeyPoyuNwLhhJupUk2yD/MPvT78Lm2vjz2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0854/1017] mmc: host: Return an error when ->enable_sdio_irq() ops is missing
-Date:   Tue,  5 Apr 2022 09:29:27 +0200
-Message-Id: <20220405070419.586137766@linuxfoundation.org>
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Lyude Paul <lyude@redhat.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 274/599] drm/nouveau/acr: Fix undefined behavior in nvkm_acr_hsfw_load_bl()
+Date:   Tue,  5 Apr 2022 09:29:28 +0200
+Message-Id: <20220405070306.992187729@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit d6c9219ca1139b74541b2a98cee47a3426d754a9 ]
+[ Upstream commit 2343bcdb4747d4f418a4daf2e898b94f86c24a59 ]
 
-Even if the current WARN() notifies the user that something is severely
-wrong, we can still end up in a PANIC() when trying to invoke the missing
-->enable_sdio_irq() ops. Therefore, let's also return an error code and
-prevent the host from being added.
+In nvkm_acr_hsfw_load_bl(), the return value of kmalloc() is directly
+passed to memcpy(), which could lead to undefined behavior on failure
+of kmalloc().
 
-While at it, move the code into a separate function to prepare for
-subsequent changes and for further host caps validations.
+Fix this bug by using kmemdup() instead of kmalloc()+memcpy().
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20220303165142.129745-1-ulf.hansson@linaro.org
+This bug was found by a static analyzer.
+
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace "secure boot"")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220124165856.57022-1-zhou1615@umn.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/host.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index cf140f4ec864..d739e2b631fe 100644
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -588,6 +588,16 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+index 667fa016496e..a6ea89a5d51a 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+@@ -142,11 +142,12 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char *name, int ver,
  
- EXPORT_SYMBOL(mmc_alloc_host);
+ 	hsfw->imem_size = desc->code_size;
+ 	hsfw->imem_tag = desc->start_tag;
+-	hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
+-	memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
+-
++	hsfw->imem = kmemdup(data + desc->code_off, desc->code_size, GFP_KERNEL);
+ 	nvkm_firmware_put(fw);
+-	return 0;
++	if (!hsfw->imem)
++		return -ENOMEM;
++	else
++		return 0;
+ }
  
-+static int mmc_validate_host_caps(struct mmc_host *host)
-+{
-+	if (host->caps & MMC_CAP_SDIO_IRQ && !host->ops->enable_sdio_irq) {
-+		dev_warn(host->parent, "missing ->enable_sdio_irq() ops\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  *	mmc_add_host - initialise host hardware
-  *	@host: mmc host
-@@ -600,8 +610,9 @@ int mmc_add_host(struct mmc_host *host)
- {
- 	int err;
- 
--	WARN_ON((host->caps & MMC_CAP_SDIO_IRQ) &&
--		!host->ops->enable_sdio_irq);
-+	err = mmc_validate_host_caps(host);
-+	if (err)
-+		return err;
- 
- 	err = device_add(&host->class_dev);
- 	if (err)
+ int
 -- 
 2.34.1
 

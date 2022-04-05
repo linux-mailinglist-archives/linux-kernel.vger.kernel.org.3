@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C084F49A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06714F4A4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443483AbiDEWU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S1455015AbiDEWj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357369AbiDELQV (ORCPT
+        with ESMTP id S1357413AbiDELQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:16:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B28172DAAA;
-        Tue,  5 Apr 2022 03:41:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EBA11515;
-        Tue,  5 Apr 2022 03:41:19 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 15C4E3F5A1;
-        Tue,  5 Apr 2022 03:41:17 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
-Subject: [PATCH v3 4/4] iommu/amd: Indicate whether DMA remap support is enabled
-Date:   Tue,  5 Apr 2022 11:41:04 +0100
-Message-Id: <674846bcefe8d85c1c4675cabaf507f09ab45514.1649089693.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-In-Reply-To: <cover.1649089693.git.robin.murphy@arm.com>
-References: <cover.1649089693.git.robin.murphy@arm.com>
+        Tue, 5 Apr 2022 07:16:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387B813CDB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:43:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF62F1F390;
+        Tue,  5 Apr 2022 10:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649155422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZV6J9Il753rBNuhU1RPeVKSIez37U0dfz5W2smwY0X4=;
+        b=eb00yWHMq9w1ZkkiXOQR2T4sGf+wUVynhUp66A9hY0CVxtite1vGwNZ6BPzb1UlU2BL28d
+        wTKf5ISHxuLw0xTrZeVg13mSC3JyfTO62/IGZv0f6GZutjtwNLvkg41UFt8cdhdaPGNu6A
+        Jc6p/QZRaGS1QklGnXhx3JQS5q7ylDc=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 95D3EA3B93;
+        Tue,  5 Apr 2022 10:43:42 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 12:43:41 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Lee Schermerhorn <lee.schermerhorn@hp.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: mm: swap: locking in release_pages()
+Message-ID: <YkwdRnuQBjoJ01YK@dhcp22.suse.cz>
+References: <89009285-c75d-0f09-5b08-d133c42a18f9@nokia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <89009285-c75d-0f09-5b08-d133c42a18f9@nokia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Tue 05-04-22 12:20:15, Alexander Sverdlin wrote:
+> Dear mm developers!
+> 
+> After experiencing a crash in release_pages() [1] I'm trying to understand the locking in the release_pages():
+> 
+> No matter if we consider v5.17 or v5.4 (as in my case), they both have similar locking patterns:
 
-Bit 1 of the IVFS IVInfo field indicates that IOMMU has been used for
-pre-boot DMA protection.
+Similar but the notable difference is that 5.4 used per node lru locking
+while newer versions 5.11+ kernels use per memcg locking. If you see the
+issue on 5.4 then this is unlikely a regression.
+[...]
+> What I don't understand here is, what guarantees us that "if (PageLRU(page))" condition
+> is still valid after we swap the locks in "if (pgdat != locked_pgdat)" case?
 
-Export this capability to allow other places in the kernel to be able to
-check for it on AMD systems.
+The underlying reasoning is that the PageLRU handling is done after the
+last reference has been dropped. isolate_lru_page and others should
+elevate the reference count before isolating page from LRU lists.
+Some callers user TestClearPageLRU
 
-Link: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+> If we check under one lock and VM_BUG_ON_PAGE() under another lock, what actually stops
+> it from crashing as below or BUG() from time to time?
+G
 
-v4: Added to series from previous posting here:
-https://lore.kernel.org/linux-iommu/20220318223104.7049-1-mario.limonciello@amd.com/
+> 
+> 1. Crash of v5.4.170 on an ARM32 machine:
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 00000104
+> pgd = e138149d
+> [00000104] *pgd=84d2fd003, *pmd=8ffd6f003
+> Internal error: Oops: a07 [#1] PREEMPT SMP ARM
+> ...
+> CPU: 1 PID: 6172 Comm: AaSysInfoRColle Tainted: G    B      O      5.4.170-... #1
+> Hardware name: Keystone
+> PC is at release_pages+0x194/0x358
+> LR is at release_pages+0x10c/0x358
 
- drivers/iommu/amd/amd_iommu_types.h | 4 ++++
- drivers/iommu/amd/init.c            | 3 +++
- drivers/iommu/amd/iommu.c           | 2 ++
- 3 files changed, 9 insertions(+)
-
-diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-index 47108ed44fbb..72d0f5e2f651 100644
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -407,6 +407,7 @@
- /* IOMMU IVINFO */
- #define IOMMU_IVINFO_OFFSET     36
- #define IOMMU_IVINFO_EFRSUP     BIT(0)
-+#define IOMMU_IVINFO_DMA_REMAP  BIT(1)
- 
- /* IOMMU Feature Reporting Field (for IVHD type 10h */
- #define IOMMU_FEAT_GASUP_SHIFT	6
-@@ -449,6 +450,9 @@ extern struct irq_remap_table **irq_lookup_table;
- /* Interrupt remapping feature used? */
- extern bool amd_iommu_irq_remap;
- 
-+/* IVRS indicates that pre-boot remapping was enabled */
-+extern bool amdr_ivrs_remap_support;
-+
- /* kmem_cache to get tables with 128 byte alignement */
- extern struct kmem_cache *amd_iommu_irq_cache;
- 
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index b4a798c7b347..0467918bf7fd 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -182,6 +182,7 @@ u32 amd_iommu_max_pasid __read_mostly = ~0;
- 
- bool amd_iommu_v2_present __read_mostly;
- static bool amd_iommu_pc_present __read_mostly;
-+bool amdr_ivrs_remap_support __read_mostly;
- 
- bool amd_iommu_force_isolation __read_mostly;
- 
-@@ -326,6 +327,8 @@ static void __init early_iommu_features_init(struct amd_iommu *iommu,
- {
- 	if (amd_iommu_ivinfo & IOMMU_IVINFO_EFRSUP)
- 		iommu->features = h->efr_reg;
-+	if (amd_iommu_ivinfo & IOMMU_IVINFO_DMA_REMAP)
-+		amdr_ivrs_remap_support = true;
- }
- 
- /* Access to l1 and l2 indexed register spaces */
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index e412a50dce59..81305c076de1 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2141,6 +2141,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
- 		return (irq_remapping_enabled == 1);
- 	case IOMMU_CAP_NOEXEC:
- 		return false;
-+	case IOMMU_CAP_PRE_BOOT_PROTECTION:
-+		return amdr_ivrs_remap_support;
- 	default:
- 		break;
- 	}
+Which LOC does this correspond to? (faddr2line should give you a nice
+output).
 -- 
-2.28.0.dirty
-
+Michal Hocko
+SUSE Labs

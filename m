@@ -2,123 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4E04F4C38
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF0E4F4A44
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576683AbiDEXKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S1454637AbiDEWjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455565AbiDEQAK (ORCPT
+        with ESMTP id S1455447AbiDEQAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:00:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E921710E8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:16:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF28D23A;
-        Tue,  5 Apr 2022 08:16:40 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87E7F3F73B;
-        Tue,  5 Apr 2022 08:16:39 -0700 (PDT)
-Message-ID: <81b5bab9-1347-a2cf-dcd3-2ec1e451cef3@arm.com>
-Date:   Tue, 5 Apr 2022 17:16:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "T.J. Alumbaugh" <talumbau@chromium.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Tue, 5 Apr 2022 12:00:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7783EAB9;
+        Tue,  5 Apr 2022 08:15:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DFF3614BF;
+        Tue,  5 Apr 2022 15:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C50C385A6;
+        Tue,  5 Apr 2022 15:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649171733;
+        bh=b7HiLYng6ZcxAx+QP9a6ZDXxt7R3Fo4ys8vPQiWJYZA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dbWLHWHfXZzDgCWo2NUyR1dwtPqFuYGXJ/9aBoNePziXJchr/loOg0AnDOzH7qZXn
+         BfEWs7ZN1sEnWIcLOVM0NHMpWeaJ0UUDqv0dJz8rXHLFrG+i+ePScN5uC+DLwYA/VW
+         CMYvtUmMi53jCjSzdbCzNfP+ina0DQc7pf7a4pHF0BA3Whp4TYrqASfwCQVEVVpAWA
+         O1Omt7RpLiFuhAPMfxuKrqkLX6Qr1p266A5qoZVPZgR6l++VQPKNeEjVCo49tvWW4L
+         0vYFpfL9t8dZvJ5dg3lLmfjM6AbW+qneXeciDzOrFEAkA5Y9897rTXtFHdVQhS7OKB
+         F4jGqUm4JVLCQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.rog
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        joel@joelfernandes.org
-References: <20220308161455.036e9933@gandalf.local.home>
- <20220315174606.02959816@gandalf.local.home>
- <20220316202734.GJ8939@worktop.programming.kicks-ass.net>
- <20220316210341.GD14330@worktop.programming.kicks-ass.net>
- <20220321133037.7d0d0c7f@gandalf.local.home>
- <20220329172236.48683eb5@gandalf.local.home>
- <51b21470-cd72-7ae3-6f33-2dd2e1d6b716@chromium.org>
- <20220405074855.GA30877@worktop.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220405074855.GA30877@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-sgx@vger.kernel.org (open list:INTEL SGX),
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH RFC] x86/sgx: Simplify struct sgx_enclave_restrict_permissions
+Date:   Tue,  5 Apr 2022 18:16:41 +0300
+Message-Id: <20220405151642.96096-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 09:48, Peter Zijlstra wrote:
-> On Mon, Apr 04, 2022 at 04:17:54PM -0400, T.J. Alumbaugh wrote:
->>
->> On 3/29/22 17:22, Steven Rostedt wrote:
->>> On Mon, 21 Mar 2022 13:30:37 -0400
->>> Steven Rostedt <rostedt@goodmis.org> wrote:
->>>
->>>> On Wed, 16 Mar 2022 22:03:41 +0100
->>>> Peter Zijlstra <peterz@infradead.org> wrote:
->>>>
->>>>> Does something like the below (untested in the extreme) help?
->>>> Hi Peter,
->>>>
->>>> This has been tested extensively by the ChromeOS team and said that it does
->>>> appear to fix the problem.
->>>>
->>>> Could you get this into mainline, and tag it for stable so that it can be
->>>> backported to the appropriate stable releases?
->>>>
->>>> Thanks for the fix!
->>>>
->>> Hi Peter,
->>>
->>> I just don't want you to forget about this :-)
->>>
->>> -- Steve
->>>
->> Hi Peter,
->>
->> Just a note that if/when you send this out as a patch, feel free to add:
->>
->> Tested-by: T.J. Alumbaugh <talumbau@chromium.org>
-> 
-> https://lkml.kernel.org/r/20220330160535.GN8939@worktop.programming.kicks-ass.net
+The reasoning to change SECINFO to simply flags is stated in this inline
+comment:
 
-I still wonder if this issue happened on a system w/o:
+/*
+ * Return valid permission fields from a secinfo structure provided by
+ * user space. The secinfo structure is required to only have bits in
+ * the permission fields set.
+ */
 
-     565790d28b1e ("sched: Fix balance_callback()")
+It is better to simply change the parameter type than require to use
+a malformed version of a data structure.
 
-Maybe chromeos-5.10 or earlier? In this case applying 565790d28b1e could
-fix it as well.
+Link: https://lore.kernel.org/linux-sgx/26ab773de8842d03b40caf8645ca86884b195901.camel@kernel.org/T/#u
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+Only compile-tested.
+ arch/x86/include/uapi/asm/sgx.h |  5 ++-
+ arch/x86/kernel/cpu/sgx/ioctl.c | 57 ++++++---------------------------
+ 2 files changed, 12 insertions(+), 50 deletions(-)
 
-The reason why I think the original issue happened on a system w/o
-565790d28b1e is the call-stack in:
+diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
+index feda7f85b2ce..627136798f2a 100644
+--- a/arch/x86/include/uapi/asm/sgx.h
++++ b/arch/x86/include/uapi/asm/sgx.h
+@@ -88,15 +88,14 @@ struct sgx_enclave_provision {
+  * @offset:	starting page offset (page aligned relative to enclave base
+  *		address defined in SECS)
+  * @length:	length of memory (multiple of the page size)
+- * @secinfo:	address for the SECINFO data containing the new permission bits
+- *		for pages in range described by @offset and @length
++ * @flags:	flags field of the SECINFO data
+  * @result:	(output) SGX result code of ENCLS[EMODPR] function
+  * @count:	(output) bytes successfully changed (multiple of page size)
+  */
+ struct sgx_enclave_restrict_permissions {
+ 	__u64 offset;
+ 	__u64 length;
+-	__u64 secinfo;
++	__u64 flags;
+ 	__u64 result;
+ 	__u64 count;
+ };
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index f88bc1236276..3c334e0bd4d9 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -676,41 +676,6 @@ static int sgx_ioc_sgx2_ready(struct sgx_encl *encl)
+ 	return 0;
+ }
+ 
+-/*
+- * Return valid permission fields from a secinfo structure provided by
+- * user space. The secinfo structure is required to only have bits in
+- * the permission fields set.
+- */
+-static int sgx_perm_from_user_secinfo(void __user *_secinfo, u64 *secinfo_perm)
+-{
+-	struct sgx_secinfo secinfo;
+-	u64 perm;
+-
+-	if (copy_from_user(&secinfo, (void __user *)_secinfo,
+-			   sizeof(secinfo)))
+-		return -EFAULT;
+-
+-	if (secinfo.flags & ~SGX_SECINFO_PERMISSION_MASK)
+-		return -EINVAL;
+-
+-	if (memchr_inv(secinfo.reserved, 0, sizeof(secinfo.reserved)))
+-		return -EINVAL;
+-
+-	perm = secinfo.flags & SGX_SECINFO_PERMISSION_MASK;
+-
+-	/*
+-	 * Read access is required for the enclave to be able to use the page.
+-	 * SGX instructions like ENCLU[EMODPE] and ENCLU[EACCEPT] require
+-	 * read access.
+-	 */
+-	if (!(perm & SGX_SECINFO_R))
+-		return -EINVAL;
+-
+-	*secinfo_perm = perm;
+-
+-	return 0;
+-}
+-
+ /*
+  * Some SGX functions require that no cached linear-to-physical address
+  * mappings are present before they can succeed. Collaborate with
+@@ -753,7 +718,6 @@ static int sgx_enclave_etrack(struct sgx_encl *encl)
+  * sgx_enclave_restrict_permissions() - Restrict EPCM permissions
+  * @encl:	Enclave to which the pages belong.
+  * @modp:	Checked parameters from user on which pages need modifying.
+- * @secinfo_perm: New (validated) permission bits.
+  *
+  * Return:
+  * - 0:		Success.
+@@ -761,8 +725,7 @@ static int sgx_enclave_etrack(struct sgx_encl *encl)
+  */
+ static long
+ sgx_enclave_restrict_permissions(struct sgx_encl *encl,
+-				 struct sgx_enclave_restrict_permissions *modp,
+-				 u64 secinfo_perm)
++				 struct sgx_enclave_restrict_permissions *modp)
+ {
+ 	struct sgx_encl_page *entry;
+ 	struct sgx_secinfo secinfo;
+@@ -772,7 +735,7 @@ sgx_enclave_restrict_permissions(struct sgx_encl *encl,
+ 	int ret;
+ 
+ 	memset(&secinfo, 0, sizeof(secinfo));
+-	secinfo.flags = secinfo_perm;
++	secinfo.flags = modp->flags;
+ 
+ 	for (c = 0 ; c < modp->length; c += PAGE_SIZE) {
+ 		addr = encl->base + modp->offset + c;
+@@ -871,7 +834,6 @@ static long sgx_ioc_enclave_restrict_permissions(struct sgx_encl *encl,
+ 						 void __user *arg)
+ {
+ 	struct sgx_enclave_restrict_permissions params;
+-	u64 secinfo_perm;
+ 	long ret;
+ 
+ 	ret = sgx_ioc_sgx2_ready(encl);
+@@ -884,15 +846,16 @@ static long sgx_ioc_enclave_restrict_permissions(struct sgx_encl *encl,
+ 	if (sgx_validate_offset_length(encl, params.offset, params.length))
+ 		return -EINVAL;
+ 
+-	ret = sgx_perm_from_user_secinfo((void __user *)params.secinfo,
+-					 &secinfo_perm);
+-	if (ret)
+-		return ret;
+-
+-	if (params.result || params.count)
++	/*
++	 * Read access is required for the enclave to be able to use the page.
++	 * SGX instructions like ENCLU[EMODPE] and ENCLU[EACCEPT] require read
++	 * access.
++	 */
++	if (params.flags & ~SGX_SECINFO_PERMISSION_MASK || !(params.flags & SGX_SECINFO_R) ||
++	    params.result || params.count)
+ 		return -EINVAL;
+ 
+-	ret = sgx_enclave_restrict_permissions(encl, &params, secinfo_perm);
++	ret = sgx_enclave_restrict_permissions(encl, &params);
+ 
+ 	if (copy_to_user(arg, &params, sizeof(params)))
+ 		return -EFAULT;
+-- 
+2.35.1
 
-https://lkml.kernel.org/r/20220315174606.02959816@gandalf.local.home
-
-[56064.673346] Call Trace:
-[56064.676066]  dump_stack+0xb9/0x117
-[56064.679861]  ? print_usage_bug+0x2af/0x2c2
-[56064.684434]  mark_lock_irq+0x25e/0x27d
-[56064.688618]  mark_lock+0x11a/0x16c
-[56064.692412]  mark_held_locks+0x57/0x87
-[56064.696595]  ? _raw_spin_unlock_irq+0x2c/0x40
-[56064.701460]  lockdep_hardirqs_on+0xb1/0x19d
-[56064.706130]  _raw_spin_unlock_irq+0x2c/0x40
-[56064.710799]  sched_core_balance+0x8a/0x4af
-[56064.715369]  ? __balance_callback+0x1f/0x9a        <--- !!!
-[56064.720030]  __balance_callback+0x4f/0x9a
-[56064.724506]  rt_mutex_setprio+0x43a/0x48b
-[56064.728982]  task_blocks_on_rt_mutex+0x14d/0x1d5
-
-has __balance_callback().
-
-565790d28b1e changes __balance_callback() to __balance_callbacks()
-                                                               ^

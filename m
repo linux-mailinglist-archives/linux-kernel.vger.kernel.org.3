@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DECD4F4CCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F79F4F4C3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580037AbiDEXdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S1572909AbiDEXPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452785AbiDEPzb (ORCPT
+        with ESMTP id S1452812AbiDEPzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:55:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF1479381
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649170635; x=1680706635;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HUuCde5QwQYg6TXe9MSQ6TekH6j3hvkYuaUQC0febew=;
-  b=h1L9i1dAUhQ3zGWOYL5d7w7x7Gh6PGKTaCXcttpiOIspqf82hgw53sVM
-   z968nfPryvMWAS30LUV7onvmaSSv7HY6dfmn3nJDRKO7iiHsBDezYlMwF
-   9v/zru+aeTmZQxcdkNrayM9k2HQDoqlXicRWxxk7gAvC1tpswEPo3dXzG
-   rq8fpUi18llLjeTPUZdqmNw+bIxfptUV+/8yHrZTUpY+9P1tf9Wn5lbeh
-   /19s/ldOK2i49KhBRzzRZfgWD5koXunrH/URzDliMvBjz6mc/59srtKVO
-   iB4m0e1QkTmybzgvD3HhEvQuvQ7jgTk7rLWt+QyGwL5WtHgFBPNUvUP82
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="242909581"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="242909581"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:57:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="524025802"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 07:57:11 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbkcJ-0003Rz-6j;
-        Tue, 05 Apr 2022 14:57:11 +0000
-Date:   Tue, 5 Apr 2022 22:56:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:nvme-v2 5/6] drivers/soc/apple/rtkit.c:591:21: warning:
- no previous prototype for 'apple_rtkit_init'
-Message-ID: <202204052220.DC2iBfq3-lkp@intel.com>
+        Tue, 5 Apr 2022 11:55:35 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172177B546;
+        Tue,  5 Apr 2022 07:57:25 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id bx5so12076459pjb.3;
+        Tue, 05 Apr 2022 07:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fNKMdl5EgB8iVKO3jm7hq1ylGNE7urfWADlkF8zHzk=;
+        b=ouZF9rErW74fo9ZonM3kbl48QBEP9m7ukEs8xbgviCGPBdG1trn8OYOgkunWQrv9Xp
+         6AsDq1Mz0OFkH2tTIlJgL6697IdMgJIPV0xamecang18e+ZTD9QzKrLKIOemtmNtZW6t
+         xMPbhL1GoZEAY6Vnb/Yj+ErgsRHJiFecRFJ2obcylz0YhPP5CkxJZqjNp9VG6pqKtxsD
+         U/JfTW3WzHYACaSRHW++KVgDT/a69ci5QEadZN53z7/PEuEX4DIIcYJtAvRS1y5+32vF
+         Nt5yBVd89OcTKFi9DIAkhjJiu7wvvHFYZiWP8TTmuLgqCpceUoKOnQWWRSKZRJiimpqL
+         se1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fNKMdl5EgB8iVKO3jm7hq1ylGNE7urfWADlkF8zHzk=;
+        b=vYW9t33g0mxb9quEvP2AO+OL4fglUipaaue7Jn8kSMSyggi9I4tVVoYb1ZXNCjTfKw
+         dMgGvz7n/v/2l0d/Q8ntK1RVDPfYBBuVtHWPi/Ocu0GgqgPbCIhhYGq4wh8IE25ZCSv+
+         w5O9y5ZFytVQRiwrzSO4b7+rtwNA9rdc6NMpKIYdzqXL26lEiGaqJiCLWQoCuaIxCEP5
+         JfoAq2NMWVpu+p21kXNfmTjxb4yzhoVq/l0yi6sSxbyv8grvzl2Cy3wNNShDvYcShVr0
+         nhQicEUC2AJq0N13Bk8czCGgxtxVJ44HCFXMSVJEt9SawSvHcq5r9JO/gzhTfVnkb7NO
+         wO6Q==
+X-Gm-Message-State: AOAM532WEqjPW57GTP92zfbAVf/4h2mDAwh2k0R/RAJM2f9B3Q0Rc2Ti
+        P9CEOfJotoe9hUIS9roRUv0=
+X-Google-Smtp-Source: ABdhPJxNnD+uON5FVNi6s4DMI5cEjuwS1ZmzNMYMxcdxqmxddZ+4IwfYpWLoUaQhrUAbn0pDSnfLsg==
+X-Received: by 2002:a17:90a:4604:b0:1bc:8bdd:4a63 with SMTP id w4-20020a17090a460400b001bc8bdd4a63mr4582646pjg.147.1649170644566;
+        Tue, 05 Apr 2022 07:57:24 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b001c779e82af6sm2687794pjf.48.2022.04.05.07.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:57:23 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
+Date:   Tue,  5 Apr 2022 22:57:11 +0800
+Message-Id: <20220405145711.49543-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux nvme-v2
-head:   76835054c23e3e3505f5967d8580d86618aca6ec
-commit: 689dd69e59bb68b19066104c34670d5dc272c946 [5/6] soc: apple: Add RTKit IPC library
-config: ia64-buildonly-randconfig-r002-20220405 (https://download.01.org/0day-ci/archive/20220405/202204052220.DC2iBfq3-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/689dd69e59bb68b19066104c34670d5dc272c946
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux nvme-v2
-        git checkout 689dd69e59bb68b19066104c34670d5dc272c946
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/soc/apple/
+Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/soc/apple/rtkit.c:591:21: warning: no previous prototype for 'apple_rtkit_init' [-Wmissing-prototypes]
-     591 | struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-         |                     ^~~~~~~~~~~~~~~~
->> drivers/soc/apple/rtkit.c:805:6: warning: no previous prototype for 'apple_rtkit_free' [-Wmissing-prototypes]
-     805 | void apple_rtkit_free(struct apple_rtkit *rtk)
-         |      ^~~~~~~~~~~~~~~~
-
-
-vim +/apple_rtkit_init +591 drivers/soc/apple/rtkit.c
-
-   590	
- > 591	struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-   592					     const char *mbox_name, int mbox_idx,
-   593					     const struct apple_rtkit_ops *ops)
-   594	{
-   595		struct apple_rtkit *rtk;
-   596		int ret;
-   597	
-   598		if (!ops)
-   599			return ERR_PTR(-EINVAL);
-   600	
-   601		rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
-   602		if (!rtk)
-   603			return ERR_PTR(-ENOMEM);
-   604	
-   605		rtk->dev = dev;
-   606		rtk->cookie = cookie;
-   607		rtk->ops = ops;
-   608	
-   609		init_completion(&rtk->epmap_completion);
-   610		init_completion(&rtk->reinit_completion);
-   611		init_completion(&rtk->iop_pwr_ack_completion);
-   612		init_completion(&rtk->ap_pwr_ack_completion);
-   613	
-   614		bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
-   615		set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
-   616	
-   617		rtk->mbox_name = mbox_name;
-   618		rtk->mbox_idx = mbox_idx;
-   619		rtk->mbox_cl.dev = dev;
-   620		rtk->mbox_cl.tx_block = true;
-   621		rtk->mbox_cl.knows_txdone = false;
-   622		rtk->mbox_cl.rx_callback = &apple_rtkit_rx_callback;
-   623	
-   624		ret = apple_rtkit_request_mbox_chan(rtk);
-   625		if (ret)
-   626			return (struct apple_rtkit *)ERR_PTR(ret);
-   627	
-   628		return rtk;
-   629	}
-   630	
-
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 3d6217e3aff7..9c4be2cdb21a 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -25,15 +25,12 @@ static int ksym_cmp(const void *p1, const void *p2)
+ 
+ int load_kallsyms(void)
+ {
+-	FILE *f = fopen("/proc/kallsyms", "r");
++	FILE *f;
+ 	char func[256], buf[256];
+ 	char symbol;
+ 	void *addr;
+ 	int i = 0;
+ 
+-	if (!f)
+-		return -ENOENT;
+-
+ 	/*
+ 	 * This is called/used from multiplace places,
+ 	 * load symbols just once.
+@@ -41,6 +38,10 @@ int load_kallsyms(void)
+ 	if (sym_cnt)
+ 		return 0;
+ 
++	f = fopen("/proc/kallsyms", "r");
++	if (!f)
++		return -ENOENT;
++
+ 	while (fgets(buf, sizeof(buf), f)) {
+ 		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
+ 			break;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

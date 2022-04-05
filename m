@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33974F448A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A444F478D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345625AbiDENFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S245450AbiDEVNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343958AbiDEJQl (ORCPT
+        with ESMTP id S1349094AbiDEJtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14592D4CBA;
-        Tue,  5 Apr 2022 02:02:08 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93949A997D;
+        Tue,  5 Apr 2022 02:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 848D1CE1C72;
-        Tue,  5 Apr 2022 09:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C60C385A0;
-        Tue,  5 Apr 2022 09:02:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC7261576;
+        Tue,  5 Apr 2022 09:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4FDC385A1;
+        Tue,  5 Apr 2022 09:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149324;
-        bh=wFerTDonqlQrjFBy86pIXwyT/HhxOYMYxgYIiyjjPUA=;
+        s=korg; t=1649151645;
+        bh=vDDIUdmf4298hAle0TTWAdKOBeKnGsofn4TXAo2kHWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JXnjIiaHADnHX5Smd7kVLdnN8AtaPltmI1XwDz/oJ/J3x+15D1OBSRLrgSGoQuzjG
-         ZqVeAvIDyEHlH8KYripBHTog7mrMgkay81oSqOzy31egrDlXEiBop8A01NGvsFKJNZ
-         ZWbUtwFR8yl9Yq4VrzguZMZ02A1RZLDIuEMZvIqM=
+        b=K9GVtchGu39gmq5oVJVmTR4PJpQjM2NkMWryJzdWIMMdBlDJ0PrHCZewMADITsnjg
+         oA0EbNKA9nGFu4RAAQdDSdt9PHwzfg1UHpQXEpETxiIdHSIOw+lLw742sgt+8PiC1b
+         +XZZ+LXt7ZeVsKYfj7fEojWHJ5mrN4Rte6mUwUus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0637/1017] ice: fix scheduling while atomic on aux critical err interrupt
-Date:   Tue,  5 Apr 2022 09:25:50 +0200
-Message-Id: <20220405070413.191671055@linuxfoundation.org>
+Subject: [PATCH 5.15 489/913] scsi: pm8001: Fix abort all task initialization
+Date:   Tue,  5 Apr 2022 09:25:51 +0200
+Message-Id: <20220405070354.513075300@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,130 +56,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 32d53c0aa3a7b727243473949bad2a830b908edc ]
+[ Upstream commit 7f12845c8389855dbcc67baa068b6832dc4a396e ]
 
-There's a kernel BUG splat on processing aux critical error
-interrupts in ice_misc_intr():
+In pm80xx_send_abort_all(), the n_elem field of the ccb used is not
+initialized to 0. This missing initialization sometimes lead to the task
+completion path seeing the ccb with a non-zero n_elem resulting in the
+execution of invalid dma_unmap_sg() calls in pm8001_ccb_task_free(),
+causing a crash such as:
 
-[ 2100.917085] BUG: scheduling while atomic: swapper/15/0/0x00010000
-...
-[ 2101.060770] Call Trace:
-[ 2101.063229]  <IRQ>
-[ 2101.065252]  dump_stack+0x41/0x60
-[ 2101.068587]  __schedule_bug.cold.100+0x4c/0x58
-[ 2101.073060]  __schedule+0x6a4/0x830
-[ 2101.076570]  schedule+0x35/0xa0
-[ 2101.079727]  schedule_preempt_disabled+0xa/0x10
-[ 2101.084284]  __mutex_lock.isra.7+0x310/0x420
-[ 2101.088580]  ? ice_misc_intr+0x201/0x2e0 [ice]
-[ 2101.093078]  ice_send_event_to_aux+0x25/0x70 [ice]
-[ 2101.097921]  ice_misc_intr+0x220/0x2e0 [ice]
-[ 2101.102232]  __handle_irq_event_percpu+0x40/0x180
-[ 2101.106965]  handle_irq_event_percpu+0x30/0x80
-[ 2101.111434]  handle_irq_event+0x36/0x53
-[ 2101.115292]  handle_edge_irq+0x82/0x190
-[ 2101.119148]  handle_irq+0x1c/0x30
-[ 2101.122480]  do_IRQ+0x49/0xd0
-[ 2101.125465]  common_interrupt+0xf/0xf
-[ 2101.129146]  </IRQ>
-...
+[  197.676341] RIP: 0010:iommu_dma_unmap_sg+0x6d/0x280
+[  197.700204] RSP: 0018:ffff889bbcf89c88 EFLAGS: 00010012
+[  197.705485] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff83d0bda0
+[  197.712687] RDX: 0000000000000002 RSI: 0000000000000000 RDI: ffff88810dffc0d0
+[  197.719887] RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8881c790098b
+[  197.727089] R10: ffffed1038f20131 R11: 0000000000000001 R12: 0000000000000000
+[  197.734296] R13: ffff88810dffc0d0 R14: 0000000000000010 R15: 0000000000000000
+[  197.741493] FS:  0000000000000000(0000) GS:ffff889bbcf80000(0000) knlGS:0000000000000000
+[  197.749659] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  197.755459] CR2: 00007f16c1b42734 CR3: 0000000004814000 CR4: 0000000000350ee0
+[  197.762656] Call Trace:
+[  197.765127]  <IRQ>
+[  197.767162]  pm8001_ccb_task_free+0x5f1/0x820 [pm80xx]
+[  197.772364]  ? do_raw_spin_unlock+0x54/0x220
+[  197.776680]  pm8001_mpi_task_abort_resp+0x2ce/0x4f0 [pm80xx]
+[  197.782406]  process_oq+0xe85/0x7890 [pm80xx]
+[  197.786817]  ? lock_acquire+0x194/0x490
+[  197.790697]  ? handle_irq_event+0x10e/0x1b0
+[  197.794920]  ? mpi_sata_completion+0x2d70/0x2d70 [pm80xx]
+[  197.800378]  ? __wake_up_bit+0x100/0x100
+[  197.804340]  ? lock_is_held_type+0x98/0x110
+[  197.808565]  pm80xx_chip_isr+0x94/0x130 [pm80xx]
+[  197.813243]  tasklet_action_common.constprop.0+0x24b/0x2f0
+[  197.818785]  __do_softirq+0x1b5/0x82d
+[  197.822485]  ? do_raw_spin_unlock+0x54/0x220
+[  197.826799]  __irq_exit_rcu+0x17e/0x1e0
+[  197.830678]  irq_exit_rcu+0xa/0x20
+[  197.834114]  common_interrupt+0x78/0x90
+[  197.840051]  </IRQ>
+[  197.844236]  <TASK>
+[  197.848397]  asm_common_interrupt+0x1e/0x40
 
-As Andrew correctly mentioned previously[0], the following call
-ladder happens:
+Avoid this issue by always initializing the ccb n_elem field to 0 in
+pm8001_send_abort_all(), pm8001_send_read_log() and
+pm80xx_send_abort_all().
 
-ice_misc_intr() <- hardirq
-  ice_send_event_to_aux()
-    device_lock()
-      mutex_lock()
-        might_sleep()
-          might_resched() <- oops
-
-Add a new PF state bit which indicates that an aux critical error
-occurred and serve it in ice_service_task() in process context.
-The new ice_pf::oicr_err_reg is read-write in both hardirq and
-process contexts, but only 3 bits of non-critical data probably
-aren't worth explicit synchronizing (and they're even in the same
-byte [31:24]).
-
-[0] https://lore.kernel.org/all/YeSRUVmrdmlUXHDn@lunn.ch
-
-Fixes: 348048e724a0e ("ice: Implement iidc operations")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Tested-by: Michal Kubiak <michal.kubiak@intel.com>
-Acked-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220220031810.738362-17-damien.lemoal@opensource.wdc.com
+Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice.h      |  2 ++
- drivers/net/ethernet/intel/ice/ice_main.c | 25 ++++++++++++++---------
- 2 files changed, 17 insertions(+), 10 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 8093346f163b..240b4c461d9c 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -290,6 +290,7 @@ enum ice_pf_state {
- 	ICE_LINK_DEFAULT_OVERRIDE_PENDING,
- 	ICE_PHY_INIT_COMPLETE,
- 	ICE_FD_VF_FLUSH_CTX,		/* set at FD Rx IRQ or timeout */
-+	ICE_AUX_ERR_PENDING,
- 	ICE_STATE_NBITS		/* must be last */
- };
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index d50eb22b2506..bed06ed0f1cb 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -1783,6 +1783,7 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
  
-@@ -557,6 +558,7 @@ struct ice_pf {
- 	wait_queue_head_t reset_wait_queue;
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
  
- 	u32 hw_csum_rx_error;
-+	u32 oicr_err_reg;
- 	u16 oicr_idx;		/* Other interrupt cause MSIX vector index */
- 	u16 num_avail_sw_msix;	/* remaining MSIX SW vectors left unclaimed */
- 	u16 max_pf_txqs;	/* Total Tx queues PF wide */
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index b449b3408a1c..523877c2f8b6 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2237,6 +2237,19 @@ static void ice_service_task(struct work_struct *work)
- 		return;
- 	}
+@@ -1844,6 +1845,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
+ 	pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
+ 	pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
  
-+	if (test_and_clear_bit(ICE_AUX_ERR_PENDING, pf->state)) {
-+		struct iidc_event *event;
-+
-+		event = kzalloc(sizeof(*event), GFP_KERNEL);
-+		if (event) {
-+			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
-+			/* report the entire OICR value to AUX driver */
-+			swap(event->reg, pf->oicr_err_reg);
-+			ice_send_event_to_aux(pf, event);
-+			kfree(event);
-+		}
-+	}
-+
- 	if (test_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags)) {
- 		/* Plug aux device per request */
- 		ice_plug_aux_dev(pf);
-@@ -3023,17 +3036,9 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 3c2f2fbdb432..b0a108e1a3d9 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1801,6 +1801,7 @@ static void pm80xx_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
  
- #define ICE_AUX_CRIT_ERR (PFINT_OICR_PE_CRITERR_M | PFINT_OICR_HMC_ERR_M | PFINT_OICR_PE_PUSH_M)
- 	if (oicr & ICE_AUX_CRIT_ERR) {
--		struct iidc_event *event;
--
-+		pf->oicr_err_reg |= oicr;
-+		set_bit(ICE_AUX_ERR_PENDING, pf->state);
- 		ena_mask &= ~ICE_AUX_CRIT_ERR;
--		event = kzalloc(sizeof(*event), GFP_ATOMIC);
--		if (event) {
--			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
--			/* report the entire OICR value to AUX driver */
--			event->reg = oicr;
--			ice_send_event_to_aux(pf, event);
--			kfree(event);
--		}
- 	}
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
  
- 	/* Report any remaining unexpected interrupts */
 -- 
 2.34.1
 

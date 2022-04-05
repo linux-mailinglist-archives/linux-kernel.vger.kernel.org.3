@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2644F457D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1B74F4621
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385556AbiDEMdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S235998AbiDEMdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235558AbiDEJCP (ORCPT
+        with ESMTP id S235605AbiDEJCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0482610D2;
-        Tue,  5 Apr 2022 01:53:59 -0700 (PDT)
+        Tue, 5 Apr 2022 05:02:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57E4BF40;
+        Tue,  5 Apr 2022 01:54:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED26614E4;
-        Tue,  5 Apr 2022 08:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D04EC385A0;
-        Tue,  5 Apr 2022 08:53:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68DDFB81A0C;
+        Tue,  5 Apr 2022 08:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C69C385A0;
+        Tue,  5 Apr 2022 08:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148838;
-        bh=sEUchKfDYORn7K/j5O1EnCAJAMVtyD6pYVimoakaOrI=;
+        s=korg; t=1649148849;
+        bh=Gh6dRGFWFQmf8B5m9q8iVsCS75Ilgj6gFgKCUtVsgWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1wTQm8S0KVJmMPCmQCABANqH6yDSZClFMgmWS4GD6QBWKqmfyuuZhWyUdUryS5jDX
-         ZueUu9IUgD6y6e38q9hMG7k8ddp8oUY5HYvZ/oDV5HmkUfifOs++Wm4tab8gVCgyYZ
-         dfsCajpdEgRrNe89aYhB8mmCkrk9+koPERxWA6hI=
+        b=XewtgC7TrAFQxtaJFjGT8gAwDmu042+wb0oFSk0DvIjBJMvmaXx4RHrA/gbwDUQq4
+         tHdBC7VGO/nYUZnUmY6sV07Gjbkqzf/Dc4yPOLfaXc+Jw7Dck2/istCLQQZol1l4Cw
+         iy7czptLziIcBWHH+FotcLuxpmLZmHBBbfOPIbTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pin-Yen Lin <treapking@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Hersen Wu <hersenwu@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        Roman Li <Roman.Li@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0498/1017] drm/bridge: anx7625: Fix overflow issue on reading EDID
-Date:   Tue,  5 Apr 2022 09:23:31 +0200
-Message-Id: <20220405070409.081464001@linuxfoundation.org>
+Subject: [PATCH 5.16 0502/1017] drm/amd/display: Add affected crtcs to atomic state for dsc mst unplug
+Date:   Tue,  5 Apr 2022 09:23:35 +0200
+Message-Id: <20220405070409.200254124@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,37 +58,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pin-Yen Lin <treapking@chromium.org>
+From: Roman Li <Roman.Li@amd.com>
 
-[ Upstream commit d5c6f647aec9ed524aedd04a3aec5ebc21d39007 ]
+[ Upstream commit 128f8ed5902a287a6bb4afe0ffdae8a80b2a64ec ]
 
-The length of EDID block can be longer than 256 bytes, so we should use
-`int` instead of `u8` for the `edid_pos` variable.
+[Why]
+When display topology changed on DSC hub we add all crtcs with dsc support to
+atomic state.
+Refer to patch:"drm/amd/display: Trigger modesets on MST DSC connectors"
+However the original implementation may skip crtc if the topology change
+caused by unplug.
+That potentially could lead to no-lightup or corruption on DSC hub after
+unplug event on one of the connectors.
 
-Fixes: 8bdfc5dae4e3 ("drm/bridge: anx7625: Add anx7625 MIPI DSI/DPI to DP")
-Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220210103827.402436-1-treapking@chromium.org
+[How]
+Update add_affected_mst_dsc_crtcs() to use old connector state
+if new connector state has no crtc (undergoes modeset due to unplug)
+
+Fixes: 44be939ff7ac58 ("drm/amd/display: Trigger modesets on MST DSC connectors")
+
+Reviewed-by: Hersen Wu <hersenwu@amd.com>
+Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
+Signed-off-by: Roman Li <Roman.Li@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 1a871f6b6822..9b2421040926 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -791,7 +791,8 @@ static int segments_edid_read(struct anx7625_data *ctx,
- static int sp_tx_edid_read(struct anx7625_data *ctx,
- 			   u8 *pedid_blocks_buf)
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 0ec8051cdfb4..7cadb9e81d9d 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -10752,10 +10752,13 @@ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
+ static int add_affected_mst_dsc_crtcs(struct drm_atomic_state *state, struct drm_crtc *crtc)
  {
--	u8 offset, edid_pos;
-+	u8 offset;
-+	int edid_pos;
- 	int count, blocks_num;
- 	u8 pblock_buf[MAX_DPCD_BUFFER_SIZE];
- 	u8 i, j;
+ 	struct drm_connector *connector;
+-	struct drm_connector_state *conn_state;
++	struct drm_connector_state *conn_state, *old_conn_state;
+ 	struct amdgpu_dm_connector *aconnector = NULL;
+ 	int i;
+-	for_each_new_connector_in_state(state, connector, conn_state, i) {
++	for_each_oldnew_connector_in_state(state, connector, old_conn_state, conn_state, i) {
++		if (!conn_state->crtc)
++			conn_state = old_conn_state;
++
+ 		if (conn_state->crtc != crtc)
+ 			continue;
+ 
 -- 
 2.34.1
 

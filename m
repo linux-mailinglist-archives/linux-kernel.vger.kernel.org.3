@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E3D4F2AB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598554F2E88
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347450AbiDEJ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S1345682AbiDEJnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239598AbiDEIUP (ORCPT
+        with ESMTP id S239607AbiDEIUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3742136;
-        Tue,  5 Apr 2022 01:17:07 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8ECF4;
+        Tue,  5 Apr 2022 01:17:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 609E7609D0;
-        Tue,  5 Apr 2022 08:17:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F80DC385A1;
-        Tue,  5 Apr 2022 08:17:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21C9CB81A37;
+        Tue,  5 Apr 2022 08:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876BBC385A1;
+        Tue,  5 Apr 2022 08:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146626;
-        bh=P3NtWkh9h3XTIlElB6Qko8BGssaTAw2AjqJ3aVe94Us=;
+        s=korg; t=1649146637;
+        bh=PaGBNH3IO+vHhfj5CQrJJiXJVdx0NKXBLXt6WjCBSr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ub+8ZWECkYc9Zzr7slZmwZqMFcrCBY9/z4GmdkrPronVwyhfc9R7ez784I2UpJVV3
-         qWNVnUW+XmhYtRpoD06V6CwHWn57a8xW6zGbIsd6PWnDXptRBMYER132c9g1krAVJY
-         dkuFXa1G0m1JeMPDSLUm/hMPNz3okl4ZPq4KtdEE=
+        b=obUNSg++14W6yndgyLV/rGWhGUjfX1NZk056hv8sM5WZTQsOHomxUKrA1apIoKC1w
+         VMsIFVzJAz7zFrpIi+7wQjBY8PUKy4/lWtxxjM+13HGcQ8l5dgMG5J3cCeb9QJWP/n
+         Xry9hVUEXhbpZAXV9wdKmFC7ZXoPjFfDS49+WiFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        stable@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Detlev Casanova <detlev.casanova@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0831/1126] lib/test: use after free in register_test_dev_kmod()
-Date:   Tue,  5 Apr 2022 09:26:18 +0200
-Message-Id: <20220405070431.950973665@linuxfoundation.org>
+Subject: [PATCH 5.17 0834/1126] regulator: rpi-panel: Handle I2C errors/timing to the Atmel
+Date:   Tue,  5 Apr 2022 09:26:21 +0200
+Message-Id: <20220405070432.038286312@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,32 +57,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit dc0ce6cc4b133f5f2beb8b47dacae13a7d283c2c ]
+[ Upstream commit 5665eee7a3800430e7dc3ef6f25722476b603186 ]
 
-The "test_dev" pointer is freed but then returned to the caller.
+The Atmel is doing some things in the I2C ISR, during which
+period it will not respond to further commands. This is
+particularly true of the POWERON command.
 
-Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Increase delays appropriately, and retry should I2C errors be
+reported.
+
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+Link: https://lore.kernel.org/r/20220124220129.158891-3-detlev.casanova@collabora.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_kmod.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../regulator/rpi-panel-attiny-regulator.c    | 56 +++++++++++++++----
+ 1 file changed, 46 insertions(+), 10 deletions(-)
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index ce1589391413..cb800b1d0d99 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1149,6 +1149,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
- 	if (ret) {
- 		pr_err("could not register misc device: %d\n", ret);
- 		free_test_dev_kmod(test_dev);
-+		test_dev = NULL;
- 		goto out;
+diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+index ee46bfbf5eee..991b4730d768 100644
+--- a/drivers/regulator/rpi-panel-attiny-regulator.c
++++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+@@ -37,11 +37,24 @@ static const struct regmap_config attiny_regmap_config = {
+ static int attiny_lcd_power_enable(struct regulator_dev *rdev)
+ {
+ 	unsigned int data;
++	int ret, i;
+ 
+ 	regmap_write(rdev->regmap, REG_POWERON, 1);
++	msleep(80);
++
+ 	/* Wait for nPWRDWN to go low to indicate poweron is done. */
+-	regmap_read_poll_timeout(rdev->regmap, REG_PORTB, data,
+-					data & BIT(0), 10, 1000000);
++	for (i = 0; i < 20; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret) {
++			if (data & BIT(0))
++				break;
++		}
++		usleep_range(10000, 12000);
++	}
++	usleep_range(10000, 12000);
++
++	if (ret)
++		pr_err("%s: regmap_read_poll_timeout failed %d\n", __func__, ret);
+ 
+ 	/* Default to the same orientation as the closed source
+ 	 * firmware used for the panel.  Runtime rotation
+@@ -57,23 +70,34 @@ static int attiny_lcd_power_disable(struct regulator_dev *rdev)
+ {
+ 	regmap_write(rdev->regmap, REG_PWM, 0);
+ 	regmap_write(rdev->regmap, REG_POWERON, 0);
+-	udelay(1);
++	msleep(30);
+ 	return 0;
+ }
+ 
+ static int attiny_lcd_power_is_enabled(struct regulator_dev *rdev)
+ {
+ 	unsigned int data;
+-	int ret;
++	int ret, i;
+ 
+-	ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	if (!(data & BIT(0)))
+ 		return 0;
+ 
+-	ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
++
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -103,20 +127,32 @@ static int attiny_update_status(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+ 	int brightness = bl->props.brightness;
++	int ret, i;
+ 
+ 	if (bl->props.power != FB_BLANK_UNBLANK ||
+ 	    bl->props.fb_blank != FB_BLANK_UNBLANK)
+ 		brightness = 0;
+ 
+-	return regmap_write(regmap, REG_PWM, brightness);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_write(regmap, REG_PWM, brightness);
++		if (!ret)
++			break;
++	}
++
++	return ret;
+ }
+ 
+ static int attiny_get_brightness(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+-	int ret, brightness;
++	int ret, brightness, i;
++
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(regmap, REG_PWM, &brightness);
++		if (!ret)
++			break;
++	}
+ 
+-	ret = regmap_read(regmap, REG_PWM, &brightness);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -166,7 +202,7 @@ static int attiny_i2c_probe(struct i2c_client *i2c,
  	}
  
+ 	regmap_write(regmap, REG_POWERON, 0);
+-	mdelay(1);
++	msleep(30);
+ 
+ 	config.dev = &i2c->dev;
+ 	config.regmap = regmap;
 -- 
 2.34.1
 

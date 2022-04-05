@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22ED4F3792
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AC24F3B8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356014AbiDELPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S1380717AbiDEL6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237222AbiDEIRr (ORCPT
+        with ESMTP id S245038AbiDEIxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDB8B1A86;
-        Tue,  5 Apr 2022 01:05:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6E9E10;
+        Tue,  5 Apr 2022 01:50:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46EAA617E9;
-        Tue,  5 Apr 2022 08:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554B9C385A1;
-        Tue,  5 Apr 2022 08:05:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E4E8B81B92;
+        Tue,  5 Apr 2022 08:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E8FC385A0;
+        Tue,  5 Apr 2022 08:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145944;
-        bh=OnXNl4l40PYL1pFWdocamRpgl3DX/A4LomQg8vlMV94=;
+        s=korg; t=1649148617;
+        bh=8byxPXwxejjXlkL2TpUmT+yCJ0uneYeRDygEpoPrvLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fvyd6q+O/eGeB8wlAET6ICMlRqEW8vkCNOnu99I905O8ORQGCyaRVHJVtOH5AuLSl
-         NECb5JwavzS0Xn0l9/AP8ZofSQ61MP8qGogE3F73B5rAiCbVV/MScOQJGPSiJ8H7Q9
-         3VS2aA3q/3RFbrld7GdNuXGfSrMn3OZWbfOK/YWA=
+        b=j4fxY5Y8v7FhkNzBnIFFxyBzynQEJFetrc/vVb1eOLh5oUYewrmLC5C6KpQUl9BNS
+         wjbvGc/32UMF/ZEV3VLBQo1RYmZfwYDBrc6dQQj1cgjkNNpqEYUv62eYlHlhoSGYdw
+         TR+FRaecyC/TPcpj7LSImj6bVx6DnI0RS323J6UM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0585/1126] scsi: pm8001: Fix payload initialization in pm80xx_set_thermal_config()
+Subject: [PATCH 5.16 0419/1017] mtd: rawnand: gpmi: fix controller timings setting
 Date:   Tue,  5 Apr 2022 09:22:12 +0200
-Message-Id: <20220405070424.805164308@linuxfoundation.org>
+Message-Id: <20220405070406.726487734@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-[ Upstream commit bb225b12dbcc82d53d637d10b8d70b64494f8c16 ]
+[ Upstream commit 2970bf5a32f079e1e9197411db4fe9faccb1503a ]
 
-The fields of the set_ctrl_cfg_req structure have the __le32 type, so use
-cpu_to_le32() to assign them. This removes the sparse warnings:
+Set the controller registers according to the real clock rate. The
+controller registers configuration (setup, hold, timeout, ... cycles)
+depends on the clock rate of the GPMI. Using the real rate instead of
+the ideal one, avoids that this inaccuracy (required_rate - real_rate)
+affects the registers setting.
 
-warning: incorrect type in assignment (different base types)
-    expected restricted __le32
-    got unsigned int
+This patch has been tested on two custom boards with i.MX28 and i.MX6
+SOCs:
+- i.MX28:
+  required rate 100MHz, real rate 99.3MHz
+- i.MX6
+  required rate 100MHz, real rate 99MHz
 
-Link: https://lore.kernel.org/r/20220220031810.738362-8-damien.lemoal@opensource.wdc.com
-Fixes: 842784e0d15b ("pm80xx: Update For Thermal Page Code")
-Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: b1206122069a ("mtd: rawnand: gpmi: use core timings instead of an empirical derivation")
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220118095434.35081-3-dario.binacchi@amarulasolutions.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index ec6b970e05a1..94af89d0b362 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1203,9 +1203,11 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *pm8001_ha)
- 	else
- 		page_code = THERMAL_PAGE_CODE_8H;
+diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+index 5eb20dfe4186..42e0aab1a00c 100644
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -648,6 +648,7 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+ 				     const struct nand_sdr_timings *sdr)
+ {
+ 	struct gpmi_nfc_hardware_timing *hw = &this->hw;
++	struct resources *r = &this->resources;
+ 	unsigned int dll_threshold_ps = this->devdata->max_chain_delay;
+ 	unsigned int period_ps, reference_period_ps;
+ 	unsigned int data_setup_cycles, data_hold_cycles, addr_setup_cycles;
+@@ -671,6 +672,8 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+ 		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
+ 	}
  
--	payload.cfg_pg[0] = (THERMAL_LOG_ENABLE << 9) |
--				(THERMAL_ENABLE << 8) | page_code;
--	payload.cfg_pg[1] = (LTEMPHIL << 24) | (RTEMPHIL << 8);
-+	payload.cfg_pg[0] =
-+		cpu_to_le32((THERMAL_LOG_ENABLE << 9) |
-+			    (THERMAL_ENABLE << 8) | page_code);
-+	payload.cfg_pg[1] =
-+		cpu_to_le32((LTEMPHIL << 24) | (RTEMPHIL << 8));
++	hw->clk_rate = clk_round_rate(r->clock[0], hw->clk_rate);
++
+ 	/* SDR core timings are given in picoseconds */
+ 	period_ps = div_u64((u64)NSEC_PER_SEC * 1000, hw->clk_rate);
  
- 	pm8001_dbg(pm8001_ha, DEV,
- 		   "Setting up thermal config. cfg_pg 0 0x%x cfg_pg 1 0x%x\n",
 -- 
 2.34.1
 

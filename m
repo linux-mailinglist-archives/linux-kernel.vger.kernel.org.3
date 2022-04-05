@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C654F48F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6544F4C83
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355795AbiDEV4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+        id S1578603AbiDEXYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356458AbiDEKXy (ORCPT
+        with ESMTP id S1349450AbiDEJtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF84BC85F;
-        Tue,  5 Apr 2022 03:08:21 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23BB27B20;
+        Tue,  5 Apr 2022 02:46:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E566B81C88;
-        Tue,  5 Apr 2022 10:08:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B880C385A1;
-        Tue,  5 Apr 2022 10:08:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C4956164D;
+        Tue,  5 Apr 2022 09:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E93AC385A3;
+        Tue,  5 Apr 2022 09:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153298;
-        bh=5+j3fHuHA0QdDHXF5DiOjJr3Ypuo/vjZboS4vptQG24=;
+        s=korg; t=1649151972;
+        bh=Erirp5qaLkmT2KhloGasa14482cQS95b1zyeEUKtpyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SVoSqoWyv9jQwMddRR422mS89ayc5Pi2xAjgNa1ZkqLK4oHCJaNO08i24HB0xMed2
-         3vFz6jAUTN6FdcT//M3G3SiS3XOPwgQaXrbj2Yj00sJtdMrSV65sPGriZKA2+KlJPx
-         CRQpGM7aCbrRe2DoRadyO7xs+U8p44nIxsDmUzxM=
+        b=mMr+n9w61cnl0LydRa2hhEDZgoMDJxB9UfThttNvQxhU8JqbmlWJqQ4aRlDXMGo83
+         mY2OdxT9pA8El8y7ivf/baSZ7d1PyXGQR5pZW2yVoz6obpVcm6Ha8oI8q4mx4qw7CG
+         LayLWgfc6lIh0aTB7vqe5UmBL5ilMrHlLDXOi5Go=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 174/599] sched/core: Export pelt_thermal_tp
-Date:   Tue,  5 Apr 2022 09:27:48 +0200
-Message-Id: <20220405070304.020965093@linuxfoundation.org>
+Subject: [PATCH 5.15 607/913] staging: r8188eu: fix endless loop in recv_func
+Date:   Tue,  5 Apr 2022 09:27:49 +0200
+Message-Id: <20220405070358.036454946@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
+From: Martin Kaiser <martin@kaiser.cx>
 
-[ Upstream commit 77cf151b7bbdfa3577b3c3f3a5e267a6c60a263b ]
+[ Upstream commit 1327fcf175fa63d3b7a058b8148ed7714acdc035 ]
 
-We can't use this tracepoint in modules without having the symbol
-exported first, fix that.
+Fix an endless loop in recv_func. If pending_frame is not NULL, we're
+stuck in the while loop forever. We have to call rtw_alloc_recvframe
+each time we loop.
 
-Fixes: 765047932f15 ("sched/pelt: Add support to track thermal pressure")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211028115005.873539-1-qais.yousef@arm.com
+Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+Reported-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+Link: https://lore.kernel.org/r/20220226181457.1138035-4-martin@kaiser.cx
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/r8188eu/core/rtw_recv.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0a5f9fad45e4..e437d946b27b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -36,6 +36,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_rt_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_dl_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_irq_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_se_tp);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_thermal_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_cpu_capacity_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index e082edfbaad8..30ca9f1e0363 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -1942,8 +1942,7 @@ static int recv_func(struct adapter *padapter, struct recv_frame *rframe)
+ 		struct recv_frame *pending_frame;
+ 		int cnt = 0;
+ 
+-		pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
+-		while (pending_frame) {
++		while ((pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
+ 			cnt++;
+ 			recv_func_posthandle(padapter, pending_frame);
+ 		}
 -- 
 2.34.1
 

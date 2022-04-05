@@ -2,272 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4284F4C45
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159374F4887
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577812AbiDEXQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        id S241510AbiDEVlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457601AbiDEQPE (ORCPT
+        with ESMTP id S1457612AbiDEQRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:15:04 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5B815724
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:13:04 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso1978416wml.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j/6AMeSlOUOklImXXq0k1qDNIpWDz1k0LAxbI2CUBOc=;
-        b=FyaCCuuFy9tOl30wxr6e96Z3cFL7OrVt/8eP0fwts2VMuhkb/CLSu1/fprs7Mj7Bcm
-         JOXo02HlIwiYQh1e997f+MdWcecZ+If13hmlFh6awBHakX3Z4zR1KO/F4NbB+j0/Qvkg
-         UlV1l7HYJS86X268Ec6D0VUkAh6CvGABxjw9g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=j/6AMeSlOUOklImXXq0k1qDNIpWDz1k0LAxbI2CUBOc=;
-        b=EQ/TNnIkqUFuYILY6Iv8PE2YTqHbWS+pLLiZU0qmjAHfIBboYOq6ew8UXoANuHDq2P
-         p/gqjSEYuQS1sR5MuVMEIQNzTjMnuMBXuUUKF3Sc0h+EH0w2w1ZOAlHHIEkdC68Wmixa
-         doO/FIjyVgXWm5gsfuSuAhAiFm9m6Z3mR9WcHKYobPm/L20A6OgKZfIFockJRhq2z1q5
-         MZ0crEPcCyK2mzex5r3NZNSNU8dMhm9/bjhsWA8c2/k9rZ9nK0eWuVc8yxyznKJZUa+t
-         LOu4ziPoVF7OQpVKJbQFNNgBf9eW8WKhpL3y6WKOEA8LgCwMkqfcbdlMSnOhap/8xulH
-         /DLg==
-X-Gm-Message-State: AOAM5322rBe0mQuJygm4iSlFjuvXY3frbL7gI9r4f/QsHSkX0HAfcv8T
-        vJ93QQrVYXLLzKRgyXFtuxP9QA==
-X-Google-Smtp-Source: ABdhPJyTSMKxjq/kxlxpLkNeNaut64OQCKi4vDYixf1wKouhmg08rIvbjri2RGMzH4UqWc57UcO3oA==
-X-Received: by 2002:a05:600c:1f14:b0:38c:946f:6812 with SMTP id bd20-20020a05600c1f1400b0038c946f6812mr3766945wmb.192.1649175182404;
-        Tue, 05 Apr 2022 09:13:02 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056000144f00b002057eac999fsm12857768wrx.76.2022.04.05.09.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:13:01 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 18:12:59 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Zack Rusin <zackr@vmware.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ilya Trukhanov <lahvuun@gmail.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Peter Jones <pjones@redhat.com>
-Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
- if a FB is already registered"
-Message-ID: <Ykxqi82sOEd2Zg1K@phenom.ffwll.local>
-Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Zack Rusin <zackr@vmware.com>, Hans de Goede <hdegoede@redhat.com>,
-        Ilya Trukhanov <lahvuun@gmail.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Peter Jones <pjones@redhat.com>
-References: <20220208210824.2238981-19-daniel.vetter@ffwll.ch>
- <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
- <Ykv/k/WoVemoCJJA@phenom.ffwll.local>
- <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
- <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com>
- <CAKMK7uHf6H8mhSm6eDHUruWK5Xc2cSPkJUX6v-jpeQfjS19dKw@mail.gmail.com>
- <e124af06-4f24-277a-543a-82b383f48cea@redhat.com>
- <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
- <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
- <YkxFHUdm/YeiVY+D@kroah.com>
+        Tue, 5 Apr 2022 12:17:09 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CBB192B9;
+        Tue,  5 Apr 2022 09:15:11 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:35:2589:2a93:190d:b787])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id CDADA30D;
+        Tue,  5 Apr 2022 16:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CDADA30D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1649175311; bh=rE6rzCNpDJ68w+IwBoDN9Cf1DCDHPiYHstqLXZaFU7k=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=J2Ns1jRSjvyM1mYJSL3V7kG1cTsmgZwyNrjCkiP+k84kUWO3JPqurBKy7zBAjPMyJ
+         Ott5DZyA+QJyeTCEwJKDoMCcshoGoh8CwR/L1ba8KNK4xcW/aA6rXiBpefXdAMte3C
+         PjftgljOkwDF4D29WR8nfffJwfRMAX70J4wLBLgJCLGM+1pb0HUTarmpcgm7YpWYgg
+         Qw3nh1LZ831VdmtW6NcllXeV8I2RpC0CSezs5Hg20lPSITd6kIt6hVyMJ83Q7/8z+m
+         h15UmZZLua6OFynX3VKxyUD5pRB4baQ3+uOlokTwt8cEc0XAdIs24491ouc5FZPpLR
+         1LExVsq2eG6ew==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: arch_pgtable_helpers: demote pgtable
+ list headings
+In-Reply-To: <20220326131313.691027-1-bagasdotme@gmail.com>
+References: <20220326131313.691027-1-bagasdotme@gmail.com>
+Date:   Tue, 05 Apr 2022 10:15:10 -0600
+Message-ID: <87k0c3ecc1.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkxFHUdm/YeiVY+D@kroah.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 03:33:17PM +0200, Greg KH wrote:
-> On Tue, Apr 05, 2022 at 03:24:40PM +0200, Geert Uytterhoeven wrote:
-> > Hi Daniel,
-> > 
-> > On Tue, Apr 5, 2022 at 1:48 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > On Tue, 5 Apr 2022 at 11:52, Javier Martinez Canillas
-> > > <javierm@redhat.com> wrote:
-> > > > On 4/5/22 11:24, Daniel Vetter wrote:
-> > > > > On Tue, 5 Apr 2022 at 11:19, Javier Martinez Canillas
-> > > > >> This is how I think that work, please let me know if you see something
-> > > > >> wrong in my logic:
-> > > > >>
-> > > > >> 1) A PCI device of OF device is registered for the GPU, this attempt to
-> > > > >>    match a registered driver but no driver was registered that match yet.
-> > > > >>
-> > > > >> 2) The efifb driver is built-in, will be initialized according to the link
-> > > > >>    order of the objects under drivers/video and the fbdev driver is registered.
-> > > > >>
-> > > > >>    There is no platform device or PCI/OF device registered that matches.
-> > > > >>
-> > > > >> 3) The DRM driver is built-in, will be initialized according to the link
-> > > > >>    order of the objects under drivers/gpu and the DRM driver is registered.
-> > > > >>
-> > > > >>    This matches the device registered in (1) and the DRM driver probes.
-> > > > >>
-> > > > >> 4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
-> > > > >>    before registering the DRM device.
-> > > > >>
-> > > > >>    There are no conflicting drivers or platform device at this point.
-> > > > >>
-> > > > >> 5) Latter at some point the drivers/firmware/sysfb.c init function is
-> > > > >>    executed, and this registers a platform device for the generic fb.
-> > > > >>
-> > > > >>    This device matches the efifb driver registered in (2) and the fbdev
-> > > > >>    driver probes.
-> > > > >>
-> > > > >>    Since that happens *after* the DRM driver already matched, probed
-> > > > >>    and registered the DRM device, that is a bug and what the reverted
-> > > > >>    patch worked around.
-> > > > >>
-> > > > >> So we need to prevent (5) if (1) and (3) already happened. Having a flag
-> > > > >> set in the fbdev core somewhere when remove_conflicting_framebuffers()
-> > > > >> is called could be a solution indeed.
-> > > > >>
-> > > > >> That is, the fbdev core needs to know that a DRM driver already probed
-> > > > >> and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
-> > > > >>
-> > > > >> I can attempt to write a patch for that.
-> > > > >
-> > > > > Ah yeah that could be an issue. I think the right fix is to replace
-> > > > > the platform dev unregister with a sysfb_unregister() function in
-> > > > > sysfb.c, which is synced with a common lock with the sysfb_init
-> > > > > function and a small boolean. I think I can type that up quickly for
-> > > > > v3.
-> > > >
-> > > > It's more complicated than that since sysfb is just *one* of the several
-> > > > places where platform devices can be registered for video devices.
-> > > >
-> > > > For instance, the vga16fb driver registers its own platform device in
-> > > > its module_init() function so that can also happen after the conflicting
-> > > > framebuffers (and associated devices) were removed by a DRM driver probe.
-> > > >
-> > > > I tried to minimize the issue for that particular driver with commit:
-> > > >
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0499f419b76f
-> > > >
-> > > > But the point stands, it all boils down to the fact that you have two
-> > > > different subsystems registering video drivers and they don't know all
-> > > > about each other to take a proper decision.
-> > > >
-> > > > Right now the drm_aperture_remove_conflicting_framebuffers() call signals
-> > > > in one direction from DRM to fbdev but there isn't a communication in the
-> > > > other direction, from fbdev to DRM.
-> > > >
-> > > > I believe the correct fix would be for the fbdev core to keep a list of
-> > > > the apertures struct that are passed to remove_conflicting_framebuffers(),
-> > > > that way it will know what apertures are not available anymore and prevent
-> > > > to register any fbdev framebuffer that conflicts with one already present.
-> > >
-> > > Hm that still feels like reinventing a driver model, badly.
-> > >
-> > > I think there's two cleaner solutions:
-> > > - move all the firmware driver platform_dev into sysfb.c, and then
-> > > just bind the special cases against that (e.g. offb, vga16fb and all
-> > > these). Then we'd have one sysfb_try_unregister(struct device *dev)
-> > > interface that fbmem.c uses.
-> > > - let fbmem.c call into each of these firmware device providers, which
-> > > means some loops most likely (like we can't call into vga16fb), so
-> > > probably need to move that into fbmem.c and it all gets a bit messy.
-> > >
-> > > > Let me know if you think that makes sense and I can attempt to write a fix.
-> > >
-> > > I still think unregistering the platform_dev properly makes the most
-> > 
-> > That doesn't sound very driver-model-aware to me. The device is what
-> > the driver binds to; it does not cease to exist.
-> 
-> I agree, that sounds odd.
-> 
-> The device should always stick around (as the bus creates it), it's up
-> to the driver to bind to the device as needed.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-The device actually disappears when the real driver takes over.
+> Demote pgtable list headings from title heading to chapter heading.
 
-The firmware fb is a special thing which only really exists as long as the
-firmware is in charge of the display hardware. As soon as a real driver
-takes over, it stops being a thing.
+This is a classic example of the sort of changelog that says *what* the
+patch does (which we can also see from the patch itself) but not *why*.
+Why do these headings need to be changed?
 
-And since a driver without a device is a bit a funny thing, we have been
-pushing towards a model where the firmware code sets up a platform_device
-for this fw interface, and the fw driver (efifb, simplefb and others like
-that) bind against it. And then we started to throw out that
-platform_device (which unbinds the fw driver and prevents it from ever
-rebinding), except in the wrong layer so there's a few races.
+Thanks,
 
-Should we throw out all that code and replace it with something else? What
-would that be like?
+jon
 
-Note that the fw side generally has not much clue which real device on
-some bus it corresponds to, that part is done through a bunch of magic
-tricks. Some of them are simply "I'm taking over a display, pls through
-out all fw drivers just to be sure".
-
-> > > sense, and feels like the most proper linux device model solution
-> > > instead of hacks on top - if the firmware fb is unuseable because a
-> > > native driver has taken over, we should nuke that. And also the
-> > > firmware fb driver would then just bind to that platform_dev if it
-> > > exists, and only if it exists. Also I think it should be the
-> > > responsibility of whichever piece of code that registers these
-> > > platform devices to ensure that platform_dev actually still exists.
-> > > That's why I think pushing all that code into sysfb.c is probably the
-> > > cleanest solution.
-> > 
-> > Can't you unbind the generic driver first, and bind the specific driver
-> > afterwards? Alike writing to sysfs unbind/driver_override/bind,
-> > but from code?
-> 
-> That too feels odd, what is so special about the fbdev code that the
-> normal driver functions do not work for them?  It shouldn't matter if
-> multiple subsystems register video devices, why can't we handle more
-> than one fb device?
-
-The specific driver binds to a completely different device (this one is
-more real), and sometimes has not much clue about what exactly the
-fw/legacy driver is doing.
-
-The special thing is that in fbdev we have "drivers" which are extremely
-thin shims around the fw driver, which has done all the real display setup
-for us. I don't think any other subsystem bothers with this, e.g. input
-just tells the fw to get lost and never tries to use the fw input support
-(stuff like the old horrors of emulating usb kbd as a ps/2 device and
-things like that which fw tended to do). Only with display drivers do we
-have this world where fairly often a fw driver is loaded first, and then
-quite a bit later in the boot process, the real driver loads. It's a bit
-like early serial console perhaps, to reduce the gap between when the
-kernel loads and when the real display driver is ready.
-
-Cheers, Daniel
-
-
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/vm/arch_pgtable_helpers.rst | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/vm/arch_pgtable_helpers.rst b/Documentation/vm/arch_pgtable_helpers.rst
+> index f8b225fc919047..cbaee9e592410f 100644
+> --- a/Documentation/vm/arch_pgtable_helpers.rst
+> +++ b/Documentation/vm/arch_pgtable_helpers.rst
+> @@ -13,7 +13,7 @@ Following tables describe the expected semantics which can also be tested during
+>  boot via CONFIG_DEBUG_VM_PGTABLE option. All future changes in here or the debug
+>  test need to be in sync.
+>  
+> -======================
+> +
+>  PTE Page Table Helpers
+>  ======================
+>  
+> @@ -79,7 +79,7 @@ PTE Page Table Helpers
+>  | ptep_set_access_flags     | Converts into a more permissive PTE              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -======================
+> +
+>  PMD Page Table Helpers
+>  ======================
+>  
+> @@ -153,7 +153,7 @@ PMD Page Table Helpers
+>  | pmdp_set_access_flags     | Converts into a more permissive PMD              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -======================
+> +
+>  PUD Page Table Helpers
+>  ======================
+>  
+> @@ -209,7 +209,7 @@ PUD Page Table Helpers
+>  | pudp_set_access_flags     | Converts into a more permissive PUD              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -==========================
+> +
+>  HugeTLB Page Table Helpers
+>  ==========================
+>  
+> @@ -235,7 +235,7 @@ HugeTLB Page Table Helpers
+>  | huge_ptep_set_access_flags  | Converts into a more permissive HugeTLB        |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -========================
+> +
+>  SWAP Page Table Helpers
+>  ========================
+>  
+>
+> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+> -- 
+> An old man doll... just what I always wanted! - Clara

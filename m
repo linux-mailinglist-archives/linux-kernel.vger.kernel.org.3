@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB7A4F4842
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4C84F4576
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbiDEVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1389423AbiDENdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352216AbiDEKEF (ORCPT
+        with ESMTP id S1345993AbiDEJXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:05 -0400
+        Tue, 5 Apr 2022 05:23:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB1AC938;
-        Tue,  5 Apr 2022 02:52:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292E5A8ED2;
+        Tue,  5 Apr 2022 02:12:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE4CFB81B76;
-        Tue,  5 Apr 2022 09:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E206C385A2;
-        Tue,  5 Apr 2022 09:52:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98831B818F3;
+        Tue,  5 Apr 2022 09:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1179C385A3;
+        Tue,  5 Apr 2022 09:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152375;
-        bh=BS9+xBaILP2NTve/YGTy5aoxWamiPKm3xneZ2z7LGuc=;
+        s=korg; t=1649149962;
+        bh=HmXyQy+1K/lealDgdQq2ot7mCjmICWhV+Bgh4pBkcn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2d7qWGL2njJwFsNLB2twJNCNGjZUWHXVN1dKJP7ssKay8Zoev9kaRNtEU6zBPxq6
-         89plCkKZXx4N+XxRc99zlsu60nzBVBqvHgF7nBjz4LU1pTxT7u3VG6mHfIDTP+j69r
-         rb6SNox7KkfLKlB/HS+ZHV6afl8YzlVCyRHbzQoA=
+        b=DKFs3s7VzLXfX61/QrJfyaJsJWdIMNfijBVdnjeGAoiSSh5cztwMEKyGOVaY3d8zZ
+         g0Ddn7ANVmDEQF/Qr/QZtpx0KxsJCiP/4P7m4v8GPZ5O6GsLn3dIZm2gG9083sV4yO
+         QfifREBxznTYinmPkJazEnFrvs6OC/XgXhg+nZxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 755/913] media: cx88-mpeg: clear interrupt status register before streaming video
+        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0904/1017] KVM: Prevent module exit until all VMs are freed
 Date:   Tue,  5 Apr 2022 09:30:17 +0200
-Message-Id: <20220405070402.464405716@linuxfoundation.org>
+Message-Id: <20220405070421.058915912@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+From: David Matlack <dmatlack@google.com>
 
-[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
+commit 5f6de5cbebee925a612856fce6f9182bb3eee0db upstream.
 
-Some cx88 video cards may have transport stream status interrupts set
-to 1 from cold start, causing errors like this:
+Tie the lifetime the KVM module to the lifetime of each VM via
+kvm.users_count. This way anything that grabs a reference to the VM via
+kvm_get_kvm() cannot accidentally outlive the KVM module.
 
-  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
-  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+Prior to this commit, the lifetime of the KVM module was tied to the
+lifetime of /dev/kvm file descriptors, VM file descriptors, and vCPU
+file descriptors by their respective file_operations "owner" field.
+This approach is insufficient because references grabbed via
+kvm_get_kvm() do not prevent closing any of the aforementioned file
+descriptors.
 
-According to CX2388x datasheet, the interrupt status register should be
-cleared before enabling IRQs to stream video.
+This fixes a long standing theoretical bug in KVM that at least affects
+async page faults. kvm_setup_async_pf() grabs a reference via
+kvm_get_kvm(), and drops it in an asynchronous work callback. Nothing
+prevents the VM file descriptor from being closed and the KVM module
+from being unloaded before this callback runs.
 
-Fix it by clearing the Transport Stream Interrupt Status register.
-
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: af585b921e5d ("KVM: Halt vcpu if page it tries to access is swapped out")
+Fixes: 3d3aab1b973b ("KVM: set owner of cpu and vm file operations")
+Cc: stable@vger.kernel.org
+Suggested-by: Ben Gardon <bgardon@google.com>
+[ Based on a patch from Ben implemented for Google's kernel. ]
+Signed-off-by: David Matlack <dmatlack@google.com>
+Message-Id: <20220303183328.1499189-2-dmatlack@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ virt/kvm/kvm_main.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index 680e1e3fe89b..2c1d5137ac47 100644
---- a/drivers/media/pci/cx88/cx88-mpeg.c
-+++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -162,6 +162,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
- 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
- 	q->count = 0;
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -117,6 +117,8 @@ EXPORT_SYMBOL_GPL(kvm_debugfs_dir);
  
-+	/* clear interrupt status register */
-+	cx_write(MO_TS_INTSTAT,  0x1f1111);
+ static const struct file_operations stat_fops_per_vm;
+ 
++static struct file_operations kvm_chardev_ops;
 +
- 	/* enable irqs */
- 	dprintk(1, "setting the interrupt mask\n");
- 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
--- 
-2.34.1
-
+ static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
+ 			   unsigned long arg);
+ #ifdef CONFIG_KVM_COMPAT
+@@ -1107,6 +1109,16 @@ static struct kvm *kvm_create_vm(unsigne
+ 	preempt_notifier_inc();
+ 	kvm_init_pm_notifier(kvm);
+ 
++	/*
++	 * When the fd passed to this ioctl() is opened it pins the module,
++	 * but try_module_get() also prevents getting a reference if the module
++	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
++	 */
++	if (!try_module_get(kvm_chardev_ops.owner)) {
++		r = -ENODEV;
++		goto out_err;
++	}
++
+ 	return kvm;
+ 
+ out_err:
+@@ -1196,6 +1208,7 @@ static void kvm_destroy_vm(struct kvm *k
+ 	preempt_notifier_dec();
+ 	hardware_disable_all();
+ 	mmdrop(mm);
++	module_put(kvm_chardev_ops.owner);
+ }
+ 
+ void kvm_get_kvm(struct kvm *kvm)
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09A84F46CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB1F4F4600
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239800AbiDEUpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S233735AbiDEUYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352392AbiDEKEc (ORCPT
+        with ESMTP id S1358255AbiDEK2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D810BBA327;
-        Tue,  5 Apr 2022 02:53:12 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F477655;
+        Tue,  5 Apr 2022 03:17:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 765486172B;
-        Tue,  5 Apr 2022 09:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F44C385A1;
-        Tue,  5 Apr 2022 09:53:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E98FFB81CB3;
+        Tue,  5 Apr 2022 10:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E829C385A0;
+        Tue,  5 Apr 2022 10:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152391;
-        bh=fwLcSYhjpEckNUeRMKC+GvUQzd+OndIHzBsm1iYLhc0=;
+        s=korg; t=1649153844;
+        bh=JbaZZu96NMk2NGaOOEFcIIrtri2HPW2g9NuKPNcasSs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acYRTLt9iqKhKOT4sc/1//lxNB6R8qGxgorgEO8rUfqwuHqMU37zy9QR7jPtAHk/Q
-         pIedEn5InHQ3qYUYroIqfpERsdtg3N0zLHwAPChoIDQKIZg8NvMN6qnOjUZHB1YAG7
-         hNlwXTzBV+foe1au5JBn/u7mHaRxqFaVaLA2SzhY=
+        b=X7tjd8IYoDVkB23uzjMp2gVnM101ksxUfFJcbBAR7yIKuuNVfCQbbzOzv8EV1k1xd
+         jwG2A67fSX4UGABC6z26+HjE75BDKye3VZCcwDSEVNs93UTVQw3gopyWXrjaapMkGK
+         hRcfBdrIfh/SbrWqZd6C0isP8N8e02cX7i7osnfE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 760/913] ASoC: amd: vg: fix for pm resume callback sequence
-Date:   Tue,  5 Apr 2022 09:30:22 +0200
-Message-Id: <20220405070402.613986123@linuxfoundation.org>
+Subject: [PATCH 5.10 329/599] gpu: host1x: Fix a memory leak in host1x_remove()
+Date:   Tue,  5 Apr 2022 09:30:23 +0200
+Message-Id: <20220405070308.623593005@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,116 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 83b713619ee1b15e09eae11a92a7f3305534223d ]
+[ Upstream commit 025c6643a81564f066d8381b9e2f4603e0f8438f ]
 
-The previous condition is used to cross check only the active
-stream status for I2S HS instance playback and capture use cases.
+Add a missing 'host1x_channel_list_free()' call in the remove function,
+as already done in the error handling path of the probe function.
 
-Modified logic to invoke sequence for two i2s controller instances.
-
-This also fixes warnings reported by kernel robot:
-"warning: variable 'frmt_val' set but not used"
-"warning: variable 'reg_val' set but not used"
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Link: https://lore.kernel.org/r/20220225193054.24916-1-Vijendar.Mukunda@amd.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 8474b02531c4 ("gpu: host1x: Refactor channel allocation code")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/amd/vangogh/acp5x-pcm-dma.c | 66 +++++++++++++--------------
- 1 file changed, 33 insertions(+), 33 deletions(-)
+ drivers/gpu/host1x/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-index 6abcc2133a2c..bfca4cf423cf 100644
---- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-+++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-@@ -426,51 +426,51 @@ static int acp5x_audio_remove(struct platform_device *pdev)
- static int __maybe_unused acp5x_pcm_resume(struct device *dev)
- {
- 	struct i2s_dev_data *adata;
--	u32 val, reg_val, frmt_val;
-+	struct i2s_stream_instance *rtd;
-+	u32 val;
+diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+index a2c09dca4eef..8659558b518d 100644
+--- a/drivers/gpu/host1x/dev.c
++++ b/drivers/gpu/host1x/dev.c
+@@ -520,6 +520,7 @@ static int host1x_remove(struct platform_device *pdev)
+ 	host1x_syncpt_deinit(host);
+ 	reset_control_assert(host->rst);
+ 	clk_disable_unprepare(host->clk);
++	host1x_channel_list_free(&host->channel_list);
+ 	host1x_iommu_exit(host);
  
--	reg_val = 0;
--	frmt_val = 0;
- 	adata = dev_get_drvdata(dev);
- 
- 	if (adata->play_stream && adata->play_stream->runtime) {
--		struct i2s_stream_instance *rtd =
--			adata->play_stream->runtime->private_data;
-+		rtd = adata->play_stream->runtime->private_data;
- 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
--		switch (rtd->i2s_instance) {
--		case I2S_HS_INSTANCE:
--			reg_val = ACP_HSTDM_ITER;
--			frmt_val = ACP_HSTDM_TXFRMT;
--			break;
--		case I2S_SP_INSTANCE:
--		default:
--			reg_val = ACP_I2STDM_ITER;
--			frmt_val = ACP_I2STDM_TXFRMT;
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
-+		}
-+	}
-+	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
-+		rtd = adata->i2ssp_play_stream->runtime->private_data;
-+		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
- 		}
--		acp_writel((rtd->xfer_resolution  << 3),
--			   rtd->acp5x_base + reg_val);
- 	}
- 
- 	if (adata->capture_stream && adata->capture_stream->runtime) {
--		struct i2s_stream_instance *rtd =
--			adata->capture_stream->runtime->private_data;
-+		rtd = adata->capture_stream->runtime->private_data;
- 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
--		switch (rtd->i2s_instance) {
--		case I2S_HS_INSTANCE:
--			reg_val = ACP_HSTDM_IRER;
--			frmt_val = ACP_HSTDM_RXFRMT;
--			break;
--		case I2S_SP_INSTANCE:
--		default:
--			reg_val = ACP_I2STDM_IRER;
--			frmt_val = ACP_I2STDM_RXFRMT;
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
- 		}
--		acp_writel((rtd->xfer_resolution  << 3),
--			   rtd->acp5x_base + reg_val);
- 	}
--	if (adata->tdm_mode == TDM_ENABLE) {
--		acp_writel(adata->tdm_fmt, adata->acp5x_base + frmt_val);
--		val = acp_readl(adata->acp5x_base + reg_val);
--		acp_writel(val | 0x2, adata->acp5x_base + reg_val);
-+	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
-+		rtd = adata->i2ssp_capture_stream->runtime->private_data;
-+		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-+		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
-+		if (adata->tdm_mode == TDM_ENABLE) {
-+			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
-+			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
-+			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
-+		}
- 	}
- 	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
  	return 0;
 -- 
 2.34.1

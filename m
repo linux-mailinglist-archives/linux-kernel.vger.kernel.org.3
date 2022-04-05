@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D274F4745
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6DB4F4643
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354367AbiDEVFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S1384341AbiDENcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353042AbiDEKFd (ORCPT
+        with ESMTP id S1345794AbiDEJXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C224BD7D9;
-        Tue,  5 Apr 2022 02:54:11 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D99D0E8;
+        Tue,  5 Apr 2022 02:12:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D4E961743;
-        Tue,  5 Apr 2022 09:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4D6C385A1;
-        Tue,  5 Apr 2022 09:54:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85C82B80DA1;
+        Tue,  5 Apr 2022 09:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3B2C385A0;
+        Tue,  5 Apr 2022 09:12:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152450;
-        bh=9kDFyJtz5aRFD1HOBnwM1kO3is+NlX0c7whwfOn5IIw=;
+        s=korg; t=1649149932;
+        bh=Y1PEmIAZMnzpISyH6SBsQsjo9DqagN4V+23i6TnvIKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eD2XDz5cYFX0eWXcZI330shMgpH2GN1EBy0bddRUryRhZ2OE3SsMybpAjk2WT4Pf8
-         tI7Oqp17cGnJiaXRgrFEfZiRJqC+NnBI2FfVU0Hl3QVqaP4ZRYZmnu9OKoDqrb3J23
-         UzN78wlZgbw1o8gP94QV4QorTfDMFkHM6K4LVxuw=
+        b=Pn+YF36P/YHALl7dIVHsuby+A8dAOxIXXFc8pGo8Aw7G67CQhQtDrfG8SbuRd9JxC
+         ggYK+9gKuULOfn0XTpuRljGwaYoz6aq0tiMThY56Em+1pVcFte7yOpddAOVrEVCwhX
+         JKJbVAd27fAL4PXHeHG7kryh8HJuQOgwFizA2Tv0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 744/913] media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2 regulator off on some boards
-Date:   Tue,  5 Apr 2022 09:30:06 +0200
-Message-Id: <20220405070402.135881972@linuxfoundation.org>
+        stable@vger.kernel.org, Marco Patalano <mpatalan@redhat.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.16 0894/1017] scsi: qla2xxx: Fix crash during module load unload test
+Date:   Tue,  5 Apr 2022 09:30:07 +0200
+Message-Id: <20220405070420.764804490@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Arun Easi <aeasi@marvell.com>
 
-[ Upstream commit 2c39a01154ea57d596470afa1d278e3be3b37f6a ]
+commit 0972252450f90db56dd5415a20e2aec21a08d036 upstream.
 
-The TrekStor SurfTab duo W1 10.1 has a hw bug where turning eldo2 back on
-after having turned it off causes the CPLM3218 ambient-light-sensor on
-the front camera sensor's I2C bus to crash, hanging the bus.
+During purex packet handling the driver was incorrectly freeing a
+pre-allocated structure. Fix this by skipping that entry.
 
-Add a DMI quirk table for systems on which to leave eldo2 on.
+System crashed with the following stack during a module unload test.
 
-Note an alternative fix is to turn off the CPLM3218 ambient-light-sensor
-as long as the camera sensor is being used, this is what Windows seems
-to do as a workaround (based on analyzing the DSDT). But that is not
-easy to do cleanly under Linux.
+Call Trace:
+	sbitmap_init_node+0x7f/0x1e0
+	sbitmap_queue_init_node+0x24/0x150
+	blk_mq_init_bitmaps+0x3d/0xa0
+	blk_mq_init_tags+0x68/0x90
+	blk_mq_alloc_map_and_rqs+0x44/0x120
+	blk_mq_alloc_set_map_and_rqs+0x63/0x150
+	blk_mq_alloc_tag_set+0x11b/0x230
+	scsi_add_host_with_dma.cold+0x3f/0x245
+	qla2x00_probe_one+0xd5a/0x1b80 [qla2xxx]
 
-Link: https://lore.kernel.org/linux-media/20220116215204.307649-10-hdegoede@redhat.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Call Trace with slub_debug and debug kernel:
+	kasan_report_invalid_free+0x50/0x80
+	__kasan_slab_free+0x137/0x150
+	slab_free_freelist_hook+0xc6/0x190
+	kfree+0xe8/0x2e0
+	qla2x00_free_device+0x3bb/0x5d0 [qla2xxx]
+	qla2x00_remove_one+0x668/0xcf0 [qla2xxx]
+
+Link: https://lore.kernel.org/r/20220310092604.22950-6-njavali@marvell.com
+Fixes: 62e9dd177732 ("scsi: qla2xxx: Change in PUREX to handle FPIN ELS requests")
+Cc: stable@vger.kernel.org
+Reported-by: Marco Patalano <mpatalan@redhat.com>
+Tested-by: Marco Patalano <mpatalan@redhat.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/scsi/qla2xxx/qla_os.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 62dc06e22476..cd0a771454da 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -729,6 +729,21 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
- 	return 0;
- }
- 
-+/*
-+ * Some boards contain a hw-bug where turning eldo2 back on after having turned
-+ * it off causes the CPLM3218 ambient-light-sensor on the image-sensor's I2C bus
-+ * to crash, hanging the bus. Do not turn eldo2 off on these systems.
-+ */
-+static const struct dmi_system_id axp_leave_eldo2_on_ids[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)"),
-+		},
-+	},
-+	{ }
-+};
-+
- static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
- {
- 	int ret;
-@@ -763,6 +778,9 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
- 	if (ret)
- 		return ret;
- 
-+	if (dmi_check_system(axp_leave_eldo2_on_ids))
-+		return 0;
-+
- 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
- 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, false);
- 	return ret;
--- 
-2.34.1
-
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3896,6 +3896,8 @@ qla24xx_free_purex_list(struct purex_lis
+ 	spin_lock_irqsave(&list->lock, flags);
+ 	list_for_each_entry_safe(item, next, &list->head, list) {
+ 		list_del(&item->list);
++		if (item == &item->vha->default_item)
++			continue;
+ 		kfree(item);
+ 	}
+ 	spin_unlock_irqrestore(&list->lock, flags);
 
 

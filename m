@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88D14F41F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE914F421D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356962AbiDENI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S1357259AbiDENIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344063AbiDEJRZ (ORCPT
+        with ESMTP id S1344091AbiDEJSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:17:25 -0400
+        Tue, 5 Apr 2022 05:18:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03609237C2;
-        Tue,  5 Apr 2022 02:03:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05CC2FE42;
+        Tue,  5 Apr 2022 02:04:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E0161571;
-        Tue,  5 Apr 2022 09:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D037C385A0;
-        Tue,  5 Apr 2022 09:03:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B37B61572;
+        Tue,  5 Apr 2022 09:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C49C385A1;
+        Tue,  5 Apr 2022 09:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149437;
-        bh=TYK4B6kjg7vfkpzhpVpnNb+aVZu1hz8gIrRdAKmIiQs=;
+        s=korg; t=1649149442;
+        bh=jQPU+iVWdRJO/Zf9E9j5Fx4xuwiHUlqhxnNThXYz8Sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OAUJo0GY8b0+U7fKmaecLpK8Ml/Q2JJkCz/wXgXS7Sy8CA80G/wc4ct91290/xwgL
-         7Ks2Xc+3JH8xOyaSS0ooIuVj5AFdK65jSJ0tUwDcZH45PdNUoBTEX1+cfIBaixqAYR
-         qkkr3bx1ULmLgn8Pffuw8A3D+UdQmjCnK3B87ces=
+        b=1SW6pHAOgrAEfhQzYC7+GcNCbzAqRaV9Tee+Bg4PwtPwUs/izlvDnJOVe1qYkOjud
+         vr4JE/HgCwnBf6JqUCtdsqVr8MVfq7FuwJ0bX1Pd/Y9WPKJZmoHWMNzvM8/591hNSx
+         ZzZxECUzvlfB7shAKMYLORJVmyKu9tzhhzNdwMnc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0676/1017] clk: at91: sama7g5: fix parents of PDMCs GCLK
-Date:   Tue,  5 Apr 2022 09:26:29 +0200
-Message-Id: <20220405070414.345995610@linuxfoundation.org>
+Subject: [PATCH 5.16 0678/1017] clk: qcom: clk-rcg2: Update the frac table for pixel clock
+Date:   Tue,  5 Apr 2022 09:26:31 +0200
+Message-Id: <20220405070414.404095514@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,46 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Taniya Das <tdas@codeaurora.org>
 
-[ Upstream commit 1a944729d8635fa59638f24e8727d5ccaa0c8c19 ]
+[ Upstream commit b527358cb4cd58a8279c9062b0786f1fab628fdc ]
 
-Audio PLL can be used as parent by the GCLKs of PDMCs.
+Support the new numerator and denominator for pixel clock on SM8350 and
+support rgb101010, RGB888 use cases on SM8450.
 
-Fixes: cb783bbbcf54 ("clk: at91: sama7g5: add clock support for sama7g5")
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220304182616.1920392-1-codrin.ciubotariu@microchip.com
+Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220227175536.3131-2-tdas@codeaurora.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/at91/sama7g5.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/clk/qcom/clk-rcg2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 369dfafabbca..060e908086a1 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -696,16 +696,16 @@ static const struct {
- 	{ .n  = "pdmc0_gclk",
- 	  .id = 68,
- 	  .r = { .max = 50000000  },
--	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
--	  .pp_mux_table = { 5, 8, },
-+	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
-+	  .pp_mux_table = { 5, 9, },
- 	  .pp_count = 2,
- 	  .pp_chg_id = INT_MIN, },
- 
- 	{ .n  = "pdmc1_gclk",
- 	  .id = 69,
- 	  .r = { .max = 50000000, },
--	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
--	  .pp_mux_table = { 5, 8, },
-+	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
-+	  .pp_mux_table = { 5, 9, },
- 	  .pp_count = 2,
- 	  .pp_chg_id = INT_MIN, },
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index b831975a9606..f675fd969c4d 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -729,6 +729,7 @@ static const struct frac_entry frac_table_pixel[] = {
+ 	{ 2, 9 },
+ 	{ 4, 9 },
+ 	{ 1, 1 },
++	{ 2, 3 },
+ 	{ }
+ };
  
 -- 
 2.34.1

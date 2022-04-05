@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326054F4B5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498D34F4900
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574377AbiDEWzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S1389301AbiDEV7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573239AbiDESbC (ORCPT
+        with ESMTP id S1573250AbiDESdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:31:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C86713F6B;
-        Tue,  5 Apr 2022 11:29:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0B7A618CE;
-        Tue,  5 Apr 2022 18:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE7BC385A0;
-        Tue,  5 Apr 2022 18:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649183341;
-        bh=RipF2sDxCVo9q2EK1KCVAMcx4kdSJtLIqkmkUKxesng=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UDtQPEvYZ04ZzfdoEjWld2hT2TMhLGg0yXVXsBO/Ak7o4umpRfbxucC7Z99uXH7cW
-         AjL4HQ8Cv2Q8/ii4mTu2moWoeSOc8jQbnGrub/IfxgaD11iFCrc7AQLER7gTOkSQXP
-         chHYTnCdfoqzHBcMCd7WyVxJciFaqtrMjwLdUqwJyUkfm+FgY2nV4fTRxSE8O1BbHH
-         4fqeSNDohq6f3/6vMQCIzJPzDiQn6HcWxLzP246GXjbwvh6iLdQIL8dcGsm/WXtVcq
-         m+dhqLcYc3gy8QaSnDiahvft4KfubFEEGkGLbLeLaBFBtUhG7rTt95XU8mdHLynpFW
-         yJ9r2pMNTlrxQ==
-Message-ID: <13a43c8d9e9d103009e652e7e8ff49e6844316d5.camel@kernel.org>
-Subject: Re: [PATCH RFC] x86/sgx: Simplify struct
- sgx_enclave_restrict_permissions
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.rog
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Date:   Tue, 05 Apr 2022 21:30:10 +0300
-In-Reply-To: <76c6e673-71fb-1068-0114-c3eea93a2fd4@intel.com>
-References: <20220405151642.96096-1-jarkko@kernel.org>
-         <76c6e673-71fb-1068-0114-c3eea93a2fd4@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.4 
+        Tue, 5 Apr 2022 14:33:09 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2A913F81
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:31:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z12so24774334lfu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yax7P8EHkvsWnyvnaOpe3ZP8r2G7HKN+i3pXtBsfClM=;
+        b=AlOylQ0jQKVcFM1G55vgGfIw3N7jIKcPb8Fyyp/oULoQtqlhNXFckkFd9+WqoIycaG
+         j3uSXFSnN9MUKlSNkyQuzzYQaqjV8XGOAV98W2dX0/cu0rYAgesS6ZgugsjdK/H/2jkk
+         fnbt8Gy5iVlTh1oKRiKygkFT2D7usXujbRj9wtNhFNlx0xb1yHFF5nZCSug2Yffskd6k
+         SQbOTL8qdWillxUg7Hfyk1Z4yt900US5/buZ6HSUAnvFJUJzW3ZTTDpX+yeyxCzbWSFK
+         f/y1ax+r51kD23D/27l7CsWDA8dkGaWmjrSo4eFHKK9DHWERyMZIp7K7VdiMTWXaCd66
+         t7Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yax7P8EHkvsWnyvnaOpe3ZP8r2G7HKN+i3pXtBsfClM=;
+        b=buQahpw01XwzxpClucWcNEWCeBLnkS4lpP65I31PbvejS2LZ2sSEkT547PL6RIDKqx
+         VLlw/c0LN6EUoukge228Ubziag6eFpGLx4YnfTYNhXTRibHwSd/xlQ1kXJBURmbPxaAg
+         2/aj2rYSDP51FxKtQxJpDeh+nskoJD9VQUuNlSSIUJSWfUFIC2YRSO7A2oNoPe3tP5M5
+         R7YwFu8YmY7vGG5wk3FmYO8AH/yla/1CWWBe963zuU/iE75KaALbU9WJ9Dyz2riazRIu
+         EKMRGFcoSIeQ3DAcD3bjjKdVQUZj0WQ93WuVN5t3ICOJG1dRAsFQClKNUqpQ5jjCLFED
+         suzA==
+X-Gm-Message-State: AOAM531QXaTsZlhsORrmGr8a9IVgKN+ckFH2jTQ2Y4I0IXxziqP6jRjA
+        urPesaDuR14wBkwttLDq2BahSA9KG63Bmw==
+X-Google-Smtp-Source: ABdhPJyytKONlFFPhM6uOSKsPqQ+53tg6aHeIXEVboaJV0vQ5E/W25OXeJQjKEHyzo/lHMBfI33Qlw==
+X-Received: by 2002:a05:6512:2347:b0:44a:6e3f:74f7 with SMTP id p7-20020a056512234700b0044a6e3f74f7mr3457813lfu.660.1649183468960;
+        Tue, 05 Apr 2022 11:31:08 -0700 (PDT)
+Received: from noname.. ([2a02:2698:8c2a:226e:6d9:f5ff:fecb:a8ab])
+        by smtp.googlemail.com with ESMTPSA id c5-20020a2e9d85000000b0024b1571209csm800133ljj.0.2022.04.05.11.31.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 11:31:08 -0700 (PDT)
+From:   Grigory Vasilyev <h0tc0d3@gmail.com>
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Jiawei Gu <Jiawei.Gu@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: Accessing to a null pointer
+Date:   Tue,  5 Apr 2022 21:30:19 +0300
+Message-Id: <20220405183020.9422-1-h0tc0d3@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-05 at 10:21 -0700, Reinette Chatre wrote:
-> Hi Jarkko,
->=20
-> On 4/5/2022 8:16 AM, Jarkko Sakkinen wrote:
-> > The reasoning to change SECINFO to simply flags is stated in this inlin=
-e
-> > comment:
-> >=20
-> > /*
-> > =C2=A0* Return valid permission fields from a secinfo structure provide=
-d by
-> > =C2=A0* user space. The secinfo structure is required to only have bits=
- in
-> > =C2=A0* the permission fields set.
-> > =C2=A0*/
-> >=20
-> > It is better to simply change the parameter type than require to use
-> > a malformed version of a data structure.
->=20
-> Could you please elaborate what is malformed?
+A typo in the code. It was assumed that it was
+possible to shift the pointer to sizeof(BIOS_ATOM_PREFIX) - 1.
 
-The structure that is accepted by the API. According to SDM permission
-changes are done with a structure where PT_REG is set, which gives
--EINVAL. I categorize it as a bug.
+Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/atom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR, Jarkko
+diff --git a/drivers/gpu/drm/amd/amdgpu/atom.c b/drivers/gpu/drm/amd/amdgpu/atom.c
+index e729973af3c9..be9d61bcb8ae 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atom.c
++++ b/drivers/gpu/drm/amd/amdgpu/atom.c
+@@ -1426,7 +1426,7 @@ static void atom_get_vbios_pn(struct atom_context *ctx)
+ 
+ 	if (*vbios_str == 0) {
+ 		vbios_str = atom_find_str_in_rom(ctx, BIOS_ATOM_PREFIX, 3, 1024, 64);
+-		if (vbios_str == NULL)
++		if (vbios_str != NULL)
+ 			vbios_str += sizeof(BIOS_ATOM_PREFIX) - 1;
+ 	}
+ 	if (vbios_str != NULL && *vbios_str == 0)
+-- 
+2.35.1
+

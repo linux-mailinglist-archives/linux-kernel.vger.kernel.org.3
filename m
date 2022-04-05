@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAD44F2DB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C122A4F2CDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352873AbiDEKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S1353022AbiDEKF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238723AbiDEIaz (ORCPT
+        with ESMTP id S239488AbiDEIbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:55 -0400
+        Tue, 5 Apr 2022 04:31:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86435860;
-        Tue,  5 Apr 2022 01:22:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511BF69CD1;
+        Tue,  5 Apr 2022 01:23:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B054DB81B92;
-        Tue,  5 Apr 2022 08:22:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235A2C385A0;
-        Tue,  5 Apr 2022 08:22:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52E2FB81BC3;
+        Tue,  5 Apr 2022 08:23:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EBEC385A0;
+        Tue,  5 Apr 2022 08:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146960;
-        bh=uV0+HtcXJ22mDTGuuOc5n2oLv0BJ/rULAiWaCYiFIRg=;
+        s=korg; t=1649147007;
+        bh=Isa5lLGUypQQZmnkX08Z4fxZNNXOrlB9B2FkkAfrJds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zZprUE0CsnCpBsEVhuqj4+Ovr0nheZwPE6yAOxx1nrSTq2McRco4XGjfhrEghxLT5
-         IKXNPTqdODX6tN7PoMBjLaRLLnnOQzde9rCPkVS/sonNH2dMJ1WvrstDI3TeJNbe6j
-         Zr7uoNNf3WcEngbOXn5dIGUzH9qkOSahjJ57OiD4=
+        b=MC/J1vMoKqcepF/fz97+nq2fmfuHkSlG5J7vDBCA3FjG4zBOrk7W7j0v8K+XZpM9L
+         srPjDON5t+SD27Zri5JyUOcOldm8/aaN5117ftb7M6qth8c9uSLeWP4+dRCw9l6Ne5
+         oklQjunnh98F9bVWkrMDQFc6waWE5svmCgWZpdV0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 0950/1126] KVM: SVM: Allow AVIC support on system w/ physical APIC ID > 255
-Date:   Tue,  5 Apr 2022 09:28:17 +0200
-Message-Id: <20220405070435.389761780@linuxfoundation.org>
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Michael Neuling <mikey@neuling.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.17 0961/1126] powerpc/tm: Fix more userspace r13 corruption
+Date:   Tue,  5 Apr 2022 09:28:28 +0200
+Message-Id: <20220405070435.713928313@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,89 +55,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+From: Nicholas Piggin <npiggin@gmail.com>
 
-commit 4a204f7895878363ca8211f50ec610408c8c70aa upstream.
+commit 9d71165d3934e607070c4e48458c0cf161b1baea upstream.
 
-Expand KVM's mask for the AVIC host physical ID to the full 12 bits defined
-by the architecture.  The number of bits consumed by hardware is model
-specific, e.g. early CPUs ignored bits 11:8, but there is no way for KVM
-to enumerate the "true" size.  So, KVM must allow using all bits, else it
-risks rejecting completely legal x2APIC IDs on newer CPUs.
+Commit cf13435b730a ("powerpc/tm: Fix userspace r13 corruption") fixes a
+problem in treclaim where a SLB miss can occur on the
+thread_struct->ckpt_regs while SCRATCH0 is live with the saved user r13
+value, clobbering it with the kernel r13 and ultimately resulting in
+kernel r13 being stored in ckpt_regs.
 
-This means KVM relies on hardware to not assign x2APIC IDs that exceed the
-"true" width of the field, but presumably hardware is smart enough to tie
-the width to the max x2APIC ID.  KVM also relies on hardware to support at
-least 8 bits, as the legacy xAPIC ID is writable by software.  But, those
-assumptions are unavoidable due to the lack of any way to enumerate the
-"true" width.
+There is an equivalent problem in trechkpt where the user r13 value is
+loaded into r13 from chkpt_regs to be recheckpointed, but a SLB miss
+could occur on ckpt_regs accesses after that, which will result in r13
+being clobbered with a kernel value and that will get recheckpointed and
+then restored to user registers.
 
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Fixes: 44a95dae1d22 ("KVM: x86: Detect and Initialize AVIC support")
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Message-Id: <20220211000851.185799-1-suravee.suthikulpanit@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+The same memory page is accessed right before this critical window where
+a SLB miss could cause corruption, so hitting the bug requires the SLB
+entry be removed within a small window of instructions, which is
+possible if a SLB related MCE hits there. PAPR also permits the
+hypervisor to discard this SLB entry (because slb_shadow->persistent is
+only set to SLB_NUM_BOLTED) although it's not known whether any
+implementations would do this (KVM does not). So this is an extremely
+unlikely bug, only found by inspection.
+
+Fix this by also storing user r13 in a temporary location on the kernel
+stack and don't change the r13 register from kernel r13 until the RI=0
+critical section that does not fault.
+
+The SCRATCH0 change is not strictly part of the fix, it's only used in
+the RI=0 section so it does not have the same problem as the previous
+SCRATCH0 bug.
+
+Fixes: 98ae22e15b43 ("powerpc: Add helper functions for transactional memory context switching")
+Cc: stable@vger.kernel.org # v3.9+
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Acked-by: Michael Neuling <mikey@neuling.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220311024733.48926-1-npiggin@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/svm.h |    2 +-
- arch/x86/kvm/svm/avic.c    |    7 +------
- arch/x86/kvm/svm/svm.h     |   11 +++++++++++
- 3 files changed, 13 insertions(+), 7 deletions(-)
+ arch/powerpc/kernel/tm.S |   25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
---- a/arch/x86/include/asm/svm.h
-+++ b/arch/x86/include/asm/svm.h
-@@ -226,7 +226,7 @@ struct __attribute__ ((__packed__)) vmcb
- #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
- #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
+--- a/arch/powerpc/kernel/tm.S
++++ b/arch/powerpc/kernel/tm.S
+@@ -443,7 +443,8 @@ restore_gprs:
  
--#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
-+#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	GENMASK_ULL(11, 0)
- #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
- #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
- #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -927,17 +927,12 @@ out:
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- {
- 	u64 entry;
--	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
- 	int h_physical_id = kvm_cpu_get_apicid(cpu);
- 	struct vcpu_svm *svm = to_svm(vcpu);
+ 	REST_GPR(0, r7)				/* GPR0 */
+ 	REST_GPRS(2, 4, r7)			/* GPR2-4 */
+-	REST_GPRS(8, 31, r7)			/* GPR8-31 */
++	REST_GPRS(8, 12, r7)			/* GPR8-12 */
++	REST_GPRS(14, 31, r7)			/* GPR14-31 */
  
- 	lockdep_assert_preemption_disabled();
- 
--	/*
--	 * Since the host physical APIC id is 8 bits,
--	 * we can support host APIC ID upto 255.
--	 */
--	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-+	if (WARN_ON(h_physical_id & ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
- 		return;
+ 	/* Load up PPR and DSCR here so we don't run with user values for long */
+ 	mtspr	SPRN_DSCR, r5
+@@ -479,18 +480,24 @@ restore_gprs:
+ 	REST_GPR(6, r7)
  
  	/*
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -558,6 +558,17 @@ extern struct kvm_x86_nested_ops svm_nes
+-	 * Store r1 and r5 on the stack so that we can access them after we
+-	 * clear MSR RI.
++	 * Store user r1 and r5 and r13 on the stack (in the unused save
++	 * areas / compiler reserved areas), so that we can access them after
++	 * we clear MSR RI.
+ 	 */
  
- /* avic.c */
+ 	REST_GPR(5, r7)
+ 	std	r5, -8(r1)
+-	ld	r5, GPR1(r7)
++	ld	r5, GPR13(r7)
+ 	std	r5, -16(r1)
++	ld	r5, GPR1(r7)
++	std	r5, -24(r1)
  
-+#define AVIC_LOGICAL_ID_ENTRY_GUEST_PHYSICAL_ID_MASK	(0xFF)
-+#define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
-+#define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
+ 	REST_GPR(7, r7)
+ 
+-	/* Clear MSR RI since we are about to use SCRATCH0. EE is already off */
++	/* Stash the stack pointer away for use after recheckpoint */
++	std	r1, PACAR1(r13)
 +
-+#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	GENMASK_ULL(11, 0)
-+#define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
-+#define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
-+#define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
-+
-+#define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
-+
- int avic_ga_log_notifier(u32 ga_tag);
- void avic_vm_destroy(struct kvm *kvm);
- int avic_vm_init(struct kvm *kvm);
++	/* Clear MSR RI since we are about to clobber r13. EE is already off */
+ 	li	r5, 0
+ 	mtmsrd	r5, 1
+ 
+@@ -501,9 +508,9 @@ restore_gprs:
+ 	 * until we turn MSR RI back on.
+ 	 */
+ 
+-	SET_SCRATCH0(r1)
+ 	ld	r5, -8(r1)
+-	ld	r1, -16(r1)
++	ld	r13, -16(r1)
++	ld	r1, -24(r1)
+ 
+ 	/* Commit register state as checkpointed state: */
+ 	TRECHKPT
+@@ -519,9 +526,9 @@ restore_gprs:
+ 	 */
+ 
+ 	GET_PACA(r13)
+-	GET_SCRATCH0(r1)
++	ld	r1, PACAR1(r13)
+ 
+-	/* R1 is restored, so we are recoverable again.  EE is still off */
++	/* R13, R1 is restored, so we are recoverable again.  EE is still off */
+ 	li	r4, MSR_RI
+ 	mtmsrd	r4, 1
+ 
 
 

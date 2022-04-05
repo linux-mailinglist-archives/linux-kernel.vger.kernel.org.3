@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAB84F2FF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841634F363F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241197AbiDEKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S1344068AbiDEK7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241662AbiDEIfF (ORCPT
+        with ESMTP id S242271AbiDEIhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:35:05 -0400
+        Tue, 5 Apr 2022 04:37:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8935C11A3C;
-        Tue,  5 Apr 2022 01:32:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F8D1C915;
+        Tue,  5 Apr 2022 01:32:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA80EB81C19;
-        Tue,  5 Apr 2022 08:32:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C2DC385A0;
-        Tue,  5 Apr 2022 08:32:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B085B81C69;
+        Tue,  5 Apr 2022 08:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA976C385A0;
+        Tue,  5 Apr 2022 08:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147525;
-        bh=4OvB7EdZuNT8kdmTDQ2yED1bKkQrmupQ5BoSD9gf6Ek=;
+        s=korg; t=1649147553;
+        bh=03Ws9qQgvQwf9mtv7tPWt+LryrlarzUFcRPDufIyokE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bmRMhthzdQsRoFDdrk/vrOinntDJezmi3PtBtp9TW6h6XCX076GFH9VlKNUg/E3+l
-         vhurt3i58GhSqlcbaA9SOGzIYisrqpU2rWL/iYqBtxf977Nh+eUnxpJiKcrv2lmA3z
-         KuDRFthmsEvq2Zdsf+ogtlp/Nv1OGQmMSnSt+SKs=
+        b=kGX27FcRvhPjMCW0rtlLb1Mldk8bVzVRr7cU7WpsQAllQV7y030Vd12+pFFmBrTWr
+         nqST0stx204WeMAVPiTWo4ZZkP589dPYJM3kaJKJ5DI/rKmxDH6GddIy7CQqg8BMat
+         pqP6g6gxL8Pikb7LkeATYVqFik6Oz8K+YgV1gb4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.16 0027/1017] drm/amdgpu: only check for _PR3 on dGPUs
-Date:   Tue,  5 Apr 2022 09:15:40 +0200
-Message-Id: <20220405070354.983759601@linuxfoundation.org>
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [PATCH 5.16 0038/1017] mei: me: disable driver on the ign firmware
+Date:   Tue,  5 Apr 2022 09:15:51 +0200
+Message-Id: <20220405070355.310457936@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,35 +55,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-commit 85ac2021fe3ace59cc0afd6edf005abad35625b0 upstream.
+commit ccdf6f806fbf559f7c29ed9302a7c1b4da7fd37f upstream.
 
-We don't support runtime pm on APUs.  They support more
-dynamic power savings using clock and powergating.
+Add a quirk to disable MEI interface on Intel PCH Ignition (IGN)
+as the IGN firmware doesn't support the protocol.
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Link: https://lore.kernel.org/r/20220215080438.264876-1-tomas.winkler@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/misc/mei/hw-me-regs.h |    1 +
+ drivers/misc/mei/hw-me.c      |   23 ++++++++++++-----------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2144,8 +2144,10 @@ static int amdgpu_device_ip_early_init(s
- 	    !pci_is_thunderbolt_attached(to_pci_dev(dev->dev)))
- 		adev->flags |= AMD_IS_PX;
+--- a/drivers/misc/mei/hw-me-regs.h
++++ b/drivers/misc/mei/hw-me-regs.h
+@@ -120,6 +120,7 @@
+ #define PCI_CFG_HFS_2         0x48
+ #define PCI_CFG_HFS_3         0x60
+ #  define PCI_CFG_HFS_3_FW_SKU_MSK   0x00000070
++#  define PCI_CFG_HFS_3_FW_SKU_IGN   0x00000000
+ #  define PCI_CFG_HFS_3_FW_SKU_SPS   0x00000060
+ #define PCI_CFG_HFS_4         0x64
+ #define PCI_CFG_HFS_5         0x68
+--- a/drivers/misc/mei/hw-me.c
++++ b/drivers/misc/mei/hw-me.c
+@@ -1405,16 +1405,16 @@ static bool mei_me_fw_type_sps_4(const s
+ 	.quirk_probe = mei_me_fw_type_sps_4
  
--	parent = pci_upstream_bridge(adev->pdev);
--	adev->has_pr3 = parent ? pci_pr3_present(parent) : false;
-+	if (!(adev->flags & AMD_IS_APU)) {
-+		parent = pci_upstream_bridge(adev->pdev);
-+		adev->has_pr3 = parent ? pci_pr3_present(parent) : false;
-+	}
+ /**
+- * mei_me_fw_type_sps() - check for sps sku
++ * mei_me_fw_type_sps_ign() - check for sps or ign sku
+  *
+- * Read ME FW Status register to check for SPS Firmware.
+- * The SPS FW is only signaled in pci function 0
++ * Read ME FW Status register to check for SPS or IGN Firmware.
++ * The SPS/IGN FW is only signaled in pci function 0
+  *
+  * @pdev: pci device
+  *
+- * Return: true in case of SPS firmware
++ * Return: true in case of SPS/IGN firmware
+  */
+-static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
++static bool mei_me_fw_type_sps_ign(const struct pci_dev *pdev)
+ {
+ 	u32 reg;
+ 	u32 fw_type;
+@@ -1427,14 +1427,15 @@ static bool mei_me_fw_type_sps(const str
  
- 	amdgpu_amdkfd_device_probe(adev);
+ 	dev_dbg(&pdev->dev, "fw type is %d\n", fw_type);
  
+-	return fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
++	return fw_type == PCI_CFG_HFS_3_FW_SKU_IGN ||
++	       fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
+ }
+ 
+ #define MEI_CFG_KIND_ITOUCH                     \
+ 	.kind = "itouch"
+ 
+-#define MEI_CFG_FW_SPS                          \
+-	.quirk_probe = mei_me_fw_type_sps
++#define MEI_CFG_FW_SPS_IGN                      \
++	.quirk_probe = mei_me_fw_type_sps_ign
+ 
+ #define MEI_CFG_FW_VER_SUPP                     \
+ 	.fw_ver_supported = 1
+@@ -1535,7 +1536,7 @@ static const struct mei_cfg mei_me_pch12
+ 	MEI_CFG_PCH8_HFS,
+ 	MEI_CFG_FW_VER_SUPP,
+ 	MEI_CFG_DMA_128,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
+ 
+ /* Cannon Lake itouch with quirk for SPS 5.0 and newer Firmware exclusion
+@@ -1545,7 +1546,7 @@ static const struct mei_cfg mei_me_pch12
+ 	MEI_CFG_KIND_ITOUCH,
+ 	MEI_CFG_PCH8_HFS,
+ 	MEI_CFG_FW_VER_SUPP,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
+ 
+ /* Tiger Lake and newer devices */
+@@ -1562,7 +1563,7 @@ static const struct mei_cfg mei_me_pch15
+ 	MEI_CFG_FW_VER_SUPP,
+ 	MEI_CFG_DMA_128,
+ 	MEI_CFG_TRC,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
+ 
+ /*
 
 

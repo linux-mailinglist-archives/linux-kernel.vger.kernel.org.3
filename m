@@ -2,66 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A514F402F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DBC4F424A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448979AbiDEUKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S237731AbiDET5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449023AbiDEPtP (ORCPT
+        with ESMTP id S1455142AbiDEP7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:49:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A24151AAA77
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:32:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 006D523A;
-        Tue,  5 Apr 2022 07:32:46 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EE7453F5A1;
-        Tue,  5 Apr 2022 07:32:44 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     cgel.zte@gmail.com
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, cristian.marussi@arm.com
-Subject: Re: [PATCH] firmware: arm_scmi: Replace zero-length array with flexible-array member
-Date:   Tue,  5 Apr 2022 15:32:37 +0100
-Message-Id: <164916896263.1245964.9249363820319711355.b4-ty@arm.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401075537.2407376-1-lv.ruyi@zte.com.cn>
-References: <20220401075537.2407376-1-lv.ruyi@zte.com.cn>
+        Tue, 5 Apr 2022 11:59:40 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8179B108772
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:11:25 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p10so23731807lfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=knadBC5/9Dlj8rbZddGyUUv9/Z5ol7Dtv9U1ioqP9jA=;
+        b=4WXxBwXx7EL1bnbBadqVFwnRXzEoKBnMCPyQY1ZoY51R3YnPyJSrpchjfB6SICDwsJ
+         5alKgXGkZ0+I2dyFvgJGXRqq9S7J0CWijdEsqtbZyqcsb9/kzsafqkVrI8xVxcY72nkg
+         UGCEDmkItzRH77RJhiDAiVZmPMq9iBdIfg9uaN8BHGlPsTQynByp4OpSEyaEevxlFS77
+         Qef8G+zninZ7IFRAGP9u/2MlkCD19bQzY1o2vc3fSvDaAeHrUE7NH83wxI08mKsTZK7G
+         sJ5I+oQd+gn/b/mCW4Ct/uXiaXcZ1hOSLpsU3SjMOep+xv/JHCQbkqq7/lg9kEhzrpAK
+         li0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=knadBC5/9Dlj8rbZddGyUUv9/Z5ol7Dtv9U1ioqP9jA=;
+        b=Qslq5YwGcXsLmb1Pm3TapmUIbLb0aK8j5tnQjiOgvSaSc2GPEAUuTY49t6RoWKg7+3
+         RioNGzuKHAqXz6MuiIkNGGRbgFFV3gGn7Kxw6rqQtexzvsmlxpaRP06fvMWs8O5KK74N
+         oGSOYoijNyqP/51dfRs08CioBgKw0fuz9l7ERQv3zLWC4cKmPE95Q521rXxuGhPNeuhZ
+         9LZZHpvSR2eLZYqbXOKgPcKJ7onyShYkXFMJRQFV8RuQ0qUeCP4QsDrcsU0hFd6zuDoa
+         se6fAMleGjRhhUk+gDeRgZkjXEWLk6e4y8e656aZH7D0Z4/bbboedJNXWMGgnHb5DYEr
+         b4Yg==
+X-Gm-Message-State: AOAM531yXbWu3ryuB4hxiMFkoSkPm5t/mlCWFYk1WVzfaYrjPSDbv74j
+        9ugVk9MRyy3YeD8sceeWsN8qww==
+X-Google-Smtp-Source: ABdhPJzACQiDfI4qUdkgsvTX0RPVvPl+IFhGVEeH45oKkhd6o7WfMVVtWugGdQVsuaBLCEHNpE0Tsw==
+X-Received: by 2002:a05:6512:3a83:b0:44a:5878:24d6 with SMTP id q3-20020a0565123a8300b0044a587824d6mr2899935lfu.426.1649171480237;
+        Tue, 05 Apr 2022 08:11:20 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:5cd5:d9c8:ef4:b0ed? ([2001:861:44c0:66c0:5cd5:d9c8:ef4:b0ed])
+        by smtp.gmail.com with ESMTPSA id x23-20020a056512047700b0044a3c53e12dsm1533643lfd.169.2022.04.05.08.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 08:11:19 -0700 (PDT)
+Message-ID: <a27da359-3922-e4ee-16d2-b4cb6fc06ca8@baylibre.com>
+Date:   Tue, 5 Apr 2022 17:11:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
+Content-Language: en-US
+To:     tanure@linux.com, Kevin Hilman <khilman@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326102229.421718-1-tanure@linux.com>
+ <7hee2lu82n.fsf@baylibre.com>
+ <CAJX_Q+1Y5pO_AGaFSXfo-J3EdGQeM2XYXzvsUtjtAFEXdwKEdQ@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <CAJX_Q+1Y5pO_AGaFSXfo-J3EdGQeM2XYXzvsUtjtAFEXdwKEdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 07:55:37 +0000, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hi,
+
+On 28/03/2022 23:51, Lucas Tanure wrote:
 > 
-> There is a regular need in the kernel to provide a way to declare
-> having a dynamically sized set of trailing elements in a structure.
-> Kernel code should always use “flexible array members”[1] for these
-> cases. The older style of one-element or zero-length arrays should
-> no longer be used[2].
 > 
-> [...]
+> On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com <mailto:khilman@baylibre.com>> wrote:
+> 
+>     Hi Lucas,
+> 
+>     Lucas Tanure <tanure@linux.com <mailto:tanure@linux.com>> writes:
+> 
+>      > The default duty cycle of 33% is less than the required
+>      > by the I2C specs for the LOW period of the SCL clock.
+>      >
+>      > So, for 100Khz or less, use 50%H/50%L duty cycle, and
+>      > for the clock above 100Khz, use 40%H/60%L duty cycle.
+>      > That ensures the low period of SCL is always more than
+>      > the minimum required by the specs at any given frequency.
+> 
+>     Thanks for the fixes!
+> 
+>     This is going to affect all SoCs, so ould you please summarize how your
+>     changes were tested, and on which SoCs & boards?
+> 
+>     Thanks,
+> 
+>     Kevin
+> 
+> 
+> Hi,
+> 
+> I only tested against vim3 board, measured the bus with an saleae logic pro 16.
+> The measurements were with 100k, 400k and a few in between frequencies.
+> 
+> Is that enough?
 
-Applied to sudeep.holla/linux (fixes/scmi), thanks!
+I did a few measures on the Libre Computer Le Potato S905X board:
 
-[1/1] firmware: arm_scmi: Replace zero-length array with flexible-array member
-      https://git.kernel.org/sudeep.holla/c/f1ad601d1f
+i2c_AO:
 
---
-Regards,
-Sudeep
+Before the patchset, I got:
+- 100KHz: 1.66uS HIGH, 6.75uS LOW, 20%/80%, Freq 118KHz /!\
+- 400KHz: Unable to decode, clock line is invalid, Data line is also invalid
+
+With the patchset
+- 100KHz: 4.25uS HIGH, 6.58uS LOW, 40%/60%, Freq 92KHz
+- 400KHz: 0.33uS HIGH, 3.00uS LOW, 10%/90%, Freq 300KHz
+
+i2c_B:
+
+Before the patchset, I got:
+- 100KHz: 2.25uS HIGH, 5.41uS LOW, 29%/71%, Freq 130KHz /!\
+- 400KHz: 0.42uS HIGH, 1.66uS LOW, 20%/80%, Freq 480KHz /!\
+
+With the patchset
+- 100KHz: 4.75uS HIGH, 5.42uS LOW, 46%/54%, Freq 98KHz
+- 400KHz: 0.66uS HIGH, 2.00uS LOW, 24%/75%, Freq 375KHz
+
+
+So this fixes the frequency, before they were invalid.
+And it fixes 400KHz on i2c_AO...
+
+I do not understand why behavior is different between i2c_AO & i2c_B, they
+are feed with the same clock so it should be the same.
+
+Did you check on both i2c interfaces ? can you share your results ?
+
+Neil
+
+> 
+> Thanks
+> Lucas
+> 
+> 
+> 
 

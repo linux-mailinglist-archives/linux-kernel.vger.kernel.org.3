@@ -2,152 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FEE4F2286
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F414F2289
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiDEFTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S229694AbiDEFVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiDEFTf (ORCPT
+        with ESMTP id S229480AbiDEFVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:19:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB02332;
-        Mon,  4 Apr 2022 22:17:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F51A614E1;
-        Tue,  5 Apr 2022 05:17:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADE1C340F3;
-        Tue,  5 Apr 2022 05:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649135856;
-        bh=F4BmQX2Y63BrfJkQle/Kee5eiX9lFVCLsQ1STIVzAGs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dZrT9tlHLkA6Z2fmx2EGIMkYJG+2GcdgeYAhBLf+3ghitO5FbdzFychci3qHoiPwS
-         5gTLjVg3FYJ7gCLHZ+u7fhr4TRFlLVEPJcT741lvrjqY5hlaUVZcltjHyEKwyUHzef
-         3HkAC+bGcaMs0lY9jYnK+i4K5jJTYWmnhDilVV6gnow/mdTTKQghuGkqM/+uyiN0w8
-         TzEWtCiEqCSz3gNlKAvVp3QOHRdyVVBxQq5UnE2xGg5nB9+A011q9Gv9oYuQvQmulM
-         cSD637H0Na5dWVPkv1qsWFfz+Uo933sppnOREKxqpvKWcu9Fb04TymS+pZqwDdkjy4
-         /peyhOqR6nm8Q==
-Received: by mail-vs1-f47.google.com with SMTP id i10so11367198vsr.6;
-        Mon, 04 Apr 2022 22:17:36 -0700 (PDT)
-X-Gm-Message-State: AOAM5312qCsmHqt5J4Yvj7OTifGsE4WuefyynPfRmAAsMaObvF7LSf5M
-        jsPZKgHnzMKjy25pZmjDK/gxhR/hKLNHtvK6H4s=
-X-Google-Smtp-Source: ABdhPJxwAHd5YmIGFxtQXjLGpWT1kmM7IBN8n/zhBH0Urpkbt1tUAG2ja7KTW5WzlcRcBYmbO9u1or/8w7wC2pBLezE=
-X-Received: by 2002:a05:6102:dd1:b0:325:80a9:b5d7 with SMTP id
- e17-20020a0561020dd100b0032580a9b5d7mr514202vst.51.1649135855592; Mon, 04 Apr
- 2022 22:17:35 -0700 (PDT)
+        Tue, 5 Apr 2022 01:21:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE66CF5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649135987; x=1680671987;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1qkMhrLj1ASwiXrwHQ9CNqfZSxNgBNAwIxTvtjinTpI=;
+  b=MA5Ld2DSzJnISu+Peg8GslGp3aLIB3QUNYoSKjTUtdafNVpP9huQN3kK
+   dYjpJznegthBdM4aA/q2TiJqnLK7xI2XZoc/pdrjAepkWW5IZJ9I2kbUj
+   LOHSEPZ9yi3WC6jmQEPOfr3dsUVvD7aLW5UGMYVBfp+p7vEwG2hcPXSlP
+   Kngz7QMIWDm80xE6V8uyykNxlJZdd2sNjjg8A4pqPOYLp2sd+FN2Zbfo5
+   4cOP2uq1csoN86hNV5O7l/rqi4TAr2fXrgOlzGJqJ1bY7KDaxN9S6wdmP
+   TFF6e6LDpEDyJcgl8+sMIxi7nZtDW1bUOi2xAH65f2G5hnUvfDbRHmO2K
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260363835"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="260363835"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:19:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="721912007"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 22:19:45 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbbbV-0002fj-A6;
+        Tue, 05 Apr 2022 05:19:45 +0000
+Date:   Tue, 5 Apr 2022 13:19:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 2/40]
+ fs/netfs/objects.c:48:9: error: implicit declaration of function
+ 'netfs_proc_add_writeback'; did you mean 'netfs_proc_add_rreq'?
+Message-ID: <202204051305.EmtUGQOR-lkp@intel.com>
 MIME-Version: 1.0
-References: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
- <Yksjb9Mkq658k4YJ@dev-arch.thelio-3990X>
-In-Reply-To: <Yksjb9Mkq658k4YJ@dev-arch.thelio-3990X>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 5 Apr 2022 13:17:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQkGZnwXrXsbx8drL0AicVpOMW=JmOcrieuvyEf91XPhg@mail.gmail.com>
-Message-ID: <CAJF2gTQkGZnwXrXsbx8drL0AicVpOMW=JmOcrieuvyEf91XPhg@mail.gmail.com>
-Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:57 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
-> > Linux next-20220404 riscv defconfig builds failed.
-> >
-> > Regressions found on riscv:
-> >    - riscv-riscv-clang-14-defconfig
-> >    - riscv-riscv-gcc-10-defconfig
-> >    - riscv-riscv-clang-13-defconfig
-> >    - riscv-riscv-clang-12-defconfig
-> >    - riscv-riscv-clang-11-defconfig
-> >    - riscv-riscv-gcc-11-defconfig
-> >    - riscv-riscv-gcc-8-defconfig
-> >    - riscv-riscv-gcc-9-defconfig
-> >    - riscv-riscv-clang-nightly-defconfig
-> >
-> >
-> > arch/riscv/kernel/compat_signal.c:7:10: fatal error:
-> > linux/tracehook.h: No such file or directory
-> >   7 | #include <linux/tracehook.h>
-> >     |          ^~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.build:289:
-> > arch/riscv/kernel/compat_signal.o] Error 1
->
-> For what it's worth, I also see:
->
-> $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
-> arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
->     3 | #include <../vdso/vdso.lds.S>
->       |          ^~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
-> arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
->     3 | #include <../vdso/rt_sigreturn.S>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
->     3 | #include <../vdso/note.S>
->       |          ^~~~~~~~~~~~~~~~
-> compilation terminated.
-> arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
->     3 | #include <../vdso/getcpu.S>
->       |          ^~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
-> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
-> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
-> arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
->     3 | #include <../vdso/flush_icache.S>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
->
-> I am guessing this code was never tested with $(srctree) == $(objtree).
-Thx for pointing it out:
-I always use:
-make -skj"$(nproc)" ARCH=riscv
-CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g
-O=../build-riscv/ defconfig all
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: 9bff5b05142d47cc6a64f5e023fd01d9bf8bee9e [2/40] netfs: Add a procfile to list in-progress requests
+config: powerpc64-randconfig-s031-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051305.EmtUGQOR-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/9bff5b05142d47cc6a64f5e023fd01d9bf8bee9e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 9bff5b05142d47cc6a64f5e023fd01d9bf8bee9e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-When I change to:
-make -skj"$(nproc)" ARCH=riscv
-CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g defconfig
-all
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I got your problem.
+All errors (new ones prefixed by >>):
 
->
-> Cheers,
-> Nathan
+   fs/netfs/objects.c: In function 'netfs_alloc_request':
+>> fs/netfs/objects.c:48:9: error: implicit declaration of function 'netfs_proc_add_writeback'; did you mean 'netfs_proc_add_rreq'? [-Werror=implicit-function-declaration]
+      48 |         netfs_proc_add_writeback(rreq);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+         |         netfs_proc_add_rreq
+   fs/netfs/objects.c: In function 'netfs_free_request':
+>> fs/netfs/objects.c:80:9: error: implicit declaration of function 'netfs_proc_del_writeback'; did you mean 'netfs_proc_del_rreq'? [-Werror=implicit-function-declaration]
+      80 |         netfs_proc_del_writeback(rreq);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+         |         netfs_proc_del_rreq
+   cc1: some warnings being treated as errors
 
 
---
-Best Regards
- Guo Ren
+vim +48 fs/netfs/objects.c
 
-ML: https://lore.kernel.org/linux-csky/
+    10	
+    11	/*
+    12	 * Allocate an I/O request and initialise it.
+    13	 */
+    14	struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
+    15						     struct file *file,
+    16						     loff_t start, size_t len,
+    17						     enum netfs_io_origin origin)
+    18	{
+    19		static atomic_t debug_ids;
+    20		struct inode *inode = file ? file_inode(file) : mapping->host;
+    21		struct netfs_i_context *ctx = netfs_i_context(inode);
+    22		struct netfs_io_request *rreq;
+    23		int ret;
+    24	
+    25		rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
+    26		if (!rreq)
+    27			return ERR_PTR(-ENOMEM);
+    28	
+    29		rreq->start	= start;
+    30		rreq->len	= len;
+    31		rreq->origin	= origin;
+    32		rreq->netfs_ops	= ctx->ops;
+    33		rreq->mapping	= mapping;
+    34		rreq->inode	= inode;
+    35		rreq->i_size	= i_size_read(inode);
+    36		rreq->debug_id	= atomic_inc_return(&debug_ids);
+    37		INIT_LIST_HEAD(&rreq->subrequests);
+    38		refcount_set(&rreq->ref, 1);
+    39		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+    40		if (rreq->netfs_ops->init_request) {
+    41			ret = rreq->netfs_ops->init_request(rreq, file);
+    42			if (ret < 0) {
+    43				kfree(rreq);
+    44				return ERR_PTR(ret);
+    45			}
+    46		}
+    47	
+  > 48		netfs_proc_add_writeback(rreq);
+    49		netfs_stat(&netfs_n_rh_rreq);
+    50		return rreq;
+    51	}
+    52	
+    53	void netfs_get_request(struct netfs_io_request *rreq, enum netfs_rreq_ref_trace what)
+    54	{
+    55		int r;
+    56	
+    57		__refcount_inc(&rreq->ref, &r);
+    58		trace_netfs_rreq_ref(rreq->debug_id, r + 1, what);
+    59	}
+    60	
+    61	void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
+    62	{
+    63		struct netfs_io_subrequest *subreq;
+    64	
+    65		while (!list_empty(&rreq->subrequests)) {
+    66			subreq = list_first_entry(&rreq->subrequests,
+    67						  struct netfs_io_subrequest, rreq_link);
+    68			list_del(&subreq->rreq_link);
+    69			netfs_put_subrequest(subreq, was_async,
+    70					     netfs_sreq_trace_put_clear);
+    71		}
+    72	}
+    73	
+    74	static void netfs_free_request(struct work_struct *work)
+    75	{
+    76		struct netfs_io_request *rreq =
+    77			container_of(work, struct netfs_io_request, work);
+    78	
+    79		trace_netfs_rreq(rreq, netfs_rreq_trace_free);
+  > 80		netfs_proc_del_writeback(rreq);
+    81		netfs_clear_subrequests(rreq, false);
+    82		if (rreq->netfs_ops->free_request)
+    83			rreq->netfs_ops->free_request(rreq);
+    84		if (rreq->cache_resources.ops)
+    85			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
+    86		kfree_rcu(rreq, rcu);
+    87		netfs_stat_d(&netfs_n_rh_rreq);
+    88	}
+    89	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

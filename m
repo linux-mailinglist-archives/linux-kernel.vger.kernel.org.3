@@ -2,202 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC964F4D3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5F94F48CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581772AbiDEXky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S1386561AbiDEVul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355872AbiDELz0 (ORCPT
+        with ESMTP id S1382069AbiDEMAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:55:26 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F86613F70;
-        Tue,  5 Apr 2022 04:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649157246; x=1680693246;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=OiUEoyK4O7y/SQgS8CjomHvWN4NBjsxew+GU385Jotw=;
-  b=XS6/fAx69CklgazfebQ1ARKyRpfJHuTJ18FF/35X3QzxtcVqcsdIp3uI
-   q319sCIn5KzVOcYWvUB1bjNAFrdUHDuJbVBqJOq0Ri3mr1/TIv2jFy9eS
-   voNUwhQLp8/T1OcFuIDf3blAjXu85r9IjXEl2AEsw/wqu0p7wMpIhllrO
-   A=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 05 Apr 2022 04:14:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:14:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 04:14:04 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 04:14:00 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohitkr@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v6 2/3] arm64: dts: qcom: sc7280: Add lpass cpu node
-Date:   Tue, 5 Apr 2022 16:43:39 +0530
-Message-ID: <1649157220-29304-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
+        Tue, 5 Apr 2022 08:00:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7193F894
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649157517; x=1680693517;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YOdap6IKUD7bVBloCdYLnSJYTixqzWdp2iFUxhRJX4Q=;
+  b=BL3BF7YuCD/7xwF2+I88sl0kPXOkqiAgtLWrRtaoXrIJP4gHUV70hRsF
+   wFiYbWfrhubzrx+ZQsuL6ca9I3qO6KoQFkTEaiCSiA1T4xbDK4GVy3STb
+   d6MUEZo8Z7AYwbr4WoQ4waJWDiU8ZaLqiSeDdHipTlqtD5r2WU0ckCd2N
+   TwVgwx4VR0UlhwDBztta3Cm5SFDdu6b/f0trDwbJyQS69y8hRrX3r8vwN
+   w1lU495jkY3J5B4fNEcmSz5FS8hQ1hJY+3KhlgFf6rMbRkaz18sgww2Pb
+   PCjZisBoJHbuXUsIFqEgCajtnmJw67v3g4LSD6M0GxwEA7uhiLGPV2BBM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323898321"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="323898321"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:18:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="620325752"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Apr 2022 04:18:06 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbhCH-000383-IH;
+        Tue, 05 Apr 2022 11:18:05 +0000
+Date:   Tue, 5 Apr 2022 19:17:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mhiramat:bootconfig/core 3/4] init/main.c:419:44: error: passing
+ argument 1 of 'get_boot_config_from_initrd' from incompatible pointer type
+Message-ID: <202204051939.gOVSGNXT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add lpass cpu node for audio on sc7280 based platforms.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git bootconfig/core
+head:   3907c71b99b8055dc7720ef35346f4d99870eb8c
+commit: a33f53148090d20b836dbea6ab603c3770165d28 [3/4] bootconfig: Support embedding a bootconfig file in kernel
+config: sparc64-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051939.gOVSGNXT-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=a33f53148090d20b836dbea6ab603c3770165d28
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat bootconfig/core
+        git checkout a33f53148090d20b836dbea6ab603c3770165d28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 28 ++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 63 ++++++++++++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 83c76b2..e3d8cbf 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -273,6 +273,34 @@
- 	modem-init;
- };
- 
-+&lpass_cpu {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sec_mi2s_data0>, <&sec_mi2s_sclk>, <&sec_mi2s_ws>;
-+
-+	mi2s-secondary@1 {
-+		reg = <MI2S_SECONDARY>;
-+		qcom,playback-sd-lines = <0>;
-+	};
-+
-+	hdmi-primary@5 {
-+		reg = <LPASS_DP_RX>;
-+	};
-+
-+	wcd-rx@6 {
-+		reg = <LPASS_CDC_DMA_RX0>;
-+	};
-+
-+	wcd-tx@19 {
-+		reg = <LPASS_CDC_DMA_TX3>;
-+	};
-+
-+	va-tx@25 {
-+		reg = <LPASS_CDC_DMA_VA_TX0>;
-+	};
-+};
-+
- &lpass_tlmm {
- 	dmic01_active: dmic01-active {
- 		clk {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 78ec84c..e808d53 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -19,6 +19,7 @@
- #include <dt-bindings/reset/qcom,sdm845-aoss.h>
- #include <dt-bindings/reset/qcom,sdm845-pdc.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-+#include <dt-bindings/sound/qcom,lpass.h>
- #include <dt-bindings/thermal/thermal.h>
- 
- / {
-@@ -2101,6 +2102,68 @@
- 			#clock-cells = <1>;
- 		};
- 
-+		lpass_cpu: audio@3987000 {
-+			compatible = "qcom,sc7280-lpass-cpu";
-+
-+			reg = <0 0x03987000 0 0x68000>,
-+			      <0 0x03b00000 0 0x29000>,
-+			      <0 0x03260000 0 0xc000>,
-+			      <0 0x03280000 0 0x29000>,
-+			      <0 0x03340000 0 0x29000>,
-+			      <0 0x0336c000 0 0x3000>;
-+
-+			reg-names = "lpass-hdmiif",
-+				    "lpass-lpaif",
-+				    "lpass-rxtx-cdc-dma-lpm",
-+				    "lpass-rxtx-lpaif",
-+				    "lpass-va-lpaif",
-+				    "lpass-va-cdc-dma-lpm";
-+
-+			iommus = <&apps_smmu 0x1820 0>,
-+				 <&apps_smmu 0x1821 0>,
-+				 <&apps_smmu 0x1832 0>;
-+			status = "disabled";
-+
-+			power-domains =	<&rpmhpd SC7280_LCX>;
-+			power-domain-names = "lcx";
-+			required-opps = <&rpmhpd_opp_nom>;
-+
-+			clocks = <&lpass_aon LPASS_AON_CC_AUDIO_HM_H_CLK>,
-+				 <&lpass_audiocc LPASS_AUDIO_CC_EXT_MCLK0_CLK>,
-+				 <&lpasscore LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK>,
-+				 <&lpasscore LPASS_CORE_CC_EXT_IF0_IBIT_CLK>,
-+				 <&lpasscore LPASS_CORE_CC_EXT_IF1_IBIT_CLK>,
-+				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM_CLK>,
-+				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM0_CLK>,
-+				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM1_CLK>,
-+				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM2_CLK>,
-+				 <&lpass_aon LPASS_AON_CC_VA_MEM0_CLK>;
-+			clock-names = "aon_cc_audio_hm_h",
-+				      "audio_cc_ext_mclk0",
-+				      "core_cc_sysnoc_mport_core",
-+				      "core_cc_ext_if0_ibit",
-+				      "core_cc_ext_if1_ibit",
-+				      "audio_cc_codec_mem",
-+				      "audio_cc_codec_mem0",
-+				      "audio_cc_codec_mem1",
-+				      "audio_cc_codec_mem2",
-+				      "aon_cc_va_mem0";
-+
-+			#sound-dai-cells = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interrupt-names = "lpass-irq-lpaif",
-+					  "lpass-irq-hdmi",
-+					  "lpass-irq-vaif",
-+					  "lpass-irq-rxtxif";
-+		};
-+
- 		lpass_ag_noc: interconnect@3c40000 {
- 			reg = <0 0x03c40000 0 0xf080>;
- 			compatible = "qcom,sc7280-lpass-ag-noc";
+All errors (new ones prefixed by >>):
+
+   init/main.c: In function 'setup_boot_config':
+>> init/main.c:419:44: error: passing argument 1 of 'get_boot_config_from_initrd' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     419 |         data = get_boot_config_from_initrd(&size);
+         |                                            ^~~~~
+         |                                            |
+         |                                            size_t * {aka long unsigned int *}
+   init/main.c:316:55: note: expected 'u32 *' {aka 'unsigned int *'} but argument is of type 'size_t *' {aka 'long unsigned int *'}
+     316 | static void * __init get_boot_config_from_initrd(u32 *_size)
+         |                                                  ~~~~~^~~~~
+   init/main.c: At top level:
+   init/main.c:769:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+     769 | void __init __weak arch_post_acpi_subsys_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   init/main.c:781:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
+     781 | void __init __weak mem_encrypt_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~
+   init/main.c:783:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
+     783 | void __init __weak poking_init(void) { }
+         |                    ^~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/get_boot_config_from_initrd +419 init/main.c
+
+d0ac5fbaf783d5 Masami Hiramatsu        2021-08-05  409  
+2b7d2fe76f9c84 Cao jin                 2021-03-11  410  static void __init setup_boot_config(void)
+7684b8582c2453 Masami Hiramatsu        2020-01-11  411  {
+f61872bb58a1cd Steven Rostedt (VMware  2020-02-07  412) 	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+a33f53148090d2 Masami Hiramatsu        2022-03-12  413  	const char *msg, *data;
+a33f53148090d2 Masami Hiramatsu        2022-03-12  414  	int pos, ret;
+a33f53148090d2 Masami Hiramatsu        2022-03-12  415  	size_t size;
+a33f53148090d2 Masami Hiramatsu        2022-03-12  416  	char *err;
+7684b8582c2453 Masami Hiramatsu        2020-01-11  417  
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  418  	/* Cut out the bootconfig data even if we have no bootconfig option */
+88404d100627e1 Masami Hiramatsu        2022-03-28 @419  	data = get_boot_config_from_initrd(&size);
+a33f53148090d2 Masami Hiramatsu        2022-03-12  420  	/* If there is no bootconfig in initrd, try embedded one. */
+a33f53148090d2 Masami Hiramatsu        2022-03-12  421  	if (!data)
+a33f53148090d2 Masami Hiramatsu        2022-03-12  422  		data = xbc_get_embedded_bootconfig(&size);
+de462e5f107185 Masami Hiramatsu        2020-04-26  423  
+f61872bb58a1cd Steven Rostedt (VMware  2020-02-07  424) 	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+477d0847817046 Masami Hiramatsu        2020-08-04  425  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+f61872bb58a1cd Steven Rostedt (VMware  2020-02-07  426) 			 bootconfig_params);
+f61872bb58a1cd Steven Rostedt (VMware  2020-02-07  427) 
+477d0847817046 Masami Hiramatsu        2020-08-04  428  	if (IS_ERR(err) || !bootconfig_found)
+7684b8582c2453 Masami Hiramatsu        2020-01-11  429  		return;
+7684b8582c2453 Masami Hiramatsu        2020-01-11  430  
+b66fbbe8d48228 Masami Hiramatsu        2021-09-05  431  	/* parse_args() stops at the next param of '--' and returns an address */
+477d0847817046 Masami Hiramatsu        2020-08-04  432  	if (err)
+b66fbbe8d48228 Masami Hiramatsu        2021-09-05  433  		initargs_offs = err - tmp_cmdline;
+477d0847817046 Masami Hiramatsu        2020-08-04  434  
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  435  	if (!data) {
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  436  		pr_err("'bootconfig' found on command line, but no bootconfig found\n");
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  437  		return;
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  438  	}
+611d0a95d46b09 Masami Hiramatsu        2020-05-11  439  
+7495e0926fdf30 Steven Rostedt (VMware  2020-02-04  440) 	if (size >= XBC_DATA_MAX) {
+a33f53148090d2 Masami Hiramatsu        2022-03-12  441  		pr_err("bootconfig size %ld greater than max size %d\n",
+a33f53148090d2 Masami Hiramatsu        2022-03-12  442  			(long)size, XBC_DATA_MAX);
+7684b8582c2453 Masami Hiramatsu        2020-01-11  443  		return;
+7495e0926fdf30 Steven Rostedt (VMware  2020-02-04  444) 	}
+7684b8582c2453 Masami Hiramatsu        2020-01-11  445  
+bdac5c2b243f68 Masami Hiramatsu        2021-09-16  446  	ret = xbc_init(data, size, &msg, &pos);
+89b74cac783473 Masami Hiramatsu        2020-03-03  447  	if (ret < 0) {
+89b74cac783473 Masami Hiramatsu        2020-03-03  448  		if (pos < 0)
+89b74cac783473 Masami Hiramatsu        2020-03-03  449  			pr_err("Failed to init bootconfig: %s.\n", msg);
+89b74cac783473 Masami Hiramatsu        2020-03-03  450  		else
+89b74cac783473 Masami Hiramatsu        2020-03-03  451  			pr_err("Failed to parse bootconfig: %s at %d.\n",
+89b74cac783473 Masami Hiramatsu        2020-03-03  452  				msg, pos);
+89b74cac783473 Masami Hiramatsu        2020-03-03  453  	} else {
+e306220cb7b7c2 Masami Hiramatsu        2021-09-16  454  		xbc_get_info(&ret, NULL);
+a33f53148090d2 Masami Hiramatsu        2022-03-12  455  		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+51887d03aca101 Masami Hiramatsu        2020-01-11  456  		/* keys starting with "kernel." are passed via cmdline */
+51887d03aca101 Masami Hiramatsu        2020-01-11  457  		extra_command_line = xbc_make_cmdline("kernel");
+1319916209ce8f Masami Hiramatsu        2020-01-11  458  		/* Also, "init." keys are init arguments */
+1319916209ce8f Masami Hiramatsu        2020-01-11  459  		extra_init_args = xbc_make_cmdline("init");
+51887d03aca101 Masami Hiramatsu        2020-01-11  460  	}
+7495e0926fdf30 Steven Rostedt (VMware  2020-02-04  461) 	return;
+7684b8582c2453 Masami Hiramatsu        2020-01-11  462  }
+de462e5f107185 Masami Hiramatsu        2020-04-26  463  
+
+:::::: The code at line 419 was first introduced by commit
+:::::: 88404d100627e1ed2f02a264e2465e2ae62f386a bootconfig: Check the checksum before removing the bootconfig from initrd
+
+:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
+:::::: CC: Masami Hiramatsu <mhiramat@kernel.org>
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

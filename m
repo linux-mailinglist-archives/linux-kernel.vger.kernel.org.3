@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3454F4E4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2758D4F4EF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588717AbiDFARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S1582672AbiDEXtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356732AbiDEKYw (ORCPT
+        with ESMTP id S1356743AbiDEKYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:24:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55592BF516;
-        Tue,  5 Apr 2022 03:08:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:24:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB38BF038;
+        Tue,  5 Apr 2022 03:08:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D51BCB81C89;
-        Tue,  5 Apr 2022 10:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CACDC385A6;
-        Tue,  5 Apr 2022 10:08:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E06FB616E7;
+        Tue,  5 Apr 2022 10:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B811CC385A1;
+        Tue,  5 Apr 2022 10:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153332;
-        bh=s9JZTHU4ISnxMDiWXbfQdfcWMtbuXYw/drMU+c7jGpQ=;
+        s=korg; t=1649153335;
+        bh=/kvIRSziW0x3o2dd/pwWaUBnYSKR0XEkNQf4oUXD/mg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z+smV24ZXXGg6NQHDSCicgF2s41V5TA6S2CKe3ZNmlWRAavfXwgjwWPYJDS3kU35d
-         4Qd3W/BttlaxPjs9MNt61/7+tAPM1e+1W1tEix8AO4lxpHS+5gGgXvUHauT5/zCk8t
-         uOErlje415YkKqgnc+FTFHlUmRKTicaov0MvQdPM=
+        b=MfcGJ4pqJaIKfGYf4/to/RLNrrfk9oMRUmP5s8ctSVmxncZeycQ53YXiWzidZlk8X
+         kimZ7UM0Lahtogi5Kztl96MF5QTELoyt48mOStaUd5uKX/E6lBfxZ9E1Trk3ogXnpD
+         H4fhwVbVVLWsPrHATT7j2NprzMtO7aGp+LNQSITo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        "kernelci.org bot" <bot@kernelci.org>,
-        Guenter Roeck <groeck@google.com>,
-        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable@vger.kernel.org, Peng Liu <liupeng256@huawei.com>,
+        Marco Elver <elver@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        David Gow <davidgow@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 185/599] selftests, x86: fix how check_cc.sh is being invoked
-Date:   Tue,  5 Apr 2022 09:27:59 +0200
-Message-Id: <20220405070304.347142989@linuxfoundation.org>
+Subject: [PATCH 5.10 186/599] kunit: make kunit_test_timeout compatible with comment
+Date:   Tue,  5 Apr 2022 09:28:00 +0200
+Message-Id: <20220405070304.377083259@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -61,71 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
+From: Peng Liu <liupeng256@huawei.com>
 
-[ Upstream commit ef696f93ed9778d570bd5ac58414421cdd4f1aab ]
+[ Upstream commit bdd015f7b71b92c2e4ecabac689642cc72553e04 ]
 
-The $(CC) variable used in Makefiles could contain several arguments
-such as "ccache gcc".  These need to be passed as a single string to
-check_cc.sh, otherwise only the first argument will be used as the
-compiler command.  Without quotes, the $(CC) variable is passed as
-distinct arguments which causes the script to fail to build trivial
-programs.
+In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
+represent 5min.  However, it is wrong when dealing with arm64 whose
+default HZ = 250, or some other situations.  Use msecs_to_jiffies to fix
+this, and kunit_test_timeout will work as desired.
 
-Fix this by adding quotes around $(CC) when calling check_cc.sh to pass
-the whole string as a single argument to the script even if it has
-several words such as "ccache gcc".
-
-Link: https://lkml.kernel.org/r/d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com
-Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Tested-by: "kernelci.org bot" <bot@kernelci.org>
-Reviewed-by: Guenter Roeck <groeck@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220309083753.1561921-3-liupeng256@huawei.com
+Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
+Signed-off-by: Peng Liu <liupeng256@huawei.com>
+Reviewed-by: Marco Elver <elver@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Wang Kefeng <wangkefeng.wang@huawei.com>
+Cc: David Gow <davidgow@google.com>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/vm/Makefile  | 6 +++---
- tools/testing/selftests/x86/Makefile | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ lib/kunit/try-catch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 2cf32e6b376e..01ec6876e8f5 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -40,9 +40,9 @@ TEST_GEN_FILES += userfaultfd
- TEST_GEN_FILES += khugepaged
+diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+index 0dd434e40487..71e5c5853099 100644
+--- a/lib/kunit/try-catch.c
++++ b/lib/kunit/try-catch.c
+@@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
+ 	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
+ 	 * the task will be killed and an oops generated.
+ 	 */
+-	return 300 * MSEC_PER_SEC; /* 5 min */
++	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
+ }
  
- ifeq ($(MACHINE),x86_64)
--CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
- 
- TARGETS := protection_keys
- BINARIES_32 := $(TARGETS:%=%_32)
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 6703c7906b71..f1b675a4040b 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -6,9 +6,9 @@ include ../lib.mk
- .PHONY: all all_32 all_64 warn_32bit_failure clean
- 
- UNAME_M := $(shell uname -m)
--CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
+ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
 -- 
 2.34.1
 

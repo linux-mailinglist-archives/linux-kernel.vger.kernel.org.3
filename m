@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0EB4F5086
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EC84F5078
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446407AbiDFBWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S1842006AbiDFB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242805AbiDEKfT (ORCPT
+        with ESMTP id S1354085AbiDEKLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:19 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF82B517E0;
-        Tue,  5 Apr 2022 03:21:19 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A374CD4B;
+        Tue,  5 Apr 2022 02:57:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4204ECE0B18;
-        Tue,  5 Apr 2022 10:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEBDC385A0;
-        Tue,  5 Apr 2022 10:21:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A20C616E7;
+        Tue,  5 Apr 2022 09:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A318C385A1;
+        Tue,  5 Apr 2022 09:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154076;
-        bh=HVTqkZTjsWRzsiky7DRmPVUh7R7XLN+qV9anCZQoTPU=;
+        s=korg; t=1649152627;
+        bh=WEzZA7KphCwxsPg16crtXDZyTJfB5qhlsaeZdSfVPQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XlWPSwS2cNte+WF5KjvhKn8lx1okCxWTXiYITWWo0k1fR9gxPHuZA8ecMIX9pfhhy
-         Ar05rHpoZkp31kBG994z+0qxR87GlY62SObJkUIxskMs7EL0S8817/jCyTAQGMsvID
-         iV8stCwIcoQfrrrMeGngG4b4BC7ZbpgBRCkS83as=
+        b=rIIiU1yRaONXvbLdOX2AqMMjjBqmygcXC9mRIsEycejPEEnjztoz5XAkDgOu7mkwG
+         mFQ7RU18/UgnbfEaUGhBuxhgtXv8/0BbkhyCXblxG+QPJSmGsFdInV5bI6jBw5e3ez
+         wWDc0oxabKuMx1fLkdb11BJ63RzQqPYv44HkwCLY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 412/599] clk: tegra: tegra124-emc: Fix missing put_device() call in emc_ensure_emc_driver
-Date:   Tue,  5 Apr 2022 09:31:46 +0200
-Message-Id: <20220405070311.092929253@linuxfoundation.org>
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.15 845/913] crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
+Date:   Tue,  5 Apr 2022 09:31:47 +0200
+Message-Id: <20220405070405.157449708@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-[ Upstream commit 6d6ef58c2470da85a99119f74d34216c8074b9f0 ]
+commit c8bd296cca3434b13b28b074eaeb78a23284de77 upstream.
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+The algorithm __cbc-aes-neonbs requires a fallback so we need
+to select the config options for them or otherwise it will fail
+to register on boot-up.
 
-Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-Link: https://lore.kernel.org/r/20220112104501.30655-1-linmq006@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 00b99ad2bac2 ("crypto: arm/aes-neonbs - Use generic cbc...")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/tegra/clk-tegra124-emc.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/crypto/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/tegra/clk-tegra124-emc.c b/drivers/clk/tegra/clk-tegra124-emc.c
-index 745f9faa98d8..733a962ff521 100644
---- a/drivers/clk/tegra/clk-tegra124-emc.c
-+++ b/drivers/clk/tegra/clk-tegra124-emc.c
-@@ -191,6 +191,7 @@ static struct tegra_emc *emc_ensure_emc_driver(struct tegra_clk_emc *tegra)
- 
- 	tegra->emc = platform_get_drvdata(pdev);
- 	if (!tegra->emc) {
-+		put_device(&pdev->dev);
- 		pr_err("%s: cannot find EMC driver\n", __func__);
- 		return NULL;
- 	}
--- 
-2.34.1
-
+--- a/arch/arm/crypto/Kconfig
++++ b/arch/arm/crypto/Kconfig
+@@ -102,6 +102,8 @@ config CRYPTO_AES_ARM_BS
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_AES
++	select CRYPTO_AES
++	select CRYPTO_CBC
+ 	select CRYPTO_SIMD
+ 	help
+ 	  Use a faster and more secure NEON based implementation of AES in CBC,
 
 

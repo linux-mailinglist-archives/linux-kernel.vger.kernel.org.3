@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF844F4F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB7F4F4F6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838593AbiDFAzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S1838069AbiDFAt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349419AbiDEJtu (ORCPT
+        with ESMTP id S1349422AbiDEJtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A9A1CFD8;
-        Tue,  5 Apr 2022 02:45:15 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2CD205CC;
+        Tue,  5 Apr 2022 02:45:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CA9D61368;
-        Tue,  5 Apr 2022 09:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79393C385A1;
-        Tue,  5 Apr 2022 09:45:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2CA7ACE1C90;
+        Tue,  5 Apr 2022 09:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37842C385A2;
+        Tue,  5 Apr 2022 09:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151914;
-        bh=LlfPEpuO2RmOjuU3Q2iGNRyCQCE6XCPmkT3/gfEHe7M=;
+        s=korg; t=1649151920;
+        bh=hjS1Ze3hfSIHjy26RolRrndkXeVbmh/Izd1p8lwYceE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UufaTZ6WTkoUSwVmM69ETZdDMhiHnRrSpGlKszULvVW0aYoD311NIVRlctnl5k8d2
-         m1Q7CkWVFilT5vf9S9tJs6M2gJDq4t45guhZok3Dc3Ul3/HXqQvRG7YUO+UcspH9i4
-         n82dCOfUfELOewxfhGR5URuaInuh6ZyCIGpB7Vtc=
+        b=Q9qlaXyMK1NrCiLE3qX2+BBq8IhM+2uaUVmajn02ClhNz9reTSzfGSACBE9++P6mi
+         XSgVsY58lkbfR9mDuSac/go8aFbHzrrs51iltT4kbhdn/y+rbwIB0bFjzqU8jUhODX
+         GrSy+bahbTBz1w9bADZwjrT1Yi+8K3i2AVLIRJfk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Marko <robimarko@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 588/913] clk: qcom: ipq8074: fix PCI-E clock oops
-Date:   Tue,  5 Apr 2022 09:27:30 +0200
-Message-Id: <20220405070357.469602231@linuxfoundation.org>
+        stable@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 590/913] dmaengine: idxd: change bandwidth token to read buffers
+Date:   Tue,  5 Apr 2022 09:27:32 +0200
+Message-Id: <20220405070357.528357758@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,161 +54,309 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Marko <robimarko@gmail.com>
+From: Dave Jiang <dave.jiang@intel.com>
 
-[ Upstream commit bf8f5182b8f59309809b41c1d1730ed9ca6134b1 ]
+[ Upstream commit 7ed6f1b85fb613e5e44ef3e14d73f2dc96860935 ]
 
-Fix PCI-E clock related kernel oops that are caused by a missing clock
-parent.
+DSA spec v1.2 has changed the term of "bandwidth tokens" to "read buffers"
+in order to make the concept clearer. Deprecate bandwidth token
+naming in the driver and convert to read buffers in order to match with
+the spec and reduce confusion when reading the spec.
 
-pcie0_rchng_clk_src has num_parents set to 2 but only one parent is
-actually set via parent_hws, it should also have "XO" defined.
-This will cause the kernel to panic on a NULL pointer in
-clk_core_get_parent_by_index().
-
-So, to fix this utilize clk_parent_data to provide gcc_xo_gpll0 parent
-data.
-Since there is already an existing static const char * const gcc_xo_gpll0[]
-used to provide the same parents via parent_names convert those users to
-clk_parent_data as well.
-
-Without this earlycon is needed to even catch the OOPS as it will reset
-the board before serial is initialized with the following:
-
-[    0.232279] Unable to handle kernel paging request at virtual address 0000a00000000000
-[    0.232322] Mem abort info:
-[    0.239094]   ESR = 0x96000004
-[    0.241778]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.244908]   SET = 0, FnV = 0
-[    0.250377]   EA = 0, S1PTW = 0
-[    0.253236]   FSC = 0x04: level 0 translation fault
-[    0.256277] Data abort info:
-[    0.261141]   ISV = 0, ISS = 0x00000004
-[    0.264262]   CM = 0, WnR = 0
-[    0.267820] [0000a00000000000] address between user and kernel address ranges
-[    0.270954] Internal error: Oops: 96000004 [#1] SMP
-[    0.278067] Modules linked in:
-[    0.282751] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.15.10 #0
-[    0.285882] Hardware name: Xiaomi AX3600 (DT)
-[    0.292043] pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.296299] pc : clk_core_get_parent_by_index+0x68/0xec
-[    0.303067] lr : __clk_register+0x1d8/0x820
-[    0.308273] sp : ffffffc01111b7d0
-[    0.312438] x29: ffffffc01111b7d0 x28: 0000000000000000 x27: 0000000000000040
-[    0.315919] x26: 0000000000000002 x25: 0000000000000000 x24: ffffff8000308800
-[    0.323037] x23: ffffff8000308850 x22: ffffff8000308880 x21: ffffff8000308828
-[    0.330155] x20: 0000000000000028 x19: ffffff8000309700 x18: 0000000000000020
-[    0.337272] x17: 000000005cc86990 x16: 0000000000000004 x15: ffffff80001d9d0a
-[    0.344391] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000006
-[    0.351508] x11: 0000000000000003 x10: 0101010101010101 x9 : 0000000000000000
-[    0.358626] x8 : 7f7f7f7f7f7f7f7f x7 : 6468626f5e626266 x6 : 17000a3a403c1b06
-[    0.365744] x5 : 061b3c403a0a0017 x4 : 0000000000000000 x3 : 0000000000000001
-[    0.372863] x2 : 0000a00000000000 x1 : 0000000000000001 x0 : ffffff8000309700
-[    0.379982] Call trace:
-[    0.387091]  clk_core_get_parent_by_index+0x68/0xec
-[    0.389351]  __clk_register+0x1d8/0x820
-[    0.394210]  devm_clk_hw_register+0x5c/0xe0
-[    0.398030]  devm_clk_register_regmap+0x44/0x8c
-[    0.402198]  qcom_cc_really_probe+0x17c/0x1d0
-[    0.406711]  qcom_cc_probe+0x34/0x44
-[    0.411224]  gcc_ipq8074_probe+0x18/0x30
-[    0.414869]  platform_probe+0x68/0xe0
-[    0.418776]  really_probe.part.0+0x9c/0x30c
-[    0.422336]  __driver_probe_device+0x98/0x144
-[    0.426329]  driver_probe_device+0x44/0x11c
-[    0.430842]  __device_attach_driver+0xb4/0x120
-[    0.434836]  bus_for_each_drv+0x68/0xb0
-[    0.439349]  __device_attach+0xb0/0x170
-[    0.443081]  device_initial_probe+0x14/0x20
-[    0.446901]  bus_probe_device+0x9c/0xa4
-[    0.451067]  device_add+0x35c/0x834
-[    0.454886]  of_device_add+0x54/0x64
-[    0.458360]  of_platform_device_create_pdata+0xc0/0x100
-[    0.462181]  of_platform_bus_create+0x114/0x370
-[    0.467128]  of_platform_bus_create+0x15c/0x370
-[    0.471641]  of_platform_populate+0x50/0xcc
-[    0.476155]  of_platform_default_populate_init+0xa8/0xc8
-[    0.480324]  do_one_initcall+0x50/0x1b0
-[    0.485877]  kernel_init_freeable+0x234/0x29c
-[    0.489436]  kernel_init+0x24/0x120
-[    0.493948]  ret_from_fork+0x10/0x20
-[    0.497253] Code: d50323bf d65f03c0 f94002a2 b4000302 (f9400042)
-[    0.501079] ---[ end trace 4ca7e1129da2abce ]---
-
-Fixes: f0cfcf1a ("clk: qcom: ipq8074: Add missing clocks for pcie")
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211220114119.465247-1-robimarko@gmail.com
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/163951338932.2988321.6162640806935567317.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/dma/idxd/device.c    | 25 +++++++++++----------
+ drivers/dma/idxd/idxd.h      | 12 +++++------
+ drivers/dma/idxd/init.c      |  6 +++---
+ drivers/dma/idxd/registers.h | 14 ++++++------
+ drivers/dma/idxd/sysfs.c     | 42 ++++++++++++++++++------------------
+ 5 files changed, 49 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 108fe27bee10..b09d99343e09 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -60,11 +60,6 @@ static const struct parent_map gcc_xo_gpll0_gpll0_out_main_div2_map[] = {
- 	{ P_GPLL0_DIV2, 4 },
- };
+diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+index 3cda1c5faf3c..ac671b6c0c36 100644
+--- a/drivers/dma/idxd/device.c
++++ b/drivers/dma/idxd/device.c
+@@ -700,9 +700,9 @@ static void idxd_groups_clear_state(struct idxd_device *idxd)
+ 		memset(&group->grpcfg, 0, sizeof(group->grpcfg));
+ 		group->num_engines = 0;
+ 		group->num_wqs = 0;
+-		group->use_token_limit = false;
+-		group->tokens_allowed = 0;
+-		group->tokens_reserved = 0;
++		group->use_rdbuf_limit = false;
++		group->rdbufs_allowed = 0;
++		group->rdbufs_reserved = 0;
+ 		group->tc_a = -1;
+ 		group->tc_b = -1;
+ 	}
+@@ -800,10 +800,10 @@ static int idxd_groups_config_write(struct idxd_device *idxd)
+ 	int i;
+ 	struct device *dev = &idxd->pdev->dev;
  
--static const char * const gcc_xo_gpll0[] = {
--	"xo",
--	"gpll0",
--};
--
- static const struct parent_map gcc_xo_gpll0_map[] = {
- 	{ P_XO, 0 },
- 	{ P_GPLL0, 1 },
-@@ -956,6 +951,11 @@ static struct clk_rcg2 blsp1_uart6_apps_clk_src = {
- 	},
- };
+-	/* Setup bandwidth token limit */
+-	if (idxd->hw.gen_cap.config_en && idxd->token_limit) {
++	/* Setup bandwidth rdbuf limit */
++	if (idxd->hw.gen_cap.config_en && idxd->rdbuf_limit) {
+ 		reg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
+-		reg.token_limit = idxd->token_limit;
++		reg.rdbuf_limit = idxd->rdbuf_limit;
+ 		iowrite32(reg.bits, idxd->reg_base + IDXD_GENCFG_OFFSET);
+ 	}
  
-+static const struct clk_parent_data gcc_xo_gpll0[] = {
-+	{ .fw_name = "xo" },
-+	{ .hw = &gpll0.clkr.hw },
-+};
-+
- static const struct freq_tbl ftbl_pcie_axi_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
- 	F(200000000, P_GPLL0, 4, 0, 0),
-@@ -969,7 +969,7 @@ static struct clk_rcg2 pcie0_axi_clk_src = {
- 	.parent_map = gcc_xo_gpll0_map,
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "pcie0_axi_clk_src",
--		.parent_names = gcc_xo_gpll0,
-+		.parent_data = gcc_xo_gpll0,
- 		.num_parents = 2,
- 		.ops = &clk_rcg2_ops,
- 	},
-@@ -1016,7 +1016,7 @@ static struct clk_rcg2 pcie1_axi_clk_src = {
- 	.parent_map = gcc_xo_gpll0_map,
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "pcie1_axi_clk_src",
--		.parent_names = gcc_xo_gpll0,
-+		.parent_data = gcc_xo_gpll0,
- 		.num_parents = 2,
- 		.ops = &clk_rcg2_ops,
- 	},
-@@ -1330,7 +1330,7 @@ static struct clk_rcg2 nss_ce_clk_src = {
- 	.parent_map = gcc_xo_gpll0_map,
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "nss_ce_clk_src",
--		.parent_names = gcc_xo_gpll0,
-+		.parent_data = gcc_xo_gpll0,
- 		.num_parents = 2,
- 		.ops = &clk_rcg2_ops,
- 	},
-@@ -4329,8 +4329,7 @@ static struct clk_rcg2 pcie0_rchng_clk_src = {
- 	.parent_map = gcc_xo_gpll0_map,
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "pcie0_rchng_clk_src",
--		.parent_hws = (const struct clk_hw *[]) {
--				&gpll0.clkr.hw },
-+		.parent_data = gcc_xo_gpll0,
- 		.num_parents = 2,
- 		.ops = &clk_rcg2_ops,
- 	},
+@@ -944,13 +944,12 @@ static void idxd_group_flags_setup(struct idxd_device *idxd)
+ 			group->tc_b = group->grpcfg.flags.tc_b = 1;
+ 		else
+ 			group->grpcfg.flags.tc_b = group->tc_b;
+-		group->grpcfg.flags.use_token_limit = group->use_token_limit;
+-		group->grpcfg.flags.tokens_reserved = group->tokens_reserved;
+-		if (group->tokens_allowed)
+-			group->grpcfg.flags.tokens_allowed =
+-				group->tokens_allowed;
++		group->grpcfg.flags.use_rdbuf_limit = group->use_rdbuf_limit;
++		group->grpcfg.flags.rdbufs_reserved = group->rdbufs_reserved;
++		if (group->rdbufs_allowed)
++			group->grpcfg.flags.rdbufs_allowed = group->rdbufs_allowed;
+ 		else
+-			group->grpcfg.flags.tokens_allowed = idxd->max_tokens;
++			group->grpcfg.flags.rdbufs_allowed = idxd->max_rdbufs;
+ 	}
+ }
+ 
+@@ -1145,7 +1144,7 @@ int idxd_device_load_config(struct idxd_device *idxd)
+ 	int i, rc;
+ 
+ 	reg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
+-	idxd->token_limit = reg.token_limit;
++	idxd->rdbuf_limit = reg.rdbuf_limit;
+ 
+ 	for (i = 0; i < idxd->max_groups; i++) {
+ 		struct idxd_group *group = idxd->groups[i];
+diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+index bfcb03329f77..833af18a99ee 100644
+--- a/drivers/dma/idxd/idxd.h
++++ b/drivers/dma/idxd/idxd.h
+@@ -84,9 +84,9 @@ struct idxd_group {
+ 	int id;
+ 	int num_engines;
+ 	int num_wqs;
+-	bool use_token_limit;
+-	u8 tokens_allowed;
+-	u8 tokens_reserved;
++	bool use_rdbuf_limit;
++	u8 rdbufs_allowed;
++	u8 rdbufs_reserved;
+ 	int tc_a;
+ 	int tc_b;
+ };
+@@ -278,11 +278,11 @@ struct idxd_device {
+ 	u32 max_batch_size;
+ 	int max_groups;
+ 	int max_engines;
+-	int max_tokens;
++	int max_rdbufs;
+ 	int max_wqs;
+ 	int max_wq_size;
+-	int token_limit;
+-	int nr_tokens;		/* non-reserved tokens */
++	int rdbuf_limit;
++	int nr_rdbufs;		/* non-reserved read buffers */
+ 	unsigned int wqcfg_size;
+ 
+ 	union sw_err_reg sw_err;
+diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+index 7bf03f371ce1..6263d9825250 100644
+--- a/drivers/dma/idxd/init.c
++++ b/drivers/dma/idxd/init.c
+@@ -464,9 +464,9 @@ static void idxd_read_caps(struct idxd_device *idxd)
+ 	dev_dbg(dev, "group_cap: %#llx\n", idxd->hw.group_cap.bits);
+ 	idxd->max_groups = idxd->hw.group_cap.num_groups;
+ 	dev_dbg(dev, "max groups: %u\n", idxd->max_groups);
+-	idxd->max_tokens = idxd->hw.group_cap.total_tokens;
+-	dev_dbg(dev, "max tokens: %u\n", idxd->max_tokens);
+-	idxd->nr_tokens = idxd->max_tokens;
++	idxd->max_rdbufs = idxd->hw.group_cap.total_rdbufs;
++	dev_dbg(dev, "max read buffers: %u\n", idxd->max_rdbufs);
++	idxd->nr_rdbufs = idxd->max_rdbufs;
+ 
+ 	/* read engine capabilities */
+ 	idxd->hw.engine_cap.bits =
+diff --git a/drivers/dma/idxd/registers.h b/drivers/dma/idxd/registers.h
+index 97ffb06de9b0..c0961c1ac161 100644
+--- a/drivers/dma/idxd/registers.h
++++ b/drivers/dma/idxd/registers.h
+@@ -65,9 +65,9 @@ union wq_cap_reg {
+ union group_cap_reg {
+ 	struct {
+ 		u64 num_groups:8;
+-		u64 total_tokens:8;
+-		u64 token_en:1;
+-		u64 token_limit:1;
++		u64 total_rdbufs:8;	/* formerly total_tokens */
++		u64 rdbuf_ctrl:1;	/* formerly token_en */
++		u64 rdbuf_limit:1;	/* formerly token_limit */
+ 		u64 rsvd:46;
+ 	};
+ 	u64 bits;
+@@ -111,7 +111,7 @@ union offsets_reg {
+ #define IDXD_GENCFG_OFFSET		0x80
+ union gencfg_reg {
+ 	struct {
+-		u32 token_limit:8;
++		u32 rdbuf_limit:8;
+ 		u32 rsvd:4;
+ 		u32 user_int_en:1;
+ 		u32 rsvd2:19;
+@@ -288,10 +288,10 @@ union group_flags {
+ 		u32 tc_a:3;
+ 		u32 tc_b:3;
+ 		u32 rsvd:1;
+-		u32 use_token_limit:1;
+-		u32 tokens_reserved:8;
++		u32 use_rdbuf_limit:1;
++		u32 rdbufs_reserved:8;
+ 		u32 rsvd2:4;
+-		u32 tokens_allowed:8;
++		u32 rdbufs_allowed:8;
+ 		u32 rsvd3:4;
+ 	};
+ 	u32 bits;
+diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+index a9025be940db..999ce13a93ad 100644
+--- a/drivers/dma/idxd/sysfs.c
++++ b/drivers/dma/idxd/sysfs.c
+@@ -99,17 +99,17 @@ struct device_type idxd_engine_device_type = {
+ 
+ /* Group attributes */
+ 
+-static void idxd_set_free_tokens(struct idxd_device *idxd)
++static void idxd_set_free_rdbufs(struct idxd_device *idxd)
+ {
+-	int i, tokens;
++	int i, rdbufs;
+ 
+-	for (i = 0, tokens = 0; i < idxd->max_groups; i++) {
++	for (i = 0, rdbufs = 0; i < idxd->max_groups; i++) {
+ 		struct idxd_group *g = idxd->groups[i];
+ 
+-		tokens += g->tokens_reserved;
++		rdbufs += g->rdbufs_reserved;
+ 	}
+ 
+-	idxd->nr_tokens = idxd->max_tokens - tokens;
++	idxd->nr_rdbufs = idxd->max_rdbufs - rdbufs;
+ }
+ 
+ static ssize_t group_tokens_reserved_show(struct device *dev,
+@@ -118,7 +118,7 @@ static ssize_t group_tokens_reserved_show(struct device *dev,
+ {
+ 	struct idxd_group *group = confdev_to_group(dev);
+ 
+-	return sysfs_emit(buf, "%u\n", group->tokens_reserved);
++	return sysfs_emit(buf, "%u\n", group->rdbufs_reserved);
+ }
+ 
+ static ssize_t group_tokens_reserved_store(struct device *dev,
+@@ -143,14 +143,14 @@ static ssize_t group_tokens_reserved_store(struct device *dev,
+ 	if (idxd->state == IDXD_DEV_ENABLED)
+ 		return -EPERM;
+ 
+-	if (val > idxd->max_tokens)
++	if (val > idxd->max_rdbufs)
+ 		return -EINVAL;
+ 
+-	if (val > idxd->nr_tokens + group->tokens_reserved)
++	if (val > idxd->nr_rdbufs + group->rdbufs_reserved)
+ 		return -EINVAL;
+ 
+-	group->tokens_reserved = val;
+-	idxd_set_free_tokens(idxd);
++	group->rdbufs_reserved = val;
++	idxd_set_free_rdbufs(idxd);
+ 	return count;
+ }
+ 
+@@ -164,7 +164,7 @@ static ssize_t group_tokens_allowed_show(struct device *dev,
+ {
+ 	struct idxd_group *group = confdev_to_group(dev);
+ 
+-	return sysfs_emit(buf, "%u\n", group->tokens_allowed);
++	return sysfs_emit(buf, "%u\n", group->rdbufs_allowed);
+ }
+ 
+ static ssize_t group_tokens_allowed_store(struct device *dev,
+@@ -190,10 +190,10 @@ static ssize_t group_tokens_allowed_store(struct device *dev,
+ 		return -EPERM;
+ 
+ 	if (val < 4 * group->num_engines ||
+-	    val > group->tokens_reserved + idxd->nr_tokens)
++	    val > group->rdbufs_reserved + idxd->nr_rdbufs)
+ 		return -EINVAL;
+ 
+-	group->tokens_allowed = val;
++	group->rdbufs_allowed = val;
+ 	return count;
+ }
+ 
+@@ -207,7 +207,7 @@ static ssize_t group_use_token_limit_show(struct device *dev,
+ {
+ 	struct idxd_group *group = confdev_to_group(dev);
+ 
+-	return sysfs_emit(buf, "%u\n", group->use_token_limit);
++	return sysfs_emit(buf, "%u\n", group->use_rdbuf_limit);
+ }
+ 
+ static ssize_t group_use_token_limit_store(struct device *dev,
+@@ -232,10 +232,10 @@ static ssize_t group_use_token_limit_store(struct device *dev,
+ 	if (idxd->state == IDXD_DEV_ENABLED)
+ 		return -EPERM;
+ 
+-	if (idxd->token_limit == 0)
++	if (idxd->rdbuf_limit == 0)
+ 		return -EPERM;
+ 
+-	group->use_token_limit = !!val;
++	group->use_rdbuf_limit = !!val;
+ 	return count;
+ }
+ 
+@@ -1161,7 +1161,7 @@ static ssize_t max_tokens_show(struct device *dev,
+ {
+ 	struct idxd_device *idxd = confdev_to_idxd(dev);
+ 
+-	return sysfs_emit(buf, "%u\n", idxd->max_tokens);
++	return sysfs_emit(buf, "%u\n", idxd->max_rdbufs);
+ }
+ static DEVICE_ATTR_RO(max_tokens);
+ 
+@@ -1170,7 +1170,7 @@ static ssize_t token_limit_show(struct device *dev,
+ {
+ 	struct idxd_device *idxd = confdev_to_idxd(dev);
+ 
+-	return sysfs_emit(buf, "%u\n", idxd->token_limit);
++	return sysfs_emit(buf, "%u\n", idxd->rdbuf_limit);
+ }
+ 
+ static ssize_t token_limit_store(struct device *dev,
+@@ -1191,13 +1191,13 @@ static ssize_t token_limit_store(struct device *dev,
+ 	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
+ 		return -EPERM;
+ 
+-	if (!idxd->hw.group_cap.token_limit)
++	if (!idxd->hw.group_cap.rdbuf_limit)
+ 		return -EPERM;
+ 
+-	if (val > idxd->hw.group_cap.total_tokens)
++	if (val > idxd->hw.group_cap.total_rdbufs)
+ 		return -EINVAL;
+ 
+-	idxd->token_limit = val;
++	idxd->rdbuf_limit = val;
+ 	return count;
+ }
+ static DEVICE_ATTR_RW(token_limit);
 -- 
 2.34.1
 

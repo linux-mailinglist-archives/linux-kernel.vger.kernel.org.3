@@ -2,193 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067194F46FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46484F473D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382936AbiDEUzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S1350042AbiDEVEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392147AbiDEPfq (ORCPT
+        with ESMTP id S1392285AbiDEPgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:35:46 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF9F710DB;
-        Tue,  5 Apr 2022 06:46:39 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8D535D;
-        Tue,  5 Apr 2022 15:46:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649166397;
-        bh=NozpGi0NsTMG/sB7xLGYVBuLZzmbJ7B3Gwh+tj4+cQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G8zkeM3lID2r8WMzYcbEXGAKX30vNSczc4ScWlOdPdazVH/RfNFQL0KJdhysWOadF
-         UCQQNWpNkGeaaTSgDAiZVcb+ZdCBuPEJQszJlD+quolRO/UOwM3K1+BDhoqKaHBHyj
-         YDypJs7DW5COOEgATFL/Z3vHTMi97p9eqOQGL8UM=
-Date:   Tue, 5 Apr 2022 16:46:34 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v7 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <YkxIOgTl876orHbf@pendragon.ideasonboard.com>
-References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
- <20220405120552.433415-2-patrick.rudolph@9elements.com>
+        Tue, 5 Apr 2022 11:36:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2E3913D0A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649166515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZveUJKzsoCzkXjLEmVVwtjwhVIlnnTQ1b+zTECXTF/U=;
+        b=G5kJ65kb7zw/NQQb13mDyCYU13+pExTyZZtoy9vkmSP5K8L/OTjkZ4erldv4N41khJHuNF
+        TSZAPy1u+MdvM7PSuXJYLJWo9Yj5/XK5lY86PYVDk9E3okiCUmfr7Gf2ePb228/9poxHBU
+        AgbVPNQHKqZtTx2/gdH9LZiKLFR7pfM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-_WSV99ANOFOfiwbtjLtvrw-1; Tue, 05 Apr 2022 09:48:33 -0400
+X-MC-Unique: _WSV99ANOFOfiwbtjLtvrw-1
+Received: by mail-wr1-f70.google.com with SMTP id x17-20020adfbb51000000b002060ff71a3bso1360320wrg.22
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:48:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZveUJKzsoCzkXjLEmVVwtjwhVIlnnTQ1b+zTECXTF/U=;
+        b=XIXhNHanNx5LbGnB+W3HckA4/SI5gmfHyiM8eCIFqwGqCBikjOVPqLGtqY6AaFsaNu
+         lSKrklKTK9CAARLaQ8nkHuchoE5z4SMDrEhIxOAoLcPQcVBtFK1HnKPJfBj5Wf1CGjE8
+         UZcWda0BXl9WAP8k55bItMBiXzc1zxwcJuVmVPn62WyLJeF1V3H24JSWBVVpMkPFCHlT
+         84jzpxmln3dWbFcZ9rSfqqtXG9dzfh+jAaMm6Ge0FNWSJ+3NhgwCvblNyRrxvqfBNWLb
+         WuhI1UIakNgSomA5c1RshzUKzqnEjq9GK50g2zTbOsPjxY/q6InLQF4ublJwBrqwilgQ
+         g14Q==
+X-Gm-Message-State: AOAM530iaLoirSoNi7cUGNsdtDj8Hh5my0P9DgI9CbbJMX+oYzjJ9Av4
+        +OiYtueTnzuOjxWbnVsrhpohF0D6C7cpVFFUyLQ1Eue6VOj24TQ99RBHiOPmwyVadlaZ6kzcsMz
+        qle1oFU5pEsbZvmcglhCTKhfR
+X-Received: by 2002:a7b:cd13:0:b0:38c:9a08:5c62 with SMTP id f19-20020a7bcd13000000b0038c9a085c62mr3234416wmj.154.1649166512157;
+        Tue, 05 Apr 2022 06:48:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwgxLrzuXmRgcHGSm9NougyOgwDnbf47hIlS2lc6czMniBzy/El5Zf8y2oTdwEa1oPyH4skoA==
+X-Received: by 2002:a7b:cd13:0:b0:38c:9a08:5c62 with SMTP id f19-20020a7bcd13000000b0038c9a085c62mr3234400wmj.154.1649166511973;
+        Tue, 05 Apr 2022 06:48:31 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id o19-20020a05600c511300b0038d0d8f67e5sm2275912wms.16.2022.04.05.06.48.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:48:30 -0700 (PDT)
+Message-ID: <5093bff2-bc85-57b9-5f8b-ecb81417409e@redhat.com>
+Date:   Tue, 5 Apr 2022 15:48:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220405120552.433415-2-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 032/104] KVM: x86/mmu: introduce config for PRIVATE
+ KVM MMU
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <770235e7fed04229b81c334e2477374374cea901.1646422845.git.isaku.yamahata@intel.com>
+ <55fa888b31bae80bf72cbdbdf6f27401ea4ccc5c.camel@intel.com>
+ <20220401015130.GE2084469@ls.amr.corp.intel.com>
+ <9e01bc014df60e215ba17432c06b6854f6dae3f8.camel@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <9e01bc014df60e215ba17432c06b6854f6dae3f8.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patrick,
-
-Thank you for the patch.
-
-On Tue, Apr 05, 2022 at 02:05:49PM +0200, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
+On 4/1/22 04:13, Kai Huang wrote:
+>> I don't want to use CONFIG_INTEL_TDX_HOST in KVM MMU code.  I think the change
+>> to KVM MMU should be a sort of independent from TDX.  But it seems failed based
+>> on your feedback.
 > 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
->  1 file changed, 34 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..132c3e54e7ab 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,48 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
->  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - maxim,max7367
-> +              - maxim,max7369
-> +              - nxp,pca9542
-> +              - nxp,pca9543
-> +              - nxp,pca9544
-> +              - nxp,pca9545
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          maxItems: 1
-> +
-> +        "#interrupt-cells":
-> +          const: 2
-> +
-> +        interrupt-controller: true
+> Why do you need to use any config?  As I said majority of your changes to MMU
+> are not under any config.  But I'll leave this to maintainer/reviewers.
 
-It feels a bit out of place to have those properties listed before the
-main "properties" property, but we can only have a sincel allOf. I
-wonder if the i2c-mux schema could be selected automatically based on
-node name, but that's out of scope for this patch.
+There are few uses, but the effect should be pretty large, because the 
+config symbol replaces variable accesses with constants:
 
-I thought it was more customary to define properties in the main
-"properties" property, and then have
++static inline gfn_t kvm_gfn_stolen_mask(struct kvm *kvm)
++{
++#ifdef CONFIG_KVM_MMU_PRIVATE
++	return kvm->arch.gfn_shared_mask;
++#else
++	return 0;
++#endif
++}
 
-if:
-  not:
-    properties:
-      compatible:
-        contains:
-          enum:
-            - maxim,max7367
-            - maxim,max7369
-            - nxp,pca9542
-            - nxp,pca9543
-            - nxp,pca9544
-            - nxp,pca9545
-  then:
-    properties:
-      interrupts: false
-      "#interrupt-cells": false
-      interrupt-controller: false
+Please keep it.
 
-I don't mind much either way though, but if one option is preferred over
-the other, we may want to be consistent.
+Paolo
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -38,14 +65,6 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts:
-> -    maxItems: 1
-> -
-> -  "#interrupt-cells":
-> -    const: 2
-> -
-> -  interrupt-controller: true
-> -
->    reset-gpios:
->      maxItems: 1
->  
-> @@ -59,6 +78,9 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -79,6 +101,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
->  
-> +            vdd-supply = <&p3v3>;
-> +
->              interrupt-parent = <&ipic>;
->              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
-
--- 
-Regards,
-
-Laurent Pinchart

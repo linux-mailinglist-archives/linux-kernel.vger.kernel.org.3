@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475994F5138
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7564F512E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446406AbiDFBzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S1845242AbiDFByH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573578AbiDETW7 (ORCPT
+        with ESMTP id S1573588AbiDETXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F4748E4C;
-        Tue,  5 Apr 2022 12:21:00 -0700 (PDT)
+        Tue, 5 Apr 2022 15:23:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AC14BB9E;
+        Tue,  5 Apr 2022 12:21:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 608E861899;
-        Tue,  5 Apr 2022 19:21:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2943AC385A3;
-        Tue,  5 Apr 2022 19:20:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB8761899;
+        Tue,  5 Apr 2022 19:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD4CC385A0;
+        Tue,  5 Apr 2022 19:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186459;
-        bh=VuAetinbMIJ3jeBAT3F1PDyYDvpSu4GO847Nw/6AauI=;
+        s=k20201202; t=1649186469;
+        bh=PDf3viSS4Mrr2b1LxuraoL8yqmsI0zQ6OYJs90Hla08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EV9WI8Ws5j3ZBLTudp20Epsy/TrTwGPL8CNzVCuRB/h6ET739GafztHdfWyE63F+G
-         QMkCTG8y8xslilsSfeVFmZb+NeKEvILYI9xZoVtZ0o0bPBAYbV/usa+jfOd1bTRCII
-         RqTCFexLXjQs50YQzwG3fKRxVqF/RZTTJn2jWrHt1p86OuBQKfe/JZtBH3s7TxvCyR
-         q8mZSr8ZYBi+zbHhWNDEMk4/fL8NWA0e3fVbEhDI5u3uh8Fe5W0TyCrlvZtq7UFRTE
-         4+6I1l+DEaBdgpeeGEgatDnXiWLsESQe8ozUJAUNJjhRxp9EaKCgeebofDmB9w7tEQ
-         WzTUdijRPHRyw==
+        b=oHkKb0zOXEGuXDRiw+PFtURhv5EVKSUUB/pEPOSwoTvrDKMMkparT8Yo9oxfzEdL7
+         bvqrG7PYDMEL/jj4n/I1QjdBPH5Iz5sKnujn5kmgM+FsE1GbkM4ubK5HYbiB5i5GRt
+         2GcheSsP2jMI0mhKOO25nWlz8HuwFSYd4XZYRKqNMBMfZji8WIC2CWZPrnd+ZW5RDK
+         4Pr63v2KKhS0GKMKuMiM7gSXx76ok2+wQrXigURfS7r4uJ3XEuk8lChHl/M0dM9RFe
+         lBusEbXaxGN9jNBzLuuXFfJasFxbyPQbDFs7VY/qr/PCYY6ZIgcswU24BwK29WyORq
+         YTE1HezVsEIQQ==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 30/59] ceph: pass the request to parse_reply_info_readdir()
-Date:   Tue,  5 Apr 2022 15:20:01 -0400
-Message-Id: <20220405192030.178326-31-jlayton@kernel.org>
+Subject: [PATCH v13 41/59] ceph: get file size from fscrypt_file when present in inode traces
+Date:   Tue,  5 Apr 2022 15:20:12 -0400
+Message-Id: <20220405192030.178326-42-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,93 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiubo Li <xiubli@redhat.com>
+When we get an inode trace from the MDS, grab the fscrypt_file field if
+the inode is encrypted, and use it to populate the i_size field instead
+of the regular inode size field.
 
-Instead of passing just the r_reply_info to the readdir reply parser,
-pass the request pointer directly instead. This will facilitate
-implementing readdir on fscrypted directories.
-
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/mds_client.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ fs/ceph/inode.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index 750a67643850..0a7f18d4df73 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -406,9 +406,10 @@ static int parse_reply_info_trace(void **p, void *end,
-  * parse readdir results
-  */
- static int parse_reply_info_readdir(void **p, void *end,
--				struct ceph_mds_reply_info_parsed *info,
--				u64 features)
-+				    struct ceph_mds_request *req,
-+				    u64 features)
- {
-+	struct ceph_mds_reply_info_parsed *info = &req->r_reply_info;
- 	u32 num, i = 0;
- 	int err;
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index b9454721c976..f2a59306e4a6 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -1024,6 +1024,7 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
  
-@@ -650,15 +651,16 @@ static int parse_reply_info_getvxattr(void **p, void *end,
-  * parse extra results
-  */
- static int parse_reply_info_extra(void **p, void *end,
--				  struct ceph_mds_reply_info_parsed *info,
-+				  struct ceph_mds_request *req,
- 				  u64 features, struct ceph_mds_session *s)
- {
-+	struct ceph_mds_reply_info_parsed *info = &req->r_reply_info;
- 	u32 op = le32_to_cpu(info->head->op);
+ 	if (new_version ||
+ 	    (new_issued & (CEPH_CAP_ANY_FILE_RD | CEPH_CAP_ANY_FILE_WR))) {
++		u64 size = le64_to_cpu(info->size);
+ 		s64 old_pool = ci->i_layout.pool_id;
+ 		struct ceph_string *old_ns;
  
- 	if (op == CEPH_MDS_OP_GETFILELOCK)
- 		return parse_reply_info_filelock(p, end, info, features);
- 	else if (op == CEPH_MDS_OP_READDIR || op == CEPH_MDS_OP_LSSNAP)
--		return parse_reply_info_readdir(p, end, info, features);
-+		return parse_reply_info_readdir(p, end, req, features);
- 	else if (op == CEPH_MDS_OP_CREATE)
- 		return parse_reply_info_create(p, end, info, features, s);
- 	else if (op == CEPH_MDS_OP_GETVXATTR)
-@@ -671,9 +673,9 @@ static int parse_reply_info_extra(void **p, void *end,
-  * parse entire mds reply
-  */
- static int parse_reply_info(struct ceph_mds_session *s, struct ceph_msg *msg,
--			    struct ceph_mds_reply_info_parsed *info,
--			    u64 features)
-+			    struct ceph_mds_request *req, u64 features)
- {
-+	struct ceph_mds_reply_info_parsed *info = &req->r_reply_info;
- 	void *p, *end;
- 	u32 len;
- 	int err;
-@@ -695,7 +697,7 @@ static int parse_reply_info(struct ceph_mds_session *s, struct ceph_msg *msg,
- 	ceph_decode_32_safe(&p, end, len, bad);
- 	if (len > 0) {
- 		ceph_decode_need(&p, end, len, bad);
--		err = parse_reply_info_extra(&p, p+len, info, features, s);
-+		err = parse_reply_info_extra(&p, p+len, req, features, s);
- 		if (err < 0)
- 			goto out_bad;
- 	}
-@@ -3440,14 +3442,14 @@ static void handle_reply(struct ceph_mds_session *session, struct ceph_msg *msg)
- 	}
+@@ -1037,10 +1038,21 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
  
- 	dout("handle_reply tid %lld result %d\n", tid, result);
--	rinfo = &req->r_reply_info;
- 	if (test_bit(CEPHFS_FEATURE_REPLY_ENCODING, &session->s_features))
--		err = parse_reply_info(session, msg, rinfo, (u64)-1);
-+		err = parse_reply_info(session, msg, req, (u64)-1);
- 	else
--		err = parse_reply_info(session, msg, rinfo, session->s_con.peer_features);
-+		err = parse_reply_info(session, msg, req, session->s_con.peer_features);
- 	mutex_unlock(&mdsc->mutex);
+ 		pool_ns = old_ns;
  
- 	/* Must find target inode outside of mutexes to avoid deadlocks */
-+	rinfo = &req->r_reply_info;
- 	if ((err >= 0) && rinfo->head->is_target) {
- 		struct inode *in = xchg(&req->r_new_inode, NULL);
- 		struct ceph_vino tvino = {
++		if (IS_ENCRYPTED(inode) && size && (iinfo->fscrypt_file_len == sizeof(__le64))) {
++			u64 fsize = __le64_to_cpu(*(__le64 *)iinfo->fscrypt_file);
++
++			if (size == round_up(fsize, CEPH_FSCRYPT_BLOCK_SIZE)) {
++				size = fsize;
++			} else {
++				pr_warn("fscrypt size mismatch: size=%llu fscrypt_file=%llu, discarding fscrypt_file size.\n",
++					info->size, size);
++			}
++		}
++
+ 		queue_trunc = ceph_fill_file_size(inode, issued,
+-					le32_to_cpu(info->truncate_seq),
+-					le64_to_cpu(info->truncate_size),
+-					le64_to_cpu(info->size));
++						  le32_to_cpu(info->truncate_seq),
++						  le64_to_cpu(info->truncate_size),
++						  size);
+ 		/* only update max_size on auth cap */
+ 		if ((info->cap.flags & CEPH_CAP_FLAG_AUTH) &&
+ 		    ci->i_max_size != le64_to_cpu(info->max_size)) {
 -- 
 2.35.1
 

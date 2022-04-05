@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B094F3E73
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014554F4354
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388746AbiDEOk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S1388874AbiDEOlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243878AbiDEJkf (ORCPT
+        with ESMTP id S229868AbiDEJlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:40:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7CEBA312;
-        Tue,  5 Apr 2022 02:25:04 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36359BAB8D;
+        Tue,  5 Apr 2022 02:25:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3813F61659;
-        Tue,  5 Apr 2022 09:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456F6C385A2;
-        Tue,  5 Apr 2022 09:25:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C59AF61368;
+        Tue,  5 Apr 2022 09:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44D7C385A0;
+        Tue,  5 Apr 2022 09:25:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150703;
-        bh=kHivgI89ExcwhIzHs0s0eahszGcG5QZveN98bO2rNkA=;
+        s=korg; t=1649150709;
+        bh=AXM6EIGv3cMnti0AXeqKdjQ/tXW2ov+kO9R4rZJX9+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PK3+5p4+ACdA8Y85tVazSMEYCZcMDYuTUbapoBHfX0Jztvrz7t1BkMPxkpVJiV7FZ
-         vODIpCWuLXL3eB93eNO9zmJIet6XBmh99RaR9OL1WqVI+JzYSg05K4s7jS4wBJ2za1
-         D96QoPYLkeDOwRXHWNSgFTc/tC49O11jFUeBXmRI=
+        b=hLkjt0DVIJmFQ5vGobsQTIX320gqI0qeLSYgE/wQFdXoF1zJbOKqjkGfCBdMi07uf
+         plkbxUcpUqAHgcGVD0ZDG29L2uqpaYcJ2cf7ldO5fD282yHR+aN2Pp8nxh+yXCJIge
+         XLNJ61ORVzXft99xIviBRMIcbQgCI8eeK8meQiks=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH 5.15 150/913] ARM: dts: exynos: add missing HDMI supplies on SMDK5420
-Date:   Tue,  5 Apr 2022 09:20:12 +0200
-Message-Id: <20220405070344.333212523@linuxfoundation.org>
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [PATCH 5.15 152/913] carl9170: fix missing bit-wise or operator for tx_params
+Date:   Tue,  5 Apr 2022 09:20:14 +0200
+Message-Id: <20220405070344.394137918@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,34 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-commit 453a24ded415f7fce0499c6b0a2c7b28f84911f2 upstream.
+commit 02a95374b5eebdbd3b6413fd7ddec151d2ea75a1 upstream.
 
-Add required VDD supplies to HDMI block on SMDK5420.  Without them, the
-HDMI driver won't probe.  Because of lack of schematics, use same
-supplies as on Arndale Octa and Odroid XU3 boards (voltage matches).
+Currently tx_params is being re-assigned with a new value and the
+previous setting IEEE80211_HT_MCS_TX_RX_DIFF is being overwritten.
+The assignment operator is incorrect, the original intent was to
+bit-wise or the value in. Fix this by replacing the = operator
+with |= instead.
 
-Cc: <stable@vger.kernel.org> # v3.15+
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220208171823.226211-3-krzysztof.kozlowski@canonical.com
+Kudos to Christian Lamparter for suggesting the correct fix.
+
+Fixes: fe8ee9ad80b2 ("carl9170: mac80211 glue and command interface")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Cc: <Stable@vger.kernel.org>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220125004406.344422-1-colin.i.king@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/exynos5420-smdk5420.dts |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/ath/carl9170/main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/exynos5420-smdk5420.dts
-+++ b/arch/arm/boot/dts/exynos5420-smdk5420.dts
-@@ -124,6 +124,9 @@
- 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&hdmi_hpd_irq>;
-+	vdd-supply = <&ldo6_reg>;
-+	vdd_osc-supply = <&ldo7_reg>;
-+	vdd_pll-supply = <&ldo6_reg>;
- };
+--- a/drivers/net/wireless/ath/carl9170/main.c
++++ b/drivers/net/wireless/ath/carl9170/main.c
+@@ -1915,7 +1915,7 @@ static int carl9170_parse_eeprom(struct
+ 		WARN_ON(!(tx_streams >= 1 && tx_streams <=
+ 			IEEE80211_HT_MCS_TX_MAX_STREAMS));
  
- &hsi2c_4 {
+-		tx_params = (tx_streams - 1) <<
++		tx_params |= (tx_streams - 1) <<
+ 			    IEEE80211_HT_MCS_TX_MAX_STREAMS_SHIFT;
+ 
+ 		carl9170_band_2GHz.ht_cap.mcs.tx_params |= tx_params;
 
 

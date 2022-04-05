@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4AC4F4AB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A22A4F4E9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448460AbiDEWvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S1835893AbiDFAd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349086AbiDEJtG (ORCPT
+        with ESMTP id S1354777AbiDEKPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F2DA9958;
-        Tue,  5 Apr 2022 02:40:28 -0700 (PDT)
+        Tue, 5 Apr 2022 06:15:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328FF6C926;
+        Tue,  5 Apr 2022 03:02:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64546B81B14;
-        Tue,  5 Apr 2022 09:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3007C385A1;
-        Tue,  5 Apr 2022 09:40:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8CB1B81B7A;
+        Tue,  5 Apr 2022 10:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60021C385A1;
+        Tue,  5 Apr 2022 10:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151626;
-        bh=/fOvHyfuNZxEjQinF8Uu0DrUexcyDz192XnxFGsCerg=;
+        s=korg; t=1649152960;
+        bh=GrLKfpMAhDiFsA9sctGu5r6LDF039bw7+aj2UbXwqKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mtxXlqVzXztEh0xDI+kuXGQUTPCNAp7vLwVEtUl04dmxSHAY8GbLtiOsbrxR8MDBG
-         EzuzEfq0H2vgmRaIfoWvenE64HLpxAsYxMIaBpoywm0IEd+D1lAIrviITWJKc7nKXd
-         N0nQLjGHxNnoGKG08wldJcq2uS890P8MfEP5bZWk=
+        b=Ybeg6cv8Yu8fCVG7hrfZ3OiGU1k56mzgqLO4ebUgNM2N8eUn77EBJNKbEMfYCvPc3
+         mhObYVkUNU+JkFMfWkHgWsyTx7IU0Ew3lHu3CnJ8NLM9g8fDQB5jUn7yJJdoLpriuD
+         2g9UmWiMVmQ41uLunUMmyRD7CWw2czKdOxrmpzK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 482/913] scsi: pm8001: Fix payload initialization in pm80xx_set_thermal_config()
-Date:   Tue,  5 Apr 2022 09:25:44 +0200
-Message-Id: <20220405070354.303822296@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 5.10 052/599] pinctrl: samsung: drop pin banks references on error paths
+Date:   Tue,  5 Apr 2022 09:25:46 +0200
+Message-Id: <20220405070300.376469907@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit bb225b12dbcc82d53d637d10b8d70b64494f8c16 ]
+commit 50ebd19e3585b9792e994cfa8cbee8947fe06371 upstream.
 
-The fields of the set_ctrl_cfg_req structure have the __le32 type, so use
-cpu_to_le32() to assign them. This removes the sparse warnings:
+The driver iterates over its devicetree children with
+for_each_child_of_node() and stores for later found node pointer.  This
+has to be put in error paths to avoid leak during re-probing.
 
-warning: incorrect type in assignment (different base types)
-    expected restricted __le32
-    got unsigned int
-
-Link: https://lore.kernel.org/r/20220220031810.738362-8-damien.lemoal@opensource.wdc.com
-Fixes: 842784e0d15b ("pm80xx: Update For Thermal Page Code")
-Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ab663789d697 ("pinctrl: samsung: Match pin banks with their device nodes")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Link: https://lore.kernel.org/r/20220111201426.326777-2-krzysztof.kozlowski@canonical.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/pinctrl/samsung/pinctrl-samsung.c |   30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 11887ac8ad0f..ed6b5e7c2136 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1202,9 +1202,11 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *pm8001_ha)
- 	else
- 		page_code = THERMAL_PAGE_CODE_8H;
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -1002,6 +1002,16 @@ samsung_pinctrl_get_soc_data_for_of_alia
+ 	return &(of_data->ctrl[id]);
+ }
  
--	payload.cfg_pg[0] = (THERMAL_LOG_ENABLE << 9) |
--				(THERMAL_ENABLE << 8) | page_code;
--	payload.cfg_pg[1] = (LTEMPHIL << 24) | (RTEMPHIL << 8);
-+	payload.cfg_pg[0] =
-+		cpu_to_le32((THERMAL_LOG_ENABLE << 9) |
-+			    (THERMAL_ENABLE << 8) | page_code);
-+	payload.cfg_pg[1] =
-+		cpu_to_le32((LTEMPHIL << 24) | (RTEMPHIL << 8));
++static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
++{
++	struct samsung_pin_bank *bank;
++	unsigned int i;
++
++	bank = d->pin_banks;
++	for (i = 0; i < d->nr_banks; ++i, ++bank)
++		of_node_put(bank->of_node);
++}
++
+ /* retrieve the soc specific data */
+ static const struct samsung_pin_ctrl *
+ samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
+@@ -1116,19 +1126,19 @@ static int samsung_pinctrl_probe(struct
+ 	if (ctrl->retention_data) {
+ 		drvdata->retention_ctrl = ctrl->retention_data->init(drvdata,
+ 							  ctrl->retention_data);
+-		if (IS_ERR(drvdata->retention_ctrl))
+-			return PTR_ERR(drvdata->retention_ctrl);
++		if (IS_ERR(drvdata->retention_ctrl)) {
++			ret = PTR_ERR(drvdata->retention_ctrl);
++			goto err_put_banks;
++		}
+ 	}
  
- 	pm8001_dbg(pm8001_ha, DEV,
- 		   "Setting up thermal config. cfg_pg 0 0x%x cfg_pg 1 0x%x\n",
--- 
-2.34.1
-
+ 	ret = samsung_pinctrl_register(pdev, drvdata);
+ 	if (ret)
+-		return ret;
++		goto err_put_banks;
+ 
+ 	ret = samsung_gpiolib_register(pdev, drvdata);
+-	if (ret) {
+-		samsung_pinctrl_unregister(pdev, drvdata);
+-		return ret;
+-	}
++	if (ret)
++		goto err_unregister;
+ 
+ 	if (ctrl->eint_gpio_init)
+ 		ctrl->eint_gpio_init(drvdata);
+@@ -1138,6 +1148,12 @@ static int samsung_pinctrl_probe(struct
+ 	platform_set_drvdata(pdev, drvdata);
+ 
+ 	return 0;
++
++err_unregister:
++	samsung_pinctrl_unregister(pdev, drvdata);
++err_put_banks:
++	samsung_banks_of_node_put(drvdata);
++	return ret;
+ }
+ 
+ /*
 
 

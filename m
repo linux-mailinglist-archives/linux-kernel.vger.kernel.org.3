@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1084F4736
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F23E4F4837
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348199AbiDEVEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S1378236AbiDEVba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244381AbiDEKil (ORCPT
+        with ESMTP id S244448AbiDEKiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:38:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B61426D4;
-        Tue,  5 Apr 2022 03:23:37 -0700 (PDT)
+        Tue, 5 Apr 2022 06:38:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8071D1706D;
+        Tue,  5 Apr 2022 03:23:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1A915CE0B18;
-        Tue,  5 Apr 2022 10:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37478C385A3;
-        Tue,  5 Apr 2022 10:23:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F760B81B18;
+        Tue,  5 Apr 2022 10:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E24C385A2;
+        Tue,  5 Apr 2022 10:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154214;
-        bh=M1gU7GJAdKfEoxBo0mmxgvDmkAOM71wt/lDiYoCEucE=;
+        s=korg; t=1649154219;
+        bh=F60sn2dNhMzWGLeWPjD2F3i4dvAVumbpwBD0iIpj0VQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ddVbKsMED+7c4CNoVNL13U7tp1WTIEI1fCE/x2k/I29fH1wz8BUvetyAd5rclusIH
-         nO31xiTd1vSKI/pTfDdYwF/wXkEFe1JrDji9BMdOCFQ1JLsvPfoMqAWj519dCKZRxs
-         Fx4VbpEE2dMEnoWMFbytvBEP1vzK8mV0uRRc6Rhs=
+        b=hJsuSwmIFwtiK1Anz74cFSbQq6uFfTwFpjXnnxZ/11W9g2X7ArWiIhA6ivDl7VhNZ
+         yWc3N7axNRVmbP1KMH7QjaiSmiRYYDDpQtXWSfUlLhJUSayCYbjaCLiup8X1ykd7H6
+         7CwChmZegGIXa9YozSPf7tMs94ZstbhZWJCQjyxI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 500/599] media: cx88-mpeg: clear interrupt status register before streaming video
-Date:   Tue,  5 Apr 2022 09:33:14 +0200
-Message-Id: <20220405070313.707864533@linuxfoundation.org>
+Subject: [PATCH 5.10 502/599] lib/test_lockup: fix kernel pointer check for separate address spaces
+Date:   Tue,  5 Apr 2022 09:33:16 +0200
+Message-Id: <20220405070313.767428936@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,41 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
+[ Upstream commit 5a06fcb15b43d1f7bf740c672950122331cb5655 ]
 
-Some cx88 video cards may have transport stream status interrupts set
-to 1 from cold start, causing errors like this:
+test_kernel_ptr() uses access_ok() to figure out if a given address
+points to user space instead of kernel space. However on architectures
+that set CONFIG_ALTERNATE_USER_ADDRESS_SPACE, a pointer can be valid
+for both, and the check always fails because access_ok() returns true.
 
-  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
-  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+Make the check for user space pointers conditional on the type of
+address space layout.
 
-According to CX2388x datasheet, the interrupt status register should be
-cleared before enabling IRQs to stream video.
-
-Fix it by clearing the Transport Stream Interrupt Status register.
-
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/test_lockup.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index a57c991b165b..10d2971ef062 100644
---- a/drivers/media/pci/cx88/cx88-mpeg.c
-+++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -162,6 +162,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
- 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
- 	q->count = 0;
+diff --git a/lib/test_lockup.c b/lib/test_lockup.c
+index 07f476317187..78a630bbd03d 100644
+--- a/lib/test_lockup.c
++++ b/lib/test_lockup.c
+@@ -417,9 +417,14 @@ static bool test_kernel_ptr(unsigned long addr, int size)
+ 		return false;
  
-+	/* clear interrupt status register */
-+	cx_write(MO_TS_INTSTAT,  0x1f1111);
+ 	/* should be at least readable kernel address */
+-	if (access_ok((void __user *)ptr, 1) ||
+-	    access_ok((void __user *)ptr + size - 1, 1) ||
+-	    get_kernel_nofault(buf, ptr) ||
++	if (!IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) &&
++	    (access_ok((void __user *)ptr, 1) ||
++	     access_ok((void __user *)ptr + size - 1, 1))) {
++		pr_err("user space ptr invalid in kernel: %#lx\n", addr);
++		return true;
++	}
 +
- 	/* enable irqs */
- 	dprintk(1, "setting the interrupt mask\n");
- 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
++	if (get_kernel_nofault(buf, ptr) ||
+ 	    get_kernel_nofault(buf, ptr + size - 1)) {
+ 		pr_err("invalid kernel ptr: %#lx\n", addr);
+ 		return true;
 -- 
 2.34.1
 

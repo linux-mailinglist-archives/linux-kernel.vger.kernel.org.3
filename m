@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F434F41A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6D44F4159
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443329AbiDEUHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S1381927AbiDEU3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244498AbiDEKi5 (ORCPT
+        with ESMTP id S244837AbiDEKjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:38:57 -0400
+        Tue, 5 Apr 2022 06:39:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18AB7C165;
-        Tue,  5 Apr 2022 03:23:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF04A56CF;
+        Tue,  5 Apr 2022 03:24:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FE03B81C8A;
-        Tue,  5 Apr 2022 10:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3265C385A0;
-        Tue,  5 Apr 2022 10:23:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A179B81B18;
+        Tue,  5 Apr 2022 10:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56967C385A1;
+        Tue,  5 Apr 2022 10:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154231;
-        bh=Qb/oTH/UWrZXJOhd5uOtZEXXGxt5HFJZw3S+Cihmmxc=;
+        s=korg; t=1649154258;
+        bh=wHyyD1j+rtVNRgjNRVprUD2XKkYLjpE3fRupRb474Sw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FVb14dvgyoXcukBMf3y6nN3+4zXsWABFDeEJEvp7gjfjKKhp4BGneg+oxI6MLnfBm
-         4yCPGWtbr3cE+jGrP/3cc2IopluhUlafPex/7klD3CQNGRu27KlFVzshoMx2PjURvW
-         oBDJ3JfuSbOTQhDj1t7a/T4VLDUAmo6vbgxvzTYM=
+        b=zRPITcFEjgAkBtyCozfbcVwSHPJ0PCDxb1AuGQ/2NydfgympYzsJxs16M7zcjmSp+
+         dwjSuaXJpVlaVFmRVnVxW130MCOzokwO3vSFAoacdhDWlAulqXKdqi9xZntexX2F5o
+         Lvq/6HW0625217442ViHOZtpIf6XXcGi5vmihsUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Schleich <rs@noreya.tech>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 488/599] ARM: dts: bcm2837: Add the missing L1/L2 cache information
-Date:   Tue,  5 Apr 2022 09:33:02 +0200
-Message-Id: <20220405070313.351085237@linuxfoundation.org>
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 515/599] powerpc/lib/sstep: Fix build errors with newer binutils
+Date:   Tue,  5 Apr 2022 09:33:29 +0200
+Message-Id: <20220405070314.164078381@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,112 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Schleich <rs@noreya.tech>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-[ Upstream commit bdf8762da268d2a34abf517c36528413906e9cd5 ]
+commit 8219d31effa7be5dbc7ff915d7970672e028c701 upstream.
 
-This patch fixes the kernel warning
-"cacheinfo: Unable to detect cache hierarchy for CPU 0"
-for the bcm2837 on newer kernel versions.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
 
-Signed-off-by: Richard Schleich <rs@noreya.tech>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-[florian: Align and remove comments matching property values]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  {standard input}: Assembler messages:
+  {standard input}:10576: Error: unrecognized opcode: `stbcx.'
+  {standard input}:10680: Error: unrecognized opcode: `lharx'
+  {standard input}:10694: Error: unrecognized opcode: `lbarx'
+
+Rework to add assembler directives [1] around the instruction.  The
+problem with this might be that we can trick a power6 into
+single-stepping through an stbcx. for instance, and it will execute that
+in kernel mode.
+
+[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
+
+Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
+Cc: stable@vger.kernel.org # v4.14+
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220224162215.3406642-3-anders.roxell@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/bcm2837.dtsi | 49 ++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ arch/powerpc/lib/sstep.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/bcm2837.dtsi b/arch/arm/boot/dts/bcm2837.dtsi
-index 0199ec98cd61..5dbdebc46259 100644
---- a/arch/arm/boot/dts/bcm2837.dtsi
-+++ b/arch/arm/boot/dts/bcm2837.dtsi
-@@ -40,12 +40,26 @@
- 		#size-cells = <0>;
- 		enable-method = "brcm,bcm2836-smp"; // for ARM 32-bit
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -949,7 +949,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
  
-+		/* Source for d/i-cache-line-size and d/i-cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500/e/level-1-memory-system
-+		 * /about-the-l1-memory-system?lang=en
-+		 *
-+		 * Source for d/i-cache-size
-+		 * https://magpi.raspberrypi.com/articles/raspberry-pi-3-specs-benchmarks
-+		 */
- 		cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000d8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
+ #define __put_user_asmx(x, addr, err, op, cr)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	" op " %2,0,%3\n"		\
++		".machine pop\n"			\
+ 		"	mfcr	%1\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+@@ -962,7 +965,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
  
- 		cpu1: cpu@1 {
-@@ -54,6 +68,13 @@
- 			reg = <1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -62,6 +83,13 @@
- 			reg = <2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -70,6 +98,27 @@
- 			reg = <3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000f0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
-+		};
-+
-+		/* Source for cache-line-size + cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500
-+		 * /e/level-2-memory-system/about-the-l2-memory-system?lang=en
-+		 * Source for cache-size
-+		 * https://datasheets.raspberrypi.com/cm/cm1-and-cm3-datasheet.pdf
-+		 */
-+		l2: l2-cache0 {
-+			compatible = "cache";
-+			cache-size = <0x80000>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>; // 512KiB(size)/64(line-size)=8192ways/16-way set
-+			cache-level = <2>;
- 		};
- 	};
- };
--- 
-2.34.1
-
+ #define __get_user_asmx(x, addr, err, op)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	"op" %1,0,%2\n"			\
++		".machine pop\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+ 		"3:	li	%0,%3\n"		\
 
 

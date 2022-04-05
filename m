@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618E84F3D8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487CB4F42C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388039AbiDENUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S1388305AbiDENVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344364AbiDEJTe (ORCPT
+        with ESMTP id S1344696AbiDEJVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E798254;
-        Tue,  5 Apr 2022 02:07:58 -0700 (PDT)
+        Tue, 5 Apr 2022 05:21:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AE237FF;
+        Tue,  5 Apr 2022 02:08:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF19614E4;
-        Tue,  5 Apr 2022 09:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA97BC385A1;
-        Tue,  5 Apr 2022 09:07:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0595E61564;
+        Tue,  5 Apr 2022 09:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15436C385A0;
+        Tue,  5 Apr 2022 09:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149677;
-        bh=K/1JruDGt6uXiQBE2IgAYNU8fm+vGs7kPoKDYyu86Xs=;
+        s=korg; t=1649149707;
+        bh=VlcoB2NN9O2FYLHqTNDYV/Vv3oVh0iUwfatCynBEVBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RwqyLzOAj7g0mvsuBOmyVwzSoUqKQ6iNkvtjvwuei6aVuulcIfPvDaNhNC/h4O1vf
-         Ves+ltqaJ0IeNxkA9lwzlW9YmXS+zNy3/lxJD8CjMKDjkspLNWuxjLu5r9Ut7cGu6v
-         8zQVLJ+5BhuXXXb8U/KNUZJrEZg7iMP69K7Z21Dc=
+        b=2DTllwcm/mbT6THd2gdgdlvHDDs7t12EspTP7Z1s6Hz0aMkWQ45EXkZYzHLER17Gv
+         2cFMmWJfX705lh/wE20hud0f9aHx8vIwT84elETAmQqGIDjab5mp7WzCZqyNo/wPJ8
+         xJRhWV76EgBacvvBE30CDx0I1jP/QhBFavsUxKjs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        Anand Jain <anand.jain@oracle.com>,
+        stable@vger.kernel.org, Boris Burkov <boris@bur.io>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Josef Bacik <josef@toxicpanda.com>,
         David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0794/1017] btrfs: harden identification of a stale device
-Date:   Tue,  5 Apr 2022 09:28:27 +0200
-Message-Id: <20220405070417.820794180@linuxfoundation.org>
+Subject: [PATCH 5.16 0795/1017] btrfs: make search_csum_tree return 0 if we get -EFBIG
+Date:   Tue,  5 Apr 2022 09:28:28 +0200
+Message-Id: <20220405070417.849784472@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,99 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anand Jain <anand.jain@oracle.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit 770c79fb65506fc7c16459855c3839429f46cb32 ]
+[ Upstream commit 03ddb19d2ea745228879b9334f3b550c88acb10a ]
 
-Identifying and removing the stale device from the fs_uuids list is done
-by btrfs_free_stale_devices().  btrfs_free_stale_devices() in turn
-depends on device_path_matched() to check if the device appears in more
-than one btrfs_device structure.
+We can either fail to find a csum entry at all and return -ENOENT, or we
+can find a range that is close, but return -EFBIG.  In essence these
+both mean the same thing when we are doing a lookup for a csum in an
+existing range, we didn't find a csum.  We want to treat both of these
+errors the same way, complain loudly that there wasn't a csum.  This
+currently happens anyway because we do
 
-The matching of the device happens by its path, the device path. However,
-when device mapper is in use, the dm device paths are nothing but a link
-to the actual block device, which leads to the device_path_matched()
-failing to match.
+	count = search_csum_tree();
+	if (count <= 0) {
+		// reloc and error handling
+	}
 
-Fix this by matching the dev_t as provided by lookup_bdev() instead of
-plain string compare of the device paths.
+However it forces us to incorrectly treat EIO or ENOMEM errors as on
+disk corruption.  Fix this by returning 0 if we get either -ENOENT or
+-EFBIG from btrfs_lookup_csum() so we can do proper error handling.
 
-Reported-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Reviewed-by: Boris Burkov <boris@bur.io>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/volumes.c | 45 ++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 7 deletions(-)
+ fs/btrfs/file-item.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 42391d4aeb11..02ee42d461be 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -530,15 +530,48 @@ btrfs_get_bdev_and_sb(const char *device_path, fmode_t flags, void *holder,
+diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
+index d1cbb64a78f3..91ae1caa1bdb 100644
+--- a/fs/btrfs/file-item.c
++++ b/fs/btrfs/file-item.c
+@@ -303,7 +303,7 @@ static int search_csum_tree(struct btrfs_fs_info *fs_info,
+ 	read_extent_buffer(path->nodes[0], dst, (unsigned long)item,
+ 			ret * csum_size);
+ out:
+-	if (ret == -ENOENT)
++	if (ret == -ENOENT || ret == -EFBIG)
+ 		ret = 0;
  	return ret;
  }
- 
--static bool device_path_matched(const char *path, struct btrfs_device *device)
-+/*
-+ * Check if the device in the path matches the device in the given struct device.
-+ *
-+ * Returns:
-+ *   true  If it is the same device.
-+ *   false If it is not the same device or on error.
-+ */
-+static bool device_matched(const struct btrfs_device *device, const char *path)
- {
--	int found;
-+	char *device_name;
-+	dev_t dev_old;
-+	dev_t dev_new;
-+	int ret;
-+
-+	/*
-+	 * If we are looking for a device with the matching dev_t, then skip
-+	 * device without a name (a missing device).
-+	 */
-+	if (!device->name)
-+		return false;
-+
-+	device_name = kzalloc(BTRFS_PATH_NAME_MAX, GFP_KERNEL);
-+	if (!device_name)
-+		return false;
- 
- 	rcu_read_lock();
--	found = strcmp(rcu_str_deref(device->name), path);
-+	scnprintf(device_name, BTRFS_PATH_NAME_MAX, "%s", rcu_str_deref(device->name));
- 	rcu_read_unlock();
- 
--	return found == 0;
-+	ret = lookup_bdev(device_name, &dev_old);
-+	kfree(device_name);
-+	if (ret)
-+		return false;
-+
-+	ret = lookup_bdev(path, &dev_new);
-+	if (ret)
-+		return false;
-+
-+	if (dev_old == dev_new)
-+		return true;
-+
-+	return false;
- }
- 
- /*
-@@ -571,9 +604,7 @@ static int btrfs_free_stale_devices(const char *path,
- 					 &fs_devices->devices, dev_list) {
- 			if (skip_device && skip_device == device)
- 				continue;
--			if (path && !device->name)
--				continue;
--			if (path && !device_path_matched(path, device))
-+			if (path && !device_matched(device, path))
- 				continue;
- 			if (fs_devices->opened) {
- 				/* for an already deleted device return 0 */
 -- 
 2.34.1
 

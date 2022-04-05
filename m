@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEF14F4F50
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FA84F4C5B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837311AbiDFApa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S1578229AbiDEXTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349031AbiDEJs7 (ORCPT
+        with ESMTP id S1348921AbiDEJsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:59 -0400
+        Tue, 5 Apr 2022 05:48:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4295A8EEE;
-        Tue,  5 Apr 2022 02:39:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FB5EE4ED;
+        Tue,  5 Apr 2022 02:37:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BF7361673;
-        Tue,  5 Apr 2022 09:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5C8C385A3;
-        Tue,  5 Apr 2022 09:39:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F6061368;
+        Tue,  5 Apr 2022 09:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5452C385A2;
+        Tue,  5 Apr 2022 09:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151553;
-        bh=I3uEnA03OADDN1LfFcs2Xj8Bm+YZGExuC8qCYOwy7vY=;
+        s=korg; t=1649151452;
+        bh=PcI19hqCNDQNOO07Q9W/VnngPzZoICRke9OEaBIjGf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJIS7LwlnlUouYgmGdmsmg4g/8nlZyZfoMsSZFOuY3aT1bMoQuRQ6ZPymFQ32l0i3
-         xvXk2PB7e0DpGjm8g1IsGgWZdbz+hvGDPsB3XYc1N9YABaCe4Jf5FTaFO18ur1s+b2
-         FO/VWLPAGpkO+cCb/OdIOoo/0oFmk3FHLsEsGOGc=
+        b=Xzl2g0MTsShWMOO67zbjV3v7wJyONiMqkWi+cr7ZRHvSpkQXGayTgAk/ZeTgBUVo5
+         39vytaA1OcNmfiCBtp9rP7Ps4fKxw/LkmjgX+XtsyjYpJHCU1hQhzQNTA5gxu50Qk+
+         veDnk3gxMWOcE/lUJD0CVQwBng37TvergU61kfz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 419/913] KVM: PPC: Book3S HV: Check return value of kvmppc_radix_init
-Date:   Tue,  5 Apr 2022 09:24:41 +0200
-Message-Id: <20220405070352.406396830@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 421/913] mt76: connac: fix sta_rec_wtbl tag len
+Date:   Tue,  5 Apr 2022 09:24:43 +0200
+Message-Id: <20220405070352.465463203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,40 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabiano Rosas <farosas@linux.ibm.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 69ab6ac380a00244575de02c406dcb9491bf3368 ]
+[ Upstream commit 74c337ec0905d99111fc63a15f2e0784b9ed5503 ]
 
-The return of the function is being shadowed by the call to
-kvmppc_uvmem_init.
+Similar to mt7915 driver, fix tag len error for sta_rec_wtbl, which
+causes fw parsing error for the tags placed behind it.
 
-Fixes: ca9f4942670c ("KVM: PPC: Book3S HV: Support for running secure guests")
-Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220125155735.1018683-2-farosas@linux.ibm.com
+Fixes: d0e274af2f2e4 ("mt76: mt76_connac: create mcu library")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_hv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index a2fd1db29f7e..7fa685711669 100644
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -6101,8 +6101,11 @@ static int kvmppc_book3s_init_hv(void)
- 	if (r)
- 		return r;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
+index d25b50e76932..017bd59c4ea8 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
+@@ -295,7 +295,7 @@ mt76_connac_mcu_alloc_wtbl_req(struct mt76_dev *dev, struct mt76_wcid *wcid,
+ 	}
  
--	if (kvmppc_radix_possible())
-+	if (kvmppc_radix_possible()) {
- 		r = kvmppc_radix_init();
-+		if (r)
-+			return r;
-+	}
+ 	if (sta_hdr)
+-		sta_hdr->len = cpu_to_le16(sizeof(hdr));
++		le16_add_cpu(&sta_hdr->len, sizeof(hdr));
  
- 	r = kvmppc_uvmem_init();
- 	if (r < 0)
+ 	return skb_put_data(nskb, &hdr, sizeof(hdr));
+ }
 -- 
 2.34.1
 

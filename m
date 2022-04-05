@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4484F2ACB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257744F2C38
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237191AbiDEJEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S1344766AbiDEJmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbiDEISC (ORCPT
+        with ESMTP id S239257AbiDEIT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:02 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04172B6D1E;
-        Tue,  5 Apr 2022 01:06:19 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1860398pjh.3;
-        Tue, 05 Apr 2022 01:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ePtpQVr2/xAxWdpNXmu4SCKmYKeBJUhhz3S5bqyfLKU=;
-        b=gKdeP7q22sW9hJCH0aUS243AOByxsp3wI5iwnh3TVk74XN8M+9MjRyPbsAVg9Nq5l4
-         HonIND9/T2b2KZfvWfSqxxWBjlTXafG3ZhAbraokr3ycCd7Bya5/KiTzNWfGlPTut4sg
-         6ilYF1x8mFQoM3mqab8tK/alOHLLJBsyBAJXZBZ7RN1fmYhzMMvyY0zl3SEConL8z7lY
-         3SMGYih6KH9Fud4dzthL0/AbxMFEfCszxaesBq1H8+SrJQT8qNJAHgDUZ3V1krehKRrd
-         sLM5NLwSnpjPiN3Jlm/AA1MhTcYYk9vZZXrCpDlBbsORuZJa1joeOEXGsBaiIKd+DDwi
-         Q0Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ePtpQVr2/xAxWdpNXmu4SCKmYKeBJUhhz3S5bqyfLKU=;
-        b=XZPNCl8QTZCCUK0tET4ZxJVwQyRE/RlqvDwxqjfXnsWUvvVbaj2U5i4Kneagyn9A4b
-         24JHx2ZyL3WIuU6oF3uVFqAofZzdng5RSUBnlucXCA14z3vitOVrLIiU3zCoXOrpZg69
-         FwknYQtrSijc2Ihczda/B+qhUXLaIBXWmC5UgyPrI8T3k1717EXD5/NIy38n3wgm95cK
-         U8tzWDWKOQnhhqwMUcdK4+qp1I8lmd6EYVlW9gPjqzkuk2siDET226hMNNwIitSGogKN
-         h2zyO3elXM/O2khRQziRPnumDo714Pj2aGE4+nmrtT2LWCL58a3yjOf/ZLkIzugb7qwe
-         q2DA==
-X-Gm-Message-State: AOAM533faAQNZJT/qfh+1y+jLxfVc0OhbTUg90T0dCEBa1ptNTqSUU2+
-        WmbzJOPpJ7MtMnjqEIoONJvMYakESSYCzQ==
-X-Google-Smtp-Source: ABdhPJwoZ4KOfl0YZ3POEkbstpClrBjXowN6NpOPSayJLzlwi3EbD0f6AqVksyI3H8TsyBOJGM+AkQ==
-X-Received: by 2002:a17:90b:1bc6:b0:1c7:f32:3aa0 with SMTP id oa6-20020a17090b1bc600b001c70f323aa0mr2764807pjb.168.1649145979009;
-        Tue, 05 Apr 2022 01:06:19 -0700 (PDT)
-Received: from localhost.localdomain ([183.156.181.188])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm14961910pfh.46.2022.04.05.01.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 01:06:18 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     jassisinghbrar@gmail.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [RESEND][PATCH] mailbox: remove an unneeded NULL check on list iterator
-Date:   Tue,  5 Apr 2022 16:05:56 +0800
-Message-Id: <20220405080556.26103-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 04:19:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADF27E0A9;
+        Tue,  5 Apr 2022 01:10:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9516C60B0E;
+        Tue,  5 Apr 2022 08:10:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4FEC385A4;
+        Tue,  5 Apr 2022 08:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649146242;
+        bh=yiUb0KeDIElbsWH/tWSC27FCtW1g3j0B1+uvrjcMk30=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=PZodR0flrzbsq2oxkUiMgDvB7X2Elj5eNDBNIJZYSeibE9SQv6EZwbMGUNvIdfWQp
+         tpWaIYsoOOdrFrg9SICP2LeeFpBryS4jQX219mjUt5KHjgKoX2oWwqm8LcfCwJsFK1
+         qelcqd7V/+W+pYJ4i3MkuqMCh3PfFnrJaeMshf/4xSM7fcxHcv5qUoqcy8emqr1k33
+         B5pEfaORqVyi0IwN7hesLxg7AkNyUyY/rEPUfRa/yw2aaBj/z5hQ5iBN8fLg+a8vz5
+         rvekW1PWphkFy52GuzH69jcaHfVAXXXanfNn8lg4iW9/vstteRQFxrNZdH1V7UhmvD
+         WsrXlZCQ2W7Sg==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] carl9170: tx: fix an incorrect use of list iterator
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220328122820.1004-1-xiam0nd.tong@gmail.com>
+References: <20220328122820.1004-1-xiam0nd.tong@gmail.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linville@tuxdriver.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164914623778.12306.14074908465775082444.kvalo@kernel.org>
+Date:   Tue,  5 Apr 2022 08:10:39 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list iterator is always non-NULL so it doesn't need to be checked.
-Thus just remove the unnecessary NULL check.
+Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/mailbox/tegra-hsp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> If the previous list_for_each_entry_continue_rcu() don't exit early
+> (no goto hit inside the loop), the iterator 'cvif' after the loop
+> will be a bogus pointer to an invalid structure object containing
+> the HEAD (&ar->vif_list). As a result, the use of 'cvif' after that
+> will lead to a invalid memory access (i.e., 'cvif->id': the invalid
+> pointer dereference when return back to/after the callsite in the
+> carl9170_update_beacon()).
+> 
+> The original intention should have been to return the valid 'cvif'
+> when found in list, NULL otherwise. So just return NULL when no
+> entry found, to fix this bug.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1f1d9654e183c ("carl9170: refactor carl9170_update_beacon")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-diff --git a/drivers/mailbox/tegra-hsp.c b/drivers/mailbox/tegra-hsp.c
-index acd0675da681..64eaee089b03 100644
---- a/drivers/mailbox/tegra-hsp.c
-+++ b/drivers/mailbox/tegra-hsp.c
-@@ -799,7 +799,7 @@ static int __maybe_unused tegra_hsp_resume(struct device *dev)
- 	struct tegra_hsp_doorbell *db;
- 
- 	list_for_each_entry(db, &hsp->doorbells, list) {
--		if (db && db->channel.chan)
-+		if (db->channel.chan)
- 			tegra_hsp_doorbell_startup(db->channel.chan);
- 	}
- 
+Christian, is this ok to take?
+
 -- 
-2.17.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20220328122820.1004-1-xiam0nd.tong@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

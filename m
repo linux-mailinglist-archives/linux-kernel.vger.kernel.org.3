@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1804F486E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5164F48C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383189AbiDEVj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
+        id S1385938AbiDEVuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358212AbiDEK2H (ORCPT
+        with ESMTP id S1358231AbiDEK2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3964BF4E;
-        Tue,  5 Apr 2022 03:17:08 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6511AD93;
+        Tue,  5 Apr 2022 03:17:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 536FB617AA;
-        Tue,  5 Apr 2022 10:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658A9C385A2;
-        Tue,  5 Apr 2022 10:17:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 024FB617AA;
+        Tue,  5 Apr 2022 10:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EADCC385A2;
+        Tue,  5 Apr 2022 10:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153827;
-        bh=CSM//Rz3PDHvzk+BYq71+X+1Jm1t0/cBCElyGnnl1/g=;
+        s=korg; t=1649153833;
+        bh=Wu9EoBb4bBXtOyqt/h2vb+Y/ya1Bxiwt1yRBhqJpw4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yGFOtd9edQG6ixd4zV54l00AJOjMXFkO7h6LWZItm41QwWvfl6Ev6C3XnX7LhDSgX
-         69j1GRFiohyk1vQdBmkryR1YHO4yTU5omZxRQHJx/HnPWQ8wEn0JZAuhEx8BPhI7vi
-         RumHyMw4uqoeJX2FYAfZU4QCCDSQPW5Obnpf7LW8=
+        b=OdYN2DlMqgj/qwdQZJxrSVxlxKAQP0tznHEJip5uhDDw1l4p2VVhGRX1UtRyePF98
+         WRppTgzWXx8BNjq5gEGAqnMuyd0ZZMyoYv2Ex0hc7H03N7MDw7izM0H9af0OaKmuOs
+         jxDv1cnGpvq/c55WFxgsAxf3BzaRaxeQSXGbZpB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 360/599] USB: storage: ums-realtek: fix error code in rts51x_read_mem()
-Date:   Tue,  5 Apr 2022 09:30:54 +0200
-Message-Id: <20220405070309.545154045@linuxfoundation.org>
+Subject: [PATCH 5.10 362/599] can: isotp: support MSG_TRUNC flag when reading from socket
+Date:   Tue,  5 Apr 2022 09:30:56 +0200
+Message-Id: <20220405070309.604358102@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,37 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-[ Upstream commit b07cabb8361dc692522538205552b1b9dab134be ]
+[ Upstream commit 42bf50a1795a1854d48717b7361dbdbce496b16b ]
 
-The rts51x_read_mem() function should return negative error codes.
-Currently if the kmalloc() fails it returns USB_STOR_TRANSPORT_ERROR (3)
-which is treated as success by the callers.
+When providing the MSG_TRUNC flag via recvmsg() syscall the return value
+provides the real length of the packet or datagram, even when it was longer
+than the passed buffer.
 
-Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220304073504.GA26464@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1065932671
+Link: https://lore.kernel.org/all/20220316164258.54155-3-socketcan@hartkopp.net
+Suggested-by: Derek Will <derekrobertwill@gmail.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/realtek_cr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/can/isotp.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-index 3789698d9d3c..0c423916d7bf 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -365,7 +365,7 @@ static int rts51x_read_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index cb5546c186bc..518014506fff 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1004,29 +1004,28 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	struct sock *sk = sock->sk;
+ 	struct sk_buff *skb;
+ 	struct isotp_sock *so = isotp_sk(sk);
+-	int err = 0;
+-	int noblock;
++	int noblock = flags & MSG_DONTWAIT;
++	int ret = 0;
  
- 	buf = kmalloc(len, GFP_NOIO);
- 	if (buf == NULL)
--		return USB_STOR_TRANSPORT_ERROR;
-+		return -ENOMEM;
+-	noblock = flags & MSG_DONTWAIT;
+-	flags &= ~MSG_DONTWAIT;
++	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC))
++		return -EINVAL;
  
- 	usb_stor_dbg(us, "addr = 0x%x, len = %d\n", addr, len);
+ 	if (!so->bound)
+ 		return -EADDRNOTAVAIL;
  
+-	skb = skb_recv_datagram(sk, flags, noblock, &err);
++	flags &= ~MSG_DONTWAIT;
++	skb = skb_recv_datagram(sk, flags, noblock, &ret);
+ 	if (!skb)
+-		return err;
++		return ret;
+ 
+ 	if (size < skb->len)
+ 		msg->msg_flags |= MSG_TRUNC;
+ 	else
+ 		size = skb->len;
+ 
+-	err = memcpy_to_msg(msg, skb->data, size);
+-	if (err < 0) {
+-		skb_free_datagram(sk, skb);
+-		return err;
+-	}
++	ret = memcpy_to_msg(msg, skb->data, size);
++	if (ret < 0)
++		goto out_err;
+ 
+ 	sock_recv_timestamp(msg, sk, skb);
+ 
+@@ -1036,9 +1035,13 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+ 	}
+ 
++	/* set length of return value */
++	ret = (flags & MSG_TRUNC) ? skb->len : size;
++
++out_err:
+ 	skb_free_datagram(sk, skb);
+ 
+-	return size;
++	return ret;
+ }
+ 
+ static int isotp_release(struct socket *sock)
 -- 
 2.34.1
 

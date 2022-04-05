@@ -2,208 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712DB4F472B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0D84F47A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344504AbiDEVCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S1356877AbiDEVPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457756AbiDEQkG (ORCPT
+        with ESMTP id S1457760AbiDEQm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:40:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E64BD9EA2
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:38:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F18D2B81E8B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45D1C385A5
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649176685;
-        bh=Godeb1QF1XaLrnNDs3lSu+RGeizZyertdC0hYAIHClw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fE6K3ZMOrzLhOrGELR5HAtFVyi2NejfAzQAYn94hbuyiYrk1Wj/uHjQ/sUwrFLq7b
-         A90RQAeTHiH/jnF2FsoDzzb6YF6K7Da9PcyEtfDSMTTtqoV+6881nB3QRuxgbRB1C0
-         L1BVh6We0d4/AWznFWw+bE9HrosTDxOoqixJRgriBIQeRWuil9/sq6gfrBnMMr+5wI
-         zMbtCSoVvsck22ldzHRKFa04rO6n/CZ4G3xf1f7z+cHOmA7EOAPN7aPLK7G36cU3Ql
-         jPOSWjIGfcde6VfzUdUUGxaUZdzwVjVyzkIbs+C0Mf1xPcXcBfPZUslz33qheWg8dg
-         7wC9nhqlRbeAg==
-Received: by mail-lf1-f49.google.com with SMTP id d5so24193237lfj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:38:05 -0700 (PDT)
-X-Gm-Message-State: AOAM530ltRtJDyN63FLLdLyyiHPgDFO6tY0icqvOcxOThfPHqVdR/jTe
-        lCkazb6l2DfBB6tbeQBxmC7KzhsGbYnoOkORZFhXuQ==
-X-Google-Smtp-Source: ABdhPJzKjYrImTJI9WyByUp50Mj9PCG8J06DWt1ucdJTqdDxCPRpsxJHnkt2Vhm9WUOmFxdnESIK5CAyDWTZbEBHta8=
-X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
- ht9-20020a170907608900b006dba3d73fa9mr4556278ejc.593.1649176672844; Tue, 05
- Apr 2022 09:37:52 -0700 (PDT)
+        Tue, 5 Apr 2022 12:42:56 -0400
+X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 09:40:56 PDT
+Received: from 5.mo583.mail-out.ovh.net (5.mo583.mail-out.ovh.net [87.98.173.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48BDDFFBD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:40:56 -0700 (PDT)
+Received: from player715.ha.ovh.net (unknown [10.108.20.144])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 6067823F18
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:40:54 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player715.ha.ovh.net (Postfix) with ESMTPSA id F12DC2900AE2A;
+        Tue,  5 Apr 2022 16:40:48 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R002e7e3a593-6777-45c4-9110-c0244ab646ae,
+                    8BB3F008109FF1ACF458F8D30695C50246D29715) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Fabio Estevam <festevam@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] ASoC: sgtl5000: use simple i2c probe function
+Date:   Tue,  5 Apr 2022 18:40:31 +0200
+Message-Id: <20220405164031.2160888-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
- <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
- <c2e57f10b62940eba3cfcae996e20e3c@huawei.com> <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
- <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com> <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
-In-Reply-To: <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 5 Apr 2022 18:37:42 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
-Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
-Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 8148700579943122566
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddttdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepteegudfgleekieekteeggeetveefueefteeugfduieeitdfhhedtfeefkedvfeefnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeduhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 6:22 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 4/5/2022 8:29 AM, Roberto Sassu wrote:
-> >> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
-> >> Sent: Tuesday, April 5, 2022 4:50 PM
-> >> On 4/4/2022 10:20 AM, Roberto Sassu wrote:
-> >>>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
-> >>>> Sent: Monday, April 4, 2022 9:45 AM
-> >>>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
-> >>>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
-> >>>>> <alexei.starovoitov@gmail.com> wrote:
-> >>>> ...
-> >>>>>>> Pinning
-> >>>>>>> them to unreachable inodes intuitively looked the
-> >>>>>>> way to go for achieving the stated goal.
-> >>>>>> We can consider inodes in bpffs that are not unlinkable by root
-> >>>>>> in the future, but certainly not for this use case.
-> >>>>> Can this not be already done by adding a BPF_LSM program to the
-> >>>>> inode_unlink LSM hook?
-> >>>>>
-> >>>> Also, beside of the inode_unlink... and out of curiosity: making
-> >> sysfs/bpffs/
-> >>>> readonly after pinning, then using bpf LSM hooks
-> >>>> sb_mount|remount|unmount...
-> >>>> family combining bpf() LSM hook... isn't this enough to:
-> >>>> 1. Restrict who can pin to bpffs without using a full MAC
-> >>>> 2. Restrict who can delete or unmount bpf filesystem
-> >>>>
-> >>>> ?
-> >>> I'm thinking to implement something like this.
-> >>>
-> >>> First, I add a new program flag called
-> >>> BPF_F_STOP_ONCONFIRM, which causes the ref count
-> >>> of the link to increase twice at creation time. In this way,
-> >>> user space cannot make the link disappear, unless a
-> >>> confirmation is explicitly sent via the bpf() system call.
-> >>>
-> >>> Another advantage is that other LSMs can decide
-> >>> whether or not they allow a program with this flag
-> >>> (in the bpf security hook).
-> >>>
-> >>> This would work regardless of the method used to
-> >>> load the eBPF program (user space or kernel space).
-> >>>
-> >>> Second, I extend the bpf() system call with a new
-> >>> subcommand, BPF_LINK_CONFIRM_STOP, which
-> >>> decreasres the ref count for the link of the programs
-> >>> with the BPF_F_STOP_ONCONFIRM flag. I will also
-> >>> introduce a new security hook (something like
-> >>> security_link_confirm_stop), so that an LSM has the
-> >>> opportunity to deny the stop (the bpf security hook
-> >>> would not be sufficient to determine exactly for
-> >>> which link the confirmation is given, an LSM should
-> >>> be able to deny the stop for its own programs).
-> >> Would you please stop referring to a set of eBPF programs
-> >> loaded into the BPF LSM as an LSM? Call it a BPF security
-> >> module (BSM) if you must use an abbreviation. An LSM is a
-> >> provider of security_ hooks. In your case that is BPF. When
-> >> you call the set of eBPF programs an LSM it is like calling
-> >> an SELinux policy an LSM.
-> > An eBPF program could be a provider of security_ hooks
-> > too.
->
-> No, it can't. If I look in /sys/kernel/security/lsm what
-> you see is "bpf". The LSM is BPF. What BPF does in its
-> hooks is up to it and its responsibility.
->
-> >   The bpf LSM is an aggregator, similarly to your
-> > infrastructure to manage built-in LSMs. Maybe, calling
-> > it second-level LSM or secondary LSM would better
-> > represent this new class.
->
-> It isn't an LSM, and adding a qualifier doesn't make it
-> one and only adds to the confusion.
->
-> > The only differences are the registration method, (SEC
-> > directive instead of DEFINE_LSM), and what the hook
-> > implementation can access.
->
-> Those two things pretty well define what an LSM is.
->
-> > The implementation of a security_ hook via eBPF can
-> > follow the same structure of built-in LSMs, i.e. it can be
-> > uniquely responsible for enforcing and be policy-agnostic,
-> > and can retrieve the decisions based on a policy from a
-> > component implemented somewhere else.
->
-> The BPF LSM provides mechanism. The eBPF programs provide policy.
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-Yeah, let's stick what we call an LSM in the kernel, Here,
-"bpf" is the LSM like selinux,apparmor and this is what you set in
-CONFIG_LSM or pass on cmdline as lsm= and can be seen
-in /sys/kernel/security/lsm
+This avoids scanning the identifier tables during probes.
 
-Calling your BPF programs an LSM will just confuse people.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/sgtl5000.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
->
-> >
-> > Hopefully, I understood the basic principles correctly.
-> > I let the eBPF maintainers comment on this.
-> >
-> > Thanks
-> >
-> > Roberto
-> >
-> > HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> > Managing Director: Li Peng, Zhong Ronghua
-> >
-> >>> What do you think?
-> >>>
-> >>> Thanks
-> >>>
-> >>> Roberto
-> >>>
-> >>> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> >>> Managing Director: Li Peng, Zhong Ronghua
+diff --git a/sound/soc/codecs/sgtl5000.c b/sound/soc/codecs/sgtl5000.c
+index 8eebf27d0ea2..2aa48aef6a97 100644
+--- a/sound/soc/codecs/sgtl5000.c
++++ b/sound/soc/codecs/sgtl5000.c
+@@ -1579,8 +1579,7 @@ static void sgtl5000_fill_defaults(struct i2c_client *client)
+ 	}
+ }
+ 
+-static int sgtl5000_i2c_probe(struct i2c_client *client,
+-			      const struct i2c_device_id *id)
++static int sgtl5000_i2c_probe(struct i2c_client *client)
+ {
+ 	struct sgtl5000_priv *sgtl5000;
+ 	int ret, reg, rev;
+@@ -1821,7 +1820,7 @@ static struct i2c_driver sgtl5000_i2c_driver = {
+ 		.name = "sgtl5000",
+ 		.of_match_table = sgtl5000_dt_ids,
+ 	},
+-	.probe = sgtl5000_i2c_probe,
++	.probe_new = sgtl5000_i2c_probe,
+ 	.remove = sgtl5000_i2c_remove,
+ 	.id_table = sgtl5000_id,
+ };
+-- 
+2.27.0
+

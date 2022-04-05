@@ -2,201 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4915C4F4F5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EF24F5042
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354894AbiDFAqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S1841024AbiDFBOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381931AbiDEORE (ORCPT
+        with ESMTP id S1381275AbiDEOQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:17:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFDE1606AB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649163681; x=1680699681;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R/3O09Fvikb/UjlJkbEDyN5KSOd3qkHBI3aO3BM5jn0=;
-  b=BAGTaW8q9IjK1hayD7V6bPVvVxZNMp9BunuZZv5xRwuZEWuxtqNoAbms
-   gQim9dg+qHMoWZJ3eLdYeOcwcwQu0yO7ly3+5VsgVfP9ynn6WXvyZZKBz
-   vlgvuJino8ve6J3rH70uOsFeRJPKoBL9S6tr8UstYqgV6K6fhxVbI6eqM
-   JG4+X8ncwSqNMtu4pP4Dp//flPcBIN1tnnpwXQRDqAmPI2xenbW+6j9Dg
-   bSMU1xVQuUMz3Q9BZho9eMriP2tVzoM+oskao/Umk1j5Glzr6AY6s5/pV
-   GJOo/9IUwo//d7Wdensa6Nz4kIh6y1104OrIYR6Xsth2NX7sLITsKBhfU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323914999"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="323914999"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:01:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="587920871"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 06:01:14 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbio5-0003Id-CI;
-        Tue, 05 Apr 2022 13:01:13 +0000
-Date:   Tue, 5 Apr 2022 21:00:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 33/40]
- fs/netfs/buffered_write.c:28:40: sparse: sparse: incompatible types in
- comparison expression (different type sizes):
-Message-ID: <202204052030.EJNYjMgU-lkp@intel.com>
+        Tue, 5 Apr 2022 10:16:43 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B88E1605D0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:00:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FXmXqpn3NofSunwzqNnR5gD7XckdQVvKnX7XHbR2rObbT6vRHBAnuA5CWpE3oQdSoamIiie4jH4zeBHcY9hzCgmhcqwzjQKIe/wPLp7DqR6Zo3CA6N469QzAQM3IAZ3cXo8Xuwe9lrVQiGGadmWvezFQkgtgsxLUlMvx2tU3qKda7HRVhsu3TGf7alSTNxxCstinUnF9vHRBsp7bkCC/vNbvzJqu0vg1icT4MTxgDLgSj4m8B5Sbdd4unDzXVcXmnEmD0N7Bt1fpRkf6Pohur4nsQZU+VotCUylh2nbdofebm1LPevMa3+g3CaVj6G/ScYHMQeD3PAqcQPwGdSKDSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w4EHduKSLYaEls4HHSadyYWQJIVgLOKHJCnvh30NzUc=;
+ b=SJQT5ETHxALAvlZSIs6MO9gYj2HYQa9DoyfUUdDy6slAsGzW8enH0jbq2Cof4rWQZGVs/HG9JBJVmqhkItKplZuHk3OR8tbWvRXlVCf4tYopbABRu0+0zqVzDHDREtwZ2MkStegpGO0wpwftYb+p8j7rh+wKF3Sq3WxTmBXMJu2dnhtrgyDpdbvCSnhJuyafIbDbyE+aagPVyUT5KKqncepNExxF8KGD8BekQCLi/WdDFu50j966qqM40x1Q5T9SxTZBr1latZLY1w2antx6R+9pVb+rVBuWDp1oXAIq7Bz1/BcOmJHZa1vGpA/cZ4hOGYQmNm69kfB3AR72SReYmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w4EHduKSLYaEls4HHSadyYWQJIVgLOKHJCnvh30NzUc=;
+ b=D5VJhC4cXfSfmaHI6SrtEIVHcXv4IH0BLJamMWdx5U8+uY7LhAeXYswA+Zhf3Id/zvhtY+XDp2vKYnkoni0prBRiKS6OOY1oa3ltTYMCGYzinOShEZf0fOehux1QOgsy70KeODtlcZMideN8mbIOHv8bGVQ6afBrQoxBYFo18UI=
+Received: from DS7PR07CA0011.namprd07.prod.outlook.com (2603:10b6:5:3af::22)
+ by CY4PR1201MB0151.namprd12.prod.outlook.com (2603:10b6:910:1e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 13:00:44 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3af:cafe::c4) by DS7PR07CA0011.outlook.office365.com
+ (2603:10b6:5:3af::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Tue, 5 Apr 2022 13:00:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 13:00:43 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
+ 2022 08:00:38 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <Lewis.Carroll@amd.com>, <Mario.Limonciello@amd.com>,
+        <gautham.shenoy@amd.com>, <Ananth.Narayan@amd.com>,
+        <bharata@amd.com>, <len.brown@intel.com>, <x86@kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <peterz@infradead.org>, <chang.seok.bae@intel.com>,
+        <keescook@chromium.org>, <metze@samba.org>,
+        <zhengqi.arch@bytedance.com>, <mark.rutland@arm.com>
+Subject: [PATCH] x86: Prefer MWAIT over HALT on AMD processors
+Date:   Tue, 5 Apr 2022 18:30:21 +0530
+Message-ID: <20220405130021.557880-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6b88505c-1d12-4675-631d-08da17044b82
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB0151:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB015162BBA772AB80CD96C91C84E49@CY4PR1201MB0151.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6SJ9G8eNbB4GMpB6SwZJmnDboKoQCekebmAALX2K/2y4y8b422r3IptWiP6jZqRWzwVayXJmSl5IguzS+CUji3D4/PuzH8ZEWdKxFwLZDRV34a165XkTKOjts6ospRLUM/CHr9QqlwObKqw/DI8Cn+ls7S9NFUMCwOAdJoXpyD43cdoxB4dy8Lk4twGq/IjWsv0fYJ43C5lcnOvSOR0HETrueXSETgNssArzscVKlBHrNS0SEgz2Peg8kGPqFUF7JVjmSGUyu0JdVRyFsDAnA0Vw6UcYJBojQVhtobwfnX/0mqRCcpcrYP1d9Bms8ZETgkpeGe2PqkarltjOzJCSdwbm1A0RjkW7cYGSdSPVRLWRnza1p1mZ8LuPhde/PkTH2gKfobbU9rjGCYL0nnfjDecdDDOWZMAWkfy5YTd4Q94q+sgwkAjRcDw+57Pl0/+rLfYctYYJSj6CQoPcYOCsi2HmMsRwDINLavw2QI1z63jQPzLPTLaMG9mF8C2vD/l3NdmBCmc36iZYemrGPG6r3dk9pLhlHYkfZ2viFzgGRyIhC0BPwqwjQKY8/l9esVCelN70KlECAoUcjJLklcmH3wLx46zdqDVo7Qtp5xpEvCGzSfuqi1hA9GUjUXQQC1ZjVQVw+PvG9nuUJCiHUprUjFets244bGAL+dHR/pYv+Qqtt6CEWdXDe06oY6V66gnJBeu3ftXf+2SKDLcCP9uJKw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(86362001)(16526019)(8676002)(6666004)(47076005)(7696005)(83380400001)(82310400005)(54906003)(36756003)(81166007)(6916009)(70206006)(70586007)(2906002)(4326008)(316002)(508600001)(36860700001)(356005)(7416002)(336012)(1076003)(426003)(44832011)(26005)(2616005)(186003)(8936002)(40460700003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 13:00:43.9553
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b88505c-1d12-4675-631d-08da17044b82
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0151
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: 073b0ba90614945b31bccfede6e00102b7eb460e [33/40] netfs: Implement buffered writes through netfs_file_write_iter()
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220405/202204052030.EJNYjMgU-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/073b0ba90614945b31bccfede6e00102b7eb460e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 073b0ba90614945b31bccfede6e00102b7eb460e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+From: Lewis Caroll <lewis.carroll@amd.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Currently in the absence of the cpuidle driver (eg: when global
+C-States are disabled in the BIOS or when cpuidle is driver is not
+compiled in), the default idle state on AMD Zen processors uses the
+HALT instruction even though there is support for MWAIT instruction
+which is more efficient than HALT.
 
+The below table represents the exit latency for HALT and MWAIT on AMD
+Zen 3 system.
+Exit latency is measured by issuing a wakeup (IPI) to other
+CPU and measuring how many clock cycles it took to wakeup.
+Each iteration measures 10K wakeups by pinning source and
+destination.
 
-sparse warnings: (new ones prefixed by >>)
->> fs/netfs/buffered_write.c:28:40: sparse: sparse: incompatible types in comparison expression (different type sizes):
->> fs/netfs/buffered_write.c:28:40: sparse:    unsigned long *
->> fs/netfs/buffered_write.c:28:40: sparse:    unsigned int *
->> fs/netfs/buffered_write.c:94:25: sparse: sparse: incompatible types in comparison expression (different signedness):
->> fs/netfs/buffered_write.c:94:25: sparse:    unsigned long long *
->> fs/netfs/buffered_write.c:94:25: sparse:    long long *
-   fs/netfs/buffered_write.c:95:25: sparse: sparse: incompatible types in comparison expression (different signedness):
-   fs/netfs/buffered_write.c:95:25: sparse:    unsigned long long *
-   fs/netfs/buffered_write.c:95:25: sparse:    long long *
+HALT:
 
-vim +28 fs/netfs/buffered_write.c
+25.0000th percentile  :      1900 ns
+50.0000th percentile  :      2000 ns
+75.0000th percentile  :      2300 ns
+90.0000th percentile  :      2500 ns
+95.0000th percentile  :      2600 ns
+99.0000th percentile  :      2800 ns
+99.5000th percentile  :      3000 ns
+99.9000th percentile  :      3400 ns
+99.9500th percentile  :      3600 ns
+99.9900th percentile  :      5900 ns
+  Min latency         :      1700 ns
+  Max latency         :      5900 ns
+Total Samples      9999
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
-    40	/*
-    41	 * Initialise a new dirty folio group.  We have to round it out to any crypto
-    42	 * alignment.
-    43	 */
-    44	static void netfs_init_dirty_region(struct netfs_i_context *ctx,
-    45					    struct netfs_dirty_region *region,
-    46					    struct file *file,
-    47					    loff_t start, size_t len)
-    48	{
-    49		region->from		= start;
-    50		region->to		= start + len;
-    51		region->debug_id	= atomic_inc_return(&netfs_region_debug_ids);
-    52	
-    53		if (file && ctx->ops->init_dirty_region)
-    54			ctx->ops->init_dirty_region(region, file);
-    55	
-    56		trace_netfs_ref_region(region->debug_id, refcount_read(&region->ref),
-    57				       netfs_region_trace_new);
-    58	}
-    59	
-    60	/*
-    61	 * Return true if two dirty regions are compatible such that b can be merged
-    62	 * onto the end of a.
-    63	 */
-    64	bool netfs_are_regions_mergeable(struct netfs_i_context *ctx,
-    65					 struct netfs_dirty_region *a,
-    66					 struct netfs_dirty_region *b)
-    67	{
-    68		if (!netfs_mas_is_valid(a) || !netfs_mas_is_valid(b))
-    69			return a == b;
-    70		if (b->waiting_on_wb != a->waiting_on_wb)
-    71			return false;
-    72		if (b->from != a->to &&
-    73		    b->from < ctx->zero_point)
-    74			return false;
-    75		if (ctx->ops->are_regions_mergeable)
-    76			return ctx->ops->are_regions_mergeable(ctx, a, b);
-    77		return true;
-    78	}
-    79	
-    80	/*
-    81	 * Subsume the modifications into an existing target region.  Returns true if
-    82	 * we need to update the dirty_regions tree.
-    83	 */
-    84	static bool netfs_subsume_into_existing(struct netfs_i_context *ctx,
-    85						struct folio *folio,
-    86						struct ma_state *mas,
-    87						struct netfs_dirty_region **_target,
-    88						struct netfs_dirty_region **_to_put,
-    89						pgoff_t *_first, pgoff_t *_last,
-    90						size_t offset, size_t len)
-    91	{
-    92		struct netfs_dirty_region *target = *_target, *prev;
-    93	
-  > 94		target->from  = min(target->from, folio_pos(folio) + offset);
-    95		target->to    = max(target->to,   folio_pos(folio) + offset + len);
-    96		trace_netfs_dirty(ctx, target, NULL, *_first, *_last,
-    97				  netfs_dirty_trace_modified);
-    98	
-    99		/* We might have bridged to the previous region also. */
-   100		prev = mas_prev(mas, *_first - 1);
-   101		if (!netfs_mas_is_valid(prev))
-   102			return false;
-   103	
-   104		if (prev->to != target->from ||
-   105		    prev->waiting_on_wb != target->waiting_on_wb)
-   106			return false;
-   107	
-   108		*_first = mas->index;
-   109		prev->to = target->to;
-   110		*_to_put = target;
-   111		trace_netfs_dirty(ctx, prev, NULL, *_first, *_last,
-   112				  netfs_dirty_trace_merged_prev);
-   113		return true;
-   114	}
-   115	
+MWAIT:
 
+25.0000th percentile  :      1400 ns
+50.0000th percentile  :      1500 ns
+75.0000th percentile  :      1700 ns
+90.0000th percentile  :      1800 ns
+95.0000th percentile  :      1900 ns
+99.0000th percentile  :      2300 ns
+99.5000th percentile  :      2500 ns
+99.9000th percentile  :      3200 ns
+99.9500th percentile  :      3500 ns
+99.9900th percentile  :      4600 ns
+  Min latency         :      1200 ns
+  Max latency         :      4600 ns
+Total Samples      9997
+
+Improvement: 21.74%
+
+A similar trend is observed on older Zen processors also.
+
+Here we enable MWAIT instruction as the default idle call for AMD
+Zen processors which support MWAIT. We retain the existing behaviour
+for older processors which depend on HALT.
+
+NOTE: This change only impacts the default idle behaviour in the
+absence of cpuidle driver. If the cpuidle driver is present, it
+controls the processor idle behaviour.
+
+Fixes: commit b253149b843f ("sched/idle/x86: Restore mwait_idle() to fix boot hangs, to improve power savings and to improve performance")
+Signed-off-by: Lewis Caroll <lewis.carroll@amd.com>
+Signed-off-by: Wyes Karny <Wyes.Karny@amd.com>
+---
+ arch/x86/kernel/process.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 81d8ef036637..952d0382354b 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -809,19 +809,34 @@ static void amd_e400_idle(void)
+ 	raw_local_irq_enable();
+ }
+ 
++/*
++ * Intel and AMD Zen processors allow MWAIT early on.
++ */
++static inline bool early_mwait_supported(const struct cpuinfo_x86 *c)
++{
++	if (c->x86_vendor == X86_VENDOR_INTEL)
++		return true;
++
++	if (c->x86_vendor == X86_VENDOR_AMD && cpu_has(c, X86_FEATURE_ZEN))
++		return true;
++
++	return false;
++}
++
+ /*
+  * Intel Core2 and older machines prefer MWAIT over HALT for C1.
+  * We can't rely on cpuidle installing MWAIT, because it will not load
+  * on systems that support only C1 -- so the boot default must be MWAIT.
+  *
+- * Some AMD machines are the opposite, they depend on using HALT.
++ * Even AMD Zen processors prefer MWAIT over HALT. But older AMD processors
++ * depend on HALT.
+  *
+  * So for default C1, which is used during boot until cpuidle loads,
+- * use MWAIT-C1 on Intel HW that has it, else use HALT.
++ * use MWAIT-C1 on Intel and AMD HW that have it, else use HALT.
+  */
+ static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+ {
+-	if (c->x86_vendor != X86_VENDOR_INTEL)
++	if (!early_mwait_supported(c))
+ 		return 0;
+ 
+ 	if (!cpu_has(c, X86_FEATURE_MWAIT) || boot_cpu_has_bug(X86_BUG_MONITOR))
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

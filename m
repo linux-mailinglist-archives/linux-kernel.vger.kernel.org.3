@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2374F4F2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422BC4F49D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837039AbiDFAlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S1451576AbiDEWaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354833AbiDEKQJ (ORCPT
+        with ESMTP id S1349178AbiDEJtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEB96C967;
-        Tue,  5 Apr 2022 03:03:12 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A509DEED;
+        Tue,  5 Apr 2022 02:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9964D616E7;
-        Tue,  5 Apr 2022 10:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3746C385A1;
-        Tue,  5 Apr 2022 10:03:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B641BB81B7F;
+        Tue,  5 Apr 2022 09:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C9DC385A1;
+        Tue,  5 Apr 2022 09:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152991;
-        bh=oEwV9TdDwQb2akMVnS/or1jUizn35IGFlLvBM0ImMXQ=;
+        s=korg; t=1649151733;
+        bh=Z9o8gaYS56UaYl5hI66rYbD2VLJumMbKcvklW95+7cY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kxABCOXy4zmFJ13/vkJsRQQEVVcG+j7aMTUy5QQFOSt+vyZHE5P1qXNTNB68Q2EGY
-         T4B1WVhxFMHEQRCTAHslq8SxHDzl1z/AcgkAWRdnY9f147jKnTelsVAusrL3oo9xi6
-         829OG80HTl93+vhPmtn7rQSnUOobJRq/NIh82bmQ=
+        b=fb4t4XIkC3pi1vkdHdNEOaMB7ApehHf/KyY0mZS0StdRrzSQm1xWyR7WjHurXgNYj
+         Zkbx7CkrpcFDSGt/xA3+HhG5PriwucALLePuuveKnL7MEu+4JsAGaBSvtQ1OU3x86g
+         B4WH+G7dq8kObuEsH7hFhz7O3z9cAPdms8tTd5Sk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 062/599] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
-Date:   Tue,  5 Apr 2022 09:25:56 +0200
-Message-Id: <20220405070300.674194206@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 495/913] drm/tegra: Fix reference leak in tegra_dsi_ganged_probe
+Date:   Tue,  5 Apr 2022 09:25:57 +0200
+Message-Id: <20220405070354.692736205@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
+[ Upstream commit 221e3638feb8bc42143833c9a704fa89b6c366bb ]
 
-To detect for the DMA_NONE (no data transfer) DMA direction,
-sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
-test does not include the ATA_CMD_NCQ_NON_DATA command as this command
-protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
-not as ATA_PROT_NODATA.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore. Add put_device() call to fix this.
 
-To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
-direction, use "!ata_is_data()".
-
-Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
-Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
-Cc: stable@vger.kernel.org
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e94236cde4d5 ("drm/tegra: dsi: Add ganged mode support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libsas/sas_ata.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/tegra/dsi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -202,7 +202,7 @@ static unsigned int sas_ata_qc_issue(str
- 		task->total_xfer_len = qc->nbytes;
- 		task->num_scatter = qc->n_elem;
- 		task->data_dir = qc->dma_dir;
--	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
-+	} else if (!ata_is_data(qc->tf.protocol)) {
- 		task->data_dir = DMA_NONE;
- 	} else {
- 		for_each_sg(qc->sg, sg, qc->n_elem, si)
+diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
+index f46d377f0c30..de1333dc0d86 100644
+--- a/drivers/gpu/drm/tegra/dsi.c
++++ b/drivers/gpu/drm/tegra/dsi.c
+@@ -1538,8 +1538,10 @@ static int tegra_dsi_ganged_probe(struct tegra_dsi *dsi)
+ 		dsi->slave = platform_get_drvdata(gangster);
+ 		of_node_put(np);
+ 
+-		if (!dsi->slave)
++		if (!dsi->slave) {
++			put_device(&gangster->dev);
+ 			return -EPROBE_DEFER;
++		}
+ 
+ 		dsi->slave->master = dsi;
+ 	}
+-- 
+2.34.1
+
 
 

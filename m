@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C23C4F46AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190424F4547
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378153AbiDEUkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S1358660AbiDEMvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349099AbiDEJtH (ORCPT
+        with ESMTP id S243987AbiDEJJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EFAA997F;
-        Tue,  5 Apr 2022 02:40:51 -0700 (PDT)
+        Tue, 5 Apr 2022 05:09:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEE333E34;
+        Tue,  5 Apr 2022 01:58:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 825D661368;
-        Tue,  5 Apr 2022 09:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC0CC385A2;
-        Tue,  5 Apr 2022 09:40:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A388B81BAE;
+        Tue,  5 Apr 2022 08:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2167C385A4;
+        Tue,  5 Apr 2022 08:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151650;
-        bh=kTwXVej5jnwI0ge7d0/k1GflTMj2Y/jFHaUkXu9gn7Y=;
+        s=korg; t=1649149133;
+        bh=BA5ghAF4QIveOcckKBPXs60Hycz0YHWwpwRKq2eF7wY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FTbZR1Itp97KYlzM3vj0IA7NUK54TJ+AY3e7rbE/BtTPiawvi0QabAinsn9QtwG/1
-         tisCZTm6QChrw4ibPSMJ/AVh53YjZ1IkvHEmUXyi5EdXfFdItGk4jTQkRmsnqSIgcW
-         JBd3SSZuPn+ZzvLHc6BMaBavdVmNHFd/TW7QkF6o=
+        b=YKUgSecn9BfrXv6T1D3P19DbcPooUPFC9wE66ra4AssSREu0PEJzVv5Wc2JOWuhlW
+         QIT/ZnbC9wSu8Grm7GikCc7mJ48tX00+q17Okxx9Jx8AxTfOhjMV+Wpp3u2vqTRL4B
+         BXbNOqJcyrsE/L3Hghap6/leeuQld/AQIAWxzORs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yinjun Zhang <yinjun.zhang@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Jiri Olsa <jolsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 455/913] bpftool: Fix the error when lookup in no-btf maps
-Date:   Tue,  5 Apr 2022 09:25:17 +0200
-Message-Id: <20220405070353.487822593@linuxfoundation.org>
+        stable@vger.kernel.org, Anshuman Gupta <anshuman.gupta@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0607/1017] drm/i915/display: Fix HPD short pulse handling for eDP
+Date:   Tue,  5 Apr 2022 09:25:20 +0200
+Message-Id: <20220405070412.296627971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +60,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yinjun Zhang <yinjun.zhang@corigine.com>
+From: José Roberto de Souza <jose.souza@intel.com>
 
-[ Upstream commit edc21dc909c6c133a2727f063eadd7907af51f94 ]
+[ Upstream commit 3a84fd1ed53582b31e843a152ee3219e9e4ccb8c ]
 
-When reworking btf__get_from_id() in commit a19f93cfafdf the error
-handling when calling bpf_btf_get_fd_by_id() changed. Before the rework
-if bpf_btf_get_fd_by_id() failed the error would not be propagated to
-callers of btf__get_from_id(), after the rework it is. This lead to a
-change in behavior in print_key_value() that now prints an error when
-trying to lookup keys in maps with no btf available.
+Commit 13ea6db2cf24 ("drm/i915/edp: Ignore short pulse when panel
+powered off") completely broke short pulse handling for eDP as it is
+usually generated by sink when it is displaying image and there is
+some error or status that source needs to handle.
 
-Fix this by following the way used in dumping maps to allow to look up
-keys in no-btf maps, by which it decides whether and where to get the
-btf info according to the btf value type.
+When power panel is enabled, this state is enough to power aux
+transactions and VDD override is disabled, so intel_pps_have_power()
+is always returning false causing short pulses to be ignored.
 
-Fixes: a19f93cfafdf ("libbpf: Add internal helper to load BTF data by FD")
-Signed-off-by: Yinjun Zhang <yinjun.zhang@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Link: https://lore.kernel.org/bpf/1644249625-22479-1-git-send-email-yinjun.zhang@corigine.com
+So here better naming this function that intends to check if aux
+lines are powered to avoid the endless cycle mentioned in the commit
+being fixed and fixing the check for what it is intended.
+
+v2:
+- renamed to intel_pps_have_panel_power_or_vdd()
+- fixed indentation
+
+Fixes: 13ea6db2cf24 ("drm/i915/edp: Ignore short pulse when panel powered off")
+Cc: Anshuman Gupta <anshuman.gupta@intel.com>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Uma Shankar <uma.shankar@intel.com>
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220311185149.110527-1-jose.souza@intel.com
+(cherry picked from commit 8f0c1c0949b609acfad62b8d5f742a3b5e7b05ab)
+Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/map.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/i915/display/intel_dp.c  | 2 +-
+ drivers/gpu/drm/i915/display/intel_pps.c | 6 +++---
+ drivers/gpu/drm/i915/display/intel_pps.h | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 407071d54ab1..72ef9ddae260 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1042,11 +1042,9 @@ static void print_key_value(struct bpf_map_info *info, void *key,
- 	json_writer_t *btf_wtr;
- 	struct btf *btf;
+diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+index a552f05a67e5..3ee0f2fc9c21 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -4742,7 +4742,7 @@ intel_dp_hpd_pulse(struct intel_digital_port *dig_port, bool long_hpd)
+ 	struct intel_dp *intel_dp = &dig_port->dp;
  
--	btf = btf__load_from_kernel_by_id(info->btf_id);
--	if (libbpf_get_error(btf)) {
--		p_err("failed to get btf");
-+	btf = get_map_kv_btf(info);
-+	if (libbpf_get_error(btf))
- 		return;
--	}
+ 	if (dig_port->base.type == INTEL_OUTPUT_EDP &&
+-	    (long_hpd || !intel_pps_have_power(intel_dp))) {
++	    (long_hpd || !intel_pps_have_panel_power_or_vdd(intel_dp))) {
+ 		/*
+ 		 * vdd off can generate a long/short pulse on eDP which
+ 		 * would require vdd on to handle it, and thus we
+diff --git a/drivers/gpu/drm/i915/display/intel_pps.c b/drivers/gpu/drm/i915/display/intel_pps.c
+index e9c679bb1b2e..5edd188d9747 100644
+--- a/drivers/gpu/drm/i915/display/intel_pps.c
++++ b/drivers/gpu/drm/i915/display/intel_pps.c
+@@ -1075,14 +1075,14 @@ static void intel_pps_vdd_sanitize(struct intel_dp *intel_dp)
+ 	edp_panel_vdd_schedule_off(intel_dp);
+ }
  
- 	if (json_output) {
- 		print_entry_json(info, key, value, btf);
+-bool intel_pps_have_power(struct intel_dp *intel_dp)
++bool intel_pps_have_panel_power_or_vdd(struct intel_dp *intel_dp)
+ {
+ 	intel_wakeref_t wakeref;
+ 	bool have_power = false;
+ 
+ 	with_intel_pps_lock(intel_dp, wakeref) {
+-		have_power = edp_have_panel_power(intel_dp) &&
+-						  edp_have_panel_vdd(intel_dp);
++		have_power = edp_have_panel_power(intel_dp) ||
++			     edp_have_panel_vdd(intel_dp);
+ 	}
+ 
+ 	return have_power;
+diff --git a/drivers/gpu/drm/i915/display/intel_pps.h b/drivers/gpu/drm/i915/display/intel_pps.h
+index fbb47f6f453e..e64144659d31 100644
+--- a/drivers/gpu/drm/i915/display/intel_pps.h
++++ b/drivers/gpu/drm/i915/display/intel_pps.h
+@@ -37,7 +37,7 @@ void intel_pps_vdd_on(struct intel_dp *intel_dp);
+ void intel_pps_on(struct intel_dp *intel_dp);
+ void intel_pps_off(struct intel_dp *intel_dp);
+ void intel_pps_vdd_off_sync(struct intel_dp *intel_dp);
+-bool intel_pps_have_power(struct intel_dp *intel_dp);
++bool intel_pps_have_panel_power_or_vdd(struct intel_dp *intel_dp);
+ void intel_pps_wait_power_cycle(struct intel_dp *intel_dp);
+ 
+ void intel_pps_init(struct intel_dp *intel_dp);
 -- 
 2.34.1
 

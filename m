@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2373C4F450E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7E64F44F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388057AbiDEOdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S1388247AbiDEOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238897AbiDEJdC (ORCPT
+        with ESMTP id S238891AbiDEJdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:33:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E433C25;
-        Tue,  5 Apr 2022 02:20:33 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6162ECF4;
+        Tue,  5 Apr 2022 02:20:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF26C6144D;
-        Tue,  5 Apr 2022 09:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3DAC385A2;
-        Tue,  5 Apr 2022 09:20:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11674B81B75;
+        Tue,  5 Apr 2022 09:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFC8C385A2;
+        Tue,  5 Apr 2022 09:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150432;
-        bh=sbrwT/SUZKgQS5k/o8rRHTPmV5lhx0fWxEXy5URgNCI=;
+        s=korg; t=1649150434;
+        bh=Utz1YvWbSMLmkIEVCdwmAdUPQ3ARE9UXbQLDcRmNtww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VLteAsFEGsyLy50FFhnvpnSMPexvACLPPxuhtPfHt7VCJ/nojsZ1GEAuS8qrcYn+H
-         UjO+Llw9mqc0HtvvaaHwgvt8nkcvqpfm7aJn7QxBl7Cgs5CI8OZ7+lg/Oui7HEyl+6
-         fD0yt3gWm769BDE6GQzoDrJlpJ+E0b0XZvgxJIv4=
+        b=09koD/JTbYXOQXStxL8zs1m9nyHJf7dih1HQWLkrviguHaQ8VKcYjTf8TDAaNJy19
+         uPRDW+o6O/mekfRPf+EtybG1MMiOlYB6O57G5lq9ZCJEPRASLQvxptuJCsyBJws22J
+         UdWLQJ77BGls0CYbkQXN4vC2AFjh/o16kCMOlBeQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 054/913] cifs: we do not need a spinlock around the tree access during umount
-Date:   Tue,  5 Apr 2022 09:18:36 +0200
-Message-Id: <20220405070341.440179049@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.15 055/913] KEYS: fix length validation in keyctl_pkey_params_get_2()
+Date:   Tue,  5 Apr 2022 09:18:37 +0200
+Message-Id: <20220405070341.470126690@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,71 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 9a14b65d590105d393b63f5320e1594edda7c672 upstream.
+commit c51abd96837f600d8fd940b6ab8e2da578575504 upstream.
 
-Remove the spinlock around the tree traversal as we are calling possibly
-sleeping functions.
-We do not need a spinlock here as there will be no modifications to this
-tree at this point.
+In many cases, keyctl_pkey_params_get_2() is validating the user buffer
+lengths against the wrong algorithm properties.  Fix it to check against
+the correct properties.
 
-This prevents warnings like this to occur in dmesg:
-[  653.774996] BUG: sleeping function called from invalid context at kernel/loc\
-king/mutex.c:280
-[  653.775088] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1827, nam\
-e: umount
-[  653.775152] preempt_count: 1, expected: 0
-[  653.775191] CPU: 0 PID: 1827 Comm: umount Tainted: G        W  OE     5.17.0\
--rc7-00006-g4eb628dd74df #135
-[  653.775195] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-\
-1.fc33 04/01/2014
-[  653.775197] Call Trace:
-[  653.775199]  <TASK>
-[  653.775202]  dump_stack_lvl+0x34/0x44
-[  653.775209]  __might_resched.cold+0x13f/0x172
-[  653.775213]  mutex_lock+0x75/0xf0
-[  653.775217]  ? __mutex_lock_slowpath+0x10/0x10
-[  653.775220]  ? _raw_write_lock_irq+0xd0/0xd0
-[  653.775224]  ? dput+0x6b/0x360
-[  653.775228]  cifs_kill_sb+0xff/0x1d0 [cifs]
-[  653.775285]  deactivate_locked_super+0x85/0x130
-[  653.775289]  cleanup_mnt+0x32c/0x4d0
-[  653.775292]  ? path_umount+0x228/0x380
-[  653.775296]  task_work_run+0xd8/0x180
-[  653.775301]  exit_to_user_mode_loop+0x152/0x160
-[  653.775306]  exit_to_user_mode_prepare+0x89/0xd0
-[  653.775315]  syscall_exit_to_user_mode+0x12/0x30
-[  653.775322]  do_syscall_64+0x48/0x90
-[  653.775326]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+Probably this wasn't noticed before because for all asymmetric keys of
+the "public_key" subtype, max_data_size == max_sig_size == max_enc_size
+== max_dec_size.  However, this isn't necessarily true for the
+"asym_tpm" subtype (it should be, but it's not strictly validated).  Of
+course, future key types could have different values as well.
 
-Fixes: 187af6e98b44e5d8f25e1d41a92db138eb54416f ("cifs: fix handlecache and multiuser")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: 00d60fd3b932 ("KEYS: Provide keyctls to drive the new key type ops for asymmetric keys [ver #2]")
+Cc: <stable@vger.kernel.org> # v4.20+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/cifsfs.c |    2 --
- 1 file changed, 2 deletions(-)
+ security/keys/keyctl_pkey.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -266,7 +266,6 @@ static void cifs_kill_sb(struct super_bl
- 		dput(cifs_sb->root);
- 		cifs_sb->root = NULL;
- 	}
--	spin_lock(&cifs_sb->tlink_tree_lock);
- 	node = rb_first(root);
- 	while (node != NULL) {
- 		tlink = rb_entry(node, struct tcon_link, tl_rbnode);
-@@ -280,7 +279,6 @@ static void cifs_kill_sb(struct super_bl
- 		mutex_unlock(&cfid->fid_mutex);
- 		node = rb_next(node);
- 	}
--	spin_unlock(&cifs_sb->tlink_tree_lock);
+--- a/security/keys/keyctl_pkey.c
++++ b/security/keys/keyctl_pkey.c
+@@ -135,15 +135,23 @@ static int keyctl_pkey_params_get_2(cons
  
- 	kill_anon_super(sb);
- 	cifs_umount(cifs_sb);
+ 	switch (op) {
+ 	case KEYCTL_PKEY_ENCRYPT:
++		if (uparams.in_len  > info.max_dec_size ||
++		    uparams.out_len > info.max_enc_size)
++			return -EINVAL;
++		break;
+ 	case KEYCTL_PKEY_DECRYPT:
+ 		if (uparams.in_len  > info.max_enc_size ||
+ 		    uparams.out_len > info.max_dec_size)
+ 			return -EINVAL;
+ 		break;
+ 	case KEYCTL_PKEY_SIGN:
++		if (uparams.in_len  > info.max_data_size ||
++		    uparams.out_len > info.max_sig_size)
++			return -EINVAL;
++		break;
+ 	case KEYCTL_PKEY_VERIFY:
+-		if (uparams.in_len  > info.max_sig_size ||
+-		    uparams.out_len > info.max_data_size)
++		if (uparams.in_len  > info.max_data_size ||
++		    uparams.in2_len > info.max_sig_size)
+ 			return -EINVAL;
+ 		break;
+ 	default:
+@@ -151,7 +159,7 @@ static int keyctl_pkey_params_get_2(cons
+ 	}
+ 
+ 	params->in_len  = uparams.in_len;
+-	params->out_len = uparams.out_len;
++	params->out_len = uparams.out_len; /* Note: same as in2_len */
+ 	return 0;
+ }
+ 
 
 

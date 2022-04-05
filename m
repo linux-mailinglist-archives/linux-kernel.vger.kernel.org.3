@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791764F4DA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8414F4A33
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453743AbiDEXrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S1453906AbiDEWhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352388AbiDEKEb (ORCPT
+        with ESMTP id S1358076AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F2FBA31B;
-        Tue,  5 Apr 2022 02:53:11 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC825E166;
+        Tue,  5 Apr 2022 03:14:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D780B818F3;
-        Tue,  5 Apr 2022 09:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A26AC385A2;
-        Tue,  5 Apr 2022 09:53:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF25761777;
+        Tue,  5 Apr 2022 10:14:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DD0C385A1;
+        Tue,  5 Apr 2022 10:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152388;
-        bh=Qb/oTH/UWrZXJOhd5uOtZEXXGxt5HFJZw3S+Cihmmxc=;
+        s=korg; t=1649153687;
+        bh=Y/huHDVq02qE08Pbr3Nr+ZQJrr+GDp2qShsn9bQLZjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z5ivzd9TLJAwtRh9wQUCxcwiH4KnkaxH+StqwVqLzgRXcDETKdW/LeGyHv/PYHGa0
-         +6sUjJLAnw1yh9SntBEn/nej7V/i++Luc8rPrY3loCiaH7IbmWm2bo+kKlA3uOwSSO
-         c4lHVD/AIGVeaaAtL6czjqI8rYjrmzL1rOrVI/fw=
+        b=HUSpTSRBCn99B38DiNdQeWQKGl9BeMgx4VLE8JIdUyD/MLL34WBmp6X9za5AuFddP
+         VzywzdNdx8jIA8ZI4F9tQyAg1JyEJ/vpGx005thtsumDayAfjusg1iRGEZ1uxAc7qa
+         xIkeLpGkjbHB0g9sjblxnD5ipH9KhIlUpQstNr8Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Schleich <rs@noreya.tech>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 742/913] ARM: dts: bcm2837: Add the missing L1/L2 cache information
-Date:   Tue,  5 Apr 2022 09:30:04 +0200
-Message-Id: <20220405070402.077174085@linuxfoundation.org>
+Subject: [PATCH 5.10 311/599] scsi: pm8001: Fix payload initialization in pm80xx_set_thermal_config()
+Date:   Tue,  5 Apr 2022 09:30:05 +0200
+Message-Id: <20220405070308.087740428@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,110 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Schleich <rs@noreya.tech>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit bdf8762da268d2a34abf517c36528413906e9cd5 ]
+[ Upstream commit bb225b12dbcc82d53d637d10b8d70b64494f8c16 ]
 
-This patch fixes the kernel warning
-"cacheinfo: Unable to detect cache hierarchy for CPU 0"
-for the bcm2837 on newer kernel versions.
+The fields of the set_ctrl_cfg_req structure have the __le32 type, so use
+cpu_to_le32() to assign them. This removes the sparse warnings:
 
-Signed-off-by: Richard Schleich <rs@noreya.tech>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-[florian: Align and remove comments matching property values]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+warning: incorrect type in assignment (different base types)
+    expected restricted __le32
+    got unsigned int
+
+Link: https://lore.kernel.org/r/20220220031810.738362-8-damien.lemoal@opensource.wdc.com
+Fixes: 842784e0d15b ("pm80xx: Update For Thermal Page Code")
+Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
+Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2837.dtsi | 49 ++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2837.dtsi b/arch/arm/boot/dts/bcm2837.dtsi
-index 0199ec98cd61..5dbdebc46259 100644
---- a/arch/arm/boot/dts/bcm2837.dtsi
-+++ b/arch/arm/boot/dts/bcm2837.dtsi
-@@ -40,12 +40,26 @@
- 		#size-cells = <0>;
- 		enable-method = "brcm,bcm2836-smp"; // for ARM 32-bit
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 9f0ce8668113..1b1033b4e310 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1199,9 +1199,11 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *pm8001_ha)
+ 	else
+ 		page_code = THERMAL_PAGE_CODE_8H;
  
-+		/* Source for d/i-cache-line-size and d/i-cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500/e/level-1-memory-system
-+		 * /about-the-l1-memory-system?lang=en
-+		 *
-+		 * Source for d/i-cache-size
-+		 * https://magpi.raspberrypi.com/articles/raspberry-pi-3-specs-benchmarks
-+		 */
- 		cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000d8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
+-	payload.cfg_pg[0] = (THERMAL_LOG_ENABLE << 9) |
+-				(THERMAL_ENABLE << 8) | page_code;
+-	payload.cfg_pg[1] = (LTEMPHIL << 24) | (RTEMPHIL << 8);
++	payload.cfg_pg[0] =
++		cpu_to_le32((THERMAL_LOG_ENABLE << 9) |
++			    (THERMAL_ENABLE << 8) | page_code);
++	payload.cfg_pg[1] =
++		cpu_to_le32((LTEMPHIL << 24) | (RTEMPHIL << 8));
  
- 		cpu1: cpu@1 {
-@@ -54,6 +68,13 @@
- 			reg = <1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -62,6 +83,13 @@
- 			reg = <2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -70,6 +98,27 @@
- 			reg = <3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000f0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
-+		};
-+
-+		/* Source for cache-line-size + cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500
-+		 * /e/level-2-memory-system/about-the-l2-memory-system?lang=en
-+		 * Source for cache-size
-+		 * https://datasheets.raspberrypi.com/cm/cm1-and-cm3-datasheet.pdf
-+		 */
-+		l2: l2-cache0 {
-+			compatible = "cache";
-+			cache-size = <0x80000>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>; // 512KiB(size)/64(line-size)=8192ways/16-way set
-+			cache-level = <2>;
- 		};
- 	};
- };
+ 	pm8001_dbg(pm8001_ha, DEV,
+ 		   "Setting up thermal config. cfg_pg 0 0x%x cfg_pg 1 0x%x\n",
 -- 
 2.34.1
 

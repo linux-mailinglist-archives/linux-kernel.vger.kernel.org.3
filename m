@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379834F41E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E2B4F3F0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453506AbiDEULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S1390066AbiDENgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358202AbiDEK2F (ORCPT
+        with ESMTP id S1347180AbiDEJZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3554DE9F;
-        Tue,  5 Apr 2022 03:16:56 -0700 (PDT)
+        Tue, 5 Apr 2022 05:25:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD8DBD0B;
+        Tue,  5 Apr 2022 02:14:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41CAD61562;
-        Tue,  5 Apr 2022 10:16:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CCCC385A1;
-        Tue,  5 Apr 2022 10:16:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95CDCB81B62;
+        Tue,  5 Apr 2022 09:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C32C385A4;
+        Tue,  5 Apr 2022 09:14:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153815;
-        bh=lnod+bwqkuNFIbknHIzQi2XPw5to1kqtNKK3bniWJ/4=;
+        s=korg; t=1649150055;
+        bh=WEzZA7KphCwxsPg16crtXDZyTJfB5qhlsaeZdSfVPQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1+vJ5DajhgS+n7z6OD+3yhjMcMf1wSS+whORuDkVjaO6diWPFMjxANpiYWcEbAyf2
-         pY6jJyjVCVtnxfIVfU/s3VYKCGbsr8XVMscrZlQgzgBp44pnTSF/1MPocD5GF6BCoo
-         NQu3KIsQum5QtDr3ABTCasSEqjpO3/OLWMrT8Hhw=
+        b=dyEsZoFfM6QUfo6HyhO622O0UnLQFesA43KetCXMM8lA2a7qeODrD6jqUPOeXlEOy
+         6T6/RO+EOW6V1PeZjla+R0vEUNixnEvflcb3jIcvof+qMj0Gt1mlO4yExn1C4mhU4V
+         oZA8/FA+m00C+HtZ2+tj3HxN1NTd1OU47hITSxSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 356/599] bpf, sockmap: Fix memleak in tcp_bpf_sendmsg while sk msg is full
-Date:   Tue,  5 Apr 2022 09:30:50 +0200
-Message-Id: <20220405070309.426596324@linuxfoundation.org>
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.16 0938/1017] crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
+Date:   Tue,  5 Apr 2022 09:30:51 +0200
+Message-Id: <20220405070422.057549347@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,109 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Yufen <wangyufen@huawei.com>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-[ Upstream commit 9c34e38c4a870eb30b13f42f5b44f42e9d19ccb8 ]
+commit c8bd296cca3434b13b28b074eaeb78a23284de77 upstream.
 
-If tcp_bpf_sendmsg() is running while sk msg is full. When sk_msg_alloc()
-returns -ENOMEM error, tcp_bpf_sendmsg() goes to wait_for_memory. If partial
-memory has been alloced by sk_msg_alloc(), that is, msg_tx->sg.size is
-greater than osize after sk_msg_alloc(), memleak occurs. To fix we use
-sk_msg_trim() to release the allocated memory, then goto wait for memory.
+The algorithm __cbc-aes-neonbs requires a fallback so we need
+to select the config options for them or otherwise it will fail
+to register on boot-up.
 
-Other call paths of sk_msg_alloc() have the similar issue, such as
-tls_sw_sendmsg(), so handle sk_msg_trim logic inside sk_msg_alloc(),
-as Cong Wang suggested.
-
-This issue can cause the following info:
-WARNING: CPU: 3 PID: 7950 at net/core/stream.c:208 sk_stream_kill_queues+0xd4/0x1a0
-Call Trace:
- <TASK>
- inet_csk_destroy_sock+0x55/0x110
- __tcp_close+0x279/0x470
- tcp_close+0x1f/0x60
- inet_release+0x3f/0x80
- __sock_release+0x3d/0xb0
- sock_close+0x11/0x20
- __fput+0x92/0x250
- task_work_run+0x6a/0xa0
- do_exit+0x33b/0xb60
- do_group_exit+0x2f/0xa0
- get_signal+0xb6/0x950
- arch_do_signal_or_restart+0xac/0x2a0
- exit_to_user_mode_prepare+0xa9/0x200
- syscall_exit_to_user_mode+0x12/0x30
- do_syscall_64+0x46/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
- </TASK>
-
-WARNING: CPU: 3 PID: 2094 at net/ipv4/af_inet.c:155 inet_sock_destruct+0x13c/0x260
-Call Trace:
- <TASK>
- __sk_destruct+0x24/0x1f0
- sk_psock_destroy+0x19b/0x1c0
- process_one_work+0x1b3/0x3c0
- kthread+0xe6/0x110
- ret_from_fork+0x22/0x30
- </TASK>
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20220304081145.2037182-3-wangyufen@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 00b99ad2bac2 ("crypto: arm/aes-neonbs - Use generic cbc...")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/skmsg.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ arch/arm/crypto/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index e4bb89599b44..545181a1ae04 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -27,6 +27,7 @@ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 		 int elem_first_coalesce)
- {
- 	struct page_frag *pfrag = sk_page_frag(sk);
-+	u32 osize = msg->sg.size;
- 	int ret = 0;
- 
- 	len -= msg->sg.size;
-@@ -35,13 +36,17 @@ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 		u32 orig_offset;
- 		int use, i;
- 
--		if (!sk_page_frag_refill(sk, pfrag))
--			return -ENOMEM;
-+		if (!sk_page_frag_refill(sk, pfrag)) {
-+			ret = -ENOMEM;
-+			goto msg_trim;
-+		}
- 
- 		orig_offset = pfrag->offset;
- 		use = min_t(int, len, pfrag->size - orig_offset);
--		if (!sk_wmem_schedule(sk, use))
--			return -ENOMEM;
-+		if (!sk_wmem_schedule(sk, use)) {
-+			ret = -ENOMEM;
-+			goto msg_trim;
-+		}
- 
- 		i = msg->sg.end;
- 		sk_msg_iter_var_prev(i);
-@@ -71,6 +76,10 @@ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 	}
- 
- 	return ret;
-+
-+msg_trim:
-+	sk_msg_trim(sk, msg, osize);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(sk_msg_alloc);
- 
--- 
-2.34.1
-
+--- a/arch/arm/crypto/Kconfig
++++ b/arch/arm/crypto/Kconfig
+@@ -102,6 +102,8 @@ config CRYPTO_AES_ARM_BS
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_AES
++	select CRYPTO_AES
++	select CRYPTO_CBC
+ 	select CRYPTO_SIMD
+ 	help
+ 	  Use a faster and more secure NEON based implementation of AES in CBC,
 
 

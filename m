@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDCB4F2F27
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8794F309F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358292AbiDEK2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S1353778AbiDEKJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241062AbiDEIcq (ORCPT
+        with ESMTP id S241076AbiDEIcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6090BB91A6;
-        Tue,  5 Apr 2022 01:26:31 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A2813E22;
+        Tue,  5 Apr 2022 01:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8AB86117D;
-        Tue,  5 Apr 2022 08:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0567AC385A1;
-        Tue,  5 Apr 2022 08:26:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 711EB6117D;
+        Tue,  5 Apr 2022 08:26:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D210C385A2;
+        Tue,  5 Apr 2022 08:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147190;
-        bh=YbwfK3n1g59Ka5Cp7SEaBOTGe7h8cOzjzd41fU7Ajow=;
+        s=korg; t=1649147209;
+        bh=/jXyjXnKVL7ginhzj5vU2rBOllvhtBJIJKYKH7J0cos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dwM6B0Q3ctQkrGuNWZphQ1mp4Nu/wBuibuGjpLJK3oA9rGrL4NS8kG3jiiWvTzUZw
-         B0EHwzb5508oXp4xVQ07AR6UOVI9cDOI1j3UObb3uaJf3ZNJSqLhZM+f46asrwexW4
-         qPB9vb2LQa/f9zyL0+tv0bnHhUZ4BQeTCAuy9OaE=
+        b=bibus54ySznIGmNwvAzsRlaCh20+opt0kUkIWWJqFkcL8MYickmIlGJtkMUCjQ8Fl
+         QNz1TWhU7TH8He6BsQgihZ7v65bdP62I642tVhdjimYt9WWS/py8sZHymLmyu8Np8l
+         gDudTTEadvtaKT+4RnwtIt+sxg1YC7UNlMZZsgmI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.17 1033/1126] net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
-Date:   Tue,  5 Apr 2022 09:29:40 +0200
-Message-Id: <20220405070437.798067423@linuxfoundation.org>
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.17 1040/1126] pinctrl: pinconf-generic: Print arguments for bias-pull-*
+Date:   Tue,  5 Apr 2022 09:29:47 +0200
+Message-Id: <20220405070438.001058820@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,38 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangbin Huang <huangguangbin2@huawei.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-commit 7ed258f12ec5ce855f15cdfb5710361dc82fe899 upstream.
+commit 188e5834b930acd03ad3cf7c5e7aa24db9665a29 upstream.
 
-When user delete vlan 0, as driver will not delete vlan 0 for hardware in
-function hclge_set_vlan_filter_hw(), so vlan 0 in software vlan talbe should
-not be deleted.
+The bias-pull-* properties, or PIN_CONFIG_BIAS_PULL_* pin config
+parameters, accept optional arguments in ohms denoting the strength of
+the pin bias.
 
-Fixes: fe4144d47eef ("net: hns3: sync VLAN filter entries when kill VLAN ID failed")
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Print these values out in debugfs as well.
+
+Fixes: eec450713e5c ("pinctrl: pinconf-generic: Add flag to print arguments")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220308100956.2750295-2-wenst@chromium.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c |    6 +++---
+ drivers/pinctrl/pinconf-generic.c |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -10314,11 +10314,11 @@ int hclge_set_vlan_filter(struct hnae3_h
- 	}
- 
- 	if (!ret) {
--		if (is_kill)
--			hclge_rm_vport_vlan_table(vport, vlan_id, false);
--		else
-+		if (!is_kill)
- 			hclge_add_vport_vlan_table(vport, vlan_id,
- 						   writen_to_tbl);
-+		else if (is_kill && vlan_id != 0)
-+			hclge_rm_vport_vlan_table(vport, vlan_id, false);
- 	} else if (is_kill) {
- 		/* when remove hw vlan filter failed, record the vlan id,
- 		 * and try to remove it from hw later, to be consistence
+--- a/drivers/pinctrl/pinconf-generic.c
++++ b/drivers/pinctrl/pinconf-generic.c
+@@ -30,10 +30,10 @@ static const struct pin_config_item conf
+ 	PCONFDUMP(PIN_CONFIG_BIAS_BUS_HOLD, "input bias bus hold", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_DISABLE, "input bias disabled", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_HIGH_IMPEDANCE, "input bias high impedance", NULL, false),
+-	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", NULL, false),
++	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", "ohms", true),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_PULL_PIN_DEFAULT,
+-				"input bias pull to pin specific state", NULL, false),
+-	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", NULL, false),
++				"input bias pull to pin specific state", "ohms", true),
++	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", "ohms", true),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_DRAIN, "output drive open drain", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_SOURCE, "output drive open source", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_PUSH_PULL, "output drive push pull", NULL, false),
 
 

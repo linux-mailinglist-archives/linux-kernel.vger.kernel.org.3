@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFFA4F26DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F81D4F2658
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbiDEIAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S233938AbiDEH5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiDEHpp (ORCPT
+        with ESMTP id S231944AbiDEHpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:45:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4498592;
-        Tue,  5 Apr 2022 00:41:33 -0700 (PDT)
+        Tue, 5 Apr 2022 03:45:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E749E9859B;
+        Tue,  5 Apr 2022 00:41:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C26C6B81B75;
-        Tue,  5 Apr 2022 07:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3625EC340EE;
-        Tue,  5 Apr 2022 07:41:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 295B3B81B14;
+        Tue,  5 Apr 2022 07:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954F3C3410F;
+        Tue,  5 Apr 2022 07:41:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144490;
-        bh=6A9UA5U7G9iRpRC1UBSpjmRYtdP73I5SljYYhYL/gGo=;
+        s=korg; t=1649144495;
+        bh=La9b5PkZMRTBVUZfxGXy8R1qZAliNvOQdKryZHSfOug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUyY7iGYXJ04Ld+WdwJDdYiW15hPdWdG2h5Mc3s3O7ecOKYmgCanEKG0Z7zKcrn9o
-         D+n8fPrt4U7ZcTiBzVGZc5A7WKFManAASXVDlmDbKYuAlAwao5+Pwd+AS3cU76UA9d
-         cu9wp73cPj9lQtAkN5VvhBwzvK35PqdqxOexyfqA=
+        b=nrERMc+bJuSolWOc7aYYYdRSVXdiDLD9jC6nPS4fcCO3VWi2PApEhbvC6/FZ+HOtV
+         4a3Yi5DEY5S/FE9uxRm/KaO06ZMUBwEjPDh452nGXzG/DzJ9vwqLRfAgdkx4xtEqAd
+         d27k3xlhOPfWo3nFLqg+/tjWnYHqZDECOBadwNFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.17 0064/1126] pinctrl: ingenic: Fix regmap on X series SoCs
-Date:   Tue,  5 Apr 2022 09:13:31 +0200
-Message-Id: <20220405070409.448866509@linuxfoundation.org>
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.17 0066/1126] net: bnxt_ptp: fix compilation error
+Date:   Tue,  5 Apr 2022 09:13:33 +0200
+Message-Id: <20220405070409.507088732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,148 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit 9279c00fa40250e5cb23a8423dce7dbc6516a0ea upstream.
+commit dcf500065fabe27676dfe7b4ba521a4f1e0fc8ac upstream.
 
-The X series Ingenic SoCs have a shadow GPIO group which is at a higher
-offset than the other groups, and is used for all GPIO configuration.
-The regmap did not take this offset into account and set max_register
-too low, so the regmap API blocked writes to the shadow group, which
-made the pinctrl driver unable to configure any pins.
+The Broadcom bnxt_ptp driver does not compile with GCC 11.2.2 when
+CONFIG_WERROR is enabled. The following error is generated:
 
-Fix this by adding regmap access tables to the chip info. The way that
-max_register was computed was also off by one, since max_register is an
-inclusive bound, not an exclusive bound; this has been fixed.
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function ‘bnxt_ptp_enable’:
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array
+subscript 255 is above array bounds of ‘struct pps_pin[4]’
+[-Werror=array-bounds]
+  400 |  ptp->pps_info.pins[pin_id].event = BNXT_PPS_EVENT_EXTERNAL;
+      |  ~~~~~~~~~~~~~~~~~~^~~~~~~~
+In file included from drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:20:
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.h:75:24: note: while
+referencing ‘pins’
+   75 |         struct pps_pin pins[BNXT_MAX_TSIO_PINS];
+      |                        ^~~~
+cc1: all warnings being treated as errors
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Fixes: 6626a76ef857 ("pinctrl: ingenic: Add .max_register in  regmap_config")
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Link: https://lore.kernel.org/r/20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+This is due to the function ptp_find_pin() returning a pin ID of -1 when
+a valid pin is not found and this error never being checked.
+Change the TSIO_PIN_VALID() function to also check that a pin ID is not
+negative and use this macro in bnxt_ptp_enable() to check the result of
+the calls to ptp_find_pin() to return an error early for invalid pins.
+This fixes the compilation error.
+
+Cc: <stable@vger.kernel.org>
+Fixes: 9e518f25802c ("bnxt_en: 1PPS functions to configure TSIO pins")
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+Link: https://lore.kernel.org/r/20220328062708.207079-1-damien.lemoal@opensource.wdc.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/pinctrl-ingenic.c |   46 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c |    6 +++++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.h |    2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -119,6 +119,8 @@ struct ingenic_chip_info {
- 	unsigned int num_functions;
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+@@ -329,7 +329,7 @@ static int bnxt_ptp_enable(struct ptp_cl
+ 	struct bnxt_ptp_cfg *ptp = container_of(ptp_info, struct bnxt_ptp_cfg,
+ 						ptp_info);
+ 	struct bnxt *bp = ptp->bp;
+-	u8 pin_id;
++	int pin_id;
+ 	int rc;
  
- 	const u32 *pull_ups, *pull_downs;
-+
-+	const struct regmap_access_table *access_table;
+ 	switch (rq->type) {
+@@ -337,6 +337,8 @@ static int bnxt_ptp_enable(struct ptp_cl
+ 		/* Configure an External PPS IN */
+ 		pin_id = ptp_find_pin(ptp->ptp_clock, PTP_PF_EXTTS,
+ 				      rq->extts.index);
++		if (!TSIO_PIN_VALID(pin_id))
++			return -EOPNOTSUPP;
+ 		if (!on)
+ 			break;
+ 		rc = bnxt_ptp_cfg_pin(bp, pin_id, BNXT_PPS_PIN_PPS_IN);
+@@ -350,6 +352,8 @@ static int bnxt_ptp_enable(struct ptp_cl
+ 		/* Configure a Periodic PPS OUT */
+ 		pin_id = ptp_find_pin(ptp->ptp_clock, PTP_PF_PEROUT,
+ 				      rq->perout.index);
++		if (!TSIO_PIN_VALID(pin_id))
++			return -EOPNOTSUPP;
+ 		if (!on)
+ 			break;
+ 
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.h
+@@ -31,7 +31,7 @@ struct pps_pin {
+ 	u8 state;
  };
  
- struct ingenic_pinctrl {
-@@ -2179,6 +2181,17 @@ static const struct function_desc x1000_
- 	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
- };
+-#define TSIO_PIN_VALID(pin) ((pin) < (BNXT_MAX_TSIO_PINS))
++#define TSIO_PIN_VALID(pin) ((pin) >= 0 && (pin) < (BNXT_MAX_TSIO_PINS))
  
-+static const struct regmap_range x1000_access_ranges[] = {
-+	regmap_reg_range(0x000, 0x400 - 4),
-+	regmap_reg_range(0x700, 0x800 - 4),
-+};
-+
-+/* shared with X1500 */
-+static const struct regmap_access_table x1000_access_table = {
-+	.yes_ranges = x1000_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x1000_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x1000_chip_info = {
- 	.num_chips = 4,
- 	.reg_offset = 0x100,
-@@ -2189,6 +2202,7 @@ static const struct ingenic_chip_info x1
- 	.num_functions = ARRAY_SIZE(x1000_functions),
- 	.pull_ups = x1000_pull_ups,
- 	.pull_downs = x1000_pull_downs,
-+	.access_table = &x1000_access_table,
- };
- 
- static int x1500_uart0_data_pins[] = { 0x4a, 0x4b, };
-@@ -2300,6 +2314,7 @@ static const struct ingenic_chip_info x1
- 	.num_functions = ARRAY_SIZE(x1500_functions),
- 	.pull_ups = x1000_pull_ups,
- 	.pull_downs = x1000_pull_downs,
-+	.access_table = &x1000_access_table,
- };
- 
- static const u32 x1830_pull_ups[4] = {
-@@ -2506,6 +2521,16 @@ static const struct function_desc x1830_
- 	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
- };
- 
-+static const struct regmap_range x1830_access_ranges[] = {
-+	regmap_reg_range(0x0000, 0x4000 - 4),
-+	regmap_reg_range(0x7000, 0x8000 - 4),
-+};
-+
-+static const struct regmap_access_table x1830_access_table = {
-+	.yes_ranges = x1830_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x1830_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x1830_chip_info = {
- 	.num_chips = 4,
- 	.reg_offset = 0x1000,
-@@ -2516,6 +2541,7 @@ static const struct ingenic_chip_info x1
- 	.num_functions = ARRAY_SIZE(x1830_functions),
- 	.pull_ups = x1830_pull_ups,
- 	.pull_downs = x1830_pull_downs,
-+	.access_table = &x1830_access_table,
- };
- 
- static const u32 x2000_pull_ups[5] = {
-@@ -2969,6 +2995,17 @@ static const struct function_desc x2000_
- 	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
- };
- 
-+static const struct regmap_range x2000_access_ranges[] = {
-+	regmap_reg_range(0x000, 0x500 - 4),
-+	regmap_reg_range(0x700, 0x800 - 4),
-+};
-+
-+/* shared with X2100 */
-+static const struct regmap_access_table x2000_access_table = {
-+	.yes_ranges = x2000_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x2000_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x2000_chip_info = {
- 	.num_chips = 5,
- 	.reg_offset = 0x100,
-@@ -2979,6 +3016,7 @@ static const struct ingenic_chip_info x2
- 	.num_functions = ARRAY_SIZE(x2000_functions),
- 	.pull_ups = x2000_pull_ups,
- 	.pull_downs = x2000_pull_downs,
-+	.access_table = &x2000_access_table,
- };
- 
- static const u32 x2100_pull_ups[5] = {
-@@ -3189,6 +3227,7 @@ static const struct ingenic_chip_info x2
- 	.num_functions = ARRAY_SIZE(x2100_functions),
- 	.pull_ups = x2100_pull_ups,
- 	.pull_downs = x2100_pull_downs,
-+	.access_table = &x2000_access_table,
- };
- 
- static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
-@@ -4168,7 +4207,12 @@ static int __init ingenic_pinctrl_probe(
- 		return PTR_ERR(base);
- 
- 	regmap_config = ingenic_pinctrl_regmap_config;
--	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
-+	if (chip_info->access_table) {
-+		regmap_config.rd_table = chip_info->access_table;
-+		regmap_config.wr_table = chip_info->access_table;
-+	} else {
-+		regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset - 4;
-+	}
- 
- 	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
- 	if (IS_ERR(jzpc->map)) {
+ #define EVENT_DATA2_PPS_EVENT_TYPE(data2)				\
+ 	((data2) & ASYNC_EVENT_CMPL_PPS_TIMESTAMP_EVENT_DATA2_EVENT_TYPE)
 
 

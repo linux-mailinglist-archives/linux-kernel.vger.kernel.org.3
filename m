@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5383D4F50B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E8C4F505D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384260AbiDFBgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S1451057AbiDFBXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344108AbiDEKjp (ORCPT
+        with ESMTP id S1344137AbiDEKjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:39:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE812611D;
-        Tue,  5 Apr 2022 03:25:00 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99B92654C;
+        Tue,  5 Apr 2022 03:25:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4DCD8CE0B18;
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB765B81C98;
+        Tue,  5 Apr 2022 10:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B866C385A1;
         Tue,  5 Apr 2022 10:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6280CC385A0;
-        Tue,  5 Apr 2022 10:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154297;
-        bh=IrqnNTvRac6zDFBz8lPZ519erod6BwbMDCIQfnHanu8=;
+        s=korg; t=1649154300;
+        bh=QLM2ZEVgjYzkdh/AaHI6bLcEGIY3utV+z9bS4wM40eI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mO25bh0/cBSbAAIQQLoJD2VRvwsWkKqNoIetd6THlo0VsfZrXr4JGFfmdjimhmwIm
-         jc5CpxNZHuParllXKmopO1QFq+STvvXppR2PLdrsqNaR0GCdr6r5ccvPzlEaOaIwLI
-         ULu2JcM7mEvXo3pouUBS9Z0K1wwBNnww1L0BVcpY=
+        b=Fze3qrAXgUh6i/7ntK3d1VIWLBUD3HlgE33cuPvRdR82tD1Fy9nqsw3NEy5KP4Wgk
+         7KHTPgQYUvp9kLZcGf970do1d7EODZ5Tg/1rJ/zlW6LhGabENJsYWIdVDwftt0DB3Q
+         Iaeu7MEGzbtHLy/xOSdr8a4XWHiR9DPlhb13SC8Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 492/599] ARM: ftrace: avoid redundant loads or clobbering IP
-Date:   Tue,  5 Apr 2022 09:33:06 +0200
-Message-Id: <20220405070313.468807707@linuxfoundation.org>
+Subject: [PATCH 5.10 493/599] ARM: dts: imx7: Use audio_mclk_post_div instead audio_mclk_root_clk
+Date:   Tue,  5 Apr 2022 09:33:07 +0200
+Message-Id: <20220405070313.498928825@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,133 +55,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Abel Vesa <abel.vesa@nxp.com>
 
-[ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
+[ Upstream commit 4cb7df64c732b2b9918424095c11660c2a8c4a33 ]
 
-Tweak the ftrace return paths to avoid redundant loads of SP, as well as
-unnecessary clobbering of IP.
+The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
+but according to the reference manual, there is no such gate. Moreover,
+the consumer driver of the mentioned clock might gate it and leave
+the ECSPI2 (the true owner of that gate) hanging. So lets use the
+audio_mclk_post_div, which is the parent.
 
-This also fixes the inconsistency of using MOV to perform a function
-return, which is sub-optimal on recent micro-architectures but more
-importantly, does not perform an interworking return, unlike compiler
-generated function returns in Thumb2 builds.
-
-Let's fix this by popping PC from the stack like most ordinary code
-does.
-
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/kernel/entry-ftrace.S | 51 +++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 29 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi     | 4 ++--
+ arch/arm/boot/dts/imx7-mba7.dtsi        | 2 +-
+ arch/arm/boot/dts/imx7d-nitrogen7.dts   | 2 +-
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts | 4 ++--
+ arch/arm/boot/dts/imx7d-pico-pi.dts     | 4 ++--
+ arch/arm/boot/dts/imx7d-sdb.dts         | 4 ++--
+ arch/arm/boot/dts/imx7s-warp.dts        | 4 ++--
+ 7 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-index f4886fb6e9ba..f33c171e3090 100644
---- a/arch/arm/kernel/entry-ftrace.S
-+++ b/arch/arm/kernel/entry-ftrace.S
-@@ -22,10 +22,7 @@
-  * mcount can be thought of as a function called in the middle of a subroutine
-  * call.  As such, it needs to be transparent for both the caller and the
-  * callee: the original lr needs to be restored when leaving mcount, and no
-- * registers should be clobbered.  (In the __gnu_mcount_nc implementation, we
-- * clobber the ip register.  This is OK because the ARM calling convention
-- * allows it to be clobbered in subroutines and doesn't use it to hold
-- * parameters.)
-+ * registers should be clobbered.
-  *
-  * When using dynamic ftrace, we patch out the mcount call by a "pop {lr}"
-  * instead of the __gnu_mcount_nc call (see arch/arm/kernel/ftrace.c).
-@@ -70,26 +67,25 @@
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index 62b771c1d5a9..f1c60b0cb143 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -40,7 +40,7 @@
  
- .macro __ftrace_regs_caller
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -293,7 +293,7 @@
+ 		compatible = "fsl,sgtl5000";
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_sai1_mclk>;
+ 		VDDA-supply = <&reg_module_3v3_avdd>;
+diff --git a/arch/arm/boot/dts/imx7-mba7.dtsi b/arch/arm/boot/dts/imx7-mba7.dtsi
+index 50abf18ad30b..887497e3bb4b 100644
+--- a/arch/arm/boot/dts/imx7-mba7.dtsi
++++ b/arch/arm/boot/dts/imx7-mba7.dtsi
+@@ -250,7 +250,7 @@
+ 	tlv320aic32x4: audio-codec@18 {
+ 		compatible = "ti,tlv320aic32x4";
+ 		reg = <0x18>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		ldoin-supply = <&reg_audio_3v3>;
+ 		iov-supply = <&reg_audio_3v3>;
+diff --git a/arch/arm/boot/dts/imx7d-nitrogen7.dts b/arch/arm/boot/dts/imx7d-nitrogen7.dts
+index e0751e6ba3c0..a31de900139d 100644
+--- a/arch/arm/boot/dts/imx7d-nitrogen7.dts
++++ b/arch/arm/boot/dts/imx7d-nitrogen7.dts
+@@ -288,7 +288,7 @@
+ 	codec: wm8960@1a {
+ 		compatible = "wlf,wm8960";
+ 		reg = <0x1a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		wlf,shared-lrclk;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+index 7b2198a9372c..d917dc4f2f22 100644
+--- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
++++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+@@ -31,7 +31,7 @@
  
--	sub	sp, sp, #8	@ space for PC and CPSR OLD_R0,
-+	str	lr, [sp, #-8]!	@ store LR as PC and make space for CPSR/OLD_R0,
- 				@ OLD_R0 will overwrite previous LR
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&sgtl5000>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -41,7 +41,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		VDDA-supply = <&reg_2p5v>;
+ 		VDDIO-supply = <&reg_vref_1v8>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-pico-pi.dts b/arch/arm/boot/dts/imx7d-pico-pi.dts
+index 70bea95c06d8..f263e391e24c 100644
+--- a/arch/arm/boot/dts/imx7d-pico-pi.dts
++++ b/arch/arm/boot/dts/imx7d-pico-pi.dts
+@@ -31,7 +31,7 @@
  
--	add 	ip, sp, #12	@ move in IP the value of SP as it was
--				@ before the push {lr} of the mcount mechanism
-+	ldr	lr, [sp, #8]    @ get previous LR
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&sgtl5000>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -41,7 +41,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		VDDA-supply = <&reg_2p5v>;
+ 		VDDIO-supply = <&reg_vref_1v8>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
+index ac0751bc1177..6823b9f1a2a3 100644
+--- a/arch/arm/boot/dts/imx7d-sdb.dts
++++ b/arch/arm/boot/dts/imx7d-sdb.dts
+@@ -378,14 +378,14 @@
+ 	codec: wm8960@1a {
+ 		compatible = "wlf,wm8960";
+ 		reg = <0x1a>;
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		clock-names = "mclk";
+ 		wlf,shared-lrclk;
+ 		wlf,hp-cfg = <2 2 3>;
+ 		wlf,gpio-cfg = <1 3>;
+ 		assigned-clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_SRC>,
+ 				  <&clks IMX7D_PLL_AUDIO_POST_DIV>,
+-				  <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++				  <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		assigned-clock-parents = <&clks IMX7D_PLL_AUDIO_POST_DIV>;
+ 		assigned-clock-rates = <0>, <884736000>, <12288000>;
+ 	};
+diff --git a/arch/arm/boot/dts/imx7s-warp.dts b/arch/arm/boot/dts/imx7s-warp.dts
+index d6b4888fa686..e035dd5bf4f6 100644
+--- a/arch/arm/boot/dts/imx7s-warp.dts
++++ b/arch/arm/boot/dts/imx7s-warp.dts
+@@ -75,7 +75,7 @@
  
--	str     lr, [sp, #0]    @ store LR instead of PC
-+	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
- 
--	ldr     lr, [sp, #8]    @ get previous LR
-+	str	lr, [sp, #-4]!	@ store previous LR as LR
- 
--	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
-+	add 	lr, sp, #16	@ move in LR the value of SP as it was
-+				@ before the push {lr} of the mcount mechanism
- 
--	stmdb   sp!, {ip, lr}
--	stmdb   sp!, {r0-r11, lr}
-+	push	{r0-r11, ip, lr}
- 
- 	@ stack content at this point:
- 	@ 0  4          48   52       56            60   64    68       72
--	@ R0 | R1 | ... | LR | SP + 4 | previous LR | LR | PSR | OLD_R0 |
-+	@ R0 | R1 | ... | IP | SP + 4 | previous LR | LR | PSR | OLD_R0 |
- 
--	mov r3, sp				@ struct pt_regs*
-+	mov	r3, sp				@ struct pt_regs*
- 
- 	ldr r2, =function_trace_op
- 	ldr r2, [r2]				@ pointer to the current
-@@ -112,11 +108,9 @@ ftrace_graph_regs_call:
- #endif
- 
- 	@ pop saved regs
--	ldmia   sp!, {r0-r12}			@ restore r0 through r12
--	ldr	ip, [sp, #8]			@ restore PC
--	ldr	lr, [sp, #4]			@ restore LR
--	ldr	sp, [sp, #0]			@ restore SP
--	mov	pc, ip				@ return
-+	pop	{r0-r11, ip, lr}		@ restore r0 through r12
-+	ldr	lr, [sp], #4			@ restore LR
-+	ldr	pc, [sp], #12
- .endm
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-@@ -132,11 +126,9 @@ ftrace_graph_regs_call:
- 	bl	prepare_ftrace_return
- 
- 	@ pop registers saved in ftrace_regs_caller
--	ldmia   sp!, {r0-r12}			@ restore r0 through r12
--	ldr	ip, [sp, #8]			@ restore PC
--	ldr	lr, [sp, #4]			@ restore LR
--	ldr	sp, [sp, #0]			@ restore SP
--	mov	pc, ip				@ return
-+	pop	{r0-r11, ip, lr}		@ restore r0 through r12
-+	ldr	lr, [sp], #4			@ restore LR
-+	ldr	pc, [sp], #12
- 
- .endm
- #endif
-@@ -202,16 +194,17 @@ ftrace_graph_call\suffix:
- .endm
- 
- .macro mcount_exit
--	ldmia	sp!, {r0-r3, ip, lr}
--	ret	ip
-+	ldmia	sp!, {r0-r3}
-+	ldr	lr, [sp, #4]
-+	ldr	pc, [sp], #8
- .endm
- 
- ENTRY(__gnu_mcount_nc)
- UNWIND(.fnstart)
- #ifdef CONFIG_DYNAMIC_FTRACE
--	mov	ip, lr
--	ldmia	sp!, {lr}
--	ret	ip
-+	push	{lr}
-+	ldr	lr, [sp, #4]
-+	ldr	pc, [sp], #8
- #else
- 	__mcount
- #endif
+ 		dailink_master: simple-audio-card,codec {
+ 			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		};
+ 	};
+ };
+@@ -232,7 +232,7 @@
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x0a>;
+ 		compatible = "fsl,sgtl5000";
+-		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
++		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_sai1_mclk>;
+ 		VDDA-supply = <&vgen4_reg>;
 -- 
 2.34.1
 

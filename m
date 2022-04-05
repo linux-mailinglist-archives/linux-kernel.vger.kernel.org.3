@@ -2,215 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E064F4A57
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABDB4F4E8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455506AbiDEWkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S1835599AbiDFAcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451578AbiDEPxg (ORCPT
+        with ESMTP id S1451872AbiDEPyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:53:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4231C8A84
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:47:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0BBEB81D6B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09424C385A1;
-        Tue,  5 Apr 2022 14:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649170037;
-        bh=3QjZsra/sKKyF/B/dmQRx/G6cza4sXiGZMxpImAEmgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RAEapBaB0keXxkMXxgRrRmBoQmXLT/6X9lJ8OkQTimi+NHBi8inmsQjMtIegqf9z+
-         pY/x21mz8i2GSvqSRovtsHNTv7qpbuUsan9XNpcBxkRfvGwWM21rhhXOCxdZDn9HnK
-         f783QlOPxd/lDvo+BOtEs+JY3yQtKTR6Qu1UJbDrgWP4ygGbEaAWlDFHyg7017Apkn
-         VlPpWfDPZA6Nu6dwajFcyFv/MdMA097Ahk9e1dEj9Q5QwgguJU67LqSovSkc6O/Lgq
-         bQHkRw8K8EUY+Lgr1L6iGQN7tlxfBF5GM3dJj02v6j/Rsp/xe92gkjf2o1CKUA2oR+
-         /Q4TjtF3QZUtA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9AD0B40407; Tue,  5 Apr 2022 11:47:13 -0300 (-03)
-Date:   Tue, 5 Apr 2022 11:47:13 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Build perf with clang, failure with libperf
-Message-ID: <YkxWcYzph5pC1EK8@kernel.org>
-References: <YktYX2OnLtyobRYD@kernel.org>
- <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
+        Tue, 5 Apr 2022 11:54:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53E6712E76B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649170136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gLnQrP3xPWs2TZHtPngsxvbbh35oj514ez2KutsOFxM=;
+        b=QZKbGykioQGSfmLoQR2zcqEqD947GhufDocQ/LqSMmX0Ldwy+lpo6er7LBqM+nU9MfgwOp
+        AJu0jrxjjTMuzGrIGCyKUreePI91y7i8VOnTKa2p//OqAdayu+puFNnn1QW1N78xIYkGJC
+        fS72yGtkM3dVKIoAp2crVD5Bu+NZ8vE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-5FwpdoaeMMuiZrhq_xK_BA-1; Tue, 05 Apr 2022 10:48:50 -0400
+X-MC-Unique: 5FwpdoaeMMuiZrhq_xK_BA-1
+Received: by mail-wm1-f71.google.com with SMTP id o35-20020a05600c512300b0038e83a52c71so170486wms.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 07:48:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gLnQrP3xPWs2TZHtPngsxvbbh35oj514ez2KutsOFxM=;
+        b=W9zNSZBJD+e876284/UGkjx8mwndnywNoEdeioibPULHpjN76Wi7IRMtZev9RKCgaX
+         8sL06jNDTWVe+/KaOagFMtELMGYgBH4xfEgK2DO6Yn2gfDfoFmzu0uuGSb28El0/WaOs
+         SEFQ6QSfK9Wfq4/9XbxuLX+e8nxOCWLysJrDD1FWVWAETIztaHqhzCnz/VbN6PUNVUIY
+         VJJc5caiM/44rvpqr+tLBPMobmuMMhCEqpWCoWskN7e5ZcQ1ywE0b7K1ukTf+m5pnY1A
+         3WlcMfdANMWdqdoGEci4P7WxnRz04vDA5GNi4ewV/mE24Uhtvk4OKW9ms2ULTsJnBo4x
+         6dNA==
+X-Gm-Message-State: AOAM530/zrne2Pa/DOiShsb/2+wjL3lsIJhkLgC5odxx+sFLfm1oRbvw
+        UhPY57rYFESM+uquBtJVL52q69sueYMaC/yfdaV+3p0q4mswucc+dlQCh5DtWxi4FS2+BDzvOiz
+        wZgHzYM6qc3zkAB9n+VMz+Az/
+X-Received: by 2002:a05:600c:27d1:b0:38e:72c2:5727 with SMTP id l17-20020a05600c27d100b0038e72c25727mr3474700wmb.123.1649170128820;
+        Tue, 05 Apr 2022 07:48:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwAm12iI6JoUmR7+6Czqj9MkJh71Zisi7Pf7OUy+0V6YUCaihNcSzxM1Dgv8W4AodPjbvVuXg==
+X-Received: by 2002:a05:600c:27d1:b0:38e:72c2:5727 with SMTP id l17-20020a05600c27d100b0038e72c25727mr3474685wmb.123.1649170128568;
+        Tue, 05 Apr 2022 07:48:48 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id az19-20020a05600c601300b0038cadf3aa69sm3722043wmb.36.2022.04.05.07.48.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 07:48:47 -0700 (PDT)
+Message-ID: <b543e92d-0a98-26f6-105b-5c3bbf74f79f@redhat.com>
+Date:   Tue, 5 Apr 2022 16:48:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 041/104] KVM: VMX: Move setting of EPT MMU masks to
+ common VT-x code
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <4dbe2defb66835ac414cdb2dc5974fa4a6820101.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <4dbe2defb66835ac414cdb2dc5974fa4a6820101.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 04, 2022 at 02:53:24PM -0700, Nathan Chancellor escreveu:
-> On Mon, Apr 04, 2022 at 05:43:11PM -0300, Arnaldo Carvalho de Melo wrote:
-> > 	Trying to apply Sedat's patch something changed in my system,
-> > and that patch wasn't enough, so I had to first apply this one:
-
-<SNIP>
-
-> > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > index 1480910c792e2cb3..90774b60d31b2b8e 100644
-> > --- a/tools/build/feature/Makefile
-> > +++ b/tools/build/feature/Makefile
-> > @@ -217,7 +217,7 @@ strip-libs = $(filter-out -l%,$(1))
-> >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
-> >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
-> >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-> > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> > +PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
-> >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-> >  
-> >  $(OUTPUT)test-libperl.bin:
-> > 
-> > ----------------------------------------------------- 8< -------------------
-
-<SNIP>
-
-> > So perhaps in this case its better to disable that
-> > -Werror,-Wcompound-token-split-by-macro when building with clang?
- 
-> Yes, I think that is probably the best solution. As far as I can tell,
-> at least in this file and context, the warning appears harmless, as the
-> "create a GNU C statement expression from two different macros" is very
-> much intentional, based on the presence of PERL_USE_GCC_BRACE_GROUPS.
-> The warning is fixed in upstream Perl by just avoiding creating GNU C
-> statement expressions using STMT_START and STMT_END:
- 
-> https://github.com/Perl/perl5/issues/18780
-> https://github.com/Perl/perl5/pull/18984
+On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> If I am reading the source code correctly, an alternative to disabling
-> the warning would be specifying -DPERL_GCC_BRACE_GROUPS_FORBIDDEN but it
-> seems like that might end up impacting more than just this site,
-> according to the issue discussion above.
+> EPT MMU masks are used commonly for VMX and TDX.  The value needs to be
+> initialized in common code before both VMX/TDX-specific initialization
+> code.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/main.c | 5 +++++
+>   arch/x86/kvm/vmx/vmx.c  | 4 ----
+>   2 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 3eb9db6d83ac..51aaafe6b432 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -4,6 +4,7 @@
+>   #include "x86_ops.h"
+>   #include "vmx.h"
+>   #include "nested.h"
+> +#include "mmu.h"
+>   #include "pmu.h"
+>   #include "tdx.h"
+>   
+> @@ -22,6 +23,10 @@ static __init int vt_hardware_setup(void)
+>   
+>   	tdx_hardware_setup(&vt_x86_ops);
+>   
+> +	if (enable_ept)
+> +		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
+> +				      cpu_has_vmx_ept_execute_only());
+> +
+>   	return 0;
+>   }
+>   
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 0edeeed0b4c8..07fd892768be 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7817,10 +7817,6 @@ __init int vmx_hardware_setup(void)
+>   
+>   	set_bit(0, vmx_vpid_bitmap); /* 0 is reserved for host */
+>   
+> -	if (enable_ept)
+> -		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
+> -				      cpu_has_vmx_ept_execute_only());
+> -
+>   	kvm_configure_mmu(enable_ept, 0, vmx_get_max_tdp_level(),
+>   			  ept_caps_to_lpage_level(vmx_capability.ept));
+>   
 
-Ok, so I ended up with the patch below.
+RB
 
-On the 5.19 window I'll make the tools/perf/Makefile.config filters only
-apply when clang is used and unify these settings so that we have it
-setup just in one place, shared by the main build and the feature build.
-
-- Arnaldo
-
-commit 5b5da660aa70e2a01748f602e9bbcd18b162a176
-Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Tue Apr 5 10:33:21 2022 -0300
-
-    tools build: Filter out options and warnings not supported by clang
-    
-    These make the feature check fail when using clang, so remove them just
-    like is done in tools/perf/Makefile.config to build perf itself.
-    
-    Adding -Wno-compound-token-split-by-macro to tools/perf/Makefile.config
-    when building with clang is also necessary to avoid these warnings
-    turned into errors (-Werror):
-    
-        CC      /tmp/build/perf/util/scripting-engines/trace-event-perl.o
-      In file included from util/scripting-engines/trace-event-perl.c:35:
-      In file included from /usr/lib64/perl5/CORE/perl.h:4085:
-      In file included from /usr/lib64/perl5/CORE/hv.h:659:
-      In file included from /usr/lib64/perl5/CORE/hv_func.h:34:
-      In file included from /usr/lib64/perl5/CORE/sbox32_hash.h:4:
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: error: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
-          ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:80:38: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
-      #define ZAPHOD32_SCRAMBLE32(v,prime) STMT_START {  \
-                                           ^~~~~~~~~~
-      /usr/lib64/perl5/CORE/perl.h:737:29: note: expanded from macro 'STMT_START'
-      #   define STMT_START   (void)( /* gcc supports "({ STATEMENTS; })" */
-                                    ^
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: note: '{' token is here
-          ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:80:49: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
-      #define ZAPHOD32_SCRAMBLE32(v,prime) STMT_START {  \
-                                                      ^
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: error: '}' and ')' tokens terminating statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
-          ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:87:41: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
-          v ^= (v>>23);                       \
-                                              ^
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: note: ')' token is here
-          ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      /usr/lib64/perl5/CORE/zaphod32_hash.h:88:3: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
-      } STMT_END
-        ^~~~~~~~
-      /usr/lib64/perl5/CORE/perl.h:738:21: note: expanded from macro 'STMT_END'
-      #   define STMT_END     )
-                              ^
-    
-    Based-on-a-patch-by: Sedat Dilek <sedat.dilek@gmail.com>
-    Cc: Adrian Hunter <adrian.hunter@intel.com>
-    Cc: Fangrui Song <maskray@google.com>
-    Cc: Florian Fainelli <f.fainelli@gmail.com>
-    Cc: Ian Rogers <irogers@google.com>
-    Cc: Jiri Olsa <jolsa@kernel.org>
-    Cc: John Keeping <john@metanate.com>
-    Cc: Leo Yan <leo.yan@linaro.org>
-    Cc: Michael Petlan <mpetlan@redhat.com>
-    Cc: Namhyung Kim <namhyung@kernel.org>
-    Cc: Nathan Chancellor <nathan@kernel.org>
-    Cc: Nick Desaulniers <ndesaulniers@google.com>
-    Link: http://lore.kernel.org/lkml/YktYX2OnLtyobRYD@kernel.org
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 90774b60d31b2b8e..de66e1cc073481c5 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -220,6 +220,13 @@ PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
- FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
- 
-+ifeq ($(CC_NO_CLANG), 0)
-+  PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
-+  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-+  PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
-+  FLAGS_PERL_EMBED += -Wno-compound-token-split-by-macro
-+endif
-+
- $(OUTPUT)test-libperl.bin:
- 	$(BUILD) $(FLAGS_PERL_EMBED)
- 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 96ad944ca6a885cd..5b5ba475a5c00c0f 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -790,6 +790,9 @@ else
-     LDFLAGS += $(PERL_EMBED_LDFLAGS)
-     EXTLIBS += $(PERL_EMBED_LIBADD)
-     CFLAGS += -DHAVE_LIBPERL_SUPPORT
-+    ifeq ($(CC_NO_CLANG), 0)
-+      CFLAGS += -Wno-compound-token-split-by-macro
-+    endif
-     $(call detected,CONFIG_LIBPERL)
-   endif
- endif

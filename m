@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065944F4EC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7F14F4E13
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836589AbiDFAgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S1587427AbiDFAJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353920AbiDEKJs (ORCPT
+        with ESMTP id S1358461AbiDEK2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03E0C4E02;
-        Tue,  5 Apr 2022 02:55:47 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EB0BA325;
+        Tue,  5 Apr 2022 03:18:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36CACB818F6;
-        Tue,  5 Apr 2022 09:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C05C385A1;
-        Tue,  5 Apr 2022 09:55:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBB461777;
+        Tue,  5 Apr 2022 10:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBF4C385A0;
+        Tue,  5 Apr 2022 10:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152545;
-        bh=mwszu1yW50OKQAP+R4EblUFAQnJ3LE7PFR9IM2ad8oQ=;
+        s=korg; t=1649153882;
+        bh=3SyFg1Ox2BVv77hwr5Q+brbLvYJwdOjO6I/B8CTdJ5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XZuh7ZQQXJwWUjBilUG228s5fuzVdBzyw3hD25LgepS0N5DfoPMR3BJRe8W4n4sia
-         vmUdkD6rHrra6Jf29xXnQHPjKRMFAVnQlv1iFH1qtS59F6Cgds5ZHYwj9rJc1VPore
-         CLTvKxlbG5/nKXEa61WaklmJT/Up/01m0RrFfglY=
+        b=TFRb0JRtSmUneYTMtm+T523bX1K3ipI78fWC3Yth0iUMDWYK3gEFwCowNmdfehZ75
+         YfAgVlD5ijA/P2BSUoq6h2d2HCbNKjScUBbwt5Xd7kMloEp+R7JmQHlUQNKD1QdvfM
+         tyH/L3bOpUWO9Qz1pnV+/3DyJBWy/5AcsF1S2cjg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 814/913] KVM: x86: fix sending PV IPI
+        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 382/599] misc: alcor_pci: Fix an error handling path
 Date:   Tue,  5 Apr 2022 09:31:16 +0200
-Message-Id: <20220405070404.230885490@linuxfoundation.org>
+Message-Id: <20220405070310.198300048@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li RongQing <lirongqing@baidu.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit c15e0ae42c8e5a61e9aca8aac920517cf7b3e94e upstream.
+[ Upstream commit 5b3dc949f554379edcb8ef6111aa5ecb78feb798 ]
 
-If apic_id is less than min, and (max - apic_id) is greater than
-KVM_IPI_CLUSTER_SIZE, then the third check condition is satisfied but
-the new apic_id does not fit the bitmask.  In this case __send_ipi_mask
-should send the IPI.
+A successful ida_simple_get() should be balanced by a corresponding
+ida_simple_remove().
 
-This is mostly theoretical, but it can happen if the apic_ids on three
-iterations of the loop are for example 1, KVM_IPI_CLUSTER_SIZE, 0.
+Add the missing call in the error handling path of the probe.
 
-Fixes: aaffcfd1e82 ("KVM: X86: Implement PV IPIs in linux guest")
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Message-Id: <1646814944-51801-1-git-send-email-lirongqing@baidu.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+While at it, switch to ida_alloc()/ida_free() instead to
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
+
+Fixes: 4f556bc04e3c ("misc: cardreader: add new Alcor Micro Cardreader PCI driver")
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/918a9875b7f67b7f8f123c4446452603422e8c5e.1644136776.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/kvm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/cardreader/alcor_pci.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -510,7 +510,7 @@ static void __send_ipi_mask(const struct
- 		} else if (apic_id < min && max - apic_id < KVM_IPI_CLUSTER_SIZE) {
- 			ipi_bitmap <<= min - apic_id;
- 			min = apic_id;
--		} else if (apic_id < min + KVM_IPI_CLUSTER_SIZE) {
-+		} else if (apic_id > min && apic_id < min + KVM_IPI_CLUSTER_SIZE) {
- 			max = apic_id < max ? max : apic_id;
- 		} else {
- 			ret = kvm_hypercall4(KVM_HC_SEND_IPI, (unsigned long)ipi_bitmap,
+diff --git a/drivers/misc/cardreader/alcor_pci.c b/drivers/misc/cardreader/alcor_pci.c
+index de6d44a158bb..3f514d77a843 100644
+--- a/drivers/misc/cardreader/alcor_pci.c
++++ b/drivers/misc/cardreader/alcor_pci.c
+@@ -266,7 +266,7 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	ret = ida_simple_get(&alcor_pci_idr, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&alcor_pci_idr, GFP_KERNEL);
+ 	if (ret < 0)
+ 		return ret;
+ 	priv->id = ret;
+@@ -280,7 +280,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 	ret = pci_request_regions(pdev, DRV_NAME_ALCOR_PCI);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Cannot request region\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto error_free_ida;
+ 	}
+ 
+ 	if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM)) {
+@@ -324,6 +325,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 
+ error_release_regions:
+ 	pci_release_regions(pdev);
++error_free_ida:
++	ida_free(&alcor_pci_idr, priv->id);
+ 	return ret;
+ }
+ 
+@@ -337,7 +340,7 @@ static void alcor_pci_remove(struct pci_dev *pdev)
+ 
+ 	mfd_remove_devices(&pdev->dev);
+ 
+-	ida_simple_remove(&alcor_pci_idr, priv->id);
++	ida_free(&alcor_pci_idr, priv->id);
+ 
+ 	pci_release_regions(pdev);
+ 	pci_set_drvdata(pdev, NULL);
+-- 
+2.34.1
+
 
 

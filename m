@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C5A4F3FF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49584F4090
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377343AbiDEURC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
+        id S1387956AbiDENUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357947AbiDEK1b (ORCPT
+        with ESMTP id S1344283AbiDEJTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016095A1B;
-        Tue,  5 Apr 2022 03:11:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:19:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC3237D1;
+        Tue,  5 Apr 2022 02:07:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71B20B81C8A;
-        Tue,  5 Apr 2022 10:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F27C385A0;
-        Tue,  5 Apr 2022 10:11:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 97359CE1C6C;
+        Tue,  5 Apr 2022 09:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE66C385A1;
+        Tue,  5 Apr 2022 09:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153490;
-        bh=W+a99i5Wl/XzyKPPltPn1bV3BI04D47hfqhWXnPVblE=;
+        s=korg; t=1649149633;
+        bh=yg6WkGRZiXN6RT05fbnMqWKZL4qp2s5qQM6TuONT29E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eb2MH+VAWtQbMHrXUxsEN4wxV0nGcVssYdXsa5d14pl+FjA/+XvU2tY8YuG8dpPtB
-         dPQPugsX7G5fMyM3NjWktbNR4l/Tfj7cdwuaGcRI8LGIYxiDInEpqRPVS4sRWMZXND
-         pHwwqO0V+8pobrhcItrKy8qSOaoWo8KD84J3D7eo=
+        b=BtSz9G2SemYlwPolhKJPmKtgUPuCWD2W0Q+t7HMLyRQoyiiZRoS20YkXc1fcMfUCO
+         br+76XyIBNm+Y2ED63Lb+EiojxHqw6sL1xuqLiBGqEN1unJlPXRS/vOFzDIIj8pGwD
+         86/YWdkNg/H4Ueq4cxuHDMmb7Ch6Hx52dOqtS6Z0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 203/599] firmware: qcom: scm: Remove reassignment to desc following initializer
+Subject: [PATCH 5.16 0784/1017] atomics: Fix atomic64_{read_acquire,set_release} fallbacks
 Date:   Tue,  5 Apr 2022 09:28:17 +0200
-Message-Id: <20220405070304.882155120@linuxfoundation.org>
+Message-Id: <20220405070417.527112826@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,44 +58,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+From: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit 7823e5aa5d1dd9ed5849923c165eb8f29ad23c54 ]
+[ Upstream commit dc1b4df09acdca7a89806b28f235cd6d8dcd3d24 ]
 
-Member assignments to qcom_scm_desc were moved into struct initializers
-in 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers") including
-the case in qcom_scm_iommu_secure_ptbl_init, except that the - now
-duplicate - assignment to desc was left in place. While not harmful,
-remove this unnecessary extra reassignment.
+Arnd reports that on 32-bit architectures, the fallbacks for
+atomic64_read_acquire() and atomic64_set_release() are broken as they
+use smp_load_acquire() and smp_store_release() respectively, which do
+not work on types larger than the native word size.
 
-Fixes: 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers")
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Reviewed-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211208083423.22037-2-marijn.suijten@somainline.org
+Since those contain compiletime_assert_atomic_type(), any attempt to use
+those fallbacks will result in a build-time error. e.g. with the
+following added to arch/arm/kernel/setup.c:
+
+| void test_atomic64(atomic64_t *v)
+| {
+|        atomic64_set_release(v, 5);
+|        atomic64_read_acquire(v);
+| }
+
+The compiler will complain as follows:
+
+| In file included from <command-line>:
+| In function 'arch_atomic64_set_release',
+|     inlined from 'test_atomic64' at ./include/linux/atomic/atomic-instrumented.h:669:2:
+| ././include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_9' declared with attribute error: Need native word sized stores/loads for atomicity.
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |                                      ^
+| ././include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
+|   327 |    prefix ## suffix();    \
+|       |    ^~~~~~
+| ././include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |  ^~~~~~~~~~~~~~~~~~~
+| ././include/linux/compiler_types.h:349:2: note: in expansion of macro 'compiletime_assert'
+|   349 |  compiletime_assert(__native_word(t),    \
+|       |  ^~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:133:2: note: in expansion of macro 'compiletime_assert_atomic_type'
+|   133 |  compiletime_assert_atomic_type(*p);    \
+|       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+|   164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+|       |                                                       ^~~~~~~~~~~~~~~~~~~
+| ./include/linux/atomic/atomic-arch-fallback.h:1270:2: note: in expansion of macro 'smp_store_release'
+|  1270 |  smp_store_release(&(v)->counter, i);
+|       |  ^~~~~~~~~~~~~~~~~
+| make[2]: *** [scripts/Makefile.build:288: arch/arm/kernel/setup.o] Error 1
+| make[1]: *** [scripts/Makefile.build:550: arch/arm/kernel] Error 2
+| make: *** [Makefile:1831: arch/arm] Error 2
+
+Fix this by only using smp_load_acquire() and smp_store_release() for
+native atomic types, and otherwise falling back to the regular barriers
+necessary for acquire/release semantics, as we do in the more generic
+acquire and release fallbacks.
+
+Since the fallback templates are used to generate the atomic64_*() and
+atomic_*() operations, the __native_word() check is added to both. For
+the atomic_*() operations, which are always 32-bit, the __native_word()
+check is redundant but not harmful, as it is always true.
+
+For the example above this works as expected on 32-bit, e.g. for arm
+multi_v7_defconfig:
+
+| <test_atomic64>:
+|         push    {r4, r5}
+|         dmb     ish
+|         pldw    [r0]
+|         mov     r2, #5
+|         mov     r3, #0
+|         ldrexd  r4, [r0]
+|         strexd  r4, r2, [r0]
+|         teq     r4, #0
+|         bne     484 <test_atomic64+0x14>
+|         ldrexd  r2, [r0]
+|         dmb     ish
+|         pop     {r4, r5}
+|         bx      lr
+
+... and also on 64-bit, e.g. for arm64 defconfig:
+
+| <test_atomic64>:
+|         bti     c
+|         paciasp
+|         mov     x1, #0x5
+|         stlr    x1, [x0]
+|         ldar    x0, [x0]
+|         autiasp
+|         ret
+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Link: https://lore.kernel.org/r/20220207101943.439825-1-mark.rutland@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/qcom_scm.c | 6 ------
- 1 file changed, 6 deletions(-)
+ include/linux/atomic/atomic-arch-fallback.h | 38 ++++++++++++++++++---
+ scripts/atomic/fallbacks/read_acquire       | 11 +++++-
+ scripts/atomic/fallbacks/set_release        |  7 +++-
+ 3 files changed, 49 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index e10a99860ca4..d417199f8fe9 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -749,12 +749,6 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
- 	};
- 	int ret;
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a3dba31df01e..6db58d180866 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -151,7 +151,16 @@
+ static __always_inline int
+ arch_atomic_read_acquire(const atomic_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	int ret;
++
++	if (__native_word(atomic_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic_read_acquire arch_atomic_read_acquire
+ #endif
+@@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
+ static __always_inline void
+ arch_atomic_set_release(atomic_t *v, int i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ #define arch_atomic_set_release arch_atomic_set_release
+ #endif
+@@ -1258,7 +1272,16 @@ arch_atomic_dec_if_positive(atomic_t *v)
+ static __always_inline s64
+ arch_atomic64_read_acquire(const atomic64_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	s64 ret;
++
++	if (__native_word(atomic64_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic64_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic64_read_acquire arch_atomic64_read_acquire
+ #endif
+@@ -1267,7 +1290,12 @@ arch_atomic64_read_acquire(const atomic64_t *v)
+ static __always_inline void
+ arch_atomic64_set_release(atomic64_t *v, s64 i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic64_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic64_set(v, i);
++	}
+ }
+ #define arch_atomic64_set_release arch_atomic64_set_release
+ #endif
+@@ -2358,4 +2386,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
  
--	desc.args[0] = addr;
--	desc.args[1] = size;
--	desc.args[2] = spare;
--	desc.arginfo = QCOM_SCM_ARGS(3, QCOM_SCM_RW, QCOM_SCM_VAL,
--				     QCOM_SCM_VAL);
--
- 	ret = qcom_scm_call(__scm->dev, &desc, NULL);
- 
- 	/* the pg table has been initialized already, ignore the error */
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
++// 8e2cc06bc0d2c0967d2f8424762bd48555ee40ae
+diff --git a/scripts/atomic/fallbacks/read_acquire b/scripts/atomic/fallbacks/read_acquire
+index 803ba7561076..a0ea1d26e6b2 100755
+--- a/scripts/atomic/fallbacks/read_acquire
++++ b/scripts/atomic/fallbacks/read_acquire
+@@ -2,6 +2,15 @@ cat <<EOF
+ static __always_inline ${ret}
+ arch_${atomic}_read_acquire(const ${atomic}_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	${int} ret;
++
++	if (__native_word(${atomic}_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_${atomic}_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ EOF
+diff --git a/scripts/atomic/fallbacks/set_release b/scripts/atomic/fallbacks/set_release
+index 86ede759f24e..05cdb7f42477 100755
+--- a/scripts/atomic/fallbacks/set_release
++++ b/scripts/atomic/fallbacks/set_release
+@@ -2,6 +2,11 @@ cat <<EOF
+ static __always_inline void
+ arch_${atomic}_set_release(${atomic}_t *v, ${int} i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(${atomic}_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_${atomic}_set(v, i);
++	}
+ }
+ EOF
 -- 
 2.34.1
 

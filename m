@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB664F41FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1E14F4242
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382543AbiDEMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S1343531AbiDEOyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244909AbiDEIwq (ORCPT
+        with ESMTP id S244449AbiDEJlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A7245B5;
-        Tue,  5 Apr 2022 01:46:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA86BB91B;
+        Tue,  5 Apr 2022 02:26:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9025C6117A;
-        Tue,  5 Apr 2022 08:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97875C385A0;
-        Tue,  5 Apr 2022 08:46:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38F14B81C9F;
+        Tue,  5 Apr 2022 09:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5A3C385A0;
+        Tue,  5 Apr 2022 09:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148362;
-        bh=KPm1yhX8itA60T9NSlrJoLLEguqqJLGw5Tnm4qUUNxM=;
+        s=korg; t=1649150786;
+        bh=dlYk8rC60OvZeHn5CTD5I6a5wqwswMluROqrjoBv3YU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TlF0VHVvuUmjnccvzTfALALwU38JxkqpWcH2D1VUbabIS3vQ6gXruWbETfD/RG9lB
-         nfsNGBOel06HRuIn9OIjOFy7FZNazxjTsvZmmK9tne1e1lKBG+y2Pq/pAXZQv6vUjR
-         JiKd/Z9W9qmG5C/Z2yYRuHFPIMElQ5LpBZBLe+80=
+        b=l7Vhytfdge9AT8oQzkIJ+PVUL685R/BGANLNDFRZb6YhlC8jujxNzJWYoa8Mad2sW
+         mZbLnhALT90XXLeuxQoxDdnlKBgwQo6ebegVqlkG3REmvTqiVnf4AviA9OyWZsg4Ir
+         DeIYjhORh8JhULTxkGc335EHJOutbip7C4+IkXJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0329/1017] vsprintf: Fix potential unaligned access
-Date:   Tue,  5 Apr 2022 09:20:42 +0200
-Message-Id: <20220405070404.047600293@linuxfoundation.org>
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Hector Martin <marcan@marcan.st>, Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.15 181/913] brcmfmac: pcie: Declare missing firmware files in pcie.c
+Date:   Tue,  5 Apr 2022 09:20:43 +0200
+Message-Id: <20220405070345.280041237@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit d75b26f880f60ead301e79ba0f4a635c5a60767f ]
+commit 6d766d8cb505ec1fae63da8faef4fc5712c3d794 upstream.
 
-The %p4cc specifier in some cases might get an unaligned pointer.
-Due to this we need to make copy to local variable once to avoid
-potential crashes on some architectures due to improper access.
+Move one of the declarations from sdio.c to pcie.c, since it makes no
+sense in the former (SDIO support is optional), and add missing ones.
 
-Fixes: af612e43de6d ("lib/vsprintf: Add support for printing V4L2 and DRM fourccs")
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Link: https://lore.kernel.org/r/20220127181233.72910-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 75729e110e68 ("brcmfmac: expose firmware config files through modinfo")
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220131160713.245637-5-marcan@marcan.st
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/vsprintf.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c |    7 +++++++
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c |    1 -
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 58d5e567f836..01e61c85f274 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -49,6 +49,7 @@
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -59,6 +59,13 @@ BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie"
+ BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+ BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
  
- #include <asm/page.h>		/* for PAGE_SIZE */
- #include <asm/byteorder.h>	/* cpu_to_le16 */
-+#include <asm/unaligned.h>
++/* firmware config files */
++MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
++MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.*.txt");
++
++/* per-board firmware binaries */
++MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.*.bin");
++
+ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_43602_CHIP_ID, 0xFFFFFFFF, 43602),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43465_CHIP_ID, 0xFFFFFFF0, 4366C),
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -629,7 +629,6 @@ BRCMF_FW_CLM_DEF(43752, "brcmfmac43752-s
  
- #include <linux/string_helpers.h>
- #include "kstrtox.h"
-@@ -1771,7 +1772,7 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
- 	char output[sizeof("0123 little-endian (0x01234567)")];
- 	char *p = output;
- 	unsigned int i;
--	u32 val;
-+	u32 orig, val;
+ /* firmware config files */
+ MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-sdio.*.txt");
+-MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.*.txt");
  
- 	if (fmt[1] != 'c' || fmt[2] != 'c')
- 		return error_string(buf, end, "(%p4?)", spec);
-@@ -1779,21 +1780,22 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
- 	if (check_pointer(&buf, end, fourcc, spec))
- 		return buf;
- 
--	val = *fourcc & ~BIT(31);
-+	orig = get_unaligned(fourcc);
-+	val = orig & ~BIT(31);
- 
--	for (i = 0; i < sizeof(*fourcc); i++) {
-+	for (i = 0; i < sizeof(u32); i++) {
- 		unsigned char c = val >> (i * 8);
- 
- 		/* Print non-control ASCII characters as-is, dot otherwise */
- 		*p++ = isascii(c) && isprint(c) ? c : '.';
- 	}
- 
--	strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
-+	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
- 	p += strlen(p);
- 
- 	*p++ = ' ';
- 	*p++ = '(';
--	p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
-+	p = special_hex_number(p, output + sizeof(output) - 2, orig, sizeof(u32));
- 	*p++ = ')';
- 	*p = '\0';
- 
--- 
-2.34.1
-
+ /* per-board firmware binaries */
+ MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-sdio.*.bin");
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D734F4204
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6374F3FF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234967AbiDEM2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S1384851AbiDEPPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245683AbiDEI4r (ORCPT
+        with ESMTP id S1346654AbiDEJpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062913F68;
-        Tue,  5 Apr 2022 01:52:35 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EDCDAFF2;
+        Tue,  5 Apr 2022 02:31:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 916EF609D0;
-        Tue,  5 Apr 2022 08:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A04ABC385A1;
-        Tue,  5 Apr 2022 08:52:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83BE7616AE;
+        Tue,  5 Apr 2022 09:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A3BC385A4;
+        Tue,  5 Apr 2022 09:31:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148754;
-        bh=vX9gO2/P9Ikseq5fiXa/uYVnU3nZMImk6mzPREI54Po=;
+        s=korg; t=1649151072;
+        bh=p0yrrYaEW8mSo8kS3j473PpFIUaa3apm+1xjXPAWWIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YJZyRjxMk02uJPRlSXkL7+X8hGHR/beJ+w679VnqWNIzb7Z19iD2rDLOx24Q/C74b
-         ts9+jU9xt6kmskAaV60A4KRr3z4RxP37oZ/Ttpv8DZ8sldYC+bWduTlGXDwELkAgL2
-         ZxnKkqjSJooWaF6lgj4/U/R3afSAouLTMjJVDECw=
+        b=d/fTka51CiUue6WACEFdZucGEt3z/bTf9W2WXAaU2vnSRDAv+HpxhHjQQUIkey60A
+         4mP4X1tva0BnQnxn9HlU8aWJq62abwf39UoPOUvm/R/XoqZyHf6NXB52pntwkAJwrV
+         DfhvkMRUlww7etKQZIHJNyfjGGXC+moEUkYNPgoE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0431/1017] net: phy: at803x: move page selection fix to config_init
-Date:   Tue,  5 Apr 2022 09:22:24 +0200
-Message-Id: <20220405070407.088275723@linuxfoundation.org>
+Subject: [PATCH 5.15 283/913] media: hantro: Fix overfill bottom register field name
+Date:   Tue,  5 Apr 2022 09:22:25 +0200
+Message-Id: <20220405070348.340963458@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,89 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit 4f3a00c7f5b2cfe4e127fd3fe49b55e1b318c01f ]
+[ Upstream commit 89d78e0133e71ba324fb67ca776223fba4353418 ]
 
-The fix to select the copper page on AR8031 was being done in the probe
-function rather than config_init, so it would not be redone after resume
-from suspend. Move this to config_init so it is always redone when
-needed.
+The Hantro H1 hardware can crop off pixels from the right and bottom of
+the source frame. These are controlled with the H1_REG_IN_IMG_CTRL_OVRFLB
+and H1_REG_IN_IMG_CTRL_OVRFLR in the H1_REG_IN_IMG_CTRL register.
 
-Fixes: c329e5afb42f ("net: phy: at803x: select correct page on config init")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+The ChromeOS kernel driver that this was based on incorrectly added the
+_D4 suffix H1_REG_IN_IMG_CTRL_OVRFLB. This field crops the bottom of the
+input frame, and the number is _not_ divided by 4. [1]
+
+Correct the name to avoid confusion when crop support with the selection
+API is added.
+
+[1] https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/ \
+	heads/chromeos-4.19/drivers/staging/media/hantro/hantro_h1_vp8_enc.c#377
+
+Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+Fixes: a29add8c9bb2 ("media: rockchip/vpu: rename from rockchip to hantro")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/at803x.c | 40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+ drivers/staging/media/hantro/hantro_h1_jpeg_enc.c | 2 +-
+ drivers/staging/media/hantro/hantro_h1_regs.h     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 32eeed672861..7e0f817d817f 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -784,25 +784,7 @@ static int at803x_probe(struct phy_device *phydev)
- 			return ret;
- 	}
+diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+index 9cd713c02a45..686d813f5c62 100644
+--- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
++++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+@@ -23,7 +23,7 @@ static void hantro_h1_set_src_img_ctrl(struct hantro_dev *vpu,
  
--	/* Some bootloaders leave the fiber page selected.
--	 * Switch to the copper page, as otherwise we read
--	 * the PHY capabilities from the fiber side.
--	 */
--	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
--		phy_lock_mdio_bus(phydev);
--		ret = at803x_write_page(phydev, AT803X_PAGE_COPPER);
--		phy_unlock_mdio_bus(phydev);
--		if (ret)
--			goto err;
--	}
--
- 	return 0;
--
--err:
--	if (priv->vddio)
--		regulator_disable(priv->vddio);
--
--	return ret;
+ 	reg = H1_REG_IN_IMG_CTRL_ROW_LEN(pix_fmt->width)
+ 		| H1_REG_IN_IMG_CTRL_OVRFLR_D4(0)
+-		| H1_REG_IN_IMG_CTRL_OVRFLB_D4(0)
++		| H1_REG_IN_IMG_CTRL_OVRFLB(0)
+ 		| H1_REG_IN_IMG_CTRL_FMT(ctx->vpu_src_fmt->enc_fmt);
+ 	vepu_write_relaxed(vpu, reg, H1_REG_IN_IMG_CTRL);
  }
- 
- static void at803x_remove(struct phy_device *phydev)
-@@ -912,6 +894,22 @@ static int at803x_config_init(struct phy_device *phydev)
- {
- 	int ret;
- 
-+	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
-+		/* Some bootloaders leave the fiber page selected.
-+		 * Switch to the copper page, as otherwise we read
-+		 * the PHY capabilities from the fiber side.
-+		 */
-+		phy_lock_mdio_bus(phydev);
-+		ret = at803x_write_page(phydev, AT803X_PAGE_COPPER);
-+		phy_unlock_mdio_bus(phydev);
-+		if (ret)
-+			return ret;
-+
-+		ret = at8031_pll_config(phydev);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	/* The RX and TX delay default is:
- 	 *   after HW reset: RX delay enabled and TX delay disabled
- 	 *   after SW reset: RX delay enabled, while TX delay retains the
-@@ -941,12 +939,6 @@ static int at803x_config_init(struct phy_device *phydev)
- 	if (ret < 0)
- 		return ret;
- 
--	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
--		ret = at8031_pll_config(phydev);
--		if (ret < 0)
--			return ret;
--	}
--
- 	/* Ar803x extended next page bit is enabled by default. Cisco
- 	 * multigig switches read this bit and attempt to negotiate 10Gbps
- 	 * rates even if the next page bit is disabled. This is incorrect
+diff --git a/drivers/staging/media/hantro/hantro_h1_regs.h b/drivers/staging/media/hantro/hantro_h1_regs.h
+index d6e9825bb5c7..30e7e7b920b5 100644
+--- a/drivers/staging/media/hantro/hantro_h1_regs.h
++++ b/drivers/staging/media/hantro/hantro_h1_regs.h
+@@ -47,7 +47,7 @@
+ #define H1_REG_IN_IMG_CTRL				0x03c
+ #define     H1_REG_IN_IMG_CTRL_ROW_LEN(x)		((x) << 12)
+ #define     H1_REG_IN_IMG_CTRL_OVRFLR_D4(x)		((x) << 10)
+-#define     H1_REG_IN_IMG_CTRL_OVRFLB_D4(x)		((x) << 6)
++#define     H1_REG_IN_IMG_CTRL_OVRFLB(x)		((x) << 6)
+ #define     H1_REG_IN_IMG_CTRL_FMT(x)			((x) << 2)
+ #define H1_REG_ENC_CTRL0				0x040
+ #define    H1_REG_ENC_CTRL0_INIT_QP(x)			((x) << 26)
 -- 
 2.34.1
 

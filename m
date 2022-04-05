@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78624F3F52
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB694F433F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442277AbiDEUHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S1383524AbiDENaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350326AbiDEJ5V (ORCPT
+        with ESMTP id S1345465AbiDEJWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:57:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7C1527D6;
-        Tue,  5 Apr 2022 02:51:05 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A484B1F7;
+        Tue,  5 Apr 2022 02:11:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9039A616AE;
-        Tue,  5 Apr 2022 09:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99626C385A3;
-        Tue,  5 Apr 2022 09:51:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47B9AB818F3;
+        Tue,  5 Apr 2022 09:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83088C385A0;
+        Tue,  5 Apr 2022 09:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152264;
-        bh=EcoUAFUxsI6UQTwk1O+Jd/36NjRrs2ewxCB69VV04XI=;
+        s=korg; t=1649149857;
+        bh=i6ekhz8yvn0w0xbt01pqAW4L3Qfv2grJOD45n0DZ3D8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KYh4rS45iWTvGSH7ViVMGo8e765MJ3yxrQtrsyc7DULnzuE1y0EPUFeVxtXiZVEcQ
-         3Zx5RuVGqMFDMyE4EymLboQ5Qr4AY/plL6hYIrQPssyQ17OwCK7YCAorERVZMfq7sB
-         8VQrmAu/RLbWgKyJbytNwhj42qAZrLv3a6ItzijE=
+        b=LUHam74465FdvGZRizgQkDgG93nCQmtYvnp5Mdj30TZ58JjK3OS95JTVWhoyA5v0g
+         bsj+U2Nnvx3ORUPhU8IlOlpmVEWFmENr/fc8gslC1KKf2y29P8cq3g6+r09xAJUW42
+         +u4+P5B+g19tloAMUCLO27i+JCnOqu7+sroCGTZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com,
-        Lee Jones <lee.jones@linaro.org>, Theodore Tso <tytso@mit.edu>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 715/913] ext4: dont BUG if someone dirty pages without asking ext4 first
-Date:   Tue,  5 Apr 2022 09:29:37 +0200
-Message-Id: <20220405070401.266956806@linuxfoundation.org>
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0865/1017] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+Date:   Tue,  5 Apr 2022 09:29:38 +0200
+Message-Id: <20220405070419.911625128@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
+commit 47d3e5cdfe607ec6883eb0faa7acf05b8cb3f92a upstream.
 
-[un]pin_user_pages_remote is dirtying pages without properly warning
-the file system in advance.  A related race was noted by Jan Kara in
-2018[1]; however, more recently instead of it being a very hard-to-hit
-race, it could be reliably triggered by process_vm_writev(2) which was
-discovered by Syzbot[2].
+It has been proven on practice that at least Windows Server 2019 tries
+using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
+and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
+hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
+information is missing in TLFS as of 6.0b. Currently, KVM returns an error
+(HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
 
-This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-that if some other kernel subsystem dirty pages without properly
-notifying the file system using page_mkwrite(), ext4 will BUG, while
-other file systems will not BUG (although data will still be lost).
+Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
+all its parameters fit into RDX:R8 and this is handled by KVM correctly.
 
-So instead of crashing with a BUG, issue a warning (since there may be
-potential data loss) and just mark the page as clean to avoid
-unprivileged denial of service attacks until the problem can be
-properly fixed.  More discussion and background can be found in the
-thread starting at [2].
-
-[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
-
-Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-Reported-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org # 5.14.x: 3244867af8c0: KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
+Cc: stable@vger.kernel.org # 5.14.x
+Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220222154642.684285-5-vkuznets@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ arch/x86/kvm/hyperv.c |   52 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 18 deletions(-)
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 22a5140546fb..fff52292c01e 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1992,6 +1992,15 @@ static int ext4_writepage(struct page *page,
- 	else
- 		len = PAGE_SIZE;
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1889,6 +1889,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 	int sparse_banks_len;
+ 	u32 vector;
+ 	bool all_cpus;
++	int i;
  
-+	/* Should never happen but for bugs in other kernel subsystems */
-+	if (!page_has_buffers(page)) {
-+		ext4_warning_inode(inode,
-+		   "page %lu does not have buffers attached", page->index);
-+		ClearPageDirty(page);
-+		unlock_page(page);
-+		return 0;
-+	}
-+
- 	page_bufs = page_buffers(page);
- 	/*
- 	 * We cannot do block allocation or other extent handling in this
-@@ -2595,6 +2604,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
- 			wait_on_page_writeback(page);
- 			BUG_ON(PageWriteback(page));
+ 	if (hc->code == HVCALL_SEND_IPI) {
+ 		if (!hc->fast) {
+@@ -1909,9 +1910,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
  
+ 		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+ 	} else {
+-		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+-					    sizeof(send_ipi_ex))))
+-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		if (!hc->fast) {
++			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
++						    sizeof(send_ipi_ex))))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		} else {
++			send_ipi_ex.vector = (u32)hc->ingpa;
++			send_ipi_ex.vp_set.format = hc->outgpa;
++			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
++		}
+ 
+ 		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+ 					 send_ipi_ex.vp_set.format,
+@@ -1919,8 +1926,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 
+ 		vector = send_ipi_ex.vector;
+ 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+-		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
+-			sizeof(sparse_banks[0]);
++		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
+ 
+ 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+ 
+@@ -1930,12 +1936,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 		if (!sparse_banks_len)
+ 			goto ret_success;
+ 
+-		if (kvm_read_guest(kvm,
+-				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+-							vp_set.bank_contents),
+-				   sparse_banks,
+-				   sparse_banks_len))
+-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		if (!hc->fast) {
++			if (kvm_read_guest(kvm,
++					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
++								vp_set.bank_contents),
++					   sparse_banks,
++					   sparse_banks_len * sizeof(sparse_banks[0])))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		} else {
 +			/*
-+			 * Should never happen but for buggy code in
-+			 * other subsystems that call
-+			 * set_page_dirty() without properly warning
-+			 * the file system first.  See [1] for more
-+			 * information.
-+			 *
-+			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
++			 * The lower half of XMM0 is already consumed, each XMM holds
++			 * two sparse banks.
 +			 */
-+			if (!page_has_buffers(page)) {
-+				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-+				ClearPageDirty(page);
-+				unlock_page(page);
-+				continue;
++			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++			for (i = 0; i < sparse_banks_len; i++) {
++				if (i % 2)
++					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
++				else
++					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
 +			}
-+
- 			if (mpd->map.m_len == 0)
- 				mpd->first_page = page->index;
- 			mpd->next_page = page->index + 1;
--- 
-2.34.1
-
++		}
+ 	}
+ 
+ check_and_send_ipi:
+@@ -2097,6 +2118,7 @@ static bool is_xmm_fast_hypercall(struct
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+ 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
++	case HVCALL_SEND_IPI_EX:
+ 		return true;
+ 	}
+ 
+@@ -2264,14 +2286,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vc
+ 		ret = kvm_hv_flush_tlb(vcpu, &hc);
+ 		break;
+ 	case HVCALL_SEND_IPI:
+-		if (unlikely(hc.rep)) {
+-			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			break;
+-		}
+-		ret = kvm_hv_send_ipi(vcpu, &hc);
+-		break;
+ 	case HVCALL_SEND_IPI_EX:
+-		if (unlikely(hc.fast || hc.rep)) {
++		if (unlikely(hc.rep)) {
+ 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 			break;
+ 		}
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56024F31F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7644D4F3176
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbiDEIno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S238433AbiDEIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiDEIC5 (ORCPT
+        with ESMTP id S232736AbiDEID3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:02:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E6B5883E;
-        Tue,  5 Apr 2022 01:00:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:03:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2535D664;
+        Tue,  5 Apr 2022 01:00:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC841B81B16;
-        Tue,  5 Apr 2022 08:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEC0C340EE;
-        Tue,  5 Apr 2022 08:00:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 577C7B81B18;
+        Tue,  5 Apr 2022 08:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52D0C340EE;
+        Tue,  5 Apr 2022 08:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145645;
-        bh=+dPd7sS8kn7j7XwarFP9aU329hPQXUS2IX/AlQaN3Sg=;
+        s=korg; t=1649145651;
+        bh=7PzITTwsWG9q7fzViUInKvz5DqJLem2r3IZSSbeLHZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UNXcR2ALVKFi6idnKGICDCiA5zXjadqev5ou19yJznki3pJXkVWqSu+mjpOc2N3Uh
-         RtnV94YCM2/hMTg+eWF+MYSXjxHrAmgyG9DXRNRQkf1knqqIV0M1M29mDmDtWDOhGh
-         5q3ORnsHfqH1upD9QIh3Q6CD1YpjDQVLuFKO8KHE=
+        b=Pp4754Nw3dCQgjQ3NAZmr0nWr7GW5IO8Wxx1Hqbhj78bWqWZQoyjo7KsEkPgsB9A/
+         rp9FyjSl5cY+6AYWCsz2PvWDGTPF0aLlSuG354AZYBT34yllamanDBN6Gwuvlp+1w0
+         4uktVRMNrpCiHrluSUZH8Tzp1TbBoeCE1PXJUjmM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
         Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
         Kiran Bhandare <kiranx.bhandare@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0479/1126] i40e: dont reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
-Date:   Tue,  5 Apr 2022 09:20:26 +0200
-Message-Id: <20220405070421.686938100@linuxfoundation.org>
+Subject: [PATCH 5.17 0481/1126] ice: dont reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+Date:   Tue,  5 Apr 2022 09:20:28 +0200
+Message-Id: <20220405070421.746127895@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -61,11 +60,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit bc97f9c6f988b31b728eb47a94ca825401dbeffe ]
+[ Upstream commit dc44572d195e10ec41a03e09b3b5addab4af5cea ]
 
 {__,}napi_alloc_skb() allocates and reserves additional NET_SKB_PAD
 + NET_IP_ALIGN for any skb.
-OTOH, i40e_construct_skb_zc() currently allocates and reserves
+OTOH, ice_construct_skb_zc() currently allocates and reserves
 additional `xdp->data - xdp->data_hard_start`, which is
 XDP_PACKET_HEADROOM for XSK frames.
 There's no need for that at all as the frame is post-XDP and will
@@ -74,31 +73,34 @@ Pass the size of the actual data only to __napi_alloc_skb() and
 don't reserve anything. This will give enough headroom for stack
 processing.
 
-Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 4 +---
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 945b1bb9c6f4..a449c84fe357 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -246,13 +246,11 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 2388837d6d6c..8fd8052edf09 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -428,17 +428,15 @@ static void ice_bump_ntc(struct ice_rx_ring *rx_ring)
+ static struct sk_buff *
+ ice_construct_skb_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp)
+ {
+-	unsigned int datasize_hard = xdp->data_end - xdp->data_hard_start;
+ 	unsigned int metasize = xdp->data - xdp->data_meta;
+ 	unsigned int datasize = xdp->data_end - xdp->data;
  	struct sk_buff *skb;
  
- 	/* allocate a skb to store the frags */
--	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
--			       xdp->data_end - xdp->data_hard_start,
+-	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize_hard,
 +	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
  			       GFP_ATOMIC | __GFP_NOWARN);
  	if (unlikely(!skb))
- 		goto out;
+ 		return NULL;
  
 -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
  	memcpy(__skb_put(skb, datasize), xdp->data, datasize);

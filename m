@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274E24F4665
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057024F440B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353164AbiDEMIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S1383927AbiDEORj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244197AbiDEIvt (ORCPT
+        with ESMTP id S239485AbiDEJdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF2ED3AE2;
-        Tue,  5 Apr 2022 01:40:31 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B95D4B1F0;
+        Tue,  5 Apr 2022 02:22:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8083861003;
-        Tue,  5 Apr 2022 08:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9028CC385A0;
-        Tue,  5 Apr 2022 08:39:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DAC97CE1C75;
+        Tue,  5 Apr 2022 09:22:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E1DC385A2;
+        Tue,  5 Apr 2022 09:22:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147985;
-        bh=Zx4lWtvKcRuOo75kaWAnuXqPkXeLmjn2MI0+fP+jJTQ=;
+        s=korg; t=1649150523;
+        bh=2C3A1eQ6if+uET8hbiuap7T2nhNv5yT8rH9N60eA7j0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0yJsQWc3PYmxcQs91Vudk9kiKJ8rkSC5xIQ8xLwWSj66RvwydOECdXIPa7xTyrgO3
-         C8bmHCBsbWUaqPaBgKzrlpzXtDZPwNU353YOZHkeqzcnIJPTf7DZLlgCPp7aJpU/8l
-         jmUAfhGEnQZ1LTnPl0Bset8EibSuKbOii9MgE7rw=
+        b=cE6YFRefU8rhyU17MqEkFlB62B3xugkxTJ/ABOMyQFn7BbJrMjROM2edZtL4vmtYK
+         GXPHIrSZfu6ov85grqq8wZC6QDf2mJf/VMCo8fKFPovN4WiUhKpFW4diibya6YsdHb
+         1r+6G+Bz9t9Mxex0Ts9c/OwZQqgiHsj+VSq+8crU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Hector Martin <marcan@marcan.st>,
+        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.16 0194/1017] brcmfmac: pcie: Fix crashes due to early IRQs
-Date:   Tue,  5 Apr 2022 09:18:27 +0200
-Message-Id: <20220405070400.003319251@linuxfoundation.org>
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 047/913] iio: inkern: apply consumer scale when no channel scale is available
+Date:   Tue,  5 Apr 2022 09:18:29 +0200
+Message-Id: <20220405070341.229447245@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Liam Beguin <liambeguin@gmail.com>
 
-commit b50255c83b914defd61a57fbc81d452334b63f4c upstream.
+commit 14b457fdde38de594a4bc4bd9075019319d978da upstream.
 
-The driver was enabling IRQs before the message processing was
-initialized. This could cause IRQs to come in too early and crash the
-driver. Instead, move the IRQ enable and hostready to a bus preinit
-function, at which point everything is properly initialized.
+When a consumer calls iio_read_channel_processed() and no channel scale
+is available, it's assumed that the scale is one and the raw value is
+returned as expected.
 
-Fixes: 9e37f045d5e7 ("brcmfmac: Adding PCIe bus layer support.")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Hector Martin <marcan@marcan.st>
+On the other hand, if the consumer calls iio_convert_raw_to_processed()
+the scaling factor requested by the consumer is not applied.
+
+This for example causes the consumer to process mV when expecting uV.
+Make sure to always apply the scaling factor requested by the consumer.
+
+Fixes: adc8ec5ff183 ("iio: inkern: pass through raw values if no scaling")
+Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+Reviewed-by: Peter Rosin <peda@axentia.se>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220131160713.245637-7-marcan@marcan.st
+Link: https://lore.kernel.org/r/20220108205319.2046348-3-liambeguin@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c |   16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/iio/inkern.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -1315,6 +1315,18 @@ static void brcmf_pcie_down(struct devic
- {
- }
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -590,10 +590,10 @@ static int iio_convert_raw_to_processed_
+ 					IIO_CHAN_INFO_SCALE);
+ 	if (scale_type < 0) {
+ 		/*
+-		 * Just pass raw values as processed if no scaling is
+-		 * available.
++		 * If no channel scaling is available apply consumer scale to
++		 * raw value and return.
+ 		 */
+-		*processed = raw;
++		*processed = raw * scale;
+ 		return 0;
+ 	}
  
-+static int brcmf_pcie_preinit(struct device *dev)
-+{
-+	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
-+	struct brcmf_pciedev *buspub = bus_if->bus_priv.pcie;
-+
-+	brcmf_dbg(PCIE, "Enter\n");
-+
-+	brcmf_pcie_intr_enable(buspub->devinfo);
-+	brcmf_pcie_hostready(buspub->devinfo);
-+
-+	return 0;
-+}
- 
- static int brcmf_pcie_tx(struct device *dev, struct sk_buff *skb)
- {
-@@ -1423,6 +1435,7 @@ static int brcmf_pcie_reset(struct devic
- }
- 
- static const struct brcmf_bus_ops brcmf_pcie_bus_ops = {
-+	.preinit = brcmf_pcie_preinit,
- 	.txdata = brcmf_pcie_tx,
- 	.stop = brcmf_pcie_down,
- 	.txctl = brcmf_pcie_tx_ctlpkt,
-@@ -1795,9 +1808,6 @@ static void brcmf_pcie_setup(struct devi
- 
- 	init_waitqueue_head(&devinfo->mbdata_resp_wait);
- 
--	brcmf_pcie_intr_enable(devinfo);
--	brcmf_pcie_hostready(devinfo);
--
- 	ret = brcmf_attach(&devinfo->pdev->dev);
- 	if (ret)
- 		goto fail;
 
 

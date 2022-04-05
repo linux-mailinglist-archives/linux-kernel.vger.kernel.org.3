@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361654F33B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8B74F3593
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347909AbiDEJ2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S1345326AbiDEJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239559AbiDEIUO (ORCPT
+        with ESMTP id S239566AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA71C636C;
-        Tue,  5 Apr 2022 01:16:29 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8E36376;
+        Tue,  5 Apr 2022 01:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67CDA60B0F;
-        Tue,  5 Apr 2022 08:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73072C385A0;
-        Tue,  5 Apr 2022 08:16:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A00A60AFB;
+        Tue,  5 Apr 2022 08:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B323C385A0;
+        Tue,  5 Apr 2022 08:16:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146588;
-        bh=wnO/W1VKyil+x2hzjyqb7HU+6IrSK8quU5k/yT2LCuw=;
+        s=korg; t=1649146591;
+        bh=R8BSE0mKHCk/KFQuqrQfNXP7Z6hcnqedSgjDwk4Zock=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wvaKmJf2zAdbVu3uA/1rIrK+fOFrj8Q2rA64J7IY7lBF24nXT1gUPR6/YFPQJyRqn
-         51juS3ivYDWDlblKJvX/EapvRdBpYdsLGXytPDvOGiJKvynZSgWGL+tGrnOZMuZuDK
-         IiDD3xRRAYOX/8jGin7vbqdcHTTQbYTWublCre08=
+        b=Kj/fFUFyhXzQO2OhFbVpu6RmMNi9kNUPnOTUFXXkYEYWAcoWZy3O55O83Q7atjL5Z
+         887Deh7sY+2/51MVzc+pZz5Xlh9XWPD3fbj4EzCo7Vjg7dg9b5vR7dqoMc9yC1sZYx
+         FCFfOnAaq5d5j48hBr7OEQLA4FYbcM1Zaa9SYGs0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guangbin Huang <huangguangbin2@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0818/1126] net: hns3: add netdev reset check for hns3_set_tunable()
-Date:   Tue,  5 Apr 2022 09:26:05 +0200
-Message-Id: <20220405070431.574524114@linuxfoundation.org>
+Subject: [PATCH 5.17 0819/1126] net: hns3: add NULL pointer check for hns3_set/get_ringparam()
+Date:   Tue,  5 Apr 2022 09:26:06 +0200
+Message-Id: <20220405070431.602796664@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,48 +58,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hao Chen <chenhao288@hisilicon.com>
 
-[ Upstream commit f5cd60169f981ca737c9e49c446506dfafc90a35 ]
+[ Upstream commit 4d07c5936c2508ddd1cfd49b0a91d94cb4d1f0e8 ]
 
-When pci device reset failed, it does uninit operation and priv->ring
-is NULL, it causes accessing NULL pointer error.
+When pci devices init failed and haven't reinit, priv->ring is
+NULL and hns3_set/get_ringparam() will access priv->ring. it
+causes call trace.
 
-Add netdev reset check for hns3_set_tunable() to fix it.
+So, add NULL pointer check for hns3_set/get_ringparam() to
+avoid this situation.
 
-Fixes: 99f6b5fb5f63 ("net: hns3: use bounce buffer when rx page can not be reused")
+Fixes: 5668abda0931 ("net: hns3: add support for set_ringparam")
 Signed-off-by: Hao Chen <chenhao288@hisilicon.com>
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index 7591772c9a6b..1f6d6faeec24 100644
+index 1f6d6faeec24..cbf36cc86803 100644
 --- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
 +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -1764,9 +1764,6 @@ static int hns3_set_tx_spare_buf_size(struct net_device *netdev,
+@@ -651,8 +651,8 @@ static void hns3_get_ringparam(struct net_device *netdev,
  	struct hnae3_handle *h = priv->ae_handle;
- 	int ret;
+ 	int rx_queue_index = h->kinfo.num_tqps;
  
--	if (hns3_nic_resetting(netdev))
--		return -EBUSY;
--
- 	h->kinfo.tx_spare_buf_size = data;
- 
- 	ret = hns3_reset_notify(h, HNAE3_DOWN_CLIENT);
-@@ -1797,6 +1794,11 @@ static int hns3_set_tunable(struct net_device *netdev,
- 	struct hnae3_handle *h = priv->ae_handle;
- 	int i, ret = 0;
- 
+-	if (hns3_nic_resetting(netdev)) {
+-		netdev_err(netdev, "dev resetting!");
 +	if (hns3_nic_resetting(netdev) || !priv->ring) {
-+		netdev_err(netdev, "failed to set tunable value, dev resetting!");
-+		return -EBUSY;
++		netdev_err(netdev, "failed to get ringparam value, due to dev resetting or uninited\n");
+ 		return;
+ 	}
+ 
+@@ -1072,8 +1072,14 @@ static int hns3_check_ringparam(struct net_device *ndev,
+ {
+ #define RX_BUF_LEN_2K 2048
+ #define RX_BUF_LEN_4K 4096
+-	if (hns3_nic_resetting(ndev))
++
++	struct hns3_nic_priv *priv = netdev_priv(ndev);
++
++	if (hns3_nic_resetting(ndev) || !priv->ring) {
++		netdev_err(ndev, "failed to set ringparam value, due to dev resetting or uninited\n");
+ 		return -EBUSY;
 +	}
 +
- 	switch (tuna->id) {
- 	case ETHTOOL_TX_COPYBREAK:
- 		priv->tx_copybreak = *(u32 *)data;
+ 
+ 	if (param->rx_mini_pending || param->rx_jumbo_pending)
+ 		return -EINVAL;
 -- 
 2.34.1
 

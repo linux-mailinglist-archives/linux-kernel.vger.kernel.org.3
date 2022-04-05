@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776504F2CF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9664F2DAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237333AbiDEJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S234742AbiDEJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239538AbiDEIUN (ORCPT
+        with ESMTP id S239474AbiDEIUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66611002;
-        Tue,  5 Apr 2022 01:15:37 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CB6B0A68;
+        Tue,  5 Apr 2022 01:14:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5165A60B0B;
-        Tue,  5 Apr 2022 08:15:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62669C385A0;
-        Tue,  5 Apr 2022 08:15:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F14BFB81B90;
+        Tue,  5 Apr 2022 08:13:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5B3C385A1;
+        Tue,  5 Apr 2022 08:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146536;
-        bh=q1UeRlLEWK3JLoRsaXN04m0q8F3HuCNVdsPigD7nWpE=;
+        s=korg; t=1649146438;
+        bh=wjPoZQY+vmub6bVsFMKqg4hLD1/RtMQB/ubel5/jwuU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MLKOIZDUUYsKln3U0g2kjC/7j6tee7hSCt5teuAw5f2nnUpS0m0xRXH+b/1pQnm1L
-         d4wjBLQF7u3uxGHRt6pHZF6SGZ5vI/52A483V079SNBwfWR5WrorVa8x+nMPBmMGk0
-         0tpOPY9fye8mwu6Dqihz8p2+pLg4r6APdzz4RYmk=
+        b=uJY8tUkyDVNyTTrClP63Dbl4dckiPvOTu5RkQxU3hJTtiskD+nVpz3sOeaPMAfQ0a
+         fuVju72FWe769wtS/PI1rerNgTyWKJJAzixlV/xjb6P38Yjn+jm6lXUOvUZcxohHlD
+         mN3MADv+Ok2tKTcAGQoApUUaRZzVpUi5/WwMyRYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
-        Robin Gong <yibin.gong@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
+        stable@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0761/1126] mailbox: imx: fix crash in resume on i.mx8ulp
-Date:   Tue,  5 Apr 2022 09:25:08 +0200
-Message-Id: <20220405070429.919368725@linuxfoundation.org>
+Subject: [PATCH 5.17 0765/1126] staging: mt7621-dts: fix pinctrl properties for ethernet
+Date:   Tue,  5 Apr 2022 09:25:12 +0200
+Message-Id: <20220405070430.037299631@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,36 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Gong <yibin.gong@nxp.com>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit 8219efd08a0aa1d7944bdb66d84ba57549258968 ]
+[ Upstream commit 0a93c0d75809582893e82039143591b9265b520e ]
 
-check 'priv->clk' before 'imx_mu_read()' otherwise crash happens on
-i.mx8ulp, since clock not enabled.
+Add pinctrl properties with rgmii1 & mdio pins under ethernet node which
+was wrongfully put under an external phy node.
+GMAC1 will start working with this fix.
 
-Fixes: 4f0b776ef5831 ("mailbox: imx-mailbox: support i.MX8ULP MU")
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+Link: https://lore.kernel.org/netdev/02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com/T/
+
+Move GB-PC2 specific phy_external node to its own device tree.
+
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220125153903.1469-5-arinc.unal@arinc9.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mailbox/imx-mailbox.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/mt7621-dts/gbpc2.dts   | 16 +++++++++++-----
+ drivers/staging/mt7621-dts/mt7621.dtsi | 13 +++----------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/mailbox/imx-mailbox.c b/drivers/mailbox/imx-mailbox.c
-index 544de2db6453..3c9c87b9c872 100644
---- a/drivers/mailbox/imx-mailbox.c
-+++ b/drivers/mailbox/imx-mailbox.c
-@@ -718,7 +718,7 @@ static int __maybe_unused imx_mu_resume_noirq(struct device *dev)
- 	 * send failed, may lead to system freeze. This issue
- 	 * is observed by testing freeze mode suspend.
- 	 */
--	if (!imx_mu_read(priv, priv->dcfg->xCR[0]) && !priv->clk) {
-+	if (!priv->clk && !imx_mu_read(priv, priv->dcfg->xCR[0])) {
- 		for (i = 0; i < IMX_MU_xCR_MAX; i++)
- 			imx_mu_write(priv, priv->xcr[i], priv->dcfg->xCR[i]);
- 	}
+diff --git a/drivers/staging/mt7621-dts/gbpc2.dts b/drivers/staging/mt7621-dts/gbpc2.dts
+index 6fe603c7711d..03d6bb6735ac 100644
+--- a/drivers/staging/mt7621-dts/gbpc2.dts
++++ b/drivers/staging/mt7621-dts/gbpc2.dts
+@@ -13,10 +13,16 @@
+ 	function = "gpio";
+ };
+ 
+-&gmac1 {
+-	status = "ok";
+-};
++&ethernet {
++	gmac1: mac@1 {
++		status = "ok";
++		phy-handle = <&phy_external>;
++	};
+ 
+-&phy_external {
+-	status = "ok";
++	mdio-bus {
++		phy_external: ethernet-phy@5 {
++			reg = <5>;
++			phy-mode = "rgmii-rxid";
++		};
++	};
+ };
+diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
+index d120e5872165..de2b130569bb 100644
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -325,6 +325,9 @@
+ 
+ 		mediatek,ethsys = <&sysc>;
+ 
++		pinctrl-names = "default";
++		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
++
+ 		gmac0: mac@0 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <0>;
+@@ -342,22 +345,12 @@
+ 			reg = <1>;
+ 			status = "off";
+ 			phy-mode = "rgmii-rxid";
+-			phy-handle = <&phy_external>;
+ 		};
+ 
+ 		mdio-bus {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 
+-			phy_external: ethernet-phy@5 {
+-				status = "off";
+-				reg = <5>;
+-				phy-mode = "rgmii-rxid";
+-
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&rgmii2_pins>;
+-			};
+-
+ 			switch0: switch0@0 {
+ 				compatible = "mediatek,mt7621";
+ 				#address-cells = <1>;
 -- 
 2.34.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D7A4F4867
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5A74F4CBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382691AbiDEVjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S1579532AbiDEXbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344780AbiDEKkN (ORCPT
+        with ESMTP id S1344820AbiDEKkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:40:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5967D2CC84;
-        Tue,  5 Apr 2022 03:25:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFB12CCA1;
+        Tue,  5 Apr 2022 03:25:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16995B81C8A;
-        Tue,  5 Apr 2022 10:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E3AC385A0;
-        Tue,  5 Apr 2022 10:25:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DCE7B81C99;
+        Tue,  5 Apr 2022 10:25:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB16C385A0;
+        Tue,  5 Apr 2022 10:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154319;
-        bh=kGwJY3ChgwKrJH3wgv8722md30dZcRAVn1RUxtVBoOk=;
+        s=korg; t=1649154325;
+        bh=PosF61ntB1uijio+vV8tUqN3VMsMmYWTHjqTxsw4wLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wPrLFDo6va+UOBGTou+gbJtKc/tn8kcERjz3GEKet6ksveNoU8GO5MSAp3pJ946+N
-         TG33vfmJkCzhypZPnpGMiD0ZrT7CLNJYH3ZXuyr26yDujhlpcAWSJnhoiYk7+ksbVk
-         fZcQji4MSIpwwZ8xc5mSNE/ZivyE40mQ+fBHgo5w=
+        b=XJyhMph3d9a65XHUPN3hZOPyWxY3e9mQLmndQrQhrB3HaYxaW6RhViKSH9/bhWgTl
+         1oyuQtixHa1ENG56PiJhnWNFQHxG3Zu4yy60BBFxrJUJIWCrvu6+1/kN9r7XSecFKJ
+         PUPHBdXmuztPj1VaOP9/PfPbpbKouQILsA6uXfBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.10 538/599] ubifs: rename_whiteout: Fix double free for whiteout_ui->data
-Date:   Tue,  5 Apr 2022 09:33:52 +0200
-Message-Id: <20220405070314.852777176@linuxfoundation.org>
+Subject: [PATCH 5.10 540/599] ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
+Date:   Tue,  5 Apr 2022 09:33:54 +0200
+Message-Id: <20220405070314.911715436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,69 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit 40a8f0d5e7b3999f096570edab71c345da812e3e upstream.
+commit 716b4573026bcbfa7b58ed19fe15554bac66b082 upstream.
 
-'whiteout_ui->data' will be freed twice if space budget fail for
-rename whiteout operation as following process:
-
-rename_whiteout
-  dev = kmalloc
-  whiteout_ui->data = dev
-  kfree(whiteout_ui->data)  // Free first time
-  iput(whiteout)
-    ubifs_free_inode
-      kfree(ui->data)	    // Double free!
-
-KASAN reports:
-==================================================================
-BUG: KASAN: double-free or invalid-free in ubifs_free_inode+0x4f/0x70
-Call Trace:
-  kfree+0x117/0x490
-  ubifs_free_inode+0x4f/0x70 [ubifs]
-  i_callback+0x30/0x60
-  rcu_do_batch+0x366/0xac0
-  __do_softirq+0x133/0x57f
-
-Allocated by task 1506:
-  kmem_cache_alloc_trace+0x3c2/0x7a0
-  do_rename+0x9b7/0x1150 [ubifs]
-  ubifs_rename+0x106/0x1f0 [ubifs]
-  do_syscall_64+0x35/0x80
-
-Freed by task 1506:
-  kfree+0x117/0x490
-  do_rename.cold+0x53/0x8a [ubifs]
-  ubifs_rename+0x106/0x1f0 [ubifs]
-  do_syscall_64+0x35/0x80
-
-The buggy address belongs to the object at ffff88810238bed8 which
-belongs to the cache kmalloc-8 of size 8
-==================================================================
-
-Let ubifs_free_inode() free 'whiteout_ui->data'. BTW, delete unused
-assignment 'whiteout_ui->data_len = 0', process 'ubifs_evict_inode()
--> ubifs_jnl_delete_inode() -> ubifs_jnl_write_inode()' doesn't need it
-(because 'inc_nlink(whiteout)' won't be excuted by 'goto out_release',
- and the nlink of whiteout inode is 0).
+whiteout inode should be put when do_tmpfile() failed if inode has been
+initialized. Otherwise we will get following warning during umount:
+  UBIFS error (ubi0:0 pid 1494): ubifs_assert_failed [ubifs]: UBIFS
+  assert failed: c->bi.dd_growth == 0, in fs/ubifs/super.c:1930
+  VFS: Busy inodes after unmount of ubifs. Self-destruct in 5 seconds.
 
 Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Suggested-by: Sascha Hauer <s.hauer@pengutronix.de>
 Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/dir.c |    2 --
- 1 file changed, 2 deletions(-)
+ fs/ubifs/dir.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
 --- a/fs/ubifs/dir.c
 +++ b/fs/ubifs/dir.c
-@@ -1423,8 +1423,6 @@ static int do_rename(struct inode *old_d
- 
- 		err = ubifs_budget_space(c, &wht_req);
- 		if (err) {
--			kfree(whiteout_ui->data);
--			whiteout_ui->data_len = 0;
- 			iput(whiteout);
- 			goto out_release;
- 		}
+@@ -431,6 +431,8 @@ out_inode:
+ 	make_bad_inode(inode);
+ 	if (!instantiated)
+ 		iput(inode);
++	else if (whiteout)
++		iput(*whiteout);
+ out_budg:
+ 	ubifs_release_budget(c, &req);
+ 	if (!instantiated)
 
 

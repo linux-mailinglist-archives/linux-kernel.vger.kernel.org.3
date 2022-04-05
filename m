@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F564F45BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80294F45D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385477AbiDEOjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S1388539AbiDEOkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243065AbiDEJiw (ORCPT
+        with ESMTP id S243545AbiDEJj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:38:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C6DA8EEC;
-        Tue,  5 Apr 2022 02:24:36 -0700 (PDT)
+        Tue, 5 Apr 2022 05:39:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9042AA023;
+        Tue,  5 Apr 2022 02:24:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A96A7B81C9D;
-        Tue,  5 Apr 2022 09:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0432AC385A3;
-        Tue,  5 Apr 2022 09:24:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07C2261368;
+        Tue,  5 Apr 2022 09:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15125C385A2;
+        Tue,  5 Apr 2022 09:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150673;
-        bh=Ok4o6pfqdJRnWy+3ovBLWBNkxP9BwuXReBNWtb04gb4=;
+        s=korg; t=1649150684;
+        bh=Cw2NlYAm/sub3uTEA3b2qIyrR3JDeMkKrC26amsoKtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D9Xh7COX55SQTv/6w7fLemBwj62TfXld+kDbH59vz9qPmDe0p7FcxruVAXqRFk6wt
-         qCTLlVFp7EZE8pMypDgO6rZt99fMaYZQlNMW6c6d91AD6yz2aPhPAGKJL5t9yA9a9V
-         8aj/Un0nxtNsm5p61E7K7QI31tbvnMmSoPE7QOtg=
+        b=dw97mN+XBE0GBNuUjBXZuXy5SF5MP3/CL3SGpZb1n4n+mJvPV8QaXAh3+TjiONuP/
+         P+D7pFBkIJAEzLk9MPNd/5qVt16In5aCcCCgXI9WS+kkn6zUS2V+80S77QQ1q+39uV
+         K/u6jpRbUHdEmDfn4CHe2EqWWTrKXilsvbJPOhAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <jbacik@fb.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 140/913] block: dont merge across cgroup boundaries if blkcg is enabled
-Date:   Tue,  5 Apr 2022 09:20:02 +0200
-Message-Id: <20220405070344.029318292@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 143/913] video: fbdev: sm712fb: Fix crash in smtcfb_read()
+Date:   Tue,  5 Apr 2022 09:20:05 +0200
+Message-Id: <20220405070344.120491507@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,112 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Helge Deller <deller@gmx.de>
 
-commit 6b2b04590b51aa4cf395fcd185ce439cab5961dc upstream.
+commit bd771cf5c4254511cc4abb88f3dab3bd58bdf8e8 upstream.
 
-blk-iocost and iolatency are cgroup aware rq-qos policies but they didn't
-disable merges across different cgroups. This obviously can lead to
-accounting and control errors but more importantly to priority inversions -
-e.g. an IO which belongs to a higher priority cgroup or IO class may end up
-getting throttled incorrectly because it gets merged to an IO issued from a
-low priority cgroup.
+Zheyu Ma reported this crash in the sm712fb driver when reading
+three bytes from the framebuffer:
 
-Fix it by adding blk_cgroup_mergeable() which is called from merge paths and
-rejects cross-cgroup and cross-issue_as_root merges.
+ BUG: unable to handle page fault for address: ffffc90001ffffff
+ RIP: 0010:smtcfb_read+0x230/0x3e0
+ Call Trace:
+  vfs_read+0x198/0xa00
+  ? do_sys_openat2+0x27d/0x350
+  ? __fget_light+0x54/0x340
+  ksys_read+0xce/0x190
+  do_syscall_64+0x43/0x90
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
-Cc: stable@vger.kernel.org # v4.19+
-Cc: Josef Bacik <jbacik@fb.com>
-Link: https://lore.kernel.org/r/Yi/eE/6zFNyWJ+qd@slm.duckdns.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fix it by removing the open-coded endianess fixup-code and
+by moving the pointer post decrement out the fb_readl() function.
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-merge.c          |   11 +++++++++++
- include/linux/blk-cgroup.h |   17 +++++++++++++++++
- 2 files changed, 28 insertions(+)
+ drivers/video/fbdev/sm712fb.c |   25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -7,6 +7,7 @@
- #include <linux/bio.h>
- #include <linux/blkdev.h>
- #include <linux/scatterlist.h>
-+#include <linux/blk-cgroup.h>
+--- a/drivers/video/fbdev/sm712fb.c
++++ b/drivers/video/fbdev/sm712fb.c
+@@ -1047,7 +1047,7 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	if (count + p > total_size)
+ 		count = total_size - p;
  
- #include <trace/events/block.h>
+-	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
++	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
  
-@@ -561,6 +562,9 @@ static inline unsigned int blk_rq_get_ma
- static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
- 		unsigned int nr_phys_segs)
- {
-+	if (!blk_cgroup_mergeable(req, bio))
-+		goto no_merge;
+@@ -1059,25 +1059,14 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	while (count) {
+ 		c = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+ 		dst = buffer;
+-		for (i = c >> 2; i--;) {
+-			*dst = fb_readl(src++);
+-			*dst = big_swap(*dst);
++		for (i = (c + 3) >> 2; i--;) {
++			u32 val;
 +
- 	if (blk_integrity_merge_bio(req->q, req, bio) == false)
- 		goto no_merge;
++			val = fb_readl(src);
++			*dst = big_swap(val);
++			src++;
+ 			dst++;
+ 		}
+-		if (c & 3) {
+-			u8 *dst8 = (u8 *)dst;
+-			u8 __iomem *src8 = (u8 __iomem *)src;
+-
+-			for (i = c & 3; i--;) {
+-				if (i & 1) {
+-					*dst8++ = fb_readb(++src8);
+-				} else {
+-					*dst8++ = fb_readb(--src8);
+-					src8 += 2;
+-				}
+-			}
+-			src = (u32 __iomem *)src8;
+-		}
  
-@@ -657,6 +661,9 @@ static int ll_merge_requests_fn(struct r
- 	if (total_phys_segments > blk_rq_get_max_segments(req))
- 		return 0;
- 
-+	if (!blk_cgroup_mergeable(req, next->bio))
-+		return 0;
-+
- 	if (blk_integrity_merge_rq(q, req, next) == false)
- 		return 0;
- 
-@@ -863,6 +870,10 @@ bool blk_rq_merge_ok(struct request *rq,
- 	if (rq->rq_disk != bio->bi_bdev->bd_disk)
- 		return false;
- 
-+	/* don't merge across cgroup boundaries */
-+	if (!blk_cgroup_mergeable(rq, bio))
-+		return false;
-+
- 	/* only merge integrity protected bio into ditto rq */
- 	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
- 		return false;
---- a/include/linux/blk-cgroup.h
-+++ b/include/linux/blk-cgroup.h
-@@ -24,6 +24,7 @@
- #include <linux/atomic.h>
- #include <linux/kthread.h>
- #include <linux/fs.h>
-+#include <linux/blk-mq.h>
- 
- /* percpu_counter batch for blkg_[rw]stats, per-cpu drift doesn't matter */
- #define BLKG_STAT_CPU_BATCH	(INT_MAX / 2)
-@@ -604,6 +605,21 @@ static inline void blkcg_clear_delay(str
- 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
- }
- 
-+/**
-+ * blk_cgroup_mergeable - Determine whether to allow or disallow merges
-+ * @rq: request to merge into
-+ * @bio: bio to merge
-+ *
-+ * @bio and @rq should belong to the same cgroup and their issue_as_root should
-+ * match. The latter is necessary as we don't want to throttle e.g. a metadata
-+ * update because it happens to be next to a regular IO.
-+ */
-+static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio)
-+{
-+	return rq->bio->bi_blkg == bio->bi_blkg &&
-+		bio_issue_as_root_blkg(rq->bio) == bio_issue_as_root_blkg(bio);
-+}
-+
- void blk_cgroup_bio_start(struct bio *bio);
- void blkcg_add_delay(struct blkcg_gq *blkg, u64 now, u64 delta);
- void blkcg_schedule_throttle(struct request_queue *q, bool use_memdelay);
-@@ -659,6 +675,7 @@ static inline void blkg_put(struct blkcg
- static inline bool blkcg_punt_bio_submit(struct bio *bio) { return false; }
- static inline void blkcg_bio_issue_init(struct bio *bio) { }
- static inline void blk_cgroup_bio_start(struct bio *bio) { }
-+static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio) { return true; }
- 
- #define blk_queue_for_each_rl(rl, q)	\
- 	for ((rl) = &(q)->root_rl; (rl); (rl) = NULL)
+ 		if (copy_to_user(buf, buffer, c)) {
+ 			err = -EFAULT;
 
 

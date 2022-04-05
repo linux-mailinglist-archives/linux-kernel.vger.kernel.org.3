@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56564F228E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6B04F2294
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiDEFXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S229849AbiDEF3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiDEFXa (ORCPT
+        with ESMTP id S229537AbiDEF3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:23:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E8202DDB
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649136049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hXNd3S63I+/DnvIHKzVjn0CsQfzi1GKX7Atsgl6DyUY=;
-        b=Aj8viwLBQejEOhZ4x+8nLx/BkAe0HyKtHO8v1WZ6hPVfiGO728bj6zCLDd7rTgjnEL+LQ1
-        9sZqfcLgTBmClRPjoxGsIHjH5cTIUKis1GwX7yHp3cCPpzh+zKSYelCUW4q6bYMXIxviso
-        GUDg2k8vi8e1A4j0g1KYoVWtcuQhT2I=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-IMR1Vew1OeGpXiREZs5WGA-1; Tue, 05 Apr 2022 01:20:48 -0400
-X-MC-Unique: IMR1Vew1OeGpXiREZs5WGA-1
-Received: by mail-wm1-f71.google.com with SMTP id v62-20020a1cac41000000b0038cfe6edf3fso759825wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 22:20:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hXNd3S63I+/DnvIHKzVjn0CsQfzi1GKX7Atsgl6DyUY=;
-        b=tHpxr542+0U6hYPpExRt2lZFjufkX279xhhKQUTZmZler7/BB0KtS6zG6trkvGbIpk
-         2W8+AGx4frjPyohPfzaxNV3Kbefup+RIiCVZjVggF6yvTMy7aMSYEpm81J/zb6OKZuGo
-         rMBzamAEzfxkw2W2cnrg678P2yVfqfNvtdFYhx9Q2cEo1w2jnidW8WW0gpdOqwThTGZJ
-         PBksNU6fhgoXIEq9Wlk6I992GOEwXAybJAabSQ7NSqB2j/c6WCgsZJ30DvmRsHtAmXbD
-         i5dB48GtzGnVU9gsSHN0VhDlzTAwm8cmgzV3Qz6zlyh76bfSMuw9WywQQHS7wGNwJNzx
-         ktuQ==
-X-Gm-Message-State: AOAM532oAsA220hUiuPcrC1mdliJ4huW2xElyG6VRVzrHnJ3+qhEr2mB
-        T5E2ZAsXKg83I4LXDDkZozZa2HAFqczRsddLFKJA3rHIueCt0uZuOt2jD7UFttYeOppfFzVpDDC
-        q7ot2n/3L6e4CEqmD1VAdg6lx
-X-Received: by 2002:a7b:cb87:0:b0:38e:7464:f796 with SMTP id m7-20020a7bcb87000000b0038e7464f796mr1343552wmi.133.1649136046819;
-        Mon, 04 Apr 2022 22:20:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5pSIpqXDbMjBhGhF2Ym8NkkUzOiS8ugQkJZJSUEkD8mJRZ/i+6rvspLskok00+YPdm3I8bA==
-X-Received: by 2002:a7b:cb87:0:b0:38e:7464:f796 with SMTP id m7-20020a7bcb87000000b0038e7464f796mr1343528wmi.133.1649136046521;
-        Mon, 04 Apr 2022 22:20:46 -0700 (PDT)
-Received: from redhat.com ([2.52.17.211])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056000186e00b0020405198faasm12295878wri.52.2022.04.04.22.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 22:20:45 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 01:20:41 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     zhenwei pi <pizhenwei@bytedance.com>, arei.gonglei@huawei.com,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        herbert@gondor.apana.org.au, helei.sig11@bytedance.com
-Subject: Re: [PATCH v3 0/4] Introduce akcipher service for virtio-crypto
-Message-ID: <20220405012015-mutt-send-email-mst@kernel.org>
-References: <20220302033917.1295334-1-pizhenwei@bytedance.com>
- <a9d1dfc1-080e-fba2-8fbb-28718b067e0d@bytedance.com>
- <20220307040431-mutt-send-email-mst@kernel.org>
- <87h778g8nn.fsf@redhat.com>
+        Tue, 5 Apr 2022 01:29:13 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A238DB9;
+        Mon,  4 Apr 2022 22:27:15 -0700 (PDT)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2355Qr35032029;
+        Tue, 5 Apr 2022 14:26:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2355Qr35032029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649136413;
+        bh=9Mjbanc1uTbEmK1mnz01B4FzZRbSAyqrQAUwcuIQyrc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q7N13ho2VG5rLtdaeG8wrsIrzV2MyavvOTH5wV/PEuj70ICAWET40QbPV5Na0UYu5
+         gr/o8vs8tVjR6GQXuQ9pGjJuCSsB9CzJ2IjWe3oA6QIA4mzE2pV2XLfQ+sY71zNdg5
+         +iXM5AHZ0/PSYam2Pvbwg0ygnLWKI99gDwZbqZ6l6jEvFoxRIgcSTZsJZbtWfdX1ko
+         q/D2JRyuouAYUJ+pRvroBlVKdbxCZUzX+wMceUb19jZomC+ZPHgUqWcEuOWkTLT2Xy
+         DA/frOTo7xheZI0XTJxKvUAe02Mc7lnsfKDA5FuAY/KivXHRHb6f3WUEri5r/8nkyS
+         sSidnkjfA2G7w==
+X-Nifty-SrcIP: [209.85.216.44]
+Received: by mail-pj1-f44.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso1428381pjb.0;
+        Mon, 04 Apr 2022 22:26:53 -0700 (PDT)
+X-Gm-Message-State: AOAM533Gsaw0t7ysT9t08Dx25gL4JrvYA0iNwczQKwEOmNJxqZ7t6fqv
+        7W0arHWQRgYjs7mdlp+d+FSE8arqqF+6cBjztwo=
+X-Google-Smtp-Source: ABdhPJwkdPkqgeF6q282Mp9Vwdv0ZWc0PT6lrZqUk8B5WAzSE3LH6/hQ1oXDCHHPqxwcsVJRZWFxeeXmOrr8mqbYLlk=
+X-Received: by 2002:a17:90b:4d01:b0:1c9:ec79:1b35 with SMTP id
+ mw1-20020a17090b4d0100b001c9ec791b35mr2005151pjb.77.1649136412823; Mon, 04
+ Apr 2022 22:26:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87h778g8nn.fsf@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329021520.308997-1-masahiroy@kernel.org> <CAKwvOdkP12zrGu4iJStSJ5-pAKFBar=Cxf=CYO5gE9L636q8-w@mail.gmail.com>
+ <CAK7LNASisGfD4vrk2Duswg_tj+LQutd+zdyq9qyFiTptCM7NWA@mail.gmail.com>
+In-Reply-To: <CAK7LNASisGfD4vrk2Duswg_tj+LQutd+zdyq9qyFiTptCM7NWA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 5 Apr 2022 14:26:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAReCMMkOvs13jNyDoEnTgRJ36MC=KrUwCWv0x0TXbQ+fg@mail.gmail.com>
+Message-ID: <CAK7LNAReCMMkOvs13jNyDoEnTgRJ36MC=KrUwCWv0x0TXbQ+fg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:39:24PM +0200, Cornelia Huck wrote:
-> On Mon, Mar 07 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> 
-> > On Mon, Mar 07, 2022 at 10:42:30AM +0800, zhenwei pi wrote:
-> >> Hi, Michael & Lei
-> >> 
-> >> The full patchset has been reviewed by Gonglei, thanks to Gonglei.
-> >> Should I modify the virtio crypto specification(use "__le32 akcipher_algo;"
-> >> instead of "__le32 reserve;" only, see v1->v2 change), and start a new issue
-> >> for a revoting procedure?
+On Tue, Apr 5, 2022 at 10:55 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Wed, Mar 30, 2022 at 3:18 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
 > >
-> > You can but not it probably will be deferred to 1.3. OK with you?
+> > On Mon, Mar 28, 2022 at 7:15 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > The genksyms command part in cmd_gensymtypes_{c,S} is duplicated.
+> > > Factor it out into the 'genksyms' macro.
+> > >
+> > > For the readability, I slightly refactor the arguments to genksyms.
 > >
-> >> Also cc Cornelia Huck.
-> 
-> [Apologies, I'm horribly behind on my email backlog, and on virtio
-> things in general :(]
-> 
-> The akcipher update had been deferred for 1.2, so I think it will be 1.3
-> material. However, I just noticed while browsing the fine lwn.net merge
-> window summary that this seems to have been merged already. That
-> situation is less than ideal, although I don't expect any really bad
-> problems, given that there had not been any negative feedback for the
-> spec proposal that I remember.
+> > Looks nicer, thanks for the patch!
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > >
+>
+> Applied to linux-kbuild.
 
-Let's open a 1.3 branch? What do you think?
+No, this patch is wrong.
+I will send v2 later.
+
+>
+>
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  scripts/Makefile.build | 19 ++++++++-----------
+> > >  1 file changed, 8 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > > index 9717e6f6fb31..3f2985df4d60 100644
+> > > --- a/scripts/Makefile.build
+> > > +++ b/scripts/Makefile.build
+> > > @@ -125,13 +125,14 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
+> > >  $(obj)/%.i: $(src)/%.c FORCE
+> > >         $(call if_changed_dep,cpp_i_c)
+> > >
+> > > +genksyms = scripts/genksyms/genksyms           \
+> > > +       $(if $(1), -T $(2))                     \
+> > > +       $(if $(CONFIG_MODULE_REL_CRCS), -R)     \
+> > > +       $(if $(KBUILD_PRESERVE), -p)            \
+> > > +       -r $(or $(wildcard $(2:.symtypes=.symref), /dev/null))
+
+The position of the closing parenthesis was wrong.
+
+    -r $(or $(wildcard $(2:.symtypes=.symref)), /dev/null)
+
+
+
+
+
+
 
 -- 
-MST
-
+Best Regards
+Masahiro Yamada

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3FC4F4374
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7A24F4107
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378252AbiDEU2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S234494AbiDET5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573590AbiDETXK (ORCPT
+        with ESMTP id S1573592AbiDETXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:23:10 -0400
+        Tue, 5 Apr 2022 15:23:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A608E4B842;
-        Tue,  5 Apr 2022 12:21:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687EC4C420;
+        Tue,  5 Apr 2022 12:21:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41453616C5;
-        Tue,  5 Apr 2022 19:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F6FC385A1;
-        Tue,  5 Apr 2022 19:21:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05A53618A0;
+        Tue,  5 Apr 2022 19:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DECC385A3;
+        Tue,  5 Apr 2022 19:21:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186470;
-        bh=Zg3zMWSG6TvHZGGBtCLfiftQlhpR76ntlCWktCjM/rI=;
+        s=k20201202; t=1649186473;
+        bh=QuApRqh0fnTOdYhO0fpJUYwLgpx0svD4Wr/+e96NUFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r75syTBou8Z4Hpkp1mjTt3Zb/e6dtZS5ttMdnxnJhie0jKOGCDuge3ZxVSfoBOsMc
-         +gKS+1NFp+FiiSYHDBQ1i6MWknoPjnydDRMD6g/zSnBrD/8232h2sqkZ9NGYdGaw+R
-         IL7f9tgOku4IbdByviN8/DQHHycj3UIXqrfeiGG9+pL8Q6fhnOx/2u/vPSeg+hrDKx
-         lTHljOLnjx8L4AZ2B8hH22tp84lnuDK8n9G6XRXhWg6WLYXyL8Sndrhe5zWq9E6BWz
-         6D6H6/5+N6Yb2brGnTvWtleWj2DejPFMZHihMz65HD78XkOpUZOr+aess+q9AojYln
-         czMgCmam9EC4g==
+        b=V85DtXBr19bL+lTEDoSEjYy0ajvW1aTrwCTptYwEHBNr64twKPsNY58LaE9PgGkBz
+         5fkatuYc5XIVY8nIkIy6NqIV3NBQrzOJ7Q3xeX7KoXb4UybNGQiYZaMRtu301iLFX2
+         o21Le4mQtxYecUZoJJek9iT+fWw+/wBQCN1Qax4df0VBEIfokFhmgUfAfE4QnJYsSJ
+         Rcd5EcbdYgldUTUG8p9j6NIF8g7PdJAAVe+FDbmo1rgknfaVkB0Px/Tm5QYnXpqVbf
+         zMnqHiS4VVHJNkw86fLoofCyYH7QysAXVtyUnI8OF1JhKtYamVaQM3XNEDv3ZFwZwg
+         +ox9LNGTbZZ6w==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 42/59] ceph: handle fscrypt fields in cap messages from MDS
-Date:   Tue,  5 Apr 2022 15:20:13 -0400
-Message-Id: <20220405192030.178326-43-jlayton@kernel.org>
+Subject: [PATCH v13 45/59] ceph: add __ceph_sync_read helper support
+Date:   Tue,  5 Apr 2022 15:20:16 -0400
+Message-Id: <20220405192030.178326-46-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,160 +55,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle the new fscrypt_file and fscrypt_auth fields in cap messages. Use
-them to populate new fields in cap_extra_info and update the inode with
-those values.
+From: Xiubo Li <xiubli@redhat.com>
 
+Turn the guts of ceph_sync_read into a new helper that takes an inode
+and an offset instead of a kiocb struct, and make ceph_sync_read call
+the helper as a wrapper.
+
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/caps.c | 78 ++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 76 insertions(+), 2 deletions(-)
+ fs/ceph/file.c  | 33 +++++++++++++++++++++------------
+ fs/ceph/super.h |  2 ++
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-index cb5cdf2260ad..1f3a2135214c 100644
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@ -3364,6 +3364,9 @@ struct cap_extra_info {
- 	/* currently issued */
- 	int issued;
- 	struct timespec64 btime;
-+	u8 *fscrypt_auth;
-+	u32 fscrypt_auth_len;
-+	u64 fscrypt_file_size;
- };
+diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+index b7e2594cc296..c4300381851e 100644
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -927,22 +927,19 @@ enum {
+  * If we get a short result from the OSD, check against i_size; we need to
+  * only return a short read to the caller if we hit EOF.
+  */
+-static ssize_t ceph_sync_read(struct kiocb *iocb, struct iov_iter *to,
+-			      int *retry_op)
++ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
++			 struct iov_iter *to, int *retry_op)
+ {
+-	struct file *file = iocb->ki_filp;
+-	struct inode *inode = file_inode(file);
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
+ 	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
+ 	struct ceph_osd_client *osdc = &fsc->client->osdc;
+ 	ssize_t ret;
+-	u64 off = iocb->ki_pos;
++	u64 off = *ki_pos;
+ 	u64 len = iov_iter_count(to);
+ 	u64 i_size = i_size_read(inode);
+ 	bool sparse = ceph_test_mount_opt(fsc, SPARSEREAD);
  
- /*
-@@ -3396,6 +3399,14 @@ static void handle_cap_grant(struct inode *inode,
- 	bool deleted_inode = false;
- 	bool fill_inline = false;
+-	dout("sync_read on file %p %llu~%u %s\n", file, off, (unsigned)len,
+-	     (file->f_flags & O_DIRECT) ? "O_DIRECT" : "");
++	dout("sync_read on inode %p %llx~%llx\n", inode, *ki_pos, len);
  
-+	/*
-+	 * If there is at least one crypto block then we'll trust fscrypt_file_size.
-+	 * If the real length of the file is 0, then ignore it (it has probably been
-+	 * truncated down to 0 by the MDS).
-+	 */
-+	if (IS_ENCRYPTED(inode) && size)
-+		size = extra_info->fscrypt_file_size;
-+
- 	dout("handle_cap_grant inode %p cap %p mds%d seq %d %s\n",
- 	     inode, cap, session->s_mds, seq, ceph_cap_string(newcaps));
- 	dout(" size %llu max_size %llu, i_size %llu\n", size, max_size,
-@@ -3462,6 +3473,10 @@ static void handle_cap_grant(struct inode *inode,
- 		dout("%p mode 0%o uid.gid %d.%d\n", inode, inode->i_mode,
- 		     from_kuid(&init_user_ns, inode->i_uid),
- 		     from_kgid(&init_user_ns, inode->i_gid));
-+
-+		WARN_ON_ONCE(ci->fscrypt_auth_len != extra_info->fscrypt_auth_len ||
-+			     memcmp(ci->fscrypt_auth, extra_info->fscrypt_auth,
-+				     ci->fscrypt_auth_len));
+ 	if (!len)
+ 		return 0;
+@@ -1061,14 +1058,14 @@ static ssize_t ceph_sync_read(struct kiocb *iocb, struct iov_iter *to,
+ 			break;
  	}
  
- 	if ((newcaps & CEPH_CAP_LINK_SHARED) &&
-@@ -3872,7 +3887,8 @@ static void handle_cap_flushsnap_ack(struct inode *inode, u64 flush_tid,
-  */
- static bool handle_cap_trunc(struct inode *inode,
- 			     struct ceph_mds_caps *trunc,
--			     struct ceph_mds_session *session)
-+			     struct ceph_mds_session *session,
-+			     struct cap_extra_info *extra_info)
- {
- 	struct ceph_inode_info *ci = ceph_inode(inode);
- 	int mds = session->s_mds;
-@@ -3889,6 +3905,14 @@ static bool handle_cap_trunc(struct inode *inode,
+-	if (off > iocb->ki_pos) {
++	if (off > *ki_pos) {
+ 		if (off >= i_size) {
+ 			*retry_op = CHECK_EOF;
+-			ret = i_size - iocb->ki_pos;
+-			iocb->ki_pos = i_size;
++			ret = i_size - *ki_pos;
++			*ki_pos = i_size;
+ 		} else {
+-			ret = off - iocb->ki_pos;
+-			iocb->ki_pos = off;
++			ret = off - *ki_pos;
++			*ki_pos = off;
+ 		}
+ 	}
  
- 	issued |= implemented | dirty;
- 
-+	/*
-+	 * If there is at least one crypto block then we'll trust fscrypt_file_size.
-+	 * If the real length of the file is 0, then ignore it (it has probably been
-+	 * truncated down to 0 by the MDS).
-+	 */
-+	if (IS_ENCRYPTED(inode) && size)
-+		size = extra_info->fscrypt_file_size;
-+
- 	dout("handle_cap_trunc inode %p mds%d seq %d to %lld seq %d\n",
- 	     inode, mds, seq, truncate_size, truncate_seq);
- 	queue_trunc = ceph_fill_file_size(inode, issued,
-@@ -4110,6 +4134,49 @@ static void handle_cap_import(struct ceph_mds_client *mdsc,
- 	*target_cap = cap;
+@@ -1076,6 +1073,18 @@ static ssize_t ceph_sync_read(struct kiocb *iocb, struct iov_iter *to,
+ 	return ret;
  }
  
-+#ifdef CONFIG_FS_ENCRYPTION
-+static int parse_fscrypt_fields(void **p, void *end, struct cap_extra_info *extra)
++static ssize_t ceph_sync_read(struct kiocb *iocb, struct iov_iter *to,
++			      int *retry_op)
 +{
-+	u32 len;
++	struct file *file = iocb->ki_filp;
++	struct inode *inode = file_inode(file);
 +
-+	ceph_decode_32_safe(p, end, extra->fscrypt_auth_len, bad);
-+	if (extra->fscrypt_auth_len) {
-+		ceph_decode_need(p, end, extra->fscrypt_auth_len, bad);
-+		extra->fscrypt_auth = kmalloc(extra->fscrypt_auth_len, GFP_KERNEL);
-+		if (!extra->fscrypt_auth)
-+			return -ENOMEM;
-+		ceph_decode_copy_safe(p, end, extra->fscrypt_auth,
-+					extra->fscrypt_auth_len, bad);
-+	}
++	dout("sync_read on file %p %llx~%zx %s\n", file, iocb->ki_pos,
++	     iov_iter_count(to), (file->f_flags & O_DIRECT) ? "O_DIRECT" : "");
 +
-+	ceph_decode_32_safe(p, end, len, bad);
-+	if (len >= sizeof(u64)) {
-+		ceph_decode_64_safe(p, end, extra->fscrypt_file_size, bad);
-+		len -= sizeof(u64);
-+	}
-+	ceph_decode_skip_n(p, end, len, bad);
-+	return 0;
-+bad:
-+	return -EIO;
++	return __ceph_sync_read(inode, &iocb->ki_pos, to, retry_op);
 +}
-+#else
-+static int parse_fscrypt_fields(void **p, void *end, struct cap_extra_info *extra)
-+{
-+	u32 len;
 +
-+	/* Don't care about these fields unless we're encryption-capable */
-+	ceph_decode_32_safe(p, end, len, bad);
-+	if (len)
-+		ceph_decode_skip_n(p, end, len, bad);
-+	ceph_decode_32_safe(p, end, len, bad);
-+	if (len)
-+		ceph_decode_skip_n(p, end, len, bad);
-+	return 0;
-+bad:
-+	return -EIO;
-+}
-+#endif
-+
- /*
-  * Handle a caps message from the MDS.
-  *
-@@ -4228,6 +4295,11 @@ void ceph_handle_caps(struct ceph_mds_session *session,
- 		ceph_decode_64_safe(&p, end, extra_info.nsubdirs, bad);
- 	}
- 
-+	if (msg_version >= 12) {
-+		if (parse_fscrypt_fields(&p, end, &extra_info))
-+			goto bad;
-+	}
-+
- 	/* lookup ino */
- 	inode = ceph_find_inode(mdsc->fsc->sb, vino);
- 	dout(" op %s ino %llx.%llx inode %p\n", ceph_cap_op_name(op), vino.ino,
-@@ -4324,7 +4396,8 @@ void ceph_handle_caps(struct ceph_mds_session *session,
- 		break;
- 
- 	case CEPH_CAP_OP_TRUNC:
--		queue_trunc = handle_cap_trunc(inode, h, session);
-+		queue_trunc = handle_cap_trunc(inode, h, session,
-+						&extra_info);
- 		spin_unlock(&ci->i_ceph_lock);
- 		if (queue_trunc)
- 			ceph_queue_vmtruncate(inode);
-@@ -4342,6 +4415,7 @@ void ceph_handle_caps(struct ceph_mds_session *session,
- 	iput(inode);
- out:
- 	ceph_put_string(extra_info.pool_ns);
-+	kfree(extra_info.fscrypt_auth);
- 	return;
- 
- flush_cap_releases:
+ struct ceph_aio_request {
+ 	struct kiocb *iocb;
+ 	size_t total_len;
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index 752bc3c820ca..d7ab820aed34 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -1258,6 +1258,8 @@ extern int ceph_renew_caps(struct inode *inode, int fmode);
+ extern int ceph_open(struct inode *inode, struct file *file);
+ extern int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
+ 			    struct file *file, unsigned flags, umode_t mode);
++extern ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
++				struct iov_iter *to, int *retry_op);
+ extern int ceph_release(struct inode *inode, struct file *filp);
+ extern void ceph_fill_inline_data(struct inode *inode, struct page *locked_page,
+ 				  char *data, size_t len);
 -- 
 2.35.1
 

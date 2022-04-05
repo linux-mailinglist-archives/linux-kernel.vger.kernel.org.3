@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25704F342E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B754F2EDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbiDEIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S241670AbiDEIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbiDEICP (ORCPT
+        with ESMTP id S236463AbiDEICW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:02:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F914C7BD;
-        Tue,  5 Apr 2022 01:00:17 -0700 (PDT)
+        Tue, 5 Apr 2022 04:02:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328DF4F9D9;
+        Tue,  5 Apr 2022 01:00:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4450DB81B14;
-        Tue,  5 Apr 2022 08:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2780C34117;
-        Tue,  5 Apr 2022 08:00:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C58AF61545;
+        Tue,  5 Apr 2022 08:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E6DC340EE;
+        Tue,  5 Apr 2022 08:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145615;
-        bh=/t/IVCH4HyVLdbcbyqgv9M9GgE6INsqR2BeJWrEF/7U=;
+        s=korg; t=1649145623;
+        bh=ILWExaWFs9IY44mWLEJ+w6njJpf64YYLdcomOi8/aGM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ylw/OFMYgwEavP+4TALTqAEHC8CuOcbazLYa91ZfAo3zQ3TW1/u41ATyeQMDciFHG
-         X314xSouXe2rGOGrj+SxkYdU8gpFM111VFbFtWcIGNHd+hc7A2g+ThWmxXm1HTkNtT
-         og0Y9z9t7ImryuXLWedcZqv2ee8jQVw9Yc6TIyxQ=
+        b=eE3LUx1H3bW4ppBUX6pg+wzK/mXmcbNk85s3I+2DrIFatCclLHOacfV5q8Hn3TAQe
+         VnvYHyiTLD84nQmuUvR7pCa5Li6jvCuD32745dkB2LzvUgWLxJp9vPHOWLQ8RSAuBG
+         SgRJ7uLbWCpYqgITDwJK2vGvVpiRf7KwOLybydUk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Melissa Wen <mwen@igalia.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0428/1126] drm: bridge: adv7511: Fix ADV7535 HPD enablement
-Date:   Tue,  5 Apr 2022 09:19:35 +0200
-Message-Id: <20220405070420.188115442@linuxfoundation.org>
+Subject: [PATCH 5.17 0431/1126] drm/v3d/v3d_drv: Check for error num after setting mask
+Date:   Tue,  5 Apr 2022 09:19:38 +0200
+Message-Id: <20220405070420.275711105@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,98 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 3dbc84a595d17f64f14fcea00120d31e33e98880 ]
+[ Upstream commit 4a39156166b90465da0f9a33b3442d63b5651bec ]
 
-Existing HPD enablement logic is not compatible with ADV7535
-bridge, thus any runtime plug-in of HDMI cable is not working
-on these bridge designs.
+Because of the possible failure of the dma_supported(), the
+dma_set_mask_and_coherent() may return error num.
+Therefore, it should be better to check it and return the error if
+fails.
+Also, we can create a variable for the mask to solve the
+alignment issue.
 
-Unlike other ADV7511 family of bridges, the ADV7535 require
-HPD_OVERRIDE bit to set and reset for proper handling of HPD
-functionality.
-
-Fix it.
-
-Fixes: 8501fe4b14a3 ("drm: bridge: adv7511: Add support for ADV7535")
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220109172949.168167-1-jagan@amarulasolutions.com
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mask")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Melissa Wen <mwen@igalia.com>
+Signed-off-by: Melissa Wen <melissa.srw@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220110013807.4105270-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511.h     |  1 +
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 29 +++++++++++++++-----
- 2 files changed, 23 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/v3d/v3d_drv.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index 592ecfcf00ca..6a882891d91c 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-@@ -169,6 +169,7 @@
- #define ADV7511_PACKET_ENABLE_SPARE2		BIT(1)
- #define ADV7511_PACKET_ENABLE_SPARE1		BIT(0)
+diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+index bd46396a1ae0..1afcd54fbbd5 100644
+--- a/drivers/gpu/drm/v3d/v3d_drv.c
++++ b/drivers/gpu/drm/v3d/v3d_drv.c
+@@ -219,6 +219,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 	int ret;
+ 	u32 mmu_debug;
+ 	u32 ident1;
++	u64 mask;
  
-+#define ADV7535_REG_POWER2_HPD_OVERRIDE		BIT(6)
- #define ADV7511_REG_POWER2_HPD_SRC_MASK		0xc0
- #define ADV7511_REG_POWER2_HPD_SRC_BOTH		0x00
- #define ADV7511_REG_POWER2_HPD_SRC_HPD		0x40
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index f8e5da148599..77118c3395bf 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -351,11 +351,17 @@ static void __adv7511_power_on(struct adv7511 *adv7511)
- 	 * from standby or are enabled. When the HPD goes low the adv7511 is
- 	 * reset and the outputs are disabled which might cause the monitor to
- 	 * go to standby again. To avoid this we ignore the HPD pin for the
--	 * first few seconds after enabling the output.
-+	 * first few seconds after enabling the output. On the other hand
-+	 * adv7535 require to enable HPD Override bit for proper HPD.
- 	 */
--	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--			   ADV7511_REG_POWER2_HPD_SRC_MASK,
--			   ADV7511_REG_POWER2_HPD_SRC_NONE);
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+	else
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+				   ADV7511_REG_POWER2_HPD_SRC_NONE);
- }
+ 	v3d = devm_drm_dev_alloc(dev, &v3d_drm_driver, struct v3d_dev, drm);
+ 	if (IS_ERR(v3d))
+@@ -237,8 +238,11 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 		return ret;
  
- static void adv7511_power_on(struct adv7511 *adv7511)
-@@ -375,6 +381,10 @@ static void adv7511_power_on(struct adv7511 *adv7511)
- static void __adv7511_power_off(struct adv7511 *adv7511)
- {
- 	/* TODO: setup additional power down modes */
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE, 0);
+ 	mmu_debug = V3D_READ(V3D_MMU_DEBUG_INFO);
+-	dma_set_mask_and_coherent(dev,
+-		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
++	mask = DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH));
++	ret = dma_set_mask_and_coherent(dev, mask);
++	if (ret)
++		return ret;
 +
- 	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER,
- 			   ADV7511_POWER_POWER_DOWN,
- 			   ADV7511_POWER_POWER_DOWN);
-@@ -672,9 +682,14 @@ adv7511_detect(struct adv7511 *adv7511, struct drm_connector *connector)
- 			status = connector_status_disconnected;
- 	} else {
- 		/* Renable HPD sensing */
--		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--				   ADV7511_REG_POWER2_HPD_SRC_MASK,
--				   ADV7511_REG_POWER2_HPD_SRC_BOTH);
-+		if (adv7511->type == ADV7535)
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+		else
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+					   ADV7511_REG_POWER2_HPD_SRC_BOTH);
- 	}
+ 	v3d->va_width = 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
  
- 	adv7511->status = status;
+ 	ident1 = V3D_READ(V3D_HUB_IDENT1);
 -- 
 2.34.1
 

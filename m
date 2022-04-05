@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E963E4F4FE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCE04F51B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839885AbiDFBGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1846980AbiDFCLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349170AbiDEJtW (ORCPT
+        with ESMTP id S1349198AbiDEJt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7796550;
-        Tue,  5 Apr 2022 02:42:05 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65584C29;
+        Tue,  5 Apr 2022 02:42:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B23A0B818F3;
-        Tue,  5 Apr 2022 09:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B91CC385A3;
-        Tue,  5 Apr 2022 09:42:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22D2BB81B14;
+        Tue,  5 Apr 2022 09:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8C8C385A2;
+        Tue,  5 Apr 2022 09:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151722;
-        bh=ivnWN4g9I2Bm8Vfn53gXQ28EBwfV06Z7FNHo7ZzZOuE=;
+        s=korg; t=1649151727;
+        bh=nt0P5PwaV4eV2/k32xMWQtKBrmy1jnzvbGj/CcjZ0BM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V/lF9za98Y8+Olg7QSJbLqjp9jqPqW/odsM96A8+m4md6E7okb2o0/47B/pN6Stxa
-         OEdJ0HS1Orj4vNJhwZ3T3oLcFNdjVdd/awhbqjvRX7FaHnRLJHfh638huGJOJPHZI2
-         BQgd0CrFFGkWHnk+Fy9ouKgXuXI7uVeUe9KNYjZU=
+        b=rggby9WN1Ub1rowhjQZSYIBug9s0fSSkjnd8Tg8mWXS0XsSaE4uYr/QM2JOf9PW/i
+         2q3r9Mt3UB8woyt/MaqGrQeY3PY4Ory+cGF8Gr1YtDdup7DleEEmignazK1Fu++dg/
+         6fuFVHvIBlWvzz3kGzEZmfgJ359yxmER3lrGRqvw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 518/913] net: axienet: fix RX ring refill allocation failure handling
-Date:   Tue,  5 Apr 2022 09:26:20 +0200
-Message-Id: <20220405070355.381109882@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 520/913] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
+Date:   Tue,  5 Apr 2022 09:26:22 +0200
+Message-Id: <20220405070355.440958448@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,139 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 7a7d340ba4d9351e4c8847b898a2b996727a922a ]
+[ Upstream commit 97bf0395c226907e1a9b908511a35192bf1e09bb ]
 
-If a memory allocation error occurred during an attempt to refill a slot
-in the RX ring after the packet was received, the hardware tail pointer
-would still have been updated to point to or past the slot which remained
-marked as previously completed. This would likely result in the DMA engine
-raising an error when it eventually tried to use that slot again.
+Include the DECstation interrupt handler in opting out of
+FPU support.
 
-If a slot cannot be refilled, then just stop processing and do not move
-the tail pointer past it. On the next attempt, we should skip receiving
-the packet from the empty slot and just try to refill it again.
+Fixes a linker error:
 
-This failure mode has not actually been observed, but was found as part
-of other driver updates.
+mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
+(.text+0x148): undefined reference to `handle_fpe_int'
 
-Fixes: 8a3b7a252dca ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/xilinx/xilinx_axienet_main.c | 72 +++++++++++--------
- 1 file changed, 42 insertions(+), 30 deletions(-)
+ arch/mips/dec/int-handler.S | 6 +++---
+ arch/mips/dec/setup.c       | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-index 2169417210c2..80637ffcca93 100644
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -857,46 +857,53 @@ static void axienet_recv(struct net_device *ndev)
- 	while ((cur_p->status & XAXIDMA_BD_STS_COMPLETE_MASK)) {
- 		dma_addr_t phys;
+diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
+index ea5b5a83f1e1..011d1d678840 100644
+--- a/arch/mips/dec/int-handler.S
++++ b/arch/mips/dec/int-handler.S
+@@ -131,7 +131,7 @@
+ 		 */
+ 		mfc0	t0,CP0_CAUSE		# get pending interrupts
+ 		mfc0	t1,CP0_STATUS
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		lw	t2,cpu_fpu_mask
+ #endif
+ 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
+@@ -139,7 +139,7 @@
  
--		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
--
- 		/* Ensure we see complete descriptor update */
- 		dma_rmb();
--		phys = desc_get_phys_addr(lp, cur_p);
--		dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
--				 DMA_FROM_DEVICE);
+ 		beqz	t0,spurious
  
- 		skb = cur_p->skb;
- 		cur_p->skb = NULL;
--		length = cur_p->app4 & 0x0000FFFF;
--
--		skb_put(skb, length);
--		skb->protocol = eth_type_trans(skb, ndev);
--		/*skb_checksum_none_assert(skb);*/
--		skb->ip_summed = CHECKSUM_NONE;
--
--		/* if we're doing Rx csum offload, set it up */
--		if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
--			csumstatus = (cur_p->app2 &
--				      XAE_FULL_CSUM_STATUS_MASK) >> 3;
--			if ((csumstatus == XAE_IP_TCP_CSUM_VALIDATED) ||
--			    (csumstatus == XAE_IP_UDP_CSUM_VALIDATED)) {
--				skb->ip_summed = CHECKSUM_UNNECESSARY;
-+
-+		/* skb could be NULL if a previous pass already received the
-+		 * packet for this slot in the ring, but failed to refill it
-+		 * with a newly allocated buffer. In this case, don't try to
-+		 * receive it again.
-+		 */
-+		if (likely(skb)) {
-+			length = cur_p->app4 & 0x0000FFFF;
-+
-+			phys = desc_get_phys_addr(lp, cur_p);
-+			dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
-+					 DMA_FROM_DEVICE);
-+
-+			skb_put(skb, length);
-+			skb->protocol = eth_type_trans(skb, ndev);
-+			/*skb_checksum_none_assert(skb);*/
-+			skb->ip_summed = CHECKSUM_NONE;
-+
-+			/* if we're doing Rx csum offload, set it up */
-+			if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
-+				csumstatus = (cur_p->app2 &
-+					      XAE_FULL_CSUM_STATUS_MASK) >> 3;
-+				if (csumstatus == XAE_IP_TCP_CSUM_VALIDATED ||
-+				    csumstatus == XAE_IP_UDP_CSUM_VALIDATED) {
-+					skb->ip_summed = CHECKSUM_UNNECESSARY;
-+				}
-+			} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
-+				   skb->protocol == htons(ETH_P_IP) &&
-+				   skb->len > 64) {
-+				skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
-+				skb->ip_summed = CHECKSUM_COMPLETE;
- 			}
--		} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
--			   skb->protocol == htons(ETH_P_IP) &&
--			   skb->len > 64) {
--			skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
--			skb->ip_summed = CHECKSUM_COMPLETE;
--		}
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		 and	t2,t0
+ 		bnez	t2,fpu			# handle FPU immediately
+ #endif
+@@ -280,7 +280,7 @@ handle_it:
+ 		j	dec_irq_dispatch
+ 		 nop
  
--		netif_rx(skb);
-+			netif_rx(skb);
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ fpu:
+ 		lw	t0,fpu_kstat_irq
+ 		nop
+diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+index eaad0ed4b523..99b9b29750db 100644
+--- a/arch/mips/dec/setup.c
++++ b/arch/mips/dec/setup.c
+@@ -746,7 +746,8 @@ void __init arch_init_irq(void)
+ 		dec_interrupt[DEC_IRQ_HALT] = -1;
  
--		size += length;
--		packets++;
-+			size += length;
-+			packets++;
-+		}
+ 	/* Register board interrupts: FPU and cascade. */
+-	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
++	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT) &&
++	    dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
+ 		struct irq_desc *desc_fpu;
+ 		int irq_fpu;
  
- 		new_skb = netdev_alloc_skb_ip_align(ndev, lp->max_frm_size);
- 		if (!new_skb)
--			return;
-+			break;
- 
- 		phys = dma_map_single(ndev->dev.parent, new_skb->data,
- 				      lp->max_frm_size,
-@@ -905,7 +912,7 @@ static void axienet_recv(struct net_device *ndev)
- 			if (net_ratelimit())
- 				netdev_err(ndev, "RX DMA mapping error\n");
- 			dev_kfree_skb(new_skb);
--			return;
-+			break;
- 		}
- 		desc_set_phys_addr(lp, phys, cur_p);
- 
-@@ -913,6 +920,11 @@ static void axienet_recv(struct net_device *ndev)
- 		cur_p->status = 0;
- 		cur_p->skb = new_skb;
- 
-+		/* Only update tail_p to mark this slot as usable after it has
-+		 * been successfully refilled.
-+		 */
-+		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
-+
- 		if (++lp->rx_bd_ci >= lp->rx_bd_num)
- 			lp->rx_bd_ci = 0;
- 		cur_p = &lp->rx_bd_v[lp->rx_bd_ci];
 -- 
 2.34.1
 

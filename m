@@ -2,141 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFA44F67F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE3A4F67EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbiDFRrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S239509AbiDFRpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239603AbiDFRqt (ORCPT
+        with ESMTP id S239563AbiDFRoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:46:49 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2064.outbound.protection.outlook.com [40.107.100.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB881EF9ED;
-        Wed,  6 Apr 2022 09:25:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TYRcT7mPbhwwdZPcoYuqNHrSfR5WV/4TLH5JC1OnzkIL7lc7ji6EPhRGIS8uVd1P3/3oewL+M7uUgBjncv7I7wY8AMjNFozc63+DjsZ6G83ngFBaaBjN/1z8krvfaJEIxACP72k0v0z4BnNJ16D/benvW8HhQUslCaEYNhxutvn+i5YBSBTkYXNCLcuveFHjCsGe+PH2mOVhpzl7Nbqh9v610ZYEhoESPVJDUMUSj0s/ff6dRQSEmzzZdSJf60OrB4gp03Sbb/EkCy99hUCGFPu52k/loKSphfSjhSFQvb1FvPI6L/Ms6H+UPfZ7n2llCsay/RrGxr1zy979bDKdYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SSuG+TTQrF7JvNDFXM36ICYOKpgj3cvGI0R4ds5p1bU=;
- b=gUn1mKuxU1ktM2D57RbY31XLIjUlziAMXxMm1kPKcKwa5B1dDyvoaCMgcJJTG4W7AusOqWPIvbBde2OSU1SIJol6q8ajfB0TmeNzxKAXqQ1zTq87GiEWpEn/x2Hk+62taLsWnYooQ+DtX3KdelBubn5F/JCwpuvkP7qlABmZB2EdgPvQ80lAUtBAroGLr8np/XtVkru1/uB3ZCLQEt/p4UgLhEQomPfP3RIZvqdg0erixkh9nMmRtjN4JxW+yGmj68PSVnMlQ4yUI2BvBE7+NmgpdisOADm6wVQnC7M5qplntc2+GuA2Q0PNKT8JEydKTWzMMdSW5u4+QyNJoNKyCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SSuG+TTQrF7JvNDFXM36ICYOKpgj3cvGI0R4ds5p1bU=;
- b=l8b/krjP4NmpvoTPOdUJa9qAmsG4lLZjsLLOn34xwIUp5dxN1sPY1uYAHteFktpv2tsBjnIQhNtBjvX7Mv72jqndfp0hQ0sgTlGbL065DmVtt9orXrgI/SlpmYyltQ9WHOwgfBdIOZfPr0g4h/gC8kWZ4//BKEHKPViH81XdjivknNy8TzALiplV7nxREZdWSugtQ3+H4p5NsuXUqyuTk9za9vGuSCHweSxF4kUdR97/atXxvnppjUJD0NRz9XeS/MNZR0zOg6B0/V2G2QQhqpL6pmBwoUFgqzLABtpp00mPHhoWMZftbo/2hxhdjSKMKYi2meguyJrG2iDy6lEy9A==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by DM4PR12MB6012.namprd12.prod.outlook.com (2603:10b6:8:6c::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.31; Wed, 6 Apr 2022 16:25:17 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::3dbb:6c2c:eecf:a279]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::3dbb:6c2c:eecf:a279%6]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
- 16:25:17 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-CC:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bcache@vger.kernel.org" <linux-bcache@vger.kernel.org>,
-        "linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [PATCH 3/5] target/pscsi: remove pscsi_get_bio
-Thread-Topic: [PATCH 3/5] target/pscsi: remove pscsi_get_bio
-Thread-Index: AQHYSZjWHWW7ZY8LCk6qHnPXNgEM8KzjEpuA
-Date:   Wed, 6 Apr 2022 16:25:17 +0000
-Message-ID: <cdae813e-2e2d-8900-c48c-e36f3fc3314c@nvidia.com>
-References: <20220406061228.410163-1-hch@lst.de>
- <20220406061228.410163-4-hch@lst.de>
-In-Reply-To: <20220406061228.410163-4-hch@lst.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b69e6288-764e-456a-6631-08da17ea0995
-x-ms-traffictypediagnostic: DM4PR12MB6012:EE_
-x-microsoft-antispam-prvs: <DM4PR12MB6012E369A1F0FD1F65A7C152A3E79@DM4PR12MB6012.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JWuAhWb02X+5TwbHjumMFa8T1iMu7wHLneNkIQGrhXne8Uvyz62gIGdGy4dv2HDOcp1u8t33fB/8/bNWsYqFJeGseq/wVhhKyuvosJXDLbr1RhP96lDNxgllqi+8dIbENQafvz1IcqA2Jhs55bqIMl5vWPjHOp1RCZsRytFZvR8TptdZjyqjzzaH2QMGLdJD3lu+vnWaeaPO524cdp3+LNSeJkg6ScV9ZkJ7viCGUBbzSyDrnSFXJVkhYcNQO04Nmwdwm3+MvSJwFyJDaGN2FvzmByaWacUGNRCiBLenjas3wla65jSRC9Ry00pY6okHdZv9is6jkFJvmPWcJdE7bpHqcVeCAY29MiCGX04orQViYvRb8Cr6ETJ5eOPOg14zRqBZaHR7OL81Aj3/JjvnXWkyicp6dLzbKhoYsT770uViHX3kGNxUaaz8bvfgp7mDK1+fmj356MZekDQjSxHRWAZQdt3+SEFnlmOVT0KLw8b5M6ddEuOJC2d82XmAyzGvfaFMNyr+Mwj2RIiGlTZAWupBEth/i0dCh2xsJpFC1Qs7lKXCxOWqXSJiy6XAYTAUvdr6+itkkReCXInOdYf0GKxISkfjMeSuEdmxwiJP+RfbsyKpW6fYYe3TaRvpxJ9vLiDpHWn4A88iwL3pzHGAf1EMKEltP7jLfM3LyZyeETDqKpbUdoR1NagWGLkss45htSPOEXNJtkKwR8Wi+fzBgr7aCCCWgXVvsnqYO95gBDIug0F5tgGJkdy/yO5e99ROfB+hqYsXDJJwuGVLaNaTmg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6512007)(71200400001)(558084003)(86362001)(31686004)(38100700002)(54906003)(38070700005)(316002)(110136005)(31696002)(7416002)(4326008)(66556008)(66446008)(66476007)(2616005)(64756008)(36756003)(186003)(91956017)(66946007)(8936002)(6486002)(122000001)(6506007)(53546011)(76116006)(8676002)(508600001)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Rk56OUxkeUJER2ZZRU9aQ05QSC9UdVlCUFRGbEI5YUVLQ0N4a21OR0hldThW?=
- =?utf-8?B?UnM4Wi9vN0ptVTJxaEhQOGc5ZWZuRzBrZjhCRkkyWWpHUlg4RFBXTE5iUmRF?=
- =?utf-8?B?Qm9INXNSdDBabzFnRDFUSjc2bTVaeG9WMlJUYVN4dGZiYlg2K2FSd2g4emc4?=
- =?utf-8?B?aWU1ZEFJemFuOTZZUnozV0ZDL3MyRlVZMW1PdTlSeU1VeVB4KzhCTmJ6d0ls?=
- =?utf-8?B?Y1NpMjVHbmh6aVd6ZlZ6TjdzTUNjTDNITTNJVGdJQUR3dHJwRTB1NVhqVEY2?=
- =?utf-8?B?OWozZGpuKy9obzhiajNkeXkxby85U2h2RlY4eTlkUit1YitJWnBockdNT1dV?=
- =?utf-8?B?bUJ2Qjk3L20wN1VtZFFlSS9hc0ZITThvY1JXSysvUExEZFg4WEpHVllsWFN5?=
- =?utf-8?B?YjVHTjYweElRSm55RFZva2ErOGJVd0c0S1E1MG4xV3dTQVcrVlh6d05xcXpp?=
- =?utf-8?B?NUlhNkZoVEkxeEV0enoyM3JPejNGbGNXYkhuTkFXYUsrcFpwMVFGMmMrK0Fn?=
- =?utf-8?B?cXlBdVRMaEhKWFJ3STdZR216Qnc3YmNrTkJyejd2a1NTM2NDL1JpOWZNdzFS?=
- =?utf-8?B?VnZLUDdXQlJyck9SN3ZPWCtvNVg5bGNOUEZxb3JPcE5QUzJRblJ6dFR1OGtC?=
- =?utf-8?B?R1dsYUVOYkhlM2hwdzNtbUsrOEp2a2VEbU1objBsNmJWaG95ZGNoME93WVRI?=
- =?utf-8?B?UDNtZjVXQWpTOHIzdDNpZStFVkpGTklQb0h0TWlYWjVKUk5Kam1CVUt4MGk4?=
- =?utf-8?B?T0VVK0ZEYVl6QkcrUmE5dGNkUUl0ZWtnV1lkVC9YS0ttbnExeVNUMFU3UGo0?=
- =?utf-8?B?b0pWdGZvSTR1Zi9oWUo1SVN0eHNFMFR2d3RYYWhjbUhYR2ZaSDhuOEE3YjlC?=
- =?utf-8?B?YTBHZ2FCMWU5d20rNlJDQXB4bGhuOFR0UkZpZDdhL2FJa1J4V3V6WERBeTZ6?=
- =?utf-8?B?YklZTDdmMjN0bnNPalY1V1dVK2Z6QkhmSmVLeHl4SUNzLzAzQkRVWmdjNHFL?=
- =?utf-8?B?S0tIemNVWk5Eejh4Vk1iSm1SNndJM21Ub2xVVkFneUZ0enc5T0hVeHhod1B4?=
- =?utf-8?B?WkZpRTJGZTU4dHJ1TmVWZ0JRNmM2Z0pPSnh4RW5UT09mNUFQaUFXZ1hBRk5t?=
- =?utf-8?B?Ylc3eGplbVZhOGk4bG5JNjYvQ0VNMU5RbExFQUE0MWF1UHhvTGM5MUVoQzB4?=
- =?utf-8?B?ZnIyR3dnYVUydlY0YXhLbUU5MjJHZmZsQjhFd1VUcE9IMUtEZ0NmL2ZEVVJj?=
- =?utf-8?B?cjl2V09jbkJoWlZVdEhUU2VjUmVWZ1hQeWxZTXdCQ29GalZJVjR3dkFmLzlK?=
- =?utf-8?B?OVE0QjRaV2VISEUzbzV4OEc1NGlEYXNLVjVBVGUvQVMrS2VyYThJUldrR3Ux?=
- =?utf-8?B?R2VxTktPL0JtaTd6c2NZUDdZbmpKbm5XK01qQm9pVDlTN1ljOUNTYTZMNjlH?=
- =?utf-8?B?MmdZbE5UTUtxdWM3S3FwSmF1dEtxdTlISUVDNFZTalBWRklSclBGeHhrbmxL?=
- =?utf-8?B?MmhOV1pqV3g4VS9uVjF5N0QvbVRPUUpZWkpoeHNuaWVmUUx0Wlh4cHpWbGdH?=
- =?utf-8?B?N050ZUxGR0YvSHdzTEttWHdsdnd5ZHdXby9SK2d2bE1aTW5kZUFqbjdCM2wr?=
- =?utf-8?B?Rkpuck5wMVhqVHgyVHdpN3d6NWo2SVQyeXAzenNCOFliRWQ1ZmE2elo1bWkv?=
- =?utf-8?B?VGoycC9JQ21uczdieVJML0d2Y2x4UnBDbDZMb0IxVDZnWmVaS1ZQUFdFRGJn?=
- =?utf-8?B?emRpK3YzOTdRRE1pakYrYksyZzVralNFczd3SmsyZm9Fa0Y2YlRDZ211RXBi?=
- =?utf-8?B?ZmZrUDRNaUJGRmEwUkFXbjVIOW5tT3dldkFPV2pXOGNGT0hiVGlwcXpmSWEw?=
- =?utf-8?B?YlgrcTJHcys3d3N1RmpkY09vN3dLWFowTm4vRDBRTWtOanowZGs0VDcwMEVF?=
- =?utf-8?B?T3JTNklLeVdnK0FJaGF3a1FqVXZYcmJpdytES1hqeVUreUVLOXR5dXB1bmk4?=
- =?utf-8?B?akNMQ3dGamNvZFlGd3lPWG0vVSt6Wk5tc2FPWjg0RXhlYk1NcGd4NmlNY0cw?=
- =?utf-8?B?YzUwRVFwSVVpVFQ4bnUvYXhzZGpHQVI4dGY5YTFuZ01SdG5hV051bWlFQ29u?=
- =?utf-8?B?OUdubUtYNkVvZTdqWXkrRVB4Q2J5cXFiL0ZyRWswWUdDMkJPbTY3N0VlejdL?=
- =?utf-8?B?OFlWLys5RTg2NkJyZUNnbDh5aDJIMWZ2TElQMkRCb1lKQTl2OXpOUEJGdEZq?=
- =?utf-8?B?dGVlMDhuMFlDSXVZdjBGelNlTGNCb1Y2akU1MjlrYmI3akp0cTNDY0Z5bW5y?=
- =?utf-8?B?M01sL1hmekdFOXF4R2krYkVrUU0zL1JHWGRiQlRTNmFRWU12UVB6d3piYzJM?=
- =?utf-8?Q?54vp//spv2N8uNZg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9AC08EC06FA28B43A522A1B654D37A98@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 6 Apr 2022 13:44:06 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FC01107C1;
+        Wed,  6 Apr 2022 09:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649262372;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=AnMX7TkbQsYZjujSesbm1e03nqe/vrMABVeFbmvE/gQ=;
+    b=CzqlyCzSNamrGN9xtyvCgjPYpFLZ6SAcyGAnSf2BbkPE2lKoJdoMfwDwMeFkl5MkYV
+    hTm7X3dqLMwHBIlV5WGy6tyNwFNDyiXZf3/5BGTB+YVNXgPnBMMmYhlepsq7VqpxrL6Z
+    BwrIaWtq6J0fsCB5ysmWGrE80Nmh0RiF1joD0mv58tRfTHiznKovSc3CAJq8aTqkeg0p
+    M/WjuIfrPaPfiZD++a4AJtHwjagHKbNS0xEuN2F5HA31b6dJJaptx35d6aG3Zp+XdnlX
+    vdX/RWwLGrN5bNGTHfszOF02/e7gyqBd38oJtYA1yEYsM9AV4AMV2Y1KIXPXDmROPZsQ
+    gHrQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbgcbPa"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy36GQAgVL
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 6 Apr 2022 18:26:10 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: [PATCH v17 0/6] MIPS: JZ4780 and CI20 HDMI
+Date:   Wed,  6 Apr 2022 18:26:02 +0200
+Message-Id: <cover.1649262368.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b69e6288-764e-456a-6631-08da17ea0995
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2022 16:25:17.5981
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4GvzuKuP8ypM0k8f8ythGutz/HEUIpjW6QTgcXilQNpNV90L5nGzEFdUJpWPaS/hvdoJdWres/hZo0pglhlikQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6012
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,9 +67,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNC81LzIyIDIzOjEyLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gUmVtb3ZlIHBzY3Np
-X2dldF9iaW8gYW5kIHNpbXBsaWZ5IHRoZSBjb2RlIGZsb3cgaW4gdGhlIG9ubHkgY2FsbGVyLg0K
-PiANCj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoIEhlbGx3aWcgPGhjaEBsc3QuZGU+DQo+IEFj
-a2VkLWJ5OiBNYXJ0aW4gSy4gUGV0ZXJzZW4gPG1hcnRpbi5wZXRlcnNlbkBvcmFjbGUuY29tPg0K
-PiAtLS0NCj4NCg0KTG9va3MgZ29vZC4NCg0KUmV2aWV3ZWQtYnk6IENoYWl0YW55YSBLdWxrYXJu
-aSA8a2NoQG52aWRpYS5jb20+DQoNCi1jaw0KDQoNCg==
+PATCH V17 2022-04-06 18:26:08:
+* removed our local attempts to enable HPD because
+  "drm/bridge_connector: enable HPD by default if supported"
+  became available and solves the issue globally (by nikita.yoush@cogentembedded.com)
+* add new mechanism to disable Color Space Conversion (by narmstrong@baylibre.com)
+* rebased to v5.18-rc1 based drm-misc/drm-misc-next 
+
+PATCH V16 2022-02-26 18:13:02:
+* fixed and renamed dw-hdmi bus negotiation patch (by narmstrong@baylibre.com)
+* reordered and merged HPD fix (suggested by paul@crapouillou.net)
+* fixed MODULE_ALIAS for dw-hdmi-ingenic (reported by paul@crapouillou.net)
+* dropped some already merged commits from the series
+
+PATCH V15 2022-02-12 16:50:54:
+* remove already (elsewhere) merged commits (suggested by paul@crapouillou.net)
+* clarify commit message for (now) 1/7 ((suggested by paul@crapouillou.net))
+
+PATCH V14 2022-02-12 15:19:25:
+* make compatible to c03d0b52ff71d5 ("drm/connector: Fix typo in output format")
+* move "dw-hdmi/ingenic-dw-hdmi: repair interworking with hdmi-connector" before
+  drm/ingenic: Add dw-hdmi driver specialization for jz4780 (by paul@crapouillou.net)
+* split introduction of dw_hdmi_enable_poll() into separate patch
+* explicitly mark plane f0 as not working in jz4780 (suggested by paul@crapouillou.net)
+* drop 1/9 since it is now in drm-misc/drm-misc-next
+
+PATCH V13 2022-02-02 17:31:22:
+* 7/9: remove call to gpiod_set_value() because of GPIOD_OUT_HIGH (by paul@crapouillou.net)
+* 4/9: replace ".." by "." (by paul@crapouillou.net)
+* 3/9: remove old hdmi-5v-power in the example (by paul@crapouillou.net)
+* 2/9: disable handling of plane f0 only for jz4780 (by paul@crapouillou.net)
+
+PATCH V12 2022-01-31 13:26:54:
+This version reworks how hdmi ddc power is controlled by connector and not
+by ddc/hdmi bridge driver.
+
+Also some patches of the previous version of this series have been removed
+since they are already applied to mips-next/linux/next/v5.17-rc1.
+
+Fixes and changes:
+
+- repair interworking of dw-hdmi with connector-hdmi (by hns@goldelico.com)
+- fix JZ_REG_LCD_OSDC setup for jz4780 (by hns@goldelico.com and paul@crapouillou.net)
+- adjustments for ci20.dts to use connector gpio for +5v (suggested by several)
+- to add control of "ddc-en-gpios" to hdmi-connector driver (by hns@goldelico.com)
+- regulator code removed because we now use the "ddc-en-gpios" of the connector
+  driver (suggested by paul@crapouillou.net)
+- bindings: addition of "ddc-i2c-bus" and "hdmi-5v-supply" removed (suggested by robh+dt@kernel.org)
+- rebase on v5.17-rc2
+
+PATCH V11 2021-12-02 19:39:52:
+- patch 4/8: change devm_regulator_get_optional to devm_regulator_get and
+             remove NULL check (requested by broonie@kernel.org)
+- patch 3/8: make hdmi-5v-supply required (requested by broonie@kernel.org)
+
+PATCH V10 2021-11-30 22:26:41:
+- patch 3/8: fix $id and $ref paths (found by robh@kernel.org)
+
+PATCH V9 2021-11-24 22:29:14:
+- patch 6/8: remove optional <0> for assigned-clocks and unintentionally included "unwedge" setup (found by paul@crapouillou.net)
+- patch 4/8: some cosmetics
+             make regulator enable/disable only if not NULL (found by paul@crapouillou.net)
+             simplify/fix error handling and driver cleanup on remove (proposed by paul@crapouillou.net)
+- patch 3/8: fix #include path in example (found by paul@crapouillou.net)
+             fix missing "i" in unevaluatedProperties (found by robh@kernel.org)
+             fix 4 spaces indentation for required: property (found by robh@kernel.org)
+
+PATCH V8 2021-11-23 19:14:00:
+- fix a bad editing result from patch 2/8 (found by paul@crapouillou.net)
+
+PATCH V7 2021-11-23 18:46:23:
+- changed gpio polarity of hdmi_power to 0 (suggested by paul@crapouillou.net)
+- fixed LCD1 irq number (bug found by paul@crapouillou.net)
+- removed "- 4" for calculating max_register (suggested by paul@crapouillou.net)
+- use unevaluatedPropertes instead of additionalProperties (suggested by robh@kernel.org)
+- moved and renamed ingenic,jz4780-hdmi.yaml (suggested by robh@kernel.org)
+- adjusted assigned-clocks changes to upstream which added some for SSI (by hns@goldelico.com)
+- rebased and tested with v5.16-rc2 + patch set drm/ingenic by paul@crapouillou.net (by hns@goldelico.com)
+
+PATCH V6 2021-11-10 20:43:33:
+- changed CONFIG_DRM_INGENIC_DW_HDMI to "m" (by hns@goldelico.com)
+- made ingenic-dw-hdmi an independent platform driver which can be compiled as module
+  and removed error patch fixes for IPU (suggested by paul@crapouillou.net)
+- moved assigned-clocks from jz4780.dtsi to ci20.dts (suggested by paul@crapouillou.net)
+- fixed reg property in jz4780.dtsi to cover all registers incl. gamma and vee (by hns@goldelico.com)
+- added a base patch to calculate regmap size from DTS reg property (requested by paul@crapouillou.net)
+- restored resetting all bits except one in LCDOSDC (requested by paul@crapouillou.net)
+- clarified setting of cpos (suggested by paul@crapouillou.net)
+- moved bindings definition for ddc-i2c-bus (suggested by paul@crapouillou.net)
+- simplified mask definitions for JZ_LCD_DESSIZE (requested by paul@crapouillou.net)
+- removed setting alpha premultiplication (suggested by paul@crapouillou.net)
+- removed some comments (suggested by paul@crapouillou.net)
+
+PATCH V5 2021-10-05 14:28:44:
+- dropped mode_fixup and timings support in dw-hdmi as it is no longer needed in this V5 (by hns@goldelico.com)
+- dropped "drm/ingenic: add some jz4780 specific features" (stimulated by paul@crapouillou.net)
+- fixed typo in commit subject: "synopsis" -> "synopsys" (by hns@goldelico.com)
+- swapped clocks in jz4780.dtsi to match synopsys,dw-hdmi.yaml (by hns@goldelico.com)
+- improved, simplified, fixed, dtbschecked ingenic-jz4780-hdmi.yaml and made dependent of bridge/synopsys,dw-hdmi.yaml (based on suggestions by maxime@cerno.tech)
+- fixed binding vs. driver&DTS use of hdmi-5v regulator (suggested by maxime@cerno.tech)
+- dropped "drm/bridge: synopsis: Fix to properly handle HPD" - was a no longer needed workaround for a previous version
+  (suggested by maxime@cerno.tech)
+
+PATCH V4 2021-09-27 18:44:38:
+- fix setting output_port = 1 (issue found by paul@crapouillou.net)
+- ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+- add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+- added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on plugin event detection (by hns@goldelico.com)
+- always allocate extended descriptor but initialize only for jz4780 (by hns@goldelico.com)
+- updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various improvements v3" (by paul@crapouillou.net)
+- rebased to v5.13-rc3
+
+PATCH V3 2021-08-08 07:10:50:
+This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
+- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
+  - the call to the dw-hdmi specialization is still called mode_fixup
+- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
+  - factor out some non-HDMI features of the jz4780 into a separate patch
+  - multiple fixes around max height
+  - do not change regmap config but a copy on stack
+  - define some constants
+  - factor out fixing of drm_init error path for IPU into separate patch
+  - use FIELD_PREP()
+- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
+
+PATCH V2 2021-08-05 16:08:05:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+
+This series adds HDMI support for JZ4780 and CI20 board
+
+
+
+H. Nikolaus Schaller (2):
+  drm/bridge: dw-hdmi: add YCBCR formats only if CSC is available
+  drm/bridge: display-connector: add ddc-en gpio support
+
+Neil Armstrong (2):
+  drm/bridge: dw-hdmi: filter out YUV output formats when DVI
+  drm/bridge: dw-hdmi: handle unusable or non-configured CSC module
+
+Paul Boddie (1):
+  drm/ingenic: Add dw-hdmi driver specialization for jz4780
+
+Paul Cercueil (1):
+  drm/ingenic: Implement proper .atomic_get_input_bus_fmts
+
+ drivers/gpu/drm/bridge/display-connector.c |  15 +++
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c  | 119 ++++++++++++++-------
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.h  |   1 +
+ drivers/gpu/drm/ingenic/Kconfig            |   9 ++
+ drivers/gpu/drm/ingenic/Makefile           |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c  |  28 ++++-
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c  | 104 ++++++++++++++++++
+ include/drm/bridge/dw_hdmi.h               |   1 +
+ 8 files changed, 238 insertions(+), 40 deletions(-)
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+
+-- 
+2.33.0
+

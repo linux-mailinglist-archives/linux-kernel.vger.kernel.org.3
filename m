@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56F94F61EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D614F61BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiDFOhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S234781AbiDFOYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiDFOg5 (ORCPT
+        with ESMTP id S234915AbiDFOYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:36:57 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DBDFA230
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:22:36 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CC70E2C0BAC;
-        Wed,  6 Apr 2022 03:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1649215353;
-        bh=mXnQPTdwXZABT724bcpv2tV11X8gLgKFjGXaRni4dNc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S5a9CIy0vPGAbMklG2y6tFSilemtmmIy08SiSMMiuUS5HVA0z28leirY3KHl910sI
-         U+KdZU3eT/fYFw+wOGu16PiPgpJvZGY0GBcF0VNJx+W8TKkxRcAaOScQgAXvMCsHZq
-         eKufN7jtH4iY1Ez5C71wYAWh1j+S7Nu0NJN/MecNw1n0yF/k5RN24gCyAEvxZT/di9
-         mqrDJd0TACWSC/7n7bA+Uh7VbuNwba6bOqb54K2Pul7MNg9M6jo+kmxzpQktGYG3IH
-         1YRongIl0BcQU5/g7SKJ/Obxqda8pVyectDIQrsKI6vY4QSB2twyPuUN+uSNotJOg+
-         M5x++NQUGmdDw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B624d07790004>; Wed, 06 Apr 2022 15:22:33 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 47B3113EEAD;
-        Wed,  6 Apr 2022 15:22:33 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id B62C32A2679; Wed,  6 Apr 2022 15:22:28 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v3 4/4] arm64: marvell: enable the 98DX2530 pinctrl driver
-Date:   Wed,  6 Apr 2022 15:21:58 +1200
-Message-Id: <20220406032158.1449049-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
-References: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
+        Wed, 6 Apr 2022 10:24:18 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88AE21A889;
+        Tue,  5 Apr 2022 21:00:13 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id i7so1213426oie.7;
+        Tue, 05 Apr 2022 21:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RNgdmhlHV2YaSa/8H1LqQR7tgjnE4yKMr+9iZaYLTy0=;
+        b=CNXSfdN0vlC+dcxnEiGotzlyZ3nX8n5QmGM4NQ1xPcl+h6NXek2ZH1Iz7i/G/wcHTg
+         DKcedZk24zwH4K2CpZDUhNCVAfNtnML3GDWIeRuzZHhk7fTC5LHms+MYfmaLFZt3GSiO
+         zw6In0OYiewjcP6bE5VGN1rQA4U2jE9Tm2tCmG80P65W59aNvXXpCIRa3UPHmTFQ6qxt
+         wrcpwI+Z7P3PKYWeVCWPXG+ABXiVTIxU1IRL0tkxKIMK/eA57xnhhtUODrU90TIybiHQ
+         kffSrPedlRQHjTBfbIEkc1RNpvrSNQgPzqMbi+LZ2ju46ijSxEFnDiJbBG0H1k9Z1UhP
+         7y6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RNgdmhlHV2YaSa/8H1LqQR7tgjnE4yKMr+9iZaYLTy0=;
+        b=OPStaCFapyNlQCD11hq3ANJJiWJb7n7uJS/VIH+CcxsqTxu8EKCyb6Kugemh7ifGxU
+         QFXCTU+oKcF2jeElZ+YBlx3m0dkvcyIKhsRih7NZof5SpGdRwJzdTTx2oUPvpjdzV8r5
+         1b2do2EC35uNrZaeXhbY7R1SB76Ee/DgXCWkH1QJFi0ybOeTAE2JTlzTUbTiAAfaEyyo
+         a0haQqn4Rw0yDiZHuw76orXlyRV32WTdxvt1JbnhV56myHHhdVJ2WeWb06UC44U+XshZ
+         Fya9LEVnCepCAi56FJwnWewFYpylDiBOh8zCLcgfe2oZVZJVU3rEcDz659xJAZAm3S9r
+         b84g==
+X-Gm-Message-State: AOAM533MqO/BuGHjmTcwSDSRph/3VN4lw/QX7JrrPv9sbtyul8p4GoIQ
+        PdCrYNeD/AAu46SdvKica10=
+X-Google-Smtp-Source: ABdhPJwBP63iKmYCkyaS8cxnP7aItx5dZ69nnJCiisBuK5RtmB5pZuoUHTSPJMwn0czM4ZAFOlGMZg==
+X-Received: by 2002:a05:6808:ab1:b0:2ec:a6fa:7251 with SMTP id r17-20020a0568080ab100b002eca6fa7251mr2709381oij.180.1649217613364;
+        Tue, 05 Apr 2022 21:00:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w22-20020acaad16000000b002d9c98e551bsm5926097oie.36.2022.04.05.21.00.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 21:00:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <074eef95-05b5-1e29-32ed-c2fe13d88c1d@roeck-us.net>
+Date:   Tue, 5 Apr 2022 21:00:10 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=JcrCUnCV c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=z0gMJWrwH1QA:10 a=XQcNo-tEeLJW46c85tUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Sasha Levin <sashal@kernel.org>
+References: <20220405070258.802373272@linuxfoundation.org>
+ <20220406010749.GA1133386@roeck-us.net>
+ <20220406023025.GA1926389@roeck-us.net>
+ <20220405225212.061852f9@gandalf.local.home>
+ <20220405230812.2feca4ed@gandalf.local.home>
+ <20220405232413.6b38e966@gandalf.local.home>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220405232413.6b38e966@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit makes sure the drivers for the 98DX2530 pin controller is
-enabled.
+On 4/5/22 20:24, Steven Rostedt wrote:
+> On Tue, 5 Apr 2022 23:08:12 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+>> Here's a thought, if you decide to backport a patch to stable, and you see
+>> that there's another commit with a "Fixes" tag to the automatically
+>> selected commit. DO NOT BACKPORT IF THE FIXES PATCH FAILS TO GO BACK TOO!
+> 
+> Seriously. This should be the case for *all* backported patches, not just
+> the AUTOSEL ones.
+> 
+> Otherwise you are backporting a commit to "stable" that is KNOWN TO BE
+> BROKEN!
+> 
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
+Agreed.
 
-Notes:
-    Changes in v3:
-    - Add review from Andrew
-    Changes in v2:
-    - None
-
- arch/arm64/Kconfig.platforms | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 21697449d762..6bbb56901794 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -183,11 +183,13 @@ config ARCH_MVEBU
- 	select PINCTRL_ARMADA_37XX
- 	select PINCTRL_ARMADA_AP806
- 	select PINCTRL_ARMADA_CP110
-+	select PINCTRL_AC5
- 	help
- 	  This enables support for Marvell EBU familly, including:
- 	   - Armada 3700 SoC Family
- 	   - Armada 7K SoC Family
- 	   - Armada 8K SoC Family
-+	   - 98DX2530 SoC Family
-=20
- config ARCH_MXC
- 	bool "ARMv8 based NXP i.MX SoC family"
---=20
-2.35.1
-
+Guenter

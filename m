@@ -2,147 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8341C4F6744
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A481B4F674A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiDFR31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S239019AbiDFRaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239051AbiDFR2o (ORCPT
+        with ESMTP id S239245AbiDFRaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:28:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AFB42487BB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649259086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SXqsmr5lOmq1DC0O01EgBHNJ75YfihYQ9afQo8lccGQ=;
-        b=TZq4ajl5Qj9CFq1SOFgMmgLLV2hlFvybOXtVkgh+q4r0y+xruxvNgNy+5zQhyzexPyT8iu
-        3WFlZnjdw6zHGhYBKVsVpMVFVYbSTlaLOCHhknhca6iiDD9P7PjKkfyAt56D86KZujEXnV
-        1I/megxU+RCHn3q4MOt4pTqV+qz40NI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-379-xBqnpCVCO7uZ7-6CbIkFvA-1; Wed, 06 Apr 2022 11:31:25 -0400
-X-MC-Unique: xBqnpCVCO7uZ7-6CbIkFvA-1
-Received: by mail-wm1-f72.google.com with SMTP id j6-20020a05600c1c0600b0038e7d07ebcaso766314wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:31:25 -0700 (PDT)
+        Wed, 6 Apr 2022 13:30:13 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAD1136643
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:33:41 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id q14so3696261ljc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V2MKXaDi/1jNYC/yBJ1BrH+QH08TMzML0ERK28N60DY=;
+        b=SLAyyGFjinRL8kaGFHMoza109mTD3uqyOJGHii9BPON0ZPD8zZ2GegVCMABiZIf92u
+         mwJXveOBoX3NpkmgodISPHevXOGq7XiOcgfR00OXb/1sTCN5v/eCljZDTh0j/xYyEmCE
+         i/dxVYR7ZSv7AHEIffHQTAorD19scopZBLnVbMDqEbcc4lEYFFX3gyiZUd1HQxBEgXPD
+         6bF8LStWUJzYpZnZH1X6cdcrEeLnusqLziJVEcNjhFqOv9IrtZVifv82qv5l6e5MqULN
+         IEoq0jnK0LUT34ETn1ZAebxZnSpE5SSVxsRx9BnmWm9a9Yf+EH4QHb8CcojpbN71phbo
+         tWtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SXqsmr5lOmq1DC0O01EgBHNJ75YfihYQ9afQo8lccGQ=;
-        b=pJ6SuWNH0FYm1GNE1MUeNUVhrU/Mb1u3zWGsyMjFGaw4/Z3BswgfW0IX1o4nOzjTY8
-         g9iFvVjyfVh4tXViaH6qZG2p1fjjGmfKcezIlt+Yp3tLd6XlOsOH5gzZqKiqBEBAMODG
-         yzjBnowjPp3e31zrp9errGm3AgCaWi+JKqrm++H6NULYr1Z5oROlhRiwdG71wCHvRoTg
-         l25xqG8mG3pUCU//IgIY3lu4a9n+OlCykIPypOqZ6Q/2GWbKOF6jjwjfjgI0yVKi2r7V
-         c79FtptrnDKChQemfj9bvqF185tOZ/gQA+rxEr8JliOuabNAIxSo8ymR0H//ECij3slR
-         pQiA==
-X-Gm-Message-State: AOAM531XIEhf5Wn3bkR0sEGvhhtjaOTWuk98JZlI7VeWtNgbJl2ui5DI
-        pbyqzF99uz2xVC6ufNtDAMe1hmeR1IXs4QC5ClgJGKO+9VN1WEJOfefPpf3HOc3ULunKk4GkdpW
-        9BQVkm5f1obAJ6rLKt8gT2OLb
-X-Received: by 2002:a05:600c:3511:b0:38c:d035:cddb with SMTP id h17-20020a05600c351100b0038cd035cddbmr8039413wmq.74.1649259084176;
-        Wed, 06 Apr 2022 08:31:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzMJUIuOfCAWCV1KjhYntMj29VSsQUoSZ2t6duktlX1OxSHrnPzc0hHgltLl0oDc5ne7fB2BQ==
-X-Received: by 2002:a05:600c:3511:b0:38c:d035:cddb with SMTP id h17-20020a05600c351100b0038cd035cddbmr8039392wmq.74.1649259083924;
-        Wed, 06 Apr 2022 08:31:23 -0700 (PDT)
-Received: from redhat.com ([2.55.156.253])
-        by smtp.gmail.com with ESMTPSA id 14-20020a056000154e00b00203f8adde0csm18525600wry.32.2022.04.06.08.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 08:31:22 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 11:31:19 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, peterz@infradead.org,
-        maz@kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, tglx@linutronix.de,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH V2 4/5] virtio-pci: implement synchronize_vqs()
-Message-ID: <20220406112858-mutt-send-email-mst@kernel.org>
-References: <20220406083538.16274-1-jasowang@redhat.com>
- <20220406083538.16274-5-jasowang@redhat.com>
- <20220406075952-mutt-send-email-mst@kernel.org>
- <87wng2e527.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V2MKXaDi/1jNYC/yBJ1BrH+QH08TMzML0ERK28N60DY=;
+        b=kqOk+pwvoKvF7/0XvAk/07Anlq+ydt2YceOenew/VV1iBYEaIuGJLZlXwzoyXk5ycP
+         TjY0bP0Hzydty6IrhPWfyU15deCU1sy1u/GlRkNmuPj5bAY+pn9fWRwQjVoZ6X/q1ieB
+         hB1Heop2KsM8mo1bfpj7BmH7NvRqkQ219QjnbxK9HhrUgUN2XT+V48I9OBxnBkvjozQb
+         q1K/yURvYhRhH34gn7N4EZ2gvBKh83fLcWzET6KptQs4XwAU26krvZpGDFaO+xE6Lj0W
+         vbupshfxMeGaSmxpxxmZc2E1qsJD4VsLLHizrCQLIXQF44/w32pgGGkRqnnYD5xuPRXQ
+         kxmw==
+X-Gm-Message-State: AOAM532WfYdUububHo849AA5+O24JDwcvtAJqwC6SI2nwRqbZS0YRpkY
+        +uaw5XIj3FCTQceq3aF5inpLj10dyVkcd+APb7e8iA==
+X-Google-Smtp-Source: ABdhPJzreYUYPZpbVpzkaPv5TENoYSI5dAupQC5/q42OXgAWYqF9DUZh8BLgg57J3IYFZOeGcNNC0cXGZ9hbHJddLsc=
+X-Received: by 2002:a2e:b8cc:0:b0:249:a2b5:8e16 with SMTP id
+ s12-20020a2eb8cc000000b00249a2b58e16mr5867735ljp.381.1649259219699; Wed, 06
+ Apr 2022 08:33:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wng2e527.fsf@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1649244204-23471-1-git-send-email-zgpeng@tencent.com>
+ <CAKfTPtDh7qFpdjsEBvT34WEgW8uGbdwsZnyXjq4KpAcOse9Pew@mail.gmail.com> <CAE5vP3=ZPGV=PuYb-WJsoQ8tX4yDAjajT_WRU+7gAiW54XgX_g@mail.gmail.com>
+In-Reply-To: <CAE5vP3=ZPGV=PuYb-WJsoQ8tX4yDAjajT_WRU+7gAiW54XgX_g@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 6 Apr 2022 17:33:28 +0200
+Message-ID: <CAKfTPtA8VjZ-F3vdiKJtpij6PUxu_OR7-54cG6NcS_K7guHF6g@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Return the busiest group only if imbalance is meaningful
+To:     =?UTF-8?B?5b2t5b+X5Yia?= <zgpeng.linux@gmail.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org,
+        Benjamin Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:04:32PM +0200, Cornelia Huck wrote:
-> On Wed, Apr 06 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> 
-> > On Wed, Apr 06, 2022 at 04:35:37PM +0800, Jason Wang wrote:
-> >> This patch implements PCI version of synchronize_vqs().
-> >> 
-> >> Cc: Thomas Gleixner <tglx@linutronix.de>
-> >> Cc: Peter Zijlstra <peterz@infradead.org>
-> >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> >> Cc: Marc Zyngier <maz@kernel.org>
-> >> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> >
-> > Please add implementations at least for ccw and mmio.
-> 
-> I'm not sure what (if anything) can/should be done for ccw...
-> 
-> >
-> >> ---
-> >>  drivers/virtio/virtio_pci_common.c | 14 ++++++++++++++
-> >>  drivers/virtio/virtio_pci_common.h |  2 ++
-> >>  drivers/virtio/virtio_pci_legacy.c |  1 +
-> >>  drivers/virtio/virtio_pci_modern.c |  2 ++
-> >>  4 files changed, 19 insertions(+)
-> >> 
-> >> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-> >> index d724f676608b..b78c8bc93a97 100644
-> >> --- a/drivers/virtio/virtio_pci_common.c
-> >> +++ b/drivers/virtio/virtio_pci_common.c
-> >> @@ -37,6 +37,20 @@ void vp_synchronize_vectors(struct virtio_device *vdev)
-> >>  		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
-> >>  }
-> >>  
-> >> +void vp_synchronize_vqs(struct virtio_device *vdev)
-> >> +{
-> >> +	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
-> >> +	int i;
-> >> +
-> >> +	if (vp_dev->intx_enabled) {
-> >> +		synchronize_irq(vp_dev->pci_dev->irq);
-> >> +		return;
-> >> +	}
-> >> +
-> >> +	for (i = 0; i < vp_dev->msix_vectors; ++i)
-> >> +		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
-> >> +}
-> >> +
-> 
-> ...given that this seems to synchronize threaded interrupt handlers?
+On Wed, 6 Apr 2022 at 17:07, =E5=BD=AD=E5=BF=97=E5=88=9A <zgpeng.linux@gmai=
+l.com> wrote:
+>
+> YES. The following are specific scenarios where negative values occur:
+>
+>
+>
+> The scheduler domain contains four groups, namely groupA, groupB, groupC,=
+ and groupD;
+>
+> The types and avg_load conditions of the four groups are as follows
+>
+>
+>
+> GroupA    TYPE=3D group_fully_busy     avg_load=3D10        [local group]
+>
+>
+>
+> GroupB    TYPE=3D group_has_spare     avg_load=3D1
+>
+> GroupC    TYPE=3D group_has_spare     avg_load=3D1
+>
+> GroupD    TYPE=3D group_overloaded    avg_load=3D20      [busiest group]
+>
+>
+>
+> The CPU that calls load_balance is located in groupA, and update_sd_lb_st=
+ats will select the busiest group in GroupB, groupC, and
+>
+> groupD, that is, gorupD. Under this condition, other judgments in the fin=
+d_busiest_group function will be bypassed and the
+>
+> calculate_imbalance function will be called. The judgment in the middle o=
+f the calculate_imbalance function cannot stop this
+>
+> situation, and it will go to the imbalance calculate logic at the end of =
+the function.At this time, the domain's avg_load=3D8, but
+>
+>  the local_groupthe's avg_load=3D10; The negative value is therefore gene=
+rated.
 
-No, any handlers at all. The point is to make sure any memory changes
-made prior to this op are visible to callbacks.
+I think that this case should be covered by an additional test in
+calculate_imbalance because we should not try to pull load in groupA
+if it's already above  the average load. Something like below should
+cover this
 
-Jason, maybe add that to the documentation?
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9469,6 +9469,16 @@ static inline void calculate_imbalance(struct
+lb_env *env, struct sd_lb_stats *s
 
-> Halil, do you think ccw needs to do anything? (AFAICS, we only have one
-> 'irq' for channel devices anyway, and the handler just calls the
-> relevant callbacks directly.)
+                sds->avg_load =3D (sds->total_load * SCHED_CAPACITY_SCALE) =
+/
+                                sds->total_capacity;
++
++               /*
++                * Don't pull any tasks if this group is already above the
++                * domain average load.
++                */
++               if (local->avg_load >=3D sds->avg_load) {
++                       env->imbalance =3D 0;
++                       return;
++               }
++
+                /*
+                 * If the local group is more loaded than the selected
+                 * busiest group don't try to pull any tasks.
 
-Then you need to synchronize with that.
-
-> >>  /* the notify function used when creating a virt queue */
-> >>  bool vp_notify(struct virtqueue *vq)
-> >>  {
-
+>
+>
+> Vincent Guittot <vincent.guittot@linaro.org> =E4=BA=8E2022=E5=B9=B44=E6=
+=9C=886=E6=97=A5=E5=91=A8=E4=B8=89 20:59=E5=86=99=E9=81=93=EF=BC=9A
+>>
+>> On Wed, 6 Apr 2022 at 13:23, zgpeng <zgpeng.linux@gmail.com> wrote:
+>> >
+>> > When calculate_imbalance function calculate the imbalance, it may
+>> > actually get a negative number. In this case, it is meaningless to
+>>
+>> We should not return a negative imbalance but I suppose this can
+>> happen when we are using the avg_load metrics to calculate imbalance.
+>> Have you faced a use case where imbalance is negative ?
+>>
+>> > return the so-called busiest group and continue to search for the
+>> > busiest cpu later. Therefore, only when the imbalance is greater
+>> > than 0 should return the busiest group, otherwise return NULL.
+>> >
+>> > Signed-off-by: zgpeng <zgpeng@tencent.com>
+>> > Reviewed-by: Samuel Liao <samuelliao@tencent.com>
+>> > ---
+>> >  kernel/sched/fair.c | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> > index 601f8bd..9f75303 100644
+>> > --- a/kernel/sched/fair.c
+>> > +++ b/kernel/sched/fair.c
+>> > @@ -9639,7 +9639,7 @@ static struct sched_group *find_busiest_group(st=
+ruct lb_env *env)
+>> >  force_balance:
+>> >         /* Looks like there is an imbalance. Compute it */
+>> >         calculate_imbalance(env, &sds);
+>> > -       return env->imbalance ? sds.busiest : NULL;
+>> > +       return env->imbalance > 0 ? sds.busiest : NULL;
+>> >
+>> >  out_balanced:
+>> >         env->imbalance =3D 0;
+>> > --
+>> > 2.9.5
+>> >

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D6A4F6776
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B1A4F67B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239210AbiDFRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S238897AbiDFRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbiDFR3M (ORCPT
+        with ESMTP id S239105AbiDFR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 13:29:12 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0D39BDA4;
-        Wed,  6 Apr 2022 08:31:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCE439A693;
+        Wed,  6 Apr 2022 08:31:41 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 236FUcaV017647;
+        by conuserg-08.nifty.com with ESMTP id 236FUcaW017647;
         Thu, 7 Apr 2022 00:30:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaV017647
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaW017647
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649259043;
-        bh=MSswAqHKy8lumNzIx8NJz222QuH49EevUg0//UJ/VHI=;
+        s=dec2015msa; t=1649259044;
+        bh=xi61ivU7WXkz9So9Rg07E0Isc4c3Oyfk6ijcms131ig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2WiwkMWqu8zQm5jY/anENgoCn2uKrKOwBEQxbI2qActQkkO6n8qv0Rf35ACThYE/7
-         yqJJrUkO7Cq8uYtm7Bd8QRR1BVyfa62yX6P2jXBrrhpWaVIgsqYwsp82y41cfxcGGX
-         Nry7828J+weffsZX0HJk8vccKnbWSnjFQp3TfjKN187yDN2Ol0wqU1sui+MHZpyyLb
-         AsUUbOS/thK45e0zdp4Tu04wZxQwJg5JgzEpZowJ1Kz6qM5l2uXuwQ0+0h7QLZNSna
-         g0CGBpLQJ/wWgfsk0HRe/ta3rrTz5MM9MFQcj4mWTbOUpDobe+F4NbyuZkW89bav5o
-         +YfKXy7qchqvA==
+        b=l/IgoVgbWFj4IWz0iLgxZnxikrdfuYjVN6WHn7/uITderaEbd7ocTNr8lMizOBJZF
+         92dFshMCkZoro3xeyINSpOoNGu3R9SpiwiRDVQtS3w0pLoiVtJwmuN0/hWbp7MQwC8
+         +au02BeAuOnZhIAKNolJ3KRjBGo7KFVcfYXW7hpGIToMoFPPQrdZgmzH2cBy+QcSVL
+         gU11ko1P5ByatlJPIlEjvqP8rVja0eyYLhTzp3zzFwC2fFFneD1BDhKX8R1gPvBw//
+         oF498F8fSyPQMTy8vC+nsfhrvLdHulLRcDCYQ1lHuCu8SV8yeRSNE/OCgES+dKeAeK
+         k4zfy3YU1ZmVQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 6/7] kbuild: make *.mod not depend on *.o
-Date:   Thu,  7 Apr 2022 00:30:22 +0900
-Message-Id: <20220406153023.500847-7-masahiroy@kernel.org>
+Subject: [PATCH 7/7] kbuild: read *.mod to get objects passed to $(LD) or $(AR)
+Date:   Thu,  7 Apr 2022 00:30:23 +0900
+Message-Id: <20220406153023.500847-8-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220406153023.500847-1-masahiroy@kernel.org>
 References: <20220406153023.500847-1-masahiroy@kernel.org>
@@ -53,67 +53,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dependency
+ld and ar support @file, which command-line options are read from.
 
-    $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o
+Now that *.mod lists the member objects in the correct order, without
+duplication, it is ready to be passed to ld and ar.
 
-... exists because *.mod files previously contained undefined symbols,
-which are computed from *.o files when CONFIG_TRIM_UNUSED_KSYMS=y.
-
-Now that the undefined symbols are put into separate *.usyms files,
-there is no reason to make *.mod depend on *.o files.
+By using the @file syntax, people will not be worried about the pitfall
+described in the NOTE.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile               | 3 ++-
- scripts/Makefile.build | 5 ++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ scripts/Makefile.build | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 82ee893909e9..e915aacd02b0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1792,7 +1792,8 @@ ifdef single-build
- 
- # .ko is special because modpost is needed
- single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
--single-no-ko := $(sort $(patsubst %.ko,%.mod, $(MAKECMDGOALS)))
-+single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
-+		$(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
- 
- $(single-ko): single_modpost
- 	@:
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index f7a30f378e20..3da731cf6978 100644
+index 3da731cf6978..f6a506318795 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -85,7 +85,7 @@ ifdef need-builtin
- targets-for-builtin += $(obj)/built-in.a
+@@ -450,22 +450,18 @@ quiet_cmd_ar_lib = AR      $@
+ $(obj)/lib.a: $(lib-y) FORCE
+ 	$(call if_changed,ar_lib)
+ 
+-# NOTE:
+-# Do not replace $(filter %.o,^) with $(real-prereqs). When a single object
+-# module is turned into a multi object module, $^ will contain header file
+-# dependencies recorded in the .*.cmd file.
+ ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+ quiet_cmd_link_multi-m = AR [M]  $@
+ cmd_link_multi-m =						\
+ 	$(cmd_update_lto_symversions);				\
+ 	rm -f $@; 						\
+-	$(AR) cDPrsT $@ $(filter %.o,$^)
++	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+ else
+ quiet_cmd_link_multi-m = LD [M]  $@
+-      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ $(filter %.o,$^)
++      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@)
  endif
  
--targets-for-modules := $(foreach x, mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
-+targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
- 				$(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
- 
- ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
-@@ -306,7 +306,7 @@ endif
- cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
- 	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
- 
--$(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
-+$(obj)/%.mod: FORCE
- 	$(call if_changed,mod)
- 
- # List module undefined symbols
-@@ -469,7 +469,6 @@ $(multi-obj-m): FORCE
+-$(multi-obj-m): FORCE
++$(multi-obj-m): %.o: %.mod FORCE
  	$(call if_changed,link_multi-m)
  $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
  
--targets += $(multi-obj-m)
- targets := $(filter-out $(PHONY), $(targets))
- 
- # Add intermediate targets:
 -- 
 2.32.0
 

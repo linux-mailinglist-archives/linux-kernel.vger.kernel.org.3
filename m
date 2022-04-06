@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A624F5E09
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79714F5E32
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiDFMp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        id S229809AbiDFMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiDFMoq (ORCPT
+        with ESMTP id S230281AbiDFMiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:44:46 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7304F58967D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:47:55 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KYJ5F57xNzgYR6;
-        Wed,  6 Apr 2022 16:46:09 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 16:47:53 +0800
-Subject: Re: [PATCH] mm/swapfile: unuse_pte can map random data if swap read
- fails
-To:     Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220401072926.45051-1-linmiaohe@huawei.com>
- <ac13a529-5000-19c9-bbd8-3ee634a923cc@redhat.com>
- <Ykr8l0sUOtAa3yUY@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <23943d63-1fc4-68ce-938f-0f9b53950710@huawei.com>
-Date:   Wed, 6 Apr 2022 16:47:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <Ykr8l0sUOtAa3yUY@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 6 Apr 2022 08:38:14 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337B85A1143
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:40:29 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DB4771A1E84;
+        Wed,  6 Apr 2022 10:40:11 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 914A81A1784;
+        Wed,  6 Apr 2022 10:40:11 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id AE8E8183AC4F;
+        Wed,  6 Apr 2022 16:40:09 +0800 (+08)
+From:   Sandor.yu@nxp.com
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com
+Cc:     Sandor.yu@nxp.com, shengjiu.wang@nxp.com, cai.huoqing@linux.dev,
+        maxime@cerno.tech, harry.wentland@amd.com,
+        hverkuil-cisco@xs4all.nl, amuel@sholland.org
+Subject: [PATCH v1 1/5] drm: bridge: dw_hdmi: cec: Add cec suspend/resume function
+Date:   Wed,  6 Apr 2022 16:48:33 +0800
+Message-Id: <27380b83a1b17419a35a13e29a86a1989204d1c3.1649230434.git.Sandor.yu@nxp.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1649230434.git.Sandor.yu@nxp.com>
+References: <cover.1649230434.git.Sandor.yu@nxp.com>
+In-Reply-To: <cover.1649230434.git.Sandor.yu@nxp.com>
+References: <cover.1649230434.git.Sandor.yu@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/4 22:11, Matthew Wilcox wrote:
-> On Mon, Apr 04, 2022 at 03:37:36PM +0200, David Hildenbrand wrote:
->> On 01.04.22 09:29, Miaohe Lin wrote:
->>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
->>> page filled with random data is mapped into user address space. The fix
->>> is to check for PageUptodate and fail swapoff in case of error.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  mm/swapfile.c | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/mm/swapfile.c b/mm/swapfile.c
->>> index 63c61f8b2611..e72a35de7a0f 100644
->>> --- a/mm/swapfile.c
->>> +++ b/mm/swapfile.c
->>> @@ -1795,6 +1795,10 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->>>  		ret = 0;
->>>  		goto out;
->>>  	}
->>> +	if (unlikely(!PageUptodate(page))) {
->>> +		ret = -EIO;
->>> +		goto out;
->>> +	}
->>
->> Yeah, we have the same handling in do_swap_page(), whereby we send a
->> SIGBUS because we're dealing with an actual access.
->>
->> Interestingly, folio_test_uptodate() states:
->>
->> "Anonymous and CoW folios are always uptodate."
->>
->> @Willy, is that true or is the swapin case not documented there?
-> 
-> Why do we keep a !Uptodate page in the swap cache?  If it can't be
-> read in from swap, I thought we just freed the page.  Since Miaohe
+From: Sandor Yu <Sandor.yu@nxp.com>
 
-We could free the bad page. But we still need a way to prevent user from
-accessing the wrong data.
+CEC interrupt status/mask and logical address registers
+will be reset when device enter suspend.
+It will cause cec fail to work after device resume.
+Add CEC suspend/resume functions, save these registers status
+when suspend and restore them when resume.
 
-> has observed that not happening, I guess it doesn't work that way,
-> but why not make it work that way?
+Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-How could we make it work that way? Could you please tell me in more detail?
-Or any suggestions?
-
-Many thanks!
-
-> 
-> .
-> 
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
+index c8f44bcb298a..ceb619b32fde 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
+@@ -18,6 +18,8 @@
+ 
+ #include "dw-hdmi-cec.h"
+ 
++static u8 cec_saved_regs[5];
++
+ enum {
+ 	HDMI_IH_CEC_STAT0	= 0x0106,
+ 	HDMI_IH_MUTE_CEC_STAT0	= 0x0186,
+@@ -306,11 +308,44 @@ static int dw_hdmi_cec_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int __maybe_unused dw_hdmi_cec_resume(struct device *dev)
++{
++	struct dw_hdmi_cec *cec = dev_get_drvdata(dev);
++
++	/* Restore logical address and interrupt status/mask register */
++	dw_hdmi_write(cec, cec_saved_regs[0], HDMI_CEC_ADDR_L);
++	dw_hdmi_write(cec, cec_saved_regs[1], HDMI_CEC_ADDR_H);
++	dw_hdmi_write(cec, cec_saved_regs[2], HDMI_CEC_POLARITY);
++	dw_hdmi_write(cec, cec_saved_regs[3], HDMI_CEC_MASK);
++	dw_hdmi_write(cec, cec_saved_regs[4], HDMI_IH_MUTE_CEC_STAT0);
++
++	return 0;
++}
++
++static int __maybe_unused dw_hdmi_cec_suspend(struct device *dev)
++{
++	struct dw_hdmi_cec *cec = dev_get_drvdata(dev);
++
++	/* store logical address and interrupt status/mask register */
++	cec_saved_regs[0] = dw_hdmi_read(cec, HDMI_CEC_ADDR_L);
++	cec_saved_regs[1] = dw_hdmi_read(cec, HDMI_CEC_ADDR_H);
++	cec_saved_regs[2] = dw_hdmi_read(cec, HDMI_CEC_POLARITY);
++	cec_saved_regs[3] = dw_hdmi_read(cec, HDMI_CEC_MASK);
++	cec_saved_regs[4] = dw_hdmi_read(cec, HDMI_IH_MUTE_CEC_STAT0);
++
++	return 0;
++}
++
++static const struct dev_pm_ops dw_hdmi_cec_pm = {
++	SET_SYSTEM_SLEEP_PM_OPS(dw_hdmi_cec_suspend, dw_hdmi_cec_resume)
++};
++
+ static struct platform_driver dw_hdmi_cec_driver = {
+ 	.probe	= dw_hdmi_cec_probe,
+ 	.remove	= dw_hdmi_cec_remove,
+ 	.driver = {
+ 		.name = "dw-hdmi-cec",
++		.pm = &dw_hdmi_cec_pm,
+ 	},
+ };
+ module_platform_driver(dw_hdmi_cec_driver);
+-- 
+2.25.1
 

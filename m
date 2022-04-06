@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F914F60CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE21D4F60D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiDFOOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S234555AbiDFOPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbiDFONd (ORCPT
+        with ESMTP id S234625AbiDFOO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:13:33 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C575C584C71
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:15:38 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id y38so3173350ybi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 03:15:38 -0700 (PDT)
+        Wed, 6 Apr 2022 10:14:59 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE64581F91
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:15:54 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bq8so3194211ejb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 03:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aGlYozd/u0p+alDYCmgtZVDQtB4EX/1Tk30HxGGPobs=;
-        b=pIutILDmfbfBS8Bf8yziDEp5NJ48RV5jCQQ/UovICb6waLboX1s/S/sBT9MinxAFcZ
-         szGpV3w1jR2qJuYykkiYAFGMcDmcVuKsQenK0EfzgkNe5mlL5HVEsOaIBd6dizkT+l+z
-         ZXnb63dmZNn//Be19R6LliDUpKQ4j7F/DxHwzVSWCPtUIfjKFU+TYHF29Kxhs/HaVY74
-         aRC0+AJfXzcA6ZwJZchNWOGwLLoATfV9TqoPOy+ARX+B8nPGdefjjvHTsApw3F2PJsCC
-         fjXvFA3nDeAcU4xaMq3+n+yIvvBqP84aTG5lH4QK1DYe8gCgFywnf1k6nWffsz8mS3Rp
-         g4vQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HN/hF2T3o28nadQ/y5E5FRCAcOOGpgeMQA27qzydwpk=;
+        b=MMkvKuoQYytHazFBhOjpMZjxYYrtKeORw+InYDqcKGeVymCLGqtah92z4+ZMSzGe+G
+         ByUKULQY/X790HdqbYC02VUOeRPdFLvPn72GkQINU8/NXh7wf+sEnQR5P8KjVDX10J/0
+         HSo0Hi+x2Yo9MWjxv/OaOLT+CqwIWbn46iIWJJPzXt62NayMr/CFO11vxCTwciz2g7HK
+         cwPOWIY9pcrWeXISMIiuglYFC9RCv7reuqsSxPqnB+C5T/EWo8wJnF7O3ZXIfxRK0t1H
+         guCc+6pPY+VlLuiKVlSvMWkGoDkRXMfq6wJ8Uwiy11zrYRJ+0y2QDqkyN3sKtKmnG8Fe
+         sJxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aGlYozd/u0p+alDYCmgtZVDQtB4EX/1Tk30HxGGPobs=;
-        b=Q+/czXbYPKLrU68hZMvaI3ioPpMvHLscKqhWorI1N6KvhhurxrtO42BD8i1kJylLBv
-         rUO1CJebPwiL8tlzfSbplUU4bOUV2x9rZrLBi92htMaHYYUP4M6xA90tefXRGvxAVFfs
-         S5O+B+gY3yC33dJVR5aJWolRqyU2iBZ82RkcsfBdDfv/NtUOK9a23Ftwrp/BeANFnO1a
-         SH+XsOGxpVtWG+DfUcC0xsEI7f/x7fRXhv75qgP+LnPaNRHkyTXzVvkZRTaibNh2f2Kp
-         /9s4a1Sjdm1TJ56X9DpPJXzRY6LWJJoXvdLjg5+Ey3k89kJlhB9y7pyyYGkn4r1VVYfF
-         Gd1A==
-X-Gm-Message-State: AOAM5314l9k1BrkS/PtM4tfYdI9kANn11S+JOtaJyuFibblgwPJR1Lsm
-        Ug6reXSGPeb/3ARKniwNkL/3j0RtS1cnpJ9smiySsA==
-X-Google-Smtp-Source: ABdhPJwWGczytXLXaFe0awziXqKzgrA3L+DnLVRUhBhfQZDOp9WwBMyGYgLlsRpyBuLb44w3Fae5khIPEGtqroP6XpQ=
-X-Received: by 2002:a25:6e85:0:b0:63d:b37a:3d3b with SMTP id
- j127-20020a256e85000000b0063db37a3d3bmr5585013ybc.128.1649240117389; Wed, 06
- Apr 2022 03:15:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HN/hF2T3o28nadQ/y5E5FRCAcOOGpgeMQA27qzydwpk=;
+        b=m2RXWDPhdHOnvHOGlkZnS+cHWBVc0DcLk5eLUcBfzlLmMLVnKTb4cFHfYAsX4XL3q3
+         gN10mOfvtheB3vy3k8filnCrpir+wH4AbeiEtqoZYO+uJY1g71kTToQng+Po7xyA9kWj
+         D/gypT2Fui7QWCsmomva/0yE8bIEzN1/dcIo5lvRAILp7rr/2I95LL52tg4O3/+g36hS
+         v+PjFq78G5q2XwboNeIZ2kFj/iPiA686cOtLQniF2d/pUeiV0CkrClugtsIZ4CR4071o
+         kJwuaNAQw8mLmSm8M3V4emtPBhWOgBvC12mGAFX1Lly1GPDaXG+pHEHGlrDAxjRk5RUW
+         m+Fg==
+X-Gm-Message-State: AOAM530V1je+5yyxfWZ2ZAYfirN8eaVaU128UX9R73ymYH9zRUhQPr+t
+        vSBF8pKGxqr9ZZ+YMm6Tbk67LCbGuwyLuwYk
+X-Google-Smtp-Source: ABdhPJwP2X65GMx2JGHx74yiRVoSvObt6GnPixnyHYFkcaqt58Yv47hkGnTFGA/62d/3gvFpIh0Xnw==
+X-Received: by 2002:a17:906:6a02:b0:6d7:cda:2cf7 with SMTP id qw2-20020a1709066a0200b006d70cda2cf7mr7292595ejc.53.1649240150485;
+        Wed, 06 Apr 2022 03:15:50 -0700 (PDT)
+Received: from [192.168.0.184] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05640211d100b00419357a2647sm7949702edw.25.2022.04.06.03.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 03:15:49 -0700 (PDT)
+Message-ID: <4ad9e733-7d8b-a73b-c59e-d9b6d5e58498@linaro.org>
+Date:   Wed, 6 Apr 2022 12:15:48 +0200
 MIME-Version: 1.0
-References: <20220405070339.801210740@linuxfoundation.org>
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 6 Apr 2022 15:45:05 +0530
-Message-ID: <CA+G9fYuSPtAB1xxGepBzmKa7ZFq9QR3Nk6RfhfU5vNhXGpTECg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] extcon: ptn5150: add usb role class support
+Content-Language: en-US
+To:     Li Jun <jun.li@nxp.com>, myungjoo.ham@samsung.com,
+        cw00.choi@samsung.com
+Cc:     linux-kernel@vger.kernel.org, frank.li@nxp.com, xu.yang_2@nxp.com
+References: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,186 +74,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 at 14:50, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.33 release.
-> There are 913 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.33-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 06/04/2022 11:42, Li Jun wrote:
+> Add support of usb role class consumer to do role switch.
+
+Please mention also why you are doing this.
+
+> 
+> Signed-off-by: Li Jun <jun.li@nxp.com>
+> ---
+>  drivers/extcon/Kconfig          |  1 +
+>  drivers/extcon/extcon-ptn5150.c | 39 +++++++++++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
+> 
+> diff --git a/drivers/extcon/Kconfig b/drivers/extcon/Kconfig
+> index 0d42e49105dd..9828ade787a8 100644
+> --- a/drivers/extcon/Kconfig
+> +++ b/drivers/extcon/Kconfig
+> @@ -132,6 +132,7 @@ config EXTCON_PTN5150
+>  	tristate "NXP PTN5150 CC LOGIC USB EXTCON support"
+>  	depends on I2C && (GPIOLIB || COMPILE_TEST)
+>  	select REGMAP_I2C
+> +	select USB_ROLE_SWITCH
+
+You do not need to select it. Driver will work without role switch,
+won't it? If it works, then probably it should be just imply.
+
+>  	help
+>  	  Say Y here to enable support for USB peripheral and USB host
+>  	  detection by NXP PTN5150 CC (Configuration Channel) logic chip.
+> diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
+> index 5b9a3cf8df26..821b0f390308 100644
+> --- a/drivers/extcon/extcon-ptn5150.c
+> +++ b/drivers/extcon/extcon-ptn5150.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/extcon-provider.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/usb/role.h>
+>  
+>  /* PTN5150 registers */
+>  #define PTN5150_REG_DEVICE_ID			0x01
+> @@ -52,6 +53,7 @@ struct ptn5150_info {
+>  	int irq;
+>  	struct work_struct irq_work;
+>  	struct mutex mutex;
+> +	struct usb_role_switch *role_sw;
+>  };
+>  
+>  /* List of detectable cables */
+> @@ -85,6 +87,12 @@ static void ptn5150_check_state(struct ptn5150_info *info)
+>  		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, false);
+>  		gpiod_set_value_cansleep(info->vbus_gpiod, 0);
+>  		extcon_set_state_sync(info->edev, EXTCON_USB, true);
+> +
+> +		ret = usb_role_switch_set_role(info->role_sw, USB_ROLE_DEVICE);
+> +		if (ret)
+> +			dev_err(info->dev, "failed to set device role: %d\n",
+> +				ret);
+> +
+>  		break;
+>  	case PTN5150_UFP_ATTACHED:
+>  		extcon_set_state_sync(info->edev, EXTCON_USB, false);
+> @@ -95,6 +103,12 @@ static void ptn5150_check_state(struct ptn5150_info *info)
+>  			gpiod_set_value_cansleep(info->vbus_gpiod, 1);
+>  
+>  		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, true);
+> +
+> +		ret = usb_role_switch_set_role(info->role_sw, USB_ROLE_HOST);
+> +		if (ret)
+> +			dev_err(info->dev, "failed to set host role: %d\n",
+> +				ret);
+> +
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Instead of having usb_role_switch_set_role() in two places, how about:
+1. setting local variable to USB_ROLE_HOST/USB_ROLE_NONE
+2. return on default
+3. one call to usb_role_switch_set_role() outside of the case?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Should create less code.
 
-NOTE:
-Anders enabled extra kconfigs to reproduce Shuah reported build regression
-and proposed two additional two commits for the fix.
+>  		break;
+>  	default:
+>  		break;
+> @@ -133,6 +147,13 @@ static void ptn5150_irq_work(struct work_struct *work)
+>  			extcon_set_state_sync(info->edev,
+>  					EXTCON_USB, false);
+>  			gpiod_set_value_cansleep(info->vbus_gpiod, 0);
+> +
+> +			ret = usb_role_switch_set_role(info->role_sw,
+> +						       USB_ROLE_NONE);
+> +			if (ret)
+> +				dev_err(info->dev,
+> +					"failed to set none role: %d\n",
+> +					ret);
+>  		}
+>  	}
+>  
+> @@ -194,6 +215,14 @@ static int ptn5150_init_dev_type(struct ptn5150_info *info)
+>  	return 0;
+>  }
+>  
+> +static void ptn5150_put_role_sw(void *data)
+> +{
+> +	struct ptn5150_info *info = data;
+> +
+> +	cancel_work_sync(&info->irq_work);
 
-## Build
-* kernel: 5.15.33-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: 841880eaff92b260de5b0fe749c05c6371bcc78c
-* git describe: v5.15.32-914-g841880eaff92
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.32-914-g841880eaff92
+This looks independent and should be executed always - even if getting
+role_sw in probe does not succeed.
 
-## Test Regressions (compared to v5.15.32-902-g1a1c2efda160)
-No test regressions found.
+> +	usb_role_switch_put(info->role_sw);
+> +}
+> +
 
-## Metric Regressions (compared to v5.15.32-902-g1a1c2efda160)
-No metric regressions found.
 
-## Test Fixes (compared to v5.15.32-902-g1a1c2efda160)
-No test fixes found.
 
-## Metric Fixes (compared to v5.15.32-902-g1a1c2efda160)
-No metric fixes found.
-
-## Test result summary
-total: 101817, pass: 85899, fail: 973, skip: 13901, xfail: 1044
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

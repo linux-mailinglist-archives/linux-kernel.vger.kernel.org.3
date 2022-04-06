@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E802B4F57F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89B64F5865
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238762AbiDFI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S1355057AbiDFJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357081AbiDFIYK (ORCPT
+        with ESMTP id S1444720AbiDFI4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:24:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EA1FE41C;
-        Tue,  5 Apr 2022 18:20:13 -0700 (PDT)
+        Wed, 6 Apr 2022 04:56:01 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667F9593A0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:20:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7A2861978;
-        Wed,  6 Apr 2022 01:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 25B47C385A6;
-        Wed,  6 Apr 2022 01:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649208012;
-        bh=dC3v0I2tbjatrppFTcXtArePWkg3Hg3WP7/TXZKrEYI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=eU31G606J6itN38BjoJvPTgXdZX9D6h9QYMA93UzZGQsHvHjkWfL9P1Z4yEkPTWHb
-         G3qrb/qmquK50artxYNOA9piMh4BLAOUIN58X0tAES7w+/jBtFNCU6g33XJqczHuRz
-         yWrn3ed6ij3wseUkl4Dwdg7Kwhj2wTUDNSBo35R4rZADwjoolI0EIfJfXc985Wpenf
-         MP9j1o4rp00XelBQh4vY5Ts3i4PpwY0XyPd7YwBDbGW2tvJy1UeerC1YJmANox8guI
-         BqPF+gOqzyoAgDLTEgA15s/CDi0+9cpNX3B1COEASNaHS03QAkyUQFPuA0qIjCRZy+
-         S7Y8QgH5UBkYQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A490E85BCB;
-        Wed,  6 Apr 2022 01:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by sin.source.kernel.org (Postfix) with ESMTPS id A5BF3CE1FE9
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12E6C385A1;
+        Wed,  6 Apr 2022 01:20:34 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 21:20:32 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
+ __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
+ vlv_allow_gt_wake.cold+0x0
+Message-ID: <20220405212032.3d858b31@gandalf.local.home>
+In-Reply-To: <87czhv11k1.ffs@tglx>
+References: <202204041241.Hw855BWm-lkp@intel.com>
+        <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
+        <20220406000500.5hlaqy5zrdqsg5mg@treble>
+        <87czhv11k1.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: micrel: Fix KS8851 Kconfig
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164920801203.3942.12236675927293580268.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 01:20:12 +0000
-References: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        Divya.Koppera@microchip.com, lkp@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, 06 Apr 2022 02:46:22 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> This covers the trace_printk() case which uses do_trace_printk(), but
+> the same problem exists in trace_puts() and ftrace_vprintk()...., no?
 
-On Tue, 5 Apr 2022 08:59:36 +0200 you wrote:
-> KS8851 selects MICREL_PHY, which depends on PTP_1588_CLOCK_OPTIONAL, so
-> make KS8851 also depend on PTP_1588_CLOCK_OPTIONAL.
-> 
-> Fixes kconfig warning and build errors:
-> 
-> WARNING: unmet direct dependencies detected for MICREL_PHY
->   Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
->     Selected by [y]:
->       - KS8851 [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && SPI [=y]
-> 
-> [...]
+Hmm, I'm not even sure why ftrace_vprintk() is there. It seems redundant.
 
-Here is the summary with links:
-  - [net] net: micrel: Fix KS8851 Kconfig
-    https://git.kernel.org/netdev/net/c/1d7e4fd72bb9
+Arnaldo,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Was there a reason for it. The commit that added it isn't very descriptive.
+
+commit 9011262a37cb438f0fa9394b5e83840db8f9680a
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Fri Jan 23 12:06:23 2009 -0200
+
+    ftrace: add ftrace_vprintk
+    
+    Impact: new helper function
+    
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+    Signed-off-by: Ingo Molnar <mingo@elte.hu>
 
 
+-- Steve

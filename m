@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4A94F671F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EB64F674E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239325AbiDFRdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S239078AbiDFRdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239533AbiDFRcs (ORCPT
+        with ESMTP id S239209AbiDFRda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:32:48 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09B021E19
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jzSTEJQcGfGZ7JxkMk9H1mBl0JJZpFa9fo6uzqvky2Q=;
-  b=sGIk5oEDLdgRxABX5JIFjj+a2Kwz7ZcKwYfWPfcBi5oloLW25ieCgVX/
-   iZY2U4Tiz6RogGzLu2VXuXumoCAbtyqXBs8t6/aRFgKMPg6hWiQ+j5wF8
-   0Qfe7ljgfV39td61LZ7Ny1ypPWU0gjUPh0ww4ZnvjbDemrUPJFdQcKLOj
-   E=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,240,1643670000"; 
-   d="scan'208";a="30395387"
-Received: from unknown (HELO hadrien) ([95.128.147.62])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 17:37:48 +0200
-Date:   Wed, 6 Apr 2022 17:37:43 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: remove Unnecessary parentheses
-In-Reply-To: <20220406152858.14076-1-eng.alaamohamedsoliman.am@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204061735340.2349@hadrien>
-References: <20220406152858.14076-1-eng.alaamohamedsoliman.am@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 6 Apr 2022 13:33:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB852AC2;
+        Wed,  6 Apr 2022 08:38:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA4E4B824B4;
+        Wed,  6 Apr 2022 15:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BD0C385A1;
+        Wed,  6 Apr 2022 15:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649259527;
+        bh=j/cHGt1Adp/5ckJatmOAtFz8YwOh1uG9kyL0/rqOdAI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZxMGCv64eYBNc1avTLYsfD8OTSDZAzQlny1jcKpgW7cpaNUn7n2lzRAB8KA+0J+lc
+         blAso325sUH2hSDdGMBvrLnlq7sBAn7rt+3e0nMPFHgiaqm3WW7oDk8r6r0EjD/33C
+         3zJFZhJkYKMkbll+HRI/2m9zRNN7EtPN7AGtPU93fqfe75x7mw7W9LpfxSs0yNy968
+         c3gGMTbxAhAO8iPe+QiMSfuQiT/dcs7TPgHbp29GUwEK7hdb12Zraumk5vV7L3JElu
+         /kqCfIhCb3N2mHJnynG8r5EIciy+D8KcqFnwwcCTHtxXDyo3TtxOG/OZ8g9SvONgYu
+         KHxSDu2GKbKkg==
+Received: by mail-pg1-f172.google.com with SMTP id 32so401846pgl.4;
+        Wed, 06 Apr 2022 08:38:47 -0700 (PDT)
+X-Gm-Message-State: AOAM5337yWeQjhOnkwDS/9Yjpru+wrCkCn8NxLoNwYn9VxRJskoZjcQu
+        SqA58Rt2YUuKdS3yQDGfQFReG/vMCsVLdW/MfLU=
+X-Google-Smtp-Source: ABdhPJx6nrBYoOc7Poen+QC3GhpAJV8qLRa+XzbVgFrkIodhg2moVi8VEmGesevH2qrojOojIBiXA0F7l3qLHy9jsCo=
+X-Received: by 2002:a05:6a00:1501:b0:4fb:2d19:b6a8 with SMTP id
+ q1-20020a056a00150100b004fb2d19b6a8mr9579739pfu.21.1649259526810; Wed, 06 Apr
+ 2022 08:38:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220326022728.2969-1-jianjun.wang@mediatek.com> <06c9f2f8236f8dab6b27da9db0332b4ca45a1039.camel@mediatek.com>
+In-Reply-To: <06c9f2f8236f8dab6b27da9db0332b4ca45a1039.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 6 Apr 2022 17:38:35 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfWH-XSogkWVy0Q5LcHSk9SXinR7AA_Odo-oTc32y1Ykg@mail.gmail.com>
+Message-ID: <CAJKOXPfWH-XSogkWVy0Q5LcHSk9SXinR7AA_Odo-oTc32y1Ykg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] phy: mediatek: Add PCIe PHY driver
+To:     Jianjun Wang <jianjun.wang@mediatek.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wei-Shun Chang <weishunc@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If you want to capitalize something in the subject, it could be the first
-word.  Capitalizing the second word is a bit strange.
+On Wed, 6 Apr 2022 at 07:47, Jianjun Wang <jianjun.wang@mediatek.com> wrote:
+>
+> Hello Maintainers,
+>
+> Is there anything I can do to get these patches merged?
 
-On Wed, 6 Apr 2022, Alaa Mohamed wrote:
+Patience. :) You posted a patch during the merge window which finished
+three days ago, so basically one can assume you ping folks after three
+days. Three days is too fast for pinging. :(
 
-> Reported by checkpatch:
->
-> CHECK: Unnecessary parentheses
-
-Indicating that the problem was detected by checkpatch is good.  But
-actually, the parentheses all have the same property.  So you could use
-the log message to describe what kind of unnecessary parentheses were
-removed.  That would help the maintainer know what to look for.
-
-julia
-
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> ---
->  drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> index 3b6926613257..6c692ad7bde7 100644
-> --- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> +++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> @@ -82,9 +82,9 @@ static inline void handle_pairwise_key(struct sta_info *psta,
->  	       (param->u.crypt. key_len > 16 ? 16 : param->u.crypt.key_len));
->  	if (strcmp(param->u.crypt.alg, "TKIP") == 0) { /* set mic key */
->  		memcpy(psta->tkiptxmickey. skey,
-> -		       &(param->u.crypt.key[16]), 8);
-> +		       &param->u.crypt.key[16], 8);
->  		memcpy(psta->tkiprxmickey. skey,
-> -		       &(param->u.crypt.key[24]), 8);
-> +		       &param->u.crypt.key[24], 8);
->  		padapter->securitypriv. busetkipkey = false;
->  		mod_timer(&padapter->securitypriv.tkip_timer,
->  			  jiffies + msecs_to_jiffies(50));
-> @@ -600,7 +600,7 @@ static int r8711_wx_get_name(struct net_device *dev,
->  	u32 ht_ielen = 0;
->  	char *p;
->  	u8 ht_cap = false;
-> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
->  	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
->  	u8 *prates;
->
-> @@ -1996,7 +1996,7 @@ static int r871x_get_ap_info(struct net_device *dev,
->  		}
->  		plist = plist->next;
->  	}
-> -	spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock), irqL);
-> +	spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock, irqL);
->  	if (pdata->length >= 34) {
->  		if (copy_to_user((u8 __user *)pdata->pointer + 32,
->  		    (u8 *)&pdata->flags, 1))
-> --
-> 2.35.1
->
->
->
+Best regards,
+Krzysztof

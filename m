@@ -2,96 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C004F6602
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7CE4F65F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238206AbiDFQxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S238059AbiDFQxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238323AbiDFQwr (ORCPT
+        with ESMTP id S238333AbiDFQwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 12:52:47 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D517C11FE07
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 07:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649257017; x=1680793017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F/U+cj87UvGy5lLxu2syFQGQxJxfbuLpFf8x7D/NyD4=;
-  b=VysKwanJ++NfYcHoIcpt6ZK34rFJEferTR2GzGrAdqCCtOL4KlqM5a/7
-   ACzBF1i2PTIOfc034jrtLF6glUgW4EfS5nkH5bYN/bjEGfk+Ll3K6bCyq
-   KvS08MdW6Y07yvVKJBOQea0svTqqxDJA4MFS0kH9T0Z3wiKrQPxDMdlnp
-   kMxkfESx8De47UnT55y9FfZraAwL0HQ5QRNdhUuJusu/MVVOhJXg55Fku
-   8GjPY2JEUehBZyqBDWG+ywNlUYSJ2PcSAw+dLSUotBAKey6F7gUVkoSmv
-   SBYQIG+yGU1IQqP6BhuqJUTTu1owPkp2VGNk5fZY5CuziCzYVi3xh652Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243209608"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="243209608"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 07:56:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="588410796"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 07:56:52 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 06 Apr 2022 17:56:50 +0300
-Date:   Wed, 6 Apr 2022 17:56:50 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <Yk2qMt568oEeTj8H@lahna>
-References: <YkRtf2HiXBOWGjna@lahna>
- <eacc22dc-e650-a208-9484-62edd98d5778@fnarfbargle.com>
- <YkXYdcUZ1E18ENle@lahna>
- <5dcee6f7-cc8c-e3ce-920c-4ad3f5d77e14@fnarfbargle.com>
- <YkcMofXKr/ZmOSwH@lahna>
- <7ea44c20-6c65-224f-af7b-aa1bd310d038@fnarfbargle.com>
- <YkrEE0uh9EVCchfl@lahna>
- <d112651d-919d-ce2d-efac-6abbd9de0f07@fnarfbargle.com>
- <YkrqL/wnACNVOpSi@lahna>
- <ae336e2d-8e7c-9167-ab3d-8d642cd4fb2c@fnarfbargle.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A85233C;
+        Wed,  6 Apr 2022 07:57:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52C1212FC;
+        Wed,  6 Apr 2022 07:57:02 -0700 (PDT)
+Received: from e121896.arm.com (unknown [10.57.10.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 750D23F73B;
+        Wed,  6 Apr 2022 07:57:00 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     acme@kernel.org, linux-perf-users@vger.kernel.org,
+        john.garry@huawei.com
+Cc:     alexandre.truong@arm.com, James Clark <james.clark@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        German Gomez <german.gomez@arm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: Don't show unwind error messages when augmenting frame pointer stack
+Date:   Wed,  6 Apr 2022 15:56:51 +0100
+Message-Id: <20220406145651.1392529-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae336e2d-8e7c-9167-ab3d-8d642cd4fb2c@fnarfbargle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Commit b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf
+record --call-graph=fp'") intended to add a 'best effort' Dwarf unwind
+that improved the frame pointer stack in most scenarios. It's expected
+that the unwind will fail sometimes, but this shouldn't be reported as
+an error. It only works when the return address can be determined from
+the contents of the link register alone.
 
-On Wed, Apr 06, 2022 at 10:51:41AM +0800, Brad Campbell wrote:
-> Both included in-line.
-> 
-> This is cold boot with the chain plugged in. I've re-added the dbg to
-> print the link number, and I've included your path discovery debugs.
-> Boot with chain plugged in, wait for it to settle, unplug and replug.
-> First head in the chain fails with :
-> 
-> [   65.778129] [drm:radeon_dp_link_train [radeon]] *ERROR* displayport link status failed
-> [   65.778158] [drm:radeon_dp_link_train [radeon]] *ERROR* clock recovery failed
+Fix the error shown when the unwinder requires extra registers by adding
+a new flag that suppresses error messages. This flag is not set in the
+normal --call-graph=dwarf unwind mode so that behavior is not changed.
 
-Thanks for the logs! 
+Reported-by: John Garry <john.garry@huawei.com>
+Fixes: b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/tests/dwarf-unwind.c                     |  2 +-
+ .../perf/util/arm64-frame-pointer-unwind-support.c  |  2 +-
+ tools/perf/util/machine.c                           |  2 +-
+ tools/perf/util/unwind-libdw.c                      | 10 +++++++---
+ tools/perf/util/unwind-libdw.h                      |  1 +
+ tools/perf/util/unwind-libunwind-local.c            | 10 +++++++---
+ tools/perf/util/unwind-libunwind.c                  |  6 ++++--
+ tools/perf/util/unwind.h                            | 13 ++++++++++---
+ 8 files changed, 32 insertions(+), 14 deletions(-)
 
-The DP tunnels look pretty much the same except that the Apple EFI CM
-seems to assign 7 buffers for the AUX RX path first hop whereas we
-always use 1 buffer. Not sure if that really makes a difference and we
-could try to use the same number but first, I realized that the PCI
-resource allocation seems not to work properly.
+diff --git a/tools/perf/tests/dwarf-unwind.c b/tools/perf/tests/dwarf-unwind.c
+index 2dab2d262060..afdca7f2959f 100644
+--- a/tools/perf/tests/dwarf-unwind.c
++++ b/tools/perf/tests/dwarf-unwind.c
+@@ -122,7 +122,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__thread(struct thread *thr
+ 	}
+ 
+ 	err = unwind__get_entries(unwind_entry, &cnt, thread,
+-				  &sample, MAX_STACK);
++				  &sample, MAX_STACK, false);
+ 	if (err)
+ 		pr_debug("unwind failed\n");
+ 	else if (cnt != MAX_STACK) {
+diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+index 2242a885fbd7..4940be4a0569 100644
+--- a/tools/perf/util/arm64-frame-pointer-unwind-support.c
++++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+@@ -53,7 +53,7 @@ u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thr
+ 		sample->user_regs.cache_regs[PERF_REG_ARM64_SP] = 0;
+ 	}
+ 
+-	ret = unwind__get_entries(add_entry, &entries, thread, sample, 2);
++	ret = unwind__get_entries(add_entry, &entries, thread, sample, 2, true);
+ 	sample->user_regs = old_regs;
+ 
+ 	if (ret || entries.length != 2)
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index b80048546451..95391236f5f6 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -2987,7 +2987,7 @@ static int thread__resolve_callchain_unwind(struct thread *thread,
+ 		return 0;
+ 
+ 	return unwind__get_entries(unwind_entry, cursor,
+-				   thread, sample, max_stack);
++				   thread, sample, max_stack, false);
+ }
+ 
+ int thread__resolve_callchain(struct thread *thread,
+diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
+index a74b517f7497..94aa40f6e348 100644
+--- a/tools/perf/util/unwind-libdw.c
++++ b/tools/perf/util/unwind-libdw.c
+@@ -200,7 +200,8 @@ frame_callback(Dwfl_Frame *state, void *arg)
+ 	bool isactivation;
+ 
+ 	if (!dwfl_frame_pc(state, &pc, NULL)) {
+-		pr_err("%s", dwfl_errmsg(-1));
++		if (!ui->best_effort)
++			pr_err("%s", dwfl_errmsg(-1));
+ 		return DWARF_CB_ABORT;
+ 	}
+ 
+@@ -208,7 +209,8 @@ frame_callback(Dwfl_Frame *state, void *arg)
+ 	report_module(pc, ui);
+ 
+ 	if (!dwfl_frame_pc(state, &pc, &isactivation)) {
+-		pr_err("%s", dwfl_errmsg(-1));
++		if (!ui->best_effort)
++			pr_err("%s", dwfl_errmsg(-1));
+ 		return DWARF_CB_ABORT;
+ 	}
+ 
+@@ -222,7 +224,8 @@ frame_callback(Dwfl_Frame *state, void *arg)
+ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 			struct thread *thread,
+ 			struct perf_sample *data,
+-			int max_stack)
++			int max_stack,
++			bool best_effort)
+ {
+ 	struct unwind_info *ui, ui_buf = {
+ 		.sample		= data,
+@@ -231,6 +234,7 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 		.cb		= cb,
+ 		.arg		= arg,
+ 		.max_stack	= max_stack,
++		.best_effort    = best_effort
+ 	};
+ 	Dwarf_Word ip;
+ 	int err = -EINVAL, i;
+diff --git a/tools/perf/util/unwind-libdw.h b/tools/perf/util/unwind-libdw.h
+index 0cbd2650e280..8c88bc4f2304 100644
+--- a/tools/perf/util/unwind-libdw.h
++++ b/tools/perf/util/unwind-libdw.h
+@@ -20,6 +20,7 @@ struct unwind_info {
+ 	void			*arg;
+ 	int			max_stack;
+ 	int			idx;
++	bool			best_effort;
+ 	struct unwind_entry	entries[];
+ };
+ 
+diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+index 71a353349181..41e29fc7648a 100644
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -96,6 +96,7 @@ struct unwind_info {
+ 	struct perf_sample	*sample;
+ 	struct machine		*machine;
+ 	struct thread		*thread;
++	bool			 best_effort;
+ };
+ 
+ #define dw_read(ptr, type, end) ({	\
+@@ -553,7 +554,8 @@ static int access_reg(unw_addr_space_t __maybe_unused as,
+ 
+ 	ret = perf_reg_value(&val, &ui->sample->user_regs, id);
+ 	if (ret) {
+-		pr_err("unwind: can't read reg %d\n", regnum);
++		if (!ui->best_effort)
++			pr_err("unwind: can't read reg %d\n", regnum);
+ 		return ret;
+ 	}
+ 
+@@ -666,7 +668,7 @@ static int get_entries(struct unwind_info *ui, unwind_entry_cb_t cb,
+ 			return -1;
+ 
+ 		ret = unw_init_remote(&c, addr_space, ui);
+-		if (ret)
++		if (ret && !ui->best_effort)
+ 			display_error(ret);
+ 
+ 		while (!ret && (unw_step(&c) > 0) && i < max_stack) {
+@@ -704,12 +706,14 @@ static int get_entries(struct unwind_info *ui, unwind_entry_cb_t cb,
+ 
+ static int _unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 			struct thread *thread,
+-			struct perf_sample *data, int max_stack)
++			struct perf_sample *data, int max_stack,
++			bool best_effort)
+ {
+ 	struct unwind_info ui = {
+ 		.sample       = data,
+ 		.thread       = thread,
+ 		.machine      = thread->maps->machine,
++		.best_effort  = best_effort
+ 	};
+ 
+ 	if (!data->user_regs.regs)
+diff --git a/tools/perf/util/unwind-libunwind.c b/tools/perf/util/unwind-libunwind.c
+index e89a5479b361..509c287ee762 100644
+--- a/tools/perf/util/unwind-libunwind.c
++++ b/tools/perf/util/unwind-libunwind.c
+@@ -80,9 +80,11 @@ void unwind__finish_access(struct maps *maps)
+ 
+ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 			 struct thread *thread,
+-			 struct perf_sample *data, int max_stack)
++			 struct perf_sample *data, int max_stack,
++			 bool best_effort)
+ {
+ 	if (thread->maps->unwind_libunwind_ops)
+-		return thread->maps->unwind_libunwind_ops->get_entries(cb, arg, thread, data, max_stack);
++		return thread->maps->unwind_libunwind_ops->get_entries(cb, arg, thread, data,
++								       max_stack, best_effort);
+ 	return 0;
+ }
+diff --git a/tools/perf/util/unwind.h b/tools/perf/util/unwind.h
+index ab8ad469c8de..b2a03fa5289b 100644
+--- a/tools/perf/util/unwind.h
++++ b/tools/perf/util/unwind.h
+@@ -23,13 +23,19 @@ struct unwind_libunwind_ops {
+ 	void (*finish_access)(struct maps *maps);
+ 	int (*get_entries)(unwind_entry_cb_t cb, void *arg,
+ 			   struct thread *thread,
+-			   struct perf_sample *data, int max_stack);
++			   struct perf_sample *data, int max_stack, bool best_effort);
+ };
+ 
+ #ifdef HAVE_DWARF_UNWIND_SUPPORT
++/*
++ * When best_effort is set, don't report errors and fail silently. This could
++ * be expanded in the future to be more permissive about things other than
++ * error messages.
++ */
+ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 			struct thread *thread,
+-			struct perf_sample *data, int max_stack);
++			struct perf_sample *data, int max_stack,
++			bool best_effort);
+ /* libunwind specific */
+ #ifdef HAVE_LIBUNWIND_SUPPORT
+ #ifndef LIBUNWIND__ARCH_REG_ID
+@@ -65,7 +71,8 @@ unwind__get_entries(unwind_entry_cb_t cb __maybe_unused,
+ 		    void *arg __maybe_unused,
+ 		    struct thread *thread __maybe_unused,
+ 		    struct perf_sample *data __maybe_unused,
+-		    int max_stack __maybe_unused)
++		    int max_stack __maybe_unused,
++		    bool best_effort __maybe_unused)
+ {
+ 	return 0;
+ }
+-- 
+2.28.0
 
-Can you disable PCIe tunneling (if you use Ubuntu/Fedora or similar
-there is the "Thunderbolt -> Direct Access" switch that you can turn
-off) and try again? Please also take 'sudo lspci -vv' for the resulting
-topology. I suspect this might also affect the other issues (the
-timeouts) you are seeing. Note this makes the peripherals connected to
-the monitors unusable too.

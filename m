@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5024F6652
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3D74F6639
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238454AbiDFREr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S238434AbiDFRE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238403AbiDFREH (ORCPT
+        with ESMTP id S239042AbiDFRC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:04:07 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91753255C12
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 07:48:54 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i27so4756067ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 07:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hWg5rr2A6nX4SfC/Pk1Y5oFdVdet7nrbWCNkMt2/CtE=;
-        b=ZJkoxABazYWZUfKwJQVJsQ/f/sTRqY4q7kgP+BmxaBH680bfL8NW5LK3KR7IA8F2ld
-         ulYkm89Hqy1x/SIN8TER5PEnWvE7HzxHAWRdzQKr1lRwAf5tY+bEmmuf7LwyLqeWJh6m
-         62DKI1uSzSGkDlIrZE4PkZXYW4TBAB3BtsW94v3Wn7SvAfnmBDCd83hhBZtEVmT2Surg
-         YqwCEMqxbPGHGHvU9FW/+KJvX5l9nL+lqWSkjfSp7tym1/sMBChf/UrMvHJQNbxBv/4d
-         M5js8KfZsABnGi+5pfUSk9E474jEhDICPLCgPY3/sikIHhZfb5uVBVp1wWOHJ3Quq0zd
-         uebw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hWg5rr2A6nX4SfC/Pk1Y5oFdVdet7nrbWCNkMt2/CtE=;
-        b=rNV4Kxm1A9HWAQYac8bFH0dCP08jyrFek7KdtOH7GTzNIX+g3Ly0ssIAIyeNp9WKU5
-         M46z2U32Vn7WPNiqRcp7JPWGWBFRxvek/A/WAaAutGH3Smuy5PNNz+3eNiVJPgD8dp6Q
-         yhkPKKvxh0niBj3HDsgWMRAsxkhExzsM4ty65A4tx8eqPNDXNbofWvDctODFhn1z+A7d
-         G5F7x1CNDGTr28TeY0YS6VcH+t6RktwjxC95INrbynF9Qpdo6eRnlBoj+/9N7NgKXDAk
-         aogovx/c1n8kwQO2et7RMHuwyycAc4/yn0uPj3AQSGmpEE4O45XE9ev3ZKGfn2e2YqGQ
-         2c/Q==
-X-Gm-Message-State: AOAM532GLbRFuc6B6rCewAkMZL/meAr/7WJsrJ3e2Rb7+xM5RVD71f0+
-        lJ6JIejFHBYsGbyjCxgcazx105EjZ6y25bHiNnQYAA==
-X-Google-Smtp-Source: ABdhPJwNgadfcl8AdRRaDfiaVyBHv4fyImm+NLtsG6q4Q83Avrp9z6SLWFvc1ZCKExavjB0TD/Gp9XyFA3ws9rxpwnQ=
-X-Received: by 2002:a17:906:3cf1:b0:6cf:86c6:8a12 with SMTP id
- d17-20020a1709063cf100b006cf86c68a12mr8739042ejh.202.1649256533034; Wed, 06
- Apr 2022 07:48:53 -0700 (PDT)
+        Wed, 6 Apr 2022 13:02:58 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C872E3CBC;
+        Wed,  6 Apr 2022 07:50:19 -0700 (PDT)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 236Eo6Eu013696;
+        Wed, 6 Apr 2022 23:50:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 236Eo6Eu013696
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649256606;
+        bh=aJtWq7m2T0/+3KJgorXCTf2UFkplPYxZGc852IFsbgA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uXq6RrQrwVcwoPCimSVtNVYxbuBWdZUJf3qKuZELt6GhA7lzgPa3XTHRJRQJnSPh7
+         cofzTrqc+MNVmRFZeRYkQlDA5T61630tPebbAdZUqT5gkFnEnRSgOfv/iHzrN8S9EK
+         3jpmO+6RDejwH/RFwGriDIuleSdhUxXW1Tz4l6ReI33F2md0PrmyQhohNjrE1Mr47b
+         J6Jr/74KXOm7mRGlwZ7hZAcQVfVO3sjaKh6HHAW6d3NeqsLwnkIw9ObAVOsoBiNrFr
+         4T5sk/6xYHuX62ol4OcHuxb4fawt/Rq050FcE/VzHyR+jUbNJHrPe7XqvjiLmaMBF/
+         8J1l7XQLSkBIQ==
+X-Nifty-SrcIP: [209.85.210.172]
+Received: by mail-pf1-f172.google.com with SMTP id s2so2669303pfh.6;
+        Wed, 06 Apr 2022 07:50:06 -0700 (PDT)
+X-Gm-Message-State: AOAM5339KhjgVNSHW/pUWA6InudNE6mnzl7uAfyfwr+MrJCm2JQ3Lj2V
+        Li8YX2pLAorbi5+2BYjkxApFKRD1Ic0tHOgXLmk=
+X-Google-Smtp-Source: ABdhPJzu9DVaBTPJLv31xmASpFadfhtH5LcW85UY2Jql+SNKJ10n7waejSRW7TByuFyw9dxLVG1/XYjaQ2PdOI325xs=
+X-Received: by 2002:a05:6a00:a02:b0:4fd:f9dd:5494 with SMTP id
+ p2-20020a056a000a0200b004fdf9dd5494mr9431657pfh.68.1649256605549; Wed, 06 Apr
+ 2022 07:50:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Wed, 6 Apr 2022 08:48:40 -0600
-Message-ID: <CANLsYkzFr5Zfzz5YL+bOLijwsrWdGiM=zcyS4-G2+A+p9JdGEw@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: defconfig: Config that had RPMSG_CHAR now gets RPMSG_CTRL
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
+References: <20220405113359.2880241-1-masahiroy@kernel.org>
+ <20220405113359.2880241-8-masahiroy@kernel.org> <YkyjkAWb56wqL3iK@fjasle.eu> <CAK7LNATUZesT6JsyrQu-ryU+PahwSwX3UVdxnJhyYDetnR_s1A@mail.gmail.com>
+In-Reply-To: <CAK7LNATUZesT6JsyrQu-ryU+PahwSwX3UVdxnJhyYDetnR_s1A@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 6 Apr 2022 23:49:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASvibpEkFGJQ5MZS6O9rLpOn+RakbwKqOJwO_MqDOzbjA@mail.gmail.com>
+Message-ID: <CAK7LNASvibpEkFGJQ5MZS6O9rLpOn+RakbwKqOJwO_MqDOzbjA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] kbuild: get rid of duplication in the first line
+ of *.mod files
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 at 10:12, Arnaud Pouliquen
-<arnaud.pouliquen@foss.st.com> wrote:
+On Wed, Apr 6, 2022 at 2:28 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
-> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
-> By default give everyone who had the old driver enabled the rpmsg_ctrl
-> driver too.
+> On Wed, Apr 6, 2022 at 5:16 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+> >
+> > On Tue, Apr 05, 2022 at 08:33:55PM +0900 Masahiro Yamada wrote:
+> > > The first line of *.mod lists the member objects of the module.
+> > > This list may contain duplication if the same object is added multiple
+> > > times, like this:
+> > >
+> > >   obj-m := foo.o
+> > >   foo-$(CONFIG_FOO1_X) += foo1.o
+> > >   foo-$(CONFIG_FOO1_Y) += foo1.o
+> > >   foo-$(CONFIG_FOO2_X) += foo2.o
+> > >   foo-$(CONFIG_FOO2_Y) += foo2.o
+> > >
+> > > This is probably not a big deal. As far as I know, the only small
+> > > problem is scripts/mod/sumversion.c parses the same file over again.
+> > > This can be avoided by adding $(sort ...). It has a side-effect that
+> > > sorts the objects alphabetically, but it is not a big deal, either.
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > > Changes in v2:
+> > >   - new
+> > >
+> > >  scripts/Makefile.build | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > > index 3ef2373f0a57..63625877aeae 100644
+> > > --- a/scripts/Makefile.build
+> > > +++ b/scripts/Makefile.build
+> > > @@ -307,8 +307,10 @@ $(obj)/%.prelink.o: $(obj)/%.o FORCE
+> > >       $(call if_changed,cc_prelink_modules)
+> > >  endif
+> > >
+> > > +multi-m-prereqs = $(sort $(addprefix $(obj)/, $($*-objs) $($*-y) $($*-m)))
+> > > +
+> > >  cmd_mod = { \
+> > > -     echo $(if $($*-objs)$($*-y)$($*-m), $(addprefix $(obj)/, $($*-objs) $($*-y) $($*-m)), $(@:.mod=.o)); \
+> > > +     echo $(if $(multi-m-prereqs), $(multi-m-prereqs), $(@:.mod=.o)); \
+> >
+> > I'd rather expected to see $(or) here, too, as in commit 5c8166419acf ("kbuild:
+> > replace $(if A,A,B) with $(or A,B)").
 >
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
+> Ah, good catch.
 >
-> This patch is extracted from the series [1] that has been partially
-> integrated in the Linux Kernel 5.18-rc1.
->
-> Update vs previous version:
-> - Add missing "---" separation marker after "Signed-off-by".
->
-> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
-> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
-> ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 50aa3d75ab4f..3f8906b8a2ca 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
->  CONFIG_QCOM_SYSMON=m
->  CONFIG_QCOM_WCNSS_PIL=m
->  CONFIG_RPMSG_CHAR=m
-> +CONFIG_RPMSG_CTRL=m
->  CONFIG_RPMSG_QCOM_GLINK_RPM=y
->  CONFIG_RPMSG_QCOM_GLINK_SMEM=m
->  CONFIG_RPMSG_QCOM_SMD=y
+> I fixed it up locally.
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-> --
-> 2.25.1
+I changed my mind.
+I will throw away 07 and 08.
+
+I will send different patches later.
+
+
+
+
 >
+> Thanks for the review.
+
+
+-- 
+Best Regards
+Masahiro Yamada

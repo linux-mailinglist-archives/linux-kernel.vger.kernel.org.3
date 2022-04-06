@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4784F5C72
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B574F5CE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiDFLlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S229985AbiDFLnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiDFLjs (ORCPT
+        with ESMTP id S231494AbiDFLnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:39:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFECC5601DE;
-        Wed,  6 Apr 2022 01:27:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649233636; x=1680769636;
-  h=from:to:cc:subject:date:message-id;
-  bh=mxkKTAJbE88/K0WJ0aBJfYdx2O1wtFiDPVBLHhOOmjw=;
-  b=WF+hPYF+k2lxiae9ecAKwzqzVOS3LyZE+q/FmDv9+tcV50+05XPqzgI0
-   Jl/lX5rQ/luj+Eqx6FBOzXvKQ8Y2sYoEPLqx6O9vJowbv6Yq/FXtRFaXD
-   fBAoR70wVIUyMUiMgL9Pnh5byDZ9+jfyZUs5dYg7NS422fXrEy5oENaOV
-   k=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 06 Apr 2022 01:27:15 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 06 Apr 2022 01:27:13 -0700
-X-QCInternal: smtphost
-Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 06 Apr 2022 13:57:00 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 54D213B54; Wed,  6 Apr 2022 13:56:59 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [V2] drivers/tty/serial/qcom-geni-serial: Do stop_rx in suspend path for console if console_suspend is disabled
-Date:   Wed,  6 Apr 2022 13:56:52 +0530
-Message-Id: <1649233612-30844-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 07:43:16 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36EF563CAE;
+        Wed,  6 Apr 2022 01:29:17 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id qh7so2636129ejb.11;
+        Wed, 06 Apr 2022 01:29:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v2z8gRO/swq08y+iM83Fo/YT89U4twO1dtpzDAI+wds=;
+        b=bo+Urh9v+B0kSQwYll4Qm4BeXZn8u9TOLVgE4WP+QcIfu7+eOoQQBVS8o5Esa2X/P2
+         oiN0kj/Nq+JcJ5XGsKDTogBVGlX2r6I6LCO4tlULRhd5bjPiUPhyHFMn4geel5wLFuKj
+         r3EHxiRaPrHH6KihVdtQs84Df/QJF2Vh+bujoh8KiVr5ajpl+wH1buXaa8LV4nQxxWGj
+         iJhEVXvOuIzlyeX+PdVK5KS5GGfUq2erTBIqSCq3hsruPgDx+nNIxwpF+RSze0lgUjng
+         e1enkv68bHZe2ioczifY4/x4i0IDBacJb7V8OHrsD0TjBDWCjDoRxT2C4IwM2g5SuZVD
+         gQHw==
+X-Gm-Message-State: AOAM533lOUVX5QTnZGdcYi2x4sbbJl/9vtqFSxKBkGkuKz0ofguiKlHw
+        2fkk692ALNklzF5kl1YfxLRhe1Nawwo=
+X-Google-Smtp-Source: ABdhPJzHQmSDjpC1O1mIJBNaZCFY2jUV1wWvoQC5P1RqZ8q+ceuPa2kq451RXmkcGjRd0ITGO0yuaQ==
+X-Received: by 2002:a17:907:6e2a:b0:6e0:b263:37a6 with SMTP id sd42-20020a1709076e2a00b006e0b26337a6mr7259741ejc.622.1649233756378;
+        Wed, 06 Apr 2022 01:29:16 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm6322837ejz.213.2022.04.06.01.29.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 01:29:15 -0700 (PDT)
+Message-ID: <afeeec95-f2c3-2e58-eac6-97bf5872a042@kernel.org>
+Date:   Wed, 6 Apr 2022 10:29:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] tty: serial: Prepare cleanup of powerpc's asm/prom.h
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org
+References: <49fc0d4b6446da630b1e9f29c4bab38f8ed087bf.1648833419.git.christophe.leroy@csgroup.eu>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <49fc0d4b6446da630b1e9f29c4bab38f8ed087bf.1648833419.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the case of console_suspend disabled, if back to back suspend/resume
-test is executed, at the end of test, sometimes console would appear to
-be frozen not responding to input. This would happen because, for
-console_suspend disabled, suspend/resume routines only turn resources
-off/on but don't do a port close/open.
-As a result, during resume, some rx transactions come in before system is
-ready, malfunction of rx happens in turn resulting in console appearing
-to be stuck.
+On 02. 04. 22, 12:20, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Do a stop_rx in suspend sequence to prevent this. start_rx is already
-present in resume sequence as part of call to set_termios which does a
-stop_rx/start_rx.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
- drivers/tty/serial/qcom_geni_serial.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> ---
+>   drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c | 1 -
+>   drivers/tty/serial/mpc52xx_uart.c           | 2 ++
+>   drivers/tty/serial/pmac_zilog.c             | 1 -
+>   3 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c b/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
+> index 6a1cd03bfe39..108af254e8f3 100644
+> --- a/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
+> +++ b/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
+> @@ -25,7 +25,6 @@
+>   #include <asm/io.h>
+>   #include <asm/irq.h>
+>   #include <asm/fs_pd.h>
+> -#include <asm/prom.h>
+>   
+>   #include <linux/serial_core.h>
+>   #include <linux/kernel.h>
+> diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
+> index 8a6958377764..4ec785e4f9b1 100644
+> --- a/drivers/tty/serial/mpc52xx_uart.c
+> +++ b/drivers/tty/serial/mpc52xx_uart.c
+> @@ -38,6 +38,8 @@
+>   #include <linux/delay.h>
+>   #include <linux/io.h>
+>   #include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+>   #include <linux/of_platform.h>
+>   #include <linux/clk.h>
+>   
+> diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
+> index 5d97c201ad88..c903085acb8d 100644
+> --- a/drivers/tty/serial/pmac_zilog.c
+> +++ b/drivers/tty/serial/pmac_zilog.c
+> @@ -51,7 +51,6 @@
+>   #include <asm/irq.h>
+>   
+>   #ifdef CONFIG_PPC_PMAC
+> -#include <asm/prom.h>
+>   #include <asm/machdep.h>
+>   #include <asm/pmac_feature.h>
+>   #include <asm/dbdma.h>
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 1543a60..6f767c7 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1481,6 +1481,10 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
- 	struct uart_port *uport = &port->uport;
- 	struct qcom_geni_private_data *private_data = uport->private_data;
- 
-+	/* do a stop_rx here, start_rx is handled in uart_resume_port by call to setermios */
-+	if (!console_suspend_enabled && uart_console(uport))
-+		uport->ops->stop_rx(uport);
-+
- 	/*
- 	 * This is done so we can hit the lowest possible state in suspend
- 	 * even with no_console_suspend
+
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-
+js
+suse labs

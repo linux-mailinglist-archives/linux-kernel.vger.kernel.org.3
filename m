@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F104F6B16
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9A54F6AED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbiDFURH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S232072AbiDFULj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234336AbiDFUQZ (ORCPT
+        with ESMTP id S232429AbiDFULI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:16:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB472264C2E;
-        Wed,  6 Apr 2022 11:09:36 -0700 (PDT)
+        Wed, 6 Apr 2022 16:11:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E410652FA;
+        Wed,  6 Apr 2022 11:13:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ADF861BD1;
-        Wed,  6 Apr 2022 18:09:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5EEC385A5;
-        Wed,  6 Apr 2022 18:09:33 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-        Will Deacon <will@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] btrfs: Avoid live-lock in search_ioctl() on hardware with sub-page faults
-Date:   Wed,  6 Apr 2022 19:09:22 +0100
-Message-Id: <20220406180922.1522433-4-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220406180922.1522433-1-catalin.marinas@arm.com>
-References: <20220406180922.1522433-1-catalin.marinas@arm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 317BEB8252B;
+        Wed,  6 Apr 2022 18:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555C0C385A3;
+        Wed,  6 Apr 2022 18:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649268819;
+        bh=QMVfExX2amMvHMtMH2GP6BV4ahQ74qFyqqVQ9KVADKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nVLUe7kjQEhu47BJhERVDSXy36Yev3KQsjVkpGHx4Xhpkkjbfpx+xmOXrE0vwvRH1
+         izDi+3ku6R7AFPmW3NTCcJkcIWmMPWwHpQi5D65PUOkQaTLvTVm9zcgMF1Hzqcdrv/
+         apzPtGjoyfCVSk3vOs4spS75LuzT+ireuOcoiQ84=
+Date:   Wed, 6 Apr 2022 20:13:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
+Message-ID: <Yk3YUFfvEszb+cXT@kroah.com>
+References: <20220406141649.728971-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406141649.728971-1-guoren@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a48b73eca4ce ("btrfs: fix potential deadlock in the search
-ioctl") addressed a lockdep warning by pre-faulting the user pages and
-attempting the copy_to_user_nofault() in an infinite loop. On
-architectures like arm64 with MTE, an access may fault within a page at
-a location different from what fault_in_writeable() probed. Since the
-sk_offset is rewound to the previous struct btrfs_ioctl_search_header
-boundary, there is no guaranteed forward progress and search_ioctl() may
-live-lock.
+On Wed, Apr 06, 2022 at 10:16:49PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> These patch_text implementations are using stop_machine_cpuslocked
+> infrastructure with atomic cpu_count. The original idea: When the
+> master CPU patch_text, the others should wait for it. But current
+> implementation is using the first CPU as master, which couldn't
+> guarantee the remaining CPUs are waiting. This patch changes the
+> last CPU as the master to solve the potential risk.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: <stable@vger.kernel.org>
+> ---
+>  arch/riscv/kernel/patch.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Use fault_in_subpage_writeable() instead of fault_in_writeable() to
-ensure the permission is checked at the right granularity (smaller than
-PAGE_SIZE).
+What commit id does this change fix?
 
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Fixes: a48b73eca4ce ("btrfs: fix potential deadlock in the search ioctl")
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
----
- fs/btrfs/ioctl.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 238cee5b5254..d49e8254f823 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -2556,8 +2556,13 @@ static noinline int search_ioctl(struct inode *inode,
- 	key.offset = sk->min_offset;
- 
- 	while (1) {
-+		size_t len = *buf_size - sk_offset;
- 		ret = -EFAULT;
--		if (fault_in_writeable(ubuf + sk_offset, *buf_size - sk_offset))
-+		/*
-+		 * Ensure that the whole user buffer is faulted in at sub-page
-+		 * granularity, otherwise the loop may live-lock.
-+		 */
-+		if (fault_in_subpage_writeable(ubuf + sk_offset, len))
- 			break;
- 
- 		ret = btrfs_search_forward(root, &key, path, sk->min_transid);

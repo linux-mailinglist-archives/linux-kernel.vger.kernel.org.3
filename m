@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CFE4F5BEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA704F5BCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344181AbiDFKty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S238549AbiDFKuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359131AbiDFKsX (ORCPT
+        with ESMTP id S1359019AbiDFKsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 06:48:23 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A35505E64
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:12:18 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b15so1688938pfm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A1ZmQ0LEmR3OOKCT6LbGpsJN17JrWfuCp3spOBn+7ys=;
-        b=imWh4RFwVhwV48pgB5H2Rk9lgcGiJab6/fGqHvtiXUfwCecaFw9d3PBd2m0v8TgPjF
-         3MUi9AyWZq8oup4KtE202CWPc2OV4UgUv32ciSiHLRXPi+HsjYpMPo2n9gvKc/nX44hd
-         UeqfcT6zSLJiuW+85EyQ6bvae5Q1jEaCn+KME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A1ZmQ0LEmR3OOKCT6LbGpsJN17JrWfuCp3spOBn+7ys=;
-        b=7w1OgmCRTWZzCuurv1RtQKsYRyIFMtNqKoJ9SriHGzqxUgf2zZPaoAnKc+CdAZZVYh
-         C+qGlOMeIGOMn9Oyz8uO2xIOHW/Rqsj7kJOqjNVGdVxSwg5K+/oMCZdALGWLFq/no1WG
-         kIpkgyuRwI6qcgzzYmygjaQLyWAbp1GwTULFLnrmTZgzkz+ju4iBGlw1GMIilYa2MXEC
-         t+5TNe0TgGDiMiI/h7D/Lm2qfGRFaK324hTHGxER0KLV/1hhPK+ChtEiZsuMQOK18wfR
-         TSenN9/fgoxwC/ez1EhX9krSq6RP2T4xWgONk9iIXNxHZ/Ypf5o+hbARHWZk8lS4brz9
-         +rHA==
-X-Gm-Message-State: AOAM531UqmM2MbwUN/5Fjd5IgtiYFQpz38f6lPvIca2uv5GhoKnWP34j
-        8TZ+4EbjSP2wV4UqsC2yvx0uTw==
-X-Google-Smtp-Source: ABdhPJwVlccxYEcB9HkcJAYauOW/XtRZfeWCrlBKg8E7IQob9Y2pKkVaemr+VLJQZqmkw5oKOWTliA==
-X-Received: by 2002:a05:6a00:1510:b0:4fa:f5fe:ffd5 with SMTP id q16-20020a056a00151000b004faf5feffd5mr7477279pfu.2.1649229137998;
-        Wed, 06 Apr 2022 00:12:17 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:f953:ca90:a854:80ca])
-        by smtp.gmail.com with UTF8SMTPSA id g6-20020a056a000b8600b004faa49add69sm17893931pfj.107.2022.04.06.00.12.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 00:12:17 -0700 (PDT)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     linux-pci@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, David Stevens <stevensd@chromium.org>
-Subject: [RFC] PCI: sysfs: add bypass for config read admin check
-Date:   Wed,  6 Apr 2022 16:11:31 +0900
-Message-Id: <20220406071131.2930035-1-stevensd@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF07505E5F;
+        Wed,  6 Apr 2022 00:12:13 -0700 (PDT)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYFym3T3lz683hj;
+        Wed,  6 Apr 2022 15:10:24 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 09:12:10 +0200
+Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 08:12:09 +0100
+Message-ID: <ab6a13c1-90c4-63f0-c48d-c1faa0ae68fd@huawei.com>
+Date:   Wed, 6 Apr 2022 08:12:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 1/2] libata: Use scsi cmnd budget token for qc tag for
+ SAS host
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+References: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
+ <1649083990-207133-2-git-send-email-john.garry@huawei.com>
+ <a3cce73f-2e91-309d-bee0-a34a30335a18@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <a3cce73f-2e91-309d-bee0-a34a30335a18@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.80.129]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+On 06/04/2022 02:39, Damien Le Moal wrote:
+> On 4/4/22 23:53, John Garry wrote:
+>> For attaining a qc tag for a SAS host we need to allocate a bit in
+>> ata_port.sas_tag_allocated bitmap.
+>>
+>> However we already have a unique tag per device in range
+>> [0, ATA_MAX_QUEUE) in the scsi cmnd budget token, so just use that
+>> instead.
+> 
+> The valid range is [0, ATA_MAX_QUEUE - 1]. Tag ATA_MAX_QUEUE is 
+> ATA_TAG_INTERNAL which is never allocated as a valid device tag but used 
+> directly in ata_exec_internal().
 
-Add a moduleparam that can be set to bypass the check that limits users
-without CAP_SYS_ADMIN to only being able to read the first 64 bytes of
-the config space. This allows systems without problematic hardware to be
-configured to allow users without CAP_SYS_ADMIN to read PCI
-capabilities.
+But that is what I have in [0, ATA_MAX_QUEUE), which is same as [0, 
+ATA_MAX_QUEUE - 1].
 
-Signed-off-by: David Stevens <stevensd@chromium.org>
----
- drivers/pci/pci-sysfs.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index 602f0fb0b007..162423b3c052 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -28,10 +28,17 @@
- #include <linux/pm_runtime.h>
- #include <linux/msi.h>
- #include <linux/of.h>
-+#include <linux/moduleparam.h>
- #include "pci.h"
- 
- static int sysfs_initialized;	/* = 0 */
- 
-+static bool allow_unsafe_config_reads;
-+module_param_named(allow_unsafe_config_reads,
-+		   allow_unsafe_config_reads, bool, 0644);
-+MODULE_PARM_DESC(allow_unsafe_config_reads,
-+		 "Enable full read access to config space without CAP_SYS_ADMIN.");
-+
- /* show configuration fields */
- #define pci_config_attr(field, format_string)				\
- static ssize_t								\
-@@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp, struct kobject *kobj,
- 	u8 *data = (u8 *) buf;
- 
- 	/* Several chips lock up trying to read undefined config space */
--	if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
-+	if (allow_unsafe_config_reads ||
-+	    file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
- 		size = dev->cfg_size;
- 	else if (dev->hdr_type == PCI_HEADER_TYPE_CARDBUS)
- 		size = 128;
--- 
-2.35.1.1094.g7c7d902a7c-goog
-
+Thanks,
+john

@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A784F66E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21B84F66AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238790AbiDFRUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S238766AbiDFRUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiDFRUO (ORCPT
+        with ESMTP id S238617AbiDFRUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:20:14 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED774929C6
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:17:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j12so3740540wrb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:17:56 -0700 (PDT)
+        Wed, 6 Apr 2022 13:20:17 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C7949679B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:18:05 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id s72so2468821pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=ep0L9P2iyTWPsPhU47glyvJj+YI4VUISjQ8ioA9AgqM=;
-        b=d6qVY29u/1z2usp0R/GfeougW9R+xKm6zwQWev+y0feICkogaEZox06UfMYWYXAr67
-         bvWvHfdPso4RzJwqojptWYBU5/TepUEOESoASeQYIDYXsDjp/VBImsQOlWPaY+DB/cT+
-         48Yluq2bsmTE1hXhkGIfj1qkh7NN9KPYP+iv+FXpCEaoJHn/b4jyUsvddMFoztWT2FWx
-         1QB83eQlwj2vN78ZKp6+NfHXsufAnaKy05rMgLCbIS/t+qGSvkohbVq6ahUpEDMoVVKE
-         oyUzbmB6GSW381ZNOzr+P/fbfturupSga2QzGlqY9KtreYj38ZglF8aM6DrD/T48CjKs
-         eIrA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tD2HAuHG+5YJaSii4/pDZTUEWXTpWgVavDzLNdcJvRo=;
+        b=ghciRJ4WeLtJOlmPaNKNNBc5YhuT7dQR1C5O3lXt5eBfSo2/yikt0ry3pL33c65QLZ
+         gPqYMlqE9MS4HAVKfHnL81AXoWcWL50H0pbYhU4+oJQumzI9mahgpbtSOzoifxSe4f83
+         zK9EZ/jj0cZIdWOzMUKAFAmKMU76WIrA5872qhWzqhK7sBxMRKJeppawIECASqXKUyxT
+         WWQZTetJa4ZQd6zaQzDFaXspclIgi4XlyuecrucpPR+uxJCyf6PKodz+pO+FFpgAsvdE
+         ZFNxF5ljA5vn/PH3grEFRY0i2+lT00bgwummWOooKDwCMvLrj8KrVXfc6jqdUIs5JuRb
+         cwEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=ep0L9P2iyTWPsPhU47glyvJj+YI4VUISjQ8ioA9AgqM=;
-        b=vmaRzLZNUsq4Kbr6uSzSPYWZp1fJ4acCWPkKuOUwC57RLn16pbd3Zsh7DX7vPtM6mW
-         KCGneOYBrPhfeSuM2oYSwwWlX2bpNoahuqeJH0emf+IaOT2WlxqXtZCA1oNlwkeGHCxM
-         JleKWHyF1qlgFHcfqyFNEdNm3CITuZz36VzM6jFFsaDoAhPW8/XXz9bubGkIUe15WM1t
-         77CcIEelCKSJdpp+S7FfguvFpXGEHtOehLweWNVAPzhxc+n8/C7917/hcfvVJ2xkiQX5
-         ZZ+bHNwM7zMahYdQj39aBXpxBCH8Ay38QZnczmudjfW3f/o9YfnzDCZ0lY/xLMvkYUFS
-         QVRA==
-X-Gm-Message-State: AOAM531BKAqKcs7cbGyxcixXCXyyi4Q0a/OfW/jV7MJ96TJkiSEXEzOJ
-        Jh9cvVLXbIT3vhxq4M0Z2pc=
-X-Google-Smtp-Source: ABdhPJxVqkYwEtjWoZ8e8nC0m72WuobT+1OGSuN4+LNUxsABQfk26FmxyBzDBPy7QR3NElRPjVXWfg==
-X-Received: by 2002:a05:6000:1e16:b0:206:40c:872d with SMTP id bj22-20020a0560001e1600b00206040c872dmr7042429wrb.535.1649258274775;
-        Wed, 06 Apr 2022 08:17:54 -0700 (PDT)
-Received: from [109.186.89.7] (109-186-89-7.bb.netvision.net.il. [109.186.89.7])
-        by smtp.gmail.com with ESMTPSA id a11-20020a5d456b000000b0020406ce0e06sm14568547wrc.94.2022.04.06.08.17.52
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 06 Apr 2022 08:17:53 -0700 (PDT)
-Message-ID: <624DAF08.9080304@gmail.com>
-Date:   Wed, 06 Apr 2022 18:17:28 +0300
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
-MIME-Version: 1.0
-To:     Hangyu Hua <hbh25y@gmail.com>
-CC:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=tD2HAuHG+5YJaSii4/pDZTUEWXTpWgVavDzLNdcJvRo=;
+        b=T98ozha1YLL2zD2k0g+hzjjvkuL+MCxvnfvp2YGfQuTvSEGpop1/9JeQV9iXzgWbCe
+         B062Q3QQYWbHDIAKdnNSM6Hcz3Z1dOVnlPOO57ILQw1gBVL7xsYWn7ZEZUw7y3zbXKxD
+         mJbhuTY0XKRgerT9wQ0aCf+C+MZ6RZ67AuL5q6YaTQGv5N3c4/tg9OVyE23FtNPo8yJ+
+         ek5mWe/+1AVql659g+BkZAJAJ19AOFSbvLDmZGZ1MLI+jEmUDrOHmILXoFpyGynF4ndu
+         seR4IQg53CqO4UqLy2f/HP01mahScumPv9xurQLHFiHXbfvuuQ3/5t2bicDtl/LPLpLG
+         LSaw==
+X-Gm-Message-State: AOAM533Pgnlq7g1pjf2NnCSfe0yed30mi+KhDHg2f99VVFjmVyG7obJd
+        ehVq8aZA7VSUNxjhLB9b7QWoAUiwW68KCQ==
+X-Google-Smtp-Source: ABdhPJzLNf7AxdI360rwpfGrbei3y65RuheIGAcynCqmFjz+dryhZ5myQ9SUoHJbcmxsVDaEL+V6nQ==
+X-Received: by 2002:a63:801:0:b0:382:a089:59d3 with SMTP id 1-20020a630801000000b00382a08959d3mr7532652pgi.350.1649258284934;
+        Wed, 06 Apr 2022 08:18:04 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:f1a3])
+        by smtp.gmail.com with ESMTPSA id t69-20020a638148000000b0039822f39a40sm15680959pgd.25.2022.04.06.08.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 08:18:04 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 6 Apr 2022 05:18:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] char: xillybus: fix a refcount leak in cleanup_dev()
-References: <20220406075703.23464-1-hbh25y@gmail.com>
-In-Reply-To: <20220406075703.23464-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [RESEND PATCH v7 1/8] kernfs: Introduce interface to access
+ global kernfs_open_file_mutex.
+Message-ID: <Yk2vKqLSN3aqGiZK@slm.duckdns.org>
+References: <20220317072612.163143-1-imran.f.khan@oracle.com>
+ <20220317072612.163143-2-imran.f.khan@oracle.com>
+ <YjOpedPDj+3KCJjk@zeniv-ca.linux.org.uk>
+ <10b5d071-7f69-da59-6395-064550c6c6cb@oracle.com>
+ <YkxRDJ2ynEHGdjeT@zeniv-ca.linux.org.uk>
+ <0dfe1056-3dc5-4d31-698e-e2c075ffd6ee@oracle.com>
+ <Yk2ptLIKdpvgL3QY@zeniv-ca.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk2ptLIKdpvgL3QY@zeniv-ca.linux.org.uk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I stand corrected. Thanks a lot.
+Hello,
 
-    Eli
+On Wed, Apr 06, 2022 at 02:54:44PM +0000, Al Viro wrote:
+> On Wed, Apr 06, 2022 at 02:54:19PM +1000, Imran Khan wrote:
+> 
+> > > BTW, speaking of kernfs_notify() - can calls of that come from NMI handlers?
+> > > If not, I'd consider using llist for kernfs_notify_list...
+> > 
+> > I see it gets invoked from 3 places only: cgroup_file_notify,
+> > sysfs_notify and sysfs_notify_dirent. So kernfs_notify should not be
+> > getting invoked in NMI context. I will make the llist transition in next
+> > version.
+> 
+> Er...  Are you sure neither of those is ever called from something that is
+> called from .... from NMI?
+> 
+> It might never happen, but there's a plenty of callchains leading to that
+> thing and no obvious obstacles for some of those to come from NMI context;
+> I don't see it documented anywhere either.
+> 
+> Tejun, could you comment on that one?
 
-Acked-by: Eli Billauer <eli.billauer@gmail.com>
+I don't know any case off the top of my head and expectedly all the common
+cases don't involved nmi. If we're worried about being called from nmis, I'd
+go for just adding WARN_ON_ONCE(in_nmi()).
 
-On 06/04/22 10:57, Hangyu Hua wrote:
-> usb_get_dev is called in xillyusb_probe. So it is better to call
-> usb_put_dev before xdev is released.
->
-> Signed-off-by: Hangyu Hua<hbh25y@gmail.com>
-> ---
->   drivers/char/xillybus/xillyusb.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-> index dc3551796e5e..39bcbfd908b4 100644
-> --- a/drivers/char/xillybus/xillyusb.c
-> +++ b/drivers/char/xillybus/xillyusb.c
-> @@ -549,6 +549,7 @@ static void cleanup_dev(struct kref *kref)
->   	if (xdev->workq)
->   		destroy_workqueue(xdev->workq);
->
-> +	usb_put_dev(xdev->udev);
->   	kfree(xdev->channels); /* Argument may be NULL, and that's fine */
->   	kfree(xdev);
->   }
->    
+Thanks.
 
+-- 
+tejun

@@ -2,213 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005A64F644C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CAC4F6432
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbiDFPwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S236663AbiDFPxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbiDFPwO (ORCPT
+        with ESMTP id S236578AbiDFPw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:52:14 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A4152750A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:13:00 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso1654255otf.12
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 06:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s4UyoymKo0MiCMqo3D+Ez+F5rfIje+Ebwuy8rUwudOc=;
-        b=5AgWHpt/wFkkkhRVPiGRh2h5NWqz7wgeP6+v9hoeFWMimCKpOvsFJj/TJ1hH7xyr0s
-         mHCIbT5UCrP0c1G238A06Tm63Yx4XF5XpXtIEmsuagWRRg4kp9dhxP0EVmasUMY5KYl1
-         hNsMM8PO6ckRIPVFYodk/Dd53TQTCFKNjMBvdavRBFyplW1GGROcvUW/Ah0ERVsoK50F
-         O4Tx1iP/trhe7bJwoOzsPokuj1yAKbuDvlm4Up6eJjTvcFayUTnISLPemlEEteKjHo+S
-         xGjwj1CHR6VMGK2CXMk5mwLMm6+ZAzoxWEUpDOS+Fm3+mQK86lNpEltD3k+bpnHx2oYg
-         a41Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s4UyoymKo0MiCMqo3D+Ez+F5rfIje+Ebwuy8rUwudOc=;
-        b=buIvJF+dc4i3a/ZDfOU6yUTGIYMfa66yG/hHyMGsuIipIwx61wL5UG6rFsw8qHieCl
-         Vf2VKMG1IvnCEiWeopjKEb+xd9YZWy/3muPpnstVEfPcRhTct2SSkESwG+wVnkKAa2LI
-         1V88+EUXmQUwu6FPJwsLBGNLMWX9B1FcTv8fjUybdcCVf0COjgBjNeAnaCgjgKFqTOK1
-         YxCIQhul90NnGQOG0eO/BkrQHycuek1Syf24LZ0j+eLDAhHgRveQ4ja+CSGIerTbI/C5
-         58hTgBay1vErXb9362wONFO4a179ejcuFNw+EnKSyDfUh2dW8fEuKNo1BzcrtyebicXg
-         rcmA==
-X-Gm-Message-State: AOAM531SpxsyWraXvJZbX9mO+VS6vhj7tw0TMr72EWwKrkkqk4v4e8V3
-        du3EETuSQweGcFsHnQ+C+FBcOg==
-X-Google-Smtp-Source: ABdhPJzjVmDCX/NGQsNm7peF0uT2TgG0ug/jXOoWpZ33ZfKWn24G5Q30lQrniT8uYl9jb0xZ58UTWQ==
-X-Received: by 2002:a05:6830:241d:b0:5ce:94f4:203a with SMTP id j29-20020a056830241d00b005ce94f4203amr2900784ots.241.1649250773502;
-        Wed, 06 Apr 2022 06:12:53 -0700 (PDT)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id y18-20020a056871011200b000e1f5910d45sm3894141oab.7.2022.04.06.06.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 06:12:52 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 10:12:47 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3 16/24] media: rkvdec: h264: Validate and use pic width
- and height in mbs
-Message-ID: <Yk2Rzzpye8KUodmu@eze-laptop>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
- <20220405204426.259074-17-nicolas.dufresne@collabora.com>
+        Wed, 6 Apr 2022 11:52:28 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88B139B2A4;
+        Wed,  6 Apr 2022 06:14:32 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nc5Ti-0001n7-Cl; Wed, 06 Apr 2022 15:13:42 +0200
+Message-ID: <eed1cea4-409a-f03e-5c31-e82d49bb2101@maciej.szmigiero.name>
+Date:   Wed, 6 Apr 2022 15:13:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405204426.259074-17-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-6-seanjc@google.com>
+ <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
+ <YkshgrUaF4+MrrXf@google.com>
+ <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
+ <YkzxXw1Aznv4zX0a@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying the
+ instruction
+In-Reply-To: <YkzxXw1Aznv4zX0a@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:44:17PM -0400, Nicolas Dufresne wrote:
-> From: Jonas Karlman <jonas@kwiboo.se>
+On 6.04.2022 03:48, Sean Christopherson wrote:
+> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
+(..)
+>> Also, I'm not sure that even the proposed updated code above will
+>> actually restore the L1-requested next_rip correctly on L1 -> L2
+>> re-injection (will review once the full version is available).
 > 
-> The width and height in macroblocks is currently configured based on OUTPUT
-> buffer resolution, this works for frame pictures but can cause issues for
-> field pictures.
+> Spoiler alert, it doesn't.  Save yourself the review time.  :-)
 > 
-> When frame_mbs_only_flag is 0 the height in mbs should be height of
-> the field instead of height of frame.
+> The missing piece is stashing away the injected event on nested VMRUN.  Those
+> events don't get routed through the normal interrupt/exception injection code and
+> so the next_rip info is lost on the subsequent #NPF.
 > 
-> Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
-> against OUTPUT buffer resolution and use these values to configure HW.
-> The validation is happening in both try_ctrt() and start() since it is
-> otherwise possible to trick the driver during initialization by changing
-> the OUTPUT format after having set a valid control.
+> Treating soft interrupts/exceptions like they were injected by KVM (which they
+> are, technically) works and doesn't seem too gross.  E.g. when prepping vmcb02
 > 
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> 	if (svm->nrips_enabled)
+> 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> 	else if (boot_cpu_has(X86_FEATURE_NRIPS))
+> 		vmcb02->control.next_rip    = vmcb12_rip;
+> 
+> 	if (is_evtinj_soft(vmcb02->control.event_inj)) {
+> 		svm->soft_int_injected = true;
+> 		svm->soft_int_csbase = svm->vmcb->save.cs.base;
+> 		svm->soft_int_old_rip = vmcb12_rip;
+> 		if (svm->nrips_enabled)
+> 			svm->soft_int_next_rip = svm->nested.ctl.next_rip;
+> 		else
+> 			svm->soft_int_next_rip = vmcb12_rip;
+> 	}
+> 
+> And then the VMRUN error path just needs to clear soft_int_injected.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+I am also a fan of parsing EVENTINJ from VMCB12 into relevant KVM
+injection structures (much like EXITINTINFO is parsed), as I said to
+Maxim two days ago [1].
+Not only for software {interrupts,exceptions} but for all incoming
+events (again, just like EXITINTINFO).
 
-> ---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 78 ++++++++++++++++------
->  1 file changed, 59 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> index 0dcbcb1bac80..f081b476340f 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -672,8 +672,16 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
->  		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_ZERO),
->  		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
-> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDTH_IN_MBS);
-> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEIGHT_IN_MBS);
-> +
-> +	/* Use the SPS values since they are already in macroblocks
-> +	 * dimensions, height can be field height (halved) if
-> +	 * V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY is not set and also it allows
-> +	 * decoding smaller images into larger allocation which can be used
-> +	 * to implementing SVC spatial layer support.
-> +	 */
-> +	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
-> +	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS);
-> +
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
->  		  FRAME_MBS_ONLY_FLAG);
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD),
-> @@ -1035,13 +1043,59 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
->  	return 0;
->  }
->  
-> +static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
-> +				    const struct v4l2_ctrl_h264_sps *sps)
-> +{
-> +	unsigned int width, height;
-> +	/*
-> +	 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> +	 * but it's currently broken in the driver.
-> +	 * Reject them for now, until it's fixed.
-> +	 */
-> +	if (sps->chroma_format_idc > 1)
-> +		/* Only 4:0:0 and 4:2:0 are supported */
-> +		return -EINVAL;
-> +	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> +		/* Luma and chroma bit depth mismatch */
-> +		return -EINVAL;
-> +	if (sps->bit_depth_luma_minus8 != 0)
-> +		/* Only 8-bit is supported */
-> +		return -EINVAL;
-> +
-> +	width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
-> +	height = (sps->pic_height_in_map_units_minus1 + 1) * 16;
-> +
-> +	/* when frame_mbs_only_flag is not set, this is field height,
-> +	 * which is half the final height (see (7-18) in the
-> +	 * specification)
-> +	 */
-> +	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> +		height *= 2;
-> +
-> +	if (width > ctx->coded_fmt.fmt.pix_mp.width ||
-> +	    height > ctx->coded_fmt.fmt.pix_mp.height)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
->  static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
->  {
->  	struct rkvdec_dev *rkvdec = ctx->dev;
->  	struct rkvdec_h264_priv_tbl *priv_tbl;
->  	struct rkvdec_h264_ctx *h264_ctx;
-> +	struct v4l2_ctrl *ctrl;
->  	int ret;
->  
-> +	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
-> +			      V4L2_CID_STATELESS_H264_SPS);
-> +	if (!ctrl)
-> +		return -EINVAL;
-> +
-> +	ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-> +	if (ret)
-> +		return ret;
-> +
->  	h264_ctx = kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
->  	if (!h264_ctx)
->  		return -ENOMEM;
-> @@ -1139,23 +1193,9 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
->  
->  static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
->  {
-> -	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-> -		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
-> -		/*
-> -		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> -		 * but it's currently broken in the driver.
-> -		 * Reject them for now, until it's fixed.
-> -		 */
-> -		if (sps->chroma_format_idc > 1)
-> -			/* Only 4:0:0 and 4:2:0 are supported */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> -			/* Luma and chroma bit depth mismatch */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 != 0)
-> -			/* Only 8-bit is supported */
-> -			return -EINVAL;
-> -	}
-> +	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS)
-> +		return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.34.1
-> 
+However, there is another issue related to L1 -> L2 event re-injection
+using standard KVM event injection mechanism: it mixes the L1 injection
+state with the L2 one.
+
+Specifically for SVM:
+* When re-injecting a NMI into L2 NMI-blocking is enabled in
+vcpu->arch.hflags (shared between L1 and L2) and IRET intercept is
+enabled.
+
+This is incorrect, since it is L1 that is responsible for enforcing NMI
+blocking for NMIs that it injects into its L2.
+Also, *L2* being the target of such injection definitely should not block
+further NMIs for *L1*.
+
+* When re-injecting a *hardware* IRQ into L2 GIF is checked (previously
+even on the BUG_ON() level), while L1 should be able to inject even when
+L2 GIF is off,
+
+With the code in my previous patch set I planned to use
+exit_during_event_injection() to detect such case, but if we implement
+VMCB12 EVENTINJ parsing we can simply add a flag that the relevant event
+comes from L1, so its normal injection side-effects should be skipped.
+
+By the way, the relevant VMX code also looks rather suspicious,
+especially for the !enable_vnmi case.
+
+Thanks,
+Maciej
+
+[1]: https://lore.kernel.org/kvm/7d67bc6f-00ac-7c07-f6c2-c41b2f0d35a1@maciej.szmigiero.name/

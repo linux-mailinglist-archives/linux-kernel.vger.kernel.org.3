@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F984F6178
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7151C4F6100
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiDFOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S234139AbiDFODE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiDFOBI (ORCPT
+        with ESMTP id S234432AbiDFOCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:01:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1532414EE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:17:53 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYJlq3rpHzgYSy;
-        Wed,  6 Apr 2022 17:16:07 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 17:17:51 +0800
-Subject: Re: [PATCH] mm/mlock: remove unneeded start >= vma->vm_end check
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     <hughd@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220314153223.53753-1-linmiaohe@huawei.com>
- <Yi9qq9hVloDXcW4b@casper.infradead.org>
- <c0ff39e2-27fc-170f-00f5-d5e9ab5a22cd@huawei.com>
-Message-ID: <58fcd181-cadb-1e61-fc18-9994b93bb1bc@huawei.com>
-Date:   Wed, 6 Apr 2022 17:17:51 +0800
+        Wed, 6 Apr 2022 10:02:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822D6636E;
+        Wed,  6 Apr 2022 02:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649236785; x=1680772785;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=C30EsKSnyXniVsuHK+cXjwGqiqlPYMws48JZ2eTUz6s=;
+  b=XVA4uOShm3u9NeDWBVFvWvVJF9+G9O9GAGUOojkAAfYnbB2Vvarqrnpc
+   jHm+B3NwgAIXCkZVhGxd0MvVgdcwHsPtyLCoOKs2OxEu6YImUQRlXBfjf
+   49I4NBE+bKVf5bIP9ih/ELM9wkeiJJZ1kfzk7mVzweYcG54YmAxn4jlyr
+   o=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 06 Apr 2022 02:19:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 02:19:44 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 02:19:44 -0700
+Received: from [10.216.50.162] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
+ 02:19:39 -0700
+Subject: Re: [PATCH V9 3/6] mfd: pm8008: Add mfd cell struct to register LDOs
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649166633-25872-4-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n52hZy6ia3i0yv9U_1TnqDf-NAW3587RSS_qG+GRNhh3yg@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <738b87e0-85dd-70b4-178b-9c3a9c5a7468@quicinc.com>
+Date:   Wed, 6 Apr 2022 14:49:35 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <c0ff39e2-27fc-170f-00f5-d5e9ab5a22cd@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <CAE-0n52hZy6ia3i0yv9U_1TnqDf-NAW3587RSS_qG+GRNhh3yg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/15 20:30, Miaohe Lin wrote:
-> On 2022/3/15 0:17, Matthew Wilcox wrote:
->> On Mon, Mar 14, 2022 at 11:32:23PM +0800, Miaohe Lin wrote:
->>> If find_vma returns a vma, it must satisfies that start < vma->vm_end.
->>> Since vma list is sorted in the ascending order, so we will never see
->>> start >= vma->vm_end here. Remove this unneeded check.
->>
->> faulty logic; vm_start + len might wrap.
 
-What do you mean is vm_start + len might wrap, so vm_end might be < vm_start ?
-If so, this could not happen as get_unmapped_area guarantees this.
+On 4/6/2022 12:38 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-04-05 06:50:30)
+>> Add mfd cell struct to match with the "qcom,pm8008-regulator"
+>> driver and a separate probe to add pm8008_regulator_devs.
+>> This separate probe is required to ensure the regulators are
+>> registered only with the mfd device which contains regulators.
+> I don't get it. Shouldn't the pm8008-regulators compatible string be a
+> different i2c driver in drivers/regulator/ that matches the compatible
+> string for qcom,pm8008-regulators?
 
-> 
-> Many thanks for comment. I agree with you about "vm_start + len" might wrap.
-> But what I mean here is that we will never see "start" >= vma->vm_end here
-> as find_vma guarantees this. And I leave the "start + len <=  vma->vm_start"
-> check untouched. So my cleanup should be right. Or am I miss something?
 
-So I think this "start >= vma->vm_end" check is unneeded and we can remove it.
-Or am I miss something?
+Initially we had it that way but as per Mark's suggestion here [1] I've 
+made these changes to register regulators directly through mfd driver.
 
-Many thanks!
+[1] 
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1637314953-4215-3-git-send-email-quic_c_skakit@quicinc.com/#24618011
 
-> 
-> Thanks.
-> 
->>
->> .
->>
-> 
+
+>> Add the reset-gpio toggling in the pm8008_probe() to bring
+>> pm8008 chip out of reset instead of doing it in DT node using
+>> "output-high" property.
+> Please split this part off to a different patch.
+
+
+Okay.
+
 

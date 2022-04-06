@@ -2,183 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7035E4F59E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CE84F575A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236720AbiDFJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S1344397AbiDFIDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1578477AbiDFJMx (ORCPT
+        with ESMTP id S1577417AbiDFIBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 05:12:53 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EFB2325EF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:08:01 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id r11so878181ila.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 18:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RgvBhB60r34bKOm2tCGx0FLu0SdJzIYZfN+oE6mYW4Y=;
-        b=UCNyZ54P2mgXYG0SUsGZv0scK1xaO99fPJQNVGaOcBBfVEqjvQWJbhpUIt9gU/3XWy
-         i1AIqrFuz6OljshjkJ4io2XcByq5P5phDtENYPHWUiAXdmExOJbEGf4bnIsPloqvrSVp
-         gfVTsJ6ugbeqHqj8t+OgchC3cON2X9yJ4tb8TPAbmr5MyrtpuZFB8QOzD9zlxC7nWjRd
-         0djc5eUqkeqQREev7dlWuZK7CObjNQPhXfsRPHPVaMTGnFug9sCPmEJQgAMVooK/KPYU
-         auxh5Czx04A5jkdZ/uXqiokinos3NqmfNX1n5/a/CgMMMmh4nQvDTOvQxE4YeRMHkAaZ
-         uFdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RgvBhB60r34bKOm2tCGx0FLu0SdJzIYZfN+oE6mYW4Y=;
-        b=dakCbGl8/KnzgO9TByG5pJ8rzm1cR7lB0MnqosR2bBqd9bUG75MchCuxnDlUrehev3
-         LGkY277RUkAYJ3t/Lp4ii2GzHaQn1sBxdX+zIu5tgxF8NxH4rK4vRLWzCpkU66IN8OWz
-         z2iFyFRl43+x6DkYCPRbszhKVMCqmXevFwALpX41O5muWg6qCveXO1BzCBkM/EFnxITu
-         RCUWuQwYGxecIbKZGPJOdzPiW2R8VSLfkRygFp1rge1+R3kWbeRnbBGUVdcU9vbuLR4o
-         yLpxNrM7jVtn1PeHWeA0KIVzpLb9vxi7UR8QnYeJ4iIs7lENcNOkesKHvLCj1RVnD1GC
-         D9Gg==
-X-Gm-Message-State: AOAM5315yRd+szMN9Ksvleg+1P7I3TmQSyo30HqRcdQIS11ihFisDYKw
-        RQJJGt7jgulYma+p+aZDP6Q2nQWnSTG/GVZCmmsfOQ==
-X-Google-Smtp-Source: ABdhPJxq3KHZ1VgC8H6k/nkG/PU0tBmZKSI4Zq/E9uh0ebH59q9hVWU4W+VT5mcgO2wHoffP8694DLo9F8gK5lolIXQ=
-X-Received: by 2002:a92:cd8b:0:b0:2c9:ded9:f20d with SMTP id
- r11-20020a92cd8b000000b002c9ded9f20dmr2825689ilb.300.1649207280627; Tue, 05
- Apr 2022 18:08:00 -0700 (PDT)
+        Wed, 6 Apr 2022 04:01:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3D03878D5;
+        Tue,  5 Apr 2022 18:13:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95224B8202A;
+        Wed,  6 Apr 2022 01:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F295C385B5;
+        Wed,  6 Apr 2022 01:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649207607;
+        bh=K2W88sa0e40FhxFM51hz1PVnPS6fYU/JKW4DlHd0JHk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HYGAzAvDvERjww1332qf4HBWmEBr8lBkHk5nMmpuHlcrS5xNhnbKDRvGd28nZ+kpN
+         TyR2NMK9JSTMkmDUMQaAIe7sJuDWPs3BEWWckbImQOQQVb12qZhWymF9E6XURIGl3a
+         ywXDWYdzLFYuIqxnrYkVbVipI7/38HCnjQcchEcsY3kjjiFKEn/sLMMxn3BglHVeeM
+         CTPK108iZ1bfDOO75pm6RvAA1YcwofguWk2pYis7TDML2vBzhBJ34KsSC3mLhVZZoL
+         RvjsW2J22HTbg1jpz9AndAsh4y5a+5KueCNel9rddnbDEZXBMQY2wLAx8cB7K3Bdi8
+         GCpVhnbxbQaPg==
+Received: by mail-ua1-f41.google.com with SMTP id j9so949629uap.13;
+        Tue, 05 Apr 2022 18:13:27 -0700 (PDT)
+X-Gm-Message-State: AOAM531T555rIXPdxkj5Ghg328Wx6M2IqnznVf5Ai87HpmZwWR2EkB65
+        opRePyXrYgbnWaYanlaPaQzk+dW17QcMl2RG2Vw=
+X-Google-Smtp-Source: ABdhPJwdlBT6DWcyITpQFk0eYMxDLklydODShGdQh3Dhz3gy5pvAEE1D7qv3EMRUsxW3oJsG0Lv+XReYvs2gnjTTYBE=
+X-Received: by 2002:a67:efc3:0:b0:325:4fcf:60bf with SMTP id
+ s3-20020a67efc3000000b003254fcf60bfmr1892801vsp.51.1649207606157; Tue, 05 Apr
+ 2022 18:13:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <YkcEMdsi9G5y8mX4@dhcp22.suse.cz> <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
- <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
- <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Tue, 5 Apr 2022 18:07:49 -0700
-Message-ID: <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Cgroups <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+References: <CAJF2gTQkGZnwXrXsbx8drL0AicVpOMW=JmOcrieuvyEf91XPhg@mail.gmail.com>
+ <mhng-cfa7bfb9-bab8-423c-85ad-ecd407d6e806@palmer-ri-x1c9>
+In-Reply-To: <mhng-cfa7bfb9-bab8-423c-85ad-ecd407d6e806@palmer-ri-x1c9>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 6 Apr 2022 09:13:15 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQgU=V+snWp7a8_txsX49BzAct1nkB18k-p4BZEd+s+eQ@mail.gmail.com>
+Message-ID: <CAJF2gTQgU=V+snWp7a8_txsX49BzAct1nkB18k-p4BZEd+s+eQ@mail.gmail.com>
+Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 5:49 PM Huang, Ying <ying.huang@intel.com> wrote:
+On Wed, Apr 6, 2022 at 12:15 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
 >
-> Wei Xu <weixugc@google.com> writes:
->
-> > On Sat, Apr 2, 2022 at 1:13 AM Huang, Ying <ying.huang@intel.com> wrote:
+> On Mon, 04 Apr 2022 22:17:24 PDT (-0700), guoren@kernel.org wrote:
+> > On Tue, Apr 5, 2022 at 12:57 AM Nathan Chancellor <nathan@kernel.org> wrote:
 > >>
-> >> Wei Xu <weixugc@google.com> writes:
-> >>
-> >> > On Fri, Apr 1, 2022 at 6:54 AM Michal Hocko <mhocko@suse.com> wrote:
-> >> >>
-> >> >> On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
-> >> >> > From: Shakeel Butt <shakeelb@google.com>
-> >> >> >
-> >>
-> >> [snip]
-> >>
-> >> >> > Possible Extensions:
-> >> >> > --------------------
-> >> >> >
-> >> >> > - This interface can be extended with an additional parameter or flags
-> >> >> >   to allow specifying one or more types of memory to reclaim from (e.g.
-> >> >> >   file, anon, ..).
-> >> >> >
-> >> >> > - The interface can also be extended with a node mask to reclaim from
-> >> >> >   specific nodes. This has use cases for reclaim-based demotion in memory
-> >> >> >   tiering systens.
-> >> >> >
-> >> >> > - A similar per-node interface can also be added to support proactive
-> >> >> >   reclaim and reclaim-based demotion in systems without memcg.
-> >> >> >
-> >> >> > For now, let's keep things simple by adding the basic functionality.
-> >> >>
-> >> >> Yes, I am for the simplicity and this really looks like a bare minumum
-> >> >> interface. But it is not really clear who do you want to add flags on
-> >> >> top of it?
-> >> >>
-> >> >> I am not really sure we really need a node aware interface for memcg.
-> >> >> The global reclaim interface will likely need a different node because
-> >> >> we do not want to make this CONFIG_MEMCG constrained.
+> >> On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
+> >> > Linux next-20220404 riscv defconfig builds failed.
 > >> >
-> >> > A nodemask argument for memory.reclaim can be useful for memory
-> >> > tiering between NUMA nodes with different performance.  Similar to
-> >> > proactive reclaim, it can allow a userspace daemon to drive
-> >> > memcg-based proactive demotion via the reclaim-based demotion
-> >> > mechanism in the kernel.
+> >> > Regressions found on riscv:
+> >> >    - riscv-riscv-clang-14-defconfig
+> >> >    - riscv-riscv-gcc-10-defconfig
+> >> >    - riscv-riscv-clang-13-defconfig
+> >> >    - riscv-riscv-clang-12-defconfig
+> >> >    - riscv-riscv-clang-11-defconfig
+> >> >    - riscv-riscv-gcc-11-defconfig
+> >> >    - riscv-riscv-gcc-8-defconfig
+> >> >    - riscv-riscv-gcc-9-defconfig
+> >> >    - riscv-riscv-clang-nightly-defconfig
+> >> >
+> >> >
+> >> > arch/riscv/kernel/compat_signal.c:7:10: fatal error:
+> >> > linux/tracehook.h: No such file or directory
+> >> >   7 | #include <linux/tracehook.h>
+> >> >     |          ^~~~~~~~~~~~~~~~~~~
+> >> > compilation terminated.
+> >> > make[3]: *** [scripts/Makefile.build:289:
+> >> > arch/riscv/kernel/compat_signal.o] Error 1
 > >>
-> >> I am not sure whether nodemask is a good way for demoting pages between
-> >> different types of memory.  For example, for a system with DRAM and
-> >> PMEM, if specifying DRAM node in nodemask means demoting to PMEM, what
-> >> is the meaning of specifying PMEM node? reclaiming to disk?
+> >> For what it's worth, I also see:
 > >>
-> >> In general, I have no objection to the idea in general.  But we should
-> >> have a clear and consistent interface.  Per my understanding the default
-> >> memcg interface is for memory, regardless of memory types.  The memory
-> >> reclaiming means reduce the memory usage, regardless of memory types.
-> >> We need to either extending the semantics of memory reclaiming (to
-> >> include memory demoting too), or add another interface for memory
-> >> demoting.
+> >> $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
+> >> arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
+> >>     3 | #include <../vdso/vdso.lds.S>
+> >>       |          ^~~~~~~~~~~~~~~~~~~~
+> >> compilation terminated.
+> >> make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
+> >> arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
+> >>     3 | #include <../vdso/rt_sigreturn.S>
+> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
+> >> compilation terminated.
+> >> arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
+> >>     3 | #include <../vdso/note.S>
+> >>       |          ^~~~~~~~~~~~~~~~
+> >> compilation terminated.
+> >> arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
+> >>     3 | #include <../vdso/getcpu.S>
+> >>       |          ^~~~~~~~~~~~~~~~~~
+> >> compilation terminated.
+> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
+> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
+> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
+> >> arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
+> >>     3 | #include <../vdso/flush_icache.S>
+> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
+> >> compilation terminated.
+> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
+> >>
+> >> I am guessing this code was never tested with $(srctree) == $(objtree).
+> > Thx for pointing it out:
+> > I always use:
+> > make -skj"$(nproc)" ARCH=riscv
+> > CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g
+> > O=../build-riscv/ defconfig all
 > >
-> > Good point.  With the "demote pages during reclaim" patch series,
-> > reclaim is already extended to demote pages as well.  For example,
-> > can_reclaim_anon_pages() returns true if demotion is allowed and
-> > shrink_page_list() can demote pages instead of reclaiming pages.
+> > When I change to:
+> > make -skj"$(nproc)" ARCH=riscv
+> > CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g defconfig
+> > all
+> >
+> > I got your problem.
 >
-> These are in-kernel implementation, not the ABI.  So we still have
-> the opportunity to define the ABI now.
->
-> > Currently, demotion is disabled for memcg reclaim, which I think can
-> > be relaxed and also necessary for memcg-based proactive demotion.  I'd
-> > like to suggest that we extend the semantics of memory.reclaim to
-> > cover memory demotion as well.  A flag can be used to enable/disable
-> > the demotion behavior.
->
-> If so,
->
-> # echo A > memory.reclaim
->
-> means
->
-> a) "A" bytes memory are freed from the memcg, regardless demoting is
->    used or not.
->
-> or
->
-> b) "A" bytes memory are reclaimed from the memcg, some of them may be
->    freed, some of them may be just demoted from DRAM to PMEM.  The total
->    number is "A".
->
-> For me, a) looks more reasonable.
->
+> Just to be clear: this one wasn't supposed to go in via the csky tree,
+> and had other build issues that were being found by the autobuilders
+> (which is why it hadn't gone in via the riscv tree).  I do in-tree
+> builds somewhat regularly so that probably would have caught it if
+> nothing else did, but my guess is that some other autobuilder would have
+> found it first (some of the earlier patches
+The problem and other build issues (arm64 & 5.18-rc1 conflict) all
+have been solved in v12:
+https://lore.kernel.org/linux-riscv/20220405071314.3225832-1-guoren@kernel.org/
 
-We can use a DEMOTE flag to control the demotion behavior for
-memory.reclaim.  If the flag is not set (the default), then
-no_demotion of scan_control can be set to 1, similar to
-reclaim_pages().
+>
+> Guo: please stop pushing things to linux-next that break the builds
+> and/or aren't aimed at your tree.  This just makes things unnecessarly
+> complicated.  If you don't want to deal with the build issues that's OK,
+> just LMK when you send the patch sets out and I'll deal with them, but
+> having linux-next's build break causes fallout for a lot of users.
+Yesterday, I made my
+https://github.com/c-sky/csky-linux/commits/linux-next with
+linux-5.18-rc1 tag commit version.
+So this only affected linux-next-20220404.
 
-The question is then whether we want to rename memory.reclaim to
-something more general.  I think this name is fine if reclaim-based
-demotion is an accepted concept.
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

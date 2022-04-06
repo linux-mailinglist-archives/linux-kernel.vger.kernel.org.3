@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6254F6E88
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A72B4F6E8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237448AbiDFXbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S237776AbiDFXcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiDFXbK (ORCPT
+        with ESMTP id S229748AbiDFXc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:31:10 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B8AE08A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:29:10 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1117D2C049B;
-        Wed,  6 Apr 2022 23:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1649287747;
-        bh=NrO2io1fNu1Dq8zpirtPjO6hL23Fu+tHPwckAyQiG08=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=iGRDeniEgJUECQLt1v2BwyW3LpdMib6/Gv8bkjBdMC5vCcwl+5XhHjT6KX+FzaFpl
-         Gm17x/GQRPwcojWHAu3fptRbZK9Q6bPo67MY/OI94/J3c4/kFvJCMd4ADIwZpk30Iw
-         qCt+qhAjcEaLARKiQ5imvUN0IS6UQ7PNSC5IitjRg54l6MW1AogorlV4xvJG2Wbqxc
-         UK/fFvyQprod7N0457VBe3HEFwrDH1phijCuC1DYhDNHCbt63+08bwZEGko4nYbVGl
-         kz4AMPGfyxrVOYa8oC8rqUI0NCL9N6pn6q0OfeTyxTYoSvZJIfHiyBjmyK1goed8I5
-         RpziR8zTtrGQA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B624e22420001>; Thu, 07 Apr 2022 11:29:07 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Thu, 7 Apr 2022 11:29:07 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Thu, 7 Apr 2022 11:29:07 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "kostap@marvell.com" <kostap@marvell.com>,
-        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 3/4] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Topic: [PATCH v3 3/4] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Index: AQHYSWWOuxqfse0Zo02heMaoBUB4aazivr6AgAABfgA=
-Date:   Wed, 6 Apr 2022 23:29:06 +0000
-Message-ID: <645fbdd4-99d1-90e3-04f1-a88be135c1d7@alliedtelesis.co.nz>
-References: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
- <20220406032158.1449049-4-chris.packham@alliedtelesis.co.nz>
- <Yk4g/ShFxNsCM8JR@lunn.ch>
-In-Reply-To: <Yk4g/ShFxNsCM8JR@lunn.ch>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <33ADC5EBA68A9240BCB38A53C866EA86@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Wed, 6 Apr 2022 19:32:27 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB21C337B;
+        Wed,  6 Apr 2022 16:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649287827; x=1680823827;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dN6tJX4kfZRcYxEG7jPgJawAk+mr6Z5aozdvN/WcmgM=;
+  b=ZhAAWgana9gbl3SgOhyB0sbqlLdJyg2lISOgdbhXtGXI/o0iwgUsMunF
+   XSacqIF8FQr7n9HTX9G/Z94GHhnnU491FENnE5LwGfJiaxjhcYoo1lAJG
+   UGWXwbBhhuliqdfAb+P9VAnH5RvxCT4m8/QKiRv805aCX9NFb+qxkdonU
+   pHsoTLm+L1NM8/2dZq4FEZ0tJfsl7BlH9w6Ctq3FScfL25T5SWs0O1kn6
+   6mO9BqtEaiCZR2jf4QYusLohGeBa8Dx2ZXYFJ7mk+yyHDO//OwrdJltQk
+   vmumHClQYnVr9zY80ve2Q+pVg2Ue1gqtU1O16VDx0dHr+wyO8Fx8qIT+K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="321878694"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="321878694"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 16:30:25 -0700
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="524689613"
+Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 16:30:22 -0700
+Message-ID: <3ac99ee504d6230f747a0f0c6ab91e6acd375536.camel@intel.com>
+Subject: Re: [RFC PATCH v5 045/104] KVM: x86/tdp_mmu: make REMOVED_SPTE
+ include shadow_initial value
+From:   Kai Huang <kai.huang@intel.com>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Thu, 07 Apr 2022 11:30:20 +1200
+In-Reply-To: <6614d2a2bc34441ed598830392b425fdf8e5ca52.1646422845.git.isaku.yamahata@intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <6614d2a2bc34441ed598830392b425fdf8e5ca52.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=JcrCUnCV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=z0gMJWrwH1QA:10 a=Cj5Alfpt04uwt4QH35QA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiA3LzA0LzIyIDExOjIzLCBBbmRyZXcgTHVubiB3cm90ZToNCj4gT24gV2VkLCBBcHIgMDYs
-IDIwMjIgYXQgMDM6MjE6NTdQTSArMTIwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IFRoZSA5
-OERYMjUzMCBTb0MgaXMgdGhlIENvbnRyb2wgYW5kIE1hbmFnZW1lbnQgQ1BVIGludGVncmF0ZWQg
-aW50bw0KPj4gdGhlIE1hcnZlbGwgOThEWDI1eHggYW5kIDk4RFgzNXh4IHNlcmllcyBvZiBzd2l0
-Y2ggY2hpcCAoaW50ZXJuYWxseQ0KPj4gcmVmZXJyZWQgdG8gYXMgQWxsZXlDYXQ1IGFuZCBBbGxl
-eUNhdDVYKS4NCj4+DQo+PiBUaGVzZSBmaWxlcyBoYXZlIGJlZW4gdGFrZW4gZnJvbSB0aGUgTWFy
-dmVsbCBTREsgYW5kIGxpZ2h0bHkgY2xlYW5lZA0KPj4gdXAgd2l0aCB0aGUgTGljZW5zZSBhbmQg
-Y29weXJpZ2h0IHJldGFpbmVkLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0g
-PGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+ICsmZXRoMCB7DQo+PiArCXN0
-YXR1cyA9ICJva2F5IjsNCj4+ICsJcGh5ID0gPCZwaHkwPjsNCj4gVGhpcyBpcyBPLkssIGJ1dCBt
-b3N0IERUIGZpbGVzIG5vdyB1c2UgcGh5LWhhbmRsZSwgbm90IHBoeS4NCkknbGwgdXBkYXRlIHRv
-IHBoeS1oYW5kbGUgZm9yIHY0DQo+DQo+IFJldmlld2VkLWJ5OiBBbmRyZXcgTHVubiA8YW5kcmV3
-QGx1bm4uY2g+DQo+DQo+ICAgICAgQW5kcmV3
+On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> TDP MMU uses REMOVED_SPTE = 0x5a0ULL as special constant to indicate the
+> intermediate value to indicate one thread is operating on it and the value
+> should be semi-arbitrary value.  For TDX (more correctly to use #VE), the
+> value should include suppress #VE value which is shadow_init_value.
+> 
+> Define SHADOW_REMOVED_SPTE as shadow_init_value | REMOVED_SPTE, and replace
+> REMOVED_SPTE with SHADOW_REMOVED_SPTE to use suppress #VE bit properly for
+> TDX.
+
+Like we discussed, this patch should be merged with patch "KVM: x86/mmu: Allow
+non-zero init value for shadow PTE".
+
+
+-- 
+Thanks,
+-Kai
+
+

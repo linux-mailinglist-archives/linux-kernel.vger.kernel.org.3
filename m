@@ -2,134 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641294F6D0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6BC4F6CF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237050AbiDFVka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S236131AbiDFVkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237885AbiDFVip (ORCPT
+        with ESMTP id S238650AbiDFVjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:38:45 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED3A217982;
-        Wed,  6 Apr 2022 14:00:32 -0700 (PDT)
+        Wed, 6 Apr 2022 17:39:07 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C99815FED
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 14:15:35 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j17so2156883pfi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 14:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1649278833; x=1680814833;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=S/RUYgJiJDHB7xj8zcZPP8Nba0qoMBr1iDzWuUq4ooM=;
-  b=BFG+AfrLxKrsTOM2H2eEXEg/F3vjones0/CYf+6wxFzUD1OvyS0Z7x55
-   QTUPQUHhuxe2SmUxBcGdRCN74gP/Jbe7bhFb6roVthpcmJFEEEGWiIho4
-   K0cF/w9eUBBn64D9cKCduvVWOe/ZLdvVRKEiUo/XixN0Dkvpr2rESB10s
-   U=;
-X-IronPort-AV: E=Sophos;i="5.90,240,1643673600"; 
-   d="scan'208";a="77373843"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-54c9d11f.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 06 Apr 2022 21:00:30 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-54c9d11f.us-east-1.amazon.com (Postfix) with ESMTPS id BF0E7C0271;
-        Wed,  6 Apr 2022 21:00:24 +0000 (UTC)
-Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Wed, 6 Apr 2022 21:00:24 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Wed, 6 Apr 2022 21:00:23 +0000
-Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.32 via Frontend Transport; Wed, 6 Apr 2022 21:00:23 +0000
-Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id 134A62510; Wed,  6 Apr 2022 21:00:22 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <leo.yan@linaro.org>
-CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
-        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
-        <german.gomez@arm.com>, <james.clark@arm.com>,
-        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
-        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>
-Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse cores
-Date:   Wed, 6 Apr 2022 21:00:17 +0000
-Message-ID: <20220406210017.11887-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220404151218.GA898573@leoy-ThinkPad-X240s>
-References: <20220404151218.GA898573@leoy-ThinkPad-X240s>
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pBppaTksBxMSYQ8KEwF0hkGErNoqL29ELbfwE/o2LyQ=;
+        b=s3oDFPukVfuhNj8ZfSNKbijug6xsWY5AXd9u8155hXTtguuSQrv2jG2K4JGWyU1+f4
+         6McDLcEDtoZw/oo1OsN0rR11XyCTBjrM4yz7q/+Ek+cQEqYLIc/QMrGKINzNebUvLJ7j
+         vmQnSg+YY4YTT+L9wT109V/ORxUZAEKwevt2AczcqeXftDnzuGTkO/x1o+jKSlXlkBcZ
+         /dSeM54ERBRYxVG+UDC6WxrSKQs4/yZJ0Vd1bIN4skmGBsqf1LUZSTxYsJeDdnDhXy0I
+         vnQE65kCN1SfRTMYCdmHQMGLVir3F8Mc7ves5b2n5wdfDvX8TRFOIx7pYNYHAgF6kQY/
+         j+Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pBppaTksBxMSYQ8KEwF0hkGErNoqL29ELbfwE/o2LyQ=;
+        b=iZtvnF6ucMdO5mhIVvpBAMlHi6pXwvBvlMwYxzpVYqnGBHz6GqfXcU67gotZVIU5mb
+         kkYZHR7jyKL06x2pYyiTjVGEL9ha8VNGnRmaS7UR3NTrupMX/MJAF8GcR10Dhq5VDgvu
+         thyv+BHlVkw0ObFe23nyDg5N2W3q6W7ftrlZ4mEaK871zktCyfbGdYwz/QkmWwxdoBhY
+         IRqEjKMP4eyk2QW45Y8qykvEjZnjep8O2XoMvxQud6dn7ndS9sJvSk0hU7LYOjIDUgQw
+         QTPloV8Wq3i+iM79eNV5a2ZcctMI7DZXMPMM7fDUFvnRgQb3Y9zmFiifnbk/szqwhdxD
+         EoSw==
+X-Gm-Message-State: AOAM533BVwzudUjFLeRUiRCwYXuAXLY6gvNGljuDlmqDF5ukuiOsPa7a
+        CD1QsUEvouCNY2qNTsjfvZE5kw==
+X-Google-Smtp-Source: ABdhPJz34FDyktVxt3U52IjSJ+sWap5q0lea2zQvyKD/pTpOEF9bIjwLB1bdquXs2h9QefNRXroxhA==
+X-Received: by 2002:a63:7f1c:0:b0:382:1fb5:58b8 with SMTP id a28-20020a637f1c000000b003821fb558b8mr8454585pgd.507.1649279734739;
+        Wed, 06 Apr 2022 14:15:34 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm6217879pjt.11.2022.04.06.14.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 14:15:34 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 21:15:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] KVM: X86: Save&restore the triple fault request
+Message-ID: <Yk4C8gA2xVCrzgrG@google.com>
+References: <20220318074955.22428-1-chenyi.qiang@intel.com>
+ <20220318074955.22428-2-chenyi.qiang@intel.com>
+ <YkzRSHHDMaVBQrxd@google.com>
+ <YkzUceG4rhw15U3i@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkzUceG4rhw15U3i@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 15:12:18  +0000, Leo Yan wrote:
-> On Sun, Apr 03, 2022 at 08:33:37PM +0000, Ali Saidi wrote:
-
-[...]
-
-> > The latter logic is why I think it's perfectly acceptable to use HITM to
-> > indicate a peer cache-to-cache transfer, however since others don't feel that way
-> > let me propose a single additional snooping type PERF_MEM_SNOOP_PEER that
-> > indicates some peer of the hierarchy below the originating core sourced the
-> > data.  This clears up the definition that line came from from a peer and may or
-> > may not have been modified, but it doesn't add a lot of implementation dependant
-> > functionality into the SNOOP API. 
+On Tue, Apr 05, 2022, Sean Christopherson wrote:
+> On Tue, Apr 05, 2022, Sean Christopherson wrote:
+> > On Fri, Mar 18, 2022, Chenyi Qiang wrote:
+> > > @@ -4976,6 +4980,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+> > >  		}
+> > >  	}
+> > >  
+> > > +	if (events->flags & KVM_VCPUEVENT_TRIPLE_FAULT)
+> > > +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+> > > +
+> > >  	kvm_make_request(KVM_REQ_EVENT, vcpu);
 > > 
-> > We could use the mem-level to indicate the level of the cache hierarchy we had
-> > to get to before the snoop traveled upward, which seems like what x86 is doing
-> > here.
+> > Looks correct, but this really needs a selftest, at least for the SET path since
+> > the intent is to use that for the NOTIFY handling.  Doesn't need to be super fancy,
+> > e.g. do port I/O from L2, inject a triple fault, and verify L1 sees the appropriate
+> > exit.
+> > 
+> > Aha!  And for the GET path, abuse KVM_X86_SET_MCE with CR4.MCE=0 to coerce KVM into
+> > making a KVM_REQ_TRIPLE_FAULT, that way there's no need to try and hit a timing
+> > window to intercept the request.
 > 
-> It makes sense to me that to use the highest cache level as mem-level.
-> Please add comments in the code for this, this would be useful for
-> understanding the code.
-
-Ok.
-
-> > PEER_CORE -> MEM_SNOOP_PEER + L2
-> > PEER_CLSTR -> MEM_SNOOP_PEER + L3
-> > PEER_LCL_CLSTR -> MEM_SNOOP_PEER + L3 (since newer neoverse cores don't support
-> > the clusters and the existing commercial implementations don't have them).
+> Drat, I bet that MCE path means the WARN in nested_vmx_vmexit() can be triggered
+> by userspace.  If so, this patch makes it really, really easy to hit, e.g. queue the
+> request while L2 is active, then do KVM_SET_NESTED_STATE to force an "exit" without
+> bouncing through kvm_check_nested_events().
 > 
-> Generally, this idea is fine for me.
-
-Great.  
-
-Now the next tricky thing. Since we're not using HITM for recording the memory
-events, the question becomes for the c2c output should we output the SNOOP_PEER
-events as if they are HITM events with a clarification in the perf-c2c man page
-or effectively duplicate all the lcl_hitm logic, which is a fair amount,  in
-perf c2c to add a column and sort option? 
-
-> Following your suggestion, if we connect the concepts PoC and PoU in Arm
-> reference manual, we can extend the snooping mode with MEM_SNOOP_POU
-> (for PoU) and MEM_SNOOP_POC (for PoC), so:
+>   WARN_ON_ONCE(kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu))
 > 
-> PEER_CORE -> MEM_SNOOP_POU + L2
-> PEER_LCL_CLSTR -> MEM_SNOOP_POU + L3
-> PEER_CLSTR -> MEM_SNOOP_POC + L3
-> 
-> Seems to me, we could consider for this.  If this is over complexity or
-> even I said any wrong concepts for this, please use your method.
+> I don't think SVM has a user-triggerable WARN, but the request should still be
+> dropped on forced exit from L2, e.g. I believe this is the correct fix:
 
-I think this adds a lot of complexity and reduces clarity. Some systems
-implement coherent icaches and the PoU would be the L1 cache, others don't so
-that would be the L2 (or wherever there is a unified cache). Similarly, with the
-point of coherency, some systems would consider that dram, but other systems
-have transparent LLCs and it would be the LLC. 
+Confirmed the WARN can be triggered by abusing this patch, I'll get a patch out
+once I figure out why kvm/queue is broken.
 
-Thanks,
-Ali
+diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
+index 2e0a92da8ff5..b7faeae3dcc4 100644
+--- a/tools/testing/selftests/kvm/x86_64/state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/state_test.c
+@@ -210,6 +210,12 @@ int main(int argc, char *argv[])
+                memset(&regs1, 0, sizeof(regs1));
+                vcpu_regs_get(vm, VCPU_ID, &regs1);
+
++               if (stage == 6) {
++                       state->events.flags |= 0x20;
++                       vcpu_events_set(vm, VCPU_ID, &state->events);
++                       vcpu_nested_state_set(vm, VCPU_ID, &state->nested, false);
++               }
++
+                kvm_vm_release(vm);
+
+                /* Restore state in a new VM.  */
 

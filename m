@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABD74F629C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA874F62C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbiDFPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S235787AbiDFPQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235777AbiDFPJh (ORCPT
+        with ESMTP id S235734AbiDFPQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:09:37 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED39F472F07
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649246650; x=1680782650;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uEpWVDG9mHAzC3vQt8/6DshQkU5+A/w706L6sIKCmZ4=;
-  b=Wbo+Z5XO48d1xnJXvfuaF9Ew3HN9KKbRGwSeqCDE5SC+gRzfLuHDjslQ
-   rO0TgXP1ZRWVAMlXTUk9CSyhST1CzYjOhXlWswSbGZi9s2gmYHOqoJoKM
-   HAOHjdpODydczu6xYKYnFzG74d1SR6XNATIhMFPC+hKP+Ue5gFE+mv0TU
-   hbOMQ4jICPF+M8Ae2TONoAlUQc9vzS5BfANfsuBRuqXI4syZXhyvuY1wk
-   S0PLleJy8eFWbakFc3MZpRIFEO/6X0ILqrdPjaSvxX/oM5iskvMYloB7K
-   lmoTsw+zPmRn7Lv91UROVHHzLTeJ8+f4lBrDmdxk4RV4H5UgGsKBvmMM5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240958360"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="240958360"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:54:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="722484316"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2022 04:54:00 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nc4Ea-0004NR-32;
-        Wed, 06 Apr 2022 11:54:00 +0000
-Date:   Wed, 6 Apr 2022 19:53:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Michael Yan <michael.yan@starfivetech.com>,
-        Jenny Zhang <jenny.zhang@starfivetech.com>
-Subject: [esmil:visionfive 39/55] sound/soc/starfive/pwmdac.h:145:6: warning:
- no previous prototype for 'sf_pwmdac_pcm_push_tx'
-Message-ID: <202204061929.5OKjyPph-lkp@intel.com>
+        Wed, 6 Apr 2022 11:16:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D44C265EAA
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649247318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kB1T+ZnqR2/L037KmDjJiiYzrhgcu2TNRn7h+cl2h1Q=;
+        b=Ssdyj+AkDcJvgflY7B0DavsWApsLQgsY9oSlS8g5c5CASfUw4DEvSRGGHZ4u4R+uGMkDg5
+        MOveifUhM9M2hy6qlRqjDlxDelTD6TgL7TPt4mcLwu02dGVBB5jy/tKdk/aNRpatNEURlS
+        dkqQMhp51XcNb2KguyWfDyWGZjOb9Zk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-372-NVV-rqNPMjmD6bT48ZKlWw-1; Wed, 06 Apr 2022 07:53:40 -0400
+X-MC-Unique: NVV-rqNPMjmD6bT48ZKlWw-1
+Received: by mail-wm1-f71.google.com with SMTP id r64-20020a1c2b43000000b0038b59eb1940so2133827wmr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:53:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kB1T+ZnqR2/L037KmDjJiiYzrhgcu2TNRn7h+cl2h1Q=;
+        b=k5wieS+r1heDnhX0wOkiagF8ME69xD7Tgf7nxaXCnu3k2oGHqW0ylDQH4cjq8zwbtr
+         uHGUnD1mjEtOsGx0RacG8MfMlPp+4MwgzG38IQcj7Uu1WXQ0HFX1iThu5IK2XGz5rNUH
+         JVCYuzVWsM+uK4GLgmhUbp4cv27qZfzGobm3t3uBGxJzsAYjodA/KL7nAw502WSg8Ttv
+         BOuu/KX6klfsZ4tx3ZVD+92JC+xigNhCS+HlHxtN530l1NmCjX26GcxUWgqg1P4aLGxC
+         IWZSg5va3hyvr9G9+FYa40AmbhBO3dfEtsNPwEmf9+zvW3blYVwOYbM51g7BJKV2D+R0
+         Fcrg==
+X-Gm-Message-State: AOAM5311iHvbmXvSsOriafXuchU2W8VECi1S2UysWmeEpK9HYCXabRSD
+        ejpV2yIB07FZWt/Cg0jH6Pbk8CPUzYc9ubeKYd6SAg+xUXkAiXLju52Oh46F4x17qlpwJZ9W9Pj
+        p/DeCAWg39MW4HJydkhJbQnGW
+X-Received: by 2002:adf:eb48:0:b0:203:f854:86cc with SMTP id u8-20020adfeb48000000b00203f85486ccmr6312035wrn.102.1649246019001;
+        Wed, 06 Apr 2022 04:53:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2+5QZG87zHPtKHombCPhUvvOUvDWdcIY4nG1TjUzIlk1J6N8DJq0jnyTF+14SRheRL60Wcw==
+X-Received: by 2002:adf:eb48:0:b0:203:f854:86cc with SMTP id u8-20020adfeb48000000b00203f85486ccmr6312018wrn.102.1649246018821;
+        Wed, 06 Apr 2022 04:53:38 -0700 (PDT)
+Received: from redhat.com ([2.55.138.162])
+        by smtp.gmail.com with ESMTPSA id r4-20020a05600c35c400b0038cbd8c41e9sm4594698wmq.12.2022.04.06.04.53.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 04:53:38 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 07:53:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, sgarzare@redhat.com,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH V2 2/5] virtio: use virtio_reset_device() when possible
+Message-ID: <20220406074440-mutt-send-email-mst@kernel.org>
+References: <20220406083538.16274-1-jasowang@redhat.com>
+ <20220406083538.16274-3-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220406083538.16274-3-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   7ff84520cb688edd6028a4ac3de3ed684eb22794
-commit: 46f456a9a328b4f2904920484bb3cf5afb654cdc [39/55] ASoC: starfive: Add StarFive JH7100 audio drivers
-config: h8300-randconfig-r004-20220406 (https://download.01.org/0day-ci/archive/20220406/202204061929.5OKjyPph-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/46f456a9a328b4f2904920484bb3cf5afb654cdc
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 46f456a9a328b4f2904920484bb3cf5afb654cdc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash sound/soc/
+On Wed, Apr 06, 2022 at 04:35:35PM +0800, Jason Wang wrote:
+> This allows us to do common extension without duplicating codes.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+codes -> code
 
-All warnings (new ones prefixed by >>):
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index 75c8d560bbd3..8dde44ea044a 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -430,7 +430,7 @@ int register_virtio_device(struct virtio_device *dev)
+>  
+>  	/* We always start by resetting the device, in case a previous
+>  	 * driver messed it up.  This also tests that code path a little. */
+> -	dev->config->reset(dev);
+> +	virtio_reset_device(dev);
+>  
+>  	/* Acknowledge that we've seen the device. */
+>  	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+> @@ -496,7 +496,7 @@ int virtio_device_restore(struct virtio_device *dev)
+>  
+>  	/* We always start by resetting the device, in case a previous
+>  	 * driver messed it up. */
+> -	dev->config->reset(dev);
+> +	virtio_reset_device(dev);
+>  
+>  	/* Acknowledge that we've seen the device. */
+>  	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+> -- 
+> 2.25.1
 
-   In file included from include/linux/err.h:5,
-                    from include/linux/clk.h:12,
-                    from sound/soc/starfive/pwmdac.c:7:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   In file included from sound/soc/starfive/pwmdac.c:19:
-   sound/soc/starfive/pwmdac.h: At top level:
->> sound/soc/starfive/pwmdac.h:145:6: warning: no previous prototype for 'sf_pwmdac_pcm_push_tx' [-Wmissing-prototypes]
-     145 | void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev) { }
-         |      ^~~~~~~~~~~~~~~~~~~~~
->> sound/soc/starfive/pwmdac.h:146:6: warning: no previous prototype for 'sf_pwmdac_pcm_pop_rx' [-Wmissing-prototypes]
-     146 | void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev) { }
-         |      ^~~~~~~~~~~~~~~~~~~~
->> sound/soc/starfive/pwmdac.h:147:5: warning: no previous prototype for 'sf_pwmdac_pcm_register' [-Wmissing-prototypes]
-     147 | int sf_pwmdac_pcm_register(struct platform_device *pdev)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
-
-
-vim +/sf_pwmdac_pcm_push_tx +145 sound/soc/starfive/pwmdac.h
-
-   137	
-   138	
-   139	
-   140	#if IS_ENABLED(CONFIG_SND_STARFIVE_PWMDAC_PCM)
-   141	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev);
-   142	void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev);
-   143	int sf_pwmdac_pcm_register(struct platform_device *pdev);
-   144	#else
- > 145	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev) { }
- > 146	void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev) { }
- > 147	int sf_pwmdac_pcm_register(struct platform_device *pdev)
-   148	{
-   149		return -EINVAL;
-   150	}
-   151	#endif
-   152	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953E24F57E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DD74F57E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiDFI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S236063AbiDFI3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242525AbiDFI1L (ORCPT
+        with ESMTP id S245726AbiDFI2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:27:11 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4F8338E19
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:05:49 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id e4so1049184oif.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 19:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
-        b=LOFD1TB5DHCmdfFhLMSs0KFUQCTqjO1cUH6JeNgY3rqhZKF4HwlfE5cVVqI7+9FwI3
-         1nWfuNTNewIPCUr2fopefsiatrMpzcGWOywnhsuJ1QCvvzT/rigzes5gu0xjmGk6RTbj
-         91zvAhi3vAWNLCyc3+P49DKDOOP9IICYV9kwc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
-        b=CkMcGgh8RZR8riXxRRVJgHbDD93TibAeu9kMVEQPRovXv8cayg9Tz1okH0JaDNKgu2
-         6j+f1mGsidtrOOK8PXU02zgDsK6DySOpZcDUcFZI1cMhW+ENRhp+0pQ6mkhKLEITi6ma
-         gcRDar29eGrdtMjrqy3MpNKzuKLP138Ltxfc6l7qn0cDsel8yP6TIwMe+EJKCxXUF125
-         MeVTq8qGVBjn9xdpw1N1SDDY/uNYq35ltsFAToTb8r9OpezArBeOVFI7l7+mkRqtBmD0
-         jIZqiD/WEkiO3eEdam5f98wTdXdbeuSY4a/joyvEA/2EDPbGqBMluEPdRJwcVhCkfYYg
-         xQAg==
-X-Gm-Message-State: AOAM531Pf0Wa1Gljge+6qt3TnnjFzK7tqac6WwKJ0Rcb2AEfIVIPRzSs
-        rbDl/bZjgs2HPgiiNoVq/5rtWsLfcvBpIg==
-X-Google-Smtp-Source: ABdhPJyQDzOez8KDKMv21Ci8ZFr/OT/uPDnk+jyyN/5mtueQtdgetX4JxBCj6kzGTk5wmbvxyR2SCQ==
-X-Received: by 2002:a05:6808:1827:b0:2da:5085:2e78 with SMTP id bh39-20020a056808182700b002da50852e78mr2648846oib.172.1649210747494;
-        Tue, 05 Apr 2022 19:05:47 -0700 (PDT)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com. [209.85.160.44])
-        by smtp.gmail.com with ESMTPSA id hg14-20020a056870790e00b000e1c070a73asm5372557oab.55.2022.04.05.19.05.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 19:05:45 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-d39f741ba0so1399790fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 19:05:44 -0700 (PDT)
-X-Received: by 2002:a05:6870:c142:b0:dd:d5a3:767c with SMTP id
- g2-20020a056870c14200b000ddd5a3767cmr2910063oad.291.1649210744492; Tue, 05
- Apr 2022 19:05:44 -0700 (PDT)
+        Wed, 6 Apr 2022 04:28:32 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A71229A9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1649211058; x=1680747058;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=d0+FytOO558btlFRtC1lBvGsmdlxFF1L6dG+96oaJ+4=;
+  b=Ap2r6wIi1nWueID3nez4OAOxwWCiDpxDfRQnNYpGf0oTP3C759vS0rQ9
+   m/Vn/rBGvGys1He1yI9o4kSsgZfk3QtOahH+c/q/eVmfLzdfMMUwcAzP5
+   mBvqRGq7kuRBYhMFjUGV5W34MjsNt1205gNvQ6pVqE0dNk9UhdoOKs1nI
+   4zg4PZMs2advY+LczYDuo2jbygA91DA1AOoNnkYEErwXcM3ia4tzmy3Qd
+   LlBCwRluYYzlKjobnpfPjyLveH3YdY+eobA/GHe4K7dnYwDrS7NsSKDfd
+   dkMlHbJh2At0i/EhmfYJI9pCDLg5/hStjtD1CZP+EsNZoZbVOHCV0mLUX
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,238,1643644800"; 
+   d="scan'208";a="196065495"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Apr 2022 10:10:51 +0800
+IronPort-SDR: zKnTsBzZU1ojdFhMsC8qeMSGf/pKmkJZ1Zgv0MgaQ0yfSBoFovouw3NNhJpoVFwvTy1HQzCI6e
+ HwRTubTjQzXtK8ioGiWiQJXYEcRKKkm8v0CUQp96wSjb9UvhlhOu//Av6WiOlCu53Z7jEwICWc
+ IRAQXuGjaWygGBVddo6hfSSLrOWsN1LP3CqGhmSpdnuqu2AftOvzkIO24oNNVB09MBFGfley9F
+ Ob3OF9EhGG8aaYdcGiOxY/r+dv69b/kM6lCKPe8PXzM3XhBtPSW8Aq5H2w9E6zFm/Kwc1bd0hF
+ dsjihTklAi7q+tJYZX/ISAYr
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Apr 2022 18:41:33 -0700
+IronPort-SDR: chAfzkgNz4WCosDK2IfDaYnz5xVfWM+UDoz3YYygAtPKRYHy1VOWn0Yx4smyCRkuvhUnvawHAN
+ /Iv43xYUvtCiU+Kj1aB5WWgJHjRvRqOmavFlTGrZYfkKjm567p7iai8g7/ygqizt8OtpOCx2Hy
+ 0gvb9gXxGGmwn0lNuw2Zp5MRj/jV7g74wS3C3RJYkhtdFT2s57+jPW3UaKfPPQiTxBDQgbF63J
+ E62F2LzLIWPNTR0nQ3sFNiHaTVc52LNgPLXwM0AbEVi2ylyKYnb9/6KqvWPrNf1ywkzuD7JuIw
+ 4Qk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Apr 2022 19:10:52 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KY7K65Yv2z1SVp0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:10:50 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1649211050; x=1651803051; bh=d0+FytOO558btlFRtC1lBvGsmdlxFF1L6dG
+        +96oaJ+4=; b=DGiCKGDztbwwCLwB/GNQfZx3xgOClhBsxA45wxipCKiSXhNZqTz
+        p6csTAu3GZxbpDP4IlHGdtZdmut7dIt1KCRj75DkmeMfA5gnFB+hE9tLkHpKgaPr
+        /6mssPYeZ16UAmbDgiWOjdCgpJNBaNQhmHGOHesrlL8zE/sKhwnEJVM+9IHPvPUi
+        FrsRxTAq6YVv8r/ByCzAkUek1sZHIYZ/Vw0wKflzibFNO/qBQYB8ay3c6eIiexkK
+        6M7Yghqh6wKRWZzgGjNaatgroogitGgXU1Zf7aPL+j7PRxzXMnpTpxUFJ9kw3ugc
+        skIeqNZoWlGz9PUZRczE+owJvbQVsYaSkWQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bvf9uKsKlF-2 for <linux-kernel@vger.kernel.org>;
+        Tue,  5 Apr 2022 19:10:50 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KY7K52xF7z1Rvlx;
+        Tue,  5 Apr 2022 19:10:49 -0700 (PDT)
+Message-ID: <da15b34f-2f13-6c97-29f1-9f26c8ec5a3d@opensource.wdc.com>
+Date:   Wed, 6 Apr 2022 11:10:48 +0900
 MIME-Version: 1.0
-References: <20220127230727.3369358-1-briannorris@chromium.org>
- <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid> <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
-In-Reply-To: <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Tue, 5 Apr 2022 19:05:33 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
-Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
-Subject: Re: [PATCH v2 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes
- on gru
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Lin Huang <hl@rock-chips.com>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/2] ata: ahci: Rename CONFIG_SATA_LPM_POLICY
+ configuration item back
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, hdegoede@redhat.com,
+        Christoph Hellwig <hch@infradead.org>
+References: <20220404200202.9388-1-mario.limonciello@amd.com>
+ <20220404200202.9388-2-mario.limonciello@amd.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220404200202.9388-2-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,32 +102,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello again Peter,
+On 4/5/22 05:02, Mario Limonciello wrote:
+> CONFIG_SATA_LPM_MOBILE_POLICY was renamed to CONFIG_SATA_LPM_POLICY in
+> commit 4dd4d3deb502 ("ata: ahci: Rename CONFIG_SATA_LPM_MOBILE_POLICY
+> configuration item").
+> 
+> This caused some pain as users would invisibly lose configuration policy
+> defaults when they built the new kernel.  To help alleviate that, switch
+> back to the old name (even if it's wrong).
+> 
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-On Fri, Mar 4, 2022 at 6:47 AM Peter Geis <pgwipeout@gmail.com> wrote:
-> Transitions anywhere from the default 800mhz cause a lock.
->
-> I'm digging deeper, but I'm hoping you can answer some questions in
-> the meantime:
-> 1. Does this require something from firmware that isn't available on
-> Mainline ATF? (AKA special firmware to the Chromebook line)
-> 2. If not, do you have any recommendations off the top of your head?
+I applied this manually as the "default 3" is from the first patch, 
+which is for 5.19. This one is queued in for-5.18-fixes now. Thanks.
 
-I may have a better answer for you now. In the intervening time
-period, I've discovered a potentially-relevant bug, involving
-interactions between the kernel power-domain driver and ATF. See this
-series for my current fixes:
+> ---
+> v1->v2:
+>   * New patch
+>   drivers/ata/Kconfig | 6 ++++--
+>   drivers/ata/ahci.c  | 2 +-
+>   drivers/ata/ahci.h  | 2 +-
+>   3 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 3ffe14057ed2..c3194b80c655 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -115,14 +115,16 @@ config SATA_AHCI
+>   
+>   	  If unsure, say N.
+>   
+> -config SATA_LPM_POLICY
+> +config SATA_MOBILE_LPM_POLICY
+>   	int "Default SATA Link Power Management policy for low power chipsets"
+>   	range 0 4
+>   	default 3
+>   	depends on SATA_AHCI
+>   	help
+>   	  Select the Default SATA Link Power Management (LPM) policy to use
+> -	  for chipsets / "South Bridges" designated as supporting low power.
+> +	  for chipsets / "South Bridges" supporting low-power modes. Such
+> +	  chipsets are typically found on most laptops but desktops and
+> +	  servers now also widely use chipsets with low power modes support.
+>   
+>   	  The value set has the following meanings:
+>   		0 => Keep firmware settings
+> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+> index 84456c05e845..397dfd27c90d 100644
+> --- a/drivers/ata/ahci.c
+> +++ b/drivers/ata/ahci.c
+> @@ -1595,7 +1595,7 @@ static int ahci_init_msi(struct pci_dev *pdev, unsigned int n_ports,
+>   static void ahci_update_initial_lpm_policy(struct ata_port *ap,
+>   					   struct ahci_host_priv *hpriv)
+>   {
+> -	int policy = CONFIG_SATA_LPM_POLICY;
+> +	int policy = CONFIG_SATA_MOBILE_LPM_POLICY;
+>   
+>   
+>   	/* Ignore processing for chipsets that don't use policy */
+> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> index 6ead58c1b6e5..ad11a4c52fbe 100644
+> --- a/drivers/ata/ahci.h
+> +++ b/drivers/ata/ahci.h
+> @@ -236,7 +236,7 @@ enum {
+>   	AHCI_HFLAG_NO_WRITE_TO_RO	= (1 << 24), /* don't write to read
+>   							only registers */
+>   	AHCI_HFLAG_USE_LPM_POLICY	= (1 << 25), /* chipset that should use
+> -							SATA_LPM_POLICY
+> +							SATA_MOBILE_LPM_POLICY
+>   							as default lpm_policy */
+>   	AHCI_HFLAG_SUSPEND_PHYS		= (1 << 26), /* handle PHYs during
+>   							suspend/resume */
 
-https://lore.kernel.org/linux-rockchip/20220406014842.2771799-1-briannorris@chromium.org/
-[RFC PATCH 0/2] rockchip / devfreq: Coordinate DRAM controller
-resources between ATF and kernel
 
-If that happens to help you (it may help, for instance, if your system
-was toggling NPLL off/on like mine was; it also may help if you're
-hitting a race on PMU_BUS_IDLE_REQ like noticed in patch 1), I'd love
-your feedback there.
-
-It's still possible your problems are completely unrelated though.
-
-Regards,
-Brian
+-- 
+Damien Le Moal
+Western Digital Research

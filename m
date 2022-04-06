@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890564F63B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAB64F63AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbiDFPtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S236684AbiDFPs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236964AbiDFPrz (ORCPT
+        with ESMTP id S236981AbiDFPr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:47:55 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DF1136FD7;
-        Wed,  6 Apr 2022 06:05:35 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:ff63:de1f:2a77:5241] (unknown [IPv6:2a01:e0a:120:3210:ff63:de1f:2a77:5241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B83D61F44155;
-        Wed,  6 Apr 2022 14:05:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649250334;
-        bh=8ZGg2lyWu5RKnQ3rLN2WnQy5xuyBOPkO3yKRiol9ycU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QXe3LgxAeKlxnjsV0YDwzLSqEuWxxSQTFm4c5lDQh7ro0gZ1d7zmkZFifpFQRblU9
-         do7GBLvZwEgY+g4qM/a8YIgRzjlTOFLO91XPTliuqqNrSIgLdQGGEsX6cHFnC9yZhw
-         RNH18tulbkuqUByzBkSxpE4Zdgv63kYcILwdiK9y5u+jkqOyDXfQHmaAGdm8OSZQNo
-         +HE2ZpqMMqq485f8yIUEmTZkqISkUmT+9ty6wwt2vI5ETDU2MaeUJ2RUSplEVEOdHl
-         P+Z41DAXsl2y6UfUZaXjavK2cxCk1K1Fb6sjaGjTm5/czRkR6IxLbqn2FkI4W0tLs/
-         RtjW5pkGjK2Rg==
-Message-ID: <a1069c94-4c3c-ee4d-738a-752bb1d12dac@collabora.com>
-Date:   Wed, 6 Apr 2022 15:05:31 +0200
+        Wed, 6 Apr 2022 11:47:56 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D9A1777D3;
+        Wed,  6 Apr 2022 06:05:43 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id c42so2554402edf.3;
+        Wed, 06 Apr 2022 06:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rRgvDvUl61lh/9aR+IEBANuvNM3XJ42a6XvezLdfwRU=;
+        b=lixNMfphu5wieSYGl6MVv8y2FmGyKF+QcsLRnOA39qbrvyRaZZiPTBPD63KdIh0XF9
+         Q5OFTMVs2UwQV4H8lGygQfhlRCHyqOoXqjG0uTrCzH6am5wZuYHwq30vataSspRkw8wk
+         GfEzJa+pYbyR07MrrFHtTogDceGeDDMpxCdRK1k3IjBBGm4sEMF/1/d/ed1QSgCvL+Fy
+         x1jQhISCNhFS4k6JmeW/Ab7F3tpNF1zFR7VfQVYm4oqQmOG7jMbgpCtrKpkn3fUHa1Ah
+         Xwbt+NGGGTPO4hQBlf9hgCD7ajwps0XGrKXgrhwfIMep1jVaVqvbFn5VoKomgAYqrpk1
+         tFBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rRgvDvUl61lh/9aR+IEBANuvNM3XJ42a6XvezLdfwRU=;
+        b=Yuf7aZDmy8Z93pdX3xK/VV9Z/Eu3l1BkjTzRJA3o0rzHMCqSw3cr5NAwDzhS+MT9Yg
+         O8wgjW6kz4dIqld7Rl+DQrNgJcLuQT3V/tf8BbYQpVD+sTantRutVbviE+2KcWAwUSAB
+         eEOS4dSl6Jxu3MuQS2ffjR7eC4DKfhpd85fj7CCJdbh6TH0UHOkMBWJMnuMnoU4JM2EO
+         lnK/bgUYc9l4pNm/S2qBcwARAdvAzGfUDjKoF5MvblCha99RuVqFQLbCT6lFNJ6GqxPV
+         Ol6rzY7auxPw9enUBeFyY72PrmUguaMzyhbsJKMoyEIP2Ah0llIUkxrrpFNsjvP1BHVS
+         Ieog==
+X-Gm-Message-State: AOAM532Wko6rA0uNQt0iwxZDeFGhWjc5cteDpa8YjbyzKBzAdLZouc+o
+        nHQmTK6QqqbrTjPpL+10YP4=
+X-Google-Smtp-Source: ABdhPJxfGL+4HXovbKpvohbOmZMjgz8AFTIA1Few84ESiJrv1iDbviCKpGxfjgCU+0BVrRfnvH725A==
+X-Received: by 2002:a05:6402:27d1:b0:419:1b02:4a04 with SMTP id c17-20020a05640227d100b004191b024a04mr8629924ede.218.1649250342056;
+        Wed, 06 Apr 2022 06:05:42 -0700 (PDT)
+Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
+        by smtp.gmail.com with ESMTPSA id p13-20020a50d88d000000b0041cd1a083f7sm4409601edj.1.2022.04.06.06.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 06:05:40 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 15:05:38 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Sandipan Patra <spatra@nvidia.com>
+Cc:     treding@nvidia.com, jonathanh@nvidia.com, digetx@gmail.com,
+        ulf.hansson@linaro.org, andriy.shevchenko@linux.intel.com,
+        cai.huoqing@linux.dev, bbasu@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch V3] soc/tegra: pmc: update Tegra234 reset sources
+Message-ID: <Yk2QIgXZ4PJqRUP4@orome>
+References: <20220401143343.31989-1-spatra@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford <aford173@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
-References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
- <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com>
- <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
- <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com>
- <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
- <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
- <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
- <163202bd-ea51-e80a-1481-568fae25b045@collabora.com>
- <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
- <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
- <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
- <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com>
- <CAHCN7x+YuXFrMe6dYo_VhkG7ey1jcPTpOMCM1=qoTivZO9U2Rw@mail.gmail.com>
- <f495aa2b-81f7-a3cd-a6dd-cc5ae5f0a81f@collabora.com>
- <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MfVVcTOm47LLmQ57"
+Content-Disposition: inline
+In-Reply-To: <20220401143343.31989-1-spatra@nvidia.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,29 +75,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Le 06/04/2022 à 15:02, Nicolas Dufresne a écrit :
-> Le mercredi 06 avril 2022 à 14:50 +0200, Benjamin Gaignard a écrit :
->>> default=1 value=1
->>> 1: Frame-Based
->>>                    hevc_start_code 0x00a40a96 (menu)   : min=1 max=1
->>> default=1 value=1
->>> 1: Annex B Start Code
->> It is the same so that suggest the issue is coming from GStreamer plugin.
-> Can you report the GStreamer commit hash you have building on ? Also please
-> validate the creation date of the plugin (libgstv4l2codecs.so) against your
-> source update date. Reminder that GStreamer is now mono-repo (just in case).
->
-> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
-> Hash: 54b7c1f98084c85d103446cc3f2edce42ad53b0f
->
-> Benjamin, can you confirm you have no local changes and this is the hash you are
-> building from ?
+--MfVVcTOm47LLmQ57
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes that is the hash I'm using without local changes
+On Fri, Apr 01, 2022 at 08:03:43PM +0530, Sandipan Patra wrote:
+> Reset_sources list is updated to add all reset sources
+> and removing ones that do not actually exist.
+>=20
+> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
+> ---
+> Update on V3 patch:
+>     Added more frequent comments to specify every 8 offsets
+> Update on V2 patch:
+>     space inside comment and
+>     Changed decimal to hexadecimal notation in the comments.
+>=20
+>  drivers/soc/tegra/pmc.c | 33 +++++++++++++++++++++++++--------
+>  1 file changed, 25 insertions(+), 8 deletions(-)
 
-Benjamin
+Applied with a slightly reworded commit message.
 
->
-> regards,
-> Nicolas
->
+Thanks,
+Thierry
+
+--MfVVcTOm47LLmQ57
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJNkCIACgkQ3SOs138+
+s6HEjg/+Mywelqh3TVqCKMxiiUC4Nm4Ez4n8yJAml+HFmLDyiz0BewvBI328BwgK
+AF3hUfZvAZN3Czotjy7MijRqdkX7V8OYiAPjf3WlbJ9BAl8RXLFImh0FoXjvlXOZ
+fgTexk+1b3i+eGUQYkEvvD+CCS1EDdXVquiolp/A0bQm5GEEaOK0M1n1sC5rc/5r
+ubrxUF/dNz++Q/DNRzl+xzt63uqhBCu4c19VMMcGpdj+vCBmjX47zWmkt1Ol0aHV
+EEG43nzEXDw2VawgHJGGsksaozeiGFwXZz0pYEfzgcRgSbjsw3AGrr2obG6pX6pE
+/6wUs0U+UA4hVi/QMFNUhuuLyI10Tcy6r2zH/03oh8L13+dhzj+3KdOdgVPNhDAf
+JqF4xBJm5ZIuU5TvxspbVlEujeVL/7+hDDLhfN2y7F8ASNhtNAyJEFLWPzDmDYGj
++EsV6MkE85MN2UYHyKTceNMvNZZa8Lpv7X2C8Iv0Bsv336Quc3fissM4bU9DRrTC
+Wz4UWzk3h5H1O6l9tZAnySZUppDwMX6K6+bmAiOCGpH+pPMLgilS8g0TXaQ2o1Va
+MzJ+bGxjV2DzfMMLUMB85ZvV0Snrx1ScfgdGpGVSyfeiiaail76xtVF0w0V0WKHC
+/PjKw/BK9txMlOg+404ltVTwC5+1iugKdXTJkXirziib2lY+io4=
+=luRr
+-----END PGP SIGNATURE-----
+
+--MfVVcTOm47LLmQ57--

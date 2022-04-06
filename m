@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2225D4F6034
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374FB4F6065
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiDFNxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S233497AbiDFNse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbiDFNxk (ORCPT
+        with ESMTP id S233489AbiDFNsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:53:40 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C14482518;
-        Wed,  6 Apr 2022 02:04:16 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id 10so3190844qtz.11;
-        Wed, 06 Apr 2022 02:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QpQISEJkMsGGUwWRkm895SJQ98zg+L5bbS31/XzrGiA=;
-        b=V/6a3hS7tQXXpoy3SEUCEWutQNX53bEKd8bYeS10mTop+OOgF6uyYIIWO2Y5qiJSwA
-         ZZzHpdNr7A/CUPLIEv3WQNOInS18DXZ5VdUQYSMCYyIkj3vK3vNw/8cPq+twLPh24NZH
-         381QADyI0AW/n15t5v21gGYxQrVUgGAQ/Ve1OW7byz/x78tsANCUkbyjU6oYEQKZRp26
-         gYetu6u+ketH/fhXx4/jQj6sVxr470FhQxOGdn3drH40eH+2/vnxYU5Z6Tg2HH2rsuZC
-         VuvtomEGcHAaFC3hNTchBNELrvaA5Zd/fJly/1cJV/Ik8ESQeYWiMmgMAHU8bQ11b4Af
-         GBRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QpQISEJkMsGGUwWRkm895SJQ98zg+L5bbS31/XzrGiA=;
-        b=5rgw2WxBPgjroEDdWsiR/AITUoDajFy4xN/hKEjjHnKqonKIJyo4UbrMSlurmz7j6B
-         4XgEuAXJggjI5Pdh18uvrnEJfupCTk/CnLxB9MwIz9jrz12yNjQ2i2ZAnLtfSd8SQD+i
-         wnj74tS+lfkF5hHB/xAAByA2dcyHGYjzvONjrp74TU46uPYK/1WHtniLqTPEcZSdlNP1
-         t6eWcLJC7YGIzaU2QG/bKRXD3Yn/cOz5QdpNIVbk4iAdyE41FOeCWfoq30RNwZl//zNX
-         2Yih1jUeWpRldUEIICAMok+EvJ9bLxxN9ncYOGhfddTCwTSDNAMY1BKR7O1H85+XN2et
-         a3rg==
-X-Gm-Message-State: AOAM530K44oyV3GO8OgL/70wP7p2Jq4ZDM2rxSRAHD5OHGhSpmPzqsxd
-        ePRll/258GsSmao3kdWUPv8x1t0kGfU=
-X-Google-Smtp-Source: ABdhPJwrHVOg7ApX3nRah3rsmk5CCi45Or8wzbEtr1NeXRWyz+taAotR4/9/9EkDW8QeYpzq5ZmXSQ==
-X-Received: by 2002:a05:620a:16b7:b0:67d:3abc:e4d2 with SMTP id s23-20020a05620a16b700b0067d3abce4d2mr4733235qkj.702.1649235851020;
-        Wed, 06 Apr 2022 02:04:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s21-20020a05620a16b500b0067b1205878esm9161645qkj.7.2022.04.06.02.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 02:04:10 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     clm@fb.com, josef@toxicpanda.com
-Cc:     dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] Btrfs: remove redundant judgment
-Date:   Wed,  6 Apr 2022 09:04:04 +0000
-Message-Id: <20220406090404.2488787-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 09:48:07 -0400
+X-Greylist: delayed 6968 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 04:04:44 PDT
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31C52E54D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:04:44 -0700 (PDT)
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 4339A803B0DB
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:08:36 +0000 (UTC)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 063B71003F401
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:08:35 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id c1eUnbjfuQs3Cc1eUnhkQD; Wed, 06 Apr 2022 09:08:35 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=A+Opg4aG c=1 sm=1 tr=0 ts=624d5893
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=ZeFZwYX2NddpyQBIYx0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nUVhw/DqtI6TDwW5cKdD/Hgy36VOLAfB37jUTelqyT0=; b=2OdqUEzwUwjNtbtDmCfCQVr7lK
+        I2ROf5jZLGQAMWWpikDu2+e3dZfCQTXAOWwHZJKAs+toYpinfL44rriMzoAxVA4oSxrFTUhMG5BmK
+        qY3UfCFs1FIE0FAJMTFp1rOuSZ06lnUMnB39w5ZzrVYL6ugcPR0t2sZZocrTjSOj3NTjdVtIG5C6i
+        P1GrUqh56Yr84ww2xTGGD17axlGYv6HwFEPyezpE8ebUbRMwYE6+DTm+aPgRPi7V6AQ4kE9Wqgz+H
+        acqouceVpbhAtmjy04Ueg3g86wP0n6j23Q30h+qM6VMD4Lhivkw3UmerdYz4vtyuHGg6xVjHKj/oG
+        +93pBoIA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36032 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nc1eT-003WtS-BE; Wed, 06 Apr 2022 03:08:33 -0600
+Subject: Re: [PATCH 5.17 0000/1126] 5.17.2-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220405070407.513532867@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+Message-ID: <957affaf-ff9a-db30-d089-6db9750e1d13@w6rz.net>
+Date:   Wed, 6 Apr 2022 02:08:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nc1eT-003WtS-BE
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36032
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On 4/5/22 12:12 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.2 release.
+> There are 1126 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.2-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-iput() has already handled null and non-null parameter. so there is no
-need to use if().
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- fs/btrfs/tree-log.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 273998153fcc..c46696896f03 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -894,8 +894,7 @@ static noinline int replay_one_extent(struct btrfs_trans_handle *trans,
- 	btrfs_update_inode_bytes(BTRFS_I(inode), nbytes, drop_args.bytes_found);
- 	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
- out:
--	if (inode)
--		iput(inode);
-+	iput(inode);
- 	return ret;
- }
- 
--- 
-2.25.1
+Tested-by: Ron Economos <re@w6rz.net>
 

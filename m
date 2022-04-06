@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CDF4F5D67
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6384F5D5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiDFMSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S230496AbiDFMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiDFMQ6 (ORCPT
+        with ESMTP id S232901AbiDFMTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:16:58 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8769B820C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:57:15 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 125so1535730pgc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+5TeASqScFwwkP3ga5oGCfohTpgutsvPzGxNFkO13C4=;
-        b=dKMdohNSUNb1VV4EpSBldV0sxbC2qZcFKgj5JaUcxsPdt0jQu/TBh1EIQDcjqPz3im
-         I6io8uSg1yVclSAioT1LBzSS+4Fmn3XmEknTCM0HKGKAHSsjQE/FLd5s6cSNl6mWVnGd
-         j3GGYE3G8VAJvz0Ji14eQVy51TxNTduEWsFIIYYuICTt2xWtf2U+HsW+i8to+tCUTVAt
-         /SFiOTT/VlLEmCkdw+GTFYdDRRCspkItDeYpigR4kSSHovt9Tr5mEl6ibyp6RfLDzPiR
-         NvDx0xl2wgqVS/FeXCOhhqO7haiZVIzmFkfTG/ArAqvVhNfEe/AkaHLgXQpXxCZzLymV
-         QI9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+5TeASqScFwwkP3ga5oGCfohTpgutsvPzGxNFkO13C4=;
-        b=lxYeFkcLWhDZvlXeBxtrNFySsANieumMMbgVDGcgPDNsPv9nPOenNaYDXeEhPDtEFX
-         P3uNtXE3lws7eUyWJwb6FDKGpDTrADV+CxQFezgiof+9+WA/u4hhFyT2VWSASQ0x/yNN
-         sf32lAGWyBCIv95hNZud13XQFnQlmNOL5ACp4McD55z2+3ts5I+/wSbR1FwqKqYXrHiG
-         Rldl1kxBg+BYOk4psB5EI5NNKiTzSZPKISXjwIMiLGSr0LvvkiqJPRg6Zy9T5JePIDbZ
-         ZMry25505oHl990XLOW4SS56HBBqXF6tZx2JfBNYo42OQhIO/abXb/e8ZUo48hPRkQu/
-         0GvQ==
-X-Gm-Message-State: AOAM531YqlgmkoXePjBEjEyINU/ZsISSl4TrR44TErzghGFJ2dugfkR+
-        38lYjrd8118CIEMPwIQHi0H+mb5pVoLP3w==
-X-Google-Smtp-Source: ABdhPJzGqOpLo+4QhJgiWLy/NvhEnE0UleX/xsTu79qPm1CYo/cT8O/eV9l1Ao5V/SZS0+a+44GtGQ==
-X-Received: by 2002:a65:6e9a:0:b0:382:1804:35c8 with SMTP id bm26-20020a656e9a000000b00382180435c8mr6197058pgb.584.1649231835203;
-        Wed, 06 Apr 2022 00:57:15 -0700 (PDT)
-Received: from slim.das-security.cn ([103.84.139.52])
-        by smtp.gmail.com with ESMTPSA id q18-20020aa78432000000b004fb0a5aa2c7sm18922949pfn.183.2022.04.06.00.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 00:57:14 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     eli.billauer@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] char: xillybus: fix a refcount leak in cleanup_dev()
-Date:   Wed,  6 Apr 2022 15:57:03 +0800
-Message-Id: <20220406075703.23464-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 08:19:04 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13B410A956
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=KaJn7Gi/gqVuEmNrjPS40alhwYrU
+        tCotnu4qjAqSYL0=; b=L33fG8W7PM+IzXsntCFBZZSbQ86rEscCp16Vqa6gMSHB
+        ZDI/f9dGPAuIneLHQqoDhOX5NpcDnzM6+/jf4Gl6jfMG9e0lEQR+W9S476LKu7ba
+        2PomVEJh929eu//4Hs+wtZZP8OLSV6gUeHZAA9c0ztXc8+ix4K8hccLc6LCTWLQ=
+Received: (qmail 2627153 invoked from network); 6 Apr 2022 09:58:49 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Apr 2022 09:58:49 +0200
+X-UD-Smtp-Session: l3s3148p1@qlYeu/fbSJQgAQnoAH8rAO83AtqmbDBd
+Date:   Wed, 6 Apr 2022 09:58:46 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 01/10] mmc: core: improve API to make clear
+ mmc_hw_reset is for cards
+Message-ID: <Yk1INkxW/i5p8yxf@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
+ <20220321115059.21803-2-wsa+renesas@sang-engineering.com>
+ <CAPDyKFqt8UUfGVHvpSX5ciP7qJReTYed=sffCGWPP9psS3vC_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cQf4rzNHPH4cfRh2"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqt8UUfGVHvpSX5ciP7qJReTYed=sffCGWPP9psS3vC_w@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_get_dev is called in xillyusb_probe. So it is better to call
-usb_put_dev before xdev is released.
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/char/xillybus/xillyusb.c | 1 +
- 1 file changed, 1 insertion(+)
+--cQf4rzNHPH4cfRh2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-index dc3551796e5e..39bcbfd908b4 100644
---- a/drivers/char/xillybus/xillyusb.c
-+++ b/drivers/char/xillybus/xillyusb.c
-@@ -549,6 +549,7 @@ static void cleanup_dev(struct kref *kref)
- 	if (xdev->workq)
- 		destroy_workqueue(xdev->workq);
- 
-+	usb_put_dev(xdev->udev);
- 	kfree(xdev->channels); /* Argument may be NULL, and that's fine */
- 	kfree(xdev);
- }
--- 
-2.25.1
+Hi Ulf,
 
+> > To make it unambiguous that mmc_hw_reset() is for cards and not for
+> > controllers, we a) add 'card' to the function name and b) make the
+> > function argument mmc_card instead of mmc_host. A fallback is provided
+> > until all users are converted.
+>=20
+> In my opinion, I think b) is sufficient and would be a nice improvement.
+
+If you say so... but I do wonder why we can't be super clear with the
+function name alone without the function argument as an additional
+source of information? Kernel hacking is complicated enough.
+
+> In this regard, I suggest we make one big cross-subsystem patch (the
+> smallest change as possible) then I can pick it up and send it for the
+> v5.18-rc2.
+
+Ok, I can prepare this.
+
+> > -static void mmc_hw_reset_for_init(struct mmc_host *host)
+> > +/* we can't use mmc_card as a parameter, it is not populated yet */
+>=20
+> Please drop this. The function is internal/static and at least to me,
+> rather self-explanatory.
+
+All other ?w_reset() functions have a card as a parameter. For people
+trying to get into the MMC core, this comment might be helpful to
+understand the anomaly? I know that you as the maintainer do know this
+by heart, this comment is meant for people learning the stuff.
+
+All the best,
+
+   Wolfram
+
+--cQf4rzNHPH4cfRh2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJNSDIACgkQFA3kzBSg
+KbZeZxAApOuKoRg/pcDM9Aqk/r5xQr0MifjkJ89D9Km+0feVU7H+g9UOwQnenXZ1
+Ki6NIoiXNQQAUhRJP5gKjLZ1uA/mNNzYQqjLBmeRP/5r8y2CeNbR8wm83EdbmoRO
+O8CR/2wwfWAhPtXz35yLq9+RKmKdiK3/UI/BYp9bupmM5nClDlVnMJa28qkp1TSg
+dyiIQ40Smc1mbr9YTVIaZ8cxtookuczxhrUd+UyQ9MtBwq3LQ1DKR05BqRsv6AQF
+J86gbBtjOr6ZyO4+3AS5+BLwQ2b1ZoZjQfPOcgor5+DYETIK66prurPL/ZEKLML9
+YVoS77jnlyODq3LdMtYhLrJUZultkfO7f3r/3y66JBMuw8bNfLG8nbozT/7q81Mp
+nHxARkZbV7syIRILUFcTE3MnhysgN55REfE4EuA2CnJ2dvmxCOI+HoscNIFE8X1e
+wBTMz3LLnNmSHuCXh5mBT+dKMiKy0PsD0zs8ki7BhNPogOYC8evBobruUtxVo5ro
+Z3cGAkRqF4GB7oCGFqEddbjeex2IOWBi1d/b8aA1RO40bxtyY2GfFewnCP2S4K5n
+2kJY9B4zUMoA/jrZdWZzQJXgwsrOpJ2Lt57lkUOu6J4Tv3gaYYzG/TqFvH+IJZ4R
+VfwSURSReiLjxIJCEzMYwYssXQkFr55vvexiTeeE47kjoHdkgC0=
+=CuG5
+-----END PGP SIGNATURE-----
+
+--cQf4rzNHPH4cfRh2--

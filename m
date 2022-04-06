@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781944F670B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D6A4F6776
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiDFR3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S239210AbiDFRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiDFR3M (ORCPT
+        with ESMTP id S238896AbiDFR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 13:29:12 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E658729F58B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0D39BDA4;
         Wed,  6 Apr 2022 08:31:42 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 236FUcaU017647;
-        Thu, 7 Apr 2022 00:30:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaU017647
+        by conuserg-08.nifty.com with ESMTP id 236FUcaV017647;
+        Thu, 7 Apr 2022 00:30:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaV017647
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1649259043;
-        bh=fsZLoYvDYA+z/X7p8S2lQGOuwjtdZEozvoW3LWJLMa0=;
+        bh=MSswAqHKy8lumNzIx8NJz222QuH49EevUg0//UJ/VHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XurjcWa8oxcby53NE+d9FsfU2mqkn76uHPM1ZQWoLCLgg2YMsJ73xIE5L8WCXvaIi
-         iDaR5ywgppo6J1ZNmGeA5/9Vvhg1wQt81+cY5OmKHo6MFgPUeCtSALAfQi8Iv0I75I
-         FJaYjttplAKtAbX38dTs8RFsz0OaIXOfSxwKde1XeZIVH7fGBNwanMbVDZ+Sjoqnd6
-         54DIjfJTnyQW8yMzufLTCzBu5jEGCQhZ88+yzSYHk33LKaQjRmwTEnyzOfSFMvASOP
-         7KGHP7oDq0N8KQXdug12K4Rp00ahfQS1/Z0j00N/OK6kIpLZINWzzlUVVNEZKJ3l4D
-         0LyBeQ1oXkGnw==
+        b=2WiwkMWqu8zQm5jY/anENgoCn2uKrKOwBEQxbI2qActQkkO6n8qv0Rf35ACThYE/7
+         yqJJrUkO7Cq8uYtm7Bd8QRR1BVyfa62yX6P2jXBrrhpWaVIgsqYwsp82y41cfxcGGX
+         Nry7828J+weffsZX0HJk8vccKnbWSnjFQp3TfjKN187yDN2Ol0wqU1sui+MHZpyyLb
+         AsUUbOS/thK45e0zdp4Tu04wZxQwJg5JgzEpZowJ1Kz6qM5l2uXuwQ0+0h7QLZNSna
+         g0CGBpLQJ/wWgfsk0HRe/ta3rrTz5MM9MFQcj4mWTbOUpDobe+F4NbyuZkW89bav5o
+         +YfKXy7qchqvA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5/7] kbuild: get rid of duplication in *.mod files
-Date:   Thu,  7 Apr 2022 00:30:21 +0900
-Message-Id: <20220406153023.500847-6-masahiroy@kernel.org>
+Subject: [PATCH 6/7] kbuild: make *.mod not depend on *.o
+Date:   Thu,  7 Apr 2022 00:30:22 +0900
+Message-Id: <20220406153023.500847-7-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220406153023.500847-1-masahiroy@kernel.org>
 References: <20220406153023.500847-1-masahiroy@kernel.org>
@@ -53,80 +53,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is allowed to add the same objects multiple times to obj-y / obj-m:
+The dependency
 
-  obj-y += foo.o foo.o foo.o
-  obj-m += bar.o bar.o bar.o
+    $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o
 
-It is also allowed to add the same objects multiple times to a composite
-module:
+... exists because *.mod files previously contained undefined symbols,
+which are computed from *.o files when CONFIG_TRIM_UNUSED_KSYMS=y.
 
-  obj-m    += foo.o
-  foo-objs := foo1.o foo2.o foo2.o foo1.o
-
-This flexibility is useful because the same object might be selected by
-different CONFIG options, like this:
-
-  obj-m               += foo.o
-  foo-y               := foo1.o
-  foo-$(CONFIG_FOO_X) += foo2.o
-  foo-$(CONFIG_FOO_Y) += foo2.o
-
-The duplicated objects are omitted at link time. It works naturally in
-Makefiles because GNU Make removes duplication in $^ without changing
-the order.
-
-It is working well, almost...
-
-A small flaw I notice is, *.mod contains duplication in such a case.
-
-This is probably not a big deal. As far as I know, the only small
-problem is scripts/mod/sumversion.c parses the same file multiple
-times.
-
-I am fixing this because I plan to reuse *.mod for other purposes,
-where the duplication can be problematic.
-
-The code change is quite simple. We already use awk to drop duplicated
-lines in modules.order (see cmd_modules_order in the same file).
-I copied the code, but changed RS to use spaces as record separators.
-
-I also changed the file format to list one object per line.
+Now that the undefined symbols are put into separate *.usyms files,
+there is no reason to make *.mod depend on *.o files.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/Makefile.build   | 3 ++-
- scripts/mod/sumversion.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ Makefile               | 3 ++-
+ scripts/Makefile.build | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 82ee893909e9..e915aacd02b0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1792,7 +1792,8 @@ ifdef single-build
+ 
+ # .ko is special because modpost is needed
+ single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
+-single-no-ko := $(sort $(patsubst %.ko,%.mod, $(MAKECMDGOALS)))
++single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
++		$(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
+ 
+ $(single-ko): single_modpost
+ 	@:
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 6ae92d119dfa..f7a30f378e20 100644
+index f7a30f378e20..3da731cf6978 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -303,7 +303,8 @@ $(obj)/%.prelink.o: $(obj)/%.o FORCE
- 	$(call if_changed,cc_prelink_modules)
+@@ -85,7 +85,7 @@ ifdef need-builtin
+ targets-for-builtin += $(obj)/built-in.a
  endif
  
--cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) > $@
-+cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
-+	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
+-targets-for-modules := $(foreach x, mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
++targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
+ 				$(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
  
- $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
+ ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+@@ -306,7 +306,7 @@ endif
+ cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+ 	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
+ 
+-$(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
++$(obj)/%.mod: FORCE
  	$(call if_changed,mod)
-diff --git a/scripts/mod/sumversion.c b/scripts/mod/sumversion.c
-index 0125698f2037..79bb9eaa65ac 100644
---- a/scripts/mod/sumversion.c
-+++ b/scripts/mod/sumversion.c
-@@ -398,7 +398,7 @@ void get_src_version(const char *modname, char sum[], unsigned sumlen)
- 	buf = read_text_file(filelist);
  
- 	md4_init(&md);
--	while ((fname = strsep(&buf, " \n"))) {
-+	while ((fname = strsep(&buf, "\n"))) {
- 		if (!*fname)
- 			continue;
- 		if (!(is_static_library(fname)) &&
+ # List module undefined symbols
+@@ -469,7 +469,6 @@ $(multi-obj-m): FORCE
+ 	$(call if_changed,link_multi-m)
+ $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+ 
+-targets += $(multi-obj-m)
+ targets := $(filter-out $(PHONY), $(targets))
+ 
+ # Add intermediate targets:
 -- 
 2.32.0
 

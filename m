@@ -2,268 +2,406 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667DB4F5B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C284F5B17
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239932AbiDFJu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S242363AbiDFJwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444199AbiDFJtT (ORCPT
+        with ESMTP id S1452567AbiDFJuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 05:49:19 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9711630CF3C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:22:30 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso1106357otj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=yiBEe+9/yoFS8QNsq6W7R4IU+UE1TYnjoeST9R9+qNE=;
-        b=KUT/9NgMmzw9YQOEqgdiz670pyxDVPMbjQx3otCmSMt/gdzMHcoLFm2T972RH9JEEJ
-         wzNHJBqSYPoYUG9rbbh+wEnWgQz2amBs1F824UgSA/7sEZRbiWnAt5T/e4pKu9i+sJPu
-         VIlArAJUfWGx8iav+WnwxfS8HQRxOf1Sb95eTUgxXjP78YPWXlpAgJq3PJYqs9VFWk4Y
-         GPWom4esroTnLycQhVNIiHLZxKlkmBZZ/hOXoLKhxBA0FRZhxpg2jMKcBK1CsEOQbRc6
-         I8RDZCVDIKuXUTS8kRhVn5wEBq0KFWZTuzTAB19k2VtQez5WFi8D9mCEuQPI8dkDMAfm
-         LTqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=yiBEe+9/yoFS8QNsq6W7R4IU+UE1TYnjoeST9R9+qNE=;
-        b=WoeF29DyfEm6qrWJn7FxvI7SOKzW7hYXHYf/0TU1iZ8KVL/o+5X0HGV9blx8r4dEZ4
-         zwMyDy+m1JQ6wLlrtt6KvWAucEE2ZyHZ9s3Km2COySJDSLVwSiLZ7SIXbOIi/5TtA45x
-         +SEULpWww0ObRIaSro95toT81EA8YN4y2PGSkNnrzLi6TGvuoXrPTHjzE0Hmzz6VrBbm
-         K/bian2hKpnIVoaWLOwhHPP7M60u7t5OoqoRpqVPDk9D7tgvGAWknMVZaIPdp3DvglTu
-         D8vwsovc/Mf6Tj4UknKjpVX9A2MBCuoSNdzlXvvx1EQjFC0t+JYRM57lt8Bt//LLPPsP
-         j9Mg==
-X-Gm-Message-State: AOAM533eT0Tw9asK5JCZYoqHGOh2tjr5BR+ZCoQxmtzC85qejGDGiOnq
-        oB5ndX38d4t9n3KY9eKkP/F6uA==
-X-Google-Smtp-Source: ABdhPJxM2+O1/dslWgPqHrxOi+Em6zSBu8nEJlKSSUqBOQa0w/3S7eEJuGm4nvupcGs+sNGkQQKeCA==
-X-Received: by 2002:a9d:426:0:b0:5cb:5837:bfc0 with SMTP id 35-20020a9d0426000000b005cb5837bfc0mr2509606otc.305.1649226149595;
-        Tue, 05 Apr 2022 23:22:29 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s125-20020acaa983000000b002ecdbaf98fesm6067819oie.34.2022.04.05.23.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 23:22:29 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 23:22:10 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Arnd Bergmann <arnd@arndb.de>
-cc:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Hugh Dickins <hughd@googl.com>, mpatocka@redhat.com,
-        lczerner@redhat.com, djwong@kernel.org, hch@lst.de,
-        zkabelac@redhat.com, miklos@szeredi.hu, bp@suse.de,
-        akpm@linux-foundation.org,
-        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
-        Valentin CARON - foss <valentin.caron@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        linux-m68k@lists.linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: Regression with v5.18-rc1 tag on STM32F7 and STM32H7 based
- boards
-In-Reply-To: <95a0d1dd-bcce-76c7-97b9-8374c9913321@google.com>
-Message-ID: <7f2993a9-adc5-2b90-9218-c4ca8239c3e@google.com>
-References: <481a13f8-d339-f726-0418-ab4258228e91@foss.st.com> <95a0d1dd-bcce-76c7-97b9-8374c9913321@google.com>
+        Wed, 6 Apr 2022 05:50:05 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB51D42CA45
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:23:40 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KYDwp5FHnz9sTH;
+        Wed,  6 Apr 2022 08:23:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dwLr21BLa_r6; Wed,  6 Apr 2022 08:23:38 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KYDwp4CXrz9sSq;
+        Wed,  6 Apr 2022 08:23:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7BE978B77A;
+        Wed,  6 Apr 2022 08:23:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ZEXgXqXCDtIp; Wed,  6 Apr 2022 08:23:38 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.200])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06EB98B775;
+        Wed,  6 Apr 2022 08:23:37 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2366NRXW390690
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 6 Apr 2022 08:23:27 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2366NPf7390689;
+        Wed, 6 Apr 2022 08:23:25 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 1/5] powerpc/8xx: Move CPM interrupt controller into a dedicated file
+Date:   Wed,  6 Apr 2022 08:23:17 +0200
+Message-Id: <d3a7dc832d905bed14b35d83410cdb69a7ba20e8.1649226186.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1649226200; l=9345; s=20211009; h=from:subject:message-id; bh=TRghPIZWzCEEv4kNXaEaQMRxcQG1byIVRG6jr5eKADc=; b=Hta5hS8mBCofEylmhhu4OfLPI4NhKQJX/TrWWgZJPjxhl0wFPcXSzmlsXMOxj8LrAE1ljFk3Y4U0 nAxU7yBGAtNmfsXZIpoHYIL6H6PzUM0D5uyFkIOIjrkFwgeNiH7d
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Asking Arnd and others below: should noMMU arches have a good ZERO_PAGE?
+CPM interrupt controller is quite standalone. Move it into a
+dedicated file. It will help for next step which will change
+it to a platform driver.
 
-On Tue, 5 Apr 2022, Hugh Dickins wrote:
-> On Tue, 5 Apr 2022, Patrice CHOTARD wrote:
-> > 
-> > We found an issue with last kernel tag v5.18-rc1 on stm32f746-disco and 
-> > stm32h743-disco boards (ARMV7-M SoCs).
-> > 
-> > Kernel hangs when executing SetPageUptodate(ZERO_PAGE(0)); in mm/filemap.c.
-> > 
-> > By reverting commit 56a8c8eb1eaf ("tmpfs: do not allocate pages on read"), 
-> > kernel boots without any issue.
-> 
-> Sorry about that, thanks a lot for finding.
-> 
-> I see that arch/arm/configs/stm32_defconfig says CONFIG_MMU is not set:
-> please confirm that is the case here.
-> 
-> Yes, it looks as if NOMMU platforms are liable to have a bogus (that's my
-> reading, but it may be unfair) definition for ZERO_PAGE(vaddr), and I was
-> walking on ice to touch it without regard for !CONFIG_MMU.
-> 
-> CONFIG_SHMEM depends on CONFIG_MMU, so that PageUptodate is only needed
-> when CONFIG_MMU.
-> 
-> Easily fixed by an #ifdef CONFIG_MMU there in mm/filemap.c, but I'll hunt
-> around (again) for a better place to do it - though I won't want to touch
-> all the architectures for it.  I'll post later today.
+This is pure code move, checkpatch report is ignored at this point,
+except one parenthesis alignment which would remain at the end of
+the series. All other points fly away with following patches.
 
-I could put #ifdef CONFIG_MMU around the SetPageUptodate(ZERO_PAGE(0))
-added to pagecache_init(); or if that's considered distasteful, I could
-skip making it potentially useful to other filesystems, revert the change
-to pagecache_init(), and just do it in mm/shmem.c's CONFIG_SHMEM (hence
-CONFIG_MMU) instance of shmem_init().
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/8xx/Makefile  |   2 +-
+ arch/powerpc/platforms/8xx/cpm1-ic.c | 151 +++++++++++++++++++++++++++
+ arch/powerpc/platforms/8xx/cpm1.c    | 139 ------------------------
+ 3 files changed, 152 insertions(+), 140 deletions(-)
+ create mode 100644 arch/powerpc/platforms/8xx/cpm1-ic.c
 
-But I wonder if it's safe for noMMU architectures to go on without a
-working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
-drivers, fs, crypto and more, and it's not at all obvious (to me) that
-they all depend on CONFIG_MMU.  Some might cause (unreported) crashes,
-some might use an unzeroed page in place of a pageful of zeroes.
-
-arm noMMU and h8300 noMMU and m68k noMMU each has
-#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-which seems riskily wrong to me.
-
-h8300 and m68k actually go to the trouble of allocating an empty_zero_page
-for this, but then forget to link it up to the ZERO_PAGE(vaddr) definition,
-which is what all the common code uses.
-
-arm noMMU does not presently allocate such a page; and I do not feel
-entitled to steal a page from arm noMMU platforms, for a hypothetical
-case, without agreement.
-
-But here's an unbuilt and untested patch for consideration - which of
-course should be split in three if agreed (and perhaps the h8300 part
-quietly forgotten if h8300 is already on its way out).
-
-(Yes, arm uses empty_zero_page in a different way from all the other
-architectures; but that's okay, and I think arm's way, with virt_to_page()
-already baked in, is better than the others; but I've no wish to get into
-changing them.)
-
-Patrice, does this patch build and run for you? I have no appreciation
-of arm early startup issues, and may have got it horribly wrong.
-
-Thanks,
-Hugh
-
- arch/arm/include/asm/pgtable-nommu.h |    3 ++-
- arch/arm/mm/nommu.c                  |   16 ++++++++++++++++
- arch/h8300/include/asm/pgtable.h     |    6 +++++-
- arch/h8300/mm/init.c                 |    5 +++--
- arch/m68k/include/asm/pgtable_no.h   |    5 ++++-
- 5 files changed, 30 insertions(+), 5 deletions(-)
-
---- a/arch/arm/include/asm/pgtable-nommu.h
-+++ b/arch/arm/include/asm/pgtable-nommu.h
-@@ -48,7 +48,8 @@ typedef pte_t *pte_addr_t;
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-+extern struct page *empty_zero_page;
-+#define ZERO_PAGE(vaddr)	(empty_zero_page)
- 
- /*
-  * Mark the prot value as uncacheable and unbufferable.
---- a/arch/arm/mm/nommu.c
-+++ b/arch/arm/mm/nommu.c
-@@ -24,6 +24,13 @@
- 
- #include "mm.h"
- 
+diff --git a/arch/powerpc/platforms/8xx/Makefile b/arch/powerpc/platforms/8xx/Makefile
+index 27a7c6f828e0..5a098f7d5d31 100644
+--- a/arch/powerpc/platforms/8xx/Makefile
++++ b/arch/powerpc/platforms/8xx/Makefile
+@@ -3,7 +3,7 @@
+ # Makefile for the PowerPC 8xx linux kernel.
+ #
+ obj-y			+= m8xx_setup.o machine_check.o pic.o
+-obj-$(CONFIG_CPM1)		+= cpm1.o
++obj-$(CONFIG_CPM1)		+= cpm1.o cpm1-ic.o
+ obj-$(CONFIG_UCODE_PATCH)	+= micropatch.o
+ obj-$(CONFIG_MPC885ADS)   += mpc885ads_setup.o
+ obj-$(CONFIG_MPC86XADS)   += mpc86xads_setup.o
+diff --git a/arch/powerpc/platforms/8xx/cpm1-ic.c b/arch/powerpc/platforms/8xx/cpm1-ic.c
+new file mode 100644
+index 000000000000..d5cf0ee7c07d
+--- /dev/null
++++ b/arch/powerpc/platforms/8xx/cpm1-ic.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * empty_zero_page is a special page that is used for
-+ * zero-initialized data and COW.
++ * Interrupt controller for the
++ * Communication Processor Module.
++ * Copyright (c) 1997 Dan error_act (dmalek@jlc.net)
 + */
-+struct page *empty_zero_page;
-+EXPORT_SYMBOL(empty_zero_page);
++#include <linux/kernel.h>
++#include <linux/interrupt.h>
++#include <linux/irqdomain.h>
++#include <linux/of_irq.h>
++#include <asm/cpm1.h>
 +
- unsigned long vectors_base;
++static cpic8xx_t __iomem *cpic_reg;
++
++static struct irq_domain *cpm_pic_host;
++
++static void cpm_mask_irq(struct irq_data *d)
++{
++	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
++
++	clrbits32(&cpic_reg->cpic_cimr, (1 << cpm_vec));
++}
++
++static void cpm_unmask_irq(struct irq_data *d)
++{
++	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
++
++	setbits32(&cpic_reg->cpic_cimr, (1 << cpm_vec));
++}
++
++static void cpm_end_irq(struct irq_data *d)
++{
++	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
++
++	out_be32(&cpic_reg->cpic_cisr, (1 << cpm_vec));
++}
++
++static struct irq_chip cpm_pic = {
++	.name = "CPM PIC",
++	.irq_mask = cpm_mask_irq,
++	.irq_unmask = cpm_unmask_irq,
++	.irq_eoi = cpm_end_irq,
++};
++
++int cpm_get_irq(void)
++{
++	int cpm_vec;
++
++	/*
++	 * Get the vector by setting the ACK bit and then reading
++	 * the register.
++	 */
++	out_be16(&cpic_reg->cpic_civr, 1);
++	cpm_vec = in_be16(&cpic_reg->cpic_civr);
++	cpm_vec >>= 11;
++
++	return irq_linear_revmap(cpm_pic_host, cpm_vec);
++}
++
++static int cpm_pic_host_map(struct irq_domain *h, unsigned int virq,
++			    irq_hw_number_t hw)
++{
++	pr_debug("cpm_pic_host_map(%d, 0x%lx)\n", virq, hw);
++
++	irq_set_status_flags(virq, IRQ_LEVEL);
++	irq_set_chip_and_handler(virq, &cpm_pic, handle_fasteoi_irq);
++	return 0;
++}
++
++/*
++ * The CPM can generate the error interrupt when there is a race condition
++ * between generating and masking interrupts.  All we have to do is ACK it
++ * and return.  This is a no-op function so we don't need any special
++ * tests in the interrupt handler.
++ */
++static irqreturn_t cpm_error_interrupt(int irq, void *dev)
++{
++	return IRQ_HANDLED;
++}
++
++static const struct irq_domain_ops cpm_pic_host_ops = {
++	.map = cpm_pic_host_map,
++};
++
++unsigned int __init cpm_pic_init(void)
++{
++	struct device_node *np = NULL;
++	struct resource res;
++	unsigned int sirq = 0, hwirq, eirq;
++	int ret;
++
++	pr_debug("cpm_pic_init\n");
++
++	np = of_find_compatible_node(NULL, NULL, "fsl,cpm1-pic");
++	if (np == NULL)
++		np = of_find_compatible_node(NULL, "cpm-pic", "CPM");
++	if (np == NULL) {
++		printk(KERN_ERR "CPM PIC init: can not find cpm-pic node\n");
++		return sirq;
++	}
++
++	ret = of_address_to_resource(np, 0, &res);
++	if (ret)
++		goto end;
++
++	cpic_reg = ioremap(res.start, resource_size(&res));
++	if (cpic_reg == NULL)
++		goto end;
++
++	sirq = irq_of_parse_and_map(np, 0);
++	if (!sirq)
++		goto end;
++
++	/* Initialize the CPM interrupt controller. */
++	hwirq = (unsigned int)virq_to_hw(sirq);
++	out_be32(&cpic_reg->cpic_cicr,
++	    (CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
++		((hwirq/2) << 13) | CICR_HP_MASK);
++
++	out_be32(&cpic_reg->cpic_cimr, 0);
++
++	cpm_pic_host = irq_domain_add_linear(np, 64, &cpm_pic_host_ops, NULL);
++	if (cpm_pic_host == NULL) {
++		printk(KERN_ERR "CPM2 PIC: failed to allocate irq host!\n");
++		sirq = 0;
++		goto end;
++	}
++
++	/* Install our own error handler. */
++	np = of_find_compatible_node(NULL, NULL, "fsl,cpm1");
++	if (np == NULL)
++		np = of_find_node_by_type(NULL, "cpm");
++	if (np == NULL) {
++		printk(KERN_ERR "CPM PIC init: can not find cpm node\n");
++		goto end;
++	}
++
++	eirq = irq_of_parse_and_map(np, 0);
++	if (!eirq)
++		goto end;
++
++	if (request_irq(eirq, cpm_error_interrupt, IRQF_NO_THREAD, "error",
++			NULL))
++		printk(KERN_ERR "Could not allocate CPM error IRQ!");
++
++	setbits32(&cpic_reg->cpic_cicr, CICR_IEN);
++
++end:
++	of_node_put(np);
++	return sirq;
++}
+diff --git a/arch/powerpc/platforms/8xx/cpm1.c b/arch/powerpc/platforms/8xx/cpm1.c
+index e82cb7f60151..3c69c7ceedea 100644
+--- a/arch/powerpc/platforms/8xx/cpm1.c
++++ b/arch/powerpc/platforms/8xx/cpm1.c
+@@ -51,145 +51,6 @@
  
- #ifdef CONFIG_ARM_MPU
-@@ -148,9 +155,18 @@ void __init adjust_lowmem_bounds(void)
-  */
- void __init paging_init(const struct machine_desc *mdesc)
+ cpm8xx_t __iomem *cpmp;  /* Pointer to comm processor space */
+ immap_t __iomem *mpc8xx_immr = (void __iomem *)VIRT_IMMR_BASE;
+-static cpic8xx_t __iomem *cpic_reg;
+-
+-static struct irq_domain *cpm_pic_host;
+-
+-static void cpm_mask_irq(struct irq_data *d)
+-{
+-	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
+-
+-	clrbits32(&cpic_reg->cpic_cimr, (1 << cpm_vec));
+-}
+-
+-static void cpm_unmask_irq(struct irq_data *d)
+-{
+-	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
+-
+-	setbits32(&cpic_reg->cpic_cimr, (1 << cpm_vec));
+-}
+-
+-static void cpm_end_irq(struct irq_data *d)
+-{
+-	unsigned int cpm_vec = (unsigned int)irqd_to_hwirq(d);
+-
+-	out_be32(&cpic_reg->cpic_cisr, (1 << cpm_vec));
+-}
+-
+-static struct irq_chip cpm_pic = {
+-	.name = "CPM PIC",
+-	.irq_mask = cpm_mask_irq,
+-	.irq_unmask = cpm_unmask_irq,
+-	.irq_eoi = cpm_end_irq,
+-};
+-
+-int cpm_get_irq(void)
+-{
+-	int cpm_vec;
+-
+-	/*
+-	 * Get the vector by setting the ACK bit and then reading
+-	 * the register.
+-	 */
+-	out_be16(&cpic_reg->cpic_civr, 1);
+-	cpm_vec = in_be16(&cpic_reg->cpic_civr);
+-	cpm_vec >>= 11;
+-
+-	return irq_linear_revmap(cpm_pic_host, cpm_vec);
+-}
+-
+-static int cpm_pic_host_map(struct irq_domain *h, unsigned int virq,
+-			  irq_hw_number_t hw)
+-{
+-	pr_debug("cpm_pic_host_map(%d, 0x%lx)\n", virq, hw);
+-
+-	irq_set_status_flags(virq, IRQ_LEVEL);
+-	irq_set_chip_and_handler(virq, &cpm_pic, handle_fasteoi_irq);
+-	return 0;
+-}
+-
+-/*
+- * The CPM can generate the error interrupt when there is a race condition
+- * between generating and masking interrupts.  All we have to do is ACK it
+- * and return.  This is a no-op function so we don't need any special
+- * tests in the interrupt handler.
+- */
+-static irqreturn_t cpm_error_interrupt(int irq, void *dev)
+-{
+-	return IRQ_HANDLED;
+-}
+-
+-static const struct irq_domain_ops cpm_pic_host_ops = {
+-	.map = cpm_pic_host_map,
+-};
+-
+-unsigned int __init cpm_pic_init(void)
+-{
+-	struct device_node *np = NULL;
+-	struct resource res;
+-	unsigned int sirq = 0, hwirq, eirq;
+-	int ret;
+-
+-	pr_debug("cpm_pic_init\n");
+-
+-	np = of_find_compatible_node(NULL, NULL, "fsl,cpm1-pic");
+-	if (np == NULL)
+-		np = of_find_compatible_node(NULL, "cpm-pic", "CPM");
+-	if (np == NULL) {
+-		printk(KERN_ERR "CPM PIC init: can not find cpm-pic node\n");
+-		return sirq;
+-	}
+-
+-	ret = of_address_to_resource(np, 0, &res);
+-	if (ret)
+-		goto end;
+-
+-	cpic_reg = ioremap(res.start, resource_size(&res));
+-	if (cpic_reg == NULL)
+-		goto end;
+-
+-	sirq = irq_of_parse_and_map(np, 0);
+-	if (!sirq)
+-		goto end;
+-
+-	/* Initialize the CPM interrupt controller. */
+-	hwirq = (unsigned int)virq_to_hw(sirq);
+-	out_be32(&cpic_reg->cpic_cicr,
+-	    (CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
+-		((hwirq/2) << 13) | CICR_HP_MASK);
+-
+-	out_be32(&cpic_reg->cpic_cimr, 0);
+-
+-	cpm_pic_host = irq_domain_add_linear(np, 64, &cpm_pic_host_ops, NULL);
+-	if (cpm_pic_host == NULL) {
+-		printk(KERN_ERR "CPM2 PIC: failed to allocate irq host!\n");
+-		sirq = 0;
+-		goto end;
+-	}
+-
+-	/* Install our own error handler. */
+-	np = of_find_compatible_node(NULL, NULL, "fsl,cpm1");
+-	if (np == NULL)
+-		np = of_find_node_by_type(NULL, "cpm");
+-	if (np == NULL) {
+-		printk(KERN_ERR "CPM PIC init: can not find cpm node\n");
+-		goto end;
+-	}
+-
+-	eirq = irq_of_parse_and_map(np, 0);
+-	if (!eirq)
+-		goto end;
+-
+-	if (request_irq(eirq, cpm_error_interrupt, IRQF_NO_THREAD, "error",
+-			NULL))
+-		printk(KERN_ERR "Could not allocate CPM error IRQ!");
+-
+-	setbits32(&cpic_reg->cpic_cicr, CICR_IEN);
+-
+-end:
+-	of_node_put(np);
+-	return sirq;
+-}
+ 
+ void __init cpm_reset(void)
  {
-+	void *zero_page;
-+
- 	early_trap_init((void *)vectors_base);
- 	mpu_setup();
- 	bootmem_init();
-+
-+	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-+	if (!zero_page)
-+		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-+		      __func__, PAGE_SIZE, PAGE_SIZE);
-+	empty_zero_page = virt_to_page(zero_page);
-+	flush_dcache_page(empty_zero_page);
- }
- 
- /*
---- a/arch/h8300/include/asm/pgtable.h
-+++ b/arch/h8300/include/asm/pgtable.h
-@@ -19,11 +19,15 @@ extern void paging_init(void);
- 
- static inline int pte_file(pte_t pte) { return 0; }
- #define swapper_pg_dir ((pgd_t *) 0)
-+
-+/* zero page used for uninitialized stuff */
-+extern void *empty_zero_page;
-+
- /*
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-+#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
- 
- /*
-  * These would be in other places but having them here reduces the diffs.
---- a/arch/h8300/mm/init.c
-+++ b/arch/h8300/mm/init.c
-@@ -41,7 +41,8 @@
-  * ZERO_PAGE is a special page that is used for zero-initialized
-  * data and COW.
-  */
--unsigned long empty_zero_page;
-+void *empty_zero_page;
-+EXPORT_SYMBOL(empty_zero_page);
- 
- /*
-  * paging_init() continues the virtual memory environment setup which
-@@ -65,7 +66,7 @@ void __init paging_init(void)
- 	 * Initialize the bad page table and bad page to point
- 	 * to a couple of allocated pages.
- 	 */
--	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-+	empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
- 	if (!empty_zero_page)
- 		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
- 		      __func__, PAGE_SIZE, PAGE_SIZE);
---- a/arch/m68k/include/asm/pgtable_no.h
-+++ b/arch/m68k/include/asm/pgtable_no.h
-@@ -38,11 +38,14 @@ extern void paging_init(void);
- #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
- #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
- 
-+/* zero page used for uninitialized stuff */
-+extern void *empty_zero_page;
-+
- /*
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-+#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
- 
- /*
-  * All 32bit addresses are effectively valid for vmalloc...
+-- 
+2.35.1
+

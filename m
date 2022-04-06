@@ -2,112 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E96E4F6722
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306144F6736
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbiDFR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S238883AbiDFR1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239064AbiDFR01 (ORCPT
+        with ESMTP id S239053AbiDFR05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:26:27 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF933205BDF;
-        Wed,  6 Apr 2022 08:25:24 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p10so4646090lfa.12;
-        Wed, 06 Apr 2022 08:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=buklFgMo3io8o1oTm+e0Xy6mGquidMcjQ+rAVmjF0R0=;
-        b=IpUBnNb1wMpq3Z33rLXUmoesOPAyubbH73r3NT6CG2VFE7ISsrjIUEOS4mq1gMPJ0/
-         y/P3ojZkkt5w1AXkNY2BYWBVLXwhiaiDchr3olLAUF1lLuK/mxEVqh5ainO6buKOAQcW
-         cUQazL0acLThFgQpSb6DFLnF60L9LGJUgO4uNUxz397btFBQeiciuYcoqB1UwvkYTjgM
-         +GYm8SLvp98Oka8FJutNz86JOqwL1MFh3KNAjkKuYRl8NwT6VNsNLWKpihRnTNa/pYmg
-         vT3st63NFAB33DNhWFfKe4Gm/CQd4KYl+hY5lpXmcLaexYpP63+/ZlNXrr/DUxmdlVw5
-         rGgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=buklFgMo3io8o1oTm+e0Xy6mGquidMcjQ+rAVmjF0R0=;
-        b=aMertZ/mQXLyIblB4e74SqA18SJZWGbjak87x6yz1Bfbicq0v+a/Dqn39uCyEXx+yc
-         8wZ+uHmXEA6Uhrs1BYb51/2FEiICW6jUlRuw3rlpY1f88oVpAucMtE7r1ZdPNnLTBA7S
-         DzOoKvw9IOvLy47QsAWDzph+1ofIUeEHv2qtSIz7EoBL+LntTOVjRV1SdO7A8KBHOJR3
-         VSqTnzFA8JSMrhrjANqQk7wMSDwJLVyvMJLl2+dxp288H2RPBvAW+JIC+ihXtAElWUkM
-         69XY79T3faOMz/7cKCI/VU3Vi3Irqh4KSHEyCsji3MnlR8H+N8Cwf7T4V/kWfX4Jyd1G
-         gJhA==
-X-Gm-Message-State: AOAM531xNrDOgn1cNe86d/Fm4MxQfGBUTYrCi5xBZDYgCfCpd/XlG+SA
-        5a0sq3ZO/CQjz/v/MZfTIlA=
-X-Google-Smtp-Source: ABdhPJw+wxyyrmHkxuNDGzpTAjtnLv+6MCubb/xVpbVgTR8NNXWidB7jX7O3yhmXgjH6l8xw/z/JWg==
-X-Received: by 2002:a05:6512:3dab:b0:44a:247:2d8 with SMTP id k43-20020a0565123dab00b0044a024702d8mr6374447lfv.628.1649258723148;
-        Wed, 06 Apr 2022 08:25:23 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id y5-20020a2e3205000000b0024b045e3b18sm1557359ljy.66.2022.04.06.08.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 08:25:22 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Tom Rini <trini@konsulko.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        u-boot@lists.denx.de, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: nvmem: u-boot,env: add Broadcom's variant binding
-Date:   Wed,  6 Apr 2022 17:25:15 +0200
-Message-Id: <20220406152515.31316-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 6 Apr 2022 13:26:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30AE485E6C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:27:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF4EF61C4E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4E2C385A1;
+        Wed,  6 Apr 2022 15:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649258825;
+        bh=/gaoq7dw7G28yfHBdA+sdXDjrczgCIBTg9c3xRMRcmo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l/uDH/QwVcUjH2qm5pxMjoZnWRQnCFvUxn7G6JXDTbiKGubXHaE1MXl0qnob7lNYm
+         SCCFjU2lBAfJOYCULz3BTWyMywoNGjmbe9QmDKvxcvRHoO38MeHIG3xY47XMxt85wh
+         pTK6k6fWqCFfqjgbgb4pDkCRmwDJFw7c9rP8rt+dgCb6G3GdTaSOzde84c3J1kv9y5
+         zBdDMRQwLtRCCkDC5uZjI/5YgU0/basz69o0NB4KLAMeVUGmr5x7ZaXTPoYxIhQGYx
+         rBKCXhkqNULGr2Q5OuaThA97jp8LCICGvKW3q/jT5tIaljdcnMPytupyJCr1e8KoMc
+         6kWPqoJZsJRHg==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v3] f2fs: give priority to select unpinned section for foreground GC
+Date:   Wed,  6 Apr 2022 23:26:51 +0800
+Message-Id: <20220406152651.5142-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Previously, during foreground GC, if victims contain data of pinned file,
+it will fail migration of the data, and meanwhile i_gc_failures of that
+pinned file may increase, and when it exceeds threshold, GC will unpin
+the file, result in breaking pinfile's semantics.
 
-Broadcom uses U-Boot for some of their recent platforms like BCM4908.
-They decided to use modified environment variables variables format
-though. Their header includes 2 extra 32 b fields at the beginning.
+In order to mitigate such condition, let's record and skip section which
+has pinned file's data and give priority to select unpinned one.
 
-The first field meaning is unknown, the second one stores length of env
-data block. Example (length 0x4000):
-$ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
-00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..4.z.IMAG|
-00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=NAND:1M,1024M.|
-
-Add a custom "compatible" value to allow describing Broadcom devices
-properly.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
 ---
- Documentation/devicetree/bindings/nvmem/u-boot,env.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+v3:
+- check pin status before pinning section in pin_section().
+ fs/f2fs/gc.c      | 56 ++++++++++++++++++++++++++++++++++++++++++++---
+ fs/f2fs/segment.c |  7 ++++++
+ fs/f2fs/segment.h |  2 ++
+ 3 files changed, 62 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-index e70b2a60cb9a..6a6b223be4a0 100644
---- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-@@ -36,6 +36,8 @@ properties:
-         const: u-boot,env-redundant-bool
-       - description: Two redundant blocks with active having higher counter
-         const: u-boot,env-redundant-count
-+      - description: Broadcom's variant with custom header
-+        const: brcm,env
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 6a7e4148ff9d..df23824ae3c2 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -646,6 +646,37 @@ static void release_victim_entry(struct f2fs_sb_info *sbi)
+ 	f2fs_bug_on(sbi, !list_empty(&am->victim_list));
+ }
  
-   reg:
-     maxItems: 1
++static void pin_section(struct f2fs_sb_info *sbi, unsigned int segno)
++{
++	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
++	unsigned int secno = GET_SEC_FROM_SEG(sbi, segno);
++
++	if (test_bit(secno, dirty_i->pinned_secmap))
++		return;
++	set_bit(secno, dirty_i->pinned_secmap);
++	dirty_i->pinned_secmap_cnt++;
++}
++
++static bool pinned_section_exists(struct dirty_seglist_info *dirty_i)
++{
++	return dirty_i->pinned_secmap_cnt;
++}
++
++static bool section_is_pinned(struct dirty_seglist_info *dirty_i,
++						unsigned int secno)
++{
++	return pinned_section_exists(dirty_i) &&
++			test_bit(secno, dirty_i->pinned_secmap);
++}
++
++static void unpin_all_sections(struct f2fs_sb_info *sbi)
++{
++	unsigned int bitmap_size = f2fs_bitmap_size(MAIN_SECS(sbi));
++
++	memset(DIRTY_I(sbi)->pinned_secmap, 0, bitmap_size);
++	DIRTY_I(sbi)->pinned_secmap_cnt = 0;
++}
++
+ /*
+  * This function is called from two paths.
+  * One is garbage collection and the other is SSR segment selection.
+@@ -787,6 +818,9 @@ static int get_victim_by_default(struct f2fs_sb_info *sbi,
+ 		if (gc_type == BG_GC && test_bit(secno, dirty_i->victim_secmap))
+ 			goto next;
+ 
++		if (gc_type == FG_GC && section_is_pinned(dirty_i, secno))
++			goto next;
++
+ 		if (is_atgc) {
+ 			add_victim_entry(sbi, &p, segno);
+ 			goto next;
+@@ -1202,8 +1236,10 @@ static int move_data_block(struct inode *inode, block_t bidx,
+ 	}
+ 
+ 	if (f2fs_is_pinned_file(inode)) {
+-		if (gc_type == FG_GC)
++		if (gc_type == FG_GC) {
+ 			f2fs_pin_file_control(inode, true);
++			pin_section(F2FS_I_SB(inode), segno);
++		}
+ 		err = -EAGAIN;
+ 		goto out;
+ 	}
+@@ -1352,8 +1388,10 @@ static int move_data_page(struct inode *inode, block_t bidx, int gc_type,
+ 		goto out;
+ 	}
+ 	if (f2fs_is_pinned_file(inode)) {
+-		if (gc_type == FG_GC)
++		if (gc_type == FG_GC) {
+ 			f2fs_pin_file_control(inode, true);
++			pin_section(F2FS_I_SB(inode), segno);
++		}
+ 		err = -EAGAIN;
+ 		goto out;
+ 	}
+@@ -1485,6 +1523,7 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ 							gc_type == FG_GC) {
+ 				f2fs_pin_file_control(inode, true);
+ 				iput(inode);
++				pin_section(sbi, segno);
+ 				return submitted;
+ 			}
+ 
+@@ -1766,9 +1805,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
+ 		ret = -EINVAL;
+ 		goto stop;
+ 	}
++retry:
+ 	ret = __get_victim(sbi, &segno, gc_type);
+-	if (ret)
++	if (ret) {
++		/* allow to search victim from sections has pinned data */
++		if (ret == -ENODATA && gc_type == FG_GC &&
++				pinned_section_exists(DIRTY_I(sbi))) {
++			unpin_all_sections(sbi);
++			goto retry;
++		}
+ 		goto stop;
++	}
+ 
+ 	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
+ 	if (gc_type == FG_GC &&
+@@ -1811,6 +1858,9 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
+ 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+ 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
+ 
++	if (gc_type == FG_GC && pinned_section_exists(DIRTY_I(sbi)))
++		unpin_all_sections(sbi);
++
+ 	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
+ 				get_pages(sbi, F2FS_DIRTY_NODES),
+ 				get_pages(sbi, F2FS_DIRTY_DENTS),
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 012524db7437..1c20d7c9eca3 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4736,6 +4736,12 @@ static int init_victim_secmap(struct f2fs_sb_info *sbi)
+ 	dirty_i->victim_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
+ 	if (!dirty_i->victim_secmap)
+ 		return -ENOMEM;
++
++	dirty_i->pinned_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
++	if (!dirty_i->pinned_secmap)
++		return -ENOMEM;
++
++	dirty_i->pinned_secmap_cnt = 0;
+ 	return 0;
+ }
+ 
+@@ -5324,6 +5330,7 @@ static void destroy_victim_secmap(struct f2fs_sb_info *sbi)
+ {
+ 	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
+ 
++	kvfree(dirty_i->pinned_secmap);
+ 	kvfree(dirty_i->victim_secmap);
+ }
+ 
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 5c94caf0c0a1..fd6f246e649c 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -294,6 +294,8 @@ struct dirty_seglist_info {
+ 	struct mutex seglist_lock;		/* lock for segment bitmaps */
+ 	int nr_dirty[NR_DIRTY_TYPE];		/* # of dirty segments */
+ 	unsigned long *victim_secmap;		/* background GC victims */
++	unsigned long *pinned_secmap;		/* pinned victims from foreground GC */
++	unsigned int pinned_secmap_cnt;		/* count of victims which has pinned data */
+ };
+ 
+ /* victim selection function for cleaning and SSR */
 -- 
-2.34.1
+2.32.0
 

@@ -2,95 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74614F57B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37FD4F5792
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243033AbiDFHKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 03:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S1345968AbiDFHLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 03:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454542AbiDFGoO (ORCPT
+        with ESMTP id S1456665AbiDFGon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 02:44:14 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B01C16FE
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 21:44:22 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso864557wme.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 21:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e1+rSoTUFj3WU/eLBjLIgKZMH01AWeNOKksTlBoI6QI=;
-        b=DZ356kbwx5IGdFHW0oHIMS7b7EvtD/qoADxDb3OCAQsNy1e/3rk+O6v1Hin+9fHM+w
-         8YqIdfgn96Z+8lR/e9ASQ3ksjl+FNnPdAdUm2+RQdYwNoXTgTXoMmEGa76DCWF7gfBUL
-         oKQ9OsGLPk05HGzDi42x5w+msAtGdWaYaIqrEJiF5vYr3hbgkZSJu2/xuBheXSzuSkdD
-         WOxPvzQ8Q5YPN+/86k1RZ4stBMQRuQfdD8rd6KFDKmkv3h4E0v/yX7tZksqWzQGW4eaL
-         4TRxoR7LGSY9TJroykH/kpFBz83Ju2+XPgxlkW7QvV2C0PW4k18tlPzNGrBG1qnKcloJ
-         Rl8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e1+rSoTUFj3WU/eLBjLIgKZMH01AWeNOKksTlBoI6QI=;
-        b=4bsE2fYQzrm7Zq3C6rGOvCpMnbHIHXD2cTRdgpGBzuRWmq0NvlCg+txL8l9VAcEPjM
-         QKZDzVrRYdL2zqH0jw542t/8PXhVZfRYu3g+wF8qfot719T6HkMCSDZns9WAwVwJiGf2
-         mqwfdqdpgDqZVQEIltJrOBdiWeU9g0VDh/nrejgA9sj/FKkqBb/6exiImsVAyoksqKJ2
-         dy8A23H8tYn7no2NVRh5qb2WT5B0tGVrSDVBFe6daW7kLQDss3C5sVs82VuCwYpERPOp
-         5Bt8m1m0z6kk+7rSHpcu1izUErBPfV3FOfcFYMWrru6FBV6M5YJM7mCoRHSm/jA+tjHA
-         4UPA==
-X-Gm-Message-State: AOAM532CF81KFnpiiulqpCNeVj2oU84kHbrSd88Na+YphccoN0mh8tHJ
-        PPXq68geGLtcTAgjT9phW6lQcpUWKQcXXzMtwZhHaeHWXrM=
-X-Google-Smtp-Source: ABdhPJzUeoLh2rgohUoRmso6+QuCiyytCmkErXglSSd5mbHd/aI3A9xMIPS+cvm8RRGxxq/lcUpM6xrBahrJyk5gvpg=
-X-Received: by 2002:a05:600c:6004:b0:38c:6c00:4316 with SMTP id
- az4-20020a05600c600400b0038c6c004316mr5854562wmb.6.1649220261185; Tue, 05 Apr
- 2022 21:44:21 -0700 (PDT)
+        Wed, 6 Apr 2022 02:44:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F8C1624A2;
+        Tue,  5 Apr 2022 21:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649220659; x=1680756659;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=I+dWPDiE4xf63aSyJo77PiXg+mtIis/JHI1I6V04uBU=;
+  b=VnYeP5a6xZf1ud7WMcSOMT3bckQN5oFJHRqp0knZRRoey2yd7tJON/46
+   SYNkVS7ijNxPTFjvUxPYi6AcOp6FM/zh74VamAPn09iW6GM/Uoykah68S
+   1SCUU5xJphPVAde5UTEEUJnJVNgI1WAwgfoKPwpWnMADfaEY+92MUev+p
+   65FJnx+U8cQE/5wC9ESohiY+UDwXrMXqlAVNQsIJw93KVMLQaMDwBAMo0
+   Qw+2Ubg97fOsJTxpJkG7YQaQj0KM5M7HTGm8Dxc4IcRGMQFgv3/hKa8B+
+   cUTf/Q175MWycEGy+U5PmeujMFMRTf4nIp5gHbu+fVEwGlJCvVlnhZwRC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243089913"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="243089913"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 21:50:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="524302468"
+Received: from dchang1-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.29.17])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 21:50:52 -0700
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, kai.huang@intel.com
+Subject: [PATCH v3 18/21] x86/virt/tdx: Initialize all TDMRs
+Date:   Wed,  6 Apr 2022 16:49:30 +1200
+Message-Id: <9c180b4f34956a5d43bbf7894c423fcbe75fc7a9.1649219184.git.kai.huang@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1649219184.git.kai.huang@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
 MIME-Version: 1.0
-References: <20220405190619.540177-1-dlatypov@google.com>
-In-Reply-To: <20220405190619.540177-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 6 Apr 2022 12:44:10 +0800
-Message-ID: <CABVgOSmJ+oOLqK-yVtr-AhtOSQ8RxMo9hB0uLR6-p_mBrME3Hg@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 3:06 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This is in line with Documentation/dev-tools/kunit/style.rst.
-> Some of these tests predate that so they don't follow this convention.
->
-> With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
-> KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
-> default. This hopefully makes it easier to run and maintain the tests.
-> If any of these were to start failing, people would notice much quicker.
->
-> Note: this commit doesn't update LINEAR_RANGES_TEST since that would
-> select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
-> to enable anything other than test kconfigs.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Initialize TDMRs via TDH.SYS.TDMR.INIT as the last step to complete the
+TDX initialization.
 
-I'd forgotten these were missing KUNIT_ALL_TESTS support, thanks!
+All TDMRs need to be initialized using TDH.SYS.TDMR.INIT SEAMCALL before
+the TDX memory can be used to run any TD guest.  The SEAMCALL internally
+uses the global KeyID to initialize PAMTs in order to crypto protect
+them from malicious host kernel.  TDH.SYS.TDMR.INIT can be done any cpu.
 
-Reviewed-by: David Gow <davidgow@google.com>
+The time of initializing TDMR is proportional to the size of the TDMR.
+To avoid long latency caused in one SEAMCALL, TDH.SYS.TDMR.INIT only
+initializes an (implementation-specific) subset of PAMT entries of one
+TDMR in one invocation.  The caller is responsible for calling
+TDH.SYS.TDMR.INIT iteratively until all PAMT entries of the requested
+TDMR are initialized.
 
-Cheers,
--- David
+Current implementation initializes TDMRs one by one.  It takes ~100ms on
+a 2-socket machine with 2.2GHz CPUs and 64GB memory when the system is
+idle.  Each TDH.SYS.TDMR.INIT takes ~7us on average.
+
+TDX does allow different TDMRs to be initialized concurrently on
+multiple CPUs. This parallel scheme could be introduced later when the
+total initialization time becomes a real concern, e.g. on a platform
+with a much bigger memory size.
+
+Signed-off-by: Kai Huang <kai.huang@intel.com>
+---
+ arch/x86/virt/vmx/tdx/tdx.c | 75 ++++++++++++++++++++++++++++++++++---
+ arch/x86/virt/vmx/tdx/tdx.h |  1 +
+ 2 files changed, 71 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+index bb15122fb8bd..11bd1daffee3 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.c
++++ b/arch/x86/virt/vmx/tdx/tdx.c
+@@ -1376,6 +1376,65 @@ static int config_global_keyid(void)
+ 	return seamcall_on_each_package_serialized(&sc);
+ }
+ 
++/* Initialize one TDMR */
++static int init_tdmr(struct tdmr_info *tdmr)
++{
++	u64 next;
++
++	/*
++	 * Initializing PAMT entries might be time-consuming (in
++	 * proportion to the size of the requested TDMR).  To avoid long
++	 * latency in one SEAMCALL, TDH.SYS.TDMR.INIT only initializes
++	 * an (implementation-defined) subset of PAMT entries in one
++	 * invocation.
++	 *
++	 * Call TDH.SYS.TDMR.INIT iteratively until all PAMT entries
++	 * of the requested TDMR are initialized (if next-to-initialize
++	 * address matches the end address of the TDMR).
++	 */
++	do {
++		struct tdx_module_output out;
++		int ret;
++
++		ret = seamcall(TDH_SYS_TDMR_INIT, tdmr->base, 0, 0, 0,
++				NULL, &out);
++		if (ret)
++			return ret;
++		/*
++		 * RDX contains 'next-to-initialize' address if
++		 * TDH.SYS.TDMR.INT succeeded.
++		 */
++		next = out.rdx;
++		if (need_resched())
++			cond_resched();
++	} while (next < tdmr->base + tdmr->size);
++
++	return 0;
++}
++
++/* Initialize all TDMRs */
++static int init_tdmrs(struct tdmr_info **tdmr_array, int tdmr_num)
++{
++	int i;
++
++	/*
++	 * Initialize TDMRs one-by-one for simplicity, though the TDX
++	 * architecture does allow different TDMRs to be initialized in
++	 * parallel on multiple CPUs.  Parallel initialization could
++	 * be added later when the time spent in the serialized scheme
++	 * becomes a real concern.
++	 */
++	for (i = 0; i < tdmr_num; i++) {
++		int ret;
++
++		ret = init_tdmr(tdmr_array[i]);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int init_tdx_module(void)
+ {
+ 	struct tdmr_info **tdmr_array;
+@@ -1457,11 +1516,12 @@ static int init_tdx_module(void)
+ 	if (ret)
+ 		goto out_free_pamts;
+ 
+-	/*
+-	 * Return -EFAULT until all steps of TDX module
+-	 * initialization are done.
+-	 */
+-	ret = -EFAULT;
++	/* Initialize TDMRs to complete the TDX module initialization */
++	ret = init_tdmrs(tdmr_array, tdmr_num);
++	if (ret)
++		goto out_free_pamts;
++
++	tdx_module_status = TDX_MODULE_INITIALIZED;
+ out_free_pamts:
+ 	/*
+ 	 * Free PAMTs allocated in construct_tdmrs() when TDX module
+@@ -1484,6 +1544,11 @@ static int init_tdx_module(void)
+ 	free_tdmrs(tdmr_array, tdmr_num);
+ 	kfree(tdmr_array);
+ out:
++	if (ret)
++		pr_info("Failed to initialize TDX module.\n");
++	else
++		pr_info("TDX module initialized.\n");
++
+ 	return ret;
+ }
+ 
+diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+index bba8cabea4bb..212f83374c0a 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.h
++++ b/arch/x86/virt/vmx/tdx/tdx.h
+@@ -126,6 +126,7 @@ struct tdmr_info {
+ #define TDH_SYS_INFO		32
+ #define TDH_SYS_INIT		33
+ #define TDH_SYS_LP_INIT		35
++#define TDH_SYS_TDMR_INIT	36
+ #define TDH_SYS_LP_SHUTDOWN	44
+ #define TDH_SYS_CONFIG		45
+ 
+-- 
+2.35.1
+

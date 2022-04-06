@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095014F560E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D5F4F5628
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiDFFqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1444853AbiDFFyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451911AbiDFFEM (ORCPT
+        with ESMTP id S1455683AbiDFFHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 01:04:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A192133DF80;
-        Tue,  5 Apr 2022 17:50:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 6 Apr 2022 01:07:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6563E340891;
+        Tue,  5 Apr 2022 17:51:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KY5Xp3RQSz4xmr;
-        Wed,  6 Apr 2022 10:50:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649206250;
-        bh=K6LR0Q5LoFNyPdpvbQ4wuGRJSuMzXSR3Bua2HeOno5g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LDNxU86SW9D2KYuEYE4NduZDFs4qHSQJ0/rCclT6PvLqEvsFk/0MFAKnBBMB00cwu
-         zvKDui7kv0R6g2CHG5JGoNw/DyPCog8mC8lS/MzkvsyHS7W2/Z7joeD34o6wbaJLY0
-         ZZJVV6h++ha9m4dqSHQ7blxk37aVm7/a/9ZYHD8WSGbb5HWkEwudgkGARvH4SPiMJ9
-         zRwgNqlZ/Dh2/eK83UdRu8S+yumGoM0lq/1ehIirYDzXz3+NnHRHxx4w+nAW8NaetS
-         H69ceEO8NtLQH6nNSQuQFQCQu1yRHnP5OdYOV0kqA81fLqv47RwogbZTaQGayTu6o5
-         bnE8+PYH/QpTQ==
-Date:   Wed, 6 Apr 2022 10:50:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christophe Branchereau <cbranchereau@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20220406105049.5f5e01c1@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85B8E6174A;
+        Wed,  6 Apr 2022 00:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A13C385A6;
+        Wed,  6 Apr 2022 00:51:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hIYaCWog"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649206280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uouxkXGt9ycAh2w6r1rTvJWeUR8k4JberlBMTjKHJDU=;
+        b=hIYaCWog3ufYJF8fi+Nqrc/DStqXujrKuPnBerdcQRO+fmFdXQ2WISfN62Wfz4+Nl+CQI1
+        2gQAsgz3a+onmtIL1apt2OygDKTHH+mrbuEkt4OZ5VgTluoZgjCYiEOmQMuFc6Obcc66Ua
+        1KM/qFhTZYs0b59EKnMN4G5wE4q+Rc4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4753b291 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 6 Apr 2022 00:51:20 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jann Horn <jannh@google.com>, Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+Date:   Wed,  6 Apr 2022 02:51:01 +0200
+Message-Id: <20220406005101.200148-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/22R7lPkTNXuhOpp3gl.O=Vn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,88 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/22R7lPkTNXuhOpp3gl.O=Vn
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+In a651a7ba294c ("random: check for signal_pending() outside of
+need_resched() check"), Jann pointed out that we previously were only
+checking the TIF_NOTIFY_SIGNAL and TIF_SIGPENDING flags if the process
+had TIF_NEED_RESCHED set, which meant in practice, super long reads to
+/dev/[u]random would delay signal handling by a long time. I tried this,
+and indeed I wasn't able to interrupt a /dev/urandom read until after
+several megabytes had been read. The bug he fixed has always been there,
+and so code that reads from /dev/urandom without checking the return
+value of read() has mostly worked for a long time, for most sizes, not
+just for <= 256.
 
-Hi all,
+Maybe it makes sense to keep that code working. The reason it was so
+small prior, ignoring the fact that it didn't work anyway, was likely
+because /dev/random used to block, and that could happen for pretty
+large lengths of time while entropy was gathered. But now, it's just a
+chacha20 call, which is extremely fast and is just operating on pure
+data, without having to wait for some external event. In that sense,
+/dev/[u]random is a lot more like /dev/zero.
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Taking a page out of /dev/zero's read_zero() function, it always returns
+at least one chunk, and then checks for signals after each chunk. Chunk
+sizes there are of length PAGE_SIZE. Let's just copy the same thing for
+/dev/[u]random, and check for signals and cond_resched() for every
+PAGE_SIZE amount of data. This makes the behavior more consistent with
+expectations, and should mitigate the impact of Jann's fix for the
+age-old signal check bug.
 
-drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: error: initializati=
-on of 'void (*)(struct spi_device *)' from incompatible pointer type 'int (=
-*)(struct spi_device *)' [-Werror=3Dincompatible-pointer-types]
-  478 |         .remove =3D nv3052c_remove,
-      |                   ^~~~~~~~~~~~~~
-drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: note: (near initial=
-ization for 'nv3052c_driver.remove')
-
-Caused by commit
-
-  49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C based LC=
-Ds")
-
-interacting with commit
-
-  2cbfa2128662 ("spi: make remove callback a void function")
-
-from Linus' tree (merged in v5.18-rc1).
-
-I applied the following merge resolution patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 6 Apr 2022 10:46:57 +1000
-Subject: [PATCH] fixup for "spi: make remove callback a void function"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jann Horn <jannh@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/gpu/drm/panel/panel-newvision-nv3052c.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/char/random.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c b/drivers/gpu/=
-drm/panel/panel-newvision-nv3052c.c
-index 127bcfdb59df..cf078f0d3cd3 100644
---- a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
-+++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
-@@ -416,15 +416,13 @@ static int nv3052c_probe(struct spi_device *spi)
- 	return 0;
- }
-=20
--static int nv3052c_remove(struct spi_device *spi)
-+static void nv3052c_remove(struct spi_device *spi)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 7f0253455d4e..e8a578af619a 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -523,7 +523,6 @@ EXPORT_SYMBOL(get_random_bytes);
+ 
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
  {
- 	struct nv3052c *priv =3D spi_get_drvdata(spi);
-=20
- 	drm_panel_remove(&priv->panel);
- 	drm_panel_disable(&priv->panel);
- 	drm_panel_unprepare(&priv->panel);
+-	bool large_request = nbytes > 256;
+ 	ssize_t ret = 0;
+ 	size_t len;
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+@@ -540,15 +539,6 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ 	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
+ 
+ 	do {
+-		if (large_request) {
+-			if (signal_pending(current)) {
+-				if (!ret)
+-					ret = -ERESTARTSYS;
+-				break;
+-			}
+-			cond_resched();
+-		}
 -
--	return 0;
- }
-=20
- static const struct drm_display_mode ltk035c5444t_modes[] =3D {
---=20
+ 		chacha20_block(chacha_state, output);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+@@ -562,6 +552,13 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ 		nbytes -= len;
+ 		buf += len;
+ 		ret += len;
++
++		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
++		if (!(ret % PAGE_SIZE) && nbytes) {
++			if (signal_pending(current))
++				break;
++			cond_resched();
++		}
+ 	} while (nbytes);
+ 
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+-- 
 2.35.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/22R7lPkTNXuhOpp3gl.O=Vn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJM4+kACgkQAVBC80lX
-0Gzv1wgAoIeioO/RuQUM06lmi112VLRhQxgoQuReg2kTMLOhTvABrEWR3N+2rFEG
-Xx06ETkA6XcTRQbAWwaX2WbHNDbEv2Bv0fy5D0Yno0HrGbONbsz2azh979KDwruX
-Eb4CMGUdq2UGI9YtC78i+VzuOuoz5KLp2j6E36/N4YbQ4ZWOgBu3Xjkb/tIDmoQd
-RmLWqXnPHPyph/oM20Ge6ZQlhQV35t0sNC3bIZWxV1HsGTUSRvWPYY4YxYTuNT7z
-U7RbOq6Lzj7kOmhQHtoJyGnmewXZWm69kwx9QXWczg9SaRsCOyHT7tq0iEI5yOBT
-teCXjP2bnViSM8U/LE3x/2vZ0eZ48Q==
-=ucTU
------END PGP SIGNATURE-----
-
---Sig_/22R7lPkTNXuhOpp3gl.O=Vn--

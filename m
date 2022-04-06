@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C294F5DA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68A04F5F57
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiDFMOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S233327AbiDFN3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiDFMMI (ORCPT
+        with ESMTP id S234384AbiDFN2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:12:08 -0400
-X-Greylist: delayed 3607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 20:38:54 PDT
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A74F2354D2D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cBzQY
-        bALC2Ft4VBebUDpTOM6eZy0ea20UFYYZFAlbxg=; b=Ue82tJbY8gIXtkv7iVep0
-        E2NOmACflFjlZXfTmk8SeiJDQnpOuN4f4JCdhhXFdgaSlJDHg4sgrbAS8qCWRF4s
-        eeM+qiYHZHZxSckG7kBLk+9Mgf52YZHH1OvaJvz+8JNnCZS037AbSb2Is6IQX7Fk
-        RzV8bnQr+dgsS4ydUQcRWo=
-Received: from localhost.localdomain (unknown [39.99.236.58])
-        by smtp3 (Coremail) with SMTP id DcmowAAXHV229Uxi5SFMAQ--.31622S2;
-        Wed, 06 Apr 2022 10:06:46 +0800 (CST)
-From:   Hongbin Wang <wh_bin@126.com>
-To:     davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, sahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ip6_tunnel: Remove duplicate assignments
-Date:   Tue,  5 Apr 2022 22:06:34 -0400
-Message-Id: <20220406020634.72995-1-wh_bin@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 09:28:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBF31107F8;
+        Tue,  5 Apr 2022 19:15:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 796ECB81FB7;
+        Wed,  6 Apr 2022 02:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23DADC385A0;
+        Wed,  6 Apr 2022 02:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649211310;
+        bh=2q0MEfiv8/KfVoQ1a/O2AiaUZczGrGkW49etIDJ3rXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cfrf6gdAfOomT2fjbWyUYFn+K+RnjvTDHP6gLTtYiaYCleRHFgAsE3tdSSHMLIMih
+         gI8+F0Hwy2UWH5Ujl9ZUPgrJmEgIXt5x0IH57M/aFKH7oQutNLjaOrXTyD+hjfTrLW
+         ms9msjfZb0ECU6H2d3DD1w2tgyQXqQ+xdyY+QYBvowkfEmJuQptiQp3mKFiLBTq2Ep
+         FHc1umrBbTzKG0+zAZpppNPZF+QtRQ+RM/aEspOlKIHQRvRZmUC5hBtRdm8W7iMk1r
+         lDv8rIXdpY9z/4ZWmTOfSYND5tDOQB2tbHFyF5vKcFoYcTTpUVkGGcgPmzcOWElCGY
+         WMSPJCGJzWvBg==
+Date:   Wed, 6 Apr 2022 10:15:03 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Jander <david@protonic.nl>, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v1 3/8] ARM: dts: imx6qdl-vicut1/vicutgo: Add
+ backlight_led node
+Message-ID: <20220406021503.GI129381@dragon>
+References: <20220221095312.3692669-1-o.rempel@pengutronix.de>
+ <20220221095312.3692669-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowAAXHV229Uxi5SFMAQ--.31622S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU7nNVDUUUU
-X-Originating-IP: [39.99.236.58]
-X-CM-SenderInfo: xzkbuxbq6rjloofrz/1tbiGBbaolpEGNmrIwAAsh
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221095312.3692669-3-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a same action when the variable is initialized
+On Mon, Feb 21, 2022 at 10:53:07AM +0100, Oleksij Rempel wrote:
+> From: David Jander <david@protonic.nl>
+> 
+> backlight_led is the dimmable backlight for the rubber border on the case. It
+> is also used to highlight the power- and some other buttons.
+> 
+> MX6QDL_PAD_SD4_DAT1__PWM3_OUT is also assigned as output for pwm3. Since
+> we need pwm3 for the backlight, we're forced to disable user space hardware
+> revision detection. The bootloader will have to supply this information
+> (i.e. through device tree).
+> 
+> Signed-off-by: David Jander <david@protonic.nl>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Signed-off-by: Hongbin Wang <wh_bin@126.com>
----
- net/ipv6/ip6_tunnel.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index 53f632a560ec..19325b7600bb 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -257,8 +257,6 @@ static int ip6_tnl_create2(struct net_device *dev)
- 	struct ip6_tnl_net *ip6n = net_generic(net, ip6_tnl_net_id);
- 	int err;
- 
--	t = netdev_priv(dev);
--
- 	dev->rtnl_link_ops = &ip6_link_ops;
- 	err = register_netdevice(dev);
- 	if (err < 0)
--- 
-2.25.1
-
+Applied, thanks!

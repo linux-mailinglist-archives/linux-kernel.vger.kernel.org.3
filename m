@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CCE4F6E9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF8E4F6EA5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237876AbiDFXjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S238064AbiDFXjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiDFXjC (ORCPT
+        with ESMTP id S237872AbiDFXjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:39:02 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5790C1FCD27
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:37:03 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id z128so3508278pgz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:37:03 -0700 (PDT)
+        Wed, 6 Apr 2022 19:39:05 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD6B1FCD38
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:37:06 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r66so3505596pgr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=t9+gL+y5i/QNCIpTjrcXEFiRInISCquyFyxbsO8XL7I=;
-        b=lQrv/P4hn6LlciweT4SqZd0iOxn/16y7L9KiKpSME26a0sh0Lx3lmpQx8Bux/PeMie
-         6oESrbi1ZDk+AeB4gmp9ssD+tBtvnO/2e6lbfSO6V3ASIzy5nDRSQk9jvhj2SIRwyzOk
-         4oCixuJcyRhb8Yi+pvL9vzv6O6fWGV3JixIG9gnQBbV48WcrzdWiyuRfUPDF5oVq4vaB
-         OCzAzCbGVDlvE+xdjAgkkAZBUyFO3TpVStor6GDEcMP/4mNfEaILG/BR6y0kl5l9lQXK
-         hA8tLndD13GXUQQcW1sY9MazzEHiVaJ6Hx+fO6hn8cr5F5kTGVjIgZo18icnwnNq7Rus
-         VnMg==
+        bh=QK8+4fUiKFidFtwDTnzjiT6o2I/M1O28JcVYOpK+fEI=;
+        b=yNDw2XDQkg9R8u4+kmc5T2VvUaV+duY5HRN5myxhw0zKpy6MtPhspE1WQr1d8QahFs
+         Q7sJGQXnlee6BS84nwIbw1gDVj3fWnja6v7EiC4LlLcfSn/FsF479Ce01jHdnO3YuWbu
+         GQ1By+IzCavFFk/c5FKPHY09esq854gQPWQb/HBPkOdro9k28aa+dID/jPvA93rL63KC
+         3Jt5+dYwFJcPJ/L9MsU46Uljoi2bAyLEr0wT7Ac9cWx4F3qz7eS1GXr7vCovmDqa8KKw
+         OXjbZAmA2V2h9HlwqtOQtwdT5vgwJxdJOqPdB9ll1gIhUU7VT+ymg+ez4NCRiqM92vSr
+         d1vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=t9+gL+y5i/QNCIpTjrcXEFiRInISCquyFyxbsO8XL7I=;
-        b=hpPwomJjYnWjSBwAau6az+hi12CXYSJ4OJkGCi/Tmy4EW1HfEgY7WR2bUgurzlXPoX
-         Tq0pitEGuCWTky2npU6PAv/EMmql8umyapnsXJmlHjJBwwCay2cVhA6icl7GT3hDUnOD
-         V1fW2Jx2yio5r9mgqZpsbM/26AGPgvOhcI+ezZ6JFRVcFk35cxgepqiU4+n2azn9gHxy
-         Eh8fL2AaJb6uAikzY0+5nWLhrj0kZi6oLn0axZq3tnhSaI1rLYDBwTTJPbbajoedC9qq
-         eMy/2JPlHfN957sDHSC+el3WKgSkGEpm2w6Kfx5jvSIa+KS8Rvk3IP8SUAdD0ZuVOTES
-         z+2w==
-X-Gm-Message-State: AOAM532eExIR1bmFJUhVupIlLCJlxL8+2JcDSSc/2fM8lW4zrTGAjfkn
-        W97vNmplFnqE+ttFFynMIMWkaA==
-X-Google-Smtp-Source: ABdhPJyoPs4NfFhETcRlRVHyTU1R8ztOjFcl2xaEAaNRVRkgtvbj80h35dMSkXq9sZjkkjDMfvNPiw==
-X-Received: by 2002:a05:6a00:815:b0:4fb:e46:511c with SMTP id m21-20020a056a00081500b004fb0e46511cmr11195728pfk.54.1649288222881;
-        Wed, 06 Apr 2022 16:37:02 -0700 (PDT)
+        bh=QK8+4fUiKFidFtwDTnzjiT6o2I/M1O28JcVYOpK+fEI=;
+        b=VghihMGfEtSbwLgjjk4NwX6TgIjxfCG9YlJczXBROr9V7eMTpOaLD4MFVekeYe+vG1
+         f8S2WbioYMxMSSNhuEUoZ3KrjuqLxXH4NYZ3qGGn6XdbR88ZsvP4VwlAcuwKON/ClM+A
+         TspLu/WX+pZAu3TYIF2XvWcA+ftHfPQ6HVX83Yjt22+Evyx+YUje+5IoDjkg6mOmFDFs
+         meBmamxHtdDpi0cWIY++a+NHgRpgxnmzdy4pLJAavxgCGdeVuNlt9CK7HozfBBKN2bYm
+         uNzUIx7dIDOQvL50qSL+/XOgKc46LnaRlWztS87aAa1ui7DPubLhDENfP0PAajDIZsvh
+         em8g==
+X-Gm-Message-State: AOAM530Rcmzme40kijORs1BTTK9vaTaxGlgW4GY5Ibkz8sS2GXXaBjPK
+        IP0Uu7Ck1PXkoskIMZ8JdVPdug==
+X-Google-Smtp-Source: ABdhPJzaezBCtvwGYSV1mX/+b9wnRQsY8UmbEyVes0OC4123FLUN6x1hyG91/ObI3Za45Bldidy0eA==
+X-Received: by 2002:a05:6a00:1988:b0:4fa:c15d:190d with SMTP id d8-20020a056a00198800b004fac15d190dmr11020521pfl.44.1649288226244;
+        Wed, 06 Apr 2022 16:37:06 -0700 (PDT)
 Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm6903667pjl.39.2022.04.06.16.37.01
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm6903667pjl.39.2022.04.06.16.37.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 16:37:02 -0700 (PDT)
+        Wed, 06 Apr 2022 16:37:05 -0700 (PDT)
 From:   Brad Larson <brad@pensando.io>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
@@ -55,9 +55,9 @@ Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
         brad@pensando.io, dac2@pensando.io, linux-gpio@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 01/11] dt-bindings: arm: add Pensando boards
-Date:   Wed,  6 Apr 2022 16:36:38 -0700
-Message-Id: <20220406233648.21644-2-brad@pensando.io>
+Subject: [PATCH 02/11] dt-bindings: Add vendor prefix for Pensando Systems
+Date:   Wed,  6 Apr 2022 16:36:39 -0700
+Message-Id: <20220406233648.21644-3-brad@pensando.io>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220406233648.21644-1-brad@pensando.io>
 References: <20220406233648.21644-1-brad@pensando.io>
@@ -70,49 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the compatible for Pensando Elba SoC boards.
+Add vendor prefix for Pensando Systems: https://pensando.io
 
 Signed-off-by: Brad Larson <brad@pensando.io>
 ---
-Change from V3:
-- Add description and board compatible
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../bindings/arm/pensando,elba.yaml           | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/pensando,elba.yaml
-
-diff --git a/Documentation/devicetree/bindings/arm/pensando,elba.yaml b/Documentation/devicetree/bindings/arm/pensando,elba.yaml
-new file mode 100644
-index 000000000000..61225f2d6ce5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/pensando,elba.yaml
-@@ -0,0 +1,26 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/pensando,elba.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Pensando Elba SoC Platforms Device Tree Bindings
-+
-+maintainers:
-+  - Brad Larson  <brad@pensando.io>
-+
-+properties:
-+  $nodename:
-+    const: "/"
-+  compatible:
-+    oneOf:
-+
-+      - description: Boards with Elba SoC
-+        items:
-+          - enum:
-+              - pensando,elba-ortano
-+          - const: pensando,elba
-+
-+additionalProperties: true
-+
-+...
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..0ce8f94eab08 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -936,6 +936,8 @@ patternProperties:
+     description: Parade Technologies Inc.
+   "^parallax,.*":
+     description: Parallax Inc.
++  "^pensando,.*":
++    description: Pensando Systems Inc.
+   "^pda,.*":
+     description: Precision Design Associates, Inc.
+   "^pericom,.*":
 -- 
 2.17.1
 

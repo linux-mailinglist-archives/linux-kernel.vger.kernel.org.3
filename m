@@ -2,114 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901F24F6C6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240354F6C6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbiDFVSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S235596AbiDFVSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiDFVRt (ORCPT
+        with ESMTP id S235432AbiDFVSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:17:49 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE23C2EF86D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:05:47 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id b16so4361786ioz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:05:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vCgsdofueDzmclBeFxqo6aKHtjsWdXLi6JiPYoFCmoc=;
-        b=cR+5rsgYLkhZXAAFxLpza6qfB2xOzcJNUAIYelWplokZAKThWScNamgWLpMmkHBhgA
-         R1+F1qKd7EG/GEu8cxmj1P80ibmXO1V5w96lKod+E60ujDAa/xCZ0xLxp4Nsp/y1+zNj
-         pGI4QVenIIYqNlvjtSBl1t5pMtIx0NmwB3jyk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vCgsdofueDzmclBeFxqo6aKHtjsWdXLi6JiPYoFCmoc=;
-        b=2zvrJkrYtOfx/7pdO4WXvzI5bMtXc0ZgOgiYjAuBTWjltARXquDmKUfiA7P+wfKBCM
-         mtgKVP7Yqzmvlk3t4pYUnK0VqRCntkYXJ71MVSerahHCmRAoM9tDGE2O2/GOh5BAdNnP
-         P57rv/yoS9gf2yrumnUwvvw+Jd0FRlHrAvq6YAbxIZ1yhRSorOxnKAQ71bZES5L03Lp7
-         6iL/LT+D1uNB/S4NbG1rAlFu0GsGjSd6yWooJLsUGQ+i451S3wDX87a+D1tOMHPsP+mw
-         gQujX0a3SJOOxObylTGM5XfjmVZ3pNhZ4u3J505DI6A3JzN38y565UuMOxRjQ+iXGJ2M
-         FBsQ==
-X-Gm-Message-State: AOAM530IYnG2mrPKvqi152jXVEAQRNZN3Rr+bLmLpiE0+1nkQZqiR8p9
-        6Hsw7h8A67j/DvlEqoaAI1LPfw==
-X-Google-Smtp-Source: ABdhPJwZyiBF+1MJR1ViEYkDA/OLIZOqcFI6CqmqutLKLEchEzixjki5nX6+7D+OjxHw9lBwnsyheA==
-X-Received: by 2002:a05:6638:41a0:b0:323:d771:8146 with SMTP id az32-20020a05663841a000b00323d7718146mr5494354jab.193.1649275547223;
-        Wed, 06 Apr 2022 13:05:47 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056602184e00b00649673c175asm11534641ioi.25.2022.04.06.13.05.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 13:05:46 -0700 (PDT)
-Subject: Re: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the
- allocated cpu set
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, disgoel@linux.vnet.ibm.com
-Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ad0648a9-0252-2d1f-cc48-7e14846fc0af@linuxfoundation.org>
-Date:   Wed, 6 Apr 2022 14:05:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 6 Apr 2022 17:18:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511A1C680C;
+        Wed,  6 Apr 2022 13:07:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9CFC60B53;
+        Wed,  6 Apr 2022 20:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44300C385A5;
+        Wed,  6 Apr 2022 20:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649275649;
+        bh=sBe75KyPvXec31wHT5nce8fovMehP42L6ogn18BYthU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=NIiU0SQL8YmwCitgzNNwZ74noDeRkYphQQOxT8d46XqtraJi2TIjJdC/2OWtvCxTk
+         P4weE9XfsHasvtxry4+kjI9yKXgUdhqdHT/kHHCJHIaPmso12R2hDU8ISPMyR9CEHS
+         CKNopHERcbcJuF/reCgXoRKCYRpGz4MfsWFBMTF+615mIRVpjLW+xpwTCkaVVd4R0B
+         qOHK480+B97pCg0AMUU078CPnBNNDHsTcbx63fMqmkfNl+UxRnqsuicOcigA72ocvn
+         y5AWA03TXGlFe8RzrOZZsUuIyCdiYFCNtYQ5uW4GT6pqjmw35BXelZOt4HDewvWtD4
+         l4RrumR/JSyYg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C00995C0B85; Wed,  6 Apr 2022 13:07:28 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 13:07:28 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu: Use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw
+ on PREEMPT_RT kernel
+Message-ID: <20220406200728.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220403061440.2762522-1-qiang1.zhang@intel.com>
+ <20220403154626.GO4285@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB58802019D7B5F23CEACE2D69DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB58802019D7B5F23CEACE2D69DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 11:57 AM, Athira Rajeev wrote:
-> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
-> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
-> and by pthread_create in the code. But in current code, allocated
-> cpu set is not freed. Fix this by adding CPU_FREE after its usage
-> is done.
+On Wed, Apr 06, 2022 at 04:41:46AM +0000, Zhang, Qiang1 wrote:
 > 
-
-Good find.
-
-> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> ---
->   tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
->   1 file changed, 1 insertion(+)
+> On Sun, Apr 03, 2022 at 02:14:40PM +0800, Zqiang wrote:
+> > On non-PREEMPT_RT kernel, the init_irq_work() make the defer_qs_iw 
+> > irq-work execute in interrupt context. however, on PREEMPT_RT kernel, 
+> > the
+> > init_irq_work() make defer_qs_iq irq-work execute in rt-fifo irq_work 
+> > kthreads. when system booting, and the CONFIG_RCU_STRICT_GRACE_PERIOD 
+> > is enabled, there are a lot of defer_qs_iw irq-work to be processed in 
+> > rt-fifo irq_work kthreads, it occupies boot CPU for long time and 
+> > cause other kthread cannot get the boot CPU, the boot process occurs 
+> > hang. use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw irq-work, can 
+> > ensure the defer_qs_iw irq-work always execute in interrupt context, 
+> > whether PREEMPT_RT or non PREEMPT_RT kernel.
 > 
-> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> index b019e0b8221c..17c41f216bef 100644
-> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> @@ -732,6 +732,7 @@ int main(int argc, char *argv[])
->   		pthread_attr_destroy(&thread_attr);
->   	}
->   
-> +	CPU_FREE(cpu_set);
->   	if (!continuous_mode) {
->   		pthread_join(cpu_threads[0], &retval);
->   		shutdown((long)retval, "perf_test_thread()", __LINE__);
+> This is a much better justification of the need for a change, thank you!
 > 
+> >But it looks like I need to clarify a sentence in my previous email.
+> >
+> >Please note that you were using the debugging RCU_STRICT_GRACE_PERIOD Kconfig option, so this is a potential problem as opposed to an immediate bug.  Yes, we must fix bugs, but it is also very important to avoid harming other workloads, which are after all the vast majority of the uses of the Linux kernel.
+> >
+> >And a major purpose of things like RCU_STRICT_GRACE_PERIOD is to give us advanced warning of bugs so that we can fix them properly, without hurting other workloads.
+> >
+> >So, does this patch guarantee exactly the same performance and scalability as before for !PREEMPT_RT systems?  If so, please add an explanation to the commit log.
+> >
+> >Otherwise, please adjust the code to provide this guarantee.
+> 
+> Thanks, I have been adjusted code and resend v2.
 
-CPU_ALLOC() is called very early on in main() and there are a
-few error paths that exit without calling CPU_FREE. This change
-doesn't fully fix the problem.
+And there have been no objections, so I have queued and pushed it
+for testing and further review, thank you!
 
-Review the other exit paths where CPU_FREE is needed.
+							Thanx, Paul
 
-thanks,
--- Shuah
+> Thanks
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  kernel/rcu/tree_plugin.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h index 
+> > 3037c2536e1f..cf7bd28af8ef 100644
+> > --- a/kernel/rcu/tree_plugin.h
+> > +++ b/kernel/rcu/tree_plugin.h
+> > @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
+> >  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
+> >  				// Get scheduler to re-evaluate and call hooks.
+> >  				// If !IRQ_WORK, FQS scan will eventually IPI.
+> > -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
+> > +				rdp->defer_qs_iw = 
+> > +IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
+> >  				rdp->defer_qs_iw_pending = true;
+> >  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
+> >  			}
+> > --
+> > 2.25.1
+> > 

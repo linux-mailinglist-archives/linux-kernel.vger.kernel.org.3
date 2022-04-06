@@ -2,106 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD66E4F5CAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66AA4F5B0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiDFLu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S1345455AbiDFKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiDFLuk (ORCPT
+        with ESMTP id S1382591AbiDFK34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:50:40 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E23E1A12BF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:53:23 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2365Gjw0040013;
-        Wed, 6 Apr 2022 06:53:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=h0MJqzIp4IiyGaH/dxNKIQcAGh7f72MS8MNvzz3eEaA=;
- b=il38V/64sHKg42/Y0raPVlOuuy00uD0tlqqyyAAlP9TVtMW0R1cFfroT+SB9N6klYZqd
- PaZpZ+LfIwqLvQ7QRIxK4dryvPg1iZpvJpu6slbOzoOcGPXipMcGBG+jn67mzd4wcRao
- 7yaarKs2kSIA4rpJ6KrOk4kGVHCqwaTxVGoi9JRDxfaM3TKk6Dlcf3rcEKV+N5HZfy2Y
- mvyH7JtGt63cRH+bwKIBzv8e/rOPWb2vYoyJ65sh1YiWOAxR6LY3GGIsj3248hm5TG0T
- D/G0BQ7C6VQq3wNOOT8FsKgx9ykbaXe8NAkmE+seMRqIk8kLRqDGJolPz0Ji0DrGzn2/ oQ== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f8tfjv6cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 06:53:15 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2366nDU8004045;
-        Wed, 6 Apr 2022 06:53:13 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3f6drhnymk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 06:53:13 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2366rIUB47317476
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 06:53:18 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E97F64203F;
-        Wed,  6 Apr 2022 06:53:10 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 945A342047;
-        Wed,  6 Apr 2022 06:53:10 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 06:53:10 +0000 (GMT)
-Received: from [9.43.195.169] (unknown [9.43.195.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 6 Apr 2022 06:29:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9780B3DF34A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id E550D600A7;
-        Wed,  6 Apr 2022 16:53:04 +1000 (AEST)
-Message-ID: <3dcd1283-4243-b7d1-142b-7654a161ee07@linux.ibm.com>
-Date:   Wed, 6 Apr 2022 16:53:02 +1000
+        by ams.source.kernel.org (Postfix) with ESMTPS id 443EEB82104
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034B5C385AA
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649228026;
+        bh=tO8JMyLzIZ8EITkhp2PubbOl10W7/jlZTi8jH9cyTLA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k0dPNLOFXD0NO7pwwnpOcM17yCmaDTXu/JTYP0X6yByGl0JOQucrjAtJzkKILFDgt
+         DSTQSo8yPhjvPvBmNbyel6rRrt4/15PnMN2lQziq+CZsz+70pBbIMzzgV+x68fasH+
+         4kdp54NwrvPrw4kBJvX/ZZd5D/AHZ8ZYujG4Q50Rytum/nCOH6J4D19SSUqnLyq444
+         YfdmhdsqppJBjydZK5tzib2BZGfDrLMND8tWRVc9Us67lKdqeXFuCfY8+CV8AvO3Ll
+         WevPFimEj1/yXJ0a5UbDE/hDXuJAFcXSo0VdeqeNdudgysy1K5L8cmk8egw2FN9s4x
+         /UryyMD+J4sxA==
+Received: by mail-ot1-f49.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso1124875otf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:53:45 -0700 (PDT)
+X-Gm-Message-State: AOAM530CPeRsdj3/mAcKPM0g5lLTlvWl6FvUTzSjqsNu6vrAT4rFAbvz
+        la2jJwomShCMy8cv4xUu1HRfzvNhG7QKgQ1GwTA=
+X-Google-Smtp-Source: ABdhPJwt+MqYoXIE9XnpjhA1n4uGXTgDOGNThyoHryIuaDZN64VMoEbM5En07e+MLJhoR+DsVsRXvaQFlGgRZfSRASs=
+X-Received: by 2002:a05:6830:1e9c:b0:5cd:8c15:5799 with SMTP id
+ n28-20020a0568301e9c00b005cd8c155799mr2506585otr.265.1649228025072; Tue, 05
+ Apr 2022 23:53:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-8-catalin.marinas@arm.com> <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
+In-Reply-To: <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 6 Apr 2022 08:53:33 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
+Message-ID: <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
- <d6cb3408-49a4-3c35-6ce0-3b35fd88bb9e@linux.ibm.com>
- <2147ad9f-2844-cef9-e804-e44cb619103e@csgroup.eu>
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-In-Reply-To: <2147ad9f-2844-cef9-e804-e44cb619103e@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9WskZlLECUlMlLXSfKbwwtwa5PMr2DZC
-X-Proofpoint-GUID: 9WskZlLECUlMlLXSfKbwwtwa5PMr2DZC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_02,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 mlxlogscore=825
- suspectscore=0 mlxscore=0 spamscore=0 clxscore=1015 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060028
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/4/22 16:52, Christophe Leroy wrote:
-> Thanks. Can you take the patch through your tree ?
+On Wed, 6 Apr 2022 at 00:57, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
+> > ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
+> > operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
+> > alignment.
+> >
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > ---
+> >  include/linux/crypto.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+> > index 2324ab6f1846..654b9c355575 100644
+> > --- a/include/linux/crypto.h
+> > +++ b/include/linux/crypto.h
+> > @@ -167,7 +167,7 @@
+> >   * maintenance for non-coherent DMA (cache invalidation in particular) does not
+> >   * affect data that may be accessed by the CPU concurrently.
+> >   */
+> > -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
+> > +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
+>
+> I think this should remain as ARCH_KMALLOC_MINALIGN with the
+> comment above modified.  The reason is that we assume memory
+> returned by kmalloc is already aligned to this value.
+>
+> Ard, you added the comment regarding the DMA requirement, so
+> does anything actually rely on this? If they do, they now need
+> to do their own alignment.
+>
 
-We don't have a tree of our own, we rely on mpe to take it through powerpc.
+This patch looks incorrect to me, as ARCH_DMA_MINALIGN is not
+#define'd on all architectures.
 
--- 
-Andrew Donnellan              OzLabs, ADL Canberra
-ajd@linux.ibm.com             IBM Australia Limited
+But I am fine with the intent: ARCH_DMA_MINALIGN will be >=
+ARCH_KMALLOC_MINALIGN, and so the compile time layout of structs will
+take the worst cast minimum DMA alignment into account, whereas their
+placement in memory when they allocated dynamically may be aligned to
+ARCH_KMALLOC_MINALIGN only. Since the latter will be based on the
+actual cache geometry, this should be fine.
+
+Apart from the 'shash desc on stack' issue solved by the patch that
+also introduced the above comment(660d2062190d), I've never looked
+into the actual memory footprint of the crypto related data structures
+resulting from this alignment, but it seems to me that /if/ this is
+significant, we should be able to punt this to the drivers that
+actually need this, rather than impose it for the whole system. (This
+would involve over-allocating the context struct, and aligning up the
+pointer in the various xxx_ctx() getters iff needed by the driver in
+question)
+
+I'll put this on my list of things to look at.

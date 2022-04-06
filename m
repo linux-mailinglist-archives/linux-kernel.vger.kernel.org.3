@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBA74F6D94
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59AE4F6D93
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236855AbiDFV6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S236781AbiDFV6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236888AbiDFV5W (ORCPT
+        with ESMTP id S237480AbiDFV5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:57:22 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B331539159
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 14:53:41 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m12-20020a17090b068c00b001cabe30a98dso7078261pjz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 14:53:41 -0700 (PDT)
+        Wed, 6 Apr 2022 17:57:39 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB2D57B37
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 14:55:11 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id v15so582284qkg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 14:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/t0ovIQiUOSTuPx9jgrpi/PzvlKilbnhNLqfgQvkTNs=;
-        b=QL0b/ugDp7rEfToKioRS6zaw7qMCtRzhXcx97rQeoYhDmLHwlXGgRRpH9/kMshrhwz
-         ZvfKDIfCfddTINqz3Ut1ZA5+lG4dH51YXHRcB685tp/LLFVd+aL6aDHRAaXBXeaP6ANW
-         4wa9+Hz52fWdDsWuwwvC2oYNMX47hWa75bcMo1oNuFEnf2Q+saFIXZmUZ5kOGRfNhDI2
-         VqFM4m5yVogBKZQfMTG0q4TTzLkFv0CfYmaikSIzrQwO3FFMv665RR+Woci08izfo7pg
-         zKIWsGtKJoQaGHwZlbiuouHhnmLo+dBwCFunJka+1riOfe31SJ/hXerOQsM4QBAwMxpQ
-         u3BA==
+        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=18K4Koo+gSDcc2mYQoqx/5md7n9d+vojvdjDwRnfQkQ=;
+        b=Kvts+vyOdgj5qb/yrmcCtgFddEpMAYJ6Vtt+e7K/TdG5zlgevkxRZJ7mT6fCAextWP
+         CkBNmJNYEme2Prp18S+VCdHLmsbnxtU2/GL7oLXhZyLH1ZbhmnD+NEIAXbAYNfNwDH0P
+         xne4EbAvbRql8bNt00hQfBSFq9neL63asMKnw0R8vSI+6e1KKIwyBEfnMLIWLMnwxMY2
+         UymboPIBOVUTC8THIxgFIWNXTLThaSoUhLGzr/yflxFTA9qQ/j4XZtytj7c/YrpAuTU3
+         U1JW4JHshQKqmHCC3SAvRIuphMsmKxiP3pyGPi+vtdE/Ad4rYIqpWQTm/V3S581T+70y
+         qWpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/t0ovIQiUOSTuPx9jgrpi/PzvlKilbnhNLqfgQvkTNs=;
-        b=tqWF3CSvvAlIW4Py5gAmeBmQLY1qvdDHbxh3nAIAP9ugTryV6yXC7KZymOud9DZu70
-         n7JL1IpF6tFpXHCLG1m8a1Mpx3EHXu7jEI3ShVxQMhPg5ijHP+7y8AVjjB/tspJOHLmY
-         vyGA9EJgzTbW7wmywswF5QXbVZKAK2GCmBd9/nxebaZjP3qNb0jra4Q9URJ8IIt2UkLO
-         beoMjZQQmcSqPQB6x+jzQHFlXhhg9J5i50ttWCKTyhDCNIVUoe8an/pk0zuS5HS45XXP
-         cFS7o4K0ba98Lro+n+VMkwYYQaZU+3fkKQYJIIEYNPTY9JTSuv4P4PHhgv8TYyC/oCMA
-         D/yw==
-X-Gm-Message-State: AOAM530Qi17K0BLeEDORP9a2ED/4llzjmP3Veeo1iFukWKeQzR15FIAG
-        nQ0P0M2kWMSfczSrnYnq1XiKvw==
-X-Google-Smtp-Source: ABdhPJzpSTHlVf5liK/Coh3Y8gHE/AVi3LRJciJq/cTWPnnJs2IFkVnqTH+/PxB+ksKiO4u5dnoncQ==
-X-Received: by 2002:a17:903:246:b0:153:87f0:a93e with SMTP id j6-20020a170903024600b0015387f0a93emr10696792plh.171.1649282021257;
-        Wed, 06 Apr 2022 14:53:41 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id z7-20020a056a00240700b004e1cde37bc1sm20683081pfh.84.2022.04.06.14.53.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 14:53:40 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ncDas-00DxdY-9t; Wed, 06 Apr 2022 18:53:38 -0300
-Date:   Wed, 6 Apr 2022 18:53:38 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     kernel test robot <lkp@intel.com>, benve@cisco.com,
-        neescoba@cisco.com, kbuild-all@lists.01.org,
-        linux-rdma@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/usnic: Refactor usnic_uiom_alloc_pd()
-Message-ID: <20220406215338.GU64706@ziepe.ca>
-References: <ef607cb3f5a09920b86971b8c8e60af8c647457e.1649169359.git.robin.murphy@arm.com>
- <202204070316.vOzwORw5-lkp@intel.com>
- <87075d61-c51c-8d94-9263-17aa40f7d70e@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=18K4Koo+gSDcc2mYQoqx/5md7n9d+vojvdjDwRnfQkQ=;
+        b=srMpp4K34NuD/Qg2nmhvtO4y6tl1I3qbqUtvZ/oWvjxtGyvww1gcn3aNufK2cXEJDK
+         m+DQdKrnaGscsqTVWGGurgc+pvuTWjPebD4IzU7bckV1ybnEETJlPzy6tBnnWiFFRDD0
+         oUkUfP6cS9r8q4dvBKG/q+L+i08XFMrvyYxE3oF8rwDrVcLK5OO6ohbKmN3gNHfSRfq2
+         Q8v6jglZdrey6GinC9CymrGij8rA6U5PXHS/FZFjKkAwzMpt8Kx7dLmCM9ULvuqXn4CY
+         +Bgs7o1kc/fOcqcNbyr39S2MNIu5MVlzJjLHZv/n8GENhFCOKKyQprEHhadpt43o1+Lp
+         WqFg==
+X-Gm-Message-State: AOAM533Qgr3aMVrqf56QNji+FESsNYwPq4Up/XIJi54/D5fZYlTfFR3Y
+        tL6gi+YXEE01UloqwkH+Hm/aLmcieNTmb6I739aYjw==
+X-Google-Smtp-Source: ABdhPJzrSfiA86e2SS1hOhDbnO4gW9TDF++9F+ETBBY4qKTwTrC34JSvWVKrwHQPm+7n0fPZ0ApGvCzsI+S+PYVc3To=
+X-Received: by 2002:a05:620a:892:b0:67e:60a9:83c2 with SMTP id
+ b18-20020a05620a089200b0067e60a983c2mr7245120qka.670.1649282110221; Wed, 06
+ Apr 2022 14:55:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87075d61-c51c-8d94-9263-17aa40f7d70e@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220406172956.3953-1-wens@kernel.org>
+In-Reply-To: <20220406172956.3953-1-wens@kernel.org>
+From:   Javier Martinez Canillas <javier@dowhile0.org>
+Date:   Wed, 6 Apr 2022 23:54:59 +0200
+Message-ID: <CABxcv=k=dRPg3S5LrY+bcrEJ91CxoLdsRjVx+sLM7GYEKdv8Gw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] drm/ssd130x: Add support for SINO WEALTH SH1106
+To:     Chen-Yu Tsai <wens@kernel.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 10:39:47PM +0100, Robin Murphy wrote:
-> On 2022-04-06 20:54, kernel test robot wrote:
-> > Hi Robin,
-> > 
-> > I love your patch! Yet something to improve:
-> > 
-> > [auto build test ERROR on rdma/for-next]
-> > [also build test ERROR on v5.18-rc1 next-20220406]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch]
-> 
-> Oops, I failed to notice that this does actually depend on the other patch I
-> sent cleaning up iommu_present()[1] - I should have sent them together as a
-> series, sorry about that.
+Hello Chen-Yu,
 
-No worries, I'll take care to order it right
+On Wed, Apr 6, 2022 at 7:30 PM Chen-Yu Tsai <wens@kernel.org> wrote:
+>
+> From: Chen-Yu Tsai <wens@csie.org>
+>
+> Hi everyone,
+>
+> This series adds support for SH1106 to the ssd130x OLED display
+> driver.
+>
 
-Jason
+Thanks for re-spinning your series. I believe that gave you my
+Acked-by for most of the patches in v1 already? But it seems you
+didn't pick them up.
+
+You addressed the comments I had in v1 so those stand, for all patches:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
+Javier

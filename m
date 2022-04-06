@@ -2,141 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B399C4F6B57
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764FE4F6B5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234673AbiDFUZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S234404AbiDFU0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236725AbiDFUYM (ORCPT
+        with ESMTP id S237308AbiDFUYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:24:12 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2E349538;
-        Wed,  6 Apr 2022 11:43:20 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e1dcc0a327so3925332fac.1;
-        Wed, 06 Apr 2022 11:43:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pe8sju6wPvJSrNfF1Eq2d0NpTEsa+xATy6yZpivcyyo=;
-        b=kOivRFEJHI+w2eouwoiLEYmGL0JgO6ICU+xkf93gZTD45eeepp2HBg9Yis+a0JDDS4
-         r2YrhPcMOu+edjcuJANfFRrlNqpv7K2tsBmb+KK1d8i3OayzdAFGeiLvfg4y4XFfG7Cn
-         jHyChCHMl9e57crE+l6k1YWVTMg4fKkvWAETAbsAWsEbeOGBgxHzDnjf9DZRwmD2Luxd
-         gc+bhBZx7lroSBiZqU4+FRu71qVqv76eKl+LSczEEvEkkkQ4LZz8VJ/pxEXdh5vbMoS/
-         iFKSvGnIKaLn/bxm9p8Ih90PDsviOaJssFsyBU4kfLh73QtNOFmDMs4Eu3bLzLB/Hasw
-         2kWw==
-X-Gm-Message-State: AOAM5321d6EQZJDptj4e8qZS2Bcx6JF0iUYKUhVkxaC/NBN5FVUF1gkp
-        bU/ZSHNlLLElKBtif/EXnTmKAOegKg==
-X-Google-Smtp-Source: ABdhPJybK5lLCphfL1x0DdD+DcfV1Sz7fJ99SXLEoZA420LGZz9AqrPtiqQNcfxb94eXkneiXCVC3g==
-X-Received: by 2002:a05:6870:e30e:b0:de:ecf4:df7e with SMTP id z14-20020a056870e30e00b000deecf4df7emr4782781oad.114.1649270599990;
-        Wed, 06 Apr 2022 11:43:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v17-20020a9d69d1000000b005b2319a08c4sm7048316oto.18.2022.04.06.11.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:43:19 -0700 (PDT)
-Received: (nullmailer pid 2564513 invoked by uid 1000);
-        Wed, 06 Apr 2022 18:43:19 -0000
-Date:   Wed, 6 Apr 2022 13:43:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v7 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <Yk3fR2CaeiJBEPKk@robh.at.kernel.org>
-References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
- <20220405120552.433415-2-patrick.rudolph@9elements.com>
- <YkxIOgTl876orHbf@pendragon.ideasonboard.com>
+        Wed, 6 Apr 2022 16:24:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2C934B623
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:44:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05F6661655
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BE6C385A3;
+        Wed,  6 Apr 2022 18:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649270657;
+        bh=DPD+gqGzilTAFAdB9aUrsXNWCMtoAzNXiS9BO63EI/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YVCh48hz43pgjqInjX7Bo/gSSRRPliJ8dHTisa1UOb7B/eWMVRkJLM72CP1MI6oeR
+         lDA84PovMpi37QEcddBo8kV7vVyRBZnm+mM4Ok4yJDMNGXDRFKfBtrB5ZT1+HK2wzZ
+         ENNdJh6cKSkjKPl5uCmX/7X470tvDkwdeScCLJoi9olzKla3iHrLuNAy9w1TWZUsDy
+         +i2hu+TKE63n70QW/9NsGjXhyOTAFFKg3eP+R0HJaBobggX7Gcif6h4BFCTIaxi18a
+         kuVYOmj4wsEJavokjss7pS97m3wO5efreOW0jBg7JwVoicT9xTK3HJI0dgwGSxMGKG
+         LApxOFCJhYwCw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3E85A40407; Wed,  6 Apr 2022 15:44:13 -0300 (-03)
+Date:   Wed, 6 Apr 2022 15:44:13 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org
+Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
+ __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
+ vlv_allow_gt_wake.cold+0x0
+Message-ID: <Yk3ffdJ6a3Q2uWRG@kernel.org>
+References: <202204041241.Hw855BWm-lkp@intel.com>
+ <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
+ <20220406000500.5hlaqy5zrdqsg5mg@treble>
+ <87czhv11k1.ffs@tglx>
+ <20220405212032.3d858b31@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkxIOgTl876orHbf@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220405212032.3d858b31@gandalf.local.home>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:46:34PM +0300, Laurent Pinchart wrote:
-> Hi Patrick,
+Em Tue, Apr 05, 2022 at 09:20:32PM -0400, Steven Rostedt escreveu:
+> On Wed, 06 Apr 2022 02:46:22 +0200
+> Thomas Gleixner <tglx@linutronix.de> wrote:
 > 
-> Thank you for the patch.
+> > This covers the trace_printk() case which uses do_trace_printk(), but
+> > the same problem exists in trace_puts() and ftrace_vprintk()...., no?
 > 
-> On Tue, Apr 05, 2022 at 02:05:49PM +0200, Patrick Rudolph wrote:
-> > Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> > chips. The functionality will be provided by the exisintg pca954x driver.
-> > 
-> > While on it make the interrupts support conditionally as not all of the
-> > existing chips have interrupts.
-> > 
-> > For chips that are powered off by default add an optional regulator
-> > called vdd-supply.
-> > 
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > ---
-> >  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
-> >  1 file changed, 34 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> > index 9f1726d0356b..132c3e54e7ab 100644
-> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> > @@ -4,21 +4,48 @@
-> >  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
-> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  
-> > -title: NXP PCA954x I2C bus switch
-> > +title: NXP PCA954x I2C and compatible bus switches
-> >  
-> >  maintainers:
-> >    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >  
-> >  description:
-> > -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> > +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> > +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
-> >  
-> >  allOf:
-> >    - $ref: /schemas/i2c/i2c-mux.yaml#
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - maxim,max7367
-> > +              - maxim,max7369
-> > +              - nxp,pca9542
-> > +              - nxp,pca9543
-> > +              - nxp,pca9544
-> > +              - nxp,pca9545
-> > +    then:
-> > +      properties:
-> > +        interrupts:
-> > +          maxItems: 1
-> > +
-> > +        "#interrupt-cells":
-> > +          const: 2
-> > +
-> > +        interrupt-controller: true
+> Hmm, I'm not even sure why ftrace_vprintk() is there. It seems redundant.
 > 
-> It feels a bit out of place to have those properties listed before the
-> main "properties" property, but we can only have a sincel allOf. I
-> wonder if the i2c-mux schema could be selected automatically based on
-> node name, but that's out of scope for this patch.
+> Arnaldo,
+> 
+> Was there a reason for it. The commit that added it isn't very descriptive.
 
-Yes, just move the allOf below 'properties'
+Yeah, I was young and in a hurry.
+
+- Arnaldo
  
-> I thought it was more customary to define properties in the main
-> "properties" property, and then have
+> commit 9011262a37cb438f0fa9394b5e83840db8f9680a
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Fri Jan 23 12:06:23 2009 -0200
+> 
+>     ftrace: add ftrace_vprintk
+>     
+>     Impact: new helper function
+>     
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+>     Signed-off-by: Ingo Molnar <mingo@elte.hu>
+> 
+> 
+> -- Steve
 
-Yes, please do.
+-- 
 
-Rob
+- Arnaldo

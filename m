@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE044F608A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A224A4F606E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbiDFNv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
+        id S233760AbiDFNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiDFNvL (ORCPT
+        with ESMTP id S233908AbiDFNvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:51:11 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB4055E43B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:25:44 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id i4so3685362qti.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northvilleschools.net; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=q6Ao2x264TUuXRgjmNEOpLHsRTrAHzD0yaNN8nRTx24=;
-        b=njmvVKYihT1RCQkDsfwJcxDQ5hrQAokIdNT4iYCY7YdZYuQV/2QHaxoFav7vgscxgR
-         GU7vm3TjVuKnRN9YGtfgKvLxmtcA22Ml7a7P2uYXFOlH/n4jSANiidycUu+UiDb+ifaT
-         z2W/KwIuJ9XabHI/wP8RxrT7RJesCc3uzqO+ihfmZNpLkotMdDGP0YciD3yMxNqXe9TG
-         rnCIF6mixuez4Ti3g2PkmGDRQQQLnJd/QPswDRig31mlOOmVIqTRbBzW4PAaXADLKBwM
-         l85U11q13H2miX6uvXSNi1Z7717Qr+bnSyqDod7dPg1G0RZmiH2wDE6ZXZs6Hd/GME6Q
-         MHdw==
+        Wed, 6 Apr 2022 09:51:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D2B7D59BC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649244365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=clK4mQhSKxURoMrRIrMnAnalT08fuiMGN0eGeD3I/lY=;
+        b=YZSOPJBByx4IAOm8bAOITjwKkVE+h4ryWxB7HZQovZueDUQ0G+XZQm1xzPC47thp94HTpV
+        kors3Q+K185WcNOf3HMuLT/dgQPAZ0VwW0a/fjRkYVVjD/p/UbhpiVcwt1MiZJSALgjo68
+        dR1lgsoRGPLfCj95U4qGYNyc/hwku3k=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-y7EyUPy8NFWq30-3pZuXPw-1; Wed, 06 Apr 2022 07:26:04 -0400
+X-MC-Unique: y7EyUPy8NFWq30-3pZuXPw-1
+Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso1036280edt.20
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:26:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=q6Ao2x264TUuXRgjmNEOpLHsRTrAHzD0yaNN8nRTx24=;
-        b=YrWDGBInX+5u75jhefmW9FqBvFR3ZEhmN+3Y6e4LMDn/2sxY6pPPl6rdygAi03xuAV
-         wwSINy4vAxM3+fgm3fgrx4q+H1UcG5gt+SEEL3H0emtDy91H66XyCh7ox6McPbe6D02l
-         S5WJ/LyEWY+Cun2MQoSzTwdv8W9iromMuhotyF7pwCZb2hudIWZ2huNW2cKf/PTZdAwW
-         KpY5oMDj0KnQ8EhhBmKiUlh72zRJhtSlaq2zxa/7N7Y7P2CAHwm2Di2NKBgToIygmUa+
-         umnBWQghrPEnozGsSpUIn+8aHjwbXUXlRU0l02gmf+oe7K701jaJPyJ58xmsI0fDQJGY
-         Wxlg==
-X-Gm-Message-State: AOAM530bsdsVNNzfSX9cyYYfC2OuRAoEnVnpUPjJhbGObASib4L46SHE
-        KIp1GQi3fozLLDwMEACRETI9+g==
-X-Google-Smtp-Source: ABdhPJxHViamNtf0QgejhKNAmZKKRWhl4+iap8uIfRlYuirDrIAVzWYkzo12oIxcVryHgb0okFUCBA==
-X-Received: by 2002:a05:620a:17a4:b0:67d:bb92:f56d with SMTP id ay36-20020a05620a17a400b0067dbb92f56dmr5087900qkb.276.1649244343892;
-        Wed, 06 Apr 2022 04:25:43 -0700 (PDT)
-Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05622a044600b002e1b9be8e6fsm13119618qtx.36.2022.04.06.04.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 04:25:43 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 07:25:42 -0400
-From:   Charlie Sands <sandsch@northvilleschools.net>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        paskripkin@gmail.com, straube.linux@gmail.com,
-        dan.carpenter@oracle.com, fmdefrancesco@gmail.com
-Subject: [PATCH V3] staging: r8188eu: Fix unsafe memory access by memcmp.
-Message-ID: <Yk14tpZCOFCsvtup@sckzor-linux.localdomain>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=clK4mQhSKxURoMrRIrMnAnalT08fuiMGN0eGeD3I/lY=;
+        b=kMevSrWgqcli0jAlWKg5SqlquS3Yy03rU+LCkl+mGI1d5fT7/6+EqgoQDdR1wj72l7
+         kMlpIOSTscFqlGP2t3Vi3B6VaK4eRqJVBDJFoJCdj6hAp3Kth3FKf5ZQuEux9tMvZbWp
+         LKs5aXJ7LVxWI+kAUoy7YaYa5M5iWAZIKS/Gk98v7AgWLMepNiYtysn51FEzkGGKxICX
+         6tFt/Q1Er0jq1MDm510MybrvqEddpJ6gZeAGfgdbRsPwUC8bbfHJtgm0nrDiOMTUCA+0
+         311tDI+e1IBi8Itp4zY6TUa01NPh7IiJMdU1iIQGRUitsJ1+h0EaAVjvLqskNT4UyhQ+
+         TXZQ==
+X-Gm-Message-State: AOAM5332ydZwbzTPvM56W330UHL/7SMr7SMmiR+PfTt87X9LpaPcYfsV
+        PqTPEKvfPwNWUxiflVskqBkRIu7fnWGgcqvicTxM7LecU76PMPYpM3frYDtJraT5phS6wljZQOV
+        jPVBxCwdWpSM5uM+HKovd9iZJ
+X-Received: by 2002:a17:907:eaa:b0:6e8:2f3:45f9 with SMTP id ho42-20020a1709070eaa00b006e802f345f9mr8050128ejc.323.1649244363397;
+        Wed, 06 Apr 2022 04:26:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwR7GzG0hS7kBevOXm+ERUBNeUao9+p0S9glggxmPxAvVTf3S4VH6qrS14gYIvTbRpsyWqEHA==
+X-Received: by 2002:a17:907:eaa:b0:6e8:2f3:45f9 with SMTP id ho42-20020a1709070eaa00b006e802f345f9mr8050115ejc.323.1649244363157;
+        Wed, 06 Apr 2022 04:26:03 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id cn27-20020a0564020cbb00b00418b0c7fbbfsm7634266edb.32.2022.04.06.04.26.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 04:26:02 -0700 (PDT)
+Message-ID: <b69fa64d-9d84-d0ce-146e-09412e8f7862@redhat.com>
+Date:   Wed, 6 Apr 2022 13:26:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 033/104] KVM: x86: Add infrastructure for stolen
+ GPA bits
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <a21c1f9065cf27db54820b2b504db4e507835584.1646422845.git.isaku.yamahata@intel.com>
+ <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
+ <5443b630-d2c8-b0c3-14f5-2b6b3f71221c@redhat.com>
+ <f9cd6947441e43cc27a6b21a089da61bb7fed9b0.camel@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <f9cd6947441e43cc27a6b21a089da61bb7fed9b0.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes sparse warnings about the memcmp function unsafely accessing 
-userspace memory without first copying it to kernel space.
+On 4/6/22 04:23, Kai Huang wrote:
+>>
+>>>>
+>>>>   
+>>>> -		gfn = gpte_to_gfn(gpte);
+>>>> +		gfn = gpte_to_gfn(vcpu, gpte);
+>>>>   		pte_access = sp->role.access;
+>>>>   		pte_access &= FNAME(gpte_access)(gpte);
+>>>>   		FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
+>>>
+>>> In commit message you mentioned "Don't support stolen bits for shadow EPT" (you
+>>> actually mean shadow MMU I suppose), yet there's bunch of code change to shadow
+>>> MMU.
+>>
+>> It's a bit ugly, but it's uglier to keep two versions of gpte_to_gfn.
+> 
+> gpte_to_gfn() is only used in paging_tmpl.h.  Could you elaborate why we need to
+> keep two versions of it?
 
-Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
----
+You're right.  Yeah, considering page table walks are not supported when 
+private memory is available, it shouldn't be necessary to change 
+paging_tmpl.h.
 
-V2: Fixed checkpatch.pl warning and changed variable name as suggested by Greg
-K. H. and improved error checking on the "copy_from_user" function as suggested
-by Pavel Skripkin.
-
-V3: return -EFAULT from the function when there is a memory error while moving
-it from user space to kernel space and fix incorrect subject from V2
-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 21 ++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 7df213856d66..9f2182b8e451 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3233,23 +3233,28 @@ static int rtw_p2p_get(struct net_device *dev,
- 			       struct iw_request_info *info,
- 			       union iwreq_data *wrqu, char *extra)
- {
--	if (!memcmp(wrqu->data.pointer, "status", 6)) {
-+	char wrqu_data[9];
-+
-+	if (copy_from_user(wrqu_data, wrqu->data.pointer, 9) != 0)
-+		return -EFAULT;
-+
-+	if (!memcmp(wrqu_data, "status", 6)) {
- 		rtw_p2p_get_status(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "role", 4)) {
-+	} else if (!memcmp(wrqu_data, "role", 4)) {
- 		rtw_p2p_get_role(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_ifa", 8)) {
-+	} else if (!memcmp(wrqu_data, "peer_ifa", 8)) {
- 		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "req_cm", 6)) {
-+	} else if (!memcmp(wrqu_data, "req_cm", 6)) {
- 		rtw_p2p_get_req_cm(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva", 9)) {
-+	} else if (!memcmp(wrqu_data, "peer_deva", 9)) {
- 		/*	Get the P2P device address when receiving the provision discovery request frame. */
- 		rtw_p2p_get_peer_devaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "group_id", 8)) {
-+	} else if (!memcmp(wrqu_data, "group_id", 8)) {
- 		rtw_p2p_get_groupid(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva_inv", 9)) {
-+	} else if (!memcmp(wrqu_data, "peer_deva_inv", 9)) {
- 		/*	Get the P2P device address when receiving the P2P Invitation request frame. */
- 		rtw_p2p_get_peer_devaddr_by_invitation(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "op_ch", 5)) {
-+	} else if (!memcmp(wrqu_data, "op_ch", 5)) {
- 		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
- 	}
- 	return 0;
--- 
-2.35.1
+Paolo
 

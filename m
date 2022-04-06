@@ -2,61 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2594F5E0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9C54F5E31
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiDFM2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S233153AbiDFM21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbiDFM1L (ORCPT
+        with ESMTP id S233396AbiDFM1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:27:11 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BB23E148C;
-        Wed,  6 Apr 2022 01:19:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
-        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=aEB6aphFsgS6tcwbtUgdYyeAKuuzYXM7RIsKLxa8uvA=; b=Pnmfz+p3TpVQv30t+iXKOy9HP1
-        IshLmKi2yNidJiLsGu1rxD8klUHG+h5ZfAsdjD5L4N6iEwAzug4A3fZuJOazknB+HBbriHZ2JvTXI
-        cQQ4udex4fEwlGMN5WwHwoOlDn0BIxj/6XHLZ8KoQEEoztSIVbYUuCsIjN+UUrsFR6hk=;
-Received: from p200300daa70ef200456864e8b8d10029.dip0.t-ipconnect.de ([2003:da:a70e:f200:4568:64e8:b8d1:29] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1nc0sP-0003Ng-8L; Wed, 06 Apr 2022 10:18:53 +0200
-Message-ID: <e3ea7381-87e3-99e1-2277-80835ec42f15@nbd.name>
-Date:   Wed, 6 Apr 2022 10:18:52 +0200
+        Wed, 6 Apr 2022 08:27:39 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFFB3B38FE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:18:32 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220406081826epoutp0116e56b3ab56f1f8e5efde1387368d843~jQMXKZpTn1340813408epoutp016
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:18:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220406081826epoutp0116e56b3ab56f1f8e5efde1387368d843~jQMXKZpTn1340813408epoutp016
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649233106;
+        bh=p6WjyG0D56W0LsXgoOg+5KDf28ARCj8LZvKlXFfllAA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=tdMbJUaF9YSvf0w+99mD5M18K+zcp8N5aIZHiOyzQgEnOiF0Uc+3rU+PC4s59fNYM
+         pdoWMTwg9qjYUmE5vrOYfvzM8I0jzrt8n846lNVAn/LAlhY++MBn/w3O2L7LjTTGhf
+         sLChbohFrI/6GQkdBkw/mQf0SrU7LZJqKfPSDFQU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220406081825epcas2p1c18bf3794cd10716a60c54d57ff94777~jQMWZm6392685226852epcas2p19;
+        Wed,  6 Apr 2022 08:18:25 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KYHTD2MYjz4x9Q8; Wed,  6 Apr
+        2022 08:18:24 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A5.98.40405.0DC4D426; Wed,  6 Apr 2022 17:18:24 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220406081823epcas2p3789ef3ac3956e4713dd1b55c8a49fb05~jQMUUFSte1543915439epcas2p3E;
+        Wed,  6 Apr 2022 08:18:23 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220406081823epsmtrp2dff5487decd39d735a18bc684f7e5ecf~jQMUTRpTe2599125991epsmtrp2b;
+        Wed,  6 Apr 2022 08:18:23 +0000 (GMT)
+X-AuditID: b6c32a46-ba1ff70000009dd5-12-624d4cd0956f
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8F.A4.24342.FCC4D426; Wed,  6 Apr 2022 17:18:23 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220406081823epsmtip16d40a770200b048ea71f777b57d900f4~jQMUFgwZP2385123851epsmtip1R;
+        Wed,  6 Apr 2022 08:18:23 +0000 (GMT)
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH v2 0/1] tty: serial: samsung: add spin_lock in console_write
+Date:   Wed,  6 Apr 2022 17:22:15 +0900
+Message-Id: <20220406082216.11206-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-5-nbd@nbd.name>
- <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH v2 04/14] dt-bindings: arm: mediatek: document WED binding
- for MT7622
-In-Reply-To: <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplk+LIzCtJLcpLzFFi42LZdljTXPeCj2+SwfdlXBYP5m1js7i8X9ui
+        efF6NosdDUdYLd7NlbE4f34Du8Wmx9dYLS7vmsNmMeP8PiaLM4t72R24PDat6mTz2D93DbvH
+        5iX1Hn1bVjF6fN4kF8AalW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ib
+        aqvk4hOg65aZA3SSkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQv
+        XS8vtcTK0MDAyBSoMCE7Y+3X/4wFW1gruhc0MDUwrmfpYuTkkBAwkVi16RtzFyMXh5DADkaJ
+        3c3nmCCcT4wSJybfYIRwvjFKLNkyD8jhAGtpPx0FEd/LKPHo/mcWCOcjo8Sa7/sYQeayCWhL
+        fF+/mBUkISJwmlHi8PajYA4zyJJd7d+ZQKqEBXwkZrTNZAexWQRUJZaf7WcFsXkFbCUWzXsN
+        daG8RPe/PywQcUGJkzOfgNnMQPHmrbPBLpcQeMQu8fjmZ6gGF4lFP38xQ9jCEq+Ob2GHsKUk
+        Pr/bywZhF0sc7/nOBNHcwChx9s4BVoiEscSsZ+1gjzILaEqs36UP8bOyxJFbUHv5JDoO/2WH
+        CPNKdLQJQTSqSdyfeg5quozEpCMrmSBsD4kFjZfA4kICsRKtb04xTmCUn4Xkm1lIvpmFsHcB
+        I/MqRrHUguLc9NRiowIjeLQm5+duYgSnSy23HYxT3n7QO8TIxMF4iFGCg1lJhLcq1ydJiDcl
+        sbIqtSg/vqg0J7X4EKMpMHwnMkuJJucDE3ZeSbyhiaWBiZmZobmRqYG5kjivV8qGRCGB9MSS
+        1OzU1ILUIpg+Jg5OqQamacFlKzICHl9edinw1w1xn5jLSYv0pmree/XleqHdbO9m9ZJrmQF/
+        FBgnLmVbtiB/x45/2mZtrxM2zy246eaan5sov+xhUqPcoWns7pMab91cuUlrnc+Rv8UFVROL
+        g4unKF6KZKt7wXqtUYMrR1nfVEY/bn7gYZ/kiZdWnlZ0Clp8gOeOeYO5wJRbhyzWf7sQHnBz
+        QYm9ktmESQvYV6bNSeFQW/9ZNXKLauhjppcslvO7E/z13RpcVDrWXa98x1X/vfLX9Bqe8D+m
+        pZbbLM5NV1rFGjFv49JLpdIbVBq41z577t5c9/HjhOtnd197qVRcKKPTyRAqtYKn4M4h74T9
+        Bx4oL1fw/h6hOH3iLpZVSizFGYmGWsxFxYkAldYtcyAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDLMWRmVeSWpSXmKPExsWy7bCSnO55H98kg+9z1C0ezNvGZnF5v7ZF
+        8+L1bBY7Go6wWrybK2Nx/vwGdotNj6+xWlzeNYfNYsb5fUwWZxb3sjtweWxa1cnmsX/uGnaP
+        zUvqPfq2rGL0+LxJLoA1issmJTUnsyy1SN8ugStj7df/jAVbWCu6FzQwNTCuZ+li5OCQEDCR
+        aD8d1cXIxSEksJtR4umMbexdjJxAcRmJ5c/62CBsYYn7LUdYIYreM0qce/IHrIhNQFvi+/rF
+        YAkRgfOMEpMfv2EDcZgF9jBKrJn9nRmkSljAR2JG20ywDhYBVYnlZ/tZQWxeAVuJRfNes0Cs
+        kJfo/veHBSIuKHFy5hMwmxko3rx1NvMERr5ZSFKzkKQWMDKtYpRMLSjOTc8tNiwwzEst1ytO
+        zC0uzUvXS87P3cQIDmAtzR2M21d90DvEyMTBeIhRgoNZSYS3KtcnSYg3JbGyKrUoP76oNCe1
+        +BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamDs3jtkV/JTZKzGPq15jTELIlLCuJ
+        TVPvgF7Ilp19nhss30dZXBR4ELlqR823Nc0fnznOYW4++DRm3vb1B+NfisdlbHy8syh7gtfH
+        ScLGu14wr07Vt7vg59054fdiTtGkiw36+9nC/L0D9iWkiz3jXiB47PjV/hXaJT0n3IOFJXbw
+        VTF7xa3YWzhvEp+SR9Wvh39unmJVfmw4/bV5Tq7LtfXOny5NE3AKmrT4kY7D3HMaLfv3+/Rx
+        aWheVbBjf79yn2Ofut+0Nmsz15BWHWWTar2DG+6dfNoZI1aoWbejy8e4cWWmzCTejG2dxWdO
+        ZM1JuWpySHvRZJMSG74Vq6Od3q5vFu+YmNLYc0n/RpcSS3FGoqEWc1FxIgAjW+vNzwIAAA==
+X-CMS-MailID: 20220406081823epcas2p3789ef3ac3956e4713dd1b55c8a49fb05
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220406081823epcas2p3789ef3ac3956e4713dd1b55c8a49fb05
+References: <CGME20220406081823epcas2p3789ef3ac3956e4713dd1b55c8a49fb05@epcas2p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,96 +119,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When console and printk log are printed at the same time,
+they are called through tty driver and console driver concurrently.
+In this case, this could lead to potintial issue that
+data loss or fifo full.
 
-On 06.04.22 10:09, Krzysztof Kozlowski wrote:
-> On 05/04/2022 21:57, Felix Fietkau wrote:
->> From: Lorenzo Bianconi <lorenzo@kernel.org>
->> 
->> Document the binding for the Wireless Ethernet Dispatch core on the MT7622
->> SoC, which is used for Ethernet->WLAN offloading
->> Add related info in mediatek-net bindings.
->> 
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> ---
->>  .../arm/mediatek/mediatek,mt7622-wed.yaml     | 50 +++++++++++++++++++
->>  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
->>  2 files changed, 52 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
-> 
-> Don't store drivers in arm directory. See:
-> https://lore.kernel.org/linux-devicetree/YkJa1oLSEP8R4U6y@robh.at.kernel.org/
-> 
-> Isn't this a network offload engine? If yes, then probably it should be
-> in "net/".
-It's not a network offload engine by itself. It's a SoC component that 
-connects to the offload engine and controls a MTK PCIe WLAN device, 
-intercepting interrupts and DMA rings in order to be able to inject 
-packets coming in from the offload engine.
-Do you think it still belongs in net, or maybe in soc instead?
+This issue also occurred with other drivers and has been fixed.
+"serial: amba-pl011: lock console writes against interrupts"
+ - https://lkml.org/lkml/2012/2/1/495
 
->> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
->> new file mode 100644
->> index 000000000000..787d6673f952
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
->> @@ -0,0 +1,50 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-wed.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: MediaTek Wireless Ethernet Dispatch Controller for MT7622
->> +
->> +maintainers:
->> +  - Lorenzo Bianconi <lorenzo@kernel.org>
->> +  - Felix Fietkau <nbd@nbd.name>
->> +
->> +description:
->> +  The mediatek wireless ethernet dispatch controller can be configured to
->> +  intercept and handle access to the WLAN DMA queues and PCIe interrupts
->> +  and implement hardware flow offloading from ethernet to WLAN.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - mediatek,mt7622-wed
->> +      - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    soc {
->> +      #address-cells = <2>;
->> +      #size-cells = <2>;
->> +      wed0: wed@1020a000 {
-> 
-> Generic node name, "wed" is specific. Maybe "network-offload"? Or
-> "network-accelerator"? You probably know better what this device does,
-> so maybe come with some generic name?
-wed stands for "wireless ethernet dispatch". Both network-offload and 
-network-accelerator don't really fit. Would it make sense to spell it 
-out, or do you have any better naming ideas?
+---
+Chnages since v1:
+ - locked variable type changed bool from int
+ - spin_lock() changed to spin_ock_irqsave()
 
-Thanks,
+Jaewon Kim (1):
+  tty: serial: samsung: add spin_lock for interrupt and console_write
 
-- Felix
+ drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+-- 
+2.35.1
+

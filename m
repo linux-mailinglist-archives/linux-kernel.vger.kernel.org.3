@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1807A4F6ED5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DBF4F6ED7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbiDFXpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S238112AbiDFXsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiDFXpd (ORCPT
+        with ESMTP id S231515AbiDFXsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:45:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4F22FE7E;
-        Wed,  6 Apr 2022 16:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649288616; x=1680824616;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=var08CWaVapTWvJV0XMLthqg4e7b4fr7jqqhMfupECY=;
-  b=CETrv9zYGlfaezMeg5SEE0SRXlNfGfxhkXu+QCfaxDsHDSZVKDd9pUbM
-   Tx+DsWtfjBkhMmb0/Pvla8xNg+/xAPF716aaOcIVtL/p98ODI4hHxe3IS
-   2a7R5SMGLfPmnKjsj2Py919Am0oyHrSsTwOtYeCfYj6+vXTWoQQDt5So2
-   yrell8fb6cOuC5aKkrXVKhnoQUhCa31mzGF9rjEw2QiadEdY8M5k/jqVr
-   ZDFIYUCChozj5TfgBTZZ0tAnF2YjVBbK4Gkn9oKCzQq6WtXEc9V1qlYlo
-   /5zU7aDqY+e8A9XQso72k5DVjAT7jlqS5zh3jvPmGNyB5wnH9gF//gHzP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261365448"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="261365448"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 16:43:35 -0700
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="588580003"
-Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 16:43:33 -0700
-Message-ID: <a439dc1542539340e845d177be911c065a4e8d97.camel@intel.com>
-Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
- struct kvm_mmu_page
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 07 Apr 2022 11:43:30 +1200
-In-Reply-To: <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 6 Apr 2022 19:48:09 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F49914DA2A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:46:09 -0700 (PDT)
+Date:   Wed, 06 Apr 2022 23:46:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1649288767;
+        bh=msv3nOGjLIGTrH1A0ydlYoFmzBEnAkJ0hjTDqARjFZY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=VO5Vhnal3btdccM03/zjx2HXeh90LnPQtZxVlbYpXI/CIiB1agDAywbdGZh5hywcq
+         ABZlR70nWy5Ow9CkEO/b7fi6iEkoZCzmSITCMiB7MjVivjekK659yX21GM2dNVOIRA
+         mh59hg3iMWpa2Z+NfVHe3TPbA6B69hxMVJR5JzD8ZsZ1nW2u9MIUMZBgDT1MsW60lq
+         A+aMAv9jOnBanleUgziFJ7IbNKttao6DHkEcfLY675fWBdkapXa3bm8kOBxcieAygi
+         9GJ9QNw4ZrZLFW2iSKAgXg0dG1qMEwHClLk4n7XC6K8HFN/eb1kQPE6jYtGllJ3H9d
+         6DkQR7EZW/BwQ==
+To:     Arnd Bergmann <arnd@arndb.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alobakin@pm.me>
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
+Message-ID: <20220406233909.529613-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Add a private pointer to kvm_mmu_page for private EPT.
-> 
-> To resolve KVM page fault on private GPA, it will allocate additional page
-> for Secure EPT in addition to private EPT.  Add memory allocator for it and
-> topup its memory allocator before resolving KVM page fault similar to
-> shared EPT page.  Allocation of those memory will be done for TDP MMU by
-> alloc_tdp_mmu_page().  Freeing those memory will be done for TDP MMU on
-> behalf of kvm_tdp_mmu_zap_all() called by kvm_mmu_zap_all().  Private EPT
-> page needs to carry one more page used for Secure EPT in addition to the
-> private EPT page.  Add private pointer to struct kvm_mmu_page for that
-> purpose and Add helper functions to allocate/free a page for Secure EPT.
-> Also add helper functions to check if a given kvm_mmu_page is private.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/mmu/mmu.c          |  9 ++++
->  arch/x86/kvm/mmu/mmu_internal.h | 84 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/mmu/tdp_mmu.c      |  3 ++
->  4 files changed, 97 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index fcab2337819c..0c8cc7d73371 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -689,6 +689,7 @@ struct kvm_vcpu_arch {
->  	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
->  	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
->  	struct kvm_mmu_memory_cache mmu_page_header_cache;
-> +	struct kvm_mmu_memory_cache mmu_private_sp_cache;
->  
->  	/*
->  	 * QEMU userspace and the guest each have their own FPU state.
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 6e9847b1124b..8def8b97978f 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -758,6 +758,13 @@ static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
->  	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
->  	int start, end, i, r;
->  
-> +	if (kvm_gfn_stolen_mask(vcpu->kvm)) {
+While testing the new macros for working with 48 bit containers,
+I faced a weird problem:
 
-Please get rid of kvm_gfn_stolen_mask().
+32 + 16: 0x2ef6e8da 0x79e60000
+48: 0xffffe8da + 0x79e60000
 
-> +		r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_private_sp_cache,
-> +					       PT64_ROOT_MAX_LEVEL);
-> +		if (r)
-> +			return r;
-> +	}
-> +
->  	if (shadow_init_value)
->  		start = kvm_mmu_memory_cache_nr_free_objects(mc);
->  
+All the bits starting from the 32nd were getting 1d in 9/10 cases.
+The debug showed:
+
+p[0]: 0x00002e0000000000
+p[1]: 0x00002ef600000000
+p[2]: 0xffffffffe8000000
+p[3]: 0xffffffffe8da0000
+p[4]: 0xffffffffe8da7900
+p[5]: 0xffffffffe8da79e6
+
+that the value becomes a garbage after the third OR, i.e. on
+`p[2] << 24`.
+When the 31st bit is 1 and there's no explicit cast to an unsigned,
+it's being considered as a signed int and getting sign-extended on
+OR, so `e8000000` becomes `ffffffffe8000000` and messes up the
+result.
+Cast the @p[2] to u64 as well to avoid this. Now:
+
+32 + 16: 0x7ef6a490 0xddc10000
+48: 0x7ef6a490 + 0xddc10000
+
+p[0]: 0x00007e0000000000
+p[1]: 0x00007ef600000000
+p[2]: 0x00007ef6a4000000
+p[3]: 0x00007ef6a4900000
+p[4]: 0x00007ef6a490dd00
+p[5]: 0x00007ef6a490ddc1
+
+Fixes: c2ea5fcf53d5 ("asm-generic: introduce be48 unaligned accessors")
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ include/asm-generic/unaligned.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligne=
+d.h
+index 8fc637379899..df30f11b4a46 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -143,7 +143,7 @@ static inline void put_unaligned_be48(const u64 val, vo=
+id *p)
+
+ static inline u64 __get_unaligned_be48(const u8 *p)
+ {
+-=09return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
++=09return (u64)p[0] << 40 | (u64)p[1] << 32 | (u64)p[2] << 24 |
+ =09=09p[3] << 16 | p[4] << 8 | p[5];
+ }
+
+--
+2.35.1
+
+

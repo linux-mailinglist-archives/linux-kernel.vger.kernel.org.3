@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6814F5E40
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72E24F5DEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiDFMYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S232053AbiDFMYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiDFMXe (ORCPT
+        with ESMTP id S234652AbiDFMXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:23:34 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01250100A5D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:09:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id qh7so2538860ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 01:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gqfp2NecHKAauwLOTljdIkk3Q50Ea/cnQshb9luki8c=;
-        b=pq64m81I9e0FH9yQUKk/b5lS1MJbaIuBPVWf6sECtzwzZFgInsOH1N8r0J0en4Trgt
-         2i/0wmYGWjMXO4UC9k29DuFFahF9A14Xvyxtho8hoedHO+uXjXscOsZXdj2v7F1Gy0uD
-         5sNFE5XDk7MMuKryD+pqoyMFkQ4GScqGCn8jOeI/fsrIlwlXbbb4Jn7KS/uL/7sgcH7j
-         ijZ5xsxpsLX7EYTtyBVbp/eR777mDnOz3RhkjN16PA21fC11SHJBR1u6H3Wla5bN7xOj
-         JofDFb57WhI0avtetitOMQsDxbncGK66ZvxEevs0o3qcIwv1F2cihVKsIqUr7e6RqM2g
-         th4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gqfp2NecHKAauwLOTljdIkk3Q50Ea/cnQshb9luki8c=;
-        b=t2I+PbjjQfUhRS6467kYjKdw+dSNys5S3fVtCKyf2mJGirQAtnc58btA4OEIaReIRY
-         mdwe5GRAWD7BdqHMtyKz3r9jl6QR3zmaWrv5tlK3QMOZnPyu0bWmhyzg0mCvhUPcsIdt
-         y5MOxvaj2euoC5KVWcnM8WR4fTiHAfU4HWWuoys7lScYTIXLhaOPyqe34XaI2xrD/5ZQ
-         lEkHwVR1EbcUnbo6lBD+umyw8UW0JOC77lWwHgh9urPQySGHcxOwTEE3SVAKV0ilYtDF
-         IKnAVlKc5rChhQBIqlNgnRxV20opE2ptPHQjV7lr4CKH9fR8iQsO/1TfGC75OQVm+Wv1
-         Gjww==
-X-Gm-Message-State: AOAM533RfruzaBwiQnamTZMQZh7G+7gvYR4bbdNlNU/SmDP+tW+89ilB
-        0EkkGisW5wGWlfsb5PEv2oZgXg==
-X-Google-Smtp-Source: ABdhPJwH3PNpR6dqUQ+vOs+ZdjHnyaVifmMlmZRc/y2sBXE1G1a1mHU1WSHCKWCZHNDIpUvpgD2iig==
-X-Received: by 2002:a17:906:9744:b0:6da:9e49:9fe3 with SMTP id o4-20020a170906974400b006da9e499fe3mr7146911ejy.319.1649232566546;
-        Wed, 06 Apr 2022 01:09:26 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm6372095ejb.179.2022.04.06.01.09.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:09:26 -0700 (PDT)
-Message-ID: <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org>
-Date:   Wed, 6 Apr 2022 10:09:24 +0200
+        Wed, 6 Apr 2022 08:23:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABA713F86;
+        Wed,  6 Apr 2022 01:09:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B1960B1E;
+        Wed,  6 Apr 2022 08:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65C3C385A1;
+        Wed,  6 Apr 2022 08:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649232576;
+        bh=goZBLwAg/DZhzYNdKCEzCGND7F9xwBbARNccVJHZ20o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c7MFHBL8kTnITP06VCPKeg+RSuNthXQrEzl+3zsnZC7CwNsjzGGqO90VIPWO42YI2
+         9CY1aZA1U4L3uSSb51+WK9/+o6J4ETlBUxGn6R6Rcbs2Na6wJNZU0hmfKGIqoiUJfd
+         BiCg8k8fLTOYwlZSjM8+PyRBY1F0TgbGqq96F+Nw=
+Date:   Wed, 6 Apr 2022 10:09:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] PCI: sysfs: add bypass for config read admin check
+Message-ID: <Yk1KveOnYfSrUJLD@kroah.com>
+References: <20220406071131.2930035-1-stevensd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 04/14] dt-bindings: arm: mediatek: document WED binding
- for MT7622
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-5-nbd@nbd.name>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220405195755.10817-5-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406071131.2930035-1-stevensd@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,90 +51,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 21:57, Felix Fietkau wrote:
-> From: Lorenzo Bianconi <lorenzo@kernel.org>
+On Wed, Apr 06, 2022 at 04:11:31PM +0900, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
 > 
-> Document the binding for the Wireless Ethernet Dispatch core on the MT7622
-> SoC, which is used for Ethernet->WLAN offloading
-> Add related info in mediatek-net bindings.
+> Add a moduleparam that can be set to bypass the check that limits users
+> without CAP_SYS_ADMIN to only being able to read the first 64 bytes of
+> the config space. This allows systems without problematic hardware to be
+> configured to allow users without CAP_SYS_ADMIN to read PCI
+> capabilities.
 > 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-
-Thank you for your patch. There is something to discuss/improve.
-
+> Signed-off-by: David Stevens <stevensd@chromium.org>
 > ---
->  .../arm/mediatek/mediatek,mt7622-wed.yaml     | 50 +++++++++++++++++++
->  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
->  2 files changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
-
-Don't store drivers in arm directory. See:
-https://lore.kernel.org/linux-devicetree/YkJa1oLSEP8R4U6y@robh.at.kernel.org/
-
-Isn't this a network offload engine? If yes, then probably it should be
-in "net/".
-
+>  drivers/pci/pci-sysfs.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
-> new file mode 100644
-> index 000000000000..787d6673f952
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-wed.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: MediaTek Wireless Ethernet Dispatch Controller for MT7622
-> +
-> +maintainers:
-> +  - Lorenzo Bianconi <lorenzo@kernel.org>
-> +  - Felix Fietkau <nbd@nbd.name>
-> +
-> +description:
-> +  The mediatek wireless ethernet dispatch controller can be configured to
-> +  intercept and handle access to the WLAN DMA queues and PCIe interrupts
-> +  and implement hardware flow offloading from ethernet to WLAN.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mediatek,mt7622-wed
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +      wed0: wed@1020a000 {
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 602f0fb0b007..162423b3c052 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -28,10 +28,17 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/msi.h>
+>  #include <linux/of.h>
+> +#include <linux/moduleparam.h>
+>  #include "pci.h"
+>  
+>  static int sysfs_initialized;	/* = 0 */
+>  
+> +static bool allow_unsafe_config_reads;
+> +module_param_named(allow_unsafe_config_reads,
+> +		   allow_unsafe_config_reads, bool, 0644);
+> +MODULE_PARM_DESC(allow_unsafe_config_reads,
+> +		 "Enable full read access to config space without CAP_SYS_ADMIN.");
 
-Generic node name, "wed" is specific. Maybe "network-offload"? Or
-"network-accelerator"? You probably know better what this device does,
-so maybe come with some generic name?
+No, this is not the 1990's, please do not add system-wide module
+parameters like this.  Especially ones that circumvent security
+protections.
 
-The same in DTS patch.
+Also, where did you document this new option?
 
-The bindings themself look ok.
+Why not just add this to a LSM instead?
 
-Best regards,
-Krzysztof
+>  /* show configuration fields */
+>  #define pci_config_attr(field, format_string)				\
+>  static ssize_t								\
+> @@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp, struct kobject *kobj,
+>  	u8 *data = (u8 *) buf;
+>  
+>  	/* Several chips lock up trying to read undefined config space */
+> -	if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+> +	if (allow_unsafe_config_reads ||
+> +	    file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+
+This feels really dangerous.  What benifit are you getting here by
+allowing an unpriviliged user to read this information?
+
+What userspace problem are you trying to solve here that deserves this
+change?
+
+thanks,
+
+greg k-h

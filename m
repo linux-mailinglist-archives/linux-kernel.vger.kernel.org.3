@@ -2,301 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB89F4F62D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA424F62ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiDFPNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S235594AbiDFPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiDFPNE (ORCPT
+        with ESMTP id S235759AbiDFPL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:13:04 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0B4633A17;
-        Wed,  6 Apr 2022 05:14:22 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 64dfcd7fc68f3766; Wed, 6 Apr 2022 14:06:39 +0200
-Received: from kreacher.localnet (unknown [213.134.186.238])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 6 Apr 2022 11:11:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098611DF875;
+        Wed,  6 Apr 2022 05:11:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3AAC166BD30;
-        Wed,  6 Apr 2022 14:06:38 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
-Date:   Wed, 06 Apr 2022 14:06:37 +0200
-Message-ID: <11967527.O9o76ZdvQC@kreacher>
-In-Reply-To: <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
-References: <20220204233219.GA228585@bhelgaas> <2632919.mvXUDI8C0e@kreacher> <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FEB06179E;
+        Wed,  6 Apr 2022 12:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B24C385A1;
+        Wed,  6 Apr 2022 12:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649246823;
+        bh=29FlFNXkq27syBNmf9v5tb8A1L9rU05KZSllftSB3hU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kVy1iQrsTySgS5FxZTXzmnZ5tx01hAkemwsko9mFzQ/aI7nTEFV/bjRvB0oKgk3TC
+         P9QcVAfk4JbrbLJspRRr2Vrr/8hemxPrcSCZ0GznQZD7Pmo0qqw/ucaQERYqD8o2Lt
+         zTAmACYIgMa+QKBnaI6wd2yOZON1bC4DhfbjK5KI=
+Date:   Wed, 6 Apr 2022 14:07:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
+Message-ID: <Yk2CZY8AuzSjgwMx@kroah.com>
+References: <20220405070258.802373272@linuxfoundation.org>
+ <e80a3eb4-335c-5f8c-dc22-e33176b225da@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.186.238
-X-CLIENT-HOSTNAME: 213.134.186.238
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhudetieeugeetgfeiteetffevheehgfeileekudejkefhtedtgfdvleevveekgeenucffohhmrghinhepohhuthhlohhokhdrtghomhdpkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeeirddvfeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekiedrvdefkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopegrsghhshgrhhhusehnvhhiughirgdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e80a3eb4-335c-5f8c-dc22-e33176b225da@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, April 6, 2022 7:32:45 AM CEST Abhishek Sahu wrote:
-> On 4/5/2022 10:20 PM, Rafael J. Wysocki wrote:
-> > On Tuesday, April 5, 2022 6:36:34 PM CEST Abhishek Sahu wrote:
-> >> On 2/8/2022 4:00 PM, Abhishek Sahu wrote:
-> >>> On 2/8/2022 12:28 AM, Rafael J. Wysocki wrote:
-> >>>> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
-> >>>>> [+cc Rafael, hoping for your review :)
-> >>>>
-> >>>> +Mika
-> >>>>
-> >>>>> Wonder if we should add something like this to MAINTAINERS so you get
-> >>>>> cc'd on power-related things:
-> >>>>>
-> >>>>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>>>> index ea3e6c914384..3d9a211cad5d 100644
-> >>>>> --- a/MAINTAINERS
-> >>>>> +++ b/MAINTAINERS
-> >>>>> @@ -15422,6 +15422,7 @@ F:    include/linux/pm.h
-> >>>>>  F:   include/linux/pm_*
-> >>>>>  F:   include/linux/powercap.h
-> >>>>>  F:   kernel/configs/nopm.config
-> >>>>> +K:   pci_[a-z_]*power[a-z_]*\(
-> >>>>
-> >>>> It seems so, but generally PM patches should be CCed to linux-pm anyway.
-> >>>>
-> >>>>>
-> >>>>>  DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
-> >>>>>  M:   Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>>>> ]
-> >>>>>
-> >>>>> On Mon, Jan 24, 2022 at 05:51:07PM +0530, Abhishek Sahu wrote:
-> >>>>>> Consider the following sequence during PCI device runtime
-> >>>>>> suspend/resume:
-> >>>>>>
-> >>>>>> 1. PCI device goes into runtime suspended state. The PCI state
-> >>>>>>    will be changed to PCI_D0 and then pci_platform_power_transition()
-> >>>>>>    will be called which changes the ACPI state to ACPI_STATE_D3_HOT.
-> >>>>
-> >>>> You mean PCI_D3hot I suppose?
-> >>>>
-> >>>
-> >>>  Yes. It should be PCI_D3hot here.
-> >>>
-> >>>>>> 2. Parent bridge goes into runtime suspended state. If parent
-> >>>>>>    bridge supports D3cold, then it will change the power state of all its
-> >>>>>>    children to D3cold state and the power will be removed.
-> >>>>>>
-> >>>>>> 3. During wake-up time, the bridge will be runtime resumed first
-> >>>>>>    and pci_power_up() will be called for the bridge. Now, the power
-> >>>>>>    supply will be resumed.
-> >>>>>>
-> >>>>>> 4. pci_resume_bus() will be called which will internally invoke
-> >>>>>>    pci_restore_standard_config(). pci_update_current_state()
-> >>>>>>    will read PCI_PM_CTRL register and the current_state will be
-> >>>>>>    updated to D0.
-> >>>>>>
-> >>>>>> In the above process, at step 4, the ACPI device state will still be
-> >>>>>> ACPI_STATE_D3_HOT since pci_platform_power_transition() is not being
-> >>>>>> invoked.
-> >>>>
-> >>>> I'm not quite following.
-> >>>>
-> >>>> I'm assuming that this description applies to the endpoint device that was
-> >>>> previously put into D3_hot.
-> >>>>
-> >>>
-> >>>  Yes. This is applicable for endpoint devices which was previously put
-> >>>  into D3hot.
-> >>>
-> >>>> Since its current state is D3_hot, it is not D0 (in particular) and the
-> >>>> pci_set_power_state() in pci_restore_standard_config() should put int into
-> >>>> D0 proper, including the platform firmware part.
-> >>>>
-> >>>
-> >>>  The pci_restore_standard_config() for endpoint devices are being called
-> >>>  internally during wake-up of upstream bridge.
-> >>>
-> >>>  pci_power_up(struct pci_dev *dev)
-> >>>  {
-> >>>       ...
-> >>>       if (dev->runtime_d3cold) {
-> >>>         /*
-> >>>          * When powering on a bridge from D3cold, the whole hierarchy
-> >>>          * may be powered on into D0uninitialized state, resume them to
-> >>>          * give them a chance to suspend again
-> >>>          */
-> >>>         pci_resume_bus(dev->subordinate);
-> >>>     }
-> >>>     ...
-> >>>  }
-> >>>
-> >>>  For the upstream bridge, the above code will trigger the wake-up of
-> >>>  endpoint devices and then following code will be executed for the
-> >>>  endpoint devices:
-> >>>
-> >>>  pci_update_current_state(struct pci_dev *dev, pci_power_t state)
-> >>>  {
-> >>>     if (platform_pci_get_power_state(dev) == PCI_D3cold ||
-> >>>         !pci_device_is_present(dev)) {
-> >>>         dev->current_state = PCI_D3cold;
-> >>>     } else if (dev->pm_cap) {
-> >>>         u16 pmcsr;
-> >>>
-> >>>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >>>         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> >>>     } else {
-> >>>         dev->current_state = state;
-> >>>     }
-> >>>  }
-> >>>
-> >>>  In the above code, the current_state will be set to D0 for the
-> >>>  endpoint devices since it will go into second block where
-> >>>  it will read the PM_CTRL register.
-> >>>
-> >>>>>> We need call the pci_platform_power_transition() with state
-> >>>>>> D0 to change the ACPI state to ACPI_STATE_D0.
-> >>>>>>
-> >>>>>> This patch calls pci_power_up() if current power state is D0 inside
-> >>>>>> pci_restore_standard_config(). This pci_power_up() will change the
-> >>>>>> ACPI state to ACPI_STATE_D0.
-> >>>>>>
-> >>>>>> Following are the steps to confirm:
-> >>>>>>
-> >>>>>> Enable the debug prints in acpi_pci_set_power_state()
-> >>>>>>
-> >>>>>> 0000:01:00.0 is PCI device and 0000:00:01.0 is parent bridge device
-> >>>>>>
-> >>>>>> Before:
-> >>>>>>
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>>>
-> >>>>>> After:
-> >>>>>>
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D0
-> >>>>>>
-> >>>>>> So with this patch, the PCI device ACPI state is also being
-> >>>>>> changed to D0.
-> >>>>>>
-> >>>>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >>>>>> ---
-> >>>>>>  drivers/pci/pci-driver.c | 14 +++++++++++---
-> >>>>>>  1 file changed, 11 insertions(+), 3 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> >>>>>> index 588588cfda48..64e0cca12f16 100644
-> >>>>>> --- a/drivers/pci/pci-driver.c
-> >>>>>> +++ b/drivers/pci/pci-driver.c
-> >>>>>> @@ -521,14 +521,22 @@ static void pci_device_shutdown(struct device *dev)
-> >>>>>>   */
-> >>>>>>  static int pci_restore_standard_config(struct pci_dev *pci_dev)
-> >>>>>>  {
-> >>>>>> +   int error = 0;
-> >>>>>>     pci_update_current_state(pci_dev, PCI_UNKNOWN);
-> >>>>>>
-> >>>>>>     if (pci_dev->current_state != PCI_D0) {
-> >>>>>> -           int error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>>>> -           if (error)
-> >>>>>> -                   return error;
-> >>>>>> +           error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>>>> +   } else {
-> >>>>>> +           /*
-> >>>>>> +            * The platform power state can still be non-D0, so this is
-> >>>>>> +            * required to change the platform power state to D0.
-> >>>>>> +            */
-> >>>>
-> >>>> This really isn't expected to happen.
-> >>>>
-> >>>> If the device's power state has been changed to D3hot by ACPI, it is not in D0.
-> >>>>
-> >>>> It looks like the state tracking is not working here.
-> >>>>
-> >>>
-> >>>  The state setting to D0 is happening due to the current logic present in
-> >>>  pci_update_current_state(). If we can fix the logic in
-> >>>  pci_update_current_state() to detect this condition and return state D3hot,
-> >>>  then it should also fix the issue.
-> >>>
-> >>>  Thanks,
-> >>>  Abhishek
-> >>>
-> >>
-> >>  Hi Rafael/Mika,
-> >>
-> >>  Could you please help regarding the correct way to fix this issue.
-> >>  I can update the patch accordingly.
+On Tue, Apr 05, 2022 at 06:08:44AM -0700, Guenter Roeck wrote:
+> On 4/5/22 00:24, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.110 release.
+> > There are 599 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > > 
-> > I think you can try one of the patches posted recently:
-> > 
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F3623886.MHq7AAxBmi%40kreacher%2F&amp;data=04%7C01%7Cabhsahu%40nvidia.com%7Cae4c8574f5a44973514a08da172471d6%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637847743178405297%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=aasJ79EICVnlJQ4EbXA2AtZFW0qnRsMkHEZRI8mnDI8%3D&amp;reserved=0
-> > 
-> > Thanks!
-> > 
-> > 
+> > Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> > Anything received after that time might be too late.
 > > 
 > 
->  Thanks Rafael.
->  I have applied both the changes and still the issue which I mentioned is happening.
+> Building um:defconfig ... failed
+> Building csky:defconfig ... failed
+> Building microblaze:mmu_defconfig ... failed
+> ------
+> Error log:
 > 
->  Following are the prints:
+> fs/binfmt_elf.c: In function 'fill_note_info':
+> fs/binfmt_elf.c:2050:45: error: 'siginfo' undeclared (first use in this function)
+>  2050 |                 sz = elf_dump_thread_status(siginfo->si_signo, ets);
+>       |                                             ^~~~~~~
+> fs/binfmt_elf.c:2050:45: note: each undeclared identifier is reported only once for each function it appears in
+> fs/binfmt_elf.c:2056:53: error: 'regs' undeclared (first use in this function)
+>  2056 |         elf_core_copy_regs(&info->prstatus->pr_reg, regs);
+>       |                                                     ^~~~
 > 
->  0000:01:00.0: power state changed by ACPI to D3hot
->  0000:00:01.0: power state changed by ACPI to D3cold
->  0000:00:01.0: power state changed by ACPI to D0
-> 
->  So ACPI state change is still not happening for PCI endpoint devices.
-> 
->  Also, the I checked the code and the pci_power_up() will not be called
->  for endpoint devices. For endpoints, pci_restore_standard_config() will
->  be called first where the current state will come as D0.
+> Build just started, so there are likely going to be more failures.
 
-OK, I see.
+Thanks, I missed this in my backport.  Now should be fixed up, I'll push
+out a -rc2 after this goes through some local build tests.
 
-The problem is that if the PCI device goes to D0 because of the bridge power-up,
-it's ACPI companion's power state may not follow, which means that we really
-want to do a full power-up in there.
-
-Please test the appended patch with the patch from
-
-https://patchwork.kernel.org/project/linux-pm/patch/3623886.MHq7AAxBmi@kreacher/
-
-still applied.
-
----
- drivers/pci/pci-driver.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
- 	 * to a driver because although we left it in D0, it may have gone to
- 	 * D3cold when the bridge above it runtime suspended.
- 	 */
--	pci_restore_standard_config(pci_dev);
-+	pci_pm_default_resume_early(pci_dev);
- 
- 	if (!pci_dev->driver)
- 		return 0;
-
-
-
+greg k-h

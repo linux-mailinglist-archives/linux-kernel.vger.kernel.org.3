@@ -2,100 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D334D4F605A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DAD4F5F7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiDFNsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S233296AbiDFNVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiDFNr4 (ORCPT
+        with ESMTP id S232124AbiDFNVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:47:56 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39133C8100
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:04:29 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2366Aox4008097;
-        Wed, 6 Apr 2022 05:03:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=no2eUXscBHSvRZ7O2It38W8eXT7w8davWXs4Eg5n67w=;
- b=aI2xtU6wmAWheuEapsgnRJAWtLsZKT6/z9ClBBkOELqdd3XznHsACv/prh7NYKH58OJx
- 0COCXudcU5MFVPlLsIKCWVkBy0uvf8LauMeKBSRuIaDun9kCOTaJKs0eZNQoaOo2ZXPi
- J8ziYRU5Vrwa8vPgCYIQrF8BzXEV/e/O5YNWHXPPEuyznoDeerTqgzG2zYQsAWzlXU+O
- r/MUTp5JcUpJh1nl2g+FmXOXDHfJcFxdbUZ6Po7WJ6AKmNb6V/2GF6dTqQCgGoh1F8UO
- MwM8c1QWWFNypn1TCbSJnbHiSKgIs1JjpsdQ5X9lsMOg3sGhptyK93YQVdoz53H2lHVg 3g== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f6kw2d0gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 06 Apr 2022 05:03:54 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
- 2022 11:03:52 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Wed, 6 Apr 2022 11:03:52 +0100
-Received: from [10.0.2.15] (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.88])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0A3EF2C5;
-        Wed,  6 Apr 2022 10:03:52 +0000 (UTC)
-Subject: Re:
- [broonie-ci:20220318_rf_asoc_add_a_driver_for_the_cirrus_logic_cs35l45_smart_amplifier
- 29/29] sound/soc/codecs/cs35l45-spi.c:66:27: error: initialization of 'void
- (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struct
- spi_device *)'
-To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>
-CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <202204061233.zD5PMrQA-lkp@intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-Message-ID: <e16cb5e1-a0bd-e5c9-f758-6d73b4ff0cb6@opensource.cirrus.com>
-Date:   Wed, 6 Apr 2022 11:03:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 6 Apr 2022 09:21:16 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235562D6E7;
+        Wed,  6 Apr 2022 03:04:46 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id ADE991F438D7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649239454;
+        bh=g7srURYZOuoeOiWj2FQ3simmvNJ0zom1MOjMcEDysv8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nmf9pj3vLhpmo8SD1pnvbqWTLGdw5/y11iJWV+6hwEAL0cONjbn5jeXbNXS37Uwvh
+         yLopOhZPHyVJ0dq5KWV9/clgqKc/SoH7xzIPrh6qm7rZ0eGeeXlaksw4mF/NjXnJQB
+         uGgaILIqE0mKJ88Ts4MoivOPf9dnGwYWJPLelPo82t8R0mzDPi+LYHqakrKh90r+Ev
+         Ca1fATeRBEKKSrBPmDh8w1aCpz3KR12xijS5Li2pKbqJSWTwV9zq9TQ/M1RfMmrG0T
+         tpIMntMjy3h87FwIikMEz5HKA7XRfWWBEs7A7gV/GKTh9OQhxAQZZ/WSHLtajCqUzT
+         YppmirKxGZj4g==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     broonie@kernel.org
+Cc:     matthias.bgg@gmail.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 0/7] MediaTek SPI controller cleanups and documentation
+Date:   Wed,  6 Apr 2022 12:04:02 +0200
+Message-Id: <20220406100409.93113-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <202204061233.zD5PMrQA-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: C7V5RAMlF6vFYCUj2Ptxyuk08s166whl
-X-Proofpoint-GUID: C7V5RAMlF6vFYCUj2Ptxyuk08s166whl
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2022 06:04, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git 20220318_rf_asoc_add_a_driver_for_the_cirrus_logic_cs35l45_smart_amplifier
-> head:   22d0ed9e232c66cf1d388c39fafac77c0872ae79
-> commit: 22d0ed9e232c66cf1d388c39fafac77c0872ae79 [29/29] ASoC: cs35l45: Add driver for Cirrus Logic CS35L45 Smart Amp
-> config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220406/202204061233.zD5PMrQA-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=22d0ed9e232c66cf1d388c39fafac77c0872ae79
->          git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
->          git fetch --no-tags broonie-ci 20220318_rf_asoc_add_a_driver_for_the_cirrus_logic_cs35l45_smart_amplifier
->          git checkout 22d0ed9e232c66cf1d388c39fafac77c0872ae79
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash sound/soc/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> sound/soc/codecs/cs35l45-spi.c:66:27: error: initialization of 'void (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struct spi_device *)' [-Werror=incompatible-pointer-types]
->        66 |         .remove         = cs35l45_spi_remove,
->           |                           ^~~~~~~~~~~~~~~~~~
+This series performs some cleanups to the spi-mt65xx driver, removing
+all gotos, simplifying the probe function and adding kerneldoc to the
+driver structures.
 
-This is fixed in V2 of the patch.
+AngeloGioacchino Del Regno (7):
+  spi: mt65xx: Simplify probe function with devm_spi_alloc_master
+  spi: mt65xx: Switch to device_get_match_data()
+  spi: mt65xx: Add and use pointer to struct device in mtk_spi_probe()
+  spi: mt65xx: Move pm_runtime_enable() call to remove all gotos
+  spi: mt65xx: Simplify probe function with dev_err_probe()
+  spi: mt65xx: Add kerneldoc for driver structures
+  spi: mt65xx: Fix definitions indentation
+
+ drivers/spi/spi-mt65xx.c | 315 ++++++++++++++++++---------------------
+ 1 file changed, 145 insertions(+), 170 deletions(-)
+
+-- 
+2.35.1
+

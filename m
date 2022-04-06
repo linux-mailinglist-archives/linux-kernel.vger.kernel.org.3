@@ -2,115 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4E24F5CBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992CD4F5CB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiDFLop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S229489AbiDFLow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiDFLoO (ORCPT
+        with ESMTP id S230269AbiDFLoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:44:14 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CE65857E8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:30:35 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p15so2786684lfk.8
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 01:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SCKZqgCi3PtFGSDXkz/WMuyQV3cdA+J7prWZVg1YWbs=;
-        b=TyvMpMUbt31Ysj9Fc/+vh86RKCcvo6OnmtNUmwrsCaotOfR8DkxNghoTyLAX/7axC1
-         hqHINnGcyQvd9Xyu2uwXExFdhI+G0CdR6x7UEW1WTrJbbLZ3flcVUTmWZvdGbuPrJ9rC
-         Mg/g1Qd+9u/TzZgzi7zumvP35+tC52NUIfV60=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SCKZqgCi3PtFGSDXkz/WMuyQV3cdA+J7prWZVg1YWbs=;
-        b=RCiLmHQB4x/U1FjK3lBS19i5ZMfB7o5b5Jsgf0PGHLy4zXvDLmDJhbED7sMaX7M04m
-         mTa+NDZ5YXIS1wqJDYDApMOVILu3V4gMPl5UUKxyd+Y+r+WLAzpFEEXWOOFezJyzCTPh
-         cUTHGwrlZM0m4cKzQoa73dVmiDl6ZkD6gbUb/Xzp/HSshYsaosuZgYoeLKkJloUIhR4E
-         UxCDJit15FdE0pwjcV3CuADiZu3Bbzuxa+wN4FEc7YbpwUcHgHFpZcKyjfARgQT77c4a
-         ConHW5nnWSXbqbbU7joRZ89lKWq3ImU+Tqvayyeq3Lu+SzsiD/i5aPo80GgikVq1eFzp
-         rPyw==
-X-Gm-Message-State: AOAM5317J8STNPeVrrTgsoX56kjYj1oBtuasRqVSfkLZ/39R3XKZLWHT
-        EUKB4U9aoljJ69X8nyKs9cdTEQ==
-X-Google-Smtp-Source: ABdhPJx8TPy213ruGo/58y5WqOOIerENqAQR6I3YAx6hbCBNhViJxXFVnzCyEKsCLHONvWCl6kcUxQ==
-X-Received: by 2002:a05:6512:1045:b0:44a:6422:4c8 with SMTP id c5-20020a056512104500b0044a642204c8mr5505234lfb.253.1649233834119;
-        Wed, 06 Apr 2022 01:30:34 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id o3-20020a198c03000000b00448b7b1780csm1765878lfd.63.2022.04.06.01.30.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:30:33 -0700 (PDT)
-Message-ID: <cf7449c2-71ef-aed1-c871-c9ae7202b3fc@rasmusvillemoes.dk>
-Date:   Wed, 6 Apr 2022 10:30:32 +0200
+        Wed, 6 Apr 2022 07:44:21 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED6A19C2A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:30:41 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CAABEC0004;
+        Wed,  6 Apr 2022 08:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649233839;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x58PUGpYCESbbCtEZlbi5sZBeRskMKKvlojIazBIayg=;
+        b=d0wVV32QEFvychcF08K0IwDp8FoTXZ2CJnGZWtqGuf79n2hPuOqEMgLNj4aAayLv5sTLZv
+        REkIZxkFKkU+37sIkxn1dgsW6cVmDp+B3xJ8vTB/Si5og7LVUtgTfK+q7KCmtQKWFffD9K
+        +TXBlJzZ9/yKj5lFvVdtyOBUo0ExX5vcdAIJ+pq/KWfO+B+Cy1I451QiaJsXgYje0Pmomw
+        rVBEwJMaPk0vahFkp9jRsAB91V+pLbPg3bayx1qDSfzpezY/5kNrhzcF0NbfUMiBeYTFks
+        5OcB6k9vUFy600orslqrcyFSrA9AXORsvG5VYMorAACPKS1PXsL7JSbSlRnSQA==
+Date:   Wed, 6 Apr 2022 10:30:38 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: [PATCH v3] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <Yk1Prpew7Sn//tZN@aptenodytes>
+References: <20220329132732.628474-1-paul.kocialkowski@bootlin.com>
+ <YkZulslrzeurp43U@ripper>
+ <YkatbpubQjwBWOiK@aptenodytes>
+ <Ykx1yQGROqyiu/yJ@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/5] x86/alternative: record .altinstructions section
- entity size
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-References: <20220311144312.88466-1-adobriyan@gmail.com>
- <20220311144312.88466-3-adobriyan@gmail.com>
- <20220312211740.GG28057@worktop.programming.kicks-ass.net>
- <Yi4ybwog/H4gk5Ts@localhost.localdomain> <87o81f1gh9.ffs@tglx>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <87o81f1gh9.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0yOxSLaMWlYo0LFA"
+Content-Disposition: inline
+In-Reply-To: <Ykx1yQGROqyiu/yJ@orome>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 21.24, Thomas Gleixner wrote:
-> On Sun, Mar 13 2022 at 21:05, Alexey Dobriyan wrote:
 
-> That does not matter. M merges any duplications in sections with the
-> same [section] name, entity size and flags.
-> 
->      .pushsection .bar "aM" @progbits, 4
->      .byte 0x01, 0x02, 0x03, 0x04
->      .popsection
-> 
->      .pushsection .bar "aM" @progbits, 4
->      .byte 0x01, 0x02, 0x03, 0x04
->      .popsection
-> 
-> Will create a section .bar with lenght 4 and the content:
->      0x1,0x2,0x3,0x4
-> 
-> What saves you here is the fact that the altinstruction entries are
-> guaranteed to be unique, but that wants a big fat comment.
+--0yOxSLaMWlYo0LFA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Actually, I think what saves this is that the linker at least currently
-ignores the merge flag for sections with relocations; from binutils
-bfd/merge.c:
+Hi Thierry,
 
-  if ((sec->flags & SEC_RELOC) != 0)
-    {
-      /* We aren't prepared to handle relocations in merged sections.  */
-      return true;
-    }
+On Tue 05 Apr 22, 19:00, Thierry Reding wrote:
+> On Fri, Apr 01, 2022 at 09:44:46AM +0200, Paul Kocialkowski wrote:
+> > Hi Bjorn,
+> >=20
+> > On Thu 31 Mar 22, 20:16, Bjorn Andersson wrote:
+> > > On Tue 29 Mar 06:27 PDT 2022, Paul Kocialkowski wrote:
+> > >=20
+> > > > While bridge/panel detection was initially relying on the usual
+> > > > port/ports-based of graph detection, it was recently changed to
+> > > > perform the lookup on any child node that is not port/ports
+> > > > instead when such a node is available, with no fallback on the
+> > > > usual way.
+> > > >=20
+> > > > This results in breaking detection when a child node is present
+> > > > but does not contain any panel or bridge node, even when the
+> > > > usual port/ports-based of graph is there.
+> > > >=20
+> > > > In order to support both situations properly, this commit reworks
+> > > > the logic to try both options and not just one of the two: it will
+> > > > only return -EPROBE_DEFER when both have failed.
+> > > >=20
+> > >=20
+> > > Thanks for your patch Paul, it fixed a regression on a device where I
+> > > have a eDP bridge with an of_graph and a aux-bus defined.
+> > >=20
+> > > But unfortunately it does not resolve the regression I have for the
+> > > USB based DisplayPort setup described below.
+> > >=20
+> > >=20
+> > > In the Qualcomm DisplayPort driver We're calling:
+> > >=20
+> > > 	devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
+> > >=20
+> > > and with the following DT snippet the behavior changed:
+> > >=20
+> > > displayport-controller@ae90000 {
+> > > 	compatible =3D "qcom,sc8180x-dp";
+> > > 	...
+> > >=20
+> > > 	operating-points-v2 =3D <&dp0_opp_table>;
+> > >=20
+> > > 	ports {
+> > > 		#address-cells =3D <1>;
+> > > 		#size-cells =3D <0>;
+> > >=20
+> > > 		port@0 {
+> > > 			reg =3D <0>;
+> > > 			dp0_in: endpoint {
+> > > 				remote-endpoint =3D <&display_driver>;
+> > > 			};
+> > > 		};
+> > > 	};
+> > >=20
+> > > 	dp0_opp_table: opp-table {
+> > > 		...;
+> > > 	};
+> > > };
+> > >=20
+> > > Prior to the introduction of 80253168dbfd ("drm: of: Lookup if child
+> > > node has panel or bridge") this would return -ENODEV, so we could
+> > > differentiate the case when we have a statically defined eDP panel fr=
+om
+> > > that of a dynamically attached (over USB) DP panel.
+> > >=20
+> > > Prior to your change, above case without the opp-table node would have
+> > > still returned -ENODEV.
+> > >=20
+> > > But now this will just return -EPROBE_DEFER in both cases.
+> >=20
+> > Oh that's right, the -ENODEV case was just completely removed by my cha=
+nge.
+> > Initially this would happen if !of_graph_is_present or if the remote no=
+de
+> > doesn't exist.
+> >=20
+> > Now that we are also checking for child nodes, we can't just return -EN=
+ODEV
+> > when the graph or remote node is missing: we must also check that there=
+ is no
+> > child node that is a panel/bridge.
+> >=20
+> > For the graph remote case, we can reliabily return -EPROBE_DEFER when
+> > of_graph_is_present and the remote exists and of_device_is_available.
+> > Otherwise we can go for -ENODEV. I think getting -EPROBE_DEFER at this =
+point
+> > should stop the drm_of_find_panel_or_bridge process.
+> >=20
+> > On the other hand for the child panel/bridge node case, I don't see how=
+ we
+> > can reliably distinguish between -EPROBE_DEFER and -ENODEV, because
+> > of_drm_find_panel and of_drm_find_bridge will behave the same if the ch=
+ild
+> > node is a not-yet-probed panel/bridge or a totally unrelated node.
+> > So I think we should always return -EPROBE_DEFER in that case.
+> >=20
+> > As a result you can't get -ENODEV if using the of graph while having any
+> > (unrelated) child node there, so your issue remains.
+> >=20
+> > Do you see any way we could make this work?
+> >=20
+> > > I thought the appropriate method of referencing the dsi panel was to
+> > > actually reference that using the of_graph, even though it's a child =
+of
+> > > the dsi controller - that's at least how we've done it in e.g. [1].
+> > > I find this to be much nicer than to just blindly define that all
+> > > children of any sort of display controller must be a bridge or a pane=
+l.
+> >=20
+> > Yes I totally agree. Given that using the child node directly apparently
+> > can't allow us to distinguish between -EPROBE_DEFER/-ENODEV I would be =
+in
+> > favor of dropping this mechanism and going with explicit of graph in an=
+y case
+> > (even if it's a child node). I don't see any downside to this approach.
+> >=20
+> > What do yout think?
+>=20
+> This patch has recently starting causing failures on various Tegra
+> devices that use drm_of_find_panel_or_bridge() for the case where the
+> output might be connected to an eDP or LVDS panel. However, that same
+> output could also be connected to an HDMI or DP monitor, in which case
+> we obviously don't want a DT representation because it's all
+> discoverable.
+>=20
+> If I understand correctly, that's similar to what Bjorn described. In my
+> case I was able to fix the regression by returning -ENODEV at the very
+> end of the function (i.e. no matching ports were found and no graph is
+> present).
 
-I do think it is theoretically possible for two altinstruction entries
-to end up being identical after relocations have been applied (same
-relative offsets to both the .text section and their replacement
-instructions).
+Okay so I'll send a patch that returns -ENODEV when possible, but there
+is still a case where we can't distinguish between -EPROBE_DEFER and -ENODE=
+V,
+which calls for removing the whole child node-based mechanism.
 
-Rasmus
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--0yOxSLaMWlYo0LFA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJNT64ACgkQ3cLmz3+f
+v9GHXAf+I7lNzoF+dBJbZYSkY3LfZOYIFKgzdHp6vgNm0qCjCqH3OeQoLqIpSA9D
+hc4ePKaNeO1hCWbdAIqUnlbcrVRX8WDxZnzsKT9mDltsr928el9BeSMybUiIzRzz
+1n/Oaxm2sz+5q8Pd9Zo98eZKArECSqPN89oBCq2ur0xPDsVVrwnlDG6GGu01O7HT
+m+4TqKE+zI50cFQ0bf8vOIIDS9A4XVQhJ91fMr4Qt8uoImiiTMbudooG55WTNyaM
+R4/1NPFvB+awBLh44lXq69dcWR91HB5v0qExhXFQuuvrE1+5x/d0rg4sCpNrTq3k
+Wu2OJ+0FIrQehcMtxias/2CVFmWwQw==
+=j6eO
+-----END PGP SIGNATURE-----
+
+--0yOxSLaMWlYo0LFA--

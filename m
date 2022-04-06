@@ -2,223 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416294F6ACE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCD74F6B10
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbiDFUHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S234091AbiDFUPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiDFUGl (ORCPT
+        with ESMTP id S236300AbiDFUNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:06:41 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5903BEDF31;
-        Wed,  6 Apr 2022 10:50:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649267438; x=1680803438;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=X17Y4T8rB8Ztasx5yMthgbTjl9W6u1YVCq0voA7BqwQ=;
-  b=D1xHeazfaSe9JN/FtujFkaH6OJjW/DMAVMpuVgaLhtZsY2OF0pyTprbF
-   ZedE5Lj9gn3YreAiY1sf01Q/AquijCIGZSLmc4fsQsHz/sCs9nu267A7x
-   MEM6mxHZszursbhDDhMCrdBCDmOW6ljSHbLIU+qzpqYevctZcEWWfrtTT
-   KhSRsq5n5GbVGtvWXcDz+8qMcJZ5lHjvgalKGgilBqGl5cx4XnSH1KdkU
-   6xpNSkGnwGuKctXgzqneOK3ACVQ4ecmSPK2SYQKnQzW01sZoTwkz1jAw2
-   1xXmBafeDd13vQDcl2GIFQRpEk2i8TOYx6aoPgUdGcQpShMyhqJ1IVB9E
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286089885"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="286089885"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:50:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="608994166"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 10:50:37 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 6 Apr 2022 10:50:37 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 6 Apr 2022 10:50:37 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 6 Apr 2022 10:50:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sw6wLsj7f1ldMuI9LgZwDUlZxvpxl+ZCdsmx9/RJqLL/XjajWWlNWnhKnWYfxAmlRo+1hsigbGNhD3Z7J7wdaqKGoIFW5SqWxrH1YnxE6oPvEQdStq2jhP4bPLydpTFtE2c2TnFWXHHxZfXWBNTBpC4pl+rtVh+v/FKUkqzGN+mRSJiAQ3qs2GLQNT0bHIkAUuTlDaBnGIwg2ao5/jbvb+aTnU7TUD/um46HrZ6FNksHsyvO0271btlnYDksIxhaudKt1lQc7gc62nnZnRCXjqqUWMawkeK3/y0779BVRpH5ISbJLBNBlrFwBTPWmkNi9CPF8Nl4w6kr4OaFjHeudg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bL+Z1XzG5LVMutrhQtaFMhmws1jlmVyV942mKQOdl40=;
- b=BGBOGaPFfAvVYveQxeAlhpM7L2jVLiKGNL7uhUyjn9rtjg8Z1LKpjnQfTBR01vHKEJKVr1ZjQBghvHAtnsxC1+k7wL1E4fvR70+iyPCs0ul9f3s5WyZUUdDX/nXy8oVHRtO9udaI8jwx0lZ34vHIEMNqB37JN+7Y0L3W+0J1OU/Cy/mMr3Z9sFHFEkurUncJQ1IdvMY5wB/ZjQV8rzv78ZaMw+W79j957t2jK3CvtzwSZTe4L9xmm2+zVQ4SEwmW9Wg4YH4BExGHnPB39+4s9SEDRiVMJupxJcXXQWjRsyjJbl7nz4/cuU26HcObMl6jdLym3DfVEvYNKyFCkSV+KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by DM6PR11MB4348.namprd11.prod.outlook.com (2603:10b6:5:1db::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 17:50:28 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5144.021; Wed, 6 Apr 2022
- 17:50:28 +0000
-Message-ID: <573970eb-f466-aad4-3808-fde5f3374e7c@intel.com>
-Date:   Wed, 6 Apr 2022 10:50:23 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH V3 19/30] x86/sgx: Free up EPC pages directly to support
- large page ranges
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>
-CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <luto@kernel.org>, <mingo@redhat.com>,
-        <linux-sgx@vger.kernel.org>, <x86@kernel.org>, <seanjc@google.com>,
-        <kai.huang@intel.com>, <cathy.zhang@intel.com>,
-        <cedric.xing@intel.com>, <haitao.huang@intel.com>,
-        <mark.shanahan@intel.com>, <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
- <b3a17e1ce7bcd14db3c28903e8a97f094998ae74.1648847675.git.reinette.chatre@intel.com>
- <Ykvrk4hYvBEnNOOl@kernel.org>
- <e118f4c6-7216-15f3-2bda-3a5851b0bcb1@intel.com>
- <f8d92685-27dd-e7ef-ce0d-100a285aec4b@intel.com>
- <984834578beba18fa5b0196a0d9e4327dc22cf73.camel@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <984834578beba18fa5b0196a0d9e4327dc22cf73.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW3PR05CA0024.namprd05.prod.outlook.com
- (2603:10b6:303:2b::29) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        Wed, 6 Apr 2022 16:13:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18BB60040;
+        Wed,  6 Apr 2022 10:51:48 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236G8xbb037207;
+        Wed, 6 Apr 2022 17:51:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=8ndA8c5xFaZF+V8VsYWe9PAD5wDhHWHh/EbZ2rHZ214=;
+ b=J1kXuTffGRvpCogdFAz/cqTHO91bY3YQoyGr+A9+PQ8v6/3zKM1PQtzg4VtTOn/0kPW4
+ LMhSxSnOhOj0J23TVSHMzoMXz/xuKlsCvb4zBUIH/5XEYvFUTT+SsVdWP1QciSfWhjnL
+ 7jwpUjwWbX7toY6ELAY0q5bOJ/tqIzVVMVKaSLjC3ZJlfRN++rqS7zhMhKJOI6xUtjgY
+ rG/fel4dhD1gOrlRWgXreGOGPehh3yLHMGzSMvhs942GWdREXN4Uwiihm9J85/JpOQaM
+ GTKKglXiDfQDeA3gwDfJdBUiPE7xs3nkUy3x6wkAlBFnoRI32ww7MQxAkZfe1pj9j5ty Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f9a9qft54-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 17:51:40 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 236Hgmsd019947;
+        Wed, 6 Apr 2022 17:51:39 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f9a9qft4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 17:51:39 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236HicXB002932;
+        Wed, 6 Apr 2022 17:51:37 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3f6drhpttb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 17:51:37 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236HpYHG41026038
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Apr 2022 17:51:34 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 487404C040;
+        Wed,  6 Apr 2022 17:51:34 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E9C234C046;
+        Wed,  6 Apr 2022 17:51:28 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.211.90.125])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Apr 2022 17:51:28 +0000 (GMT)
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+To:     acme@kernel.org, jolsa@kernel.org, disgoel@linux.vnet.ibm.com
+Cc:     mpe@ellerman.id.au, linux-perf-users@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.vnet.ibm.com,
+        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
+        linux-kernel@vger.kernel.org, srikar@linux.vnet.ibm.com,
+        irogers@google.com
+Subject: [PATCH v2 2/4] tools/perf: Fix perf bench epoll to correct usage of affinity for machines with #CPUs > 1K
+Date:   Wed,  6 Apr 2022 23:21:11 +0530
+Message-Id: <20220406175113.87881-3-atrajeev@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
+References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff78001f-4643-4f67-a4b3-08da17f5efc2
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4348:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR11MB4348164AB1698180C699029AF8E79@DM6PR11MB4348.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ECP9x6ZnKaIPe3F7LRkPGjxnEekyaYDtXK0TK/KNAphwc50OUQiVhbWWvpmpvMqEUgyFFLh11engM60xubCKd113w8GkSaUFMQ2R0CMDexQSm6prAIbnssrLl1UQh2YbW4DMMQK7G5SL0FqxKIvkgIDQKZcUG1XuTXrWAjXqZFIr6ELVbT1sM6h2RmIqkiKXoMdfzzh4Q/42AoCoZOxUxqRv3Iw4IYWcCNWK4EUjzKSObtg7+Czu1BHKwAK6EIwm//u4xTuqhyqaYGJ9sohNXp4BsbOy5gvmrTg1cdMxxo1yOcqpZGhT49pEkzyEwGOts2xVQ1yv6Td5+E2Dtr6btiLO3akhw8t3BZIa0/juI4gB16sTMxCbfTNtpsdFLnHsV6vI8qN6UlxXbX7Wsoy1GCkSakGe+6slVvONnAAI2DZHQG88holfp+0cSwgvx73opF/3PTVr0o23EuIJO+ayDymFp1MVNIDg+Sf73hg3JqXeYPyNM+GqYeZNnyOXkZAUQ3r1ZzZB6huTTL6NmDTF5Mp8vPa0Yy6DFArP6X7xmMxyeH0Adt+2gCTKswLww57fYtvs8KLdo6/39Sc2+J6kVwx83ddUt+LNE8h9QoByiunw5DilsRjJ17SDU5Hh6+tDqFeilaqNXk1Z4/yyEXW5CPZ1815XvlSjc4C8y6ayU3b+VGUZRru94zHFut2xYixUjw+jnZvUNUcv68cmp02zJKiv5g75H8o/fvArMlQM7p+pm5CjLnP2m2jhX+ICX+L/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(6512007)(508600001)(316002)(31686004)(36756003)(6506007)(53546011)(6486002)(26005)(6636002)(110136005)(2616005)(7416002)(82960400001)(2906002)(31696002)(4326008)(66476007)(8676002)(83380400001)(66946007)(86362001)(44832011)(8936002)(38100700002)(6666004)(66556008)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emZGY0hEMUNzQ1ByR0d4MGQyenBYMllucTBVanZsS3AzOGY3ZC9rVkJFZTNX?=
- =?utf-8?B?dzlMbHlpcWNpazc5TUNkZkRBVGhpem5uYzRnczUzeXI0NFVIVnlKZnJTcmtm?=
- =?utf-8?B?a01LRFVENFZSLzNDYTFjdGc3ZEQyWERRUFd4Z2piMmhhTjQzT2NocFFJK2ZN?=
- =?utf-8?B?ckk5OUwwSnoxSittbGJuUGo1WkxMQVZ5TEZhckM5ZG9oRVBXcDhRcERVRUsw?=
- =?utf-8?B?UEQ0NkZVejdRWWcxOTVHKzRGWWlTcGsyd3hTWG1rNFdVd3phVVFOMVlsT1Vn?=
- =?utf-8?B?b2Y3dUVUZUJWWDNFUFVESTBPWEYzZ0tYSGVwcjNodzB1bEFOZmZ6SERGbHBB?=
- =?utf-8?B?NEdENFNldmQ5RU1DNWNIRTEvR1diazFleW80Z1EzZGw2eWFtWVZtaHN6U0hN?=
- =?utf-8?B?MGl0ZDhIUGlCZmZDTUc1akRJbHpzVFk5akFBcTg1Q2Uxb1N1amtwR2Z3TnR2?=
- =?utf-8?B?TXN5cWtSWGZHYmFzWXFMUnI4YitHMGlsM2ZlVjZXZ2F1SXF4TWRjR3NnNjNW?=
- =?utf-8?B?d3BOY29xUEpibys2MG82cER4dFdBb25uZTlUNHVwWXJta1ZNaUpMUmo1a0pm?=
- =?utf-8?B?YlhvZ21kcTZpR1ZCdzdQeHlOR3REcVNObnZlRG5OUTBwcjcxZ1dKTUpJb1RJ?=
- =?utf-8?B?cXY1aHBwWVp6MGQvMFN2UVFsbmxqRS9nNDRjZWE4eDZOVHRub2RmRFhhaHZo?=
- =?utf-8?B?aFQvVTNHdFlzVSsrVnhMV1MvN3hxZFRrS3liVDBjb09GYU52OElTeWw2bXVp?=
- =?utf-8?B?VzFjZ0NMOGhpWVNDc0dFckJuSmZXK21jMC9hdnk5QUxXUi9vSDhrWnhQQWdF?=
- =?utf-8?B?K3hFbWsvTXc5VXZ1QWpTUnFRWVd1Nk41WC9kT3hlUGZFQTBLTFc1Y2FvUVdk?=
- =?utf-8?B?K3V6SVBDZ3hQb1ZCSWF3TTBvbmZTOEhBOVlkTGkzUWtid0trU1JhM2s3WEcr?=
- =?utf-8?B?ejlLbEE4MzREaU5WTUtXOWl3ZG1zWGpaS0NzeW52ZUgrNFpSS3QzN2ZOZTNL?=
- =?utf-8?B?b3VZUVNvZGtDRnB1dGhjck5TbEV2djIvYzZSM3FJSHhaOG5PWU5uTzVDbUx2?=
- =?utf-8?B?Q2QvL1I2Ri9FcGVxelpsNEp6WE41MlpncERTOWh2eVVLNjdCRklUcVhsWEY2?=
- =?utf-8?B?cTZPTEdqNUpkZlVWKzJqZWhUN2NkR0FTOVNPV2dlYUptcDZoemhreDhCYmJG?=
- =?utf-8?B?UllNbngxQWJjd0JJZ2pTM0V5dFZKUmxMcnBQQ3NwRGF2bCtVdm9Vb0p6YkVq?=
- =?utf-8?B?aGNkMkRCSzVJaVVmZWtBdDRyQms2eTcyajZtcHU3U2NVTG9rc1BXTFR6YUlX?=
- =?utf-8?B?ZnJoREhjZllTYjRWckgzaHBKZU9BUGdPUlZzL2NMN2pDQkZRa21xSmExL0pz?=
- =?utf-8?B?QUNkWmV6YTg0dytSK21nYlBuTWxRZHEzZzlrRnQzSmdDL0FUS3lIbkdOZ29E?=
- =?utf-8?B?Kzd3YTUyVTFTVGo1bnBOdW1COUJiVnBwWVV3KytTZk1rUEZaSGUvTDNjdTFP?=
- =?utf-8?B?KzVGQU9aVmxZMlBzaHBFRnR4SU9FTjJmUFpaQ0IvaDBQQTY1eWpYS2lsU2Mz?=
- =?utf-8?B?VE8rdDg2ekNBaDBHa0dJTTByekVqU1NxNlExUzJsZjNQaDI3emM2bnpCMzN4?=
- =?utf-8?B?RkhWMVB4RVVXZ0ZJL04rYm5qUWZJaFhBZTFYWkJxQ1labG9yVE12aUk4UHNS?=
- =?utf-8?B?S2xvY01FdTlQRzV1V3dhTlNyMEFibUZiaHQ0WGJnbWVITmw1YVljNWU1a01N?=
- =?utf-8?B?V0JDdTh3bnRxTTNTRkR0aXpubTRsK3oxQVo5Vlcyb29jNktSTkVOdjM5YXpy?=
- =?utf-8?B?SS91QUVxeU9hRVNLSlRtTmkxVWxqd0lwcGlsMFd5R01SR2RHYjE2cTMwUVBq?=
- =?utf-8?B?U1ZUUS8vUTN1bnZ3cHBDQ0ZIa0ozTFNITFIyRXRSeWpPSjRvS3BIMmc2Q0Rm?=
- =?utf-8?B?Q1N4enRsL09INmovdmhhZVdhOWtjc3BCMWlSallKWFFESUMyQWdqNFRSVVR4?=
- =?utf-8?B?MWlIKytrcVN5ekVjYkdDR0NzdGpVNjR6Y1Q5bzRDZ25oREZ3TnlUTmFtY2gy?=
- =?utf-8?B?STVzNUhibElRamFxQkRNeEg1cnRTUjdFUVFXZFI4Wk1US3BISzlPRytXU01z?=
- =?utf-8?B?QkpWWVd1MGZ1amkwU2NSTytNbEdZcDE0RStZbkpJUXVtTzE0eVJYUUp4dkVW?=
- =?utf-8?B?SmtmQ2NwT1lwNVdQWCtudHgvNmJDbE15RER2a1lMZUttQXpxL2pvS3VKWWZx?=
- =?utf-8?B?QUh5Sy9aNHVTbnU3akJNNDQ3cll5d0p6elBsTTFBVUE5N1poYitiWWl5R2pV?=
- =?utf-8?B?UDJMbVRKcGpSTjZBQUUxcmIvM1NMS01ucHRHWTNTbkNDWVBBa2NOSFpNNWRt?=
- =?utf-8?Q?14dl51SgYNnN20qM=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff78001f-4643-4f67-a4b3-08da17f5efc2
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 17:50:28.5470
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7L1w/kMnkHT1040Uv+P801E7Ty8iKKh2x04MFe1eOc+Zoku4B9b2RbuI0AOi+m/gCh1A0hJdSuVQQPLb/m+zUYJ6JaNybyUdoN63N6ps/FA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4348
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OVMkAlE1clseF4f9BcFFTUoXeUPF5OVm
+X-Proofpoint-ORIG-GUID: rvF_PSZj4BgcGV26e9u35LXN93EfB-Vi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_09,2022-04-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204060087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+perf bench epoll testcase fails on systems with CPU's
+more than 1K.
 
-On 4/5/2022 11:35 PM, Jarkko Sakkinen wrote:
-> On Tue, 2022-04-05 at 10:25 -0700, Dave Hansen wrote:
->> On 4/5/22 10:13, Reinette Chatre wrote:
->>>>> +void sgx_direct_reclaim(void)
->>>>> +{
->>>>> +       if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
->>>>> +               sgx_reclaim_pages();
->>>>> +}
->>>> Please, instead open code this to both locations - not enough redundancy
->>>> to be worth of new function. Causes only unnecessary cross-referencing
->>>> when maintaining. Otherwise, I agree with the idea.
->>>>
->>> hmmm, that means the heart of the reclaimer (sgx_reclaim_pages()) would be
->>> made available for direct use from everywhere in the driver. I will look into this.
->>
->> I like the change.  It's not about reducing code redundancy, it's about
->> *describing* what the code does.  Each location could have:
->>
->>         /* Enter direct SGX reclaim: */
->>         if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
->>                 sgx_reclaim_pages();
->>
->> Or, it could just be:
->>
->>         sgx_direct_reclaim();
->>
->> Which also provides a logical choke point to add comments, like:
->>
->> /*
->>  * sgx_direct_reclaim() should be called in locations where SGX
->>  * memory resources might be low and might be needed in order
->>  * to make forward progress.
->>  */
->> void sgx_direct_reclaim(void)
->> {
->>         ...
-> 
-> Maybe cutting hairs but could it be "sgx_reclaim_direct"? Rationale
-> is easier grepping of reclaimer functions, e.g. when tracing.
+Testcase: perf bench epoll all
+Result snippet:
+<<>>
+Run summary [PID 106497]: 1399 threads monitoring on 64 file-descriptors for 8 secs.
 
-Sure, will do.
+perf: pthread_create: No such file or directory
+<<>>
 
-This may not help grepping all reclaimer functions though since
-the code is not consistent in this regard.
+In epoll benchmarks (ctl, wait) pthread_create is invoked in do_threads
+from respective bench_epoll_*  function. Though the logs shows direct
+failure from pthread_create, the actual failure is from  "sched_setaffinity"
+returning EINVAL (invalid argument). This happens because the default
+mask size in glibc is 1024. To overcome this 1024 CPUs mask size
+limitation of cpu_set_t, change the mask size using the CPU_*_S macros.
 
-Reinette
+Patch addresses this by fixing all the epoll benchmarks to use
+CPU_ALLOC to allocate cpumask, CPU_ALLOC_SIZE for size, and
+CPU_SET_S to set the mask.
+
+Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+---
+ tools/perf/bench/epoll-ctl.c  | 25 +++++++++++++++++++------
+ tools/perf/bench/epoll-wait.c | 25 +++++++++++++++++++------
+ 2 files changed, 38 insertions(+), 12 deletions(-)
+
+diff --git a/tools/perf/bench/epoll-ctl.c b/tools/perf/bench/epoll-ctl.c
+index 1a17ec83d3c4..91c53f6c6d87 100644
+--- a/tools/perf/bench/epoll-ctl.c
++++ b/tools/perf/bench/epoll-ctl.c
+@@ -222,13 +222,20 @@ static void init_fdmaps(struct worker *w, int pct)
+ static int do_threads(struct worker *worker, struct perf_cpu_map *cpu)
+ {
+ 	pthread_attr_t thread_attr, *attrp = NULL;
+-	cpu_set_t cpuset;
++	cpu_set_t *cpuset;
+ 	unsigned int i, j;
+ 	int ret = 0;
++	int nrcpus;
++	size_t size;
+ 
+ 	if (!noaffinity)
+ 		pthread_attr_init(&thread_attr);
+ 
++	nrcpus = perf_cpu_map__nr(cpu);
++	cpuset = CPU_ALLOC(nrcpus);
++	BUG_ON(!cpuset);
++	size = CPU_ALLOC_SIZE(nrcpus);
++
+ 	for (i = 0; i < nthreads; i++) {
+ 		struct worker *w = &worker[i];
+ 
+@@ -252,22 +259,28 @@ static int do_threads(struct worker *worker, struct perf_cpu_map *cpu)
+ 			init_fdmaps(w, 50);
+ 
+ 		if (!noaffinity) {
+-			CPU_ZERO(&cpuset);
+-			CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
++			CPU_ZERO_S(size, cpuset);
++			CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu,
++					size, cpuset);
+ 
+-			ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset);
+-			if (ret)
++			ret = pthread_attr_setaffinity_np(&thread_attr, size, cpuset);
++			if (ret) {
++				CPU_FREE(cpuset);
+ 				err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
++			}
+ 
+ 			attrp = &thread_attr;
+ 		}
+ 
+ 		ret = pthread_create(&w->thread, attrp, workerfn,
+ 				     (void *)(struct worker *) w);
+-		if (ret)
++		if (ret) {
++			CPU_FREE(cpuset);
+ 			err(EXIT_FAILURE, "pthread_create");
++		}
+ 	}
+ 
++	CPU_FREE(cpuset);
+ 	if (!noaffinity)
+ 		pthread_attr_destroy(&thread_attr);
+ 
+diff --git a/tools/perf/bench/epoll-wait.c b/tools/perf/bench/epoll-wait.c
+index 0d1dd8879197..9469a53ffab9 100644
+--- a/tools/perf/bench/epoll-wait.c
++++ b/tools/perf/bench/epoll-wait.c
+@@ -291,9 +291,11 @@ static void print_summary(void)
+ static int do_threads(struct worker *worker, struct perf_cpu_map *cpu)
+ {
+ 	pthread_attr_t thread_attr, *attrp = NULL;
+-	cpu_set_t cpuset;
++	cpu_set_t *cpuset;
+ 	unsigned int i, j;
+ 	int ret = 0, events = EPOLLIN;
++	int nrcpus;
++	size_t size;
+ 
+ 	if (oneshot)
+ 		events |= EPOLLONESHOT;
+@@ -306,6 +308,11 @@ static int do_threads(struct worker *worker, struct perf_cpu_map *cpu)
+ 	if (!noaffinity)
+ 		pthread_attr_init(&thread_attr);
+ 
++	nrcpus = perf_cpu_map__nr(cpu);
++	cpuset = CPU_ALLOC(nrcpus);
++	BUG_ON(!cpuset);
++	size = CPU_ALLOC_SIZE(nrcpus);
++
+ 	for (i = 0; i < nthreads; i++) {
+ 		struct worker *w = &worker[i];
+ 
+@@ -341,22 +348,28 @@ static int do_threads(struct worker *worker, struct perf_cpu_map *cpu)
+ 		}
+ 
+ 		if (!noaffinity) {
+-			CPU_ZERO(&cpuset);
+-			CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
++			CPU_ZERO_S(size, cpuset);
++			CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu,
++					size, cpuset);
+ 
+-			ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset);
+-			if (ret)
++			ret = pthread_attr_setaffinity_np(&thread_attr, size, cpuset);
++			if (ret) {
++				CPU_FREE(cpuset);
+ 				err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
++			}
+ 
+ 			attrp = &thread_attr;
+ 		}
+ 
+ 		ret = pthread_create(&w->thread, attrp, workerfn,
+ 				     (void *)(struct worker *) w);
+-		if (ret)
++		if (ret) {
++			CPU_FREE(cpuset);
+ 			err(EXIT_FAILURE, "pthread_create");
++		}
+ 	}
+ 
++	CPU_FREE(cpuset);
+ 	if (!noaffinity)
+ 		pthread_attr_destroy(&thread_attr);
+ 
+-- 
+2.35.1
+

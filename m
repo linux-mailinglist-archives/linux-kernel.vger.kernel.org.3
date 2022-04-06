@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAF54F61E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836D94F61BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbiDFOYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S234706AbiDFOhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234796AbiDFOYE (ORCPT
+        with ESMTP id S235048AbiDFOg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:24:04 -0400
+        Wed, 6 Apr 2022 10:36:57 -0400
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9B2F3A76
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F3FFABFF
         for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:22:36 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AC2972C0BAB;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D87C12C0BB4;
         Wed,  6 Apr 2022 03:22:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1649215353;
-        bh=DHNC3Zcy51/EmNQ99UmiyG9EVfs5Ia7btWKSraGnVh8=;
+        bh=hVpxHdzMJb1hTW90DcdnkBiKsznHikHDfbRI6CGXHh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ulqQhuGN/3OolSZ05PHL2JfYV8p+cA2Sfc95l5J7+MbOIZ+6OVrTx1OlTLKsZYo3X
-         WaNFwuA1YzFOh5qQw8FartFYPQkFtPfWmrKgcWdPNH6MjaSlEuHPYe0s5XpEl5AiR+
-         za/77vx6y0vjk3hoDsrvBHcwJaZHC4fkXMtmXPERLDGhMgNs7eKL6N3eQ+AEr9ja9T
-         a7uJVw9IBGesA6RcTazxUrl5Z86bR7Jr3HrAu9l4wANBy7b5h1r5fDPrheDxQJ3bGZ
-         wrJmValFuL3347ZCGSoix9GgUPEskYkMd+iiwiL27zMKVWjzQw4a1hXUVclB4uQJS8
-         4jYDF28CQ00nA==
+        b=2M5lUscW/ggO8d2VPG/b7qJe37lAxHRDZ8HBdPkMDhmxXsltf7cVBlBCq26pmDIFB
+         KTxduFxR8XpUgXgxYvbxAsPNs4IDGLVBaD+9gFgCVmO1Rp794w++0rqcxKBp4lpvPG
+         rv6jXJNmmam8XR8290XKJsUmX4WZvFJxvbdRkQRnWdUm3WOvHzPqU64wk+JRw29pTU
+         28j7Jv9EKyYvzpHjuoZh4h06/LuN1M6YENpVm2Y67oT1rnoJHV4XlUHDG0VyLCMkaT
+         MDJOyYAYf2a9NwM9I9PhRRi67X2AvKm1Exwtu2HaCgoaL5ydFiVZz/cQZtSNlwdKXC
+         mxGXPjj/AI2xw==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B624d07790002>; Wed, 06 Apr 2022 15:22:33 +1200
+        id <B624d07790003>; Wed, 06 Apr 2022 15:22:33 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 416AE13EEA3;
+        by pat.atlnz.lc (Postfix) with ESMTP id 44C0F13EEAA;
         Wed,  6 Apr 2022 15:22:33 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id AFE052A003C; Wed,  6 Apr 2022 15:22:28 +1200 (NZST)
+        id B31572A2679; Wed,  6 Apr 2022 15:22:28 +1200 (NZST)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     linus.walleij@linaro.org, robh+dt@kernel.org,
         catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
@@ -46,15 +46,15 @@ To:     linus.walleij@linaro.org, robh+dt@kernel.org,
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v3 2/4] pinctrl: mvebu: pinctrl driver for 98DX2530 SoC
-Date:   Wed,  6 Apr 2022 15:21:56 +1200
-Message-Id: <20220406032158.1449049-3-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v3 3/4] arm64: dts: marvell: Add Armada 98DX2530 SoC and RD-AC5X board
+Date:   Wed,  6 Apr 2022 15:21:57 +1200
+Message-Id: <20220406032158.1449049-4-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
 References: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=JcrCUnCV c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=z0gMJWrwH1QA:10 a=M5GUcnROAAAA:8 a=XOt8PQhkpNQJGvtk3RcA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=JcrCUnCV c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=z0gMJWrwH1QA:10 a=AA5DLZjKFo6PKoe0PMkA:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,322 +67,460 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This pinctrl driver supports the 98DX25xx and 98DX35xx family of chips
-from Marvell. It is based on the Marvell SDK with additions for various
-(non-gpio) pin configurations based on the datasheet.
+The 98DX2530 SoC is the Control and Management CPU integrated into
+the Marvell 98DX25xx and 98DX35xx series of switch chip (internally
+referred to as AlleyCat5 and AlleyCat5X).
+
+These files have been taken from the Marvell SDK and lightly cleaned
+up with the License and copyright retained.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
 
 Notes:
+    The Marvell SDK has a number of new compatible strings. I've brought
+    through some of the drivers or where possible used an in-tree
+    alternative (e.g. there is SDK code for a ac5-gpio but two instances =
+of
+    the existing marvell,orion-gpio seems to cover what is needed if you =
+use
+    an appropriate binding). I expect that there will a new series of
+    patches when I get some different hardware (or additions to this seri=
+es
+    depending on if/when it lands).
+   =20
     Changes in v3:
-    - Use mmio instead of syscon
-    - Add addtional functions based on the datasheet
+    - Move memory node to board
+    - Use single digit reg value for phy address
+    - Remove MMC node (driver needs work)
+    - Remove syscon & simple-mfd for pinctrl
     Changes in v2:
-    - Make pinctrl a child of a syscon node like the armada-7k-pinctrl
+    - Make pinctrl a child node of a syscon node
+    - Use marvell,armada-8k-gpio instead of orion-gpio
+    - Remove nand peripheral. The Marvell SDK does have some changes for =
+the
+      ac5-nand-controller but I currently lack hardware with NAND fitted =
+so
+      I can't test it right now. I've therefore chosen to omit the node a=
+nd
+      not attempted to bring in the driver or binding.
+    - Remove pcie peripheral. Again there are changes in the SDK and I ha=
+ve
+      no way of testing them.
+    - Remove prestera node.
+    - Remove "marvell,ac5-ehci" compatible from USB node as
+      "marvell,orion-ehci" is sufficient
+    - Remove watchdog node. There is a buggy driver for the ac5 watchdog =
+in
+      the SDK but it needs some work so I've dropped the node for now.
 
- drivers/pinctrl/mvebu/Kconfig       |   4 +
- drivers/pinctrl/mvebu/Makefile      |   1 +
- drivers/pinctrl/mvebu/pinctrl-ac5.c | 261 ++++++++++++++++++++++++++++
- 3 files changed, 266 insertions(+)
- create mode 100644 drivers/pinctrl/mvebu/pinctrl-ac5.c
+ arch/arm64/boot/dts/marvell/Makefile          |   1 +
+ .../boot/dts/marvell/armada-98dx2530.dtsi     | 302 ++++++++++++++++++
+ arch/arm64/boot/dts/marvell/rd-ac5x.dts       |  74 +++++
+ 3 files changed, 377 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi
+ create mode 100644 arch/arm64/boot/dts/marvell/rd-ac5x.dts
 
-diff --git a/drivers/pinctrl/mvebu/Kconfig b/drivers/pinctrl/mvebu/Kconfi=
-g
-index 0d12894d3ee1..aa5883f09d7b 100644
---- a/drivers/pinctrl/mvebu/Kconfig
-+++ b/drivers/pinctrl/mvebu/Kconfig
-@@ -45,6 +45,10 @@ config PINCTRL_ORION
- 	bool
- 	select PINCTRL_MVEBU
-=20
-+config PINCTRL_AC5
-+	bool
-+	select PINCTRL_MVEBU
-+
- config PINCTRL_ARMADA_37XX
- 	bool
- 	select GENERIC_PINCONF
-diff --git a/drivers/pinctrl/mvebu/Makefile b/drivers/pinctrl/mvebu/Makef=
-ile
-index cd082dca4482..23458ab17c53 100644
---- a/drivers/pinctrl/mvebu/Makefile
-+++ b/drivers/pinctrl/mvebu/Makefile
-@@ -11,3 +11,4 @@ obj-$(CONFIG_PINCTRL_ARMADA_CP110) +=3D pinctrl-armada-=
-cp110.o
- obj-$(CONFIG_PINCTRL_ARMADA_XP)  +=3D pinctrl-armada-xp.o
- obj-$(CONFIG_PINCTRL_ARMADA_37XX)  +=3D pinctrl-armada-37xx.o
- obj-$(CONFIG_PINCTRL_ORION)  +=3D pinctrl-orion.o
-+obj-$(CONFIG_PINCTRL_AC5) +=3D pinctrl-ac5.o
-diff --git a/drivers/pinctrl/mvebu/pinctrl-ac5.c b/drivers/pinctrl/mvebu/=
-pinctrl-ac5.c
+diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/m=
+arvell/Makefile
+index 1c794cdcb8e6..3905dee558b4 100644
+--- a/arch/arm64/boot/dts/marvell/Makefile
++++ b/arch/arm64/boot/dts/marvell/Makefile
+@@ -24,3 +24,4 @@ dtb-$(CONFIG_ARCH_MVEBU) +=3D cn9132-db.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) +=3D cn9132-db-B.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) +=3D cn9130-crb-A.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) +=3D cn9130-crb-B.dtb
++dtb-$(CONFIG_ARCH_MVEBU) +=3D rd-ac5x.dtb
+diff --git a/arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi b/arch/arm6=
+4/boot/dts/marvell/armada-98dx2530.dtsi
 new file mode 100644
-index 000000000000..292633e61129
+index 000000000000..b726afaa2e1d
 --- /dev/null
-+++ b/drivers/pinctrl/mvebu/pinctrl-ac5.c
-@@ -0,0 +1,261 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi
+@@ -0,0 +1,302 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Marvell ac5 pinctrl driver based on mvebu pinctrl core
++ * Device Tree For AC5.
 + *
 + * Copyright (C) 2021 Marvell
 + *
-+ * Noam Liron <lnoam@marvell.com>
 + */
 +
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
++/dts-v1/;
 +
-+#include "pinctrl-mvebu.h"
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+static struct mvebu_mpp_mode ac5_mpp_modes[] =3D {
-+	MPP_MODE(0,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d0"),
-+		 MPP_FUNCTION(2, "nand",  "io4")),
-+	MPP_MODE(1,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d1"),
-+		 MPP_FUNCTION(2, "nand",  "io3")),
-+	MPP_MODE(2,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d2"),
-+		 MPP_FUNCTION(2, "nand",  "io2")),
-+	MPP_MODE(3,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d3"),
-+		 MPP_FUNCTION(2, "nand",  "io7")),
-+	MPP_MODE(4,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d4"),
-+		 MPP_FUNCTION(2, "nand",  "io6"),
-+		 MPP_FUNCTION(3, "uart3", "txd"),
-+		 MPP_FUNCTION(4, "uart2", "txd")),
-+	MPP_MODE(5,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d5"),
-+		 MPP_FUNCTION(2, "nand",  "io5"),
-+		 MPP_FUNCTION(3, "uart3", "rxd"),
-+		 MPP_FUNCTION(4, "uart2", "rxd")),
-+	MPP_MODE(6,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d6"),
-+		 MPP_FUNCTION(2, "nand",  "io0"),
-+		 MPP_FUNCTION(3, "i2c1",  "sck")),
-+	MPP_MODE(7,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "d7"),
-+		 MPP_FUNCTION(2, "nand",  "io1"),
-+		 MPP_FUNCTION(3, "i2c1",  "sda")),
-+	MPP_MODE(8,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "clk"),
-+		 MPP_FUNCTION(2, "nand",  "wen")),
-+	MPP_MODE(9,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "cmd"),
-+		 MPP_FUNCTION(2, "nand",  "ale")),
-+	MPP_MODE(10,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "ds"),
-+		 MPP_FUNCTION(2, "nand",  "cle")),
-+	MPP_MODE(11,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "sdio",  "rst"),
-+		 MPP_FUNCTION(2, "nand",  "cen")),
-+	MPP_MODE(12,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "clk")),
-+	MPP_MODE(13,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "csn")),
-+	MPP_MODE(14,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "mosi")),
-+	MPP_MODE(15,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "miso")),
-+	MPP_MODE(16,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "wpn"),
-+		 MPP_FUNCTION(2, "nand",  "ren"),
-+		 MPP_FUNCTION(3, "uart1", "txd")),
-+	MPP_MODE(17,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "spi0",  "hold"),
-+		 MPP_FUNCTION(2, "nand",  "rb"),
-+		 MPP_FUNCTION(3, "uart1", "rxd")),
-+	MPP_MODE(18,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "tsen_int", NULL),
-+		 MPP_FUNCTION(2, "uart2", "rxd"),
-+		 MPP_FUNCTION(3, "wd_int", NULL)),
-+	MPP_MODE(19,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "dev_init_done", NULL),
-+		 MPP_FUNCTION(2, "uart2", "txd")),
-+	MPP_MODE(20,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(2, "i2c1",  "sck"),
-+		 MPP_FUNCTION(3, "spi1",  "clk"),
-+		 MPP_FUNCTION(4, "uart3", "txd")),
-+	MPP_MODE(21,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(2, "i2c1",  "sda"),
-+		 MPP_FUNCTION(3, "spi1",  "csn"),
-+		 MPP_FUNCTION(4, "uart3", "rxd")),
-+	MPP_MODE(22,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(3, "spi1",  "mosi")),
-+	MPP_MODE(23,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(3, "spi1",  "miso")),
-+	MPP_MODE(24,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "wd_int", NULL),
-+		 MPP_FUNCTION(2, "uart2", "txd"),
-+		 MPP_FUNCTION(3, "uartsd", "txd")),
-+	MPP_MODE(25,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "int_out", NULL),
-+		 MPP_FUNCTION(2, "uart2", "rxd"),
-+		 MPP_FUNCTION(3, "uartsd", "rxd")),
-+	MPP_MODE(26,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "i2c0",  "sck"),
-+		 MPP_FUNCTION(2, "ptp", "clk1"),
-+		 MPP_FUNCTION(3, "uart3", "txd")),
-+	MPP_MODE(27,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "i2c0",  "sda"),
-+		 MPP_FUNCTION(2, "ptp", "pulse"),
-+		 MPP_FUNCTION(3, "uart3", "rxd")),
-+	MPP_MODE(28,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "xg", "mdio"),
-+		 MPP_FUNCTION(2, "ge", "mdio"),
-+		 MPP_FUNCTION(3, "uart3", "txd")),
-+	MPP_MODE(29,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "xg", "mdio"),
-+		 MPP_FUNCTION(2, "ge", "mdio"),
-+		 MPP_FUNCTION(3, "uart3", "rxd")),
-+	MPP_MODE(30,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "xg", "mdio"),
-+		 MPP_FUNCTION(2, "ge", "mdio"),
-+		 MPP_FUNCTION(3, "ge", "mdio")),
-+	MPP_MODE(31,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "xg", "mdio"),
-+		 MPP_FUNCTION(2, "ge", "mdio"),
-+		 MPP_FUNCTION(3, "ge", "mdio")),
-+	MPP_MODE(32,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "uart0", "txd")),
-+	MPP_MODE(33,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "uart0", "rxd"),
-+		 MPP_FUNCTION(2, "ptp", "clk1"),
-+		 MPP_FUNCTION(3, "ptp", "pulse")),
-+	MPP_MODE(34,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ge", "mdio"),
-+		 MPP_FUNCTION(2, "uart3", "rxd")),
-+	MPP_MODE(35,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ge", "mdio"),
-+		 MPP_FUNCTION(2, "uart3", "txd"),
-+		 MPP_FUNCTION(3, "pcie", "rstoutn")),
-+	MPP_MODE(36,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ptp", "clk0_tp"),
-+		 MPP_FUNCTION(2, "ptp", "clk1_tp")),
-+	MPP_MODE(37,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ptp", "pulse_tp"),
-+		 MPP_FUNCTION(2, "wd_int", NULL)),
-+	MPP_MODE(38,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "synce", "clk_out0")),
-+	MPP_MODE(39,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "synce", "clk_out1")),
-+	MPP_MODE(40,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ptp", "pclk_out0"),
-+		 MPP_FUNCTION(2, "ptp", "pclk_out1")),
-+	MPP_MODE(41,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ptp", "ref_clk"),
-+		 MPP_FUNCTION(2, "ptp", "clk1"),
-+		 MPP_FUNCTION(3, "ptp", "pulse"),
-+		 MPP_FUNCTION(4, "uart2", "txd"),
-+		 MPP_FUNCTION(5, "i2c1",  "sck")),
-+	MPP_MODE(42,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "ptp", "clk0"),
-+		 MPP_FUNCTION(2, "ptp", "clk1"),
-+		 MPP_FUNCTION(3, "ptp", "pulse"),
-+		 MPP_FUNCTION(4, "uart2", "rxd"),
-+		 MPP_FUNCTION(5, "i2c1",  "sda")),
-+	MPP_MODE(43,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "led", "clk")),
-+	MPP_MODE(44,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "led", "stb")),
-+	MPP_MODE(45,
-+		 MPP_FUNCTION(0, "gpio",  NULL),
-+		 MPP_FUNCTION(1, "led", "data")),
++/ {
++	model =3D "Marvell AC5 SoC";
++	compatible =3D "marvell,ac5";
++	interrupt-parent =3D <&gic>;
++	#address-cells =3D <2>;
++	#size-cells =3D <2>;
++
++	aliases {
++		serial0 =3D &uart0;
++		spiflash0 =3D &spiflash0;
++		gpio0 =3D &gpio0;
++		gpio1 =3D &gpio1;
++		ethernet0 =3D &eth0;
++		ethernet1 =3D &eth1;
++	};
++
++	psci {
++		compatible =3D "arm,psci-0.2";
++		method =3D "smc";
++	};
++
++	timer {
++		compatible =3D "arm,armv8-timer";
++		interrupts =3D <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>,
++				 <GIC_PPI 8 IRQ_TYPE_LEVEL_HIGH>,
++				 <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>,
++				 <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
++		clock-frequency =3D <25000000>;
++	};
++
++	pmu {
++		compatible =3D "arm,armv8-pmuv3";
++		interrupts =3D <GIC_PPI 12 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	soc {
++		compatible =3D "simple-bus";
++		#address-cells =3D <2>;
++		#size-cells =3D <2>;
++		ranges;
++		dma-ranges;
++
++		internal-regs@7f000000 {
++			#address-cells =3D <1>;
++			#size-cells =3D <1>;
++			compatible =3D "simple-bus";
++			/* 16M internal register @ 0x7f00_0000 */
++			ranges =3D <0x0 0x0 0x7f000000 0x1000000>;
++			dma-coherent;
++
++			uart0: serial@12000 {
++				compatible =3D "snps,dw-apb-uart";
++				reg =3D <0x12000 0x100>;
++				reg-shift =3D <2>;
++				interrupts =3D <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++				reg-io-width =3D <1>;
++				clock-frequency =3D <328000000>;
++				status =3D "okay";
++			};
++
++			mdio: mdio@22004 {
++				#address-cells =3D <1>;
++				#size-cells =3D <0>;
++				compatible =3D "marvell,orion-mdio";
++				reg =3D <0x22004 0x4>;
++				clocks =3D <&core_clock>;
++			};
++
++			i2c0: i2c@11000{
++				compatible =3D "marvell,mv78230-i2c";
++				reg =3D <0x11000 0x20>;
++
++				clocks =3D <&core_clock>;
++				clock-names =3D "core";
++				interrupts =3D <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
++				clock-frequency=3D<100000>;
++				status=3D"okay";
++
++				pinctrl-names =3D "default", "gpio";
++				pinctrl-0 =3D <&i2c0_pins>;
++				pinctrl-1 =3D <&i2c0_gpio>;
++				scl_gpio =3D <&gpio0 26 GPIO_ACTIVE_HIGH>;
++				sda_gpio =3D <&gpio0 27 GPIO_ACTIVE_HIGH>;
++			};
++
++			i2c1: i2c@11100{
++				compatible =3D "marvell,mv78230-i2c";
++				reg =3D <0x11100 0x20>;
++
++				clocks =3D <&core_clock>;
++				clock-names =3D "core";
++				interrupts =3D <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
++				clock-frequency=3D<100000>;
++				status=3D"okay";
++
++				pinctrl-names =3D "default", "gpio";
++				pinctrl-0 =3D <&i2c1_pins>;
++				pinctrl-1 =3D <&i2c1_gpio>;
++				scl_gpio =3D <&gpio0 20 GPIO_ACTIVE_HIGH>;
++				sda_gpio =3D <&gpio0 21 GPIO_ACTIVE_HIGH>;
++			};
++
++			gpio0: gpio@18100 {
++				compatible =3D "marvell,orion-gpio";
++				reg =3D <0x18100 0x40>;
++				ngpios =3D <32>;
++				gpio-controller;
++				#gpio-cells =3D <2>;
++				gpio-ranges =3D <&pinctrl0 0 0 32>;
++				marvell,pwm-offset =3D <0x1f0>;
++			};
++
++			gpio1: gpio@18140 {
++				reg =3D <0x18140 0x40>;
++				compatible =3D "marvell,orion-gpio";
++				ngpios =3D <14>;
++				gpio-controller;
++				#gpio-cells =3D <2>;
++				gpio-ranges =3D <&pinctrl0 0 32 14>;
++				marvell,pwm-offset =3D <0x1f0>;
++			};
++		};
++
++		/*
++		 * Dedicated section for devices behind 32bit controllers so we
++		 * can configure specific DMA mapping for them
++		 */
++		behind-32bit-controller@7f000000 {
++			compatible =3D "simple-bus";
++			#address-cells =3D <0x2>;
++			#size-cells =3D <0x2>;
++			ranges =3D <0x0 0x0 0x0 0x7f000000 0x0 0x1000000>;
++			/* Host phy ram starts at 0x200M */
++			dma-ranges =3D <0x0 0x0 0x2 0x0 0x1 0x0>;
++			dma-coherent;
++
++			eth0: ethernet@20000 {
++				compatible =3D "marvell,armada-ac5-neta";
++				reg =3D <0x0 0x20000 0x0 0x4000>;
++				interrupts =3D <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
++				clocks =3D <&core_clock>;
++				status =3D "disabled";
++				phy-mode =3D "sgmii";
++			};
++
++			eth1: ethernet@24000 {
++				compatible =3D "marvell,armada-ac5-neta";
++				reg =3D <0x0 0x24000 0x0 0x4000>;
++				interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
++				clocks =3D <&core_clock>;
++				status =3D "disabled";
++				phy-mode =3D "sgmii";
++			};
++
++			/* A dummy entry used for chipidea phy init */
++			usb1phy: usbphy {
++				compatible =3D "usb-nop-xceiv";
++				#phy-cells =3D <0>;
++			};
++
++			/* USB0 is a host USB */
++			usb0: usb@80000 {
++				compatible =3D "marvell,orion-ehci";
++				reg =3D <0x0 0x80000 0x0 0x500>;
++				interrupts =3D <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
++				status =3D "okay";
++			};
++
++			/* USB1 is a peripheral USB */
++			usb1: usb@a0000 {
++				reg =3D <0x0 0xa0000 0x0 0x500>;
++				interrupts =3D <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
++				status =3D "okay";
++			};
++		};
++
++		pinctrl0: pinctrl@80020100 {
++			compatible =3D "marvell,ac5-pinctrl";
++			reg =3D <0 0x80020100 0 0x20>;
++
++			i2c0_pins: i2c0-pins {
++				marvell,pins =3D "mpp26", "mpp27";
++				marvell,function =3D "i2c0";
++			};
++
++			i2c0_gpio: i2c0-gpio-pins {
++				marvell,pins =3D "mpp26", "mpp27";
++				marvell,function =3D "gpio";
++			};
++
++			i2c1_pins: i2c1-pins {
++				marvell,pins =3D "mpp20", "mpp21";
++				marvell,function =3D "i2c1";
++			};
++
++			i2c1_gpio: i2c1-gpio-pins {
++				marvell,pins =3D "mpp20", "mpp21";
++				marvell,function =3D "i2c1";
++			};
++		};
++
++		core_clock: core_clock@0 {
++			compatible =3D "fixed-clock";
++			#clock-cells =3D <0>;
++			clock-frequency =3D <400000000>;
++		};
++
++		axi_clock: axi_clock@0 {
++			compatible =3D "fixed-clock";
++			#clock-cells =3D <0>;
++			clock-frequency =3D <325000000>;
++		};
++
++		spi_clock: spi_clock@0 {
++			compatible =3D "fixed-clock";
++			#clock-cells =3D <0>;
++			clock-frequency =3D <200000000>;
++		};
++
++		spi0: spi@805a0000 {
++			compatible =3D "marvell,armada-3700-spi";
++			reg =3D <0x0 0x805a0000 0x0 0x50>;
++			#address-cells =3D <0x1>;
++			#size-cells =3D <0x0>;
++			clocks =3D <&spi_clock>;
++			interrupts =3D <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++			num-cs =3D <1>;
++			status =3D "disabled";
++		};
++
++		spi@805a8000 {
++			compatible =3D "marvell,armada-3700-spi";
++			reg =3D <0x0 0x805a8000 0x0 0x50>;
++			#address-cells =3D <0x1>;
++			#size-cells =3D <0x0>;
++			clocks =3D <&spi_clock>;
++			interrupts =3D <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
++			num-cs =3D <1>;
++			status =3D "disabled";
++		};
++	};
++
++	gic: interrupt-controller@80600000 {
++		compatible =3D "arm,gic-v3";
++		#interrupt-cells =3D <3>;
++		interrupt-controller;
++		/*#redistributor-regions =3D <1>;*/
++		redistributor-stride =3D <0x0 0x20000>;	// 128kB stride
++		reg =3D <0x0 0x80600000 0x0 0x10000>, /* GICD */
++		      <0x0 0x80660000 0x0 0x40000>; /* GICR */
++		interrupts =3D <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	cpus {
++		#address-cells =3D <2>;
++		#size-cells =3D <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu =3D <&CPU0>;
++				};
++				core1 {
++					cpu =3D <&CPU1>;
++				};
++			};
++		};
++
++		CPU0:cpu@0 {
++			device_type =3D "cpu";
++			compatible =3D "arm,armv8";
++			reg =3D <0x0 0x0>;
++			enable-method =3D "psci";
++			next-level-cache =3D <&L2_0>;
++		};
++
++		CPU1:cpu@1 {
++			device_type =3D "cpu";
++			compatible =3D "arm,armv8";
++			reg =3D <0x0 0x100>;
++			enable-method =3D "psci";
++			next-level-cache =3D <&L2_0>;
++		};
++
++		L2_0: l2-cache0 {
++			compatible =3D "cache";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/marvell/rd-ac5x.dts b/arch/arm64/boot/dt=
+s/marvell/rd-ac5x.dts
+new file mode 100644
+index 000000000000..1290de782f52
+--- /dev/null
++++ b/arch/arm64/boot/dts/marvell/rd-ac5x.dts
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree For AC5X.
++ *
++ * Copyright (C) 2021 Marvell
++ *
++ */
++/*
++ * Device Tree file for Marvell Alleycat 5X development board
++ * This board file supports the B configuration of the board
++ */
++
++/dts-v1/;
++
++#include "armada-98dx2530.dtsi"
++
++/ {
++	model =3D "Marvell RD-AC5X Board";
++	compatible =3D "marvell,ac5x", "marvell,ac5";
++
++	memory@0 {
++		device_type =3D "memory";
++		reg =3D <0x2 0x00000000 0x0 0x40000000>;
++	};
 +};
 +
-+static struct mvebu_pinctrl_soc_info ac5_pinctrl_info;
-+
-+static const struct of_device_id ac5_pinctrl_of_match[] =3D {
-+	{
-+		.compatible =3D "marvell,ac5-pinctrl",
-+	},
-+	{ },
++&mdio {
++	phy0: ethernet-phy@0 {
++		reg =3D <0>;
++	};
 +};
 +
-+static const struct mvebu_mpp_ctrl ac5_mpp_controls[] =3D {
-+	MPP_FUNC_CTRL(0, 45, NULL, mvebu_mmio_mpp_ctrl), };
-+
-+static struct pinctrl_gpio_range ac5_mpp_gpio_ranges[] =3D {
-+	MPP_GPIO_RANGE(0,   0,  0, 46), };
-+
-+static int ac5_pinctrl_probe(struct platform_device *pdev)
-+{
-+	struct mvebu_pinctrl_soc_info *soc =3D &ac5_pinctrl_info;
-+
-+	soc->variant =3D 0; /* no variants for ac5 */
-+	soc->controls =3D ac5_mpp_controls;
-+	soc->ncontrols =3D ARRAY_SIZE(ac5_mpp_controls);
-+	soc->gpioranges =3D ac5_mpp_gpio_ranges;
-+	soc->ngpioranges =3D ARRAY_SIZE(ac5_mpp_gpio_ranges);
-+	soc->modes =3D ac5_mpp_modes;
-+	soc->nmodes =3D ac5_mpp_controls[0].npins;
-+
-+	pdev->dev.platform_data =3D soc;
-+
-+	return mvebu_pinctrl_simple_mmio_probe(pdev);
-+}
-+
-+static struct platform_driver ac5_pinctrl_driver =3D {
-+	.driver =3D {
-+		.name =3D "ac5-pinctrl",
-+		.of_match_table =3D of_match_ptr(ac5_pinctrl_of_match),
-+	},
-+	.probe =3D ac5_pinctrl_probe,
++&eth0 {
++	status =3D "okay";
++	phy =3D <&phy0>;
 +};
-+builtin_platform_driver(ac5_pinctrl_driver);
++
++&spi0 {
++	status =3D "okay";
++
++	spiflash0: spi-flash@0 {
++		compatible =3D "spi-nor";
++		spi-max-frequency =3D <50000000>;
++		spi-tx-bus-width =3D <1>; /* 1-single, 2-dual, 4-quad */
++		spi-rx-bus-width =3D <1>; /* 1-single, 2-dual, 4-quad */
++		reg =3D <0>;
++
++		#address-cells =3D <1>;
++		#size-cells =3D <1>;
++
++		partition@0 {
++			label =3D "spi_flash_part0";
++			reg =3D <0x0 0x800000>;
++		};
++
++		parition@1 {
++			label =3D "spi_flash_part1";
++			reg =3D <0x800000 0x700000>;
++		};
++
++		parition@2 {
++			label =3D "spi_flash_part2";
++			reg =3D <0xF00000 0x100000>;
++		};
++	};
++};
++
++&usb1 {
++	compatible =3D "chipidea,usb2";
++	phys =3D <&usb1phy>;
++	phy-names =3D "usb-phy";
++	dr_mode =3D "peripheral";
++};
++
 --=20
 2.35.1
 

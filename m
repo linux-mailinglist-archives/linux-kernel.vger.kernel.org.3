@@ -2,277 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B165C4F5C10
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBD64F5C12
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245244AbiDFLUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:20:38 -0400
+        id S243716AbiDFLTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:19:02 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244465AbiDFLTo (ORCPT
+        with ESMTP id S242518AbiDFLSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:19:44 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12D35473C1
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649230854; x=1680766854;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sV9b+cScATro9Da3kwZV40I5CBiv4vmg1Aeg62rfn/Y=;
-  b=DpP1MfrbanPG5Qd4ptLz8nPJI1RoeXSjWf2irakAx8AjxC8kb1C+0gEt
-   xBjIzjqL3VmYc7m9B2WyOIwG3JNdJGZoWwGdYvsljCIFgSbfBuGwWGgkE
-   e7hq0gMZru3efiyHJ0jxqztG0D+F9EMxa+nG8LN2rZelXv6lE09th0T4t
-   YjCSTpKVgYx1QSaVd0PgOZGJLRyrCkkmYIpJxF8RUnYV2xS2y3EuHchZQ
-   0QecvyX09D6WXEPJI+HeP9l3POsioXNrWKU4CYzrJEXLoVovgQSaOvrzA
-   l7/eSLptt3xIKUf69i1CrlrXhy2XF8YzlqouyrgEil6WRWTtWI4LKRouf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="259810681"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="259810681"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 00:39:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="588266160"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 06 Apr 2022 00:39:53 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nc0Ge-0004Bn-Fh;
-        Wed, 06 Apr 2022 07:39:52 +0000
-Date:   Wed, 6 Apr 2022 15:39:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/rcu/next 103/110] WARNING:
- modpost: vmlinux.o(.text+0x9deeba): Section mismatch in reference from the
- function spi_dv_device_work_wrapper() to the function
- .exit.text:test_ww_mutex_exit()
-Message-ID: <202204061528.kzz0m3tZ-lkp@intel.com>
+        Wed, 6 Apr 2022 07:18:15 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351B47CD1F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:40:04 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id s2so1741092pfh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1QYq8NuVe9FN1D3vwLDp5oNe5+OPIXHbOpbj0ZnKIIo=;
+        b=I0WUDB/A3XT+HHA+8xdWDIxHNPYG1oNh9YCaF3Z6OGT7ASDzbHM55p2/UUQDrZEgQa
+         EMani0C9pII6a6RDj7NeJT9y/yuOtT/8kLbCKQHHwGqfbiAF073eLiaBiHjtaVfN0x5q
+         bNvRDkc9MUhQb1nl+7JnuQZvAJU/fjiPy3ZEgPk2QaQg8cEPBfcT9k5yWjJ3imKGPJrR
+         yFL50pYQzWgkfTIm4DEN5nVsrvoTtqwKJhAgODeDLyCdd2zzb/o5bLgbK89e2IdVjnnT
+         HLIAI1TtCXYJMp7K8PxT8KQhoRtzpDtreaYfYLMEbhuMxg3Jq0K2MffRYK+F4ZCWNV7i
+         eZoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1QYq8NuVe9FN1D3vwLDp5oNe5+OPIXHbOpbj0ZnKIIo=;
+        b=44HDAYuZOLvmZbQvyTvH5Gt47bUjrvKGYgzgzIdAEOUBnQEjfsdn2cprw/L7mcm9HB
+         yQOOwkgZElCxHJD5IuZGLN8VbKrQ7DLyc4j+EaAU5Z2k5uwfAV6efcEZ+ILO3o+e1Tao
+         5JHhH+QZ4CdJJzwXcnQvOkcMZyVHMzrFgqweVODt0qFu/IeTXCbxZ7JAQEbIQ9P5sobm
+         PiLkQejZ9Z34nfR+OinsJPl8ICLoBLId6Gk68hrXoVSes+RCaET5lNLQELm10zXd6Y4p
+         AMzx5vNDdUKhg0gAIceLEEqd78eNzFu3ICmKto8XmFzAKYJZJ/iHMGp+KsDX9jjOK1l1
+         FVNg==
+X-Gm-Message-State: AOAM530dzRlbp7fq+A5+rnlMYe9Nddov4U9NU/AHA1moSOCIQmjXHMds
+        KShzciEX4q+pfhROu6arYDi0FuJvHQ9EdOsk6s0=
+X-Google-Smtp-Source: ABdhPJyCF7VtDld/Bk1zsR0RI1ioU48r8W3y5GNMOO89Tl7mj4ykPWLwgQlMOtVnjrpXkiRt/uw7CM0Ijf43uSZoHFs=
+X-Received: by 2002:a63:4f46:0:b0:382:56b2:f8 with SMTP id p6-20020a634f46000000b0038256b200f8mr6098889pgl.90.1649230803905;
+ Wed, 06 Apr 2022 00:40:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220401115018.9335-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220401115018.9335-1-xiam0nd.tong@gmail.com>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Wed, 6 Apr 2022 09:39:52 +0200
+Message-ID: <CAMeQTsaPve23sNNm0Xkg9=8kqeN0SQp056Xyiva4pe2B7K37RQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/gma500: fix a missing break in psb_intel_crtc_mode_set
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        Alan Cox <alan@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/rcu/next
-head:   d0c78768fd9c838d9c4f1965a33ce7f51f16a319
-commit: d00674235d8d0e85006ad5b107a266e2c7ee594d [103/110] srcu: Prevent expedited GPs and blocking readers from consuming CPU
-config: riscv-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061528.kzz0m3tZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/d00674235d8d0e85006ad5b107a266e2c7ee594d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/rcu/next
-        git checkout d00674235d8d0e85006ad5b107a266e2c7ee594d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Fri, Apr 1, 2022 at 1:50 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+>
+> Instead of exiting the loop as expected when an entry is found, the
+> list_for_each_entry() continues until the traversal is complete.
+> when found the entry, add a break after the switch statement.
+>
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the patch
+Applied to drm-misc-next
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0x9deeba): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-The function spi_dv_device_work_wrapper() references a function in an exit section.
-Often the function test_ww_mutex_exit() has valid usage outside the exit section
-and the fix is to remove the __exit annotation of test_ww_mutex_exit.
---
->> WARNING: modpost: vmlinux.o(.text+0x9e0b08): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-The function child_iter() references a function in an exit section.
-Often the function test_ww_mutex_exit() has valid usage outside the exit section
-and the fix is to remove the __exit annotation of test_ww_mutex_exit.
---
->> WARNING: modpost: vmlinux.o(.text+0xa2c6e2): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-The function hisi_sas_phy_down() references
-the function __init set_reset_devices().
-This is often because hisi_sas_phy_down lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xa2dc2e): Section mismatch in reference from the function hisi_sas_remove() to the function .init.text:set_reset_devices()
-The function hisi_sas_remove() references
-the function __init set_reset_devices().
-This is often because hisi_sas_remove lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9eb084): Section mismatch in reference from the function sas_phy_enable() to the function .init.text:set_reset_devices()
-The function sas_phy_enable() references
-the function __init set_reset_devices().
-This is often because sas_phy_enable lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x14b5336): Section mismatch in reference from the function rds_sysctl_init() to the function .meminit.text:init_reserve_notifier()
-The function rds_sysctl_init() references
-the function __meminit init_reserve_notifier().
-This is often because rds_sysctl_init lacks a __meminit
-annotation or the annotation of init_reserve_notifier is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x15abf1a): Section mismatch in reference from the function ceph_strings_empty() to the function .init.text:set_reset_devices()
-The function ceph_strings_empty() references
-the function __init set_reset_devices().
-This is often because ceph_strings_empty lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.init.text+0x460f2): Section mismatch in reference from the function scsi_init_devinfo() to the function .exit.text:test_ww_mutex_exit()
-The function __init scsi_init_devinfo() references
-a function __exit test_ww_mutex_exit().
-This is often seen when error handling in the init function
-uses functionality in the exit path.
-The fix is often to remove the __exit annotation of
-test_ww_mutex_exit() so it may be used outside an exit section.
---
->> WARNING: modpost: vmlinux.o(.init.text+0x7340e): Section mismatch in reference from the function xbc_node_find_next_leaf() to the variable .exit.text:.LBB3_6
-The function __init xbc_node_find_next_leaf() references
-a variable __exit .LBB3_6.
-This is often seen when error handling in the init function
-uses functionality in the exit path.
-The fix is often to remove the __exit annotation of
-.LBB3_6 so it may be used outside an exit section.
---
->> WARNING: modpost: vmlinux.o(.init.setup+0x73c): Section mismatch in reference from the variable __setup_debug_boot_weak_hash_enable to the function .exit.text:test_ww_mutex_exit()
-The variable __init __setup_debug_boot_weak_hash_enable references
-a function __exit test_ww_mutex_exit().
-This is often seen when error handling in the init function
-uses functionality in the exit path.
-The fix is often to remove the __exit annotation of
-test_ww_mutex_exit() so it may be used outside an exit section.
---
->> WARNING: modpost: vmlinux.o(.data+0x179b3c): Section mismatch in reference from the variable iscsi_flashnode_bus to the function .exit.text:test_ww_mutex_exit()
-The variable iscsi_flashnode_bus references
-the function __exit test_ww_mutex_exit()
-If the reference is valid then annotate the
-variable with (see linux/init.h) or name the variable:
-
-..
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb0c7e2): Section mismatch in reference from the function __spi_pump_messages() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb11244): Section mismatch in reference from the function spi_mem_dirmap_read() to the variable .exit.text:.LBB0_3
-<< WARNING: modpost: vmlinux.o(.text+0xb46a60): Section mismatch in reference from the function stm32_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb47604): Section mismatch in reference from the function sun4i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4827c): Section mismatch in reference from the function sun6i_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb492f0): Section mismatch in reference from the function synquacer_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4a894): Section mismatch in reference from the function tegra_qspi_remove() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0xb4cbd6): Section mismatch in reference from the function tegra_spi_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f030): Section mismatch in reference from the function tegra_slink_probe() to the variable .exit.text:.LBB0_4
-<< WARNING: modpost: vmlinux.o(.text+0xb4f410): Section mismatch in reference from the function tegra_slink_remove() to the function .exit.text:test_ww_mutex_exit()
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/gpu/drm/gma500/psb_intel_display.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/gma500/psb_intel_display.c b/drivers/gpu/drm/gma500/psb_intel_display.c
+> index dc467996cce4..9a5ea06a1a8e 100644
+> --- a/drivers/gpu/drm/gma500/psb_intel_display.c
+> +++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+> @@ -135,6 +135,8 @@ static int psb_intel_crtc_mode_set(struct drm_crtc *crtc,
+>                         is_tv = true;
+>                         break;
+>                 }
+> +
+> +               break;
+>         }
+>         drm_connector_list_iter_end(&conn_iter);
+>
+> --
+> 2.17.1
+>

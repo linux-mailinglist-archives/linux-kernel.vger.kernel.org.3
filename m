@@ -2,110 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B624F6AC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7F84F6B18
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiDFUE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
+        id S232731AbiDFUSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiDFUDp (ORCPT
+        with ESMTP id S234300AbiDFUQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:03:45 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27337E5A3
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:21:02 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e1dcc0a327so3670868fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 10:21:02 -0700 (PDT)
+        Wed, 6 Apr 2022 16:16:59 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452228E35F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:22:37 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id d10so3530448edj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 10:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=RUU1F0wpujC7WhqVwBC+2pTO1HYEQ6X5S3p8UJ+PTMc=;
-        b=iE0ztCXOiYH9yto1ZKUgnifI908erHLqfQyguoCUhqSjQjwBN3nHvyPzvdgfKblAaC
-         txVXePDctGgXJNraMQvZ1ugNcw3UiGH/2MPqUDn0HFb+eDuEfcQNXfzBHDL837S8x2df
-         tSfN2hzVdetG7C75UtpGguKAqnkdia10CyhDQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dQHPYFD1Py8zNnywpsqR57whk+RQMCTk3DSycMVZoGs=;
+        b=i3285HxhOHK+wsC2Sx1TdhTQ+r7HTGVY90ljRxlx5XyfINjbt5tgpYWCX8OOchd/AK
+         KSRf1EIcTp0BC/+unXiBAoc5zggnumgcKHKD3RNsFV/uALsMxQfgTTiQnTz0BbY2Xp5Z
+         k9xgMH2wYhIeShrQGa5E39WZn5iiJ3hd06q8c/i70lGPnCsMTiH+ApXi2r66DIZbMwEr
+         N6rO7auN6KtNdQejV7+SzkUWFrNVQp7noRR++bZ3aI1vAvahlXc+gXZzFnDtIgfgzJ+v
+         mOb/kQxf+M5+kuKoznZBqKA6eb7KHSRSuoEKjmBYgqBcwQzsEA02Pmm6VjOac6sTymGl
+         GPcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=RUU1F0wpujC7WhqVwBC+2pTO1HYEQ6X5S3p8UJ+PTMc=;
-        b=sfVXgv8YGujp0b3LU05uz0gc2ePkouRCHA7akILfhc818bfe6uyqPSRUUCgVm5oQER
-         olmcN9CyIHIrQGi1HVOw9sy0n3KBXdNWP8aOkHFDVi4h+UF82kUg4Zhv3LXOGpBnEe2U
-         XWlIhd1YdTwMUYWOMpqEF1WWTcT4Ky0KQ2JPvXYxSpGQQRnmnkCAU5og/guYMw43yhGF
-         JMPH8/l/psMMieuSIZUYUpigXlFDPjzarNy9idqPwGBMuiEEAJzoJVKlm6o1FmO3w/1U
-         5jGrrkROmBYmumEOqPcI/JO0eJD7TnjvrIFH4ko9Q0H9DOfWAKpD9RZRXsr1Qga/zGhX
-         RiMw==
-X-Gm-Message-State: AOAM533yJ80LZ1b5nRelgZhpVwVx/FNc8tU4T8Z/JBoLaN9Yh/Dr0K3y
-        53hPdjSB5X4oKwoCZVJYn08wXvCjF0PWjdNWEsB3Mg==
-X-Google-Smtp-Source: ABdhPJyZQyu/K5x1uJUUL3GjBmaiHMZMMBfeE1A4A4cNNBRKCil6XVdMRFMtXJn+fZcA2z3NkLK8jXc2zoN5xcSGrbU=
-X-Received: by 2002:a05:6870:e314:b0:e1:e5f0:d777 with SMTP id
- z20-20020a056870e31400b000e1e5f0d777mr4254311oad.193.1649265661935; Wed, 06
- Apr 2022 10:21:01 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 6 Apr 2022 10:21:01 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dQHPYFD1Py8zNnywpsqR57whk+RQMCTk3DSycMVZoGs=;
+        b=zIGP3cAlUQJo5sfD5UHv2QmF/EdBzxWgustaRUfDoH7tDoEqfls14b3NCDolSCYjI5
+         Md8GRTpCt5VOgOISSUQz4EKYlwYwPY6EaNArbl5PNBnH7DJSiQrM4FA4NwQKjaGUdDiQ
+         8tfZM+HzesGqEjZ5NoKPgOO1K+WwSbL5rkoJTRBRJ5TAOVTBDhR71mw5k+xUg6r+FSHT
+         NaBXgjGV6YF3qH9+keikgnc8Bnd2Ofy9RkiCz/ZfKdWL6VTTr5yrbKBlF7dcqSylgeTD
+         NwpJeTLguXxSoLZfamycD9BGRLssQOwVv+8yfhQ5+K/JbHYzv+e11FvfnDuUa5gW29Y5
+         WDjQ==
+X-Gm-Message-State: AOAM5305BIYPW4Ytnq+NGAWFaUU/mJEzFMSxkYPwttFkMuHt7L8JsMz0
+        tcr3C9balwdvrmuUNIlW7SQ=
+X-Google-Smtp-Source: ABdhPJxTLzdy7NH5f/05EmF9B7YY/OHkx1w89J5gA3kDRTQwcqmx5OjjXPssz+kL8Id3eYvIFvDyOg==
+X-Received: by 2002:a05:6402:1909:b0:418:d876:3119 with SMTP id e9-20020a056402190900b00418d8763119mr10249749edz.266.1649265756026;
+        Wed, 06 Apr 2022 10:22:36 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id da19-20020a056402177300b00413583e0996sm7912730edb.14.2022.04.06.10.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 10:22:35 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH v2 1/5] staging: r8188eu: use PTR_ALIGN() instead of RND4()
+Date:   Wed,  6 Apr 2022 19:22:15 +0200
+Message-Id: <20220406172219.15565-2-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220406172219.15565-1-straube.linux@gmail.com>
+References: <20220406172219.15565-1-straube.linux@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yk3Bfnxe/meBYokp@sirena.org.uk>
-References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
- <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n53G-atsuwqcgNvi3nvWyiO3P=pSj5zDUMYj0ELVYJE54Q@mail.gmail.com>
- <Yk1B4f51WMGIV9WB@sirena.org.uk> <CAE-0n53Cv_bR92M64dhdnDge_=_jeOs4VZzDhUkksN90Y7rgog@mail.gmail.com>
- <Yk21pdu16lyR8jXm@sirena.org.uk> <CAE-0n50C8khP2x4sgNP5xnfLVMRQj2=LChyWWx1BWL+Xgecgyw@mail.gmail.com>
- <Yk3Bfnxe/meBYokp@sirena.org.uk>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 6 Apr 2022 10:21:01 -0700
-Message-ID: <CAE-0n53O23=N0zkZpg87Q3EyKquLe3WLNJT8qnZz4WEor6QK7A@mail.gmail.com>
-Subject: Re: [PATCH V9 4/6] regulator: Add a regulator driver for the PM8008 PMIC
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Mark Brown (2022-04-06 09:36:14)
-> On Wed, Apr 06, 2022 at 08:51:48AM -0700, Stephen Boyd wrote:
-> > Quoting Mark Brown (2022-04-06 08:45:41)
->
-> > > There's a MFD parent for it, and if it's for an I2C device for a pm8008
-> > > why would it have a -regulators in the name?
->
-> > There are two i2c devices. One is pm8008 at i2c address 0x8 and one is
-> > pm8008-regulators at i2c address 0x9. Earlier revisions of this patch
-> > series were making it very confusing by redoing the pm8008 binding and
-> > adding the pm8008-regulator i2c address device to the same binding and
-> > driver.
->
-> > My guess is that this is one IC that responds to multiple i2c addresses.
-> > The "main" qcom,pm8008 address is 0x8 and that supports things like
-> > interrupts. Then there's an address for regulators at 0x9 which controls
-> > the handful of LDOs on the PMIC.
->
-> So it's like the TI TWL4030 and Palmas - in which case it should
-> probably be handled similarly?
+Use in-kernel PTR_ALIGN() instead of custom RND4().
 
-How did those work out? I wasn't involved and I don't know what you
-mean. Do they have multiple i2c addresses they respond to?
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+v2: use PTR_ALIGN
 
-> Note that the original sumbission was
-> *also* a MFD subfunction, but using a DT compatible to match the
-> platform device - this is the first I've heard of this being a separate
-> I2C function.
+ drivers/staging/r8188eu/core/rtw_security.c     | 6 +++---
+ drivers/staging/r8188eu/core/rtw_xmit.c         | 7 ++-----
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c    | 2 +-
+ drivers/staging/r8188eu/include/osdep_service.h | 1 -
+ 4 files changed, 6 insertions(+), 10 deletions(-)
 
-I'm mainly looking at the dts file now. It clearly has two i2c devices
-at 0x8 and 0x9. Maybe the regulator driver followed the mfd design
-because the first driver for this device is an mfd.
+diff --git a/drivers/staging/r8188eu/core/rtw_security.c b/drivers/staging/r8188eu/core/rtw_security.c
+index 2cdcdfd5ca5c..5bba57d18b5f 100644
+--- a/drivers/staging/r8188eu/core/rtw_security.c
++++ b/drivers/staging/r8188eu/core/rtw_security.c
+@@ -63,7 +63,7 @@ void rtw_wep_encrypt(struct adapter *padapter, struct xmit_frame *pxmitframe)
+ 				arc4_crypt(ctx, payload + length, crc.f1, 4);
+ 
+ 				pframe += pxmitpriv->frag_len;
+-				pframe = (u8 *)RND4((size_t)(pframe));
++				pframe = PTR_ALIGN(pframe, 4);
+ 			}
+ 		}
+ 	}
+@@ -504,7 +504,7 @@ u32 rtw_tkip_encrypt(struct adapter *padapter, struct xmit_frame *pxmitframe)
+ 					arc4_crypt(ctx, payload + length, crc.f1, 4);
+ 
+ 					pframe += pxmitpriv->frag_len;
+-					pframe = (u8 *)RND4((size_t)(pframe));
++					pframe = PTR_ALIGN(pframe, 4);
+ 				}
+ 			}
+ 		} else {
+@@ -1133,7 +1133,7 @@ u32 rtw_aes_encrypt(struct adapter *padapter, struct xmit_frame *pxmitframe)
+ 
+ 					aes_cipher(prwskey, pattrib->hdrlen, pframe, length);
+ 					pframe += pxmitpriv->frag_len;
+-					pframe = (u8 *)RND4((size_t)(pframe));
++					pframe = PTR_ALIGN(pframe, 4);
+ 				}
+ 			}
+ 		} else {
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index aede8ef8b098..029b994e1b71 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -642,7 +642,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
+ 			payload = pframe;
+ 
+ 			for (curfragnum = 0; curfragnum < pattrib->nr_frags; curfragnum++) {
+-				payload = (u8 *)RND4((size_t)(payload));
++				payload = PTR_ALIGN(payload, 4);
+ 
+ 				payload = payload + pattrib->hdrlen + pattrib->iv_len;
+ 				if ((curfragnum + 1) == pattrib->nr_frags) {
+@@ -868,7 +868,6 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+ {
+ 	struct pkt_file pktfile;
+ 	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
+-	size_t addr;
+ 	u8 *pframe, *mem_start;
+ 	u8 hw_hdr_offset;
+ 	struct sta_info		*psta;
+@@ -985,9 +984,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+ 			break;
+ 		}
+ 
+-		addr = (size_t)(pframe);
+-
+-		mem_start = (unsigned char *)RND4(addr) + hw_hdr_offset;
++		mem_start = PTR_ALIGN(pframe, 4) + hw_hdr_offset;
+ 		memcpy(mem_start, pbuf_start + hw_hdr_offset, pattrib->hdrlen);
+ 	}
+ 
+diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+index 55032d7ae7e3..9bd2428514de 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
++++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+@@ -347,7 +347,7 @@ static s32 rtw_dump_xframe(struct adapter *adapt, struct xmit_frame *pxmitframe)
+ 
+ 		mem_addr += w_sz;
+ 
+-		mem_addr = (u8 *)RND4(((size_t)(mem_addr)));
++		mem_addr = PTR_ALIGN(mem_addr, 4);
+ 	}
+ 
+ 	rtw_free_xmitframe(pxmitpriv, pxmitframe);
+diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
+index fca8f3d116c2..56e5cbfec1f1 100644
+--- a/drivers/staging/r8188eu/include/osdep_service.h
++++ b/drivers/staging/r8188eu/include/osdep_service.h
+@@ -95,7 +95,6 @@ static inline void flush_signals_thread(void)
+ }
+ 
+ #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
+-#define RND4(x)	(((x >> 2) + (((x & 3) == 0) ?  0: 1)) << 2)
+ 
+ static inline u32 _RND4(u32 sz)
+ {
+-- 
+2.35.1
+

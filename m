@@ -2,115 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1504F5F0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D814F5F80
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiDFN3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S232730AbiDFNZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234065AbiDFN2X (ORCPT
+        with ESMTP id S233303AbiDFNYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:28:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D7C51BD99D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649240771;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ZcKsEZ8qwBQThqWn9sE6S/H8YRw8IewVlhEa4ihZuo=;
-        b=ckHTOObpm3NtPtjw/vGjnhnar2pzf/NnzNlLFhPHYcWIcMDEi6a8PclrPNgH76U4BfghDR
-        psSx4A7DlRtVyCDftr/Vd8RZ/xiLCsnoCXjLPRZEWshqdnk3ngDLgKtPhRQ7ECHXXGzGNF
-        fpnWEs9+SuHRaqd0bRVpHqrOZeZjO1w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-260-AIsMgtwZNIGqyAF5y3K81A-1; Wed, 06 Apr 2022 06:04:22 -0400
-X-MC-Unique: AIsMgtwZNIGqyAF5y3K81A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B59E780346E;
-        Wed,  6 Apr 2022 10:04:21 +0000 (UTC)
-Received: from tucnak.zalov.cz (unknown [10.39.195.172])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7460040CF905;
-        Wed,  6 Apr 2022 10:04:21 +0000 (UTC)
-Received: from tucnak.zalov.cz (localhost [127.0.0.1])
-        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 236A4IHC1580605
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 6 Apr 2022 12:04:19 +0200
-Received: (from jakub@localhost)
-        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 236A4HPQ1580604;
-        Wed, 6 Apr 2022 12:04:17 +0200
-Date:   Wed, 6 Apr 2022 12:04:17 +0200
-From:   Jakub Jelinek <jakub@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>, Richard Biener <rguenther@suse.de>,
-        linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: older gccs and case labels producing integer constants
-Message-ID: <Yk1lodskz34cmqJ1@tucnak>
-Reply-To: Jakub Jelinek <jakub@redhat.com>
-References: <YkwQ6+tIH8GQpuct@zn.tnic>
- <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
- <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
- <YkwbygWj/C3XooMV@zn.tnic>
- <Yk1jC4oLnIklOTHI@tucnak>
+        Wed, 6 Apr 2022 09:24:54 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29776658DFA;
+        Wed,  6 Apr 2022 03:20:59 -0700 (PDT)
+X-UUID: d8bf1bdb4e264a849f69ad5925330207-20220406
+X-UUID: d8bf1bdb4e264a849f69ad5925330207-20220406
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 74661343; Wed, 06 Apr 2022 18:05:19 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 6 Apr 2022 18:05:18 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 6 Apr 2022 18:05:17 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <nfraprado@collabora.com>, <tzungbi@google.com>
+CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [v9 1/4] ASoC: dt-bindings: mt8192-mt6359: add new compatible and new properties
+Date:   Wed, 6 Apr 2022 18:05:11 +0800
+Message-ID: <20220406100514.11269-2-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
+References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yk1jC4oLnIklOTHI@tucnak>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 11:53:17AM +0200, Jakub Jelinek wrote:
-> On Tue, Apr 05, 2022 at 12:36:58PM +0200, Borislav Petkov wrote:
-> > On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
-> > > Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
-> > > compiler flags genommen werden?
-> > 
-> > Found it:
-> > 
-> > $ gcc -fsanitize=shift -c switch.c
-> > switch.c: In function ‘foo’:
-> > switch.c:10:7: error: case label does not reduce to an integer constant
-> >        case (((0xfc08) << 16) | (0x0101)):;
-> > 
-> > $ gcc --version
-> > gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
-> > Copyright (C) 2017 Free Software Foundation, Inc.
-> > 
-> > Something not fully backported?
-> 
-> That is rejected with -fsanitize=shift even on current trunk (in C, C++ is
-> fine).
-> C++ constexpr code has cases for ubsan builtins and internal functions,
-> but C just doesn't handle those apparently.
+1. Adds new compatible string "mt8192_mt6359_rt1015p_rt5682s" for machines
+with rt1015p and rt5682s.
+2. Adds new property "headset-codec" for getting headset codec.
+3. Adds new property "speaker-codecs" for getting speaker codecs.
 
-But I think the error is actually correct.
-In C99 and later, for signed left shift the rule for x << y is that
-there is UB if (similarly to all C family) if y is negative or greater or
-equal to precision of promoted x, but for C99 also when
-((unsigned_typeof_x) x >> (precision_of_x - 1 - y)) != 0.
-That is the case above, 0xfc08 is signed int and 0xfc08 << 16 is
-0xfc080000 where (0xfc08 >> 15) is 1 and so it is UB.
-In C99 and later you need:
-	case (int)(((0xfc08U) << 16) | (0x0101)):;
-or so.
-Note, C++ has different rules (and C++20 and later only has the
-y non-negative and less than precision requirement and nothing else).
+Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-	Jakub
+diff --git a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
+index 5a5b765b859a..4fa179909c62 100644
+--- a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
++++ b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
+@@ -18,6 +18,7 @@ properties:
+     enum:
+       - mediatek,mt8192_mt6359_rt1015_rt5682
+       - mediatek,mt8192_mt6359_rt1015p_rt5682
++      - mediatek,mt8192_mt6359_rt1015p_rt5682s
+ 
+   mediatek,platform:
+     $ref: "/schemas/types.yaml#/definitions/phandle"
+@@ -27,11 +28,33 @@ properties:
+     $ref: "/schemas/types.yaml#/definitions/phandle"
+     description: The phandle of HDMI codec.
+ 
++  headset-codec:
++    type: object
++    properties:
++      sound-dai:
++        $ref: /schemas/types.yaml#/definitions/phandle
++    required:
++      - sound-dai
++
++  speaker-codecs:
++    type: object
++    properties:
++      sound-dai:
++        minItems: 1
++        maxItems: 2
++        items:
++          maxItems: 1
++        $ref: /schemas/types.yaml#/definitions/phandle-array
++    required:
++      - sound-dai
++
+ additionalProperties: false
+ 
+ required:
+   - compatible
+   - mediatek,platform
++  - headset-codec
++  - speaker-codecs
+ 
+ examples:
+   - |
+@@ -44,6 +67,15 @@ examples:
+                         "aud_clk_mosi_on";
+         pinctrl-0 = <&aud_clk_mosi_off>;
+         pinctrl-1 = <&aud_clk_mosi_on>;
++
++        headset-codec {
++            sound-dai = <&rt5682>;
++        };
++
++        speaker-codecs {
++            sound-dai = <&rt1015_l>,
++                        <&rt1015_r>;
++        };
+     };
+ 
+ ...
+-- 
+2.25.1
 

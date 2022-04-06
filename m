@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AE44F610F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A5D4F6145
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiDFOMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S234201AbiDFOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiDFOMP (ORCPT
+        with ESMTP id S234526AbiDFOLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:12:15 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E372121A0DF;
-        Wed,  6 Apr 2022 03:06:28 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p17so1511926plo.9;
-        Wed, 06 Apr 2022 03:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=57yP5txyEZyDXpbo8tIP1sloT8BEAgWzSMNPoATwlDg=;
-        b=ehDrXAaW3pMqUfx6zSCSo3ez2chyhCErGyezUVm9LK1/D0javYpCUbJcZIXfHfMvkN
-         8UIV/uwH0bb7zEJGYOseWq2ar1EmtgBpi8Gox+OQasCWLVzzBsysSGCPqZ7csA3+Td3B
-         dMru2IP9psWuiXdD27GLpcl1xK5YaKi5o5RfzDNfKouCSPisF0u0YDTQo/TtmxlmCNvR
-         I1PevTkDTfKigc4tGc7Gz67Yxo+M40RoOJfqCyycumlnyj3FL1bsLJ1kHzeIttwSzOLM
-         x9jMos0U8Pf4TpTu1/pxpqYsBWguWjQU56tBLryyJgVZR0EKx8yvXdBvYVnRMBKD41/W
-         UImw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=57yP5txyEZyDXpbo8tIP1sloT8BEAgWzSMNPoATwlDg=;
-        b=xA0DVpVJc7hrUhXdpCOlA/I6D0KEC/Y3ycaCU7ZiI36BrH7ZBJ6+wRBN1tKkMRMlQi
-         5KrheRv0/1b1I6ReksHd+OsH+vRhAPzh1gTkYFP4iUfzrEEtbfPBj5MxB/RROHuexlZR
-         c0eN6EbnogRSjhZrRoVApVzqXm4G08JBKYnh+Kas1f3AecO75BsD+uDIve8ym14iE6Fn
-         975twtJZNgEC8D5MwsHuL+rHZWG8dMQh1/b4MtAjUxq12JwCk1T5Sl0hWfotrJxBbAg4
-         JUbN6zhnml25FPrTgvCCyApH4jzgVbyt3EYopWInTZNbnPz7m1+DJNrba5NB94OOOe1b
-         y2DA==
-X-Gm-Message-State: AOAM533GIPrBITZBla72tDW7D/wuxvIctMjpsTDsVzpPN+/d3XwT7T9i
-        odc+UyJFJDK1eVXWl3FNqTk=
-X-Google-Smtp-Source: ABdhPJylhVZbCyCHSeSScbZqHALx+bT8I3PFeWGu4VLRdO069nloeoxBtQ1mNZowYRE80cEQdXbpCg==
-X-Received: by 2002:a17:90b:4c92:b0:1c7:a9a3:6274 with SMTP id my18-20020a17090b4c9200b001c7a9a36274mr8943122pjb.148.1649239587542;
-        Wed, 06 Apr 2022 03:06:27 -0700 (PDT)
-Received: from CHENGDONGLI-MB0.localdomain ([203.205.141.115])
-        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm5144868pjv.57.2022.04.06.03.06.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 Apr 2022 03:06:26 -0700 (PDT)
-From:   Chengdong Li <brytonlee01@gmail.com>
-X-Google-Original-From: Chengdong Li <chengdongli@tencent.com>
-Received: by CHENGDONGLI-MB0.localdomain (Postfix, from userid 501)
-        id 2E2286C7A19C; Wed,  6 Apr 2022 18:06:22 +0800 (CST)
-To:     adrian.hunter@intel.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org
-Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
-Subject: [PATCH v2] perf test tsc: Fix error message report when not supported.
-Date:   Wed,  6 Apr 2022 18:06:09 +0800
-Message-Id: <20220406100609.65239-1-chengdongli@tencent.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 6 Apr 2022 10:11:07 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5837428253F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:06:48 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3EECF3202069;
+        Wed,  6 Apr 2022 06:06:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 06 Apr 2022 06:06:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=rzh+YVo8AjmVzXYtwCOyrTTWQiWeb9VJ0DWPZZ
+        BZogk=; b=Iwl/Hcis915YuxuSYdtKUaM/emcwdNwLUmOhK6Uz82oFFtNQo63baz
+        Ff5WVmMH4CgIgB7Mjfc5roxPZ0JdXi0pY34k5ZIeLjH3enh4PdbqE3fxuGXU4pHV
+        3hdnWggWcpKE6ptGCcatiyrWEHik3RVX22Vpulup6f6z/FberTjC3fiBs/BaUMP2
+        niwV6K24YkECzfaWDbiKrXjqT+cuw3wK/0wd/7NWxLp4iZdqkn59yFYerh4SfVtl
+        QvKs0QQ0rjf86CoCz+GhX9FldByRRlCzIVxn6PQLtl8fE/vvyg9uP7RXCDhZHRXa
+        9AbPtGKycpgEyc73ClOkJmrdbu7HaqGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=rzh+YVo8AjmVzXYtw
+        COyrTTWQiWeb9VJ0DWPZZBZogk=; b=oJmVUCYa8RfGhDk7IDvEzqizOrCriQbxv
+        WdMHs6fMqIyIi3LPz6EI/scjODZShthbGt7AcwVMnlmsQwqNKQbqtrk7p/PcipWC
+        ecVAyKG61Np/F1E+MIxcWHz3ZPHLYas2VHt9DmPa2RBmZxClg91IlIiAr4Q53YuR
+        l/y5XAFHyRvZh8n9FDiyNhq8VW9Q2oQT3GfmHfgIJZkK0YLqP6fEK1t1sFSThi4E
+        YHFU+5HU0XY6nGnJXU/voDMb2tmchA5A6ZagEFAYDI+MDrQ4knCFrAg3M90fVEbw
+        2Jd5MVa9ixw40lX5/Vcm7UzV83wl3vCgbZFRkRAfy16QetfoY1Btg==
+X-ME-Sender: <xms:FmZNYpJl84yEK7oacOxfoP1IURA_k3vTeG1huh40Qr5-r_tVWKxnzg>
+    <xme:FmZNYlKHcTc7M2cYTupcwic4PCFhpt_NuhXN7PM_lZhmfneYkwCaps03-x-fjv6_4
+    HOb7n524u4a06ACdtM>
+X-ME-Received: <xmr:FmZNYhui4m3AsCU4MTpBt76kbnVxXWXaR2wY32nkqlW--tXu5EDCr8ttmPEWK9f45yHk_7v6H4PRNtuQRiiIRGMNsJhUgNmEn_Ywv6Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
+    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:FmZNYqaz6oaZVAssejHnLeAU8GbZO9Mh9YaMZYA9Kr2tGAgvIPv-LA>
+    <xmx:FmZNYgZmoRxnLfPw2ysMKf-mQYdh9yyn2ZhQqFMA-tmCIBb30k0pvg>
+    <xmx:FmZNYuBw0PTi9pVOCgEUkOdb0QIjl3O5WLVJGNTDssWHFwPv3EWNsg>
+    <xmx:FmZNYvyzyhoy5Khxf_IBHaOsGBVgMQmSHjUQWsjmpOQLFwXLiJ17Rg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 6 Apr 2022 06:06:14 -0400 (EDT)
+Date:   Wed, 6 Apr 2022 12:06:12 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     "Zhengbin (OSKernel)" <zhengbin13@huawei.com>
+Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        tangyizhou@huawei.com
+Subject: Re: [PATCH v2 -next] drm/vc4: Fix build error when CONFIG_DRM_VC4=y
+ && CONFIG_RASPBERRYPI_FIRMWARE=m
+Message-ID: <20220406100612.2nuvjcc2oxo54n5j@houat>
+References: <20220325021831.2812735-1-zhengbin13@huawei.com>
+ <20220325130541.tjxq4kjgmkaz32en@houat>
+ <601a9682-6afc-d87b-cfa7-5c683271f7a5@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m2ydzgbnjwzzthnm"
+Content-Disposition: inline
+In-Reply-To: <601a9682-6afc-d87b-cfa7-5c683271f7a5@huawei.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,105 +86,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default `perf test tsc` does not return the error message
-when child process detected kernel does not support. Instead, child
-process print error message to stderr, unfortunately the stderr is
-redirected to /dev/null when verbose <= 0.
 
-This patch did three things:
-- returns TEST_SKIP to parent process instead of TEST_OK when
-  perf_read_tsc_conversion() is not supported.
-- add a new subtest of testing if TSC is supported on current
-  architecture by moving exist code to a separate function.
-- extended test suite definition to contain above two subtests.
+--m2ydzgbnjwzzthnm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes since v1 (thanks for the feedback from Adrian Hunter):
-- rebase commit to current source.
+Hi,
 
-Signed-off-by: Chengdong Li <chengdongli@tencent.com>
----
- tools/perf/tests/perf-time-to-tsc.c | 36 +++++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+On Mon, Mar 28, 2022 at 10:22:11AM +0800, Zhengbin (OSKernel) wrote:
+> On 2022/3/25 21:05, Maxime Ripard wrote:
+> > On Fri, Mar 25, 2022 at 10:18:31AM +0800, Zheng Bin wrote:
+> > > If CONFIG_DRM_VC4=3Dy, CONFIG_RASPBERRYPI_FIRMWARE=3Dm, CONFIG_COMPIL=
+E_TEST=3Dn,
+> > > bulding fails:
+> > >=20
+> > > drivers/gpu/drm/vc4/vc4_drv.o: In function `vc4_drm_bind':
+> > > vc4_drv.c:(.text+0x320): undefined reference to `rpi_firmware_get'
+> > > vc4_drv.c:(.text+0x320): relocation truncated to fit: R_AARCH64_CALL2=
+6 against undefined symbol `rpi_firmware_get'
+> > > vc4_drv.c:(.text+0x34c): undefined reference to `rpi_firmware_propert=
+y'
+> > > vc4_drv.c:(.text+0x34c): relocation truncated to fit: R_AARCH64_CALL2=
+6 against undefined symbol `rpi_firmware_property'
+> > > vc4_drv.c:(.text+0x354): undefined reference to `rpi_firmware_put'
+> > > vc4_drv.c:(.text+0x354): relocation truncated to fit: R_AARCH64_CALL2=
+6 against undefined symbol `rpi_firmware_put'
+> > >=20
+> > > Make DRM_VC4 depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST to fix t=
+his.
+> > >=20
+> > > Fixes: c406ad5e4a85 ("drm/vc4: Notify the firmware when DRM is in cha=
+rge")
+> > > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > > Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+> > > ---
+> > > v2: follow Maxime's advise, add RASPBERRYPI_FIRMWARE as an additional=
+ depends
+> > >   drivers/gpu/drm/vc4/Kconfig | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
+> > > index de3424fed2fc..92d74ba7c449 100644
+> > > --- a/drivers/gpu/drm/vc4/Kconfig
+> > > +++ b/drivers/gpu/drm/vc4/Kconfig
+> > > @@ -2,6 +2,7 @@
+> > >   config DRM_VC4
+> > >   	tristate "Broadcom VC4 Graphics"
+> > >   	depends on ARCH_BCM || ARCH_BCM2835 || COMPILE_TEST
+> > > +	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
+> > Why do we need the || COMPILE_TEST here?
+> >=20
+> > The rpi_firmware_get, _property and _put functions aren't define if
+> > RASPBERRYPI_FIRMWARE, so we need that dependency every time, even if
+> > COMPILE_TEST is set?
+>=20
+> include/soc/bcm2835/raspberrypi-firmware.h
+>=20
+> #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
+>=20
+> struct rpi_firmware *rpi_firmware_get(struct device_node
+> *firmware_node);/_property/_put
+>=20
+> #else=A0=A0=A0 -->empty function
+>=20
+> =A0static inline struct rpi_firmware *rpi_firmware_get(struct device_node
+> *firmware_node)/_property/_put
+> {
+> =A0=A0=A0=A0=A0=A0=A0=A0 return NULL;
+> =A0}
+> #endif
+>=20
+>=20
+> We can refer to drivers/pwm/Kconfig
+>=20
+> config PWM_RASPBERRYPI_POE
+> =A0=A0=A0=A0=A0=A0=A0=A0 tristate "Raspberry Pi Firwmware PoE Hat PWM sup=
+port"
+> =A0=A0=A0=A0=A0=A0=A0=A0 # Make sure not 'y' when RASPBERRYPI_FIRMWARE is=
+ 'm'. This can only
+> =A0=A0=A0=A0=A0=A0=A0 # happen when COMPILE_TEST=3Dy, hence the added !RA=
+SPBERRYPI_FIRMWARE.
+> =A0=A0=A0=A0=A0=A0=A0=A0 depends on RASPBERRYPI_FIRMWARE || (COMPILE_TEST=
+ &&
+> !RASPBERRYPI_FIRMWARE)=A0 -->There is no need to add (&&
+> !RASPBERRYPI_FIRMWARE)
 
-diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
-index d12d0ad81801..fc7c380af5a0 100644
---- a/tools/perf/tests/perf-time-to-tsc.c
-+++ b/tools/perf/tests/perf-time-to-tsc.c
-@@ -47,6 +47,17 @@
- 	}					\
- }
- 
-+static int test__tsc_is_supported(struct test_suite *test __maybe_unused,
-+				  int subtest __maybe_unused)
-+{
-+	if (!TSC_IS_SUPPORTED) {
-+		pr_debug("Test not supported on this architecture");
-+		return TEST_SKIP;
-+	}
-+
-+	return TEST_OK;
-+}
-+
- /**
-  * test__perf_time_to_tsc - test converting perf time to TSC.
-  *
-@@ -70,7 +81,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	struct perf_cpu_map *cpus = NULL;
- 	struct evlist *evlist = NULL;
- 	struct evsel *evsel = NULL;
--	int err = -1, ret, i;
-+	int err = TEST_FAIL, ret, i;
- 	const char *comm1, *comm2;
- 	struct perf_tsc_conversion tc;
- 	struct perf_event_mmap_page *pc;
-@@ -79,10 +90,6 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	u64 test_time, comm1_time = 0, comm2_time = 0;
- 	struct mmap *md;
- 
--	if (!TSC_IS_SUPPORTED) {
--		pr_debug("Test not supported on this architecture");
--		return TEST_SKIP;
--	}
- 
- 	threads = thread_map__new(-1, getpid(), UINT_MAX);
- 	CHECK_NOT_NULL__(threads);
-@@ -124,8 +131,8 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	ret = perf_read_tsc_conversion(pc, &tc);
- 	if (ret) {
- 		if (ret == -EOPNOTSUPP) {
--			fprintf(stderr, " (not supported)");
--			return 0;
-+			pr_debug("perf_read_tsc_conversion is not supported in current kernel");
-+			err = TEST_SKIP;
- 		}
- 		goto out_err;
- 	}
-@@ -191,7 +198,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	    test_tsc >= comm2_tsc)
- 		goto out_err;
- 
--	err = 0;
-+	err = TEST_OK;
- 
- out_err:
- 	evlist__delete(evlist);
-@@ -200,4 +207,15 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	return err;
- }
- 
--DEFINE_SUITE("Convert perf time to TSC", perf_time_to_tsc);
-+static struct test_case time_to_tsc_tests[] = {
-+	TEST_CASE_REASON("TSC support", tsc_is_supported,
-+			 "This architecture does not support"),
-+	TEST_CASE_REASON("Perf time to TSC", perf_time_to_tsc,
-+			 "perf_read_tsc_conversion is not supported"),
-+	{ .name = NULL, }
-+};
-+
-+struct test_suite suite__perf_time_to_tsc = {
-+	.desc = "Convert perf time to TSC",
-+	.test_cases = time_to_tsc_tests,
-+};
--- 
-2.27.0
+Oh, so you're fixing the case where vc4 would be built-in, but the
+firmware driver a module?
 
+I guess that makes sense, but the comment definitely helps there. And
+the (COMPILE_TEST && !RASPBERRYPI_FIRMWARE) is also needed, since it
+wouldn't fix the issue you're trying to fix for COMPILE_TEST otherwise.
+
+Maxime
+
+--m2ydzgbnjwzzthnm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYk1mFAAKCRDj7w1vZxhR
+xT80AQC7Tm+NmNDitAW/WPTe7zEurlBuKyI80CaozozVmnmeUgD/ZdkwChF2xf3c
+k1aWDhJy5q1hEMUagUb6QAuZLV0lMAM=
+=wzKX
+-----END PGP SIGNATURE-----
+
+--m2ydzgbnjwzzthnm--

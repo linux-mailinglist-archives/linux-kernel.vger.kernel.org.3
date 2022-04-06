@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25A24F63E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8ED4F637B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiDFPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S236306AbiDFPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiDFPgL (ORCPT
+        with ESMTP id S236342AbiDFPgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:36:11 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03E1228A80;
-        Wed,  6 Apr 2022 05:50:24 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p23so2469881edi.8;
-        Wed, 06 Apr 2022 05:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6mOjh8/nxxO7FhJS1LLehXmSXTMaZJKRB8nObFfsNbo=;
-        b=n+wftPKFdTcnrOBFRPl1sie5LmQbBV4Wig3BYMdGK9jlCXGD33qoIKnOoA0hKOgrOg
-         hl4p1bitVM7Po252GRKkBE9NVRvnOgcgYBLJrXPiJmzsaN1C4fF8NPFf+P17qmT4XDtT
-         05kJ9L7ZeM/UeCe98MqHbLKj+Zy9AxnU3tQDO5fHP/SETPCw+6HFa6S7hd0BgqaHDLR0
-         K3UChqnPPrp3NBrMpBCSbxfFlsAPAKQWLJSBoddpujVLTqD+2W24YYH4HO1SDYc2XEQH
-         rtvC74nkItGO4r2tuFUoiLQR8ImnindXq9xbT1JxZDXKaV1VY4vTYUsr5SeYKcliT3N8
-         xAqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6mOjh8/nxxO7FhJS1LLehXmSXTMaZJKRB8nObFfsNbo=;
-        b=zXcSocR2KE7NHYif7KBQkOb86wYN8I+x1b4Qc+yUXp4RiVm3RhhKnocfWYfGeZ5LNa
-         4LUcqYt93CMY2e/1lrQxdub7QzXeSiCyXjdKNREjeRlFehmvz4leRSKgaBVPRWCHEBr3
-         hKNXk4CFhFqpNFu2BfxEXfx+pvD1dFbw4jyGV99X4Vywjnlq890MZP3fyRynhwEnRP2B
-         f3MiBupp3tEgBTzJeKMck4iV1SUj3QFjZ/Dw94DHG+dh1Vq8wJvKL2dr5WjtQuy/H/kB
-         1Z/aB5V1pc5ikge4cUHOKW34bSnbe2rsSA3wKe8Wj9+o+xqNW72TV/bt6ld927DLhUTJ
-         H+AA==
-X-Gm-Message-State: AOAM532IpadvOUrQmcTYdS2KWKcU1TMGsJQWoSPLbRHhtM/kiS6JOd8k
-        Ug4BU88wwtL+k2IQ8ZtuvPNN4d9XSkmsFg==
-X-Google-Smtp-Source: ABdhPJzyNssuXxZzNjgnttY/wMDEhKqO5YSC/ufOaEXOMyVe2Hf2bJ3Aw7FVyWc7xv7gXzUS+eWR9w==
-X-Received: by 2002:a05:6402:40cb:b0:419:42de:65b6 with SMTP id z11-20020a05640240cb00b0041942de65b6mr8624261edb.66.1649249357935;
-        Wed, 06 Apr 2022 05:49:17 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id j17-20020a05640211d100b00419357a2647sm8143114edw.25.2022.04.06.05.49.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 05:49:17 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <24bf735f-1f63-277e-02f1-dff90d5cfbab@redhat.com>
-Date:   Wed, 6 Apr 2022 14:49:16 +0200
+        Wed, 6 Apr 2022 11:36:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6596C44A4D2;
+        Wed,  6 Apr 2022 05:50:27 -0700 (PDT)
+X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
+X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1457013016; Wed, 06 Apr 2022 20:49:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 6 Apr 2022 20:49:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 6 Apr 2022 20:49:32 +0800
+Message-ID: <bf6d645d9c8d0cc0ada530d9a3ebf27df838cc52.camel@mediatek.com>
+Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
+ dt-bindings
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
+        <Allen-yy.Lin@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+Date:   Wed, 6 Apr 2022 20:49:32 +0800
+In-Reply-To: <YipjOXdCNUxdy+ey@robh.at.kernel.org>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+         <20220307122151.11666-3-jia-wei.chang@mediatek.com>
+         <YipjOXdCNUxdy+ey@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 079/104] KVM: TDX: Implements vcpu
- request_immediate_exit
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <22f86f34055452b99a8d5bf2a707e40645e03334.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <22f86f34055452b99a8d5bf2a707e40645e03334.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,45 +66,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Thu, 2022-03-10 at 14:44 -0600, Rob Herring wrote:
+> On Mon, Mar 07, 2022 at 08:21:49PM +0800, Tim Chang wrote:
+> > 1. add cci property.
+> > 2. add example of MT8186.
+> > 
+> > Signed-off-by: Jia-Wei Chang <
+> > jia-wei.chang@mediatek.corp-partner.google.com>
+> > ---
+> >  .../bindings/cpufreq/cpufreq-mediatek.yaml    | 41
+> > +++++++++++++++++++
+> >  1 file changed, 41 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > mediatek.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > mediatek.yaml
+> > index 584946eb3790..d3ce17fd8fcf 100644
+> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > mediatek.yaml
+> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > mediatek.yaml
+> > @@ -48,6 +48,10 @@ properties:
+> >        When absent, the voltage scaling flow is handled by
+> > hardware, hence no
+> >        software "voltage tracking" is needed.
+> >  
+> > +  cci:
+> > +    description:
+> > +      Phandle of the cci to be linked with the phandle of CPU if
+> > present.
 > 
-> Now we are able to inject interrupts into TDX vcpu, it's ready to block TDX
-> vcpu.  Wire up kvm x86 methods for blocking/unblocking vcpu for TDX.  To
-> unblock on pending events, request immediate exit methods is also needed.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/vmx/main.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index a0bcc4dca678..404a260796e4 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -280,6 +280,14 @@ static void vt_enable_irq_window(struct kvm_vcpu *vcpu)
->   	vmx_enable_irq_window(vcpu);
->   }
->   
-> +static void vt_request_immediate_exit(struct kvm_vcpu *vcpu)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return __kvm_request_immediate_exit(vcpu);
-> +
-> +	vmx_request_immediate_exit(vcpu);
-> +}
-> +
->   static int vt_mem_enc_op(struct kvm *kvm, void __user *argp)
->   {
->   	if (!is_td(kvm))
-> @@ -402,7 +410,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->   	.check_intercept = vmx_check_intercept,
->   	.handle_exit_irqoff = vmx_handle_exit_irqoff,
->   
-> -	.request_immediate_exit = vmx_request_immediate_exit,
-> +	.request_immediate_exit = vt_request_immediate_exit,
->   
->   	.sched_in = vt_sched_in,
->   
+> We already have a binding for this. See cci-control-port.
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Hi Rob,
+
+Pardon me for my late reply.
+
+It seems that "cci-control-port" is hardware IP from ARM.
+But mediatek-cpufreq uses MTK internal CCI hardware IP.
+I think I should keep this change here.
+
+Thanks.
+
+> 
+> > +
+> >    "#cooling-cells":
+> >      description:
+> >        For details, please refer to
+

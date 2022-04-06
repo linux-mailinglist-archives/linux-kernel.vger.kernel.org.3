@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F474F6D9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82164F6DA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbiDFWBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S233088AbiDFWD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236888AbiDFWBo (ORCPT
+        with ESMTP id S232022AbiDFWDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 18:01:44 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B42D158D8C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 14:59:45 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id n6-20020a17090a670600b001caa71a9c4aso4216724pjj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 14:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bXhrp57RyScu0ZRvGqkj/42ZMpBOCbed3PRNPxmdooU=;
-        b=B59yobXTGPG4rEfgZjhYoSKEU4ZMy+8G9eOxJcsAVR9eKsxs7p0WGGXtFMVpagGXNK
-         dc4CcJaYjjpvU+9eQ0X2Lt92CL0FUiid9cd+cr9qROWyWtMhR4nXsBnAr1RaWcW0t/xq
-         6sVHWUttKLQi3MW8gne2IPX2vp23No3IfrWl1IC4fgtjfhybReP9L72H/uAidTrHi07x
-         WdpxrHRw4thm/pt2GLR4yKHel6jLeLq1VWY+mFsuf0eb/46uuriT1kjp65eDBJ9uAkzM
-         sCCE0siQIAXgyFR7MFokyn5WQbLHG5NbmhZ+zyQc2c44Xg4wNySqGtL8QRqwPiL2F4cT
-         EkBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bXhrp57RyScu0ZRvGqkj/42ZMpBOCbed3PRNPxmdooU=;
-        b=Uzsj178a0bb6x2yeIqIQVsgdXyAuqIijyVUfm6SsYuFOQhXUb32Dyba1QQXc+jTj2m
-         Du1vzX8wa4DnXe8CQmptxnPdm0ZsGY+NEw8+spuCcD/FtO9s1oCFCLUlPGq5gXmssuY2
-         kxKTuov4psMT+d771hq3XdKF9J6w4R9ZivejzCblm1snJ7sjZr8IAKsCStVDhUEzJ9Mo
-         F3SPYRMy9dO6cYwO1aP7ukYg22ctNxlq3C6/fILWrDyvgt8CIXqNM0504zBlZAduyApz
-         rf/AH0QUGZaogyPYiwM6PSFjg4quA+VW76V50Z9gJ3Im1yZZvdjymn5WxKON4tZh1zLW
-         lr2g==
-X-Gm-Message-State: AOAM532lOTAo1qb8GnQomtCqgJ1/u3MBAsWEAN+VDa2alE54ro/PgQpy
-        ejOsfMYLnVVEg4xPc76QabOnwvbXPS53AQ==
-X-Google-Smtp-Source: ABdhPJzgZCCGDuuQfvFHhd+mYjLI8r5Wq68lTnYfarN485RvSlkGa2xnJxtuQJr0OAeMb0BR2Lm+1w==
-X-Received: by 2002:a17:902:ce05:b0:156:a7f7:aae1 with SMTP id k5-20020a170902ce0500b00156a7f7aae1mr10931690plg.166.1649282384592;
-        Wed, 06 Apr 2022 14:59:44 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id u3-20020a17090add4300b001ca56ea162bsm6323543pjv.33.2022.04.06.14.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 14:59:44 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 14:59:41 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Yann Droneaud <ydroneaud@opteya.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] af_unix: Escape abstract unix socket address
-Message-ID: <20220406145941.728b4cb5@hermes.local>
-In-Reply-To: <20220406102213.2020784-1-ydroneaud@opteya.com>
-References: <20220406102213.2020784-1-ydroneaud@opteya.com>
+        Wed, 6 Apr 2022 18:03:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96431BE0C7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649282515; x=1680818515;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oJo9I0DB9H/abgW4dRNH0eSjf9gNlwzigGOQG/tFcEw=;
+  b=M72yoEj2ssvPecqu4uyRDPCcEotOVmAvQHPOWIOxeY7XEsFAz3N8RTNU
+   h3BKXhVG1sbuHaiJQuiVc18KuWPcktWM9LiWFzD2wxgJHUfQaIUICmkYN
+   bjXJRsJpszp8FogkAQMhPxs/zB24PWfRmeg1/zslRx7Vp6sDT55dHyYvD
+   1c2dmYDzHh2zQqasGGw/qpEVc73zKOWljF+EJmdCnYREgZceO4byq03H6
+   oGIiwU+DrQhz0PPhX6qcJf8oPU9cpddadVayvRCBhJ/egLV7MJI1da+6E
+   38epf2pAx5Bgf0eeFQgYygCvcG2aPUJ0Dew37ykjMg9f9eLmRoaxUOT/H
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243299504"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="243299504"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 15:01:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="722689824"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 15:01:54 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Smita Koralahalli Channabasappa 
+        <smita.koralahallichannabasappa@amd.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] topology/sysfs: Hide PPIN on systems that do not support it.
+Date:   Wed,  6 Apr 2022 15:01:50 -0700
+Message-Id: <20220406220150.63855-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <Yfhbj7Q99dqRIYaL@zn.tnic>
+References: <Yfhbj7Q99dqRIYaL@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Apr 2022 12:22:13 +0200
-Yann Droneaud <ydroneaud@opteya.com> wrote:
+Systems that do not support a Protected Processor Identification Number
+currently report:
 
-> Abstract unix socket address are bytes sequences up to
-> 108 bytes (UNIX_PATH_MAX == sizeof(struct sockaddr_un) -
-> offsetof(struct sockaddr_un, sun_path)).
-> 
-> As with any random string of bytes, printing them in
-> /proc/net/unix should be done with caution to prevent
-> misbehavior.
-> 
-> It would have been great to use seq_escape_mem() to escape
-> the control characters in a reversible way.
-> 
-> Unfortunately userspace might expect that NUL bytes are
-> replaced with '@' characters as it's done currently.
-> 
-> So this patch implements the following scheme: any control
-> characters, including NUL, in the abstract unix socket
-> addresses is replaced by '@' characters.
-> 
-> Sadly, with such non reversible escape scheme, abstract
-> addresses such as "\0\0", "\0\a", "\0\b", "\0\t", etc.
-> will have the same representation: "@@".
-> 
-> But will prevent "cat /proc/net/unix" from messing with
-> terminal, and will prevent "\n" in abstract address from
-> messing with parsing the list of Unix sockets.
-> 
-> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
-> ---
->  net/unix/af_unix.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index e71a312faa1e..8021efd92301 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -3340,7 +3340,8 @@ static int unix_seq_show(struct seq_file *seq, void *v)
->  				i++;
->  			}
->  			for ( ; i < len; i++)
-> -				seq_putc(seq, u->addr->name->sun_path[i] ?:
-> +				seq_putc(seq, !iscntrl(u->addr->name->sun_path[i]) ?
-> +					 u->addr->name->sun_path[i] :
->  					 '@');
->  		}
->  		unix_state_unlock(s);
+	# cat /sys/devices/system/cpu/cpu0/topology/ppin
+	0x0
 
-Unfortunately, you will break userspace ABI with this.
+which is confusing/wrong.
+
+Add a ".is_visible" function to suppress inclusion of the ppin file.
+
+Fixes: ab28e944197f ("topology/sysfs: Add PPIN in sysfs under cpu topology")
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ drivers/base/topology.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+index e9d1efcda89b..706dbf8bf249 100644
+--- a/drivers/base/topology.c
++++ b/drivers/base/topology.c
+@@ -152,9 +152,21 @@ static struct attribute *default_attrs[] = {
+ 	NULL
+ };
+ 
++static umode_t topology_is_visible(struct kobject *kobj,
++				   struct attribute *attr, int unused)
++{
++	struct device *dev = kobj_to_dev(kobj);
++
++	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
++		return 0;
++
++	return attr->mode;
++}
++
+ static const struct attribute_group topology_attr_group = {
+ 	.attrs = default_attrs,
+ 	.bin_attrs = bin_attrs,
++	.is_visible = topology_is_visible,
+ 	.name = "topology"
+ };
+ 
+-- 
+2.35.1
+

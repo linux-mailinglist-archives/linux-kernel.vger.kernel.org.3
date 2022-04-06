@@ -2,273 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBAB4F5FA9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484E84F5EDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbiDFN1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S232187AbiDFNGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiDFN01 (ORCPT
+        with ESMTP id S231450AbiDFNFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:26:27 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6EE9F38A;
-        Tue,  5 Apr 2022 18:28:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V9JKQ3h_1649208501;
-Received: from 192.168.193.179(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V9JKQ3h_1649208501)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 06 Apr 2022 09:28:22 +0800
-Message-ID: <daf48a22-6528-6778-09dc-7a37b6a65983@linux.alibaba.com>
-Date:   Tue, 5 Apr 2022 18:28:20 -0700
+        Wed, 6 Apr 2022 09:05:45 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC4A24096A5;
+        Tue,  5 Apr 2022 18:35:52 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:54096.784187684
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 51B6C1002AE;
+        Wed,  6 Apr 2022 09:35:48 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id a29d35676fba41b29fedbb3bbd7277bc for andrii.nakryiko@gmail.com;
+        Wed, 06 Apr 2022 09:35:51 CST
+X-Transaction-ID: a29d35676fba41b29fedbb3bbd7277bc
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <529149bc-d095-8161-11be-b36d7d63b7ed@189.cn>
+Date:   Wed, 6 Apr 2022 09:35:45 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
+Subject: Re: [PATCH] sample: bpf: syscall_tp_kern: add dfd before filename
 Content-Language: en-US
-To:     catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
-        ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
-        luc.vanoostenryck@gmail.com, samitolvanen@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <20220314135329.80621-1-ashimida@linux.alibaba.com>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1648777246-21352-1-git-send-email-chensong_2000@189.cn>
+ <CAEf4Bzbo=DU_LqJ=sXgawP9-O4VR84jDdhuf9Xto=T3LSsrySA@mail.gmail.com>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <CAEf4Bzbo=DU_LqJ=sXgawP9-O4VR84jDdhuf9Xto=T3LSsrySA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+Hi,
 
-Gentile ping for this :).
-
-I also saw the discussion on llvm-project, use address of labels as a
-parameter doesn't seem to be stable.
-
-Do we need to split it into two cases here?
-
-Link: https://github.com/llvm/llvm-project/issues/54328
-
-Thanks,
-Dan
-
-
-On 3/14/22 06:53, Dan Li wrote:
-> Add tests for SCS (Shadow Call Stack) based backward CFI.
+在 2022/4/5 06:17, Andrii Nakryiko 写道:
+> On Thu, Mar 31, 2022 at 6:34 PM Song Chen <chensong_2000@189.cn> wrote:
+>>
+>> When i was writing my eBPF program, i copied some pieces of code from
+>> syscall_tp, syscall_tp_kern only records how many files are opened, but
+>> mine needs to print file name.I reused struct syscalls_enter_open_args,
+>> which is defined as:
+>>
+>> struct syscalls_enter_open_args {
+>>          unsigned long long unused;
+>>          long syscall_nr;
+>>          long filename_ptr;
+>>          long flags;
+>>          long mode;
+>> };
+>>
+>> I tried to use filename_ptr, but it's not the pointer of filename, flags
+>> turns out to be the pointer I'm looking for, there might be something
+>> missed in the struct.
+>>
+>> I read the ftrace log, found the missed one is dfd, which is supposed to be
+>> placed in between syscall_nr and filename_ptr.
+>>
+>> Actually syscall_tp has nothing to do with dfd, it can run anyway without
+>> it, but it's better to have it to make it a better eBPF sample, especially
+>> to new eBPF programmers, then i fixed it.
+>>
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>> ---
+>>   samples/bpf/syscall_tp_kern.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/samples/bpf/syscall_tp_kern.c b/samples/bpf/syscall_tp_kern.c
+>> index 50231c2eff9c..e4ac818aee57 100644
+>> --- a/samples/bpf/syscall_tp_kern.c
+>> +++ b/samples/bpf/syscall_tp_kern.c
+>> @@ -7,6 +7,7 @@
+>>   struct syscalls_enter_open_args {
+>>          unsigned long long unused;
+>>          long syscall_nr;
+>> +       long dfd_ptr;
+>>          long filename_ptr;
+>>          long flags;
+>>          long mode;
 > 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> ---
->   arch/arm64/include/asm/compiler.h       | 18 ++++++
->   drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
->   drivers/misc/lkdtm/core.c               |  1 +
->   drivers/misc/lkdtm/lkdtm.h              |  1 +
->   include/linux/compiler-clang.h          |  1 +
->   include/linux/compiler-gcc.h            |  2 +
->   include/linux/compiler_types.h          |  4 ++
->   tools/testing/selftests/lkdtm/tests.txt |  1 +
->   8 files changed, 112 insertions(+)
+> Here's what I see on latest bpf-next:
 > 
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..96590fb4a8de 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -8,6 +8,24 @@
->   #define ARM64_ASM_PREAMBLE
->   #endif
->   
-> +#ifndef __ASSEMBLY__
-> +#ifdef __KERNEL__
-> +
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +
-> +#ifdef CONFIG_ARM64_BTI_KERNEL
-> +# define __no_ptrauth __attribute__((target("branch-protection=bti")))
-> +#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
-> +# define __no_ptrauth __attribute__((target("branch-protection=none")))
-> +#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
-> +# define __no_ptrauth __attribute__((target("sign-return-address=none")))
-> +#endif
-> +
-> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-> +
-> +#endif /* __KERNEL__ */
-> +#endif /* __ASSEMBLY__ */
-> +
->   /*
->    * The EL0/EL1 pointer bits used by a pointer authentication code.
->    * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
-> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-> index c9aeddef1044..468ba2f26f74 100644
-> --- a/drivers/misc/lkdtm/cfi.c
-> +++ b/drivers/misc/lkdtm/cfi.c
-> @@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
->   	pr_err("FAIL: survived mismatched prototype function call!\n");
->   	pr_expected_config(CONFIG_CFI_CLANG);
->   }
-> +
-> +#ifdef CONFIG_ARM64
-> +/*
-> + * This function is used to modify its return address. The PAC needs to be turned
-> + * off here to ensure that the modification of the return address will not be blocked.
-> + */
-> +static noinline __no_ptrauth
-> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +
-> +/* Function with __noscs attribute attempts to modify its return address. */
-> +static noinline __no_ptrauth __noscs
-> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +#else
-> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +#endif
-> +
-> +static volatile unsigned int force_label;
-> +
-> +/*
-> + * This first checks whether a function with the __noscs attribute under
-> + * the current platform can directly modify its return address, and if so,
-> + * checks whether scs takes effect.
-> + */
-> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
-> +{
-> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
-> +
-> +	if (force_label && (force_label < sizeof(array))) {
-> +		/*
-> +		 * Call them with "NULL" first to avoid
-> +		 * arguments being treated as constants in -02.
-> +		 */
-> +		lkdtm_noscs_set_lr(NULL, NULL);
-> +		lkdtm_scs_set_lr(NULL, NULL);
-> +		goto *array[force_label];
-> +	}
-> +
-> +	/* Keep labels in scope to avoid compiler warnings. */
-> +	do {
-> +		/* Verify the "normal" condition of LR corruption working. */
-> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
-> +
-> +unexpected:
-> +		/*
-> +		 * If lr cannot be modified, the following check is meaningless,
-> +		 * returns directly.
-> +		 */
-> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> +		break;
-> +
-> +expected:
-> +		pr_info("ok: lr corruption redirected without scs.\n");
-> +
-> +		/* Verify that SCS is in effect. */
-> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
-> +
-> +good_scs:
-> +		pr_info("ok: scs takes effect.\n");
-> +		break;
-> +
-> +bad_scs:
-> +		pr_err("FAIL: return address rewritten!\n");
-> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> +	} while (0);
-> +}
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index f69b964b9952..7af7268b82e4 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
->   	CRASHTYPE(USERCOPY_KERNEL),
->   	CRASHTYPE(STACKLEAK_ERASING),
->   	CRASHTYPE(CFI_FORWARD_PROTO),
-> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
->   	CRASHTYPE(FORTIFIED_OBJECT),
->   	CRASHTYPE(FORTIFIED_SUBOBJECT),
->   	CRASHTYPE(FORTIFIED_STRSCPY),
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index d6137c70ebbe..a66fba949ab5 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
->   
->   /* cfi.c */
->   void lkdtm_CFI_FORWARD_PROTO(void);
-> +void lkdtm_CFI_BACKWARD_SHADOW(void);
->   
->   /* fortify.c */
->   void lkdtm_FORTIFIED_OBJECT(void);
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index 3c4de9b6c6e3..2db37db36651 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -68,3 +68,4 @@
->   
->   #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->   #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
-> +#define __no_optimize	__attribute__((optnone))
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index deff5b308470..28d1b0ec6656 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -162,3 +162,5 @@
->   #if GCC_VERSION < 90100
->   #undef __alloc_size__
->   #endif
-> +
-> +#define __no_optimize	__attribute__((optimize("-O0")))
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 3c1795fdb568..f5ad83f7ea2f 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -257,6 +257,10 @@ struct ftrace_likely_data {
->   # define __nocfi
->   #endif
->   
-> +#ifndef __no_ptrauth
-> +# define __no_ptrauth
-> +#endif
-> +
->   #ifndef __cficanonical
->   # define __cficanonical
->   #endif
-> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> index 6b36b7f5dcf9..12df67a3b419 100644
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
->   USERCOPY_KERNEL
->   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
->   CFI_FORWARD_PROTO
-> +CFI_BACKWARD_SHADOW ok: scs takes effect
->   FORTIFIED_STRSCPY
->   FORTIFIED_OBJECT
->   FORTIFIED_SUBOBJECT
+> # cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_open/format
+> name: sys_enter_open
+> ID: 613
+> format:
+>          field:unsigned short common_type;       offset:0;
+> size:2; signed:0;
+>          field:unsigned char common_flags;       offset:2;
+> size:1; signed:0;
+>          field:unsigned char common_preempt_count;       offset:3;
+>   size:1; signed:0;
+>          field:int common_pid;   offset:4;       size:4; signed:1;
+> 
+>          field:int __syscall_nr; offset:8;       size:4; signed:1;
+>          field:const char * filename;    offset:16;      size:8; signed:0;
+>          field:int flags;        offset:24;      size:8; signed:0;
+>          field:umode_t mode;     offset:32;      size:8; signed:0;
+> 
+> This layout doesn't correspond either to before or after state of
+> syscalls_enter_open_args. Not sure what's going on, but it doesn't
+> seem that struct syscalls_enter_open_args is correct anyways.
+> 
+
+sys_enter_open is not enabled in my system somehow and i haven't figured 
+out why, then i used sys_enter_openat, whose format is:
+
+name: sys_enter_openat
+ID: 647
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
+
+	field:int __syscall_nr;	offset:8;	size:4;	signed:1;
+	field:int dfd;	offset:16;	size:8;	signed:0;
+	field:const char * filename;	offset:24;	size:8;	signed:0;
+	field:int flags;	offset:32;	size:8;	signed:0;
+	field:umode_t mode;	offset:40;	size:8;	signed:0;
+
+print fmt: "dfd: 0x%08lx, filename: 0x%08lx, flags: 0x%08lx, mode: 
+0x%08lx", ((unsigned long)(REC->dfd)), ((unsigned long)(REC->filename)), 
+((unsigned long)(REC->flags)), ((unsigned long)(REC->mode))
+
+I think in this case syscalls_enter_open_args is not applicable for 
+sys_enter_openat, how about we introduce a new struct specific for 
+sys_enter_openat with dfd in it?
+
+/Song
+
+> 
+>> --
+>> 2.25.1
+>>
+> 

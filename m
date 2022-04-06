@@ -2,178 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406AC4F620C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C769C4F621E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiDFOki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S234983AbiDFOlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235019AbiDFOkb (ORCPT
+        with ESMTP id S234981AbiDFOlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:40:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2324C458D17
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649242999; x=1680778999;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZgeY5au0/JYbpMr1ByPbrAcDmwZzKH4hE93co6HLIk4=;
-  b=Wjx+M5b7XH6ENZc7yg32fquctLHo7NY7fn570Ato6av34It3NIAWyrvT
-   ARBdjwjbEv6j14NGe5RuBtmuouLMuLfSMn8+kqJYcG0By8RKSjchrqmGq
-   Azszwj8YTNOsTonee84mHtLeDt2eS2ZaZM8L9OoSdhmFaY6SrGC4jWx2I
-   4riw5ew4S99QW2iZtFlco7X4Z6N715Ru/kQqWJZykUXikQQR8c1+qgeX0
-   x4ggShlSWKy3SS+PDgSx2PKIhvCp6PLZw2GMtmogWgYwCz+j8EQRdEIFs
-   KW+gCg5JhHCfcrKnaf7///X60uKmyQl8VguY8m6J8U8Te7eRTT8R2Vmny
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260714140"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="260714140"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:03:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="570465683"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.82]) ([10.254.215.82])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:03:14 -0700
-Message-ID: <a5542ef5-bacc-f527-0295-ffdedefcbdd9@linux.intel.com>
-Date:   Wed, 6 Apr 2022 19:03:12 +0800
+        Wed, 6 Apr 2022 10:41:07 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D90730766A;
+        Wed,  6 Apr 2022 04:06:31 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id yy13so3531180ejb.2;
+        Wed, 06 Apr 2022 04:06:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N2THVurhsccxKkF2HWhrDY2pkiMynqfdfvLsobfM+Yo=;
+        b=h37FkggXgRe/PZc/HrlLcRdGWom2nmcXS9h4nOplt/F8pSHnJVXdcofQuvA4W8PrW3
+         Rz5ZsP8o8035FWp5blHx9zoE6hljZRyfieDAAiNsET4R2iaRaHW2eyrNt9WtSqwbgL8F
+         iYqrgRwRY1vzcjJnz5lPttSwxfWWSmhGlT+0g5eVMuwjdCPnlAhQmFLcTnFNQ1YeqH26
+         vdg5Cc8OzVhICFQJhiIwDrsyD77x6sIF9L5OY1kmP8PmjQjDVnew+tJQoW3CI4J3wF+j
+         wgfWgsMGwv+/1nzku5TtJIZTqO1rPLqk/onMv0d/E33SizM5v+82ixJxVT0z1dxUzQ6Q
+         M4UA==
+X-Gm-Message-State: AOAM530MTGo15zq5d/gcgASfRgXZq3ZYPnOUhLOy1Rcr+Vu8WxDBMh6Q
+        D2QyxJ3aqCYRVJXHbFSlhJCxFNi1elI=
+X-Google-Smtp-Source: ABdhPJxXISf0CaAZeKMZm4PCEOg+znZcmcAigb+3y0I2v8/gVHE5FOEiAQ0D4VFoaP2rJ8ypaf4gyg==
+X-Received: by 2002:a17:907:3e94:b0:6d1:d64e:3141 with SMTP id hs20-20020a1709073e9400b006d1d64e3141mr7510497ejc.213.1649243189374;
+        Wed, 06 Apr 2022 04:06:29 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id g8-20020a17090670c800b006e49b0641ebsm6415423ejk.195.2022.04.06.04.06.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 04:06:28 -0700 (PDT)
+Message-ID: <47a0164e-c8b7-8418-c965-3d12294553f5@kernel.org>
+Date:   Wed, 6 Apr 2022 13:06:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com,
-        "Alex Williamson (alex.williamson@redhat.com)" 
-        <alex.williamson@redhat.com>, "Raj, Ashok" <ashok.raj@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
+Subject: Re: [PATCH] tty: Fix a possible resource leak in icom_probe
 Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-3-baolu.lu@linux.intel.com>
- <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220329114259.GB1716663@nvidia.com>
- <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220330115820.GE1716663@nvidia.com>
- <BN9PR11MB527691E38BAC4F89FB17BDB98C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220330143008.GB2111031@nvidia.com>
- <BL1PR11MB52718E663EF48C45D97FEEF38CE39@BL1PR11MB5271.namprd11.prod.outlook.com>
- <821dc298-47fb-6d06-ba75-de5d62a97b7a@linux.intel.com>
- <BN9PR11MB527646AB4F3FE8E9F97ECB8D8CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB527646AB4F3FE8E9F97ECB8D8CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
+To:     Huang Guobin <huangguobin4@huawei.com>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220331091005.3290753-1-huangguobin4@huawei.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220331091005.3290753-1-huangguobin4@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/6 18:44, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Wednesday, April 6, 2022 6:02 PM
->>
->> Hi Kevin,
->>
->> On 2022/4/2 15:12, Tian, Kevin wrote:
->>>>>> Add a flag to the group that positively indicates the group can never
->>>>>> have more than one member, even after hot plug. eg because it is
->>>>>> impossible due to ACS, or lack of bridges, and so on.
->>>>> OK, I see your point. It essentially refers to a singleton group which
->>>>> is immutable to hotplug.
->>>> Yes, known at creation time, not retroactively enforced because
->>>> someone used SVA
->>>>
->>> We may check following conditions to set the immutable flag when
->>> a new group is created for a device in pci_device_group():
->>>
->>> 1) ACS is enabled in the upstream path of the device;
->>> 2) the device is single function or ACS is enabled on a multi-function device;
->>> 3) the device type is PCI_EXP_TYPE_ENDPOINT (thus no hotplug);
->>> 4) no 'dma aliasing' on this device;
->>>
->>> The last one is a bit conservative as it also precludes a device which aliasing
->>> dma due to quirks from being treated as a singleton group. But doing so
->>> saves the effort on trying to separate different aliasing scenarios as defined
->>> in pci_for_each_dma_alias(). Probably we can go this way as the first step.
->>>
->>> Once the flag is set on a group no other event can change it. If a new
->>> identified device hits an existing singleton group in pci_device_group()
->>> then it's a bug.
->>
->> How about below implementation?
->>
->> /* callback for pci_for_each_dma_alias() */
->> static int has_pci_alias(struct pci_dev *pdev, u16 alias, void *opaque)
->> {
->> 	return -EEXIST;
->> }
->>
->> static bool pci_dev_is_immutably_isolated(struct pci_dev *pdev)
->> {
->> 	/* Skip bridges. */
->> 	if (pci_is_bridge(pdev))
->> 		return false;
->>
->> 	/* Either connect to root bridge or the ACS-enabled bridge. */
->> 	if (!pci_is_root_bus(pdev->bus) &&
->> 	    !pci_acs_enabled(pdev->bus->self, REQ_ACS_FLAGS))
->> 		return false;
+On 31. 03. 22, 11:10, Huang Guobin wrote:
+> When pci_read_config_dword failed, call pci_release_regions() and
+> pci_disable_device() to recycle the resource previously allocated.
+
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+
+
+> Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
+> ---
+>   drivers/tty/serial/icom.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> it's not sufficient to just check the non-root bridge itself. This needs to
-> cover the entire path from the bridge to the root port, as pci_device_group()
-> does.
+> diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+> index 03a2fe9f4c9a..02b375ba2f07 100644
+> --- a/drivers/tty/serial/icom.c
+> +++ b/drivers/tty/serial/icom.c
+> @@ -1501,7 +1501,7 @@ static int icom_probe(struct pci_dev *dev,
+>   	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
+>   	if (retval) {
+>   		dev_err(&dev->dev, "PCI Config read FAILED\n");
+> -		return retval;
+> +		goto probe_exit0;
+>   	}
+>   
+>   	pci_write_config_dword(dev, PCI_COMMAND,
 
-Yes! You are right.
 
-> 
->>
->> 	/* ACS is required for MFD. */
->> 	if (pdev->multifunction && !pci_acs_enabled(pdev, REQ_ACS_FLAGS))
->> 		return false;
-> 
-> Above two checks be replaced by a simple check as below:
-> 
-> 	if (!pci_acs_path_enabled(pdev, NULL, REQ_ACS_FLAGS))
-> 		return false;
-
-If !pdev->multifunction, do we still need to start from the device
-itself? ACS is only for MFDs and bridges, do I understand it right?
-Do we need to consider the SRIOV case?
-
-> 
->>
->> 	/* Make sure no PCI alias. */
->> 	if (pci_for_each_dma_alias(pdev, has_pci_alias, NULL))
->> 		return false;
->>
->> 	return true;
->> }
->>
->> I didn't get why do we need to check the PCI_EXP_TYPE_ENDPOINT device
->> type. Can you please elaborate a bit more?
->>
-> 
-> I didn't know there is a pci_is_bridge() facility thus be conservative
-> to restrict it to only endpoint device. If checking pci_is_bridge() alone
-> excludes any hotplug possibility, then it's definitely better.
-
-Okay! Thanks!
-
-> Thanks
-> Kevin
-
-Best regards,
-baolu
+-- 
+js
+suse labs

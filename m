@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAF54F636B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0593F4F636D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235812AbiDFP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S236053AbiDFP06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236046AbiDFP0D (ORCPT
+        with ESMTP id S236090AbiDFP0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:26:03 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD794E81FB;
-        Wed,  6 Apr 2022 05:24:31 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so1608319otj.1;
-        Wed, 06 Apr 2022 05:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=encaLqHcBH6foBnrbFxZ2i6K7G7Yn7crS2vxrpfT+uY=;
-        b=I/dd6AWAR8pHJ3oZYLJYf9SClhq/KmGq7qylijYmLA77gSBEBddKrBVVTi2VqIRPv3
-         qTAnMP4PLty3za3QnwGGwZ5RgC/oqqR1YuBuz6zC0Fd1/F087GI3eu2ybA3hvB/aT4wB
-         M/ui8Q+KyKbLliO4U4zum9KYqJxS+75ZNtz/Tpn+rb9EloOLFnzJd5Hi/UwINV3Ssqfn
-         wPYuSrwJ7YwG4myQHQlxIcCD9pObfuzwnDYZjloGVwE789CFPHEwyOA4yGeVNEuZOCte
-         m87yfGICIk8v8X53GJg+0ZvbBwCDBTiepCniNrij9+GpwPh/1Z9E5s8kGx6RoBoT/gV2
-         veOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=encaLqHcBH6foBnrbFxZ2i6K7G7Yn7crS2vxrpfT+uY=;
-        b=nk/k83B1WrOMdleKpt/vv42I/dVCHl2x7S6b4YG4+7WkN64H0jFSCNwNIL7QWIAMlK
-         YyRFK0vd4DFAVRvM8uTKTpstUD+HaNqRf3IYViMggxiiEEWJ/V/VYfFwB1Fh2Q18H1rA
-         eT+uBO2OiPcd6kyiUQwXZlZgtopyiKCsbaO0W260PZR5KK9KFuusA4tvLhw7ry9uWlK9
-         +2m2SB/3RA+jMoBQU0Cj5NDdtL8b+EiT8HNdKsCK10tiXP/JXFh225B8eyrIIs2FGV1t
-         AEJDx1VUglmYNuV5C7Xuk+eHKj7v1ko2cN0fU/BfJiCP11iS/qmVTctwYbWL1dFS6iA+
-         B3Fw==
-X-Gm-Message-State: AOAM53141DBhmoUzymqv5HCH71Nvd8db91QMGf6elxm9aWqWoqhMYAcO
-        VuHDvp8wtoI0IGxZKbPPtYc=
-X-Google-Smtp-Source: ABdhPJzfuUCYVbipdZsd9M6/L296AWUeysgoZNl5fvgy8K8+GU78LuJDiWcSmJzpnPLjDGm4lsi0lw==
-X-Received: by 2002:a9d:1b68:0:b0:5c9:5da1:3752 with SMTP id l95-20020a9d1b68000000b005c95da13752mr2811618otl.354.1649247871210;
-        Wed, 06 Apr 2022 05:24:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm6033772oov.3.2022.04.06.05.24.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 05:24:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <18719038-4eef-4792-e961-6550bb9f0d55@roeck-us.net>
-Date:   Wed, 6 Apr 2022 05:24:29 -0700
+        Wed, 6 Apr 2022 11:26:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5775F90B1;
+        Wed,  6 Apr 2022 05:24:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 186BAB8232A;
+        Wed,  6 Apr 2022 12:24:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4107FC385A7;
+        Wed,  6 Apr 2022 12:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649247890;
+        bh=VXAqwleH/9FZW2pL8a52fjF/WAWTJuJF9KN83znJwp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HxfZK3niCIpttqDTvrn+MhcnImqotYL7Z8+P8+ovfuMJxUiznMKGrln66zonahKVE
+         dXkrKrly7b3rYB8L7Skwd9NRQr9oB9V4mqugE466H0xmS4nkwNPVr8CDbmFRO8/Zpu
+         QQpru43kcyWvP97u/p0e1+sGS9ufH/5kMlt0HO1g=
+Date:   Wed, 6 Apr 2022 14:24:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
+Message-ID: <Yk2GkNTTc3XYDU2X@kroah.com>
+References: <20220405070354.155796697@linuxfoundation.org>
+ <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmon: (tmp401) Support extended temperature range
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Camel Guo <camel.guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kernel@axis.com, Camel Guo <camelg@axis.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220406092901.408861-1-camel.guo@axis.com>
- <c2a1776d-1499-8b84-15cd-b09908ebd0e5@roeck-us.net>
-In-Reply-To: <c2a1776d-1499-8b84-15cd-b09908ebd0e5@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 05:12, Guenter Roeck wrote:
-> On 4/6/22 02:29, Camel Guo wrote:
->> From: Camel Guo <camelg@axis.com>
->>
->> This patch only applies to tmp431 and devicetree configuration.
->>
->> Signed-off-by: Camel Guo <camelg@axis.com>
->> ---
->>   Documentation/hwmon/tmp401.rst | 13 +++++++++++++
->>   drivers/hwmon/tmp401.c         |  5 +++++
->>   2 files changed, 18 insertions(+)
->>
->> diff --git a/Documentation/hwmon/tmp401.rst b/Documentation/hwmon/tmp401.rst
->> index 3aacf3d3bdf3..d12e9c9ba40f 100644
->> --- a/Documentation/hwmon/tmp401.rst
->> +++ b/Documentation/hwmon/tmp401.rst
->> @@ -78,3 +78,16 @@ some additional features.
->>   TMP432 is compatible with TMP401 and TMP431. It supports two external
->>   temperature sensors.
->> +
->> +Device tree
->> +-----------
->> +TMP431 has support for the device tree parameter "extended-range" which enables
->> +the extended range in the chip.
->> +
+On Tue, Apr 05, 2022 at 05:03:24PM -0600, Shuah Khan wrote:
+> On 4/5/22 1:15 AM, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.16.19 release.
+> > There are 1017 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.19-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> Build failed on my system. The following is the problem commit. There
+> are no changes to the config between 5.16.18 and this build.
 > 
-> There is no practical reason to limit support for this to TMP431,
-> nor does the actual code make such a distinction.
-> 
->> +Example:
->> +
->> +main-temp@4c {
->> +  compatible = "ti,tmp431";
->> +  reg = <0x4c>;
->> +  extended-range;
->> +};
-> 
-> This is not an acceptable way to describe devicetree properties.
-> You would have to write a bindings document
-> (Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml)
-> and describe the property there.
-> 
+> Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+>     ASoC: SOF: Intel: hda: Remove link assignment limitation
 
-... and that should be modeled after ti,tmp421.yaml and also support
-other configuration parameters, specifically beta compensation and
-n-factor correction.
+Now dropped from 5.10, 5.15, and 5.16 queues, thanks!
 
-Guenter
+greg k-h

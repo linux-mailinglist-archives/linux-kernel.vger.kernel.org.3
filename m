@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A394F5AC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FC24F5A9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245015AbiDFKA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        id S238598AbiDFKBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354870AbiDFJ7Y (ORCPT
+        with ESMTP id S244309AbiDFKAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 05:59:24 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE201E8151
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649226472; x=1680762472;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2uOoFeMNCRJkfiR9nVln0eJV1lFjC+Kyk84cwTYw7pA=;
-  b=cX58j+Hlhe7/TUlWVsyGRl1bquneOYckJXcI+wXyKEHt8sMVQ23iqS3Z
-   0aT1O2saaK1br1/ZD6OgiHRAb7JrVm5MiwIFe4e6xB27rJ+Smx3QoU1DX
-   kpnwz+AYqLZGnXG9xUO3JyPEYG9894rBqdswkEQF/Pjv9MR74668ky8FQ
-   Iyy9xrOUpBHpjcdwl4cMkNpAI/dyF/jV0qk7YUBYuL1euBkUOie79mHY3
-   5QFU2m8ILz/GMwEpnvcasdPqhvRGN5EOU+cYZUdygbnHkO/yksZgkTvzd
-   L38gZUsC5eL6WaXxypQcdJexYG7/aO206T1jL4BFNMFJuUs4vA/Wem3q8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261139060"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="261139060"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 23:27:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="524328276"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 23:27:50 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbz8w-00048L-2I;
-        Wed, 06 Apr 2022 06:27:50 +0000
-Date:   Wed, 6 Apr 2022 14:27:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:robh/linux/dt/pop-pci-nodes 2/2]
- arm-linux-gnueabi-ld: drivers/pci/of.c:97: undefined reference to
- `of_attach_node'
-Message-ID: <202204061402.HV1VNYZe-lkp@intel.com>
+        Wed, 6 Apr 2022 06:00:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8293A4B3386
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649226529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l/O6WJnzHeES5MzV1iHizq7+45V776U6yPTcrafzRys=;
+        b=F3MBjAZxdmG7U0BXiXbyjSLxdakTuLOO8ABuOd5kNDIdCC6GQkvxfyfmuF2nfA+7u9D0KO
+        SqEsgXDzGitHRlNZVjfmq/dPX7qgYeHcrLDPPz9FLeRkw1YaOGyeXnGsTzJXBWBHLSVhqH
+        k18newDT0wFNLzheKFK/DhFtsz+L8GA=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-fJWpoN9aN5yisBIgDISQmA-1; Wed, 06 Apr 2022 02:28:48 -0400
+X-MC-Unique: fJWpoN9aN5yisBIgDISQmA-1
+Received: by mail-pj1-f70.google.com with SMTP id rm11-20020a17090b3ecb00b001c713925e58so3187859pjb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:28:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=l/O6WJnzHeES5MzV1iHizq7+45V776U6yPTcrafzRys=;
+        b=tU3cSg+AH5a3h/CbnfNMwseEOJuikRtNKJdWZGe+s4MRoVGj8luEQfhwMKcmMhKhML
+         tCcaXFj6Q6fvt9aQD1MnvmiFNF9LW/I20t/c68vLVtXcSfgUt0FuTsiyCZRKIkAR2XE2
+         vwhhSJcohiA3kk8u2qKLC80h3mBLZQwviB55BDnnjWgmmI/OMrSRWqzc/guaX749iumV
+         yISrKlrut+iLCjNNeD+8ZVvfdkWjfPmyX4tGBc3/mjmbbP/H9TzjTtoorfNMomG1vaKN
+         vn8yv98F6vc5hbfhr0dT6nMsP103XzFg9ngiDL0zvPWNDzX6Uht4iz3xIs23CDTSxB5Z
+         0qXw==
+X-Gm-Message-State: AOAM530JDjVEUYt0Uyf4uLP8hZukd2Gh+G7NcgH7Fj6K1YITBLwp+2Ux
+        n0ROy0VCisgZQe6AYnl8LuARoBsxjLjzSpgDyS9+s5nl0op8mRAgjmCEowOgUxNmDC++V4nvWy+
+        R4skGszjAiMsdMTKE6GDxRMEIqBwnmN6m2A3+VkGqt9R13K3F8fRTNlNv57LRgnXd7umUEfTyCA
+        ==
+X-Received: by 2002:a17:903:1210:b0:151:fa59:95ef with SMTP id l16-20020a170903121000b00151fa5995efmr7366395plh.57.1649226526833;
+        Tue, 05 Apr 2022 23:28:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxZvWs4H8FX933o5QmfCgBqAZoT7G4kIpX1kSIZuQfv64mCK+4K29iDcIHPX48Uz7K6jAic+g==
+X-Received: by 2002:a17:903:1210:b0:151:fa59:95ef with SMTP id l16-20020a170903121000b00151fa5995efmr7366376plh.57.1649226526509;
+        Tue, 05 Apr 2022 23:28:46 -0700 (PDT)
+Received: from [10.72.13.31] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id f15-20020a056a001acf00b004fb2ad05521sm17845124pfv.215.2022.04.05.23.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 23:28:45 -0700 (PDT)
+Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
+ inodes
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220401133243.1075-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
+Date:   Wed, 6 Apr 2022 14:28:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220401133243.1075-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block robh/linux/dt/pop-pci-nodes
-head:   b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-commit: b9198a9525a97d05b0bb2a7282fede92d7d2d93d [2/2] PCI: Create DT nodes if they don't exist
-config: arm-buildonly-randconfig-r003-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061402.HV1VNYZe-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block robh/linux/dt/pop-pci-nodes
-        git checkout b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/1/22 9:32 PM, Luís Henriques wrote:
+> When doing DIO on an encrypted node, we need to invalidate the page cache in
+> the range being written to, otherwise the cache will include invalid data.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/file.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> Changes since v1:
+> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>
+> Note: I'm not really sure this last change is required, it doesn't really
+> affect generic/647 result, but seems to be the most correct.
+>
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 5072570c2203..b2743c342305 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	ceph_fscache_invalidate(inode, false);
+> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+>   	ret = invalidate_inode_pages2_range(inode->i_mapping,
+>   					    pos >> PAGE_SHIFT,
+>   					    (pos + count - 1) >> PAGE_SHIFT);
 
-All errors (new ones prefixed by >>):
+The above has already invalidated the pages, why doesn't it work ?
 
-   kernel/softirq.o: in function `cpuhp_setup_state_nocalls':
-   include/linux/cpuhotplug.h:324:(.init.text+0x28): relocation truncated to fit: R_ARM_PC24 against symbol `__cpuhp_setup_state' defined in .text section in kernel/cpu.o
-   kernel/softirq.o: in function `spawn_ksoftirqd':
-   kernel/softirq.c:970:(.init.text+0x30): relocation truncated to fit: R_ARM_PC24 against symbol `smpboot_register_percpu_thread' defined in .text section in kernel/smpboot.o
-   kernel/softirq.o: in function `_sub_I_65535_1':
-   softirq.c:(.text.startup+0x14): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_register_globals' defined in .text section in mm/kasan/generic.o
-   init/main.o: in function `debug_kernel':
-   init/main.c:236:(.init.text+0x60): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_store4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.o: in function `quiet_kernel':
-   init/main.c:242:(.init.text+0xb8): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_store4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.o: in function `init_setup':
-   init/main.c:586:(.init.text+0x134): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_store4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.o: in function `rdinit_setup':
-   init/main.c:598:(.init.text+0x1a4): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_store4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.o: in function `do_early_param':
-   init/main.c:736:(.init.text+0x268): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_load4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.c:736:(.init.text+0x2c0): relocation truncated to fit: R_ARM_PC24 against symbol `__asan_report_load4_noabort' defined in .text section in mm/kasan/report_generic.o
-   init/main.c:736:(.init.text+0x2cc): relocation truncated to fit: R_ARM_PC24 against symbol `parameq' defined in .text section in kernel/params.o
-   init/main.c:740:(.init.text+0x308): additional relocation overflows omitted from the output
-   arm-linux-gnueabi-ld: drivers/pci/of.o: in function `make_dev_node':
-   drivers/pci/of.c:84: undefined reference to `of_attach_node'
-   arm-linux-gnueabi-ld: drivers/pci/of.o: in function `make_bus_node':
-   drivers/pci/of.c:97: undefined reference to `of_attach_node'
->> arm-linux-gnueabi-ld: drivers/pci/of.c:97: undefined reference to `of_attach_node'
-   pahole: .tmp_vmlinux.btf: No such file or directory
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+-- Xiubo
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> @@ -1895,6 +1895,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   		req->r_inode = inode;
+>   		req->r_mtime = mtime;
+>   
+> +		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT)) {
+> +			ret = invalidate_inode_pages2_range(
+> +				inode->i_mapping,
+> +				write_pos >> PAGE_SHIFT,
+> +				(write_pos + write_len - 1) >> PAGE_SHIFT);
+> +			if (ret < 0)
+> +				dout("invalidate_inode_pages2_range returned %d\n", ret);
+> +		}
+> +
+>   		/* Set up the assertion */
+>   		if (rmw) {
+>   			/*
+>
+

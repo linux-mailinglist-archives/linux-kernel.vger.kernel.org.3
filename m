@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2FF4F62E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6134F6302
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbiDFPQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S235783AbiDFPL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbiDFPQb (ORCPT
+        with ESMTP id S235534AbiDFPLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:16:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18115267AEA;
-        Wed,  6 Apr 2022 05:16:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5629BCE22F5;
-        Wed,  6 Apr 2022 12:09:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4FFC385A1;
-        Wed,  6 Apr 2022 12:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649246947;
-        bh=ksBAr8NMYRRobAattf5M1b7e3FecoUcE07XRZT2Dck0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f6+BNh3hZkJcNrIACGR//OU57LJSFiyPwSvuX2EPOpUAHfD0lLkCv5GiUSlyfVHmi
-         /Ll2oo5Ym9IVrwqyhpexjl4bAu+2SpYCcYzfTjAhripG1XqB8DA4SnvHTN95JtulHa
-         npX0tchFxvbu7aph/DjGTUNYI75p5HEY3G6LgjsI=
-Date:   Wed, 6 Apr 2022 14:09:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     dann frazier <dann.frazier@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
-Subject: Re: [PATCH 5.16 0199/1017] PCI: xgene: Revert "PCI: xgene: Fix IB
- window setup"
-Message-ID: <Yk2C4cZDtlVDDWqG@kroah.com>
-References: <20220405070354.155796697@linuxfoundation.org>
- <20220405070400.156176848@linuxfoundation.org>
- <YkxjbVp3W2LeVIeL@xps13.dannf>
- <Ykx1o2PbNzGlp1ds@kroah.com>
- <CALdTtnv2w5d0N4ez7JTsxaWMa6v2c5j9-guVjkUq33=UDNFMGA@mail.gmail.com>
+        Wed, 6 Apr 2022 11:11:19 -0400
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D963B19E3A9
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:11:07 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so2537248pjm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 05:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VxvVdkfuigSD3d66lzCfSLqAWuJHzoxORHDZPeqJF20=;
+        b=gk7I0dlOY5WPCoG3b9ssw9G/zUZAVZVhKwSj1GQpWxKfK4U/SDf5qRArFLruvhHAG4
+         4P1l76QSu5NHDh9jGLhDyx1w35dD+1nqtkDyymhGzVwPNqvb8PxF9M9xpcaosAJI11N0
+         ypXPXx5KRUjx49Da7bbuyh0RROCxksK7lvw8TELhxxuV3kT+1ntAHCT5gcV3h1I7tJwM
+         ChrTm6lFfbaWqxVJjoo+pazTLkvB1CA6tm/OeELa5I5BaZdB9jbeefQAbPfs/FqLY/Fp
+         nhV0qRCEHZScFi3sqXQhLIbe6K0JnF8xY7aLMbcNL+Qu021bl86o6ln0jXdBUkPkvB0K
+         Z7cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VxvVdkfuigSD3d66lzCfSLqAWuJHzoxORHDZPeqJF20=;
+        b=dv2cDVqGsrcdpUThobHjC+9UpjTFuZTOltanR+LDohJdNWD4zZzJVHVIMr1Q2qX/nn
+         u2TklEnWTmgWDTp8Q8yna84A7f3s6oUb/HWv+fg0Or2cM7R/lJvpNS4tpYG5ZNDa8MV+
+         y5TuoQsD028zbB4uMpe8raz4pzda77eAW3x1nafqhi9X1lTPlou7juP/DHUem21FaFOE
+         rhJ8MRahDZRYo1iJ+vx1KUmS/3xl5gLrfCK0gJJ3OsOLZhN9PV3sfL5Q7+ZaJqBTURgJ
+         O0I6UUJewuKfwcWS9RDzMhxvpEDTkeUKvkJ5uZ0RZyRSlMEYtZ8eIUGHkp/uqRhP7Lt5
+         5UYQ==
+X-Gm-Message-State: AOAM533Bbf03wpT70ZzB4l8j46o3E6Llw3pXTpHAdLbyabea+vZPpCxV
+        3G8gktX3U2a0dhg6xZW/DwM=
+X-Google-Smtp-Source: ABdhPJzPv/0s/hoXyGUY/9nqEVuptmFoaFod8nip9pDQC/6pHYBrhMCyczDafCZIp0OrrjUqAMCzgw==
+X-Received: by 2002:a17:902:7296:b0:151:62b1:e2b0 with SMTP id d22-20020a170902729600b0015162b1e2b0mr8189883pll.165.1649246964817;
+        Wed, 06 Apr 2022 05:09:24 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a060800b001c7936791d1sm5417690pjj.7.2022.04.06.05.09.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 05:09:23 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 21:09:14 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>, roman.gushchin@linux.dev
+Subject: Re: [PATCH 01/10] mm/slab: Decouple ARCH_KMALLOC_MINALIGN from
+ ARCH_DMA_MINALIGN
+Message-ID: <Yk2C6jLR8BSeHRkm@hyeyoo>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-2-catalin.marinas@arm.com>
+ <YkzX1nM0Ca7apVBt@hyeyoo>
+ <CAK8P3a1K0=jwYEHVu=X7oAWk9dzaOYAdFsidwVRKCJVReSV3+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALdTtnv2w5d0N4ez7JTsxaWMa6v2c5j9-guVjkUq33=UDNFMGA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAK8P3a1K0=jwYEHVu=X7oAWk9dzaOYAdFsidwVRKCJVReSV3+g@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,60 +86,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 11:07:53AM -0600, dann frazier wrote:
-> On Tue, Apr 5, 2022 at 11:00 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+On Wed, Apr 06, 2022 at 09:29:19AM +0200, Arnd Bergmann wrote:
+> On Wed, Apr 6, 2022 at 1:59 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
 > >
-> > On Tue, Apr 05, 2022 at 09:42:37AM -0600, dann frazier wrote:
-> > > On Tue, Apr 05, 2022 at 09:18:32AM +0200, Greg Kroah-Hartman wrote:
-> > > > From: Marc Zyngier <maz@kernel.org>
-> > > >
-> > > > commit 825da4e9cec68713fbb02dc6f71fe1bf65fe8050 upstream.
-> > > >
-> > > > Commit c7a75d07827a ("PCI: xgene: Fix IB window setup") tried to
-> > > > fix the damages that 6dce5aa59e0b ("PCI: xgene: Use inbound resources
-> > > > for setup") caused, but actually didn't improve anything for some
-> > > > plarforms (at least Mustang and m400 are still broken).
-> > > >
-> > > > Given that 6dce5aa59e0b has been reverted, revert this patch as well,
-> > > > restoring the PCIe support on XGene to its pre-5.5, working state.
-> > > >
-> > > > Link: https://lore.kernel.org/r/YjN8pT5e6/8cRohQ@xps13.dannf
-> > > > Link: https://lore.kernel.org/r/20220321104843.949645-3-maz@kernel.org
-> > > > Fixes: c7a75d07827a ("PCI: xgene: Fix IB window setup")
-> > > > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > > > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > > Cc: stable@vger.kernel.org
-> > > > Cc: Rob Herring <robh@kernel.org>
-> > > > Cc: Toan Le <toan@os.amperecomputing.com>
-> > > > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > > Cc: Krzysztof Wilczyński <kw@linux.com>
-> > > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > > Cc: Stéphane Graber <stgraber@ubuntu.com>
-> > > > Cc: dann frazier <dann.frazier@canonical.com>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > >  drivers/pci/controller/pci-xgene.c |    2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > On Tue, Apr 05, 2022 at 02:57:49PM +0100, Catalin Marinas wrote:
+> > > In preparation for supporting a dynamic kmalloc() minimum alignment,
+> > > allow architectures to define ARCH_KMALLOC_MINALIGN independently of
+> > > ARCH_DMA_MINALIGN. In addition, always define ARCH_DMA_MINALIGN even if
+> > > an architecture does not override it.
 > > >
-> > > Hi Greg,
-> > >
-> > >   I don't think it makes sense to apply this to 5.10.y, 5.15.y &
-> > > 5.16.y w/o also applying a backport of 1874b6d7ab1, because without
-> > > that we will regress support for Stéphane's X-Gene2-based systems. The
-> > > backport of 1874b6d7ab1 was rejected for these trees because it doesn't
-> > > apply cleanly, but I've just submitted new versions that do.
 > >
-> > Where were those patches sent to?  I don't seem to see them on the
-> > stable list, did I miss them?
+> > [ +Cc slab maintainer/reviewers ]
+> >
+> > I get why you want to set minimum alignment of kmalloc() dynamically.
+> > That's because cache line size can be different and we cannot statically
+> > know that, right?
+> >
+> > But I don't get why you are trying to decouple ARCH_KMALLOC_MINALIGN
+> > from ARCH_DMA_MINALIGN. kmalloc'ed buffer is always supposed to be DMA-safe.
+> >
+> > I'm afraid this series may break some archs/drivers.
+> >
+> > in Documentation/dma-api-howto.rst:
+> > > 2) ARCH_DMA_MINALIGN
+> > >
+> > >   Architectures must ensure that kmalloc'ed buffer is
+> > >   DMA-safe. Drivers and subsystems depend on it. If an architecture
+> > >   isn't fully DMA-coherent (i.e. hardware doesn't ensure that data in
+> > >   the CPU cache is identical to data in main memory),
+> > >   ARCH_DMA_MINALIGN must be set so that the memory allocator
+> > >   makes sure that kmalloc'ed buffer doesn't share a cache line with
+> > >   the others. See arch/arm/include/asm/cache.h as an example.
+> > >
+> > >   Note that ARCH_DMA_MINALIGN is about DMA memory alignment
+> > >   constraints. You don't need to worry about the architecture data
+> > >   alignment constraints (e.g. the alignment constraints about 64-bit
+> > >   objects).
+> >
+> > If I'm missing something, please let me know :)
 > 
-> These are the message IDs:
-> <20220405142505.1268999-1-dann.frazier@canonical.com>
-> <20220405153419.1330755-1-dann.frazier@canonical.com>
+> It helps in two ways:
 > 
-> I've just bounced them directly to you as well. Thanks Greg!
+> - you can start with a relatively large hardcoded ARCH_DMA_MINALIGN
+>   of 128 or 256 bytes, depending on what the largest possible line size
+>   is for any machine you want to support, and then drop that down to
+>   32 or 64 bytes based on runtime detection. This should always be safe,
+>   and it means a very sizable chunk of wasted memory can be recovered.
+>
 
-Got them now, vger was being a bit slow due to the onslaught of patches
-I had sent it.
+I agree this part.
 
-greg k-h
+> - On systems that are fully cache coherent, there is no need to align
+>   kmallloc() allocations for DMA safety at all, on these, we can drop the
+>   size even below the cache line. This does not apply on most of the
+>   cheaper embedded or mobile SoCs, but it helps a lot on the machines
+>   you'd find in a data center.
+
+Now I get the point. Thank you for explanation!
+Going to review this series soon.
+
+> 
+>         Arnd
+
+-- 
+Thanks,
+Hyeonggon

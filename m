@@ -2,143 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4654F6107
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F984F6178
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbiDFOAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S234128AbiDFOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234172AbiDFOAU (ORCPT
+        with ESMTP id S234016AbiDFOBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:00:20 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD341F61A;
-        Wed,  6 Apr 2022 02:17:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d7z0i1CjSS/XWtsgtr2csk2AFpFApcL7mIMyYzmpCVPYjY4Vn1y6/ucPgR8flp/13xVLazvtGyIY39TL4XKxDpj+jQxvGy7M28iFCoGr3F33wXIGCxn1B3SX27GYcoUEgmuB5muydjp1C3n+k+vt8yRxscD8+D6lAsrsRs0VA2CY1tTn073dvW9T9pIlna4KCTnHSApe8F6wWwqC1WvWAppjWDcdj7cHsyLf0GcqnK+FoYsultTS/dqYPXR//N3r28AbHLMOOhgpOHTCsQmHRTIAVjXXbGUatT5KrBfUitT5qITVZmhnb8+deULDfyDzJtiUuCeKlfWUqmJkNe9MvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WzaTI8isN2L2nFbXn2wHNEiF9xB0iVzX4iHh8M+Sh3A=;
- b=gfPSdKC7plmR68x37B8lFWsZ7hm+aeSlRBHE2R9bon1xBnV4TKl2tmlOa3JETP+VJ1IbiZMF7bdZZjceUMHIqV5p9iRPmIDCW0aJizjNkrpv1oo1AfAEmJB7kwjvwNFf49Rbtn9lKvH3LrJR9DDMP71F8LbWux3wzJ4B9kC1vrEXOiTt36a2EkshHeRYvu8SpqTBtdREi6/61Q8/nbhgZIhsxad8pdLG3CTbfffP0SUDTv/B0jPAzG+ccYBqn1XQ8fG83CjMi7w38L7Hrv1EOHZTTmoZ42OM4uun0kyBREMEGQ8U+RN8/r67kfcjiolfABETAEI/eiOqeeK/k28Ugg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WzaTI8isN2L2nFbXn2wHNEiF9xB0iVzX4iHh8M+Sh3A=;
- b=hR1mT11m20Zh/AQYUXT2+MYkAE62oryQ1aO8lLIKffL8s4htMlaXhP1crqbMNT/xhWlSttUjlKw3s6K7Q2zmEFLE6nIg6kFuAuSM9+8KRF0Lc9pF1OILwylRuJUY2rV7ixSpsCJDcBGDK3BR4ZKOXeJxa3ohHZWlAWLCxKm8kjg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SEYPR06MB5255.apcprd06.prod.outlook.com (2603:1096:101:84::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 09:17:38 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::e468:c298:cfe5:84fc]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::e468:c298:cfe5:84fc%6]) with mapi id 15.20.5144.019; Wed, 6 Apr 2022
- 09:17:38 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH RESEND] net: ethernet: xilinx: use of_property_read_bool() instead of of_get_property
-Date:   Wed,  6 Apr 2022 02:17:26 -0700
-Message-Id: <1649236646-4257-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0201.apcprd02.prod.outlook.com
- (2603:1096:201:20::13) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        Wed, 6 Apr 2022 10:01:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1532414EE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:17:53 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYJlq3rpHzgYSy;
+        Wed,  6 Apr 2022 17:16:07 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 17:17:51 +0800
+Subject: Re: [PATCH] mm/mlock: remove unneeded start >= vma->vm_end check
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <hughd@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220314153223.53753-1-linmiaohe@huawei.com>
+ <Yi9qq9hVloDXcW4b@casper.infradead.org>
+ <c0ff39e2-27fc-170f-00f5-d5e9ab5a22cd@huawei.com>
+Message-ID: <58fcd181-cadb-1e61-fc18-9994b93bb1bc@huawei.com>
+Date:   Wed, 6 Apr 2022 17:17:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee40ddc8-630b-4a75-cb2a-08da17ae4b15
-X-MS-TrafficTypeDiagnostic: SEYPR06MB5255:EE_
-X-Microsoft-Antispam-PRVS: <SEYPR06MB52552919F281BEAEFF163769BDE79@SEYPR06MB5255.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wifTB6T+QW2VJpvia3LsWRAgX4txE5wYDc/MmFOL5pyhVvJ9E/9gYCvqWpmWpfu26TvIs2o4S/JnCq8hnUOo6tYOV3QPI1chxvThTN4f1jIOH9a9Syj499NBdc+SbYgML0TyCuqd3pV0G8ziUWfLtB+pAi/OCSVN3LV/tWCxq0dJL5kY2xKr4R2AfRMFW/TqrM1IAp1TLspk1098/V43TSE/semucv/AwwoH1aaznToUN9aJLa5Uu/MsA41+6E6+IBgMXD3JKi8YyKS90TqPjmM4VT5bBmZGBdlZtMVXjmMQ5sU44L6UPOJfR4IeKS29+DBweplGkCeCjxJ2KBRKkRGECTIeRbf1iJu7E6zOQXq1W2zgQX1k7Q8Vtuo5bEbO69J6ltevhs+endY5p+orO4lNhxDM+21vYBLo3jEjBUkdPgcUxi+aDJdSTSlVOuyoLO2ZzFpBJm9BV7h6pVwiB+lXtmNSNvqx9kCqRtAFNmTHbADa0RKur4qmC8mzZFdlFypDx54kaEKM7zyVllaFCUYKcnz8DnSzun22b7ojq3UMDOgjKuxYWBFtWbXbU2OMUp3u+mzBNjzCPSmOzc2NHBIUH/1gjsuc+C0icR4RfC8HJYwukqUUjQAzqLLWQPQUTkh9XD3mxAkNFEgB9xzhXlpWidKRz6m8SVxuS70ZcdTMD0xVLMWEmK0q56xWGSxFKuZh9xsKp8wBj+g9G/VWfg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6486002)(4744005)(83380400001)(6506007)(8676002)(508600001)(4326008)(66476007)(66946007)(66556008)(2906002)(86362001)(2616005)(38100700002)(8936002)(36756003)(186003)(107886003)(110136005)(38350700002)(316002)(26005)(6512007)(5660300002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MoTOxbUyoyVcQfa0nwGxDRL2IWwRvifUfEFwFx02WTrj7AtNtwoQMvz84xoU?=
- =?us-ascii?Q?yZ2j79chY4K8k9ikQ0U2p3J4bzPmyJfD70oiEZOIq8cL3QFqVhMxb4pPCjah?=
- =?us-ascii?Q?ayowruXYcbJ3rOXD2AiWxhrBrEeNrP6UkVxHpr7KKxEwu0qq3d/K0aaRpikF?=
- =?us-ascii?Q?5aGUQHW4Lx9YOW9CvW/PVihuS8+89PziH81p8Jk/Y1ARTfERDrARw9/Nw1to?=
- =?us-ascii?Q?9XQEOZK5keErpercBL7ANct5IZk+otFW5MR1GEuK6NiJgDXIY4v1cL4QRGak?=
- =?us-ascii?Q?Z4Td89ZQflYZlSvE9iKy75v1EuXrfVyfEULTJchDQUvmJu00ZKnK0ndiS/su?=
- =?us-ascii?Q?80DFLWESpRFYB2L+DxYUTyUSJHiuIoEaxV2hl7Fw5G0OBjV6e8yJJ2aIWeSf?=
- =?us-ascii?Q?cOODy7LzvOezqhEn0fwH2UTuJaAMf+Ze+WHLRVu28OaVT7lkpjX5BvIyW1P/?=
- =?us-ascii?Q?+U6NEHixiqgJjVnD4i+xgBi8iiO56I2F2Mk0FIPOCBLSmuXd3RlRphtpYrr/?=
- =?us-ascii?Q?GgziFwqsp7rxV1OgXlXw4iPIKqMuNHMYbXJQX717u9neV/29+BZ88KFs3FGb?=
- =?us-ascii?Q?E+My8CwoRu/L30sM5NoJXcg62qpGtIoq7L47R/a6d9DOU5tZcBLL4+HfxpdW?=
- =?us-ascii?Q?qfCDim3rXO6r+TX2qvXHDIHxeLVxIbDn/XE0mfcPhjo//Kn5gJYfYc6XfSjZ?=
- =?us-ascii?Q?v3M368PY1X2aFD0HcXWVQBnlxbQoNAekjXccz6/lZCHYxNihAP08W1cw0Yqx?=
- =?us-ascii?Q?KWBby0AK54g7UT8sEh2DQz3+ClJLQHpIp71Q20J6sywXxRRO39XZwoTvpN/g?=
- =?us-ascii?Q?vnJBtYFX6p+vbPPKgGtPzhOroPhrLo3gds0sJUxSuEkkW2NZPuEDX9oMjTyv?=
- =?us-ascii?Q?ZgbFKBCeMWuQei/+wzNP+jyDTFgLsQwMRxe08Gq7UEfImMhqs3hwHGeR6hlw?=
- =?us-ascii?Q?6Wcx3MhVcEOfR8O5bjftdeb1bJ8KXclSuirEP4uu5rHGgeAYKnC91EGGJu17?=
- =?us-ascii?Q?06GKYdivDk9lHgkCDiG7qbYXY7COe7hp9yvuiKRnqyVz7fDaQjmuFXo8pMvN?=
- =?us-ascii?Q?0LmI/rc/+1MwzWTDTiw6guODcc08p2QRErk/PjdwTCgKD8tTGdXc0Z4skdBm?=
- =?us-ascii?Q?R97MogYXRF5ByQVfGE/enGGOrpvIyc0Mvd9hF9izN3iCIH59vZW0RX52WCYS?=
- =?us-ascii?Q?n2Sq2vuarGrc6kDF3n5ZfPDiDIN9KIhHAve4OKnKVQ2qPznZyxLX9afYZ409?=
- =?us-ascii?Q?qcyQF/n2KkvLRgSCZHW9zpaKpv9PjXMHP52P20IgDUcFEDewjaQ9JXyLat/q?=
- =?us-ascii?Q?Y9U0w1VaKKKU22bAAjhLwiPTJjHAH/47F8R6f+L0TdqplamKav9oyTxTD1EY?=
- =?us-ascii?Q?4IWFm0hyChKgVxfqNkWpnQl5y6+3NWXLU8bUbyAwMD89MUTP787shxLg//65?=
- =?us-ascii?Q?A5KRx2EQZuIRbfk58vB77z/QJXvqgf/bLfeVs2SIf0AAKZW1P256R2wpEoTu?=
- =?us-ascii?Q?DHmlxCawnnMM1rNDuewgOONZ9Y21OXc5k6zNb0806TBYMuHtRHoThgWJihGb?=
- =?us-ascii?Q?Bdxr9Oe2B4jlx4Zgb2+BzcNdmM4Cqcy7s1y0Gqv5WbiBbZXIkJ6rfXh3gc0K?=
- =?us-ascii?Q?pVnAf6R1HT2qGYlI7UzROu2GStMl++91ULfrP8uG368XU2QVrF5Od7Hk2ewc?=
- =?us-ascii?Q?Fnxo+IbVbXoQed74T6L42qLLSbUi3GJgP/L5ZDxMDkDzDt+2jLVC+eEJ8sNZ?=
- =?us-ascii?Q?aAHZ2auB/w=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee40ddc8-630b-4a75-cb2a-08da17ae4b15
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 09:17:38.0626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8jKU6YOlUFVgwjVr/Nblj9AqK57XlBGfiDKQ7Dk5HHj0Bg4tK5Ky62uDF8eFZQmNkFaeHMsTo48saHnCvtjPpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5255
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c0ff39e2-27fc-170f-00f5-d5e9ab5a22cd@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+On 2022/3/15 20:30, Miaohe Lin wrote:
+> On 2022/3/15 0:17, Matthew Wilcox wrote:
+>> On Mon, Mar 14, 2022 at 11:32:23PM +0800, Miaohe Lin wrote:
+>>> If find_vma returns a vma, it must satisfies that start < vma->vm_end.
+>>> Since vma list is sorted in the ascending order, so we will never see
+>>> start >= vma->vm_end here. Remove this unneeded check.
+>>
+>> faulty logic; vm_start + len might wrap.
 
-"little-endian" has no specific content, use more helper function
-of_property_read_bool() instead of of_get_property()
+What do you mean is vm_start + len might wrap, so vm_end might be < vm_start ?
+If so, this could not happen as get_unmapped_area guarantees this.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/net/ethernet/xilinx/ll_temac_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Many thanks for comment. I agree with you about "vm_start + len" might wrap.
+> But what I mean here is that we will never see "start" >= vma->vm_end here
+> as find_vma guarantees this. And I leave the "start + len <=  vma->vm_start"
+> check untouched. So my cleanup should be right. Or am I miss something?
 
-diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
-index 869e362..3f6b9df
---- a/drivers/net/ethernet/xilinx/ll_temac_main.c
-+++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
-@@ -1515,7 +1515,7 @@ static int temac_probe(struct platform_device *pdev)
- 				of_node_put(dma_np);
- 				return PTR_ERR(lp->sdma_regs);
- 			}
--			if (of_get_property(dma_np, "little-endian", NULL)) {
-+			if (of_property_read_bool(dma_np, "little-endian")) {
- 				lp->dma_in = temac_dma_in32_le;
- 				lp->dma_out = temac_dma_out32_le;
- 			} else {
--- 
-2.7.4
+So I think this "start >= vma->vm_end" check is unneeded and we can remove it.
+Or am I miss something?
+
+Many thanks!
+
+> 
+> Thanks.
+> 
+>>
+>> .
+>>
+> 
 

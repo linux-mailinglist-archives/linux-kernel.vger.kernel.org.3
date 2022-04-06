@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF464F662B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B4B4F666A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbiDFQ6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S238125AbiDFQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238316AbiDFQ5U (ORCPT
+        with ESMTP id S238135AbiDFQ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:57:20 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF2184278
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 07:54:12 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b43so3546731ljr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 07:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X1xhe1hOFAkXA525Rq3XOWwhSA0DHEVv+3E5iLs6qgQ=;
-        b=tspW005OPBxR+ZMlu03A0boY2M62lp6g6YNgoTvv6v/KYHreyQnN5dmKHMfnFpzTpQ
-         PVr4s0vd/qIMOM/oFYeX9FURNeJkoRw2g6ndopnW4COOyPGCoDfFkHnosk0krbSe9Iol
-         1PGkMVjFk5EhHl0Dl1FggaaXTLIVUbVGCLOjSYD6KEf10lOty0GTULIK8kdKHRnnyOHl
-         ESpb43gy8pe1sJbU1fk1mIMIjZqIc8KsZkjJ0Ul80z394RVPOEtYAEMBddZVSobtYwIN
-         jWhDfA11K19pAEe51Ig0i8sT2IU2lSIIvIkAqHaOGqYUwX+npjrY2OBUBv7kAIztq3wa
-         KWJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X1xhe1hOFAkXA525Rq3XOWwhSA0DHEVv+3E5iLs6qgQ=;
-        b=bbC9E8iFuz2CyB709KxKih63F50uXv0tpImcMdat6pGtv5XUOa17ybQIFjug7DulGt
-         n8TLpDXAs+siLG92vHqsXOOI/5FLISOKFNbGHea7vPZCrqA1+4KXbvENZtVYJTO0nERx
-         JwmLR+hMIazOlmwtAQHa73XjqredMS3YYYa2S+aWu8HC+jrqFeBO3rK53zYuIsXU+JGe
-         ZRF95yC+/XGN2EhlqKkTwFlse6B6FHdcwc1UP3SXrVm0jQh9wGMYXX1eNlaUykCeeavV
-         VpAehJr+GQxmob7toPj/VRPPR2LMIBXXi9zcWT5K7DsTjqUS+ejo7+GzvJuPryYjb+eh
-         shng==
-X-Gm-Message-State: AOAM531H4NWCBTkgHd8HIAH6WduT+5AMUoy7KIK8tboLu8TG64q42+KQ
-        R4iFKJK+wWNOJyDllt/6NXpKcpa1U0PBTjDFejpcwA==
-X-Google-Smtp-Source: ABdhPJw6Rb9PTYA18fciCJa0mLjW77O/slOI6A0bJzY2u6WIFtnMtLTFL1vWalImn+T5p5DF5++fg9LaZdhoFiO6AUQ=
-X-Received: by 2002:a05:651c:1783:b0:249:43a8:b6f9 with SMTP id
- bn3-20020a05651c178300b0024943a8b6f9mr5416176ljb.273.1649256851127; Wed, 06
- Apr 2022 07:54:11 -0700 (PDT)
+        Wed, 6 Apr 2022 12:57:01 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B543834330A;
+        Wed,  6 Apr 2022 07:54:42 -0700 (PDT)
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 236EsSMg017012;
+        Wed, 6 Apr 2022 23:54:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 236EsSMg017012
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649256869;
+        bh=dXve7En2M5e4xXh5b7jtfh9BPqAH3MYvfHqMc5jc6Ao=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QGd26goSRGemW9yxN71egfjPrhtbmiN00TYVX0qVeyVjmWL1ZWPVHDBnXVQpDCWUd
+         yt/yApzYSktVEfQ41rwccIAF9vgcPZbDHBoGKL0yqEotBBKpOi+5zVE9WDwC66ewk5
+         mHw1x+2VhZQJMjaLnSUVneBoT5+OJpjHU156IlH0HkNqW7Qfc/PxKz7Do12f33IKh4
+         hZ86f4J+n9GqU1lLVL/hlC2dcCzc4LKSa3F6gB81igQHvRvpKE8hSYtl/ntrFSC8XQ
+         KWR/pfVEtaj8DFfMsihc2EqKLCKuGAwhZF6BYoJ6NCmkIJSgGTLqljkIMPQsuyZc1r
+         CMNGEhfAPRDEw==
+X-Nifty-SrcIP: [209.85.214.170]
+Received: by mail-pl1-f170.google.com with SMTP id o10so2158815ple.7;
+        Wed, 06 Apr 2022 07:54:28 -0700 (PDT)
+X-Gm-Message-State: AOAM531EHFtU5f47MVob2b/6rAj/H8a2MRiLkMMieC9vGndU0M1YiUT9
+        F/3xV1xCP1b07RCUIVzKAjGBWrId2FfD5Knr+/0=
+X-Google-Smtp-Source: ABdhPJyWembw7UB5FHXQ3/iYGzaCekp69tkkqZgrhPUh5j729qxNH8iii8K8VCAnxAkKzsMkl6zOQkbluDZMQftpnnk=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr8890545plp.162.1649256868141; Wed, 06
+ Apr 2022 07:54:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <1647532165-6302-1-git-send-email-quic_c_sbhanu@quicinc.com> <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
-In-Reply-To: <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 6 Apr 2022 16:53:35 +0200
-Message-ID: <CAPDyKFqhtFSy-fWJE+vA=sP+aVnQXygphaHNWq7sZgcY84EG_w@mail.gmail.com>
-Subject: Re: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Add reset entries for
- SDCC controllers
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+References: <20220405043350.12599-1-fazilyildiran@gmail.com>
+In-Reply-To: <20220405043350.12599-1-fazilyildiran@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 6 Apr 2022 23:53:38 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT=7=kPQP3+Nf0gyRZGbXE19=wSu3NOanrzuM2gLHE1Rw@mail.gmail.com>
+Message-ID: <CAK7LNAT=7=kPQP3+Nf0gyRZGbXE19=wSu3NOanrzuM2gLHE1Rw@mail.gmail.com>
+Subject: Re: [PATCH] docs: kbuild: add references on Kconfig semantics
+To:     Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        paul@pgazz.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Bhupesh Sharma
-
-
-On Thu, 17 Mar 2022 at 16:49, Shaik Sajida Bhanu
-<quic_c_sbhanu@quicinc.com> wrote:
+On Tue, Apr 5, 2022 at 1:34 PM Necip Fazil Yildiran
+<fazilyildiran@gmail.com> wrote:
 >
-> Add gcc hardware reset entries for eMMC and SD card.
+> Add references to 1) a research paper which provides a definition of
+> Kconfig semantics, 2) the kismet tool, which checks for unmet direct
+> dependency bugs in Kconfig specifications.
 >
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-
-As I just replied to Bhupesh Sharma, it would be nice to get all the
-mmc DT bindings converted to the yaml format.
-
-Would you mind having a look at doing the conversion first, thus prior
-to extending the existing text-based docs?
-
-Kind regards
-Uffe
-
+> Signed-off-by: Paul Gazzillo <paul@pgazz.com>
+> Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
+
+Applied to linux-kbuild. Thanks.
+
+
+>  Documentation/kbuild/kconfig-language.rst | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index c07765d..cd50ea3 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -881,6 +881,10 @@
->                         mmc-hs400-1_8v;
->                         mmc-hs400-enhanced-strobe;
+> diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
+> index 93a5b6e1fabd..a7173843a294 100644
+> --- a/Documentation/kbuild/kconfig-language.rst
+> +++ b/Documentation/kbuild/kconfig-language.rst
+> @@ -693,6 +693,8 @@ in documenting basic Kconfig syntax a more precise definition of Kconfig
+>  semantics is welcomed. One project deduced Kconfig semantics through
+>  the use of the xconfig configurator [1]_. Work should be done to confirm if
+>  the deduced semantics matches our intended Kconfig design goals.
+> +Another project formalized a denotational semantics of a core subset of
+> +the Kconfig language [10]_.
 >
-> +                       /* gcc hardware reset entry for eMMC */
-> +                       resets = <&gcc GCC_SDCC1_BCR>;
-> +                       reset-names = "core_reset";
-> +
->                         sdhc1_opp_table: opp-table {
->                                 compatible = "operating-points-v2";
+>  Having well defined semantics can be useful for tools for practical
+>  evaluation of dependencies, for instance one such case was work to
+> @@ -700,6 +702,8 @@ express in boolean abstraction of the inferred semantics of Kconfig to
+>  translate Kconfig logic into boolean formulas and run a SAT solver on this to
+>  find dead code / features (always inactive), 114 dead features were found in
+>  Linux using this methodology [1]_ (Section 8: Threats to validity).
+> +The kismet tool, based on the semantics in [10]_, finds abuses of reverse
+> +dependencies and has led to dozens of committed fixes to Linux Kconfig files [11]_.
 >
-> @@ -2686,6 +2690,10 @@
->
->                         qcom,dll-config = <0x0007642c>;
->
-> +                       /* gcc hardware reset entry for SD card */
-> +                       resets = <&gcc GCC_SDCC2_BCR>;
-> +                       reset-names = "core_reset";
-> +
->                         sdhc2_opp_table: opp-table {
->                                 compatible = "operating-points-v2";
->
+>  Confirming this could prove useful as Kconfig stands as one of the leading
+>  industrial variability modeling languages [1]_ [2]_. Its study would help
+> @@ -738,3 +742,5 @@ https://kernelnewbies.org/KernelProjects/kconfig-sat
+>  .. [7] https://vamos.cs.fau.de
+>  .. [8] https://undertaker.cs.fau.de
+>  .. [9] https://www4.cs.fau.de/Publications/2011/tartler_11_eurosys.pdf
+> +.. [10] https://paulgazzillo.com/papers/esecfse21.pdf
+> +.. [11] https://github.com/paulgazz/kmax
 > --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
+> 2.25.1
 >
+
+
+-- 
+Best Regards
+Masahiro Yamada

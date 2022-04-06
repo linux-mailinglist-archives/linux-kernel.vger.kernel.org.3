@@ -2,125 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B574F5CE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B543A4F5CF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiDFLnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S229749AbiDFLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiDFLnQ (ORCPT
+        with ESMTP id S231648AbiDFLnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:43:16 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36EF563CAE;
-        Wed,  6 Apr 2022 01:29:17 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id qh7so2636129ejb.11;
-        Wed, 06 Apr 2022 01:29:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v2z8gRO/swq08y+iM83Fo/YT89U4twO1dtpzDAI+wds=;
-        b=bo+Urh9v+B0kSQwYll4Qm4BeXZn8u9TOLVgE4WP+QcIfu7+eOoQQBVS8o5Esa2X/P2
-         oiN0kj/Nq+JcJ5XGsKDTogBVGlX2r6I6LCO4tlULRhd5bjPiUPhyHFMn4geel5wLFuKj
-         r3EHxiRaPrHH6KihVdtQs84Df/QJF2Vh+bujoh8KiVr5ajpl+wH1buXaa8LV4nQxxWGj
-         iJhEVXvOuIzlyeX+PdVK5KS5GGfUq2erTBIqSCq3hsruPgDx+nNIxwpF+RSze0lgUjng
-         e1enkv68bHZe2ioczifY4/x4i0IDBacJb7V8OHrsD0TjBDWCjDoRxT2C4IwM2g5SuZVD
-         gQHw==
-X-Gm-Message-State: AOAM533lOUVX5QTnZGdcYi2x4sbbJl/9vtqFSxKBkGkuKz0ofguiKlHw
-        2fkk692ALNklzF5kl1YfxLRhe1Nawwo=
-X-Google-Smtp-Source: ABdhPJzHQmSDjpC1O1mIJBNaZCFY2jUV1wWvoQC5P1RqZ8q+ceuPa2kq451RXmkcGjRd0ITGO0yuaQ==
-X-Received: by 2002:a17:907:6e2a:b0:6e0:b263:37a6 with SMTP id sd42-20020a1709076e2a00b006e0b26337a6mr7259741ejc.622.1649233756378;
-        Wed, 06 Apr 2022 01:29:16 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm6322837ejz.213.2022.04.06.01.29.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:29:15 -0700 (PDT)
-Message-ID: <afeeec95-f2c3-2e58-eac6-97bf5872a042@kernel.org>
-Date:   Wed, 6 Apr 2022 10:29:11 +0200
+        Wed, 6 Apr 2022 07:43:19 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83135826C2;
+        Wed,  6 Apr 2022 01:29:36 -0700 (PDT)
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MUGmJ-1nTSAf49gp-00RGcd; Wed, 06 Apr 2022 10:29:35 +0200
+Received: by mail-wr1-f42.google.com with SMTP id z1so2052634wrg.4;
+        Wed, 06 Apr 2022 01:29:34 -0700 (PDT)
+X-Gm-Message-State: AOAM531OqtwpTUOg/EVfV2+UmJYA0dXu/AnjpJjfw+EM4q16jICsyIML
+        tf37VFHTca6RTkr9lTjXbOaswI6c/kFG7cPnJtk=
+X-Google-Smtp-Source: ABdhPJzqKjimJ4xZnU9IPYt6fad20KHtM3TIsGz7LIfUNSAEh1Re0WD0ken3T+oCqWElZNVdr0ug0qBt3+5Wlumu5QE=
+X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
+ e12-20020a056000178c00b002040648b4c4mr5517385wrg.219.1649233774585; Wed, 06
+ Apr 2022 01:29:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] tty: serial: Prepare cleanup of powerpc's asm/prom.h
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org
-References: <49fc0d4b6446da630b1e9f29c4bab38f8ed087bf.1648833419.git.christophe.leroy@csgroup.eu>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <49fc0d4b6446da630b1e9f29c4bab38f8ed087bf.1648833419.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220405195755.10817-1-nbd@nbd.name> <20220405195755.10817-5-nbd@nbd.name>
+ <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org> <e3ea7381-87e3-99e1-2277-80835ec42f15@nbd.name>
+In-Reply-To: <e3ea7381-87e3-99e1-2277-80835ec42f15@nbd.name>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 6 Apr 2022 10:29:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1A6QYajv_HTw79HjiJ8CN6YPeKXc_X3ZFD83pdOqVTkQ@mail.gmail.com>
+Message-ID: <CAK8P3a1A6QYajv_HTw79HjiJ8CN6YPeKXc_X3ZFD83pdOqVTkQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/14] dt-bindings: arm: mediatek: document WED binding
+ for MT7622
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Networking <netdev@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:LqaHr6zQfU63/KWC6IeHSigHnsL9BIJjTNGAo+pOtFMNqkYgWK+
+ qUDoplE/Sw83CfpzQULwxHJ1W39zwgAd79ykAa/+fe0ExWXw7ftfen8XLjT7gYwvaNy4BPA
+ 3KuKZG3aMpEW6CuAyECDaQAnlIA+VuavkpT64DltnENZgd+kr2pa6LnNklCAdqE7hudEIjS
+ A9GRnXOMY6UbCs4JsAz6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BzheXsG6FwM=:lg/g4Wyl4/RF5LqxEvpfvk
+ KKYJWvaS+wvWRZtVArZ/ClXOWia8PVjNVm9si85mcWYixRVc/aRdfzIMpy+tUiYinSaKfjG4+
+ hdrDYGeExr9bn1ct26akXZ+DDFtFII4AFZ4m0njrWitiNEwUTV33lDXAaR2FjqOhJnUCbHL2g
+ E4E1g/pIi7dF2QUrpUCUUM5Zgco7yTrqoC1Y7NNIWrZjNfRuvR/5zM8mBfRxd+rn+8z9FxDxj
+ M934Rd0egAkdXZjNk0EyjvFvgsYVVPG0k1zDuvJ5eXxpWsGUX6uF2abfyRswd161OkVCEXCZA
+ QSSEuW/5VAdAOQbyyFkCWQ3oZAzUnerlmSjukdDCbnxQjkOd7ZisOS1ocdvQKMnExWZ+D0rmk
+ xdHggtD8TWKFmZDo5UE9hN+slc8mM+2IxIhDdRzsLZjRxSdF11zRfMvoeSuumj9Gpp/il2q3U
+ xD/XngG83S1iCDLrV8LkcUt/YQA8OR4CckWCQ13gR3cP5EapDHPKIFmZAdUh1MeGG727aK0iC
+ x0Nbwh/avUzfvZFDgI+JQfJ1vWMBCHx686wpb9h7Hms9hUmmf0vEXm2eyt84f5t1q4ftX2P+P
+ YGs8tilrlLW2N0ibBxnYY2If4knWoFDohzhE7BG7K2yWgKQ/o7p7HyJ0ZEN8hIGfvnHmF/1CZ
+ KK+Dzkf6eBd8zqCK7cpXK4f6iFHU6gaVPL6DBGp7TMXhnZMBCPbP4CprSftVytQ/xvKSFFtQI
+ +OVn74Rm2A+faAFh6VQPFV9bFKFak2GydaBuQmSJCCsI0PiW9QxWZcL5XQf86yMLxRFRxEgpt
+ cAZ47H5qjCXwXhea4f5I4x5ux1RwZ25ZVpwMz+HbsdsDiEHVG4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02. 04. 22, 12:20, Christophe Leroy wrote:
-> powerpc's asm/prom.h brings some headers that it doesn't
-> need itself.
-> 
-> In order to clean it up, first add missing headers in
-> users of asm/prom.h
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Wed, Apr 6, 2022 at 10:18 AM Felix Fietkau <nbd@nbd.name> wrote:
+> On 06.04.22 10:09, Krzysztof Kozlowski wrote:
+> > On 05/04/2022 21:57, Felix Fietkau wrote:
+> >> From: Lorenzo Bianconi <lorenzo@kernel.org>
+> >>
+> >> Document the binding for the Wireless Ethernet Dispatch core on the MT7622
+> >> SoC, which is used for Ethernet->WLAN offloading
+> >> Add related info in mediatek-net bindings.
+> >>
+> >> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> >> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> >
+> > Thank you for your patch. There is something to discuss/improve.
+> >
+> >> ---
+> >>  .../arm/mediatek/mediatek,mt7622-wed.yaml     | 50 +++++++++++++++++++
+> >>  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
+> >>  2 files changed, 52 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
+> >
+> > Don't store drivers in arm directory. See:
+> > https://lore.kernel.org/linux-devicetree/YkJa1oLSEP8R4U6y@robh.at.kernel.org/
+> >
+> > Isn't this a network offload engine? If yes, then probably it should be
+> > in "net/".
+> It's not a network offload engine by itself. It's a SoC component that
+> connects to the offload engine and controls a MTK PCIe WLAN device,
+> intercepting interrupts and DMA rings in order to be able to inject
+> packets coming in from the offload engine.
+> Do you think it still belongs in net, or maybe in soc instead?
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+I think it belongs into drivers/net/. Presumably this has some kind of
+user interface to configure which packets are forwarded? I would not
+want to maintain that in a SoC driver as this clearly needs to communicate
+with both of the normal network devices in some form.
 
-> ---
->   drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c | 1 -
->   drivers/tty/serial/mpc52xx_uart.c           | 2 ++
->   drivers/tty/serial/pmac_zilog.c             | 1 -
->   3 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c b/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
-> index 6a1cd03bfe39..108af254e8f3 100644
-> --- a/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
-> +++ b/drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c
-> @@ -25,7 +25,6 @@
->   #include <asm/io.h>
->   #include <asm/irq.h>
->   #include <asm/fs_pd.h>
-> -#include <asm/prom.h>
->   
->   #include <linux/serial_core.h>
->   #include <linux/kernel.h>
-> diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
-> index 8a6958377764..4ec785e4f9b1 100644
-> --- a/drivers/tty/serial/mpc52xx_uart.c
-> +++ b/drivers/tty/serial/mpc52xx_uart.c
-> @@ -38,6 +38,8 @@
->   #include <linux/delay.h>
->   #include <linux/io.h>
->   #include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
->   #include <linux/of_platform.h>
->   #include <linux/clk.h>
->   
-> diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
-> index 5d97c201ad88..c903085acb8d 100644
-> --- a/drivers/tty/serial/pmac_zilog.c
-> +++ b/drivers/tty/serial/pmac_zilog.c
-> @@ -51,7 +51,6 @@
->   #include <asm/irq.h>
->   
->   #ifdef CONFIG_PPC_PMAC
-> -#include <asm/prom.h>
->   #include <asm/machdep.h>
->   #include <asm/pmac_feature.h>
->   #include <asm/dbdma.h>
-
-
--- 
-js
-suse labs
+         Arnd

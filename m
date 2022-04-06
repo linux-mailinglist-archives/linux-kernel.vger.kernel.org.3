@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F8F4F6E0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBB04F6E10
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237354AbiDFWxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        id S237378AbiDFWxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237342AbiDFWw4 (ORCPT
+        with ESMTP id S237341AbiDFWw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 18:52:56 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACFE20037E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:50:56 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id q11so4813579iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 15:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3qjN15LildAkA1UcTUK0Pb+T2oa5XZIOoRf6nmgevRk=;
-        b=hSkS4doEGHqz4km3BOFtuZF5E82VjRRSbLKkI3q/kdUjojOc8WZPJxjGNVWwoEJlJN
-         sJ84kxuKZmJRCxJyVAXGv35p+dlAKCiHjO41rauBicQH+2ZpKUA1dynaPUkLzG6bFnhb
-         kNy/2t6UCVA9CC/0howpicuRxdwOi6FcA397g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3qjN15LildAkA1UcTUK0Pb+T2oa5XZIOoRf6nmgevRk=;
-        b=HI5wf3XiVxzDWazaXmn1lCiR+TeRs9EAfKFYB9wP/I/uLT62oVRxS9DxFTB4BpvBv3
-         vDetvzupnQ3EUzvbaq+cWBW2+Zp5aWaRVUc6GgNzhH1QwLaa8N6VndjSoglwOJnauIjs
-         rqbD8d7yGD3qAXzm5b1cVMKVLlmDbzWahzXr660dk+PUNPihXjcRS2A+6r4NTdaKGozE
-         1zkm9vp2adfzTSgtELlLVrLhApc63kQUvvuaiJ2cGwGWfyk/o0LnmgW/j9OV3QNkj70m
-         gYnI/gmVSlygr5JjX91uA/D4v4RErQQDfSx4S3wHAWzwq3TuektXOvqWwXLLYo+DU9iF
-         bzMA==
-X-Gm-Message-State: AOAM531AsAloWG3XQxFrY7U5sDkcrvdKTgW43dbwWT/sTDgReBNamJgj
-        1FzrAcUKoyiLLdGrEGdGCh+5Me4AFgiOsQ==
-X-Google-Smtp-Source: ABdhPJzXH6rNGUKQlqhPfN5d+8YuFyoy0E9/BL1l2eDxtbtzbimDP0lRRdXCkrNHV7yHMAv43N2IJA==
-X-Received: by 2002:a05:6638:1352:b0:321:547b:daa2 with SMTP id u18-20020a056638135200b00321547bdaa2mr5372535jad.128.1649285455605;
-        Wed, 06 Apr 2022 15:50:55 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m8-20020a92d708000000b002c6381d9144sm10383514iln.59.2022.04.06.15.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 15:50:55 -0700 (PDT)
-Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220406133013.264188813@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <028a0284-f939-4d62-3d42-06a2835942c7@linuxfoundation.org>
-Date:   Wed, 6 Apr 2022 16:50:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5E31FF40D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:50:58 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649285456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oo8BnTvTnMjo6ZgJBNScUqL3BREyI730+icd519jAck=;
+        b=3B2xL2UxolikYO97tJGM0M7nLOAYdVh+LtA5JvD4+SbPbg/2hX+SlmV3iDVYi1CAPgOve6
+        Rw0oOOlNFXGuRB/gr1zKkUFTdWgGU5k/YWA3yHpatMEYu+d8wYeGCe96jccznj/sasgvnK
+        7478NR4ej+nSjs69DFm7hzrqba/lAxfp1YNNMLq5bqnjMDV/5kBqHV+1yRLVenarwQNJY8
+        cBIKmEiut07UfCvi/mQfJarfkHJ3F9K6idK5cBW/CHcoV9wPVkwZWfvJUaXnpWY4swWkHn
+        Y7ZF2bUw+UfXNp6PEdHQGHC91BBKzgkScA94n3b79LkBMRXjoJaXfilMcUGfYg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649285456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oo8BnTvTnMjo6ZgJBNScUqL3BREyI730+icd519jAck=;
+        b=d759eRy1EyZA+QNOtpkwGGzkMPjHlOzyeD2OaPS884TdJgwyjB0bsyScdrNnt+EdISZJxK
+        eyBIJ1NW0EzyYIDg==
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2] x86/apic: Do apic driver probe for "nosmp" use case
+In-Reply-To: <20220406185430.552016-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220406185430.552016-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Date:   Thu, 07 Apr 2022 00:50:56 +0200
+Message-ID: <87mtgxzuzz.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20220406133013.264188813@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 7:43 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.110 release.
-> There are 597 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.110-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Wed, Apr 06 2022 at 18:54, Kuppuswamy Sathyanarayanan wrote:
+> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+> index b70344bf6600..79b8b521981c 100644
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -1419,22 +1419,22 @@ void __init apic_intr_mode_init(void)
+>  		return;
+>  	case APIC_VIRTUAL_WIRE:
+>  		pr_info("APIC: Switch to virtual wire mode setup\n");
+> -		default_setup_apic_routing();
+>  		break;
+>  	case APIC_VIRTUAL_WIRE_NO_CONFIG:
+>  		pr_info("APIC: Switch to virtual wire mode setup with no configuration\n");
+>  		upmode = true;
+> -		default_setup_apic_routing();
+>  		break;
+>  	case APIC_SYMMETRIC_IO:
+>  		pr_info("APIC: Switch to symmetric I/O mode setup\n");
+> -		default_setup_apic_routing();
+>  		break;
+>  	case APIC_SYMMETRIC_IO_NO_ROUTING:
+>  		pr_info("APIC: Switch to symmetric I/O mode setup in no SMP routine\n");
+> +		upmode = true;
 
-Compiled and booted on my test system. No dmesg regressions.
+Why? The changelog tells nothing about this change.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+And it's not correct because the APIC configuration is there, otherwise
+__apic_intr_mode_select() would have returned APIC_VIRTUAL_WIRE_NO_CONFIG.
 
-thanks,
--- Shuah
+Thanks,
 
+        tglx

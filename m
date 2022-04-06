@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E934F5F3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2014F5F72
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiDFN0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S232648AbiDFN0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbiDFNZu (ORCPT
+        with ESMTP id S233291AbiDFNZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:25:50 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BF8376620
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:10:22 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 0102F9C42
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:10:22 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bu9lniis49AGSbu9lnJWMy; Tue, 05 Apr 2022 20:08:21 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BM53CkdiWE9/AyefGVVmcfgwA9TziGoeOzw36GMhF68=; b=0+uXrFiSoJ6r2JBUjoEKRQoewo
-        WNv4IAttvm2qLAE2IB4xxBtJl9Yw7BC1ngCDRF0i6CM3JgZNyNRB7RxECcFETvXbjtYV/flU7Ur1s
-        k8aKpKfrXGkCzYXTArIKFVNiwl9WTUcZSRhq7ABnDFzhpAPWgdy9WkKt0nJEiIiXAvCxowaBeSury
-        tjcrDrbogKFpXyN0moVHB6/QULHPJ3Gj4tm0H/8RXALWitD0kZ7Cvum+uGram3T4IO4FIEhjdDhyK
-        q0vawtktx+GEGu1Zen4VeOJy6DGymMzcaa1sLbJTHxCUHRxJm2g46h7JK5AWfCdFgLhM9qsKSx2Pk
-        qEEBjvGQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57876 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbu9l-001L2s-8Y; Wed, 06 Apr 2022 01:08:21 +0000
-Date:   Tue, 5 Apr 2022 18:08:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
-Message-ID: <20220406010820.GB1133386@roeck-us.net>
-References: <20220405070339.801210740@linuxfoundation.org>
+        Wed, 6 Apr 2022 09:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF84386A89;
+        Tue,  5 Apr 2022 18:13:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F2F61923;
+        Wed,  6 Apr 2022 01:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D82AC385A1;
+        Wed,  6 Apr 2022 01:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649207598;
+        bh=XhrRwaJr766BJcr+zRvpxYXxBy6jna9TGrTSweXCY1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g8Oqp0wSAhnciHM0lfhuzwuROBlAV0QXRuF062IwHGhpgOFIKfLzrVHCccbzRkOin
+         7R0C0T2xEWGUUREEo79Ws2luDtk97Bcv5Ix1hjIqwDgbv7+de+7BD6E+WqzDBDPNRe
+         WLEMFqAz1mSdFu+lYXB/7w2enU5on5KfevctBaZCzti1J+5FSBMla8KL9U+coMTrDc
+         PT9TDJs3mvxU1JWtZW7ZFa0n0gCUnxc2cb75v7MSxLS7xP52BBXPpbMrZorpTWBtNy
+         bV7obvFWjwnCmzqkA00ARtjNoz8YawBqMbRpjx+OerzeqhQ4pFZPyamnWaUQCXhzGN
+         Efl3Qn+Ia+nGA==
+Date:   Wed, 6 Apr 2022 09:13:10 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] arm64: dts: imx8mm-kontron: fix ethernet node name
+Message-ID: <20220406011310.GC129381@dragon>
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-10-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbu9l-001L2s-8Y
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57876
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 25
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220216074927.3619425-10-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 09:17:42AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.33 release.
-> There are 913 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
++ Frieder Schrempf who is the board owner.
+
+On Wed, Feb 16, 2022 at 08:49:27AM +0100, Oleksij Rempel wrote:
+> The node name of Ethernet controller should be "ethernet" instead of
+> "usbether" as required by Ethernet controller devicetree schema:
+>  Documentation/devicetree/bindings/net/ethernet-controller.yaml
 > 
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
+> This patch can potentially affect boot loaders patching against full
+> node path instead of using device aliases.
+
+Frieder,
+
+Are you okay with that?
+
+Shawn
+
 > 
-
-Build results:
-	total: 156 pass: 156 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> index d40caf14ac4a..23be1ec538ba 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> @@ -182,7 +182,7 @@ usb1@1 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+>  
+> -		usbnet: usbether@1 {
+> +		usbnet: ethernet@1 {
+>  			compatible = "usb424,ec00";
+>  			reg = <1>;
+>  			local-mac-address = [ 00 00 00 00 00 00 ];
+> -- 
+> 2.30.2
+> 

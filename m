@@ -2,304 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467434F6D2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7171A4F6D43
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiDFVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S235752AbiDFVsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236731AbiDFVrD (ORCPT
+        with ESMTP id S237743AbiDFVsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:47:03 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08831A9C90;
-        Wed,  6 Apr 2022 14:28:22 -0700 (PDT)
+        Wed, 6 Apr 2022 17:48:17 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D356615AE33
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 14:32:38 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id d7so4160875edn.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 14:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649280503; x=1680816503;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=Rd50QDi3gDFXqhwUtUsxEiyWvUNJVdfNBSRh1Ewhqpk=;
-  b=sGMvD5VnyxJ5wt3RuJdF10DdLqW/GGLNnOGHU7jR824B4phnjtRXg5o6
-   n7tXxyGVJCmCVLl6TVkzjBfaMiNKp05+XqCrhNivvneQaaztmG5st1DIw
-   FnxxeOeV7oLCfm5G6ZFG19YtguXbeoPSV9qZBzSRXi7hMGkdUMtbwWIzJ
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Apr 2022 14:28:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 14:28:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 14:28:22 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 14:28:21 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/msm/dp: enhance both connect and disconnect pending_timeout handle
-Date:   Wed, 6 Apr 2022 14:28:13 -0700
-Message-ID: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a32qnBztE2IXtzvLnaEci16ST2DBqAaVGBlmBFvRnDc=;
+        b=Am3wn/I//RT+8eEj8AGDpa3XAgi7OxffpcM51aNFuWlwe39zYgN3D7PZ0yNbmCtitb
+         8XL+DUuK3lUirphpaiMnKyQHtTcKLbM9hGqiE5K3nG1hjkYzjpCbMfLYcjqj9VXadHUY
+         7+eJOKPbRDfaBR8hmjQR4txexhRpvrohH/03Dv4dUHm40iAgkDAUL6nxY5zatf5qFMmF
+         OMlBQQ5e7roLBLt1v4e+U88WesZhkMtEAPZ8+bQ3LRuYmd9MKC4iUUiFMeByMa1+zH8R
+         D8h/aSuF7uNcLC1A2g0lo9no+3zg4xnad0m77CDSPc7HbBu1+CllhuMZqV5zidnJOcnG
+         CMcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a32qnBztE2IXtzvLnaEci16ST2DBqAaVGBlmBFvRnDc=;
+        b=OUxVqqT9hmFQtMzpNxwN4VSAqfzLJTc2nZxPnbOKtIbtplMhF+EX84qr7mCag7n0+M
+         TTRvY+pE+ezBKnsfR0oEidu2+qVUds5RF/mwzHnbHgZ3+0x4zmmmMo4ktvFjLM0ofXDD
+         BZ93f5ShEEk1KuCSvNKef2QObDzReJxiwZEoEQfz1rbcWGga9T6ceLNDNhTsLxzCY0BJ
+         +HReJ3mH+MHPWJ5op6jrneYd6EUDiFoq3QtqODbFjf7hVJv+iNVi5Uoq/LCmnsF+NHh8
+         TdpChsEz6ZgPloONc0swgcPNquTjCUnHoKyGuVgwz0iMFXVFfVI2C0uOWnPGm8BoBTqf
+         cbjQ==
+X-Gm-Message-State: AOAM531RCOrUna+ppJxicezDAK9soyMbFU/I+uiM9SdHu/DeJ8Y+7Hti
+        kFfr+yjpqBOKwsCfn6GaZHGyDu1q/9BVNWj8gCMi0IqQoK9sI8qE
+X-Google-Smtp-Source: ABdhPJy7jr2rjkpSgrB0uWoNfSr5yY0hfXjtoI1MFRT5vPFgLXCaEZb/W4AjmRfU/AXvAIpD1uyXUeDLWbd253pxzOw=
+X-Received: by 2002:aa7:cb8b:0:b0:410:9aaf:2974 with SMTP id
+ r11-20020aa7cb8b000000b004109aaf2974mr10907125edt.173.1649280757166; Wed, 06
+ Apr 2022 14:32:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220404041101.6276-1-akihiko.odaki@gmail.com> <Yk4DGZfpYbK8dofL@chromium.org>
+In-Reply-To: <Yk4DGZfpYbK8dofL@chromium.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 6 Apr 2022 14:32:26 -0700
+Message-ID: <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Akihiko Odaki <akihiko.odaki@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_hpd_plug_handle() is responsible for setting up main link and send
-uevent to notify user space framework to start video stream. Similarly,
-dp_hdp_unplug_handle is responsible to send uevent to notify user space
-framework to stop video stream and then tear down main link.
-However there are rare cases, such as in the middle of system suspending,
-that uevent could not be delivered to user space framework. Therefore
-some kind of recover mechanism armed by timer need to be in place in the
-case of user space framework does not respond to uevent.
+On Wed, Apr 6, 2022 at 2:16 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hi Akihiko,
+>
+> Thanks for the patch.
+>
+> On Apr 04 13:11, Akihiko Odaki wrote:
+> > The EC driver may not be initialized when cros_typec_probe is called,
+> > particulary when CONFIG_CROS_EC_CHARDEV=m.
+> >
+> > Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+> > ---
+> >  drivers/platform/chrome/cros_ec_typec.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> > index 4bd2752c0823..7cb2e35c4ded 100644
+> > --- a/drivers/platform/chrome/cros_ec_typec.c
+> > +++ b/drivers/platform/chrome/cros_ec_typec.c
+> > @@ -1084,6 +1084,9 @@ static int cros_typec_probe(struct platform_device *pdev)
+> >       }
+> >
+> >       ec_dev = dev_get_drvdata(&typec->ec->ec->dev);
+> > +     if (!ec_dev)
+> > +             return -EPROBE_DEFER;
+> > +
+>
+> Just a quick check: are you still seeing this issue with 5.18-rc1, which
+> contains a null check for the parent EC device [1] ?
+>
 
-This patch have both dp_conenct_pending_timeout and
-dp_disconnect_pending_timeout are used to stop video stream and tear down
-main link and eventually restore DP driver state to known default
-DISCONNECTED state in the case of timer fired due to framework does not
-respond to uevent so that DP driver can recover itself gracefully at next
-dongle unplug followed by plugin event.
+I may be missing something, but from the context I suspect this may
+make the problem worse. My understanding was that the problem was seen
+specifically if CONFIG_CROS_EC_CHARDEV=m. In that situation, it
+appears that the parent EC device does _not yet_ exist. If the driver
+returns -ENODEV in that situation, it will never be instantiated. The
+big question for me is why the type C device is instantiated in the
+first place if the parent EC device does not [yet] exist. I have not
+been able to identify the code path where this happens.
 
-Changes in v2:
--- replace dp_display_usbpd_disconnect_cb with dp_display_notify_disconnect
+There is a similar problem with other EC child devices which are also
+sometimes instantiated even though the parent EC device does not exist
+(ie dev_get_drvdata(pdev->dev.parent) returns NULL). That can happen
+if the parent EC device instantiation fails because of EC
+communication errors (see https://b.corp.google.com/issues/228118385
+for examples [sorry, internal only, I can't make it public]). I think
+we need to track down why that happens and prevent child devices from
+being instantiated in the first place instead of trying to work around
+the problem in the child drivers.
 
-Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 36 ++++++++++++++++++++-----
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  1 +
- drivers/gpu/drm/msm/dp/dp_display.c | 54 ++++++++++++++++++++++++++++---------
- 3 files changed, 72 insertions(+), 19 deletions(-)
+Guenter
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index dcd0126..48990fb 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1910,15 +1910,12 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
- 	return ret;
- }
- 
--int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-+int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl)
- {
- 	struct dp_ctrl_private *ctrl;
- 	struct dp_io *dp_io;
- 	struct phy *phy;
--	int ret = 0;
--
--	if (!dp_ctrl)
--		return -EINVAL;
-+	int ret;
- 
- 	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
- 	dp_io = &ctrl->parser->io;
-@@ -1926,7 +1923,34 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
- 
- 	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
- 
--	dp_catalog_ctrl_reset(ctrl->catalog);
-+	ret = dp_power_clk_enable(ctrl->power, DP_CTRL_PM, false);
-+	if (ret) {
-+		DRM_ERROR("Failed to disable link clocks. ret=%d\n", ret);
-+	}
-+
-+	DRM_DEBUG_DP("Before, phy=%p init_count=%d power_on=%d\n",
-+		phy, phy->init_count, phy->power_count);
-+
-+	phy_power_off(phy);
-+
-+	DRM_DEBUG_DP("After, phy=%p init_count=%d power_on=%d\n",
-+		phy, phy->init_count, phy->power_count);
-+
-+	return ret;
-+}
-+
-+int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-+{
-+	struct dp_ctrl_private *ctrl;
-+	struct dp_io *dp_io;
-+	struct phy *phy;
-+	int ret;
-+
-+	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-+	dp_io = &ctrl->parser->io;
-+	phy = dp_io->phy;
-+
-+	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
- 
- 	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, false);
- 	if (ret)
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 2433edb..ffafe17 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -22,6 +22,7 @@ struct dp_ctrl {
- int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
-+int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 178b774..a6200a5 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -451,11 +451,14 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
- 
- static int dp_display_usbpd_disconnect_cb(struct device *dev)
- {
-+	return 0;
-+}
-+
-+static void dp_display_notify_disconnect(struct device *dev)
-+{
- 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
- 
- 	dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
--
--	return 0;
- }
- 
- static void dp_display_handle_video_request(struct dp_display_private *dp)
-@@ -593,10 +596,16 @@ static int dp_connect_pending_timeout(struct dp_display_private *dp, u32 data)
- 
- 	mutex_lock(&dp->event_mutex);
- 
-+	/*
-+	 * main link had been setup but video is not ready yet
-+	 * only tear down main link
-+	 */
- 	state = dp->hpd_state;
- 	if (state == ST_CONNECT_PENDING) {
--		dp->hpd_state = ST_CONNECTED;
- 		DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-+		dp_ctrl_off_link(dp->ctrl);
-+		dp_display_host_phy_exit(dp);
-+		dp->hpd_state = ST_DISCONNECTED;
- 	}
- 
- 	mutex_unlock(&dp->event_mutex);
-@@ -645,6 +654,7 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 		if (dp->link->sink_count == 0) {
- 			dp_display_host_phy_exit(dp);
- 		}
-+		dp_display_notify_disconnect(&dp->pdev->dev);
- 		mutex_unlock(&dp->event_mutex);
- 		return 0;
- 	}
-@@ -661,19 +671,22 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
- 
--	dp->hpd_state = ST_DISCONNECT_PENDING;
--
- 	/* disable HPD plug interrupts */
- 	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
- 
- 	/*
- 	 * We don't need separate work for disconnect as
- 	 * connect/attention interrupts are disabled
--	 */
--	dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
-+	*/
-+	dp_display_notify_disconnect(&dp->pdev->dev);
- 
--	/* start sentinel checking in case of missing uevent */
--	dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-+	if (state == ST_DISPLAY_OFF) {
-+		dp->hpd_state = ST_DISCONNECTED;
-+	} else {
-+		/* start sentinel checking in case of missing uevent */
-+		dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-+		dp->hpd_state = ST_DISCONNECT_PENDING;
-+	}
- 
- 	/* signal the disconnect event early to ensure proper teardown */
- 	dp_display_handle_plugged_change(&dp->dp_display, false);
-@@ -695,10 +708,16 @@ static int dp_disconnect_pending_timeout(struct dp_display_private *dp, u32 data
- 
- 	mutex_lock(&dp->event_mutex);
- 
-+	/*
-+	 * main link had been set up and video is ready
-+	 * tear down main link, video stream and phy
-+	 */
- 	state =  dp->hpd_state;
- 	if (state == ST_DISCONNECT_PENDING) {
--		dp->hpd_state = ST_DISCONNECTED;
- 		DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-+		dp_ctrl_off(dp->ctrl);
-+		dp_display_host_phy_exit(dp);
-+		dp->hpd_state = ST_DISCONNECTED;
- 	}
- 
- 	mutex_unlock(&dp->event_mutex);
-@@ -1571,6 +1590,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
- 
- 	mutex_lock(&dp_display->event_mutex);
- 
-+	state = dp_display->hpd_state;
-+	if (state == ST_DISCONNECTED) {
-+		mutex_unlock(&dp_display->event_mutex);
-+		return rc;
-+	}
-+
- 	/* stop sentinel checking */
- 	dp_del_event(dp_display, EV_CONNECT_PENDING_TIMEOUT);
- 
-@@ -1588,8 +1613,6 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
- 		return rc;
- 	}
- 
--	state =  dp_display->hpd_state;
--
- 	if (state == ST_DISPLAY_OFF)
- 		dp_display_host_phy_init(dp_display);
- 
-@@ -1638,13 +1661,18 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
- 	/* stop sentinel checking */
- 	dp_del_event(dp_display, EV_DISCONNECT_PENDING_TIMEOUT);
- 
-+	state = dp_display->hpd_state;
-+	if (state == ST_DISCONNECTED || state == ST_DISPLAY_OFF) {
-+		mutex_unlock(&dp_display->event_mutex);
-+		return rc;
-+	}
-+
- 	dp_display_disable(dp_display, 0);
- 
- 	rc = dp_display_unprepare(dp);
- 	if (rc)
- 		DRM_ERROR("DP display unprepare failed, rc=%d\n", rc);
- 
--	state =  dp_display->hpd_state;
- 	if (state == ST_DISCONNECT_PENDING) {
- 		/* completed disconnection */
- 		dp_display->hpd_state = ST_DISCONNECTED;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+> Thanks,
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/platform/chrome?id=ffebd90532728086007038986900426544e3df4e

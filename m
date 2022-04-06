@@ -2,255 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232C84F5FFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1DD4F5FC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbiDFNXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S233027AbiDFNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiDFNWk (ORCPT
+        with ESMTP id S233304AbiDFNYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:22:40 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0207A36BCC1
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:13:44 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso20230187b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 03:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sNpLtjT8N1zIIINaELQa0JweQ+VPyM3S6k6MC6+RPps=;
-        b=DRkueuiaLLSvBw00To6buMVvkhuqahQLDZtud4rlCh5K4UtGSCGZKizmLbQh4qi+hd
-         Xwf3HS314TZT5b58wrt6IMEQZOXsFZda8SAYUrNeetZNHoxwbwxhNt/OUwT3lKyuus2k
-         H+ZJuecIQIethU62VZzi+uQw+KqqgovPZEJxNaKEReImPtBbDa+e1BEXoCBE69/XA82s
-         WzGwafJCe6j26oj/LZSe05SdS9r2UJz67vUSUMSAOzpy7syyIrptevyQpilHOh392Iqn
-         kn7vAQ/L/VMi4KeLxA7O3LzQtc+Zv9xrXAUhblf8asS0POPYoTIf7GcxgGwxu+NBV4h3
-         irAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sNpLtjT8N1zIIINaELQa0JweQ+VPyM3S6k6MC6+RPps=;
-        b=eekvpHqSM9hnYMMd/ehVQrstmzikecNdgz9ZyhfD/zHpPXsSBsjE686DSX08zjxvzN
-         eDyOQEJ6BGcMwUTPEvh+/fIkThxGiCGY4f9y1i8Io7oL5c6LjBknmtiEj8xhix75zk2y
-         kM86WM3hV70GE2S2aPGZWiIXbtembcQUFt11eg/wgrglLJvqnVilE8ZhsiMi3X+Huhi1
-         TSW3E0oObDvc53Y6+FgWKruKLpOITOWhdf8JUUULRJk07+EZa2OsgqakZG+9/TcGaqqX
-         EFg1VZqTM4tcSQWbv271HLpR66XARhjvO+TIh+rwpR7t2VbexJGOnjYk3TzA54u+gBv7
-         1MYA==
-X-Gm-Message-State: AOAM532jFKonVxvXpMExDpSHV0wTuMHYIreYaaz4wFQM8KPST9AGw/6u
-        dft8V9kdisFNi863fkyhuKKCsc10tihiSuaERJNatg==
-X-Google-Smtp-Source: ABdhPJyxys7fbyhnwwlqIy9+Bx5S1uCSqejI5clAZAJcwNZucI5Le124MTq3mVCMh0/ChpejLPeAyub1ePEYUwfh4uo=
-X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
- p186-20020a0dffc3000000b002eb23273361mr6287962ywf.36.1649240019674; Wed, 06
- Apr 2022 03:13:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405070354.155796697@linuxfoundation.org>
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 6 Apr 2022 15:43:27 +0530
-Message-ID: <CA+G9fYtyterUZ6KhC1+4MOo7y92Z8MTy6NtR1SeVrstWimYy7w@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 6 Apr 2022 09:24:17 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on0624.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0e::624])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171464B51BC;
+        Wed,  6 Apr 2022 03:20:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fyjFK3LX3kCxWBB9JUTZx9cq9R1TltDJ+HUOf/2kxg6uygNMbkTBgA/ixeUq8/lOgcz6zKdVXTWSsTnLN0v+E0rC6fGqC9Jftri+VtoWcVThYPC5JG+BysJdXR9gSjYTPF8HJxZ0FvAu8H6ZWLvd6W3GyWHqEtEvnJdOhH8oExYW8SWm5W0GJrWDpmL6DdRipUiOgMO3rkfA2sB0HXBrWB4gUJ/6ofUwdM6aDU7gf9jyHS+VuKcw26CBgCSZemhvn3vu1VvtNpMjsxuI4VPBis2cgNp9rhkV23Ji4rKlZkAhptZYO65jCP2p0nDcFASYHOzPhXO4W/C4sUveaHZXvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ei+eXuVp+AnXYrZkPK/jJT0FBtnfmqEEmFKs+L2PFK0=;
+ b=OajWbjrU4rGlWsg6khuyA6Fiu1oraT+5NE9LRc+nvfjOHc1BSrMme2A0cA7U9EhcAekjplgWpnIOKFDorJqF9JIhIMEeNc2F9oQ7MBxQA5gAxihlgscwA46CKg1K798b7M8CRKTH3zWD8RrE+EX40kIc3SnZ44PUKskLyyam+ZlzCSCob8cXbMBkF0pDIXmsk9MdNxtq5KVP7sYxftCYUM+myV0mfv01J6sGjLERHLepya/larXj8LTdqN6fQqqG6L8/hObDIIsLx/Jp75ummgxJKZJ+9YvxkKwJ9P/Q6MNpykTzXUszkak/dDYq/Nmfa3mOVkxDgIYFRlbjzrtuYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ei+eXuVp+AnXYrZkPK/jJT0FBtnfmqEEmFKs+L2PFK0=;
+ b=cFcjNpqbPzqg2QrRGqFZ5j1lhdAez4akuahisfBrE12tnGOh4bUwCHLYbhukV1wBpG17VfYqVvI5PLElDaN57uqfe/25BZc2QwccILdBGFmCdS+1JaB6wSi3ZJ8hE3qBCzP+iKml5n5dN92XNZv+Oju395A9Y1nQVr/YKhH2PAs=
+Received: from DU2PR04MB9082.eurprd04.prod.outlook.com (2603:10a6:10:2f1::10)
+ by DBBPR04MB6330.eurprd04.prod.outlook.com (2603:10a6:10:cc::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 10:18:49 +0000
+Received: from DU2PR04MB9082.eurprd04.prod.outlook.com
+ ([fe80::31d4:4644:d8b8:2b74]) by DU2PR04MB9082.eurprd04.prod.outlook.com
+ ([fe80::31d4:4644:d8b8:2b74%6]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 10:18:49 +0000
+From:   "S.J. Wang" <shengjiu.wang@nxp.com>
+To:     "Daniel Baluta (OSS)" <daniel.baluta@oss.nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
+CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daniel.baluta@gmail.com" <daniel.baluta@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>
+Subject: RE: [PATCH] remoteproc: imx_dsp_rproc: Make rsc_table optional
+Thread-Topic: [PATCH] remoteproc: imx_dsp_rproc: Make rsc_table optional
+Thread-Index: AQHYROqwwU4P4PKJAku1tOtg7L4orqzitRgw
+Date:   Wed, 6 Apr 2022 10:18:49 +0000
+Message-ID: <DU2PR04MB90822E836A7415C43BBF7C0FE3E79@DU2PR04MB9082.eurprd04.prod.outlook.com>
+References: <20220331103237.340796-1-daniel.baluta@oss.nxp.com>
+In-Reply-To: <20220331103237.340796-1-daniel.baluta@oss.nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 33142ea9-0876-448b-a947-08da17b6d789
+x-ms-traffictypediagnostic: DBBPR04MB6330:EE_
+x-microsoft-antispam-prvs: <DBBPR04MB633009EAE083AD4EE9F24A5EE3E79@DBBPR04MB6330.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sUbVc3cxR16ZCJvr7h8x2xjJk2sE024NBTrAL+C0P1owQN9hWrZghdhS4LuAjI75OXx9Ijj05qdi0c5utW+28ZubIGg1tRal+/nNdbpdoFQusOKLqvU/Du8Mb/AqnLqWuawRohEU2dE77XgPcKrB13QVcRT4JMyrTR32DV5fG7hboYqim2eBUblRe3j0f12KYxvu3ZAq2hcwOFczBb4KkWo+GpTNT/EKsp3BAjwZ8AEUqf8xuLPT03eU1/HYNwXOxW717LnVzNzYvww0N9qscZwW1KGBRqiMvJ02gBp0c4aZkEH6h+6voHNa+FKDUjwZhZCyZSJ2EMKGyYfIzJvfMKQyGi61ibPlgNxjkRA/pWDltqxQlvmqVTF8XSndYaSmG2GUv0rxpLqww3byioQwtd5bKvL4OWZ02XrwU6FAe+uuXKHadbdlNq+g10c5CYkHoJ+yzn2IxU3SsRXvOvMn7GCVA7i42zlBeiyubz602bxVI0rd9EiiQU2DaRpbsg0M9r8Zi7WohSdWOlnVOfpzTFNG1OMz4SjwrCLw2MT2OoxKotk+wD5Iz8dgUSMpGDDbdZ+hqQs/SomxDgJmceAX6BPUlvzdKQozFzLOmVcQY+BJIXqj+rIKs/+UNM8uhrekPCJITixbCujnWWoAQrjrH1mcYYLeNyNHX+dNJlw9KJY+0gNHPLxrZOH6BCSkIxGRaGyVOACzqGegiM6JGtleGQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB9082.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(5660300002)(186003)(9686003)(55016003)(2906002)(316002)(122000001)(38100700002)(76116006)(8676002)(66476007)(66446008)(64756008)(83380400001)(4326008)(33656002)(6506007)(508600001)(54906003)(66946007)(71200400001)(7696005)(52536014)(86362001)(110136005)(66556008)(8936002)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KGjI8Kh+Rb+ikQsLoAyNhspM8YZSF27KTXQYtwQa8xWlr28PBz+6Q2dWW41W?=
+ =?us-ascii?Q?uvsJ2ow8Izy9tpmsOiEMSE9J8nB8ol9l6Bb1CYzwfSFcLYiYCaflHGXHtGkR?=
+ =?us-ascii?Q?6jUY76PhzCJs81A8XBELxnwG8IdwJlBJEfBPNbCOPMqsFC0kwT+NYqtJcdoF?=
+ =?us-ascii?Q?9pBR88AyusIuPGHbu5i/RkGAW8BT3qeByUXPQ5eHUJc/H1BJULbCxMRjNHa+?=
+ =?us-ascii?Q?ppXszq0Uu9yoNx53oPWDoPLl7pLtyIdY0ePHQKFqniAhol7BPOEWf3GgeUD7?=
+ =?us-ascii?Q?eIPkvdJFlLfX0BpRKHLZay0pUSVE67xZHO1q8mjB5LgGePE2W5KDCJoD5e6g?=
+ =?us-ascii?Q?LZkKzxUJFjbzQwPGY6VViy0On+/uOmsbzy3L/PA8jdm45ZBuMv5hmy7OLfYY?=
+ =?us-ascii?Q?jvjvTDJGwVJra6fk3XmgvyQewmzaOAC1b4HZnB6MknlsrLPLRZ+B3anKS3yG?=
+ =?us-ascii?Q?wx6UNnlmFsrq/NN6RjPeXYt4+WaMaXauWyjQCSgM9rx+FBS3EfQuAVjT1onl?=
+ =?us-ascii?Q?TgG1Fh930oE5a/e1+nOh7NAJPxMKLMAqXGgFfWgI5UNPxn+A913waVyyX9VW?=
+ =?us-ascii?Q?OXmQwUeAJaSwIzmwODSebzkXXAiUCWiM9xfJLxQosh7qJH7fTvSCZmSvHfOg?=
+ =?us-ascii?Q?+j8la+ceq5BtyjI/HlUd/63CNqpS3+vyMklLG9lHHf4Vwj7s9zOIQ0VKntcg?=
+ =?us-ascii?Q?xkJrcGVih+aWHcCjmulTNTHU40pOmEYFEfxC4TNcyjavx6ESi3EVMRnivRlT?=
+ =?us-ascii?Q?UvLOWrb+dI94Qg/gjqQBjRjpvXHuJBfxFWhtw4vUg8+Qc9EfKAwMTcfNhFuP?=
+ =?us-ascii?Q?DcrZRlskeATCN7gggThzjlcNfmuyPidX0GuVxIeHd6fFETXNW2Dqqj8x7cTa?=
+ =?us-ascii?Q?rh17EQDlIVKdd3dZ/4vZbkVPpalMwlidbGRhcl6Ev908gXaBOpLg0+U63rgX?=
+ =?us-ascii?Q?KPVQ/wkSAlBEHp22N4SDpgGwflt4ijj5qFCU5ivJb9e5hSs+orqOhvF/41RY?=
+ =?us-ascii?Q?s8TxA5nzxh4S0oX5Da4X8yyu2tvo0duFKBE+Dcvx6WmGskspuu7dg9xVTwme?=
+ =?us-ascii?Q?TGNgAm23puJTqhGQ/2At88SWbLlLJe0k06WUoPxLftRTzVPPoDYhcX+yrRFa?=
+ =?us-ascii?Q?sArVIqm+2eWYkZ6768GcuPSyw5uO3FzlDO17EMgMO08nyK2r7kszBhwQ+0Lv?=
+ =?us-ascii?Q?6Eu2TjDPDiMcGmapA7Amj+I5oCl/SMwea3SYxPzcU1wZchB+qvtGe1GY5A0Z?=
+ =?us-ascii?Q?0JiXKscYpQvw5a5YZ0Xi8IqdLYgpbBD24eScXwiVR5xO6wATkGG+7GvWdTOD?=
+ =?us-ascii?Q?BI6b0eIMrrDYhEAftaZsum4Otl/Xdt6HZCTjN/OTtvgkFmFwXXwkuth4XmYZ?=
+ =?us-ascii?Q?YBp943kqq08sNyrNuKPJDYZESNpTMH2QuXbSY3WaBxTQJOssUwnJ3BWgEqjT?=
+ =?us-ascii?Q?eNf1FpO82kLckEOmVcLrjTxRB8DUUqkSpvQoiobtb4xgS1y5iR+mYX0LP4yt?=
+ =?us-ascii?Q?sH0aU2hOX7jv1ZCzjHND4vH2vG18IuanvcSf3sB/kUgRmIhy2HVNVBEO9kfn?=
+ =?us-ascii?Q?MGMbS0PN0UBRP1ZTa/z8paDZgsr9Tv90oG5Oqd9RGoDJ+LyhSxlvKMajvs6J?=
+ =?us-ascii?Q?Q0Xsl9ib8TaptYf3AkqAtejDoY+umC10r9HqDsOr55Tk9KPpVRmqbobe2iyk?=
+ =?us-ascii?Q?+cQUrarWU8+Y+JxV25pQT8SIyxj0Cr0XvOccyb3A0CIl4yMIECjBrF9Bxksy?=
+ =?us-ascii?Q?yY2R52vKvQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB9082.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33142ea9-0876-448b-a947-08da17b6d789
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2022 10:18:49.2706
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qIXZ/D3lNGxKw3cDejsTwFzvg52w/DfcnHkuHgpBqH8EgT5RgXA8wXAKfLu9FLtGYRCYM82h/1zZOhiihmUoHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6330
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 at 14:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.19 release.
-> There are 1017 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.19-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>=20
+> There are cases when we want to test a simple "hello world"
+> app on the DSP and we do not need a resource table.
+>=20
+> remoteproc core allows us having an optional rsc_table.
+>=20
+> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
 
-NOTE:
-Anders enabled extra kconfigs to reproduce Shuah reported build regression
-and proposed two additional two commits for the fix.
+Acked-by: Shengjiu Wang <shengjiu.wang@gmail.com>
 
-## Build
-* kernel: 5.16.19-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: 5d3da1624789df6fa741a30aa6cd98c541f25528
-* git describe: v5.16.18-1018-g5d3da1624789
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.18-1018-g5d3da1624789
+Best regards
+Wang Shengjiu
 
-## Test Regressions (compared to v5.16.18-959-gef4d007f65de)
-No test regressions found.
+> ---
+>  drivers/remoteproc/imx_dsp_rproc.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c
+> b/drivers/remoteproc/imx_dsp_rproc.c
+> index 2abee78df96e..987ab1add761 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -802,6 +802,14 @@ static void imx_dsp_rproc_kick(struct rproc *rproc,
+> int vqid)
+>  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid,
+> err);  }
+>=20
+> +static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct
+> +firmware *fw) {
+> +	if (rproc_elf_load_rsc_table(rproc, fw))
+> +		dev_warn(&rproc->dev, "no resource table found for this
+> firmware\n");
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct rproc_ops imx_dsp_rproc_ops =3D {
+>  	.prepare	=3D imx_dsp_rproc_prepare,
+>  	.unprepare	=3D imx_dsp_rproc_unprepare,
+> @@ -809,7 +817,7 @@ static const struct rproc_ops imx_dsp_rproc_ops =3D {
+>  	.stop		=3D imx_dsp_rproc_stop,
+>  	.kick		=3D imx_dsp_rproc_kick,
+>  	.load		=3D imx_dsp_rproc_elf_load_segments,
+> -	.parse_fw	=3D rproc_elf_load_rsc_table,
+> +	.parse_fw	=3D imx_dsp_rproc_parse_fw,
+>  	.sanity_check	=3D rproc_elf_sanity_check,
+>  	.get_boot_addr	=3D rproc_elf_get_boot_addr,
+>  };
+> --
+> 2.27.0
 
-## Metric Regressions (compared to v5.16.18-959-gef4d007f65de)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16.18-959-gef4d007f65de)
-No test fixes found.
-
-## Metric Fixes (compared to v5.16.18-959-gef4d007f65de)
-No metric fixes found.
-
-## Test result summary
-total: 105413, pass: 88695, fail: 1159, skip: 14378, xfail: 1181
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracin[
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

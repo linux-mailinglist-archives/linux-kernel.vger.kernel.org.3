@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4554F5F82
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81CA4F5F36
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiDFNHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S232991AbiDFNNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiDFNGf (ORCPT
+        with ESMTP id S233595AbiDFNMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:06:35 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777DC5DE2AC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:40:43 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id f38so3063065ybi.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kYMTnVbKZb14hTPQbaLRIxPgj7UusTT0smTXojvT54o=;
-        b=H2heIrruY2WXCA/JBhDLFuyEyB5W29rhEE9oasb272qSCTotofpqCps+Scq0e4bMEP
-         rgxQUChZSnFNhksIND8MJq0KLteGG+5nrTpEafuYKQJg+k/RviLceA47vA/9kPKy92xz
-         fflBWWfh/ylypIV2F2ZRicDKfbjM5gEjwkuReNiLEPkUzHgXv51xtwCpuDWS7i8ff3um
-         wcS8xyypVPVCDp0AV4JzWWvehCzJTwXpOFGXIlDHHJwxvUG41ogibesLUfwsrQ8FvFzf
-         fL2TOl+XGNpfd3/QnG4sMbh8yx7c4bv4Ew46ZqI6cjM8rPV426F/dnlvgyG44+ehMCFR
-         fM4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kYMTnVbKZb14hTPQbaLRIxPgj7UusTT0smTXojvT54o=;
-        b=bzp0XqOvGVETuAysPbDWa8bG6bH+L5KILI5CbZesRZlh43GzwvIqkW26tUza261KVs
-         Y55UJFhxy2tilBzpzZR+AQv9raaLzXI7IxdyAqKraYAMldKRr7QNl+7Pj8U0MJeCosfv
-         xFAi1ea8y95LMpoyeR2OOEGAVY8dhgK3tpyfLI2u+qcR+NZA2Gx/nlZ0mQQKc6lV63Jq
-         2DiPcuYMY/mi+VpPTxsLGxVG/mzbhGd1xBE/pllz30kmuL7naE3oT8yXFhtzqfXdQf96
-         oKSeAdgU2v4cfCZAwzuddLGiODoi0dwHW4KJmkwE3rMzU6v+R4NkHwQ32oFx8Km1SyDf
-         /VnQ==
-X-Gm-Message-State: AOAM531O3ySCIlbZAP5FZuhM7n8AMti7v4o7q5guuNgR6IGCJBB6Xvyr
-        0q3k0z5T+DhLEfHf/TxZWBD4QHiEBj2GdzBsq0QBUQ==
-X-Google-Smtp-Source: ABdhPJy8rfzJ/R3bJ36z4knt9034VlzfxKLGhEmCeGO21EoalFxtZqpYUAvNRh7lfsjSV1vvT6eTKi7fItQ03MoXGXQ=
-X-Received: by 2002:a05:6902:1028:b0:639:7ca3:84db with SMTP id
- x8-20020a056902102800b006397ca384dbmr5986894ybt.357.1649237877980; Wed, 06
- Apr 2022 02:37:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405070354.155796697@linuxfoundation.org> <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
- <CADYN=9+pshm3PGa0+JY=yR3bTQySUxdTUVtNraKXOS_ZDTXWsw@mail.gmail.com>
-In-Reply-To: <CADYN=9+pshm3PGa0+JY=yR3bTQySUxdTUVtNraKXOS_ZDTXWsw@mail.gmail.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 6 Apr 2022 11:37:47 +0200
-Message-ID: <CADYN=9JcNwpPmJ0Y4zTTOAAm-2BuBEqjUfpHBt8ND-tc+mO4Fg@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        ranjani.sridharan@linux.intel.com
+        Wed, 6 Apr 2022 09:12:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085B14E1D1E;
+        Wed,  6 Apr 2022 02:49:44 -0700 (PDT)
+X-UUID: 61da098c1a8f4141b6812e69d4ab8532-20220406
+X-UUID: 61da098c1a8f4141b6812e69d4ab8532-20220406
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1250012946; Wed, 06 Apr 2022 17:38:39 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 6 Apr 2022 17:38:38 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 6 Apr 2022 17:38:37 +0800
+Message-ID: <d7c0b9573e32d68c25444e48e6df1bba0eb64262.camel@mediatek.com>
+Subject: Re: [PATCH v9 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
+ pinctrls properties
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 6 Apr 2022 17:38:37 +0800
+In-Reply-To: <Ykc53EmCaA7TadRK@robh.at.kernel.org>
+References: <20220329032913.8750-1-axe.yang@mediatek.com>
+         <20220329032913.8750-2-axe.yang@mediatek.com>
+         <CAPDyKFqoTN1pF-L6qCHxpdMCmPtHP0aHHaDURN2QJsN3v+wZBw@mail.gmail.com>
+         <Ykc53EmCaA7TadRK@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,93 +71,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 11:30, Anders Roxell <anders.roxell@linaro.org> wrote=
-:
->
-> On Wed, 6 Apr 2022 at 01:03, Shuah Khan <skhan@linuxfoundation.org> wrote=
-:
-> >
-> > On 4/5/22 1:15 AM, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.16.19 release.
-> > > There are 1017 patches in this series, all will be posted as a respon=
-se
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
-h-5.16.19-rc1.gz
-> > > or in the git tree and branch at:
-> > >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git linux-5.16.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > >
-> >
-> > Build failed on my system. The following is the problem commit. There
-> > are no changes to the config between 5.16.18 and this build.
-> >
-> > Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> >      ASoC: SOF: Intel: hda: Remove link assignment limitation
->
-> I saw the same build error, after applying the following patches it
-> builds fine again.
+On Fri, 2022-04-01 at 12:43 -0500, Rob Herring wrote:
+> On Fri, Apr 01, 2022 at 11:22:13AM +0200, Ulf Hansson wrote:
+> > On Tue, 29 Mar 2022 at 05:29, Axe Yang <axe.yang@mediatek.com>
+> > wrote:
+> > > 
+> > > Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
+> > > This feature allow SDIO devices alarm asynchronous interrupt to
+> > > host
+> > > even when host stop providing clock to SDIO card. An extra wakeup
+> > > interrupt and pinctrl states for SDIO DAT1 pin state switching
+> > > are
+> > > required in this scenario.
+> > > 
+> > > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> > > ---
+> > >  .../devicetree/bindings/mmc/mtk-sd.yaml         | 17
+> > > ++++++++++++++++-
+> > >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > index 297ada03e3de..3872a6ce2867 100644
+> > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > @@ -69,12 +69,22 @@ properties:
+> > >        - const: ahb_cg
+> > > 
+> > >    interrupts:
+> > > -    maxItems: 1
+> > > +    description:
+> > > +      Should at least contain MSDC GIC interrupt. To support
+> > > SDIO in-band wakeup, an extended
+> > > +      interrupt is required and be configured as wakeup source
+> > > irq.
+> > 
+> > If I understand correctly, the extended interrupt (a GPIO irq) may
+> > not
+> > necessarily share the same interrupt parent as the primary device
+> > interrupt.
+> > 
+> > Perhaps it's then better to extend this with "interrupts-extended"
+> > instead. See Documentation/devicetree/bindings/interrupt-
+> > controller/interrupts.txt.
+> 
+> 'interrupts-extended' is interchangeable with 'interrupts'. For
+> schemas, 
+> use 'interrupts' and the tools take care of supporting both forms.
+> 
 
-I'm sorry managed to grab the wrong commit, This is the two commits:
-a792bfc1c2bc ("ASoC: SOF: Intel: hda-stream: limit PROCEN workaround")
-81ed6770ba67 ("ASoC: SOF: Intel: hda: expose get_chip_info()")
+hello Ulf, you are right, the wakeup interrupt(parent is &pio) do not
+share same parent as primary interrupt(parent is &gic). And as you
+said, I am using "interrupts-extended" to declare the wakeup irq, see
+commit message in patch 3/3:
+         &mmcX {
+                 ...
+                 interrupts-extended = <...>,
+                                       <&pio xxx IRQ_TYPE_LEVEL_LOW>;
+                 ...
+                 pinctrl-names = "default", "state_uhs", "state_eint";
+                 ...
+                 pinctrl-2 = <&mmc2_pins_eint>;
+                 ...
+                 cap-sdio-irq;
+                 keep-power-in-suspend;
+                 wakeup-source;
+                 ...
+         };
+
+But the wakup interrupt is for SDIO only, in most instances, MSDC is
+been used as eMMC/SD card host, they do not need this interrupt. So as
+Rob suggested, I think we'd better keep using 'interrupts'. And I will
+update the description for 'interrupts', suggest to use 'interrupts-
+extended' to declare SDIO wakeup interrupt.
+
+And 'interrupt-names' is a good idea, I will add this property to
+document too. Thank you for the advice.
+
+Regards,
+Axe
 
 
->
-> Cheers,
-> Anders
->
-> >
-> >    CC [M]  sound/soc/sof/intel/hda-dai.o
-> > sound/soc/sof/intel/hda-dai.c: In function =E2=80=98hda_link_stream_ass=
-ign=E2=80=99:
-> > sound/soc/sof/intel/hda-dai.c:86:24: error: implicit declaration of fun=
-ction =E2=80=98get_chip_info=E2=80=99; did you mean =E2=80=98get_group_info=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-> >     86 |                 chip =3D get_chip_info(sdev->pdata);
-> >        |                        ^~~~~~~~~~~~~
-> >        |                        get_group_info
-> > sound/soc/sof/intel/hda-dai.c:86:22: error: assignment to =E2=80=98cons=
-t struct sof_intel_dsp_desc *=E2=80=99 from =E2=80=98int=E2=80=99 makes poi=
-nter from integer without a cast [-Werror=3Dint-conversion]
-> >     86 |                 chip =3D get_chip_info(sdev->pdata);
-> >        |                      ^
-> > sound/soc/sof/intel/hda-dai.c:94:35: error: =E2=80=98const struct sof_i=
-ntel_dsp_desc=E2=80=99 has no member named =E2=80=98quirks=E2=80=99
-> >     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_=
-FMT_QUIRK)) {
-> >        |                                   ^~
-> > sound/soc/sof/intel/hda-dai.c:94:46: error: =E2=80=98SOF_INTEL_PROCEN_F=
-MT_QUIRK=E2=80=99 undeclared (first use in this function)
-> >     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_=
-FMT_QUIRK)) {
-> >        |                                              ^~~~~~~~~~~~~~~~~=
-~~~~~~~~~
-> > sound/soc/sof/intel/hda-dai.c:94:46: note: each undeclared identifier i=
-s reported only once for each function it appears in
-> > cc1: all warnings being treated as errors
-> > make[4]: *** [scripts/Makefile.build:287: sound/soc/sof/intel/hda-dai.o=
-] Error 1
-> > make[3]: *** [scripts/Makefile.build:549: sound/soc/sof/intel] Error 2
-> > make[2]: *** [scripts/Makefile.build:549: sound/soc/sof] Error 2
-> > make[1]: *** [scripts/Makefile.build:549: sound/soc] Error 2
-> > make: *** [Makefile:1846: sound] Error 2
-> >
-> > thanks,
-> > -- Shuah
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org

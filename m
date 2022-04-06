@@ -2,138 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5E04F5DD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998764F5E14
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbiDFMYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S233129AbiDFMYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiDFMW7 (ORCPT
+        with ESMTP id S234308AbiDFMXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:22:59 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B775DB4BC;
-        Wed,  6 Apr 2022 01:07:34 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id n6so2513001ejc.13;
-        Wed, 06 Apr 2022 01:07:34 -0700 (PDT)
+        Wed, 6 Apr 2022 08:23:14 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E69116D;
+        Wed,  6 Apr 2022 01:08:38 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id d29so1930947wra.10;
+        Wed, 06 Apr 2022 01:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Oy67HKB+CH5MprbImCqTy7TMJ9Sc0ffSgIQtidsk7ic=;
+        b=NbUT5qTkF0/yhbtTMiRU91oFoO0A54Mr1tlwna16DC4OO0Rr/LNqXcYHCszzOaUxjV
+         6/x2ZV853pL7kHV4/RSDr8FsYGEWC0U2h5TULHMl5Tl5AkhueCmCKJp1FXV4PeLwtQJP
+         unoNRURHRC1IpADCz0yElwjJtGKB4cw5VSJ7vK+CAnF8zgtDgj4uWlV7TrvPCYZTBwBr
+         6dIYnop/zOV07tgWx4e7/ff8WqO6BSL+ahSr/4rDLUPJ7yBviKCuYO66ThgWTnazwt3u
+         QR46MaoMWWyaltmwYP4iv66YyBURkogn2t0/JLY3nFhP/Jhs8hT6ydJNUglysMoF3zDy
+         qDUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iOgrKLV2a4LHZWuaU0zd4hmFB+3+hL8SxL1QKpt1vFw=;
-        b=Aeu0h6eoM3DuD02xlZdprKNSyY6HFgcAKRfyttW8MkDO7zFCP9YDSWeJydn0npQfMw
-         u6HYqON/EDXyOOhjyRFO6jBvp2t94Qgz/nRfPt2sW2+V6RRwTWBJ5CZIVRZxHLEeDnmx
-         x04k4IpxMrwjJ5SAAE/mAGVeTsFDT2rZFLlBlOxlf37VJ6KDp0n8SYSJQCvk5Dph0iWj
-         yBO/QJ5RuGqm0/9W3EM2R1j5ApwIINjTaa8sSivzhuIfMj29neSwFnMhKtNrkWSAua63
-         EmxUdN+vvO3X9ax6wOm8NmOZkdNMmWhILn5HlBDrMGofw6w171i92QTfl2vPFHtlqUKR
-         uVWA==
-X-Gm-Message-State: AOAM533tZBGsSOeh7HTXbaYnk7pIIlcQSaTHZfkXgfHL/9og6e0sBZpf
-        Gu5mOYy+Ajnlw7hGXhrDKGQ83vNpqQs=
-X-Google-Smtp-Source: ABdhPJwgTUFvg/eSX3csMe5evjOo9LmO3q9dhkvN2Iw+ERs2TBcEZaZRM7zyBJuvJ462spR/0PyR/g==
-X-Received: by 2002:a17:907:7245:b0:6e4:b142:f736 with SMTP id ds5-20020a170907724500b006e4b142f736mr7316050ejc.58.1649232453089;
-        Wed, 06 Apr 2022 01:07:33 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm1918181ejb.143.2022.04.06.01.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:07:32 -0700 (PDT)
-Message-ID: <cffdfa4c-57f8-a8f7-758e-2975b91d7b92@kernel.org>
-Date:   Wed, 6 Apr 2022 10:07:31 +0200
+        bh=Oy67HKB+CH5MprbImCqTy7TMJ9Sc0ffSgIQtidsk7ic=;
+        b=f7QK6LOR/Zp4ke41y6ZPkcl63JsVzIQhUvg3UnpKVxFBEbKAUTWdV5bOnhzrQ436K4
+         vy3PxKbuJqr9TRJtBjO+Uf96j/rpPL9MyTAg7YOO8f28ArK3Ty92j3FZ+axmCoPpUHzO
+         gIGhZwPvp2+Yw5ZM275TQtCeWMj8HYTZy+Lq5p4LID1Uh3VSpLUDb0IEofg/dbvgbKMI
+         mkETjljV4jjsSWjo4TQR2ibtAifZADF92GZP3qDMZI2/rYrCo3jqQVAyd/SpmjivNvfg
+         rNfvlPZf4bR36t+rosfwwQcwdZYj38msFUrkOrZm7JVw32nDr+pLAYw9A/LZccEDaSRV
+         LFWw==
+X-Gm-Message-State: AOAM533igNL7u77mDyftQLa+tk2FI4x2YWVGz5Ze5M4gF+gE4uWxDdL5
+        VOz0hz83moKmqh5u5Gv/vbs=
+X-Google-Smtp-Source: ABdhPJyGUySVImbWHPE8ZMHJL80liCjqLWjiWY9DChxMxo3AEPwcFSHgFeTYEXGDgCP96GwANq5Omg==
+X-Received: by 2002:a5d:6d8b:0:b0:203:f9b4:be1d with SMTP id l11-20020a5d6d8b000000b00203f9b4be1dmr5704571wrs.298.1649232517257;
+        Wed, 06 Apr 2022 01:08:37 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l3-20020a1ced03000000b0038ce57d28a1sm4035390wmh.26.2022.04.06.01.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 01:08:36 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] libbpf: Fix spelling mistake "libaries" -> "libraries"
+Date:   Wed,  6 Apr 2022 09:08:35 +0100
+Message-Id: <20220406080835.14879-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] tty: Add lookahead param to receive_buf
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
- <20220405102437.4842-2-ilpo.jarvinen@linux.intel.com>
- <YkxoR+jA9tDJOqNU@smile.fi.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <YkxoR+jA9tDJOqNU@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05. 04. 22, 18:03, Andy Shevchenko wrote:
-> On Tue, Apr 05, 2022 at 01:24:36PM +0300, Ilpo Järvinen wrote:
->> After lookahead for XON/XOFF characters is added by the next
->> patch, the receive side needs to ensure the flow-control
->> actions are not retaken later on when those same characters
->> get read by TTY.
->>
->> Thus, pass lookahead count to receive_buf and skip
->> flow-control character actions if already taken for the
->> character in question. Lookahead count will become live after
->> the next patch.
-> 
-> ...
-> 
->> -static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c)
->> +static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
->> +				       bool lookahead_done)
->>   {
->>   	struct n_tty_data *ldata = tty->disc_data;
->>   
->>   	if (I_IXON(tty)) {
->>   		if (c == START_CHAR(tty)) {
->> -			start_tty(tty);
->> -			process_echoes(tty);
->> +			if (!lookahead_done) {
->> +				start_tty(tty);
->> +				process_echoes(tty);
->> +			}
->>   			return;
->>   		}
->>   		if (c == STOP_CHAR(tty)) {
->> -			stop_tty(tty);
->> +			if (!lookahead_done)
->> +				stop_tty(tty);
->>   			return;
->>   		}
-> 
-> Wouldn't be cleaner to inside out the conditionals?
+There is a spelling mistake in a pr_warn message. Fix it.
 
-Seconded.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/lib/bpf/usdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 	if (I_IXON(tty)) {
-> 		if (lookahead_done) {
-> 			// Can be joined, but I think this is better
-
-I would join them, IMO it'd be still easy to read and to follow too.
-
-> 			if (c == START_CHAR(tty))
-> 				return;
-> 			if (c == STOP_CHAR(tty))
-> 				return;
-> 		} else {
-> 			if (c == START_CHAR(tty)) {
-> 				start_tty(tty);
-> 				process_echoes(tty);
-> 				return;
-> 			}
-> 			if (c == STOP_CHAR(tty)) {
-> 				stop_tty(tty);
-> 				return;
-> 			}
-> 		}
-> 	}
-
-thanks,
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 1bce2eab5e89..c5acf2824fcc 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -687,7 +687,7 @@ static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *
+ 			 * to shared libraries with no PID filter.
+ 			 */
+ 			if (pid < 0) {
+-				pr_warn("usdt: attaching to shared libaries without specific PID is not supported on current kernel\n");
++				pr_warn("usdt: attaching to shared libraries without specific PID is not supported on current kernel\n");
+ 				err = -ENOTSUP;
+ 				goto err_out;
+ 			}
 -- 
-js
-suse labs
+2.35.1
+

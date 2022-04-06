@@ -2,121 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F594F5E56
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB754F6086
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiDFMsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S234068AbiDFNxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiDFMrj (ORCPT
+        with ESMTP id S233555AbiDFNxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:47:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B91560F6
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:03:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E32F01F38A;
-        Wed,  6 Apr 2022 09:03:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649235804; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SrjnSu7MjHBeqhbgwuRAlgVZcIuW8Y0moN9j8NoG/2Y=;
-        b=hK3uk7ZGEbYQ9rMasmKvb/ieiNW3V8pdEqG7wto/Ka98MV5hqlcBOjjzdc4iDGvzs7y9xg
-        85Q40e4pWsJt06oN+1jHiFWMw2N9AjcCZWISGJWYBC84oXU5vXpDi5XizENheFcEuWsEQu
-        dyqtnbYesQBoXzcTQPvIA7madlvgO4I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649235804;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SrjnSu7MjHBeqhbgwuRAlgVZcIuW8Y0moN9j8NoG/2Y=;
-        b=fJQD4Pq0hC66czHrzhbWHn2F86x6yzKpfmgdTskQvhKFEiSTcZCQumdQ1JHB4a9Q/UZX6u
-        RBUWyQ0efG0HWVCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AEE28139F5;
-        Wed,  6 Apr 2022 09:03:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xx4BKlxXTWKPeQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 06 Apr 2022 09:03:24 +0000
-Message-ID: <b3d4255d-2a63-b2cb-bd1b-dc7812d95fe9@suse.cz>
-Date:   Wed, 6 Apr 2022 11:03:24 +0200
+        Wed, 6 Apr 2022 09:53:25 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478CF48B850
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:04:24 -0700 (PDT)
+X-UUID: 2a68b10bd70c4878b239404787f1c2ac-20220406
+X-UUID: 2a68b10bd70c4878b239404787f1c2ac-20220406
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <lienze@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 745961270; Wed, 06 Apr 2022 17:03:06 +0800
+X-ns-mid: postfix-624D5787-6421288226
+Received: from localhost.localdomain (unknown [172.30.60.63])
+        by cs2c.com.cn (NSMail) with ESMTPSA id 99FDF383C642;
+        Wed,  6 Apr 2022 09:04:07 +0000 (UTC)
+From:   Enze Li <lienze@kylinos.cn>
+To:     phil@philpotter.co.uk
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] cdrom: make EXPORT_SYMBOL follow exported function
+Date:   Wed,  6 Apr 2022 17:03:37 +0800
+Message-Id: <20220406090337.1116708-1-lienze@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 3/6] mm/slub: use stackdepot to save stack trace in
- objects
-Content-Language: en-US
-To:     David Rientjes <rientjes@google.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>
-References: <20220404164112.18372-1-vbabka@suse.cz>
- <20220404164112.18372-4-vbabka@suse.cz>
- <5f7d33ec-1e73-cdfc-54e5-e93d346ac78@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <5f7d33ec-1e73-cdfc-54e5-e93d346ac78@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 23:40, David Rientjes wrote:
->> -static void set_track(struct kmem_cache *s, void *object,
->> +static void noinline set_track(struct kmem_cache *s, void *object,
->>  			enum track_item alloc, unsigned long addr)
->>  {
->>  	struct track *p = get_track(s, object, alloc);
->>  
->> -#ifdef CONFIG_STACKTRACE
->> +#ifdef CONFIG_STACKDEPOT
->> +	unsigned long entries[TRACK_ADDRS_COUNT];
->>  	unsigned int nr_entries;
->>  
->> -	metadata_access_enable();
->> -	nr_entries = stack_trace_save(kasan_reset_tag(p->addrs),
->> -				      TRACK_ADDRS_COUNT, 3);
->> -	metadata_access_disable();
->> -
->> -	if (nr_entries < TRACK_ADDRS_COUNT)
->> -		p->addrs[nr_entries] = 0;
->> +	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
->> +	p->handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-> 
-> I think this should also have __GFP_NOWARN set since this allocation could 
-> easily fail and it would unnecessarily spam the kernel log unless we 
-> actually care about the stack trace being printed later (and the patch 
-> already indicates the allocation failed in print_track() when it matters).
+Currently, some EXPORT_SYMBOL declarations do not follow the exported
+function, which affects the readability of the code.  To maintain
+consistency, move these EXPORT_SYMBOL declarations to the correct
+position to improve the readability of the code.
 
-Good point. But turns out __stack_depot_save() adds it for us already.
+Signed-off-by: Enze Li <lienze@kylinos.cn>
+---
+ drivers/cdrom/cdrom.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-> Otherwise:
-> 
-> Acked-by: David Rientjes <rientjes@google.com>
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 7bd10d63ddbe..2d9dce967c90 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -648,6 +648,7 @@ int register_cdrom(struct gendisk *disk, struct cdrom_device_info *cdi)
+ 	mutex_unlock(&cdrom_mutex);
+ 	return 0;
+ }
++EXPORT_SYMBOL(register_cdrom);
+ #undef ENSURE
+ 
+ void unregister_cdrom(struct cdrom_device_info *cdi)
+@@ -663,6 +664,7 @@ void unregister_cdrom(struct cdrom_device_info *cdi)
+ 
+ 	cd_dbg(CD_REG_UNREG, "drive \"/dev/%s\" unregistered\n", cdi->name);
+ }
++EXPORT_SYMBOL(unregister_cdrom);
+ 
+ int cdrom_get_media_event(struct cdrom_device_info *cdi,
+ 			  struct media_event_desc *med)
+@@ -690,6 +692,7 @@ int cdrom_get_media_event(struct cdrom_device_info *cdi,
+ 	memcpy(med, &buffer[sizeof(*eh)], sizeof(*med));
+ 	return 0;
+ }
++EXPORT_SYMBOL(cdrom_get_media_event);
+ 
+ static int cdrom_get_random_writable(struct cdrom_device_info *cdi,
+ 			      struct rwrt_feature_desc *rfd)
+@@ -1206,6 +1209,7 @@ int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
+ 	cdi->use_count--;
+ 	return ret;
+ }
++EXPORT_SYMBOL(cdrom_open);
+ 
+ /* This code is similar to that in open_for_data. The routine is called
+    whenever an audio play operation is requested.
+@@ -1301,6 +1305,7 @@ void cdrom_release(struct cdrom_device_info *cdi, fmode_t mode)
+ 			cdo->tray_move(cdi, 1);
+ 	}
+ }
++EXPORT_SYMBOL(cdrom_release);
+ 
+ static int cdrom_read_mech_status(struct cdrom_device_info *cdi, 
+ 				  struct cdrom_changer_info *buf)
+@@ -1383,6 +1388,7 @@ int cdrom_number_of_slots(struct cdrom_device_info *cdi)
+ 	kfree(info);
+ 	return nslots;
+ }
++EXPORT_SYMBOL(cdrom_number_of_slots);
+ 
+ 
+ /* If SLOT < 0, unload the current slot.  Otherwise, try to load SLOT. */
+@@ -1582,6 +1588,7 @@ void init_cdrom_command(struct packet_command *cgc, void *buf, int len,
+ 	cgc->data_direction = type;
+ 	cgc->timeout = CDROM_DEF_TIMEOUT;
+ }
++EXPORT_SYMBOL(init_cdrom_command);
+ 
+ /* DVD handling */
+ 
+@@ -2000,6 +2007,7 @@ int cdrom_mode_sense(struct cdrom_device_info *cdi,
+ 	cgc->data_direction = CGC_DATA_READ;
+ 	return cdo->generic_packet(cdi, cgc);
+ }
++EXPORT_SYMBOL(cdrom_mode_sense);
+ 
+ int cdrom_mode_select(struct cdrom_device_info *cdi,
+ 		      struct packet_command *cgc)
+@@ -2015,6 +2023,7 @@ int cdrom_mode_select(struct cdrom_device_info *cdi,
+ 	cgc->data_direction = CGC_DATA_WRITE;
+ 	return cdo->generic_packet(cdi, cgc);
+ }
++EXPORT_SYMBOL(cdrom_mode_select);
+ 
+ static int cdrom_read_subchannel(struct cdrom_device_info *cdi,
+ 				 struct cdrom_subchnl *subchnl, int mcn)
+@@ -2893,6 +2902,7 @@ int cdrom_get_last_written(struct cdrom_device_info *cdi, long *last_written)
+ 	*last_written = toc.cdte_addr.lba;
+ 	return 0;
+ }
++EXPORT_SYMBOL(cdrom_get_last_written);
+ 
+ /* return the next writable block. also for udf file system. */
+ static int cdrom_get_next_writable(struct cdrom_device_info *cdi,
+@@ -3430,18 +3440,7 @@ int cdrom_ioctl(struct cdrom_device_info *cdi, struct block_device *bdev,
+ 
+ 	return -ENOSYS;
+ }
+-
+-EXPORT_SYMBOL(cdrom_get_last_written);
+-EXPORT_SYMBOL(register_cdrom);
+-EXPORT_SYMBOL(unregister_cdrom);
+-EXPORT_SYMBOL(cdrom_open);
+-EXPORT_SYMBOL(cdrom_release);
+ EXPORT_SYMBOL(cdrom_ioctl);
+-EXPORT_SYMBOL(cdrom_number_of_slots);
+-EXPORT_SYMBOL(cdrom_mode_select);
+-EXPORT_SYMBOL(cdrom_mode_sense);
+-EXPORT_SYMBOL(init_cdrom_command);
+-EXPORT_SYMBOL(cdrom_get_media_event);
+ 
+ #ifdef CONFIG_SYSCTL
+ 
+-- 
+2.25.1
 
-Thanks!

@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8551F4F6C26
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510814F6C2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiDFVJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S235492AbiDFVKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235172AbiDFVJY (ORCPT
+        with ESMTP id S233283AbiDFVKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:09:24 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4831E1D97FC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:48:28 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id s2so3421876pfh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 12:48:28 -0700 (PDT)
+        Wed, 6 Apr 2022 17:10:02 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171391B29D7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:49:31 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id p8so3143765qvv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 12:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ivY7gPzhCgTPb85y1ArAKDyYkjWGtkQUuxuGGpkRaB4=;
-        b=VvB/mS82pqmKMl7KSQBIAG2cz/OPBPDhEpi43Dh6W74+CSb3UnqLDmrhyfYy1ZrHfK
-         qhQchnHgWM+MWNjqXDTtA/tWHN3xsSQtKfHirf5Wb9GYA/GYSvNu9nuowSMuVQLMssxJ
-         JMRkb4iJo5rz646ajP+Y5tViG2WW+ZfZg5BCujD1ZcnY8dwqqA4fvWA08IrZPlMMwGzE
-         34fyvuqWo292jtJEsmn/htAVeLM9UwH1hnQWdGZOLBMjbuAzajSi3bdxQcW+iAcJxOqH
-         3TE/kAanMwYLNvjPdAyQsqY8/BwdE+RKGzPDrNEsb2Q8PG34u72F1zjmPsAh4l3InMYd
-         xYbA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YALPcXFlHyjJhM5IWic8x8fsXsmFYfOaEejI/INaLqA=;
+        b=Y/LXP7pUpQ/mB4D2Bm5PRBF+M9OQHdXqn1VwvqNhpwGTAGnOYEvjaT7gj06TOoXUlA
+         Q7JoZlyaXNJXIzIyqVy0C1436BtgV1uvf5vNDam8qufk0kDTp5kRX7+VoTPKNwHHYibO
+         mE49Cgi9zQ1+YVg9j0PpdETJD0CebPzxvpx0O7YMQ3qHHW6z5WO4n47LK6Ecoy4zMyq5
+         LdvfSN/wS8f9agQoDVjQoXDMc6hwWLpPkNg9NL/h9kVYrIWdxQJcmuPK+7vaHqjZJ2LP
+         ob1vZmvXVrvh6KC6diiiDq4HGv29tj0Bh7cZqbu2cJgCsFkyq2aYQYXvvF7VGAAAm1oP
+         //7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ivY7gPzhCgTPb85y1ArAKDyYkjWGtkQUuxuGGpkRaB4=;
-        b=Qc86kXuTGNfojKTs1r4CfyC6Jy1EpqQcBdcilnTHYKwHbxNzEsHZNSFIkUgjXdIwJa
-         mKzMsYurSxk5lX1IFWCcK/+kpkvXc6lJ/KvqmYNjPmoAHbIKDc+agacgdFECrYopHCSq
-         I2k9hLJPqejwT0htiheh1cWCfbbuoYy/sUU7cALqeXe4hanWIB7QH0pP1p+KMADHHvVv
-         7oT9CqkpS/7yX9rmzz69jxnH8X9MEG5KyuzIPfNDMWrJMvGMBbGQMrRSxFZcVymdgHy/
-         6EB4n5BvC53slQq31tAjiTbKJZs0IO+x/EMLyk7sN/D5xmbJ0xFrTmDmh4dK/0SVFQba
-         mgMA==
-X-Gm-Message-State: AOAM531ivuvdyDarRMNAZqWY4hFbfXnNFNjxuEm+xfmpXDaEE5CtFYs3
-        GJy4Qdy2IPlCa+XDcenhY5y2lA==
-X-Google-Smtp-Source: ABdhPJxVp7ccl3nSue9FWuysUOekRnmu5STmGGspjwZDhaJlXmHWwGHr+WuuT+iuISJHS0oB3AzSag==
-X-Received: by 2002:a63:204a:0:b0:399:5905:37ab with SMTP id r10-20020a63204a000000b00399590537abmr8377689pgm.229.1649274507577;
-        Wed, 06 Apr 2022 12:48:27 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i2-20020a625402000000b004fdf66ab35fsm12737270pfb.21.2022.04.06.12.48.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 12:48:26 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 19:48:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
- the instruction
-Message-ID: <Yk3uh6f+0nOdybd3@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
- <YkzxXw1Aznv4zX0a@google.com>
- <eed1cea4-409a-f03e-5c31-e82d49bb2101@maciej.szmigiero.name>
- <Yk3Jd6xAfgVoFgLc@google.com>
- <5135b502-ce2e-babb-7812-4d4c431a5252@maciej.szmigiero.name>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YALPcXFlHyjJhM5IWic8x8fsXsmFYfOaEejI/INaLqA=;
+        b=6hp8XWcveFE+w9ejthZ+Db/rqg2JuQ704TxVZvah5gnLXByoYpSYLNqQC81dYw+TCy
+         DVdjapEI9zQyEZUwiYE7ml3bk7rjuX5gpFLc/J2f728NcEyEeaw1k4o4L7FJJ9o6BVY9
+         dR64f4Be4+2jdJJq0rdZ+DBfhnCyj/zteYzc3hGovATo2WdmpDlIQIkPSs+tDHRTCyBk
+         q3s9lKi1DYRMxqkyPFzPa3oIEPn841VbBKLk1aY9KZn84/M5KCuA/Ic26CDHRxUH+yde
+         Zk6tEVH9AFgRVr9fzCCGQ+HIxSHkgFwasDbynsSGmGxWxee0U1Tt88mtnJVARVm4isN8
+         Gm6A==
+X-Gm-Message-State: AOAM5323lD6Qcjjad5H3MHMEbQQ/9ff2QTRR1eTgzbbUYgP/LVOIuv3T
+        HKLd6IJBo7wntfv93WK//jUqsDbjzNs=
+X-Google-Smtp-Source: ABdhPJyjAFFP99pb0yXCVblrbdHgl6DOsqGtHutYkUmDsLh2vpyMSccdvfQIZzYPQpBTuRkkFrg6kw==
+X-Received: by 2002:a05:6214:21ce:b0:444:612:aa52 with SMTP id d14-20020a05621421ce00b004440612aa52mr905523qvh.89.1649274571036;
+        Wed, 06 Apr 2022 12:49:31 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id h206-20020a379ed7000000b0067b5192da4csm10262086qke.12.2022.04.06.12.49.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 12:49:30 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2eb57fd3f56so38596187b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 12:49:30 -0700 (PDT)
+X-Received: by 2002:a81:b04a:0:b0:2eb:6919:f27 with SMTP id
+ x10-20020a81b04a000000b002eb69190f27mr8641057ywk.54.1649274570313; Wed, 06
+ Apr 2022 12:49:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5135b502-ce2e-babb-7812-4d4c431a5252@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220406192956.3291614-1-vladimir.oltean@nxp.com> <20220406192956.3291614-3-vladimir.oltean@nxp.com>
+In-Reply-To: <20220406192956.3291614-3-vladimir.oltean@nxp.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 6 Apr 2022 15:48:54 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSe0YNxNqR5kWSB3+8DLEBz4FDQBXG0w8yTDTKCRtrrR_w@mail.gmail.com>
+Message-ID: <CA+FuTSe0YNxNqR5kWSB3+8DLEBz4FDQBXG0w8yTDTKCRtrrR_w@mail.gmail.com>
+Subject: Re: [PATCH 4.14 2/2] net: add missing SOF_TIMESTAMPING_OPT_ID support
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,105 +83,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
-> On 6.04.2022 19:10, Sean Christopherson wrote:
-> > On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
-> And what if it's L0 that is trying to inject a NMI into L2?
-> In this case is_guest_mode() is true, but the full NMI injection machinery
-> should be used.
+On Wed, Apr 6, 2022 at 3:30 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
+> From: Willem de Bruijn <willemb@google.com>
+>
+> [ Upstream commit 8f932f762e7928d250e21006b00ff9b7718b0a64 ]
+>
+> SOF_TIMESTAMPING_OPT_ID is supported on TCP, UDP and RAW sockets.
+> But it was missing on RAW with IPPROTO_IP, PF_PACKET and CAN.
+>
+> Add skb_setup_tx_timestamp that configures both tx_flags and tskey
+> for these paths that do not need corking or use bytestream keys.
+>
+> Fixes: 09c2d251b707 ("net-timestamp: add key to disambiguate concurrent datagrams")
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Gah, you're right, I got misled by a benign bug in nested_vmx_l1_wants_exit() and
-was thinking that NMIs always exit.  The "L1 wants" part should be conditioned on
-NMI exiting being enabled.  It's benign because KVM always wants "real" NMIs, and
-so the path is never encountered.
+Acked-by: Willem de Bruijn <willemb@google.com>
 
-@@ -5980,7 +6005,7 @@ static bool nested_vmx_l1_wants_exit(struct kvm_vcpu *vcpu,
-        switch ((u16)exit_reason.basic) {
-        case EXIT_REASON_EXCEPTION_NMI:
-                intr_info = vmx_get_intr_info(vcpu);
--               if (is_nmi(intr_info))
-+               if (is_nmi(intr_info) && nested_cpu_has_nmi_exiting(vmcs12))
-                        return true;
-                else if (is_page_fault(intr_info))
-                        return true;
-
-
-> > > Also, *L2* being the target of such injection definitely should not block
-> > > further NMIs for *L1*.
-> > 
-> > Actually, it should block NMIs for L1.  From L1's perspective, the injection is
-> > part of VM-Entry.  That's a single gigantic instruction, thus there is no NMI window
-> > until VM-Entry completes from L1's perspetive.  Any exit that occurs on vectoring
-> > an injected event and is handled by L0 should not be visible to L1, because from
-> > L1's perspective it's all part of VMRUN/VMLAUNCH/VMRESUME.  So blocking new events
-> > because an NMI (or any event) needs to be reinjected for L2 is correct.
-> 
-> I think this kind of NMI blocking will be already handled by having
-> the pending new NMI in vcpu->arch.nmi_pending but the one that needs
-> re-injecting in vcpu->arch.nmi_injected.
-> 
-> The pending new NMI in vcpu->arch.nmi_pending won't be handled until
-> vcpu->arch.nmi_injected gets cleared (that is, until re-injection is
-> successful).
-
-Yep.
-
-> It is incorrect however, to wait for L2 to execute IRET to unblock
-> L0 -> L1 NMIs or L1 -> L2 NMIs, in these two cases we (L0) just need the CPU
-> to vector that L2 NMI so it no longer shows in EXITINTINFO.
-
-Yep, and the pending NMI should cause KVM to request an "immediate" exit that
-occurs after vectoring completes.
-
-> It is also incorrect to block L1 -> L2 NMI injection because either L1
-> or L2 is currently under NMI blocking: the first case is obvious,
-> the second because it's L1 that is supposed to take care of proper NMI
-> blocking for L2 when injecting an NMI there.
-
-Yep, but I don't think there's a bug here.  At least not for nVMX.
-
-> > > * When re-injecting a *hardware* IRQ into L2 GIF is checked (previously
-> > > even on the BUG_ON() level), while L1 should be able to inject even when
-> > > L2 GIF is off,
-> > 
-> > Isn't that just a matter of tweaking the assertion to ignore GIF if L2 is
-> > active?  Hmm, or deleting the assertion altogether, it's likely doing more harm
-> > than good at this point.
-> 
-> I assume this assertion is meant to catch the case when KVM itself (L0) is
-> trying to erroneously inject a hardware interrupt into L1 or L2, so it will
-> need to be skipped only for L1 -> L2 event injection.
-
-Yeah, that's what my git archeaology came up with too.
-
-> Whether this assertion benefits outweigh its costs is debatable - don't have
-> a strong opinion here (BUG_ON() is for sure too strong, but WARN_ON_ONCE()
-> might make sense to catch latent bugs).
-> 
-> > > With the code in my previous patch set I planned to use
-> > > exit_during_event_injection() to detect such case, but if we implement
-> > > VMCB12 EVENTINJ parsing we can simply add a flag that the relevant event
-> > > comes from L1, so its normal injection side-effects should be skipped.
-> > 
-> > Do we still need a flag based on the above?  Honest question... I've been staring
-> > at all this for the better part of an hour and may have lost track of things.
-> 
-> If checking just is_guest_mode() is not enough due to reasons I described
-> above then we need to somehow determine in the NMI / IRQ injection handler
-> whether the event to be injected into L2 comes from L0 or L1.
-> For this (assuming we do VMCB12 EVENTINJ parsing) I think we need an extra flag.
-
-Yes :-(  And I believe the extra flag would need to be handled by KVM_{G,S}ET_VCPU_EVENTS.
- 
-> > > By the way, the relevant VMX code also looks rather suspicious,
-> > > especially for the !enable_vnmi case.
-> > 
-> > I think it's safe to say we can ignore edge cases for !enable_vnmi.  It might even
-> > be worth trying to remove that support again (Paolo tried years ago), IIRC the
-> > only Intel CPUs that don't support virtual NMIs are some funky Yonah SKUs.
-> 
-> Ack, we could at least disable nested on !enable_vnmi.
-> 
-> BTW, I think that besides Yonah cores very early Core 2 CPUs also lacked
-> vNMI support, that's why !enable_vnmi support was reinstated.
-> But that's hardware even older than !nrips AMD parts.
+Thanks for handling the cherry-pick to stable of this fix, Vladimir.

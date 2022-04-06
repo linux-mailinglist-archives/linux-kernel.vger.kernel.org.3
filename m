@@ -2,89 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1B54F6B77
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C054F6B81
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiDFUeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S233923AbiDFUkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiDFUdE (ORCPT
+        with ESMTP id S234864AbiDFUkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:33:04 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BE365021
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:55:01 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id k14so3001616pga.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 11:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3UwS67a96Tb6SDCw770nS82cwtsxoFoCCEDFi2dayKs=;
-        b=QwvBgZECwWIxCMgkRGEbJujhDdTc1utsklWF3FNHR8M0OKB3ndAMk1Oi9O7LSZ1AQg
-         fpECfDRnjuzQn4OziK063RbFwCQsPJ/CGgTT4fUv46pDflCTY210/+biid5NTqduYLbb
-         Sb+4gTvmccRJzQ0Fd1SXDeS2WNttTR0uVFXW27AoRQrh+VG1Jw12m8q8dJR81Mrv81My
-         wFgBTdmEmZDwjLuluHqRo6qWH2Pi+z9BOwhw1oHO+a2en3n7sv0npOiUMA00YI7pWrfP
-         JKizjxX0m0ckqqhQAVQUAjZzqWIyADy/kMB3zdFrsnSwOqTDGXtyWwzWqaeKSUfYptUa
-         myTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3UwS67a96Tb6SDCw770nS82cwtsxoFoCCEDFi2dayKs=;
-        b=PCxkR13Um9S7MJkcvKfjyT+gsDaXxzjhbpQOtjGXBsz0rUbXbsUbBoQV0eJBswsU5M
-         JWkHoNhNXx2fiaUetcUMMEz84kuWtJQlg9lyEeJJS/i918NgJ8azCX+Oq5Eppm2bSunk
-         Ml2yMo+6Efa2F8y6UE3hjy+zpynEHOVt0a0Cy2S3KSdV0LQ7S8eBPnYNXpyAPyZ7AwDN
-         Z18zw/l8ukmCzLn4bw7zJTFPFrPqc8SytQ/9GSEh/EgH/N5/vlaOEznb9FEDqz7XJqkj
-         55reJsV0NEbiynUy/V8IN9B2PE+iCexlp8VM4HbNFE/ihuYfYQYnB4SFfd1GSwriaVO1
-         In3w==
-X-Gm-Message-State: AOAM533Co3Ok5Ei8rwXVLjpo2cUPoWIrDZrgziVUWXe4Y7MynxAiDdO/
-        IzhigfR8wknCvVOd1dso2AICeg==
-X-Google-Smtp-Source: ABdhPJwLt1JpqlwVw3x5E2e7SNXCzHby2VVZ2genX56F+WKjgXE6zz87d/CzoeM8HMRx1mtQwFoFYg==
-X-Received: by 2002:a05:6a00:1252:b0:4fa:afcc:7d24 with SMTP id u18-20020a056a00125200b004faafcc7d24mr10142251pfi.85.1649271300765;
-        Wed, 06 Apr 2022 11:55:00 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k20-20020aa788d4000000b004fb07f819c1sm20270581pff.50.2022.04.06.11.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:55:00 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 18:54:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chenyi Qiang <chenyi.qiang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tao Xu <tao3.xu@intel.com>
-Subject: Re: [PATCH v5 2/3] KVM: VMX: Enable Notify VM exit
-Message-ID: <Yk3iAKW1sdA4StiC@google.com>
-References: <20220318074955.22428-1-chenyi.qiang@intel.com>
- <20220318074955.22428-3-chenyi.qiang@intel.com>
- <YkzgLGlCAG2ZwgqS@google.com>
+        Wed, 6 Apr 2022 16:40:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409F4398201;
+        Wed,  6 Apr 2022 11:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eiI7X6dT42yKGQJQb30m9eUSmBWaGsGGkVUqKrcoGx4=; b=LWDVJ/ZSal1eHjVTrYsVrSwlKr
+        ApMgW1FbcuXL6b0jKhUUkux08j2su2wbZQVFTnKaDbAHeeOMeUJAHsUkUueocktlsREn/Und0NI2w
+        Rq5fOth9IRM6Zcba/37iVrBgL+A3k/9IMSPHfKgIJEdWCX+LwPMUq5sA3UOl4OjCWG8E=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ncAr5-00EVUY-Ni; Wed, 06 Apr 2022 20:58:11 +0200
+Date:   Wed, 6 Apr 2022 20:58:11 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Potin Lai <potin.lai@quantatw.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, davem@davemloft.net,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Patrick Williams <patrick@stwcx.xyz>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next RESEND v2 1/3] net: mdio: aspeed: move reg
+ accessing part into separate functions
+Message-ID: <Yk3iw0ENOYUBrXK2@lunn.ch>
+References: <20220406170055.28516-1-potin.lai@quantatw.com>
+ <20220406170055.28516-2-potin.lai@quantatw.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkzgLGlCAG2ZwgqS@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220406170055.28516-2-potin.lai@quantatw.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022, Sean Christopherson wrote:
-> On Fri, Mar 18, 2022, Chenyi Qiang wrote:
-> Ha, and I think skipping this path on VMX_EXIT_REASONS_FAILED_VMENTRY is also
-> technically wrong.  That's still a VM-Exit, I'm pretty sure failed VM-Entry only
-> skips the MSR load/store list processing (because the load lists on VM-Entry are
-> processed after the final consistency checks).
+On Thu, Apr 07, 2022 at 01:00:53AM +0800, Potin Lai wrote:
+> Add aspeed_mdio_op() and aseed_mdio_get_data() for register accessing.
+> 
+> aspeed_mdio_op() handles operations, write command to control register,
+> then check and wait operations is finished (bit 31 is cleared).
+> 
+> aseed_mdio_get_data() fetchs the result value of operation from data
+> register.
+> 
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 
-Nope, I'm wrong, the SDM explicit states that only EXIT_QUALIFICATION is modified
-on VM-Entry failure VM-Exits.  Which means we actually have the opposite bug as
-KVM is clearing a bunch of fields.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew

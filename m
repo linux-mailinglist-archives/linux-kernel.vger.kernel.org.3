@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13FB4F6425
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00304F647C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbiDFPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S236588AbiDFPvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236488AbiDFPvj (ORCPT
+        with ESMTP id S236646AbiDFPuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:51:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D3F1587A0;
-        Wed,  6 Apr 2022 06:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649250693; x=1680786693;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dhKZFE7l+zk7iULmf3peuVOi1f+iSF+Jfyv10og7Xqg=;
-  b=K+B+TTuPShb+CIS2OhycOLA0rPPpcVS8C1jshFWIZBOJVeVTK8tvvV9v
-   RzKXDAziLWqC+QXEO6hbGsq7a7u4RimL4Y6+RZoF/1Czk+nKAc09DqNL7
-   0Oyevl9S3XamrbbYZJ41mThbu9FmUwJiN6FQ4sDIQyjVzp3hBpD3W0BwS
-   AWK3iTD9gV4qv10rLHU7zen0O0zBIsY0GO3DTQHg7CCKCcrMrrwrL0bLu
-   c2sB97wGzsLzjDGCTVb57gJuYjskHqRL7RIducPPqLiMnfEvqJeRu0SxZ
-   RF7Pskf6fqxVPGaZKct15pwk78xYsXSSEVPlD4tjhoWQpDd6Sq6YsHD1w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="324208113"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="324208113"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:09:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="697364975"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Apr 2022 06:09:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8585B405; Wed,  6 Apr 2022 16:05:55 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 4/4] device property: Constify fwnode APIs that uses fwnode_get_next_parent()
-Date:   Wed,  6 Apr 2022 16:05:52 +0300
-Message-Id: <20220406130552.30930-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
-References: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
+        Wed, 6 Apr 2022 11:50:01 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8D72CCB0D;
+        Wed,  6 Apr 2022 06:08:52 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d29so3105668wra.10;
+        Wed, 06 Apr 2022 06:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EzPicKvhciEAshSHE/waFTsLkuf/DuXzcy4ZuAGYnOQ=;
+        b=ZYv5p3MjHvI8UrhE6y/d5AJOhKKDQVlCHSNdip8u3z4CcvBJcKQ8oD6c1RWTeExkK1
+         v4cjRoN/i0pYgQkZfJlLDo2EfdJDgFu7rGHeRogFVEfkgRN4Z4oCKOOUJCf50s0uRjjS
+         LlOeu0sDQkrNbfcjpleVjhFwDblFIE3EP22lt9x1QV9I9/t9Btk9oGzNXLS3Jwm5Wb88
+         oFe0tO+M2YWSYPnNhCnxARmvOCqYhrwHblygkyDSZJsJO/t8OxGg+vSUfNs3ev1RdwpA
+         a4eWqeh0gjhTzsUs1gIE1GYYiz59nAenynDYpUlIwXrmMgY1Uukv8orchLBAQ2QGPzVc
+         5jvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EzPicKvhciEAshSHE/waFTsLkuf/DuXzcy4ZuAGYnOQ=;
+        b=76dFYriHvVvlGiZm5dZP6G0T4lR8XsXCCTgHlDybu5+NuIoKVzE/B1gH8cybGkyb4C
+         nCT1dp97/LTzz0r+JzFhgpDO6ASS8yuEAvHEedo2glOnWEI6qHEvWxHYJAAVuhZmiTBx
+         mtSvlevSkOI3yf27hG+w/3CTgl0vwOOVXC4yZZX9hRPantb5N8/Y4fRMsZjoEYwWE2qy
+         k9UgwNNxj4lnmFUdzg/q9VC8Tmb5DCKUf3jnc0gFS7zcY+zf5wib2WLdujM55YN/cYkE
+         8CQntxTkLKlD5gb7qYSMNXROSdpOeGAtUrjf+ow4wrhDRitnDbvKqy2Iijs5chjCSSrl
+         O0ZQ==
+X-Gm-Message-State: AOAM533pDugwQ2LTWvTyd7nfBVLbrYJljrBZPSO+/iENn4oqOYkqc4Om
+        xaLRsAdEmEHjAJoYoa4YzzYGIaiOPfY=
+X-Google-Smtp-Source: ABdhPJx0Yr5teJaPktbkGEyUw2tv218TFtm8lcAFMNVMPKfCxv/8tvYndt0yGBd8nPkC8ru6DeBr6Q==
+X-Received: by 2002:adf:fb0b:0:b0:205:dfbd:8601 with SMTP id c11-20020adffb0b000000b00205dfbd8601mr6302576wrr.527.1649250525257;
+        Wed, 06 Apr 2022 06:08:45 -0700 (PDT)
+Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
+        by smtp.gmail.com with ESMTPSA id v18-20020adfc5d2000000b0020589b76704sm15184511wrg.70.2022.04.06.06.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 06:08:44 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 15:08:42 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] gpu: host1x: fix a kernel-doc warning
+Message-ID: <Yk2Q2kcgrECbhAi4@orome>
+References: <20220403225354.2492-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9J87IkycnimcbG86"
+Content-Disposition: inline
+In-Reply-To: <20220403225354.2492-1-rdunlap@infradead.org>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to fwnode_get_next_parent() used to be called against the parameters
-of some of fwnode APIs those parameters have no const qualifier. However,
-after switching to fwnode_for_each_parent_node() API now it's possible to
-constify the parameters. Do it for good.
 
-The affected functions are:
+--9J87IkycnimcbG86
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	fwnode_get_next_parent_dev()
-	fwnode_get_nth_parent()
-	fwnode_is_ancestor_of()
+On Sun, Apr 03, 2022 at 03:53:54PM -0700, Randy Dunlap wrote:
+> Add @cache description to eliminate a kernel-doc warning.
+>=20
+> include/linux/host1x.h:104: warning: Function parameter or member 'cache'=
+ not described in 'host1x_client'
+>=20
+> Fixes: 1f39b1dfa53c ("drm/tegra: Implement buffer object cache")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: linux-tegra@vger.kernel.org
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> ---
+>  include/linux/host1x.h |    1 +
+>  1 file changed, 1 insertion(+)
+>=20
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v5: new patch
- drivers/base/property.c  | 7 +++----
- include/linux/property.h | 9 ++++-----
- 2 files changed, 7 insertions(+), 9 deletions(-)
+Applied, thanks.
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 839ee7f3ee12..79e0adfa1e24 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -594,7 +594,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_parent);
-  * The caller of this function is expected to call put_device() on the returned
-  * device when they are done.
-  */
--struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
-+struct device *fwnode_get_next_parent_dev(const struct fwnode_handle *fwnode)
- {
- 	struct fwnode_handle *parent;
- 	struct device *dev;
-@@ -639,8 +639,7 @@ EXPORT_SYMBOL_GPL(fwnode_count_parents);
-  * The caller is responsible for calling fwnode_handle_put() for the returned
-  * node.
-  */
--struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
--					    unsigned int depth)
-+struct fwnode_handle *fwnode_get_nth_parent(const struct fwnode_handle *fwnode, unsigned int depth)
- {
- 	struct fwnode_handle *parent;
- 
-@@ -664,7 +663,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
-  *
-  * Returns true if @ancestor is an ancestor of @child. Otherwise, returns false.
-  */
--bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle *child)
-+bool fwnode_is_ancestor_of(const struct fwnode_handle *ancestor, const struct fwnode_handle *child)
- {
- 	struct fwnode_handle *parent;
- 
-diff --git a/include/linux/property.h b/include/linux/property.h
-index fc24d45632eb..119bf7d6a02f 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -91,11 +91,10 @@ struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode);
- 	for (parent = fwnode_get_parent(fwnode); parent;	\
- 	     parent = fwnode_get_next_parent(parent))
- 
--struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode);
--unsigned int fwnode_count_parents(const struct fwnode_handle *fwn);
--struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwn,
--					    unsigned int depth);
--bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle *child);
-+struct device *fwnode_get_next_parent_dev(const struct fwnode_handle *fwnode);
-+unsigned int fwnode_count_parents(const struct fwnode_handle *fwnode);
-+struct fwnode_handle *fwnode_get_nth_parent(const struct fwnode_handle *fwnode, unsigned int depth);
-+bool fwnode_is_ancestor_of(const struct fwnode_handle *ancestor, const struct fwnode_handle *child);
- struct fwnode_handle *fwnode_get_next_child_node(
- 	const struct fwnode_handle *fwnode, struct fwnode_handle *child);
- struct fwnode_handle *fwnode_get_next_available_child_node(
--- 
-2.35.1
+Thierry
 
+--9J87IkycnimcbG86
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJNkNoACgkQ3SOs138+
+s6GQ7A//U1t+rjKiIEIQmxmnfruDLVKJ+IOn6D45CGb52JfwVSCEK+1JC5Z3V7+a
+owzbWNXmCh33rHIf4wiXGZYmlkXcyjYCowBMDGsUejA+eVlQzo8H2eiNfovPkBFB
+M+UY1gB0T1KbzEpDO5i9a1tBfy22P38pV19sxN8EKkq0pwdFXKwwQ3xMw+SC0e7L
+jDrWqJgp4pg1H10+GlHM8ipHOhCx0QNcYae9T1vTsToa56gmOWadGnHqUHUhb1ES
+KjnpZg08XPq3fcw/AEzir4SZqfgx8O7MJYGofzZOnXoztNoH9ytiiPDfY5CeQy2a
+ExDOgXX+hckf0rr2uIJWvqxklDAt1QkIaT7+68MMh/kuzEwNdmyXBcOzggrD+IlQ
+xk56pa5abrdxWgb9p6E4CKyjvTAJ+puc30jbaZLG6T1Deh+92dBJlMyLDVcaprqQ
+spqZjMe7uqEfR32Wm9b4K59HdTiacvBTfUbTgmdRazHlTJ9KOQpL+xtnU9KqhMmu
+h/ahj7DYwXSkt26G1z5rPcJ6cp8tO1pjHcZSaIWxfXJbzYQ/EikyYn4p2YTEPBak
+kOkev2jc09VAKLUxn5NA3TK5lwHRu42IBRaNWn8odtvjDTWFYwSDSr+KOIX1gy3X
+aRKKkrkteE1wpYeWhVxv+B5CJiOs73jXDsoPtlwZKA35Xtu5SuY=
+=xxNp
+-----END PGP SIGNATURE-----
+
+--9J87IkycnimcbG86--

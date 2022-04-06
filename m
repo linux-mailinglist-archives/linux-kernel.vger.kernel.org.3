@@ -2,157 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C334F6538
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2631A4F653B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbiDFQOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S237274AbiDFQPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237354AbiDFQOY (ORCPT
+        with ESMTP id S237134AbiDFQPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:14:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366365DA04;
-        Wed,  6 Apr 2022 06:41:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C82B1615E4;
-        Wed,  6 Apr 2022 13:41:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02E5C385A3;
-        Wed,  6 Apr 2022 13:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649252466;
-        bh=BmgZ/1mmISCzEBB5knGB373Rii6dB/CAioOuAHnaKJA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JlSFfjYaAB9PLg4Rofz28z7Pvxlm2o7uwTzjQJBHk1qaQ2fjpGZlexGkRtO+CGxqC
-         lBiig24iJqQDbfq21HS92W5sy4K8LteUZMV+s7P3yAHOyqtQWPRT/rI4gDkOdokzOZ
-         b0hWn8YlNYnHRU7RZFTExCRrMxsUhirWFc3wyUpjEUG315qdyf5rhHSxdXWQKJI3Hh
-         zfqV8/1JDs/WWubPcOp65sZTH9P9oFVkiXRls1fs4DyybyWOPUV4cePez0+gu7yR5p
-         gdos7XP19oddCW85Aa9t1cKsVGbatF0tPOt33yiqTWM1UNyJTGLGw+u0ueiaGRGfWs
-         xGrrzRMWuPV4g==
-Message-ID: <f0ed169ed02fe810076e959e9ec5455d9de4b4ff.camel@kernel.org>
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Xiubo Li <xiubli@redhat.com>,
-        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 06 Apr 2022 09:41:04 -0400
-In-Reply-To: <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
-References: <20220401133243.1075-1-lhenriques@suse.de>
-         <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
-         <878rsia391.fsf@brahms.olymp>
-         <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
-         <87zgky8n0o.fsf@brahms.olymp>
-         <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
-         <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 6 Apr 2022 12:15:05 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221902A26E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:41:37 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id l26so4402167ejx.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 06:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0IeTkY1yhaJPK6VDqHKztL6/sdrLKeK5VaUPik01uco=;
+        b=WbP9ySUZSPgHLrHFRxIUWqAkKlwtz3/lphdxBTdMOVQuUT5+HfJKYrAg4eUTEsXZkz
+         8e8KhdnBO1xUEtEoMVUbtRmhxsR8BiyPPc5TfM+9lfBW5O/VYyOW+YLyas51CMQO09SJ
+         sZRGZOroZ5LEsaydgXPFKgZgbG1xzpflqC0GHSWYpUCcjg8C4j+ZieSFKHPLTUOmbrOS
+         FoxY0v0cP6iQBZ+ms6c4zzRlAar3PgroXfqXIn9AfuiaBKa3RqrlilCrfE7ZwizUQ6Gj
+         m53Hcr11tJjGhloLapsO3Q2jt656PpXU7Rt7ClPkwJ/n3+3r+zLKxwgtFNDXTmcfVLZU
+         ZYlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0IeTkY1yhaJPK6VDqHKztL6/sdrLKeK5VaUPik01uco=;
+        b=6Iw7zn8Y1Xtvd20tsENPlDb4tHQSagUGPRqJrltTo2QrwgzX42OaRnGC9RghfWwshd
+         qRRVXr49J5rZS9WBhNDisxop1ZhOHVuljtmAwnh0kihFJ27WjGftNXoU9RRK3YL6Npcq
+         MwCtSsAqiPrKOYrSDcxiiryBNrPS1eYzY1ohgLp6zRkYgyhS4wF0M62b0CoKOcHiQ/Qm
+         PMfKCLJbD7RKuJi7s3Ao4MN5h5HpAU4kngFyMQ5SMwD5Vo5kr7MH0TZu8AO7pGqtNDcD
+         fC99iu3/j4O5NjOyO+Ss5HdYOWd58CgdZ+vK5MbRegAN903zsQo6oyAH8tN9jAEw9bRN
+         GgBw==
+X-Gm-Message-State: AOAM533wYYMyiYInkFQ8tvnPIVSWb4Tf3tHzELpUZxSdmAFbPkFb8g+m
+        gtjvnj2VPHbn/tq7iasnt3iYfbP189Se29E2Xos=
+X-Google-Smtp-Source: ABdhPJxZ9dElneUwA1wzU6Q0bcRp/j+jGbBrxLosQpe0RT2zY1YIsaK+d6cZ5N6w4jJF97TCJJ6VotA+kDLMYk0zyDo=
+X-Received: by 2002:a17:907:980b:b0:6e0:71d9:c87e with SMTP id
+ ji11-20020a170907980b00b006e071d9c87emr8142309ejc.510.1649252495645; Wed, 06
+ Apr 2022 06:41:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404222132.12740-1-h0tc0d3@gmail.com> <c55e9866-83f6-a3a0-2ad3-40090e978b40@amd.com>
+In-Reply-To: <c55e9866-83f6-a3a0-2ad3-40090e978b40@amd.com>
+From:   =?UTF-8?B?0JPRgNC40LPQvtGA0LjQuQ==?= <h0tc0d3@gmail.com>
+Date:   Wed, 6 Apr 2022 16:41:34 +0300
+Message-ID: <CAD5ugGDL7U1TiOW3P=ecwVhF95XgdibtoYGV8GzbAskuB5UWCA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdkfd: Fix potential NULL pointer dereference
+To:     Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 21:10 +0800, Xiubo Li wrote:
-> On 4/6/22 7:48 PM, Jeff Layton wrote:
-> > On Wed, 2022-04-06 at 12:33 +0100, Luís Henriques wrote:
-> > > Xiubo Li <xiubli@redhat.com> writes:
-> > > 
-> > > > On 4/6/22 6:57 PM, Luís Henriques wrote:
-> > > > > Xiubo Li <xiubli@redhat.com> writes:
-> > > > > 
-> > > > > > On 4/1/22 9:32 PM, Luís Henriques wrote:
-> > > > > > > When doing DIO on an encrypted node, we need to invalidate the page cache in
-> > > > > > > the range being written to, otherwise the cache will include invalid data.
-> > > > > > > 
-> > > > > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > > > > > > ---
-> > > > > > >     fs/ceph/file.c | 11 ++++++++++-
-> > > > > > >     1 file changed, 10 insertions(+), 1 deletion(-)
-> > > > > > > 
-> > > > > > > Changes since v1:
-> > > > > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
-> > > > > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
-> > > > > > > 
-> > > > > > > Note: I'm not really sure this last change is required, it doesn't really
-> > > > > > > affect generic/647 result, but seems to be the most correct.
-> > > > > > > 
-> > > > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> > > > > > > index 5072570c2203..b2743c342305 100644
-> > > > > > > --- a/fs/ceph/file.c
-> > > > > > > +++ b/fs/ceph/file.c
-> > > > > > > @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> > > > > > >     	if (ret < 0)
-> > > > > > >     		return ret;
-> > > > > > >     -	ceph_fscache_invalidate(inode, false);
-> > > > > > > +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
-> > > > > > >     	ret = invalidate_inode_pages2_range(inode->i_mapping,
-> > > > > > >     					    pos >> PAGE_SHIFT,
-> > > > > > >     					    (pos + count - 1) >> PAGE_SHIFT);
-> > > > > > The above has already invalidated the pages, why doesn't it work ?
-> > > > > I suspect the reason is because later on we loop through the number of
-> > > > > pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
-> > > > Checked the 'copy_page_from_iter()', it will do the kmap for the pages but will
-> > > > kunmap them again later. And they shouldn't update the i_mapping if I didn't
-> > > > miss something important.
-> > > > 
-> > > > For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context inplace,
-> > > > IMO if it needs to map the page and it should also unmap it just like in
-> > > > 'copy_page_from_iter()'.
-> > > > 
-> > > > I thought it possibly be when we need to do RMW, it may will update the
-> > > > i_mapping when reading contents, but I checked the code didn't find any
-> > > > place is doing this. So I am wondering where tha page caches come from ? If that
-> > > > page caches really from reading the contents, then we should discard it instead
-> > > > of flushing it back ?
-> > > > 
-> > > > BTW, what's the problem without this fixing ? xfstest fails ?
-> > > Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
-> > > also checked that the RMW code was never executed in this test.
-> > > 
-> > > But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
-> > > change the inode->i_mapping.
-> > > 
-> > No, kmap/unmap are all about high memory and 32-bit architectures. Those
-> > functions are usually no-ops on 64-bit arches.
-> 
-> Yeah, right.
-> 
-> So they do nothing here.
-> 
-> > > In my debugging this seemed to be the case
-> > > for the O_DIRECT path.  That's why I added this extra call here.
-> > > 
-> > I agree with Xiubo that we really shouldn't need to invalidate multiple
-> > times.
-> > 
-> > I guess in this test, we have a DIO write racing with an mmap read
-> > Probably what's happening is either that we can't invalidate the page
-> > because it needs to be cleaned, or the mmap read is racing in just after
-> > the invalidate occurs but before writeback.
-> 
-> This sounds a possible case.
-> 
-> 
-> > In any case, it might be interesting to see whether you're getting
-> > -EBUSY back from the new invalidate_inode_pages2 calls with your patch.
-> > 
-> If it's really this case maybe this should be retried some where ?
-> 
+Thanks. You are right. I found a potential bug, and as I understand
+it, the code only applies to the Aldebaran GPU and I can not check the
+correctness of the code. I only test code on my navi 10 and run GPU
+stress tests.
+My knowledge of amdgpu is limited, and fixing potential bugs allows me
+to learn more about amdgpu code. But there are many that I still don't
+understand. In any case, we need to fix the code to eliminate
+problems in the future.
 
-Possibly, or we may need to implement ->launder_folio.
+Regards, Grigory.
 
-Either way, we need to understand what's happening first and then we can
-figure out a solution for it.
--- 
-Jeff Layton <jlayton@kernel.org>
+=D0=B2=D1=82, 5 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 20:00, Felix Kuehli=
+ng <felix.kuehling@amd.com>:
+>
+> Am 2022-04-04 um 18:21 schrieb Grigory Vasilyev:
+> > In the amdgpu_amdkfd_get_xgmi_bandwidth_mbytes function,
+> > the peer_adev pointer can be NULL and is passed to amdgpu_xgmi_get_num_=
+links.
+> >
+> > In amdgpu_xgmi_get_num_links, peer_adev pointer is dereferenced
+> > without any checks: peer_adev->gmc.xgmi.node_id .
+>
+> What's worse, peer_adev is uninitialized with an undefined value if src
+> is NULL. So that code was definitely bogus.
+>
+> However, I think your patch will result in incorrect results. Currently
+> amdgpu_amdkfd_get_xgmi_bandwidth is always called with is_min=3Dtrue if
+> src=3D=3DNULL, and with is_min=3Dfalse if src!=3DNULL. The intention is, =
+that we
+> assume a single XGMI link in the case that src=3D=3DNULL. That means the
+> is_min parameter is redundant. What we should do instead is, assume that
+> num_links=3D=3D1 if src=3D=3DNULL, and drop the is_min parameter.
+>
+> That would keep things working the way they do now, and prevent
+> potential problems in the future.
+>
+> Regards,
+>    Felix
+>
+>
+> >
+> > Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c | 5 ++---
+> >   1 file changed, 2 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c b/drivers/gpu/d=
+rm/amd/amdgpu/amdgpu_amdkfd.c
+> > index be1a55f8b8c5..1a1006b18016 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
+> > @@ -541,11 +541,10 @@ int amdgpu_amdkfd_get_xgmi_bandwidth_mbytes(struc=
+t amdgpu_device *dst,
+> >       struct amdgpu_device *adev =3D dst, *peer_adev;
+> >       int num_links;
+> >
+> > -     if (adev->asic_type !=3D CHIP_ALDEBARAN)
+> > +     if (!src || adev->asic_type !=3D CHIP_ALDEBARAN)
+> >               return 0;
+> >
+> > -     if (src)
+> > -             peer_adev =3D src;
+> > +     peer_adev =3D src;
+> >
+> >       /* num links returns 0 for indirect peers since indirect route is=
+ unknown. */
+> >       num_links =3D is_min ? 1 : amdgpu_xgmi_get_num_links(adev, peer_a=
+dev);

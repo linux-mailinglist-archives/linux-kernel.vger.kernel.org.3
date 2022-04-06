@@ -2,287 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18BC4F6CB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A97B4F6CBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiDFVcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S234131AbiDFVc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiDFVb1 (ORCPT
+        with ESMTP id S232644AbiDFVc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:31:27 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC142A2662
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:37:13 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2eafabbc80aso39638367b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kSwQ++FPyKB/vl2bGzRhFWSxoUzqGVu0Qa3zcm0+NfI=;
-        b=gBxOw0iOw1J8HClN/uFFu0sKeRWMZxQ0rip9XVW1IyOZJBuu6Tzu9J8LeKdWS2jMkH
-         HTAQk5sUlb5pzXUxCnXlJS5rcuSxky8ob1bhWdUrOqBT3U1+LtuoC0d1vIGHmcF4E4v9
-         6O7XbqkiswHR4DZdZ5GfajSloucuqoM0d+FL7KBnLM5AM5zYz5Vdp2s6FKZWTmk3WirX
-         vHr7OlOL9K2e9GjiAwrTEnRMaOsl2Z8yO9WvuzSlUK75bXn0nAxK+dCJ2rsTExtvmFaF
-         144g0hKlbMM68rN6c4hmBmAs+li435U4LwVewzh/gmKUrT70RE39iCu7QkmBH8cW2WRv
-         P19A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kSwQ++FPyKB/vl2bGzRhFWSxoUzqGVu0Qa3zcm0+NfI=;
-        b=QB66p1EHlt3dS7Fw7pyO+JvvtVmQBKU4gEPVhYW2zR6IL05qp0Q9HuXwTSJPuHCEQC
-         AS+MSjEA159RSAKNgypYewowb7E5bq+9mL8tGHxAhdRynPaGrhvIhLle+9mPRTsQjgbh
-         Xfpm9T5Cq1UzcZvJr72Q27jWTTq9YmgX7myiRLoZonapBDWtvjEs91WXEWf5aznbsZoZ
-         i5pKVqG+1H7rG0EoshvsLWakEVwWRO7M3mJaDELheNmx/cG08lzy4jaWFc72dM7lnh7g
-         Dh/gSg3Tle8JsqbrOJMy1kbhT5StaRcTCR0EmeCjFSHiPo59GH1jv5bzvcsgAHiyazAu
-         ViwA==
-X-Gm-Message-State: AOAM530LHNbnwEYkwhWZR258jp/4hbNM50wJXRc6gWO3xBOogUlVa0U/
-        DDAaQdbhyDz9H3tVLMagNGG/IZmKKo6peq5AXQ1DQw==
-X-Google-Smtp-Source: ABdhPJx6BjpXpRTZbOCj6S4XC4E20ax9/WY3he9jDUUmpUOjjPX98vnnGCOKnlrBeyYUaG54088ly2FIWWatFwNAM7U=
-X-Received: by 2002:a0d:d5c3:0:b0:2e5:cc05:1789 with SMTP id
- x186-20020a0dd5c3000000b002e5cc051789mr8479547ywd.472.1649277432095; Wed, 06
- Apr 2022 13:37:12 -0700 (PDT)
+        Wed, 6 Apr 2022 17:32:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA692D35CA;
+        Wed,  6 Apr 2022 13:39:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3C98B8254C;
+        Wed,  6 Apr 2022 20:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757FFC385A5;
+        Wed,  6 Apr 2022 20:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649277541;
+        bh=PXUDYE1r6Gil/o9m5rfjYKx/BFUoyr1dI3rq+0GFdOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cd9d3yNYx5ueGCXvizdmPbLOeNrVL6KS5C9ulrFKncWNwuw/eFoj4ZgXMdrIGjDxv
+         a7fjB7+wNcj4jiIBOJK35xYyIsj6e+NpbqJQinyrR1FNlX3ZgTWjHUksIBI7YC3Omx
+         gGwXlXFrEFw+DdU48Ubs3JzmiTAVW17j0Naaa8et4nrA9ezYZlBmQvEKN9N6GxDyrt
+         V4EgEOqknmuYSsUSXN9oA2iX4BkcxxQbiFkg6SphOxCEbIr2ml5/lLBC4yKrLZ0z/f
+         UCHO7hgqZ6LQ5zOaQ7/07RWJJxT5VxoUEIQq2NGtk6k/McpEorw6y0xTMPEc3f1MqM
+         71yCvdJd8NJqQ==
+Date:   Wed, 6 Apr 2022 13:39:00 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Jane Chu <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+Message-ID: <20220406203900.GR27690@magnolia>
+References: <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+ <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
+ <YkPtptNljNcJc1g/@infradead.org>
+ <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
+ <YkQtOO/Z3SZ2Pksg@infradead.org>
+ <4ed8baf7-7eb9-71e5-58ea-7c73b7e5bb73@fujitsu.com>
+ <YkR8CUdkScEjMte2@infradead.org>
+ <20220330161812.GA27649@magnolia>
+ <fd37cde6-318a-9faf-9bff-70bb8e5d3241@oracle.com>
+ <CAPcyv4gqBmGCQM_u40cR6GVror6NjhxV5Xd7pdHedE2kHwueoQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220330174621.1567317-1-bgardon@google.com> <20220330174621.1567317-3-bgardon@google.com>
- <YkzAV8FPdSjzDOd1@google.com>
-In-Reply-To: <YkzAV8FPdSjzDOd1@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 6 Apr 2022 13:37:01 -0700
-Message-ID: <CANgfPd9frTex7L1ouCHCeNU_C6b-cxZJL+3FG31wAu5HRRT4YQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/11] KVM: selftests: Dump VM stats in binary stats test
-To:     David Matlack <dmatlack@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4gqBmGCQM_u40cR6GVror6NjhxV5Xd7pdHedE2kHwueoQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 3:19 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Wed, Mar 30, 2022 at 10:46:12AM -0700, Ben Gardon wrote:
-> > Add kvm_util library functions to read KVM stats through the binary
-> > stats interface and then dump them to stdout when running the binary
-> > stats test. Subsequent commits will extend the kvm_util code and use it
-> > to make assertions in a test for NX hugepages.
+On Tue, Apr 05, 2022 at 06:22:48PM -0700, Dan Williams wrote:
+> On Tue, Apr 5, 2022 at 5:55 PM Jane Chu <jane.chu@oracle.com> wrote:
 > >
-> > CC: Jing Zhang <jingzhangos@google.com>
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  .../selftests/kvm/include/kvm_util_base.h     |   1 +
-> >  .../selftests/kvm/kvm_binary_stats_test.c     |   3 +
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 143 ++++++++++++++++++
-> >  3 files changed, 147 insertions(+)
+> > On 3/30/2022 9:18 AM, Darrick J. Wong wrote:
+> > > On Wed, Mar 30, 2022 at 08:49:29AM -0700, Christoph Hellwig wrote:
+> > >> On Wed, Mar 30, 2022 at 06:58:21PM +0800, Shiyang Ruan wrote:
+> > >>> As the code I pasted before, pmem driver will subtract its ->data_offset,
+> > >>> which is byte-based. And the filesystem who implements ->notify_failure()
+> > >>> will calculate the offset in unit of byte again.
+> > >>>
+> > >>> So, leave its function signature byte-based, to avoid repeated conversions.
+> > >>
+> > >> I'm actually fine either way, so I'll wait for Dan to comment.
+> > >
+> > > FWIW I'd convinced myself that the reason for using byte units is to
+> > > make it possible to reduce the pmem failure blast radius to subpage
+> > > units... but then I've also been distracted for months. :/
+> > >
 > >
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > index 976aaaba8769..4783fd1cd4cf 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > @@ -401,6 +401,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
-> >
-> >  int vm_get_stats_fd(struct kvm_vm *vm);
-> >  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
-> > +void dump_vm_stats(struct kvm_vm *vm);
-> >
-> >  uint32_t guest_get_vcpuid(void);
-> >
-> > diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > index 17f65d514915..afc4701ce8dd 100644
-> > --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > @@ -174,6 +174,9 @@ static void vm_stats_test(struct kvm_vm *vm)
-> >       stats_test(stats_fd);
-> >       close(stats_fd);
-> >       TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
-> > +
-> > +     /* Dump VM stats */
-> > +     dump_vm_stats(vm);
-> >  }
-> >
-> >  static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 11a692cf4570..f87df68b150d 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -2562,3 +2562,146 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
-> >
-> >       return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
-> >  }
-> > +
-> > +/* Caller is responsible for freeing the returned kvm_stats_header. */
-> > +static struct kvm_stats_header *read_vm_stats_header(int stats_fd)
-> > +{
-> > +     struct kvm_stats_header *header;
-> > +     ssize_t ret;
-> > +
-> > +     /* Read kvm stats header */
-> > +     header = malloc(sizeof(*header));
-> > +     TEST_ASSERT(header, "Allocate memory for stats header");
-> > +
-> > +     ret = read(stats_fd, header, sizeof(*header));
-> > +     TEST_ASSERT(ret == sizeof(*header), "Read stats header");
-> > +
-> > +     return header;
-> > +}
->
-> It seems like this helper could be used in kvm_binary_stats_test.c to
-> eliminate duplicate code.
+> > Yes, thanks Darrick!  I recall that.
+> > Maybe just add a comment about why byte unit is used?
+> 
+> I think we start with page failure notification and then figure out
+> how to get finer grained through the dax interface in follow-on
+> changes. Otherwise, for finer grained error handling support,
+> memory_failure() would also need to be converted to stop upcasting
+> cache-line granularity to page granularity failures. The native MCE
+> notification communicates a 'struct mce' that can be in terms of
+> sub-page bytes, but the memory management implications are all page
+> based. I assume the FS implications are all FS-block-size based?
 
-It could, but I think the duplicate code in that test has value in
-being verbose and well commented and having a bunch of checks to
-assert things the regular library function isn't interested in.
-I'd prefer to keep the duplication as-is.
+I wouldn't necessarily make that assumption -- for regular files, the
+user program is in a better position to figure out how to reset the file
+contents.
 
->
-> > +
-> > +static void dump_header(int stats_fd, struct kvm_stats_header *header)
-> > +{
-> > +     ssize_t ret;
-> > +     char *id;
-> > +
-> > +     printf("flags: %u\n", header->flags);
-> > +     printf("name size: %u\n", header->name_size);
-> > +     printf("num_desc: %u\n", header->num_desc);
-> > +     printf("id_offset: %u\n", header->id_offset);
-> > +     printf("desc_offset: %u\n", header->desc_offset);
-> > +     printf("data_offset: %u\n", header->data_offset);
-> > +
-> > +     /* Read kvm stats id string */
-> > +     id = malloc(header->name_size);
-> > +     TEST_ASSERT(id, "Allocate memory for id string");
-> > +     ret = pread(stats_fd, id, header->name_size, header->id_offset);
-> > +     TEST_ASSERT(ret == header->name_size, "Read id string");
-> > +
-> > +     printf("id: %s\n", id);
-> > +
-> > +     free(id);
-> > +}
-> > +
-> > +static ssize_t stats_desc_size(struct kvm_stats_header *header)
-> > +{
-> > +     return sizeof(struct kvm_stats_desc) + header->name_size;
-> > +}
-> > +
-> > +/* Caller is responsible for freeing the returned kvm_stats_desc. */
-> > +static struct kvm_stats_desc *read_vm_stats_desc(int stats_fd,
-> > +                                              struct kvm_stats_header *header)
-> > +{
-> > +     struct kvm_stats_desc *stats_desc;
-> > +     size_t size_desc;
-> > +     ssize_t ret;
-> > +
-> > +     size_desc = header->num_desc * stats_desc_size(header);
-> > +
-> > +     /* Allocate memory for stats descriptors */
-> > +     stats_desc = malloc(size_desc);
-> > +     TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-> > +
-> > +     /* Read kvm stats descriptors */
-> > +     ret = pread(stats_fd, stats_desc, size_desc, header->desc_offset);
-> > +     TEST_ASSERT(ret == size_desc, "Read KVM stats descriptors");
-> > +
-> > +     return stats_desc;
-> > +}
->
-> Same with this helper.
->
-> > +
-> > +/* Caller is responsible for freeing the memory *data. */
-> > +static int read_stat_data(int stats_fd, struct kvm_stats_header *header,
-> > +                       struct kvm_stats_desc *desc, uint64_t **data)
-> > +{
-> > +     u64 *stats_data;
-> > +     ssize_t ret;
-> > +
-> > +     stats_data = malloc(desc->size * sizeof(*stats_data));
-> > +
-> > +     ret = pread(stats_fd, stats_data, desc->size * sizeof(*stats_data),
-> > +                 header->data_offset + desc->offset);
-> > +
-> > +     /* ret is in bytes. */
-> > +     ret = ret / sizeof(*stats_data);
-> > +
-> > +     TEST_ASSERT(ret == desc->size,
-> > +                 "Read data of KVM stats: %s", desc->name);
-> > +
-> > +     *data = stats_data;
-> > +
-> > +     return ret;
-> > +}
->
-> Same with this helper.
->
-> > +
-> > +static void dump_stat(int stats_fd, struct kvm_stats_header *header,
-> > +                   struct kvm_stats_desc *desc)
-> > +{
-> > +     u64 *stats_data;
-> > +     ssize_t ret;
-> > +     int i;
-> > +
-> > +     printf("\tflags: %u\n", desc->flags);
-> > +     printf("\texponent: %u\n", desc->exponent);
-> > +     printf("\tsize: %u\n", desc->size);
-> > +     printf("\toffset: %u\n", desc->offset);
-> > +     printf("\tbucket_size: %u\n", desc->bucket_size);
-> > +     printf("\tname: %s\n", (char *)&desc->name);
-> > +
-> > +     ret = read_stat_data(stats_fd, header, desc, &stats_data);
-> > +
-> > +     printf("\tdata: %lu", *stats_data);
-> > +     for (i = 1; i < ret; i++)
-> > +             printf(", %lu", *(stats_data + i));
-> > +     printf("\n\n");
-> > +
-> > +     free(stats_data);
-> > +}
-> > +
-> > +void dump_vm_stats(struct kvm_vm *vm)
-> > +{
-> > +     struct kvm_stats_desc *stats_desc;
-> > +     struct kvm_stats_header *header;
-> > +     struct kvm_stats_desc *desc;
-> > +     size_t size_desc;
-> > +     int stats_fd;
-> > +     int i;
-> > +
-> > +     stats_fd = vm_get_stats_fd(vm);
-> > +
-> > +     header = read_vm_stats_header(stats_fd);
-> > +     dump_header(stats_fd, header);
-> > +
-> > +     stats_desc = read_vm_stats_desc(stats_fd, header);
-> > +
-> > +     size_desc = stats_desc_size(header);
-> > +
-> > +     /* Read kvm stats data one by one */
-> > +     for (i = 0; i < header->num_desc; ++i) {
-> > +             desc = (void *)stats_desc + (i * size_desc);
-> > +             dump_stat(stats_fd, header, desc);
-> > +     }
-> > +
-> > +     free(stats_desc);
-> > +     free(header);
-> > +
-> > +     close(stats_fd);
-> > +}
-> > +
-> > --
-> > 2.35.1.1021.g381101b075-goog
-> >
+For fs metadata, it really depends.  In principle, if (say) we could get
+byte granularity poison info, we could look up the space usage within
+the block to decide if the poisoned part was actually free space, in
+which case we can correct the problem by (re)zeroing the affected bytes
+to clear the poison.
+
+Obviously, if the blast radius hits the internal space info or something
+that was storing useful data, then you'd have to rebuild the whole block
+(or the whole data structure), but that's not necessarily a given.
+
+--D
+

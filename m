@@ -2,179 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5FE4F5C85
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94B44F5C65
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbiDFLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S238701AbiDFLes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiDFLbH (ORCPT
+        with ESMTP id S234947AbiDFLcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:31:07 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BC7569493
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:16:27 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id g9so2768442ybf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 01:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HkJYbIHMqwQ6KzQhnlyh94SGyp2xoVLs+8NE9EwLMWg=;
-        b=pdEzYhc3D/8vfTe+xdqkwb9W3OA/Nn+PUf/QQnIvGlmAtOLtscQNdTChoStLaXhp7w
-         UGsnor+Lfy+KKJAjSprZoff8bCD1eJzNIIrQRFf2JV58NbWtPc8autMR22UrpsZtzjNQ
-         KV5yhiEiLmLV6cl33VwIta9RFWffLigB+yC92XyfauYPSpV31pMdsceWG/Ra+dioaURH
-         FPTNzss6/H8NxVDb/PlOg4Cb30+UOg1maqec3axzVXeL267MRChqwXDxsNHYsXxI2lfg
-         zrsBihbByYHmTUwlv6kXBRCLKSj+MDxL9lNmHUD0wyDMmS0WnKv0A+jo9vIzaG9iuwvg
-         +IRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HkJYbIHMqwQ6KzQhnlyh94SGyp2xoVLs+8NE9EwLMWg=;
-        b=hhrzwLGhkUMkAzuHQpKRHc9ekv3HN1skOpEcY25pF5bBqV2PPtD3HBfK/Y4cRgDi/0
-         ZDiXItZEY7XihSkp/jN7u0CZmB20Vm+hBcSTlkaFtJ+xhMu+rV2iQt9veNiTlrXOmYHJ
-         0PcmBXool/DcXonzTnsPPJe/EJ22ETDrFuieG3cwzwzpSvA3tB0jzIUcyqF+fO+HxnIf
-         7VgIKhs3l1ibHIjxU1XRMNCn3NX6qnHfO7bGd4RwGPJAQ4eHNqQjXnR1awTC/niE0EUN
-         hHUDW2Fqq/Ad5cnHEU9itjCVppiSydm2Fvch+MEMWabqi/Y918a7Sl5F1BFlpWnvmePG
-         zJUw==
-X-Gm-Message-State: AOAM530WSN+/EAnG38Sk917tiDJ1HnVS7OxpIDqHRXVZTFItkX6VIznz
-        6ohfCzBOY9EyOAPdBza25NkZTicado4WsrVEZAvjGg==
-X-Google-Smtp-Source: ABdhPJzMrCurQ3/dMDZuGfj7fAlAKqY4rSbL4z205qGDy3ZsS/DZmDyMXNksW5lk4Wmv7bQp7yblJKZ4p03bo7PF5HY=
-X-Received: by 2002:a25:bfc9:0:b0:63d:a284:3616 with SMTP id
- q9-20020a25bfc9000000b0063da2843616mr5495810ybm.416.1649232986369; Wed, 06
- Apr 2022 01:16:26 -0700 (PDT)
+        Wed, 6 Apr 2022 07:32:21 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CA656FD22;
+        Wed,  6 Apr 2022 01:20:47 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 0D75130ADE7F;
+        Wed,  6 Apr 2022 10:20:45 +0200 (CEST)
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 1D2BF30ADE4A;
+        Wed,  6 Apr 2022 10:20:44 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2368KhCX018534;
+        Wed, 6 Apr 2022 10:20:43 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2368KhL8018533;
+        Wed, 6 Apr 2022 10:20:43 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
+Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
+Date:   Wed, 6 Apr 2022 10:20:42 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Mataj Vasilevski <vasilmat@fel.cvut.cz>
+References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <202203220918.33033.pisa@cmp.felk.cvut.cz> <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
+In-Reply-To: <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-References: <20220326071159.56056-1-ebiggers@kernel.org> <CAOtvUMfpqxrdgmnzpkCW=EdUmquXYC6F=rwW+n8koJAt0Wg38g@mail.gmail.com>
- <YkuAaabISmyqcjoS@sol.localdomain>
-In-Reply-To: <YkuAaabISmyqcjoS@sol.localdomain>
-From:   Gilad Ben-Yossef <gilad@benyossef.com>
-Date:   Wed, 6 Apr 2022 11:16:16 +0300
-Message-ID: <CAOtvUMc3n0p8pcbrxTLYYWhpT=nQOQqEfXoB0DOJBoZUq7riPA@mail.gmail.com>
-Subject: Re: [PATCH] crypto: testmgr - test in-place en/decryption with two sglists
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204061020.42943.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 2:34 AM Eric Biggers <ebiggers@kernel.org> wrote:
+Hello Marc and others,
+
+On Tuesday 22 of March 2022 10:22:12 Marc Kleine-Budde wrote:
+> On 22.03.2022 09:18:32, Pavel Pisa wrote:
+> > > The driver looks much better now. Good work. Please have a look at the
+> > > TX path of the mcp251xfd driver, especially the tx_stop_queue and
+> > > tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
+> > > lockless implementation should work in your hardware, too.
+> >
+> > Is this blocker for now? I would like to start with years tested base.
 >
-> On Sun, Mar 27, 2022 at 09:04:43AM +0300, Gilad Ben-Yossef wrote:
-> > On Sat, Mar 26, 2022 at 10:13 AM Eric Biggers <ebiggers@kernel.org> wro=
-te:
-> > >
-> > > From: Eric Biggers <ebiggers@google.com>
-> > >
-> > > As was established in the thread
-> > > https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@be=
-nyossef.com/T/#u,
-> > > many crypto API users doing in-place en/decryption don't use the same
-> > > scatterlist pointers for the source and destination, but rather use
-> > > separate scatterlists that point to the same memory.  This case isn't
-> > > tested by the self-tests, resulting in bugs.
-> > >
-> > > This is the natural usage of the crypto API in some cases, so requiri=
-ng
-> > > API users to avoid this usage is not reasonable.
-> > >
-> > > Therefore, update the self-tests to start testing this case.
-> > >
-> > > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> >
-> >
-> > Thank you Eric.
-> >
-> > I have given this a lot of thought and here is what I predict will
-> > happen thanks to this added test:
-> > - We will not find a driver that this breaks, in the sense of
-> > producing wrong results and triggering failure in this test.
-> > - We probably will see drivers that when running this test when DMA
-> > debug is compiled and enabled trigger the debug warning about double
-> > DMA mapping of the same cache line.
-> >
-> > The reason is that these double mapping stemming from this test will
-> > be from mapping the same buffer as source and destination.
-> > As such, the situation that is the cause for the DMA debug warning, of
-> > a mapping causing  cache flush invalidate, followed by DMA, followed
-> > by another mapping causing cache flush/invalidate while the DMA is in
-> > flight, will not happen. Instead we will have mapping ->
-> > flush/invalidate -> another mapping -> flush/invalidate -> DMA ...
-> >
-> > Note, this is certainly not a claim we should not add this test! on
-> > the contrary ...
-> >
-> > In fact, I would be tempted to claim that this means the real problem
-> > is with an over zealous DMA debug logic. Unfortunately, I can think of
-> > other scenarios where things are not so simple:
-> >
-> > For example, what happens if a crypto API user has a buffer, which it
-> > divides into two parts, and then submit a crypto op on one part and
-> > another crypto op on the 2nd part (say encrypt and hash, just as an
-> > example). For the best of my knowledge, there is nothing forcing the
-> > split between the two parts to fall on a cache line. This can cause a
-> > double mapping of the same cache line - and this time the warning is
-> > real, because we are not guaranteed a single DMA operation following
-> > the two mappings. There is nothing much a crypto driver can do even -
-> > the two operations don't have to be done by the same driver at all...
-> >
-> > I believe the scenario you are proposing to test is a benign example
-> > of a larger issue. I also believe this is an example of Worse in
-> > Better* and that the right solution is to dictate certain rules on the
-> > callers of the crypto API. Whether these rules should or should not
-> > include a limitation of not passing the same buffer via two different
-> > scatter gather list to the same crypto op is debatable, but I think we
-> > cannot run away from defining some rules.
-> >
-> > I would really love for others to voice an opinion on this. It seems a
-> > rather narrow discussion so far between the two of us on what I feel
-> > is  a broader issue.
->
-> I don't have an answer, sorry.
->
-> I personally don't actually have a lot of interest in the crypto accelera=
-tor
-> support in the crypto API, since in the domain I work in (storage encrypt=
-ion)
-> it's much more common for inline encryption hardware to be used instead, =
-and
-> that has its own support in the Linux block layer, separate from the cryp=
-to API.
->
-> If there are fundamental issues with how crypto accelerators are supporte=
-d in
-> the crypto API, then I think that the people who actually care about such
-> hardware need to get together to create a plan for correctly supporting i=
-t.
-> Doing separate crypto operations on contiguous buffers is absolutely some=
-thing
-> that users can expect to work, so if that in fact cannot work, then I exp=
-ect
-> that this limitation will need to be very explicitly documented and check=
-ed in
-> the crypto API, and users will need to explicitly opt-in to being able to=
- use
-> crypto accelerators rather than having them (sort of) be used by default.
+> Makes sense.
 
-Very well. Since the issue I've raised is right now an theoretical
-issue, I'm going to leave it be for now.
+I have missed timing for 5.18 but v5.18-rc1 is out so I would be
+happy if we do not miss 5.19 merge window at least with minimal version.
 
-FWIW, the ccree driver passes this extra test with no failures.
+If we succeeds in review reasonably early we could fit with inclusion
+or at least the first review round of Mataj Vasilevski's 
 
-Thanks,
-Gilad
+  https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/tree/hw-timestamping
 
---=20
-Gilad Ben-Yossef
-Chief Coffee Drinker
+Please, help us to finish this subsequent goal of our portfolio development.
+I think that our work is valuable for the community, code can be tested
+even in QEMU CAN bus subsystem which we architected as well
 
-values of =CE=B2 will give rise to dom!
+  https://www.qemu.org/docs/master/system/devices/can.html
+
+I hope that it is usable for others. I have the last support call from
+Magdeburg University where they use CAN emulation for some Volkswagen
+projects. The Xilinx uses code for their CAN FD controllers emulation.
+Thei have whole stack including mainline driver for their CAN FD controller
+in mainline but on the other hand, their CAN FD is bound to Xilinx devices
+emulation. But CTU CAN FD provides generic PCI integration and can be used
+even on broad range of FPGAs so its emulation and matching driver provides
+valuable tool even if you do not consider use its actual design on hardware.
+
+New version of the latency tester based on CTU CAN FD timestamping
+is in preparation as upgrade of original Martin Jerabek's
+work done on Oliver Hartkopp's and Volkswagen call
+
+  
+https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/wikis/uploads/56b4d27d8f81ae390fc98bdce803398f/F3-BP-2016-Jerabek-Martin-Jerabek-thesis-2016.pdf
+
+Best wishes,
+
+                Pavel
+--
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://dce.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+

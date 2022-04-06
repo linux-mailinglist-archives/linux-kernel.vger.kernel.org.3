@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1194F53A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A50B4F53BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiDFDdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 23:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S1446873AbiDFDfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 23:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390337AbiDFDEn (ORCPT
+        with ESMTP id S2359565AbiDFDPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:04:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BD33E07;
-        Tue,  5 Apr 2022 17:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCA06153E;
-        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B6B5C385A1;
-        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649203214;
-        bh=KMNIOTy7tQqMiQJt2a1NiAN3Cf5KwEY7COeHi3Y3npQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WY3GCFkU9JF3B4v5HSCFdz0Gj1g3tb96D7PZJkiSm3vvC8jb4MWHldVEgv5bCarKh
-         FWQCvugxZ2/CJSFokNg9fa9+Hgivxt8yKUATeDfmS/qrTyAEFf2bzVv73Qyz8tTQmd
-         wV32dqGQxfQP6I+vUAWitf0/Fu8a5GWZ+W+O3SjU03jfpTzmIPE0DzxD+79U/Mamls
-         smqmtdr/Bvo2LEC6L8pXtT6x62lQUBUDe0+CpAL1stRKfhEU1ZMsz+691auXyuZHM3
-         7TNBTaLkX2QOSi+7vwLyYimeZf/XStjOuJcZHj/p6CRltTsVivnrOoHA/zHGyBJIfx
-         Fk1tgNG+yQunw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5D48E6D402;
-        Wed,  6 Apr 2022 00:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 5 Apr 2022 23:15:54 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71731DD960
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:01:58 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 555F010E56E5;
+        Wed,  6 Apr 2022 10:01:32 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nbt74-00EFQJ-N4; Wed, 06 Apr 2022 10:01:30 +1000
+Date:   Wed, 6 Apr 2022 10:01:30 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hillf Danton <hdanton@sina.com>, MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Yu Zhao <yuzhao@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
+Message-ID: <20220406000130.GZ1609613@dread.disaster.area>
+References: <20220402072103.5140-1-hdanton@sina.com>
+ <20220403005618.5263-1-hdanton@sina.com>
+ <20220404010948.GV1609613@dread.disaster.area>
+ <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
+ <20220405051710.GW1609613@dread.disaster.area>
+ <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
+ <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
+ <Ykyy8RfJgWDOGylv@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in
- load_kallsyms()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164920321379.789.15662598832496347807.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 00:00:13 +0000
-References: <20220405145711.49543-1-ytcoode@gmail.com>
-In-Reply-To: <20220405145711.49543-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ykyy8RfJgWDOGylv@casper.infradead.org>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=624cd85d
+        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
+        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=7-415B0cAAAA:8
+        a=GuXcQiCdMdAWui93_OgA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,26 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue,  5 Apr 2022 22:57:11 +0800 you wrote:
-> Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
+On Tue, Apr 05, 2022 at 10:21:53PM +0100, Matthew Wilcox wrote:
+> On Tue, Apr 05, 2022 at 01:58:59PM -0700, Yang Shi wrote:
+> > Yeah, I agree it actually doesn't make too much sense to return the
+> > number of reclaimed objects. Other part of vmscan returns the number
+> > of base pages, the sizes of slab objects are varied, it may be much
+> > smaller than a page, for example, dentry may be 192 bytes.
 > 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+> From the point of view of vmscan, it only cares about the number of pages
+> freed because it's trying to free pages.  But from the point of view of
+> trying to keep the number of non-useful objects in check, the number of
+> objects freed is more important, and it doesn't matter whether we ended
+> up freeing any pages because we made memory available for this slab cache.
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
-    https://git.kernel.org/bpf/bpf-next/c/2d0df01974ce
+Yes and no. If the memory pressure is being placed on this cache,
+then freeing any number of objects is a win-win situation - reclaim
+makes progress and new allocations don't need to wait for reclaim.
 
-You are awesome, thank you!
+However, if there is no pressure on this slab cache, then freeing
+objects but no actual memory pages is largely wasted reclaim effort.
+Freeing those objects does nothing to alleviate the memory shortage,
+and the memory freed is not going to be consumed any time soon so
+all we've done is fragment the slab cache and require the subsystem
+to spend more resources re-populating it. That's a lose-lose.
+
+We want to select the shrinkers that will result in the former
+occurring, not the latter.
+
+Cheers,
+
+Dave.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Dave Chinner
+david@fromorbit.com

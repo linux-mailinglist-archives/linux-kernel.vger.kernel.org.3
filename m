@@ -2,168 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471554F561D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095014F560E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358983AbiDFFve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S233528AbiDFFqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447167AbiDFE5t (ORCPT
+        with ESMTP id S1451911AbiDFFEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 00:57:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EC731C094;
-        Tue,  5 Apr 2022 17:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649206134; x=1680742134;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=JVq/0q1U8J0tjQQNcPkukCTp/eQviHcDu+kC6AMz/cE=;
-  b=HPGRRLp4tR/ry/OLh+j36AyaN/1iKfQZ7peezzax2zeFm+qeXjaTYIsr
-   1kP0MjoA0pgxla7EPRJNL725H0kQDtjrDse+OAoF9AkkYm9FUjp/KiWsL
-   6U3LtmwLSBsL2TcUPexWaGukl6fNfQBTpojry7PjoKjIMJpGOsTJv35nv
-   MYCPUS9ctizUosSQOHjeKK+oZrbuNOnFqAOb50if1U3euXsga7HIqN+4t
-   IP+vHmP3j2712HgE4dMk7MZc0Q/Y/gcUTM5c5kfa+bp3Md4Bym8VHyY6M
-   +fdE53QucJbPfETX/NbtONMreqtO6qxXjny7NacfgloW8HbD4AcuEZcF3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347351964"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="347351964"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 17:48:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="549302253"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 17:48:49 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Wed, 6 Apr 2022 01:04:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A192133DF80;
+        Tue,  5 Apr 2022 17:50:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KY5Xp3RQSz4xmr;
+        Wed,  6 Apr 2022 10:50:50 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649206250;
+        bh=K6LR0Q5LoFNyPdpvbQ4wuGRJSuMzXSR3Bua2HeOno5g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LDNxU86SW9D2KYuEYE4NduZDFs4qHSQJ0/rCclT6PvLqEvsFk/0MFAKnBBMB00cwu
+         zvKDui7kv0R6g2CHG5JGoNw/DyPCog8mC8lS/MzkvsyHS7W2/Z7joeD34o6wbaJLY0
+         ZZJVV6h++ha9m4dqSHQ7blxk37aVm7/a/9ZYHD8WSGbb5HWkEwudgkGARvH4SPiMJ9
+         zRwgNqlZ/Dh2/eK83UdRu8S+yumGoM0lq/1ehIirYDzXz3+NnHRHxx4w+nAW8NaetS
+         H69ceEO8NtLQH6nNSQuQFQCQu1yRHnP5OdYOV0kqA81fLqv47RwogbZTaQGayTu6o5
+         bnE8+PYH/QpTQ==
+Date:   Wed, 6 Apr 2022 10:50:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christophe Branchereau <cbranchereau@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mark Brown <broonie@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-References: <20220331084151.2600229-1-yosryahmed@google.com>
-        <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
-        <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
-        <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
-Date:   Wed, 06 Apr 2022 08:48:47 +0800
-In-Reply-To: <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
-        (Wei Xu's message of "Sat, 2 Apr 2022 23:56:19 -0700")
-Message-ID: <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20220406105049.5f5e01c1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/22R7lPkTNXuhOpp3gl.O=Vn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Xu <weixugc@google.com> writes:
+--Sig_/22R7lPkTNXuhOpp3gl.O=Vn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Sat, Apr 2, 2022 at 1:13 AM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> Wei Xu <weixugc@google.com> writes:
->>
->> > On Fri, Apr 1, 2022 at 6:54 AM Michal Hocko <mhocko@suse.com> wrote:
->> >>
->> >> On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
->> >> > From: Shakeel Butt <shakeelb@google.com>
->> >> >
->>
->> [snip]
->>
->> >> > Possible Extensions:
->> >> > --------------------
->> >> >
->> >> > - This interface can be extended with an additional parameter or flags
->> >> >   to allow specifying one or more types of memory to reclaim from (e.g.
->> >> >   file, anon, ..).
->> >> >
->> >> > - The interface can also be extended with a node mask to reclaim from
->> >> >   specific nodes. This has use cases for reclaim-based demotion in memory
->> >> >   tiering systens.
->> >> >
->> >> > - A similar per-node interface can also be added to support proactive
->> >> >   reclaim and reclaim-based demotion in systems without memcg.
->> >> >
->> >> > For now, let's keep things simple by adding the basic functionality.
->> >>
->> >> Yes, I am for the simplicity and this really looks like a bare minumum
->> >> interface. But it is not really clear who do you want to add flags on
->> >> top of it?
->> >>
->> >> I am not really sure we really need a node aware interface for memcg.
->> >> The global reclaim interface will likely need a different node because
->> >> we do not want to make this CONFIG_MEMCG constrained.
->> >
->> > A nodemask argument for memory.reclaim can be useful for memory
->> > tiering between NUMA nodes with different performance.  Similar to
->> > proactive reclaim, it can allow a userspace daemon to drive
->> > memcg-based proactive demotion via the reclaim-based demotion
->> > mechanism in the kernel.
->>
->> I am not sure whether nodemask is a good way for demoting pages between
->> different types of memory.  For example, for a system with DRAM and
->> PMEM, if specifying DRAM node in nodemask means demoting to PMEM, what
->> is the meaning of specifying PMEM node? reclaiming to disk?
->>
->> In general, I have no objection to the idea in general.  But we should
->> have a clear and consistent interface.  Per my understanding the default
->> memcg interface is for memory, regardless of memory types.  The memory
->> reclaiming means reduce the memory usage, regardless of memory types.
->> We need to either extending the semantics of memory reclaiming (to
->> include memory demoting too), or add another interface for memory
->> demoting.
->
-> Good point.  With the "demote pages during reclaim" patch series,
-> reclaim is already extended to demote pages as well.  For example,
-> can_reclaim_anon_pages() returns true if demotion is allowed and
-> shrink_page_list() can demote pages instead of reclaiming pages.
+Hi all,
 
-These are in-kernel implementation, not the ABI.  So we still have
-the opportunity to define the ABI now.
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-> Currently, demotion is disabled for memcg reclaim, which I think can
-> be relaxed and also necessary for memcg-based proactive demotion.  I'd
-> like to suggest that we extend the semantics of memory.reclaim to
-> cover memory demotion as well.  A flag can be used to enable/disable
-> the demotion behavior.
+drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: error: initializati=
+on of 'void (*)(struct spi_device *)' from incompatible pointer type 'int (=
+*)(struct spi_device *)' [-Werror=3Dincompatible-pointer-types]
+  478 |         .remove =3D nv3052c_remove,
+      |                   ^~~~~~~~~~~~~~
+drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: note: (near initial=
+ization for 'nv3052c_driver.remove')
 
-If so,
+Caused by commit
 
-# echo A > memory.reclaim
+  49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C based LC=
+Ds")
 
-means
+interacting with commit
 
-a) "A" bytes memory are freed from the memcg, regardless demoting is
-   used or not.
+  2cbfa2128662 ("spi: make remove callback a void function")
 
-or
+from Linus' tree (merged in v5.18-rc1).
 
-b) "A" bytes memory are reclaimed from the memcg, some of them may be
-   freed, some of them may be just demoted from DRAM to PMEM.  The total
-   number is "A".
+I applied the following merge resolution patch for today.
 
-For me, a) looks more reasonable.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 6 Apr 2022 10:46:57 +1000
+Subject: [PATCH] fixup for "spi: make remove callback a void function"
 
-Best Regards,
-Huang, Ying
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/panel/panel-newvision-nv3052c.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c b/drivers/gpu/=
+drm/panel/panel-newvision-nv3052c.c
+index 127bcfdb59df..cf078f0d3cd3 100644
+--- a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
++++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+@@ -416,15 +416,13 @@ static int nv3052c_probe(struct spi_device *spi)
+ 	return 0;
+ }
+=20
+-static int nv3052c_remove(struct spi_device *spi)
++static void nv3052c_remove(struct spi_device *spi)
+ {
+ 	struct nv3052c *priv =3D spi_get_drvdata(spi);
+=20
+ 	drm_panel_remove(&priv->panel);
+ 	drm_panel_disable(&priv->panel);
+ 	drm_panel_unprepare(&priv->panel);
+-
+-	return 0;
+ }
+=20
+ static const struct drm_display_mode ltk035c5444t_modes[] =3D {
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/22R7lPkTNXuhOpp3gl.O=Vn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJM4+kACgkQAVBC80lX
+0Gzv1wgAoIeioO/RuQUM06lmi112VLRhQxgoQuReg2kTMLOhTvABrEWR3N+2rFEG
+Xx06ETkA6XcTRQbAWwaX2WbHNDbEv2Bv0fy5D0Yno0HrGbONbsz2azh979KDwruX
+Eb4CMGUdq2UGI9YtC78i+VzuOuoz5KLp2j6E36/N4YbQ4ZWOgBu3Xjkb/tIDmoQd
+RmLWqXnPHPyph/oM20Ge6ZQlhQV35t0sNC3bIZWxV1HsGTUSRvWPYY4YxYTuNT7z
+U7RbOq6Lzj7kOmhQHtoJyGnmewXZWm69kwx9QXWczg9SaRsCOyHT7tq0iEI5yOBT
+teCXjP2bnViSM8U/LE3x/2vZ0eZ48Q==
+=ucTU
+-----END PGP SIGNATURE-----
+
+--Sig_/22R7lPkTNXuhOpp3gl.O=Vn--

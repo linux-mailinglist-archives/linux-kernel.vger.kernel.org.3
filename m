@@ -2,370 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978E54F6A08
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EACA4F6A23
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiDFTfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S229506AbiDFTmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiDFTfY (ORCPT
+        with ESMTP id S232132AbiDFTmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:35:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1BA1B60A0;
-        Wed,  6 Apr 2022 10:51:43 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236FWn9D032195;
-        Wed, 6 Apr 2022 17:51:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=OFAfPY3hhK/weS7YMTSyokrhHm3RHnUzOfo894HLQkY=;
- b=gfIgmelQvvRMJqziW1LgeCek8Z721WYeh4R8BVJxB8mrOYy6oeJVWfNSsBTqO/741XUT
- llu4uOGzgdyxWTXsPVSXi5Gxx/xMq9PWTTXm/QFwchd+ve/ByyCz8e8mGwJcrh4gkyls
- +320GRtFv+cv1LeU32kPjPvOfZiMVSR/EOlkeZGmMMdaZuxp1HtvwRJsY1b1CXKt+7yS
- rIJlI2edvb97bowG+gNcxNO6+MZQl8zjPj9jpZCFgYNeXcBf71Kae0EHkvLAdEtk1+YS
- rAeGkcdyEdxZ9tDO/BAp8bA1j6c1RjNseCa8l/wVy+ZPTGHACO776kEkYFBpsnMlO38q sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f977bunbg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:51:34 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 236HgW4g028102;
-        Wed, 6 Apr 2022 17:51:33 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f977bunb7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:51:33 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236Hhvcq003113;
-        Wed, 6 Apr 2022 17:51:32 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3f6e48xtr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:51:31 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236HpSFu47513908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 17:51:28 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 300EF4C044;
-        Wed,  6 Apr 2022 17:51:28 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAB8F4C040;
-        Wed,  6 Apr 2022 17:51:22 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.211.90.125])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 17:51:22 +0000 (GMT)
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-To:     acme@kernel.org, jolsa@kernel.org, disgoel@linux.vnet.ibm.com
-Cc:     mpe@ellerman.id.au, linux-perf-users@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maddy@linux.vnet.ibm.com,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
-        linux-kernel@vger.kernel.org, srikar@linux.vnet.ibm.com,
-        irogers@google.com
-Subject: [PATCH v2 1/4] tools/perf: Fix perf bench futex to correct usage of affinity for machines with #CPUs > 1K
-Date:   Wed,  6 Apr 2022 23:21:10 +0530
-Message-Id: <20220406175113.87881-2-atrajeev@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
-References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
-MIME-Version: 1.0
+        Wed, 6 Apr 2022 15:42:01 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A94F6005A;
+        Wed,  6 Apr 2022 10:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649267514; x=1680803514;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=e3PAH8KNuq0G7/EEf+7+elCQECWG3SBCQhimjF6jxlM=;
+  b=jydN0xdUNlaaAijI/xgOlcOnhQvlSlYVUvvPTVYpAUrBqJRLSiO1uK5w
+   DsegdeOZkX1n+thgjZHmhVS0xxGkNesSibHYesbHdGTQaL5VbZAT8Zqcd
+   +IvI81kGD4eyWnwAT/tguHLFbOqakk12nNrYze5Git6F53JcGNiBYQYto
+   u2hLOm1/Oy0iqOJGFwzt289NPfBPQuHt7Szka10FWiyQPZuV+MtC7D95/
+   Q4VX3SaX7mYPozMD29n97im07S3FBU4oIoGf3PdTNFuBraOb/LruI0oza
+   cxGN6bWHs5KF1xYIbN6Ir7t0OJX2IX58Umr1RyfwBy8Q0fXTR4JaXF/yS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="259952300"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="259952300"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:51:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="652473848"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2022 10:51:53 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Apr 2022 10:51:53 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Apr 2022 10:51:52 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 6 Apr 2022 10:51:52 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 6 Apr 2022 10:51:52 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iilW5p6QM6LW3DMTeoJd7iYk7h8NymG/4BOKDi+fmBl8HuIVZ0zMUgxRvgGA+LFD0y0k2sBUpOJk/R7EPL+8GrSGEMred++87MyN9//LsfMan4Xh0sl7LBL172s0sP8zdjP56j0HafEAqe3i/mkN4eX1x6lOhoqiCamZtkjCXUkqF3hXD75hmbUzwjWNMqh6bbOzrgkyLYZ03KwULUX6tSufE/cW5c2oZoraJsyrUdS5DQmLPPHXVxMfBet26W3OsO4H/8mTo8/95uldbKt0uaQs7tPoI/QfNGVeHdT7pUZVKGRLJHdTEEp63TT1TUKNHtzdWmB/6ziXUzHyKaOoJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rdegSsy7Rsou3x7SV08IckIWrZ/u8yKsI0rEgvk+3lo=;
+ b=NfA3UrtUUW+dC1pM85ZQAb/ZWouHnNrFcpOJwnzGcLbZDYz8D3t/R1dAdoxF6sIj0/+afQX1xWjPvEZOEDH9rYzPo2ESwKkm8EStobu3NrcYruovDLjmvLRaRXcYG6LgGAkeg+Mfb/pDDWj6o/l7oE+sTOBwe20aoMut9wL2hhnBUrNDmEpy1vJQouQ6p5jdyy89FJwlFghN6xBV/BlJaOaQZrDW6uKKTEXhdcs2yYDufyB+eZ9M6Xc0bE3C107Yon8ImZx3xQEiXlxVtrcAoIvr6VCWxxJifLfF73JkOZKJi2r6XKVq1vVRr2OzeHpSqNs620UuqOMrgJwdZiMrEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BYAPR11MB3303.namprd11.prod.outlook.com (2603:10b6:a03:18::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 17:51:48 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5144.021; Wed, 6 Apr 2022
+ 17:51:48 +0000
+Message-ID: <8010f544-852a-d7cd-3c3b-4e9cbcef3ab9@intel.com>
+Date:   Wed, 6 Apr 2022 10:51:44 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH V3 14/30] x86/sgx: Support restricting of enclave page
+ permissions
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, <dave.hansen@linux.intel.com>,
+        <tglx@linutronix.de>, <bp@alien8.de>, <luto@kernel.org>,
+        <mingo@redhat.com>, <linux-sgx@vger.kernel.org>, <x86@kernel.org>
+CC:     <seanjc@google.com>, <kai.huang@intel.com>,
+        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
+        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
+        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        <nathaniel@profian.com>
+References: <cover.1648847675.git.reinette.chatre@intel.com>
+ <8ed9ee98ca26c9eefde0fd49062bca6e7b9efe80.1648847675.git.reinette.chatre@intel.com>
+ <c9071aa19076c7c618294f0c9cb830a8be96ae09.camel@kernel.org>
+ <26ab773de8842d03b40caf8645ca86884b195901.camel@kernel.org>
+ <91a02d50b2cba34dfb058fd864ba20ef1e6a5554.camel@kernel.org>
+ <10303ca73ea02a300636580e87446766374f66cb.camel@kernel.org>
+ <6e0feeadc562b9e3f0a524040469d4f5c3484824.camel@kernel.org>
+ <ca08465b6fa8af4121592c6381023fda5e0ade70.camel@kernel.org>
+ <59910ad4-a898-4eb2-5e2b-856c686b53fb@intel.com>
+ <0f44fba956288bcad69e076f84118bc50f8e5d2f.camel@kernel.org>
+ <38603303-f683-cb79-57e5-57fad5c5ae3b@intel.com>
+ <2bf954521a3cfc7c677887b1eef772cfcc9e3157.camel@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <2bf954521a3cfc7c677887b1eef772cfcc9e3157.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 92SeOSS3GSzJb9fxzN6HztPdygV3V_ke
-X-Proofpoint-ORIG-GUID: DV6XDUT-LMXwOtSyY6beI8q_2edOxXKf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_09,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MW4P221CA0028.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::33) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3b526051-9674-4f19-f8a6-08da17f61f44
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3303:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BYAPR11MB3303C89390E3622AC5395968F8E79@BYAPR11MB3303.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GfXor9kYkMswo+xc8/rfCYoKaBvseYVtDaoESU0PQsU/NrBPbfjKnarD5+6rpev+mgBla3fcUOtchw0CgmQIVg712uQwrdRdB0VLRX6vttyiHYyoe2KjWoVQ21+OefXEKa4oYikMnZGAhZ8YKBT7EtGnaYdQRpUiFw6mHI3GobXA0qjTEjYQkpn2i1xFWbW9QO9SYKqvBLH9QP5uSfrN0CBouS4FIY3nZJk5Qv5tWS/q7wYowzLoRqx2S07PAL95EnNsxg4BalEwRb+/NlA1alnat2VmSVtwaXxrLpM4fzcHmV1Amr+F7t43MeURwIShMhJNnKgvsEU5C/LwCaGpEBXoMVx9VvescchoQ60p8icpg5qYhxIELYeOvQEoS9KxLPQCezd0nN1CDbqEgt9HyqsTQ7bG+cTeXJ4PBUmlRT3KwAoDq76O8mVvWwTadhVW2S0cUVIc1g5ZK+o2fJOBPGDt1fi3gKdqYaIvtBJsUnZqmsEBRZzOWws/psAyyPz3G5Ek5RbA6mI5SdkX11WITpBKCWTWEEekAyivEBq8I6Zy0d31LV2szH2M0ujhi0BNsqynIGZKYA/X2A2k6TeTB0WjduVeRKks6pb6hPqV9lgULWIKbwwvcW4Iz2VxUHMRtMdEKQrRk5s7ZQ7YNtxFHbnf6EhKTbo0MXms+/kIALFeDCK3GCfzuADG+u9+9DAxOD2sckoetKezgJD5eP5UhberywZTurHVn7Pu2xsZrau4etpQMJTgDnZmoLl0xzK9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(7416002)(44832011)(6506007)(36756003)(86362001)(8936002)(508600001)(2616005)(31686004)(31696002)(6486002)(5660300002)(2906002)(38100700002)(26005)(83380400001)(316002)(186003)(6666004)(82960400001)(8676002)(6512007)(66476007)(4326008)(66556008)(53546011)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTVkMjdzaUduaU5taGJUYmdjQ0hCanF2dm04QVNSOG5aNC8yOHBFeHQvQ0NZ?=
+ =?utf-8?B?MnV0UTdrU280a3BmbmI3Z0xpTlF2ZjI1ekUwUnE4YUFqdGNnRDk1Rlh6UG5X?=
+ =?utf-8?B?bVlqV0tKSXBPYjB0MTNJd0FFanNsc0s5V2FPT0FJczNadzlPbjFJMlVSbTZ6?=
+ =?utf-8?B?T0ZrVXJXeWFJMVRVeHFOMEJCZk00a1NzalI3Q1MxSGkyL0tNdTBYRmE0dHZR?=
+ =?utf-8?B?dk04L1N5NTZvOVVpSVJXZE9ubUVzajdKSklBU2E5RWE4cHBiUFJlWEhwZ05E?=
+ =?utf-8?B?TmRDdDlTbGowR3JwTzBteFE0cElKcWlCc1BDU2k3QUR6emVJUHJNbEdCdXZZ?=
+ =?utf-8?B?bkQ1WFJNSGdTeTZuSEhTb2l1RW9IRkRLWVhFZzNZZG1xdzJXS1lVbzhDR1dI?=
+ =?utf-8?B?RzN1QnN2eEVOMyt3UFNkZDNMZmpEcGV0M0p5cktEc0o2UUc5QUs3UEtUTDVR?=
+ =?utf-8?B?Y3p5K3hGV0QyUzFyUGFJMUdjV1lDYlhyeEh0VmF1ams1YXVmdnVRalk1cXlP?=
+ =?utf-8?B?ZXR1VitJR2U3WEU5bDVrR1RpN2tReW5iWnZ6RHZCdmpPeXNyRERXN25Ia21w?=
+ =?utf-8?B?VXBDUWZvSDBnTHAwRzduU2JJbnRhVjBhaXJqbmxhcUJHSG4rOVhhUHE2MWZy?=
+ =?utf-8?B?L3ZKQWI0aFVSVWp5cS9MNS8wUlV6RXBtZFBKNDZPVEN3UUkyaFRkTk9ZMVJZ?=
+ =?utf-8?B?bVFZQVU3d0ZsSzJOZEtCQ3Z1d2t0WnRISE9vTjNYZzkwMHRSV1RNcS84TE1V?=
+ =?utf-8?B?dnNBLzlkSlovY1ZwNjN4UnUvcEFOQ1dWRFhPT1lGZTRuVkhhRzUxMVFpYnVy?=
+ =?utf-8?B?cjRwbVZsMGtuNEQxTXF6MjhaWktEM0tsWTZGdld5ZXJqQ3FTRFEzN1ZQQ1ps?=
+ =?utf-8?B?QTNuNjZpZGVkRTl6Zlk4eUErRloyek1UN3ZMbWRrODRwT3UxWnMrN3B0TjRM?=
+ =?utf-8?B?RGIzei9xZndqUEdDMHBGcnE2YmN6bUt0cU10UWpqS0VBMjBKL2pyUTZFd3lJ?=
+ =?utf-8?B?STZuQ3dNU292d3RuRFF2dXBxcXUvV3d0dEhGWFI5MEhGUEpCSzhiZFZiSWQ2?=
+ =?utf-8?B?OS9ENUowUEloby9RQkkvS0YwbFh2cVUzc0Rubm14YkJFUWM3cy8wSXNMdVpR?=
+ =?utf-8?B?dEEzUzVjVFl1NXYwUjdZSWVOWVZiVkRPb1J3VEIzTXV3MEdTSmVuYnpLTjFi?=
+ =?utf-8?B?K09aMGVCamp5N1RPZVNiK3pwNmhYVkNpS3NNem1ISldsZkRWNHVTaUdUOVVH?=
+ =?utf-8?B?QzI1bDZ6QWlBeVh3em9HdXUwVUFoaEhLa0JML0lYN09VUHZtVm80bGhZL2dD?=
+ =?utf-8?B?d0RDYUZ1RzNNRXJ1RVczU3E2VVllblJzR0hZUW41Z3RuRzR4VytJMGZvbS9u?=
+ =?utf-8?B?UDlIdnZtREMxdG9pbWcxQ2FKWWJlMS9UMXVtbEJBK0c5aWlEM29selFjQVBQ?=
+ =?utf-8?B?ZENxQjBLaFJvUmNlZkVPZGYrNXJLTUlWN1NLN3BWS1ZTcEZRbit0SkpNSUFP?=
+ =?utf-8?B?RG01VXZNMjFVWmw0RlFYN1JZdzQ1WDg4dUtQZkVrbkM1dkRabzhTN1h5VTVS?=
+ =?utf-8?B?QW9HQ1lWSXhRRHBwbnFFL1JvRVNJYnlHOU5VUktkTXNQbCtkZ2Q4a0NETnpa?=
+ =?utf-8?B?L0o4NGZyd21XWW81dDNOSmhtWkRQSUExNG94eDM1K0I1TjI4eVlabTNVRjdh?=
+ =?utf-8?B?eWM5aFVqdTNhamo1OEg4bXRnOWp3bXVnRDhXUkFNTFBMaGI0ZHdURjBzbTFu?=
+ =?utf-8?B?dStjSEZiSGZrSUVramNNQUtnb1ZLQjh4TEJ1Z1R3SnFQSllzdU15alZGS2s1?=
+ =?utf-8?B?YUEvR2J4RjE2cVFVRzM1a0RLVmNDclJnSDZWUlVGVzhkR1FRNVdJRjh0eHl6?=
+ =?utf-8?B?RXlZRkZKWE9LOXRGNFZpRFRlN3g5MU50UWdVUHhEZW1LVk13RkFwdHRJdDdC?=
+ =?utf-8?B?S0w3d3BRS3FBNTE4SGUrSzZzMGkzaFJTQkcxUDZwYnBpWWpKZWQ1NjdsaUpk?=
+ =?utf-8?B?V3M4RXpRQ3E5Q3dBbjN6UFJtNG1mT0dpVEFUM2NhWHJUU1VIcmk5L3VYUE5u?=
+ =?utf-8?B?d294a1RZZCtaRnpFb3djU1ZJakEvSDRUcHZKL003ZGU2K3V0WkxtSWs0UlVw?=
+ =?utf-8?B?SjNBSGNlOWt5TStOUnNzenQxQ1dQQnZRWjJCSVpDaXg5N1NtbG9Fa2tHaitP?=
+ =?utf-8?B?enZvT3JFMDJWVitqbEZxQVpoNVRkVHVHSkpRSmk5WEc4SDNUeXRlSGZvLzNl?=
+ =?utf-8?B?WUZxTjRBRW02YW5yeVFCVzZqOFIxVnZKbDl3ejA3ZlIxR1BsajRGc0JDREd4?=
+ =?utf-8?B?cmlSbHRERmpDNlBPSTBPeWdPWjJwMStWVVBmYXF6QnVzNkdtaEVGR3p0NTJN?=
+ =?utf-8?Q?Lmjdf7cv44WqAgaA=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b526051-9674-4f19-f8a6-08da17f61f44
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 17:51:48.3947
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s/h4cRodUvEELmnmh56bhHhEeq4ZqgGcaYRXImsXBaMRhZKDEJh0yfjhhE16aRDXw3EQg+QKz9JzgAgHvXpFJKInCbD/hrmPywdGeQI7VM4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3303
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf bench futex testcase fails on systems with CPU's
-more than 1K.
+Hi Jarkko,
 
-Testcase: perf bench futex all
-Failure snippet:
-<<>>Running futex/hash benchmark...
+On 4/6/2022 12:30 AM, Jarkko Sakkinen wrote:
+> On Tue, 2022-04-05 at 11:59 -0700, Reinette Chatre wrote:
 
-perf: pthread_create: No such file or directory
-<<>>
 
-All the futex benchmarks ( ie hash, lock-api, requeue, wake,
-wake-parallel ), pthread_create is invoked in respective bench_futex_*
-function. Though the logs shows direct failure from pthread_create,
-strace logs showed that actual failure is from  "sched_setaffinity"
-returning EINVAL (invalid argument). This happens because the default
-mask size in glibc is 1024. To overcome this 1024 CPUs mask size
-limitation of cpu_set_t, change the mask size using the CPU_*_S macros.
+>> I plan to replace the current "secinfo" field in struct sgx_enclave_restrict_permissions
+>> with a new "permissions" field that contain only the permissions. Please let
+>> me know if you have concerns with this (I also discuss this more in reply to
+>> your other message related to the page type change ioctl()).
+> 
+> I'm cool with it but if it is named as "permissions", then 
+> it is already software-defined entity, i.e. meaning just that
+> have this check in place in the ioctl:
+> 
+> if (addp->permissions & !(PROT_READ | PROT_WRITE | PROT_EXEC))
+> 	return -EINVAL;
+> 
 
-Patch addresses this by fixing all the futex benchmarks to use
-CPU_ALLOC to allocate cpumask, CPU_ALLOC_SIZE for size, and
-CPU_SET_S to set the mask.
+I assume that we do still want to ensure that
+PROT_READ is always set.
 
-Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
----
- tools/perf/bench/futex-hash.c          | 26 +++++++++++++++++++-------
- tools/perf/bench/futex-lock-pi.c       | 21 ++++++++++++++++-----
- tools/perf/bench/futex-requeue.c       | 21 ++++++++++++++++-----
- tools/perf/bench/futex-wake-parallel.c | 21 ++++++++++++++++-----
- tools/perf/bench/futex-wake.c          | 22 ++++++++++++++++------
- 5 files changed, 83 insertions(+), 28 deletions(-)
+I was planning to keep it in the "SGX language" since
+this is about changing EPCM permissions with values from
+a runtime understanding SGX permissions in secinfo that will
+be provided to hardware understanding SGX permissions in
+secinfo.
 
-diff --git a/tools/perf/bench/futex-hash.c b/tools/perf/bench/futex-hash.c
-index 9627b6ab8670..dfce64e551e2 100644
---- a/tools/perf/bench/futex-hash.c
-+++ b/tools/perf/bench/futex-hash.c
-@@ -122,12 +122,14 @@ static void print_summary(void)
- int bench_futex_hash(int argc, const char **argv)
- {
- 	int ret = 0;
--	cpu_set_t cpuset;
-+	cpu_set_t *cpuset;
- 	struct sigaction act;
- 	unsigned int i;
- 	pthread_attr_t thread_attr;
- 	struct worker *worker = NULL;
- 	struct perf_cpu_map *cpu;
-+	int nrcpus;
-+	size_t size;
- 
- 	argc = parse_options(argc, argv, options, bench_futex_hash_usage, 0);
- 	if (argc) {
-@@ -170,25 +172,35 @@ int bench_futex_hash(int argc, const char **argv)
- 	threads_starting = params.nthreads;
- 	pthread_attr_init(&thread_attr);
- 	gettimeofday(&bench__start, NULL);
-+
-+	nrcpus = perf_cpu_map__nr(cpu);
-+	cpuset = CPU_ALLOC(nrcpus);
-+	BUG_ON(!cpuset);
-+	size = CPU_ALLOC_SIZE(nrcpus);
-+
- 	for (i = 0; i < params.nthreads; i++) {
- 		worker[i].tid = i;
- 		worker[i].futex = calloc(params.nfutexes, sizeof(*worker[i].futex));
- 		if (!worker[i].futex)
- 			goto errmem;
- 
--		CPU_ZERO(&cpuset);
--		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-+		CPU_ZERO_S(size, cpuset);
- 
--		ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset);
--		if (ret)
-+		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-+		ret = pthread_attr_setaffinity_np(&thread_attr, size, cpuset);
-+		if (ret) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
--
-+		}
- 		ret = pthread_create(&worker[i].thread, &thread_attr, workerfn,
- 				     (void *)(struct worker *) &worker[i]);
--		if (ret)
-+		if (ret) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_create");
-+		}
- 
- 	}
-+	CPU_FREE(cpuset);
- 	pthread_attr_destroy(&thread_attr);
- 
- 	pthread_mutex_lock(&thread_lock);
-diff --git a/tools/perf/bench/futex-lock-pi.c b/tools/perf/bench/futex-lock-pi.c
-index a512a320df74..61c3bb80d4cf 100644
---- a/tools/perf/bench/futex-lock-pi.c
-+++ b/tools/perf/bench/futex-lock-pi.c
-@@ -120,11 +120,17 @@ static void *workerfn(void *arg)
- static void create_threads(struct worker *w, pthread_attr_t thread_attr,
- 			   struct perf_cpu_map *cpu)
- {
--	cpu_set_t cpuset;
-+	cpu_set_t *cpuset;
- 	unsigned int i;
-+	int nrcpus =  perf_cpu_map__nr(cpu);
-+	size_t size;
- 
- 	threads_starting = params.nthreads;
- 
-+	cpuset = CPU_ALLOC(nrcpus);
-+	BUG_ON(!cpuset);
-+	size = CPU_ALLOC_SIZE(nrcpus);
-+
- 	for (i = 0; i < params.nthreads; i++) {
- 		worker[i].tid = i;
- 
-@@ -135,15 +141,20 @@ static void create_threads(struct worker *w, pthread_attr_t thread_attr,
- 		} else
- 			worker[i].futex = &global_futex;
- 
--		CPU_ZERO(&cpuset);
--		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-+		CPU_ZERO_S(size, cpuset);
-+		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
- 
--		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-+		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-+		}
- 
--		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i]))
-+		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i])) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_create");
-+		}
- 	}
-+	CPU_FREE(cpuset);
- }
- 
- int bench_futex_lock_pi(int argc, const char **argv)
-diff --git a/tools/perf/bench/futex-requeue.c b/tools/perf/bench/futex-requeue.c
-index aca47ce8b1e7..2cb013f7ffe5 100644
---- a/tools/perf/bench/futex-requeue.c
-+++ b/tools/perf/bench/futex-requeue.c
-@@ -123,22 +123,33 @@ static void *workerfn(void *arg __maybe_unused)
- static void block_threads(pthread_t *w,
- 			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
- {
--	cpu_set_t cpuset;
-+	cpu_set_t *cpuset;
- 	unsigned int i;
-+	int nrcpus = perf_cpu_map__nr(cpu);
-+	size_t size;
- 
- 	threads_starting = params.nthreads;
- 
-+	cpuset = CPU_ALLOC(nrcpus);
-+	BUG_ON(!cpuset);
-+	size = CPU_ALLOC_SIZE(nrcpus);
-+
- 	/* create and block all threads */
- 	for (i = 0; i < params.nthreads; i++) {
--		CPU_ZERO(&cpuset);
--		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-+		CPU_ZERO_S(size, cpuset);
-+		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
- 
--		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-+		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-+		}
- 
--		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
-+		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_create");
-+		}
- 	}
-+	CPU_FREE(cpuset);
- }
- 
- static void toggle_done(int sig __maybe_unused,
-diff --git a/tools/perf/bench/futex-wake-parallel.c b/tools/perf/bench/futex-wake-parallel.c
-index 888ee6037945..efa5070a5eb3 100644
---- a/tools/perf/bench/futex-wake-parallel.c
-+++ b/tools/perf/bench/futex-wake-parallel.c
-@@ -144,22 +144,33 @@ static void *blocked_workerfn(void *arg __maybe_unused)
- static void block_threads(pthread_t *w, pthread_attr_t thread_attr,
- 			  struct perf_cpu_map *cpu)
- {
--	cpu_set_t cpuset;
-+	cpu_set_t *cpuset;
- 	unsigned int i;
-+	int nrcpus = perf_cpu_map__nr(cpu);
-+	size_t size;
- 
- 	threads_starting = params.nthreads;
- 
-+	cpuset = CPU_ALLOC(nrcpus);
-+	BUG_ON(!cpuset);
-+	size = CPU_ALLOC_SIZE(nrcpus);
-+
- 	/* create and block all threads */
- 	for (i = 0; i < params.nthreads; i++) {
--		CPU_ZERO(&cpuset);
--		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-+		CPU_ZERO_S(size, cpuset);
-+		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
- 
--		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-+		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-+		}
- 
--		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL))
-+		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_create");
-+		}
- 	}
-+	CPU_FREE(cpuset);
- }
- 
- static void print_run(struct thread_data *waking_worker, unsigned int run_num)
-diff --git a/tools/perf/bench/futex-wake.c b/tools/perf/bench/futex-wake.c
-index aa82db51c0ab..3a10f54900c1 100644
---- a/tools/perf/bench/futex-wake.c
-+++ b/tools/perf/bench/futex-wake.c
-@@ -97,22 +97,32 @@ static void print_summary(void)
- static void block_threads(pthread_t *w,
- 			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
- {
--	cpu_set_t cpuset;
-+	cpu_set_t *cpuset;
- 	unsigned int i;
--
-+	size_t size;
-+	int nrcpus = perf_cpu_map__nr(cpu);
- 	threads_starting = params.nthreads;
- 
-+	cpuset = CPU_ALLOC(nrcpus);
-+	BUG_ON(!cpuset);
-+	size = CPU_ALLOC_SIZE(nrcpus);
-+
- 	/* create and block all threads */
- 	for (i = 0; i < params.nthreads; i++) {
--		CPU_ZERO(&cpuset);
--		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-+		CPU_ZERO_S(size, cpuset);
-+		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
- 
--		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-+		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-+		}
- 
--		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
-+		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
-+			CPU_FREE(cpuset);
- 			err(EXIT_FAILURE, "pthread_create");
-+		}
- 	}
-+	CPU_FREE(cpuset);
- }
- 
- static void toggle_done(int sig __maybe_unused,
--- 
-2.35.1
+Thus:
 
+if (params.permissions & ~SGX_SECINFO_PERMISSION_MASK)
+	return -EINVAL;
+
+if (!(params.permissions & SGX_SECINFO_R))
+	return -EINVAL;
+
+
+Reinette

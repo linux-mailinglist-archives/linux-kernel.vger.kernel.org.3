@@ -2,145 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81FD4F5B99
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F47F4F5BA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241916AbiDFKLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S1346255AbiDFKQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356704AbiDFKJb (ORCPT
+        with ESMTP id S1354738AbiDFKIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:09:31 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A412321CC67;
-        Tue,  5 Apr 2022 23:38:39 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KYFFZ4T46z1HBPX;
-        Wed,  6 Apr 2022 14:38:10 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 6 Apr
- 2022 14:38:36 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <linux-integrity@vger.kernel.org>
-CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <roberto.sassu@huawei.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] ima: remove the IMA_TEMPLATE Kconfig option
-Date:   Wed, 6 Apr 2022 14:37:27 +0800
-Message-ID: <20220406063727.178522-2-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220406063727.178522-1-guozihua@huawei.com>
-References: <20220406063727.178522-1-guozihua@huawei.com>
+        Wed, 6 Apr 2022 06:08:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A648215839
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649227072; x=1680763072;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sNfY3kKWF6XstpO9zanCd4P6Rax/WoTuZBhub1zmDpw=;
+  b=KjGTu1kylumAEY1RMnR7wQhEVKz7yTtVp6VSoomjIhavjVSCAsrxdpKl
+   X3+bbT/OKUO5ByChFuGHIlRr+WqYt5WwWWWdPZYlpfujV7LmA6NFQfwUM
+   eecd2S2A/6DWq5l7jLkNKMiAuWiRky7AuM9/uod4nmmeT4ncxVF6jN/GX
+   x61Ig6QQFZ9ygY8bQ+BjuCYG9269LSzqwbjMXmqaNBgTmGHmZPMTVkUxU
+   FmKcnyed8CWm6VuftlGicAJg4PMmb7PFmirXBT+XOp0aqUB+MqMoVshsj
+   hTd3EDJWR+lk1LtyMJTsAs1DqRvJDmkn75ek0wL/P2g5sVvU51COGMuy7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="258551227"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="258551227"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 23:37:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="722384611"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2022 23:37:50 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbzIc-00048b-6u;
+        Wed, 06 Apr 2022 06:37:50 +0000
+Date:   Wed, 6 Apr 2022 14:37:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for
+ 'cxl_mem_active'
+Message-ID: <202204061427.aSm1HpbH-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is discovered that allowing template "ima" as the compiled default
-would cause the following issue: the boot command line option
-"ima_hash=" must be behind "ima_template=", otherwise "ima_hash=" might
-be rejected.
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220406-100617/Dan-Williams/cxl-mem-Disable-suspend/20220403-085917
+head:   16a271eb76b492775d76beb93daa896c53d50b95
+commit: 16a271eb76b492775d76beb93daa896c53d50b95 PM: CXL: Disable suspend
+date:   5 hours ago
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220406/202204061427.aSm1HpbH-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/16a271eb76b492775d76beb93daa896c53d50b95
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220406-100617/Dan-Williams/cxl-mem-Disable-suspend/20220403-085917
+        git checkout 16a271eb76b492775d76beb93daa896c53d50b95
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/cxl/core/
 
-The root cause of this issue is that during the processing of ima_hash,
-we would try to check whether the hash algorithm is compatible with the
-template. If the template is not set at the moment we do the check, we
-check the algorithm against the compiled default template. If the
-complied default template is "ima", then we reject any hash algorithm
-other than sha1 and md5.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For example, if the compiled default template is "ima", and the default
-algorithm is sha1 (which is the current default). In the cmdline, we put
-in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
-that ima starts with ima-ng as the template and sha256 as the hash
-algorithm. However, during the processing of "ima_hash=",
-"ima_template=" has not been processed yet, and hash_setup would check
-the configured hash algorithm against the compiled default: ima, and
-reject sha256. So at the end, the hash algorithm that is actually used
-will be sha1.
+All warnings (new ones prefixed by >>):
 
-With template "ima" removed from the compiled default, we ensure that
-the default tempalte would at least be "ima-ng" which allows for
-basically any hash algorithm. Users who needs to use "ima" template
-could still do it by specifying "ima_template=ima" in boot command line.
+>> drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for 'cxl_mem_active' [-Wmissing-prototypes]
+       8 | bool cxl_mem_active(void)
+         |      ^~~~~~~~~~~~~~
+>> drivers/cxl/core/suspend.c:13:6: warning: no previous prototype for 'cxl_mem_active_inc' [-Wmissing-prototypes]
+      13 | void cxl_mem_active_inc(void)
+         |      ^~~~~~~~~~~~~~~~~~
+>> drivers/cxl/core/suspend.c:19:6: warning: no previous prototype for 'cxl_mem_active_dec' [-Wmissing-prototypes]
+      19 | void cxl_mem_active_dec(void)
+         |      ^~~~~~~~~~~~~~~~~~
 
-This change would not break the algorithm compatibility checking for
-IMA.
 
-Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/Kconfig | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+vim +/cxl_mem_active +8 drivers/cxl/core/suspend.c
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index f3a9cc201c8c..f392cac7a7d1 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -65,14 +65,11 @@ choice
- 	help
- 	  Select the default IMA measurement template.
- 
--	  The original 'ima' measurement list template contains a
--	  hash, defined as 20 bytes, and a null terminated pathname,
--	  limited to 255 characters.  The 'ima-ng' measurement list
--	  template permits both larger hash digests and longer
--	  pathnames.
--
--	config IMA_TEMPLATE
--		bool "ima"
-+	  The 'ima-ng' measurement list template permits various hash
-+	  digests and long pathnames. The compiled default template
-+	  can be overwritten using the kernel command line
-+	  'ima_template=' option.
-+
- 	config IMA_NG_TEMPLATE
- 		bool "ima-ng (default)"
- 	config IMA_SIG_TEMPLATE
-@@ -82,7 +79,6 @@ endchoice
- config IMA_DEFAULT_TEMPLATE
- 	string
- 	depends on IMA
--	default "ima" if IMA_TEMPLATE
- 	default "ima-ng" if IMA_NG_TEMPLATE
- 	default "ima-sig" if IMA_SIG_TEMPLATE
- 
-@@ -102,19 +98,19 @@ choice
- 
- 	config IMA_DEFAULT_HASH_SHA256
- 		bool "SHA256"
--		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SHA256=y
- 
- 	config IMA_DEFAULT_HASH_SHA512
- 		bool "SHA512"
--		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SHA512=y
- 
- 	config IMA_DEFAULT_HASH_WP512
- 		bool "WP512"
--		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
-+		depends on CRYPTO_WP512=y
- 
- 	config IMA_DEFAULT_HASH_SM3
- 		bool "SM3"
--		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SM3=y
- endchoice
- 
- config IMA_DEFAULT_HASH
+     7	
+   > 8	bool cxl_mem_active(void)
+     9	{
+    10		return atomic_read(&mem_active) != 0;
+    11	}
+    12	
+  > 13	void cxl_mem_active_inc(void)
+    14	{
+    15		atomic_inc(&mem_active);
+    16	}
+    17	EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, CXL);
+    18	
+  > 19	void cxl_mem_active_dec(void)
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

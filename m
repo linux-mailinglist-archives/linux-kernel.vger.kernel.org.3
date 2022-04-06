@@ -2,62 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF404F57AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953E24F57E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiDFINN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S233725AbiDFI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445649AbiDFILu (ORCPT
+        with ESMTP id S242525AbiDFI1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:11:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41192BD7ED
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649210567; x=1680746567;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q9HJ/wMoqCq/bvozt3SgFYGtUgCsUPN2Y8mufFhHYxg=;
-  b=fS/37ow91/wRlVvtYeosAM+jHpFDMittLfAqCcsAwAPNlYyvjZfyl5SR
-   AkmyzL2jCU6wHrx8Ud0K8FwRs683nMZHxbZzFF2tOdgzUYyEU2fvG8+AN
-   0vv+pleFZdHnG5cMWsu5UNZO8FZ732z+9ygce5OLygpDpro0rXnCkxAEe
-   qU9aky5mYfhx44t/mffsk2gxXpOQw98eZG005oO09BEpAIJsEcZ+UyXFK
-   ol5gGzPRyNBbKSXb1G1MZRxSH9PAvun3tiDhaDN4qAMY3P/ySGnCsur1r
-   v68rR5G9oDIS+8Mac976qye8SukWAssHGtrkP/PXNz7372a0J07pvHQtK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260918486"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="260918486"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 19:02:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="608701778"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2022 19:02:45 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbv0O-0003yv-GN;
-        Wed, 06 Apr 2022 02:02:44 +0000
-Date:   Wed, 6 Apr 2022 10:01:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:robh/linux/dt/pop-pci-nodes 2/2]
- drivers/pci/of.c:29:6: warning: no previous prototype for function
- 'add_bus_props'
-Message-ID: <202204060919.ixlG0hLi-lkp@intel.com>
+        Wed, 6 Apr 2022 04:27:11 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4F8338E19
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:05:49 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id e4so1049184oif.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 19:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
+        b=LOFD1TB5DHCmdfFhLMSs0KFUQCTqjO1cUH6JeNgY3rqhZKF4HwlfE5cVVqI7+9FwI3
+         1nWfuNTNewIPCUr2fopefsiatrMpzcGWOywnhsuJ1QCvvzT/rigzes5gu0xjmGk6RTbj
+         91zvAhi3vAWNLCyc3+P49DKDOOP9IICYV9kwc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
+        b=CkMcGgh8RZR8riXxRRVJgHbDD93TibAeu9kMVEQPRovXv8cayg9Tz1okH0JaDNKgu2
+         6j+f1mGsidtrOOK8PXU02zgDsK6DySOpZcDUcFZI1cMhW+ENRhp+0pQ6mkhKLEITi6ma
+         gcRDar29eGrdtMjrqy3MpNKzuKLP138Ltxfc6l7qn0cDsel8yP6TIwMe+EJKCxXUF125
+         MeVTq8qGVBjn9xdpw1N1SDDY/uNYq35ltsFAToTb8r9OpezArBeOVFI7l7+mkRqtBmD0
+         jIZqiD/WEkiO3eEdam5f98wTdXdbeuSY4a/joyvEA/2EDPbGqBMluEPdRJwcVhCkfYYg
+         xQAg==
+X-Gm-Message-State: AOAM531Pf0Wa1Gljge+6qt3TnnjFzK7tqac6WwKJ0Rcb2AEfIVIPRzSs
+        rbDl/bZjgs2HPgiiNoVq/5rtWsLfcvBpIg==
+X-Google-Smtp-Source: ABdhPJyQDzOez8KDKMv21Ci8ZFr/OT/uPDnk+jyyN/5mtueQtdgetX4JxBCj6kzGTk5wmbvxyR2SCQ==
+X-Received: by 2002:a05:6808:1827:b0:2da:5085:2e78 with SMTP id bh39-20020a056808182700b002da50852e78mr2648846oib.172.1649210747494;
+        Tue, 05 Apr 2022 19:05:47 -0700 (PDT)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com. [209.85.160.44])
+        by smtp.gmail.com with ESMTPSA id hg14-20020a056870790e00b000e1c070a73asm5372557oab.55.2022.04.05.19.05.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 19:05:45 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-d39f741ba0so1399790fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 19:05:44 -0700 (PDT)
+X-Received: by 2002:a05:6870:c142:b0:dd:d5a3:767c with SMTP id
+ g2-20020a056870c14200b000ddd5a3767cmr2910063oad.291.1649210744492; Tue, 05
+ Apr 2022 19:05:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid> <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
+In-Reply-To: <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Tue, 5 Apr 2022 19:05:33 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes
+ on gru
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Lin Huang <hl@rock-chips.com>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,93 +88,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block robh/linux/dt/pop-pci-nodes
-head:   b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-commit: b9198a9525a97d05b0bb2a7282fede92d7d2d93d [2/2] PCI: Create DT nodes if they don't exist
-config: mips-buildonly-randconfig-r002-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060919.ixlG0hLi-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block robh/linux/dt/pop-pci-nodes
-        git checkout b9198a9525a97d05b0bb2a7282fede92d7d2d93d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/
+Hello again Peter,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Mar 4, 2022 at 6:47 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> Transitions anywhere from the default 800mhz cause a lock.
+>
+> I'm digging deeper, but I'm hoping you can answer some questions in
+> the meantime:
+> 1. Does this require something from firmware that isn't available on
+> Mainline ATF? (AKA special firmware to the Chromebook line)
+> 2. If not, do you have any recommendations off the top of your head?
 
-All warnings (new ones prefixed by >>):
+I may have a better answer for you now. In the intervening time
+period, I've discovered a potentially-relevant bug, involving
+interactions between the kernel power-domain driver and ATF. See this
+series for my current fixes:
 
-   drivers/pci/of.c:18:21: warning: no previous prototype for function 'make_node' [-Wmissing-prototypes]
-   struct device_node *make_node(void)
-                       ^
-   drivers/pci/of.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct device_node *make_node(void)
-   ^
-   static 
->> drivers/pci/of.c:29:6: warning: no previous prototype for function 'add_bus_props' [-Wmissing-prototypes]
-   void add_bus_props(struct device_node *node)
-        ^
-   drivers/pci/of.c:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void add_bus_props(struct device_node *node)
-   ^
-   static 
-   drivers/pci/of.c:60:6: warning: no previous prototype for function 'make_dev_node' [-Wmissing-prototypes]
-   void make_dev_node(struct pci_dev *dev)
-        ^
-   drivers/pci/of.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void make_dev_node(struct pci_dev *dev)
-   ^
-   static 
-   drivers/pci/of.c:88:21: warning: no previous prototype for function 'make_bus_node' [-Wmissing-prototypes]
-   struct device_node *make_bus_node(struct pci_bus *bus)
-                       ^
-   drivers/pci/of.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct device_node *make_bus_node(struct pci_bus *bus)
-   ^
-   static 
-   4 warnings generated.
+https://lore.kernel.org/linux-rockchip/20220406014842.2771799-1-briannorris@chromium.org/
+[RFC PATCH 0/2] rockchip / devfreq: Coordinate DRAM controller
+resources between ATF and kernel
 
+If that happens to help you (it may help, for instance, if your system
+was toggling NPLL off/on like mine was; it also may help if you're
+hitting a race on PMU_BUS_IDLE_REQ like noticed in patch 1), I'd love
+your feedback there.
 
-vim +/add_bus_props +29 drivers/pci/of.c
+It's still possible your problems are completely unrelated though.
 
-    28	
-  > 29	void add_bus_props(struct device_node *node)
-    30	{
-    31		struct property *prop;
-    32		__be32 *val;
-    33	
-    34		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
-    35		prop->name = "ranges";
-    36		prop->value = prop + 1;
-    37		prop->next = node->properties;
-    38		node->properties = prop;
-    39	
-    40		prop = kzalloc(sizeof(*prop) + sizeof(__be32), GFP_KERNEL);
-    41		prop->name = "#address-cells";
-    42		prop->value = prop + 1;
-    43		prop->length = sizeof(__be32);
-    44		val = prop->value;
-    45		val[0] = __cpu_to_be32(3);
-    46		prop->next = node->properties;
-    47		node->properties = prop;
-    48	
-    49		prop = kzalloc(sizeof(*prop) + sizeof(__be32), GFP_KERNEL);
-    50		prop->name = "#size-cells";
-    51		prop->value = prop + 1;
-    52		prop->length = sizeof(__be32);
-    53		val = prop->value;
-    54		val[0] = __cpu_to_be32(2);
-    55		prop->next = node->properties;
-    56		node->properties = prop;
-    57	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Brian

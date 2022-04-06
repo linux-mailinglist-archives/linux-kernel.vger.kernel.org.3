@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DE54F63A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4924F63C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbiDFPtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S236707AbiDFPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbiDFPrr (ORCPT
+        with ESMTP id S236424AbiDFPs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:47:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E255348B58;
-        Wed,  6 Apr 2022 06:04:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9543261BE2;
-        Wed,  6 Apr 2022 13:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78763C385A3;
-        Wed,  6 Apr 2022 13:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649250282;
-        bh=pg/2MkpNnzjv5CVzDKTAf71fbhHWkr8Xyd8iEp35Khc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FlLnH5OzioJgnW5RgaR7ACr0FYOwiGaEMeRuL/di7AZA60GzoUPAId8M+TfDVfQP8
-         TOIIxq69VbjHB6+7a+g5qhTsSWx4XGHxH9r8u72tn38NriTEIKMJ3hEjAiiqSPHGdt
-         znPorIKAV78v14N7d3fk/d3h/ZLFj9mMx+V5SIWM=
-Date:   Wed, 6 Apr 2022 15:04:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 327/913] lib: uninline simple_strntoull() as well
-Message-ID: <Yk2P58P53btqLAgr@kroah.com>
-References: <20220405070339.801210740@linuxfoundation.org>
- <20220405070349.652301661@linuxfoundation.org>
- <Yk2I7JXzXaXi+6R1@localhost.localdomain>
+        Wed, 6 Apr 2022 11:48:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719434961DE;
+        Wed,  6 Apr 2022 06:09:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1B58C210F4;
+        Wed,  6 Apr 2022 13:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649250535;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ny6SkW/jjvFpcVUGJahdGz/N3Zi6Zn73i10e9D2Lh3E=;
+        b=UZlmD6C1rcVd7c9TYRt/MA0lDF47JspYw//BPhBSRvqyAnMd4a3lIiZ4eizQW9DFdw/MHF
+        1dWIeP+32cmwnnlMnyAgHZDmH0NzATbB6x2tf2x2b3ag10oCI9XF2FAx26O0dmeSq2S0Oo
+        nCF+YTvEuyLdMC6V7+atUIVQr7+R+HQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649250535;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ny6SkW/jjvFpcVUGJahdGz/N3Zi6Zn73i10e9D2Lh3E=;
+        b=85Vj1nlNdiZXDGccmK9QqluymfR/owT8jdecNZDrZ/7Xncs1RHkrzEnpmk5uyyEvqjRY7E
+        BtKfJojqA68BCgCA==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id C6AD5A3B83;
+        Wed,  6 Apr 2022 13:08:54 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 32AB9DA80E; Wed,  6 Apr 2022 15:04:53 +0200 (CEST)
+Date:   Wed, 6 Apr 2022 15:04:53 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     cgel.zte@gmail.com
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] Btrfs: remove redundant judgment
+Message-ID: <20220406130453.GB15609@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, cgel.zte@gmail.com, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220406090404.2488787-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk2I7JXzXaXi+6R1@localhost.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220406090404.2488787-1-lv.ruyi@zte.com.cn>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:34:52PM +0300, Alexey Dobriyan wrote:
-> On Tue, Apr 05, 2022 at 09:23:09AM +0200, Greg Kroah-Hartman wrote:
-> > From: Alexey Dobriyan <adobriyan@gmail.com>
-> > 
-> > [ Upstream commit 839b395eb9c13ae56ea5fc3ca9802734a72293f0 ]
-> > 
-> > Codegen become bloated again after simple_strntoull() introduction
-> > 
-> > 	add/remove: 0/0 grow/shrink: 0/4 up/down: 0/-224 (-224)
+On Wed, Apr 06, 2022 at 09:04:04AM +0000, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 > 
-> > -static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
-> > -					   char **endp, unsigned int base)
-> > +static noinline unsigned long long simple_strntoull(const char *startp, size_t max_chars, char **endp, unsigned int base)
-> 
-> This patch doesn't fix any bugs, why it is selected?
+> iput() has already handled null and non-null parameter. so there is no
+> need to use if().
 
-Easy change to make the kernel a tiny bit smaller?
-
-
+Ok, we can drop the check, have you looked if there are more similar
+places to update?

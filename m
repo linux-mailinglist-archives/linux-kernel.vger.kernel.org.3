@@ -2,84 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E86E4F5CFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1F04F5CFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiDFL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S231972AbiDFL7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiDFL6T (ORCPT
+        with ESMTP id S232868AbiDFL6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:58:19 -0400
-Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FA43BE61A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:29:05 -0700 (PDT)
-Received: (qmail 8173 invoked by uid 989); 6 Apr 2022 07:29:03 -0000
-Authentication-Results: euporie.uberspace.de;
-        auth=pass (plain)
-From:   Florian Fischer <florian.fischer@muhq.space>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Florian Schmaus <flow@cs.fau.de>
-Subject: [RFC v2] perf stat: add rusage utime and stime events
-Date:   Wed,  6 Apr 2022 09:28:35 +0200
-Message-Id: <20220406072839.107519-1-florian.fischer@muhq.space>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <YkybjsCKyWkDZGX+@kernel.org>
-References: <YkybjsCKyWkDZGX+@kernel.org>
+        Wed, 6 Apr 2022 07:58:20 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0133BE630
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:29:12 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id z19so3038770qtw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VE08dsgukeGG5IChIzOIKz1Sx9tWGQgZeReJDKhgy2Y=;
+        b=FUuVzC2mh2PVAGCMRzU0asrMqYuRHc8mtDR5m5TiIlCPxpg/IWOWW0Zdfm3/eLqi2R
+         2p7j5BO1/HkIb7o4D2nSTOo/Pr9CaSHq4DN7QdoDCAb02JfVSPV1dPTdYrwSHgoSW659
+         KKSXTOllrtnDh55cJMQot97phLbbifmvR1+xfuSGrduOtaBhdWJm1wO4jaUSrTSwq90S
+         8KyvuqNUQUwpfhQY7SouUIWg2PIQIKrGfRBUeX16AGAPJBgExu4TQlsIaqia1hf60TkR
+         5MKJZGi9MfiM6PwShYFhEnUYjvPvRGZ5KQ8lpxtXCUGjfEXvLyF/VGfKo2tz0n/DVCKL
+         uBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VE08dsgukeGG5IChIzOIKz1Sx9tWGQgZeReJDKhgy2Y=;
+        b=XQtjUn2XIUF/aA+Ga8eSwpQ/JIGvvBuWs4NRuxPlFGAKU8TOd4fKCk3SSFr0D+oiyR
+         gNRPFg+nDLxa9KXB/3mZRJogEv/75kcpQh6IB3JjfoQn5XXa6V1yMV4BDygU/k+dUvkp
+         72y3GpB8zZ18t2xdispIs9SqbHZPJYPLEEO0s9PJdZ27vWGgJJluEUS4Ri9TTL/qBrm2
+         4YYKdwAyqJJq7wMBDx2lhLxYWHO+nmAGswWK58kUol3hWHYEE+i1hVXs3zXGza7sHfiX
+         tBQ0JuOj3GLYwCMJGfb/mlm1MiheSgJho7aay8NRi7qYOKy+jqeHTRXGHeTIOQqyY/Y1
+         w53A==
+X-Gm-Message-State: AOAM531ftehRr7I+VrZuA0eT3nERjEce37RDJ/1V0JvC/3Juhg5C26gl
+        uLKAU64XouMhi0M+hhZ9ILBEiIwy+rU=
+X-Google-Smtp-Source: ABdhPJwigMtxTwtlbYYuXX75zJfRY1b7cxmWJvS5iiYcfK8nJ29v69OEJU8x+gG+EYqd39myJHe+pg==
+X-Received: by 2002:ac8:5f07:0:b0:2e1:d695:d857 with SMTP id x7-20020ac85f07000000b002e1d695d857mr6317759qta.40.1649230151230;
+        Wed, 06 Apr 2022 00:29:11 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d124-20020ae9ef82000000b00699a8b42aa8sm7949525qkg.16.2022.04.06.00.29.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 00:29:10 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     harry.wentland@amd.com, sunpeng.li@amd.com
+Cc:     Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, Jun.Lei@amd.com, qingqing.zhuo@amd.com,
+        hvanzyll@amd.com, Anthony.Koo@amd.com, Angus.Wang@amd.com,
+        alvin.lee2@amd.com, lv.ruyi@zte.com.cn, Bing.Guo@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/amd/dc:: remove duplicate include
+Date:   Wed,  6 Apr 2022 07:28:40 +0000
+Message-Id: <20220406072840.2488056-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: +
-X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-0.054225)
-X-Rspamd-Score: 1.345774
-Received: from unknown (HELO unkown) (::1)
-        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 06 Apr 2022 09:29:03 +0200
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds new internal events to perf stat exposing the utime and
-stime reported by rusage.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-During some benchmarking using perf it bothered me that I could not easily
-retrieve the times spent in user or kernel mode from perf stat when using the
-machine readable output.
+'dm_services.h' included in 'freesync,c' is duplicated, so remove one.
 
-But perf definitely knows about those values because in the human readable output
-they are present.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/gpu/drm/amd/display/modules/freesync/freesync.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Therefore I exposed the times reported by rusage via the new tool events:
-rusage_user_time, rusage_system_time and their aliases ru_utime and ru_stime.
-
-This allows to retrieved them in machine-readable output:
-
-$ ./perf stat -x, -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time tools/perf
-72134524,ns,duration_time:u,72134524,100.00,,
-65225,us,ru_utime:u,65225,100.00,,
-6865,us,ru_stime:u,6865,100.00,,
-38705,,cache-misses:u,71189328,100.00,,
-
-The changes are mostly inspired by the code for the only other available
-tool event: 'duration_time'.
-
-For now rusage_* events are not usable with metrics (as far as I understand).
-
-The patch applies cleanly on linux-next/next-20220405.
-
-[PATCH v2 1/4] perf stat: introduce stats for the user and system
-[PATCH v2 2/4] perf stat: add rusage utime and stime events
-[PATCH v2 3/4] perf list: print all available tool events
-[PATCH v2 4/4] perf util: add 'us' unit to the rusage time events
-
-[v2]: Split up the changes into separate commits.
-
-Florian Fischer
+diff --git a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
+index d72566c6928a..0130f1879116 100644
+--- a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
++++ b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
+@@ -29,7 +29,6 @@
+ #include "dc.h"
+ #include "mod_freesync.h"
+ #include "core_types.h"
+-#include "dm_services.h"
+ 
+ #define MOD_FREESYNC_MAX_CONCURRENT_STREAMS  32
+ 
+-- 
+2.25.1
 

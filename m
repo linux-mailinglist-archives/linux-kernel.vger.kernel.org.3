@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376704F638B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529154F639B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiDFPj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S236242AbiDFPlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237447AbiDFPir (ORCPT
+        with ESMTP id S236251AbiDFPkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:38:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A992DB36B0;
-        Wed,  6 Apr 2022 05:54:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC0AB82275;
-        Wed,  6 Apr 2022 12:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AEBC385A1;
-        Wed,  6 Apr 2022 12:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649249691;
-        bh=DfOgWxb3N9DOiQt9BDMl0FbPyPLPnEL6bZAkQrm703o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YgMzzR1nKE4E3uq4IQUFQ/pojxpn4HAUaU8XrnZucIxXGhCDqWTnTukaLA8kl8wkt
-         VgpDFBxUbKykIvV7uEwWk9rzH2PVcMr7KhugMLnoP8wyzNrTklWFwylU30JMrwiGUe
-         8NNQS49qfplBYrSTV1c9n357Y+t2F/Zdzb6gWQJxxtUJ4vIjGsUnzhh8441ThQdxzJ
-         0GFG8xJiDpPo/qIOzSKW7afax6MKD7G/AgrHdrKWW9gSqB6o0B3ypdvzS5ZBwyyqrp
-         ee2PhtFZss/TmqZeKG9M9MJOSt1YaD2CeLC6DYCJkuks7YsMY645KzNoxKAMX1T36B
-         /3oV/+Gi3ELtw==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, mark.rutland@arm.com, peterz@infradead.org
-Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH] csky: atomic: Add custom atomic.h implementation
-Date:   Wed,  6 Apr 2022 20:54:36 +0800
-Message-Id: <20220406125436.685264-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 11:40:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C92626A0B5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649249764; x=1680785764;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i4Z8WedwVdvezLTFVD9PQEY/BenOcNbiAfsHFxkmaZw=;
+  b=XDWekrp0yxcxR+Cuyx+10TQa6m667hiQBJyIrUiIrpbOCIQB6TnVJuRA
+   pkKoGzfMQJGbnLiEqcO4DJ5zNd6CrCocSIKqUCr7weA1TS9a9rO3SR66f
+   EDa7KZmlTRmTXnmMzyGNlh32ibBZ+bDNB3hgDttI+3m7q83/p75JtK/iW
+   BJx9x2osZoKXsIBGVqj66MrrD+OguQ3PN68b08KEWyoTN7O63kf/uTqDq
+   FiPR7MF9S8YWcpYcnTnEJOxGJb5MS8mRX9hQ7caFqwLuB5U+49bMpb+Cj
+   jYKtkIodLumMOPFsU+nc7bS6cku80Uym7LJTJfb7I47vQBBN00r62Fiht
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240968187"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="240968187"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 05:56:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="505717737"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 06 Apr 2022 05:56:02 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc5Cb-0004QC-HG;
+        Wed, 06 Apr 2022 12:56:01 +0000
+Date:   Wed, 6 Apr 2022 20:55:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:robh/linux/dt/pop-pci-nodes 2/2] ia64-linux-ld:
+ of.c:undefined reference to `of_attach_node'
+Message-ID: <202204062042.zlTRFO9x-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,277 +64,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+tree:   https://github.com/ammarfaizi2/linux-block robh/linux/dt/pop-pci-nodes
+head:   b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+commit: b9198a9525a97d05b0bb2a7282fede92d7d2d93d [2/2] PCI: Create DT nodes if they don't exist
+config: ia64-randconfig-r025-20220406 (https://download.01.org/0day-ci/archive/20220406/202204062042.zlTRFO9x-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block robh/linux/dt/pop-pci-nodes
+        git checkout b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-The generic atomic.h used cmpxchg to implement the atomic
-operations, it will cause daul loop to reduce the forward
-guarantee. The patch implement csky custom atomic operations with
-ldex/stex instructions for the best performance.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/csky/include/asm/atomic.h | 251 +++++++++++++++++++++++++++++++++
- 1 file changed, 251 insertions(+)
- create mode 100644 arch/csky/include/asm/atomic.h
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
-new file mode 100644
-index 000000000000..3157df8ad555
---- /dev/null
-+++ b/arch/csky/include/asm/atomic.h
-@@ -0,0 +1,251 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __ASM_CSKY_ATOMIC_H
-+#define __ASM_CSKY_ATOMIC_H
-+
-+#ifdef CONFIG_SMP
-+# include <asm-generic/atomic64.h>
-+
-+#include <asm/cmpxchg.h>
-+#include <asm/barrier.h>
-+
-+#define __atomic_acquire_fence()	__smp_acquire_fence()
-+
-+#define __atomic_release_fence()	__smp_release_fence()
-+
-+static __always_inline int arch_atomic_read(const atomic_t *v)
-+{
-+	return READ_ONCE(v->counter);
-+}
-+static __always_inline void arch_atomic_set(atomic_t *v, int i)
-+{
-+	WRITE_ONCE(v->counter, i);
-+}
-+
-+#define ATOMIC_OP(op, asm_op, I)					\
-+static __always_inline							\
-+void arch_atomic_##op(int i, atomic_t *v)				\
-+{									\
-+	unsigned long tmp;						\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w		%0, (%2)	\n"			\
-+	"	" #op "		%0, %1		\n"			\
-+	"	stex.w		%0, (%2)	\n"			\
-+	"	bez		%0, 1b		\n"			\
-+	: "=&r" (tmp)							\
-+	: "r" (I), "r" (&v->counter)					\
-+	: "memory");							\
-+}
-+
-+ATOMIC_OP(add, add,  i)
-+ATOMIC_OP(sub, add, -i)
-+ATOMIC_OP(and, and,  i)
-+ATOMIC_OP( or,  or,  i)
-+ATOMIC_OP(xor, xor,  i)
-+
-+#undef ATOMIC_OP
-+
-+#define ATOMIC_FETCH_OP(op, asm_op, I)					\
-+static __always_inline							\
-+int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)		\
-+{									\
-+	register int ret, tmp;						\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w		%0, (%3) \n"				\
-+	"	mov		%1, %0   \n"				\
-+	"	" #op "		%0, %2   \n"				\
-+	"	stex.w		%0, (%3) \n"				\
-+	"	bez		%0, 1b   \n"				\
-+		: "=&r" (tmp), "=&r" (ret)				\
-+		: "r" (I), "r"(&v->counter) 				\
-+		: "memory");						\
-+	return ret;							\
-+}									\
-+static __always_inline							\
-+int arch_atomic_fetch_##op##_acquire(int i, atomic_t *v)		\
-+{									\
-+	register int ret, tmp;						\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w		%0, (%3) \n"				\
-+	ACQUIRE_FENCE							\
-+	"	mov		%1, %0   \n"				\
-+	"	" #op "		%0, %2   \n"				\
-+	"	stex.w		%0, (%3) \n"				\
-+	"	bez		%0, 1b   \n"				\
-+		: "=&r" (tmp), "=&r" (ret)				\
-+		: "r" (I), "r"(&v->counter) 				\
-+		: "memory");						\
-+	return ret;							\
-+}									\
-+static __always_inline							\
-+int arch_atomic_fetch_##op##_release(int i, atomic_t *v)		\
-+{									\
-+	register int ret, tmp;						\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w		%0, (%3) \n"				\
-+	"	mov		%1, %0   \n"				\
-+	"	" #op "		%0, %2   \n"				\
-+	RELEASE_FENCE							\
-+	"	stex.w		%0, (%3) \n"				\
-+	"	bez		%0, 1b   \n"				\
-+		: "=&r" (tmp), "=&r" (ret)				\
-+		: "r" (I), "r"(&v->counter) 				\
-+		: "memory");						\
-+	return ret;							\
-+}									\
-+static __always_inline							\
-+int arch_atomic_fetch_##op(int i, atomic_t *v)				\
-+{									\
-+	register int ret, tmp;						\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w		%0, (%3) \n"				\
-+	ACQUIRE_FENCE							\
-+	"	mov		%1, %0   \n"				\
-+	"	" #op "		%0, %2   \n"				\
-+	RELEASE_FENCE							\
-+	"	stex.w		%0, (%3) \n"				\
-+	"	bez		%0, 1b   \n"				\
-+		: "=&r" (tmp), "=&r" (ret)				\
-+		: "r" (I), "r"(&v->counter) 				\
-+		: "memory");						\
-+	return ret;							\
-+}
-+
-+#define ATOMIC_OP_RETURN(op, asm_op, c_op, I)				\
-+static __always_inline							\
-+int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)		\
-+{									\
-+        return arch_atomic_fetch_##op##_relaxed(i, v) c_op I;		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_##op##_return_acquire(int i, atomic_t *v)		\
-+{									\
-+        return arch_atomic_fetch_##op##_relaxed(i, v) c_op I;		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_##op##_return_release(int i, atomic_t *v)		\
-+{									\
-+        return arch_atomic_fetch_##op##_release(i, v) c_op I;		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_##op##_return(int i, atomic_t *v)			\
-+{									\
-+        return arch_atomic_fetch_##op(i, v) c_op I;			\
-+}
-+
-+#define ATOMIC_OPS(op, asm_op, c_op, I)					\
-+        ATOMIC_FETCH_OP( op, asm_op,       I)				\
-+        ATOMIC_OP_RETURN(op, asm_op, c_op, I)
-+
-+ATOMIC_OPS(add, add, +,  i)
-+ATOMIC_OPS(sub, add, +, -i)
-+
-+#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
-+#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+#define arch_atomic_fetch_add_acquire	arch_atomic_fetch_add_acquire
-+#define arch_atomic_fetch_sub_acquire	arch_atomic_fetch_sub_acquire
-+#define arch_atomic_fetch_add_release	arch_atomic_fetch_add_release
-+#define arch_atomic_fetch_sub_release	arch_atomic_fetch_sub_release
-+#define arch_atomic_fetch_add		arch_atomic_fetch_add
-+#define arch_atomic_fetch_sub		arch_atomic_fetch_sub
-+
-+#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
-+#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_add_return_acquire	arch_atomic_add_return_acquire
-+#define arch_atomic_sub_return_acquire	arch_atomic_sub_return_acquire
-+#define arch_atomic_add_return_release	arch_atomic_add_return_release
-+#define arch_atomic_sub_return_release	arch_atomic_sub_return_release
-+#define arch_atomic_add_return		arch_atomic_add_return
-+#define arch_atomic_sub_return		arch_atomic_sub_return
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_OP_RETURN
-+
-+#define ATOMIC_OPS(op, asm_op, I)					\
-+        ATOMIC_FETCH_OP(op, asm_op, I)
-+
-+ATOMIC_OPS(and, and, i)
-+ATOMIC_OPS( or,  or, i)
-+ATOMIC_OPS(xor, xor, i)
-+
-+#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
-+#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
-+#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+#define arch_atomic_fetch_and_acquire	arch_atomic_fetch_and_acquire
-+#define arch_atomic_fetch_or_acquire	arch_atomic_fetch_or_acquire
-+#define arch_atomic_fetch_xor_acquire	arch_atomic_fetch_xor_acquire
-+#define arch_atomic_fetch_and_release	arch_atomic_fetch_and_release
-+#define arch_atomic_fetch_or_release	arch_atomic_fetch_or_release
-+#define arch_atomic_fetch_xor_release	arch_atomic_fetch_xor_release
-+#define arch_atomic_fetch_and		arch_atomic_fetch_and
-+#define arch_atomic_fetch_or		arch_atomic_fetch_or
-+#define arch_atomic_fetch_xor		arch_atomic_fetch_xor
-+
-+#undef ATOMIC_OPS
-+
-+#undef ATOMIC_FETCH_OP
-+
-+#define ATOMIC_OP(size)							\
-+static __always_inline							\
-+int arch_atomic_xchg_relaxed(atomic_t *v, int n)			\
-+{									\
-+	return __xchg_relaxed(n, &(v->counter), size);			\
-+}									\
-+static __always_inline							\
-+int arch_atomic_xchg_acquire(atomic_t *v, int n)			\
-+{									\
-+	return __xchg_acquire(n, &(v->counter), size);			\
-+}									\
-+static __always_inline							\
-+int arch_atomic_xchg_release(atomic_t *v, int n)			\
-+{									\
-+	return __xchg_release(n, &(v->counter), size);			\
-+}									\
-+static __always_inline							\
-+int arch_atomic_xchg(atomic_t *v, int n)				\
-+{									\
-+	return __xchg(n, &(v->counter), size);				\
-+}									\
-+static __always_inline							\
-+int arch_atomic_cmpxchg_relaxed(atomic_t *v, int o, int n)		\
-+{									\
-+	return __cmpxchg_relaxed(&(v->counter), o, n, size);		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_cmpxchg_acquire(atomic_t *v, int o, int n)		\
-+{									\
-+	return __cmpxchg_acquire(&(v->counter), o, n, size);		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_cmpxchg_release(atomic_t *v, int o, int n)		\
-+{									\
-+	return __cmpxchg_release(&(v->counter), o, n, size);		\
-+}									\
-+static __always_inline							\
-+int arch_atomic_cmpxchg(atomic_t *v, int o, int n)			\
-+{									\
-+	return __cmpxchg(&(v->counter), o, n, size);			\
-+}
-+
-+#define ATOMIC_OPS()							\
-+	ATOMIC_OP(4)
-+
-+ATOMIC_OPS()
-+
-+#define arch_atomic_xchg_relaxed	arch_atomic_xchg_relaxed
-+#define arch_atomic_xchg_acquire	arch_atomic_xchg_acquire
-+#define arch_atomic_xchg_release	arch_atomic_xchg_release
-+#define arch_atomic_xchg		arch_atomic_xchg
-+#define arch_atomic_cmpxchg_relaxed	arch_atomic_cmpxchg_relaxed
-+#define arch_atomic_cmpxchg_acquire	arch_atomic_cmpxchg_acquire
-+#define arch_atomic_cmpxchg_release	arch_atomic_cmpxchg_release
-+#define arch_atomic_cmpxchg		arch_atomic_cmpxchg
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_OP
-+
-+#else
-+# include <asm-generic/atomic.h>
-+#endif
-+
-+#endif /* __ASM_CSKY_ATOMIC_H */
+   ia64-linux-ld: drivers/pci/of.o: in function `make_dev_node':
+   of.c:(.text+0x1a72): undefined reference to `of_attach_node'
+>> ia64-linux-ld: of.c:(.text+0x1b62): undefined reference to `of_attach_node'
+   ia64-linux-ld: drivers/pci/of.o: in function `make_bus_node':
+   of.c:(.text+0x1c62): undefined reference to `of_attach_node'
+   ia64-linux-ld: drivers/pci/of.o: in function `pci_set_bus_of_node':
+   of.c:(.text+0x1ff2): undefined reference to `of_attach_node'
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

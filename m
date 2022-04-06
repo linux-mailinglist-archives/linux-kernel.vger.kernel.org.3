@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156D34F6426
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B994F650E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbiDFPxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S237644AbiDFQYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236570AbiDFPxc (ORCPT
+        with ESMTP id S237581AbiDFQYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:53:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAEC58F736;
-        Wed,  6 Apr 2022 06:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=94sQlQmKAhs+bhZl9YeISZUchG1U5ciTRG/I6OMRF+E=; b=2mWpJbh/i+hFie80O/CmsQdpfd
-        XAejkE9gd5BDMAg12TWppD0Ul7D43s3rge8vIfIpv8UIH3kcw2A3W0bg+n6YOyG985IhwzfpYNzyU
-        scYJqqfIDqGUG/y9WFhaR+94GgCoBNB3OaZa7JZwqGyoBukl8AfnHuQ8qBNMz7fIWuUg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nc4ti-00ERc1-7z; Wed, 06 Apr 2022 14:36:30 +0200
-Date:   Wed, 6 Apr 2022 14:36:30 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/4] pinctrl: mvebu: pinctrl driver for 98DX2530 SoC
-Message-ID: <Yk2JTo91sZHunEpN@lunn.ch>
-References: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
- <20220406032158.1449049-3-chris.packham@alliedtelesis.co.nz>
+        Wed, 6 Apr 2022 12:24:12 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6D03858E2
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649252785; x=1680788785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pFQJLYTSIUtGGDkRMNXfH9mNCTySCEkxZaPD/bR+QOY=;
+  b=St3UJLK29tiLsgVL5o0JTowrDvcsLMMr170noz0lMdGMA0WLxVHERHVs
+   l5BdL88N9WH3ees92sGdLuDNVJ+50ur8jMIHsQfnE/WVfJ+APBXyDlmkF
+   vI74fs+zHeQqMGG5qHsY9YLvtw1SrqzLKX6GQZWb+qUSnBVKsEOf1fXmv
+   gsP9Xf/APmbR9RMF8bh9fZuD+lxm3VwZQdjbPojYk8dXoZvUi9Q4Be47Y
+   1ijyHyuBITlAgQI+4pwL2pY02oFpJFJwVsRC8pyNdmIAo9YsIaX5Ugm2A
+   3sfH7OkjUzvTIjeWWB5N6KSqMBV2xRAXrmIR//bDpTYeHKJiBSsbwK0SC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261214425"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="261214425"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:02:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="524459107"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:02:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nc5HX-000EG4-V0;
+        Wed, 06 Apr 2022 16:01:07 +0300
+Date:   Wed, 6 Apr 2022 16:01:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Scott Wood <oss@buserror.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/1] powerpc/83xx/mpc8349emitx: Get rid of of_node
+ assignment
+Message-ID: <Yk2PE7+oEEtGri95@smile.fi.intel.com>
+References: <20220323174342.56187-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbUWE8knM=9uUVLTX792Y8_J1aPj4KtFh=yJxaKi+ZqRw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406032158.1449049-3-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdbUWE8knM=9uUVLTX792Y8_J1aPj4KtFh=yJxaKi+ZqRw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:21:56PM +1200, Chris Packham wrote:
-> This pinctrl driver supports the 98DX25xx and 98DX35xx family of chips
-> from Marvell. It is based on the Marvell SDK with additions for various
-> (non-gpio) pin configurations based on the datasheet.
+On Mon, Mar 28, 2022 at 03:16:08PM +0200, Linus Walleij wrote:
+> On Wed, Mar 23, 2022 at 6:43 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
+> > Let GPIO library to assign of_node from the parent device.
+> > This allows to move GPIO library and drivers to use fwnode
+> > APIs instead of being stuck with OF-only interfaces.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Notes:
->     Changes in v3:
->     - Use mmio instead of syscon
+> That's a nice patch.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Hi Chris
+Thanks!
 
-syscon is used when the register space is shared with other
-devices. Is that not the case here? You can share mmio spaces, but you
-have to use the correct call to reserve it, so that the system knows
-it is to be shared. Or are all the pinctl registers contiguous and you
-are only reserve just the registers you need, leaving other drivers
-fee to take what they need?
+Can we have this applied now?
 
-I'm just trying to ensure you are not going to have trouble later when
-you add other drivers.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-    Andrew
+

@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14CD4F63B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405EE4F6398
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbiDFPrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S236459AbiDFPqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbiDFPqu (ORCPT
+        with ESMTP id S236595AbiDFPo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:46:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD9D219AE3
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649250207; x=1680786207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iTWnY1k7bbh1/b+9WL07ilkWgLIQ46sXRa4zPnKXvHw=;
-  b=Q4HDE74FLPEMHJsE9HCcJeZPC/rXNtJ5lW4jq1KQr1lC5VmZm5S4s4EO
-   mmmDKHoQI8yjJpTQ6AwNPtmccIZZW3zfdmNP91n/s5EztxK7jS2hHDAKo
-   ly0z6nSMf85y1koEdO40DeXVZDT5k8ses2aviXlZpUeoO2N9hLFoR6F8c
-   BzttIlSYd1/0LVMIZ2clx/QKbybxmQbAROzjvolly1MFIij1PQx6W0Nos
-   ol2uiAjNFrM1evnJwzMQgUo22erg2UjStZv60501TV47VZMY98jM7umNZ
-   tHlpvAPe0gnA11SI5MaJBahwUZsiG/4MXQANcrw9/rjZcPPE5qsPwMMa3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="324206892"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="324206892"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:03:17 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="588361010"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:03:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nc5I5-000EGZ-94;
-        Wed, 06 Apr 2022 16:01:41 +0300
-Date:   Wed, 6 Apr 2022 16:01:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v1 1/1] regulator/rpi-panel-attiny: Get rid of duplicate
- of_node assignment
-Message-ID: <Yk2PNas3YIGQLZ04@smile.fi.intel.com>
-References: <20220325184508.45670-1-andriy.shevchenko@linux.intel.com>
+        Wed, 6 Apr 2022 11:44:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AD641D11A;
+        Wed,  6 Apr 2022 06:02:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0D88B8238B;
+        Wed,  6 Apr 2022 13:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3562C385A7;
+        Wed,  6 Apr 2022 13:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649250118;
+        bh=uPrV80DxeNwcp1FdNzYO+3Drqzpm3w0g1FHPY+tG+WI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QVaDGy73WkBoQint21oa63zb2kKsQk0lVbSRoaMiK5UP0EK+aSKEDUM16apWSdi00
+         ZmT4K59VUSThYE7z9HpZ8tcXK3zXRTi+Ri/jIADnqyA2/hMjw+B47N2aESyY0MZKtR
+         MzJQVquSWzy4lyPAdtDchkySAMe26fIIAZXzmndk=
+Date:   Wed, 6 Apr 2022 15:01:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
+Message-ID: <Yk2PQzynOVOzJdPo@kroah.com>
+References: <20220405070339.801210740@linuxfoundation.org>
+ <373809f0-9fc8-8eeb-ff13-146df11b4ece@applied-asynchrony.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220325184508.45670-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <373809f0-9fc8-8eeb-ff13-146df11b4ece@applied-asynchrony.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 08:45:08PM +0200, Andy Shevchenko wrote:
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove these assignment all at once.
+On Tue, Apr 05, 2022 at 01:58:57PM +0200, Holger Hoffstätte wrote:
+> (cc'ing Valentin)
 > 
-> For the details one may look into the of_gpio_dev_init() implementation.
+> On 2022-04-05 09:17, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.33 release.
+> > There are 913 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> 
+> This locks up  immediately when trying to use tracepoints, due to:
+> "sched-tracing-don-t-re-read-p-state-when-emitting-sc.patch" aka
+> "sched/tracing: Don't re-read p->state when emitting sched_switch event"
+> 
+> Reverting this patch makes things work again, at least for 5.15.x;
+> don't know about other series.
 
-Any comments on this? Can it be applied now?
+Thanks for letting me know, I've now dropped it from all of the queues.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h

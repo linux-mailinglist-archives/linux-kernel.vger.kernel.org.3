@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C994F6625
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F374F6641
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238426AbiDFRHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S238476AbiDFRIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238381AbiDFRGv (ORCPT
+        with ESMTP id S238419AbiDFRHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:06:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DC74BEF19;
-        Wed,  6 Apr 2022 07:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E2761A35;
-        Wed,  6 Apr 2022 14:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C203C385A9;
-        Wed,  6 Apr 2022 14:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649255413;
-        bh=b+Jn04l7J+92NIm/oLXywT4M2+LZAPg9gjG3dxBRhAc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FNtLxxWtrEPrA0lRhvpokbYAVdtth3ABiOwFLmVQdT6iioShyLzf1gjf2M3Geeu7B
-         7mLSvsQ62gUa4mGQ4F5opq153IYHFBm4k2S+MOcL72dJo/S1OSNHYwOVT/mU0PlZve
-         i2AuEROItMLB6xhWZdk3Atp0KrkNBEH5N3y2sTylV/snVLSHKB8wzBnw1CY4dLFDL4
-         OBxb81qUQjDro6w3XPzOLEKa78VAOegm9AB4XO/ZcIky/H0DkdncyQ1uLNQuwMhBCQ
-         CI4b34Mks3eVX9f9epfp4pwhPLn9MpcMNjgTZ0HX/BSpSOUia7aS5wjTiltjnryQBP
-         UBW4hica35p2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6495DE8DBDD;
-        Wed,  6 Apr 2022 14:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 6 Apr 2022 13:07:42 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C68B2F3D27;
+        Wed,  6 Apr 2022 07:30:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so4696488ejb.4;
+        Wed, 06 Apr 2022 07:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vMzHq1nDdrTgNWerlZndh8+uHJuzMZUk5JD3WK4zHos=;
+        b=b28NPSS+1bg37gEmwgiee4aegL8utqDr/xTOCnCKJVqzF4/NMDjmdcRP9K3OCbrkg+
+         eOCO5ChW9MediiismI+cr/RxTxvd9QWwBhgslhp0AWtb9f6CckOyewF2Pup6uu+JxXYa
+         MIV0akmn6I0YJHpkEAIJHOh6aXcv5Cz3UEOuLbV3Ciknbfp4gHCibWbDnOGebuUiAdHG
+         csXyGE5btDdtVRmhFwdDJfN+/BayVuuxKXYNjwKg6pZuQTnzePXYbR6Xv2ZBbxYZJdsf
+         OTSnvWxrJC3S9OO9ZKLiQm3dRyUYsjSTrguslVJt/oRV+BIYvVxvuxyM1MKnIW1uWjdU
+         kqug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vMzHq1nDdrTgNWerlZndh8+uHJuzMZUk5JD3WK4zHos=;
+        b=eYxuz4reewKUatJrrbbTbjRiChQCz0szZiZlNfd9iNfJWKHRCqivgDshwcU4HfqFyU
+         FIAdx7gReqL0yrRZV0KWoIgbkX/rK46gWjl0U5eK/4I9axDjQtklWPtFb4ysUIMWGLDn
+         fXU0Th3Rz4FarSh38a2t1He109cs0JPnjm5rOhPinA7OLQak3v4cmFp99s0zlUj6bYRQ
+         yqmNZqcXGgP9Iq8R1H1/0Ygqe0VCVTDLFoSZcnAeKXIdztiqN8IiyIPP1E3wI+Icwhix
+         YxN2ZN2Mle0JO4Ezqtu0/S9fG3omVbgCqh4KBeZm8goezo9pT0eIY715dvQw/JnMnVEa
+         LmWQ==
+X-Gm-Message-State: AOAM533HjOppxKv59x+xBt2XoA930y3DgTupdm2pDVqCK4+DXO739RKP
+        CV/3QuKTZ4306fx2N44n7Bk=
+X-Google-Smtp-Source: ABdhPJwj5LMBNvlor+0fHq6krcRwBsg/XTJyYzN+wrPisCqeAZjQM8jMzy+Lkvlak65z9QeNtCE12A==
+X-Received: by 2002:a17:907:6e89:b0:6df:d819:dc9c with SMTP id sh9-20020a1709076e8900b006dfd819dc9cmr9096219ejc.158.1649255437119;
+        Wed, 06 Apr 2022 07:30:37 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id e19-20020a056402105300b004162d0b4cbbsm7933952edu.93.2022.04.06.07.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 07:30:36 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 17:30:34 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Jianbo Liu <jianbol@nvidia.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, rajur@chelsio.com,
+        claudiu.manoil@nxp.com, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com, hkelam@marvell.com, saeedm@nvidia.com,
+        leon@kernel.org, idosch@nvidia.com, petrm@nvidia.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        simon.horman@corigine.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        baowen.zheng@corigine.com, louis.peens@netronome.com,
+        peng.zhang@corigine.com, oss-drivers@corigine.com, roid@nvidia.com
+Subject: Re: [PATCH net-next v3 1/2] net: flow_offload: add tc police action
+ parameters
+Message-ID: <20220406143034.voa7afprh3xa5epp@skbuf>
+References: <20220224102908.5255-1-jianbol@nvidia.com>
+ <20220224102908.5255-2-jianbol@nvidia.com>
+ <20220315191358.taujzi2kwxlp6iuf@skbuf>
+ <YjM2IhX4k5XHnya0@shredder>
+ <20220317185249.5mff5u2x624pjewv@skbuf>
+ <YjON61Hum0+B4m6y@shredder>
+ <YjmhS7mEw7DraXfE@shredder>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND] net: usb: remove duplicate assignment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164925541340.21938.4564814458141656979.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 14:30:13 +0000
-References: <1649236624-4208-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1649236624-4208-1-git-send-email-wangqing@vivo.com>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjmhS7mEw7DraXfE@shredder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed,  6 Apr 2022 02:17:03 -0700 you wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Tue, Mar 22, 2022 at 12:13:31PM +0200, Ido Schimmel wrote:
+> On Thu, Mar 17, 2022 at 09:37:22PM +0200, Ido Schimmel wrote:
+> > On Thu, Mar 17, 2022 at 08:52:49PM +0200, Vladimir Oltean wrote:
+> > > I'd just like the 'reclassify' action to be propagated in some reasonable
+> > > way to flow offload, considering that at the moment the error is quite cryptic.
+> > 
+> > OK, will check next week. Might be best to simply propagate extack to
+> > offload_act_setup() and return a meaningful message in
+> > tcf_police_offload_act_setup(). There are a bunch of other actions whose
+> > callback simply returns '-EOPNOTSUPP' that can benefit from it.
 > 
-> netdev_alloc_skb() has assigned ssi->netdev to skb->dev if successed,
-> no need to repeat assignment.
+> # tc filter add dev dummy0 ingress protocol ip flower skip_sw ip_proto icmp action police rate 100Mbit burst 10000
+> Error: act_police: Offload not supported when conform/exceed action is "reclassify".
+> We have an error talking to the kernel
 > 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> Available here:
+> https://github.com/idosch/linux/commits/tc_extack
 > 
-> [...]
+> I plan to submit the patches after net-next reopens.
 
-Here is the summary with links:
-  - [RESEND] net: usb: remove duplicate assignment
-    https://git.kernel.org/netdev/net-next/c/207d924dcf32
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks. I've tested these partially and at least the case that I
+reported is now covered.

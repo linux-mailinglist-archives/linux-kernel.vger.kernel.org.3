@@ -2,149 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE374F6B59
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569904F6B08
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234715AbiDFUZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S232266AbiDFUOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiDFUWh (ORCPT
+        with ESMTP id S236999AbiDFUNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:22:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795101CEA59;
-        Wed,  6 Apr 2022 10:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649267537; x=1680803537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NKYqSDBSi2gK7jq1hDnM4aEW04YtFUxd7nZHJ7bseh0=;
-  b=Bm9t/h+TXBGewdWnTVzUKQLc64XIY77jTMjvZAnLclF5viOu/od46bF6
-   K5eHIDOvzcJS3WQV+9O3OHBzIe912CVX/W/ZRBg0Gu80bdQIdZF81YyVM
-   /y8G5MZMvF2tQFN9V4t9ull4sh6+3nqvG7Rviejb7u4AQtF411/8v3qmv
-   9uTEcB8Zi+/2xYrXVoVorgluyQu1k2Xh2hEvzGi046KBCz9MI/WjV/Jah
-   4hGiNwb6e8h+2OYIlmJ29hMWcJYX2LN2xN2i0yxgYFntZB9fF/BySP6OA
-   iRtZaVAPoih7ACpJI15t+Al3RDjxnfdiVC43tgDjdx6Y7qsxe5rwcrvHU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241706443"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="241706443"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:52:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="658629123"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 10:52:13 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nc9pE-0004dP-QV;
-        Wed, 06 Apr 2022 17:52:12 +0000
-Date:   Thu, 7 Apr 2022 01:51:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v5 4/4] device property: Constify fwnode APIs that uses
- fwnode_get_next_parent()
-Message-ID: <202204070123.UdpbjnDH-lkp@intel.com>
-References: <20220406130552.30930-4-andriy.shevchenko@linux.intel.com>
+        Wed, 6 Apr 2022 16:13:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8DC506EE;
+        Wed,  6 Apr 2022 11:01:09 -0700 (PDT)
+Date:   Wed, 06 Apr 2022 18:01:04 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649268067;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IndriNrjjKue7jTMRIVbOa6aEXgiAJs1mmKTKQU5o2k=;
+        b=n8LIvLG63fRvoYpG/xxua2e9y5DhIF/6fPG3gYpNwAP3J30WSQNKx0LECysc40M3oYfRzY
+        yEG//fH5BZvVv5CoKBiBpkPnmSmOzBmVPBK8RHhtwCySoserHElFnHn5CWvB1/ZSLrAVr4
+        qRE+voPF6nE/O8QTOLnAyCrhN3WQu0SmzscV8GcASLBlVVDDUclGR1FZLI0yO1fdaNQs+1
+        SrvNBfLqJtCcdxabccSWCqR6ihf/PkwizDvdhZBRFHu8wSJ3El4byEKRBe5MJdRkpiNRSm
+        xLmyZFG0ybEchdjl3DwVyByWcjHpqDut7ih453x4aol9yktuhNHtztU1NK8Tfg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649268067;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IndriNrjjKue7jTMRIVbOa6aEXgiAJs1mmKTKQU5o2k=;
+        b=ZAxYhEcigm5Sz65+61+nzBTrSsIfhWcIqJ6/Dhi7BNkxlk1HGqTkHyT9Js9Y1Cco8pnktV
+        svPF6NIKoT0lPhDA==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/build] x86/configs: Add x86 debugging Kconfig fragment plus docs
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
+References: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406130552.30930-4-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164926806495.389.2039548073927168895.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+The following commit has been merged into the x86/build branch of tip:
 
-I love your patch! Perhaps something to improve:
+Commit-ID:     9b5a7f4a2a8dcda461f9c7a6671150f4a8a902e8
+Gitweb:        https://git.kernel.org/tip/9b5a7f4a2a8dcda461f9c7a6671150f4a8a902e8
+Author:        Dave Hansen <dave.hansen@linux.intel.com>
+AuthorDate:    Thu, 31 Mar 2022 10:57:28 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 06 Apr 2022 19:56:29 +02:00
 
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on rafael-pm/linux-next linus/master linux/master v5.18-rc1 next-20220406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+x86/configs: Add x86 debugging Kconfig fragment plus docs
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220407-002511
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220407/202204070123.UdpbjnDH-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d9d353ada8d8c3b1b7f3965ad7fe191bd7dea930
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220407-002511
-        git checkout d9d353ada8d8c3b1b7f3965ad7fe191bd7dea930
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/base/
+The kernel has a wide variety of debugging options to help catch
+and squash bugs.  However, new debugging is added all the time and
+the existing options can be hard to find.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Add a Kconfig fragment with the debugging options which tip
+maintainers expect to be used to test contributions.
 
-All warnings (new ones prefixed by >>):
+This should make it easier for contributors to test their code and
+find issues before submission.
 
-   drivers/base/property.c: In function 'fwnode_get_nth_parent':
->> drivers/base/property.c:647:42: warning: passing argument 1 of 'fwnode_handle_get' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     647 |                 return fwnode_handle_get(fwnode);
-         |                                          ^~~~~~
-   In file included from include/linux/of.h:22,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/base/property.c:10:
-   include/linux/property.h:123:63: note: expected 'struct fwnode_handle *' but argument is of type 'const struct fwnode_handle *'
-     123 | struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+  [ bp: Add to "make help" output, fix DEBUG_INFO selection as pointed
+        out by Nathan Chancellor <nathan@kernel.org>. ]
 
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220331175728.299103A0@davehans-spike.ostc.intel.com
+---
+ Documentation/process/maintainer-tip.rst | 14 ++++++++++++++
+ arch/x86/Makefile                        |  1 +
+ kernel/configs/x86_debug.config          | 18 ++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 kernel/configs/x86_debug.config
 
-vim +647 drivers/base/property.c
-
-87e5e95db31a27 Sakari Ailus    2019-10-03  629  
-87e5e95db31a27 Sakari Ailus    2019-10-03  630  /**
-87e5e95db31a27 Sakari Ailus    2019-10-03  631   * fwnode_get_nth_parent - Return an nth parent of a node
-87e5e95db31a27 Sakari Ailus    2019-10-03  632   * @fwnode: The node the parent of which is requested
-87e5e95db31a27 Sakari Ailus    2019-10-03  633   * @depth: Distance of the parent from the node
-87e5e95db31a27 Sakari Ailus    2019-10-03  634   *
-87e5e95db31a27 Sakari Ailus    2019-10-03  635   * Returns the nth parent of a node. If there is no parent at the requested
-87e5e95db31a27 Sakari Ailus    2019-10-03  636   * @depth, %NULL is returned. If @depth is 0, the functionality is equivalent to
-87e5e95db31a27 Sakari Ailus    2019-10-03  637   * fwnode_handle_get(). For @depth == 1, it is fwnode_get_parent() and so on.
-87e5e95db31a27 Sakari Ailus    2019-10-03  638   *
-87e5e95db31a27 Sakari Ailus    2019-10-03  639   * The caller is responsible for calling fwnode_handle_put() for the returned
-87e5e95db31a27 Sakari Ailus    2019-10-03  640   * node.
-87e5e95db31a27 Sakari Ailus    2019-10-03  641   */
-d9d353ada8d8c3 Andy Shevchenko 2022-04-06  642  struct fwnode_handle *fwnode_get_nth_parent(const struct fwnode_handle *fwnode, unsigned int depth)
-87e5e95db31a27 Sakari Ailus    2019-10-03  643  {
-040f806ecab6cd Andy Shevchenko 2022-04-06  644  	struct fwnode_handle *parent;
-87e5e95db31a27 Sakari Ailus    2019-10-03  645  
-040f806ecab6cd Andy Shevchenko 2022-04-06  646  	if (depth == 0)
-040f806ecab6cd Andy Shevchenko 2022-04-06 @647  		return fwnode_handle_get(fwnode);
-87e5e95db31a27 Sakari Ailus    2019-10-03  648  
-040f806ecab6cd Andy Shevchenko 2022-04-06  649  	fwnode_for_each_parent_node(fwnode, parent) {
-040f806ecab6cd Andy Shevchenko 2022-04-06  650  		if (--depth == 0)
-040f806ecab6cd Andy Shevchenko 2022-04-06  651  			return parent;
-040f806ecab6cd Andy Shevchenko 2022-04-06  652  	}
-040f806ecab6cd Andy Shevchenko 2022-04-06  653  	return NULL;
-87e5e95db31a27 Sakari Ailus    2019-10-03  654  }
-87e5e95db31a27 Sakari Ailus    2019-10-03  655  EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
-87e5e95db31a27 Sakari Ailus    2019-10-03  656  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
+index c74f4a8..572a328 100644
+--- a/Documentation/process/maintainer-tip.rst
++++ b/Documentation/process/maintainer-tip.rst
+@@ -437,6 +437,20 @@ in a private repository which allows interested people to easily pull the
+ series for testing. The usual way to offer this is a git URL in the cover
+ letter of the patch series.
+ 
++Testing
++^^^^^^^
++
++Code should be tested before submitting to the tip maintainers.  Anything
++other than minor changes should be built, booted and tested with
++comprehensive (and heavyweight) kernel debugging options enabled.
++
++These debugging options can be found in kernel/configs/x86_debug.config
++and can be added to an existing kernel config by running:
++
++	make x86_debug.config
++
++Some of these options are x86-specific and can be left out when testing
++on other architectures.
+ 
+ Coding style notes
+ ------------------
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 63d50f6..1abd7cc 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -313,5 +313,6 @@ define archhelp
+   echo  ''
+   echo  '  kvm_guest.config	- Enable Kconfig items for running this kernel as a KVM guest'
+   echo  '  xen.config		- Enable Kconfig items for running this kernel as a Xen guest'
++  echo  '  x86_debug.config	- Enable tip tree debugging options for testing'
+ 
+ endef
+diff --git a/kernel/configs/x86_debug.config b/kernel/configs/x86_debug.config
+new file mode 100644
+index 0000000..dcd86f3
+--- /dev/null
++++ b/kernel/configs/x86_debug.config
+@@ -0,0 +1,18 @@
++CONFIG_X86_DEBUG_FPU=y
++CONFIG_LOCK_STAT=y
++CONFIG_DEBUG_VM=y
++CONFIG_DEBUG_VM_VMACACHE=y
++CONFIG_DEBUG_VM_RB=y
++CONFIG_DEBUG_SLAB=y
++CONFIG_DEBUG_KMEMLEAK=y
++CONFIG_DEBUG_PAGEALLOC=y
++CONFIG_SLUB_DEBUG_ON=y
++CONFIG_KMEMCHECK=y
++CONFIG_DEBUG_OBJECTS=y
++CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
++CONFIG_GCOV_KERNEL=y
++CONFIG_LOCKDEP=y
++CONFIG_PROVE_LOCKING=y
++CONFIG_SCHEDSTATS=y
++CONFIG_VMLINUX_VALIDATION=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y

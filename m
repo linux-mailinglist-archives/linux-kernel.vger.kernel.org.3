@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD61D4F5EB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721DC4F5E8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiDFMxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S231721AbiDFMx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiDFMv5 (ORCPT
+        with ESMTP id S231405AbiDFMwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:51:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2343ECA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:54:38 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2368niKd017736;
-        Wed, 6 Apr 2022 08:54:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Kp8RoHD+XVt9u99MJh7zHcRBQ4EXYmIK0d74cb1v5vg=;
- b=A5ePbxivA1W0DU5AfTqpLd7ovdjjj+uZ3S68u3fgpPLdQDYWlbq13y2eHYKLSQwDvXIL
- 0wdQDdLZs0oPZJQ+HTg3kGcZgQrIF0kUAeYylymcMIitNvLv/YW+ulrZkdOfMXsm2AVu
- wsUohPCS8Nln62Luue7ouzMByWCCToaY8M0kudOy8rr8BagrAsme1wxJlbyAInnrOObg
- 2XUldOYNoUo/F5OPl+1Cqz/0spKneymBFHW/pLrmk4fm/EoSOn0PGmICvmaLKKZvtCHm
- gT8bNIcBKl3UQspi0AbE/BAmSQpF8Tmw0gwGFz+Wl+7uYtsyA+tDYZMLm20pmvabwWTq qQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f8twfww72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 08:54:28 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2368hVA5019739;
-        Wed, 6 Apr 2022 08:54:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhqdjf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 08:54:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2368g8R529229350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 08:42:08 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93C784C044;
-        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40E764C04E;
-        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
-Received: from [9.145.51.104] (unknown [9.145.51.104])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
-Message-ID: <f551db1b-4f32-2799-9424-15af0fb778c3@linux.ibm.com>
-Date:   Wed, 6 Apr 2022 10:54:22 +0200
+        Wed, 6 Apr 2022 08:52:12 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5FB2CE01;
+        Wed,  6 Apr 2022 01:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649235283; x=1680771283;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8Pubj1dDiUwibywXxkRjHfOE8N365AkZr19hsnqKjAw=;
+  b=XJwk/F6ihXtv3IsOcIC9BstkLRfXJODnYxmqTcOjmQG/JNTf0HY8jfIA
+   9Wu2KNCU6qTSC0e6HSAMiY3ZzZyYoUUfoFgenf81bqAqXZwyg/kFAi5yn
+   hwZ8qOw+5kalObxWHDrGIPXfhGcmxFxN9PdOsZuOGGtiZS864NA7Sh+kh
+   2f930lQJmCbGnLe5YLwfrs2mHiPY62ufx8MUaXqUbXEn6RlZ+eieWMG4q
+   PyzkA0z9cCguMn0qGj4fQpOIHsmiLyy8juBvu0Be2yT/XxC/DnfAy4SMf
+   Xqkweu5X6Qeu6Xs8HUnnEUr+ppPzooX0Kp25FEaJrYfVjusKC8iP6aTUr
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643670000"; 
+   d="scan'208";a="23123437"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 06 Apr 2022 10:54:40 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 06 Apr 2022 10:54:40 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 06 Apr 2022 10:54:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649235280; x=1680771280;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8Pubj1dDiUwibywXxkRjHfOE8N365AkZr19hsnqKjAw=;
+  b=J+DT2M047zqAESv4v7c+N9cvsJttfG7cEyLRBPRj0TuC8b/eSSJiEIeq
+   vZ3LzmIO0pAwDDdOmHEp6KMAak7aKLB5H1eK3pYMOz8KgK0mRYPDKhatM
+   Skh9Z3WSOevY3V6hTFxJAQ48XUvl/VW5paT3avLFe1eiCknR25bBAoTXl
+   30UP/cSlZ7Eg2T/ev/6J47xu1D4hUtWX7dquHNENut8IpVB2AzGkt8aKH
+   U2tNnVE9LCMW/sTcagPJxeNUHbD1/fJhgPrc+6aKtnySUACeV3mLSoaMJ
+   Vh1JZccQGt6R9ysm9gmJQVna1zTTN4+73D3NT9kRomfLhX/jHhrlIsMc0
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643670000"; 
+   d="scan'208";a="23123436"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 06 Apr 2022 10:54:40 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 027D5280065;
+        Wed,  6 Apr 2022 10:54:39 +0200 (CEST)
+Message-ID: <170e086e24860c37897825e7f2599efc78de5a38.camel@ew.tq-group.com>
+Subject: Re: [PATCH] spi: cadence-quadspi: fix protocol setup for non-1-1-X
+ operations
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 06 Apr 2022 10:54:37 +0200
+In-Reply-To: <20220405193721.5jf3umfn3dvv6fxd@ti.com>
+References: <20220331110819.133392-1-matthias.schiffer@ew.tq-group.com>
+         <20220401100606.iz52jbrdcz6pd5sg@ti.com>
+         <6b2bfa6614fbb9339b94a191ab933a2c25b8b4d7.camel@ew.tq-group.com>
+         <20220405193721.5jf3umfn3dvv6fxd@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
-From:   Frederic Barrat <fbarrat@linux.ibm.com>
-In-Reply-To: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FqQdEy4hmhh8m4MFMDZapfnZH3zmLmRd
-X-Proofpoint-GUID: FqQdEy4hmhh8m4MFMDZapfnZH3zmLmRd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_03,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 malwarescore=0 mlxscore=0
- bulkscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060040
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,153 +87,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 02/04/2022 11:52, Christophe Leroy wrote:
-> powerpc's asm/prom.h brings some headers that it doesn't
-> need itself.
+On Wed, 2022-04-06 at 01:07 +0530, Pratyush Yadav wrote:
+> On 01/04/22 12:20PM, Matthias Schiffer wrote:
+> > On Fri, 2022-04-01 at 15:36 +0530, Pratyush Yadav wrote:
+> > > Hi Matthias,
+> > > 
+> > > On 31/03/22 01:08PM, Matthias Schiffer wrote:
+> > > > cqspi_set_protocol() only set the data width, but ignored the
+> > > > command
+> > > > and address width (except for 8-8-8 DTR ops), leading to
+> > > > corruption
+> > > > of
+> > > > all transfers using 1-X-X or X-X-X ops. Fix by setting the
+> > > > other
+> > > > two
+> > > > widths as well.
+> > > > 
+> > > > While we're at it, simplify the code a bit by replacing the
+> > > > CQSPI_INST_TYPE_* constants with ilog2().
+> > > > 
+> > > > Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash
+> > > > with 1-
+> > > > 4-4
+> > > > read and write operations.
+> > > > 
+> > > > Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to
+> > > > use
+> > > > spi-mem framework")
+> > > 
+> > > I think a fixes tag is wrong here. The old driver did not support
+> > > 1-
+> > > X-X 
+> > > modes either. So you are not fixing anything, you are adding a
+> > > new 
+> > > feature. I don't think we should backport this patch to stable.
+> > 
+> > Giving a precise fixes tag is a bit difficult. The referenced
+> > commit
+> > made the driver (accidentally) accept commands like 1-4-4 without
+> > handing them correctly, causing data corruption for flashs that
+> > support
+> > these modes. The data corruption is fixed by my patch.
 > 
-> In order to clean it up, first add missing headers in
-> users of asm/prom.h
+> Ah, you're right. I missed the fact that the original driver
+> explicitly 
+> checked for 1-1-1, 1-1-4, and 1-1-8, and returned an error for the
+> rest. 
+> So your patch does indeed fix a bug.
 > 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-
-LGTM
-Acked-by: Frederic Barrat <fbarrat@linux.ibm.com>
-
-
->   drivers/misc/cxl/api.c      | 1 +
->   drivers/misc/cxl/cxl.h      | 2 ++
->   drivers/misc/cxl/cxllib.c   | 1 +
->   drivers/misc/cxl/flash.c    | 1 +
->   drivers/misc/cxl/guest.c    | 2 ++
->   drivers/misc/cxl/irq.c      | 1 +
->   drivers/misc/cxl/main.c     | 1 +
->   drivers/misc/cxl/native.c   | 1 +
->   drivers/misc/ocxl/afu_irq.c | 1 +
->   drivers/misc/ocxl/link.c    | 1 +
->   10 files changed, 12 insertions(+)
+> > As the change was unintended, one option would be to split this
+> > patch
+> > into two parts: One fix patch that makes cqspi_set_protocol()
+> > -EINVAL
+> > again for all commands that are not 1-1-X, and one feature patch
+> > that
+> > adds actual support for these commands.
+> > 
+> > My thought process was that making these commands work correctly
+> > can't
+> > break anything that is not already broken in current stable
+> > kernels.
+> > But if you prefer the minimal change, I can send a v2 that splits
+> > the
+> > patch.
 > 
-> diff --git a/drivers/misc/cxl/api.c b/drivers/misc/cxl/api.c
-> index b493de962153..d85c56530863 100644
-> --- a/drivers/misc/cxl/api.c
-> +++ b/drivers/misc/cxl/api.c
-> @@ -12,6 +12,7 @@
->   #include <linux/pseudo_fs.h>
->   #include <linux/sched/mm.h>
->   #include <linux/mmu_context.h>
-> +#include <linux/irqdomain.h>
->   
->   #include "cxl.h"
->   
-> diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
-> index 5dc0f6093f9d..7a6dd91987fd 100644
-> --- a/drivers/misc/cxl/cxl.h
-> +++ b/drivers/misc/cxl/cxl.h
-> @@ -25,6 +25,8 @@
->   
->   extern uint cxl_verbose;
->   
-> +struct property;
-> +
->   #define CXL_TIMEOUT 5
->   
->   /*
-> diff --git a/drivers/misc/cxl/cxllib.c b/drivers/misc/cxl/cxllib.c
-> index 53b919856426..e5fe0a171472 100644
-> --- a/drivers/misc/cxl/cxllib.c
-> +++ b/drivers/misc/cxl/cxllib.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/hugetlb.h>
->   #include <linux/sched/mm.h>
-> +#include <asm/opal-api.h>
->   #include <asm/pnv-pci.h>
->   #include <misc/cxllib.h>
->   
-> diff --git a/drivers/misc/cxl/flash.c b/drivers/misc/cxl/flash.c
-> index 5b93ff51d82a..eee9decc121e 100644
-> --- a/drivers/misc/cxl/flash.c
-> +++ b/drivers/misc/cxl/flash.c
-> @@ -4,6 +4,7 @@
->   #include <linux/semaphore.h>
->   #include <linux/slab.h>
->   #include <linux/uaccess.h>
-> +#include <linux/of.h>
->   #include <asm/rtas.h>
->   
->   #include "cxl.h"
-> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
-> index 9d485c9e3fff..3321c014913c 100644
-> --- a/drivers/misc/cxl/guest.c
-> +++ b/drivers/misc/cxl/guest.c
-> @@ -6,6 +6,8 @@
->   #include <linux/spinlock.h>
->   #include <linux/uaccess.h>
->   #include <linux/delay.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/platform_device.h>
->   
->   #include "cxl.h"
->   #include "hcalls.h"
-> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
-> index 4cb829d5d873..5f0e2dcebb34 100644
-> --- a/drivers/misc/cxl/irq.c
-> +++ b/drivers/misc/cxl/irq.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #include <linux/interrupt.h>
-> +#include <linux/irqdomain.h>
->   #include <linux/workqueue.h>
->   #include <linux/sched.h>
->   #include <linux/wait.h>
-> diff --git a/drivers/misc/cxl/main.c b/drivers/misc/cxl/main.c
-> index 43b312d06e3e..c1fbf6f588f7 100644
-> --- a/drivers/misc/cxl/main.c
-> +++ b/drivers/misc/cxl/main.c
-> @@ -15,6 +15,7 @@
->   #include <linux/slab.h>
->   #include <linux/idr.h>
->   #include <linux/pci.h>
-> +#include <linux/platform_device.h>
->   #include <linux/sched/task.h>
->   
->   #include <asm/cputable.h>
-> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
-> index 1a7f22836041..50b0c44bb8d7 100644
-> --- a/drivers/misc/cxl/native.c
-> +++ b/drivers/misc/cxl/native.c
-> @@ -11,6 +11,7 @@
->   #include <linux/mm.h>
->   #include <linux/uaccess.h>
->   #include <linux/delay.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/synch.h>
->   #include <asm/switch_to.h>
->   #include <misc/cxl-base.h>
-> diff --git a/drivers/misc/ocxl/afu_irq.c b/drivers/misc/ocxl/afu_irq.c
-> index ecdcfae025b7..a06920b7e049 100644
-> --- a/drivers/misc/ocxl/afu_irq.c
-> +++ b/drivers/misc/ocxl/afu_irq.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0+
->   // Copyright 2017 IBM Corp.
->   #include <linux/interrupt.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/pnv-ocxl.h>
->   #include <asm/xive.h>
->   #include "ocxl_internal.h"
-> diff --git a/drivers/misc/ocxl/link.c b/drivers/misc/ocxl/link.c
-> index 9670d02c927f..4cf4c55a5f00 100644
-> --- a/drivers/misc/ocxl/link.c
-> +++ b/drivers/misc/ocxl/link.c
-> @@ -6,6 +6,7 @@
->   #include <linux/mm_types.h>
->   #include <linux/mmu_context.h>
->   #include <linux/mmu_notifier.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/copro.h>
->   #include <asm/pnv-ocxl.h>
->   #include <asm/xive.h>
+> Yes, but as I commented below, I would prefer you rework the driver
+> to 
+> drop cqspi_set_protocol() entirely. For doing that the 2 patch
+> approach 
+> would work best so we don't end up getting the new code backported
+> to 
+> stable as well.
+
+Okay, I tried to split my patch, however I found
+that cqspi_set_protocol() is not the right place to check for
+unsupported operations at all - if the driver ever reaches a path where
+cqspi_set_protocol() returns -EINVAL, something has already gone wrong
+(and the attemption operation will fail altogether rather than falling
+back to a slower command).
+
+I think that these checks - including the check that only 8-8-8 is
+supported with DTR - should actually happen in cqspi_supports_mem_op().
+Does that sound right?
+
+Regards,
+Matthias
+
+
+
+> 
+> > Regards,
+> > Matthias
+> > 
+> > 
+> > 
+> > > > Signed-off-by: Matthias Schiffer <
+> > > > matthias.schiffer@ew.tq-group.com
+> > > > ---
+> > > >  drivers/spi/spi-cadence-quadspi.c | 46 ++++++++---------------
+> > > > ----
+> > > > ----
+> > > >  1 file changed, 12 insertions(+), 34 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/spi/spi-cadence-quadspi.c
+> > > > b/drivers/spi/spi-
+> > > > cadence-quadspi.c
+> > > > index b0c9f62ccefb..616ada891974 100644
+> > > > --- a/drivers/spi/spi-cadence-quadspi.c
+> > > > +++ b/drivers/spi/spi-cadence-quadspi.c
+> > > > @@ -19,6 +19,7 @@
+> > > >  #include <linux/iopoll.h>
+> > > >  #include <linux/jiffies.h>
+> > > >  #include <linux/kernel.h>
+> > > > +#include <linux/log2.h>
+> > > >  #include <linux/module.h>
+> > > >  #include <linux/of_device.h>
+> > > >  #include <linux/of.h>
+> > > > @@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
+> > > >  #define CQSPI_TIMEOUT_MS			500
+> > > >  #define CQSPI_READ_TIMEOUT_MS			10
+> > > >  
+> > > > -/* Instruction type */
+> > > > -#define CQSPI_INST_TYPE_SINGLE			0
+> > > > -#define CQSPI_INST_TYPE_DUAL			1
+> > > > -#define CQSPI_INST_TYPE_QUAD			2
+> > > > -#define CQSPI_INST_TYPE_OCTAL			3
+> > > > -
+> > > >  #define CQSPI_DUMMY_CLKS_PER_BYTE		8
+> > > >  #define CQSPI_DUMMY_BYTES_MAX			4
+> > > >  #define CQSPI_DUMMY_CLKS_MAX			31
+> > > > @@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const
+> > > > struct spi_mem_op *op, bool dtr)
+> > > >  static int cqspi_set_protocol(struct cqspi_flash_pdata
+> > > > *f_pdata,
+> > > >  			      const struct spi_mem_op *op)
+> > > >  {
+> > > > -	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
+> > > > -	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
+> > > > -	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+> > > > -
+> > > >  	/*
+> > > >  	 * For an op to be DTR, cmd phase along with every
+> > > > other non-
+> > > > empty
+> > > >  	 * phase should have dtr field set to 1. If an op phase
+> > > > has
+> > > > zero
+> > > > @@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct
+> > > > cqspi_flash_pdata *f_pdata,
+> > > >  		       (!op->addr.nbytes || op->addr.dtr) &&
+> > > >  		       (!op->data.nbytes || op->data.dtr);
+> > > >  
+> > > > -	switch (op->data.buswidth) {
+> > > > -	case 0:
+> > > > -		break;
+> > > > -	case 1:
+> > > > -		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+> > > > -		break;
+> > > > -	case 2:
+> > > > -		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
+> > > > -		break;
+> > > > -	case 4:
+> > > > -		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
+> > > > -		break;
+> > > > -	case 8:
+> > > > -		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
+> > > > -		break;
+> > > > -	default:
+> > > > -		return -EINVAL;
+> > > > -	}
+> > > > +	f_pdata->inst_width = 0;
+> > > > +	if (op->cmd.buswidth)
+> > > > +		f_pdata->inst_width = ilog2(op->cmd.buswidth);
+> > > > +
+> > > > +	f_pdata->addr_width = 0;
+> > > > +	if (op->addr.buswidth)
+> > > > +		f_pdata->addr_width = ilog2(op->addr.buswidth);
+> > > > +
+> > > > +	f_pdata->data_width = 0;
+> > > > +	if (op->data.buswidth)
+> > > > +		f_pdata->data_width = ilog2(op->data.buswidth);
+> > > 
+> > > Honestly, I think we should get rid of cqspi_set_protocol()
+> > > entirely.
+> > > I 
+> > > see no need to store f_pdata->{instr,addr,data}_width since we 
+> > > recalculate those for each op execution anyway. So why not just
+> > > use
+> > > the 
+> > > spi_mem_op to get those values directly and be rid of all this
+> > > mess?
+> > > 
+> > > >  
+> > > >  	/* Right now we only support 8-8-8 DTR mode. */
+> > > >  	if (f_pdata->dtr) {
+> > > >  		switch (op->cmd.buswidth) {
+> > > >  		case 0:
+> > > > -			break;
+> > > >  		case 8:
+> > > > -			f_pdata->inst_width =
+> > > > CQSPI_INST_TYPE_OCTAL;
+> > > >  			break;
+> > > >  		default:
+> > > >  			return -EINVAL;
+> > > > @@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct
+> > > > cqspi_flash_pdata *f_pdata,
+> > > >  
+> > > >  		switch (op->addr.buswidth) {
+> > > >  		case 0:
+> > > > -			break;
+> > > >  		case 8:
+> > > > -			f_pdata->addr_width =
+> > > > CQSPI_INST_TYPE_OCTAL;
+> > > >  			break;
+> > > >  		default:
+> > > >  			return -EINVAL;
+> > > > @@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct
+> > > > cqspi_flash_pdata *f_pdata,
+> > > >  
+> > > >  		switch (op->data.buswidth) {
+> > > >  		case 0:
+> > > > -			break;
+> > > >  		case 8:
+> > > > -			f_pdata->data_width =
+> > > > CQSPI_INST_TYPE_OCTAL;
+> > > >  			break;
+> > > >  		default:
+> > > >  			return -EINVAL;
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+

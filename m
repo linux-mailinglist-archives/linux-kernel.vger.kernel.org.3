@@ -2,153 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA234F5FF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461304F5F23
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbiDFNQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S232933AbiDFNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbiDFNPm (ORCPT
+        with ESMTP id S233809AbiDFNSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:15:42 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9B3558303
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:52:53 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2e64a6b20eeso20272407b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/yHrnn97lLsdzLQ/tiQKfs1ZiFY5fV3TRpR81okhiyk=;
-        b=IcLxWDEf7+C8DspiQndRuhI1XrlNQ2QQ/vDOajpEGHJu3NRx9sfwGDTDtS0WUu6sqZ
-         wBo+d0lDWjRBzFlNTZXFyWhgilrFzdFEoegRa+TpnTQiLI6UPGPZ29VYj7LPEdhCQpfK
-         tpenov1vJgo/oau07ISFuxSGQ+UTG5ZXwUjsj1XXVqy5MEytputwLCTU5CxnFzpUwdYP
-         KDBxJXcw0GaepeCI1sz8aoqzwBz+wpNkCG81WKJ4l/Y+1eiupXw7+EnP/14GM5v6lnuI
-         80XpGQIVj1QEVUWpHIBgOevRQbVwbcfilrR2Sk7BLLwSfnCK9FgOnK8sur+wEm6j/n4P
-         5/7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/yHrnn97lLsdzLQ/tiQKfs1ZiFY5fV3TRpR81okhiyk=;
-        b=RKj5GKkn/hWqhSTCCptTP4h0Leb/DdhrREA7h7gsrglHCNNlNRp6evtQTn21EUjtQK
-         uCM3ggpBclo1B1Q1TploCbLhN97Vz91USuz/Jku/hvOMBOPqyt43Ojz2u4vBzFQS15VL
-         Z1hJzB/lpzTMdT0wj+CnJvTE2h/es7HAJrcgYavaJ4oNPMEa/R19HOt8EIDY19V6qCDj
-         H7TYOLQpIyM6Mn53mwwrDmjeG0+51TKH3JLbv4nWBLjlMGUu8kHjDKuuYltGu+KgCZjx
-         pyTXd9gJsl3LJQHH3C521lUJiD+lOKqolgyAcT2vaXyCHkdQhGzREGGZ6zYVly/ws7TA
-         0YuA==
-X-Gm-Message-State: AOAM533KDhIrmXCAZT1k5rRuKluN9VO+LEWiqeF8HLxtOzWVEYUKpQoj
-        B7t+QgGG7ezhkaDKNAKGH9z5LsdIiH2KQhSKt3pYVg==
-X-Google-Smtp-Source: ABdhPJxKvEHiCkKRBJfSRTHKYHTAYUapsFaOhZ68x2epxJghJ37F36ttuJtyOr4x6Yonqn3l7MHm9HrN2VXKDeTCpTc=
-X-Received: by 2002:a0d:d0c1:0:b0:2dc:5950:c72f with SMTP id
- s184-20020a0dd0c1000000b002dc5950c72fmr6000563ywd.185.1649238748644; Wed, 06
- Apr 2022 02:52:28 -0700 (PDT)
+        Wed, 6 Apr 2022 09:18:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6546949D65F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649238993;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eG+lA98DgXDfZlx051ErYhuzaKYIyqcOJZfsLhGFR/o=;
+        b=F0MVufxa1UuLTgwmgYatQzwxRlA1FHxn2AKzq+5HDktQ5llgtPPnBu78hUOTixREvabasK
+        gPG7uBnsWxMlucNByfYI9LN9DJXnjAEPPYfj65JAlYHxFe7FExOKqOAFDOAxmJCnzf9vVm
+        kvqO468ZvqsGtCPEAYMg9vF2b4MFjXo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-287-eDrC-MY7P2-smmVV8MfwcA-1; Wed, 06 Apr 2022 05:53:20 -0400
+X-MC-Unique: eDrC-MY7P2-smmVV8MfwcA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C29FD100BAAA;
+        Wed,  6 Apr 2022 09:53:19 +0000 (UTC)
+Received: from tucnak.zalov.cz (unknown [10.39.195.172])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C6DD40CF905;
+        Wed,  6 Apr 2022 09:53:19 +0000 (UTC)
+Received: from tucnak.zalov.cz (localhost [127.0.0.1])
+        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 2369rGLR1580461
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 6 Apr 2022 11:53:16 +0200
+Received: (from jakub@localhost)
+        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 2369rFOl1580460;
+        Wed, 6 Apr 2022 11:53:15 +0200
+Date:   Wed, 6 Apr 2022 11:53:15 +0200
+From:   Jakub Jelinek <jakub@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Richard Biener <rguenther@suse.de>,
+        linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: older gccs and case labels producing integer constants
+Message-ID: <Yk1jC4oLnIklOTHI@tucnak>
+Reply-To: Jakub Jelinek <jakub@redhat.com>
+References: <YkwQ6+tIH8GQpuct@zn.tnic>
+ <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
+ <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
+ <YkwbygWj/C3XooMV@zn.tnic>
 MIME-Version: 1.0
-References: <20220405070339.801210740@linuxfoundation.org> <4273d632-9686-3809-2ef0-e87bb431f798@linuxfoundation.org>
-In-Reply-To: <4273d632-9686-3809-2ef0-e87bb431f798@linuxfoundation.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 6 Apr 2022 11:52:18 +0200
-Message-ID: <CADYN=9+=Z=9g2r6-14kY9OQets+K=tzVeejiqTJyDJgKctddYw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        ranjani.sridharan@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YkwbygWj/C3XooMV@zn.tnic>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 01:06, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 4/5/22 1:17 AM, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.33 release.
-> > There are 913 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.33-rc1.gz
-> > or in the git tree and branch at:
-> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
->
-> Build failed on my system. The following is the problem commit. There
-> are no changes to the config between 5.15.32 and this build.
->
-> Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
->      ASoC: SOF: Intel: hda: Remove link assignment limitation
+On Tue, Apr 05, 2022 at 12:36:58PM +0200, Borislav Petkov wrote:
+> On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
+> > Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
+> > compiler flags genommen werden?
+> 
+> Found it:
+> 
+> $ gcc -fsanitize=shift -c switch.c
+> switch.c: In function ‘foo’:
+> switch.c:10:7: error: case label does not reduce to an integer constant
+>        case (((0xfc08) << 16) | (0x0101)):;
+> 
+> $ gcc --version
+> gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
+> Copyright (C) 2017 Free Software Foundation, Inc.
+> 
+> Something not fully backported?
 
-I saw the same build error, after applying the following patches it
-builds fine again.
+That is rejected with -fsanitize=shift even on current trunk (in C, C++ is
+fine).
+C++ constexpr code has cases for ubsan builtins and internal functions,
+but C just doesn't handle those apparently.
 
-a792bfc1c2bc ("ASoC: SOF: Intel: hda-stream: limit PROCEN workaround")
-81ed6770ba67 ("ASoC: SOF: Intel: hda: expose get_chip_info()")
+	Jakub
 
-
-Cheers,
-Anders
-
->
->    CC [M]  sound/soc/sof/intel/hda-dai.o
-> sound/soc/sof/intel/hda-dai.c: In function =E2=80=98hda_link_stream_assig=
-n=E2=80=99:
-> sound/soc/sof/intel/hda-dai.c:86:24: error: implicit declaration of funct=
-ion =E2=80=98get_chip_info=E2=80=99; did you mean =E2=80=98get_group_info=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
->     86 |                 chip =3D get_chip_info(sdev->pdata);
->        |                        ^~~~~~~~~~~~~
->        |                        get_group_info
-> sound/soc/sof/intel/hda-dai.c:86:22: error: assignment to =E2=80=98const =
-struct sof_intel_dsp_desc *=E2=80=99 from =E2=80=98int=E2=80=99 makes point=
-er from integer without a cast [-Werror=3Dint-conversion]
->     86 |                 chip =3D get_chip_info(sdev->pdata);
->        |                      ^
-> sound/soc/sof/intel/hda-dai.c:94:35: error: =E2=80=98const struct sof_int=
-el_dsp_desc=E2=80=99 has no member named =E2=80=98quirks=E2=80=99
->     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FM=
-T_QUIRK)) {
->        |                                   ^~
-> sound/soc/sof/intel/hda-dai.c:94:46: error: =E2=80=98SOF_INTEL_PROCEN_FMT=
-_QUIRK=E2=80=99 undeclared (first use in this function)
->     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FM=
-T_QUIRK)) {
->        |                                              ^~~~~~~~~~~~~~~~~~~=
-~~~~~~~
-> sound/soc/sof/intel/hda-dai.c:94:46: note: each undeclared identifier is =
-reported only once for each function it appears in
-> cc1: all warnings being treated as errors
-> make[4]: *** [scripts/Makefile.build:287: sound/soc/sof/intel/hda-dai.o] =
-Error 1
-> make[3]: *** [scripts/Makefile.build:549: sound/soc/sof/intel] Error 2
-> make[2]: *** [scripts/Makefile.build:549: sound/soc/sof] Error 2
-> make[1]: *** [scripts/Makefile.build:549: sound/soc] Error 2
-> make: *** [Makefile:1846: sound] Error 2
->
-> thanks,
-> -- Shuah

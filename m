@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075A84F636E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAF54F636B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbiDFP0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S235812AbiDFP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbiDFPZQ (ORCPT
+        with ESMTP id S236046AbiDFP0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:25:16 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA0048237A;
-        Wed,  6 Apr 2022 05:24:15 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z128so2084256pgz.2;
-        Wed, 06 Apr 2022 05:24:15 -0700 (PDT)
+        Wed, 6 Apr 2022 11:26:03 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD794E81FB;
+        Wed,  6 Apr 2022 05:24:31 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so1608319otj.1;
+        Wed, 06 Apr 2022 05:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wIbRrcBu3wiJi2dQAUZF70F3o+wrjYSVUUIbW23yRI8=;
-        b=SqYJt3Vz0vUPFawK/Pii4cibHzamqUQMEuiw8YfsKSBBXiPkNUDLcXoaXpWtQSZhj3
-         BJ1DkVMCDpPwZUaZ5rrb81v13Pwlc6d1ef7BHjKaNinS+usOL0WBN0Oqojq9EqL2lIVU
-         fjMwuwKi6I2S12D0r9bwxd8imK0WPa0cmPgH9vFTd2PrFgl55K4K4G98dkut6zDp5hex
-         L9baKVQB/oUtn1d/uj6iUNBJl+OA0GFIz/2NFco2JAzy/JAqfsutrIiHWk59RaSGh4Sd
-         8qSmlAanzGyBoOiwptXWDv//a/3X8lgZ+JEwz+ue8/ekGWbABd1S3kunfik8MRQ5nLTE
-         wXGA==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=encaLqHcBH6foBnrbFxZ2i6K7G7Yn7crS2vxrpfT+uY=;
+        b=I/dd6AWAR8pHJ3oZYLJYf9SClhq/KmGq7qylijYmLA77gSBEBddKrBVVTi2VqIRPv3
+         qTAnMP4PLty3za3QnwGGwZ5RgC/oqqR1YuBuz6zC0Fd1/F087GI3eu2ybA3hvB/aT4wB
+         M/ui8Q+KyKbLliO4U4zum9KYqJxS+75ZNtz/Tpn+rb9EloOLFnzJd5Hi/UwINV3Ssqfn
+         wPYuSrwJ7YwG4myQHQlxIcCD9pObfuzwnDYZjloGVwE789CFPHEwyOA4yGeVNEuZOCte
+         m87yfGICIk8v8X53GJg+0ZvbBwCDBTiepCniNrij9+GpwPh/1Z9E5s8kGx6RoBoT/gV2
+         veOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=wIbRrcBu3wiJi2dQAUZF70F3o+wrjYSVUUIbW23yRI8=;
-        b=4mFT4CEH4/wo/FStEuAYSJlXaA6mXIvTcRBf2xDcvzrSwUTw8uIbW/gOgQJEqw+Eda
-         URcMrdOhwj+ZMV6eh2ilanS9hQTt+8qutAwVMuYExzvw0FAaVPVjK1ZBGr3J/eN54+9J
-         1nNxAlKHeRhTlsMCv3NREIM7YG1v90ZueP8Exm4bJ9jqzCe9ADGDrKFMft4AYY/WEie0
-         pZGZbOW8VFG3ugOKvL2RIFWJJa0oD5uGCZ1X14SFkUPop3h1MnpVytUYBBQcLXrDlqk9
-         BATe0vM9ICxMB7ptikjIHlOW4VRf2Ys/BWqVltmpP40Xm2Kcxm67K9NLQg2BXe70JTAr
-         q26Q==
-X-Gm-Message-State: AOAM530ryJRPzI3enCNq/iMQ6icAiSqR0UH0HDwPwqJ1HvV6Hs9mCH6e
-        qSgNrIUnRhsvSlSYBdqgbRk=
-X-Google-Smtp-Source: ABdhPJwtn/a2AijiiLVSK02GoxH2lVtQhB5yHUWMaOSediMlGyq/Ei67ayB/sBEDIUjA+8mcbX8Lyw==
-X-Received: by 2002:a62:402:0:b0:4f7:81a3:7c47 with SMTP id 2-20020a620402000000b004f781a37c47mr8665028pfe.9.1649247855054;
-        Wed, 06 Apr 2022 05:24:15 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-40.three.co.id. [116.206.12.40])
-        by smtp.gmail.com with ESMTPSA id j22-20020a056a00235600b004faed937407sm20769712pfj.19.2022.04.06.05.24.10
+        bh=encaLqHcBH6foBnrbFxZ2i6K7G7Yn7crS2vxrpfT+uY=;
+        b=nk/k83B1WrOMdleKpt/vv42I/dVCHl2x7S6b4YG4+7WkN64H0jFSCNwNIL7QWIAMlK
+         YyRFK0vd4DFAVRvM8uTKTpstUD+HaNqRf3IYViMggxiiEEWJ/V/VYfFwB1Fh2Q18H1rA
+         eT+uBO2OiPcd6kyiUQwXZlZgtopyiKCsbaO0W260PZR5KK9KFuusA4tvLhw7ry9uWlK9
+         +2m2SB/3RA+jMoBQU0Cj5NDdtL8b+EiT8HNdKsCK10tiXP/JXFh225B8eyrIIs2FGV1t
+         AEJDx1VUglmYNuV5C7Xuk+eHKj7v1ko2cN0fU/BfJiCP11iS/qmVTctwYbWL1dFS6iA+
+         B3Fw==
+X-Gm-Message-State: AOAM53141DBhmoUzymqv5HCH71Nvd8db91QMGf6elxm9aWqWoqhMYAcO
+        VuHDvp8wtoI0IGxZKbPPtYc=
+X-Google-Smtp-Source: ABdhPJzfuUCYVbipdZsd9M6/L296AWUeysgoZNl5fvgy8K8+GU78LuJDiWcSmJzpnPLjDGm4lsi0lw==
+X-Received: by 2002:a9d:1b68:0:b0:5c9:5da1:3752 with SMTP id l95-20020a9d1b68000000b005c95da13752mr2811618otl.354.1649247871210;
+        Wed, 06 Apr 2022 05:24:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm6033772oov.3.2022.04.06.05.24.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 05:24:14 -0700 (PDT)
-Message-ID: <6c722445-d5cb-dd28-c001-159a64909788@gmail.com>
-Date:   Wed, 6 Apr 2022 19:24:09 +0700
+        Wed, 06 Apr 2022 05:24:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <18719038-4eef-4792-e961-6550bb9f0d55@roeck-us.net>
+Date:   Wed, 6 Apr 2022 05:24:29 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
+Subject: Re: [PATCH] hwmon: (tmp401) Support extended temperature range
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Camel Guo <camel.guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@axis.com, Camel Guo <camelg@axis.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220405070339.801210740@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220406092901.408861-1-camel.guo@axis.com>
+ <c2a1776d-1499-8b84-15cd-b09908ebd0e5@roeck-us.net>
+In-Reply-To: <c2a1776d-1499-8b84-15cd-b09908ebd0e5@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/22 14.17, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.33 release.
-> There are 913 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 4/6/22 05:12, Guenter Roeck wrote:
+> On 4/6/22 02:29, Camel Guo wrote:
+>> From: Camel Guo <camelg@axis.com>
+>>
+>> This patch only applies to tmp431 and devicetree configuration.
+>>
+>> Signed-off-by: Camel Guo <camelg@axis.com>
+>> ---
+>>   Documentation/hwmon/tmp401.rst | 13 +++++++++++++
+>>   drivers/hwmon/tmp401.c         |  5 +++++
+>>   2 files changed, 18 insertions(+)
+>>
+>> diff --git a/Documentation/hwmon/tmp401.rst b/Documentation/hwmon/tmp401.rst
+>> index 3aacf3d3bdf3..d12e9c9ba40f 100644
+>> --- a/Documentation/hwmon/tmp401.rst
+>> +++ b/Documentation/hwmon/tmp401.rst
+>> @@ -78,3 +78,16 @@ some additional features.
+>>   TMP432 is compatible with TMP401 and TMP431. It supports two external
+>>   temperature sensors.
+>> +
+>> +Device tree
+>> +-----------
+>> +TMP431 has support for the device tree parameter "extended-range" which enables
+>> +the extended range in the chip.
+>> +
+> 
+> There is no practical reason to limit support for this to TMP431,
+> nor does the actual code make such a distinction.
+> 
+>> +Example:
+>> +
+>> +main-temp@4c {
+>> +  compatible = "ti,tmp431";
+>> +  reg = <0x4c>;
+>> +  extended-range;
+>> +};
+> 
+> This is not an acceptable way to describe devicetree properties.
+> You would have to write a bindings document
+> (Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml)
+> and describe the property there.
 > 
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
-powerpc (ps3_defconfig, gcc 11.2.0).
+... and that should be modeled after ti,tmp421.yaml and also support
+other configuration parameters, specifically beta compensation and
+n-factor correction.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+Guenter

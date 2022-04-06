@@ -2,262 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FA34F57F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4E74F57ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348595AbiDFIjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S1353599AbiDFIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359059AbiDFIib (ORCPT
+        with ESMTP id S1381792AbiDFIdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:38:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548573E4C04;
-        Tue,  5 Apr 2022 20:26:25 -0700 (PDT)
-X-UUID: fa20a524bf4842848135357a270be9bf-20220406
-X-UUID: fa20a524bf4842848135357a270be9bf-20220406
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1929525275; Wed, 06 Apr 2022 11:26:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 6 Apr 2022 11:26:16 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 11:26:16 +0800
-Message-ID: <0656f45f2933518708b82195bd9c49351e394c16.camel@mediatek.com>
-Subject: Re: [PATCH v10 1/4] dt-bindings: display: mediatek: revise enum to
- const
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <jassisinghbrar@gmail.com>,
-        <fparent@baylibre.com>, <yongqiang.niu@mediatek.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 6 Apr 2022 11:26:16 +0800
-In-Reply-To: <20220406030009.2357-2-rex-bc.chen@mediatek.com>
-References: <20220406030009.2357-1-rex-bc.chen@mediatek.com>
-         <20220406030009.2357-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 6 Apr 2022 04:33:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F356B7FE;
+        Tue,  5 Apr 2022 20:33:36 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KY96b15hLzgYLl;
+        Wed,  6 Apr 2022 11:31:51 +0800 (CST)
+Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 6 Apr
+ 2022 11:33:34 +0800
+From:   GUO Zihua <guozihua@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <roberto.sassu@huawei.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] ima: remove the IMA_TEMPLATE Kconfig option
+Date:   Wed, 6 Apr 2022 11:32:42 +0800
+Message-ID: <20220406033242.145393-1-guozihua@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.31]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+It is discovered that allowing template "ima" as the compiled default
+would cause the following issue: the boot command line option
+"ima_hash=" must be behind "ima_template=", otherwise "ima_hash=" might
+be rejected.
 
-On Wed, 2022-04-06 at 11:00 +0800, Rex-BC Chen wrote:
-> There won't be more than 1 fallback for these bindings, so we modify
-> them to use const instead of enum.
+The root cause of this issue is that during the processing of ima_hash,
+we would try to check whether the hash algorithm is compatible with the
+template. If the template is not set at the moment we do the check, we
+check the algorithm against the compiled default template. If the
+complied default template is "ima", then we reject any hash algorithm
+other than sha1 and md5.
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+For example, if the compiled default template is "ima", and the default
+algorithm is sha1 (which is the current default). In the cmdline, we put
+in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+that ima starts with ima-ng as the template and sha256 as the hash
+algorithm. However, during the processing of "ima_hash=",
+"ima_template=" has not been processed yet, and hash_setup would check
+the configured hash algorithm against the compiled default: ima, and
+reject sha256. So at the end, the hash algorithm that is actually used
+will be sha1.
 
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml  | 3 +--
->  .../bindings/display/mediatek/mediatek,ccorr.yaml           | 3 +--
->  .../bindings/display/mediatek/mediatek,color.yaml           | 6 ++
-> ----
->  .../bindings/display/mediatek/mediatek,dither.yaml          | 3 +--
->  .../bindings/display/mediatek/mediatek,gamma.yaml           | 3 +--
->  .../devicetree/bindings/display/mediatek/mediatek,ovl.yaml  | 6 ++
-> ----
->  .../devicetree/bindings/display/mediatek/mediatek,rdma.yaml | 6 ++
-> ----
->  7 files changed, 10 insertions(+), 20 deletions(-)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> index 61f0ed1e388f..cdb6d0819cca 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> @@ -29,8 +29,7 @@ properties:
->                - mediatek,mt8183-disp-aal
->                - mediatek,mt8192-disp-aal
->                - mediatek,mt8195-disp-aal
-> -          - enum:
-> -              - mediatek,mt8173-disp-aal
-> +          - const: mediatek,mt8173-disp-aal
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> index 0ed53b6238f0..7766c806c102 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> @@ -28,8 +28,7 @@ properties:
->        - items:
->            - enum:
->                - mediatek,mt8195-disp-ccorr
-> -          - enum:
-> -              - mediatek,mt8192-disp-ccorr
-> +          - const: mediatek,mt8192-disp-ccorr
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> index 3ad842eb5668..0c9095b0411e 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> @@ -32,15 +32,13 @@ properties:
->            - enum:
->                - mediatek,mt7623-disp-color
->                - mediatek,mt2712-disp-color
-> -          - enum:
-> -              - mediatek,mt2701-disp-color
-> +          - const: mediatek,mt2701-disp-color
->        - items:
->            - enum:
->                - mediatek,mt8183-disp-color
->                - mediatek,mt8192-disp-color
->                - mediatek,mt8195-disp-color
-> -          - enum:
-> -              - mediatek,mt8173-disp-color
-> +          - const: mediatek,mt8173-disp-color
->    reg:
->      maxItems: 1
->  
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> index 6657549af165..8180ed0a89ff 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> @@ -28,8 +28,7 @@ properties:
->            - enum:
->                - mediatek,mt8192-disp-dither
->                - mediatek,mt8195-disp-dither
-> -          - enum:
-> -              - mediatek,mt8183-disp-dither
-> +          - const: mediatek,mt8183-disp-dither
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> index 78442339314f..5f1825b4512b 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> @@ -29,8 +29,7 @@ properties:
->            - enum:
->                - mediatek,mt8192-disp-gamma
->                - mediatek,mt8195-disp-gamma
-> -          - enum:
-> -              - mediatek,mt8183-disp-gamma
-> +          - const: mediatek,mt8183-disp-gamma
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> index f77094e61443..51f8235f1b1b 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> @@ -33,13 +33,11 @@ properties:
->            - enum:
->                - mediatek,mt7623-disp-ovl
->                - mediatek,mt2712-disp-ovl
-> -          - enum:
-> -              - mediatek,mt2701-disp-ovl
-> +          - const: mediatek,mt2701-disp-ovl
->        - items:
->            - enum:
->                - mediatek,mt8195-disp-ovl
-> -          - enum:
-> -              - mediatek,mt8183-disp-ovl
-> +          - const: mediatek,mt8183-disp-ovl
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> index e8c72afa0630..9a6756f185ee 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> @@ -35,13 +35,11 @@ properties:
->            - enum:
->                - mediatek,mt7623-disp-rdma
->                - mediatek,mt2712-disp-rdma
-> -          - enum:
-> -              - mediatek,mt2701-disp-rdma
-> +          - const: mediatek,mt2701-disp-rdma
->        - items:
->            - enum:
->                - mediatek,mt8192-disp-rdma
-> -          - enum:
-> -              - mediatek,mt8183-disp-rdma
-> +          - const: mediatek,mt8183-disp-rdma
->  
->    reg:
->      maxItems: 1
+With template "ima" removed from the compiled default, we ensure that
+the default tempalte would at least be "ima-ng" which allows for
+basically any hash algorithm. Users who needs to use "ima" template
+could still do it by specifying "ima_template=ima" in boot command line.
+
+This change would not break the algorithm compatibility checking for
+IMA.
+
+Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+---
+ security/integrity/ima/Kconfig | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index f3a9cc201c8c..f392cac7a7d1 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -65,14 +65,11 @@ choice
+ 	help
+ 	  Select the default IMA measurement template.
+ 
+-	  The original 'ima' measurement list template contains a
+-	  hash, defined as 20 bytes, and a null terminated pathname,
+-	  limited to 255 characters.  The 'ima-ng' measurement list
+-	  template permits both larger hash digests and longer
+-	  pathnames.
+-
+-	config IMA_TEMPLATE
+-		bool "ima"
++	  The 'ima-ng' measurement list template permits various hash
++	  digests and long pathnames. The compiled default template
++	  can be overwritten using the kernel command line
++	  'ima_template=' option.
++
+ 	config IMA_NG_TEMPLATE
+ 		bool "ima-ng (default)"
+ 	config IMA_SIG_TEMPLATE
+@@ -82,7 +79,6 @@ endchoice
+ config IMA_DEFAULT_TEMPLATE
+ 	string
+ 	depends on IMA
+-	default "ima" if IMA_TEMPLATE
+ 	default "ima-ng" if IMA_NG_TEMPLATE
+ 	default "ima-sig" if IMA_SIG_TEMPLATE
+ 
+@@ -102,19 +98,19 @@ choice
+ 
+ 	config IMA_DEFAULT_HASH_SHA256
+ 		bool "SHA256"
+-		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA256=y
+ 
+ 	config IMA_DEFAULT_HASH_SHA512
+ 		bool "SHA512"
+-		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA512=y
+ 
+ 	config IMA_DEFAULT_HASH_WP512
+ 		bool "WP512"
+-		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
++		depends on CRYPTO_WP512=y
+ 
+ 	config IMA_DEFAULT_HASH_SM3
+ 		bool "SM3"
+-		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
++		depends on CRYPTO_SM3=y
+ endchoice
+ 
+ config IMA_DEFAULT_HASH
+-- 
+2.17.1
 

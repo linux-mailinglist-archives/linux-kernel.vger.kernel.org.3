@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9974F636F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4524F62C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiDFPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S235671AbiDFPPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236358AbiDFPfB (ORCPT
+        with ESMTP id S235409AbiDFPPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:35:01 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCDD6B3DA0;
-        Wed,  6 Apr 2022 05:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649249212; x=1680785212;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qjd3E9oaefZi4G89Xe8n5LQfk2srs+ghT6tlVcucH4o=;
-  b=WymFQaD644GYplQwM1E7c3h3cBxAUkH0aWeVJVrJbkH5Es72if4cSPFe
-   dRDiCeKADex0+almkKP8Gy5JDUuqxCw05DzP7KoxewieTqjKsBV/A6Q2M
-   9t7xvA430p1dl+tF5agZ/gGJG499D/245fUe6ZunzwojaKQ+Z2e//cDY9
-   uF3h65q8dpS+UxxnuVYli1+kq2KSTFa0e2H99CmHeNxCx/F7ZAGCCt6tP
-   vqSRxGRARXkS6RZqutnBh13j4WU2HOop1QOW/HgBRKMufkwYt8DFY2r7z
-   5itliIytqwMPzxy/u5uiVIAr/AC9zVVdQ+fGheKmVNz27pQUi6KQvto3J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261203661"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="261203661"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 05:04:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="608867666"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 05:04:00 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nc4OG-0004O5-Al;
-        Wed, 06 Apr 2022 12:04:00 +0000
-Date:   Wed, 6 Apr 2022 20:03:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
- warning: unused variable 'samsung_jpeg_match'
-Message-ID: <202204061912.zNf42JUP-lkp@intel.com>
+        Wed, 6 Apr 2022 11:15:11 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4031517CC7;
+        Wed,  6 Apr 2022 05:15:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CF70FCE22E4;
+        Wed,  6 Apr 2022 12:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D18C385B5;
+        Wed,  6 Apr 2022 12:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649246715;
+        bh=rt0wDlUOfXUFyUlSaOUV3jMwgpV+M0IZlrMbI4ZWEOs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=t6F7+QgYocVCXRx6iQo1raESLOLbSQvOTLxig3SvJ5zdF7zIl43MxAfgMXt+/92jc
+         KNDvYtcoQnBBnD8H8TsKxRJfhd3aDuTS/U0R++HkOiLhLQT620C8F54j8kw6X9qYoa
+         T2avXcfndLpylpf46d93/gB6HFM3W5K8vkm5joHtldkwETtvm1MvMTkIgEeyoyd/DE
+         66P+AOpcvtpckoCLzvNAJMU5IfBG8oA599Rl2xv0ll2x6WUf/eKFG+EWf/S8nOX7mt
+         +xzWry/JI4Bkz74a5PG+MCkk3Zjl2dj8Uilt3aQsSjfCIQE45KxqmtsFp5pED6tykK
+         i8ta3NDzDSf2g==
+From:   guoren@kernel.org
+To:     palmer@rivosinc.com, arnd@arndb.de, mark.rutland@arm.com,
+        peterz@infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: [PATCH] riscv: Optimize AMO acquire/release usage
+Date:   Wed,  6 Apr 2022 20:04:05 +0800
+Message-Id: <20220406120405.660354-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,130 +56,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-First bad commit (maybe != root cause):
+Using RISCV_ACQUIRE/RELEASE_BARRIER is over expensive for
+xchg/cmpxchg_acquire/release than nature instructions' .aq/rl.
+The patch fixed these issues under RISC-V Instruction Set Manual,
+Volume I: RISC-V User-Level ISA “A” Standard Extension for Atomic
+Instructions, Version 2.1.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-date:   3 weeks ago
-config: s390-randconfig-r004-20220406 (https://download.01.org/0day-ci/archive/20220406/202204061912.zNf42JUP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+---
+ arch/riscv/include/asm/atomic.h  | 70 ++++++++++++++++++++++++++++++--
+ arch/riscv/include/asm/cmpxchg.h | 30 +++++---------
+ 2 files changed, 76 insertions(+), 24 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_jpeg_match[] = {
-                                    ^
-   13 warnings generated.
-
-
-vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
-
-:::::: The code at line 3126 was first introduced by commit
-:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
-
-:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
-
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index ac9bdf4fc404..364df773a36a 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -99,6 +99,30 @@ c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
+ 	return ret;							\
+ }									\
+ static __always_inline							\
++c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,		\
++					     atomic##prefix##_t *v)	\
++{									\
++	register c_type ret;						\
++	__asm__ __volatile__ (						\
++		"	amo" #asm_op "." #asm_type ".aq %1, %2, %0"	\
++		: "+A" (v->counter), "=r" (ret)				\
++		: "r" (I)						\
++		: "memory");						\
++	return ret;							\
++}									\
++static __always_inline							\
++c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,		\
++					     atomic##prefix##_t *v)	\
++{									\
++	register c_type ret;						\
++	__asm__ __volatile__ (						\
++		"	amo" #asm_op "." #asm_type ".rl %1, %2, %0"	\
++		: "+A" (v->counter), "=r" (ret)				\
++		: "r" (I)						\
++		: "memory");						\
++	return ret;							\
++}									\
++static __always_inline							\
+ c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+ {									\
+ 	register c_type ret;						\
+@@ -118,6 +142,18 @@ c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,		\
+         return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
+ }									\
+ static __always_inline							\
++c_type arch_atomic##prefix##_##op##_return_acquire(c_type i,		\
++					      atomic##prefix##_t *v)	\
++{									\
++        return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I;	\
++}									\
++static __always_inline							\
++c_type arch_atomic##prefix##_##op##_return_release(c_type i,		\
++					      atomic##prefix##_t *v)	\
++{									\
++        return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I;	\
++}									\
++static __always_inline							\
+ c_type arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
+ {									\
+         return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
+@@ -140,22 +176,38 @@ ATOMIC_OPS(sub, add, +, -i)
+ 
+ #define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
+ #define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
++#define arch_atomic_add_return_acquire	arch_atomic_add_return_acquire
++#define arch_atomic_sub_return_acquire	arch_atomic_sub_return_acquire
++#define arch_atomic_add_return_release	arch_atomic_add_return_release
++#define arch_atomic_sub_return_release	arch_atomic_sub_return_release
+ #define arch_atomic_add_return		arch_atomic_add_return
+ #define arch_atomic_sub_return		arch_atomic_sub_return
+ 
+ #define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
+ #define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
++#define arch_atomic_fetch_add_acquire	arch_atomic_fetch_add_acquire
++#define arch_atomic_fetch_sub_acquire	arch_atomic_fetch_sub_acquire
++#define arch_atomic_fetch_add_release	arch_atomic_fetch_add_release
++#define arch_atomic_fetch_sub_release	arch_atomic_fetch_sub_release
+ #define arch_atomic_fetch_add		arch_atomic_fetch_add
+ #define arch_atomic_fetch_sub		arch_atomic_fetch_sub
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+ #define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
+ #define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
++#define arch_atomic64_add_return_acquire	arch_atomic64_add_return_acquire
++#define arch_atomic64_sub_return_acquire	arch_atomic64_sub_return_acquire
++#define arch_atomic64_add_return_release	arch_atomic64_add_return_release
++#define arch_atomic64_sub_return_release	arch_atomic64_sub_return_release
+ #define arch_atomic64_add_return		arch_atomic64_add_return
+ #define arch_atomic64_sub_return		arch_atomic64_sub_return
+ 
+ #define arch_atomic64_fetch_add_relaxed	arch_atomic64_fetch_add_relaxed
+ #define arch_atomic64_fetch_sub_relaxed	arch_atomic64_fetch_sub_relaxed
++#define arch_atomic64_fetch_add_acquire	arch_atomic64_fetch_add_acquire
++#define arch_atomic64_fetch_sub_acquire	arch_atomic64_fetch_sub_acquire
++#define arch_atomic64_fetch_add_release	arch_atomic64_fetch_add_release
++#define arch_atomic64_fetch_sub_release	arch_atomic64_fetch_sub_release
+ #define arch_atomic64_fetch_add		arch_atomic64_fetch_add
+ #define arch_atomic64_fetch_sub		arch_atomic64_fetch_sub
+ #endif
+@@ -178,6 +230,12 @@ ATOMIC_OPS(xor, xor, i)
+ #define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
+ #define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
+ #define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
++#define arch_atomic_fetch_and_acquire	arch_atomic_fetch_and_acquire
++#define arch_atomic_fetch_or_acquire	arch_atomic_fetch_or_acquire
++#define arch_atomic_fetch_xor_acquire	arch_atomic_fetch_xor_acquire
++#define arch_atomic_fetch_and_release	arch_atomic_fetch_and_release
++#define arch_atomic_fetch_or_release	arch_atomic_fetch_or_release
++#define arch_atomic_fetch_xor_release	arch_atomic_fetch_xor_release
+ #define arch_atomic_fetch_and		arch_atomic_fetch_and
+ #define arch_atomic_fetch_or		arch_atomic_fetch_or
+ #define arch_atomic_fetch_xor		arch_atomic_fetch_xor
+@@ -186,6 +244,12 @@ ATOMIC_OPS(xor, xor, i)
+ #define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
+ #define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
+ #define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
++#define arch_atomic64_fetch_and_acquire	arch_atomic64_fetch_and_acquire
++#define arch_atomic64_fetch_or_acquire	arch_atomic64_fetch_or_acquire
++#define arch_atomic64_fetch_xor_acquire	arch_atomic64_fetch_xor_acquire
++#define arch_atomic64_fetch_and_release	arch_atomic64_fetch_and_release
++#define arch_atomic64_fetch_or_release	arch_atomic64_fetch_or_release
++#define arch_atomic64_fetch_xor_release	arch_atomic64_fetch_xor_release
+ #define arch_atomic64_fetch_and		arch_atomic64_fetch_and
+ #define arch_atomic64_fetch_or		arch_atomic64_fetch_or
+ #define arch_atomic64_fetch_xor		arch_atomic64_fetch_xor
+@@ -315,12 +379,11 @@ static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
+        int prev, rc;
+ 
+ 	__asm__ __volatile__ (
+-		"0:	lr.w     %[p],  %[c]\n"
++		"0:	lr.w.aq  %[p],  %[c]\n"
+ 		"	sub      %[rc], %[p], %[o]\n"
+ 		"	bltz     %[rc], 1f\n"
+ 		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		: [o]"r" (offset)
+@@ -337,12 +400,11 @@ static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offs
+        long rc;
+ 
+ 	__asm__ __volatile__ (
+-		"0:	lr.d     %[p],  %[c]\n"
++		"0:	lr.d.aq  %[p],  %[c]\n"
+ 		"	sub      %[rc], %[p], %[o]\n"
+ 		"	bltz     %[rc], 1f\n"
+ 		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		: [o]"r" (offset)
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 36dc962f6343..8ff1cd8162ba 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -52,16 +52,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.w.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.d.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -87,16 +85,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.w %0, %2, %1\n"			\
++			"	amoswap.w.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.d %0, %2, %1\n"			\
++			"	amoswap.d.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -217,11 +213,10 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
++			"0:	lr.w.aq %0, %2\n"			\
+ 			"	bne  %0, %z3, 1f\n"			\
+ 			"	sc.w %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" ((long)__old), "rJ" (__new)		\
+@@ -229,11 +224,10 @@
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
++			"0:	lr.d.aq %0, %2\n"			\
+ 			"	bne %0, %z3, 1f\n"			\
+ 			"	sc.d %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" (__old), "rJ" (__new)			\
+@@ -263,10 +257,9 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+ 			"0:	lr.w %0, %2\n"				\
+ 			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
++			"	sc.w.rl %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+@@ -275,10 +268,9 @@
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+ 			"0:	lr.d %0, %2\n"				\
+ 			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
++			"	sc.d.rl %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+@@ -309,11 +301,10 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
++			"0:	lr.w.aq %0, %2\n"			\
+ 			"	bne  %0, %z3, 1f\n"			\
+ 			"	sc.w.rl %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" ((long)__old), "rJ" (__new)		\
+@@ -321,11 +312,10 @@
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
++			"0:	lr.d.aq %0, %2\n"			\
+ 			"	bne %0, %z3, 1f\n"			\
+ 			"	sc.d.rl %1, %z4, %2\n"			\
+ 			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" (__old), "rJ" (__new)			\
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

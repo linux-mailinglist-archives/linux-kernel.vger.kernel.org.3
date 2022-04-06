@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41364F6A8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CB24F6AB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbiDFTyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S233423AbiDFUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235471AbiDFTxa (ORCPT
+        with ESMTP id S233572AbiDFUAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:53:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF22EC4FF;
-        Wed,  6 Apr 2022 10:30:16 -0700 (PDT)
+        Wed, 6 Apr 2022 16:00:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530B82EC4E7;
+        Wed,  6 Apr 2022 10:30:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85555B803F7;
-        Wed,  6 Apr 2022 17:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F5BC385A1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8E7361A3D;
+        Wed,  6 Apr 2022 17:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B09C385A5;
         Wed,  6 Apr 2022 17:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649266214;
-        bh=TzTlpFZtH0J+36S9N9L4ND/H/yCs90y6P3aB8Lln2MI=;
+        bh=oonR2xgCOkK+2ZsJXKQdEiC5WZelRESZAkoTfAw8t7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CDIGt5bbay39GvswOhiiR9x75f4CZ8870l7rpiON7ocOR7Me8MM0zEhEwZm/0UnWZ
-         xb0eOyjBo1tE5/yrUkFFzNGfXk0IMQqFaXgvgQmgnx6t7Q/ieFGMllaRCJ0+/hmhAa
-         OVI2CLkcS36qkpexDIETUelaifR4eghO4GfP5Ywwe29lEOvaVO1fe6+lhP3kUGCEun
-         M9CkpTS01zPwawvH3vfQYBHxYkZOtnXmEJfzGPJaZAf5UF7vkoe77u2dcRQ06Zi/h+
-         Lzf7r9aeghgL7ZPdLdOoLFa9eIAk2MUQfK6SeqnSay9Tbwd0nJRipOO2YEoIAW1THs
-         3pqmcTIqow9Sg==
+        b=GmdCAI1PEXG/SQMmze443jy4k7raOrxY7mJu/mbfL29JTMs50hFJYyDQEZIXIFS6U
+         6sIt9Gyo4XfjAEvTOCVYI2gpS88mTOwYESjW/FCz0EETOzglUdsDI/KHVwyd6/Ozfv
+         cJXLy+/BtoY6/bMusBJ2tgSVE0SE57A2bTAyWge2Tnc4AZPCxoMdboLTbXic/+75zx
+         JC4gWgIQknHrk7LLGTOyEhafG8bLwHPqZmHlIPOFSVkl7apatB4e9/Tmx/80VZzLaT
+         U8yKUPY8ThKVhJzACG6taKj8KWR/vfJlYFsVHP9C7TmSNcTEDN5Onpp3JfQ8vg0L7c
+         6uXazcIawcA6g==
 Received: by wens.tw (Postfix, from userid 1000)
-        id 4A61B5F8E8; Thu,  7 Apr 2022 01:30:11 +0800 (CST)
+        id 527CF5FD20; Thu,  7 Apr 2022 01:30:11 +0800 (CST)
 From:   Chen-Yu Tsai <wens@kernel.org>
 To:     Javier Martinez Canillas <javierm@redhat.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -43,14 +43,13 @@ To:     Javier Martinez Canillas <javierm@redhat.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     Chen-Yu Tsai <wens@csie.org>, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] dt-bindings: vendor-prefixes: Add prefix for SINO WEALTH Eletronics Ltd.
-Date:   Thu,  7 Apr 2022 01:29:53 +0800
-Message-Id: <20220406172956.3953-2-wens@kernel.org>
+Subject: [PATCH v2 2/4] dt-bindings: display: ssd1307fb: Add entry for SINO WEALTH SH1106
+Date:   Thu,  7 Apr 2022 01:29:54 +0800
+Message-Id: <20220406172956.3953-3-wens@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220406172956.3953-1-wens@kernel.org>
 References: <20220406172956.3953-1-wens@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,27 +63,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chen-Yu Tsai <wens@csie.org>
 
-Add a vendor prefix entry for SINO WEALTH Eletronics Ltd.
-(http://www.sinowealth.com).
+The SINO WEALTH SH1106 is an OLED display driver that is somewhat
+compatible with the SSD1306. It supports a slightly wider display,
+at 132 instead of 128 pixels. The basic commands are the same, but
+the SH1106 doesn't support the horizontal or vertical address modes.
+
+Add a compatible string for it.
 
 Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/display/solomon,ssd1307fb.yaml         | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 01430973ecec..79b72e370ade 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1130,6 +1130,8 @@ patternProperties:
-     description: Sinlinx Electronics Technology Co., LTD
-   "^sinovoip,.*":
-     description: SinoVoip Co., Ltd
-+  "^sinowealth,.*":
-+    description: SINO WEALTH Electronic Ltd.
-   "^sipeed,.*":
-     description: Shenzhen Sipeed Technology Co., Ltd.
-   "^sirf,.*":
+diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+index 9baafd0c42dd..ade61d502edd 100644
+--- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
++++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+@@ -13,6 +13,7 @@ maintainers:
+ properties:
+   compatible:
+     enum:
++      - sinowealth,sh1106-i2c
+       - solomon,ssd1305fb-i2c
+       - solomon,ssd1306fb-i2c
+       - solomon,ssd1307fb-i2c
+@@ -131,6 +132,18 @@ required:
+   - reg
+ 
+ allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: sinowealth,sh1106-i2c
++    then:
++      properties:
++        solomon,dclk-div:
++          default: 1
++        solomon,dclk-frq:
++          default: 5
++
+   - if:
+       properties:
+         compatible:
 -- 
 2.34.1
 

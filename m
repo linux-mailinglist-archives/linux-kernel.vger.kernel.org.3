@@ -2,241 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D304F671B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803814F678A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239383AbiDFRic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
+        id S239492AbiDFRiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239897AbiDFRiE (ORCPT
+        with ESMTP id S240155AbiDFRiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:38:04 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE021CFFA5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:46:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso3898739wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e7i5fqIjPCuBRPSNQcsQxgqCqyICNl6AH42cdEc+yEQ=;
-        b=U7m5Z2u+eJzUk8VkHRb/RwLQIG3AB2s5PYvohe6Ue9KG11lvEbAW2mZLxgkglkrJt6
-         4LN+BwOOCd+l/VYLUMKspIvVNcikV6JK5zMytQp0duRlojij67LyJ9Zc5hJjLblNY9Ac
-         dtZm/DJfjZYDAhfCSpFsA0ot5nQDdcmN4K5vw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e7i5fqIjPCuBRPSNQcsQxgqCqyICNl6AH42cdEc+yEQ=;
-        b=rRpvIJPkRLw8oA+rrq7B6zdCm5VbO+bbQvYiKeBJIdYKYbpfgt0z8RzlOmNtCmiF7H
-         a9kghCxkNaCOJtOY9qRkDxtf3jbkt245/ojszYzUFsmY+a9xvHyr2pjrbITMw3wrTLPN
-         I0muA2pDPqf1NekYIYR+zb6SiCsCg38sPRuBcSfmvApRMvhKlF5Basbkcj/vctRd1HC2
-         78oNO9j3X/7IrfILn4y2PiayvICldQ8IL1zlpA4i905SrBuwIFT97fYPG2Xkw9m5fvoq
-         cg0sVsVyW65ZCojtVWwULUCBFx4/27BiK/ttNVe8PQZoxs33QkJOqQHiotqlTwF5jT3+
-         /WCg==
-X-Gm-Message-State: AOAM533jewyijGWM493ejzsV4Y5BOuofxzW3pRtfmgx3grcw9DRvamCE
-        1iRt89huZImGROEzZ0pekkYkWQ==
-X-Google-Smtp-Source: ABdhPJys5Bo9ztdLxydOo5LBEYNo7oHRyJ8vIXN458O2Bw72RWUm15njJG9rhQqFwouzjM6Z4YVPtA==
-X-Received: by 2002:a05:600c:3d14:b0:38c:9d85:781d with SMTP id bh20-20020a05600c3d1400b0038c9d85781dmr8056737wmb.191.1649259993019;
-        Wed, 06 Apr 2022 08:46:33 -0700 (PDT)
-Received: from amarula.amarulasolutions.com (77-32-12-93.dyn.eolo.it. [77.32.12.93])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05600c1d1400b0038cba2f88c0sm7383922wms.26.2022.04.06.08.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 08:46:32 -0700 (PDT)
-From:   Fabio Aiuto <fabio.aiuto@amarulasolutions.com>
-To:     agk@redhat.com, snitzer@kernel.org
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>
-Subject: [PATCH v3] md: dm-init: Wait devices if it's not find on first adpet
-Date:   Wed,  6 Apr 2022 17:46:31 +0200
-Message-Id: <20220406154631.277107-1-fabio.aiuto@amarulasolutions.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 6 Apr 2022 13:38:20 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBF334B90C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1649260020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kc8CRbZjWWFNq3yUrHt8iTG6oax4BgdV/OMmdCABUtw=;
+        b=N3ZryaTrnrrHGUWxB9rouoHHdYDFAfEIzQTPE+SUI81mUMl07rVjPSW4BkRv7b62zheMl/
+        5ewvzaeP2XwEccHmhMUpUNr0slVWi7tbIfGPljE1KuhKAQBeIUsezQPOV58SL1EQtUBDDN
+        lU+NtxzdWCIlVOQxiyW1PO6yenorQ8w=
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur02lp2052.outbound.protection.outlook.com [104.47.5.52]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-31-dD9XrEghMiKpNWbNYZ2PLA-1; Wed, 06 Apr 2022 17:46:57 +0200
+X-MC-Unique: dD9XrEghMiKpNWbNYZ2PLA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QPh55zBV0oFyL5pfau4fhHAcnoVi4lqmUDVSWUVnrqQaWFKWISYOXpSHUXBzB4jOFIeLCcjy1bc/rVIbb13XXdxDv2HhqRBDTMdMy6GZjBX5BxJj4qsYnyfUuPjvhCtUm5v37D791dVyDcBtXZElNrdSsUiDR2/YjJV9iajb3Ot5kvZIIiwT9paaApkhluIhIYqXMmdMqR7Dyd0bPdtbDrcFMZyn7Tk6BYtFN6sRvCmoCrIG5Isjxq26kXfe6tLUkJgjfpQKMIF5K71bRcmZfIJ0urFb/VDxYISFAx/sbfkyoAF7GrSokJziaxRFnLR1PZ9Fkuui70rOxTK9pMb82Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kc8CRbZjWWFNq3yUrHt8iTG6oax4BgdV/OMmdCABUtw=;
+ b=A2l7Gy5I8uioAE9wPCxs8axaNmmHTcSPxM+PTQFudvG7QzpanP1zN94WTPAE/raM7BXQJt2f5o8a6iJr8kev6Czg0uUnZGshJsHRIGROVLoZEEBGlz/C0GXo73LjbMC50jPYa5bn2TrfwXbp2bzn7feTAe1zlJyg25X5+5ewfljRwE4uxnMx1Mrhloulj2s4petSsQ6KP1c4DRmT77KvJiiQHmDRHEKfV6Od5L01TR4UTi8F+X1WfWM+Bk0oPk2wKnm2KeXNlr3YLcZi0XN02BYgWwYhzR+Q47reB8KynsRlEBnqomuwvPpLojVBZ08v/yhGZaH0XULdhq3IXMKGPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB8PR04MB7097.eurprd04.prod.outlook.com (2603:10a6:10:12a::11)
+ by AM6PR04MB4070.eurprd04.prod.outlook.com (2603:10a6:209:44::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 15:46:55 +0000
+Received: from DB8PR04MB7097.eurprd04.prod.outlook.com
+ ([fe80::8d7a:5d52:e592:9227]) by DB8PR04MB7097.eurprd04.prod.outlook.com
+ ([fe80::8d7a:5d52:e592:9227%9]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 15:46:54 +0000
+Date:   Wed, 6 Apr 2022 23:46:38 +0800
+From:   joeyli <jlee@suse.com>
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Philipp Rudo <prudo@linux.ibm.com>,
+        kexec@lists.infradead.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@kernel.org
+Subject: Re: [PATCH 3/4] kexec, KEYS, s390: Make use of built-in and
+ secondary keyring for signature verification
+Message-ID: <20220406154623.GN11641@linux-l9pv.suse>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <9f8b71f368843568d7dd6764f8c8a68b1f3a9bbc.1644953683.git.msuchanek@suse.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f8b71f368843568d7dd6764f8c8a68b1f3a9bbc.1644953683.git.msuchanek@suse.de>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-ClientProxiedBy: HK2PR0302CA0021.apcprd03.prod.outlook.com
+ (2603:1096:202::31) To DB8PR04MB7097.eurprd04.prod.outlook.com
+ (2603:10a6:10:12a::11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d418655b-d94b-40da-3613-08da17e4acd6
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4070:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4070D47A2310D3DCE87BDDACA3E79@AM6PR04MB4070.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3oE5NtWLJA5d7LHL69odBtux0PpOeNK7KBNPmFqDLYk8U8vg57/CPANNDcc0KaOhi1dWPyqb1ZFpfp5E0VVYVs2joZlMSv/RPpnf3EVeNhD7JyXKlheQldVyBsUBOhGKuoY9Xnixbd2CYpPvfifCeq/BGPqrs1I252nvKzSkMvkky/m1Mkv52amy0lNviMrurDSEzfqym/99an2t1nJ5123uq6nyhKXUwXftriul3+wQkWmyzXiRjgvNxuAcNySm1ZI3HpZzNV+vDUnz5B4QXUitHQUwaF1Tm+BzbhaoH5Irocd4zLOl/1r/iT+K8NPsPox9aCV8dbbaSGfBAyObzSfv45tLAkkqwa9aMLMSFkMm6uzI229uSTU8yt0SErU23LO408qHhqvRHYD96lTEP+owQtWN/5KdW0e+x39htL4gNmz8K3TwDisvyod9hGTMTPLoGWe7pawyptQe5HkT8iGdKnYPH72R6DG/xf+56KjtcnLEFpR/Aod1aZiylYiw37JkGLScYVnPpuS+I4oeOWJmLmFwn2fOUP2TAf9Is5iOcdVIJgk1GILF82dZdjU5zhv5asRoKleLbPCKQ3JZ0JzaJQZtyf6y8J3plp3H5ZM/5zz8AUikteIj9lQkAq1HCXx1u2dJ6Qe4PaNOrNaPjttH9TQRsJA714rApZGSxhXbuP3FgAdvd0+oRAwWDP7m1I2EwvSU/og4NTKb59cEDg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7097.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(36756003)(83380400001)(33656002)(1076003)(2906002)(186003)(15650500001)(66476007)(7416002)(508600001)(6666004)(5660300002)(8936002)(6916009)(6486002)(6512007)(54906003)(9686003)(4326008)(316002)(86362001)(6506007)(66556008)(8676002)(38100700002)(66946007)(43062005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?molW7i6Yc2b/xuiNoCt/+4aXhvGAjEAM6PlvFs/9uIMZKoGKYRc9t2GrjY/J?=
+ =?us-ascii?Q?Os1OvpGc3RCHyxBeGkJf0EAa8gcEhZcTUZ2x83Ao5pgFMp9pJgYAUQXGFnaj?=
+ =?us-ascii?Q?oTXjtoUgfDISuBi3BiAAO5f1LbeZOQ+k7C8N0ln7JY2uLgK8taynFvqTqmc5?=
+ =?us-ascii?Q?glK5fFbvu/p/XF7/0RDatNRIDrLYhzt2AucOmfH4aQdu3yE6FTZtb1uVJm41?=
+ =?us-ascii?Q?j7jhIHiH6qIOdAi+hQ2XCDE9pKjOwuaFYfyB6mAVxuDsinXDxqMzMytsNKV2?=
+ =?us-ascii?Q?+V/7HvrAIiOW/cDe56Mu+hxceyBXaP8a8p2hTpLD2359ekeaFoIe8jAja6iU?=
+ =?us-ascii?Q?KrX+Jund1iTDThWt2mgV2OHa7KZvPoZJz8ulVid+vzwFgQhj65l0O1flO/jr?=
+ =?us-ascii?Q?Iz5YSmnmhBkdfDMDNciCmChg9yMMDuKL/3u9vM6ZCxfTA7ql+5MvasvVdRhN?=
+ =?us-ascii?Q?jgWFNCj1w5OIWfHKCAphiU3fDYgDN4/wFr15qCTCfeS8MSzDn4TXrP9zGlUH?=
+ =?us-ascii?Q?hrgi3nyWm+4ItD6swtdHpLy1s9kFix9bCpebL6hLYqWFcaFqxh+blwom5h1G?=
+ =?us-ascii?Q?bj3b1rf98OyzkEQmQdBEwvdYKJG/SI0F35TPsocCtIfg8TIdu8ilGmeLSCKs?=
+ =?us-ascii?Q?x+sY35ELqZDsIdH8ewnmvsHrjeP5jVzqZjgavuvk0G/fQ8o9FJhlsOAgr5kE?=
+ =?us-ascii?Q?B/VJphYyWDs/0dS5SWqqDpwGLSeil/FntSUacL0iUtGJ5HdnCSn8toVkOFSC?=
+ =?us-ascii?Q?vlXjac1NTgitPy+v5NPlEgCuDWWyVjjvXiJPPDsdeVwqc5/ITlkPJDKCeXlc?=
+ =?us-ascii?Q?TATSYfOsJP2npFWcHBwP2pSJNwEj1hXeLxYfahYps6PfGG5cB3Wkmjz3IPsE?=
+ =?us-ascii?Q?o/3LvfIhBfXXpTNEndxWG8DqgoUTt1gBswHwWKMwn1pV65IXaYlZ6UO+YN+2?=
+ =?us-ascii?Q?wIYnEkcTyvqrZ7QVZ7X20LsWQVZ58CPbbWQiEFi4IRxQ8MeMvgciWMEi4cDR?=
+ =?us-ascii?Q?Bz+o2pvU9wUFROvLUM7k5M6EH4+VDyn4FO2jahNl/pGqaOOKWLaA31mLDXdJ?=
+ =?us-ascii?Q?skRB+qH+9YQpwEt6dJbwk7IHT1mNuQf5/AD6JWYI3fJDKjOVtvQuvrjtQ5Tw?=
+ =?us-ascii?Q?pT0+lFvoZ6CYXtwTOxSn17+zursritgq2CKkjqEBEBDsq33iwaCyhF2prf9v?=
+ =?us-ascii?Q?FDsYHEiesEz9a1RhWXdVKn8VMR5GzHnT/4bG0AEcWkvleqrLni/JrfEHPdna?=
+ =?us-ascii?Q?4yfyK4sGJZcI7Dudn0m1zWZ1tJAQIbpQUbI4X/vvFbx4Srr+XyrcGvS8flSO?=
+ =?us-ascii?Q?2+E6OIHVN0maUuMpaLaOUF0K4xl54RzJqk4qb1MVyoTxRiO2RUhI1ROyzrm1?=
+ =?us-ascii?Q?ktYZ3E6alPX0mltRetUn177UCUcDt3YvOerNKVXlH99B2W5W2FWFT2v7jzEm?=
+ =?us-ascii?Q?t2Jd7aRaFZhmOBRfo7uggNWJHGrlY4hjpvbZT1cmIS8jzBmoX61JsIxtlain?=
+ =?us-ascii?Q?IFZe9PyCKi7ezxuC11Oz9HEIFdassb0oOdhWQUQtVf2gz0VC7SBuxNfgO7W3?=
+ =?us-ascii?Q?KxTWtvbHYQXt9lqIS45hgsUzX9/4ieu8MyhbQ+CYEZSghxpipFqFDEHPdPNq?=
+ =?us-ascii?Q?220UQixBjZQ2dteaep/R537xDS+1UlMxYlpMK7GQUPHHleOjinHuF8peFLG7?=
+ =?us-ascii?Q?ohPdnMcnfFBFOY1SbS9ZhsNmdND8O8NoSD+82uMcY8ihPxIfIc2buYF8XD56?=
+ =?us-ascii?Q?sz+dtDCbPw=3D=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d418655b-d94b-40da-3613-08da17e4acd6
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7097.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 15:46:54.8548
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eJ3baT0gVQR7UQUTVkMOB4IF2SJERARr/3wgeeelnU056DyPCMAi8xaMjUhetMiw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4070
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Trimarchi <michael@amarulasolutions.com>
+On Tue, Feb 15, 2022 at 08:39:40PM +0100, Michal Suchanek wrote:
+> commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> adds support for KEXEC_SIG verification with keys from platform keyring
+> but the built-in keys and secondary keyring are not used.
+> 
+> Add support for the built-in keys and secondary keyring as x86 does.
+> 
+> Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> Cc: Philipp Rudo <prudo@linux.ibm.com>
+> Cc: kexec@lists.infradead.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Cc: stable@kernel.org
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
 
-The device driver can be deferrable and can be a race during
-the dm-init early. We need to wait all the probe are really finished
-in a loop as is done in do_mounts. This is was tested on kernel 5.4
-but code seems was not changed since that time
+Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
 
-003: imx8mq-usb-phy 381f0040.usb-phy: 381f0040.usb-phy supply vbus not found, using dummy regulator
-003: imx8mq-usb-phy 382f0040.usb-phy: 382f0040.usb-phy supply vbus not found, using dummy regulator
-003: imx-cpufreq-dt imx-cpufreq-dt: cpu speed grade 5 mkt segment 0 supported-hw 0x20 0x1
-003: caam-dma caam-dma: caam dma support with 2 job rings
-000: hctosys: unable to open rtc device (rtc0)
-000: device-mapper: init: waiting for all devices to be available before creating mapped devices
-002: device-mapper: table: 254:0: verity: Data device lookup failed
-002: device-mapper: ioctl: error adding target to table
-002: crng init done
-003: of_cfs_init
-003: of_cfs_init: OK
-003: Waiting for root device /dev/dm-0...
-001: mmc2: new HS400 Enhanced strobe MMC card at address 0001
-001: mmcblk2: mmc2:0001 IB2916 14.6 GiB
-001: mmcblk2boot0: mmc2:0001 IB2916 partition 1 4.00 MiB
-001: mmcblk2boot1: mmc2:0001 IB2916 partition 2 4.00 MiB
-001: mmcblk2rpmb: mmc2:0001 IB2916 partition 3 4.00 MiB, chardev (249:0)
-001:  mmcblk2: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
-001: VSD_3V3: disabling
-
-with the patch
-
-003: device-mapper: init: waiting for all devices to be available before creating mapped devices
-
-000: device-mapper: table: 254:0: verity: Data device lookup failed
-000: device-mapper: ioctl: error adding target to table
-002: crng init done
-003: device-mapper: init: waiting for all devices to be available before creating mapped devices
-003: device-mapper: table: 254:0: verity: Data device lookup failed
-003: device-mapper: ioctl: error adding target to table
-003: device-mapper: init: waiting for all devices to be available before creating mapped devices
-000: device-mapper: table: 254:0: verity: Data device lookup failed
-000: device-mapper: ioctl: error adding target to table
-002: device-mapper: init: waiting for all devices to be available before creating mapped devices
-002: device-mapper: table: 254:0: verity: Data device lookup failed
-002: device-mapper: ioctl: error adding target to table
-000: device-mapper: init: waiting for all devices to be available before creating mapped devices
-000: device-mapper: table: 254:0: verity: Data device lookup failed
-000: device-mapper: ioctl: error adding target to table
-003: mmc2: new HS400 Enhanced strobe MMC card at address 0001
-003: mmcblk2: mmc2:0001 DG4016 14.7 GiB
-003: mmcblk2boot0: mmc2:0001 DG4016 partition 1 4.00 MiB
-003: mmcblk2boot1: mmc2:0001 DG4016 partition 2 4.00 MiB
-003: mmcblk2rpmb: mmc2:0001 DG4016 partition 3 4.00 MiB, chardev (249:0)
-003:  mmcblk2: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
-002: device-mapper: init: waiting for all devices to be available before creating mapped devices
-003: device-mapper: verity: sha256 using implementation "sha256-caam"
-000: device-mapper: ioctl: dm-0 (rootfs) is ready
-
-Wait loop is limited to 10 at the moment for our use case showed no
-more than 4 loops before successfully find data device.
-
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Fabio Aiuto <fabio.aiuto@amarulasolutions.com>
----
-Changes from v1:
-        - limit the loop to 10 iterations
-        - change variable names
-        - check only for -ENODEV failures
-
-Changes from v2:
-	- use a limit in seconds (not in retry
-	  number)
-	- add a parameter
-	- update docs
-
- .../admin-guide/device-mapper/dm-init.rst     | 13 +++++++++++
- drivers/md/dm-init.c                          | 23 +++++++++++++++++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/admin-guide/device-mapper/dm-init.rst b/Documentation/admin-guide/device-mapper/dm-init.rst
-index e5242ff17e9b..5c2f2bf1db03 100644
---- a/Documentation/admin-guide/device-mapper/dm-init.rst
-+++ b/Documentation/admin-guide/device-mapper/dm-init.rst
-@@ -123,3 +123,16 @@ Other examples (per target):
-     0 1638400 verity 1 8:1 8:2 4096 4096 204800 1 sha256
-     fb1a5a0f00deb908d8b53cb270858975e76cf64105d412ce764225d53b8f3cfd
-     51934789604d1b92399c52e7cb149d1b3a1b74bbbcb103b2a0aaacbed5c08584
-+
-+Delay for waiting deferred probes of block devices
-+==================================================
-+
-+Sometimes the late initcall starting the early creation of mapped
-+devices, starts too early. A loop waiting for probing of block
-+devices has been added; the default maximum delay is 1 second but
-+it can be set through the following kernel command::
-+
-+  dm-mod.delay=<seconds>
-+
-+This allows the procedure to retry the creation of a mapped device
-+after a short wait (5 msecs).
-diff --git a/drivers/md/dm-init.c b/drivers/md/dm-init.c
-index b0c45c6ebe0b..f4c5b4a46001 100644
---- a/drivers/md/dm-init.c
-+++ b/drivers/md/dm-init.c
-@@ -7,7 +7,9 @@
-  * This file is released under the GPLv2.
-  */
- 
-+#include <linux/async.h>
- #include <linux/ctype.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/device-mapper.h>
- #include <linux/init.h>
-@@ -18,8 +20,10 @@
- #define DM_MAX_DEVICES 256
- #define DM_MAX_TARGETS 256
- #define DM_MAX_STR_SIZE 4096
-+#define DM_DEFAULT_MAX_PROBE_DELAY 1
- 
- static char *create;
-+static int delay = DM_DEFAULT_MAX_PROBE_DELAY;
- 
- /*
-  * Format: dm-mod.create=<name>,<uuid>,<minor>,<flags>,<table>[,<table>+][;<name>,<uuid>,<minor>,<flags>,<table>[,<table>+]+]
-@@ -267,6 +271,8 @@ static int __init dm_init_init(void)
- 	LIST_HEAD(devices);
- 	char *str;
- 	int r;
-+	int loopcnt = delay * 1000 / 5;
-+	bool devnotfound = false;
- 
- 	if (!create)
- 		return 0;
-@@ -275,6 +281,7 @@ static int __init dm_init_init(void)
- 		DMERR("Argument is too big. Limit is %d", DM_MAX_STR_SIZE);
- 		return -EINVAL;
- 	}
-+retry:
- 	str = kstrndup(create, DM_MAX_STR_SIZE, GFP_KERNEL);
- 	if (!str)
- 		return -ENOMEM;
-@@ -287,13 +294,23 @@ static int __init dm_init_init(void)
- 	wait_for_device_probe();
- 
- 	list_for_each_entry(dev, &devices, list) {
--		if (dm_early_create(&dev->dmi, dev->table,
--				    dev->target_args_array))
-+		r = dm_early_create(&dev->dmi, dev->table, dev->target_args_array);
-+		if (r == -ENODEV) {
-+			devnotfound = true;
- 			break;
-+		}
- 	}
-+
- out:
- 	kfree(str);
- 	dm_setup_cleanup(&devices);
-+	if (devnotfound && loopcnt) {
-+		msleep(5);
-+		devnotfound = false;
-+		loopcnt--;
-+		goto retry;
-+	}
-+
- 	return r;
- }
- 
-@@ -301,3 +318,5 @@ late_initcall(dm_init_init);
- 
- module_param(create, charp, 0);
- MODULE_PARM_DESC(create, "Create a mapped device in early boot");
-+module_param(delay, int, 0);
-+MODULE_PARM_DESC(delay, "Max delay to wait for data/hash device probe in seconds");
--- 
-2.30.2
+> ---
+>  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/s390/kernel/machine_kexec_file.c b/arch/s390/kernel/machine_kexec_file.c
+> index 8f43575a4dd3..fc6d5f58debe 100644
+> --- a/arch/s390/kernel/machine_kexec_file.c
+> +++ b/arch/s390/kernel/machine_kexec_file.c
+> @@ -31,6 +31,7 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
+>  	const unsigned long marker_len = sizeof(MODULE_SIG_STRING) - 1;
+>  	struct module_signature *ms;
+>  	unsigned long sig_len;
+> +	int ret;
+>  
+>  	/* Skip signature verification when not secure IPLed. */
+>  	if (!ipl_secure_flag)
+> @@ -65,11 +66,18 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
+>  		return -EBADMSG;
+>  	}
+>  
+> -	return verify_pkcs7_signature(kernel, kernel_len,
+> -				      kernel + kernel_len, sig_len,
+> -				      VERIFY_USE_PLATFORM_KEYRING,
+> -				      VERIFYING_MODULE_SIGNATURE,
+> -				      NULL, NULL);
+> +	ret = verify_pkcs7_signature(kernel, kernel_len,
+> +				     kernel + kernel_len, sig_len,
+> +				     VERIFY_USE_SECONDARY_KEYRING,
+> +				     VERIFYING_MODULE_SIGNATURE,
+> +				     NULL, NULL);
+> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING))
+> +		ret = verify_pkcs7_signature(kernel, kernel_len,
+> +					     kernel + kernel_len, sig_len,
+> +					     VERIFY_USE_PLATFORM_KEYRING,
+> +					     VERIFYING_MODULE_SIGNATURE,
+> +					     NULL, NULL);
+> +	return ret;
+>  }
+>  #endif /* CONFIG_KEXEC_SIG */
+>  
+> -- 
+> 2.31.1
 

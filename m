@@ -2,165 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7FA4F6CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6F04F6D0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236169AbiDFVhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S236948AbiDFVkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235578AbiDFVgv (ORCPT
+        with ESMTP id S236839AbiDFVhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:36:51 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2CDDB2E3
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:50:18 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id w134so6120267ybe.10
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:50:18 -0700 (PDT)
+        Wed, 6 Apr 2022 17:37:45 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA605149D24
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:52:36 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n18so3038859plg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sFI0AJVTPwPw0LmwssqZcXake7SjDusjEH1aLxnOGrI=;
-        b=VBxmrMVPtydbsfRqsorjhKDoEdFwlfvFfHl7Qizy+qjuks/24gknLBbySdud//aBSz
-         /VIp99eQYHZthbGrg6IS/L7Tki5m7OmrvgsElS/LSuGKc8EW9EsTts4q2TrjGvC1kpLS
-         F6dWxsYSnhINwB7LUT7IScIlJE9XmXK+MEU/2bVJlTuyTLLNvfleTh9oQatKRCiOFMUC
-         JqeiuHH5nGVcXRsINrzUHb55PX5pAWTat0ZJLO5AZ3CTZTHy3rdXGWy8ZzLhFC6UZ7Uk
-         VxkYet4qNF6XpHSXucb4zSnR++/Ft6GeHGr1qW2JjZGgo8EhW+Ja6XVCIIQfcCCduf0J
-         K4AA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xkFjUfhGoQ34kJyACGIdw2JI7HA9Qbq4djiPovTr3nU=;
+        b=V8fNKwMdF/78RolOKcFf3ZhsNoC2OOtHtdeW5d4KTeh6iZ082KMBgGMOrUBMe/NoAk
+         +hYS8r+McENQQu6k7QLmoTfZZhz0LTvbBhIwc1ZI7jxz1W+5c5WWXRyy1o7L2cBuaII1
+         NmyILt6XWSnRiLW7ZHhxOJQEiTaLQ9Eq5FsY0JtXgTZsjhSPvufEaufsobiiryXZJNz+
+         iBucEWrK4ZyDbDEQsCwa80KUqwk5B3Yq0AUdwErNvl0NPJKwNJbrvt4iLP9RJaDs1tw8
+         9doJwoCrBACSmeYA61WBSRyiqNZQ+DLpu8wV1DHZqxvoH2bn9xvtpXh9i1JHl+qFC86h
+         PacA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sFI0AJVTPwPw0LmwssqZcXake7SjDusjEH1aLxnOGrI=;
-        b=FYq9SbV2hOq2jY+XY1o9RDhjgdR4PF5lD3EYaEx2g5NtGV3dH8DeSulIEdED5rjikt
-         yeIxqxiCuWryr+r97lDIY6P+MUtA0PhSQMm32hhGl6vOorzPWJwcUv/FlZ7Ze5XMqjxD
-         N0NN91+IpeoVxbz3BNjHLt/HnKG5+ircfl4d6osidvjDfnGXq5avqQnaUeCZAcoiJuYE
-         nSuFkWAK928MR6/MpZ3gbhdhke/XE2dHjQznidvAeZWkPkmuTaYeAAjOwy8/ocwq+UN1
-         OZacyBIlfDgKFTDnOLd3So00d9X82O8y9W960vrnrKCw8IyT8zGYleKYUdVwCb8DgJoF
-         cjQQ==
-X-Gm-Message-State: AOAM533IPRQa+aBxzCbbN4Ky9+qvuCC/n5regNT67RGLGVEpwnelNarx
-        Pwg+6QaVzWCcXJVovvDEdEvw2WROMMJnHApS1U7qOw==
-X-Google-Smtp-Source: ABdhPJwR0QZVr+oFFiA9oRCRtbQSk240zhY0yqvRUudwSR5L5ZfE5RfF+mPIml8RimPr4f6xCim2REhriPS2GPtoRns=
-X-Received: by 2002:a25:d913:0:b0:634:23a5:7f68 with SMTP id
- q19-20020a25d913000000b0063423a57f68mr8044255ybg.40.1649278217564; Wed, 06
- Apr 2022 13:50:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1646422845.git.isaku.yamahata@intel.com> <1df5271baa641d9d189edb86f9ee0921ea3a83e0.1646422845.git.isaku.yamahata@intel.com>
-In-Reply-To: <1df5271baa641d9d189edb86f9ee0921ea3a83e0.1646422845.git.isaku.yamahata@intel.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Wed, 6 Apr 2022 13:50:06 -0700
-Message-ID: <CAAhR5DEb+jRfGxK0nv4A_XEEnY4yrw1CzCcXU8HNw=CnHW27Gw@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 086/104] KVM: TDX: handle ept violation/misconfig exit
-To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xkFjUfhGoQ34kJyACGIdw2JI7HA9Qbq4djiPovTr3nU=;
+        b=5oCrUkU0Dmmv2doBAYmaXgLbB55ofAxiKTRbALTa0x6CQz5P1jC18L+k5A2vaqyC45
+         T0BDgTp0fI1A2Vm/tD0s/nSlrHNydAYgqLMz1locE61NEvmRs+baNMgrx6xemC56mQTS
+         MStyrPUahOwifWa/eFseISUAINgl+acdBFD/uNGMwcQ5ErxPHjvhIeZUWL2ZVkUSWSCn
+         hsLJdLfi8m+9c0Js2ZzmJFeAUljn/e9a0PBW1RWIwGawnccDYlRgqaSwvKpywJz3OR+l
+         Ki5xPTkR3fYIreX5O0XwSw1BkqxORT9sYhiFpjKRWMPU/KyoCGB6kF5hdPoPRPBaTYr+
+         wL5A==
+X-Gm-Message-State: AOAM533ADFyNrpT7pYGReQXD/v+p1BewGngmfEVTTz/YsVK++XwUSkKa
+        OJehAXX2AKY102W/l5UFgRzozw==
+X-Google-Smtp-Source: ABdhPJxKhnEQV5VqEbY+JvX8VIw//fdN/sZciPCv9KuPGbSdvYgXpIcb2nA5fqbPdQp5BKAl6Hw2OQ==
+X-Received: by 2002:a17:902:76ca:b0:157:1c6:5660 with SMTP id j10-20020a17090276ca00b0015701c65660mr703844plt.105.1649278356074;
+        Wed, 06 Apr 2022 13:52:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a16-20020a17090a6d9000b001c9c3e2a177sm6421301pjk.27.2022.04.06.13.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 13:52:35 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 20:52:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
+ the instruction
+Message-ID: <Yk39j8f81+iDOsDG@google.com>
+References: <20220402010903.727604-6-seanjc@google.com>
+ <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
+ <YkshgrUaF4+MrrXf@google.com>
+ <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
+ <YkzxXw1Aznv4zX0a@google.com>
+ <eed1cea4-409a-f03e-5c31-e82d49bb2101@maciej.szmigiero.name>
+ <Yk3Jd6xAfgVoFgLc@google.com>
+ <5135b502-ce2e-babb-7812-4d4c431a5252@maciej.szmigiero.name>
+ <Yk3uh6f+0nOdybd3@google.com>
+ <cd348e77-cb40-a64c-6b82-24e9a9158946@maciej.szmigiero.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd348e77-cb40-a64c-6b82-24e9a9158946@maciej.szmigiero.name>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 12:23 PM <isaku.yamahata@intel.com> wrote:
->
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> On EPT violation, call a common function, __vmx_handle_ept_violation() to
-> trigger x86 MMU code.  On EPT misconfiguration, exit to ring 3 with
-> KVM_EXIT_UNKNOWN.  because EPT misconfiguration can't happen as MMIO is
-> trigged by TDG.VP.VMCALL. No point to set a misconfiguration value for the
-> fast path.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/tdx.c | 40 ++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 6fbe89bcfe1e..2c35dcad077e 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -1081,6 +1081,40 @@ void tdx_deliver_interrupt(struct kvm_lapic *apic, int delivery_mode,
->         __vmx_deliver_posted_interrupt(vcpu, &tdx->pi_desc, vector);
->  }
->
-> +#define TDX_SEPT_PFERR (PFERR_WRITE_MASK | PFERR_USER_MASK)
+On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+> On 6.04.2022 21:48, Sean Christopherson wrote:
+> > On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+> > > On 6.04.2022 19:10, Sean Christopherson wrote:
+> > > > On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+> > > And what if it's L0 that is trying to inject a NMI into L2?
+> > > In this case is_guest_mode() is true, but the full NMI injection machinery
+> > > should be used.
+> > 
+> > Gah, you're right, I got misled by a benign bug in nested_vmx_l1_wants_exit() and
+> > was thinking that NMIs always exit.  The "L1 wants" part should be conditioned on
+> > NMI exiting being enabled.  It's benign because KVM always wants "real" NMIs, and
+> > so the path is never encountered.
+> > 
+> > @@ -5980,7 +6005,7 @@ static bool nested_vmx_l1_wants_exit(struct kvm_vcpu *vcpu,
+> >          switch ((u16)exit_reason.basic) {
+> >          case EXIT_REASON_EXCEPTION_NMI:
+> >                  intr_info = vmx_get_intr_info(vcpu);
+> > -               if (is_nmi(intr_info))
+> > +               if (is_nmi(intr_info) && nested_cpu_has_nmi_exiting(vmcs12))
+> >                          return true;
+> >                  else if (is_page_fault(intr_info))
+> >                          return true;
+> > 
+> 
+> I guess you mean "benign" when having KVM as L1, since other hypervisors may
+> let their L2s handle NMIs themselves.
 
-TDX_SEPT_PFERR is defined using PFERR_.* bitmask but
-__vmx_handle_ept_violation is accepting an EPT_VIOLATION_.* bitmask.
-so (PFERR_WRITE_MASK | PFERR_USER_MASK) will get interpreted as
-(EPT_VIOLATION_ACC_WRITE | EPT_VIOLATION_ACC_INSTR) which will get
-translated to (PFERR_WRITE_MASK | PFERR_FETCH_MASK). Was that the
-intention of this code?
+No, this one's truly benign.  The nVMX exit processing is:
 
-> +
-> +static int tdx_handle_ept_violation(struct kvm_vcpu *vcpu)
-> +{
-> +       unsigned long exit_qual;
-> +
-> +       if (kvm_is_private_gpa(vcpu->kvm, tdexit_gpa(vcpu)))
-> +               exit_qual = TDX_SEPT_PFERR;
-> +       else {
-> +               exit_qual = tdexit_exit_qual(vcpu);
-> +               if (exit_qual & EPT_VIOLATION_ACC_INSTR) {
-> +                       pr_warn("kvm: TDX instr fetch to shared GPA = 0x%lx @ RIP = 0x%lx\n",
-> +                               tdexit_gpa(vcpu), kvm_rip_read(vcpu));
-> +                       vcpu->run->exit_reason = KVM_EXIT_EXCEPTION;
-> +                       vcpu->run->ex.exception = PF_VECTOR;
-> +                       vcpu->run->ex.error_code = exit_qual;
-> +                       return 0;
-> +               }
-> +       }
-> +
-> +       trace_kvm_page_fault(tdexit_gpa(vcpu), exit_qual);
-> +       return __vmx_handle_ept_violation(vcpu, tdexit_gpa(vcpu), exit_qual);
-> +}
-> +
-> +static int tdx_handle_ept_misconfig(struct kvm_vcpu *vcpu)
-> +{
-> +       WARN_ON(1);
-> +
-> +       vcpu->run->exit_reason = KVM_EXIT_UNKNOWN;
-> +       vcpu->run->hw.hardware_exit_reason = EXIT_REASON_EPT_MISCONFIG;
-> +
-> +       return 0;
-> +}
-> +
->  int tdx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t fastpath)
->  {
->         union tdx_exit_reason exit_reason = to_tdx(vcpu)->exit_reason;
-> @@ -1097,6 +1131,10 @@ int tdx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t fastpath)
->         WARN_ON_ONCE(fastpath != EXIT_FASTPATH_NONE);
->
->         switch (exit_reason.basic) {
-> +       case EXIT_REASON_EPT_VIOLATION:
-> +               return tdx_handle_ept_violation(vcpu);
-> +       case EXIT_REASON_EPT_MISCONFIG:
-> +               return tdx_handle_ept_misconfig(vcpu);
->         case EXIT_REASON_OTHER_SMI:
->                 /*
->                  * If reach here, it's not a MSMI.
-> @@ -1378,8 +1416,6 @@ void tdx_flush_tlb(struct kvm_vcpu *vcpu)
->                 cpu_relax();
->  }
->
-> -#define TDX_SEPT_PFERR (PFERR_WRITE_MASK | PFERR_USER_MASK)
-> -
->  static int tdx_init_mem_region(struct kvm *kvm, struct kvm_tdx_cmd *cmd)
->  {
->         struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> --
-> 2.25.1
->
+	if (nested_vmx_l0_wants_exit())
+		handle in L0 / KVM;
 
-Sagi
+	if (nested_vmx_l1_wants_exit())
+		handle in L1
+
+	handle in L0 / KVM
+
+Since this is for actual hardware NMIs, the first "L0 wants" check always returns
+true for NMIs, so the fact that KVM screws up L1's wants is a non-issue.
+ 
+> > > It is also incorrect to block L1 -> L2 NMI injection because either L1
+> > > or L2 is currently under NMI blocking: the first case is obvious,
+> > > the second because it's L1 that is supposed to take care of proper NMI
+> > > blocking for L2 when injecting an NMI there.
+> > 
+> > Yep, but I don't think there's a bug here.  At least not for nVMX.
+> 
+> I agree this scenario should currently work (including on nSVM) - mentioned
+> it just as a constraint on solution space.
+> 
+> > > > > With the code in my previous patch set I planned to use
+> > > > > exit_during_event_injection() to detect such case, but if we implement
+> > > > > VMCB12 EVENTINJ parsing we can simply add a flag that the relevant event
+> > > > > comes from L1, so its normal injection side-effects should be skipped.
+> > > > 
+> > > > Do we still need a flag based on the above?  Honest question... I've been staring
+> > > > at all this for the better part of an hour and may have lost track of things.
+> > > 
+> > > If checking just is_guest_mode() is not enough due to reasons I described
+> > > above then we need to somehow determine in the NMI / IRQ injection handler
+> > > whether the event to be injected into L2 comes from L0 or L1.
+> > > For this (assuming we do VMCB12 EVENTINJ parsing) I think we need an extra flag.
+> > 
+> > Yes :-(  And I believe the extra flag would need to be handled by KVM_{G,S}ET_VCPU_EVENTS.
+> > 
+> 
+> Another option for saving and restoring a VM would be to add it to
+> KVM_{GET,SET}_NESTED_STATE somewhere (maybe as a part of the saved VMCB12
+> control area?).
+
+Ooh.  What if we keep nested_run_pending=true until the injection completes?  Then
+we don't even need an extra flag because nested_run_pending effectively says that
+any and all injected events are for L1=>L2.  In KVM_GET_NESTED_STATE, shove the
+to-be-injected event into the normal vmc*12 injection field, and ignore all
+to-be-injected events in KVM_GET_VCPU_EVENTS if nested_run_pending=true.
+
+That should work even for migrating to an older KVM, as keeping nested_run_pending
+will cause the target to reprocess the event injection as if it were from nested
+VM-Enter, which it technically is.
+
+We could probably get away with completely dropping the intermediate event as
+the vmc*12 should still have the original event, but that technically could result
+in architecturally incorrect behavior, e.g. if vectoring up to the point of
+interception sets A/D bits in the guest.

@@ -2,164 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E834F6B76
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46B44F6B7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiDFUd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S234355AbiDFUeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbiDFUdH (ORCPT
+        with ESMTP id S235439AbiDFUcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:33:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55E26FEA0
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649271307; x=1680807307;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nCOz63NpVNE724shHm0K8baYhqKC2a9PMwtuJZkTVWA=;
-  b=F98PrHfsoyeALeBvVzQX8T7UB98y9VwD/RYJfnwYFZMHvnMFOkpp62Yl
-   rzfj7lungqKgo+DG4LIDeJ9ufY2+FFVY/4HLhKAn1GJv3UcBZDGIuok0b
-   AJKUDUPl3fGhKL/csKGfiaFtmVmDWHOKHygj3GfLEW67D8Jn1h8hcPGll
-   I8jREfgaiSOB+UHYj/fY0JaPeKpc+kB9Qq0Mv7kFwrBaIG/X7t3mcmh29
-   v/0l1vZOddYNWYISEbBctTzSecdsWzfYwNu/1kwOFaWzBgLvB7dllYGIB
-   3+//WwRAuEm0hrI+QBHCD7idO0zivyYt3Rj3VUbpO12EUMZ+xNdIeHqlH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248654246"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="248654246"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:55:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="658650615"
-Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:55:06 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2] x86/apic: Do apic driver probe for "nosmp" use case
-Date:   Wed,  6 Apr 2022 18:54:30 +0000
-Message-Id: <20220406185430.552016-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 16:32:55 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90F136478D;
+        Wed,  6 Apr 2022 11:54:52 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id b188so3330866oia.13;
+        Wed, 06 Apr 2022 11:54:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Lm/ONmGbxsdA25Z0fG4ZT+Z1iRsHjkpKpaJkjdZ5COY=;
+        b=OBCYVmoZGwmKz2RveRDMOVs2tyG2SUzg6l843Tz1ES5nqYMeR6lhsQzbW7PrrHKUTu
+         VmLycItgZMeGPxFH7vmEO4ySoqOufvA/dj4TwdOQrM8RfkwH9Prb+2d2W/0Ipby2ueaH
+         fu7gegCEQ/hsTLIlSU/mP0S5bVtvBTv4NvjqXi1/KZDKIF4eNT6Cf3qejmolrOpAKw4t
+         89wo3dSy1TgNMovchL9KR/7Lc3t6Hw3OgHYXkC/BO7kXF4AYy8ArrrxyK+T7FKk2uDFl
+         L279xSvXzJSZsBQtvaLWy5wqLdQn+541p9KSZ+i4nlZ7UmPIrw58XJIe4RY/7AQj/uLk
+         cT+Q==
+X-Gm-Message-State: AOAM531Lwx3jQuHJcGR3Mi4XOz8NMpNO09oxgtAHUjxMkBiVWaNlihuJ
+        kbjUgaKLSWESwgIvkJZGjJ6SXbf+cw==
+X-Google-Smtp-Source: ABdhPJxXvM3z8yhyG8vVgJqle/yx/OreVndgv4ogfsuisU/phylm10J6pGMGOEt5/5eHIivc2c65lQ==
+X-Received: by 2002:a05:6808:3ad:b0:2d9:fc59:ef0e with SMTP id n13-20020a05680803ad00b002d9fc59ef0emr4358505oie.266.1649271291912;
+        Wed, 06 Apr 2022 11:54:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w7-20020a9d6387000000b005b2265711fcsm7152964otk.16.2022.04.06.11.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 11:54:51 -0700 (PDT)
+Received: (nullmailer pid 2581012 invoked by uid 1000);
+        Wed, 06 Apr 2022 18:54:50 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        ssantosh@kernel.org, vigneshr@ti.com, kishon@ti.com,
+        mathieu.poirier@linaro.org, nm@ti.com, netdev@vger.kernel.org,
+        s-anna@ti.com, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220406094358.7895-13-p-mohan@ti.com>
+References: <20220406094358.7895-1-p-mohan@ti.com> <20220406094358.7895-13-p-mohan@ti.com>
+Subject: Re: [RFC 12/13] dt-bindings: net: Add ICSSG Ethernet Driver bindings
+Date:   Wed, 06 Apr 2022 13:54:50 -0500
+Message-Id: <1649271290.537509.2581011.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the "nosmp" use case, APIC initialization code uses
-"APIC_SYMMETRIC_IO_NO_ROUTING" as a default interrupt mode. As per
-current design, APIC drivers are not probed (via
-default_setup_apic_routing()) for the above mentioned interrupt mode.
-Due to missing probe, later when local APIC is initialized (for x2APIC
-case), it leads to the null pointer exception due to missing allocation
-of "cluster_hotplug_mask" (aka 'cmsk').
+On Wed, 06 Apr 2022 15:13:57 +0530, Puranjay Mohan wrote:
+> Add a YAML binding document for the ICSSG Programmable real time unit
+> based Ethernet driver. This driver uses the PRU and PRUSS consumer APIs
+> to interface the PRUs and load/run the firmware for supporting ethernet
+> functionality.
+> 
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> ---
+>  .../bindings/net/ti,icssg-prueth.yaml         | 172 ++++++++++++++++++
+>  1 file changed, 172 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> 
 
-This is observed in TDX platform where x2APIC is enabled and "nosmp"
-command line option is allowed.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-To fix this issue, probe APIC drivers via default_setup_apic_routing()
-for the APIC_SYMMETRIC_IO_NO_ROUTING interrupt mode. This will make the
-code similar to APIC_SYMMETRIC_IO and APIC_VIRTUAL_WIRE interrupt modes.
-Since APIC_SYMMETRIC_IO_NO_ROUTING interrupt mode is in-between
-configuration between APIC_SYMMETRIC_IO and APIC_VIRTUAL_WIRE, making
-the code similar to them will not have any impact (other than just
-loading the apic drivers).
+yamllint warnings/errors:
 
-Since default_setup_apic_routing() is called for all cases with a break
-statement, move it outside the switch-case.
+dtschema/dtc warnings/errors:
+schemas/remoteproc/ti,pru-consumer.yaml: ignoring, error parsing file
+schemas/remoteproc/ti,pru-consumer.yaml: ignoring, error parsing file
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-validate", line 176, in <module>
+    sg.check_trees(filename, testtree)
+  File "/usr/local/bin/dt-validate", line 123, in check_trees
+    self.check_subtree(dt, subtree, False, "/", "/", filename)
+  File "/usr/local/bin/dt-validate", line 112, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+  File "/usr/local/bin/dt-validate", line 112, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+  File "/usr/local/bin/dt-validate", line 107, in check_subtree
+    self.check_node(tree, subtree, disabled, nodename, fullname, filename)
+  File "/usr/local/bin/dt-validate", line 51, in check_node
+    errors = sorted(dtschema.DTValidator(schema).iter_errors(node), key=lambda e: e.linecol)
+  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 1027, in iter_errors
+    for error in super().iter_errors(instance, _schema):
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 229, in iter_errors
+    for error in errors:
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/_validators.py", line 362, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 245, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 1027, in iter_errors
+    for error in super().iter_errors(instance, _schema):
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 229, in iter_errors
+    for error in errors:
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/_validators.py", line 298, in ref
+    yield from validator.descend(instance, resolved)
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 245, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 1027, in iter_errors
+    for error in super().iter_errors(instance, _schema):
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 219, in iter_errors
+    scope = id_of(_schema)
+  File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py", line 96, in _id_of
+    return schema.get("$id", "")
+AttributeError: 'NoneType' object has no attribute 'get'
 
- BUG: kernel NULL pointer dereference, address: 0000000000000000
- #PF: supervisor write access in kernel mode
- #PF: error_code(0x0002) - not-present page
- PGD 0 P4D 0
- Oops: 0002 1 SMP NOPTI
- CPU: 0 PID: 0 Comm: swapper/0 Tainted: G Y 5.14.0-rc4-tdx-guest-v5.14-2-tdx-attest-y-vsockets+ #32
- RIP: 0010:init_x2apic_ldr+0xaf/0xc0
- Code: fb 76 65 8b 15 9a 88 fb 76 89 d2 f0 48 0f ab 50 08 5b 5d 41 5c 41 5d c3 48 8b 05 74 0d fe 02 48 c7 05 69 0d fe 02 00 00 00 00 <89> 18 eb c9 48 89 e8 eb c7 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00
- RSP: 0000:ffffffff8ae03e48 EFLAGS: 00010283
- RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
- RDX: fffffffffffffffe RSI: 0000000000000000 RDI: 0000000000000200
- RBP: ffffffff8b7704a0 R08: 0000000000000000 R09: 0000000000000000
- R10: 0000000000000000 R11: 0000000000000007 R12: 0000000000000001
- R13: 0000000000017120 R14: ffffffff8ae13108 R15: ffffffff8aab7a20
- FS: 0000000000000000(0000) GS:ffff976a37c00000(0000) knlGS:0000000000000000
- CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000000 CR3: 000000017ae0c001 CR4: 00000000000606f0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
- Call Trace:
- setup_local_APIC+0x9b/0x350
- ? printk+0x58/0x6f
- apic_intr_mode_init+0xe5/0x109
- x86_late_time_init+0x20/0x30
- start_kernel+0x5fb/0x6b9
- secondary_startup_64_no_verify+0xbf/0xcb
- Modules linked in:
- CR2: 0000000000000000
- --[ end trace e82759a76de428f6 ]--
- RIP: 0010:init_x2apic_ldr+0xaf/0xc0
+doc reference errors (make refcheckdocs):
 
-Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
+See https://patchwork.ozlabs.org/patch/
 
-Changes since v1:
- * Rebased on top of v5.18-rc1.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
- arch/x86/kernel/apic/apic.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index b70344bf6600..79b8b521981c 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -1419,22 +1419,22 @@ void __init apic_intr_mode_init(void)
- 		return;
- 	case APIC_VIRTUAL_WIRE:
- 		pr_info("APIC: Switch to virtual wire mode setup\n");
--		default_setup_apic_routing();
- 		break;
- 	case APIC_VIRTUAL_WIRE_NO_CONFIG:
- 		pr_info("APIC: Switch to virtual wire mode setup with no configuration\n");
- 		upmode = true;
--		default_setup_apic_routing();
- 		break;
- 	case APIC_SYMMETRIC_IO:
- 		pr_info("APIC: Switch to symmetric I/O mode setup\n");
--		default_setup_apic_routing();
- 		break;
- 	case APIC_SYMMETRIC_IO_NO_ROUTING:
- 		pr_info("APIC: Switch to symmetric I/O mode setup in no SMP routine\n");
-+		upmode = true;
- 		break;
- 	}
- 
-+	default_setup_apic_routing();
-+
- 	if (x86_platform.apic_post_init)
- 		x86_platform.apic_post_init();
- 
--- 
-2.25.1
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

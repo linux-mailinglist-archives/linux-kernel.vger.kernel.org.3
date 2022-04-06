@@ -2,319 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B14F5EB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B104F5EBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiDFMu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S230444AbiDFMzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbiDFMto (ORCPT
+        with ESMTP id S231281AbiDFMzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:49:44 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3471E7A4A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:53:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EMiHWo+TpxhkJXv7erWOW7Y98rh6TUq99sDlyqFV2IcQCoNkssA5OSBTwEr6WacvCkaOIXz695n9VojIys9IZL1i2TZmalVLtNDd8/dEhJyjZIiYmIOy1ufvIEuMbl7pGy0P/z/IZA8NTMTpRMpa59DU8RI3b3tbxaGpkhysJOcyvQ5Et1HecN3zSy3L7p7BqPbZp2kbIPSIzW+BiyyDR7kgHcxFIiQ5VvQfoGImnL6/2Tqx68NK80HnXaV8t8oDE6gxpoRVlbVP2D0iUg4OybX0ATLIjRGH0SaSESeqXFt4nWSVUkbfFrnkR7+0fzhOQkGWwr87FVhZDpwoUojRWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=McThjsTS85EmB2fhaEdb26rTB8J93zN8afmePHG7bQ0=;
- b=etD7AzLggvSHkEdqvoOaRQe9mLDdwUvtXREvOtlulmXTO+gHtb+JBE8McYT4cPblH0fz7LuKhJGNWWA9HcoR97oreEIRxknz7ZI2Y7OM0Sw2eRhrvoxKBBHmB6JGdZZuVvxYoF+QliiwxbJPreJAIYhJchLa4vd+LdUaWoQ2MEMtWs8w3Ng7vCk1aYam/fZLiRUcFDQAcsWhvqaj5OkJYMjNL6YxE3bUsIAcJl2Z3u/srY+IptrlirR+nJHP069/UpF1eXoJvt4ejei264w5I+xrJ1JIZVR9888rCRnv+U4lEJcTBAaZJ26S8/zSOE7HisICIgBjrVnQv/HglFNgLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=lists.linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=McThjsTS85EmB2fhaEdb26rTB8J93zN8afmePHG7bQ0=;
- b=Gj2GsAaj+4Ut0vwPeVXNufKq1z3sM9hCJ6XomiAorvdbk9b8IzcQ9k0z7IfXu9kCWn/U2y4Z22r+ZrsW+BOLW0xN6SXwDI+MgBi+CHfSoiy/zjw4swyUxF1dt9kQIx4N2BQuJByxRLrE6V2lzAgFcY+3OS8oDHxc9hFTC31xKd2dQMThhBNaKZ6CDFYk4W7NEuGxXFCumD82EK8cCocRxl5oCh3n6XiQt0HkgJAbc/EeyEjX45AoxNBSauyhXi8ef4wN7qGz7T4kRowsCDu+aumOE4Bk0WfDZjcYm2+vJ6d2G1iLe/kXewaEWND26muNfAcatbO27lC7PWPBQM8KxA==
-Received: from MW4P223CA0029.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::34)
- by DM6PR12MB3978.namprd12.prod.outlook.com (2603:10b6:5:1c5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 08:53:33 +0000
-Received: from CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::83) by MW4P223CA0029.outlook.office365.com
- (2603:10b6:303:80::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23 via Frontend
- Transport; Wed, 6 Apr 2022 08:53:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT042.mail.protection.outlook.com (10.13.174.250) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5144.20 via Frontend Transport; Wed, 6 Apr 2022 08:53:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 6 Apr
- 2022 08:53:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
- 01:53:30 -0700
-Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Wed, 6 Apr
- 2022 01:53:28 -0700
-From:   Eli Cohen <elic@nvidia.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <hdanton@sina.com>, <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Eli Cohen <elic@nvidia.com>
-Subject: [PATCH RESEND V3 3/3] vdpa/mlx5: Use consistent RQT size
-Date:   Wed, 6 Apr 2022 11:53:25 +0300
-Message-ID: <20220406085325.87644-1-elic@nvidia.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 6 Apr 2022 08:55:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5083250E15;
+        Wed,  6 Apr 2022 01:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649235355; x=1680771355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oQ/+Wg3GyoNAcQbYLklGfVrwQ6XwL0N97xAXaF7/B+A=;
+  b=Lr7Ls7hqx6LCKpeE6a8mm0LAb84h3ikmB5/6g0Yr+8BDMa3L/uRabbuL
+   ZNClWV5J9Uy9kcsAg9CNSIPtfAAwSfyaPCiLkc8cqCGh9DY6jOwXMb9Bf
+   LTBiSP4vMVbkT7WIwm0/BIcc4wFnaa7cZvxfFyKw8yN/QyNgVy2ZVnaqd
+   yqpNXJ/kwuCVSchsQ26/wz0r8nLT0Uba0KpcpI+bq7/wxeducy1HC1IAa
+   tRfniveTZDEA3M8fD2YtB1mIYa0l57Lhg1v1SB9OWt6ufo7UgZJl3m8pF
+   fgwNiHNZB1Kc+ZqRAsYyQSQHWIDmPexgDmfKr4TAUV5TFCMcurJgwELky
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="241576610"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="241576610"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 01:55:38 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="524383433"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 01:55:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nc1QT-000BGu-Cl;
+        Wed, 06 Apr 2022 11:54:05 +0300
+Date:   Wed, 6 Apr 2022 11:54:05 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH 2/2] tty: Implement lookahead to process XON/XOFF timely
+Message-ID: <Yk1VLWMmMu6jJEWo@smile.fi.intel.com>
+References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
+ <20220405102437.4842-3-ilpo.jarvinen@linux.intel.com>
+ <YkxqGDsURPpkDM5W@smile.fi.intel.com>
+ <fce9c28e-a334-3c70-3a6a-8812f11d8fc7@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5e5235a0-2f4f-4c2b-756d-08da17aaed37
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3978:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3978A62E3223311C89F9CFD9ABE79@DM6PR12MB3978.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Oas1nllwNIUs4X1Q125TWedDfH4JeI75SzthrB1nFGw/jwlwFdJAuTqpgEInE8pRR9gzyWMk94NfIWrnzLI10iVXybHMdCPlVFCYjPLrefpH5+xGCJptvNNpB20QmuoY+4olOQjMK9xXIqX53QFkXO6BI6V1Db1LFz4yfyq51JQruwnMyMV8G3oetkWSWYkqQcdnViU76prjVD+JZIMTGiBv+AN5ByXlJazw0eXX7r3G2Xka7wlA6UzpdGgWVIaKUKDWavZ69vczeC7+MwBJrLDQLjU6b0zjCljiSIj1sFwHlFrinZ7WuXc/bi2ZLOCwAYVSEFBo68SY2vR0mmex2aX+qiMFcsUbSg9o3yhk++lpezuzZVLCO/pDPaW3J2BXcEAeQ5zGxVLaRNNC7xgsygrQAxkMt/CHr+kxORS40ln+gXYRwMjnufxkNEa6OYW5s5WEJjn1+roQUZUK4ihdew29HKMzdr9XtHj+Jh54qOWT0W19A6k34hZPcUEUrSu3DOx2V/zlFaIko/g6LxlPV3B4HI73xAmI7mEKdIk8mlFYCutr0Ont0rYvBefOei2m1lAdgH/EJtp9j6MN/SB/Lu3Uu8tPWtf7dc15XaSBg2WYSKiI4I3URAGgyUCO37v4s6KeCB99edn3ijH2xb1Of44++l4UywOLXbM4xzrGAbfrP4FwY32M97MYLkuelMqWa402ugHvCz72TFR/O6RGKA==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(5660300002)(186003)(82310400005)(2906002)(316002)(81166007)(356005)(36756003)(36860700001)(47076005)(7696005)(1076003)(83380400001)(508600001)(107886003)(4326008)(54906003)(26005)(8676002)(86362001)(6666004)(40460700003)(70586007)(336012)(8936002)(426003)(110136005)(2616005)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 08:53:31.6810
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e5235a0-2f4f-4c2b-756d-08da17aaed37
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3978
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fce9c28e-a334-3c70-3a6a-8812f11d8fc7@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current code evaluates RQT size based on the configured number of
-virtqueues. This can raise an issue in the following scenario:
+On Wed, Apr 06, 2022 at 10:21:12AM +0200, Jiri Slaby wrote:
+> On 05. 04. 22, 18:11, Andy Shevchenko wrote:
+> > On Tue, Apr 05, 2022 at 01:24:37PM +0300, Ilpo Järvinen wrote:
+> > > When tty is not read from, XON/XOFF may get stuck into an
+> > > intermediate buffer. As those characters are there to do software
+> > > flow-control, it is not very useful. In the case where neither end
+> > > reads from ttys, the receiving ends might not be able receive the
+> > > XOFF characters and just keep sending more data to the opposite
+> > > direction. This problem is almost guaranteed to occur with DMA
+> > > which sends data in large chunks.
+> > > 
+> > > If TTY is slow to process characters, that is, eats less than given
+> > > amount in receive_buf, invoke lookahead for the rest of the chars
+> > > to process potential XON/XOFF characters.
+> > > 
+> > > The guards necessary for ensuring the XON/XOFF character are
+> > > processed only once were added by the previous patch. All this patch
+> > > needs to do on that front is to pass the lookahead count (that can
+> > > now be non-zero) into port->client_ops->receive_buf().
+> > 
+> > ...
+> > 
+> > > +static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
+> > > +					 bool lookahead_done)
+> > > +{
+> > > +	if (!I_IXON(tty))
+> > > +		return false;
+> > > +
+> > > +	if (c == START_CHAR(tty)) {
+> > > +		if (!lookahead_done) {
+> > > +			start_tty(tty);
+> > > +			process_echoes(tty);
+> > > +		}
+> > > +		return true;
+> > > +	}
+> > > +	if (c == STOP_CHAR(tty)) {
+> > > +		if (!lookahead_done)
+> > > +			stop_tty(tty);
+> > > +		return true;
+> > > +	}
+> > > +	return false;
+> > > +}
+> > 
+> > Looking into this I would first make a preparatory patch that splits out
+> > current code into something like
+> > 
+> > static bool __n_tty_receive_char_special_no_lookahead(struct tty_struct *tty, unsigned char c)
+> > {
+> > 	...current code...
+> > }
+> > 
+> > Then in the patch 1 you add
+> > 
+> > static bool __n_tty_receive_char_special_lookahead(struct tty_struct *tty, unsigned char c)
+> > {
+> > 	...
+> > }
+> > 
+> > static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
+> > 					 bool lookahead_done)
+> 
+> This should be dubbed better. Maybe n_tty_receive_char_flow_control()?
+> 
+> And I would place the if (I_IXON(tty)) to the caller. I am a bit lost in
+> this pseudo code, so maybe this doesn't make sense in your proposal. I have
+> something like in my mind:
+> 
+> if (I_IXON(tty))
+>   return n_tty_receive_char_flow_control();
 
-Assume MQ was negotiated.
-1. mlx5_vdpa_set_map() gets called.
-2. handle_ctrl_mq() is called setting cur_num_vqs to some value, lower
-   than the configured max VQs.
-3. A second set_map gets called, but now a smaller number of VQs is used
-   to evaluate the size of the RQT.
-4. handle_ctrl_mq() is called with a value larger than what the RQT can
-   hold. This will emit errors and the driver state is compromised.
+My point to have three helpers which make each change cleaner:
 
-To fix this, we use a new field in struct mlx5_vdpa_net to hold the
-required number of entries in the RQT. This value is evaluated in
-mlx5_vdpa_set_driver_features() where we have the negotiated features
-all set up.
+  .-> n_tty_receive_char_flow_control_lah()
+  |
+  |  .-> n_tty_receive_char_flow_control_no_lah()
+  |  |
+  `- + -- n_tty_receive_char_flow_control()
 
-In addition to that, we take into consideration the max capability of RQT
-entries early when the device is added so we don't need to take consider
-it when creating the RQT.
+Where no_lah variant can be split as preparatory patch prepending the current
+series.
 
-Last, we remove the use of mlx5_vdpa_max_qps() which just returns the
-max_vas / 2 and make the code clearer.
+And yes, calling I_IXON at the caller seems better.
 
-Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Eli Cohen <elic@nvidia.com>
----
-V2 -> V3:
-Fix typo in change log
-Add acked-by Jason
+> Historically, these n_tty_receive* function names were a big mess. Don't
+> produce more of that by simply prepending only "__".
+> 
+> > {
+> > 	if (!I_IXON(tty))
+> > 		return false;
+> > 
+> > 	if (lookahead_done)
+> > 		return _lookahead();
+> > 
+> > 	return _no_lookahead();
+> > }
 
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 61 +++++++++++--------------------
- 1 file changed, 21 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 79001301b383..e0de44000d92 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -161,6 +161,7 @@ struct mlx5_vdpa_net {
- 	struct mlx5_flow_handle *rx_rule_mcast;
- 	bool setup;
- 	u32 cur_num_vqs;
-+	u32 rqt_size;
- 	struct notifier_block nb;
- 	struct vdpa_callback config_cb;
- 	struct mlx5_vdpa_wq_ent cvq_ent;
-@@ -204,17 +205,12 @@ static __virtio16 cpu_to_mlx5vdpa16(struct mlx5_vdpa_dev *mvdev, u16 val)
- 	return __cpu_to_virtio16(mlx5_vdpa_is_little_endian(mvdev), val);
- }
- 
--static inline u32 mlx5_vdpa_max_qps(int max_vqs)
--{
--	return max_vqs / 2;
--}
--
- static u16 ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev)
- {
- 	if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
- 		return 2;
- 
--	return 2 * mlx5_vdpa_max_qps(mvdev->max_vqs);
-+	return mvdev->max_vqs;
- }
- 
- static bool is_ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev, u16 idx)
-@@ -1236,25 +1232,13 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
- static int create_rqt(struct mlx5_vdpa_net *ndev)
- {
- 	__be32 *list;
--	int max_rqt;
- 	void *rqtc;
- 	int inlen;
- 	void *in;
- 	int i, j;
- 	int err;
--	int num;
--
--	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
--		num = 1;
--	else
--		num = ndev->cur_num_vqs / 2;
- 
--	max_rqt = min_t(int, roundup_pow_of_two(num),
--			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
--	if (max_rqt < 1)
--		return -EOPNOTSUPP;
--
--	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
-+	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
- 	in = kzalloc(inlen, GFP_KERNEL);
- 	if (!in)
- 		return -ENOMEM;
-@@ -1263,12 +1247,12 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
- 	rqtc = MLX5_ADDR_OF(create_rqt_in, in, rqt_context);
- 
- 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
--	MLX5_SET(rqtc, rqtc, rqt_max_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_max_size, ndev->rqt_size);
- 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
--	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
--		list[i] = cpu_to_be32(ndev->vqs[j % (2 * num)].virtq_id);
-+	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
-+		list[i] = cpu_to_be32(ndev->vqs[j % ndev->cur_num_vqs].virtq_id);
- 
--	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
- 	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
- 	kfree(in);
- 	if (err)
-@@ -1282,19 +1266,13 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
- static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
- {
- 	__be32 *list;
--	int max_rqt;
- 	void *rqtc;
- 	int inlen;
- 	void *in;
- 	int i, j;
- 	int err;
- 
--	max_rqt = min_t(int, roundup_pow_of_two(ndev->cur_num_vqs / 2),
--			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
--	if (max_rqt < 1)
--		return -EOPNOTSUPP;
--
--	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
-+	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
- 	in = kzalloc(inlen, GFP_KERNEL);
- 	if (!in)
- 		return -ENOMEM;
-@@ -1305,10 +1283,10 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
- 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
- 
- 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
--	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
-+	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
- 		list[i] = cpu_to_be32(ndev->vqs[j % num].virtq_id);
- 
--	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
- 	err = mlx5_vdpa_modify_rqt(&ndev->mvdev, in, inlen, ndev->res.rqtn);
- 	kfree(in);
- 	if (err)
-@@ -1625,7 +1603,7 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
- 
- 		newqps = mlx5vdpa16_to_cpu(mvdev, mq.virtqueue_pairs);
- 		if (newqps < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
--		    newqps > mlx5_vdpa_max_qps(mvdev->max_vqs))
-+		    newqps > ndev->rqt_size)
- 			break;
- 
- 		if (ndev->cur_num_vqs == 2 * newqps) {
-@@ -1989,7 +1967,7 @@ static int setup_virtqueues(struct mlx5_vdpa_dev *mvdev)
- 	int err;
- 	int i;
- 
--	for (i = 0; i < 2 * mlx5_vdpa_max_qps(mvdev->max_vqs); i++) {
-+	for (i = 0; i < mvdev->max_vqs; i++) {
- 		err = setup_vq(ndev, &ndev->vqs[i]);
- 		if (err)
- 			goto err_vq;
-@@ -2060,9 +2038,11 @@ static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
- 
- 	ndev->mvdev.actual_features = features & ndev->mvdev.mlx_features;
- 	if (ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ))
--		ndev->cur_num_vqs = 2 * mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
-+		ndev->rqt_size = mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
- 	else
--		ndev->cur_num_vqs = 2;
-+		ndev->rqt_size = 1;
-+
-+	ndev->cur_num_vqs = 2 * ndev->rqt_size;
- 
- 	update_cvq_info(mvdev);
- 	return err;
-@@ -2529,7 +2509,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
- 	struct mlx5_vdpa_virtqueue *mvq;
- 	int i;
- 
--	for (i = 0; i < 2 * mlx5_vdpa_max_qps(ndev->mvdev.max_vqs); ++i) {
-+	for (i = 0; i < ndev->mvdev.max_vqs; ++i) {
- 		mvq = &ndev->vqs[i];
- 		memset(mvq, 0, offsetof(struct mlx5_vdpa_virtqueue, ri));
- 		mvq->index = i;
-@@ -2671,7 +2651,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 		return -EOPNOTSUPP;
- 	}
- 
--	max_vqs = MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues);
-+	max_vqs = min_t(int, MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues),
-+			1 << MLX5_CAP_GEN(mdev, log_max_rqt_size));
- 	if (max_vqs < 2) {
- 		dev_warn(mdev->device,
- 			 "%d virtqueues are supported. At least 2 are required\n",
-@@ -2742,7 +2723,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 		ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
- 	}
- 
--	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, mlx5_vdpa_max_qps(max_vqs));
-+	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, max_vqs / 2);
- 	mvdev->vdev.dma_dev = &mdev->pdev->dev;
- 	err = mlx5_vdpa_alloc_resources(&ndev->mvdev);
- 	if (err)
-@@ -2769,7 +2750,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	ndev->nb.notifier_call = event_handler;
- 	mlx5_notifier_register(mdev, &ndev->nb);
- 	mvdev->vdev.mdev = &mgtdev->mgtdev;
--	err = _vdpa_register_device(&mvdev->vdev, 2 * mlx5_vdpa_max_qps(max_vqs) + 1);
-+	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1);
- 	if (err)
- 		goto err_reg;
- 
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 

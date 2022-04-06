@@ -2,136 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551F24F5AAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520FF4F5BB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236214AbiDFKkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S1346462AbiDFKlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242168AbiDFKjE (ORCPT
+        with ESMTP id S1354092AbiDFKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:39:04 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC10D4BFCF;
-        Wed,  6 Apr 2022 00:04:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XkpGShSOtrQdXXXpqlQiKIJIBo5tayg8Sdbp3Th3aglL1UZKTwJ4M2cut0cYgMX0kTWv+uGd/oxE3eoL6D0DbufwJ+tOYN1jQrGYXATow/T9Hw3xJ8lzeL3Rdr4wpjtZizJ1ghU9QmlLVB4+8izpG9+wVkqq1v4j8TrTgj+tn7tUFA6CiwHbjeNc44E8J6/2RIcbKc8cbZHg0iogB4uZA6UBY+axbkANrgyxZ1xkxvIvD3z0t7dw6B0G3Na/4keOLlMjVQ1xkvA88b6dsKkkNGJ8cn5M5UaDbmR71GuXcA5Acflr3bBxHmgGQ5DgCofQEdsaC3AVxqPkZXCz+mzi4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2em0mDVlhltllKvMC+54AC2/kYS0S1+Cpug54H6ZNwI=;
- b=JmlHrfyaFgCVOCLh0Pb+RS/r+qyV3cqoHqHhMDYf4Sc1tieaQnMz3CqPzmMyqI/C+d6p5ZmQgL0YQHcHYQNgU8KGi8GuyKwE7wayDWjSGuWep6LZLKg7LSUrEfs4DaZ3gCEcEAIQAZ9JeaVY7VNXX6HkbEWqaBs4UuT1GMaKu8iyZ7bDrWUK/Tv5jNMUJUe51n/HGdLSGHAl9djXK7sE9HzGDKqpVyFIZ0TEGPhrFjYZIMUXSsoMihsbmPBd1OuaNNnzhIw+cGIVLqQ2xErT/2/ckDMUhqb/UhPotK/mTQWlIQwZNW41uHPG4WyEKE6eueYgOa1MYRysO0h4KURoOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2em0mDVlhltllKvMC+54AC2/kYS0S1+Cpug54H6ZNwI=;
- b=tTFEfIYHfZwCAdNLFxm1LZsr9pvuMawERZ9OKhBfj7MJf1Xj4TnTO0Kr8nU6dtgS5DzaG5TkiJdDE0ECLPw47CzMvOgww9cGxdNUQ2y1meds+o++OVzYj2Al2RueGd3Is3zdosAvtpNnTX145qH5iCRM2iw/hM3hScCsf6P31lhamD6DNkp6SRvpZDP0WxLKW+8MWDEISNrNA1GZ/CWsmsIcPdHss1edXhevPcoJaslUAoAtLwRCfBLmST2WoO8bFf2fStMRP+wa8sdsxgqzGlbkkHxBZsUDAPdqvkoquvWn/6ys7HSDSp2q1b1rSPLyZpNyD/weRhxIO/QRE5XiYQ==
-Received: from DM6PR07CA0050.namprd07.prod.outlook.com (2603:10b6:5:74::27) by
- DM8PR12MB5479.namprd12.prod.outlook.com (2603:10b6:8:38::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.31; Wed, 6 Apr 2022 07:04:24 +0000
-Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:74:cafe::b5) by DM6PR07CA0050.outlook.office365.com
- (2603:10b6:5:74::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.29 via Frontend
- Transport; Wed, 6 Apr 2022 07:04:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5144.20 via Frontend Transport; Wed, 6 Apr 2022 07:04:18 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 6 Apr
- 2022 07:04:18 +0000
-Received: from localhost (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
- 00:04:17 -0700
-Date:   Wed, 6 Apr 2022 10:04:14 +0300
-From:   Leon Romanovsky <leonro@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>, <linux-kernel@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH mlx5-next 0/5] Drop Mellanox FPGA TLS support from the
- kernel
-Message-ID: <Yk07bqnHhuT8QjS7@unreal>
-References: <cover.1649073691.git.leonro@nvidia.com>
+        Wed, 6 Apr 2022 06:39:58 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1764F9164
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:05:15 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id x9so1277627ilc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8brfd4/xj9n/UUbz1QgkS/+4GSIqfRVY8lKR+Ve02ZQ=;
+        b=JdmbHxbY+8JX8cz01LU1ksij0DZUUY5x8192E1h/BvzuCqmGoiCxSLWZGq/eUFalNQ
+         FvgdOGyW7HR22BregNT2UoSHD0vPqGHLrJwx1aDv9q7U873nHfCuf78RsyUSc+ZcGqrt
+         ARFSoeUGxNOaJsAmv9OWIFVADgnLvreKjzgQ+X/UgBgUjdshdt69STvqXE9ryra9YXcz
+         tlOgUvoN7+ICqARPWqV/H1thtHogeFL8pChzPVxluHKwcdyMd31i0hpCMkVFNkPxtF4+
+         fsNuURlQa2SOtu4YVpsWQIIbmR0826UtJrMtvsmG4M6irpThm4Ca+kXyxBahGpgu1NTy
+         WtYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8brfd4/xj9n/UUbz1QgkS/+4GSIqfRVY8lKR+Ve02ZQ=;
+        b=5radINduU3LTbusAnYOjkiWYVEQg+gNjm6zPb6CqM1hG1TyUyJb50gFlKc7tbmxSjY
+         CNsT/uk65azoKoFpkTvjZEgOAa90m8AYdCjNAvPuB4YspaHrhZM+5i//ugNcIYlKf4f8
+         5wHj9699yrZtE6Q3p0TZMgvsU5f/Uk+3FebzGfMfl4XQNBsjkF1uBCGV3qw1eKm8Oj7H
+         2ZB/KyFAvV1Spm+FM79HK8MifzI4CplVkZKTO6qAWpyKKjBCk0hS6zP/UtcKwSk3oGYw
+         Vwfa5KkzQbgrARnLjFs1vR2q2kqBrIFwDSWvG0BTR6dPcuNbD8GnCHxO/OmPF9dsUl6j
+         3gMw==
+X-Gm-Message-State: AOAM533YTDAoyP+PCR+VCKNvLWp2q7feAJ1VpJf3EuI7IlGTxksJOecW
+        ALHbOicNAyhYz4CeioQwe0bQfuS7kQUx5jWm2215gQ==
+X-Google-Smtp-Source: ABdhPJyrivXGrt8+ghdHPltEhU5fpHsONeQ1s+2axYkZ4w0Kr/omf9D2IlBFQgtQEsUmDyutKX0N/t/HwMpd6fu5qzY=
+X-Received: by 2002:a92:cd8b:0:b0:2c9:ded9:f20d with SMTP id
+ r11-20020a92cd8b000000b002c9ded9f20dmr3307152ilb.300.1649228714777; Wed, 06
+ Apr 2022 00:05:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <cover.1649073691.git.leonro@nvidia.com>
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1725ea7-03aa-4ec2-5aa0-08da179bab6f
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5479:EE_
-X-Microsoft-Antispam-PRVS: <DM8PR12MB54795A366C3E9D3D7876D056BDE79@DM8PR12MB5479.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zX81UJObQTxWIX2OE5r381kRj3qWB/3fdIpqWnKyYsuLgIxGYQvjOmPHmfN9duLnZJHBkrkumFy7HLgriLX22k7DL59XtseLXJQr6TBWR3XHPSGV3h2rvVEHp2xPYW7Ok/tM/xzDVrQ4YSlwMsQjiNKzgZzwAGu1chDip5S9v2/9cR5ktgRDvzo280UfzMU8XtaBhtEkRZO6ycUQDmlCJ4Up75zSc8zo0RbcP8YqBLn96jZwnouP5AIEavKvaLRVJ98f9/GD+wIbMyz2JkxvlA13SAuPMm5APDSFZ9WOW6w9FUUI9GYiSS6fN+dDN1Cgg3EkmS/YH79OZmHAukGbpZQsPl5MyIHTpFcEhc+9D+J+A2b06rt2ZpKa0k0pXS6a6EouIfFZZ5T4h/RJ7xwrPPH59LqQtacZjzqwDah3oB4giLa4aNTEsfEeZTP1U4o3wYaItDkNSLiqNFiK0oE8h09O3gRASsVYiJEC84zg3emCmKGcE7KQiETEOuu9U59pc0ObKnEzIFi28ShZYXZHPoWyPLi6rnMzbqtnXoAxyQu402sePYTl6aIS6sbCRGscT+hvVBXev/cw+xHd66xHfAwkdOsdKsGxCeWMDLnw/TQmhNvExTZXxvyez7yF1g8y/V3zJXZpdvL2q5NojviWeSqA56EXekhN78lj/uasOkxElg1J/gaYNqaT/H7EYFBK9w1ae4UuUQ6R9DnRt3UWGocLybbgvxTeBKwpiJWqE8pzVTstoJIo2pT9mr3XbPdr0SiG/Y26gKkFAvOkcwkCuMuZQZe0Q1G10zmeIce+D5U=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(7916004)(46966006)(40470700004)(36840700001)(8676002)(70586007)(70206006)(4326008)(2906002)(86362001)(356005)(82310400005)(5660300002)(8936002)(83380400001)(81166007)(36860700001)(426003)(6666004)(40460700003)(16526019)(54906003)(186003)(316002)(47076005)(110136005)(336012)(9686003)(966005)(107886003)(26005)(33716001)(508600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 07:04:18.8667
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1725ea7-03aa-4ec2-5aa0-08da179bab6f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5479
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <YkcEMdsi9G5y8mX4@dhcp22.suse.cz> <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
+ <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
+ <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
+ <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u_FVEVE+wTBNYfDibLVKsRuOwEnpigYYRiZ2MbeUs1u8w@mail.gmail.com>
+ <877d82vi13.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <877d82vi13.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Wed, 6 Apr 2022 00:05:03 -0700
+Message-ID: <CAAPL-u8u77yazFpc2R216j6ObAiANb0Lfxt7DcT9P=3eg60u9Q@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Cgroups <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:08:14PM +0300, Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
-> 
-> Mellanox INNOVA TLS cards are EOL in May, 2018 [1]. As such, the code
-> is unmaintained, untested and not in-use by any upstream/distro oriented
-> customers. In order to reduce code complexity, drop the kernel code,
-> clean build config options and delete useless kTLS vs. TLS separation.
->     
-> [1] https://network.nvidia.com/related-docs/eol/LCR-000286.pdf
->     
-> Thanks
-> 
-> BTW, the target of this series is mlx5-next, as other series removes
-> FPGA IPsec together with relevant cleanup in RDMA side.
-> 
-> Leon Romanovsky (5):
->   net/mlx5_fpga: Drop INNOVA TLS support
->   net/mlx5: Reliably return TLS device capabilities
->   net/mlx5: Remove indirection in TLS build
->   net/mlx5: Remove tls vs. ktls separation as it is the same
->   net/mlx5: Cleanup kTLS function names and their exposure
-> 
+On Tue, Apr 5, 2022 at 11:32 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> > On Tue, Apr 5, 2022 at 7:50 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >>
+> >> Wei Xu <weixugc@google.com> writes:
+> >>
+> >> > On Tue, Apr 5, 2022 at 5:49 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >> >>
+> >> >> Wei Xu <weixugc@google.com> writes:
+> >> >>
+> >> >> > On Sat, Apr 2, 2022 at 1:13 AM Huang, Ying <ying.huang@intel.com> wrote:
+> >> >> >>
+> >> >> >> Wei Xu <weixugc@google.com> writes:
+> >> >> >>
+> >> >> >> > On Fri, Apr 1, 2022 at 6:54 AM Michal Hocko <mhocko@suse.com> wrote:
+> >> >> >> >>
+> >> >> >> >> On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
+> >> >> >> >> > From: Shakeel Butt <shakeelb@google.com>
+> >> >> >> >> >
+> >> >> >>
+> >> >> >> [snip]
+> >> >> >>
+> >> >> >> >> > Possible Extensions:
+> >> >> >> >> > --------------------
+> >> >> >> >> >
+> >> >> >> >> > - This interface can be extended with an additional parameter or flags
+> >> >> >> >> >   to allow specifying one or more types of memory to reclaim from (e.g.
+> >> >> >> >> >   file, anon, ..).
+> >> >> >> >> >
+> >> >> >> >> > - The interface can also be extended with a node mask to reclaim from
+> >> >> >> >> >   specific nodes. This has use cases for reclaim-based demotion in memory
+> >> >> >> >> >   tiering systens.
+> >> >> >> >> >
+> >> >> >> >> > - A similar per-node interface can also be added to support proactive
+> >> >> >> >> >   reclaim and reclaim-based demotion in systems without memcg.
+> >> >> >> >> >
+> >> >> >> >> > For now, let's keep things simple by adding the basic functionality.
+> >> >> >> >>
+> >> >> >> >> Yes, I am for the simplicity and this really looks like a bare minumum
+> >> >> >> >> interface. But it is not really clear who do you want to add flags on
+> >> >> >> >> top of it?
+> >> >> >> >>
+> >> >> >> >> I am not really sure we really need a node aware interface for memcg.
+> >> >> >> >> The global reclaim interface will likely need a different node because
+> >> >> >> >> we do not want to make this CONFIG_MEMCG constrained.
+> >> >> >> >
+> >> >> >> > A nodemask argument for memory.reclaim can be useful for memory
+> >> >> >> > tiering between NUMA nodes with different performance.  Similar to
+> >> >> >> > proactive reclaim, it can allow a userspace daemon to drive
+> >> >> >> > memcg-based proactive demotion via the reclaim-based demotion
+> >> >> >> > mechanism in the kernel.
+> >> >> >>
+> >> >> >> I am not sure whether nodemask is a good way for demoting pages between
+> >> >> >> different types of memory.  For example, for a system with DRAM and
+> >> >> >> PMEM, if specifying DRAM node in nodemask means demoting to PMEM, what
+> >> >> >> is the meaning of specifying PMEM node? reclaiming to disk?
+> >> >> >>
+> >> >> >> In general, I have no objection to the idea in general.  But we should
+> >> >> >> have a clear and consistent interface.  Per my understanding the default
+> >> >> >> memcg interface is for memory, regardless of memory types.  The memory
+> >> >> >> reclaiming means reduce the memory usage, regardless of memory types.
+> >> >> >> We need to either extending the semantics of memory reclaiming (to
+> >> >> >> include memory demoting too), or add another interface for memory
+> >> >> >> demoting.
+> >> >> >
+> >> >> > Good point.  With the "demote pages during reclaim" patch series,
+> >> >> > reclaim is already extended to demote pages as well.  For example,
+> >> >> > can_reclaim_anon_pages() returns true if demotion is allowed and
+> >> >> > shrink_page_list() can demote pages instead of reclaiming pages.
+> >> >>
+> >> >> These are in-kernel implementation, not the ABI.  So we still have
+> >> >> the opportunity to define the ABI now.
+> >> >>
+> >> >> > Currently, demotion is disabled for memcg reclaim, which I think can
+> >> >> > be relaxed and also necessary for memcg-based proactive demotion.  I'd
+> >> >> > like to suggest that we extend the semantics of memory.reclaim to
+> >> >> > cover memory demotion as well.  A flag can be used to enable/disable
+> >> >> > the demotion behavior.
+> >> >>
+> >> >> If so,
+> >> >>
+> >> >> # echo A > memory.reclaim
+> >> >>
+> >> >> means
+> >> >>
+> >> >> a) "A" bytes memory are freed from the memcg, regardless demoting is
+> >> >>    used or not.
+> >> >>
+> >> >> or
+> >> >>
+> >> >> b) "A" bytes memory are reclaimed from the memcg, some of them may be
+> >> >>    freed, some of them may be just demoted from DRAM to PMEM.  The total
+> >> >>    number is "A".
+> >> >>
+> >> >> For me, a) looks more reasonable.
+> >> >>
+> >> >
+> >> > We can use a DEMOTE flag to control the demotion behavior for
+> >> > memory.reclaim.  If the flag is not set (the default), then
+> >> > no_demotion of scan_control can be set to 1, similar to
+> >> > reclaim_pages().
+> >>
+> >> If we have to use a flag to control the behavior, I think it's better to
+> >> have a separate interface (e.g. memory.demote).  But do we really need b)?
+> >>
+> >
+> > I am fine with either approach: a separate interface similar to
+> > memory.reclaim, but dedicated to demotion, or multiplexing
+> > memory.reclaim for demotion with a flag.
+> >
+> > My understanding is that with the "demote pages during reclaim"
+> > support, b) is the expected behavior, or more precisely, pages that
+> > cannot be demoted may be freed or swapped out.  This is reasonable.
+> > Demotion-only can also be supported via some arguments to the
+> > interface and changes to demotion code in the kernel.  After all, this
+> > interface is being designed to be extensible based on the discussions
+> > so far.
+>
+> I think we should define the interface not from the current
+> implementation point of view, but from the requirement point of view.
+> For proactive reclaim, per my understanding, the requirement is,
+>
+>   we found that there's some cold pages in some workloads, so we can
+>   take advantage of the proactive reclaim to reclaim some pages so that
+>   other workload can use the freed memory.
+>
+> For proactive demotion, per my understanding, the requirement could be,
+>
+>   We found that there's some cold pages in fast memory (e.g. DRAM) in
+>   some workloads, so we can take advantage of the proactive demotion to
+>   demote some pages so that other workload can use the freed fast
+>   memory.  Given the DRAM partition support Tim (Cced) is working on.
+>
+> Why do we need something in the middle?
 
-Thanks, applied to mlx5-next.
+Maybe there is some misunderstanding.  As you said, demotion is to
+free up fast memory.  If pages on fast memory cannot be demoted, but
+can still be reclaimed to free some fast memory, it is useful, too.
+Certainly, we can also add the support and configure the policy to
+only demote, not reclaim, from fast memory in such cases.
 
-7a9104ea9011 net/mlx5: Cleanup kTLS function names and their exposure
-943aa7bda373 net/mlx5: Remove tls vs. ktls separation as it is the same
-691f17b980d0 net/mlx5: Remove indirection in TLS build
-e59437aa7ae6 net/mlx5: Reliably return TLS device capabilities
-40379a0084c2 net/mlx5_fpga: Drop INNOVA TLS support
+In any case, we will not reclaim from slow memory for demotion, if
+that is the middle thing you refer to.  This is why nodemask is
+proposed for memory.reclaim to support the demotion use case.  With a
+separate memory.demote interface and memory tiering topology among
+NUMA nodes being well defined by the kernel and shared with the
+userspace, we can omit the nodemask argument.
+
+> Best Regards,
+> Huang, Ying
+>
+> >> > The question is then whether we want to rename memory.reclaim to
+> >> > something more general.  I think this name is fine if reclaim-based
+> >> > demotion is an accepted concept.
+> >>
+> >> Best Regards,
+> >> Huang, Ying

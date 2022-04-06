@@ -2,100 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98FA4F633E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682EC4F6353
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiDFP1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S236016AbiDFP2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236165AbiDFP0r (ORCPT
+        with ESMTP id S236094AbiDFP1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:26:47 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A0F567C51;
-        Wed,  6 Apr 2022 05:25:26 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-dacc470e03so2688068fac.5;
-        Wed, 06 Apr 2022 05:25:26 -0700 (PDT)
+        Wed, 6 Apr 2022 11:27:09 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19039407E27;
+        Wed,  6 Apr 2022 05:25:44 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id i10-20020a17090a2aca00b001ca56c9ab16so3921970pjg.1;
+        Wed, 06 Apr 2022 05:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=u4lQcQZ+imfh4MOd3QbHlEhGcU+MXHsvZG3cns0j61I=;
+        b=akzK0B7lVqP4dRsVOS9uOB3iL0Vmy9LqMijzk47ODkF1PEUAI/jNHSGorvJnzT0Oy9
+         AIKplwtBFlQhfUVC59dPSkfG08+pw8aAneA7b6IIHzS+lkjwZWlM0BSyhNtv3nra3nLl
+         48SaenkFEFzBzVqMt/KKVRAm0GliPl3bZD3Udlu3zyd+2BTVXz5WPq0eJrWK/V7Ln1BB
+         uk/wM07K5Cbl42WIsgszpAi6CjTHaA9rcdrXuiLuGYu1NwsHPTZ5zB9wsUsrq6zNw8hN
+         d7mCD6Tfc2UdvWlDKJD2fsaQoeb3spbvsQL/5f6kWgBS/JOE6Cs83OTDhIx7irtIhvkC
+         jaxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ZAiwNLyOdCqn327S7Lza4+QFCdIZGu76iyxPe00STg8=;
-        b=fEQ/gv2HdE5MFizzHU2tW9pk31Ssp6GcGqPzi5tOmIh4f0YiAaAR5hbmVAYQo+84yL
-         r5oeysMMV81jXpk5F+DsSNNdg8DxhegaNm39LyImOORn0aXL9bIBmqCQEbyHPXSdZkQ+
-         ljHQfubXjpTx7XZS21o0sGQCqjeB1f1gadz/tGwYC0duhYoP8pn95djxwYS8sBGhGbHZ
-         OI5xn/LgFbcbskryauR55Grr+4zgxYTP1bFKTUrRsRhjLfQ3j6gVncoOqR3UObzWIbSq
-         k6pQt5wCtNcPOkZqyDc71GqhEf55F0GtnSfrrOeIAjcaItz+3+KjNxzhDnitbxspDoB3
-         Mo7Q==
-X-Gm-Message-State: AOAM531Qz5UrBB0ImVRUL4jtR6SqtTaQVncJlDbggjWDOX1dqwUC6Ulv
-        f6OW0AbS9CvhCcVCZaKNlXlWwOf/ew==
-X-Google-Smtp-Source: ABdhPJw7dq0Mj6SFn7qO94i5CoOYKOOyYXs9QtdK23qSduHeloMb3lGgbs5sF7l1G1NkfAXjnetxhA==
-X-Received: by 2002:a05:6870:c109:b0:d9:e74e:d09a with SMTP id f9-20020a056870c10900b000d9e74ed09amr3640814oad.142.1649247925324;
-        Wed, 06 Apr 2022 05:25:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5902589oot.46.2022.04.06.05.25.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 05:25:24 -0700 (PDT)
-Received: (nullmailer pid 2048304 invoked by uid 1000);
-        Wed, 06 Apr 2022 12:25:24 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, qperret@google.com,
-        maz@kernel.org, linux-watchdog@vger.kernel.org, will@kernel.org
-In-Reply-To: <20220405141954.1489782-2-sebastianene@google.com>
-References: <20220405141954.1489782-1-sebastianene@google.com> <20220405141954.1489782-2-sebastianene@google.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add qemu,vm-watchdog compatible
-Date:   Wed, 06 Apr 2022 07:25:24 -0500
-Message-Id: <1649247924.294947.2048303.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=u4lQcQZ+imfh4MOd3QbHlEhGcU+MXHsvZG3cns0j61I=;
+        b=FxwSPzdp5uoRRxLqmNjnrOa2DadynnPoalW3/uK4TtOJ5sOdIpQ4/CqS1MBQOPhCv+
+         Lu6rfIKhQwIvhKOOZJUie4GXRSPMxJ9ifbITkNWUVVlMEv3aOF9oacWBt+yOVjeW0xUn
+         ThkjAeuogUq60HKLkLvAmBBxw++w7zVP9x5s0fcRPLVmFCU7SJ/a6yOmOxzM5lkvKjcq
+         5FnSle+iN50SIj3yUIrd+x0rpJ1uoQ3hYrRi0hLNkzenL6ikPIHHVdyliW5N+rNTJeCB
+         buUHVcOG81OUMozJZo2nVLkT8VFyquladcOhhDjE2iylLS1o60uEsm3t1ylacZn2p7As
+         BzsQ==
+X-Gm-Message-State: AOAM533NMJ9bvk83Cb9tkP8IMaNrBWtdjJ7D9drK106vB21AD+fxXLVT
+        9JxNUXrbXQSul3F/auhEVZM=
+X-Google-Smtp-Source: ABdhPJyL+30565wftFyUsYo6o4/MHY5OjykGUh2b38JVSNhDM20ubMcobFCgyq3dmbuYezTCOZEmDA==
+X-Received: by 2002:a17:90b:4d10:b0:1ca:5925:442 with SMTP id mw16-20020a17090b4d1000b001ca59250442mr9797382pjb.135.1649247943673;
+        Wed, 06 Apr 2022 05:25:43 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-45.three.co.id. [116.206.12.45])
+        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm5628543pju.44.2022.04.06.05.25.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 05:25:43 -0700 (PDT)
+Message-ID: <1ea212ba-250a-66e9-37a5-f0022107b053@gmail.com>
+Date:   Wed, 6 Apr 2022 19:25:38 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220405070258.802373272@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Apr 2022 14:19:54 +0000, Sebastian Ene wrote:
-> This watchdog can be used to detect stalls on vCPUs.
-> 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> ---
->  .../devicetree/bindings/watchdog/vm-wdt.yaml  | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
+On 05/04/22 14.24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.110 release.
+> There are 599 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
+powerpc (ps3_defconfig, gcc 11.2.0).
 
-yamllint warnings/errors:
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: ignoring, error in schema: properties: timeout-sec
-Documentation/devicetree/bindings/watchdog/vm-wdt.example.dtb:0:0: /example-0/watchdog: failed to match any schema with compatible: ['qemu,vm-watchdog']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+An old man doll... just what I always wanted! - Clara

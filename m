@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D134F6660
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C994F6625
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbiDFRHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S238426AbiDFRHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238529AbiDFRGv (ORCPT
+        with ESMTP id S238381AbiDFRGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 13:06:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F58123211D;
-        Wed,  6 Apr 2022 07:30:16 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DC74BEF19;
+        Wed,  6 Apr 2022 07:30:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C282FB82436;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E2761A35;
         Wed,  6 Apr 2022 14:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7102FC385A8;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C203C385A9;
         Wed,  6 Apr 2022 14:30:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649255413;
-        bh=icIJTMtIxjoHsHy/UFVMz3ivUvtOztilnj6bZ6ZdNwo=;
+        bh=b+Jn04l7J+92NIm/oLXywT4M2+LZAPg9gjG3dxBRhAc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TOMeDQa+oCyCD1c6W54vR/9FZPMfrb+dd7KvXbXnfuUM9cnBccWWr58+q3KjM8cSi
-         B5LBok5SuXl8JNP6d5PckBNjX5Z1tv3RQ/LOQTaCglwvc2R3XeXsdKLj/tdKuuzv00
-         rvCNZKwdz3OCUXIJIRbrz5JTOpskIIn//ddXoBX2sfJjnI8XeDEXb503xIbjEW+8LM
-         sB4/7MVTANzBs99aZf3kd/jBPT5uMbso9JqRAJSddGgchgy9To0SslvteQ39tvDgsv
-         YCCr8nYwIFLz8OFBhIJkLNb8x6OmmLAiJcla3hIPPyJieQ+bRBJ4FtS7bXiOer36ga
-         ufPAs918Wf/Xg==
+        b=FNtLxxWtrEPrA0lRhvpokbYAVdtth3ABiOwFLmVQdT6iioShyLzf1gjf2M3Geeu7B
+         7mLSvsQ62gUa4mGQ4F5opq153IYHFBm4k2S+MOcL72dJo/S1OSNHYwOVT/mU0PlZve
+         i2AuEROItMLB6xhWZdk3Atp0KrkNBEH5N3y2sTylV/snVLSHKB8wzBnw1CY4dLFDL4
+         OBxb81qUQjDro6w3XPzOLEKa78VAOegm9AB4XO/ZcIky/H0DkdncyQ1uLNQuwMhBCQ
+         CI4b34Mks3eVX9f9epfp4pwhPLn9MpcMNjgTZ0HX/BSpSOUia7aS5wjTiltjnryQBP
+         UBW4hica35p2w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58D1BE4A6CB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6495DE8DBDD;
         Wed,  6 Apr 2022 14:30:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND] net: ethernet: xilinx: use of_property_read_bool()
- instead of of_get_property
+Subject: Re: [PATCH RESEND] net: usb: remove duplicate assignment
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164925541335.21938.2629519087642040461.git-patchwork-notify@kernel.org>
+Message-Id: <164925541340.21938.4564814458141656979.git-patchwork-notify@kernel.org>
 Date:   Wed, 06 Apr 2022 14:30:13 +0000
-References: <1649236646-4257-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1649236646-4257-1-git-send-email-wangqing@vivo.com>
+References: <1649236624-4208-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <1649236624-4208-1-git-send-email-wangqing@vivo.com>
 To:     Qing Wang <wangqing@vivo.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, michal.simek@xilinx.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+Cc:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,19 +63,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Wed,  6 Apr 2022 02:17:26 -0700 you wrote:
+On Wed,  6 Apr 2022 02:17:03 -0700 you wrote:
 > From: Wang Qing <wangqing@vivo.com>
 > 
-> "little-endian" has no specific content, use more helper function
-> of_property_read_bool() instead of of_get_property()
+> netdev_alloc_skb() has assigned ssi->netdev to skb->dev if successed,
+> no need to repeat assignment.
 > 
 > Signed-off-by: Wang Qing <wangqing@vivo.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [RESEND] net: ethernet: xilinx: use of_property_read_bool() instead of of_get_property
-    https://git.kernel.org/netdev/net-next/c/be8d9d05271c
+  - [RESEND] net: usb: remove duplicate assignment
+    https://git.kernel.org/netdev/net-next/c/207d924dcf32
 
 You are awesome, thank you!
 -- 

@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1315A4F60F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B234F61A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiDFOJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
+        id S234957AbiDFOgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235051AbiDFOIk (ORCPT
+        with ESMTP id S235196AbiDFOgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:08:40 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E09429D25F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:57:15 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id g22so1978680edz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:57:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DZ+POTcsaLkbMBo1CqBhzn/vBLLAxpoEW4QABrQlisQ=;
-        b=CRTnuQGhMYTEe3X2W6mPLm/rYVRez1DDjvF3norRcXMqm0kR5DF1fyXugZDH4Q/ZJE
-         HO7KjSES2fw061YnAiRTCHNmJ4y/X1chnVfNxCcayYvzRwwb+p+IrPP8bWSw/jLv/yq2
-         TVmmeEJdH4eXZ7jEYQKx2DkZ7DTDzEdfHxuIdg9YH6uCAwSj9C7aDvAZC1ZZMKTFxpzZ
-         hvt7SJCf7wKlI7F/F9P+azTvbK+wW7IrxGt2U72CYVgcMq3tX9/p4W5wy1moNYAs9kus
-         92b/rRLNCQTDA4HtNwRR4Kc++OCHMfLWLwg7iP48HYfG7m3iKRVSQAJJ4AOXm9JuZx78
-         uTtw==
-X-Gm-Message-State: AOAM533EP3b/8QgkVsoivskviLxtkoai8Ck9rfiG/mt4PFo1H5fKvxbB
-        5l+WbSFb+YiSF+WkN0wBVHFxNT4R+HU=
-X-Google-Smtp-Source: ABdhPJxpg8ho5fSv2sVWTjZY4TksMQ+SF2ZZRW0S++abhw2YiStIbejQjLOOG1NE+CNGVeHgAb3h9g==
-X-Received: by 2002:a05:6402:31e2:b0:41c:dd5e:3c61 with SMTP id dy2-20020a05640231e200b0041cdd5e3c61mr7797701edb.407.1649239033620;
-        Wed, 06 Apr 2022 02:57:13 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id j12-20020a50e0cc000000b0041cd813ac01sm3691091edl.28.2022.04.06.02.57.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 02:57:13 -0700 (PDT)
-Message-ID: <19e11d77-1f81-c5a8-8a72-4fb7616438bf@kernel.org>
-Date:   Wed, 6 Apr 2022 11:57:12 +0200
+        Wed, 6 Apr 2022 10:36:20 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123B1412F88
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:00:49 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2369U3LH017684;
+        Wed, 6 Apr 2022 05:01:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=sPI0KE262NMl5/Dd//VQ2u+CPs7TTFSV0fZrVrMi8pU=;
+ b=iNLU6lLlA9LTbz034bLu9e6yO6hks9uAqdmCLlJX/mwQ0QGVovSOjUQd6WgtxyGUAP2f
+ KhCuWjYST7x/EdMjbHQY+H7XS4mMp/x+UUSA6uycll49gM4o1/AZ5BTZRa0/99B93gnV
+ sL3LkzqXpjJ10jG1jJT9IGyNdqivhIA9P+s1i1GqPKdHIZ0TOa2sM0H6SwgRybffJJ0M
+ r6B5dDYW7iBwfHjKNqcvR5L2r2E5S4XVJhwDomzrooW3poVTteiXc5Yf6p0pTejiO6PE
+ eH9waaxewp6EuafkhGkwjn+u9vQ3NVSvteYe0MP7UZ9IT18im9QgZxR5bk4FNd5Iziqu hQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3f6jwnvryv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 06 Apr 2022 05:01:23 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 11:01:21 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 6 Apr 2022 11:01:21 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A8E0FB1A;
+        Wed,  6 Apr 2022 10:01:21 +0000 (UTC)
+Date:   Wed, 6 Apr 2022 10:01:21 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <patches@opensource.cirrus.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: wm8731: Disable the regulator when probing fails
+Message-ID: <20220406100121.GV38351@ediswmail.ad.cirrus.com>
+References: <20220405121038.4094051-1-zheyuma97@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1] tty/sysrq: change the definition of sysrq_key_table's
- element to make it more readable
-Content-Language: en-US
-To:     wujunwen <wudaemon@163.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220405153625.55689-1-wudaemon@163.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220405153625.55689-1-wudaemon@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220405121038.4094051-1-zheyuma97@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: S2HnYa2CZmleDIUjLpESqyKuo9NJ9nV_
+X-Proofpoint-GUID: S2HnYa2CZmleDIUjLpESqyKuo9NJ9nV_
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 05. 04. 22, 17:36, wujunwen wrote:
-> the definition of sysrq_key_table's elements, like sysrq_thaw_op and
-
-The starts the sentence, so should be with capital T.
-
-> sysrq_showallcpus_op are massive,
-
-massive?
-
-> so we should make it consistent.
-
-You should elaborate consistent to what.
-
-> Signed-off-by: wujunwen <wudaemon@163.com>
-
-Is this really your real full name?
-
-Other than that, the patch appears to be correct.
-
->   drivers/tty/sysrq.c | 14 ++++++--------
->   1 file changed, 6 insertions(+), 8 deletions(-)
+On Tue, Apr 05, 2022 at 08:10:38PM +0800, Zheyu Ma wrote:
+> When the driver fails during probing, the driver should disable the
+> regulator, not just handle it in wm8731_hw_init().
 > 
-> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-> index bbfd004449b5..9485156bf48b 100644
-> --- a/drivers/tty/sysrq.c
-> +++ b/drivers/tty/sysrq.c
-> @@ -274,6 +274,8 @@ static const struct sysrq_key_op sysrq_showallcpus_op = {
->   	.action_msg	= "Show backtrace of all active CPUs",
->   	.enable_mask	= SYSRQ_ENABLE_DUMP,
->   };
-> +#else
-> +#define sysrq_showallcpus_op (*(const struct sysrq_key_op *)NULL)
->   #endif
->   
->   static void sysrq_handle_showregs(int key)
-> @@ -405,6 +407,7 @@ static const struct sysrq_key_op sysrq_moom_op = {
->   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
->   };
->   
-> +#ifdef CONFIG_BLOCK
->   static void sysrq_handle_thaw(int key)
->   {
->   	emergency_thaw_all();
-> @@ -415,6 +418,9 @@ static const struct sysrq_key_op sysrq_thaw_op = {
->   	.action_msg	= "Emergency Thaw of all frozen filesystems",
->   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
->   };
-> +#else
-> +#define sysrq_thaw_op (*(const struct sysrq_key_op *)NULL)
-> +#endif
->   
->   static void sysrq_handle_kill(int key)
->   {
-> @@ -468,17 +474,9 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
->   	NULL,				/* g */
->   	NULL,				/* h - reserved for help */
->   	&sysrq_kill_op,			/* i */
-> -#ifdef CONFIG_BLOCK
->   	&sysrq_thaw_op,			/* j */
-> -#else
-> -	NULL,				/* j */
-> -#endif
->   	&sysrq_SAK_op,			/* k */
-> -#ifdef CONFIG_SMP
->   	&sysrq_showallcpus_op,		/* l */
-> -#else
-> -	NULL,				/* l */
-> -#endif
->   	&sysrq_showmem_op,		/* m */
->   	&sysrq_unrt_op,			/* n */
->   	/* o: This will often be registered as 'Off' at init time */
+> The following log reveals it:
+> 
+> [   17.812483] WARNING: CPU: 1 PID: 364 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> [   17.815958] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> [   17.824467] Call Trace:
+> [   17.824774]  <TASK>
+> [   17.825040]  regulator_bulk_free+0x82/0xe0
+> [   17.825514]  devres_release_group+0x319/0x3d0
+> [   17.825882]  i2c_device_probe+0x766/0x940
+> [   17.829198]  i2c_register_driver+0xb5/0x130
+> 
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> ---
 
+Mark just merged a big chain overhauling a lot of this driver, at
+the very least this patch is going to require a rebase on top of
+that lot.
 
--- 
-js
-suse labs
+Thanks,
+Charles

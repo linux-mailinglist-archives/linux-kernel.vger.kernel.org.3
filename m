@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A070A4F629F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C514F6282
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiDFPEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S235282AbiDFPEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiDFPD5 (ORCPT
+        with ESMTP id S235262AbiDFPCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:03:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB27E59CD5C;
-        Wed,  6 Apr 2022 05:35:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E4D871F38A;
-        Wed,  6 Apr 2022 12:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649248445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0nalfo9aZQbfkaPJuevJGokBEgQRD+uQYrkQD6gB7I4=;
-        b=KnYKVlfeHPMyilOcIFdUGMPu9r3dGgiiP6b6g3iqYs7P7z+HApBHhX+dBKa+rAxMwoCzk/
-        dg98WZO0/vINblwwOMXnut2d/CPTwuTqw0PAWBlxnu68NY1RuP6utcWIooPP0isFIo5fMH
-        1UEtmSKuTwYCuXqAX4V4tq+60L3rCPk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649248445;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0nalfo9aZQbfkaPJuevJGokBEgQRD+uQYrkQD6gB7I4=;
-        b=rXRGROhunSQ1f00/MAy/JciTOqeqeqi5VvnJSxZLPFwLoZqZnbqthl3seAY5aFOiN+kJc7
-        NyXvBabuFn1PdVAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7816413A8E;
-        Wed,  6 Apr 2022 12:34:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OXpFGr2ITWLcZQAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Wed, 06 Apr 2022 12:34:05 +0000
-Message-ID: <857f3f9c-abc3-779e-d03b-76c23f6e13af@suse.de>
-Date:   Wed, 6 Apr 2022 15:33:49 +0300
+        Wed, 6 Apr 2022 11:02:22 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC774DA296;
+        Wed,  6 Apr 2022 05:36:20 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id b24so2409274edu.10;
+        Wed, 06 Apr 2022 05:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zoN0C4dCFjchyITLB1tB6zwVEWxxfDvgG1qN8jQPv2I=;
+        b=eBR8ZsrKWiHejkZ6qud6doIxyd09MSIW5RfG2+jyj7OQztuTXDLQe+ngmuXIF2YRTZ
+         3g2HKwEpZEM1X0+ICBGB+1l8573RZ1AwEAnYCdyaSln9+EhKUtQa5YWbDoSslJZO4OyH
+         flkP8AJspoUCPMLGiBkKwVcDEQnlt0SKpaK1UX9AFUMrOpprxU/TrrdJ/U0aY7GdVJjs
+         UpYbNXMFpJJLQnKz6ipPqRM+z+1umCFyc33Iv3ZkB2cHSAyuYVNEbP62ECcScDJt0dMM
+         5oUjaqU64qr9438zrOgIh6SRJIcfl7r7RXmsF6I4BDcqCSO6GbmNmTRYgMnTufK+1BNG
+         ed2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zoN0C4dCFjchyITLB1tB6zwVEWxxfDvgG1qN8jQPv2I=;
+        b=f+YxN9zaa/+WNjzUsSvFak8BvNJ2pK/Me1Gnfo18o8nd0dxtvQy64T1oDNjvCOWcGu
+         hNqoFCpQeCLWmLDu473hDCdatqyYWgRqfGLD+1GBhJcKUxLS7YMMdzux0P0RzNVLSTc5
+         8ZH+cFcAMPsVPr3XRwgRc/VObQcwro9bpiNHcyZ5PCm316xblyzRzoe7ulwKEq5LKvUs
+         di+xZDHi+Bu4SunvGYPx4zhDOrYE8u8lTRhPVXNH4lYjhnLmegQk/iPNy5ocipLMAI0L
+         wOcEgh2eRUicIZBCxKj+Pa7lGingqkvoMF6Lo7jR1RTi5IJwjs5S+UmYVNbV64XPFV1r
+         GMgg==
+X-Gm-Message-State: AOAM5309UrTGnEIWhrOa3FcoxIy3Ynf/PQo7JB/hEaDdQ1gC4+GS9jFo
+        fdWZcDiRo7jZjrP6Ly3zzQ==
+X-Google-Smtp-Source: ABdhPJwNUEZh3XYfKve3Ha4J0OboJ9AEl2Orz3KW5bkdcHRz6931+vhs8I+9B89skl5ZGhs2uQRXyw==
+X-Received: by 2002:a05:6402:278d:b0:419:3794:de39 with SMTP id b13-20020a056402278d00b004193794de39mr8480855ede.137.1649248494988;
+        Wed, 06 Apr 2022 05:34:54 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.248.249])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170906728800b006e0351df2dcsm6646164ejl.70.2022.04.06.05.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 05:34:54 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 15:34:52 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 327/913] lib: uninline simple_strntoull() as well
+Message-ID: <Yk2I7JXzXaXi+6R1@localhost.localdomain>
+References: <20220405070339.801210740@linuxfoundation.org>
+ <20220405070349.652301661@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] myri10ge: fix an incorrect free for skb in
- myri10ge_sw_tso
-Content-Language: ru
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, christopher.lee@cspi.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406035556.730-1-xiam0nd.tong@gmail.com>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20220406035556.730-1-xiam0nd.tong@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220405070349.652301661@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-4/6/22 06:55, Xiaomeng Tong пишет:
-> All remaining skbs should be released when myri10ge_xmit fails to
-> transmit a packet. Fix it within another skb_list_walk_safe.
+On Tue, Apr 05, 2022 at 09:23:09AM +0200, Greg Kroah-Hartman wrote:
+> From: Alexey Dobriyan <adobriyan@gmail.com>
 > 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
+> [ Upstream commit 839b395eb9c13ae56ea5fc3ca9802734a72293f0 ]
 > 
-> changes since v2:
->   - free all remaining skbs. (Xiaomeng Tong)
+> Codegen become bloated again after simple_strntoull() introduction
 > 
-> changes since v1:
->   - remove the unneeded assignmnets. (Xiaomeng Tong)
-> 
-> v2:https://lore.kernel.org/lkml/20220405000553.21856-1-xiam0nd.tong@gmail.com/
-> v1:https://lore.kernel.org/lkml/20220319052350.26535-1-xiam0nd.tong@gmail.com/
-> 
-> ---
->   drivers/net/ethernet/myricom/myri10ge/myri10ge.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-> index 50ac3ee2577a..21d2645885ce 100644
-> --- a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-> +++ b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-> @@ -2903,11 +2903,9 @@ static netdev_tx_t myri10ge_sw_tso(struct sk_buff *skb,
->   		status = myri10ge_xmit(curr, dev);
->   		if (status != 0) {
->   			dev_kfree_skb_any(curr);
-> -			if (segs != NULL) {
-> -				curr = segs;
-> -				segs = next;
-> +			skb_list_walk_safe(next, curr, next) {
->   				curr->next = NULL;
-> -				dev_kfree_skb_any(segs);
-> +				dev_kfree_skb_any(curr);
+> 	add/remove: 0/0 grow/shrink: 0/4 up/down: 0/-224 (-224)
 
-why can't we just do the following?
-         skb_list_walk_safe(segs, skb, nskb) {
-                 status = myri10ge_xmit(curr, dev);
-                 if (err)
-                         break;
+> -static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
+> -					   char **endp, unsigned int base)
+> +static noinline unsigned long long simple_strntoull(const char *startp, size_t max_chars, char **endp, unsigned int base)
 
-         }
-
-         /* Free all of the segments. */
-         skb_list_walk_safe(segs, skb, nskb) {
-                 if (err)
-                         kfree_skb(skb);
-                 else
-                         consume_skb(skb);
-         }
-         return err;
-
-
->   			}
->   			goto drop;
->   		}
+This patch doesn't fix any bugs, why it is selected?

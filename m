@@ -2,73 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848404F6E7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4864F6E81
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiDFXZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S235951AbiDFX0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiDFXZu (ORCPT
+        with ESMTP id S233489AbiDFX0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:25:50 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BAF6C1E7;
-        Wed,  6 Apr 2022 16:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=8Tr0WGyvMrQMt+EjpEp3gg9RonkOaYU/ypqpop9zD0Y=; b=3/G4WViF61ZPur49VqH8DJ/jdV
-        BEucAW+jSVcV910j7GIKUtDova5EfTRbSkx5e0LNGihTmAkKJ83PglsNF48/G+7iZJEMJBmn9EF9c
-        WBu+NRUYOulLaKhN/YX8Oe6s8LylN6gWeCaYcywiQFa8frbizh8ZyxGlzF6PaEyBJTXc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ncF01-00EX4U-RG; Thu, 07 Apr 2022 01:23:41 +0200
-Date:   Thu, 7 Apr 2022 01:23:41 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 3/4] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Message-ID: <Yk4g/ShFxNsCM8JR@lunn.ch>
-References: <20220406032158.1449049-1-chris.packham@alliedtelesis.co.nz>
- <20220406032158.1449049-4-chris.packham@alliedtelesis.co.nz>
+        Wed, 6 Apr 2022 19:26:10 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D336D13DDB;
+        Wed,  6 Apr 2022 16:24:07 -0700 (PDT)
+X-UUID: 7bc4d3761fed4986a9988a2c389047e2-20220407
+X-UUID: 7bc4d3761fed4986a9988a2c389047e2-20220407
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1460989857; Thu, 07 Apr 2022 07:24:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 7 Apr 2022 07:24:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Apr 2022 07:24:00 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <devicetree@vger.kernel.org>, <hsinyi@chromium.org>,
+        <kewei.xu@mediatek.com>, <krzk+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <qii.wang@mediatek.com>, <robh+dt@kernel.org>, <wsa@kernel.org>
+Subject: Re: [PATCH] dt-bindings: i2c: convert i2c-mt65xx to json-schema
+Date:   Thu, 7 Apr 2022 07:24:00 +0800
+Message-ID: <20220406232400.2788-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220406152940.140224-1-angelogioacchino.delregno@collabora.com>
+References: <20220406152940.140224-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406032158.1449049-4-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:21:57PM +1200, Chris Packham wrote:
-> The 98DX2530 SoC is the Control and Management CPU integrated into
-> the Marvell 98DX25xx and 98DX35xx series of switch chip (internally
-> referred to as AlleyCat5 and AlleyCat5X).
+Hi AngeloGioacchino,
+
+> Convert I2C binding for MediaTek SoCs to Devicetree schema.
 > 
-> These files have been taken from the Marvell SDK and lightly cleaned
-> up with the License and copyright retained.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  53 --------
+>  .../devicetree/bindings/i2c/i2c-mt65xx.yaml   | 118 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 119 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+> deleted file mode 100644
+> index 026985b8f61a..000000000000
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+> +++ /dev/null
+> @@ -1,53 +0,0 @@
+> -* MediaTek's I2C controller
+> -
+> -The MediaTek's I2C controller is used to interface with I2C devices.
+> -
+> -Required properties:
+> -  - compatible: value should be either of the following.
+> -      "mediatek,mt2701-i2c", "mediatek,mt6577-i2c": for MediaTek MT2701
+> -      "mediatek,mt2712-i2c": for MediaTek MT2712
+> -      "mediatek,mt6577-i2c": for MediaTek MT6577
+> -      "mediatek,mt6589-i2c": for MediaTek MT6589
+> -      "mediatek,mt6797-i2c", "mediatek,mt6577-i2c": for MediaTek MT6797
+> -      "mediatek,mt7622-i2c": for MediaTek MT7622
+> -      "mediatek,mt7623-i2c", "mediatek,mt6577-i2c": for MediaTek MT7623
+> -      "mediatek,mt7629-i2c", "mediatek,mt2712-i2c": for MediaTek MT7629
+> -      "mediatek,mt8168-i2c": for MediaTek MT8168
+> -      "mediatek,mt8173-i2c": for MediaTek MT8173
+> -      "mediatek,mt8183-i2c": for MediaTek MT8183
+> -      "mediatek,mt8186-i2c": for MediaTek MT8186
+> -      "mediatek,mt8192-i2c": for MediaTek MT8192
+> -      "mediatek,mt8195-i2c", "mediatek,mt8192-i2c": for MediaTek MT8195
+> -      "mediatek,mt8516-i2c", "mediatek,mt2712-i2c": for MediaTek MT8516
+> -  - reg: physical base address of the controller and dma base, length of memory
+> -    mapped region.
+> -  - interrupts: interrupt number to the cpu.
+> -  - clock-div: the fixed value for frequency divider of clock source in i2c
+> -    module. Each IC may be different.
+> -  - clocks: clock name from clock manager
+>-  - clock-names: Must include "main" and "dma", "arb" is for multi-master that
+>-    one bus has more than two i2c controllers, if enable have-pmic need include
+>-    "pmic" extra.
 
-> +&eth0 {
-> +	status = "okay";
-> +	phy = <&phy0>;
+snip
 
-This is O.K, but most DT files now use phy-handle, not phy.
+>+properties:
+>+  compatible:
+>+    oneOf:
+>+      - const: mediatek,mt2712-i2c
+>+      - const: mediatek,mt6577-i2c
+>+      - const: mediatek,mt6589-i2c
+>+      - const: mediatek,mt7622-i2c
+>+      - const: mediatek,mt8168-i2c
+>+      - const: mediatek,mt8173-i2c
+>+      - const: mediatek,mt8183-i2c
+>+      - const: mediatek,mt8186-i2c
+>+      - const: mediatek,mt8192-i2c
+>+      - items:
+>+          - enum:
+>+              - mediatek,mt7629-i2c
+>+              - mediatek,mt8516-i2c
+>+          - const: mediatek,mt2712-i2c
+>+      - items:
+>+          - enum:
+>+              - mediatek,mt2701-i2c
+>+              - mediatek,mt6797-i2c
+>+              - mediatek,mt7623-i2c
+>+          - const: mediatek,mt6577-i2c
+>+      - items:
+>+          - enum:
+>+              - mediatek,mt8195-i2c
+>+          - const: mediatek,mt8192-i2c
+>+
+>+  reg:
+>+    items:
+>+      - description: Physical base address
+>+      - description: DMA base address
+>+
+>+  interrupts:
+>+    maxItems: 1
+>+
+>+  clocks:
+>+    minItems: 1
+>+    items:
+>+      - description: Main clock for I2C bus
+>+      - description: Clock for I2C via DMA
+>+      - description: Bus arbitrator clock
+>+      - description: Clock for I2C from PMIC
+>+
+>+  clock-names:
+>+    minItems: 1
+>+    items:
+>+      - const: main
+>+      - const: dma
+>+      - const: arb
+>+      - const: pmic
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+I read "clock-names: Must include "main" and "dma"" from i2c-mt65xx.txt.
+Does it means that we should have at least 2 clock-names (minItems: 2)?
 
-    Andrew
+Thanks,
+Miles
+
+>+
+>+  clock-div:
+>+    $ref: /schemas/types.yaml#/definitions/uint32
+>+    description: Frequency divider of clock source in I2C module
+>+
+>+  clock-frequency:
+>+    default: 100000
+>+    description:
+>+      SCL frequency to use (in Hz). If omitted, 100kHz is used.
+>+
+>+  mediatek,have-pmic:
+>+    description: Platform controls I2C from PMIC side
+>+    type: boolean
+>+
+>+  mediatek,use-push-pull:
+>+    description: Use push-pull mode I/O config
+>+    type: boolean
+>+
+>+  vbus-supply:
+>+    description: Phandle to the regulator providing power to SCL/SDA
+>+
+>+required:
+>+  - compatible
+>+  - reg
+>+  - clocks
+>+  - clock-names
+>+  - clock-div
+>+  - interrupts
+>+
+>+unevaluatedProperties: false
+>+
+>+examples:
+>+  - |
+>+    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>+    #include <dt-bindings/interrupt-controller/irq.h>
+>+
+>+    i2c0: i2c@1100d000 {
+>+      compatible = "mediatek,mt6577-i2c";
+>+      reg = <0x1100d000 0x70>, <0x11000300 0x80>;
+>+      interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
+>+      clocks = <&i2c0_ck>, <&ap_dma_ck>;
+>+      clock-names = "main", "dma";
+>+      clock-div = <16>;
+>+      clock-frequency = <400000>;
+>+      mediatek,have-pmic;
+>+
+>+      #address-cells = <1>;
+>+      #size-cells = <0>;
+>+    };
+>diff --git a/MAINTAINERS b/MAINTAINERS
+>index ee0b5a70aff1..28a17d4c8d12 100644
+>--- a/MAINTAINERS
+>+++ b/MAINTAINERS
+>@@ -12361,7 +12361,7 @@ MEDIATEK I2C CONTROLLER DRIVER
+> M:	Qii Wang <qii.wang@mediatek.com>
+> L:	linux-i2c@vger.kernel.org
+> S:	Maintained
+>-F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+>+F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> F:	drivers/i2c/busses/i2c-mt65xx.c
+> 
+> MEDIATEK IOMMU DRIVER
+>-- 
+>2.35.1
+>
+>

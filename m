@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CF04F5809
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DAA4F5808
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244777AbiDFIec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S233274AbiDFIk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359317AbiDFId0 (ORCPT
+        with ESMTP id S1355881AbiDFIiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:33:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CB18B30
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:01:26 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KY8PS4LtzzQjJN;
-        Wed,  6 Apr 2022 10:59:40 +0800 (CST)
-Received: from dggpeml500009.china.huawei.com (7.185.36.209) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 11:01:24 +0800
-Received: from [10.174.177.235] (10.174.177.235) by
- dggpeml500009.china.huawei.com (7.185.36.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 11:01:24 +0800
-Message-ID: <25a24259-3ac3-81ab-1c28-f2a4886888b5@huawei.com>
-Date:   Wed, 6 Apr 2022 11:01:23 +0800
+        Wed, 6 Apr 2022 04:38:16 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B30DD39AA;
+        Tue,  5 Apr 2022 20:12:31 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 13A5E1C805DD;
+        Wed,  6 Apr 2022 11:12:31 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 6 Apr 2022
+ 11:12:30 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Wed, 6 Apr 2022 11:12:30 +0800
+Message-ID: <8ac80947-2f59-6eef-c6ac-2ad64628dfe6@nuvoton.com>
+Date:   Wed, 6 Apr 2022 11:12:30 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [f2fs-dev] [PATCH 4/5] f2fs: get rid of stale fault injection
- code
+Subject: Re: [PATCH 2/3] dt-bindings: clock: Document MA35D1 clock controller
+ bindings
 Content-Language: en-US
-To:     Chao Yu <chao@kernel.org>, <jaegeuk@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>
-References: <20220401071909.505086-1-yuyufen@huawei.com>
- <20220401071909.505086-5-yuyufen@huawei.com>
- <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
-From:   Yufen Yu <yuyufen@huawei.com>
-In-Reply-To: <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>, MS10 CFLi0 <CFLi0@nuvoton.com>
+References: <20220331024256.14762-1-ychuang3@nuvoton.com>
+ <20220331024256.14762-3-ychuang3@nuvoton.com>
+ <6be6ffd1-a303-f3f2-0424-0ce622de197f@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <6be6ffd1-a303-f3f2-0424-0ce622de197f@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.235]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500009.china.huawei.com (7.185.36.209)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2022/4/1 16:28, Chao Yu wrote:
-> On 2022/4/1 15:19, Yufen Yu via Linux-f2fs-devel wrote:
->> Nowly, we can use new fault injection framework. Just delete the
->> stale fault injection code.
+
+On 2022/3/31 下午 02:27, Krzysztof Kozlowski wrote:
+> On 31/03/2022 04:42, Jacky Huang wrote:
+>> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
 >>
->> Signed-off-by: Yufen Yu <yuyufen@huawei.com>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 >> ---
->>   fs/f2fs/checkpoint.c |  2 +-
->>   fs/f2fs/f2fs.h       | 51 ++----------------------------------------
->>   fs/f2fs/super.c      | 53 --------------------------------------------
->>   fs/f2fs/sysfs.c      | 23 -------------------
->>   4 files changed, 3 insertions(+), 126 deletions(-)
+>>   .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 59 +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
 >>
+>> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+>> new file mode 100644
+>> index 000000000000..bf5474b10420
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+>> @@ -0,0 +1,59 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: https://apc01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fclock%2Fnuvoton%2Cma35d1-clk.yaml%23&amp;data=04%7C01%7Cychuang3%40nuvoton.com%7C26d072d904854cb7c77308da12df8dd5%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637843048619482176%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=NgdR0%2F8%2BxsM4u%2BPuKtuniulNf%2BhMLJoYsjIPnR0iVec%3D&amp;reserved=0
+>> +$schema: https://apc01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cychuang3%40nuvoton.com%7C26d072d904854cb7c77308da12df8dd5%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637843048619482176%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=Km%2Fawm8lT0IYN39tkE3lSrho9uCOd2Fgs8qb82pI7ec%3D&amp;reserved=0
+>> +
+>> +title: Nuvoton MA35D1 Clock Control Module Binding
+>> +
+>> +maintainers:
+>> +  - Chi-Fang Li <cfli0@nuvoton.com>
+>> +  - Jacky Huang <ychuang3@nuvoton.com>
+>> +
+>> +description: |
+>> +  The MA35D1 clock controller generates clocks for the whole chip,
+>> +  including system clocks and all peripheral clocks.
+>> +
+>> +  See also:
+>> +    dt-bindings/clock/ma35d1-clk.h
+> Full path needed.
 
-...
+I will fix it as include/dt-bindings/clock/ma35d1-clk.h
+>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: nuvoton,ma35d1-clk
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  "#clock-cells":
+>> +    const: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  assigned-clocks:
+>> +    maxItems: 4
+>> +
+>> +  assigned-clock-rates:
+>> +    maxItems: 4
+>> +
+>> +  clock-pll-mode:
+>> +    maxItems: 4
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "#clock-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  # clock control module node:
+> Useless comment, remove it.
 
->>               break;
->> @@ -1963,14 +1920,6 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
->>       if (F2FS_IO_SIZE_BITS(sbi))
->>           seq_printf(seq, ",io_bits=%u",
->>                   F2FS_OPTION(sbi).write_io_size_bits);
->> -#ifdef CONFIG_F2FS_FAULT_INJECTION
->> -    if (test_opt(sbi, FAULT_INJECTION)) {
->> -        seq_printf(seq, ",fault_injection=%u",
->> -                F2FS_OPTION(sbi).fault_info.inject_rate);
->> -        seq_printf(seq, ",fault_type=%u",
->> -                F2FS_OPTION(sbi).fault_info.inject_type);
->> -    }
->> -#endif
-> 
-> This will cause regression due to it breaks application usage w/ -o
-> fault_* mountoption..., I don't think this is the right way.
+OK, I will remove it.
 
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
 
-Thanks for catching this. I admit it's a problem. But, IMO fault_* mount
-option are mostly been used in test, not in actual product. So, I think
-it may just affect some test applications. With the common fault injection
-framework, it can be more easy and flexible to do fault injection test.
-Therefore, I want to remove the two mount options directly.
+Thanks for your review.
 
-If you really worried about compatibility, how about just reserving the
-two inject_* options but without doing any thing for them. We actually
-configure fault injections by debugfs in this patch.
-
-Or do you have more better suggestion?
-
-Thanks,
-Yufen
-
-
-
-
-
+Sincerely,
+Jacky
 

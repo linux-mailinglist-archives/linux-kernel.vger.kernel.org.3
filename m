@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B3F4F6A53
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AD14F69FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiDFTtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S231890AbiDFTdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiDFTtJ (ORCPT
+        with ESMTP id S232038AbiDFTct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:49:09 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A64210447
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649270261; x=1680806261;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vwP7tqcATHHZbPTdGKag4qVPI+s/ZhYdH5Hhb5WB3pI=;
-  b=j+5OrFIiKUhF+fcNunzY4ArMaiuIa32lbz8thRQ4tT0YZr+q0bDWPagA
-   c0Q9CiX2YPZixw1k4X47Kg85Cw6SpWaXsSVR+F2w0m0jQ0fb1eeCpwZ+9
-   mgN4kX7Uj0RwcV3J+kqJ7Hwpgj7hgaVwckn5In/8Fb54eL0J2gFA2crAG
-   Qc3C7ZKPdgTj885dwfvdGnk0DVHUeLEa+ab3ePExxI34nnqyLMzzBvttu
-   4no6rlblGsv7DXZ2CFk/pWpAtdObIc3mRQZtaHVXFZ2uP3pZACjkdJwuf
-   MVxR4oC/+e8Oa+bI7jgQ+Vpp7Q225dwTkErrL0DRlzALRJ2EBQlX5TjsO
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="321822244"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="321822244"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:37:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="588483890"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.19.90]) ([10.212.19.90])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:37:40 -0700
-Message-ID: <b19466ad-afae-7c70-cd28-73e3959c48f4@intel.com>
-Date:   Wed, 6 Apr 2022 11:37:40 -0700
+        Wed, 6 Apr 2022 15:32:49 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD43441B2;
+        Wed,  6 Apr 2022 11:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=YGjX529UM3G1Sm5ZEV/Cp3ZmPunyP2OAVWthxaOm0TE=; b=tFJFatXB6xPNnIMbja6SvXD6Cu
+        bXU3vUUO2xXCQztEU1jTleEdty4GRLL6fyovwu4ho7/XnxRC1YoSxvItgGIztyc6J2Yjr4HUEetQZ
+        rNCnT4wt2/HAhtlf+zClghovZH7e4bhX8oK2ntrborSlj/r0U+pQu3ADTxv2fYmtBfz0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ncAXN-00EVLu-E7; Wed, 06 Apr 2022 20:37:49 +0200
+Date:   Wed, 6 Apr 2022 20:37:49 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
+        linux-arm-kernel@lists.infradead.org, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org, vigneshr@ti.com,
+        kishon@ti.com
+Subject: Re: [RFC 13/13] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <Yk3d/cC36fhNmfY2@lunn.ch>
+References: <20220406094358.7895-1-p-mohan@ti.com>
+ <20220406094358.7895-14-p-mohan@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/4] staging: r8188eu: correct misspelling in comment
- 'tppe' -> 'type'
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <cover.1649233201.git.remckee0@gmail.com>
- <edaab7d38893e4f1cbb3c281b617c74fa91f0fe7.1649233201.git.remckee0@gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <edaab7d38893e4f1cbb3c281b617c74fa91f0fe7.1649233201.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406094358.7895-14-p-mohan@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> +static int emac_phy_connect(struct prueth_emac *emac)
+> +{
+> +	struct prueth *prueth = emac->prueth;
+> +
+> +	/* connect PHY */
+> +	emac->phydev = of_phy_connect(emac->ndev, emac->phy_node,
+> +				      &emac_adjust_link, 0, emac->phy_if);
 
-On 4/6/2022 1:30 AM, Rebecca Mckeever wrote:
-> Correct spelling typo.
+> +static int prueth_config_rgmiidelay(struct prueth *prueth,
+> +				    struct device_node *eth_np,
+> +				    phy_interface_t phy_if)
+> +{
+> +	struct device *dev = prueth->dev;
+> +	struct regmap *ctrl_mmr;
+> +	u32 rgmii_tx_id = 0;
+> +	u32 icssgctrl_reg;
+> +
+> +	if (!phy_interface_mode_is_rgmii(phy_if))
+> +		return 0;
+> +
+> +	ctrl_mmr = syscon_regmap_lookup_by_phandle(eth_np, "ti,syscon-rgmii-delay");
+> +	if (IS_ERR(ctrl_mmr)) {
+> +		dev_err(dev, "couldn't get ti,syscon-rgmii-delay\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (of_property_read_u32_index(eth_np, "ti,syscon-rgmii-delay", 1,
+> +				       &icssgctrl_reg)) {
+> +		dev_err(dev, "couldn't get ti,rgmii-delay reg. offset\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
+> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
+> +
+> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
+> +
+> +	return 0;
+> +}
 >
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
->   drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-> index cd20811ae152..f4a277e6b654 100644
-> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
-> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-> @@ -1162,7 +1162,7 @@ u8 p2p_protocol_wk_cmd(struct adapter *padapter, int intCmdType)
->   	}
->   
->   	pdrvextra_cmd_parm->ec_id = P2P_PROTO_WK_CID;
-> -	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command tppe. */
-> +	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command type. */
 
-Nothing to do with this patch. Just saw intCmdType. Suggest another 
-patch to fix this mixed case function parameter. Maybe cmd_type instead?
+O.K, so this does not do what i initially thought it was doing. I was
+thinking it was to fine tune the delay, ti,syscon-rgmii-delay would be
+a small pico second value to allow the 2ns delay to be tuned to the
+board.
 
+But now i think this is actually inserting the full 2ns delay?
 
->   	pdrvextra_cmd_parm->pbuf = NULL;		/*	Must be NULL here */
->   
->   	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
+The problem is, you also pass phy_if to of_phy_connect() so the PHY
+will also insert the delay if requested. So you end up with double
+delays for rgmii_id and rgmii_txid.
+
+The general recommendation is that the PHY inserts the delay, based on
+phy-mode. The MAC does not add a delay, so i suggest you always write
+0 here, just to ensure the system is in a deterministic state, and the
+bootloader and not being messing around with things.
+
+	   Andrew

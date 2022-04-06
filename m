@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C264F673F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E96E4F6722
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239036AbiDFR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
+        id S239092AbiDFR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbiDFRZx (ORCPT
+        with ESMTP id S239064AbiDFR01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:25:53 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 22B8F3BF8BA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:24:46 -0700 (PDT)
-Received: (qmail 190547 invoked by uid 1000); 6 Apr 2022 11:24:46 -0400
-Date:   Wed, 6 Apr 2022 11:24:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
+        Wed, 6 Apr 2022 13:26:27 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF933205BDF;
+        Wed,  6 Apr 2022 08:25:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id p10so4646090lfa.12;
+        Wed, 06 Apr 2022 08:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=buklFgMo3io8o1oTm+e0Xy6mGquidMcjQ+rAVmjF0R0=;
+        b=IpUBnNb1wMpq3Z33rLXUmoesOPAyubbH73r3NT6CG2VFE7ISsrjIUEOS4mq1gMPJ0/
+         y/P3ojZkkt5w1AXkNY2BYWBVLXwhiaiDchr3olLAUF1lLuK/mxEVqh5ainO6buKOAQcW
+         cUQazL0acLThFgQpSb6DFLnF60L9LGJUgO4uNUxz397btFBQeiciuYcoqB1UwvkYTjgM
+         +GYm8SLvp98Oka8FJutNz86JOqwL1MFh3KNAjkKuYRl8NwT6VNsNLWKpihRnTNa/pYmg
+         vT3st63NFAB33DNhWFfKe4Gm/CQd4KYl+hY5lpXmcLaexYpP63+/ZlNXrr/DUxmdlVw5
+         rGgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=buklFgMo3io8o1oTm+e0Xy6mGquidMcjQ+rAVmjF0R0=;
+        b=aMertZ/mQXLyIblB4e74SqA18SJZWGbjak87x6yz1Bfbicq0v+a/Dqn39uCyEXx+yc
+         8wZ+uHmXEA6Uhrs1BYb51/2FEiICW6jUlRuw3rlpY1f88oVpAucMtE7r1ZdPNnLTBA7S
+         DzOoKvw9IOvLy47QsAWDzph+1ofIUeEHv2qtSIz7EoBL+LntTOVjRV1SdO7A8KBHOJR3
+         VSqTnzFA8JSMrhrjANqQk7wMSDwJLVyvMJLl2+dxp288H2RPBvAW+JIC+ihXtAElWUkM
+         69XY79T3faOMz/7cKCI/VU3Vi3Irqh4KSHEyCsji3MnlR8H+N8Cwf7T4V/kWfX4Jyd1G
+         gJhA==
+X-Gm-Message-State: AOAM531xNrDOgn1cNe86d/Fm4MxQfGBUTYrCi5xBZDYgCfCpd/XlG+SA
+        5a0sq3ZO/CQjz/v/MZfTIlA=
+X-Google-Smtp-Source: ABdhPJw+wxyyrmHkxuNDGzpTAjtnLv+6MCubb/xVpbVgTR8NNXWidB7jX7O3yhmXgjH6l8xw/z/JWg==
+X-Received: by 2002:a05:6512:3dab:b0:44a:247:2d8 with SMTP id k43-20020a0565123dab00b0044a024702d8mr6374447lfv.628.1649258723148;
+        Wed, 06 Apr 2022 08:25:23 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id y5-20020a2e3205000000b0024b045e3b18sm1557359ljy.66.2022.04.06.08.25.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 08:25:22 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Tom Rini <trini@konsulko.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        u-boot@lists.denx.de, bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: nvmem: u-boot,env: add Broadcom's variant binding
+Date:   Wed,  6 Apr 2022 17:25:15 +0200
+Message-Id: <20220406152515.31316-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406092445.215288-1-mdevaev@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 12:24:45PM +0300, Maxim Devaev wrote:
-> Using the SIGUSR1 signal sent to the "file-storage" thread
-> from the userspace, it is possible to break IO operations
-> that block the gadget. Thus, it is possible to implement
-> "force eject" without stopping the gadget and umounting
-> it from the host side.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-It's not clear to me how breaking I/O operations allows you to do a 
-"force eject".  It seems that what you would need is something like 
-fsg_store_file() that omits the curlun->prevent_medium_removal check.
-Interrupting a lengthy I/O operation doesn't really have anything to do 
-with this.
+Broadcom uses U-Boot for some of their recent platforms like BCM4908.
+They decided to use modified environment variables variables format
+though. Their header includes 2 extra 32 b fields at the beginning.
 
-> There are two problems here:
-> 
->   - In order to send a signal, we need to find the thread
->     in procfs, but if several mass storage gadgets are created
->     in the system, each process has the same name and it is
->     impossible to distinguish one gadget from another.
-> 
->   - Root privileges are required to send the signal.
-> 
-> The proposed "break_io" interface solves both problems.
-> It allows us to get rid of the procfs search and delegate
-> sending the signal to a regular user.
+The first field meaning is unknown, the second one stores length of env
+data block. Example (length 0x4000):
+$ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
+00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..4.z.IMAG|
+00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=NAND:1M,1024M.|
 
-Or to keep this ability restricted to the superuser, if that is desired.
+Add a custom "compatible" value to allow describing Broadcom devices
+properly.
 
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 22 ++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 6ad669dde41c..e9b7c59e1dc4 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -3239,6 +3239,27 @@ static ssize_t fsg_opts_stall_store(struct config_item *item, const char *page,
->  
->  CONFIGFS_ATTR(fsg_opts_, stall);
->  
-> +static ssize_t fsg_opts_break_io_store(struct config_item *item,
-> +				       const char *page, size_t len)
-> +{
-> +	struct fsg_opts *opts = to_fsg_opts(item);
-> +	unsigned long flags;
-> +
-> +	mutex_lock(&opts->lock);
-> +	spin_lock_irqsave(&opts->common->lock, flags);
-> +
-> +	if (opts->common->thread_task)
-> +		send_sig_info(SIGUSR1, SEND_SIG_PRIV,
-> +			      opts->common->thread_task);
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ Documentation/devicetree/bindings/nvmem/u-boot,env.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You should not call send_sig_info() directly; instead call 
-raise_exception().  It already does the work you need (including some 
-things you left out).
+diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+index e70b2a60cb9a..6a6b223be4a0 100644
+--- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
++++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+@@ -36,6 +36,8 @@ properties:
+         const: u-boot,env-redundant-bool
+       - description: Two redundant blocks with active having higher counter
+         const: u-boot,env-redundant-count
++      - description: Broadcom's variant with custom header
++        const: brcm,env
+ 
+   reg:
+     maxItems: 1
+-- 
+2.34.1
 
-Alan Stern
-
-> +
-> +	spin_unlock_irqrestore(&opts->common->lock, flags);
-> +	mutex_unlock(&opts->lock);
-> +
-> +	return len;
-> +}
-> +
-> +CONFIGFS_ATTR_WO(fsg_opts_, break_io);
-> +
->  #ifdef CONFIG_USB_GADGET_DEBUG_FILES
->  static ssize_t fsg_opts_num_buffers_show(struct config_item *item, char *page)
->  {
-> @@ -3283,6 +3304,7 @@ CONFIGFS_ATTR(fsg_opts_, num_buffers);
->  
->  static struct configfs_attribute *fsg_attrs[] = {
->  	&fsg_opts_attr_stall,
-> +	&fsg_opts_attr_break_io,
->  #ifdef CONFIG_USB_GADGET_DEBUG_FILES
->  	&fsg_opts_attr_num_buffers,
->  #endif
-> -- 
-> 2.35.1
-> 

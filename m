@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0214F5FFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D644F609A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbiDFNbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S233439AbiDFNdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbiDFNbN (ORCPT
+        with ESMTP id S233657AbiDFNck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:31:13 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EF6E674212
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:30:26 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxusyWa01iAhAZAA--.30206S5;
-        Wed, 06 Apr 2022 18:29:43 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MAINTAINERS: Remove redundant file of PTRACE SUPPORT entry
-Date:   Wed,  6 Apr 2022 18:29:41 +0800
-Message-Id: <1649240981-11024-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1649240981-11024-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1649240981-11024-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9AxusyWa01iAhAZAA--.30206S5
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYX7k0a2IF6F4UM7kC6x804xWl14x267AK
-        xVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-        A2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2x26xkF7I0E14v26r1I6r4UM28lY4IE
-        w2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84
-        ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxd
-        M28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc
-        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
-        wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwV
-        W8twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jrAwsUUUUU
-        =
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Wed, 6 Apr 2022 09:32:40 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FA67C7E8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:32:27 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 9A43922238;
+        Wed,  6 Apr 2022 12:31:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649241082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=teRjar+QxUq3g1wf45P3zQIoOzFA3FHoJkTKj33N6VI=;
+        b=B3ohjPB3uUOpuA+Cx2WNqILMHe80lLNb4or7/isCZTcTXr0NobDkMaYjPWcXcb+zG7wA29
+        U5/VwKQuSBZRMpZbVh4Qle3XWk4EToIwtV9E6G6CjL59OTpPS8zOlb5DJnE5zjxVKqwxYL
+        Tq93ygyKkXDSYCpfnmFTllqKPDat3Fo=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 06 Apr 2022 12:31:22 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor.Ambarus@microchip.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com
+Subject: Re: [PATCH v2 4/4] mtd: spi-nor: sfdp: Keep SFDP definitions private
+In-Reply-To: <20220405193111.pnekaivbsj7hronp@ti.com>
+References: <20220309144215.179449-1-tudor.ambarus@microchip.com>
+ <20220309144215.179449-5-tudor.ambarus@microchip.com>
+ <20220401200133.gyyvoe7xdbsww7cv@ti.com>
+ <ed093fa5-b514-b0a6-166f-ecf117582b0b@microchip.com>
+ <20220405193111.pnekaivbsj7hronp@ti.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1fa079c4a0341ffe6ad7bdebd3cb8958@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,26 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In MAINTAINERS PTRACE SUPPORT entry, the file include/uapi/linux/ptrace.h
-is redundant, remove it.
+Hi,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+I didn't follow the series closely, so I might miss something.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d4..881e3ea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15959,7 +15959,6 @@ F:	include/asm-generic/syscall.h
- F:	include/linux/ptrace.h
- F:	include/linux/regset.h
- F:	include/uapi/linux/ptrace.h
--F:	include/uapi/linux/ptrace.h
- F:	kernel/ptrace.c
- 
- PULSE8-CEC DRIVER
--- 
-2.1.0
+Am 2022-04-05 21:31, schrieb Pratyush Yadav:
+> On 04/04/22 06:19AM, Tudor.Ambarus@microchip.com wrote:
+>> On 4/1/22 23:01, Pratyush Yadav wrote:
+>> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>> >
+>> > On 09/03/22 04:42PM, Tudor Ambarus wrote:
+>> >> Keep the SFDP definitions private and expose just the definitions that are
+>> >> required by the core and manufacturer drivers.
+>> >
+>> > I am not so sure about this. Since the post_bfpt hook passes in the bfpt
+>> > table to flash drivers, they might end up wanting to use these for some
+>> > checks like issi.c does for DWORD 1. They would have to move them back
+>> > to sfdp.h for that, which just causes extra churn, and also puts some
+>> > BFPT related defines in sfdp.h and some in sfdp.c.
+>> >
 
+It's not the extra churn, but also git blame doesn't really work. In
+fact, it is already really hard to follow all the commits in spi-nor/
+with all the code moving around. So what is the actual adavantage of
+having this stuff private? One clear disadvantage is that you need to
+move it from sfdp.c to sfdp.h once you need it. And potentially, you
+might need all the defines.
+
+Also, if you pass the SFDP data to any fixups, the drivers are expected
+to use them.
+
+>> That's correct, but I think exposing just the public defines in sfdp.h 
+>> is
+>> the path to follow. We should keep private all the definitions that we 
+>> can
+>> private in sfdp.c and expose publicly in sfdp.h just the ones that are 
+>> shared.
+>> Flash collisions, and implicitly the need of public SFDP definitions, 
+>> should be
+>> an exception, so I expect sfdp.h to be short in size.
+> 
+> I disagree. I think we should keep everything in the same place. And
+> since we need to expose this to manufacturer drivers, that place is
+> sfdp.h. Who is going to cast the tiebreaking vote here? ;-)
+
+I'm leaning towards Pratyush opinion unless there is a clear advantage
+to move the defines.
+
+-michael

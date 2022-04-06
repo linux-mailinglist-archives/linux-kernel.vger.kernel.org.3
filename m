@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FE94F6791
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1374F6747
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiDFRaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S238834AbiDFR3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239075AbiDFR31 (ORCPT
+        with ESMTP id S239106AbiDFR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:29:27 -0400
+        Wed, 6 Apr 2022 13:29:12 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E513D182AFF;
-        Wed,  6 Apr 2022 08:32:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57241560A5;
+        Wed,  6 Apr 2022 08:31:42 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 236FUcaP017647;
-        Thu, 7 Apr 2022 00:30:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaP017647
+        by conuserg-08.nifty.com with ESMTP id 236FUcaQ017647;
+        Thu, 7 Apr 2022 00:30:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 236FUcaQ017647
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649259039;
-        bh=ndm1WDAbt9/rjEylpsXuA9cyn3z2PfelOFyCYEZ9OVI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HsCXPe29MYtetJOqJFbTKiHB2uKifL2Sv8/kGjmWg+otp4IawIVwbHZQ6IMmENN27
-         tExikjqx6gJHVaL4nK2yY2G5EeeAL8HEndlytK+wDrCxVHmjxGdS3C3vd41D9iIHAd
-         z1fGZTg05gRU+hW5dgj0E/6qmjWqttzgm+M6Kpuu2yVGOyzBe9nII/cVb5V/PxPBKZ
-         QnPN9dRvv74WFHW2V4cSc6TuIcn25D717SckK7fEdD8IYAeb9/o3nUSIau/GbKBp6O
-         MqN1+MHf2Uhap5PFIWd7LOpa+ZzGyQ9S3iapIc0BR/+kF4RRmSsPogKp7uHs7IpBP1
-         YvpHGr2n3EFdg==
+        s=dec2015msa; t=1649259040;
+        bh=6o17aiZBvHlMD/DzwDamCOdodobOeuUrwwxgJ29rqNo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cbyS2Nd2FDsH4kPaPK8uaby5RDDNiWRu+WcCe9Yp/vPUTiV5R2Pk0RhXuDl9EGzlp
+         C8pJFTT4ZeWSzQfi6GnZyDZc5l105tIzUExpgBUgjh0wH1Lm0XHf8JnBkqDJljA9oO
+         YZIBIkThqqO7KBy9uLf2W0Rum+dREfpcUghFvWXn/lzdOsOiZiYuocauOp3/c32Swj
+         W9vTg/k3VYgPvcoBxiqcDg2P/ms+mVcbXc0c7amDGzuDCYwDTYxXsnVssNP4+et0gv
+         4qHzTfKwf88KNHyeP/8xK/PC+kog2zkUZPU3f19fNp1lCiAn0CtDeiG2oBqP8xF3n8
+         cpDuSqlIJh+3A==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
         Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: [PATCH 0/7] kbuild: more misc cleanups
-Date:   Thu,  7 Apr 2022 00:30:16 +0900
-Message-Id: <20220406153023.500847-1-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 1/7] kbuild: reuse suffix-search to refactor multi_depend
+Date:   Thu,  7 Apr 2022 00:30:17 +0900
+Message-Id: <20220406153023.500847-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220406153023.500847-1-masahiroy@kernel.org>
+References: <20220406153023.500847-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,35 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The complicated part of multi_depend is the same as suffix-search.
 
-I sent the first batch of cleanups:
-https://lore.kernel.org/linux-kbuild/20220405113359.2880241-1-masahiroy@kernel.org/T/#t
+Reuse it.
 
-I took 01-06, 09-10.
-I dropped 07, 08.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-This is the second batch.
+ scripts/Makefile.lib | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
-Masahiro Yamada (7):
-  kbuild: reuse suffix-search to refactor multi_depend
-  kbuild: make multi_depend work with targets in subdirectory
-  kbuild: reuse real-search to simplify cmd_mod
-  kbuild: split the second line of *.mod into *.usyms
-  kbuild: get rid of duplication in *.mod files
-  kbuild: make *.mod not depend on *.o
-  kbuild: read *.mod to get objects passed to $(LD) or $(AR)
-
- .gitignore                  |  1 +
- Makefile                    |  5 +++--
- scripts/Makefile.build      | 31 ++++++++++++++-----------------
- scripts/Makefile.lib        |  6 +++---
- scripts/adjust_autoksyms.sh |  2 +-
- scripts/gen_autoksyms.sh    | 18 +++++++++++-------
- scripts/mod/sumversion.c    | 11 ++---------
- 7 files changed, 35 insertions(+), 39 deletions(-)
-
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 9f69ecdd7977..d56cda3c1e8a 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -238,7 +238,7 @@ endif
+ define multi_depend
+ $(foreach m, $(notdir $1), \
+ 	$(eval $(obj)/$m: \
+-	$(addprefix $(obj)/, $(foreach s, $3, $($(m:%$(strip $2)=%$(s)))))))
++	$(addprefix $(obj)/, $(call suffix-search, $m, $2, $3))))
+ endef
+ 
+ # Copy a file
 -- 
 2.32.0
 

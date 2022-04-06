@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C41E4F6903
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4230B4F693D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240536AbiDFSUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 14:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S240367AbiDFSTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 14:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241494AbiDFSTT (ORCPT
+        with ESMTP id S241268AbiDFSSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:19:19 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB9810781D;
-        Wed,  6 Apr 2022 10:01:50 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id bx5so3117507pjb.3;
-        Wed, 06 Apr 2022 10:01:50 -0700 (PDT)
+        Wed, 6 Apr 2022 14:18:32 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D58D1877E5;
+        Wed,  6 Apr 2022 10:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tji3uryA80ryL0v5i/4cJLB5FmNIif56xmTcuZ+KJ1E=;
-        b=VKGbuIMCQkgcPN2TDBgIhQ0kOQ5fkECxM375spzc9MjKK3AH4Ss+8I8/w0TwxzGZbr
-         yjEIW1kMpL5UwR1ByOoQuTEmwmZ5ihewS3bXAPBrTmZkNtFo/Exj6Z4QOoPDVpOXqEa+
-         X6FPILUSP6D3YB7DWDU7Jdw37z5u1JX1ojLmwZ30eY/6ono4+TJeSEqks+f77pJx0VNb
-         P38COxMVPO4tGwAxAg43DcCXd9MVWqpad9quPgVZEwgn1qtOLFcsnQjMln6foAhj/yzm
-         uiJHXRrTqlM5gty/vGc5IrBp7CctkWXdH8jJIGMgwp35/mg7Zn/xYnraYhXVa0RUc0rg
-         fV0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tji3uryA80ryL0v5i/4cJLB5FmNIif56xmTcuZ+KJ1E=;
-        b=VR42+s8nWqdxOLTmFXzomEQuyirTtRfFL132GEXsRNHflgozZkblSlNRlZH+7Ggvg+
-         0/KfFem5XGSzX+4qA3y9FGo9zHpKzAeiZDWc3n/W7DXyCakHpPmedrOkej07m0QzQpDR
-         RIgviZjdva5CGrum1DVYVJaWdNNLBCaFPo7EiEjaiNnw5PQvfNDOkKVm3IVrF4oCV8jd
-         kJ+r/GVNoBpet6sTVgtrmQu/k+hGfIu/udDWRAnmQLaZQRSWjBaK3NMHkfyP5v23YDLD
-         BDKUJtD1zfi+vq67GHDsCslmMU61kk+hEuOSoImhubDkvPzYo7T9BCaqT94TSvFS04H0
-         bslg==
-X-Gm-Message-State: AOAM533c/jtMy6uoLjK8TiGdGDFgoI4RxW4ysIjt6IiBXx3ul67Y7OUq
-        5Es7JOwP2EZZw3SaPxPHzdAQVFrhw+UUJvT5e1mngQul
-X-Google-Smtp-Source: ABdhPJwnrYWN+wCHETrUl7CszfjDyZfqz3h5NA96wUGgNIvVDzoB+9XhRVEIkQ3LYGAY8vAr6aG3dWoV31bu/qaLbk0=
-X-Received: by 2002:a17:903:32c5:b0:156:b466:c8ed with SMTP id
- i5-20020a17090332c500b00156b466c8edmr9561560plr.34.1649264510205; Wed, 06 Apr
- 2022 10:01:50 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649264554; x=1680800554;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zCm35dqJeIsDGwuyLVEnPyr0Q2EEi3+4jjs5g8wcZjU=;
+  b=a9yGXzAXrrEvTK3brLkFa/vFFy1K1VLtfMW+E4W5rxFQY5cHkDARwA09
+   SLnp/h7nXqMMCYfGrvnzSAO2qo9s0jG/y5pSND6cJnyJzv/y8/RabKSRx
+   Hg/FHpK//3P5Hgc2Lzj3bbg4qyetQgWOCYBPJ4RDTjdfh71eogOAX7Gvw
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 06 Apr 2022 10:02:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:02:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 10:02:33 -0700
+Received: from [10.110.72.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
+ 10:02:32 -0700
+Message-ID: <fb02ab86-4c7f-8303-621d-349ac8c25546@quicinc.com>
+Date:   Wed, 6 Apr 2022 10:02:31 -0700
 MIME-Version: 1.0
-References: <20220405075531.GB30877@worktop.programming.kicks-ass.net>
- <CAADnVQJ1_9sBqRngG_J+84whx9j7d7qOSzMaJvhc0evDBQfE3w@mail.gmail.com> <20220406104643.GB2731@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220406104643.GB2731@worktop.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 6 Apr 2022 10:01:39 -0700
-Message-ID: <CAADnVQLnHYQDM650v7JBw4TkmWOR5FMyEbTw31ySEyccM8QDCg@mail.gmail.com>
-Subject: Re: [PATCH] x86,bpf: Avoid IBT objtool warning
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] cw1200: fix incorrect check to determine if no element
+ is found in list
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+CC:     <pizza@shaftnet.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linville@tuxdriver.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jakobkoschel@gmail.com>
+References: <20220320035436.11293-1-xiam0nd.tong@gmail.com>
+ <164924475461.19026.8095141212129340061.kvalo@kernel.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <164924475461.19026.8095141212129340061.kvalo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 3:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Apr 05, 2022 at 09:58:28AM -0700, Alexei Starovoitov wrote:
-> > On Tue, Apr 5, 2022 at 12:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > >
-> > > Clang can inline emit_indirect_jump() and then folds constants, which
-> > > results in:
-> > >
-> > >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x6a4: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
-> > >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x67d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
-> > >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x386: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
-> > >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x35d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
-> > >
-> > > Suppress the optimization such that it must emit a code reference to
-> > > the __x86_indirect_thunk_array[] base.
-> > >
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >  arch/x86/net/bpf_jit_comp.c |    1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > --- a/arch/x86/net/bpf_jit_comp.c
-> > > +++ b/arch/x86/net/bpf_jit_comp.c
-> > > @@ -412,6 +412,7 @@ static void emit_indirect_jump(u8 **ppro
-> > >                 EMIT_LFENCE();
-> > >                 EMIT2(0xFF, 0xE0 + reg);
-> > >         } else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
-> > > +               OPTIMIZER_HIDE_VAR(reg);
-> > >                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
-> > >         } else
-> > >  #endif
-> >
-> > Looks good. Please cc bpf@vger and all bpf maintainers in the future.
->
-> Oh right, I'll go add an alias for that.
->
-> > We can take it through the bpf tree if you prefer.
->
-> I'll take it through the x86/urgent tree if you don't mind.
+On 4/6/2022 4:32 AM, Kalle Valo wrote:
+> Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+> 
+>> The bug is here: "} else if (item) {".
+>>
+>> The list iterator value will *always* be set and non-NULL by
+>> list_for_each_entry(), so it is incorrect to assume that the iterator
+>> value will be NULL if the list is empty or no element is found in list.
+>>
+>> Use a new value 'iter' as the list iterator, while use the old value
+>> 'item' as a dedicated pointer to point to the found element, which
+>> 1. can fix this bug, due to now 'item' is NULL only if it's not found.
+>> 2. do not need to change all the uses of 'item' after the loop.
+>> 3. can also limit the scope of the list iterator 'iter' *only inside*
+>>     the traversal loop by simply declaring 'iter' inside the loop in the
+>>     future, as usage of the iterator outside of the list_for_each_entry
+>>     is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+>>
+>> Fixes: a910e4a94f692 ("cw1200: add driver for the ST-E CW1100 & CW1200 WLAN chipsets")
+>> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> 
+> Can someone review this, please?
+> 
 
-Sure. Then pls add:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+

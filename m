@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B304F6DB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C524F6DB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbiDFWKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S237118AbiDFWKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiDFWK1 (ORCPT
+        with ESMTP id S236988AbiDFWK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 18:10:27 -0400
+        Wed, 6 Apr 2022 18:10:29 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AE3F1D08F8;
-        Wed,  6 Apr 2022 15:08:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C9131D12DE;
+        Wed,  6 Apr 2022 15:08:32 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBEA612FC;
-        Wed,  6 Apr 2022 15:08:29 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C1FF12FC;
+        Wed,  6 Apr 2022 15:08:32 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.9.217])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F14B83F5A1;
-        Wed,  6 Apr 2022 15:08:27 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 38BB83F5A1;
+        Wed,  6 Apr 2022 15:08:30 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
         viresh.kumar@linaro.org, rafael@kernel.org,
         daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
         amit.kachhap@gmail.com, linux-pm@vger.kernel.org
-Subject: [RFC PATCH v3 2/5] cpuidle: Add Cpufreq Active Stats calls tracking idle entry/exit
-Date:   Wed,  6 Apr 2022 23:08:06 +0100
-Message-Id: <20220406220809.22555-3-lukasz.luba@arm.com>
+Subject: [RFC PATCH v3 3/5] thermal: Add interface to cooling devices to handle governor change
+Date:   Wed,  6 Apr 2022 23:08:07 +0100
+Message-Id: <20220406220809.22555-4-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220406220809.22555-1-lukasz.luba@arm.com>
 References: <20220406220809.22555-1-lukasz.luba@arm.com>
@@ -42,46 +42,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Cpufreq Active Stats tracks and accounts the activity of the CPU
-for each performance level. It accounts the real residency, when the CPU
-was not idle, at a given performance level. This patch adds needed calls
-which provide the CPU idle entry/exit events to the Cpufreq Active Stats.
+Add interface to cooling devices to handle governor change, to better
+setup internal needed structures or to cleanup them. This interface is
+going to be used by thermal governor Intelligent Power Allocation (IPA).
+which requires to setup monitoring mechanism in the cpufreq cooling
+devices.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/cpuidle/cpuidle.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/thermal.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index ef2ea1b12cd8..f19711b95afb 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -16,6 +16,7 @@
- #include <linux/notifier.h>
- #include <linux/pm_qos.h>
- #include <linux/cpu.h>
-+#include <linux/cpufreq_stats.h>
- #include <linux/cpuidle.h>
- #include <linux/ktime.h>
- #include <linux/hrtimer.h>
-@@ -231,6 +232,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
- 	trace_cpu_idle(index, dev->cpu);
- 	time_start = ns_to_ktime(local_clock());
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index c314893970b3..baaa84d989bd 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -87,6 +87,7 @@ struct thermal_cooling_device_ops {
+ 	int (*get_requested_power)(struct thermal_cooling_device *, u32 *);
+ 	int (*state2power)(struct thermal_cooling_device *, unsigned long, u32 *);
+ 	int (*power2state)(struct thermal_cooling_device *, u32, unsigned long *);
++	int (*change_governor)(struct thermal_cooling_device *cdev, bool set);
+ };
  
-+	cpufreq_active_stats_cpu_idle_enter(time_start);
-+
- 	stop_critical_timings();
- 	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
- 		rcu_idle_enter();
-@@ -243,6 +246,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
- 	time_end = ns_to_ktime(local_clock());
- 	trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
- 
-+	cpufreq_active_stats_cpu_idle_exit(time_end);
-+
- 	/* The cpu is no longer idle or about to enter idle. */
- 	sched_idle_set_state(NULL);
- 
+ struct thermal_cooling_device {
 -- 
 2.17.1
 

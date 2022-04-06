@@ -2,181 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6244E4F6252
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A634F6258
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235101AbiDFOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S235041AbiDFOzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiDFOy2 (ORCPT
+        with ESMTP id S235252AbiDFOzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:54:28 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16DA542779
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:31:25 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n35so1254818wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:31:25 -0700 (PDT)
+        Wed, 6 Apr 2022 10:55:18 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFEB60290E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:31:50 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id t4so1975578pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5XbRU+VxgtJAsYJu2rQYo8tuqHFMuZ1T/xaK9fUrdH0=;
-        b=eR5rUlVSnTFQlvGrccqjvN39M+LeViWxotz7T8MGCPbprNA8KYhbn/yw6G+dwvbAyK
-         mxXLeQggdQLJvCfjEdJz1V45cbfp1g3qf2mP6hTjQ0jauNDwJw/0skDi7X4qzk70kShg
-         xTWeyaXzLpEhIappmAnDK8gVxdrAaQxznxoLwhp1xkZM/wCBTQE+2EW1jX+i85riQPyl
-         WxogHEwc5ZehS7LFL8tJMaR7hBZmSxT9d7+2y+6IIE5Gg/Hh11kb01LTUTO5FUVUUzu0
-         zZEXGR5B7R/AO+i1J3O7BWkkqCV0AY00roN3cmRkjgq1laaz+jiP+NkI21eF0pWV6/fm
-         A20Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=xl6VVCAajevFuRJS9yPa1nlDbDqEUfMrrJAAj8Ufl7w=;
+        b=Jm/MEaVSKPLAgcL0eRNOvFXKLkxCSUlelHrlNGJGE8zKGxd3mPDoOYmNNAr/PX2oZf
+         RI56ezt7I/hXAiPJq0vjNGAcQdWuTdVWA/7HJ+WZ3/B7mbSna+w1YFowR0TTEWY06fIF
+         WfJU0pApHvsua2/YXeuoXGx+e7I4ebchnLVYYnj8iygztCYswVz7jr7Dibf3ufK1ndcA
+         mxmOxppTuxX3dtjyhVfSyWcNRIDUo0Z//arZ/poeXhMUaF3BOLjZy0EWeqKe8I2MeObe
+         /A1vlRRhDQfVjwsZ3tA5TLRSHymZFcUXPpi8ktcYdFJDGzQe+HSYGq8JR+rxkv4chhPM
+         MB5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5XbRU+VxgtJAsYJu2rQYo8tuqHFMuZ1T/xaK9fUrdH0=;
-        b=dpkOqrMQG+vZNkka2GPqLr5nmjTCe4xWOnxMgggMug0cnvKGiDnfU4Np5wU1nQnvA8
-         IrW8A4iSa5IoSbE0d0QBG23b/DGalDewyKoEUKsVq7+9Q2Gp4Hc3Vb21aMtKl8yIlpJw
-         ulq+M7YZGYJZkpTSpIukgYzIvZoNXeTKL2vPLXrwZv3fapt9OGNepvkfZSYFCIAP+ceQ
-         jPJyjfgKkfmSGUfHc13vA3LaDB+OxOZanZ7ORhjaNsia+H2J4p+3eiYGtIXh5+mKbUUS
-         6nLUHmv+L+kexXXxCtwdci+V9OEum92ql7pC7pQL7mLQ/rQNC2jX4HCPpUqCaApRmTlX
-         lWWg==
-X-Gm-Message-State: AOAM531d0xBZkeLOif4tNj48xqrcNFj1jJ/UdXPARLUpSTmEUcmWmAOr
-        dkONHT9JnrwELyq+0uJUAHcnEQ==
-X-Google-Smtp-Source: ABdhPJz5ePGx/VXESvKKA0BSxhKgDc52BTcCoXDqPlrAPdNxYzxZyJaRj9rQ1myoM+kbqb4a3CQTqQ==
-X-Received: by 2002:a05:600c:2652:b0:38e:72da:7992 with SMTP id 18-20020a05600c265200b0038e72da7992mr7034652wmy.111.1649244683953;
-        Wed, 06 Apr 2022 04:31:23 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:d960:ec5e:e421:9c9e? ([2001:861:44c0:66c0:d960:ec5e:e421:9c9e])
-        by smtp.gmail.com with ESMTPSA id a2-20020a5d53c2000000b0020604b2667asm16014136wrw.81.2022.04.06.04.31.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 04:31:23 -0700 (PDT)
-Message-ID: <c789adcd-d072-bec2-a823-5f5993704365@baylibre.com>
-Date:   Wed, 6 Apr 2022 13:31:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] i2c: meson: Use 50% duty cycle for I2C clock
-Content-Language: en-US
-To:     Lucas Tanure <tanure@linux.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220326102229.421718-1-tanure@linux.com>
- <20220326102229.421718-3-tanure@linux.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220326102229.421718-3-tanure@linux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xl6VVCAajevFuRJS9yPa1nlDbDqEUfMrrJAAj8Ufl7w=;
+        b=TIP0xqWBiyVWcTs++J+fPq2uQWEmzC3YQoylCeFjOkG45N5j7n87Pd9hLkt+y/Zi4m
+         vWDvQovj7RBWZkNcXKMWUrdW6y646B1WtEukm5M5iVA6fvlHEHoSIXPiSTOXIw1moyvR
+         0hbrSDCSjITYT5M38l9cPtvyQgPoJy+RHgsRV+wa+eMZkhopi2t7x+WwQVnQ0mq7x1ud
+         5aUgEd9k5omlyghitR8khysSl4Yq8B7TIYvDo5w+WzuRLcuM5HxHPLKZaYPFYLS511RS
+         CjTLGTrJaw6vU1gM1M77JeDz6YGXukQa3LZsAFmheI7XQOBJ5gEMhmXI5TzXrM8/ljnV
+         YHdA==
+X-Gm-Message-State: AOAM532H3EFehPAdc+LEw8uTi0zWbXWgLhTNaRdJS50RDmhCx3/ccTR3
+        VYkIuhVyGAinrWad12xvo6mTUwu6bWmWeA==
+X-Google-Smtp-Source: ABdhPJx3gTn89KY6+7NY2fQ+ZYGvPyx47HtqtU3a9MIUqtNVPY4y3m/hrg/EmUaMM3x0fmQTiwagag==
+X-Received: by 2002:a63:221f:0:b0:374:7286:446a with SMTP id i31-20020a63221f000000b003747286446amr6759359pgi.538.1649244709835;
+        Wed, 06 Apr 2022 04:31:49 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.119.18])
+        by smtp.gmail.com with ESMTPSA id f19-20020a056a00229300b004fb157f136asm19760516pfe.153.2022.04.06.04.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 04:31:49 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     patrik.r.jakobsson@gmail.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v2] drm/gma500: fix a potential repeat execution in psb_driver_load
+Date:   Wed,  6 Apr 2022 19:31:43 +0800
+Message-Id: <20220406113143.10699-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Instead of exiting the loop as expected when an entry is found, the
+list_for_each_entry() continues until the traversal is complete. To
+avoid potential executing 'ret = gma_backlight_init(dev);' repeatly,
+goto outside the loop when the entry is found.
 
-On 26/03/2022 11:22, Lucas Tanure wrote:
-> The duty cycle of 33% is less than the required
-> by the I2C specs for the LOW period of the SCL
-> clock.
-> 
-> Move the duty cyle to 50% for 100Khz or lower
-> clocks, and (40% High SCL / 60% Low SCL) duty
-> cycle for clocks above 100Khz.
-> 
-> Signed-off-by: Lucas Tanure <tanure@linux.com>
-> ---
->   drivers/i2c/busses/i2c-meson.c | 45 +++++++++++++++++++++++++---------
->   1 file changed, 33 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-> index 4b4a5b2d77ab..b913ba20f06e 100644
-> --- a/drivers/i2c/busses/i2c-meson.c
-> +++ b/drivers/i2c/busses/i2c-meson.c
-> @@ -140,29 +140,50 @@ static void meson_i2c_add_token(struct meson_i2c *i2c, int token)
->   static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
->   {
->   	unsigned long clk_rate = clk_get_rate(i2c->clk);
-> -	unsigned int div;
-> +	unsigned int div_h, div_l;
->   
-> -	div = DIV_ROUND_UP(clk_rate, freq);
-> -	div -= FILTER_DELAY;
-> -	div = DIV_ROUND_UP(div, i2c->data->div_factor);
-> +	if (freq <= 100000) {
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
 
-You should use I2C_MAX_STANDARD_MODE_FREQ instead here
+changes since v1:
+ - goto outside the loop (Xiaomeng Tong)
 
-> +		div_h = DIV_ROUND_UP(clk_rate, freq);
-> +		div_l = DIV_ROUND_UP(div_h, 4);
-> +		div_h = DIV_ROUND_UP(div_h, 2) - FILTER_DELAY;
-> +	} else {
-> +	/* According to I2C-BUS Spec 2.1, in FAST-MODE, the minimum LOW period is 1.3uS, and
-> +	 * minimum HIGH is least 0.6us.
-> +	 * For 400000 freq, the period is 2.5us. To keep within the specs, give 40% of period to
-> +	 * HIGH and 60% to LOW. This means HIGH at 1.0us and LOW 1.5us.
-> +	 * The same applies for Fast-mode plus, where LOW is 0.5us and HIGH is 0.26us.
-> +	 * Duty = H/(H + L) = 2/5
-> +	 */
+v1: https://lore.kernel.org/lkml/20220401115811.9656-1-xiam0nd.tong@gmail.com/
 
-Please move the comment before the if()
+---
+ drivers/gpu/drm/gma500/psb_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> +		div_h = DIV_ROUND_UP(clk_rate * 2, freq * 5) - FILTER_DELAY;
-> +		div_l = DIV_ROUND_UP(clk_rate * 3, freq * 5 * 2);
-> +	}
->   
->   	/* clock divider has 12 bits */
-> -	if (div > GENMASK(11, 0)) {
-> +	if (div_h > GENMASK(11, 0)) {
->   		dev_err(i2c->dev, "requested bus frequency too low\n");
-> -		div = GENMASK(11, 0);
-> +		div_h = GENMASK(11, 0);
-> +	}
-> +	if (div_l > GENMASK(11, 0)) {
-> +		dev_err(i2c->dev, "requested bus frequency too low\n");
-> +		div_l = GENMASK(11, 0);
->   	}
->   
->   	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
-> -			   FIELD_PREP(REG_CTRL_CLKDIV_MASK, div & GENMASK(9, 0)));
-> +			   FIELD_PREP(REG_CTRL_CLKDIV_MASK, div_h & GENMASK(9, 0)));
->   
->   	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
-> -			   FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div >> 10));
-> +			   FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div_h >> 10));
-> +
-> +
-> +	/* set SCL low delay */
-> +	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_MASK,
-> +			   (div_l << REG_SLV_SCL_LOW_SHIFT) & REG_SLV_SCL_LOW_MASK);
-
-You could use FIELD_PREP() here
-
->   
-> -	/* Disable HIGH/LOW mode */
-> -	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, 0);
-> +	/* Enable HIGH/LOW mode */
-> +	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, REG_SLV_SCL_LOW_EN);
->   
-> -	dev_dbg(i2c->dev, "%s: clk %lu, freq %u, div %u\n", __func__,
-> -		clk_rate, freq, div);
-> +	dev_dbg(i2c->dev, "%s: clk %lu, freq %u, divh %u, divl %u\n", __func__,
-> +		clk_rate, freq, div_h, div_l);
->   }
->   
->   static void meson_i2c_get_data(struct meson_i2c *i2c, char *buf, int len)
-
-I looked at different amlogic downstream sources, and those match the recommended
-calculations.
-
-So with the legacy back for Meson6, it will be OK.
-
-Neil
+diff --git a/drivers/gpu/drm/gma500/psb_drv.c b/drivers/gpu/drm/gma500/psb_drv.c
+index 2aff54d505e2..929fd47548b4 100644
+--- a/drivers/gpu/drm/gma500/psb_drv.c
++++ b/drivers/gpu/drm/gma500/psb_drv.c
+@@ -400,9 +400,10 @@ static int psb_driver_load(struct drm_device *dev, unsigned long flags)
+ 		case INTEL_OUTPUT_LVDS:
+ 		case INTEL_OUTPUT_MIPI:
+ 			ret = gma_backlight_init(dev);
+-			break;
++			goto out;
+ 		}
+ 	}
++out:
+ 	drm_connector_list_iter_end(&conn_iter);
+ 
+ 	if (ret)
+-- 
+2.17.1
 

@@ -2,145 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F704F6528
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C334F6538
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbiDFQLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S237280AbiDFQOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiDFQLf (ORCPT
+        with ESMTP id S237354AbiDFQOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:11:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836154E0035
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:39:49 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a6so4454371ejk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 06:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iyJLK8l5hs8KCNBFxlx1llqa+FYfySe8JZbdJuv2BSY=;
-        b=AZPHzmAkPb4vBz8KQIFg70PyU76BInADKyX8st0Ig2+U518SEl0fYZpUw9xiNqn87K
-         aFxAL3Rzj+bm6m248CxtYI2apq5TfG0PFHHUmZ81yjVBfZyky+nQJ/y68jjzZEoz3IVP
-         2ZeHrhjWp7zRdPFnB94aJ4/AKOIGQDHMVIHBYN9336v/0QdlpMxxmRvr9byy1Bbv4vDL
-         t/8yFF66Fj9bRZzxcLG0bXKl15HjhRZclLJAUz756gQUgnTvBYY20cHN7doi1i5nWcX4
-         ErVcNb4eFZDmVj0lZzaKcxqtV9IkWmD3avg4JPdWRFGAV0+pyTjszJMDk1upXk7xhzUN
-         JwKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iyJLK8l5hs8KCNBFxlx1llqa+FYfySe8JZbdJuv2BSY=;
-        b=U+DoP9+SCQIW9mWelHpeg3+c5hosev8xFySgzH8gaszeGvBL+JPRvPhNJlgCOMHDel
-         UGaxAfzi2uhCOE+vcn30D6CiHwO9R5MUMsiteMvyjz3HmkMra3+1eKxZs+XhguqEJl9N
-         zkEkbCcL/Om6RC6maIvfkJkiehx1cUxKFGXwK9VJKHQBckFqc/KnzmTKCcKfEtJ3ymbY
-         oewVhfiH+JhQVxURhRv3yjkZUbC64nRSC75Gz02HqjN46Ya0FH3uDvVOq3KczTtWQHpb
-         QwWev1K28vU2Uq+WI83GAiEsgF53H7ss0L17a+uSlnbHw0W00UpZQgPZ0XDXiUNXoUgG
-         pMtw==
-X-Gm-Message-State: AOAM533tQAu4yrhNVi+L2fks5uhcOghRzv0nF8p7oeK2FRX6H31w+dCo
-        NUU4xOoZPEH0POd5dUgWmW6mqUynXjARD8pdJjc=
-X-Google-Smtp-Source: ABdhPJxMIvTQA11CZ2AiXt7TtQTnJBNSoAaXV+VAZQ4YGkON/JIi45sEq/1i4BR871lm6N50qVjEtGN9q8EZB893/WU=
-X-Received: by 2002:a17:906:7947:b0:6da:892f:2503 with SMTP id
- l7-20020a170906794700b006da892f2503mr8161523ejo.710.1649252387873; Wed, 06
- Apr 2022 06:39:47 -0700 (PDT)
+        Wed, 6 Apr 2022 12:14:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366365DA04;
+        Wed,  6 Apr 2022 06:41:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C82B1615E4;
+        Wed,  6 Apr 2022 13:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02E5C385A3;
+        Wed,  6 Apr 2022 13:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649252466;
+        bh=BmgZ/1mmISCzEBB5knGB373Rii6dB/CAioOuAHnaKJA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=JlSFfjYaAB9PLg4Rofz28z7Pvxlm2o7uwTzjQJBHk1qaQ2fjpGZlexGkRtO+CGxqC
+         lBiig24iJqQDbfq21HS92W5sy4K8LteUZMV+s7P3yAHOyqtQWPRT/rI4gDkOdokzOZ
+         b0hWn8YlNYnHRU7RZFTExCRrMxsUhirWFc3wyUpjEUG315qdyf5rhHSxdXWQKJI3Hh
+         zfqV8/1JDs/WWubPcOp65sZTH9P9oFVkiXRls1fs4DyybyWOPUV4cePez0+gu7yR5p
+         gdos7XP19oddCW85Aa9t1cKsVGbatF0tPOt33yiqTWM1UNyJTGLGw+u0ueiaGRGfWs
+         xGrrzRMWuPV4g==
+Message-ID: <f0ed169ed02fe810076e959e9ec5455d9de4b4ff.camel@kernel.org>
+Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
+ inodes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiubo Li <xiubli@redhat.com>,
+        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 06 Apr 2022 09:41:04 -0400
+In-Reply-To: <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
+References: <20220401133243.1075-1-lhenriques@suse.de>
+         <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
+         <878rsia391.fsf@brahms.olymp>
+         <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
+         <87zgky8n0o.fsf@brahms.olymp>
+         <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
+         <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-References: <20220405213800.90205-1-h0tc0d3@gmail.com> <CADnq5_PXDyOXX2p4FswWWyY6sw8nXmajhUzx-=ke+6jiZn3ZPA@mail.gmail.com>
-In-Reply-To: <CADnq5_PXDyOXX2p4FswWWyY6sw8nXmajhUzx-=ke+6jiZn3ZPA@mail.gmail.com>
-From:   =?UTF-8?B?0JPRgNC40LPQvtGA0LjQuQ==?= <h0tc0d3@gmail.com>
-Date:   Wed, 6 Apr 2022 16:39:46 +0300
-Message-ID: <CAD5ugGDAKGtKLavhqSDObbGRu1WSyE04eQRhUv4Dk7dC+PrK6w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Unnecessary code in gfx_v7_0.c
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Joseph Greathouse <Joseph.Greathouse@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alex Deucher, Thanks, that's what I thought too. But this code is
-uninformative, and without it is clear what this code is doing. If you
-need to provide additional information on how the code works, then for
-me it's better to leave a comment.
-This is actually more like a bug than an explanation of what the code is do=
-ing.
+On Wed, 2022-04-06 at 21:10 +0800, Xiubo Li wrote:
+> On 4/6/22 7:48 PM, Jeff Layton wrote:
+> > On Wed, 2022-04-06 at 12:33 +0100, Luís Henriques wrote:
+> > > Xiubo Li <xiubli@redhat.com> writes:
+> > > 
+> > > > On 4/6/22 6:57 PM, Luís Henriques wrote:
+> > > > > Xiubo Li <xiubli@redhat.com> writes:
+> > > > > 
+> > > > > > On 4/1/22 9:32 PM, Luís Henriques wrote:
+> > > > > > > When doing DIO on an encrypted node, we need to invalidate the page cache in
+> > > > > > > the range being written to, otherwise the cache will include invalid data.
+> > > > > > > 
+> > > > > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > > > > > > ---
+> > > > > > >     fs/ceph/file.c | 11 ++++++++++-
+> > > > > > >     1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > > > > 
+> > > > > > > Changes since v1:
+> > > > > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> > > > > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+> > > > > > > 
+> > > > > > > Note: I'm not really sure this last change is required, it doesn't really
+> > > > > > > affect generic/647 result, but seems to be the most correct.
+> > > > > > > 
+> > > > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > > > > > > index 5072570c2203..b2743c342305 100644
+> > > > > > > --- a/fs/ceph/file.c
+> > > > > > > +++ b/fs/ceph/file.c
+> > > > > > > @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+> > > > > > >     	if (ret < 0)
+> > > > > > >     		return ret;
+> > > > > > >     -	ceph_fscache_invalidate(inode, false);
+> > > > > > > +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+> > > > > > >     	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> > > > > > >     					    pos >> PAGE_SHIFT,
+> > > > > > >     					    (pos + count - 1) >> PAGE_SHIFT);
+> > > > > > The above has already invalidated the pages, why doesn't it work ?
+> > > > > I suspect the reason is because later on we loop through the number of
+> > > > > pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
+> > > > Checked the 'copy_page_from_iter()', it will do the kmap for the pages but will
+> > > > kunmap them again later. And they shouldn't update the i_mapping if I didn't
+> > > > miss something important.
+> > > > 
+> > > > For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context inplace,
+> > > > IMO if it needs to map the page and it should also unmap it just like in
+> > > > 'copy_page_from_iter()'.
+> > > > 
+> > > > I thought it possibly be when we need to do RMW, it may will update the
+> > > > i_mapping when reading contents, but I checked the code didn't find any
+> > > > place is doing this. So I am wondering where tha page caches come from ? If that
+> > > > page caches really from reading the contents, then we should discard it instead
+> > > > of flushing it back ?
+> > > > 
+> > > > BTW, what's the problem without this fixing ? xfstest fails ?
+> > > Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
+> > > also checked that the RMW code was never executed in this test.
+> > > 
+> > > But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
+> > > change the inode->i_mapping.
+> > > 
+> > No, kmap/unmap are all about high memory and 32-bit architectures. Those
+> > functions are usually no-ops on 64-bit arches.
+> 
+> Yeah, right.
+> 
+> So they do nothing here.
+> 
+> > > In my debugging this seemed to be the case
+> > > for the O_DIRECT path.  That's why I added this extra call here.
+> > > 
+> > I agree with Xiubo that we really shouldn't need to invalidate multiple
+> > times.
+> > 
+> > I guess in this test, we have a DIO write racing with an mmap read
+> > Probably what's happening is either that we can't invalidate the page
+> > because it needs to be cleaned, or the mmap read is racing in just after
+> > the invalidate occurs but before writeback.
+> 
+> This sounds a possible case.
+> 
+> 
+> > In any case, it might be interesting to see whether you're getting
+> > -EBUSY back from the new invalidate_inode_pages2 calls with your patch.
+> > 
+> If it's really this case maybe this should be retried some where ?
+> 
 
-=D1=81=D1=80, 6 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 16:20, Alex Deucher=
- <alexdeucher@gmail.com>:
->
-> On Wed, Apr 6, 2022 at 4:00 AM Grigory Vasilyev <h0tc0d3@gmail.com> wrote=
-:
-> >
-> > The code is useless and doesn't change the value.
-> >
-> > (0 << GB_ADDR_CONFIG__ROW_SIZE__SHIFT) =3D 0
-> > gb_addr_config | 0 =3D gb_addr_config
-> >
-> > Perhaps there could be 1 instead of 0, but this does not correspond wit=
-h
-> > the logic of the switch.
->
-> It doesn't do anything, but it helps the developer to understand how
-> the driver state maps to hardware state.
->
-> Alex
->
-> >
-> > Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c b/drivers/gpu/drm/am=
-d/amdgpu/gfx_v7_0.c
-> > index 1cb5db17d2b9..5ed84a6467ee 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
-> > @@ -4409,16 +4409,14 @@ static void gfx_v7_0_gpu_early_init(struct amdg=
-pu_device *adev)
-> >         /* fix up row size */
-> >         gb_addr_config &=3D ~GB_ADDR_CONFIG__ROW_SIZE_MASK;
-> >         switch (adev->gfx.config.mem_row_size_in_kb) {
-> > -       case 1:
-> > -       default:
-> > -               gb_addr_config |=3D (0 << GB_ADDR_CONFIG__ROW_SIZE__SHI=
-FT);
-> > -               break;
-> >         case 2:
-> >                 gb_addr_config |=3D (1 << GB_ADDR_CONFIG__ROW_SIZE__SHI=
-FT);
-> >                 break;
-> >         case 4:
-> >                 gb_addr_config |=3D (2 << GB_ADDR_CONFIG__ROW_SIZE__SHI=
-FT);
-> >                 break;
-> > +       default:
-> > +               break;
-> >         }
-> >         adev->gfx.config.gb_addr_config =3D gb_addr_config;
-> >  }
-> > --
-> > 2.35.1
-> >
+Possibly, or we may need to implement ->launder_folio.
+
+Either way, we need to understand what's happening first and then we can
+figure out a solution for it.
+-- 
+Jeff Layton <jlayton@kernel.org>

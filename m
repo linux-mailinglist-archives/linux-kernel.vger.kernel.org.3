@@ -2,194 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A5D4F6145
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDBE4F60DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiDFOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S234436AbiDFOMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234526AbiDFOLH (ORCPT
+        with ESMTP id S234447AbiDFOMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:11:07 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5837428253F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:06:48 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3EECF3202069;
-        Wed,  6 Apr 2022 06:06:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 06 Apr 2022 06:06:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=rzh+YVo8AjmVzXYtwCOyrTTWQiWeb9VJ0DWPZZ
-        BZogk=; b=Iwl/Hcis915YuxuSYdtKUaM/emcwdNwLUmOhK6Uz82oFFtNQo63baz
-        Ff5WVmMH4CgIgB7Mjfc5roxPZ0JdXi0pY34k5ZIeLjH3enh4PdbqE3fxuGXU4pHV
-        3hdnWggWcpKE6ptGCcatiyrWEHik3RVX22Vpulup6f6z/FberTjC3fiBs/BaUMP2
-        niwV6K24YkECzfaWDbiKrXjqT+cuw3wK/0wd/7NWxLp4iZdqkn59yFYerh4SfVtl
-        QvKs0QQ0rjf86CoCz+GhX9FldByRRlCzIVxn6PQLtl8fE/vvyg9uP7RXCDhZHRXa
-        9AbPtGKycpgEyc73ClOkJmrdbu7HaqGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=rzh+YVo8AjmVzXYtw
-        COyrTTWQiWeb9VJ0DWPZZBZogk=; b=oJmVUCYa8RfGhDk7IDvEzqizOrCriQbxv
-        WdMHs6fMqIyIi3LPz6EI/scjODZShthbGt7AcwVMnlmsQwqNKQbqtrk7p/PcipWC
-        ecVAyKG61Np/F1E+MIxcWHz3ZPHLYas2VHt9DmPa2RBmZxClg91IlIiAr4Q53YuR
-        l/y5XAFHyRvZh8n9FDiyNhq8VW9Q2oQT3GfmHfgIJZkK0YLqP6fEK1t1sFSThi4E
-        YHFU+5HU0XY6nGnJXU/voDMb2tmchA5A6ZagEFAYDI+MDrQ4knCFrAg3M90fVEbw
-        2Jd5MVa9ixw40lX5/Vcm7UzV83wl3vCgbZFRkRAfy16QetfoY1Btg==
-X-ME-Sender: <xms:FmZNYpJl84yEK7oacOxfoP1IURA_k3vTeG1huh40Qr5-r_tVWKxnzg>
-    <xme:FmZNYlKHcTc7M2cYTupcwic4PCFhpt_NuhXN7PM_lZhmfneYkwCaps03-x-fjv6_4
-    HOb7n524u4a06ACdtM>
-X-ME-Received: <xmr:FmZNYhui4m3AsCU4MTpBt76kbnVxXWXaR2wY32nkqlW--tXu5EDCr8ttmPEWK9f45yHk_7v6H4PRNtuQRiiIRGMNsJhUgNmEn_Ywv6Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:FmZNYqaz6oaZVAssejHnLeAU8GbZO9Mh9YaMZYA9Kr2tGAgvIPv-LA>
-    <xmx:FmZNYgZmoRxnLfPw2ysMKf-mQYdh9yyn2ZhQqFMA-tmCIBb30k0pvg>
-    <xmx:FmZNYuBw0PTi9pVOCgEUkOdb0QIjl3O5WLVJGNTDssWHFwPv3EWNsg>
-    <xmx:FmZNYvyzyhoy5Khxf_IBHaOsGBVgMQmSHjUQWsjmpOQLFwXLiJ17Rg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 6 Apr 2022 06:06:14 -0400 (EDT)
-Date:   Wed, 6 Apr 2022 12:06:12 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "Zhengbin (OSKernel)" <zhengbin13@huawei.com>
-Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        tangyizhou@huawei.com
-Subject: Re: [PATCH v2 -next] drm/vc4: Fix build error when CONFIG_DRM_VC4=y
- && CONFIG_RASPBERRYPI_FIRMWARE=m
-Message-ID: <20220406100612.2nuvjcc2oxo54n5j@houat>
-References: <20220325021831.2812735-1-zhengbin13@huawei.com>
- <20220325130541.tjxq4kjgmkaz32en@houat>
- <601a9682-6afc-d87b-cfa7-5c683271f7a5@huawei.com>
+        Wed, 6 Apr 2022 10:12:18 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428CD12F6C2;
+        Wed,  6 Apr 2022 03:06:36 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id p189so1117736wmp.3;
+        Wed, 06 Apr 2022 03:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=47pi7dvQzwfLX3ainw4cotVpAlhqEnPPur28m2DBYnI=;
+        b=oyRzTjU9Y5vVWWhJlEXWBmqOttlu6Wt5erI3pvi3Fx5Be/D9iwtxpOKRdMqP8MSnvV
+         JBJGNCltub8U7JXIZ9M5AUptIBltfbxi4nu/ZZCi8tXkbjKvPp+Epc3VQSPe52ylIXpy
+         ubB2jEtugsabOsmsf+PzZzpWaaV/LpZUIhPFv72C1ChcXPk/o3VCBcXs7tjofJaVJpqA
+         yC3Gaaecl3i9SCS0y10GBJEn1wndI7ziUMRs9XbXmODOmMaV4YAdNfaPbtVNPnY7mDVq
+         xpvGUcS/BLncMrjceqSCIxgkHqp31zclZ1gtlHQTFDVsVq+1Lql1hC9hId/rA59BKViW
+         fJuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=47pi7dvQzwfLX3ainw4cotVpAlhqEnPPur28m2DBYnI=;
+        b=li/3TbjpWZHsrO+pbFpJmtXrij9rHnpV7KRyXW2Lz7jkUCar7FcAjsIc6tceNQsPN5
+         7TweOfbz2md+g3nTgA2JCOApSHNWfCYhQjcpw7h3/WG+/dFM8wCqBq1j0/Bfcf65mUx7
+         ssqDT066TvXeTQbgs7946m2i4ZTPiv9RFCamQn+TT8v17B5SHgeQ5MDwNy9QN4PkDyhK
+         EBV56EDNXSFbfHAwdgDJDcr51Of2fpycaevFq1CwNxQG3nZZlt+q6ps8zkocuT1ENZQ3
+         GvH7VbkgbbzdXk34swUil93BLj52npvhWg1HnINcoGFN7p+h0SxWssS/Aa8WbdB+C3Lm
+         ZsOA==
+X-Gm-Message-State: AOAM5327sjlCJ7E4ykCI0sLo8UfCfU7Hz54jC2GxxmXWSPiEhO/NEJRx
+        i2za2kx6msNbxP4PxR9Z3Dc=
+X-Google-Smtp-Source: ABdhPJwjEWxUDNSk8rXkcq9W0u0al0JkpQ7wIp2FGwbqxDUXcBGMVgOqvVjB2N3EDRLNfNHBWOY8ag==
+X-Received: by 2002:a05:600c:4f10:b0:38c:ae36:d305 with SMTP id l16-20020a05600c4f1000b0038cae36d305mr6818888wmq.34.1649239589575;
+        Wed, 06 Apr 2022 03:06:29 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id l2-20020a5d5602000000b00206120e0b0fsm10793032wrv.18.2022.04.06.03.06.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 03:06:29 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 11:06:27 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
+Message-ID: <Yk1mIxYRSDSsIOyq@debian>
+References: <20220405070258.802373272@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m2ydzgbnjwzzthnm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <601a9682-6afc-d87b-cfa7-5c683271f7a5@huawei.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
---m2ydzgbnjwzzthnm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 05, 2022 at 09:24:54AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.110 release.
+> There are 599 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
 
-Hi,
+Build test:
+mips (gcc version 11.2.1 20220314): 63 configs -> no failure
+arm (gcc version 11.2.1 20220314): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
 
-On Mon, Mar 28, 2022 at 10:22:11AM +0800, Zhengbin (OSKernel) wrote:
-> On 2022/3/25 21:05, Maxime Ripard wrote:
-> > On Fri, Mar 25, 2022 at 10:18:31AM +0800, Zheng Bin wrote:
-> > > If CONFIG_DRM_VC4=3Dy, CONFIG_RASPBERRYPI_FIRMWARE=3Dm, CONFIG_COMPIL=
-E_TEST=3Dn,
-> > > bulding fails:
-> > >=20
-> > > drivers/gpu/drm/vc4/vc4_drv.o: In function `vc4_drm_bind':
-> > > vc4_drv.c:(.text+0x320): undefined reference to `rpi_firmware_get'
-> > > vc4_drv.c:(.text+0x320): relocation truncated to fit: R_AARCH64_CALL2=
-6 against undefined symbol `rpi_firmware_get'
-> > > vc4_drv.c:(.text+0x34c): undefined reference to `rpi_firmware_propert=
-y'
-> > > vc4_drv.c:(.text+0x34c): relocation truncated to fit: R_AARCH64_CALL2=
-6 against undefined symbol `rpi_firmware_property'
-> > > vc4_drv.c:(.text+0x354): undefined reference to `rpi_firmware_put'
-> > > vc4_drv.c:(.text+0x354): relocation truncated to fit: R_AARCH64_CALL2=
-6 against undefined symbol `rpi_firmware_put'
-> > >=20
-> > > Make DRM_VC4 depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST to fix t=
-his.
-> > >=20
-> > > Fixes: c406ad5e4a85 ("drm/vc4: Notify the firmware when DRM is in cha=
-rge")
-> > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-> > > ---
-> > > v2: follow Maxime's advise, add RASPBERRYPI_FIRMWARE as an additional=
- depends
-> > >   drivers/gpu/drm/vc4/Kconfig | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
-> > > index de3424fed2fc..92d74ba7c449 100644
-> > > --- a/drivers/gpu/drm/vc4/Kconfig
-> > > +++ b/drivers/gpu/drm/vc4/Kconfig
-> > > @@ -2,6 +2,7 @@
-> > >   config DRM_VC4
-> > >   	tristate "Broadcom VC4 Graphics"
-> > >   	depends on ARCH_BCM || ARCH_BCM2835 || COMPILE_TEST
-> > > +	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
-> > Why do we need the || COMPILE_TEST here?
-> >=20
-> > The rpi_firmware_get, _property and _put functions aren't define if
-> > RASPBERRYPI_FIRMWARE, so we need that dependency every time, even if
-> > COMPILE_TEST is set?
->=20
-> include/soc/bcm2835/raspberrypi-firmware.h
->=20
-> #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
->=20
-> struct rpi_firmware *rpi_firmware_get(struct device_node
-> *firmware_node);/_property/_put
->=20
-> #else=A0=A0=A0 -->empty function
->=20
-> =A0static inline struct rpi_firmware *rpi_firmware_get(struct device_node
-> *firmware_node)/_property/_put
-> {
-> =A0=A0=A0=A0=A0=A0=A0=A0 return NULL;
-> =A0}
-> #endif
->=20
->=20
-> We can refer to drivers/pwm/Kconfig
->=20
-> config PWM_RASPBERRYPI_POE
-> =A0=A0=A0=A0=A0=A0=A0=A0 tristate "Raspberry Pi Firwmware PoE Hat PWM sup=
-port"
-> =A0=A0=A0=A0=A0=A0=A0=A0 # Make sure not 'y' when RASPBERRYPI_FIRMWARE is=
- 'm'. This can only
-> =A0=A0=A0=A0=A0=A0=A0 # happen when COMPILE_TEST=3Dy, hence the added !RA=
-SPBERRYPI_FIRMWARE.
-> =A0=A0=A0=A0=A0=A0=A0=A0 depends on RASPBERRYPI_FIRMWARE || (COMPILE_TEST=
- &&
-> !RASPBERRYPI_FIRMWARE)=A0 -->There is no need to add (&&
-> !RASPBERRYPI_FIRMWARE)
+Boot test:
+x86_64: fails to boot on my test laptop. Detailed report at: https://lore.kernel.org/stable/Yky7RmYZnPp9HgzT@debian/
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-Oh, so you're fixing the case where vc4 would be built-in, but the
-firmware driver a module?
+[1]. https://openqa.qa.codethink.co.uk/tests/978
+[2]. https://openqa.qa.codethink.co.uk/tests/981
 
-I guess that makes sense, but the comment definitely helps there. And
-the (COMPILE_TEST && !RASPBERRYPI_FIRMWARE) is also needed, since it
-wouldn't fix the issue you're trying to fix for COMPILE_TEST otherwise.
 
-Maxime
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---m2ydzgbnjwzzthnm
-Content-Type: application/pgp-signature; name="signature.asc"
+--
+Regards
+Sudip
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYk1mFAAKCRDj7w1vZxhR
-xT80AQC7Tm+NmNDitAW/WPTe7zEurlBuKyI80CaozozVmnmeUgD/ZdkwChF2xf3c
-k1aWDhJy5q1hEMUagUb6QAuZLV0lMAM=
-=wzKX
------END PGP SIGNATURE-----
-
---m2ydzgbnjwzzthnm--

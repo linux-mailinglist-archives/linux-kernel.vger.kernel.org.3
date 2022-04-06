@@ -2,146 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7474F57EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FF94F5884
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbiDFIf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S239185AbiDFJBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349697AbiDFIco (ORCPT
+        with ESMTP id S1450849AbiDFI6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:32:44 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F474187BA3;
-        Tue,  5 Apr 2022 19:37:40 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 6 Apr
- 2022 10:37:38 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 6 Apr
- 2022 10:37:37 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-s390@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] s390: Simplify the calculation of variables
-Date:   Wed, 6 Apr 2022 10:37:31 +0800
-Message-ID: <1649212651-32038-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <Ykq2H+POaGs0GHVU@osiris>
-References: <Ykq2H+POaGs0GHVU@osiris>
+        Wed, 6 Apr 2022 04:58:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61318329253;
+        Tue,  5 Apr 2022 19:53:36 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KY8Fr2Fk9z1HBRp;
+        Wed,  6 Apr 2022 10:53:04 +0800 (CST)
+Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 10:53:29 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>,
+        <liaochang1@huawei.com>, <tglx@linutronix.de>, <clg@kaod.org>,
+        <nitesh@redhat.com>, <edumazet@google.com>, <peterz@infradead.org>,
+        <joshdon@google.com>, <masahiroy@kernel.org>, <nathan@kernel.org>,
+        <akpm@linux-foundation.org>, <vbabka@suse.cz>,
+        <gustavoars@kernel.org>, <arnd@arndb.de>, <chris@chrisdown.name>,
+        <dmitry.torokhov@gmail.com>, <linux@rasmusvillemoes.dk>,
+        <daniel@iogearbox.net>, <john.ogness@linutronix.de>,
+        <will@kernel.org>, <dave@stgolabs.net>, <frederic@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <heying24@huawei.com>, <guohanjun@huawei.com>,
+        <weiyongjun1@huawei.com>
+Subject: [RFC 0/3] softirq: Introduce softirq throttling
+Date:   Wed, 6 Apr 2022 10:52:38 +0800
+Message-ID: <20220406025241.191300-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.174.53]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
-./arch/s390/include/asm/scsw.h:695:47-49: WARNING
- !A || A && B is equivalent to !A || B
+Kernel check for pending softirqs periodically, they are performed in a
+few points of kernel code, such as irq_exit() and __local_bh_enable_ip(),
+softirqs that have been activated by a given CPU must be executed on the
+same CPU, this characteristic of softirq is always a potentially
+"dangerous" operation, because one CPU might be end up very busy while
+the other are most idle.
 
-I apply a readable version just to get rid of a warning.
+Above concern is proven in a networking user case: recenlty, we
+engineer find out the time used for connection re-establishment on
+kernel v5.10 is 300 times larger than v4.19, meanwhile, softirq
+monopolize almost 99% of CPU. This problem stem from that the connection
+between Sender and Receiver node get lost, the NIC driver on Sender node
+will keep raising NET_TX softirq before connection recovery. The system
+log show that most of softirq is performed from __local_bh_enable_ip(),
+since __local_bh_enable_ip is used widley in kernel code, it is very
+easy to run out most of CPU, and the user-mode application can't obtain
+enough CPU cycles to establish connection as soon as possible.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: apply a readable and simple version as suggestion.
+Although kernel limit the running time of __do_softirq(), it does not
+control the running time of entire softirqs on given CPU, so this
+patchset introduce a safeguard mechanism that allows the system
+administrator to allocate bandwidth for used by softirqs, this safeguard
+mechanism is known as Sofitrq Throttling and is controlled by two
+parameters in the /proc file system:
 
- arch/s390/include/asm/scsw.h | 47 ++++++++++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 15 deletions(-)
+/proc/sys/kernel/sofitrq_period_ms
+  Defines the period in ms(millisecond) to be considered as 100% of CPU
+  bandwidth, the default value is 1,000 ms(1second). Changes to the
+  value of the period must be very well thought out, as too long or too
+  short are beyond one's expectation.
 
-diff --git a/arch/s390/include/asm/scsw.h b/arch/s390/include/asm/scsw.h
-index a7c3ccf681da..b7e65f96de3c 100644
---- a/arch/s390/include/asm/scsw.h
-+++ b/arch/s390/include/asm/scsw.h
-@@ -508,9 +508,13 @@ static inline int scsw_cmd_is_valid_zcc(union scsw *scsw)
-  */
- static inline int scsw_cmd_is_valid_ectl(union scsw *scsw)
- {
--	return (scsw->cmd.stctl & SCSW_STCTL_STATUS_PEND) &&
--	       !(scsw->cmd.stctl & SCSW_STCTL_INTER_STATUS) &&
--	       (scsw->cmd.stctl & SCSW_STCTL_ALERT_STATUS);
-+	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
-+		return 0;
-+	if (scsw->tm.stctl & SCSW_STCTL_INTER_STATUS)
-+		return 0;
-+	if (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS)
-+		return 1;
-+	return 0;
- }
- 
- /**
-@@ -522,10 +526,15 @@ static inline int scsw_cmd_is_valid_ectl(union scsw *scsw)
-  */
- static inline int scsw_cmd_is_valid_pno(union scsw *scsw)
- {
--	return (scsw->cmd.fctl != 0) &&
--	       (scsw->cmd.stctl & SCSW_STCTL_STATUS_PEND) &&
--	       (!(scsw->cmd.stctl & SCSW_STCTL_INTER_STATUS) ||
--		  (scsw->cmd.actl & SCSW_ACTL_SUSPENDED));
-+	if (!scsw->tm.fctl)
-+		return 0;
-+	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
-+		return 0;
-+	if (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS))
-+		return 1;
-+	if (scsw->tm.actl & SCSW_ACTL_SUSPENDED)
-+		return 1;
-+	return 0;
- }
- 
- /**
-@@ -675,9 +684,13 @@ static inline int scsw_tm_is_valid_q(union scsw *scsw)
-  */
- static inline int scsw_tm_is_valid_ectl(union scsw *scsw)
- {
--	return (scsw->tm.stctl & SCSW_STCTL_STATUS_PEND) &&
--	       !(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) &&
--	       (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS);
-+	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
-+		return 0;
-+	if (scsw->tm.stctl & SCSW_STCTL_INTER_STATUS)
-+		return 0;
-+	if (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS)
-+		return 1;
-+	return 0;
- }
- 
- /**
-@@ -689,11 +702,15 @@ static inline int scsw_tm_is_valid_ectl(union scsw *scsw)
-  */
- static inline int scsw_tm_is_valid_pno(union scsw *scsw)
- {
--	return (scsw->tm.fctl != 0) &&
--	       (scsw->tm.stctl & SCSW_STCTL_STATUS_PEND) &&
--	       (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) ||
--		 ((scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) &&
--		  (scsw->tm.actl & SCSW_ACTL_SUSPENDED)));
-+	if (!scsw->tm.fctl)
-+		return 0;
-+	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
-+		return 0;
-+	if (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS))
-+		return 1;
-+	if (scsw->tm.actl & SCSW_ACTL_SUSPENDED)
-+		return 1;
-+	return 0;
- }
- 
- /**
+/proc/sys/kernel/softirq_runtime_ms
+  Define the bandwidth available to softirqs on each CPU, the default
+  values is 950 ms(0.95 second) or, in other words, 95% of the CPU
+  bandwidth. Setting negative integer to this value means that softirqs
+  my use up to 100% CPU times.
+
+The default values for softirq throttling mechanism define that 95% of
+the CPU time can be used by softirqs. The remaing 5% will be devoted to
+other kinds of tasks, such as syscall, interrupt, exception, real-time
+processes and normal processes when the softirqs workload in system are
+very heavy. System administrator can tune above two parameters to
+satifies the need of system performance and stability.
+
+Liao Chang (3):
+  softirq: Add two parameters to control CPU bandwidth for use by
+    softirq
+  softirq: Do throttling when softirqs use up its bandwidth
+  softirq: Introduce statistics about softirq throttling
+
+ fs/proc/softirqs.c          |  18 +++++
+ include/linux/interrupt.h   |   7 ++
+ include/linux/kernel_stat.h |  27 +++++++
+ init/Kconfig                |  10 +++
+ kernel/softirq.c            | 155 ++++++++++++++++++++++++++++++++++++
+ kernel/sysctl.c             |  16 ++++
+ 6 files changed, 233 insertions(+)
+
 -- 
-2.7.4
+2.17.1
 

@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461304F5F23
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF91C4F6054
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbiDFNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S233902AbiDFNsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiDFNSV (ORCPT
+        with ESMTP id S233671AbiDFNr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:18:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6546949D65F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649238993;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eG+lA98DgXDfZlx051ErYhuzaKYIyqcOJZfsLhGFR/o=;
-        b=F0MVufxa1UuLTgwmgYatQzwxRlA1FHxn2AKzq+5HDktQ5llgtPPnBu78hUOTixREvabasK
-        gPG7uBnsWxMlucNByfYI9LN9DJXnjAEPPYfj65JAlYHxFe7FExOKqOAFDOAxmJCnzf9vVm
-        kvqO468ZvqsGtCPEAYMg9vF2b4MFjXo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-eDrC-MY7P2-smmVV8MfwcA-1; Wed, 06 Apr 2022 05:53:20 -0400
-X-MC-Unique: eDrC-MY7P2-smmVV8MfwcA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C29FD100BAAA;
-        Wed,  6 Apr 2022 09:53:19 +0000 (UTC)
-Received: from tucnak.zalov.cz (unknown [10.39.195.172])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C6DD40CF905;
-        Wed,  6 Apr 2022 09:53:19 +0000 (UTC)
-Received: from tucnak.zalov.cz (localhost [127.0.0.1])
-        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 2369rGLR1580461
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 6 Apr 2022 11:53:16 +0200
-Received: (from jakub@localhost)
-        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 2369rFOl1580460;
-        Wed, 6 Apr 2022 11:53:15 +0200
-Date:   Wed, 6 Apr 2022 11:53:15 +0200
-From:   Jakub Jelinek <jakub@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Richard Biener <rguenther@suse.de>,
-        linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: older gccs and case labels producing integer constants
-Message-ID: <Yk1jC4oLnIklOTHI@tucnak>
-Reply-To: Jakub Jelinek <jakub@redhat.com>
-References: <YkwQ6+tIH8GQpuct@zn.tnic>
- <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
- <onrq8p1-582o-6rs9-r682-rs9sqoq7sq6p@fhfr.qr>
- <YkwbygWj/C3XooMV@zn.tnic>
+        Wed, 6 Apr 2022 09:47:57 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E9E3C8101
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:04:29 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2366Aowd008097;
+        Wed, 6 Apr 2022 04:54:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=ZWtYtEP6ksjFQqnyEmmOpZ3NxAIAdcKEON9VScCRpts=;
+ b=kS8JququnS/P433jjj4yjCHo3EvYeF/l6X80KjiVJ+H48moB8mHAU6LHqBwAC3eSlFVf
+ mSUvu3vyqMiKN7FcJLCq1+baEy7bOAXI6B3m3mxE0SL9dEuatMUoNEaZfE6XB5qplrOh
+ y6ppnN5EFutCLbuJ1Lri4ovPNYVNSGqozOdoPPT8kTUSYjRgNLKAk1W8HNNhuoN7yrZl
+ jpa6BXX+E0FkWYtaie8TxKyaBBuQ/dZzoqVXjmVB57Tpx33o69zBda70L4Vs1ULYLMkp
+ cVP7VM0e9d9CNM1rGg4F7B4g4C/Q6Yys7y2HSt5ohwU2W4H5whtTaUZPfVMe0IEr/g8D Wg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f6kw2d06t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 06 Apr 2022 04:54:24 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 10:54:22 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 6 Apr 2022 10:54:22 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 095912C5;
+        Wed,  6 Apr 2022 09:54:22 +0000 (UTC)
+Date:   Wed, 6 Apr 2022 09:54:22 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Stephen Kitt <steve@sk2.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <patches@opensource.cirrus.com>, Wolfram Sang <wsa@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] ASoC: wm*: use simple i2c probe function
+Message-ID: <20220406095422.GU38351@ediswmail.ad.cirrus.com>
+References: <20220405122411.2096387-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YkwbygWj/C3XooMV@zn.tnic>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220405122411.2096387-1-steve@sk2.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: J7OSmPskFQrUtpATmrtUgfaSwannSLbK
+X-Proofpoint-GUID: J7OSmPskFQrUtpATmrtUgfaSwannSLbK
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 12:36:58PM +0200, Borislav Petkov wrote:
-> On Tue, Apr 05, 2022 at 12:06:45PM +0200, Richard Biener wrote:
-> > Wird auch mit gcc 11 rejected.  Kanns sein dass mit gcc 7 andere
-> > compiler flags genommen werden?
+On Tue, Apr 05, 2022 at 02:24:11PM +0200, Stephen Kitt wrote:
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
 > 
-> Found it:
+> wm8731.c is excluded and will be submitted separately.
 > 
-> $ gcc -fsanitize=shift -c switch.c
-> switch.c: In function ‘foo’:
-> switch.c:10:7: error: case label does not reduce to an integer constant
->        case (((0xfc08) << 16) | (0x0101)):;
+> This avoids scanning the identifier tables during probes.
 > 
-> $ gcc --version
-> gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
-> Copyright (C) 2017 Free Software Foundation, Inc.
-> 
-> Something not fully backported?
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> ---
 
-That is rejected with -fsanitize=shift even on current trunk (in C, C++ is
-fine).
-C++ constexpr code has cases for ubsan builtins and internal functions,
-but C just doesn't handle those apparently.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-	Jakub
-
+Thanks,
+Charles

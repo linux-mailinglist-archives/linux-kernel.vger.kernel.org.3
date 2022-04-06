@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0F54F634A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A070A4F629F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiDFPXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S235442AbiDFPEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236578AbiDFPXI (ORCPT
+        with ESMTP id S235551AbiDFPD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:23:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D010651FD6B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:32:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 832F81516;
-        Wed,  6 Apr 2022 05:32:14 -0700 (PDT)
-Received: from [10.57.41.19] (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97DBD3F718;
-        Wed,  6 Apr 2022 05:32:12 -0700 (PDT)
-Message-ID: <d0f6caea-0cd9-d839-c9fb-0fe49c2bad16@arm.com>
-Date:   Wed, 6 Apr 2022 13:32:07 +0100
+        Wed, 6 Apr 2022 11:03:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB27E59CD5C;
+        Wed,  6 Apr 2022 05:35:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E4D871F38A;
+        Wed,  6 Apr 2022 12:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649248445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0nalfo9aZQbfkaPJuevJGokBEgQRD+uQYrkQD6gB7I4=;
+        b=KnYKVlfeHPMyilOcIFdUGMPu9r3dGgiiP6b6g3iqYs7P7z+HApBHhX+dBKa+rAxMwoCzk/
+        dg98WZO0/vINblwwOMXnut2d/CPTwuTqw0PAWBlxnu68NY1RuP6utcWIooPP0isFIo5fMH
+        1UEtmSKuTwYCuXqAX4V4tq+60L3rCPk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649248445;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0nalfo9aZQbfkaPJuevJGokBEgQRD+uQYrkQD6gB7I4=;
+        b=rXRGROhunSQ1f00/MAy/JciTOqeqeqi5VvnJSxZLPFwLoZqZnbqthl3seAY5aFOiN+kJc7
+        NyXvBabuFn1PdVAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7816413A8E;
+        Wed,  6 Apr 2022 12:34:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OXpFGr2ITWLcZQAAMHmgww
+        (envelope-from <dkirjanov@suse.de>); Wed, 06 Apr 2022 12:34:05 +0000
+Message-ID: <857f3f9c-abc3-779e-d03b-76c23f6e13af@suse.de>
+Date:   Wed, 6 Apr 2022 15:33:49 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH RFC v2 03/11] iommu/sva: Add iommu_domain type for SVA
-Content-Language: en-GB
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-4-baolu.lu@linux.intel.com>
- <20220330190201.GB2120790@nvidia.com>
- <BN9PR11MB5276A39F481E2E31B0FCFEAE8CE39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220402233210.GM2120790@nvidia.com>
- <BN9PR11MB527660D99D154F922B0A628B8CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220406012334.GZ2120790@nvidia.com>
- <BN9PR11MB52764E3DE16E19D1F1515D008CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <BN9PR11MB52764E3DE16E19D1F1515D008CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
+Subject: Re: [PATCH v3] myri10ge: fix an incorrect free for skb in
+ myri10ge_sw_tso
+Content-Language: ru
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, christopher.lee@cspi.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406035556.730-1-xiam0nd.tong@gmail.com>
+From:   Denis Kirjanov <dkirjanov@suse.de>
+In-Reply-To: <20220406035556.730-1-xiam0nd.tong@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-06 06:58, Tian, Kevin wrote:
->> From: Jason Gunthorpe <jgg@nvidia.com>
->> Sent: Wednesday, April 6, 2022 9:24 AM
->>
->> On Wed, Apr 06, 2022 at 01:00:13AM +0000, Tian, Kevin wrote:
->>
->>>> Because domains wrap more than just the IOPTE format, they have
->>>> additional data related to the IOMMU HW block itself. Imagine a SOC
->>>> with two IOMMU HW blocks that can both process the CPU IOPTE format,
->>>> but have different configuration.
->>>
->>> Curious. Is it hypothesis or real? If real can you help give a concrete
->>> example?
->>
->> Look at arm_smmu_attach_dev() - the domain has exactly one smmu
->> pointer which contains the base address for the SMMU IP block. If the
->> domain doesn't match the smmu pointer from the struct device it won't
->> allow attaching.
->>
->> I know of ARM SOCs with many copies of the SMMU IP block.
->>
->> So at least with current drivers ARM seems to have this limitation.
->>
-> 
-> I saw that code, but before this series it is used only for stage-2 instead
-> of SVA. and I didn't see similar check in the old sva related paths (though
-> it doesn't use domain):
-> 
-> arm_smmu_master_sva_enable_iopf()
-> arm_smmu_master_enable_sva{}
-> __arm_smmu_sva_bind()
-> 
-> If I didn't overlook some trick hiding in the call chain of those functions,
-> is there a bug in the existing SMMU sva logic or is it conceptually correct
-> to not have such check for SVA?
 
-The current SVA APIs are all device-based, so implicitly reflect 
-whichever SMMU instance serves the given device. Once domains come into 
-the picture, callers are going to have to be more aware that a domain 
-may be specific to a particular IOMMU instance, and potentially allocate 
-separate domains for separate devices to represent the same address 
-space, much like vfio_iommu_type1_attach_group() does.
 
-It's not really worth IOMMU drivers trying to support a domain spanning 
-potentially-heterogeneous instances internally, since they can't 
-reasonably know what matters in any particular situation. That's 
-primarily why we've never tried to do it in the SMMU drivers. It's a lot 
-easier for relevant callers to look at what they get and figure out 
-whether any mismatch in capabilities is tolerable or not.
-
-Robin.
-
-> If the former then yes we have to take SMMU IP block into consideration
-> thus could have multiple domains per CPU page table. If the latter then
-> this is not a valid example for that configuration.
+4/6/22 06:55, Xiaomeng Tong пишет:
+> All remaining skbs should be released when myri10ge_xmit fails to
+> transmit a packet. Fix it within another skb_list_walk_safe.
 > 
-> Which one is correct?
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
 > 
-> Thanks
-> Kevin
+> changes since v2:
+>   - free all remaining skbs. (Xiaomeng Tong)
+> 
+> changes since v1:
+>   - remove the unneeded assignmnets. (Xiaomeng Tong)
+> 
+> v2:https://lore.kernel.org/lkml/20220405000553.21856-1-xiam0nd.tong@gmail.com/
+> v1:https://lore.kernel.org/lkml/20220319052350.26535-1-xiam0nd.tong@gmail.com/
+> 
+> ---
+>   drivers/net/ethernet/myricom/myri10ge/myri10ge.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
+> index 50ac3ee2577a..21d2645885ce 100644
+> --- a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
+> +++ b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
+> @@ -2903,11 +2903,9 @@ static netdev_tx_t myri10ge_sw_tso(struct sk_buff *skb,
+>   		status = myri10ge_xmit(curr, dev);
+>   		if (status != 0) {
+>   			dev_kfree_skb_any(curr);
+> -			if (segs != NULL) {
+> -				curr = segs;
+> -				segs = next;
+> +			skb_list_walk_safe(next, curr, next) {
+>   				curr->next = NULL;
+> -				dev_kfree_skb_any(segs);
+> +				dev_kfree_skb_any(curr);
+
+why can't we just do the following?
+         skb_list_walk_safe(segs, skb, nskb) {
+                 status = myri10ge_xmit(curr, dev);
+                 if (err)
+                         break;
+
+         }
+
+         /* Free all of the segments. */
+         skb_list_walk_safe(segs, skb, nskb) {
+                 if (err)
+                         kfree_skb(skb);
+                 else
+                         consume_skb(skb);
+         }
+         return err;
+
+
+>   			}
+>   			goto drop;
+>   		}

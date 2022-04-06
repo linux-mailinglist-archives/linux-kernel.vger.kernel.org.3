@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F94F4F672E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4A94F671F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239225AbiDFRdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S239325AbiDFRdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiDFRcm (ORCPT
+        with ESMTP id S239533AbiDFRcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:32:42 -0400
-X-Greylist: delayed 23294 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 08:36:50 PDT
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49721140B8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:36:49 -0700 (PDT)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 429D910040431
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:36:49 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id c7iCnB4rwwm8ic7iDnCewx; Wed, 06 Apr 2022 15:36:49 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=624db391
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=z0gMJWrwH1QA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=ZeFZwYX2NddpyQBIYx0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JMxUVJMpsL7nuQ40vL68h4B7UrUFk55jUQ5/AoXyI18=; b=NYL4EvsyoaXRSXSwt+OwX/nALT
-        g5hxB3iUU3ktYF8FwbYaX0UgllGaWw984AgROU8WZ6vjhiPkAFVfnUxLIs6KFsYhoELfwCmaztS6j
-        T/MneWxid2dE2yaht+XojavTgHn4HJbTciTQMyqpn5w0qI07kgmz+V+kktosxVFpBhKNBvTh9WB2J
-        lzeNsz9ffQaFrku7EnFDO3S7WCt/fwdGqQHBIPFCtop1xxHGGpFoZ39ZJwFlVJlyV5lO8n8n6+IWb
-        KcRLtUB3MYdJTfIEG/Et2bGYo0uhebVnshvT0Y8uftgctLsikqo7r/Z6IBGy4QKUa6Yp4zY+jZsE4
-        C4so0LVQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36216 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nc7iB-001cGF-PI; Wed, 06 Apr 2022 09:36:47 -0600
-Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220405070339.801210740@linuxfoundation.org>
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <eee3dca3-22e9-c0f1-a022-52a73a4b0d0b@w6rz.net>
-Date:   Wed, 6 Apr 2022 08:36:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 6 Apr 2022 13:32:48 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09B021E19
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jzSTEJQcGfGZ7JxkMk9H1mBl0JJZpFa9fo6uzqvky2Q=;
+  b=sGIk5oEDLdgRxABX5JIFjj+a2Kwz7ZcKwYfWPfcBi5oloLW25ieCgVX/
+   iZY2U4Tiz6RogGzLu2VXuXumoCAbtyqXBs8t6/aRFgKMPg6hWiQ+j5wF8
+   0Qfe7ljgfV39td61LZ7Ny1ypPWU0gjUPh0ww4ZnvjbDemrUPJFdQcKLOj
+   E=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,240,1643670000"; 
+   d="scan'208";a="30395387"
+Received: from unknown (HELO hadrien) ([95.128.147.62])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 17:37:48 +0200
+Date:   Wed, 6 Apr 2022 17:37:43 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8712: remove Unnecessary parentheses
+In-Reply-To: <20220406152858.14076-1-eng.alaamohamedsoliman.am@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204061735340.2349@hadrien>
+References: <20220406152858.14076-1-eng.alaamohamedsoliman.am@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nc7iB-001cGF-PI
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36216
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 12:17 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.33 release.
-> There are 913 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.33-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+If you want to capitalize something in the subject, it could be the first
+word.  Capitalizing the second word is a bit strange.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+On Wed, 6 Apr 2022, Alaa Mohamed wrote:
 
-Tested-by: Ron Economos <re@w6rz.net>
+> Reported by checkpatch:
+>
+> CHECK: Unnecessary parentheses
 
+Indicating that the problem was detected by checkpatch is good.  But
+actually, the parentheses all have the same property.  So you could use
+the log message to describe what kind of unnecessary parentheses were
+removed.  That would help the maintainer know what to look for.
+
+julia
+
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+>  drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> index 3b6926613257..6c692ad7bde7 100644
+> --- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> +++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> @@ -82,9 +82,9 @@ static inline void handle_pairwise_key(struct sta_info *psta,
+>  	       (param->u.crypt. key_len > 16 ? 16 : param->u.crypt.key_len));
+>  	if (strcmp(param->u.crypt.alg, "TKIP") == 0) { /* set mic key */
+>  		memcpy(psta->tkiptxmickey. skey,
+> -		       &(param->u.crypt.key[16]), 8);
+> +		       &param->u.crypt.key[16], 8);
+>  		memcpy(psta->tkiprxmickey. skey,
+> -		       &(param->u.crypt.key[24]), 8);
+> +		       &param->u.crypt.key[24], 8);
+>  		padapter->securitypriv. busetkipkey = false;
+>  		mod_timer(&padapter->securitypriv.tkip_timer,
+>  			  jiffies + msecs_to_jiffies(50));
+> @@ -600,7 +600,7 @@ static int r8711_wx_get_name(struct net_device *dev,
+>  	u32 ht_ielen = 0;
+>  	char *p;
+>  	u8 ht_cap = false;
+> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+>  	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
+>  	u8 *prates;
+>
+> @@ -1996,7 +1996,7 @@ static int r871x_get_ap_info(struct net_device *dev,
+>  		}
+>  		plist = plist->next;
+>  	}
+> -	spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock), irqL);
+> +	spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock, irqL);
+>  	if (pdata->length >= 34) {
+>  		if (copy_to_user((u8 __user *)pdata->pointer + 32,
+>  		    (u8 *)&pdata->flags, 1))
+> --
+> 2.35.1
+>
+>
+>

@@ -2,112 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704EE4F5E88
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD61D4F5EB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiDFMxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S230185AbiDFMxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbiDFMuv (ORCPT
+        with ESMTP id S231532AbiDFMv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:50:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7BC957B2E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649235258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=C3E55v6H/hYc3LaSvLNAvhU13rJ0i/ZaskPmc70RQYw=;
-        b=eGSIlS70FhYQP2Av3B7KYFMqtsiLIQdP1MGvX2gIwumgGXUAOGrNI9l9gAG44PuAN7kFpO
-        A38BcERzW4DPxZGyCwz+KM6zLKtk6lENpkG0gF1LfQGhPomC44TaIBRwG6l6SG3QMvdoCZ
-        YVWVf/oKsHyt40Y1dprbS363q86dJIU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-hBdzYFkQP5SA6QJW8XVnrQ-1; Wed, 06 Apr 2022 04:54:12 -0400
-X-MC-Unique: hBdzYFkQP5SA6QJW8XVnrQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7E35800B28;
-        Wed,  6 Apr 2022 08:54:11 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BE7EA2166B2F;
-        Wed,  6 Apr 2022 08:54:10 +0000 (UTC)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next] bpf/selftests: use bpf_num_possible_cpus() in per-cpu map allocations
-Date:   Wed,  6 Apr 2022 10:54:08 +0200
-Message-Id: <20220406085408.339336-1-asavkov@redhat.com>
+        Wed, 6 Apr 2022 08:51:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2343ECA
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:54:38 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2368niKd017736;
+        Wed, 6 Apr 2022 08:54:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Kp8RoHD+XVt9u99MJh7zHcRBQ4EXYmIK0d74cb1v5vg=;
+ b=A5ePbxivA1W0DU5AfTqpLd7ovdjjj+uZ3S68u3fgpPLdQDYWlbq13y2eHYKLSQwDvXIL
+ 0wdQDdLZs0oPZJQ+HTg3kGcZgQrIF0kUAeYylymcMIitNvLv/YW+ulrZkdOfMXsm2AVu
+ wsUohPCS8Nln62Luue7ouzMByWCCToaY8M0kudOy8rr8BagrAsme1wxJlbyAInnrOObg
+ 2XUldOYNoUo/F5OPl+1Cqz/0spKneymBFHW/pLrmk4fm/EoSOn0PGmICvmaLKKZvtCHm
+ gT8bNIcBKl3UQspi0AbE/BAmSQpF8Tmw0gwGFz+Wl+7uYtsyA+tDYZMLm20pmvabwWTq qQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f8twfww72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 08:54:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2368hVA5019739;
+        Wed, 6 Apr 2022 08:54:26 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhqdjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 08:54:25 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2368g8R529229350
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Apr 2022 08:42:08 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 93C784C044;
+        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40E764C04E;
+        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
+Received: from [9.145.51.104] (unknown [9.145.51.104])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Apr 2022 08:54:23 +0000 (GMT)
+Message-ID: <f551db1b-4f32-2799-9424-15af0fb778c3@linux.ibm.com>
+Date:   Wed, 6 Apr 2022 10:54:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+From:   Frederic Barrat <fbarrat@linux.ibm.com>
+In-Reply-To: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FqQdEy4hmhh8m4MFMDZapfnZH3zmLmRd
+X-Proofpoint-GUID: FqQdEy4hmhh8m4MFMDZapfnZH3zmLmRd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_03,2022-04-05_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204060040
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpf_map_value_size() uses num_possible_cpus() to determine map size, but
-some of the tests only allocate enough memory for online cpus. This
-results in out-of-bound writes in userspace during bpf(BPF_MAP_LOOKUP_ELEM)
-syscalls in cases when number of online cpus is lower than the number of
-possible cpus. Fix by switching from get_nprocs_conf() to
-bpf_num_possible_cpus() when determining the number of processors in
-these tests (test_progs/netcnt and test_cgroup_storage).
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- tools/testing/selftests/bpf/prog_tests/netcnt.c   | 2 +-
- tools/testing/selftests/bpf/test_cgroup_storage.c | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/netcnt.c b/tools/testing/selftests/bpf/prog_tests/netcnt.c
-index 954964f0ac3d..d3915c58d0e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/netcnt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/netcnt.c
-@@ -25,7 +25,7 @@ void serial_test_netcnt(void)
- 	if (!ASSERT_OK_PTR(skel, "netcnt_prog__open_and_load"))
- 		return;
- 
--	nproc = get_nprocs_conf();
-+	nproc = bpf_num_possible_cpus();
- 	percpu_netcnt = malloc(sizeof(*percpu_netcnt) * nproc);
- 	if (!ASSERT_OK_PTR(percpu_netcnt, "malloc(percpu_netcnt)"))
- 		goto err;
-diff --git a/tools/testing/selftests/bpf/test_cgroup_storage.c b/tools/testing/selftests/bpf/test_cgroup_storage.c
-index d6a1be4d8020..2ffa08198d1c 100644
---- a/tools/testing/selftests/bpf/test_cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/test_cgroup_storage.c
-@@ -7,6 +7,7 @@
- #include <sys/sysinfo.h>
- 
- #include "bpf_rlimit.h"
-+#include "bpf_util.h"
- #include "cgroup_helpers.h"
- #include "testing_helpers.h"
- 
-@@ -44,7 +45,7 @@ int main(int argc, char **argv)
- 	unsigned long long *percpu_value;
- 	int cpu, nproc;
- 
--	nproc = get_nprocs_conf();
-+	nproc = bpf_num_possible_cpus();
- 	percpu_value = malloc(sizeof(*percpu_value) * nproc);
- 	if (!percpu_value) {
- 		printf("Not enough memory for per-cpu area (%d cpus)\n", nproc);
--- 
-2.34.1
+On 02/04/2022 11:52, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
 
+LGTM
+Acked-by: Frederic Barrat <fbarrat@linux.ibm.com>
+
+
+>   drivers/misc/cxl/api.c      | 1 +
+>   drivers/misc/cxl/cxl.h      | 2 ++
+>   drivers/misc/cxl/cxllib.c   | 1 +
+>   drivers/misc/cxl/flash.c    | 1 +
+>   drivers/misc/cxl/guest.c    | 2 ++
+>   drivers/misc/cxl/irq.c      | 1 +
+>   drivers/misc/cxl/main.c     | 1 +
+>   drivers/misc/cxl/native.c   | 1 +
+>   drivers/misc/ocxl/afu_irq.c | 1 +
+>   drivers/misc/ocxl/link.c    | 1 +
+>   10 files changed, 12 insertions(+)
+> 
+> diff --git a/drivers/misc/cxl/api.c b/drivers/misc/cxl/api.c
+> index b493de962153..d85c56530863 100644
+> --- a/drivers/misc/cxl/api.c
+> +++ b/drivers/misc/cxl/api.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/pseudo_fs.h>
+>   #include <linux/sched/mm.h>
+>   #include <linux/mmu_context.h>
+> +#include <linux/irqdomain.h>
+>   
+>   #include "cxl.h"
+>   
+> diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
+> index 5dc0f6093f9d..7a6dd91987fd 100644
+> --- a/drivers/misc/cxl/cxl.h
+> +++ b/drivers/misc/cxl/cxl.h
+> @@ -25,6 +25,8 @@
+>   
+>   extern uint cxl_verbose;
+>   
+> +struct property;
+> +
+>   #define CXL_TIMEOUT 5
+>   
+>   /*
+> diff --git a/drivers/misc/cxl/cxllib.c b/drivers/misc/cxl/cxllib.c
+> index 53b919856426..e5fe0a171472 100644
+> --- a/drivers/misc/cxl/cxllib.c
+> +++ b/drivers/misc/cxl/cxllib.c
+> @@ -5,6 +5,7 @@
+>   
+>   #include <linux/hugetlb.h>
+>   #include <linux/sched/mm.h>
+> +#include <asm/opal-api.h>
+>   #include <asm/pnv-pci.h>
+>   #include <misc/cxllib.h>
+>   
+> diff --git a/drivers/misc/cxl/flash.c b/drivers/misc/cxl/flash.c
+> index 5b93ff51d82a..eee9decc121e 100644
+> --- a/drivers/misc/cxl/flash.c
+> +++ b/drivers/misc/cxl/flash.c
+> @@ -4,6 +4,7 @@
+>   #include <linux/semaphore.h>
+>   #include <linux/slab.h>
+>   #include <linux/uaccess.h>
+> +#include <linux/of.h>
+>   #include <asm/rtas.h>
+>   
+>   #include "cxl.h"
+> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
+> index 9d485c9e3fff..3321c014913c 100644
+> --- a/drivers/misc/cxl/guest.c
+> +++ b/drivers/misc/cxl/guest.c
+> @@ -6,6 +6,8 @@
+>   #include <linux/spinlock.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/delay.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/platform_device.h>
+>   
+>   #include "cxl.h"
+>   #include "hcalls.h"
+> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
+> index 4cb829d5d873..5f0e2dcebb34 100644
+> --- a/drivers/misc/cxl/irq.c
+> +++ b/drivers/misc/cxl/irq.c
+> @@ -4,6 +4,7 @@
+>    */
+>   
+>   #include <linux/interrupt.h>
+> +#include <linux/irqdomain.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/sched.h>
+>   #include <linux/wait.h>
+> diff --git a/drivers/misc/cxl/main.c b/drivers/misc/cxl/main.c
+> index 43b312d06e3e..c1fbf6f588f7 100644
+> --- a/drivers/misc/cxl/main.c
+> +++ b/drivers/misc/cxl/main.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/idr.h>
+>   #include <linux/pci.h>
+> +#include <linux/platform_device.h>
+>   #include <linux/sched/task.h>
+>   
+>   #include <asm/cputable.h>
+> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
+> index 1a7f22836041..50b0c44bb8d7 100644
+> --- a/drivers/misc/cxl/native.c
+> +++ b/drivers/misc/cxl/native.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/mm.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/delay.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/synch.h>
+>   #include <asm/switch_to.h>
+>   #include <misc/cxl-base.h>
+> diff --git a/drivers/misc/ocxl/afu_irq.c b/drivers/misc/ocxl/afu_irq.c
+> index ecdcfae025b7..a06920b7e049 100644
+> --- a/drivers/misc/ocxl/afu_irq.c
+> +++ b/drivers/misc/ocxl/afu_irq.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0+
+>   // Copyright 2017 IBM Corp.
+>   #include <linux/interrupt.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/pnv-ocxl.h>
+>   #include <asm/xive.h>
+>   #include "ocxl_internal.h"
+> diff --git a/drivers/misc/ocxl/link.c b/drivers/misc/ocxl/link.c
+> index 9670d02c927f..4cf4c55a5f00 100644
+> --- a/drivers/misc/ocxl/link.c
+> +++ b/drivers/misc/ocxl/link.c
+> @@ -6,6 +6,7 @@
+>   #include <linux/mm_types.h>
+>   #include <linux/mmu_context.h>
+>   #include <linux/mmu_notifier.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/copro.h>
+>   #include <asm/pnv-ocxl.h>
+>   #include <asm/xive.h>

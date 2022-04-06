@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3363E4F5B92
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F514F5B8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357637AbiDFKTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+        id S1349717AbiDFKXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377250AbiDFKSi (ORCPT
+        with ESMTP id S1357288AbiDFKWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:18:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CA4E43A7;
-        Tue,  5 Apr 2022 23:45:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYFQC2Sxzz4xNp;
-        Wed,  6 Apr 2022 16:45:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649227539;
-        bh=GY7NqJT5gG15KDdh+bqIXSFySSoQEilEDlX+CFfVH5M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qjwjHMH5ttiBhM4GfXQvLVTVXKbv3XRQe8zlqkFCjwz36Iyl6kX9EWftSWfXUolcY
-         F4Jmb8J3crTULvcshcEZf5nd2o//Ad91gOtU9KNXGeGGolGDmkPLE6x8cZQLRijoEj
-         Mzw/Uj/BA0yeBRL3jxeDtfsHnF7RBk39xw5APF1qdoSzzC0vpNdUfIigX801omHD/Z
-         YMOPZPvzuc4UCH6NUyO/GlzHp+h/zR8D9O8bPIQrbwUg0G4B/RAu7QjYgPaYl1Z4Nc
-         LVCZoy2b0xai+yqoc/eNzDCXMe9lF2K/aNtq+5A1Af6Vl1bZ3b3SXECZvowxERtHFE
-         bK7cff63RcuxQ==
-Date:   Wed, 6 Apr 2022 16:45:38 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kbuild tree
-Message-ID: <20220406164538.0438bd0e@canb.auug.org.au>
+        Wed, 6 Apr 2022 06:22:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C6917AB3;
+        Tue,  5 Apr 2022 23:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649227625; x=1680763625;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JRb3SzOQESj6NEoJIznEzSTJmuuLPgnO38vSPHZXK34=;
+  b=VQNeVav8WhLbRDu6n+sxEPXljbYva9FqwFJOjY54tHMoOHWklA1xJiqI
+   OAwNZZtrYqupTpffVbEUHKppu1Wt3x6J9GP2536B4wt7/MmUKN0V6WWvB
+   8fxHh+TKUycRuD9X6GZRCYoElh3SH054WmgoeCY1VX9wx9l2UIAUzwm0i
+   oTahWijIXigBbrlMHuifG0uE4h3OOS5cLWF5TqAFYu3XVW7PdLS3RrGSw
+   TT5CAGkljg1uS+TKH8jSW900aSpreiIwOCB5LRDpn/spWeKt7/E4Pmgru
+   fGW4NgAnfR7Ym+BUl7czWyNBz8yS8a7UvrnO5WNdbYCt1aZCLmKDeMtJC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260959912"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="260959912"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 23:47:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="549413737"
+Received: from cqiang-mobl.ccr.corp.intel.com (HELO [10.249.170.41]) ([10.249.170.41])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 23:47:02 -0700
+Message-ID: <9b45d2bc-9bb3-53a1-3eb3-4b1bf6987268@intel.com>
+Date:   Wed, 6 Apr 2022 14:46:59 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uAcPf6hRDwqokOX0NsMO1d2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/3] KVM: X86: Save&restore the triple fault request
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318074955.22428-1-chenyi.qiang@intel.com>
+ <20220318074955.22428-2-chenyi.qiang@intel.com> <YkzRSHHDMaVBQrxd@google.com>
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <YkzRSHHDMaVBQrxd@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,36 +68,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/uAcPf6hRDwqokOX0NsMO1d2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Commit
+On 4/6/2022 7:31 AM, Sean Christopherson wrote:
+> On Fri, Mar 18, 2022, Chenyi Qiang wrote:
+>> For the triple fault sythesized by KVM, e.g. the RSM path or
+>> nested_vmx_abort(), if KVM exits to userspace before the request is
+>> serviced, userspace could migrate the VM and lose the triple fault.
+>> Fix this issue by adding a new event KVM_VCPUEVENT_TRIPLE_FAULT in
+>> get/set_vcpu_events() to track the triple fault request.
+>>
+>> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
+>> ---
+>>   Documentation/virt/kvm/api.rst  | 6 ++++++
+>>   arch/x86/include/uapi/asm/kvm.h | 1 +
+>>   arch/x86/kvm/x86.c              | 9 ++++++++-
+>>   3 files changed, 15 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index 691ff84444bd..9682b0a438bd 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -1146,6 +1146,9 @@ The following bits are defined in the flags field:
+>>     fields contain a valid state. This bit will be set whenever
+>>     KVM_CAP_EXCEPTION_PAYLOAD is enabled.
+>>   
+>> +- KVM_VCPUEVENT_TRIPLE_FAULT may be set to signal that there's a
+>> +  triple fault request waiting to be serviced.
+> 
+> Please avoid "request" in the docs, as before, that's a KVM implemenation detail.
+> For this one, maybe "there's a pending triple fault event"?
+> 
+>> +
+>>   ARM/ARM64:
+>>   ^^^^^^^^^^
+>>   
+>> @@ -1241,6 +1244,9 @@ can be set in the flags field to signal that the
+>>   exception_has_payload, exception_payload, and exception.pending fields
+>>   contain a valid state and shall be written into the VCPU.
+>>   
+>> +KVM_VCPUEVENT_TRIPLE_FAULT can be set in flags field to signal that a
+>> +triple fault request should be made.
+> 
+> 
+> And here, "to signal that KVM should synthesize a triple fault for the guest"?
+> 
+>> +
+>>   ARM/ARM64:
+>>   ^^^^^^^^^^
+>>   
+>> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+>> index bf6e96011dfe..d8ef0d993e86 100644
+>> --- a/arch/x86/include/uapi/asm/kvm.h
+>> +++ b/arch/x86/include/uapi/asm/kvm.h
+>> @@ -325,6 +325,7 @@ struct kvm_reinject_control {
+>>   #define KVM_VCPUEVENT_VALID_SHADOW	0x00000004
+>>   #define KVM_VCPUEVENT_VALID_SMM		0x00000008
+>>   #define KVM_VCPUEVENT_VALID_PAYLOAD	0x00000010
+>> +#define KVM_VCPUEVENT_TRIPLE_FAULT	0x00000020
+>>   
+>>   /* Interrupt shadow states */
+>>   #define KVM_X86_SHADOW_INT_MOV_SS	0x01
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 4fa4d8269e5b..fee402a700df 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -4891,6 +4891,9 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+>>   	if (vcpu->kvm->arch.exception_payload_enabled)
+>>   		events->flags |= KVM_VCPUEVENT_VALID_PAYLOAD;
+>>   
+>> +	if (kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu))
+>> +		events->flags |= KVM_VCPUEVENT_TRIPLE_FAULT;
+>> +
+>>   	memset(&events->reserved, 0, sizeof(events->reserved));
+>>   }
+>>   
+>> @@ -4903,7 +4906,8 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>>   			      | KVM_VCPUEVENT_VALID_SIPI_VECTOR
+>>   			      | KVM_VCPUEVENT_VALID_SHADOW
+>>   			      | KVM_VCPUEVENT_VALID_SMM
+>> -			      | KVM_VCPUEVENT_VALID_PAYLOAD))
+>> +			      | KVM_VCPUEVENT_VALID_PAYLOAD
+>> +			      | KVM_VCPUEVENT_TRIPLE_FAULT))
+>>   		return -EINVAL;
+>>   
+>>   	if (events->flags & KVM_VCPUEVENT_VALID_PAYLOAD) {
+>> @@ -4976,6 +4980,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>>   		}
+>>   	}
+>>   
+>> +	if (events->flags & KVM_VCPUEVENT_TRIPLE_FAULT)
+>> +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+>> +
+>>   	kvm_make_request(KVM_REQ_EVENT, vcpu);
+> 
+> Looks correct, but this really needs a selftest, at least for the SET path since
+> the intent is to use that for the NOTIFY handling.  Doesn't need to be super fancy,
+> e.g. do port I/O from L2, inject a triple fault, and verify L1 sees the appropriate
+> exit.
+> 
+> Aha!  And for the GET path, abuse KVM_X86_SET_MCE with CR4.MCE=0 to coerce KVM into
+> making a KVM_REQ_TRIPLE_FAULT, that way there's no need to try and hit a timing
+> window to intercept the request.
 
-  33057b0081b7 ("docs: kbuild: add references on Kconfig semantics")
+OK, will cook a selftest to verify it.
 
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/uAcPf6hRDwqokOX0NsMO1d2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJNNxIACgkQAVBC80lX
-0GztYgf+Po2sx3ZyCb8JCY1PE9r0gxnHMR38JnauKMHT0BgL/R6o2ydwZmwPsQXI
-b2DHDScE0Fk8p2gaYTVUrSsIJ8/wwzLXXQY+4X7GHb23z6xuP91fF0+bo5CQHRU9
-X7NoZJdJHnF/E0s7mINPPnpNR433LvtKBR6bhf4KYjt6xqmNLFS3gsomWatL6Oq5
-c0F+vgnjlOZKpKb1T662ZpqKEC1+wNEy4VqF1pXywqOSh1VoobTn/cQWGinyIQRR
-U3XOcXaIBc6/pSIRDYfCfImkST07v2Bl+fCIbXrNCk9LfMdMv8hJuSExsObfuO0r
-nyVJ58+0BXUbRzxeHWRNzN4rtnHyNA==
-=jj5G
------END PGP SIGNATURE-----
-
---Sig_/uAcPf6hRDwqokOX0NsMO1d2--

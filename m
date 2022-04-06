@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2464F5EA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936414F5EBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiDFNDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S231802AbiDFNER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbiDFNDB (ORCPT
+        with ESMTP id S232830AbiDFNDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:03:01 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5DD5CCC92;
-        Wed,  6 Apr 2022 02:30:48 -0700 (PDT)
+        Wed, 6 Apr 2022 09:03:11 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35665CFBF2
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:31:28 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id x21so3005639ybd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649237449; x=1680773449;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=SFtc5Cx+6Nw5kBcMc7124XPPOGKJlKRghgQoJVTH32U=;
-  b=qQZdlqzBL4KzIAEwj1Qq+TFHVB8V6MozN6gKjS/caMY1LveIGpoi4iP+
-   5KOAGeWKQe3a9yhWouxmj1HMAPYa8x9YmixZ7/RUHqYNqi8Z2u40wr0r8
-   yMVgq3v40Bdn14hgu68sGyy9Uk+HxyChY2ZcX7PIkH7OBJeA0Pxt1Katw
-   0=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Apr 2022 02:28:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 02:28:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 02:28:07 -0700
-Received: from [10.216.50.162] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
- 02:28:02 -0700
-Subject: Re: [PATCH V9 5/6] arm64: dts: qcom: pm8008: Add base dts file
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
- <1649166633-25872-6-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n51rLRcWE+h3zaWNy-nJYK4tQoivjdbfgYrwTJbjYYxWFw@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <8c8bf971-b6d3-9669-4da4-e81701d9c79e@quicinc.com>
-Date:   Wed, 6 Apr 2022 14:57:59 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OVhcFKo8wEkExU/JC2CRzZWztSpDv1NCOKxUnp7443Y=;
+        b=EkJZYz1J8Z/oE3qqME1XB+QbpG8B8S74ho9tvQX1t9lAVsg8UD/hlNSpmXDdSRvIOw
+         Y4uVlWPzTiVhujbvzK1L9VS52kyPUdm7kwxH1BAPROFZE503CGp3GHnoLGZ6CmvVTpM8
+         jJkYAPhunpASUxiqoY8cOZRcNxAfnXThvDHv0RWUH95VZNM/IBDBFnHiK+gQfSrCkOLv
+         1swYT3Cy7NV1OsV4CoGtsQQLAe8on7KupZqKk+DFx9fw5h2IlgK51dBoia3UxPoP0ebS
+         beC49EuS+ZE1CzDBhojRT/kkhiOTlR1SxS2Ew+YNaZw7WrKEn+dLFejBOlPtRZ5kM6k7
+         XymQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OVhcFKo8wEkExU/JC2CRzZWztSpDv1NCOKxUnp7443Y=;
+        b=4mLvvyTrnFDaKwrq2yX4rNSKr2PL8Ymqwrs+RMzjZ0c7EhnxHus5renWj2U3sZxLTJ
+         YUwXgbHhGgBRuQPmDn4THURAFj7OyfEmndC3xwaRayU8GZN+jfi9nPESHOddJO+CLmbm
+         BsD4JdLx8nbBzVIVMBB8y/fIWmGyLYHSBxDHRd0lkfPMwUt0973qosIzgDSGKfLAmnsT
+         at9ShriO3Jie/Ve2bw+Sj+lqQ9iO2RPhQufdwDK0albpSFPQfrw6vNhUVFoa2ZG33YdZ
+         NH86iMH44lRZwoUAQAJYeqL3mFH77R82Ypz21SpXhaI7rdwUDHB9gUbcJifWEkRxJkW6
+         vhiA==
+X-Gm-Message-State: AOAM5326OWe65NBDJWlZg1BcxqyiWyw+30wM9+f+6V/LViIoXkD7bMge
+        PIkT6lQ/SrVjwm1QZ58DpCjdrYJXZjqTMt8u8656eQ==
+X-Google-Smtp-Source: ABdhPJzHP4KTzpT8pwgNRTsJvsXivMME9ci/UzSnGw6ceYMSaXlcvDfVKlwXaUlpwscmIUUQ0Et86Btyzj6l7QzdRRQ=
+X-Received: by 2002:a25:7102:0:b0:63d:91db:c29d with SMTP id
+ m2-20020a257102000000b0063d91dbc29dmr5502786ybc.405.1649237427488; Wed, 06
+ Apr 2022 02:30:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n51rLRcWE+h3zaWNy-nJYK4tQoivjdbfgYrwTJbjYYxWFw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220405070354.155796697@linuxfoundation.org> <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
+In-Reply-To: <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Wed, 6 Apr 2022 11:30:16 +0200
+Message-ID: <CADYN=9+pshm3PGa0+JY=yR3bTQySUxdTUVtNraKXOS_ZDTXWsw@mail.gmail.com>
+Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        ranjani.sridharan@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,38 +74,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/6/2022 12:41 AM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-04-05 06:50:32)
->> diff --git a/arch/arm64/boot/dts/qcom/pm8008.dtsi b/arch/arm64/boot/dts/qcom/pm8008.dtsi
->> new file mode 100644
->> index 0000000..24bd832
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/pm8008.dtsi
->> @@ -0,0 +1,47 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +// Copyright (c) 2022, The Linux Foundation. All rights reserved.
->> +
->> +&pm8008_bus {
->> +       pm8008: pm8008@8 {
-> pmic@8
-
-
-Sorry I missed this change. I'll change it in next post.
-
-
->> +               compatible = "qcom,pm8008";
->> +               reg = <0x8>;
->> +               #address-cells = <1>;
->> +               #size-cells = <0>;
->> +               #interrupt-cells = <2>;
->> +       };
->> +
->> +       pm8008_regulators: pm8008@9 {
-> pmic@9
+On Wed, 6 Apr 2022 at 01:03, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
->> +               compatible = "qcom,pm8008-regulators";
->> +               reg = <0x9>;
->> +               #address-cells = <0>;
->> +               #size-cells = <0>;
->> +
+> On 4/5/22 1:15 AM, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.16.19 release.
+> > There are 1017 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.19-rc1.gz
+> > or in the git tree and branch at:
+> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> >
+>
+> Build failed on my system. The following is the problem commit. There
+> are no changes to the config between 5.16.18 and this build.
+>
+> Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+>      ASoC: SOF: Intel: hda: Remove link assignment limitation
+
+I saw the same build error, after applying the following patches it
+builds fine again.
+198fa4bcf6a1 ("ASoC: SOF: intel: add snd_sof_dsp_check_sdw_irq ops")
+81ed6770ba67 ("ASoC: SOF: Intel: hda: expose get_chip_info()")
+
+Cheers,
+Anders
+
+>
+>    CC [M]  sound/soc/sof/intel/hda-dai.o
+> sound/soc/sof/intel/hda-dai.c: In function =E2=80=98hda_link_stream_assig=
+n=E2=80=99:
+> sound/soc/sof/intel/hda-dai.c:86:24: error: implicit declaration of funct=
+ion =E2=80=98get_chip_info=E2=80=99; did you mean =E2=80=98get_group_info=
+=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+>     86 |                 chip =3D get_chip_info(sdev->pdata);
+>        |                        ^~~~~~~~~~~~~
+>        |                        get_group_info
+> sound/soc/sof/intel/hda-dai.c:86:22: error: assignment to =E2=80=98const =
+struct sof_intel_dsp_desc *=E2=80=99 from =E2=80=98int=E2=80=99 makes point=
+er from integer without a cast [-Werror=3Dint-conversion]
+>     86 |                 chip =3D get_chip_info(sdev->pdata);
+>        |                      ^
+> sound/soc/sof/intel/hda-dai.c:94:35: error: =E2=80=98const struct sof_int=
+el_dsp_desc=E2=80=99 has no member named =E2=80=98quirks=E2=80=99
+>     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FM=
+T_QUIRK)) {
+>        |                                   ^~
+> sound/soc/sof/intel/hda-dai.c:94:46: error: =E2=80=98SOF_INTEL_PROCEN_FMT=
+_QUIRK=E2=80=99 undeclared (first use in this function)
+>     94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FM=
+T_QUIRK)) {
+>        |                                              ^~~~~~~~~~~~~~~~~~~=
+~~~~~~~
+> sound/soc/sof/intel/hda-dai.c:94:46: note: each undeclared identifier is =
+reported only once for each function it appears in
+> cc1: all warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:287: sound/soc/sof/intel/hda-dai.o] =
+Error 1
+> make[3]: *** [scripts/Makefile.build:549: sound/soc/sof/intel] Error 2
+> make[2]: *** [scripts/Makefile.build:549: sound/soc/sof] Error 2
+> make[1]: *** [scripts/Makefile.build:549: sound/soc] Error 2
+> make: *** [Makefile:1846: sound] Error 2
+>
+> thanks,
+> -- Shuah
+
+--=20
+Linaro LKFT
+https://lkft.linaro.org

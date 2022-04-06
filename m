@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30ED4F68A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC3B4F690C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240287AbiDFSLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 14:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S240404AbiDFSNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 14:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240279AbiDFSJo (ORCPT
+        with ESMTP id S240547AbiDFSMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0601E9972
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:46:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Apr 2022 14:12:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBC2C1F9A3E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649263817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sQTT4EqOLRNQF0Ed2dIB0yr4+oIJIzcbTRQWujoh2kY=;
+        b=Ek/VubANinPC9h9ZGCSwBN5Dy2Bd73QKGhM2T4OwroZM/1bb9vVAESyDG+hH6qht4dZalw
+        qk1SwZF3VLvGdpwVqGvzfQJ33ENEltBbOYmLNUpUEIeWsz1qvK8ijQPvm2vnlItAp+xIlN
+        yOfgy2UhkPyLSrj1uiU4NwsGlQ/+no0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-f_Ly0toDM--tXyule_3RIw-1; Wed, 06 Apr 2022 12:50:14 -0400
+X-MC-Unique: f_Ly0toDM--tXyule_3RIw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FC1161763
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6BD1C385A1;
-        Wed,  6 Apr 2022 16:46:46 +0000 (UTC)
-Date:   Wed, 6 Apr 2022 12:46:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Ben Young Tae Kim <ytkim@qca.qualcomm.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] Bluetooth: hci_qca: Use del_timer_sync() before freeing
-Message-ID: <20220406124645.3a1ce66e@gandalf.local.home>
-In-Reply-To: <59941012-6eb6-91f3-ac79-cca759fa53d7@roeck-us.net>
-References: <20220404182236.1caa174e@rorschach.local.home>
-        <97d1cc84-890c-3fcf-2efc-645633cd36b2@gmail.com>
-        <20220406153907.GA1994259@roeck-us.net>
-        <20220406114654.3c0e17a8@gandalf.local.home>
-        <59941012-6eb6-91f3-ac79-cca759fa53d7@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30F0F803D7C;
+        Wed,  6 Apr 2022 16:50:13 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-8.rdu2.redhat.com [10.22.0.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CFF7B76C4;
+        Wed,  6 Apr 2022 16:49:56 +0000 (UTC)
+Date:   Wed, 6 Apr 2022 12:49:54 -0400
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     Paul Moore <paul@paul-moore.com>, kbuild-all@lists.01.org,
+        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
+        eparis@redhat.com, dai.shixin@zte.com.cn,
+        Yang Yang <yang.yang29@zte.com.cn>, linux-audit@redhat.com,
+        ink@jurassic.park.msu.ru, huang.junhua@zte.com.cn,
+        guo.xiaofeng@zte.com.cn, mattst88@gmail.com
+Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
+Message-ID: <Yk3Esn2Fu0lVX2SZ@madcap2.tricolour.ca>
+References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
+ <CAHC9VhTaCNqfTOi8X5G3AheBFzTYCzGnt_-=fNFc5Z1o8gPm9Q@mail.gmail.com>
+ <62465bf3.1c69fb81.d5424.365e@mx.google.com>
+ <2777189.mvXUDI8C0e@x2>
+ <CAHC9VhRYHhHPx42BKa0gp974uzwHoXZWqmwt9o=1rox7tHyy1w@mail.gmail.com>
+ <624803f7.1c69fb81.972da.2dd0@mx.google.com>
+ <YksVuhfv8weLCxX/@madcap2.tricolour.ca>
+ <624cea8e.1c69fb81.422be.e03b@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <624cea8e.1c69fb81.422be.e03b@mx.google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,17 +71,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 09:36:10 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On 2022-04-06 01:19, CGEL wrote:
+> On Mon, Apr 04, 2022 at 11:58:50AM -0400, Richard Guy Briggs wrote:
+> > On 2022-04-02 08:06, CGEL wrote:
+> > > On Fri, Apr 01, 2022 at 10:16:45AM -0400, Paul Moore wrote:
+> > > > On Fri, Apr 1, 2022 at 9:39 AM Steve Grubb <sgrubb@redhat.com> wrote:
+> > > > > On Thursday, March 31, 2022 9:57:05 PM EDT CGEL wrote:
+> > > > > > On Thu, Mar 31, 2022 at 10:16:23AM -0400, Paul Moore wrote:
+> > > > > > > On Wed, Mar 30, 2022 at 10:29 PM CGEL <cgel.zte@gmail.com> wrote:
+> > > > > > > > On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
+> > > > > > > > > If audit is not generating SYSCALL records, even for invalid/ENOSYS
+> > > > > > > > > syscalls, I would consider that a bug which should be fixed.
+> > > > > > > >
+> > > > > > > > If we fix this bug, do you think audit invalid/ENOSYS syscalls better
+> > > > > > > > be forcible or be a rule that can be configure? I think configure is
+> > > > > > > > better.
+> > > > > > >
+> > > > > > > It isn't clear to me exactly what you are asking, but I would expect
+> > > > > > > the existing audit syscall filtering mechanism to work regardless if
+> > > > > > > the syscall is valid or not.
+> > > > > >
+> > > > > > Thanks, I try to make it more clear. We found that auditctl would only
+> > > > > > set rule with syscall number (>=0 && <2047) ...
+> > > > 
+> > > > That is exactly why I wrote the warning below in my response ...
+> > > >
+> > > I think the question is more clear now.
+> > > 
+> > > 1) libaudit.c wants to forbid setting invalid syscall, but inconsistent
+> > > Currently way(>=0 && <2047) is inconsistent, syscall with number 2000 and
+> > > syscall with number 3000 are both invalid syscall. But 2000 can be set by
+> > > auditctl, and 3000 cannot be set by auditctl.
+> > > A better way to do this forbidden is to use __NR_syscalls(asm-generic/unistd.h).
+> > > 
+> > > 2) if libaudit.c do the right forbidden, kernel better ignore invalid syscall
+> > > See this patch.
+> > > 
+> > > If we want audit invalid syscall as you said before. libaudit.c should not
+> > > do the forbidden, auditctl should allow setting syscall rule with 'any' number.
+> > > So do you think we should fix libaudit.c?
+> > 
+> > I'm having a bit of trouble understanding what you've said above.
+> > 
+> > The kernel ultimately must protect itself from malice and mistakes, so
+> > it must verify all data sent to it.
+> > 
+> > Userspace can help by knowing what that kernel policy is so it can avoid
+> > violating that policy or provide useful feedback if it can't.  Userspace
+> > can be used to make things more efficient, but the kernel is the last
+> > step for security.
+> > 
+> > If userspace and the kernel are mismatched or out of sync, then the
+> > kernel enforces policy to protect itself.
+>
+> Much appreciate for your interpretation. Have you get any idea of how
+> to solve the mismatched? From your viewpoint, I think it's better for
+> kernel to not handle syscall of syscall number<0, because it's invaild
+> of all arch, and has no value for attacker to probing for specific
+> syscall numbers.
 
-> > So we have a chicken verses egg issue here?
-> >   
-> 
-> Almost looks like it, unless I am missing something. Maybe some flag
-> is needed to prevent the timer handling code from queuing into the
-> destroyed workqueue, or the workqueue handler from updating the timer.
+Going back to the very first quoted line above, if you can generate a
+test case that shows that audit is missing an auditable event, that is a
+bug that should be fixed.
 
-That's exactly what I was thinking. I do not know all the code here. I
-could try to write a patch, but I may likely miss something.
+> > > > > > > to the audit syscall filter, which are unfortunately baked into the
+> > > > > > > current design/implementation, which may affect this to some extent.
+> > > > 
+> > > > -- 
+> > > > paul-moore.com
+> > 
+> > - RGB
 
--- Steve
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
+

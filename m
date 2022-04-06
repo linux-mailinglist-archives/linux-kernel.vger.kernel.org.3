@@ -2,97 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D0E4F6E94
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DC84F6E9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237822AbiDFXhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S237834AbiDFXjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237595AbiDFXhs (ORCPT
+        with ESMTP id S237820AbiDFXi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:37:48 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A01E520E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:35:50 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id fu5so3996877pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:35:50 -0700 (PDT)
+        Wed, 6 Apr 2022 19:38:57 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5571FCD2E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:36:57 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id j8so3338851pll.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I9PXYYNYzm+S86XiDohEIIjS7uODRi+inUQ+moEyXoI=;
-        b=AHE5qokLSDutFR7PI8eQWDwxmxlJzrKafDW0/fFJ5EL9eN5tG8Ib+nvmPWjLccswFO
-         LeBMTI+eySDNC30XqN9ueFi938W7I4yq1ZS7LJMpYY2vAy6DD2krEQIuakJkRHmOJJD2
-         2qW51WjOrAwtImJkE7bXt2zuDlMIeuMjonTWrp3LI/f6WeyMKYbGgBfORrKDMu4Y+ncd
-         mtIpb5SSZ1XD4hMusUwFvUsQKFZarjSi4MYhbgkAr9DFzNmGqd8C3uqsV2cJUaXlgJ2q
-         zwFw0KCxkoz9Gs0Mw+T9ysOWDwHhd4H9pUeN/qtavuciYsE4ZXb/RYcYThkdLG2hffah
-         uAWQ==
+        d=pensando.io; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=21ZJRRzPBF6FcLzLA+5OerzfnCr3C60pEPJqVVBmqTY=;
+        b=fKwn0tUMW047EyEj2Owp8YI5iW6CAw7fzm93kE70JaSkisqGFGRYw0WSQ995y/Ahdq
+         b5/KCNurRH6P5x7lXbwcqz0zzAE+yKIziwzwdqasM8LjpbSn+FORgzLng6ddJwykKYrm
+         Cd/1iatq5/fR7IkJzWYaoNcwzcgT3D5fxa1Aykz9Z4tVz0Cio1oD0tzlY1vOeULqgofo
+         AwyAlp0RPJIhg+tw0v7IFvDyp/1GnWipihXFIoDrCISvL+bWWPs3XPdoOvOfNHJYmf6S
+         dOw4iFaedBTqWWlN2+STe3zBU8+pRxzgGbeC5VsbDjmU7417KuUWs/Q71WxPyhQ3XfGp
+         7FDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I9PXYYNYzm+S86XiDohEIIjS7uODRi+inUQ+moEyXoI=;
-        b=nrPljf36RV6dOvz7keNgf3VfsMQ72OTvYDoK/wFBrni9cNQIk1jjrpuaXEHS4NWz55
-         DegzQzDX6XnIsuuztVyrAAMs7+kjN9d6I1Cn0F2b26MgPdhdHjvDkL2MBtJ3O8m9CeN5
-         7xnRuTyJJooR3LzXf0fYck/YGSel2QBQa0w1F1fhLmAPcl3RHXci6ybzw5cSLf0VpcfW
-         lPxpNARTY2EvYxx85JdaFsKCAmLHH66sTDI62cl6IZdu2XAGx5a6aUtt4hxThnZIc3nu
-         Hdv3Rn3cH3x97Xxht1WW8V/afquTYHl6NbMZknPlYL6xCuZjsokhRmRFebh8KIxRKYjx
-         iTUQ==
-X-Gm-Message-State: AOAM533fVd8XGYJzTeNEW+h/TdiKbVK7uSoz5z1WfzIv8eFRn0udlDcJ
-        YKaa5X4keo+NUS7at4JDjXMN3Q==
-X-Google-Smtp-Source: ABdhPJy16UR83rlEq9AhsRifZ1oBb2UHMARMltuDdLjmXLfxa1VkMpUIcuOE413C9cxMtZqmFWNWpw==
-X-Received: by 2002:a17:902:d48f:b0:156:bddf:ef8 with SMTP id c15-20020a170902d48f00b00156bddf0ef8mr11085044plg.83.1649288149820;
-        Wed, 06 Apr 2022 16:35:49 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m15-20020a638c0f000000b003827bfe1f5csm17030090pgd.7.2022.04.06.16.35.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=21ZJRRzPBF6FcLzLA+5OerzfnCr3C60pEPJqVVBmqTY=;
+        b=vNJRCcZe4ouSZ2dwwyIL7gsOa8TAOZK3oCMz+s38xMrcyb3vyqcb8rsKgRBBl2fbUu
+         bbTd7Oz6APAawVpl+C+tLRkTEnoi/Q1L7rbPRAHVXiEPH+9xhvM96MrawfdSVt9wARct
+         ORVFBCQvHwSVeH4+M3yzUupI+lFzjfftrrQZdV84FUs/7EXTT7rbm5jMssdK7Qx6DNMH
+         VK4aEfdOlix45juXEG7tVPWbQ56wf6Rtd9734lhWrs1Hzy5IjcvVfJ0zzycQSwU5xYJB
+         sf30wZvE4KZav2woa+aNUhUBQoSJiljByoTQ4EHsZMfYoj263UsKo4DWvp4gGggwtIxA
+         H/rA==
+X-Gm-Message-State: AOAM531aYqa53N0C1MhKBDTANygJhZCCSv5FqIqMRMAakext7cKNwgV9
+        wNVDiDbb72g8gTd59OR+zr3XQA==
+X-Google-Smtp-Source: ABdhPJw6de6LxMX24kxKqOkwU7ahEUMqpmaXcVTLkvOJdN5e2XGTxzipHvLO3QMVfxr0Ma+CwQjFTQ==
+X-Received: by 2002:a17:90a:b115:b0:1ca:9d56:24f9 with SMTP id z21-20020a17090ab11500b001ca9d5624f9mr12636918pjq.130.1649288217192;
+        Wed, 06 Apr 2022 16:36:57 -0700 (PDT)
+Received: from platform-dev1.pensando.io ([12.226.153.42])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm6903667pjl.39.2022.04.06.16.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 16:35:49 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 23:35:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 045/104] KVM: x86/tdp_mmu: make REMOVED_SPTE
- include shadow_initial value
-Message-ID: <Yk4j0cCR5fnQKw1F@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6614d2a2bc34441ed598830392b425fdf8e5ca52.1646422845.git.isaku.yamahata@intel.com>
- <3f93de19-0685-3045-22db-7e05492bb5a4@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f93de19-0685-3045-22db-7e05492bb5a4@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 06 Apr 2022 16:36:56 -0700 (PDT)
+From:   Brad Larson <brad@pensando.io>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        brad@pensando.io, dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] Support Pensando Elba SoC
+Date:   Wed,  6 Apr 2022 16:36:37 -0700
+Message-Id: <20220406233648.21644-1-brad@pensando.io>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Paolo Bonzini wrote:
-> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> > @@ -207,9 +209,17 @@ extern u64 __read_mostly shadow_nonpresent_or_rsvd_mask;
-> >   /* Removed SPTEs must not be misconstrued as shadow present PTEs. */
-> >   static_assert(!(REMOVED_SPTE & SPTE_MMU_PRESENT_MASK));
-> > +/*
-> > + * See above comment around REMOVED_SPTE.  SHADOW_REMOVED_SPTE is the actual
-> > + * intermediate value set to the removed SPET.  When TDX is enabled, it sets
-> > + * the "suppress #VE" bit, otherwise it's REMOVED_SPTE.
-> > + */
-> > +extern u64 __read_mostly shadow_init_value;
-> > +#define SHADOW_REMOVED_SPTE	(shadow_init_value | REMOVED_SPTE)
-> 
-> Please rename the existing REMOVED_SPTE to REMOVED_SPTE_MASK, and call this
-> simply REMOVED_SPTE.  This also makes the patch smaller.
+This series enables support for Pensando Elba SoC based platforms.
+The Elba SoC has the following features:
 
-Can we name it either __REMOVE_SPTE or REMOVED_SPTE_VAL?  It's most definitely
-not a mask, it's a full value, e.g. spte |= REMOVED_SPTE_MASK is completely wrong.
+- Sixteen ARM64 A72 cores
+- Dual DDR 4/5 memory controllers
+- 32 lanes of PCIe Gen3/4 to the Host
+- Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+  also a single 1GE management port.
+- Storage/crypto offloads and 144 programmable P4 cores.
+- QSPI and EMMC for SoC storage
+- Two SPI interfaces for peripheral management
+- I2C bus for platform management
 
-Other than that, 100% agree with avoiding churn.
+This is a respin based on review inputs.  The version of 
+dtschema used is 2022.3.2.  Changes from V3:
+
+0001-dt-bindings-arm-add-Pensando-boards.patch
+- Add description and board compatible
+
+0003-dt-bindings-mmc-Add-Pensando-Elba-SoC-binding.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+- Use minItems: 1 and maxItems: 2 to pass schema check
+
+0005-dt-bindings-spi-dw-Add-Pensando-Elba-SoC-SPI-Control.patch
+- Add required property pensando,syscon-spics to go with
+  pensando,elba-spi
+
+0006-MAINTAINERS-Add-entry-for-PENSANDO.patch
+- Change Maintained to Supported
+
+0007-arm64-Add-config-for-Pensando-SoC-platforms.patch
+- Fix a typo on interface max speed
+
+0008-spi-cadence-quadspi-Add-compatible-for-Pensando-Elba.patch
+- Update due to spi-cadence-quadspi.c changes
+
+0009-mmc-sdhci-cadence-Add-Pensando-Elba-SoC-support.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+
+0010-spi-dw-Add-support-for-Pensando-Elba-SoC.patch
+- Use more descriptive dt property pensando,syscon-spics
+- Minor changes from review input
+
+0011-arm64-dts-Add-Pensando-Elba-SoC-support.patch
+- Changed to dual copyright (GPL-2.0+ OR MIT)
+- Minor changes from review input
+
+Brad Larson (11):
+  dt-bindings: arm: add Pensando boards
+  dt-bindings: Add vendor prefix for Pensando Systems
+  dt-bindings: mmc: Add Pensando Elba SoC binding
+  dt-bindings: spi: Add compatible for Pensando Elba SoC
+  dt-bindings: spi: dw: Add Pensando Elba SoC SPI Controller bindings
+  MAINTAINERS: Add entry for PENSANDO
+  arm64: Add config for Pensando SoC platforms
+  spi: cadence-quadspi: Add compatible for Pensando Elba SoC
+  mmc: sdhci-cadence: Add Pensando Elba SoC support
+  spi: dw: Add support for Pensando Elba SoC
+  arm64: dts: Add Pensando Elba SoC support
+
+ .../bindings/arm/pensando,elba.yaml           |  26 +++
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |   4 +-
+ .../bindings/spi/cdns,qspi-nor.yaml           |   3 +-
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  17 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ arch/arm64/Kconfig.platforms                  |  12 ++
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/pensando/Makefile         |   3 +
+ arch/arm64/boot/dts/pensando/elba-16core.dtsi | 189 ++++++++++++++++++
+ .../boot/dts/pensando/elba-asic-common.dtsi   |  98 +++++++++
+ arch/arm64/boot/dts/pensando/elba-asic.dts    |  28 +++
+ .../boot/dts/pensando/elba-flash-parts.dtsi   | 106 ++++++++++
+ arch/arm64/boot/dts/pensando/elba.dtsi        | 189 ++++++++++++++++++
+ drivers/mmc/host/Kconfig                      |   1 +
+ drivers/mmc/host/sdhci-cadence.c              | 148 ++++++++++++--
+ drivers/spi/spi-cadence-quadspi.c             |  19 ++
+ drivers/spi/spi-dw-mmio.c                     |  85 ++++++++
+ 18 files changed, 922 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/pensando,elba.yaml
+ create mode 100644 arch/arm64/boot/dts/pensando/Makefile
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-16core.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic.dts
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-flash-parts.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba.dtsi
+
+-- 
+2.17.1
+

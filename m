@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB084F5CB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E934F5F3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiDFLuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S231855AbiDFN0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiDFLuW (ORCPT
+        with ESMTP id S233262AbiDFNZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:50:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEABC5AB658
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:49:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48EF261380
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C3EC385A3;
-        Wed,  6 Apr 2022 08:49:46 +0000 (UTC)
-Date:   Wed, 6 Apr 2022 09:49:42 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yk1UJs6eZMoIp3Eh@arm.com>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-8-catalin.marinas@arm.com>
- <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
- <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
+        Wed, 6 Apr 2022 09:25:50 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BF8376620
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:10:22 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 0102F9C42
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:10:22 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bu9lniis49AGSbu9lnJWMy; Tue, 05 Apr 2022 20:08:21 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BM53CkdiWE9/AyefGVVmcfgwA9TziGoeOzw36GMhF68=; b=0+uXrFiSoJ6r2JBUjoEKRQoewo
+        WNv4IAttvm2qLAE2IB4xxBtJl9Yw7BC1ngCDRF0i6CM3JgZNyNRB7RxECcFETvXbjtYV/flU7Ur1s
+        k8aKpKfrXGkCzYXTArIKFVNiwl9WTUcZSRhq7ABnDFzhpAPWgdy9WkKt0nJEiIiXAvCxowaBeSury
+        tjcrDrbogKFpXyN0moVHB6/QULHPJ3Gj4tm0H/8RXALWitD0kZ7Cvum+uGram3T4IO4FIEhjdDhyK
+        q0vawtktx+GEGu1Zen4VeOJy6DGymMzcaa1sLbJTHxCUHRxJm2g46h7JK5AWfCdFgLhM9qsKSx2Pk
+        qEEBjvGQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57876 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbu9l-001L2s-8Y; Wed, 06 Apr 2022 01:08:21 +0000
+Date:   Tue, 5 Apr 2022 18:08:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/913] 5.15.33-rc1 review
+Message-ID: <20220406010820.GB1133386@roeck-us.net>
+References: <20220405070339.801210740@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbu9l-001L2s-8Y
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57876
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 25
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 08:53:33AM +0200, Ard Biesheuvel wrote:
-> On Wed, 6 Apr 2022 at 00:57, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> > On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
-> > > ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
-> > > operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
-> > > alignment.
-> > >
-> > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > ---
-> > >  include/linux/crypto.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
-> > > index 2324ab6f1846..654b9c355575 100644
-> > > --- a/include/linux/crypto.h
-> > > +++ b/include/linux/crypto.h
-> > > @@ -167,7 +167,7 @@
-> > >   * maintenance for non-coherent DMA (cache invalidation in particular) does not
-> > >   * affect data that may be accessed by the CPU concurrently.
-> > >   */
-> > > -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
-> > > +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
-> >
-> > I think this should remain as ARCH_KMALLOC_MINALIGN with the
-> > comment above modified.  The reason is that we assume memory
-> > returned by kmalloc is already aligned to this value.
-> >
-> > Ard, you added the comment regarding the DMA requirement, so
-> > does anything actually rely on this? If they do, they now need
-> > to do their own alignment.
+On Tue, Apr 05, 2022 at 09:17:42AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.33 release.
+> There are 913 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This patch looks incorrect to me, as ARCH_DMA_MINALIGN is not
-> #define'd on all architectures.
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
+> 
 
-It is after the first patch:
+Build results:
+	total: 156 pass: 156 fail: 0
+Qemu test results:
+	total: 488 pass: 488 fail: 0
 
-https://lore.kernel.org/all/20220405135758.774016-2-catalin.marinas@arm.com/
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-The series makes both ARCH_*_MINALIGN available irrespective of what an
-arch defines. If one needs guaranteed static alignment for DMA, use the
-DMA macro. If the minimum kmalloc() alignment is needed (e.g. to store
-some flags in the lower pointer bits), use the KMALLOC macro. I grep'ed
-through drivers/ and I've seen both cases (e.g.
-drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c for the latter use-case).
-
-> But I am fine with the intent: ARCH_DMA_MINALIGN will be >=
-> ARCH_KMALLOC_MINALIGN, and so the compile time layout of structs will
-> take the worst cast minimum DMA alignment into account, whereas their
-> placement in memory when they allocated dynamically may be aligned to
-> ARCH_KMALLOC_MINALIGN only. Since the latter will be based on the
-> actual cache geometry, this should be fine.
-
-That's the idea.
-
-> Apart from the 'shash desc on stack' issue solved by the patch that
-> also introduced the above comment(660d2062190d), I've never looked
-> into the actual memory footprint of the crypto related data structures
-> resulting from this alignment, but it seems to me that /if/ this is
-> significant, we should be able to punt this to the drivers that
-> actually need this, rather than impose it for the whole system. (This
-> would involve over-allocating the context struct, and aligning up the
-> pointer in the various xxx_ctx() getters iff needed by the driver in
-> question)
-
-Since ARCH_KMALLOC_MINALIGN on arm64 prior to this series is 128, there
-is any change to the crypto code.
-
--- 
-Catalin
+Guenter

@@ -2,223 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857B94F6A46
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD23C4F6979
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiDFTr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S231217AbiDFTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiDFTrC (ORCPT
+        with ESMTP id S230146AbiDFS6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:47:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A28B1CABED
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649267535; x=1680803535;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ox5ATFu+xqgQXkmgla1zDR6lDbcZQAbNxoWh967Te9Q=;
-  b=Jvv7urYW3soXFkFh6xgdhcR1n3tyrSZ6RUc6+ujHM6y9GVPa3ypkPDW7
-   XkJFskL1xM2VtSWli3eb4kNJrpziDWeYpw/g6YI5I3xSRY+GuDudlRzu7
-   4sfGszKyZSerErUfqYEfzbrrge/Vx2FAPOFTt2QLMohGR49PIoaw9nfMC
-   noeb872x0jGV8rHrVFJw0fDYqLsiSAwCZiwqjcNEU0q4Y/Vm/rZDkho8X
-   iy14l+QsLgQnQ53WZhU4GnOh4D+2Rn8XJTrWDiLDcdqumIr7CiV9pasWk
-   VXTKBsWAbxFLI399m8ZJKpcOFjxH7pf4AmyvF+4qhAahcPqpWk46Rb1Lw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261110337"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="261110337"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:52:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="588470254"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 06 Apr 2022 10:52:13 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nc9pE-0004dR-Rb;
-        Wed, 06 Apr 2022 17:52:12 +0000
-Date:   Thu, 7 Apr 2022 01:51:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 94/107]
- drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for
- '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,
-  struct nsim_dev_linecard *, unsigned int)'
-Message-ID: <202204070134.R3rLQYRH-lkp@intel.com>
+        Wed, 6 Apr 2022 14:58:20 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC21F6217
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:53:35 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id s7so5684728qtk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 10:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UiC0JZZNX3Tmz74Za2QGi0YjgPWaNriTzAia+mIG/oY=;
+        b=C8Z9DYmcvxvJu8NY+MYMQtX06XDHFQ8K7wmWpgt+e7UvuTJ9kBW6rgJ4m96ItAT6bC
+         agSP0mlkb7pnOPpK4P5qXOxdL3bq3763M5W3mQub8hSZw4EHWvaiGixVMKZjjpkduDrG
+         /01OoPFxfig9PKbGV/F3KE1OujzAGwrfqLQiAruhJhtDtf9ijrhVvcQB6SLC0vb+q3qf
+         8Vl9LEL+vckhVErsWsETDcjgIWL4qfXEq9DCiY2YNiB3pdXE+lO4IuMvWvz1EfPk6J/t
+         DV0ZhLSsIxbw3Pqo48d1dCeDRNuY0lzlWrixn45pwenckWRpx7+MZxNkmc5uxMQamJBA
+         Bm8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UiC0JZZNX3Tmz74Za2QGi0YjgPWaNriTzAia+mIG/oY=;
+        b=ErpzmZQzutElDQ2b0Xmf7qcL0nAvSl/FlTWcxLmKJ7cbxtKsOv9PIZ2uN9M/pTjyOF
+         26XRdg6scNklGoUEgghbCB0nCLuZeLSE18f4UpnN80s3wsEy1vIGryietx8hopSJXezM
+         PkpYo2t9RZPOXJ25QlVUfWDps4bOf/95CqEph54wxTRBoPC7PGOVcWR3x4Eg3rH3Ijgv
+         aGRY5/glc73xPNMnbi571IXYRZH8OW6Jw4mSqTQMnUcXYfT5ZVbrs5zk9APQmb3dGvNd
+         0ENNtk0V90wrUXJoTbxTGY3b9phYKi5IW+pepikj7OmVNjg/T422Q5RHJofb5j44iRDp
+         JCsw==
+X-Gm-Message-State: AOAM533EAfuEAvVnHo3MZR4qTUNq98eaX+GUAPOrxAcH4zfhuJRb5W52
+        fKYRlycDkbTqM7YJxhn2brJIHBriF83ucg+ziAEXZg==
+X-Google-Smtp-Source: ABdhPJwOnUHmEK3nL1Hw0/iJrblnXqISxL1gjp5QrgobTxIRsSlbBb1hCnBusAh4f2TNJVRB/0hdR0CBT2U4iymcC9w=
+X-Received: by 2002:a05:622a:610:b0:2e2:694:38c6 with SMTP id
+ z16-20020a05622a061000b002e2069438c6mr8559136qta.458.1649267614742; Wed, 06
+ Apr 2022 10:53:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220330164306.2376085-1-pgonda@google.com> <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
+ <YkYdlfYM/FWlMqMg@google.com>
+In-Reply-To: <YkYdlfYM/FWlMqMg@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Wed, 6 Apr 2022 10:53:23 -0700
+Message-ID: <CAL715WLhy7EkJCyO7vzak3O8iw8GDRHkPF8aRtDedPXO1vx_Qw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Gonda <pgonda@google.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   902ba56740ea4a18fafa90b3fa057f70baff52ab
-commit: dfd22c2838bb1870d2aaf9b911dbe414a475b5f9 [94/107] netdevsim: allow port objects to be linked with line cards
-config: openrisc-buildonly-randconfig-r001-20220405 (https://download.01.org/0day-ci/archive/20220407/202204070134.R3rLQYRH-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/dfd22c2838bb1870d2aaf9b911dbe414a475b5f9
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout dfd22c2838bb1870d2aaf9b911dbe414a475b5f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/net/netdevsim/
+Hi Sean,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > > index 75fa6dd268f0..c2fe89ecdb2d 100644
+> > > --- a/arch/x86/kvm/svm/sev.c
+> > > +++ b/arch/x86/kvm/svm/sev.c
+> > > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+> > >                 page_virtual = kmap_atomic(pages[i]);
+> > >                 clflush_cache_range(page_virtual, PAGE_SIZE);
+> > >                 kunmap_atomic(page_virtual);
+> > > +               cond_resched();
+> >
+> > If you add cond_resched() here, the frequency (once per 4K) might be
+> > too high. You may want to do it once per X pages, where X could be
+> > something like 1G/4K?
+>
+> No, every iteration is perfectly ok.  The "cond"itional part means that this will
+> reschedule if and only if it actually needs to be rescheduled, e.g. if the task's
+> timeslice as expired.  The check for a needed reschedule is cheap, using
+> cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a reched
+> check prior to enterring the guest.
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from ./arch/openrisc/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:248,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/debugfs.h:15,
-                    from drivers/net/netdevsim/dev.c:18:
-   drivers/net/netdevsim/dev.c: In function 'nsim_esw_switchdev_enable':
-   include/linux/stddef.h:8:14: warning: passing argument 3 of '__nsim_dev_port_add' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-         |              |
-         |              void *
-   drivers/net/netdevsim/dev.c:638:43: note: in expansion of macro 'NULL'
-     638 |                                           NULL, i);
-         |                                           ^~~~
-   drivers/net/netdevsim/dev.c:613:34: note: expected 'unsigned int' but argument is of type 'void *'
-     613 |                     unsigned int port_index);
-         |                     ~~~~~~~~~~~~~^~~~~~~~~~
-   drivers/net/netdevsim/dev.c:637:23: error: too many arguments to function '__nsim_dev_port_add'
-     637 |                 err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
-         |                       ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: declared here
-     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:651:25: error: too many arguments to function '__nsim_dev_port_del'
-     651 |                         __nsim_dev_port_del(nsim_dev_port, NULL, i);
-         |                         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:614:13: note: declared here
-     614 | static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
-         |             ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c: At top level:
->> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,  struct nsim_dev_linecard *, unsigned int)'
-    1393 | static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         |            ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: previous declaration of '__nsim_dev_port_add' with type 'int(struct nsim_dev *, enum nsim_dev_port_type,  unsigned int)'
-     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: warning: '__nsim_dev_port_add' used but never defined
-
-
-vim +1393 drivers/net/netdevsim/dev.c
-
-150e8f8a1bae1d Jiri Pirko      2019-08-09  1392  
-814b9ce65ec3b5 Dmytro Linkin   2021-06-02 @1393  static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1394  			       struct nsim_dev_linecard *nsim_dev_linecard,
-7f36a77ade6eef Jiri Pirko      2019-10-03  1395  			       unsigned int port_index)
-7f36a77ade6eef Jiri Pirko      2019-10-03  1396  {
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1397  	struct devlink_port_attrs attrs = {};
-7f36a77ade6eef Jiri Pirko      2019-10-03  1398  	struct nsim_dev_port *nsim_dev_port;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1399  	struct devlink_port *devlink_port;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1400  	int err;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1401  
-5e388f3dc38c72 Jakub Kicinski  2021-10-30  1402  	if (type == NSIM_DEV_PORT_TYPE_VF && !nsim_dev_get_vfs(nsim_dev))
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1403  		return -EINVAL;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1404  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1405  	nsim_dev_port = kzalloc(sizeof(*nsim_dev_port), GFP_KERNEL);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1406  	if (!nsim_dev_port)
-7f36a77ade6eef Jiri Pirko      2019-10-03  1407  		return -ENOMEM;
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1408  	nsim_dev_port->port_index = nsim_dev_port_index(type, nsim_dev_linecard,
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1409  							port_index);
-814b9ce65ec3b5 Dmytro Linkin   2021-06-02  1410  	nsim_dev_port->port_type = type;
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1411  	nsim_dev_port->linecard = nsim_dev_linecard;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1412  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1413  	devlink_port = &nsim_dev_port->devlink_port;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1414  	if (nsim_dev_port_is_pf(nsim_dev_port)) {
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1415  		attrs.flavour = DEVLINK_PORT_FLAVOUR_PHYSICAL;
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1416  		attrs.phys.port_number = port_index + 1;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1417  	} else {
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1418  		attrs.flavour = DEVLINK_PORT_FLAVOUR_PCI_VF;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1419  		attrs.pci_vf.pf = 0;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1420  		attrs.pci_vf.vf = port_index;
-92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1421  	}
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1422  	memcpy(attrs.switch_id.id, nsim_dev->switch_id.id, nsim_dev->switch_id.id_len);
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1423  	attrs.switch_id.id_len = nsim_dev->switch_id.id_len;
-71ad8d55f8e5ea Danielle Ratson 2020-07-09  1424  	devlink_port_attrs_set(devlink_port, &attrs);
-76eea6c2e663f7 Jakub Kicinski  2022-03-18  1425  	err = devl_port_register(priv_to_devlink(nsim_dev), devlink_port,
-814b9ce65ec3b5 Dmytro Linkin   2021-06-02  1426  				 nsim_dev_port->port_index);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1427  	if (err)
-7f36a77ade6eef Jiri Pirko      2019-10-03  1428  		goto err_port_free;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1429  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1430  	err = nsim_dev_port_debugfs_init(nsim_dev, nsim_dev_port);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1431  	if (err)
-7f36a77ade6eef Jiri Pirko      2019-10-03  1432  		goto err_dl_port_unregister;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1433  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1434  	nsim_dev_port->ns = nsim_create(nsim_dev, nsim_dev_port);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1435  	if (IS_ERR(nsim_dev_port->ns)) {
-7f36a77ade6eef Jiri Pirko      2019-10-03  1436  		err = PTR_ERR(nsim_dev_port->ns);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1437  		goto err_port_debugfs_exit;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1438  	}
-7f36a77ade6eef Jiri Pirko      2019-10-03  1439  
-885dfe121b3862 Dmytro Linkin   2021-06-02  1440  	if (nsim_dev_port_is_vf(nsim_dev_port)) {
-76eea6c2e663f7 Jakub Kicinski  2022-03-18  1441  		err = devl_rate_leaf_create(&nsim_dev_port->devlink_port,
-885dfe121b3862 Dmytro Linkin   2021-06-02  1442  					    nsim_dev_port);
-885dfe121b3862 Dmytro Linkin   2021-06-02  1443  		if (err)
-885dfe121b3862 Dmytro Linkin   2021-06-02  1444  			goto err_nsim_destroy;
-885dfe121b3862 Dmytro Linkin   2021-06-02  1445  	}
-885dfe121b3862 Dmytro Linkin   2021-06-02  1446  
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1447  	if (nsim_dev_linecard)
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1448  		list_add(&nsim_dev_port->list_lc, &nsim_dev_linecard->port_list);
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1449  	else
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1450  		netif_carrier_on(nsim_dev_port->ns->netdev);
-dfd22c2838bb18 Jiri Pirko      2021-01-12  1451  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1452  	devlink_port_type_eth_set(devlink_port, nsim_dev_port->ns->netdev);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1453  	list_add(&nsim_dev_port->list, &nsim_dev->port_list);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1454  
-7f36a77ade6eef Jiri Pirko      2019-10-03  1455  	return 0;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1456  
-885dfe121b3862 Dmytro Linkin   2021-06-02  1457  err_nsim_destroy:
-885dfe121b3862 Dmytro Linkin   2021-06-02  1458  	nsim_destroy(nsim_dev_port->ns);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1459  err_port_debugfs_exit:
-7f36a77ade6eef Jiri Pirko      2019-10-03  1460  	nsim_dev_port_debugfs_exit(nsim_dev_port);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1461  err_dl_port_unregister:
-76eea6c2e663f7 Jakub Kicinski  2022-03-18  1462  	devl_port_unregister(devlink_port);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1463  err_port_free:
-7f36a77ade6eef Jiri Pirko      2019-10-03  1464  	kfree(nsim_dev_port);
-7f36a77ade6eef Jiri Pirko      2019-10-03  1465  	return err;
-7f36a77ade6eef Jiri Pirko      2019-10-03  1466  }
-7f36a77ade6eef Jiri Pirko      2019-10-03  1467  
-
-:::::: The code at line 1393 was first introduced by commit
-:::::: 814b9ce65ec3b53404eeda7a11e1abb4af8d7df3 netdevsim: Implement port types and indexing
-
-:::::: TO: Dmytro Linkin <dlinkin@nvidia.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Double check on the code again. I think the point is not about flag
+checking. Obviously branch prediction could really help. The point I
+think is the 'call' to cond_resched(). Depending on the kernel
+configuration, cond_resched() may not always be inlined, at least this
+is my understanding so far? So if that is true, then it still might
+not always be the best to call cond_resched() that often.

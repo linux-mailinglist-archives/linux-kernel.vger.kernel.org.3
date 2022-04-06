@@ -2,173 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A124F5608
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F1A4F565B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiDFF42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S243242AbiDFF5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiDFFqZ (ORCPT
+        with ESMTP id S1345418AbiDFFsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 01:46:25 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2129.outbound.protection.outlook.com [40.107.255.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8941933DF93;
-        Tue,  5 Apr 2022 22:03:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BCD/RK2HTrvNG5J/fYIJdb7Xzill6jv+jibBVK98GriglHTBVvUI212tTP+5y1xuP8rkw4gtBAr2dy3oH95qtz0GgyDW8JVwmdqW3rPuRWwDkhLgUKWIlVb+5Kiu9vwR4HfF6IzDewlZpJEbP+2RXS5QcswXRasyZxoemKwxeBcdCjbkWMzbhDrF5cCVLYXiDKg6FiEOA5aEVVFtn2wORbUOaXpCReX3Biq00ypGM+Qx/FTybGcECZipAEta8QoxLVzt2LzEhS65BQGQnTqutBt3OHuvtXxr0IErX6JpTGDZZqIPIsZbLA7scHA82cNcGvHfESmjriL5fYO7aAc8GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dU7mKko5H8aGk6E8AhPmTRXLz/s5sLANcIJwi2Bc7VI=;
- b=Hx6GapS/Eu9MeX+qf4SXoNiuHiIlf9DMHU+9tFD0QyraAFwb5oRYivfFKcm/+u0ccCfRpqMWjjSlAUZbCorbWAZ77+XFLiHIbEehqw3PR/mZb1gXxk5Uhq1SmbVRuvo94IVJy9IPEzXDRHeF+S2/DONl35YtyhgRUPGTMxtq32IS+8GE3WZkBDImaf9cSPSbPTIB2hU/aZSbMNf5kUnu3ia4kl2EyY/qghelz0abi2vjceT2qWi3abNmFcag+l20YfY05RK1RMaGjihzXKnlz3jRWJ8U8v+HVZ9PALL3cU1RdI9LDfa+dQ+LjqdJ+M4knoC3d6sQmzQ13iGRj/BSRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dU7mKko5H8aGk6E8AhPmTRXLz/s5sLANcIJwi2Bc7VI=;
- b=SvecOorKAyHSqOQKf9vu9bOmdYaY7k6Nlcqd1hiVtT0fGoDUtyxeIK/d1xyzAx0Tft3SWiG1jWKXLXjCzhtlhmgEVjTY3HxhiLA7TXlkKBT/HkZ6f6e1uG0X4sOR2IJNUltlFNU0CUdOr7Xe1ZeQsVZ8fkz/2UiuryNW5a0z3nI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PS2PR06MB3493.apcprd06.prod.outlook.com (2603:1096:300:63::20)
- by SG2PR06MB2490.apcprd06.prod.outlook.com (2603:1096:4:5b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.19; Wed, 6 Apr
- 2022 05:03:49 +0000
-Received: from PS2PR06MB3493.apcprd06.prod.outlook.com
- ([fe80::98bc:c4d6:61e2:f84]) by PS2PR06MB3493.apcprd06.prod.outlook.com
- ([fe80::98bc:c4d6:61e2:f84%5]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
- 05:03:49 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-kernel@vger.kernel.org (open list:ARM/TEXAS INSTRUMENT KEYSTONE
-        CLOCK FRAMEWORK),
-        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [PATCH linux-next] clk: keystone: sci-clk: change `struct sci_clk **clk` to `struct sci_clk *clk`
-Date:   Wed,  6 Apr 2022 13:02:32 +0800
-Message-Id: <20220406050321.26177-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR01CA0129.jpnprd01.prod.outlook.com
- (2603:1096:404:2d::21) To PS2PR06MB3493.apcprd06.prod.outlook.com
- (2603:1096:300:63::20)
+        Wed, 6 Apr 2022 01:48:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E443B47C3DC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 22:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649221551; x=1680757551;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eV54akyHGKuAFjoV5dc7eN0JPzBZbl8aFLdXfqqArbw=;
+  b=Inbl1S+AZiAFnxnvt/9X/PO7EW2H6P8trN5QsE1wNIcbymvwLOoGrl6h
+   IzjM0Kv8R+iGnSvClD6THJ/eUpBKRMaGJ1SutgbAF+GSVjRX8CzHdW19j
+   A2G49E2wbE8ZDxkoZySrHTG+4tuU2Iv+XXiuYdVSNrB5OAOxvSqnbdLyy
+   vaFESo5LO77SaTTsbc2RCaquby+2Xd+dWntRJ7BNQKzrJJ5eMPUs8/AbL
+   D7EKBTJahNrBPYLoHinkSN8Ma7khAFidNu5p3wD8g2V4ICGW5OwdLsZXb
+   /fRM5jgpoQSimDRDQ6MsRJqH6Bkot3wEQX24jL/aOhMPYEhDKCLTO2Ct8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261127740"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="261127740"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 22:05:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="588226626"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 22:05:48 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbxrY-00044t-6S;
+        Wed, 06 Apr 2022 05:05:48 +0000
+Date:   Wed, 6 Apr 2022 13:04:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v2 15/15]
+ drivers/scsi/ufs/ufshcd-pltfrm.c:383:44: error: passing 'char *[32]' to
+ parameter of type 'const char *const *' discards qualifiers in nested
+ pointer types
+Message-ID: <202204061323.ynOnjrOZ-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 36fffcb8-f05c-413d-fd86-08da178ad5dc
-X-MS-TrafficTypeDiagnostic: SG2PR06MB2490:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB2490F45276AF91403370B90CC7E79@SG2PR06MB2490.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: weN/L+qoXTqG0ivZwD3hYdpkWLv5u6Ne6j54y5HeID055vhJ/9ylJHV4zo/HuukM7Z/r2WjElMtkq3B6SNMLh6TUeUD7YumhpiZFPiLRDL2uxQsYGwNzajKOLDhjmWqdb3ezmwZ+wMIl82uw8kD5SVCWARLFqM1MHoT0/+6E/Nu3GiVY1aYVO9IxyCNOaDEE8uvosZikQq5cWuDh4Okab5BQhciel9EgOerU+Kexdfe7NDY6Z3QWBozZn/xAO9ROmF1d941KIsU1GFdQfY6tyBn9TEQ5DzlVOm/tgScAbf7yRInvV7sQ90uxSEW0DK9K8FDUZYGxHNSJOddcUL8Ffio8VAX1cWwUHXIRITaDixhOS/wPx8vbImrzmqKHTLFpa7ACFrsj4LuRYC8JFGylfnu50GY8F2nz7MaBkg9KYlEDlE576PsxHZDR+M3C2RwMS8PtnFEbnT2alVBTfG1MNf28WvGF+hfUX3QDMB/1eHcoeJ75r71K+gdjUxMFrEVVIeeyEQSkznnhkiwm4A9+uLfCRCERTb3wOZ+USEWLgKbUApJnGx5m7Odmg5ynemD96UMxp3chXazsS6ZpWO6Z8LeU55FCunh6qbAi1fS/p2YB1v8d2P7oihFBkdUDF0EnFWycy3goEPQ/KILYwQPHiGAYU8+A6TAhQW0B2raiflhMfLQ9AfpZW6Fgo9jE1NLwWyxujZzLeOgavsQ1Lj7KoCgH2j+cJMK5Vrr+LEcemT0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS2PR06MB3493.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(110136005)(1076003)(2616005)(8936002)(107886003)(86362001)(316002)(52116002)(66476007)(6506007)(8676002)(83380400001)(66946007)(36756003)(508600001)(6486002)(5660300002)(4326008)(66556008)(2906002)(38350700002)(186003)(38100700002)(6666004)(26005)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9uNctrYJJFamgHnbsZyNg+fCgbrnjiZBRUNoA7APvsGRjsSQtwY8e3O5elK/?=
- =?us-ascii?Q?iOYx1kvnX0YQaLc3hkPnoiHtE71dGBUZqLFHlweyXpC84uj4d/1BhIoQgos9?=
- =?us-ascii?Q?mlic0PQcl/jeb23POfdSQSupHQZl/UX884OmEt6Tuw1LyQkBG8ZPuf7FarqL?=
- =?us-ascii?Q?Xk9SoABanHJopSNiTm/36OYbDFm43hI/cEsH5poGu0v9hkcTg5A3NPz5xGgV?=
- =?us-ascii?Q?gCDy8c7U9pt0rDBV1iCwsEMpeWzS4QD2eqQUJKKWgutdxLWxW5TTRLutEAyj?=
- =?us-ascii?Q?1T1CXe252NISRjmUpnepboj1R2BB0risblQPfd0YD5+ybBnrxU2CG/Y6EHWE?=
- =?us-ascii?Q?uvQ6hoVTcq1oKoYZ3KU4TIqRdPPzAZ3hHU+PegKTJsW2oINl3ZSdQaOHlHHs?=
- =?us-ascii?Q?8UCtTO/UAyI0K+TuTCrOtT3oeEZGXgVSaDvi8/nxWr9rUc9w27+wNfNv0cdf?=
- =?us-ascii?Q?5/km67sktbfUwdDg8UOakFy8usnLSmUiUlm0BxZl2E2POiuGLEGPs9qlgbXu?=
- =?us-ascii?Q?UYTYCUxzweBtx+elHFCjAVvp5Sum4jC++EMkxYI7BWuuJ5WZIwdI6HsIuoR1?=
- =?us-ascii?Q?Ve6csph10VkW+3UaGnhyVwVs4IrkF8sh+VyZ0BXiT4AzgBPs2g1IuJwLvOIf?=
- =?us-ascii?Q?pQa89H4qAeaoB/o3pHoQ8G1x9PLxwBvRaWl81GxssbFOuKXUBV0TIrVbAfAE?=
- =?us-ascii?Q?eZTs8/ZyL9pIIefpSyemH3O/vAuv89w7h2iSZy3NaQ3M/uXbYvfAjh1fSOZ4?=
- =?us-ascii?Q?yxP9PQyaZtLUcjfxUQVuPhL3+Jszk8fEP9pRXHKOjXGlTavKT0HkXMfn3pZK?=
- =?us-ascii?Q?hKENLLYJqDtYL/CX8tn0vjxqHp+PmVEvGjMz/r2hP/u0wy2OHrE2fBl7CsbW?=
- =?us-ascii?Q?8cwlhOfG/AMMmqRitrVS0w/bQlgEdaUEdsq9/joLNNUwmjA3xHmCnApDwe2u?=
- =?us-ascii?Q?qiID17yPBk0uNbbzlaWfI0KUYNIHpDXKScxf/dK6iNPsik46NjzzNvzdgWz/?=
- =?us-ascii?Q?36ayFnGc4FruvBtNeN9tXI6xlZcM2WqSVXleIR1lSCOYUXf4Ysng1hsLCC7C?=
- =?us-ascii?Q?9hYxFYOr7KgpnSbSYmh6kMJGEFRFeBfa7PtNxXL8t4Eyhc0hxG78ve7kibdB?=
- =?us-ascii?Q?mECynuAGJyx1IbDBuqI/5KSZ0q0wKIQcnSdi1ZDTceDihTwl0h0Hgrf92sI9?=
- =?us-ascii?Q?hO4dFuT1ITs0L5b2pI7RENQCOU07A/klB6VRaTNZT/E9N1Byp8nSl/C4859q?=
- =?us-ascii?Q?ZGTXxqD3wtBYangc7QGL7+0LXgIRkV5hHwDFt/Joqf6yt+WZj0kLk1BZzcsQ?=
- =?us-ascii?Q?A6pZgBE39w069cGMMSK0BFo2NtlnaShniQ5nrW52Awab2cYtxDpzZnCjhegQ?=
- =?us-ascii?Q?r0pt7zFV1JTvuX0i4LssNcBRARtDov+Rmco29y0fGS6Y/nJB/raRJCNvUML/?=
- =?us-ascii?Q?oGIlYLFLBYitUOXA/uZQ8hhfnelbeVnKOhN2G03Xwo9srmn2XpcRqIYuLU4r?=
- =?us-ascii?Q?XRzK4XSK0tRD/87D7ZxGgxJkHOeZMa1WNnPLX5RpIvbJcJtQ8FaJvizJsP6n?=
- =?us-ascii?Q?9rxxBp7Y5j8kVZzlOcMp5ks/s3UCpKQ9sSyE0aztRRkVDvcMAOJ5QV9qVQzR?=
- =?us-ascii?Q?4xQNfYuK/h3tldKK7mBJYkP2EBG/r43SZbLYyt4nli08KRJS7G4rFAKICnRn?=
- =?us-ascii?Q?z3xlB/ECud+6hNPclBQABQjQPlIbLsQgi9PqPnMgHuTy7TLzq8Yy/2XQo5eR?=
- =?us-ascii?Q?Y9RX9SzvIA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36fffcb8-f05c-413d-fd86-08da178ad5dc
-X-MS-Exchange-CrossTenant-AuthSource: PS2PR06MB3493.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 05:03:49.0270
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8qcV8JSjEhPl/MLyUr9VBtKp4xbpJqHWC3q1jIJYO+Mdj3ifejuQL99udq+If2HDBc34CHyTlp0AF8FscAxmcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2490
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`struct sci_clk **clk` is unnecessary. Change it to `struct sci_clk *clk`.
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
+head:   fff8a3e9335a828deb502bbcf983c4316d27c74e
+commit: fff8a3e9335a828deb502bbcf983c4316d27c74e [15/15] pm wip
+config: hexagon-randconfig-r045-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061323.ynOnjrOZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/krzk/linux/commit/fff8a3e9335a828deb502bbcf983c4316d27c74e
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
+        git checkout fff8a3e9335a828deb502bbcf983c4316d27c74e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
 
-Also fix functions relating to it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
----
- drivers/clk/keystone/sci-clk.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-clk.c
-index 7e1b136e71ae..2c3e4fcfd441 100644
---- a/drivers/clk/keystone/sci-clk.c
-+++ b/drivers/clk/keystone/sci-clk.c
-@@ -362,7 +362,7 @@ static int _sci_clk_build(struct sci_clk_provider *provider,
- static int _cmp_sci_clk(const void *a, const void *b)
- {
- 	const struct sci_clk *ca = a;
--	const struct sci_clk *cb = *(struct sci_clk **)b;
-+	const struct sci_clk *cb = b;
- 
- 	if (ca->dev_id == cb->dev_id && ca->clk_id == cb->clk_id)
- 		return 0;
-@@ -385,7 +385,7 @@ static int _cmp_sci_clk(const void *a, const void *b)
- static struct clk_hw *sci_clk_get(struct of_phandle_args *clkspec, void *data)
- {
- 	struct sci_clk_provider *provider = data;
--	struct sci_clk **clk;
-+	struct sci_clk *clk;
- 	struct sci_clk key;
- 
- 	if (clkspec->args_count != 2)
-@@ -400,7 +400,7 @@ static struct clk_hw *sci_clk_get(struct of_phandle_args *clkspec, void *data)
- 	if (!clk)
- 		return ERR_PTR(-ENODEV);
- 
--	return &(*clk)->hw;
-+	return &clk->hw;
- }
- 
- static int ti_sci_init_clocks(struct sci_clk_provider *p)
-@@ -509,7 +509,7 @@ static int _cmp_sci_clk_list(void *priv, const struct list_head *a,
- 	struct sci_clk *ca = container_of(a, struct sci_clk, node);
- 	struct sci_clk *cb = container_of(b, struct sci_clk, node);
- 
--	return _cmp_sci_clk(ca, &cb);
-+	return _cmp_sci_clk(ca, cb);
- }
- 
- static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+                   list_for_each_entry(clki, head, list) {
+                                       ^
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
+   drivers/scsi/ufs/ufshcd-pltfrm.c:374:24: error: use of undeclared identifier 'clki'
+                           if (!IS_ERR_OR_NULL(clki->clk)) {
+                                               ^
+   drivers/scsi/ufs/ufshcd-pltfrm.c:379:18: error: use of undeclared identifier 'clki'
+                                   names[i++] = clki->name;
+                                                ^
+>> drivers/scsi/ufs/ufshcd-pltfrm.c:383:44: error: passing 'char *[32]' to parameter of type 'const char *const *' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   opp_table = dev_pm_opp_set_clknames(dev, names, i);
+                                                            ^~~~~
+   include/linux/pm_opp.h:178:27: note: passing argument to parameter 'names' here
+                                             const char * const names[],
+                                                                ^
+   drivers/scsi/ufs/ufshcd-pltfrm.c:385:4: error: use of undeclared identifier 'ret'
+                           ret = PTR_ERR(opp_table);
+                           ^
+   13 errors generated.
+
+
+vim +383 drivers/scsi/ufs/ufshcd-pltfrm.c
+
+65858014ee20c84 Stanley Chu         2020-11-16  314  
+03b1781aa978aab Vinayak Holikatti   2013-02-26  315  /**
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  316   * ufshcd_pltfrm_init - probe routine of the driver
+03b1781aa978aab Vinayak Holikatti   2013-02-26  317   * @pdev: pointer to Platform device handle
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  318   * @vops: pointer to variant ops
+03b1781aa978aab Vinayak Holikatti   2013-02-26  319   *
+03b1781aa978aab Vinayak Holikatti   2013-02-26  320   * Returns 0 on success, non-zero value on failure
+03b1781aa978aab Vinayak Holikatti   2013-02-26  321   */
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  322  int ufshcd_pltfrm_init(struct platform_device *pdev,
+176eb927744201b Arnd Bergmann       2019-03-04  323  		       const struct ufs_hba_variant_ops *vops)
+03b1781aa978aab Vinayak Holikatti   2013-02-26  324  {
+03b1781aa978aab Vinayak Holikatti   2013-02-26  325  	struct ufs_hba *hba;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  326  	void __iomem *mmio_base;
+2953f850c3b80bd Seungwon Jeon       2013-06-27  327  	int irq, err;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  328  	struct device *dev = &pdev->dev;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  329  
+0b27555166241cb YueHaibing          2019-09-04  330  	mmio_base = devm_platform_ioremap_resource(pdev, 0);
+645b8ef5943f95b Tomas Winkler       2017-03-14  331  	if (IS_ERR(mmio_base)) {
+645b8ef5943f95b Tomas Winkler       2017-03-14  332  		err = PTR_ERR(mmio_base);
+2953f850c3b80bd Seungwon Jeon       2013-06-27  333  		goto out;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  334  	}
+03b1781aa978aab Vinayak Holikatti   2013-02-26  335  
+2953f850c3b80bd Seungwon Jeon       2013-06-27  336  	irq = platform_get_irq(pdev, 0);
+2953f850c3b80bd Seungwon Jeon       2013-06-27  337  	if (irq < 0) {
+339c9b63cc7ce77 Sergey Shtylyov     2021-03-29  338  		err = irq;
+2953f850c3b80bd Seungwon Jeon       2013-06-27  339  		goto out;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  340  	}
+03b1781aa978aab Vinayak Holikatti   2013-02-26  341  
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  342  	err = ufshcd_alloc_host(dev, &hba);
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  343  	if (err) {
+f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  344  		dev_err(dev, "Allocation failed\n");
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  345  		goto out;
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  346  	}
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  347  
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  348  	hba->vops = vops;
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  349  
+c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  350  	err = ufshcd_parse_clock_info(hba);
+c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  351  	if (err) {
+f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  352  		dev_err(dev, "%s: clock parse failed %d\n",
+c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  353  				__func__, err);
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  354  		goto dealloc_host;
+c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  355  	}
+aa497613093412e Sujit Reddy Thumma  2014-09-25  356  	err = ufshcd_parse_regulator_info(hba);
+aa497613093412e Sujit Reddy Thumma  2014-09-25  357  	if (err) {
+f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  358  		dev_err(dev, "%s: regulator init failed %d\n",
+aa497613093412e Sujit Reddy Thumma  2014-09-25  359  				__func__, err);
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  360  		goto dealloc_host;
+aa497613093412e Sujit Reddy Thumma  2014-09-25  361  	}
+aa497613093412e Sujit Reddy Thumma  2014-09-25  362  
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  363  	if (devm_pm_opp_of_add_table(dev)) {
+c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  364  		dev_dbg(dev, "no OPP table (%d), no performance state control\n",
+c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  365  			err);
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  366  	} else {
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  367  		struct list_head *head = &hba->clk_list_head;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  368  		char *names[32];
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  369  		unsigned int i = 0;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  370  		struct opp_table *opp_table;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  371  
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  372  		pr_err("AAA USING OPP\n");
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  373  		list_for_each_entry(clki, head, list) {
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  374  			if (!IS_ERR_OR_NULL(clki->clk)) {
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  375  				if (i == ARRAY_SIZE(names)) {
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  376  					pr_err("AAA BBBB too many\n");
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  377  					goto dealloc_host;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  378  				}
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  379  				names[i++] = clki->name;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  380  			}
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  381  		}
+c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  382  		hba->use_pm_opp = true;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05 @383  		opp_table = dev_pm_opp_set_clknames(dev, names, i);
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  384  		if (IS_ERR(opp_table)) {
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  385  			ret = PTR_ERR(opp_table);
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  386  			goto dealloc_host;
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  387  		}
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  388  		// FIXME: put table
+ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  389  	}
+c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  390  
+54b879b76ea2531 Yaniv Gardi         2016-03-10  391  	ufshcd_init_lanes_per_dir(hba);
+54b879b76ea2531 Yaniv Gardi         2016-03-10  392  
+5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  393  	err = ufshcd_init(hba, mmio_base, irq);
+03b1781aa978aab Vinayak Holikatti   2013-02-26  394  	if (err) {
+bad9764cfaaa15b Colin Ian King      2015-11-28  395  		dev_err(dev, "Initialization failed\n");
+24e2e7a19f7e4b8 Stanley Chu         2019-06-12  396  		goto dealloc_host;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  397  	}
+03b1781aa978aab Vinayak Holikatti   2013-02-26  398  
+f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  399  	pm_runtime_set_active(dev);
+f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  400  	pm_runtime_enable(dev);
+24e2e7a19f7e4b8 Stanley Chu         2019-06-12  401  
+62694735ca95c74 Sujit Reddy Thumma  2013-07-30  402  	return 0;
+62694735ca95c74 Sujit Reddy Thumma  2013-07-30  403  
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  404  dealloc_host:
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  405  	ufshcd_dealloc_host(hba);
+2953f850c3b80bd Seungwon Jeon       2013-06-27  406  out:
+03b1781aa978aab Vinayak Holikatti   2013-02-26  407  	return err;
+03b1781aa978aab Vinayak Holikatti   2013-02-26  408  }
+47555a5c8a11a42 Yaniv Gardi         2015-10-28  409  EXPORT_SYMBOL_GPL(ufshcd_pltfrm_init);
+03b1781aa978aab Vinayak Holikatti   2013-02-26  410  
+
+:::::: The code at line 383 was first introduced by commit
+:::::: ae883f49d1137ae5f4997c5287dbf35f9bdd0272 ufs wip
+
+:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

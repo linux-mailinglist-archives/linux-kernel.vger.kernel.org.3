@@ -2,172 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CE84F575A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F244F5894
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344397AbiDFIDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S1382728AbiDFJDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577417AbiDFIBK (ORCPT
+        with ESMTP id S1444335AbiDFIzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:01:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3D03878D5;
-        Tue,  5 Apr 2022 18:13:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95224B8202A;
-        Wed,  6 Apr 2022 01:13:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F295C385B5;
-        Wed,  6 Apr 2022 01:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649207607;
-        bh=K2W88sa0e40FhxFM51hz1PVnPS6fYU/JKW4DlHd0JHk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HYGAzAvDvERjww1332qf4HBWmEBr8lBkHk5nMmpuHlcrS5xNhnbKDRvGd28nZ+kpN
-         TyR2NMK9JSTMkmDUMQaAIe7sJuDWPs3BEWWckbImQOQQVb12qZhWymF9E6XURIGl3a
-         ywXDWYdzLFYuIqxnrYkVbVipI7/38HCnjQcchEcsY3kjjiFKEn/sLMMxn3BglHVeeM
-         CTPK108iZ1bfDOO75pm6RvAA1YcwofguWk2pYis7TDML2vBzhBJ34KsSC3mLhVZZoL
-         RvjsW2J22HTbg1jpz9AndAsh4y5a+5KueCNel9rddnbDEZXBMQY2wLAx8cB7K3Bdi8
-         GCpVhnbxbQaPg==
-Received: by mail-ua1-f41.google.com with SMTP id j9so949629uap.13;
-        Tue, 05 Apr 2022 18:13:27 -0700 (PDT)
-X-Gm-Message-State: AOAM531T555rIXPdxkj5Ghg328Wx6M2IqnznVf5Ai87HpmZwWR2EkB65
-        opRePyXrYgbnWaYanlaPaQzk+dW17QcMl2RG2Vw=
-X-Google-Smtp-Source: ABdhPJwdlBT6DWcyITpQFk0eYMxDLklydODShGdQh3Dhz3gy5pvAEE1D7qv3EMRUsxW3oJsG0Lv+XReYvs2gnjTTYBE=
-X-Received: by 2002:a67:efc3:0:b0:325:4fcf:60bf with SMTP id
- s3-20020a67efc3000000b003254fcf60bfmr1892801vsp.51.1649207606157; Tue, 05 Apr
- 2022 18:13:26 -0700 (PDT)
+        Wed, 6 Apr 2022 04:55:55 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B05CBD7EC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:19:12 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id b18so2003176qtk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 18:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=emQSRtRyiIFOLZBRRD9ok+SvUgg5HT0mxHFWqehp0vo=;
+        b=liEzV1DvukrzML5boo3DbzOsgqEOmW0TeGZTRGeDBUiO58NX4hoZ95SKtZ0x5lxoy/
+         D+UyQgPzqMzwbGKoyaljyyvCPgry06NMaGJrvORwjJXzRsgikKeJ59XIt4sCqr0WH0PZ
+         foni+TAvduk8iqwj62A/m+7RyRpjJBxUB0ZQuBILLV3XWPtEe0uOWPBOQpClr8ZbCf5y
+         zVh7ul4pC0MnQA170gM0tkNixTeWAKfJGqKxvJxx70YiTFBWKtvIabgOhUdKlW7P5lPu
+         veOX0IOPELZ3Oq1VYBpIdI3ZRGMHlbBCRZutv8u83QPzUSNJFnymCzyO7+6+Vq8+zHSE
+         TpRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=emQSRtRyiIFOLZBRRD9ok+SvUgg5HT0mxHFWqehp0vo=;
+        b=8PFNyWFedcvGSHVTdsxgLZqOLwtc6cc4d539Um443TxPeIrDQcv8MaAJl1na9+6qZ9
+         LsenNuMYoArXYUjfZSFCxR7dzZG+5cYG0OzRzp53gcCd4vv/0S/vnJ06rLo6Kltt0Ehu
+         o+/TyldIsvAFEl7USxO0QPrzn7ClAK84CjRwGOEa2n+a2snK31Ru/T11ywHhwkXInxV7
+         3Gdgp+s/wgghUqAVyuKp3/M6jVqvx5/Q78M9FwUfruv6NM3DzjTsnQD1TrGdrRABnf6h
+         sb1Yk/ncHqFy/Itx+jtzzZ/5/P92S+Te9v4SP3itDMPkz0aoN2FERQ2CXJL/fbtc628y
+         OAgg==
+X-Gm-Message-State: AOAM532BAlqwa1fZiG6Azv9rCAeRyzxl166jIZ5Ue2TZC6dz7yNOlloN
+        PinU0hBytGWRa5wgin39M5hVCadwCc8=
+X-Google-Smtp-Source: ABdhPJw3H1ruWxhuQ05X1p8z8JYG/k0+IbQoPX9aYytL4Pwxr7a6RJLhDMF3ORYFkO683VqFRlZ0KQ==
+X-Received: by 2002:a05:620a:2886:b0:699:bab7:ae78 with SMTP id j6-20020a05620a288600b00699bab7ae78mr4108850qkp.618.1649207951145;
+        Tue, 05 Apr 2022 18:19:11 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x18-20020a05622a001200b002eb856d7786sm12382288qtw.84.2022.04.05.18.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 18:19:10 -0700 (PDT)
+Message-ID: <624cea8e.1c69fb81.422be.e03b@mx.google.com>
+X-Google-Original-Message-ID: <20220406011907.GA2458824@cgel.zte@gmail.com>
+Date:   Wed, 6 Apr 2022 01:19:07 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>, kbuild-all@lists.01.org,
+        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
+        eparis@redhat.com, dai.shixin@zte.com.cn,
+        Yang Yang <yang.yang29@zte.com.cn>, linux-audit@redhat.com,
+        ink@jurassic.park.msu.ru, huang.junhua@zte.com.cn,
+        guo.xiaofeng@zte.com.cn, mattst88@gmail.com
+Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
+References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
+ <CAHC9VhTaCNqfTOi8X5G3AheBFzTYCzGnt_-=fNFc5Z1o8gPm9Q@mail.gmail.com>
+ <62465bf3.1c69fb81.d5424.365e@mx.google.com>
+ <2777189.mvXUDI8C0e@x2>
+ <CAHC9VhRYHhHPx42BKa0gp974uzwHoXZWqmwt9o=1rox7tHyy1w@mail.gmail.com>
+ <624803f7.1c69fb81.972da.2dd0@mx.google.com>
+ <YksVuhfv8weLCxX/@madcap2.tricolour.ca>
 MIME-Version: 1.0
-References: <CAJF2gTQkGZnwXrXsbx8drL0AicVpOMW=JmOcrieuvyEf91XPhg@mail.gmail.com>
- <mhng-cfa7bfb9-bab8-423c-85ad-ecd407d6e806@palmer-ri-x1c9>
-In-Reply-To: <mhng-cfa7bfb9-bab8-423c-85ad-ecd407d6e806@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 6 Apr 2022 09:13:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQgU=V+snWp7a8_txsX49BzAct1nkB18k-p4BZEd+s+eQ@mail.gmail.com>
-Message-ID: <CAJF2gTQgU=V+snWp7a8_txsX49BzAct1nkB18k-p4BZEd+s+eQ@mail.gmail.com>
-Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YksVuhfv8weLCxX/@madcap2.tricolour.ca>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 12:15 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+On Mon, Apr 04, 2022 at 11:58:50AM -0400, Richard Guy Briggs wrote:
+> On 2022-04-02 08:06, CGEL wrote:
+> > On Fri, Apr 01, 2022 at 10:16:45AM -0400, Paul Moore wrote:
+> > > On Fri, Apr 1, 2022 at 9:39 AM Steve Grubb <sgrubb@redhat.com> wrote:
+> > > > On Thursday, March 31, 2022 9:57:05 PM EDT CGEL wrote:
+> > > > > On Thu, Mar 31, 2022 at 10:16:23AM -0400, Paul Moore wrote:
+> > > > > > On Wed, Mar 30, 2022 at 10:29 PM CGEL <cgel.zte@gmail.com> wrote:
+> > > > > > > On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
+> > > > > > > > If audit is not generating SYSCALL records, even for invalid/ENOSYS
+> > > > > > > > syscalls, I would consider that a bug which should be fixed.
+> > > > > > >
+> > > > > > > If we fix this bug, do you think audit invalid/ENOSYS syscalls better
+> > > > > > > be forcible or be a rule that can be configure? I think configure is
+> > > > > > > better.
+> > > > > >
+> > > > > > It isn't clear to me exactly what you are asking, but I would expect
+> > > > > > the existing audit syscall filtering mechanism to work regardless if
+> > > > > > the syscall is valid or not.
+> > > > >
+> > > > > Thanks, I try to make it more clear. We found that auditctl would only
+> > > > > set rule with syscall number (>=0 && <2047) ...
+> > > 
+> > > That is exactly why I wrote the warning below in my response ...
+> > >
+> > I think the question is more clear now.
+> > 
+> > 1) libaudit.c wants to forbid setting invalid syscall, but inconsistent
+> > Currently way(>=0 && <2047) is inconsistent, syscall with number 2000 and
+> > syscall with number 3000 are both invalid syscall. But 2000 can be set by
+> > auditctl, and 3000 cannot be set by auditctl.
+> > A better way to do this forbidden is to use __NR_syscalls(asm-generic/unistd.h).
+> > 
+> > 2) if libaudit.c do the right forbidden, kernel better ignore invalid syscall
+> > See this patch.
+> > 
+> > If we want audit invalid syscall as you said before. libaudit.c should not
+> > do the forbidden, auditctl should allow setting syscall rule with 'any' number.
+> > So do you think we should fix libaudit.c?
+> 
+> I'm having a bit of trouble understanding what you've said above.
+> 
+> The kernel ultimately must protect itself from malice and mistakes, so
+> it must verify all data sent to it.
+> 
+> Userspace can help by knowing what that kernel policy is so it can avoid
+> violating that policy or provide useful feedback if it can't.  Userspace
+> can be used to make things more efficient, but the kernel is the last
+> step for security.
+> 
+> If userspace and the kernel are mismatched or out of sync, then the
+> kernel enforces policy to protect itself.
 >
-> On Mon, 04 Apr 2022 22:17:24 PDT (-0700), guoren@kernel.org wrote:
-> > On Tue, Apr 5, 2022 at 12:57 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >>
-> >> On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
-> >> > Linux next-20220404 riscv defconfig builds failed.
-> >> >
-> >> > Regressions found on riscv:
-> >> >    - riscv-riscv-clang-14-defconfig
-> >> >    - riscv-riscv-gcc-10-defconfig
-> >> >    - riscv-riscv-clang-13-defconfig
-> >> >    - riscv-riscv-clang-12-defconfig
-> >> >    - riscv-riscv-clang-11-defconfig
-> >> >    - riscv-riscv-gcc-11-defconfig
-> >> >    - riscv-riscv-gcc-8-defconfig
-> >> >    - riscv-riscv-gcc-9-defconfig
-> >> >    - riscv-riscv-clang-nightly-defconfig
-> >> >
-> >> >
-> >> > arch/riscv/kernel/compat_signal.c:7:10: fatal error:
-> >> > linux/tracehook.h: No such file or directory
-> >> >   7 | #include <linux/tracehook.h>
-> >> >     |          ^~~~~~~~~~~~~~~~~~~
-> >> > compilation terminated.
-> >> > make[3]: *** [scripts/Makefile.build:289:
-> >> > arch/riscv/kernel/compat_signal.o] Error 1
-> >>
-> >> For what it's worth, I also see:
-> >>
-> >> $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
-> >> arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
-> >>     3 | #include <../vdso/vdso.lds.S>
-> >>       |          ^~~~~~~~~~~~~~~~~~~~
-> >> compilation terminated.
-> >> make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
-> >> arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
-> >>     3 | #include <../vdso/rt_sigreturn.S>
-> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
-> >> compilation terminated.
-> >> arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
-> >>     3 | #include <../vdso/note.S>
-> >>       |          ^~~~~~~~~~~~~~~~
-> >> compilation terminated.
-> >> arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
-> >>     3 | #include <../vdso/getcpu.S>
-> >>       |          ^~~~~~~~~~~~~~~~~~
-> >> compilation terminated.
-> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
-> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
-> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
-> >> arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
-> >>     3 | #include <../vdso/flush_icache.S>
-> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
-> >> compilation terminated.
-> >> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
-> >>
-> >> I am guessing this code was never tested with $(srctree) == $(objtree).
-> > Thx for pointing it out:
-> > I always use:
-> > make -skj"$(nproc)" ARCH=riscv
-> > CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g
-> > O=../build-riscv/ defconfig all
-> >
-> > When I change to:
-> > make -skj"$(nproc)" ARCH=riscv
-> > CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g defconfig
-> > all
-> >
-> > I got your problem.
->
-> Just to be clear: this one wasn't supposed to go in via the csky tree,
-> and had other build issues that were being found by the autobuilders
-> (which is why it hadn't gone in via the riscv tree).  I do in-tree
-> builds somewhat regularly so that probably would have caught it if
-> nothing else did, but my guess is that some other autobuilder would have
-> found it first (some of the earlier patches
-The problem and other build issues (arm64 & 5.18-rc1 conflict) all
-have been solved in v12:
-https://lore.kernel.org/linux-riscv/20220405071314.3225832-1-guoren@kernel.org/
-
->
-> Guo: please stop pushing things to linux-next that break the builds
-> and/or aren't aimed at your tree.  This just makes things unnecessarly
-> complicated.  If you don't want to deal with the build issues that's OK,
-> just LMK when you send the patch sets out and I'll deal with them, but
-> having linux-next's build break causes fallout for a lot of users.
-Yesterday, I made my
-https://github.com/c-sky/csky-linux/commits/linux-next with
-linux-5.18-rc1 tag commit version.
-So this only affected linux-next-20220404.
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Much appreciate for your interpretation. Have you get any idea of how
+to solve the mismatched? From your viewpoint, I think it's better for
+kernel to not handle syscall of syscall number<0, because it's invaild
+of all arch, and has no value for attacker to probing for specific
+syscall numbers.
+> > > > > > Beware that there are some limitations
+> > > > > > to the audit syscall filter, which are unfortunately baked into the
+> > > > > > current design/implementation, which may affect this to some extent.
+> > > 
+> > > -- 
+> > > paul-moore.com
+> 
+> - RGB
+> 
+> --
+> Richard Guy Briggs <rgb@redhat.com>
+> Sr. S/W Engineer, Kernel Security, Base Operating Systems
+> Remote, Ottawa, Red Hat Canada
+> IRC: rgb, SunRaycer
+> Voice: +1.647.777.2635, Internal: (81) 32635

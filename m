@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F9B4F6E8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D0E4F6E94
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237790AbiDFXfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S237822AbiDFXhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiDFXfb (ORCPT
+        with ESMTP id S237595AbiDFXhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:35:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4794E223205;
-        Wed,  6 Apr 2022 16:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649288013; x=1680824013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pRwkOMm0qHu0lOS5zpitn48/SuLkUxM71YjsDbeCfgU=;
-  b=j6Jo/5NdXON1TidgY6q+3RBApHgZOYNNK3aFQPluLBd0mDgm/oPBw6/P
-   b4kx3mf7AotZyhvUOsYFDZbMu4my0ZFhQm5crDbkA2uHvnejgmRyLEaZo
-   EJ+R0LTFrPmYHDPtU3MeSubh7B540ExBWGSuHFMQsg//4Rf7ZQAfYwVj3
-   J+Hbh95EuC5Q4sS42dQVyT3xfAk4BAmZ89f9hOar0JxrFn5Q2O2ND8K5K
-   PxbBIlpbTBRMNSNrkDtMZsXmEPP+VJQcB2cVqa6B19qeJX7YHVRvbwqYz
-   MXxsr7RZnf7+ErnQnfOu8KWUBRuFaQleGFW6pE50ziQ25NvlqqigxjPr2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="260022035"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="260022035"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 16:32:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="722721744"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2022 16:32:42 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncF8j-0004r5-Sb;
-        Wed, 06 Apr 2022 23:32:41 +0000
-Date:   Thu, 7 Apr 2022 07:31:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        stable@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH] xen/balloon: fix page onlining when populating new zone
-Message-ID: <202204070706.PKz2Th7L-lkp@intel.com>
-References: <20220406133229.15979-1-jgross@suse.com>
+        Wed, 6 Apr 2022 19:37:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A01E520E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:35:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id fu5so3996877pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I9PXYYNYzm+S86XiDohEIIjS7uODRi+inUQ+moEyXoI=;
+        b=AHE5qokLSDutFR7PI8eQWDwxmxlJzrKafDW0/fFJ5EL9eN5tG8Ib+nvmPWjLccswFO
+         LeBMTI+eySDNC30XqN9ueFi938W7I4yq1ZS7LJMpYY2vAy6DD2krEQIuakJkRHmOJJD2
+         2qW51WjOrAwtImJkE7bXt2zuDlMIeuMjonTWrp3LI/f6WeyMKYbGgBfORrKDMu4Y+ncd
+         mtIpb5SSZ1XD4hMusUwFvUsQKFZarjSi4MYhbgkAr9DFzNmGqd8C3uqsV2cJUaXlgJ2q
+         zwFw0KCxkoz9Gs0Mw+T9ysOWDwHhd4H9pUeN/qtavuciYsE4ZXb/RYcYThkdLG2hffah
+         uAWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I9PXYYNYzm+S86XiDohEIIjS7uODRi+inUQ+moEyXoI=;
+        b=nrPljf36RV6dOvz7keNgf3VfsMQ72OTvYDoK/wFBrni9cNQIk1jjrpuaXEHS4NWz55
+         DegzQzDX6XnIsuuztVyrAAMs7+kjN9d6I1Cn0F2b26MgPdhdHjvDkL2MBtJ3O8m9CeN5
+         7xnRuTyJJooR3LzXf0fYck/YGSel2QBQa0w1F1fhLmAPcl3RHXci6ybzw5cSLf0VpcfW
+         lPxpNARTY2EvYxx85JdaFsKCAmLHH66sTDI62cl6IZdu2XAGx5a6aUtt4hxThnZIc3nu
+         Hdv3Rn3cH3x97Xxht1WW8V/afquTYHl6NbMZknPlYL6xCuZjsokhRmRFebh8KIxRKYjx
+         iTUQ==
+X-Gm-Message-State: AOAM533fVd8XGYJzTeNEW+h/TdiKbVK7uSoz5z1WfzIv8eFRn0udlDcJ
+        YKaa5X4keo+NUS7at4JDjXMN3Q==
+X-Google-Smtp-Source: ABdhPJy16UR83rlEq9AhsRifZ1oBb2UHMARMltuDdLjmXLfxa1VkMpUIcuOE413C9cxMtZqmFWNWpw==
+X-Received: by 2002:a17:902:d48f:b0:156:bddf:ef8 with SMTP id c15-20020a170902d48f00b00156bddf0ef8mr11085044plg.83.1649288149820;
+        Wed, 06 Apr 2022 16:35:49 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m15-20020a638c0f000000b003827bfe1f5csm17030090pgd.7.2022.04.06.16.35.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 16:35:49 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 23:35:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 045/104] KVM: x86/tdp_mmu: make REMOVED_SPTE
+ include shadow_initial value
+Message-ID: <Yk4j0cCR5fnQKw1F@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <6614d2a2bc34441ed598830392b425fdf8e5ca52.1646422845.git.isaku.yamahata@intel.com>
+ <3f93de19-0685-3045-22db-7e05492bb5a4@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406133229.15979-1-jgross@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3f93de19-0685-3045-22db-7e05492bb5a4@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Juergen,
+On Tue, Apr 05, 2022, Paolo Bonzini wrote:
+> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> > @@ -207,9 +209,17 @@ extern u64 __read_mostly shadow_nonpresent_or_rsvd_mask;
+> >   /* Removed SPTEs must not be misconstrued as shadow present PTEs. */
+> >   static_assert(!(REMOVED_SPTE & SPTE_MMU_PRESENT_MASK));
+> > +/*
+> > + * See above comment around REMOVED_SPTE.  SHADOW_REMOVED_SPTE is the actual
+> > + * intermediate value set to the removed SPET.  When TDX is enabled, it sets
+> > + * the "suppress #VE" bit, otherwise it's REMOVED_SPTE.
+> > + */
+> > +extern u64 __read_mostly shadow_init_value;
+> > +#define SHADOW_REMOVED_SPTE	(shadow_init_value | REMOVED_SPTE)
+> 
+> Please rename the existing REMOVED_SPTE to REMOVED_SPTE_MASK, and call this
+> simply REMOVED_SPTE.  This also makes the patch smaller.
 
-I love your patch! Perhaps something to improve:
+Can we name it either __REMOVE_SPTE or REMOVED_SPTE_VAL?  It's most definitely
+not a mask, it's a full value, e.g. spte |= REMOVED_SPTE_MASK is completely wrong.
 
-[auto build test WARNING on xen-tip/linux-next]
-[also build test WARNING on linus/master linux/master v5.18-rc1 next-20220406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Juergen-Gross/xen-balloon-fix-page-onlining-when-populating-new-zone/20220407-000935
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-config: arm64-randconfig-r011-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070706.PKz2Th7L-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b3deb59d5386ade4fb227038f202a9bdb8ade4ab
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Juergen-Gross/xen-balloon-fix-page-onlining-when-populating-new-zone/20220407-000935
-        git checkout b3deb59d5386ade4fb227038f202a9bdb8ade4ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/xen/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/xen/balloon.c: In function 'decrease_reservation':
-   drivers/xen/balloon.c:518:24: error: implicit declaration of function 'alloc_page_for_balloon' [-Werror=implicit-function-declaration]
-     518 |                 page = alloc_page_for_balloon(gfp);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/xen/balloon.c:518:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     518 |                 page = alloc_page_for_balloon(gfp);
-         |                      ^
-   drivers/xen/balloon.c:545:17: error: implicit declaration of function 'add_page_to_balloon' [-Werror=implicit-function-declaration]
-     545 |                 add_page_to_balloon(page);
-         |                 ^~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +518 drivers/xen/balloon.c
-
-   505	
-   506	static enum bp_state decrease_reservation(unsigned long nr_pages, gfp_t gfp)
-   507	{
-   508		enum bp_state state = BP_DONE;
-   509		unsigned long i;
-   510		struct page *page, *tmp;
-   511		int ret;
-   512		LIST_HEAD(pages);
-   513	
-   514		if (nr_pages > ARRAY_SIZE(frame_list))
-   515			nr_pages = ARRAY_SIZE(frame_list);
-   516	
-   517		for (i = 0; i < nr_pages; i++) {
- > 518			page = alloc_page_for_balloon(gfp);
-   519			if (page == NULL) {
-   520				nr_pages = i;
-   521				state = BP_EAGAIN;
-   522				break;
-   523			}
-   524			list_add(&page->lru, &pages);
-   525		}
-   526	
-   527		/*
-   528		 * Ensure that ballooned highmem pages don't have kmaps.
-   529		 *
-   530		 * Do this before changing the p2m as kmap_flush_unused()
-   531		 * reads PTEs to obtain pages (and hence needs the original
-   532		 * p2m entry).
-   533		 */
-   534		kmap_flush_unused();
-   535	
-   536		/*
-   537		 * Setup the frame, update direct mapping, invalidate P2M,
-   538		 * and add to balloon.
-   539		 */
-   540		i = 0;
-   541		list_for_each_entry_safe(page, tmp, &pages, lru) {
-   542			frame_list[i++] = xen_page_to_gfn(page);
-   543	
-   544			list_del(&page->lru);
-   545			add_page_to_balloon(page);
-   546		}
-   547	
-   548		flush_tlb_all();
-   549	
-   550		ret = xenmem_reservation_decrease(nr_pages, frame_list);
-   551		BUG_ON(ret != nr_pages);
-   552	
-   553		balloon_stats.current_pages -= nr_pages;
-   554	
-   555		return state;
-   556	}
-   557	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Other than that, 100% agree with avoiding churn.

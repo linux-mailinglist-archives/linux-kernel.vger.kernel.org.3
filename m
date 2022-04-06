@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BCF4F6DBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5064F4F6DBE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbiDFWM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S237059AbiDFWNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiDFWMx (ORCPT
+        with ESMTP id S233642AbiDFWN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 18:12:53 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78062DAFD5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649283055; x=1680819055;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1IAaiWw79qdN3EyKUVMdF1kajhzc7akfzw8AsZvioLU=;
-  b=KSbJ6hyUsysZCsP6vmtS4HbIiKpSkw08aK0TAHcnE7ux9XklXiu5hNlE
-   pwKW64RrileNMZsLq0IxjwIrLgSdr8oaSL0PX+F835hhB83BGr//i9REU
-   whVBXnu4vIiEJjck90KtQMbdBzZMCdqd0T9CzWbfhrFbv8BDl7G0hYynk
-   iLjhVYl6BW3Id8Co6wjg7rYVDTITOL6oF6XaD5Tr6LBsQJ1hT2FLZvfA+
-   1uvHDxtLE1tt9HCpEJ5G13A5GHN9N64FhH/4OudVLVcfhWoaBPXrWQQLn
-   EyE0Y7YSDXoakJF0l4B4E6VfK0RQUq+RQMCZe90sdEHaSzvaHBgPj1iZc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286140368"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="286140368"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 15:10:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="524657287"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 15:10:53 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncDrY-0004nz-K6;
-        Wed, 06 Apr 2022 22:10:52 +0000
-Date:   Thu, 7 Apr 2022 06:09:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: drivers/irqchip/irq-apple-aic.c:181:1: sparse: sparse: symbol
- 'use_fast_ipi' was not declared. Should it be static?
-Message-ID: <202204070633.vRp7MVoj-lkp@intel.com>
+        Wed, 6 Apr 2022 18:13:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59265C351;
+        Wed,  6 Apr 2022 15:11:30 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649283088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kjO+FcQEbzxNg96q+CVmF00/Fnf4v+c6IvBo4ypadGM=;
+        b=MDuDrMsLXT/GQRVb1ZTFGX5T1I+FdkjJWTul1ShjgI4pL+Dl8SLAHZGvNn6gjOifz29Aij
+        LtwQGLnBbbAaxhNsSJHXixYSJPAkT5PXM/LIHVVsjwRHIA82U5PyFhHwUhMHpnjg9DkUpK
+        XDWhiJALkz/J82FdRql2L4Tn8dExuRbpLwTkBxOkzOggDC9O/J7n4iyYlkAgRFii0kky9M
+        gRCUhTIW+opQ9cHKacXd0v31t0o4eyOWXV/GnPY9wHGeXfgphZ3nvpglWFHLl+iKOJVNf0
+        bx7RuROx41KU9bEMsqOpKLZpSHOyBvPMo89txpgbl+CjlIz2XxqPfK1OS2X4oA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649283088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kjO+FcQEbzxNg96q+CVmF00/Fnf4v+c6IvBo4ypadGM=;
+        b=/JM3+JRbyPJzN47EjFTCmy7kGOujjw4LAotjVETTRqG+McDzrvIwV7iirZ2G3TRLNTSinL
+        FgoFrheKZGhP44AQ==
+To:     Reto Buerki <reet@codelabs.ch>, dwmw2@infradead.org
+Cc:     x86@kernel.org, kvm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, joro@8bytes.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, maz@misterjones.org,
+        decui@microsoft.com
+Subject: Re: [PATCH] x86/msi: Fix msi message data shadow struct
+In-Reply-To: <20220406083624.38739-2-reet@codelabs.ch>
+References: <20201024213535.443185-13-dwmw2@infradead.org>
+ <20220406083624.38739-1-reet@codelabs.ch>
+ <20220406083624.38739-2-reet@codelabs.ch>
+Date:   Thu, 07 Apr 2022 00:11:28 +0200
+Message-ID: <87pmltzwtr.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 2cf68211664acd2e4bdd1fb66697137b30901981 irqchip/apple-aic: Add Fast IPI support
-date:   4 weeks ago
-config: arm64-randconfig-s032-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070633.vRp7MVoj-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2cf68211664acd2e4bdd1fb66697137b30901981
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2cf68211664acd2e4bdd1fb66697137b30901981
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/ drivers/remoteproc/ lib/
+Reto,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Apr 06 2022 at 10:36, Reto Buerki wrote:
 
+> The x86 MSI message data is 32 bits in total and is either in
+> compatibility or remappable format, see Intel Virtualization Technology
+> for Directed I/O, section 5.1.2.
+>
+> Fixes: 6285aa50736 ("x86/msi: Provide msi message shadow structs")
+> Signed-off-by: Reto Buerki <reet@codelabs.ch>
+> Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/irqchip/irq-apple-aic.c:181:1: sparse: sparse: symbol 'use_fast_ipi' was not declared. Should it be static?
+This signed-off by chain is incorrect. It would be correct if Adrian-Ken
+would have sent the patch.
 
-vim +/use_fast_ipi +181 drivers/irqchip/irq-apple-aic.c
+If you both worked on that then please use the Co-developed-by tag
+according to Documentation/process/
 
- > 181	
+Thanks,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        tglx

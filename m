@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764FE4F6B5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380914F6B61
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbiDFU0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S233568AbiDFU2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiDFUYp (ORCPT
+        with ESMTP id S234330AbiDFU2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:24:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2C934B623
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:44:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05F6661655
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BE6C385A3;
-        Wed,  6 Apr 2022 18:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649270657;
-        bh=DPD+gqGzilTAFAdB9aUrsXNWCMtoAzNXiS9BO63EI/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YVCh48hz43pgjqInjX7Bo/gSSRRPliJ8dHTisa1UOb7B/eWMVRkJLM72CP1MI6oeR
-         lDA84PovMpi37QEcddBo8kV7vVyRBZnm+mM4Ok4yJDMNGXDRFKfBtrB5ZT1+HK2wzZ
-         ENNdJh6cKSkjKPl5uCmX/7X470tvDkwdeScCLJoi9olzKla3iHrLuNAy9w1TWZUsDy
-         +i2hu+TKE63n70QW/9NsGjXhyOTAFFKg3eP+R0HJaBobggX7Gcif6h4BFCTIaxi18a
-         kuVYOmj4wsEJavokjss7pS97m3wO5efreOW0jBg7JwVoicT9xTK3HJI0dgwGSxMGKG
-         LApxOFCJhYwCw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3E85A40407; Wed,  6 Apr 2022 15:44:13 -0300 (-03)
-Date:   Wed, 6 Apr 2022 15:44:13 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org
-Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
- __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
- vlv_allow_gt_wake.cold+0x0
-Message-ID: <Yk3ffdJ6a3Q2uWRG@kernel.org>
-References: <202204041241.Hw855BWm-lkp@intel.com>
- <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
- <20220406000500.5hlaqy5zrdqsg5mg@treble>
- <87czhv11k1.ffs@tglx>
- <20220405212032.3d858b31@gandalf.local.home>
+        Wed, 6 Apr 2022 16:28:10 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4838413D09;
+        Wed,  6 Apr 2022 11:48:19 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id k21so5687961lfe.4;
+        Wed, 06 Apr 2022 11:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=j9395K+P3ckPAEpp0VngX/lMlS/mSO7/OiLA6T9rii8=;
+        b=AdiupK0f5tH3mzh81yMw74TNiqYSKhpRq5BV6vNWimIJM65sCmwtO0VGTLEIQSkjg/
+         xHomBGdi80pYAOjj2DuUq1oWwtOlgDYUspbmgS50UQ2XpWmFvFb64rmVAjIspPHu8v/N
+         raKCDBS81RRn+l35CiP8V9s15SZMqyc+I6CC6eNFaX7SY9jCEODu+ODqKQrEXvDnNfW9
+         06BmSYAMjoFA6bYLj+hs4lTp1VvofM5xzi/2yOrMuJgyl5vhhS2Qt0VQ3ZrZxNRi+m2Y
+         ZVJqXmFHD7We6zWDIH1c5jJ/5vx6iC0vE5/vmSAzew0dRX0CYnl+53PUQ+FMuZ066+V3
+         5MlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=j9395K+P3ckPAEpp0VngX/lMlS/mSO7/OiLA6T9rii8=;
+        b=C9xni2Se3KsxJ/qA93W+xT20Lw3+mTceU3wgH16Dve2CQ7nmCmvrtOUmZD0avnYS2S
+         YmqpjEb78NypbSAU+0QDfalhlbm7FtQnPIlFdG/05lAYnVqgSslrUyVzNxG5yHzUXbtT
+         5TUZYkFpCdtJwRYIvdGa4Mx+fmCErSMshhNppBLX2HnXOMvylHXA5DgldxXFZ8Mw32/b
+         RZ9UKjpvY8iAEM3wSAylA1/cwa3L6vBrcRLV5ILiJq4shdrvxaFjGIoU9E/buKc4gkVP
+         kFZOU3CpMbZF+yCcvcX4+GLM8S+4Kp5lBqTmCd8noPP9LVf2QoKGRzIAFN6HnTxNcc44
+         6Hzw==
+X-Gm-Message-State: AOAM532pgeNnve5fE9O4raZl5zCCcOeWUnFsS38sUmEVI1sjGjGMNMMv
+        J99BOXbnijdY3dBwS55rfaP1ZIb57nLf9boT
+X-Google-Smtp-Source: ABdhPJzNADicM+sXa4roBFQ7B2f4eH3VnwkH5xkwOrMbesUL+8GJo8yXhHvLj4BO2Bo5WHfPEDGStA==
+X-Received: by 2002:a05:6512:39c1:b0:44a:e25d:47fd with SMTP id k1-20020a05651239c100b0044ae25d47fdmr6907751lfu.580.1649270897430;
+        Wed, 06 Apr 2022 11:48:17 -0700 (PDT)
+Received: from dell.intranet (93-181-165-181.internetia.net.pl. [93.181.165.181])
+        by smtp.gmail.com with ESMTPSA id e14-20020a19500e000000b0044a16931c7csm1912219lfb.97.2022.04.06.11.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 11:48:16 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to CCF
+Date:   Wed, 06 Apr 2022 20:48:14 +0200
+Message-ID: <1888452.PYKUYFuaPT@dell>
+In-Reply-To: <20220406132149.GC594699@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com> <1810824.tdWV9SEqCh@dell> <20220406132149.GC594699@darkstar.musicnaut.iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405212032.3d858b31@gandalf.local.home>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Apr 05, 2022 at 09:20:32PM -0400, Steven Rostedt escreveu:
-> On Wed, 06 Apr 2022 02:46:22 +0200
-> Thomas Gleixner <tglx@linutronix.de> wrote:
-> 
-> > This covers the trace_printk() case which uses do_trace_printk(), but
-> > the same problem exists in trace_puts() and ftrace_vprintk()...., no?
-> 
-> Hmm, I'm not even sure why ftrace_vprintk() is there. It seems redundant.
-> 
-> Arnaldo,
-> 
-> Was there a reason for it. The commit that added it isn't very descriptive.
+Dnia =C5=9Broda, 6 kwietnia 2022 15:21:49 CEST Aaro Koskinen pisze:
+> Hi,
+>=20
+> On Sat, Mar 26, 2022 at 10:17:49PM +0100, Janusz Krzysztofik wrote:
+> > Dnia wtorek, 22 marca 2022 20:07:53 CET Aaro Koskinen pisze:
+> > > On Tue, Mar 22, 2022 at 06:36:48PM +0200, Aaro Koskinen wrote:
+> > > > Something is still broken. When doing kexec (using CCF kernel), the
+> > > > kexec'ed kernel now hangs early (on 770):
+> > > [...]
+> > > > [    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
+> > >=20
+> > > It hangs in omap_sram_reprogram_clock() (<- omap1_select_table_rate()
+> > > <- omap1_clk_late_init()).
+> >=20
+> > I've reviewed my changes but haven't found anything suspicious.
+>=20
+> The below change is fixing the kexec boot. Based on the comment in the
+> code, it seems this clock is needed for the SRAM to work.
+>=20
+> diff --git a/arch/arm/mach-omap1/clock_data.c b/arch/arm/mach-omap1/clock=
+_data.c
+> index e33e11f826af..b8b4876ff935 100644
+> --- a/arch/arm/mach-omap1/clock_data.c
+> +++ b/arch/arm/mach-omap1/clock_data.c
+> @@ -285,7 +285,7 @@ static struct omap1_clk tc1_ck =3D {
+>   */
+> =20
+>  static struct omap1_clk tc2_ck =3D {
+> -	.hw.init	=3D CLK_HW_INIT("tc2_ck", "tc_ck", &omap1_clk_gate_ops, 0),
+> +	.hw.init	=3D CLK_HW_INIT("tc2_ck", "tc_ck", &omap1_clk_gate_ops, CLK_IS=
+_CRITICAL),
+>  	.ops		=3D &clkops_generic,
+>  	.enable_reg	=3D OMAP1_IO_ADDRESS(ARM_IDLECT3),
+>  	.enable_bit	=3D EN_TC2_CK,
+>=20
+> A.
+>=20
 
-Yeah, I was young and in a hurry.
+Thank you Aaro.  Will you submit this as a separate fix, or should I submit=
+=20
+v2 of my patch 4/4 with your fix included?
 
-- Arnaldo
- 
-> commit 9011262a37cb438f0fa9394b5e83840db8f9680a
-> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date:   Fri Jan 23 12:06:23 2009 -0200
-> 
->     ftrace: add ftrace_vprintk
->     
->     Impact: new helper function
->     
->     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->     Signed-off-by: Ingo Molnar <mingo@elte.hu>
-> 
-> 
-> -- Steve
+Thanks,
+Janusz
 
--- 
 
-- Arnaldo
+

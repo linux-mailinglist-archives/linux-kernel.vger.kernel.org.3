@@ -2,117 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB7E4F6429
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE304F6438
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiDFQCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S236771AbiDFQDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236933AbiDFQCC (ORCPT
+        with ESMTP id S236925AbiDFQCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:02:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F0F348A67;
-        Wed,  6 Apr 2022 06:32:19 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id yy13so4343466ejb.2;
-        Wed, 06 Apr 2022 06:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=niunOJ3MaXUFHbr4lbaS6D1TbU9QBsWRT6UXQMa2ITQ=;
-        b=nkXV47q3wTX2IKhRobhX9k0wlO78UWo3Pu1cGioH8EzA5XNkKBINxeIcA6qNduJWCa
-         fdcbIZE2tAhplyS7K4DkNZc7pXz+ba22d/7OPtvHVcO8ha3afT9O8+Nb6qYgNVkUO9xS
-         Sr5MmOo8w1shDyK/prx9VliBS+wbmCPkNdjRgf04BlemlcmS5jDoyBQh6Olfqwe8lsLL
-         pz3NQHK4TIYz9T6ArCbIxNJjrEdEFKuf66ctnNgOGxwEkJUXAwencqQi4OZr0Pju/o51
-         YZy5feqpqgIeSXJhtsL/inBW/VXSW6jDf6pOZDA0vX0ceDeyH/ok5EHxGQO2lYte+COn
-         8glA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=niunOJ3MaXUFHbr4lbaS6D1TbU9QBsWRT6UXQMa2ITQ=;
-        b=LOZusQmECm8lRpSieExeNFBvPVLziJ1ZHlwSh4VyN1Uni/1Vd/fdVRRTdOnFkdQIvV
-         zgI5aIkotgUTT73zYoGcrQagLLNBwAl7iqpDIYOeQ/3/YsuQgXjY/RFu9rHQqDsTfyhj
-         mn0IqE3qkGNhF8VNN1fsnawJjVb3tsYUZ+RoL9+y/iDO+Ul88JESKz7Vz/x4QmbTceqK
-         PeNA3H3OsuvAclpUXsDlCuSbTYMTHve8OlbkFpAfk2zC9XJYubLcJ6c2OQKtZ8IK2IbD
-         ViYvSVj4g/ea3JQbvXRjoSdIdk0M3fji9rPmonVOMo4plRJGUjJ2Il1nci5jxJxZQ78m
-         O1Ng==
-X-Gm-Message-State: AOAM53180/iBi4Haci3uZWhgAKtMoh093x21GXsHVmVL0UIKm2LGRUTI
-        ltqyoW6jslhAvbhMm1N0iig=
-X-Google-Smtp-Source: ABdhPJyg/OBIlUh7EMNy4f0TXHsNiCHCCBnWiWJ/r6XOCH2Fjigs+ZL4f8/vPP3nFsOzBdCi0E1d+A==
-X-Received: by 2002:a17:907:7206:b0:6e6:d0b7:fd88 with SMTP id dr6-20020a170907720600b006e6d0b7fd88mr8074540ejc.121.1649251938297;
-        Wed, 06 Apr 2022 06:32:18 -0700 (PDT)
-Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
-        by smtp.gmail.com with ESMTPSA id jt8-20020a170906ca0800b006df9b29eaf1sm6535874ejb.8.2022.04.06.06.32.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 06:32:16 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 15:32:14 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        kernel-janitors@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: tegra: fix typos in comments
-Message-ID: <Yk2WXutks478t7MJ@orome>
-References: <20220318103729.157574-8-Julia.Lawall@inria.fr>
+        Wed, 6 Apr 2022 12:02:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC1B34DD24;
+        Wed,  6 Apr 2022 06:32:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE0AE615F2;
+        Wed,  6 Apr 2022 13:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B71BC385A1;
+        Wed,  6 Apr 2022 13:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649251956;
+        bh=yVtK4OSU/dz7cCD7phTmXOaCwuF/h2svpJZzwvXXAsA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m2E73t23BrnyOD/+HPsx4+PRxqhU25KUf8RwocNfFy4KvnbUQtYBgALtv/829Y+Yj
+         EdSgOtO/TWXv7i5tweZFPLGDroNAQ2bY1WhKvG6ulS0xD7TNOgDi8Fav8N8I9p00vE
+         KvsEohRTPQqFs4z8wLlPGkELTD7+4w0aYM9ah4w6L4ZHhugxDP048LB6acYzE7dBHp
+         zHCFoUGv4/qZ0fMNzhNkUj41DSkP+cOeDk7tDlZEkLlhvnmKr8dDhvC/s+7DAWePo5
+         Z8lQ7Gp9rvnD0VnV8Ju0QBUnNgEU708dAWpHw91y0vUbZEw83dIl/NfQEJLpf45gdj
+         +Z21D2+nf6wQQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V2] csky: optimize memcpy_{from,to}io() and memset_io()
+Date:   Wed,  6 Apr 2022 21:32:22 +0800
+Message-Id: <20220406133222.724347-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Yd0gt/eyj0AUzh/G"
-Content-Disposition: inline
-In-Reply-To: <20220318103729.157574-8-Julia.Lawall@inria.fr>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Guo Ren <guoren@linux.alibaba.com>
 
---Yd0gt/eyj0AUzh/G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Optimize memcpy_{from,to}io() and memset_io() by transferring in
+64 bit as much as possible with minimized barrier usage.  This
+simplest optimization brings faster throughput compare to current
+byte-by-byte read and write with barrier in the loop. Code's
+skeleton is taken from the powerpc & arm64.
 
-On Fri, Mar 18, 2022 at 11:37:03AM +0100, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
->=20
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->=20
-> ---
->  arch/arm/mach-tegra/platsmp.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+Changes in V2:
+ - Fixup compile error by Makefile missing io.o
+---
+ arch/csky/include/asm/io.h | 11 +++++
+ arch/csky/kernel/Makefile  |  2 +-
+ arch/csky/kernel/io.c      | 91 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 103 insertions(+), 1 deletion(-)
+ create mode 100644 arch/csky/kernel/io.c
 
-Applied, thanks.
+diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+index f82654053dc0..adb64e26194f 100644
+--- a/arch/csky/include/asm/io.h
++++ b/arch/csky/include/asm/io.h
+@@ -32,6 +32,17 @@
+ #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
+ #endif
+ 
++/*
++ * String version of I/O memory access operations.
++ */
++extern void __memcpy_fromio(void *, const volatile void __iomem *, size_t);
++extern void __memcpy_toio(volatile void __iomem *, const void *, size_t);
++extern void __memset_io(volatile void __iomem *, int, size_t);
++
++#define memset_io(c,v,l)        __memset_io((c),(v),(l))
++#define memcpy_fromio(a,c,l)    __memcpy_fromio((a),(c),(l))
++#define memcpy_toio(c,a,l)      __memcpy_toio((c),(a),(l))
++
+ /*
+  * I/O memory mapping functions.
+  */
+diff --git a/arch/csky/kernel/Makefile b/arch/csky/kernel/Makefile
+index 6c0f36010ed0..4eb41421ca5b 100644
+--- a/arch/csky/kernel/Makefile
++++ b/arch/csky/kernel/Makefile
+@@ -2,7 +2,7 @@
+ extra-y := head.o vmlinux.lds
+ 
+ obj-y += entry.o atomic.o signal.o traps.o irq.o time.o vdso.o vdso/
+-obj-y += power.o syscall.o syscall_table.o setup.o
++obj-y += power.o syscall.o syscall_table.o setup.o io.o
+ obj-y += process.o cpu-probe.o ptrace.o stacktrace.o
+ obj-y += probes/
+ 
+diff --git a/arch/csky/kernel/io.c b/arch/csky/kernel/io.c
+new file mode 100644
+index 000000000000..5883f13fa2b1
+--- /dev/null
++++ b/arch/csky/kernel/io.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/export.h>
++#include <linux/types.h>
++#include <linux/io.h>
++
++/*
++ * Copy data from IO memory space to "real" memory space.
++ */
++void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)from, 4)) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		*(u32 *)to = __raw_readl(from);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_fromio);
++
++/*
++ * Copy data from "real" memory space to IO memory space.
++ */
++void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)to, 4)) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(*(u32 *)from, to);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_toio);
++
++/*
++ * "memset" on IO memory space.
++ */
++void __memset_io(volatile void __iomem *dst, int c, size_t count)
++{
++	u32 qc = (u8)c;
++
++	qc |= qc << 8;
++	qc |= qc << 16;
++
++	while (count && !IS_ALIGNED((unsigned long)dst, 4)) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(qc, dst);
++		dst += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memset_io);
+-- 
+2.25.1
 
-Thierry
-
---Yd0gt/eyj0AUzh/G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJNll4ACgkQ3SOs138+
-s6H3AA/8ChdHj0sdYCc2sTyKoZSt78iMAJsOzE65Xmc7eeU51exdcOjPG6EysgRb
-Lgp/iu4ViEw4u6P9pvsA/buET898qfi96cHeoCESqrDza4NEqSwL6+8vr+I3l+ZV
-YySgT6FbybCt6jmxo0BTg5Lw9Q/ytHl3RUtsS+CJCbmHd6jjzbXOoKdwCsyZZ/jh
-dz4Ht6iW9k+1xg2kgr1KCPiVN5INHBSfqKuS1l9OYSUme3vfjEPt+XlqkKms9L4c
-KNk1J5QQ/tujKhvUNNtjNstuVPAbNSue/FyTRPsoMH0ha8esJ9kZmA3UCEP/n3mY
-gYzaRpk1CNrUxdIhmry6evmKnmnybcKtYZaLnc3VAJaSPrUu3ewuF1bm9Qdpi8XH
-Ks4UsSDkrjUuPs+blRz5XKt/+AlQj9mnkAT4cUf/No9edP6oza0qyJXYcWRcYVRx
-bxthehCUCeJLtb5nnKZ0I7jTBPN/vBlS7rZkzbUtyKJRp0Kspamgy/aNqDu0ynjR
-IUaqFbe3r507xZP0za5BVEbOmdXy/+QwP3YvIdpj5/8i1JqBfRkeCMGDtWdu7/zC
-t0f5rRfJswHx1DtYxbzWI8ULphiYrV4bHFVklhmduOAYWwJ1uLgYFgLzb/MlcgK7
-quS3WEWN11kTWHlwm+BHv+3PCvxzIuiiNH5LbcKA1toTRlMWEwo=
-=Cw0h
------END PGP SIGNATURE-----
-
---Yd0gt/eyj0AUzh/G--

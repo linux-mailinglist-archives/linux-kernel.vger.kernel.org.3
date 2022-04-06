@@ -2,229 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8371C4F5FC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906564F6084
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbiDFNTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S233513AbiDFNhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiDFNS0 (ORCPT
+        with ESMTP id S233577AbiDFNgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:18:26 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130049.outbound.protection.outlook.com [40.107.13.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440D43B82A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:56:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eBRot4lm/9CfnJ3vLX0OsQ2Jup1bcmjl/XBCJqodIHz24FgmKhZQY8ShYXbSTj16VjtiADmA9Yt1Re/j/lmH+qr8lEB/qyJJBKLtyW7HrU8bwwsSWET05ZfvOeV2xhzSIQvbWRkhKAzDKkfIxgdazMjtvMGHO7pW8cfBdnCyPjjHON5AiXpGcX0xrUPpwlsb7D6zZn1CkrxAjYHI85YTh78yQ6SwTxdtGvC/Pgo78B9V1wAkuUB1w5CYCHja3XuQ67fatPmlZd9EjkcnZYcPRo13Tu0Qo6MMrEUtygfEacrL/QsRDV0a+RMjrC9ienGmd0rskv9+7015+ruXgTAp4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=efwIcjEz0IsCRbZj6ijpxa6ZbM2lhPBAg9gQzGTPpt8=;
- b=SExEHzzQ1u960HeBW/k5qM6jvFOY3WHmQbROY+iMfUAOcb1IyjNEHzIYO1YWense5QquWUoOvax4I7dWlXhC91megbSYjW0uAgDgzXvryJZ6ov/RBicSiRsLAph8Idjrdu/kYRiR/EWgl4NwlJWVYs1uTEAD6ogUhNxC/EJRK4gs7xxorA73cc8daEAhnrprgcf+lYzEnxjk1VHZoR6++ihNkBQauzlBqVMMV8DUsnNppyNGFu4PTcTpMBv8ZtdglDkff57t4/5hv8Gpjsq8QKvWW6ba/HTwDsdZxI+Rju0rx9MOftLCyiQy/ODz7UIEcRp72gr0F9mayS6ItTZ2CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=efwIcjEz0IsCRbZj6ijpxa6ZbM2lhPBAg9gQzGTPpt8=;
- b=hvN58REdpZyKKRRkE9WdgrnsWHlvFpNlB1LtaE/mGFerMUYxAV69XDGLMBk2qHfUL5eS2O/RcUqxMMHeu+fBbE5A0U9qyJPHovYCJEU8YCxfC9P4z9bAX5Vy1h/4ZTX456DxyaecYmHfGz8ho832+xAUa3lAVx2mGNFebfnt1fo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
- by AM0PR04MB5860.eurprd04.prod.outlook.com (2603:10a6:208:133::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 09:53:05 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::81be:ee44:be2a:727c]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::81be:ee44:be2a:727c%4]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
- 09:53:05 +0000
-From:   Li Jun <jun.li@nxp.com>
-To:     myungjoo.ham@samsung.com, cw00.choi@samsung.com, krzk@kernel.org
-Cc:     linux-kernel@vger.kernel.org, frank.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH] extcon: ptn5150: add usb role class support
-Date:   Wed,  6 Apr 2022 17:42:22 +0800
-Message-Id: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0010.apcprd02.prod.outlook.com
- (2603:1096:3:17::22) To VI1PR04MB4333.eurprd04.prod.outlook.com
- (2603:10a6:803:49::27)
+        Wed, 6 Apr 2022 09:36:45 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0EA68B496
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:37:58 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 92D2A802C09F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:42:33 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id C43DD10048713
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:42:31 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id c2BLnoQB3Y8ycc2BLnQHxz; Wed, 06 Apr 2022 09:42:31 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=e+XD9Yl/ c=1 sm=1 tr=0 ts=624d6087
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=ZeFZwYX2NddpyQBIYx0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nmw3pI3LAC2JpacL0WZdZQOTCVHYle8oGUHMFCNDJh4=; b=McpS05w/vt13v6O5ArkwMUT9tS
+        z0wNqFZIxzs6/OTOebOus1dzDjX16KZHudYXKIokPQBeon3kifcgJFQ0lkB1kyXZNROv4i/RMuMH7
+        uhw78oineNtkFNbTvTNe6qD6BwPu9iUEaRP65o//p8xYXwAFhCMlfAkw8vjs0NF7/smmgQBukwPlL
+        s3JYezY8IrlODLYu/LIX1JD5yGe4fTtO8xWDRo+tXGDtaI4pQmKy+d+wbZB5dWyKcxrxmVFFS/pEc
+        exMtK9ZnXp23xq99QB486XQrAv7xArf59bf0a+wPZaT39oPRvjnJDLQCrXdpIgpTu3gM06l38ADGx
+        awxSTB1A==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36042 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nc2BK-003htt-Gw; Wed, 06 Apr 2022 03:42:30 -0600
+Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <19cab1db-e972-e25d-c306-bab51406289d@w6rz.net>
+Date:   Wed, 6 Apr 2022 02:42:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 76dacfe4-a770-44a2-20e5-08da17b33f12
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5860:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR04MB58602C29E526CE8BABE55A3389E79@AM0PR04MB5860.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1H55dtAKbMEmBZJ2ZsdKoVZcHSMMuPnPeGNB5N8b848FUqy4/VjESUhRXxsfOH9nHeA5aXl6zwgEGB+ljVOr7RY3U49IgaBjz4sed3l4UIwqMxYbMojl1Y+ch66+xdhg0FZz3Bt5X+GIKCfpwxHd2DN5jmbWi7YNilnbCsylb9WINXlw5fYxgIg3826GeFTjK90kieC2PX/1jrijGuSiE8B1ZqG8xFKB80xJ/yQcC9hzSZR5pmRV/NKXHdAq7dHR0R4w3beiRX9LFflg0GXK2baRhstU7FYRgpbbiiq9qdddBLO+gdA0IwQq8G7qXz4s1M8EY5c2s8020xAej4GzQZPUId04WRr9SjdhnqCWtnWGT+iEg4cmtKSsFkJ7kbNCUKJXCr2gZQ1yz6CEfQJklPXiWT4cIPKeTrxWjFZv/Upy58Q1LFoJY3oIQxB/06rQwZqUfLU//EPcr2hXdNc+CQ2iGqG9Sstji299vu6bPwsURsVoiXKH8CpZhisrik2AHIz3PUTgxF/7gNr9k/kxxnk/slrCEcQnwIUVg3BlQtKMEXLdHgqTr1xKgqRHrt45jYhTHo0aVvaWy9Wi12R3F2ETxy2CdPLmH645aIPplIzLlb2QXEH36m2Aiboate9qET4AlgxFZtOysvd/09t8f2Is6Axu/GaharoHXNM/2t4o7dMbHi+/QgzlelFNpfXMdlvcAACioSHfYlCfbLNPKw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6486002)(316002)(8936002)(83380400001)(508600001)(26005)(36756003)(186003)(2616005)(6512007)(38100700002)(86362001)(66476007)(66946007)(2906002)(38350700002)(66556008)(4326008)(8676002)(6666004)(6506007)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UxKF7xhPP0uoSjiRxNge8t7D99gDMKwTXJhEcojdSPODC/7Ely1XS66qdqaC?=
- =?us-ascii?Q?ukZ/tX5+PUq+CGDi6tQniyX/htRVp5l9DdqqC9MNmgAnSJknQo7FkyH78OMN?=
- =?us-ascii?Q?Hq2lHTtu0PTaOxYuoevha1yW8mlx0wkd7Dtj2zqEWRh8NSr33mK6zBEYE2jw?=
- =?us-ascii?Q?IzSbKw53eGL0GL2ebObSv5jiZGSxXZqyXXFbecib1BgEqYWQMmUOIalQpypR?=
- =?us-ascii?Q?l6nUTbzge9ahpKp5IzIXpUzjGHJVt27QPLBR3idNk7Jl4PjGk+EoYiSGqAiU?=
- =?us-ascii?Q?u9LRZG+fLlZufqxkKPKY1ouAlffX3VLZdBuF4UDX4Ur8VLXHuWospdGLpGsL?=
- =?us-ascii?Q?0xt1cci9no3nhLjkazQpoRVloZNlZHg8FJYysWa8b5ICwbI7DE9aHSpSREFx?=
- =?us-ascii?Q?mqTNHDEgjaHiiIEmg5FHzRJj9tq6nYE48NF5lWosvN4i5LOp+/1L3j71KMZw?=
- =?us-ascii?Q?Rb2P+2hYC2FfsEZYktTlGF5XEjIJRPtaTpys3MroGXUgtqeZ56MCXn5eBvFx?=
- =?us-ascii?Q?NUdKZ4p+0gWx+/rRXzxB2jAMFFuouaxpZyd6jvk5MfFuh0hXTaeJqLtTXnHX?=
- =?us-ascii?Q?q6/hOyDtreRb+KlOYjCxlg/CT3b72HxgpqJ13GtTKVdMi7lnSeGIirJf03P0?=
- =?us-ascii?Q?8a151dHw+I/k12F8sPMvFuE3vcVuUyxJk1939AtmJBCNa5smDKu8KAW4f5KG?=
- =?us-ascii?Q?S7d7iDf1N49kLuGJCOIYVSU//VpI6uyGDvo2570BvngZWY3DtY2MhwuJ4SsA?=
- =?us-ascii?Q?ny2wLrmuljtTr14o0WHk97JWmyoYHgpBmTcqhipPjtrnw8gxg17fEVlVC9yb?=
- =?us-ascii?Q?Ci+wuUSfnopggX7XlsU3kmVbviJl8cx3okn6MGQ1M3REDXUj/P0yKw59KFPI?=
- =?us-ascii?Q?he1F88qvXJyEucRI4IjQZEveyuOp+yjgLHahQhEaNv9I1XWKNtFVMEm5gug6?=
- =?us-ascii?Q?p9t+J1aaXaTmdsMR5p/U+z/3bERv6j2DQ27K5+Qpze2gAT0VDDDJBFyVJR1p?=
- =?us-ascii?Q?wYE9heXGfHVSN7uXQKwJEdPb+34WmapAjUcpmRJrh1gS+zEVU8JrF4CEBZFU?=
- =?us-ascii?Q?RmsXMt0x/gJMMZTI/u6n/8iBBNIHG86WBUApFB2Bg8UvOOFt5dsH+2g8rLY8?=
- =?us-ascii?Q?mrxryFdOwqpRiU8uMitNSnsF7Ch46pyEHg103IWJ7Dey9nrzy16rFoVBK6nG?=
- =?us-ascii?Q?ve+XXz0Ei0oTgqFpIgkuu5VgzzhGCgYge+MZ59pwO6mV4QtG0HFsIS0w34JD?=
- =?us-ascii?Q?DEEX9Y+3ac17vVvgIykIuy4mvJ51rwH1ad1KOYLDghEwUYYhAJOIp71tTFMS?=
- =?us-ascii?Q?q4tL6wyh2huKTE04wRzH4egWEg5HYaKDpYHuWx23m3zyHOjZ6zuRIvHqfrUj?=
- =?us-ascii?Q?K90Tp6kkbCwKA4vNXzQyV4HBg2YSoZ6K/X8EgFPK5cIozBdwDXPhSac306fh?=
- =?us-ascii?Q?RjtQmgtNlJbTGOhQr/M0MtRfFap94R/IXc0A78lvdG0hvhZ9jva1hdVnK/VU?=
- =?us-ascii?Q?a3c5sBgwoeFQOQX3QeO6EEngY0QXPnlO7QOjYnZIcAtsdkJ4Z2UHh9FNqEQv?=
- =?us-ascii?Q?Py2+Sb4sWJqnlqOMpbQeZ8HO410Cc+hjMMNIUaH11J9b5bCqQLkdjCVUdRtI?=
- =?us-ascii?Q?uB0vMPYj4Iny9j8KMPtrEGhWmz/i+0uFqfZ9vCgLz+VkAQoEYgp4u0iWEdGU?=
- =?us-ascii?Q?S6f8ODpgUIiK17cJAqvE5GZ03q+7DiUxCgTuugdMif+q5t0TB0FbvM+5T87C?=
- =?us-ascii?Q?6SMZKxQBsA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76dacfe4-a770-44a2-20e5-08da17b33f12
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 09:53:05.3896
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yDvwgnYwYWqDnIvsNB12vpQ2TdMkjeV7dvIHlfT+wtrDn13pUd5gaPZ+HYkg4xri
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5860
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nc2BK-003htt-Gw
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36042
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 16
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support of usb role class consumer to do role switch.
+On 4/5/22 12:15 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.19 release.
+> There are 1017 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
- drivers/extcon/Kconfig          |  1 +
- drivers/extcon/extcon-ptn5150.c | 39 +++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-diff --git a/drivers/extcon/Kconfig b/drivers/extcon/Kconfig
-index 0d42e49105dd..9828ade787a8 100644
---- a/drivers/extcon/Kconfig
-+++ b/drivers/extcon/Kconfig
-@@ -132,6 +132,7 @@ config EXTCON_PTN5150
- 	tristate "NXP PTN5150 CC LOGIC USB EXTCON support"
- 	depends on I2C && (GPIOLIB || COMPILE_TEST)
- 	select REGMAP_I2C
-+	select USB_ROLE_SWITCH
- 	help
- 	  Say Y here to enable support for USB peripheral and USB host
- 	  detection by NXP PTN5150 CC (Configuration Channel) logic chip.
-diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
-index 5b9a3cf8df26..821b0f390308 100644
---- a/drivers/extcon/extcon-ptn5150.c
-+++ b/drivers/extcon/extcon-ptn5150.c
-@@ -17,6 +17,7 @@
- #include <linux/slab.h>
- #include <linux/extcon-provider.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/usb/role.h>
- 
- /* PTN5150 registers */
- #define PTN5150_REG_DEVICE_ID			0x01
-@@ -52,6 +53,7 @@ struct ptn5150_info {
- 	int irq;
- 	struct work_struct irq_work;
- 	struct mutex mutex;
-+	struct usb_role_switch *role_sw;
- };
- 
- /* List of detectable cables */
-@@ -85,6 +87,12 @@ static void ptn5150_check_state(struct ptn5150_info *info)
- 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, false);
- 		gpiod_set_value_cansleep(info->vbus_gpiod, 0);
- 		extcon_set_state_sync(info->edev, EXTCON_USB, true);
-+
-+		ret = usb_role_switch_set_role(info->role_sw, USB_ROLE_DEVICE);
-+		if (ret)
-+			dev_err(info->dev, "failed to set device role: %d\n",
-+				ret);
-+
- 		break;
- 	case PTN5150_UFP_ATTACHED:
- 		extcon_set_state_sync(info->edev, EXTCON_USB, false);
-@@ -95,6 +103,12 @@ static void ptn5150_check_state(struct ptn5150_info *info)
- 			gpiod_set_value_cansleep(info->vbus_gpiod, 1);
- 
- 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, true);
-+
-+		ret = usb_role_switch_set_role(info->role_sw, USB_ROLE_HOST);
-+		if (ret)
-+			dev_err(info->dev, "failed to set host role: %d\n",
-+				ret);
-+
- 		break;
- 	default:
- 		break;
-@@ -133,6 +147,13 @@ static void ptn5150_irq_work(struct work_struct *work)
- 			extcon_set_state_sync(info->edev,
- 					EXTCON_USB, false);
- 			gpiod_set_value_cansleep(info->vbus_gpiod, 0);
-+
-+			ret = usb_role_switch_set_role(info->role_sw,
-+						       USB_ROLE_NONE);
-+			if (ret)
-+				dev_err(info->dev,
-+					"failed to set none role: %d\n",
-+					ret);
- 		}
- 	}
- 
-@@ -194,6 +215,14 @@ static int ptn5150_init_dev_type(struct ptn5150_info *info)
- 	return 0;
- }
- 
-+static void ptn5150_put_role_sw(void *data)
-+{
-+	struct ptn5150_info *info = data;
-+
-+	cancel_work_sync(&info->irq_work);
-+	usb_role_switch_put(info->role_sw);
-+}
-+
- static int ptn5150_i2c_probe(struct i2c_client *i2c)
- {
- 	struct device *dev = &i2c->dev;
-@@ -284,6 +313,16 @@ static int ptn5150_i2c_probe(struct i2c_client *i2c)
- 	if (ret)
- 		return -EINVAL;
- 
-+	info->role_sw = usb_role_switch_get(info->dev);
-+	if (IS_ERR(info->role_sw))
-+		return PTR_ERR(info->role_sw);
-+
-+	if (info->role_sw) {
-+		ret = devm_add_action_or_reset(dev, ptn5150_put_role_sw, info);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/*
- 	 * Update current extcon state if for example OTG connection was there
- 	 * before the probe
--- 
-2.25.1
+Tested-by: Ron Economos <re@w6rz.net>
 

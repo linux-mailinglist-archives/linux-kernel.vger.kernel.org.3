@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB9C4F5C61
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EA64F5C51
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiDFLek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S236449AbiDFLdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiDFLcZ (ORCPT
+        with ESMTP id S236007AbiDFLcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:32:25 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537E56FD2E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:20:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bg10so2677102ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 01:20:49 -0700 (PDT)
+        Wed, 6 Apr 2022 07:32:43 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A1149FA17;
+        Wed,  6 Apr 2022 01:21:36 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id t2so3093276qtw.9;
+        Wed, 06 Apr 2022 01:21:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nwwNMDaP5Yh8K0WaZWOfIjXkdwXbq5VOVV+PO+4zCEI=;
-        b=t7z1bs+kTqbj1INwRe1vMtQ6NKc9uAcZwKH60yfxmMmMEUv5b2KMB9WrLTjgP48JEr
-         yJSUf9ilQz0NsSCbqfCtGk3S5Y6RMpHcFgypLxDLY4xXto8of3uXP8OhAa2JlUVZd+z+
-         STDLjB7eUkYmPVJ/dKPcvWdoR2MzbknsovOOYDkfvdgAXybQnXF7QXhp3uK8KBx6bBwN
-         yW0SOxMHKO46Pqx08IvSKm5rFKwocFHce2EocdmglFWZsyYKaiCGogjwQ7jlTLu39I0y
-         0RSfqUSdfO6qX/snMr/HH0+KQ9C2V+oUnfDIFX94aNbg6t6wQ+loyiy7hOx/mqPT+n1d
-         WwyA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AFWezyJlqZ77VORHX3U0GwJuhQRt/uhTxdefuNmt42Q=;
+        b=UdajeAwz5lRZFRXbxD0b6WdicDco/5iM+47a7VFFMBjwCmLgcEiDJIg7nWDLO+ji2k
+         CkNHMl6aooBimIBDkw/xp6u2yjv2xEGsx/+kzbYrNShkzRVLJwOLOsVjqzHpMfixnZl0
+         4cO/49izpHp3ca9V5F8qjww8XY3WRZZdDjbY1cVxZQ6PVn0vDIhLZbqfkykB9fzQOIBS
+         KLpAKeY80xO37Hxbxzf4fCFAt1qxkfTvaCNHYh7wyNmpF0A4E3DVm5LVNtc9F0CaxlME
+         /pd/fLotihhQ0LroBEuHJKYI64RmS2669IZmn3bOJWVpyEvNOfNmQwixkMW+TcsM65/G
+         tUZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nwwNMDaP5Yh8K0WaZWOfIjXkdwXbq5VOVV+PO+4zCEI=;
-        b=aQbJXz/X1LcjSoljcqRtcJFYduVUFIqfb02h55OaNgrJDp+9YvkjzsSlAERDf0xSbE
-         9oArhNHYTv3J9ePIiWTYcW4QZ0LROGcyzXn6/fGEv7u5/gmOs+uc34iDJQDFDNsptd2B
-         8edHeHBj6L/MpbYtcXTlCOJdCnbPvgO+BE6QlKXwvKurL0HkWDNWOe+9YwWZOp/0SVVr
-         tKv+6c4aT97NMmCTIZ2UBz/dsE+MGBfRWVBz/j5oN92TIrR34+Mm0r9tBmzcFGEG2axT
-         ygE4+7nGQY8h7/hBCE9zHSR1QRbvA1zE+WluWQfZyZB/F+nT/Pm0X6MnRQJ0kPibjA2U
-         jE/Q==
-X-Gm-Message-State: AOAM531lgY1vnBScwkhws6o/JKGP70WxNBzGjcnPGAIg3iFrfk0ANKIn
-        AjHSsarsc+ExxFFxkdZ46TeuPQ==
-X-Google-Smtp-Source: ABdhPJwXpHbNbl+9gjYwq/xSxgHmjmznGjTieI5zwK9DQvHmBWZLhxJmk6snQcc/KpO8olUy4KkMhg==
-X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr7135579ejc.665.1649233248063;
-        Wed, 06 Apr 2022 01:20:48 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm6347202ejc.25.2022.04.06.01.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:20:47 -0700 (PDT)
-Message-ID: <4bafe244-6a3d-d0ec-59d3-3f3f00e71caf@linaro.org>
-Date:   Wed, 6 Apr 2022 10:20:46 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AFWezyJlqZ77VORHX3U0GwJuhQRt/uhTxdefuNmt42Q=;
+        b=OvFkU3J7EyonMNQlvjKl6AMT1EjpYqR4wazMB2rYjFK/q2xL5agQL9UTwtn7brNO/n
+         v6c465MRq2HJa1Ak0Fc98VD2sumWWk4x+4C+Vi0KForeRCjXvgOeD834VQ7aYiGe59yK
+         NEdQ2lcHpzDaTzsXSN5vr6PKpR+HHqCRJgZfnp5okbZX/DT3MDnew77xKx0+IEh12lyp
+         yoLonaGv5/UF0Se5L95Z34yYdz19LKdidGcphU1RWclDI5btrBhYh22l5tBIceqFeA/s
+         IVPUnFY261t9fcB768IXNsJNyM0+BnmrXo5Gh7EAvSg7hgVChe5gprp32/P6CtPgtSoc
+         v+Xw==
+X-Gm-Message-State: AOAM530Vf+cwbbgJXkw2FXFoQq0Nk4MJA5eZqDCHUAmBfbE+eFE3Sjot
+        66kpQ0TTHHFL7Ks6qejCVCP3H7selM8323gijUA=
+X-Google-Smtp-Source: ABdhPJwsFaRtyZQjBJn9zBMfC8Nfx9hxl1Be1gb/G3G6j10kQniywe6cDREOy6skFWkz8Y7S2TA7wlgoNtxnX5qnP0k=
+X-Received: by 2002:ae9:e513:0:b0:67d:2bc6:9620 with SMTP id
+ w19-20020ae9e513000000b0067d2bc69620mr4910453qkf.453.1649233295174; Wed, 06
+ Apr 2022 01:21:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
- mirror node on MT7622
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-6-nbd@nbd.name>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220405195755.10817-6-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+ <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+ <YkqxpEW4m6iU3zMq@dhcp22.suse.cz> <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+ <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
+ <Ykq7KUleuAg5QnNU@dhcp22.suse.cz> <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
+ <Ykrkx4JML4c81gBV@dhcp22.suse.cz> <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
+ <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
+In-Reply-To: <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Wed, 6 Apr 2022 16:21:07 +0800
+Message-ID: <CAGWkznEfT7qZbhjCUPHnAxSsYp3Rxm-RzEnWj4TQRO5B3fLvOQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 21:57, Felix Fietkau wrote:
-> From: Lorenzo Bianconi <lorenzo@kernel.org>
-> 
-> This patch adds the pcie mirror document bindings for MT7622 SoC.
-> The feature is used for intercepting PCIe MMIO access for the WED core
-> Add related info in mediatek-net bindings.
-> 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> ---
->  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
-
-Eh, I wanted to ask to not put it inside arm/, but judging by your usage
-- you did not create drivers for both of these (WED and PCIe mirror).
-
-You only need them to expose address spaces via syscon.
-
-This actually looks hacky. Either WED and PCIe mirror are part of
-network driver, then add the address spaces via "reg". If they are not,
-but instead they are separate blocks, why you don't have drivers for them?
-
-
-Best regards,
-Krzysztof
+On Tue, Apr 5, 2022 at 8:08 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
+> [...]
+> > Please be noticed that this patch DOES protect the memcg when external
+> > pressure is 1GB as fixed low does.
+>
+> This is getting more and more confusing (at least to me). Could you
+> describe the behavior of the reclaim for the following setups/situations?
+>
+> a) mostly reclaiming a clean page cache - via kswapd
+> b) same as above but the direct reclaim is necessary but very
+>    lightweight
+> c) direct reclaim makes fwd progress but not enough to satisfy the
+>    allocation request (so the reclaim has to be retried)
+> d) direct reclaim not making progress and low limit protection is
+>    ignored.
+>
+> Say we have several memcgs and only some have low memory protection
+> configured. What is the user observable state of the protected group and
+> when and how much the protection can be updated?
+Ok. I guess you doubt why the external reclaiming on global LRU or
+other unprotected memcg does not satisfy the requirement and have the
+protected memcg have to face reclaim? According to my experience, this
+is common for a large number of malloc from userspace OR high order
+alloc_pages within the kernel. I have retested the previous case by
+removing mlock and get the trend of result is same, where the pages on
+global LRU could help to push some of the global memory pressure back
+to global LRU and finally reach the protected memcg.
+>
+> I think it would be also helpful to describe the high level semantic of
+> this feature.
+>
+> > Besides, how does the admin decide
+> > the exact number of low/min if it expand from small to even xGB in a
+> > quick changing scenario?
+>
+> This is not really related, is it? There are different ways to tune for
+> the protection.
+>
+> [...]
+> --
+> Michal Hocko
+> SUSE Labs

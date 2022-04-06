@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0E54F6294
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DC64F62A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiDFPDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
+        id S235424AbiDFPEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235935AbiDFPDP (ORCPT
+        with ESMTP id S236187AbiDFPDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:03:15 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C17D30F0E4;
-        Wed,  6 Apr 2022 04:48:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id n6so3626615ejc.13;
-        Wed, 06 Apr 2022 04:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pjR3ZKgCNlG2r3MTFcz+8pEF96poMRdIaSe2ljO7/xk=;
-        b=eYL4/LuqUIxaerOgfa3GApON8QrsWa5AjqMB1adkTFYzk4SvAT1JPOjeNKLba2t+Zn
-         JfQyKbqmAEopHyZI69vxE9fnVkNnMGWMuYaP3UU1mgG0ZHwOmtTWz/oR+IXmtGrH3FnE
-         9idHtS+A0oKDBbwr0d3DsWS8g2wNi7/a+TCLLeA2Q7de6VbTENizuPvydmGz+Ti5olKu
-         NebDcUTxZ87tO5fLYItCwy5sTYAX38TKYKyW83BulP1WHFFMP4XzjDdSVHJa9mlnENZ3
-         m3we0ZjCTHRygkBYQJzyBMXvqVyzCGW8z0fQup1BmqVy+5Lkzzg/+5bb4+dEnn4y9q4e
-         oMgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pjR3ZKgCNlG2r3MTFcz+8pEF96poMRdIaSe2ljO7/xk=;
-        b=3VtH46O3FklSNe1CY99NXOe065j+lsHSz4CmJC9aJY/nmXWfkivROJTF29yDlgucYm
-         QyejY/RrFm2exVNp20TeswED4o5EK7hJ+E+cTXPcN0MK0BU3Kq923iiVioE7DoiPoCOT
-         DiyDzXBwPDXZ4z1+90rrgRyapGzLz+EpT3eE/XwepUE5pj/HTz6FqYNVjFAp/iIkT/jO
-         GpahZuY37lJEyYr7A9RIEbQZ/rnIQl7I/oE/VC9878xIX9Yo3Jhyba56Fs0Wx+Md7CYK
-         WKMNrIc5E6M5Rfv6Bx7pfRPcf3NaK/egurWZwW1qx4h4k8XvyQNr4ma8N65obQrCdE78
-         7QJw==
-X-Gm-Message-State: AOAM531/QllZYH8EB+AvEGNwvOP8I7i/sJvKPyLxheR9OE+ate1Pv+qA
-        WknyHENLEom3VVwsjvWIOm0=
-X-Google-Smtp-Source: ABdhPJyo0WafdMO5+IasWWGJZeUfnt2xy0e4WcgANDB0CW3P+SCtYqf61F6AiNhMSMPZ2Zwx91rqxg==
-X-Received: by 2002:a17:907:1b06:b0:6e7:f58a:9b91 with SMTP id mp6-20020a1709071b0600b006e7f58a9b91mr8070888ejc.291.1649245678783;
-        Wed, 06 Apr 2022 04:47:58 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id k19-20020a1709062a5300b006c75a94c587sm6530560eje.65.2022.04.06.04.47.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 04:47:58 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <220361fd-6375-5874-cb1c-f7c22794f64f@redhat.com>
-Date:   Wed, 6 Apr 2022 13:47:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 078/104] KVM: TDX: Implement interrupt injection
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        Wed, 6 Apr 2022 11:03:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748361E817D;
+        Wed,  6 Apr 2022 04:50:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7944617FF;
+        Wed,  6 Apr 2022 11:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98576C385A3;
+        Wed,  6 Apr 2022 11:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649245701;
+        bh=Eqm4FO9yfmN8qKPSd+0DsUNWznpY+VAjxNHYra7fkmM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Vey/thLylG7lNXXBB4Bh6eXwOZ5KtUaoluhAWSPBTSeyyk0rRS+akzEz+ylI+Q8Vl
+         GTG9p6GQ4R2tb3RfdSy+mYBJLH4uWNCudezLEeRTp6NRuv+uIUViUpeBbnGnmcB3+L
+         u4+Cd+0UI3meT6bp9DJDa6z2dl4ptypybce3M7fFg4UHWwXG02j2iMuqK0k7MDRC+n
+         5lyvMefAPQGLUo5fQjzM11/ftR1elb5rRDYW8/ElqH5VFIr3W0RZX/TT1Q+ER+k7zn
+         0K7eh+kvDXJvdeqtiwXmRSVWTVDXifwXO6SrRVYDuWMrHru/86ageWYPKQJJmV6cjX
+         lrRsxcg3cDuUQ==
+Message-ID: <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
+Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
+ inodes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <776d48b5c88ebf189ffac1eb94ef190bfc7210da.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <776d48b5c88ebf189ffac1eb94ef190bfc7210da.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Date:   Wed, 06 Apr 2022 07:48:19 -0400
+In-Reply-To: <87zgky8n0o.fsf@brahms.olymp>
+References: <20220401133243.1075-1-lhenriques@suse.de>
+         <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
+         <878rsia391.fsf@brahms.olymp>
+         <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
+         <87zgky8n0o.fsf@brahms.olymp>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,30 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please do not duplicate code, for example:
+On Wed, 2022-04-06 at 12:33 +0100, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
+> 
+> > On 4/6/22 6:57 PM, Luís Henriques wrote:
+> > > Xiubo Li <xiubli@redhat.com> writes:
+> > > 
+> > > > On 4/1/22 9:32 PM, Luís Henriques wrote:
+> > > > > When doing DIO on an encrypted node, we need to invalidate the page cache in
+> > > > > the range being written to, otherwise the cache will include invalid data.
+> > > > > 
+> > > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > > > > ---
+> > > > >    fs/ceph/file.c | 11 ++++++++++-
+> > > > >    1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > Changes since v1:
+> > > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> > > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+> > > > > 
+> > > > > Note: I'm not really sure this last change is required, it doesn't really
+> > > > > affect generic/647 result, but seems to be the most correct.
+> > > > > 
+> > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > > > > index 5072570c2203..b2743c342305 100644
+> > > > > --- a/fs/ceph/file.c
+> > > > > +++ b/fs/ceph/file.c
+> > > > > @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+> > > > >    	if (ret < 0)
+> > > > >    		return ret;
+> > > > >    -	ceph_fscache_invalidate(inode, false);
+> > > > > +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+> > > > >    	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> > > > >    					    pos >> PAGE_SHIFT,
+> > > > >    					    (pos + count - 1) >> PAGE_SHIFT);
+> > > > The above has already invalidated the pages, why doesn't it work ?
+> > > I suspect the reason is because later on we loop through the number of
+> > > pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
+> > 
+> > Checked the 'copy_page_from_iter()', it will do the kmap for the pages but will
+> > kunmap them again later. And they shouldn't update the i_mapping if I didn't
+> > miss something important.
+> > 
+> > For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context inplace,
+> > IMO if it needs to map the page and it should also unmap it just like in
+> > 'copy_page_from_iter()'.
+> > 
+> > I thought it possibly be when we need to do RMW, it may will update the
+> > i_mapping when reading contents, but I checked the code didn't find any 
+> > place is doing this. So I am wondering where tha page caches come from ? If that
+> > page caches really from reading the contents, then we should discard it instead
+> > of flushing it back ?
+> > 
+> > BTW, what's the problem without this fixing ? xfstest fails ?
+> 
+> Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
+> also checked that the RMW code was never executed in this test.
+> 
+> But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
+> change the inode->i_mapping. 
+> 
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
->   
-> +void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
-> +{
-> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> +
-> +	pi_clear_on(&tdx->pi_desc);
-> +	memset(tdx->pi_desc.pir, 0, sizeof(tdx->pi_desc.pir));
-> +}
+No, kmap/unmap are all about high memory and 32-bit architectures. Those
+functions are usually no-ops on 64-bit arches.
 
-This is the same as vmx_apicv_post_state_restore.  Please write this like:
+> In my debugging this seemed to be the case
+> for the O_DIRECT path.  That's why I added this extra call here.
+> 
 
-void vt_apicv_post_state_restore(struct kvm_vcpu *vcpu)
-{
-	struct pi_desc *pi = vcpu_to_pi_desc(vcpu);
-	pi_clear_on(pi);
-	memset(pi->pir, 0, sizeof(pi->pir));
-}
+I agree with Xiubo that we really shouldn't need to invalidate multiple
+times.
 
+I guess in this test, we have a DIO write racing with an mmap read
+Probably what's happening is either that we can't invalidate the page
+because it needs to be cleaned, or the mmap read is racing in just after
+the invalidate occurs but before writeback.
 
-Otherwise,
+In any case, it might be interesting to see whether you're getting
+-EBUSY back from the new invalidate_inode_pages2 calls with your patch.
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-
-Paolo
+-- 
+Jeff Layton <jlayton@kernel.org>

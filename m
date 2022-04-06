@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFFF4F6A4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA494F6A63
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiDFTtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S232858AbiDFTvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiDFTso (ORCPT
+        with ESMTP id S232774AbiDFTup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:48:44 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B354330DF6;
-        Wed,  6 Apr 2022 11:34:18 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e2442907a1so3500733fac.8;
-        Wed, 06 Apr 2022 11:34:18 -0700 (PDT)
+        Wed, 6 Apr 2022 15:50:45 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD1C18649C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:34:32 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id h11so4445540ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 11:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HSwp1BDG0k7X/+K+RwJOW/sVCMMxMSEnJISgNBGi2bg=;
+        b=Ys/1WSnGhYSt2OK9wL+F2ZyDI0KN3bD3nkQ7cSEAfHt1sAJ+3HACDKvwFqmgSO0McZ
+         QFScanM5uUJaQB9Dg7NYmvPo2C65E+TWz5N6SYM8r9Roi/wG86Rh7LzBhbgvInT42DFQ
+         7Qn1qPwmokjVsWFL7xBCD7dR5M2pNWfz9LutvoFMBLrdy9yPU0pbuHgbnhyGep2+PxlF
+         B+WXQTlzC15jmupuOPCyOclnMpoFIGqpDpOFln7aOg1ado+Q4UuO8F1YYm+el0+4BD9G
+         8Afv9mb1mWYGKWv/eaktdDgf0tWjnHCB0QK0RS14sBPVGz+3igXdnZum3nr2wGmSxHnv
+         Op4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MwdIaQzbBkp+/5EU9BR9ve1JKS4NpPyKI/2bRfhgI3A=;
-        b=BA8m8LakTUEyA/n2t/pwSuNOe50fI9ZHlTFc/+MQG6tPWAUtsodlSatWMIZ0/k/466
-         zMkrXiNHyyOvhddBDyJoh7P4HdNe95zqZum/4mVdJHJQIXUSKDCf/hQgGSnC6b1fWxFk
-         omCzl97nvWVgUTO3fLS6zyO4gTZxncwFKXgWWTuEAE+jbWlL3f2qOfA5t1jK04Hic8n2
-         jrHJkvN002zIjK0OR4PykCuUaqlz8aJdfyUkkNCtXM4xAzTEBI73jev1S9+Nf8jG2IpN
-         NuXFcdJKWPXPRNBqYNHQIa8pKdNpNi3GVSc9i9Ij0sORmsdpwWZHMhNzYJjozqGQQ1rV
-         +QTQ==
-X-Gm-Message-State: AOAM533IT4TRHPqkIrKN6dNm00B/Z+Lgc0FuFqC4W9gWk5Z5dvEBgVyq
-        NBk0JXXIA03wrHKd2sGyqA==
-X-Google-Smtp-Source: ABdhPJz091hVtxjPl1dTv65qEKLx42amDqNg+LIkiEhUs1vZjalw5jmdtXldZ84sUL4miSebhuT5bQ==
-X-Received: by 2002:a05:6870:f144:b0:da:b3f:2b88 with SMTP id l4-20020a056870f14400b000da0b3f2b88mr4542392oac.295.1649270057566;
-        Wed, 06 Apr 2022 11:34:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w1-20020a056808090100b002da82caced5sm6643535oih.3.2022.04.06.11.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:34:17 -0700 (PDT)
-Received: (nullmailer pid 2552073 invoked by uid 1000);
-        Wed, 06 Apr 2022 18:34:16 -0000
-Date:   Wed, 6 Apr 2022 13:34:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, alexandre.belloni@bootlin.com,
-        devicetree@vger.kernel.org, sre@kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH 3/8] dt-bindings: reset: atmel,at91sam9260-reset: add
- sama7g5 bindings
-Message-ID: <Yk3dKExnPUglpiwb@robh.at.kernel.org>
-References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
- <20220405112724.2760905-4-claudiu.beznea@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HSwp1BDG0k7X/+K+RwJOW/sVCMMxMSEnJISgNBGi2bg=;
+        b=N7PzB23zjc33DdUsb9uHBosKwona8noknznFzxjbSp+6ZodjTCKgrRA7jPNSmm81lC
+         tkBcfNffmh3T4MSUuC/53QxngKpulVsOuad3WZm4FzGNRPezEq2iFwy22BdzaSalfy4x
+         Dlu8rQr7IOcg6wstTYdel5jYf3OWJDFG7xFwnLJoGvf52umhQAsN2Rf1+XTML00vyL5J
+         mJeb2aEUXVMLFXNzJP4NHtF1hq4GzYteJ5CSPxVViEHeLSUm0MsLufb3X/GxysD0VNhJ
+         KIgRAGhmAEXnp+K2917v7NdyvXterBZFQCWIaOxFQPOGKgpeiG3jPpQbS8jnA7sd9xZO
+         8GHw==
+X-Gm-Message-State: AOAM532paex0uAPA6IdGxisHF5+lfI7v0eEg7X+unEuSonFQ6VjXjIr9
+        Q5jL9rfVTkj4VbLn3axJpTu35d16ke4B3XfXhB8wKw==
+X-Google-Smtp-Source: ABdhPJwumCsczWpIy24fNgQlHvwaiW2/ShuvoT5gCcoB1T6IdJSpe3MINoXCfDWffgbKbUzSewBdIR9qz3k8q2Uxfpw=
+X-Received: by 2002:a05:651c:b1e:b0:249:95d3:7832 with SMTP id
+ b30-20020a05651c0b1e00b0024995d37832mr6253661ljr.426.1649270070676; Wed, 06
+ Apr 2022 11:34:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405112724.2760905-4-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220330164306.2376085-1-pgonda@google.com> <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
+ <YkYdlfYM/FWlMqMg@google.com> <CAL715WLhy7EkJCyO7vzak3O8iw8GDRHkPF8aRtDedPXO1vx_Qw@mail.gmail.com>
+ <Yk3bSmQTspjZHUZf@google.com>
+In-Reply-To: <Yk3bSmQTspjZHUZf@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 6 Apr 2022 12:34:19 -0600
+Message-ID: <CAMkAt6obVDW_LFvQzUYw6v7okiNq1KAbUOMoM3bN6zeJUGg6Xw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Apr 2022 14:27:19 +0300, Claudiu Beznea wrote:
-> Add documentation for SAMA7G5 reset controller. Compared with previous
-> versions of reset controllers this one contains support for resetting
-> in SoC devices (e.g. USB PHYs).
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../reset/atmel,at91sam9260-reset.yaml        | 23 +++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
-> 
+On Wed, Apr 6, 2022 at 12:26 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Apr 06, 2022, Mingwei Zhang wrote:
+> > Hi Sean,
+> >
+> > > > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > > > > index 75fa6dd268f0..c2fe89ecdb2d 100644
+> > > > > --- a/arch/x86/kvm/svm/sev.c
+> > > > > +++ b/arch/x86/kvm/svm/sev.c
+> > > > > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+> > > > >                 page_virtual = kmap_atomic(pages[i]);
+> > > > >                 clflush_cache_range(page_virtual, PAGE_SIZE);
+> > > > >                 kunmap_atomic(page_virtual);
+> > > > > +               cond_resched();
+> > > >
+> > > > If you add cond_resched() here, the frequency (once per 4K) might be
+> > > > too high. You may want to do it once per X pages, where X could be
+> > > > something like 1G/4K?
+> > >
+> > > No, every iteration is perfectly ok.  The "cond"itional part means that this will
+> > > reschedule if and only if it actually needs to be rescheduled, e.g. if the task's
+> > > timeslice as expired.  The check for a needed reschedule is cheap, using
+> > > cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a reched
+> > > check prior to enterring the guest.
+> >
+> > Double check on the code again. I think the point is not about flag
+> > checking. Obviously branch prediction could really help. The point I
+> > think is the 'call' to cond_resched(). Depending on the kernel
+> > configuration, cond_resched() may not always be inlined, at least this
+> > is my understanding so far? So if that is true, then it still might
+> > not always be the best to call cond_resched() that often.
+>
+> Eh, compared to the cost of 64 back-to-back CLFLUSHOPTs, the cost of __cond_resched()
+> is peanuts.  Even accounting for the rcu_all_qs() work, it's still dwarfed by the
+> cost of flushing data from the cache.  E.g. based on Agner Fog's wonderful uop
+> latencies[*], the actual flush time for a single page is going to be upwards of
+> 10k cycles, whereas __cond_resched() is going to well under 100 cycles in the happy
+> case of no work.  Even if those throughput numbers are off by an order of magnitude,
+> e.g. CLFLUSHOPT can complete in 15 cycles, that's still ~1k cycles.
+>
+> Peter, don't we also theoretically need cond_resched() in the loops in
+> sev_launch_update_data()?  AFAICT, there's no articifical restriction on the size
+> of the payload, i.e. the kernel is effectively relying on userspace to not update
+> large swaths of memory.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Yea we probably do want to cond_resched() in the for loop inside of
+sev_launch_update_data(). Ithink in  sev_dbg_crypt() userspace could
+request a large number of pages to be decrypted/encrypted for
+debugging but se have a call to sev_pin_memory() in the loop so that
+will have a cond_resded() inside of __get_users_pages(). Or should we
+have a cond_resded() inside of the loop in sev_dbg_crypt() too?
+
+>
+> [*] https://www.agner.org/optimize/instruction_tables.pdf

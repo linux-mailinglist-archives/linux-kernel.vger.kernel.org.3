@@ -2,222 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825314F5BA9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3914F5B54
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345474AbiDFK1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S1347298AbiDFKag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347298AbiDFK0J (ORCPT
+        with ESMTP id S1359351AbiDFK2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:26:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5E41BD9B4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649227733; x=1680763733;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fe1HvuydVZpIx/fapGwC9n83OxyAvhBPFz+zlKxSRM4=;
-  b=iRpTLHvN8SGULHrDwU++9c8XaO63wvy8FVsdixGsBdmlCCSvbBC1Q6Wb
-   X/fslRybmmn7fyFH0uUhXbEayN+9PnEqqUDBeQCdDADYdOGRoJI/Sd+R/
-   81SCwniMDQj5UKUAgCsc7FpcfV9tXpKA3NEBOKBwh7hv/cb8Eu3xXiXWX
-   yZg+Uby9/0mzzzbwj9iusGMXayM5XiMGc2btfKrOy/uMqDFzJowl6Xk2L
-   1WiJUzOIynF8ZwNfFxCZVpyaj+uL5UUyrLmJcHgGWLQwjDLicKK1AXW6F
-   A4LGY9CzI2pAH9zHQPoMfgphm5SjwcEymk6Cj5a6SRhfU3f7Egcwlwtm2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260664301"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="260664301"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 23:48:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="524335040"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 23:48:51 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbzTG-00049N-KP;
-        Wed, 06 Apr 2022 06:48:50 +0000
-Date:   Wed, 6 Apr 2022 14:47:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v2 13/15] drivers/opp/core.c:2252:34:
- error: 'np' undeclared; did you mean 'up'?
-Message-ID: <202204061419.k57I1cIf-lkp@intel.com>
+        Wed, 6 Apr 2022 06:28:42 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120079.outbound.protection.outlook.com [40.107.12.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4262DA4FE
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:52:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QIDeudoKKk4cSH1Fz/KvCOtOqik9ibOjLORblXW31ra0qmNalVKRl6yigOuLE3ylTlgOw69UM8QExaV1/HT86Icg3HrjG+Rvb8e4ccrK8LQO9jsqVpJjsygKeNSds9zW1ldIBzc2nvo+IDn4+U0W4AoMTpVHX2/hi+JkhDbH+KMMxYO0OmSbK/uUc7+xemcz3CeagNLWIEm70J+/gdeV+UpvYj2l6WXAFrScENWN5beQwGNCc1hf4VFecSCpw5zLBjmsTg8zWdblrUuoTYk5UE2A1CKET4jkq0bEMnNW1htAIPg7wVD8li8CEPzQWyBUoLlKSHsaUnpDzeemmariSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s+Sx8qMZ2Xey/Koguy0eiSy0Fr2+G467DgaOcb8fMRM=;
+ b=kj0dKeTDIC+wzaOzaJtN0FfLobAFP2gwKTGSk0Vh8KALXhtSMOlHyxPNDMDv/ORBo1w53GvBMCKSsZ3gZjkp6mh+DAYTOtCOX0ltMDaH8znLM1DOdq0PkkZX+mudIFj9ygY66wEYY4SJco1cmXMSXLVx2RsAUG9XURZ2lRIfuXLsL/cGKaQFIv85azKnmQZbMHyJpYn5ob5sGVZT5uBz5wplLMACod68UYZwAa8R0NPnebtGHcSQbCKQRhqHdNkcWlIL0CtGVQiKdJ6eLL1JHMntlZnN6qWRVTqh5X2qBcBsCyxHU7etfCA6u/gg7X6/gYPVnD+x3Sd1vDe2XIvh7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB3065.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.19; Wed, 6 Apr
+ 2022 06:52:10 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c%7]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 06:52:10 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
+Thread-Topic: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
+Thread-Index: AQHYRndqcBWSpozbLUWMUKe4L7pHjqzidlIAgAACaoA=
+Date:   Wed, 6 Apr 2022 06:52:10 +0000
+Message-ID: <2147ad9f-2844-cef9-e804-e44cb619103e@csgroup.eu>
+References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+ <d6cb3408-49a4-3c35-6ce0-3b35fd88bb9e@linux.ibm.com>
+In-Reply-To: <d6cb3408-49a4-3c35-6ce0-3b35fd88bb9e@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 95b5b462-7a5b-4e0f-4b2b-08da1799f96d
+x-ms-traffictypediagnostic: MRZP264MB3065:EE_
+x-microsoft-antispam-prvs: <MRZP264MB3065618CF1385EFA4F71473AEDE79@MRZP264MB3065.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gqVzsPcdaC3TzTComKBpch4n7Mz+K5UiaHmpQFfTVmWCY67WCrFDjenp5nNsfhTed2/1EC3rLvf47k06d5bP9mPvameyDj0ZoRK8+l0WLdRB4A5H6IYRRmbDcdEmFksynNfsPBJKXLl5FZK7Q04MD2gjQrLx00NfaeN15gmKANnQBOG6c+AaxgaXNlQCU/wickUDeDmaqNsUdB/gZqTuiPkn1104McGyXsHMb169xcioh1YUlm0+Lb0k61ZHI3wyP4OUq/nY3pBCAb8PE++yBLIPrT3xwheuKlbPvo0CeJa9FThgaA4hMPhvR6StEefde6gqHlB1KL2OawmJ6b19yHq64E7Z6q8wugLAh0fUx122sU7YMDy0dwBj29V+pDTlS1jcoRpCGrVI44sMp0EFBh4e30GJCPA2pdDbPWnE5RQUG7+0Q68ydRsANdYg4SaD3ZTx2EtIOrjuo2MWlrGfWYrFMvwFp69knRLh74nvDGX9ZR8sa8+ow18kZr+y07ZXPUH5HWH97LDeAtoGQyla4EkaiTHRW9gnfUjL+qZAOy1QJm8UU/pQBwgcnYYJ28f6EEfBHC8PWP7NtWFLxryEkoCae8K+EIobuF9j7uDlSq4A4LNDV2DWdNn1+1z1z7ap6iBJvRGsmE82h8FwHVGVQDrrBzKKT2bwdJKJ0lGcLscCNtoxzaPwTIz4z42XZlwvu1cIPjqNkD5Uh0S90AYXmDvWEq4Q0bHj8XzYz3eDXysPQddsjnU05J2Usi57IqZQg8IAVUB3WREro2AJw0Riww==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(71200400001)(83380400001)(66574015)(64756008)(66446008)(91956017)(2616005)(4326008)(66476007)(31686004)(508600001)(66946007)(8676002)(66556008)(76116006)(122000001)(2906002)(8936002)(53546011)(6506007)(38100700002)(54906003)(6486002)(6512007)(86362001)(110136005)(31696002)(44832011)(316002)(5660300002)(4744005)(38070700005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NVB4Q2U4QXh1RVZWb1V1L2VjOHF3QXhWWWhtM2dxM1FrMEJrVk5aL0FhUitn?=
+ =?utf-8?B?ZFFMR3djc3RRZitWNTNQc0FaQ3VzV3VrQitMU1JvNm50bGpUZGVwM2EyZ245?=
+ =?utf-8?B?VXRVUUpZMjVBczRxMGQxTzZSdHZ2NWZ3Sld6cGEyOGd5dkxuaDhDcFQ0SnhG?=
+ =?utf-8?B?VDJQTVJFYzdqYmdxaXFlUFQ0S0M2bWJ3dUlVWjRlaThBZjJrQi82RFV5aUV1?=
+ =?utf-8?B?WkRuc3BZMjZOYzVrWDdnajd4NEdRRVRaODVXWlZacEk0dE9hbXFJSEJMRGN6?=
+ =?utf-8?B?bnRIVGVpOHo4ck0ybkQ4N01LYktSRFNIeFFhdjJ3TUphTXpORThSZjd2YnRj?=
+ =?utf-8?B?NE1mVll3YnB4V0tqblVQeUtZS0FUZTdwT3Y3QVoycnpIRnpNTG1EaDRtblNs?=
+ =?utf-8?B?TGdiamJXQXlHaVkwNDJRdlZpWVRTSTVwenZqTW83THFuRWRKYzc5WVlLS3VT?=
+ =?utf-8?B?SDFZQ3JMYWhlVXNseFpOZ05CeisyVEsxMThJZnE5blhoUVlzcHR2ZkFCb09B?=
+ =?utf-8?B?VDhkZ21NNHpUYmF4NnYwNGhNZ0YxSWlsbGMwOTgxZkc2SjgrdmFyT25vOHVH?=
+ =?utf-8?B?bWJjSUN2YjdXMHBadHdGZEpQUUZTaTVVUlBrU3BBM0s4SDRxK2RjNnBYells?=
+ =?utf-8?B?ZlBIMDhiQlp5TlhUZ2Q3K2FSUitkbVhjVU5LOVRyZEtTdUxaRkJxdEN1RmNN?=
+ =?utf-8?B?MW5qY01PVzEzaUtraUZ2dE1hU3NTSGRmNzQ3TVlpNkNUK2pEV25SUnVVYytm?=
+ =?utf-8?B?YkJPODJ1bFlrNTdLMTJuUTE2VWF6dEl1bUFUNmdaUzc1WW9aN2VyUnoxVFFX?=
+ =?utf-8?B?cWpzWjZ1d0JkdkNwc01TOFlSbTFBQW5yRktYbjJaZXZ5RnhLSlVyQzV2Skp3?=
+ =?utf-8?B?eXBmYTZZWEtSUUpVbm1Hc0s3d0ZvejBicHV6Y0xtQjVRb0tjUE5DTUNYVHpN?=
+ =?utf-8?B?ampWTzM5bGpSYTJCblN3bUxKbEtZOGVlZk5XMFdZRWFBRWRJRCtwVnl4Tmlv?=
+ =?utf-8?B?bmFNTnlPTDhHd0VNNlR2dVJpQ1lFM1NtcS9oUW9WWnlRNkp5dFlTNVFLbDZ6?=
+ =?utf-8?B?Rk5wMGNOc0VzYndlY21RMzFxeHVuYjZzaHhPenFsUmdjM1BHMlJteFp2S2xq?=
+ =?utf-8?B?aGc4QkpuMkdnTkhJd3FQbkUyNHdZQWFVMGRMbldGVGs2Vk5lWlVPeFNlcE1v?=
+ =?utf-8?B?VmFyUEFkTEd3UGNtN2lhUnZwbzBwL0ExM0hXdGFlUWlvdnR3bjBOaGxLUkZT?=
+ =?utf-8?B?ZFh3OWp5eTlwK3NsSElDa0hTMWdRMjJqOXpCdkdVdml6bXA5d21TSjZRMW1J?=
+ =?utf-8?B?d3RGRmtmbUdPVE43WjE5MHJ1NUpOS2p6YmgvcFZ2L09oVEpTLzNjMEEreVB0?=
+ =?utf-8?B?VUI0N0h3aEJwZU4waWNuU3hWdElWOWNXT1hoeHdNQlhUZEJ0MEw0alkzZ2V0?=
+ =?utf-8?B?U1dlMGo2aGdqcVNNOVB0R0EzRVZOWWJ6c0paTmUxbDdVVlMxQkd6WDdIV2x6?=
+ =?utf-8?B?aTFMOEdyMTErTDJWSldRekFqQkFNbSt6V1gwS2NtU1d6QUhaNXpGR1Yrbm40?=
+ =?utf-8?B?S1pDZTVUR2RLT3VkajlGUmZPRW9jcGppY1RvMWMrUTVTbVJzelFsd0VPdzBR?=
+ =?utf-8?B?NWc5V0JSbTYwN2djeHBIbFZPZGp2NTByd2FIb1dacmQ4aEhYRnRRV1VFV3lB?=
+ =?utf-8?B?a2JhOElmZFg1eHdFUHU0WUQ1bk9lR1kwd1poZ0xHblMwdHV1VzUzeHMybnVr?=
+ =?utf-8?B?aEpORFVnblRwdTI0YThFdjlzdGZpdm00TlNuY092YWF6L2ZkVFM0a0IwRVEr?=
+ =?utf-8?B?QkJibi9ONzZ5WmJGMlFvYmNuSUNjNjRzc042SVpHNjhRRjVJRGJBeVVtQkVx?=
+ =?utf-8?B?U1VaRklZZGJRaCtialZ4ZUY2ZkUrZjkvRjJEWFRaQ1hhL2NlaXZET2dKM2k0?=
+ =?utf-8?B?MXVCbFo4Qi9ZMkR5cHFmeDgvQWFBQmJvN2VKeUF3eUZuelg1cjJjeXRGV3Zj?=
+ =?utf-8?B?bU5wL1dBTjRtWC9jWWtZckNUWlMyWTU0U2RXSVhZRnF6c2E0WDJkYkJyVVdl?=
+ =?utf-8?B?Q3BEUmFPV0NzSzlzV1lnTGdJUERXZHh6dWNtS0IyaUJIL0tnUnVOTTBqR0p6?=
+ =?utf-8?B?ejJYaHAzZWU3dllpNVZwU0NmbGtwRXF5UTVwRTBSMk5RM0Q1VDAwZlpYN2N3?=
+ =?utf-8?B?ZXAvenJzQ3FLVVJDM0g2Q0tQaG1TZ2hDdlRTcE9CYVhxMCtoUjZiZTZsNlIw?=
+ =?utf-8?B?dW54SFB4ZW92V1pZcmVjQ0lTN2I3c3VBYldrUUVSUXRVMFNtSEN6cUNMeFho?=
+ =?utf-8?B?K1VzWVpOZUZORFl1aDJOS2pZa2ppa3ltNEJGWDloaWpxM04rb21LT3ZtOEZV?=
+ =?utf-8?Q?S8JdcB+Yee7gX5HpvQqByHxcXnRQwXM6KIoe0?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5F1CF9EE8B6B6A498A2CBD1E0A4EF1DB@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95b5b462-7a5b-4e0f-4b2b-08da1799f96d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2022 06:52:10.8158
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Vl8VzMdRQ/q/G53DmcBWP/NiJulY4veL35clTEeTOpesCw+YVUpplDLyADCNJZq13KgTqUJhtS7v9HuOWFLKbimLycRYUQWcC2fXlGVoGi4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB3065
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
-head:   fff8a3e9335a828deb502bbcf983c4316d27c74e
-commit: 92622915a3dd2035b67cef4ef60bea1f941b3876 [13/15] PM wip
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220406/202204061419.k57I1cIf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/krzk/linux/commit/92622915a3dd2035b67cef4ef60bea1f941b3876
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
-        git checkout 92622915a3dd2035b67cef4ef60bea1f941b3876
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/opp/core.c: In function 'dev_pm_opp_set_clkname':
-   drivers/opp/core.c:2185:16: error: implicit declaration of function 'dev_pm_opp_set_clknames'; did you mean 'dev_pm_opp_set_clkname'? [-Werror=implicit-function-declaration]
-    2185 |         return dev_pm_opp_set_clknames(dev, &name, 1);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-         |                dev_pm_opp_set_clkname
-   drivers/opp/core.c:2185:16: warning: returning 'int' from a function with return type 'struct opp_table *' makes pointer from integer without a cast [-Wint-conversion]
-    2185 |         return dev_pm_opp_set_clknames(dev, &name, 1);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c: In function 'dev_pm_opp_put_clkname':
-   drivers/opp/core.c:2195:16: error: implicit declaration of function 'dev_pm_opp_put_clknames'; did you mean 'dev_pm_opp_put_clkname'? [-Werror=implicit-function-declaration]
-    2195 |         return dev_pm_opp_put_clknames(opp_table);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-         |                dev_pm_opp_put_clkname
-   drivers/opp/core.c:2195:16: error: 'return' with a value, in function returning void [-Werror=return-type]
-    2195 |         return dev_pm_opp_put_clknames(opp_table);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c:2193:6: note: declared here
-    2193 | void dev_pm_opp_put_clkname(struct opp_table *opp_table)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c: At top level:
-   drivers/opp/core.c:2204:19: warning: no previous prototype for 'dev_pm_opp_set_clknames' [-Wmissing-prototypes]
-    2204 | struct opp_table *dev_pm_opp_set_clknames(struct device *dev,
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c:2204:19: error: conflicting types for 'dev_pm_opp_set_clknames'; have 'struct opp_table *(struct device *, const char * const*, unsigned int)'
-   drivers/opp/core.c:2185:16: note: previous implicit declaration of 'dev_pm_opp_set_clknames' with type 'int()'
-    2185 |         return dev_pm_opp_set_clknames(dev, &name, 1);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/kernel.h:29,
-                    from include/linux/clk.h:13,
-                    from drivers/opp/core.c:13:
-   drivers/opp/core.c: In function 'dev_pm_opp_set_clknames':
->> drivers/opp/core.c:2252:34: error: 'np' undeclared (first use in this function); did you mean 'up'?
-    2252 |                of_node_full_name(np), count, opp_table->clk_count);
-         |                                  ^~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:489:9: note: in expansion of macro 'printk'
-     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/opp/core.c:2251:9: note: in expansion of macro 'pr_err'
-    2251 |         pr_err("AAA %s:%d - read %s - %d clocks (count %d)\n", __func__, __LINE__,
-         |         ^~~~~~
-   drivers/opp/core.c:2252:34: note: each undeclared identifier is reported only once for each function it appears in
-    2252 |                of_node_full_name(np), count, opp_table->clk_count);
-         |                                  ^~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:489:9: note: in expansion of macro 'printk'
-     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/opp/core.c:2251:9: note: in expansion of macro 'pr_err'
-    2251 |         pr_err("AAA %s:%d - read %s - %d clocks (count %d)\n", __func__, __LINE__,
-         |         ^~~~~~
-   drivers/opp/core.c: At top level:
-   drivers/opp/core.c:2271:6: warning: no previous prototype for 'dev_pm_opp_put_clknames' [-Wmissing-prototypes]
-    2271 | void dev_pm_opp_put_clknames(struct opp_table *opp_table)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c:2271:6: warning: conflicting types for 'dev_pm_opp_put_clknames'; have 'void(struct opp_table *)'
-   drivers/opp/core.c:2195:16: note: previous implicit declaration of 'dev_pm_opp_put_clknames' with type 'void(struct opp_table *)'
-    2195 |         return dev_pm_opp_put_clknames(opp_table);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +2252 drivers/opp/core.c
-
-  2203	
-  2204	struct opp_table *dev_pm_opp_set_clknames(struct device *dev,
-  2205						  const char * const names[],
-  2206						  unsigned int count)
-  2207	{
-  2208		struct opp_table *opp_table;
-  2209		struct clk *clk;
-  2210		int ret, i;
-  2211	
-  2212		opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_2);
-  2213		if (IS_ERR(opp_table))
-  2214			return opp_table;
-  2215	
-  2216		/* This should be called before OPPs are initialized */
-  2217		if (WARN_ON(!list_empty(&opp_table->opp_list))) {
-  2218			ret = -EBUSY;
-  2219			goto err;
-  2220		}
-  2221	
-  2222		/* clk shouldn't be initialized at this point */
-  2223		if (WARN_ON(opp_table->clks)) {
-  2224			ret = -EBUSY;
-  2225			goto err;
-  2226		}
-  2227	
-  2228		if (!names) {
-  2229			
-  2230		}
-  2231		opp_table->clks = kmalloc_array(count, sizeof(*opp_table->clks),
-  2232						GFP_KERNEL);
-  2233		if (!opp_table->clks) {
-  2234			ret = -ENOMEM;
-  2235			goto err;
-  2236		}
-  2237	
-  2238		for (i = 0; i < count; i++) {
-  2239			clk = clk_get(dev, names[i]);
-  2240			if (IS_ERR(clk)) {
-  2241				ret =  dev_err_probe(dev, PTR_ERR(clk),
-  2242						     "%s: Couldn't find clock %s\n",
-  2243						     __func__, names[i]);
-  2244				goto free_clks;
-  2245			}
-  2246			pr_err("AAA getting clock %s=%px\n", names[i], clk);
-  2247	
-  2248			opp_table->clks[i] = clk;
-  2249		}
-  2250	
-  2251		pr_err("AAA %s:%d - read %s - %d clocks (count %d)\n", __func__, __LINE__,
-> 2252		       of_node_full_name(np), count, opp_table->clk_count);
-  2253		opp_table->clk_count = count;
-  2254	
-  2255		return opp_table;
-  2256	
-  2257	free_clks:
-  2258		while (i != 0)
-  2259			clk_put(opp_table->clks[--i]);
-  2260	
-  2261		kfree(opp_table->clks);
-  2262		opp_table->clks = NULL;
-  2263		opp_table->clk_count = -1;
-  2264	err:
-  2265		dev_pm_opp_put_opp_table(opp_table);
-  2266	
-  2267		return ERR_PTR(ret);
-  2268	}
-  2269	EXPORT_SYMBOL_GPL(dev_pm_opp_set_clknames);
-  2270	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+DQoNCkxlIDA2LzA0LzIwMjIgw6AgMDg6NDMsIEFuZHJldyBEb25uZWxsYW4gYSDDqWNyaXTCoDoN
+Cj4gT24gMi80LzIyIDIwOjUyLCBDaHJpc3RvcGhlIExlcm95IHdyb3RlOg0KPj4gcG93ZXJwYydz
+IGFzbS9wcm9tLmggYnJpbmdzIHNvbWUgaGVhZGVycyB0aGF0IGl0IGRvZXNuJ3QNCj4+IG5lZWQg
+aXRzZWxmLg0KPj4NCj4+IEluIG9yZGVyIHRvIGNsZWFuIGl0IHVwLCBmaXJzdCBhZGQgbWlzc2lu
+ZyBoZWFkZXJzIGluDQo+PiB1c2VycyBvZiBhc20vcHJvbS5oDQo+Pg0KPj4gU2lnbmVkLW9mZi1i
+eTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPiANCj4g
+VW50ZXN0ZWQgYmVjYXVzZSBJIGRvbid0IGhhdmUgeW91ciBhY3R1YWwgcGF0Y2ggdG8gY2hhbmdl
+IHByb20uaCwgYnV0IA0KPiBub3RoaW5nIGhlcmUgbG9va3MgY29uY2VybmluZy4NCg0KWWVzIEkn
+bGwgc2VuZCB0aGUgcGF0Y2ggdG8gY2xlYW51cCBwcm9tLmggaW4gYSBmdXR1cmUgY3ljbGUsIG9u
+Y2UgYWxsIA0KcHJlcGFyYXRpb24gcGF0Y2hlcyBhcmUgbWVyZ2VkIGJ5IGFsbCBzdWJzeXN0ZW1z
+IG1haW50YWluZXJzLg0KDQo+IA0KPiBBY2tlZC1ieTogQW5kcmV3IERvbm5lbGxhbiA8YWpkQGxp
+bnV4LmlibS5jb20+DQoNClRoYW5rcy4gQ2FuIHlvdSB0YWtlIHRoZSBwYXRjaCB0aHJvdWdoIHlv
+dXIgdHJlZSA/DQoNCkNocmlzdG9waGU=

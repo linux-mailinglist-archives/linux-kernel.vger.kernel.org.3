@@ -2,103 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BC34F6E28
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B694F6E31
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbiDFXEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S237520AbiDFXFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbiDFXEr (ORCPT
+        with ESMTP id S235387AbiDFXE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:04:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4FAAC066;
-        Wed,  6 Apr 2022 16:02:49 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id n9so3294575plc.4;
-        Wed, 06 Apr 2022 16:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=of84ggpToYZhGQ1nZc9dGJOUUyvolterQrxSu9zb1EA=;
-        b=iOpdDefhnXGTy87N1C1gVfpAm5QdywJ/5ovEZVjjyjwH6MLaSUq6+K5005RcZ96Nsh
-         EYExtp0yr/+1k+7hpOTg/nS4JgSp3Cv3P0buIhCY21LFInv5jTbNdR61iaOFhgM+Acsz
-         JAKK7V2Eyt5MPxxapPubY/TTQeKYHkTF9z8BDMBhQjixuN3LFzXXSfESIwCRC3kC57pg
-         BQF5AaLjRiZOFU4haSajhiNdqmf8cxbmU08nOadjoknQjq8hl12FTZIbLlHZ5NEXj6lm
-         JQI8wEjD8tuhqGjagMfyGg9tvNzzCiUwsmbRFEAHTQJ+J9Iy6VUoYr28CtZ1oR36MVx2
-         PwHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=of84ggpToYZhGQ1nZc9dGJOUUyvolterQrxSu9zb1EA=;
-        b=XBDSy7m+PUFdqrdIpOuv2W7XOB1Auw/4/5ub8x3X0pccRC/NPWcUXbREIF03JEuLiG
-         8GhQmv0UoTDd1reB0nhbPJ03PVKSXDjGaXptSN0sjHUPC1cK5l/OoLZVLZH2vCX/a5Wb
-         qoVo9IJxbbPDCROUQSPZpSJeI5hX8eSp2WLvdq+IEGsVikklwrcDs7AwbyMdwZzCcUK+
-         eot9XiPKIKKSSsU+Wim32eBM39WlzYuaCLzTJiuYcatLTtqNWJ93iFecZOhMMmr/IT+a
-         fzQ8X6S6nxHuJK8/F7/pFevCoxDbAh25cZCE9hVEyzRbqfON9Ur/Xc/E8oAcKmnFeeSB
-         EkMw==
-X-Gm-Message-State: AOAM531ZcSdcGjOU85rIYV9qKN+o1Zp5I26qKB2Lrbivmi9jqbDylyHU
-        awVinC2pbDyr3SPlG5nXvF4=
-X-Google-Smtp-Source: ABdhPJzlxb1AnRNf+mM1KPrcoE9icfIDw5dAGfHnW32hxRIWRI8366eeoLHApMabeljUHyBc4dAGzg==
-X-Received: by 2002:a17:90a:3e0e:b0:1c7:ca0e:a11 with SMTP id j14-20020a17090a3e0e00b001c7ca0e0a11mr12497816pjc.19.1649286169325;
-        Wed, 06 Apr 2022 16:02:49 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x24-20020aa79ad8000000b004fde026f4b2sm16603940pfp.199.2022.04.06.16.02.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 16:02:48 -0700 (PDT)
-Message-ID: <ef1ae390-d3e6-e442-5f5e-16f411c3ad30@gmail.com>
-Date:   Wed, 6 Apr 2022 16:02:44 -0700
+        Wed, 6 Apr 2022 19:04:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3031810F6E0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649286180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DdY7fXraB+kYCaafZemuyrgRrpIvDIqLb0inRFdnagc=;
+        b=iiWbs/nZEuGn/ITVG27UsBYMzG0n6lLVCxGgw7axdmaEOiSBHl/DeT7UHArmqCIJVqzBu7
+        q4hQA1dO+TYtZRF1ibMhn2RzksCEOGqbVkrsJk7TeuA+JkpeBUbq5CA1epWMX92mcsGEJz
+        m2KP2Nb0wgO9AjTYg1b/NjqFiKJVPQ4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-53uIWRzFO6qrdoNzavT4tw-1; Wed, 06 Apr 2022 19:02:57 -0400
+X-MC-Unique: 53uIWRzFO6qrdoNzavT4tw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3F6D1C05ED9;
+        Wed,  6 Apr 2022 23:02:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E54E145BA41;
+        Wed,  6 Apr 2022 23:02:48 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH 01/14] cifs: Add some helper functions
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        linux-cifs@vger.kernel.org, dhowells@redhat.com,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@redhat.com>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Date:   Thu, 07 Apr 2022 00:02:45 +0100
+Message-ID: <164928616583.457102.15157033997163988344.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk>
+References: <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220406133013.264188813@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220406133013.264188813@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 06:43, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.110 release.
-> There are 597 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.110-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Add some helper functions to manipulate the folio marks by iterating
+through a list of folios held in an xarray rather than using a page list.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <sfrench@samba.org>
+cc: Shyam Prasad N <nspmangalore@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: linux-cifs@vger.kernel.org
+---
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+ fs/cifs/cifsfs.h  |    3 ++
+ fs/cifs/cifssmb.c |   85 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+
+diff --git a/fs/cifs/cifsfs.h b/fs/cifs/cifsfs.h
+index 15a5c5db038b..1c77bbc0815f 100644
+--- a/fs/cifs/cifsfs.h
++++ b/fs/cifs/cifsfs.h
+@@ -110,6 +110,9 @@ extern int cifs_file_strict_mmap(struct file * , struct vm_area_struct *);
+ extern const struct file_operations cifs_dir_ops;
+ extern int cifs_dir_open(struct inode *inode, struct file *file);
+ extern int cifs_readdir(struct file *file, struct dir_context *ctx);
++extern void cifs_pages_written_back(struct inode *inode, loff_t start, unsigned int len);
++extern void cifs_pages_write_failed(struct inode *inode, loff_t start, unsigned int len);
++extern void cifs_pages_write_redirty(struct inode *inode, loff_t start, unsigned int len);
+ 
+ /* Functions related to dir entries */
+ extern const struct dentry_operations cifs_dentry_ops;
+diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
+index 47e927c4ff8d..88e2de74f74f 100644
+--- a/fs/cifs/cifssmb.c
++++ b/fs/cifs/cifssmb.c
+@@ -27,6 +27,7 @@
+ #include "cifsglob.h"
+ #include "cifsacl.h"
+ #include "cifsproto.h"
++#include "cifsfs.h"
+ #include "cifs_unicode.h"
+ #include "cifs_debug.h"
+ #include "smb2proto.h"
+@@ -1928,6 +1929,90 @@ cifs_writedata_release(struct kref *refcount)
+ 	kfree(wdata);
+ }
+ 
++/*
++ * Completion of write to server.
++ */
++void cifs_pages_written_back(struct inode *inode, loff_t start, unsigned int len)
++{
++	struct address_space *mapping = inode->i_mapping;
++	struct folio *folio;
++	pgoff_t end;
++
++	XA_STATE(xas, &mapping->i_pages, start / PAGE_SIZE);
++
++	rcu_read_lock();
++
++	end = (start + len - 1) / PAGE_SIZE;
++	xas_for_each(&xas, folio, end) {
++		if (!folio_test_writeback(folio)) {
++			pr_err("bad %x @%llx page %lx %lx\n",
++			       len, start, folio_index(folio), end);
++			BUG();
++		}
++
++		folio_detach_private(folio);
++		folio_end_writeback(folio);
++	}
++
++	rcu_read_unlock();
++}
++
++/*
++ * Failure of write to server.
++ */
++void cifs_pages_write_failed(struct inode *inode, loff_t start, unsigned int len)
++{
++	struct address_space *mapping = inode->i_mapping;
++	struct folio *folio;
++	pgoff_t end;
++
++	XA_STATE(xas, &mapping->i_pages, start / PAGE_SIZE);
++
++	rcu_read_lock();
++
++	end = (start + len - 1) / PAGE_SIZE;
++	xas_for_each(&xas, folio, end) {
++		if (!folio_test_writeback(folio)) {
++			pr_err("bad %x @%llx page %lx %lx\n",
++			       len, start, folio_index(folio), end);
++			BUG();
++		}
++
++		folio_set_error(folio);
++		folio_end_writeback(folio);
++	}
++
++	rcu_read_unlock();
++}
++
++/*
++ * Redirty pages after a temporary failure.
++ */
++void cifs_pages_write_redirty(struct inode *inode, loff_t start, unsigned int len)
++{
++	struct address_space *mapping = inode->i_mapping;
++	struct folio *folio;
++	pgoff_t end;
++
++	XA_STATE(xas, &mapping->i_pages, start / PAGE_SIZE);
++
++	rcu_read_lock();
++
++	end = (start + len - 1) / PAGE_SIZE;
++	xas_for_each(&xas, folio, end) {
++		if (!folio_test_writeback(folio)) {
++			pr_err("bad %x @%llx page %lx %lx\n",
++			       len, start, folio_index(folio), end);
++			BUG();
++		}
++
++		filemap_dirty_folio(folio->mapping, folio);
++		folio_end_writeback(folio);
++	}
++
++	rcu_read_unlock();
++}
++
+ /*
+  * Write failed with a retryable error. Resend the write request. It's also
+  * possible that the page was redirtied so re-clean the page.
+
+

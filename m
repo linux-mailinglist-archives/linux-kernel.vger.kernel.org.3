@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19004F5F05
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D134F5F79
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233090AbiDFNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S232994AbiDFNX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiDFNWN (ORCPT
+        with ESMTP id S233159AbiDFNWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:22:13 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD649DC47
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:11:02 -0700 (PDT)
+        Wed, 6 Apr 2022 09:22:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8DD33D0D8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649239862; x=1680775862;
+  t=1649239873; x=1680775873;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=Csi4O2nlSqUNejwpPTBdz5GRkdB1SE/vCWHLcsz0Tqg=;
-  b=KlI0rUAzXtXb97TIf6nB6BV9B28WNxPtktP5RgBXa//mmOSWCrX/ghk/
-   rdLGXO6EY8lnQzqnJXk4QnIqfOeDzngFohIiyKw/0W7Dz9FjPzJV6TjWJ
-   C+Jtf9yxY5BNN3JWePInycIDOV5X6SBXtmrG3wfKcs70HGxL5cC+K5wMy
-   73YJSjUsJMBfli/i0XffA2PPFbnqlDkKEy2NfyIsGCa1Ht4TN0NG2NVIO
-   Vp4B1NwWhKdF9ed1K7JAlItgvdUAhd8O1lf5nBFsfHXD+fOYX+VOT1dcG
-   TdclUCw2JJJtgbruc/DZM5zfEJj7jB739Oj3UnfUFUcQApEmmPkHyafJy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="285972324"
+  bh=Ca8ZSE276JC1CDf3dzhMRbCVn79yuby2FCsfTwD1DuI=;
+  b=SEHsBHxV/unQ8J5lVWYbcYy+dPEYZwlAlNstVOjsYnboBedGn1Mwr7Tz
+   KgYIzX7oqZIgoU6UTym12pohSZVwxXpE1SyryrTwHv23idFlHjQzKgnhH
+   AtwZ/5sOURBKoOFHbj+o7z70UrkqsPHTSsDrD53xOHQNSnsfy2jeVGM9y
+   FZuuyF0ehrN6RKgigYuKr6Ndv4m6PqQb3yjv82fv9zzDQ9IjVt5sOmNjP
+   wSXofqQ8blfoWbasstWPV1DfPE5huHCbr/lwPNxeAZCQGbtEjWsSLVNDC
+   AiifpDvenoOnTAHk+KjN9E+sg+8+udu+KptzyDvdfeTCFx1s3BNWBWWyq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240938004"
 X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="285972324"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:07:59 -0700
+   d="scan'208";a="240938004"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:07:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="524405883"
+   d="scan'208";a="588310392"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 03:07:57 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 Apr 2022 03:07:57 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nc2Zx-0004Ic-6k;
+        id 1nc2Zx-0004IZ-6J;
         Wed, 06 Apr 2022 10:07:57 +0000
-Date:   Wed, 06 Apr 2022 18:07:34 +0800
+Date:   Wed, 06 Apr 2022 18:07:39 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- 0205f8a738ab9e62d849e88e543cfa6ce4c13163
-Message-ID: <624d6666.zWBztTsw4YSrgtzO%lkp@intel.com>
+Subject: [tip:x86/misc] BUILD SUCCESS
+ b86eb74098a92afd789da02699b4b0dd3f73b889
+Message-ID: <624d666b.N/M6qqNsAMgVQGfF%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: 0205f8a738ab9e62d849e88e543cfa6ce4c13163  x86/speculation/srbds: Do not try to turn mitigation off when not supported
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
+branch HEAD: b86eb74098a92afd789da02699b4b0dd3f73b889  x86/delay: Fix the wrong asm constraint in delay_loop()
 
 elapsed time: 733m
 
-configs tested: 141
+configs tested: 144
 configs skipped: 5
 
 The following configs have been built successfully.
@@ -171,6 +170,9 @@ powerpc                          allmodconfig
 x86_64                        randconfig-a006
 x86_64                        randconfig-a004
 x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
 i386                          randconfig-a012
 i386                          randconfig-a014
 i386                          randconfig-a016

@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3D14F6681
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA7C4F664A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238153AbiDFQzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S238239AbiDFQ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238316AbiDFQzI (ORCPT
+        with ESMTP id S238197AbiDFQ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:55:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7C447DE3D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 07:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649256939;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=edxkcn/vXTQrPZmEvbrycB6QtSNdKCqqu4nikxfDLOU=;
-        b=bUznwvLNFzkvun21+iJsvwufNwztAybzUlGXCyb3R5yXhzpx2gANX2tzOmpkHShidmuGc1
-        XPhr9TCAF15rPZyF+THXW4+Ec2WekaYOs4I5/aDboU9l5nb86F4hPQBYBCrpDnKgSowUPK
-        QCDu8JWzQgHbrG8qg7gfaz7a/u5xWz8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-yUseNoLDNbGLCUaotm0_tg-1; Wed, 06 Apr 2022 10:55:38 -0400
-X-MC-Unique: yUseNoLDNbGLCUaotm0_tg-1
-Received: by mail-ed1-f69.google.com with SMTP id w8-20020a50d788000000b00418e6810364so1347834edi.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 07:55:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=edxkcn/vXTQrPZmEvbrycB6QtSNdKCqqu4nikxfDLOU=;
-        b=WDhxS34PU7fUc64SilTMzDQ0OFI4noCaDUjbvW/sjLux11EUvZaP0OIwIve2KXuNVW
-         wCbjyJJIQ+9Rdgt3dsIw7hcXksiEMMde3jBXVtT68Ivc/5S5XSJ7lIytum38pxy/Y8ck
-         /sZyUto7fwLk9fFvV8W0TaaYiIThsTv+hY7Vitcj6E4XEIrfjxFnz2woBQLC5+n4lUqN
-         hqmjzJa9zF+fT0TiAtQRI1kYs38kgO9xtTswjebkH2U9AOwX3LZJ2OCaJtURAndpHFaQ
-         RtL50ZWfCiw9/r20nvqwzDPaN5BhjB+jh3E5YYBfyTNUAVmGw3rCwkL0X6wvK7ax8qOM
-         FXZg==
-X-Gm-Message-State: AOAM530ZA10Gb4IoMGgtf7ZwKvCUpZuKWPIpXJtqHC2eCRrOmwS2bzQg
-        bNbR0M5bOe3jawPLzfa9VYOghr8zsEBMBJeX97hfNejlYjb8G5oggqcYIcBMwqfmEN5Ow241XZ0
-        y8cj7GmUPL01sXpJ3173HNdWiLB3E2KvbCAEG43ge
-X-Received: by 2002:a17:907:60cf:b0:6db:f0a6:74af with SMTP id hv15-20020a17090760cf00b006dbf0a674afmr8456727ejc.317.1649256937568;
-        Wed, 06 Apr 2022 07:55:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy44spcu/fjaFebRMomDblr3Vf4LhpM4BDNXoOgeTB1qaTeaumXtn/ABpPvx8Ki5uzAU6FFObc99m5q+zNA0lM=
-X-Received: by 2002:a17:907:60cf:b0:6db:f0a6:74af with SMTP id
- hv15-20020a17090760cf00b006dbf0a674afmr8456713ejc.317.1649256937399; Wed, 06
- Apr 2022 07:55:37 -0700 (PDT)
+        Wed, 6 Apr 2022 12:56:21 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993F3169B1E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 07:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B10soQAROjAGizcB6m2pLuc7Finz9LgnWyDNUbVwfpU=; b=s8u2iS/ajJ1VZ9L7k+uht6nJDO
+        SwmRpLob6jYtHNIkDhCMhqnuoURinLawIE2e0DjSoVXDo8ZWiOfJ3Nh0lZHZBcNOflk6u/D6zUhoX
+        bO0/lVcCBbrlUO446gLWOdEiZTi28yYI4GjA20LhHoqdXfdGSeeV3GcYM6y1+orn2JtGLz6L1PAvC
+        BWKxhNIVp2dVgBFSPeWpQAbKEZJDU1viVyBqZJGjwZ3z18eBuMJDl+euvHe3IywGjOiL7RiZIbBaf
+        8Lnr/7Vin+8c6q4lzklSTzloqHiy1M0XPhmEm1PPE4kh/JgKC7PhQ58OE/gWRCQkjAJvHvyFYBkRy
+        0u6m2nnw==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nc73U-003AgN-Io; Wed, 06 Apr 2022 14:54:44 +0000
+Date:   Wed, 6 Apr 2022 14:54:44 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 1/8] kernfs: Introduce interface to access
+ global kernfs_open_file_mutex.
+Message-ID: <Yk2ptLIKdpvgL3QY@zeniv-ca.linux.org.uk>
+References: <20220317072612.163143-1-imran.f.khan@oracle.com>
+ <20220317072612.163143-2-imran.f.khan@oracle.com>
+ <YjOpedPDj+3KCJjk@zeniv-ca.linux.org.uk>
+ <10b5d071-7f69-da59-6395-064550c6c6cb@oracle.com>
+ <YkxRDJ2ynEHGdjeT@zeniv-ca.linux.org.uk>
+ <0dfe1056-3dc5-4d31-698e-e2c075ffd6ee@oracle.com>
 MIME-Version: 1.0
-References: <20220202140244.1681140-1-neelx@redhat.com> <874k361liu.ffs@tglx>
-In-Reply-To: <874k361liu.ffs@tglx>
-From:   Daniel Vacek <neelx@redhat.com>
-Date:   Wed, 6 Apr 2022 16:54:39 +0200
-Message-ID: <CACjP9X_A7aLmvypyOz1UrXM571gx_X5q7=w-1j+G+MSbCteiEw@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] apic: fix timer base macro definitions
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dfe1056-3dc5-4d31-698e-e2c075ffd6ee@oracle.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,69 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 1:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Daniel,
->
-> On Wed, Feb 02 2022 at 15:02, Daniel Vacek wrote:
-> > I was wondering if the aliasing of APIC_TIMER_BASE_TMBASE and
-> > APIC_LVT_TIMER_TSCDEADLINE was intentional or we need to << 19?
->
-> That's intentional. This is only used for the !lapic_is_integrated()
-> case, which is the ancient i82489DX.
->
-> Something like the below should make this more clear.
+On Wed, Apr 06, 2022 at 02:54:19PM +1000, Imran Khan wrote:
 
-Nah. Makes sense. Thanks for clearing that up. Looks good to me now.
+> > BTW, speaking of kernfs_notify() - can calls of that come from NMI handlers?
+> > If not, I'd consider using llist for kernfs_notify_list...
+> 
+> I see it gets invoked from 3 places only: cgroup_file_notify,
+> sysfs_notify and sysfs_notify_dirent. So kernfs_notify should not be
+> getting invoked in NMI context. I will make the llist transition in next
+> version.
 
---nX
+Er...  Are you sure neither of those is ever called from something that is
+called from .... from NMI?
 
-> Thanks,
->
->         tglx
-> ---
-> --- a/arch/x86/include/asm/apicdef.h
-> +++ b/arch/x86/include/asm/apicdef.h
-> @@ -95,12 +95,6 @@
->  #define        APIC_LVTTHMR    0x330
->  #define        APIC_LVTPC      0x340
->  #define        APIC_LVT0       0x350
-> -#define                APIC_LVT_TIMER_BASE_MASK        (0x3 << 18)
-> -#define                GET_APIC_TIMER_BASE(x)          (((x) >> 18) & 0x3)
-> -#define                SET_APIC_TIMER_BASE(x)          (((x) << 18))
-> -#define                APIC_TIMER_BASE_CLKIN           0x0
-> -#define                APIC_TIMER_BASE_TMBASE          0x1
-> -#define                APIC_TIMER_BASE_DIV             0x2
->  #define                APIC_LVT_TIMER_ONESHOT          (0 << 17)
->  #define                APIC_LVT_TIMER_PERIODIC         (1 << 17)
->  #define                APIC_LVT_TIMER_TSCDEADLINE      (2 << 17)
-> --- a/arch/x86/kernel/apic/apic.c
-> +++ b/arch/x86/kernel/apic/apic.c
-> @@ -320,6 +320,9 @@ int lapic_get_maxlvt(void)
->  #define APIC_DIVISOR 16
->  #define TSC_DIVISOR  8
->
-> +/* i82489DX specific */
-> +#define                I82489DX_BASE_DIVIDER           (((0x2) << 18))
-> +
->  /*
->   * This function sets up the local APIC timer, with a timeout of
->   * 'clocks' APIC bus clock. During calibration we actually call
-> @@ -340,8 +343,14 @@ static void __setup_APIC_LVTT(unsigned i
->         else if (boot_cpu_has(X86_FEATURE_TSC_DEADLINE_TIMER))
->                 lvtt_value |= APIC_LVT_TIMER_TSCDEADLINE;
->
-> +       /*
-> +        * The i82489DX APIC uses bit 18 and 19 for the base divider.  This
-> +        * overlaps with bit 18 on integrated APICs, but is not documented
-> +        * in the SDM. No problem though. i82489DX equipped systems do not
-> +        * have TSC deadline timer.
-> +        */
->         if (!lapic_is_integrated())
-> -               lvtt_value |= SET_APIC_TIMER_BASE(APIC_TIMER_BASE_DIV);
-> +               lvtt_value |= I82489DX_BASE_DIVIDER;
->
->         if (!irqen)
->                 lvtt_value |= APIC_LVT_MASKED;
->
+It might never happen, but there's a plenty of callchains leading to that
+thing and no obvious obstacles for some of those to come from NMI context;
+I don't see it documented anywhere either.
 
+Tejun, could you comment on that one?

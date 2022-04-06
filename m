@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B5E4F62F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E1B4F62A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiDFPKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S235329AbiDFPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235790AbiDFPKM (ORCPT
+        with ESMTP id S235328AbiDFPC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:10:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA57728CA93;
-        Wed,  6 Apr 2022 05:08:17 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 318E01F454CE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649245528;
-        bh=Fewgg+W6G1clWAEhEVkkn/lbkFWCF9MXpHqn8lun8+U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W0PyamTsuvA78l+/qDMNGB6+50vsfBr9RtR3NmgbT0TpB0CLcmKhN3U7kOED1i6j5
-         4+luSQam5SOsryOX1O7J4La7JDlAFG0pBGud0XvHsMv6oaLx4ZOBHwj9YTmpfpjY7k
-         t2OWz3k2yeyD2DPbW/THzfBJ6dKVKPCHFDfOVyL55k5fBwgB+mCtCmsW6oxi3ZSCb0
-         E2xnpJh2X1rqd4mYjf+kP1TFxVs0WxfPxionk63hhXfPvYetGY4acG5czvaTsgJpBb
-         /cZL7/mTkLhfHPFTUQOPWijqhkXc2FF/YNXd2TdT8gRcM/9QU9jvCxKkyqNV8kh+NH
-         lYINv/Sd3khPQ==
-Message-ID: <a263e572-35ec-9671-50e3-dbc71b55b6cd@collabora.com>
-Date:   Wed, 6 Apr 2022 13:45:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173: Add gce-client-reg handle
- to disp-mutex
-Content-Language: en-US
-To:     robh+dt@kernel.org
-Cc:     krzysztof.kozlowski@canonical.com, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220228110329.245366-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220228110329.245366-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 11:02:27 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509F6AAB5B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:46:41 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n18so1723067plg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=hWie3mJTAnfpzOXhn4Z/4uIgwysiFcrooHT60DVzybQ=;
+        b=CE9K9MT+Rt2kpApicMQngJo7nwda7ou2DtrFamdUZFxlh3kP15ZFuCURNlqhkQmCGY
+         2AT2p7oDzXmGjNJgBhxofiTlVwbGL2bESAobC4pPZiIEqg605SXXcDgFou2T6Acy3uno
+         QJnZeOHUhwImxP4AKwaD8eEC9R8AntNoAFKgRLD+1PiQikFBcA9KHKWkZ6x8RBW71ddk
+         xQpQaYU+zmm7wYRMe0eufz5huUYwBj5SjrudLWccRPZbmsG2S3Rjahtutr9ZdVYLEvHi
+         ectsA3dd8F3ivzbXM0WBgO0uM3BnScI145ZmiaJQMxHhcubB6TcTzGgRh4Yh5+26x18B
+         Ngdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=hWie3mJTAnfpzOXhn4Z/4uIgwysiFcrooHT60DVzybQ=;
+        b=A1Q+IloOcKOt2ZPOxXCMvFolA+uygHHTsMnZh3M358jUwPZ3M8kajgpqjsvziiKS64
+         mCYsraTStAdveNJjYktr+hJnYel64dy8O3eK3JZB3rkIhQZzE7W4VVexJRS7eRXQTWz3
+         mNFoVMQBfKterKIKfHOoht5tLKVqJIvkstrSTYDD22jraw3+qJwty999A7BrDmJvvoqQ
+         7A/8Sf1EquAn6/I8dIdoJOjS/n3tTAaWrKqJn9BFRSSb+jwYltcj8rAOnfCXxb312TJw
+         Zxu3LxR9MkK2/rC9i2/NDgOJv3NejRI3HF1wFQmI6QXHA0rb/Vzd6tf4bG7j3pss6LZH
+         0uWg==
+X-Gm-Message-State: AOAM531txUZ9p3OfgtiRaemFICciSHko4ZskLz4Jq+6Ms+GAskIgLa+k
+        XvZp7gGPfc9/2wh0tIYAYoY=
+X-Google-Smtp-Source: ABdhPJwNMvr7Ye7f8HN6k8CSNZ1+X2QyzDqvWOQk6MAWcVPOo0giQ96XUCTWCwbkum8M+/VAdkJAhQ==
+X-Received: by 2002:a17:902:c40e:b0:154:80a7:95c9 with SMTP id k14-20020a170902c40e00b0015480a795c9mr8546529plk.28.1649245585441;
+        Wed, 06 Apr 2022 04:46:25 -0700 (PDT)
+Received: from localhost.localdomain ([150.109.127.35])
+        by smtp.gmail.com with ESMTPSA id br2-20020a17090b0f0200b001caa0db90d3sm5578684pjb.13.2022.04.06.04.46.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Apr 2022 04:46:24 -0700 (PDT)
+From:   zgpeng <zgpeng.linux@gmail.com>
+X-Google-Original-From: zgpeng <zgpeng@tencent.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] sched/fair: Simplify the scene where both local and busiest are group_fully_busy
+Date:   Wed,  6 Apr 2022 19:46:20 +0800
+Message-Id: <1649245580-27256-1-git-send-email-zgpeng@tencent.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/02/22 12:03, AngeloGioacchino Del Regno ha scritto:
-> Add a gce client reg handle to the disp mutex to enable MT8173
-> platforms to use MediaTek's CMDQ for extra performance.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8173.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> index 291db4fcbb25..9eaea1156e25 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> @@ -1278,6 +1278,7 @@ mutex: mutex@14020000 {
->   			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
->   			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
->   			clocks = <&mmsys CLK_MM_MUTEX_32K>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1402XXXX 0 0x1000>;
->   			mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
->                                                 <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
->   		};
+When both local and busiest group are group_fully_busy type, because
+the avg_load of the group of type group_fully_busy is not calculated, the
+avg_load value is equal to 0. In this case, load balancing will not actually 
+done, because after a series of calculations in the calculate_imbalance, it 
+will be considered that load balance is not required. Therefore,it is not
+necessary to enter calculate_imbalance to do some useless work.
 
-Hello, this is a friendly ping to avoid forgetting about this patch.
+Signed-off-by: zgpeng <zgpeng@tencent.com>
+Reviewed-by: Samuel Liao <samuelliao@tencent.com>
+---
+ kernel/sched/fair.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-As a note, this was successfully tested on MT8173 Acer Chromebook R13 (Elm).
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 9f75303..cc1d6c4 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9634,6 +9634,18 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 			 * busiest doesn't have any tasks waiting to run
+ 			 */
+ 			goto out_balanced;
++
++		if (local->group_type == group_fully_busy)
++			/*
++			 * If local group is group_fully_busy, the code goes here,
++			 * the type of busiest group must also be group_fully_busy.
++			 * Because the avg_load of the group_fully_busy type is not
++			 * calculated at present, it is actually equal to 0. In this
++			 * scenario, load balance is not performed. therefore, it can
++			 * be returned directly here, and there is no need to do some
++			 * useless work in calculate_imbalance.
++			 */
++			goto out_balanced;
+ 	}
+ 
+ force_balance:
+-- 
+2.9.5
 
-Cheers,
-Angelo

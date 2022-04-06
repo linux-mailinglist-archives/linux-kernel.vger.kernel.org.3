@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8ED4F637B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BAB4F63C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbiDFPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S236351AbiDFPg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236342AbiDFPgM (ORCPT
+        with ESMTP id S236395AbiDFPgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:36:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6596C44A4D2;
-        Wed,  6 Apr 2022 05:50:27 -0700 (PDT)
-X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
-X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1457013016; Wed, 06 Apr 2022 20:49:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 6 Apr 2022 20:49:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 20:49:32 +0800
-Message-ID: <bf6d645d9c8d0cc0ada530d9a3ebf27df838cc52.camel@mediatek.com>
-Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
- dt-bindings
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Wed, 6 Apr 2022 20:49:32 +0800
-In-Reply-To: <YipjOXdCNUxdy+ey@robh.at.kernel.org>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220307122151.11666-3-jia-wei.chang@mediatek.com>
-         <YipjOXdCNUxdy+ey@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 6 Apr 2022 11:36:11 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D340421B2FA;
+        Wed,  6 Apr 2022 05:50:23 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n6so3961186ejc.13;
+        Wed, 06 Apr 2022 05:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vTCOW92YtaWtP9gBOFJZ28SWmMr1HlrfPw92UcpoTtM=;
+        b=oJp0ZgmWu05+xxMueBWXeBuXpPO+SG1WRlLhyswlkLfOPrM4cD/dmA6WSzXnn0MF6J
+         vq2RyDk+4P8vJA08yr4pwE+bqaKKgO9OmQELo+bT9EyVfDB0PXQeD7IfzpHvMEGq9j0b
+         9KDs0DoKUQaxsp29U+rh474lDCPn2/qmqtdkvxvS/e1351MYtPUOswi8jFkR6fBTOMj0
+         IFyNdnOWvAV6PCOqZTx1dso1DrZ3+rjBZOsODwuuobtEMLcDQVWmKsuHYYXl8jd/SfHT
+         EEsf2hNLGKOFqjKJATeY/ukCdoiEsFnC1/a4w3a4PKOSV4ODnqdbw73pWvbjPM/8l+9R
+         tECA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vTCOW92YtaWtP9gBOFJZ28SWmMr1HlrfPw92UcpoTtM=;
+        b=TKqEp2axS5Fo0Z0fg5otBQhyGWIFvgbPuKPkTijTXZMtZKBU/UpToEQpLZM5EC1Uwz
+         mTj5BbEevJ+JI69vqJUY11uAVPAKi+Um/yit4USHWMtxwWpDsHEruj/P0RfwxVTjx2mh
+         7UnT4o5DDkmJq8oBnYYphkxFPDc2EUhZy9M3iQJsvfbGwV95U6/HSaxsYN/DxbjK+720
+         kQ0CNIo6fRtsLhJN6ktGU9J7hxs3/QDQ3rHakGEnTak7L31cOz3/M8ViDRiAYHpwkN1Y
+         rx2Lv2kkk/Vsk44TNIGKkqPL9fo/5KE4VMKKN3ur1n4YDeGa4FtV9DqW7wzjaBSARvem
+         IK5A==
+X-Gm-Message-State: AOAM532mMSqI5KS+xvBfeVFw0JLEcL23b8YER4IxaixvhdHrKUDPrZKE
+        EEKyZNRAYHVHiyBj0T+uT1g=
+X-Google-Smtp-Source: ABdhPJzgMH6NrDoT1aKPmWrFFVbZZaFmYokcguSj87WGdCrEY2ls4P+N/suRm0Xdg3YZDE6pJwjRWw==
+X-Received: by 2002:a17:906:144e:b0:6ce:6126:6a6d with SMTP id q14-20020a170906144e00b006ce61266a6dmr8014240ejc.662.1649249388742;
+        Wed, 06 Apr 2022 05:49:48 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm6587882ejm.103.2022.04.06.05.49.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 05:49:48 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <afbb7b38-11d9-0cfb-2c7b-df17a9074e3b@redhat.com>
+Date:   Wed, 6 Apr 2022 14:49:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 081/104] KVM: VMX: Modify NMI and INTR handlers to
+ take intr_info as function argument
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <961a6534904cc8fd2ddd187ab0a930fbf00cc1ca.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <961a6534904cc8fd2ddd187ab0a930fbf00cc1ca.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,51 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-10 at 14:44 -0600, Rob Herring wrote:
-> On Mon, Mar 07, 2022 at 08:21:49PM +0800, Tim Chang wrote:
-> > 1. add cci property.
-> > 2. add example of MT8186.
-> > 
-> > Signed-off-by: Jia-Wei Chang <
-> > jia-wei.chang@mediatek.corp-partner.google.com>
-> > ---
-> >  .../bindings/cpufreq/cpufreq-mediatek.yaml    | 41
-> > +++++++++++++++++++
-> >  1 file changed, 41 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > index 584946eb3790..d3ce17fd8fcf 100644
-> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > @@ -48,6 +48,10 @@ properties:
-> >        When absent, the voltage scaling flow is handled by
-> > hardware, hence no
-> >        software "voltage tracking" is needed.
-> >  
-> > +  cci:
-> > +    description:
-> > +      Phandle of the cci to be linked with the phandle of CPU if
-> > present.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> We already have a binding for this. See cci-control-port.
-
-Hi Rob,
-
-Pardon me for my late reply.
-
-It seems that "cci-control-port" is hardware IP from ARM.
-But mediatek-cpufreq uses MTK internal CCI hardware IP.
-I think I should keep this change here.
-
-Thanks.
-
+> TDX uses different ABI to get information about VM exit.  Pass intr_info to
+> the NMI and INTR handlers instead of pulling it from vcpu_vmx in
+> preparation for sharing the bulk of the handlers with TDX.
 > 
-> > +
-> >    "#cooling-cells":
-> >      description:
-> >        For details, please refer to
+> When the guest TD exits to VMM, RAX holds status and exit reason, RCX holds
+> exit qualification etc rather than the VMCS fields because VMM doesn't have
+> access to the VMCS.  The eventual code will be
+> 
+> VMX:
+>    - get exit reason, intr_info, exit_qualification, and etc from VMCS
+>    - call NMI/INTR handlers (common code)
+> 
+> TDX:
+>    - get exit reason, intr_info, exit_qualification, and etc from guest
+>      registers
+>    - call NMI/INTR handlers (common code)
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/vmx.c | 17 ++++++++---------
+>   1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 4bd1e61b8d45..008400927144 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6442,28 +6442,27 @@ static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
+>   		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+>   }
+>   
+> -static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+> +static void handle_exception_nmi_irqoff(struct kvm_vcpu *vcpu, u32 intr_info)
+>   {
+>   	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
+> -	u32 intr_info = vmx_get_intr_info(&vmx->vcpu);
+>   
+>   	/* if exit due to PF check for async PF */
+>   	if (is_page_fault(intr_info))
+> -		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
+> +		vcpu->arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
+>   	/* if exit due to NM, handle before interrupts are enabled */
+>   	else if (is_nm_fault(intr_info))
+> -		handle_nm_fault_irqoff(&vmx->vcpu);
+> +		handle_nm_fault_irqoff(vcpu);
+>   	/* Handle machine checks before interrupts are enabled */
+>   	else if (is_machine_check(intr_info))
+>   		kvm_machine_check();
+>   	/* We need to handle NMIs before interrupts are enabled */
+>   	else if (is_nmi(intr_info))
+> -		handle_interrupt_nmi_irqoff(&vmx->vcpu, nmi_entry);
+> +		handle_interrupt_nmi_irqoff(vcpu, nmi_entry);
+>   }
+>   
+> -static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+> +static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu,
+> +					     u32 intr_info)
+>   {
+> -	u32 intr_info = vmx_get_intr_info(vcpu);
+>   	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
+>   	gate_desc *desc = (gate_desc *)host_idt_base + vector;
+>   
+> @@ -6482,9 +6481,9 @@ void vmx_handle_exit_irqoff(struct kvm_vcpu *vcpu)
+>   		return;
+>   
+>   	if (vmx->exit_reason.basic == EXIT_REASON_EXTERNAL_INTERRUPT)
+> -		handle_external_interrupt_irqoff(vcpu);
+> +		handle_external_interrupt_irqoff(vcpu, vmx_get_intr_info(vcpu));
+>   	else if (vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI)
+> -		handle_exception_nmi_irqoff(vmx);
+> +		handle_exception_nmi_irqoff(vcpu, vmx_get_intr_info(vcpu));
+>   }
+>   
+>   /*
 
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

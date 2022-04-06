@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF0B4F698F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725684F6A52
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiDFTJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S232784AbiDFTtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiDFTHh (ORCPT
+        with ESMTP id S232300AbiDFTtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:07:37 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F29B2AF242
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:58:41 -0700 (PDT)
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id C613E35D0;
-        Wed,  6 Apr 2022 17:58:39 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id AA85120011;
-        Wed,  6 Apr 2022 17:58:37 +0000 (UTC)
-Message-ID: <1064228a2bb8a5fbdcb483295c641c100dd08c9f.camel@perches.com>
-Subject: Re: [PATCH v4 1/2] ray_cs: Improve card_status[]
-From:   Joe Perches <joe@perches.com>
-To:     Benjamin =?ISO-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>,
-        kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 06 Apr 2022 10:58:35 -0700
-In-Reply-To: <20220406152247.386267-2-benni@stuerz.xyz>
-References: <20220406152247.386267-1-benni@stuerz.xyz>
-         <20220406152247.386267-2-benni@stuerz.xyz>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Wed, 6 Apr 2022 15:49:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BA02E0A5;
+        Wed,  6 Apr 2022 10:59:51 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9BD721EC058B;
+        Wed,  6 Apr 2022 19:59:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649267986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YX86Bq1CunXRltFfq1Z3H5gzQ1SRlqU01eVuZwQdMXc=;
+        b=WVxBypOwpwKvq+pR7jm4wlRIgMWZQnwObfcYnm98A9gi1Aa8VpZNrL6xHVa3bhkpk0HKWV
+        ELHqHpXpd2DmCneiLxU5Jbib/LZ6jAxzjKf0tSCjMlByYXzyyAbjmsmedW58Yv+9zXj5fr
+        WvpPpx0Xte3P5m5tuaPkBQejSrM/sy8=
+Date:   Wed, 6 Apr 2022 19:59:44 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: Re: [tip: x86/build] x86/configs: Add x86 debugging Kconfig fragment
+ plus docs
+Message-ID: <Yk3VEM9LoHozLt2g@zn.tnic>
+References: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
+ <164918891525.389.9920170532036101413.tip-bot2@tip-bot2>
+ <Yk3GCnyA8rhy1Syj@thelio-3990X>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 4x93hygzkp67pzsimy8pxrem6idwkheg
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: AA85120011
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18okezJojRz1U2N98r1sNAPyIQfCdYT8Jw=
-X-HE-Tag: 1649267917-578212
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yk3GCnyA8rhy1Syj@thelio-3990X>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 17:22 +0200, Benjamin Stürz wrote:
-> Replace comments with C99's designated initializers to improve
-> readability and maintainability.
-[]
-> diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
-[]
-> @@ -2529,20 +2529,23 @@ static void clear_interrupt(ray_dev_t *local)
->  #define MAXDATA (PAGE_SIZE - 80)
->  
->  static const char *card_status[] = {
-> -	"Card inserted - uninitialized",	/* 0 */
-> -	"Card not downloaded",			/* 1 */
-> -	"Waiting for download parameters",	/* 2 */
-> -	"Card doing acquisition",		/* 3 */
-> -	"Acquisition complete",			/* 4 */
-> -	"Authentication complete",		/* 5 */
-> -	"Association complete",			/* 6 */
-> -	"???", "???", "???", "???",		/* 7 8 9 10 undefined */
-> -	"Card init error",			/* 11 */
-> -	"Download parameters error",		/* 12 */
-> -	"???",					/* 13 */
-> -	"Acquisition failed",			/* 14 */
-> -	"Authentication refused",		/* 15 */
-> -	"Association failed"			/* 16 */
-> +	[CARD_INSERTED]		= "Card inserted - uninitialized",
-> +	[CARD_AWAITING_PARAM]	= "Card not downloaded",
-> +	[CARD_DL_PARAM]		= "Waiting for download parameters",
-> +	[CARD_DOING_ACQ]	= "Card doing acquisition",
-> +	[CARD_ACQ_COMPLETE]	= "Acquisition complete",
-> +	[CARD_AUTH_COMPLETE]	= "Authentication complete",
-> +	[CARD_ASSOC_COMPLETE]	= "Association complete",
-> +	[7]			= "???",
-> +	[8]			= "???",
-> +	[9]			= "???",
-> +	[10]			= "???",
+On Wed, Apr 06, 2022 at 09:55:38AM -0700, Nathan Chancellor wrote:
+> I am replying to this message versus the original patch because this
+> appears to be done during committing.
+> 
+> This "CONFIG_DEBUG_INFO=y" will not do anything, as the debug info
+> Kconfig was turned into a choice in commit f9b3cd245784 ("Kconfig.debug:
+> make DEBUG_INFO selectable from a choice").
+> 
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> 
+> will do what "CONFIG_DEBUG_INFO=y" used to do.
 
-Rather than using specific numbers and "???"
-it's probably better to use no initialization at all
-and change the output call to test the array index
-ao all of the [number] = "???" could be removed.
+Thanks Nathan, fixed.
 
----
- drivers/net/wireless/ray_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+Regards/Gruss,
+    Boris.
 
-diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
-index 87e98ab068ed..29451cd0a22a 100644
---- a/drivers/net/wireless/ray_cs.c
-+++ b/drivers/net/wireless/ray_cs.c
-@@ -2600,7 +2600,7 @@ static int ray_cs_proc_show(struct seq_file *m, void *v)
- 		i = 10;
- 	if (i > 16)
- 		i = 10;
--	seq_printf(m, "Card status          = %s\n", card_status[i]);
-+	seq_printf(m, "Card status          = %s\n", card_status[i] ?: "???");
- 
- 	seq_printf(m, "Framing mode         = %s\n", framing[translate]);
- 
-
+https://people.kernel.org/tglx/notes-about-netiquette

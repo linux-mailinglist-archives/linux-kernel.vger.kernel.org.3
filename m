@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460E74F566A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6954F55F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356395AbiDFFvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S1387933AbiDFFyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353968AbiDFEmS (ORCPT
+        with ESMTP id S230108AbiDFEzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 00:42:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC91B84CD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:41:31 -0700 (PDT)
-Received: from kwepemi100020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KY5HK6msSz4wqT;
-        Wed,  6 Apr 2022 08:39:09 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi100020.china.huawei.com (7.221.188.48) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 08:41:28 +0800
-Received: from [10.174.177.238] (10.174.177.238) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 08:41:27 +0800
-Message-ID: <36ac1182-36d3-d6fa-6954-c7c6a2e1d968@huawei.com>
-Date:   Wed, 6 Apr 2022 08:41:27 +0800
+        Wed, 6 Apr 2022 00:55:11 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D861C7C21
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:45:27 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id y8-20020a056e020f4800b002ca498c9655so688108ilj.20
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 17:45:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=K8hWI48Li8trbK+jUlQuleE3ZHhh2wmLyXeEDXW43vw=;
+        b=INjjPnjouXvbYBwShSiGmeMtJqnWg+kdZ7gW2gtzayLPFcXO+yZ5SDetV6PciOyaUI
+         PdAtlPjyOVd0bsSdzNCCXQPFUV0mTkfJI3870ItVvhl+OUUZJR6+bQViVg2KdTTG/gSE
+         ptP42PUooFAgm1OwA3ds/WJrlLy77shILYI7Iuxi7nzKNuNN1EuE+eWmtYTzcSDucEqP
+         5vHl0nFLaVFTvLBiylzqUI1y3h9+ndByY+wSg3bOsNdommTHR+lrwiUq5kxxHP68sLYF
+         h+uGYaWkcvC4bnxt+yu6GChFYsc0q0LVeCykd5C2cObLjZuAS7unC98Dw4D/tD5p0Ckp
+         pQDA==
+X-Gm-Message-State: AOAM533yRIBCAWe2mhwF8i4p5cLZD67qnhSeb5/aSlKpL7Wc1HXyaze4
+        kp7T1bBli53rtVbzrEIGRzCBCj0w1AKfTLUQ7stKaRi7nzgd
+X-Google-Smtp-Source: ABdhPJzwKvT+DPbOFb3e0/wxaOlCTgDcZf2KDM+dO7ftVXxNA8V5tTN2Jhg99YnAA0syhK/cF4tivFBSAouXsHOie8j/ulxusMxn
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.2
-Subject: Re: [PATCH v3] lz4: fix LZ4_decompress_safe_partial read out of bound
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Nick Terrell <terrelln@fb.com>, Chengyang Fan <cy.fan@huawei.com>,
-        "Yann Collet" <cyan@fb.com>,
-        "fangwei1@huawei.com" <fangwei1@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com" 
-        <syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com>,
-        "wangli74@huawei.com" <wangli74@huawei.com>
-References: <20211111085058.1940591-1-guoxuenan@huawei.com>
- <20211111105048.2006070-1-guoxuenan@huawei.com>
- <CCE83845-DC40-4E14-9105-6319C048FACB@fb.com>
- <YkfXSzePVEhlajCU@B-P7TQMD6M-0146.local>
- <20220404142123.7de8d3a291d6484e7fb4c8a0@linux-foundation.org>
- <YktxATidpH2A1QJu@B-P7TQMD6M-0146.local>
-From:   Guo Xuenan <guoxuenan@huawei.com>
-In-Reply-To: <YktxATidpH2A1QJu@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.238]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1d03:b0:2c7:e33f:2557 with SMTP id
+ i3-20020a056e021d0300b002c7e33f2557mr3225518ila.15.1649205926868; Tue, 05 Apr
+ 2022 17:45:26 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 17:45:26 -0700
+In-Reply-To: <0000000000000cede205dbf052bc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ebdf405dbf1ad65@google.com>
+Subject: Re: [syzbot] general protection fault in simple_recursive_removal (2)
+From:   syzbot <syzbot+17404da5afdf21e8d612@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all，
+syzbot has found a reproducer for the following issue on:
 
-在 2022/4/5 6:28, Gao Xiang Write:
-> On Mon, Apr 04, 2022 at 02:21:23PM -0700, Andrew Morton wrote:
->> On Sat, 2 Apr 2022 12:55:39 +0800 Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->>
->>> On Fri, Nov 19, 2021 at 06:23:24PM +0000, Nick Terrell wrote:
->>>>
->>>>> On Nov 11, 2021, at 2:50 AM, Guo Xuenan <guoxuenan@huawei.com> wrote:
->>>>>
->>>>> When partialDecoding, it is EOF if we've either, filled the output
->>>>> buffer or can't proceed with reading an offset for following match.
->>>>>
->>>>> In some extreme corner cases when compressed data is crusted corrupted,
->>>>> UAF will occur. As reported by KASAN [1], LZ4_decompress_safe_partial
->>>>> may lead to read out of bound problem during decoding. lz4 upstream has
->>>>> fixed it [2] and this issue has been disscussed here [3] before.
->>>>>
->>>>> current decompression routine was ported from lz4 v1.8.3, bumping lib/lz4
->>>>> to v1.9.+ is certainly a huge work to be done later, so, we'd better fix
->>>>> it first.
->>>>>
->>>>> [1] https://lore.kernel.org/all/000000000000830d1205cf7f0477@google.com/
->>>>> [2] https://github.com/lz4/lz4/commit/c5d6f8a8be3927c0bec91bcc58667a6cfad244ad#
->>>>> [3] https://lore.kernel.org/all/CC666AE8-4CA4-4951-B6FB-A2EFDE3AC03B@fb.com/
->>>>>
->>>>> Reported-by: syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com
->>>>> Cc: hsiangkao@linux.alibaba.com
->>>>> Cc: terrelln@fb.com
->>>>> Cc: cyan@fb.com
->>>>> Cc: cy.fan@huawei.com
->>>>> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
->>>> Sorry I’m a bit late to the party, but this looks good to me!
->>>>
->>>> Reviewed-by: Nick Terrell <terrelln@fb.com>
->>> Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
->>>
->>> Hi Andrew,
->>>
->>> This patch has already been pending for 2 release cycles.. Would you
->>> mind submitting it upstream? Or are there other concerns about this?
->> Sorry, I'd not noticed that this was from lz4 upstream.
->>
->> I'll put a cc:stable in there and shall send it upstream this week.
->>
->> In the changelog, can someone please explain what "crusted corrupted"
->> is saying?
-Sorry for my missspelling, Gao Xiang is right, i mean "well-designed 
-corrupted".
-> Er.. It sounds like "well-designed corrupted". I think it was a typo
-> though.
->
-> Thanks,
-> Gao Xiang
-> .
-Thanks,
-Guo Xuenan
-.
+HEAD commit:    ce4c854ee868 Merge tag 'for-5.18-rc1-tag' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16258680f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=595bcd2109a73f9c
+dashboard link: https://syzkaller.appspot.com/bug?extid=17404da5afdf21e8d612
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b7765b700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16de6637700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+17404da5afdf21e8d612@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc000000002a: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000150-0x0000000000000157]
+CPU: 1 PID: 3623 Comm: udevd Not tainted 5.18.0-rc1-syzkaller-00009-gce4c854ee868 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__lock_acquire+0xd85/0x56c0 kernel/locking/lockdep.c:4899
+Code: 1a 0e 41 be 01 00 00 00 0f 86 c8 00 00 00 89 05 21 8d 1a 0e e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 15 31 00 00 48 81 3b 20 d4 22 8f 0f 84 4f f3 ff
+RSP: 0018:ffffc90003b5f9f0 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002a RSI: 0000000000000000 RDI: 0000000000000150
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff888079c50000 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007faa8035a840(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000561474c18580 CR3: 0000000019f83000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire kernel/locking/lockdep.c:5641 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
+ down_write+0x90/0x150 kernel/locking/rwsem.c:1514
+ inode_lock include/linux/fs.h:748 [inline]
+ simple_recursive_removal+0x171/0x830 fs/libfs.c:276
+ debugfs_remove fs/debugfs/inode.c:742 [inline]
+ debugfs_remove+0x59/0x80 fs/debugfs/inode.c:736
+ blk_mq_debugfs_unregister_queue_rqos+0x34/0x70 block/blk-mq-debugfs.c:840
+ rq_qos_exit+0x1e/0xf0 block/blk-rq-qos.c:297
+ disk_release_mq block/genhd.c:1142 [inline]
+ disk_release+0x191/0x420 block/genhd.c:1168
+ device_release+0x9f/0x240 drivers/base/core.c:2229
+ kobject_cleanup lib/kobject.c:705 [inline]
+ kobject_release lib/kobject.c:736 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c8/0x540 lib/kobject.c:753
+ put_device+0x1b/0x30 drivers/base/core.c:3512
+ blkdev_close+0x64/0x80 block/fops.c:512
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faa7ff25fc3
+Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007fff33290db8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007faa8035a6a8 RCX: 00007faa7ff25fc3
+RDX: 000000000000001c RSI: 00007fff332905b8 RDI: 0000000000000008
+RBP: 0000561474c196f0 R08: 0000000000000007 R09: 0000561474c22c30
+R10: 00007faa7ffb4fc0 R11: 0000000000000246 R12: 0000000000000002
+R13: 0000561474bf8aa0 R14: 0000000000000008 R15: 0000561474bef910
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__lock_acquire+0xd85/0x56c0 kernel/locking/lockdep.c:4899
+Code: 1a 0e 41 be 01 00 00 00 0f 86 c8 00 00 00 89 05 21 8d 1a 0e e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 15 31 00 00 48 81 3b 20 d4 22 8f 0f 84 4f f3 ff
+RSP: 0018:ffffc90003b5f9f0 EFLAGS: 00010002
+
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002a RSI: 0000000000000000 RDI: 0000000000000150
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff888079c50000 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007faa8035a840(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000561474c18580 CR3: 0000000019f83000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	1a 0e                	sbb    (%rsi),%cl
+   2:	41 be 01 00 00 00    	mov    $0x1,%r14d
+   8:	0f 86 c8 00 00 00    	jbe    0xd6
+   e:	89 05 21 8d 1a 0e    	mov    %eax,0xe1a8d21(%rip)        # 0xe1a8d35
+  14:	e9 bd 00 00 00       	jmpq   0xd6
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 da             	mov    %rbx,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 15 31 00 00    	jne    0x3149
+  34:	48 81 3b 20 d4 22 8f 	cmpq   $0xffffffff8f22d420,(%rbx)
+  3b:	0f                   	.byte 0xf
+  3c:	84 4f f3             	test   %cl,-0xd(%rdi)
+  3f:	ff                   	.byte 0xff
+

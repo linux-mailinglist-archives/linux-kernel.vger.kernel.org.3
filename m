@@ -2,42 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574A44F6286
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0533E4F6332
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235198AbiDFPD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S236345AbiDFPd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbiDFPDS (ORCPT
+        with ESMTP id S235821AbiDFPdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:03:18 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB652440980;
-        Wed,  6 Apr 2022 05:36:00 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nc4sP-0002uI-Ln; Wed, 06 Apr 2022 14:35:09 +0200
-Message-ID: <6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info>
-Date:   Wed, 6 Apr 2022 14:35:09 +0200
+        Wed, 6 Apr 2022 11:33:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050544BBB85;
+        Wed,  6 Apr 2022 05:41:23 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:ff63:de1f:2a77:5241] (unknown [IPv6:2a01:e0a:120:3210:ff63:de1f:2a77:5241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C1D291F45595;
+        Wed,  6 Apr 2022 13:40:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649248859;
+        bh=juTIYH9Al5t/rKSzyFuZP8TUprn707yPkNgjF5GXa8s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HqxajCWbb5OdryJwbl1Ee5ck7vrJ8zLk/jotKFigpo7VMVLUyzAxdhXgfwKVzDOVJ
+         KnfNHj+KhPaGMDeHMVww0ZN9xgjXxEzJWnvGj9qE4/ECR0RkWOlELq71VcFXpULOSV
+         DqmHLyBFDvaq7ZvVaRJLtTaJFJH4eDT16kLG1ICg4M1gbi7cIiqvi9q1qmO4GbQ/vd
+         MGPQGWCcKVVD+ojzlxp4YZhbbL8ZUz+xCep/T1uZ0RylopT7QXhZS/HjBLot/ZiO5G
+         attjb//Mj+SmKlHdFEBrFvbhNA6l8fDw1o46/RlRrQ5n0tQWG0NTrVpk7Pm2MXLdGx
+         +xoc5AsRgMlig==
+Message-ID: <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com>
+Date:   Wed, 6 Apr 2022 14:40:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
 Content-Language: en-US
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        "jernej.skrabec" <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media <linux-media@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        workflows@vger.kernel.org
-Subject: A lot of regression reports submitted to bugzilla.kernel.org are
- apparently ignored, even bisected ones
-Content-Type: text/plain; charset=UTF-8
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
+        knaerzche@gmail.com, jc@kynesim.co.uk
+References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
+ <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com>
+ <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
+ <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com>
+ <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
+ <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
+ <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
+ <163202bd-ea51-e80a-1481-568fae25b045@collabora.com>
+ <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
+ <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
+ <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1649248562;71258c03;
-X-HE-SMSGID: 1nc4sP-0002uI-Ln
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,434 +79,338 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi! TLDR: I looked closer at every ticket filed in bugzilla.kernel.org
-over a time span of two weeks to see how well reports are handled, in
-particular those for kernel regressions. The results of this rough
-analysis are kinda devastating from my point of view. I for example
-found 8 tickets describing a regression where the reporter had even
-bisected the problem, but nevertheless the ticket afaics didn’t get a
-single reply or any other reaction from a regular kernel developer
-within about a week; in fact out of a total of 20 reports that looked
-like regressions to me (17 if you exclude tickets where the reporter
-used an afaics lightly patched distro kernel), only one got a helpful
-reply from a developer within a week. That makes us miss valuable
-reports and puts our "no regressions" rule into a bad light. Hence,
-something IMHO should be done here to improve the situation, but I'm not
-sure myself what exactly -- that's why I'm writing this mail. A better
-warning on bugzilla’s frontpage suggesting to report issues by mail
-maybe? And/or disable all bugzilla products and components where it's
-not clear that somebody will be looking at least once at submitted tickets?
 
-
-The long story: As part of my regression tracking work I a few months
-ago started to watch out for regressions reported in
-bugzilla.kernel.org. Normally I only skim roughly through tickets when
-they are about a week old, as doing it more thoroughly would quickly
-consume all the time I can spend on regression tracking (reminder: I'm
-doing this on my own time as a volunteer, it's not part of my job or
-something!). But multiple times already I got the impression that things
-were quite amiss. I also heard complaints from users about the state of
-things; some developers also complained when I told them about reports
-they had missed.
-
-That's why I took a closer look at the tickets filed in the weeks right
-before and after Linux 5.17 was released; that's 2022-03-14 till
-2022-03-27, which covers tickets with the IDs 215680 to 215764 (215707
-and up were filed during the first week of the merge window of 5.18).
-
-
-I excluded 31 tickets from my analysis for one reason or another (spam;
-tickets about man-pages and Trace-cmd/Kernelshark; note/reminder-to-self
-tickets filed by a developer; reports with distro-kernels heavily
-patched; ... -- see the list below for details). From the remaining
-tickets 20 looked like reports about regressions and 34 were about other
-issues; the numbers go down to 17 and 27 if one excludes tickets where
-the reporter used a distro-kernel that's afaics is only lightly patched
-(Arch, Fedora, Tumbleweed, ...). Warning, I'm just human and had to use
-my best judgment in quite a few cases, hence I might have mis-judged or
-mis-classified some tickets.
-
-Only 1 of those 20 regression tickets and 5 of the 34 other tickets
-within about a week got a reply from a kernel developer that works in
-the affected area. Don't worry, I forwarded all valid regression reports
-to the developers when I noticed the tickets were not acted upon (most
-of the time this got things moving).
-
-There is something I felt quite annoying: 8 out of those 20 tickets
-describing regressions where bisected and nevertheless were ignored in
-the first week. Among them is the (in)famous swiotlb/ath9k problem
-(https://lwn.net/Articles/889593/ ) that was recently fixed after
-someone brought it to LKML -- 4 days after the ticket was created and
-two after someone pointed to the culprit there.
-
-
-This situation afaics is in nobody's interest, as valuable regressions
-reports are ignored; and I guess the people that submitted them will
-feel ignored and likely think things like “they claim to have a ‘no
-regressions rule’, but don't take reports about regressions seriously”.
-
-[Quick reminder on the state of bugzilla.kernel.org for anyone that is
-not aware of the backstory: in an ideal world, nearly all of those 20/34
-tickets about regressions/issues should never have been reported to
-bugzilla.kernel.org in the first place. Our reporting-issues text
-(https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
--- linked on the front page of bugzilla.kernel.org) clearly warns that
-bugzilla.kernel.org almost always is the wrong place to file
-regressions/issues. But we don't live in an ideal world and that
-document sadly is quite long, as our bug-reporting process is special
-and hard for outsiders. OTOH I guess quite a few people afaics wouldn't
-even read the text even if it was really really short.]
-
-
-I'm not sure what's the best way forward to address the situation, as
-bugzilla.kernel.org is used by some kernel developers and subsystems.
-There are for example 19 entries (out of more than 2400!) in MAINTAINERS
-referring to it as the primary place to report issues; from what I've
-heard and seen there seem to be a few other kernel developers and
-subsystems that like having bugzilla around.
-
-But as the numbers show, a lot of tickets submitted there get ignored.
-Note though, many developers imho are not to blame here, as they never
-were told that tickets that might be of interest for them were
-submitted. That's because keeping an eye on bugzilla afaik has always
-been optional for kernel developers (many components assign the tickets
-to a non-existing email address; developers only get the reports in my
-mail, if they manually tell bugzilla in their account preferences to
-monitor that non-existing email address.) That's afaics the main reason
-why valuable tickets are ignored, but there are others. Many tickets for
-example get filed against components where afaics nobody watches at all
--- like other/other
-(https://bugzilla.kernel.org/buglist.cgi?component=Other&list_id=1110244&product=Other&resolution=---
-). Some tickets are forwarded to a mailing list, but it seems nobody
-takes a look at them.
-
-Something that could help for example would be an improved and really
-prominent text for the front-page of bugzilla.kernel.org that describes
-the situation. That text for example could clearly explain that
-submitting tickets in the bugtracker is often the wrong approach when it
-comes to the Linux kernel (aka "waste of time"); at the same time it
-obviously would need to point people to the (sadly quite long)
-reporting-issues text that explains the proper approach (disclaimer:
-that text was mostly written by yours truly and designed to get the
-important facts across quite quickly).
-
-Something else that could help: Disable all bugzilla products and
-components where it's not clear that somebody will be looking at least
-once at every ticket submitted. Except maybe for one where the name and
-the description makes it totally obvious that the report won't be sent
-to anyone; such a component is useful for people that want to upload big
-files somewhere and just link to them when reporting issues by mail.
-
-But as I said earlier: I’m not sure if that's the best angle of approach
-here. Sometimes I wonder if we should simply disallow filing new
-tickets. But then those subsystems and developers that rely on it would
-be forced to find alternatives; not to mention that afaics quite a few
-users will never report issues by mail and need something like
-bugzilla.kernel.org to get in contact with us.
-
-Does anyone have any better ideas on how to improve the situation? Or is
-this something that needs to be discussed at the next kernel/maintainers
-summit in September?
-
-Anyway, that's it from my side. Find the detailed report below if you
-want to check how I came up with the numbers mentioned above.
-
-Ciao, Thorsten
-
-P.S.: I'll try to continue keeping an eye on regressions reported to
-bugzilla.kernel.org, but I can't continue watching this closely, so some
-will slip through. Sorry.
-
-
----
-Detailed analysis:
-
-____________________________________________________________
-
-# Section 1: Regression reports
-
-1 out of 20 tickets mentioned in this section got a reply from a
-developer within round about a week
-
-____________________
-
-## Clearly reports about upstream regressions where a developer replied
-within roundabout one week
-
-1 ticket:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215713
-
-  Not bisected, but a fix was already available, apparently developed
-independently.
-
-____________________
-
-## Clearly reports about upstream regression that were bisected where no
-developer replied within roundabout one week
-
-8 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215689
-* https://bugzilla.kernel.org/show_bug.cgi?id=215703
-
-  Fun fact: that's the (in)famous swiotlb/ath9k problem
-(https://lwn.net/Articles/889593/ ("A security fix briefly breaks DMA"))
-that was reported properly to LKML by Oleksandr Natalenko
-(https://lore.kernel.org/lkml/1812355.tdWV9SEqCh@natalenko.name/ ) *four
-days* after this ticket was filed and *two days* after someone had
-identified and mentioned the culprit in the ticket.
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215715
-* https://bugzilla.kernel.org/show_bug.cgi?id=215720
-* https://bugzilla.kernel.org/show_bug.cgi?id=215726
-* https://bugzilla.kernel.org/show_bug.cgi?id=215734
-* https://bugzilla.kernel.org/show_bug.cgi?id=215742
-* https://bugzilla.kernel.org/show_bug.cgi?id=215744
-____________________
-
-## Clearly reports about upstream regression where no developer replied
-within roundabout one week
-
-3 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215711
-* https://bugzilla.kernel.org/show_bug.cgi?id=215725
-* https://bugzilla.kernel.org/show_bug.cgi?id=215743
-
-____________________
-
-## Reports that look a lot like a regression, but might not be one;
-after no kernel developer replied within one week the regression tracker
-asked for clarification and got confirmation it's a regression
-
-1 ticket:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215747
-
-____________________
-
-## tickets with reports that look a lot like regressions, but might not
-be; after no kernel developer replied within one week the regression
-tracker asked for clarification, but the reporter didn't respond (yet)
-
-4 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215682
-* https://bugzilla.kernel.org/show_bug.cgi?id=215691
-* https://bugzilla.kernel.org/show_bug.cgi?id=215719
-* https://bugzilla.kernel.org/show_bug.cgi?id=215761
-
-____________________
-
-## tickets about regressions occurring with distro kernels that are
-known to be close to upstream (some of these problems might be present
-in upstream, too)
-
-3 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215681
-* https://bugzilla.kernel.org/show_bug.cgi?id=215696
-* https://bugzilla.kernel.org/show_bug.cgi?id=215697
-
-
-
-____________________________________________________________
-
-# Section 2: tickets that don't look like regressions reports,
-nevertheless might be worth investigating
-
-Note: 5 out of 34 tickets mentioned in this section got a reply from a
-developer within roundabout a week.
-
-____________________
-
-## tickets where a developer replied within round about a week
-
-5 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215709
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215712
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215729
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215730
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215763
-
-____________________
-
-## Reports about circular locking and sanitizer warnings that didn't get
-a reply from a developer within round about a week
-
-2 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215746
-* https://bugzilla.kernel.org/show_bug.cgi?id=215748
-
-____________________
-
-## other issues that don't look like regressions (but might be!) that
-didn't get a reply from a developer within round about a week
-
-16 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215683
-* https://bugzilla.kernel.org/show_bug.cgi?id=215686
-* https://bugzilla.kernel.org/show_bug.cgi?id=215684
-* https://bugzilla.kernel.org/show_bug.cgi?id=215685
-* https://bugzilla.kernel.org/show_bug.cgi?id=215688
-* https://bugzilla.kernel.org/show_bug.cgi?id=215695
-* https://bugzilla.kernel.org/show_bug.cgi?id=215698
-* https://bugzilla.kernel.org/show_bug.cgi?id=215714
-* https://bugzilla.kernel.org/show_bug.cgi?id=215732
-* https://bugzilla.kernel.org/show_bug.cgi?id=215733
-* https://bugzilla.kernel.org/show_bug.cgi?id=215739
-* https://bugzilla.kernel.org/show_bug.cgi?id=215749
-* https://bugzilla.kernel.org/show_bug.cgi?id=215750
-* https://bugzilla.kernel.org/show_bug.cgi?id=215760
-* https://bugzilla.kernel.org/show_bug.cgi?id=215762
-* https://bugzilla.kernel.org/show_bug.cgi?id=215764
-
-____________________
-
-## tickets about issues occurring with distro kernels known to be close
-to upstream (some of these problems thus might be present in upstream, too)
-
-7 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215680
-* https://bugzilla.kernel.org/show_bug.cgi?id=215699
-* https://bugzilla.kernel.org/show_bug.cgi?id=215700
-* https://bugzilla.kernel.org/show_bug.cgi?id=215705
-* https://bugzilla.kernel.org/show_bug.cgi?id=215708
-* https://bugzilla.kernel.org/show_bug.cgi?id=215727
-* https://bugzilla.kernel.org/show_bug.cgi?id=215745
-
-_______________________________________
-
-## ticket about issues when mounting corrupted fs images (some of them
-might be regressions, but do we handle them as such? Related:
-https://lwn.net/Articles/796687/ )
-
-4 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215716
-* https://bugzilla.kernel.org/show_bug.cgi?id=215717
-* https://bugzilla.kernel.org/show_bug.cgi?id=215718
-* https://bugzilla.kernel.org/show_bug.cgi?id=215722
-
-
-
-____________________________________________________________
-
-# Section 3: other tickets that for one reason or another would be
-misleading to count them in Sections 1 or 2
-
-31 tickets
-
-____________________
-
-## regression reports
-
-5 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215687
-
-  Reporter brought the regression to IRC shortly after filing the bug,
-so developers might be aware that this ticket was safe to ignore.
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215693
-
-  Reporter brought the regression to IRC shortly after filing the bug,
-so developers might be aware that this ticket was safe to ignore.
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215721
-
-  Regression with a maintainers dev tree, developer replied.
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215728
-
-  This looked like a regression, but the reporter after one day noticed
-on his own it in fact was a bug in openZFS.
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215740
-
-  Hard to see that this is actually a regression; and when the
-regression tracker got the developers involved it turned out that this
-is caused by a change adding a warning that made an older problem now
-obvious.
-
-____________________
-
-## issues
-
-7 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215701
-
-  RHEL/CentOS kernel (known to contain quite a few patches)
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215702
-
-  RHEL/CentOS kernel (known to contain quite a few patches)
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215707
-
-  Arch Zen Kernel (seems to contains quite a few patches)
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215723
-
-  "dirty"(?) kernel (whatever that is)
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215724
-
-  Reporter marked it as a duplicate of 215730 (a ticket filed by the
-same reporter where a developer replied).
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215731
-
-   RHEL/CentOS kernel (known to contain quite a few patches) (a
-developer nevertheless replied within round about a week)
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215741
-
-  Very old kernel version
-
-____________________
-
-## tickets submitted from a developer as a kind of note/reminder-to-self
-
-10 tickets:
-
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215690
-* https://bugzilla.kernel.org/show_bug.cgi?id=215751
-* https://bugzilla.kernel.org/show_bug.cgi?id=215752
-* https://bugzilla.kernel.org/show_bug.cgi?id=215753
-* https://bugzilla.kernel.org/show_bug.cgi?id=215754
-* https://bugzilla.kernel.org/show_bug.cgi?id=215755
-* https://bugzilla.kernel.org/show_bug.cgi?id=215756
-* https://bugzilla.kernel.org/show_bug.cgi?id=215757
-* https://bugzilla.kernel.org/show_bug.cgi?id=215758
-* https://bugzilla.kernel.org/show_bug.cgi?id=215759
-
-____________________
-
-## Tickets either inaccessible or covering things like man-pages,
-Trace-cmd/Kernelshark, etc.
-
-9 tickets:
-
-* https://bugzilla.kernel.org/show_bug.cgi?id=215692
-* https://bugzilla.kernel.org/show_bug.cgi?id=215694
-* https://bugzilla.kernel.org/show_bug.cgi?id=215704
-* https://bugzilla.kernel.org/show_bug.cgi?id=215706
-* https://bugzilla.kernel.org/show_bug.cgi?id=215710
-* https://bugzilla.kernel.org/show_bug.cgi?id=215735
-* https://bugzilla.kernel.org/show_bug.cgi?id=215736
-* https://bugzilla.kernel.org/show_bug.cgi?id=215737
-* https://bugzilla.kernel.org/show_bug.cgi?id=215738
-
-
+Le 06/04/2022 à 14:28, Adam Ford a écrit :
+> On Wed, Apr 6, 2022 at 1:56 AM Benjamin Gaignard
+> <benjamin.gaignard@collabora.com> wrote:
+>>
+>> Le 05/04/2022 à 23:27, Adam Ford a écrit :
+>>> On Mon, Apr 4, 2022 at 10:56 AM Benjamin Gaignard
+>>> <benjamin.gaignard@collabora.com> wrote:
+>>>> Le 02/04/2022 à 18:59, Adam Ford a écrit :
+>>>>> On Sat, Apr 2, 2022 at 11:22 AM Adam Ford <aford173@gmail.com> wrote:
+>>>>>> On Fri, Apr 1, 2022 at 8:18 AM Benjamin Gaignard
+>>>>>> <benjamin.gaignard@collabora.com> wrote:
+>>>>>>> Le 31/03/2022 à 08:53, Benjamin Gaignard a écrit :
+>>>>>>>> Le 30/03/2022 à 20:52, Adam Ford a écrit :
+>>>>>>>>> On Wed, Mar 30, 2022 at 2:53 AM Benjamin Gaignard
+>>>>>>>>> <benjamin.gaignard@collabora.com> wrote:
+>>>>>>>>>> Le 28/02/2022 à 15:08, Benjamin Gaignard a écrit :
+>>>>>>>>>>> This series aims to make HEVC uapi stable and usable for hardware
+>>>>>>>>>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+>>>>>>>>>>> and 2 out of the tree drivers (rkvdec and RPI).
+>>>>>>>>>>>
+>>>>>>>>>>> After the remarks done on version 2, I have completely reworked to
+>>>>>>>>>>> patches
+>>>>>>>>>>> split so changelogs are meaningless. I have also drop "RFC" from the
+>>>>>>>>>>> titles.
+>>>>>>>>>>>
+>>>>>>>>>>> Version 4:
+>>>>>>>>>>> - Add num_entry_point_offsets field in  struct
+>>>>>>>>>>> v4l2_ctrl_hevc_slice_params
+>>>>>>>>>>> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+>>>>>>>>>>> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+>>>>>>>>>>> - Fix space/tab issue in kernel-doc
+>>>>>>>>>>> - Add patch to change data_bit_offset definition
+>>>>>>>>>>> - Fix hantro-media SPDX license
+>>>>>>>>>>> - put controls under stateless section in v4l2-ctrls-defs.c
+>>>>>>>>>>>
+>>>>>>>>>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
+>>>>>>>>>> Dear reviewers,
+>>>>>>>>>>
+>>>>>>>>>> This series is waiting for your feedback,
+>>>>>>>>> I tried several times with the suggested repos for both the kernel and
+>>>>>>>>> g-streamer without success getting Fluster to pass any tests on the
+>>>>>>>>> imx8mq.  I can try again but I likely won't get to it until this
+>>>>>>>>> weekend.  If I can get it working, I'll test both the 8mq and 8mm.
+>>>>>>>> Thanks a lot for that.
+>>>>>>>>
+>>>>>>>> Benjamin
+>>>>>>> Adam,
+>>>>>>>
+>>>>>>> You may need to check if h265parse and v4l2slh265dec are available on your board.
+>>>>>> I ran gst-inspect to see what showed up with 265 in the name.
+>>>>>>
+>>>>>> # gst-inspect-1.0 |grep 265
+>>>>>> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
+>>>>>> rtp:  rtph265depay: RTP H265 depayloader
+>>>>>> rtp:  rtph265pay: RTP H265 payloader
+>>>>>> typefindfunctions: video/x-h265: h265, x265, 265
+>>>>>> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
+>>>>>> videoparsersbad:  h265parse: H.265 parser
+>>>>>>
+>>>>>> It appears I have both h265parse and v4l2slh265dec.
+>>>>>>
+>>>>>>> fluster check if v4l2slh265dec is working fine with this command line:
+>>>>>>>
+>>>>>>> gst-launch-1.0 appsrc num-buffers=0 ! h265parse ! v4l2slh265dec ! fakesink
+>>>>>>>
+>>>>>>> so if one of them is missing it won't work.
+>>>>>> gst-launch-1.0 appsrc num-buffers=0 ! h265parse ! v4l2slh265dec ! fakesink
+>>>>>> Setting pipeline to PAUSED ...
+>>>>>> 0:00:00.098389938   526 0xaaaaf9d86ac0 ERROR     v4l2codecs-decoder
+>>>>>> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
+>>>>>> VIDIOC_G_EXT_CTRLS failed: Invalid argument
+>>>>>> ERROR: from element
+>>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
+>>>>>> report framing and start code method.
+>>>>>> Additional debug info:
+>>>>>> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
+>>>>>> gst_v4l2_codec_h265_dec_open ():
+>>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+>>>>>> gst_v4l2_decoder_get_controls() failed: Invalid argument
+>>>>>> ERROR: pipeline doesn't want to preroll.
+>>>>>> ERROR: from element
+>>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
+>>>>>> initialize supporting library.
+>>>>>> Additional debug info:
+>>>>>> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909):
+>>>>>> gst_video_decoder_change_state ():
+>>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+>>>>>> Failed to open decoder
+>>>>>> ERROR: pipeline doesn't want to preroll.
+>>>>>> Failed to set pipeline to PAUSED.
+>>>>>> Setting pipeline to NULL ...
+>>>>>> Freeing pipeline ...
+>>>>>>
+>>>>>> Does this mean I have a wrong version of the kernel and/or incomplete patches?
+>>>>> I double checked the branches.
+>>>>>
+>>>>> Kernel:
+>>>>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
+>>>>> branch:  origin/HEVC_UAPI_V4
+>>>>>
+>>>>> Gstreamer:
+>>>>> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
+>>>>> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_5.15
+>>>>>
+>>>>>
+>>>>> I am still not able to run h.265/HEVC tests.
+>>>> Hello Adam,
+>>>>
+>>>> I have updated the following branches with the versions I have used today:
+>>>>
+>>>> Kernel:
+>>>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
+>>>> branch: origin/HEVC_UAPI_V5 only one change in documentation vs version 4 but rebased in v5.18-rc1
+>>>>
+>>>> Gstreamer:
+>>>> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
+>>>> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_5.15 updated on the latest GST main branch
+>>>>
+>>>> I hope this will work fine this time.
+>>> I wish I had better news for you:
+>>>
+>>> dmesg shows the hantro driver is being loaded:
+>>>
+>>> [   38.612243] hantro-vpu 38300000.video-codec: registered
+>>> nxp,imx8mq-vpu-g1-dec as /dev/video0
+>>> [   38.612618] hantro-vpu 38310000.video-codec: registered
+>>> nxp,imx8mq-vpu-g2-dec as /dev/video1
+>>>
+>>> # gst-inspect-1.0 |grep 265
+>>> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
+>>> rtp:  rtph265depay: RTP H265 depayloader
+>>> rtp:  rtph265pay: RTP H265 payloader
+>>> typefindfunctions: video/x-h265: h265, x265, 265
+>>> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
+>>> videoparsersbad:  h265parse: H.265 parser
+>>>
+>>> Fluster reports:
+>>> GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
+>>> GStreamer 1.0... ❌
+>> Still the same error about non supported control ?
+> # gst-lagst-launch-1.0 appsrc num-buffers=0 ! h265parse !
+> v4l2slh265dec ! fakesink
+> Setting pipeline to PAUSED ...
+> 0:00:01.704385508   420 0xaaaaec0a76c0 ERROR     v4l2codecs-decoder
+> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
+> VIDIOC_G_EXT_CTRLS failed: Invalid argument
+> ERROR: from element
+> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
+> report framing and start code method.
+> Additional debug info:
+> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
+> gst_v4l2_codec_h265_dec_open ():
+> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+> gst_v4l2_decoder_get_controls() failed: Invalid argument
+> ERROR: pipeline doesn't want to preroll.
+> ERROR: from element
+> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
+> initialize supporting library.
+> Additional debug info:
+> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909):
+> gst_video_decoder_change_state ():
+> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+> Failed to open decoder
+> ERROR: pipeline doesn't want to preroll.
+> Failed to set pipeline to PAUSED.
+> Setting pipeline to NULL ...
+> Freeing pipeline ...
+
+What is the result of v4l2-ctl ?
+Here I have:
+v4l2-ctl --all -d 1
+Driver Info:
+	Driver name      : hantro-vpu
+	Card type        : nxp,imx8mq-vpu-g2-dec
+	Bus info         : platform: hantro-vpu
+	Driver version   : 5.18.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+Media Driver Info:
+	Driver name      : hantro-vpu
+	Model            : hantro-vpu
+	Serial           :
+	Bus info         : platform: hantro-vpu
+	Media version    : 5.18.0
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 5.18.0
+Interface Info:
+	ID               : 0x0300000c
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x00000001 (1)
+	Name             : nxp,imx8mq-vpu-g2-dec-source
+	Function         : V4L2 I/O
+	Pad 0x01000002   : 0: Source
+	  Link 0x02000008: to remote pad 0x1000004 of entity 'nxp,imx8mq-vpu-g2-dec-proc': Data, Enabled, Immutable
+Priority: 2
+Format Video Capture Multiplanar:
+	Width/Height      : 48/48
+	Pixel Format      : 'VT12' (Y/CbCr 4:2:0 (4x4 Linear))
+	Field             : None
+	Number of planes  : 1
+	Flags             :
+	Colorspace        : JPEG
+	Transfer Function : Default
+	YCbCr/HSV Encoding: Default
+	Quantization      : Default
+	Plane 0           :
+	   Bytes per Line : 48
+	   Size Image     : 3600
+Format Video Output Multiplanar:
+	Width/Height      : 48/48
+	Pixel Format      : 'S265' (HEVC Parsed Slice Data)
+	Field             : None
+	Number of planes  : 1
+	Flags             :
+	Colorspace        : JPEG
+	Transfer Function : Default
+	YCbCr/HSV Encoding: Default
+	Quantization      : Default
+	Plane 0           :
+	   Bytes per Line : 0
+	   Size Image     : 4608
+
+User Controls
+
+hantro_hevc_slice_header_skip_b 0x00981a80 (int)    : min=0 max=256 step=1 default=0 value=0
+
+Codec Controls
+
+                    hevc_profile 0x00990b67 (menu)   : min=0 max=2 default=0 value=0
+				0: Main
+				1: Main Still Picture
+				2: Main 10
+                      hevc_level 0x00990b68 (menu)   : min=0 max=8 default=0 value=0
+				0: 1
+				1: 2
+				2: 2.1
+				3: 3
+				4: 3.1
+				5: 4
+				6: 4.1
+				7: 5
+				8: 5.1
+
+Stateless Codec Controls
+
+     vp9_frame_decode_parameters 0x00a40a2c (unknown): type=261 flags=has-payload
+       vp9_probabilities_updates 0x00a40a2d (unknown): type=260 flags=has-payload
+     hevc_sequence_parameter_set 0x00a40a90 (unknown): type=270 flags=has-payload
+      hevc_picture_parameter_set 0x00a40a91 (unknown): type=271 flags=has-payload
+             hevc_scaling_matrix 0x00a40a93 (unknown): type=273 flags=has-payload
+          hevc_decode_parameters 0x00a40a94 (unknown): type=274 flags=has-payload
+                hevc_decode_mode 0x00a40a95 (menu)   : min=1 max=1 default=1 value=1
+				1: Frame-Based
+                 hevc_start_code 0x00a40a96 (menu)   : min=1 max=1 default=1 value=1
+				1: Annex B Start Code
+
+>
+>> Benjamin
+>>
+>>> adam
+>>>> Benjamin
+>>>>
+>>>>> adam
+>>>>>> adam
+>>>>>>> Regards,
+>>>>>>> Benjamin
+>>>>>>>
+>>>>>>>>> adam
+>>>>>>>>>> Thanks,
+>>>>>>>>>> Benjamin
+>>>>>>>>>>
+>>>>>>>>>>> Benjamin
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Benjamin Gaignard (12):
+>>>>>>>>>>>        media: uapi: HEVC: Add missing fields in HEVC controls
+>>>>>>>>>>>        media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+>>>>>>>>>>>          prefix
+>>>>>>>>>>>        media: uapi: HEVC: Add document uAPI structure
+>>>>>>>>>>>        media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS
+>>>>>>>>>>> as a
+>>>>>>>>>>>          dynamic array
+>>>>>>>>>>>        media: uapi: Move parsed HEVC pixel format out of staging
+>>>>>>>>>>>        media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+>>>>>>>>>>> control
+>>>>>>>>>>>        media: uapi: Move the HEVC stateless control type out of staging
+>>>>>>>>>>>        media: controls: Log HEVC stateless control in .std_log
+>>>>>>>>>>>        media: uapi: Create a dedicated header for Hantro control
+>>>>>>>>>>>        media: uapi: HEVC: fix padding in v4l2 control structures
+>>>>>>>>>>>        media: uapi: Change data_bit_offset definition
+>>>>>>>>>>>        media: uapi: move HEVC stateless controls out of staging
+>>>>>>>>>>>
+>>>>>>>>>>> Hans Verkuil (3):
+>>>>>>>>>>>        videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>>>>>>>>>>>        v4l2-ctrls: add support for dynamically allocated arrays.
+>>>>>>>>>>>        vivid: add dynamic array test control
+>>>>>>>>>>>
+>>>>>>>>>>>       .../userspace-api/media/drivers/hantro.rst    |   5 -
+>>>>>>>>>>>       .../media/v4l/ext-ctrls-codec-stateless.rst   | 833
+>>>>>>>>>>> ++++++++++++++++++
+>>>>>>>>>>>       .../media/v4l/ext-ctrls-codec.rst             | 780
+>>>>>>>>>>> ----------------
+>>>>>>>>>>>       .../media/v4l/pixfmt-compressed.rst           |   7 +-
+>>>>>>>>>>>       .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+>>>>>>>>>>>       .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>>>>>>>>>>>       .../media/videodev2.h.rst.exceptions          |   5 +
+>>>>>>>>>>>       .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+>>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
+>>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
+>>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  37 +-
+>>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>>>>>>>>>>>       drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+>>>>>>>>>>>       drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+>>>>>>>>>>>       drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+>>>>>>>>>>>       .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>>>>>>>>>>>       .../staging/media/sunxi/cedrus/cedrus_h265.c  |   2 +-
+>>>>>>>>>>>       include/media/hevc-ctrls.h                    | 250 ------
+>>>>>>>>>>>       include/media/v4l2-ctrls.h                    |  48 +-
+>>>>>>>>>>>       include/uapi/linux/hantro-media.h             |  19 +
+>>>>>>>>>>>       include/uapi/linux/v4l2-controls.h            | 439 +++++++++
+>>>>>>>>>>>       include/uapi/linux/videodev2.h                |  13 +
+>>>>>>>>>>>       23 files changed, 1697 insertions(+), 1170 deletions(-)
+>>>>>>>>>>>       delete mode 100644 include/media/hevc-ctrls.h
+>>>>>>>>>>>       create mode 100644 include/uapi/linux/hantro-media.h
+>>>>>>>>>>>

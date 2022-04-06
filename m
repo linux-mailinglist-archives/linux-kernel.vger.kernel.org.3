@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BAC4F6793
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531854F674F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbiDFRfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S239105AbiDFRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239108AbiDFRev (ORCPT
+        with ESMTP id S239174AbiDFRex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:34:51 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E11428CF6F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:41:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i27so5085588ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:41:42 -0700 (PDT)
+        Wed, 6 Apr 2022 13:34:53 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4EF1F6BE7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:41:54 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d5so4758454lfj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IVumMDZqt2rwjHo8Qk+yTSY8rtnOM1vqzCoA3ao9aAM=;
-        b=zVB8o3Zgd/cpfJfL0Am7OUu8eY30qJZHoXMN4YADODANvu03uA3vq/LsPdIMNa/cvj
-         79Xn5J/zT/yzIdDCay7AJdtG6EbZutctsan0TUjqCkHikSW7F52S0iKdx4w/02av41kC
-         C4gcQ/Fgh1bkBZQ6qh33ERwqW6zDcHhVFdso9gKd5oKVrjWiywDbxGSSSEGzGREdn0rP
-         XjNwcv6B8qd5UnsvcNNgD04AYyeUw90W0QPIgXJaY5JSJ/cyE2bJGtdKSwOvW9tGtEqA
-         h0HUtmo83SzZLEgBjOqw7TT0xqlli4KUKMepZjsNRzH3PPc83PeU5gq+YBrU/bUXF3SZ
-         vV7Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WIVsdQsPt2lxmnjdpo863Zg6K+OImetGpesYpOQLQrY=;
+        b=miXKVMm0bdpNo8et8CZm7eD33XHm+hRGYT5aUy/TjlYtIbm8+mQgqEB71S4VfHGLU5
+         4BrZqQae+7jH7cSgOVqtH4rAJA6AtEycG5yWt/1K8hOBGtWcv6af58Fny759ak3zTWcx
+         st/uFU6mUpXZ2yldbatFSNSGeQbjjuTWR7uNA/JWuxH0U3ZM5xD1KodgyJTd4koONW53
+         QTzflRlgvGq0UaFb4ufnA6wOAUW0aqelgom78FQOXlMjNsKK11QbYgD3VxAvw9D7SCgW
+         sPBeiuza/3cB9IstHe+dlqqOjawFexBxrJDnSJSqCaggD9GQX/PTm4RkKjVmc8CgP2FM
+         z5xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IVumMDZqt2rwjHo8Qk+yTSY8rtnOM1vqzCoA3ao9aAM=;
-        b=RQi2yebrNNGMGQWC6n4KCP7kPF1Y7sj1dx/lB146SQcTY4YLjIa6ABfFl1hMLeNnQd
-         KjNnskOUVmVvNsU2jdBM2q5LQaXNdJkcYK1mURXD3QhOKfH8MshfvDngcKscN8tiBsxx
-         6vBucvwpMN5QSGQIPZuknvitW5TzSAPNsTL+Qu5kBCQ1A4GtwYm1VB9yz7Djpg4NU8fV
-         Rz1m/ff8ery4fkz1uIbISb3LxEkc0ngQJGgUAlEaKdlRMe3s4nmfT/yVYObscatAQjfy
-         MXBySY41cqn0nxHHb/GoJ1LJeGACBM7u8MNVY1tKK/swUI5Jbm8sLS0YT5DsNpGTLVkJ
-         9E4w==
-X-Gm-Message-State: AOAM531rIR28rgKLyI7ybRkLNOhQIcPlM75YU5Jh+ZGCmRqWAXnCIhj9
-        oKntP4dLCByvIgdH5NmwHwAPZQ==
-X-Google-Smtp-Source: ABdhPJxrUbKHbP58C1B/fd6ArkIlovyAlC3CUwhuPi3IERJe3tFXIzQsIIQmlOGhmyi2L62wj78X5w==
-X-Received: by 2002:a17:906:5d0e:b0:6e0:2cd5:a87c with SMTP id g14-20020a1709065d0e00b006e02cd5a87cmr8930160ejt.708.1649259701557;
-        Wed, 06 Apr 2022 08:41:41 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm6666260ejc.81.2022.04.06.08.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 08:41:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] dt-bindings: soc: samsung: usi: refer to dtschema for SPI
-Date:   Wed,  6 Apr 2022 17:41:38 +0200
-Message-Id: <164925969518.491593.2533491999537917360.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220324134106.103588-1-krzk@kernel.org>
-References: <20220324134106.103588-1-krzk@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WIVsdQsPt2lxmnjdpo863Zg6K+OImetGpesYpOQLQrY=;
+        b=lJImb9Y7keCmJA9AtZLi5MdHEUApArS0JxOmvAmWukjbSL0kJThL0SYVhTXZ2M/3HD
+         3LjZeObT3Ek6ze0m2Scjh6HbgixRH3GwIqq9ypNSlwlPG/n4rlBP2A7AobV3u5+dFaMo
+         12qKBeu2D7tufmTIM60wgPqhcm/Xx/12qrdn1AQDCaAfFKVUkWdonUfvLnPg8iYd+vko
+         yuol39iyNOfmyOrT6RFBMSXvtzbRHm8qLw8goWxo9l6Mo/VbvUg+Pqr9re8WffP9Iy9t
+         g/CxYshaljnPM0HR24R7bJbhgU1it2lJctMXReVYGIaoy++XwxxbEkJrMtSg1oiJ8zCr
+         Hiwg==
+X-Gm-Message-State: AOAM533/LtOsOyya+c+2cJNfri8BMOuXQTTs52V7hgbO9LmCwaRCBs5j
+        RBwcOyiA4NBE2HKCYhX9c0aVGgjFfQ70IVGqkbovPA==
+X-Google-Smtp-Source: ABdhPJxcJUN8YmcY60C5+lVqseVI93O5+3mb5MF+QKmQFOUn2PLcEHssbp2CqD/3x1eZBKiCg9zFAUEoMy0CxpVXUqk=
+X-Received: by 2002:a05:6512:250:b0:44a:47c6:96a7 with SMTP id
+ b16-20020a056512025000b0044a47c696a7mr6136832lfo.46.1649259712451; Wed, 06
+ Apr 2022 08:41:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <1649245580-27256-1-git-send-email-zgpeng@tencent.com>
+In-Reply-To: <1649245580-27256-1-git-send-email-zgpeng@tencent.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 6 Apr 2022 17:41:41 +0200
+Message-ID: <CAKfTPtDCXP8pt=F563sovxXJr-ALFuxNtE+1gWL-s7A-h4waew@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Simplify the scene where both local and
+ busiest are group_fully_busy
+To:     zgpeng <zgpeng.linux@gmail.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -76,17 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 14:41:06 +0100, Krzysztof Kozlowski wrote:
-> After adding DT schema for Samsung SPI controller, the Samsung USI
-> bindings can reference it directly for proper schema validation.
-> 
-> 
+On Wed, 6 Apr 2022 at 13:46, zgpeng <zgpeng.linux@gmail.com> wrote:
+>
+> When both local and busiest group are group_fully_busy type, because
+> the avg_load of the group of type group_fully_busy is not calculated, the
+> avg_load value is equal to 0. In this case, load balancing will not actually
+> done, because after a series of calculations in the calculate_imbalance, it
+> will be considered that load balance is not required. Therefore,it is not
+> necessary to enter calculate_imbalance to do some useless work.
+>
+> Signed-off-by: zgpeng <zgpeng@tencent.com>
+> Reviewed-by: Samuel Liao <samuelliao@tencent.com>
+> ---
+>  kernel/sched/fair.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 9f75303..cc1d6c4 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9634,6 +9634,18 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+>                          * busiest doesn't have any tasks waiting to run
+>                          */
+>                         goto out_balanced;
+> +
 
-Applied, thanks!
+We are there because both local and busiest are not overloaded, local
+is idle or newly_idle and there might be an opportunity to pull a
+waiting task on local to use this local cpu. I wonder if we should not
+cover this opportunity in calculate_imbalance instead of skipping it
 
-[1/1] dt-bindings: soc: samsung: usi: refer to dtschema for SPI
-      commit: db85474594609fc6f6a37fe5d5001fa9341971ed
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +               if (local->group_type == group_fully_busy)
+> +                       /*
+> +                        * If local group is group_fully_busy, the code goes here,
+> +                        * the type of busiest group must also be group_fully_busy.
+> +                        * Because the avg_load of the group_fully_busy type is not
+> +                        * calculated at present, it is actually equal to 0. In this
+> +                        * scenario, load balance is not performed. therefore, it can
+> +                        * be returned directly here, and there is no need to do some
+> +                        * useless work in calculate_imbalance.
+> +                        */
+> +                       goto out_balanced;
+>         }
+>
+>  force_balance:
+> --
+> 2.9.5
+>

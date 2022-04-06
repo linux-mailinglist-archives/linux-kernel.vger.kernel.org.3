@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240274F5E39
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2815C4F5E87
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiDFMfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 08:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S230012AbiDFMuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiDFMdS (ORCPT
+        with ESMTP id S233711AbiDFMd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:33:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283B92DCC87;
-        Wed,  6 Apr 2022 01:31:48 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYHjz45tKzDqMd;
-        Wed,  6 Apr 2022 16:29:27 +0800 (CST)
-Received: from [10.174.178.134] (10.174.178.134) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 16:31:46 +0800
-Subject: Re: [PATCH -next] ext4: Fix symlink file size not match to file
- content
-To:     Jan Kara <jack@suse.cz>
-CC:     Ye Bin <yebin10@huawei.com>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lczerner@redhat.com>
-References: <20220321113408.4112428-1-yebin10@huawei.com>
- <20220321113703.cibgeac5ipslg3df@quack3.lan>
- <5b3e0bb7-370b-a950-1d2f-b0e31357cc01@huawei.com>
- <20220321151141.hypnhr6o4vng2sa6@quack3.lan>
-From:   Zhang Yi <yi.zhang@huawei.com>
-Message-ID: <75227a4a-2e32-463a-ade7-57c37a3fbf4b@huawei.com>
-Date:   Wed, 6 Apr 2022 16:31:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 6 Apr 2022 08:33:29 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDA236FB5A;
+        Wed,  6 Apr 2022 01:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9xt0369dhM7VBOgA77yxeIwkTj0Hpid2gN2MW5LI3oo=; b=LZmSgaDdhGWPzS7AFEj8yCE24S
+        5jtuV7po7iIM1SI3fgqX0lmSNmiWaMI6X4Hujy0wUAdj3OzCK6osprWGo/NxsY2TNRlHWFJruD966
+        lsf8d9G0WJ85l6ntJ0YQh/jaBvGBk/tsr5ppdw+cdNXpEl707vUKrc51miM0AYsL7xpk=;
+Received: from p200300daa70ef200456864e8b8d10029.dip0.t-ipconnect.de ([2003:da:a70e:f200:4568:64e8:b8d1:29] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nc15K-00040V-QC; Wed, 06 Apr 2022 10:32:14 +0200
+Message-ID: <08883cf4-27b9-30bf-bd27-9391b763417c@nbd.name>
+Date:   Wed, 6 Apr 2022 10:32:14 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220321151141.hypnhr6o4vng2sa6@quack3.lan>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 04/14] dt-bindings: arm: mediatek: document WED binding
+ for MT7622
 Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Networking <netdev@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-5-nbd@nbd.name>
+ <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org>
+ <e3ea7381-87e3-99e1-2277-80835ec42f15@nbd.name>
+ <CAK8P3a1A6QYajv_HTw79HjiJ8CN6YPeKXc_X3ZFD83pdOqVTkQ@mail.gmail.com>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <CAK8P3a1A6QYajv_HTw79HjiJ8CN6YPeKXc_X3ZFD83pdOqVTkQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.134]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,64 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/21 23:11, Jan Kara wrote:
-> Hello Yi!
+On 06.04.22 10:29, Arnd Bergmann wrote:
+> On Wed, Apr 6, 2022 at 10:18 AM Felix Fietkau <nbd@nbd.name> wrote:
+>> On 06.04.22 10:09, Krzysztof Kozlowski wrote:
+>> > On 05/04/2022 21:57, Felix Fietkau wrote:
+>> >> From: Lorenzo Bianconi <lorenzo@kernel.org>
+>> >>
+>> >> Document the binding for the Wireless Ethernet Dispatch core on the MT7622
+>> >> SoC, which is used for Ethernet->WLAN offloading
+>> >> Add related info in mediatek-net bindings.
+>> >>
+>> >> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>> >> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+>> >
+>> > Thank you for your patch. There is something to discuss/improve.
+>> >
+>> >> ---
+>> >>  .../arm/mediatek/mediatek,mt7622-wed.yaml     | 50 +++++++++++++++++++
+>> >>  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
+>> >>  2 files changed, 52 insertions(+)
+>> >>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
+>> >
+>> > Don't store drivers in arm directory. See:
+>> > https://lore.kernel.org/linux-devicetree/YkJa1oLSEP8R4U6y@robh.at.kernel.org/
+>> >
+>> > Isn't this a network offload engine? If yes, then probably it should be
+>> > in "net/".
+>> It's not a network offload engine by itself. It's a SoC component that
+>> connects to the offload engine and controls a MTK PCIe WLAN device,
+>> intercepting interrupts and DMA rings in order to be able to inject
+>> packets coming in from the offload engine.
+>> Do you think it still belongs in net, or maybe in soc instead?
 > 
-> On Mon 21-03-22 22:38:49, Zhang Yi wrote:
->> On 2022/3/21 19:37, Jan Kara wrote:
->>> On Mon 21-03-22 19:34:08, Ye Bin wrote:
->>>> We got issue as follows:
->>>> [home]# fsck.ext4  -fn  ram0yb
->>>> e2fsck 1.45.6 (20-Mar-2020)
->>>> Pass 1: Checking inodes, blocks, and sizes
->>>> Pass 2: Checking directory structure
->>>> Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
->>>> Clear? no
->>>> Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
->>>> Fix? no
->>>>
->>>> As symlink file size not match to file content. If symlink data block
->>>> writback failed, will call ext4_finish_bio to end io. In this path don't
->>>> mark buffer error. When umount do checkpoint can't detect buffer error,
->>>> then will cleanup jounral. Actually, correct data maybe in journal area.
->>>> To solve this issue, mark buffer error when detect bio error in
->>>> ext4_finish_bio.
->>>
->>> Thanks for the patch! Let me rephrase the text a bit:
->>>
->>> As the symlink file size does not match the file content. If the writeback
->>> of the symlink data block failed, ext4_finish_bio() handles the end of IO.
->>> However this function fails to mark the buffer with BH_write_io_error and
->>> so when unmount does journal checkpoint it cannot detect the writeback
->>> error and will cleanup the journal. Thus we've lost the correct data in the
->>> journal area. To solve this issue, mark the buffer as BH_write_io_error in
->>> ext4_finish_bio().
->>>
->>
->> Thinking about this issue in depth, the symlink data block is one kind of
->> metadata, but the page mapping of such block is belongs to the ext4 inode,
->> it's not coordinate to other metadata blocks, e.g. directory block and extents
->> block. This is why we have already fix the same issue of other metadata blocks
->> in commit fcf37549ae19e9 "jbd2: ensure abort the journal if detect IO error
->> when writing original buffer back" but missing the case of symlink data block.
->> So, after Ye Bin's fix, I think it's worth to unify the symlink data block
->> mapping to bdev, any suggestions?
-> 
-> Well, symlink with external block is essentially a case of data=journal
-> data block. So even if we would handle symlinks, we would still need to
-> deal with other inodes with journalled data. Also we need to keep the> symlink contents in the page cache to make it simple for generic VFS code
-> handling symlinks. So I don't see how we could substantially unify
-> things...
-> 
+> I think it belongs into drivers/net/. Presumably this has some kind of
+> user interface to configure which packets are forwarded? I would not
+> want to maintain that in a SoC driver as this clearly needs to communicate
+> with both of the normal network devices in some form.
+The WLAN driver attaches to WED in order to deal with the intercepted 
+DMA rings, but other than that, WED itself has no user configuration.
+Offload is controlled by the PPE code in the ethernet driver (which is 
+already upstream), and WED simply provides a destination port for PPE, 
+which allows packets to flow to the wireless device.
 
-Yeah, this fix is still needed for other regular file's journalled data when we
-mounted filesystem with data=jouranl mode. But if we just consider whether if we
-could unify the journal mode of ext4's metadata blocks, it seems that using
-data=journal mode for symlink's external data block is also complicated and
-confused in the creating procedure. Instead, if we use ext4_bread(), it make
-things clear, and it seems also has no side effect of reading symlinks. I write
-a RFC patch to do this, please take a look at my latest mail "[RFC PATCH] ext4:
-convert symlink external data block mapping to bdev".
-
-Thanks,
-Yi.
+- Felix

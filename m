@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C40C4F55F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13964F55FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390279AbiDFFyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S1377897AbiDFFwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360966AbiDFDoF (ORCPT
+        with ESMTP id S2360982AbiDFDoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:44:05 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71B816B152;
-        Tue,  5 Apr 2022 17:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649203919;
-        bh=lQZC9KF3fkpp3qkV+BLTCo7NkUkmtr0bB09V3SZnVCY=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=cnGDvje0keNcFijjyhXnLHAG8r/nL0zsJTCxsXIMcILiclPaf+JAm9c6frMQJ9q+I
-         GMTutl8pRgHhaXeeXnxJvVMdm5uUxFzE5MBIv+M6A4Q4/ukFPBgl5wdwbeLfWFFHvI
-         xNgj/ZpADI9aCTmc02Qe10uXActUd0m8OG5tweLY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.239]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N49lJ-1o2OOE2uGn-0105Zq; Wed, 06
- Apr 2022 02:11:59 +0200
-Message-ID: <ca184e4d-1691-f44a-6054-b7cae52f5077@gmx.de>
-Date:   Wed, 6 Apr 2022 02:11:58 +0200
+        Tue, 5 Apr 2022 23:44:06 -0400
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D12296D2F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:12:14 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 1616156A6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:12:14 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id btHRnRHiaXvvJbtHSnS7gB; Tue, 05 Apr 2022 19:12:14 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=V34eNda++WlmGe+ZWCeqNhmRnpIlO8Tl6u7MFmXbztQ=; b=EbiyndnK4uoLFl5VhRQPS09z1S
+        /yRo1ynqYNlThAxczGu1FqKJTEXcc6AlPe6vEEB8L3UVFwZAS9dtqH7Jnyvy/mwSfokN2SkZGR/WH
+        A9JnbadYt3+rk4viOgIydnS0VTdSrBCt1CQFKo+FlZTvhcxjmneFzuATMeBe2BP4IpqDXacIFqK3W
+        lzKjDTRgLJaD+jht1thLujSL4f3L5cH29a1ZqfO6TsXeNhqkAMo1tfbdhxVkjzJ5Bs4XamjDKoC4G
+        QJzf5JMTZ9GE9dR2FWF4iun9VTKFbPPCAGFbHWTKAHHkNrt0BqRy2St1XGwRQlzmHx6Xr01d9Jpev
+        Ot3jyP4A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54732)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbtHR-000mos-4N; Wed, 06 Apr 2022 00:12:13 +0000
+Message-ID: <53e24114-fe48-91aa-1b76-78b12dfcdf4e@roeck-us.net>
+Date:   Tue, 5 Apr 2022 17:12:10 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.17 0000/1126] 5.17.2-rc1 review
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org>
+ <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <20220405212653.GA2482665@roeck-us.net>
+ <CAK8P3a396EkfQtmkwo80eB9i7F37S=mvrHtCLXhGDhHBczYK3g@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PULL] remove arch/h8300
+In-Reply-To: <CAK8P3a396EkfQtmkwo80eB9i7F37S=mvrHtCLXhGDhHBczYK3g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:cYu9JdORc1SmR6BiCGPQiPskdZm+eavF6AOJyRHFXDBuita0uCy
- bHTYWxbw+Z/KjUN+XDezDDimJupB61QO/covhoz8VMbH7n3PPHf0hbbqitmkmoIvsflcHAR
- uk8uYDYjgRAJ/CXul5bKLbayP+pvPjYkDNGHb22DRTP721+5IaMRECB82MbiQzjZ+/f8XnP
- sWWZIj7ulfSdcy806baRQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qnKmeB+oY6I=:MZ26Fl6Oiw4udMXe9NQlPC
- lM1BKFUII6Eh9f53H1c7laOrQcXDySDgkVqBF1epo/y3JuEPVQRuUMpbyZ4mnHbwJVAPtsIyR
- mrlTUNswGPGeBilTlDvuW/ggAOCwFToYCzWq1TbdQTjhZ1i6HpMSlF15sYutchgBON/MNx3Qi
- MjtP8MvH16tj9a3yMoKZe10gnsbNlyRw8J2qe3Z/hfB+ynBnKWbqyaOpUOGcBCGrChbYNdCd5
- nXHLbvVtK3+M77c1SIFUUQiuQjs2Ons5vucAD5gWheZ3PDMQU02bXPBjCg1wQkLaEjbujxJ9z
- peWVPz9n8PrwIf05DAl5Rg8TVSgfJcb92TtMoiXJH8LH2Rp/evPFBEas+G4W8neuZoVUjglsr
- LH31gUSpFIdQVOFzEjhyqyaCns9ysMe5mrnkzXPQ8hWJyzkO2PIMCV3rGhMYX+KgpqioDsPNr
- oIbJbQU4bKNd2v+CZtd3pwUqQpXSlMHBd9KhNsBz4aJjzN9GKtOiJOzbD0DpWMJUXKucBjlp6
- Hhsno3FhFtv8RLma7tfbq2JTkcQXNIfBYD9a8oGFkbDKWB+8h4s3YSLDq4tLSnFzUadPEdJsH
- 1BiHMu3Ll6yK71SNF7+xUsiMl3XzRyz5ACwBlMR5usA2Q2IgZapnsI7XcnyQw5BNeYpY2T8uQ
- 5kUh68CKf8L0L8uggNGMWXklu+2n0JM1FIPXLqjv8bgT/Lt0f3EvXB8B0Zc7fdPI+lsJxJjrH
- 25METSOyJpU4FacHYroEzzPOaez794jW53z2pq4MhEhp4FNYBy2i72tY/7thUKxannniM6h/m
- GLTqW4zfdZxGGeDgC944r6YTcH8Nv6ynH66P8MIkVeLaq4JC1suv8p3RF16eqKWd+4wP0ZI7/
- soVKmCxfZjaIzsV3r/ojHW6maz5puLgBNTwdeVnkYQdZ/IacQjUsdJlvswmn2q+n7Tpt73cp8
- C8ZC6Ex9GEZP1mKvPQ/axtPrHetWwDsWO2592BHu4ZaqJJX8/A3/rChASd2YoyUcEScTvXe7Z
- kJ7sCxJlrvzYd9CLHXr775XIkqw+gkEx1UjfCoOI6n4H48pMwL65JeTtegkzVxJjSPDxuljcY
- IGd7+NCbSEsWBU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FAKE_REPLY_A1,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbtHR-000mos-4N
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54732
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 10
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+On 4/5/22 15:01, Arnd Bergmann wrote:
+> On Tue, Apr 5, 2022 at 11:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On Mon, Apr 04, 2022 at 03:07:06PM +0200, Arnd Bergmann wrote:
+>>>
+>>> Should we garbage-collect some of the other nommu platforms where
+>>> we're here? Some of them are just as stale:
+>>>
+>>> 1. xtensa nommu has does not compile in mainline and as far as I can
+>>> tell never did
+>>>     (there was https://github.com/jcmvbkbc/linux-xtensa/tree/xtensa-5.6-esp32,
+>>> which
+>>>     worked at some point, but I don't think there was enough interest
+>>> to get in merged)
+>>
+>> Hmm, I build and test nommu_kc705_defconfig in my test system.
+> 
+> What toolchain do you use for this? Max already pointed out my mistake
+> regarding xtensa, which I thought does not build at all, but just needs
+> a toolchain specific to the cpu.
+> 
 
-5.17.2-rc1
+Home-built using buildroot. I have three different xtensa toolchains
+(de212, dc232b, and dc233c). The toolchain for kc705_nommu needs the
+de212 overlay; I think Max pointed to to the information needed
+to build the compiler. Buildroot has the "XTENSA_OVERLAY_FILE"
+option to specify the compiler overlay file for the target.
 
-compiles, boots and runs on my x86_64
-(Intel i5-11400, Fedora 36 Beta)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
-
-Ronald
-
+Guenter

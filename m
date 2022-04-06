@@ -2,88 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595FA4F65AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEB54F656B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbiDFQfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S237125AbiDFQbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiDFQez (ORCPT
+        with ESMTP id S237706AbiDFQai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:34:55 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0D741C17F;
-        Tue,  5 Apr 2022 18:46:00 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5E0FD839BA;
-        Wed,  6 Apr 2022 03:45:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1649209555;
-        bh=v3oFc7B9bk2XqycnFoV04ixZ2YcCpeqjwMggrSrn75U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o4J3v1s3ENNJEYYwqYgvj1wHS6f9tcldZPd7pkPdyzU6mW3Rol9t91MY41+ydOFqP
-         0+mAXb9BdNRZ2rgPZJELmfBa6E4gzP2kSyYospn3W4EdT82ZcOnH7cB2Z65VruxKdR
-         mOqgA4gc3aKwE8vKKIvh6unJbnqA7H0GJOPFkoyUuK1PErGEavYAv622jrZA8FJHTe
-         AFRZP+T+p11ZJOuJOaODsOnGV3lBVABwYHlSCsCZGYEhQJh1PEp+WXBohaylgwS4kZ
-         35eOXXxc7NIJJJznSlFPJRyzhqXWcV9M+Mg0oblqaqIj+YdwmsVHAJ3ajIvwgY1t0h
-         fcGjS6QUK0LAw==
-Message-ID: <481e40a3-bf84-1b04-b6e6-2a74a0b4b6fe@denx.de>
-Date:   Wed, 6 Apr 2022 03:45:49 +0200
+        Wed, 6 Apr 2022 12:30:38 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F76941FD0A;
+        Tue,  5 Apr 2022 18:48:15 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V9JJspu_1649209690;
+Received: from 192.168.193.179(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V9JJspu_1649209690)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 06 Apr 2022 09:48:11 +0800
+Message-ID: <2bda020e-cc1b-ecf2-be23-9b7ed5d61945@linux.alibaba.com>
+Date:   Tue, 5 Apr 2022 18:48:09 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
+ Thunderbird/91.8.0
+From:   Dan Li <ashimida@linux.alibaba.com>
+Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
+To:     catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
+        arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
+        ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
+        luc.vanoostenryck@gmail.com, samitolvanen@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Dan Li <ashimida@linux.alibaba.com>
+References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <20220314135329.80621-1-ashimida@linux.alibaba.com>
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220406105828.6d238651@canb.auug.org.au>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20220406105828.6d238651@canb.auug.org.au>
+In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 02:58, Stephen Rothwell wrote:
-> Hi all,
+Hi Kees,
 
-Hi,
+Gentile ping for this :).
 
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
-> 
-> WARNING: modpost: drivers/gpu/drm/bridge/chipone-icn6211.prelink.o(.exit.data+0x0): Section mismatch in reference from the variable __cfi_jt_cleanup_module to the function .init.text:cleanup_module()
-> The variable __exitdata __cfi_jt_cleanup_module references
-> a function __init cleanup_module().
-> This is often seen when error handling in the exit function
-> uses functionality in the init path.
-> The fix is often to remove the __init annotation of
-> cleanup_module() so it may be used outside an init section.
-> 
-> Introduced by commit
-> 
->    8dde6f7452a1 ("drm: bridge: icn6211: Add I2C configuration support")
-> 
-> The chipone_exit function should not be marked __init.
+I also saw the discussion on llvm-project, use address of labels as a
+parameter doesn't seem to be stable.
 
-Thanks, fix is submitted.
+Do we need to split it into two cases here?
 
-Sigh.
+Link: https://github.com/llvm/llvm-project/issues/54328
+
+Thanks,
+Dan
+
+
+On 3/14/22 06:53, Dan Li wrote:
+> Add tests for SCS (Shadow Call Stack) based backward CFI.
+> 
+> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> ---
+>   arch/arm64/include/asm/compiler.h       | 18 ++++++
+>   drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
+>   drivers/misc/lkdtm/core.c               |  1 +
+>   drivers/misc/lkdtm/lkdtm.h              |  1 +
+>   include/linux/compiler-clang.h          |  1 +
+>   include/linux/compiler-gcc.h            |  2 +
+>   include/linux/compiler_types.h          |  4 ++
+>   tools/testing/selftests/lkdtm/tests.txt |  1 +
+>   8 files changed, 112 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
+> index dc3ea4080e2e..96590fb4a8de 100644
+> --- a/arch/arm64/include/asm/compiler.h
+> +++ b/arch/arm64/include/asm/compiler.h
+> @@ -8,6 +8,24 @@
+>   #define ARM64_ASM_PREAMBLE
+>   #endif
+>   
+> +#ifndef __ASSEMBLY__
+> +#ifdef __KERNEL__
+> +
+> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> +
+> +#ifdef CONFIG_ARM64_BTI_KERNEL
+> +# define __no_ptrauth __attribute__((target("branch-protection=bti")))
+> +#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
+> +# define __no_ptrauth __attribute__((target("branch-protection=none")))
+> +#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
+> +# define __no_ptrauth __attribute__((target("sign-return-address=none")))
+> +#endif
+> +
+> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
+> +
+> +#endif /* __KERNEL__ */
+> +#endif /* __ASSEMBLY__ */
+> +
+>   /*
+>    * The EL0/EL1 pointer bits used by a pointer authentication code.
+>    * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
+> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> index c9aeddef1044..468ba2f26f74 100644
+> --- a/drivers/misc/lkdtm/cfi.c
+> +++ b/drivers/misc/lkdtm/cfi.c
+> @@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
+>   	pr_err("FAIL: survived mismatched prototype function call!\n");
+>   	pr_expected_config(CONFIG_CFI_CLANG);
+>   }
+> +
+> +#ifdef CONFIG_ARM64
+> +/*
+> + * This function is used to modify its return address. The PAC needs to be turned
+> + * off here to ensure that the modification of the return address will not be blocked.
+> + */
+> +static noinline __no_ptrauth
+> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (*ret_addr == expected)
+> +		*ret_addr = addr;
+> +}
+> +
+> +/* Function with __noscs attribute attempts to modify its return address. */
+> +static noinline __no_ptrauth __noscs
+> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (*ret_addr == expected)
+> +		*ret_addr = addr;
+> +}
+> +#else
+> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
+> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
+> +#endif
+> +
+> +static volatile unsigned int force_label;
+> +
+> +/*
+> + * This first checks whether a function with the __noscs attribute under
+> + * the current platform can directly modify its return address, and if so,
+> + * checks whether scs takes effect.
+> + */
+> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
+> +{
+> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
+> +
+> +	if (force_label && (force_label < sizeof(array))) {
+> +		/*
+> +		 * Call them with "NULL" first to avoid
+> +		 * arguments being treated as constants in -02.
+> +		 */
+> +		lkdtm_noscs_set_lr(NULL, NULL);
+> +		lkdtm_scs_set_lr(NULL, NULL);
+> +		goto *array[force_label];
+> +	}
+> +
+> +	/* Keep labels in scope to avoid compiler warnings. */
+> +	do {
+> +		/* Verify the "normal" condition of LR corruption working. */
+> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
+> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
+> +
+> +unexpected:
+> +		/*
+> +		 * If lr cannot be modified, the following check is meaningless,
+> +		 * returns directly.
+> +		 */
+> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
+> +		break;
+> +
+> +expected:
+> +		pr_info("ok: lr corruption redirected without scs.\n");
+> +
+> +		/* Verify that SCS is in effect. */
+> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
+> +
+> +good_scs:
+> +		pr_info("ok: scs takes effect.\n");
+> +		break;
+> +
+> +bad_scs:
+> +		pr_err("FAIL: return address rewritten!\n");
+> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> +	} while (0);
+> +}
+> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+> index f69b964b9952..7af7268b82e4 100644
+> --- a/drivers/misc/lkdtm/core.c
+> +++ b/drivers/misc/lkdtm/core.c
+> @@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
+>   	CRASHTYPE(USERCOPY_KERNEL),
+>   	CRASHTYPE(STACKLEAK_ERASING),
+>   	CRASHTYPE(CFI_FORWARD_PROTO),
+> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
+>   	CRASHTYPE(FORTIFIED_OBJECT),
+>   	CRASHTYPE(FORTIFIED_SUBOBJECT),
+>   	CRASHTYPE(FORTIFIED_STRSCPY),
+> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+> index d6137c70ebbe..a66fba949ab5 100644
+> --- a/drivers/misc/lkdtm/lkdtm.h
+> +++ b/drivers/misc/lkdtm/lkdtm.h
+> @@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
+>   
+>   /* cfi.c */
+>   void lkdtm_CFI_FORWARD_PROTO(void);
+> +void lkdtm_CFI_BACKWARD_SHADOW(void);
+>   
+>   /* fortify.c */
+>   void lkdtm_FORTIFIED_OBJECT(void);
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index 3c4de9b6c6e3..2db37db36651 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -68,3 +68,4 @@
+>   
+>   #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+>   #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+> +#define __no_optimize	__attribute__((optnone))
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index deff5b308470..28d1b0ec6656 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -162,3 +162,5 @@
+>   #if GCC_VERSION < 90100
+>   #undef __alloc_size__
+>   #endif
+> +
+> +#define __no_optimize	__attribute__((optimize("-O0")))
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 3c1795fdb568..f5ad83f7ea2f 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -257,6 +257,10 @@ struct ftrace_likely_data {
+>   # define __nocfi
+>   #endif
+>   
+> +#ifndef __no_ptrauth
+> +# define __no_ptrauth
+> +#endif
+> +
+>   #ifndef __cficanonical
+>   # define __cficanonical
+>   #endif
+> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+> index 6b36b7f5dcf9..12df67a3b419 100644
+> --- a/tools/testing/selftests/lkdtm/tests.txt
+> +++ b/tools/testing/selftests/lkdtm/tests.txt
+> @@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
+>   USERCOPY_KERNEL
+>   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+>   CFI_FORWARD_PROTO
+> +CFI_BACKWARD_SHADOW ok: scs takes effect
+>   FORTIFIED_STRSCPY
+>   FORTIFIED_OBJECT
+>   FORTIFIED_SUBOBJECT

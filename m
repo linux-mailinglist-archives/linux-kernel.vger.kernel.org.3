@@ -2,89 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EB64F674E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B150D4F677B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239078AbiDFRdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S239331AbiDFReD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbiDFRda (ORCPT
+        with ESMTP id S239365AbiDFRdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:33:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB852AC2;
-        Wed,  6 Apr 2022 08:38:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA4E4B824B4;
-        Wed,  6 Apr 2022 15:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BD0C385A1;
-        Wed,  6 Apr 2022 15:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649259527;
-        bh=j/cHGt1Adp/5ckJatmOAtFz8YwOh1uG9kyL0/rqOdAI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZxMGCv64eYBNc1avTLYsfD8OTSDZAzQlny1jcKpgW7cpaNUn7n2lzRAB8KA+0J+lc
-         blAso325sUH2hSDdGMBvrLnlq7sBAn7rt+3e0nMPFHgiaqm3WW7oDk8r6r0EjD/33C
-         3zJFZhJkYKMkbll+HRI/2m9zRNN7EtPN7AGtPU93fqfe75x7mw7W9LpfxSs0yNy968
-         c3gGMTbxAhAO8iPe+QiMSfuQiT/dcs7TPgHbp29GUwEK7hdb12Zraumk5vV7L3JElu
-         /kqCfIhCb3N2mHJnynG8r5EIciy+D8KcqFnwwcCTHtxXDyo3TtxOG/OZ8g9SvONgYu
-         KHxSDu2GKbKkg==
-Received: by mail-pg1-f172.google.com with SMTP id 32so401846pgl.4;
-        Wed, 06 Apr 2022 08:38:47 -0700 (PDT)
-X-Gm-Message-State: AOAM5337yWeQjhOnkwDS/9Yjpru+wrCkCn8NxLoNwYn9VxRJskoZjcQu
-        SqA58Rt2YUuKdS3yQDGfQFReG/vMCsVLdW/MfLU=
-X-Google-Smtp-Source: ABdhPJx6nrBYoOc7Poen+QC3GhpAJV8qLRa+XzbVgFrkIodhg2moVi8VEmGesevH2qrojOojIBiXA0F7l3qLHy9jsCo=
-X-Received: by 2002:a05:6a00:1501:b0:4fb:2d19:b6a8 with SMTP id
- q1-20020a056a00150100b004fb2d19b6a8mr9579739pfu.21.1649259526810; Wed, 06 Apr
- 2022 08:38:46 -0700 (PDT)
+        Wed, 6 Apr 2022 13:33:42 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFA415EDE7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:39:09 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so3301598fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V6NesqS8T+uaIQBk3Ioy4XttyfnAiZ+4Unbo6Ixdr/g=;
+        b=K2OYW3cQXtcIASumLAOQH2NCn8bX5/LS561qkTuyt1jKdYAnPDOCn7RjQbhjVyFIRB
+         gmAG4NToDt2xH2Rqht5pWCSuXSMa8kprf376kccdXhs245uMcWV9CiUqp5weYPIh8tQl
+         8hIp0s6U3LHMWhkOcfdirKuje4iDrlRmGrAcLSS6RXCZ5KamLAp83U4m/CVf+I0DzrUa
+         bMcYVXrpmDzx+Jmy/TlQaAqZpfWabN3AtZBJxi1aOmElMLtzYDLGTwLB8/Z91Ynqar7C
+         XZLwvy9aG4zywaZU9xJDBRTxQrPOvXAzmXjmCaFyC6zAfHZIEJi9HN49LBBudO8fyYEo
+         ZrYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=V6NesqS8T+uaIQBk3Ioy4XttyfnAiZ+4Unbo6Ixdr/g=;
+        b=p91SGkz/W56JIefwNwrwImU0nspfL4olPvDfBh7SiAFEQ9fAgkfljl9n/bw2nzJZw+
+         lab37XQlXt0fdozaQHgi2CypvDGp/6kmHb7iXCVupnM6N3wLikMzExwBDzBYhY4oG346
+         cA1yfX7keTj9BbAWSpfkfHIRL/p3DONzcQopA9QUyQyoO6lDV2u9DJ05DxojpU/HRs9+
+         +N/l6OMexNgH1gAcppXjGYbc2xnsDFweQuxDAUAXA7GsPsngWPJMZNJq5YVBpF1OdvsZ
+         IkYpHGt2OBlQgaJ5stCJ/5oHqGUOZ+Jtw6HH1ao9HHBIHoM5iiGWnLwuIZh0zmx1QUW5
+         iGkQ==
+X-Gm-Message-State: AOAM531wn5TKALZhv7PvxH2UgupALtlhmTuih49kpejvBa4VZkZ5xU09
+        bhw0z9hYsbGzZLcUXRDtbQ8=
+X-Google-Smtp-Source: ABdhPJxlgD7xC0amjI9GG2hFxHgR2AjpDP8ExNMOBTn8yGef4MYQoM5mnOcNcMEzHJvFO7s6KqK9gQ==
+X-Received: by 2002:a05:6870:73cb:b0:e1:e897:5463 with SMTP id a11-20020a05687073cb00b000e1e8975463mr4275962oan.255.1649259548806;
+        Wed, 06 Apr 2022 08:39:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056870170b00b000e1f0e0a943sm4194341oae.2.2022.04.06.08.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 08:39:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 6 Apr 2022 08:39:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Ben Young Tae Kim <ytkim@qca.qualcomm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] Bluetooth: hci_qca: Use del_timer_sync() before freeing
+Message-ID: <20220406153907.GA1994259@roeck-us.net>
+References: <20220404182236.1caa174e@rorschach.local.home>
+ <97d1cc84-890c-3fcf-2efc-645633cd36b2@gmail.com>
 MIME-Version: 1.0
-References: <20220326022728.2969-1-jianjun.wang@mediatek.com> <06c9f2f8236f8dab6b27da9db0332b4ca45a1039.camel@mediatek.com>
-In-Reply-To: <06c9f2f8236f8dab6b27da9db0332b4ca45a1039.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 6 Apr 2022 17:38:35 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfWH-XSogkWVy0Q5LcHSk9SXinR7AA_Odo-oTc32y1Ykg@mail.gmail.com>
-Message-ID: <CAJKOXPfWH-XSogkWVy0Q5LcHSk9SXinR7AA_Odo-oTc32y1Ykg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] phy: mediatek: Add PCIe PHY driver
-To:     Jianjun Wang <jianjun.wang@mediatek.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97d1cc84-890c-3fcf-2efc-645633cd36b2@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 07:47, Jianjun Wang <jianjun.wang@mediatek.com> wrote:
->
-> Hello Maintainers,
->
-> Is there anything I can do to get these patches merged?
+On Mon, Apr 04, 2022 at 05:22:00PM -0700, Eric Dumazet wrote:
+> 
+> On 4/4/22 15:22, Steven Rostedt wrote:
+> > [ Resending due to cut and paste failure of email address ]
+> > 
+> > From: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > 
+> > While looking at a crash report on a timer list being corrupted, which
+> > usually happens when a timer is freed while still active. This is
+> > commonly triggered by code calling del_timer() instead of
+> > del_timer_sync() just before freeing.
+> > 
+> > One possible culprit is the hci_qca driver, which does exactly that.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for
+> > UART") Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > ---
+> > diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> > index f6e91fb432a3..73a8c72b5aae 100644
+> > --- a/drivers/bluetooth/hci_qca.c
+> > +++ b/drivers/bluetooth/hci_qca.c
+> > @@ -696,8 +696,8 @@ static int qca_close(struct hci_uart *hu)
+> >   	skb_queue_purge(&qca->tx_wait_q);
+> >   	skb_queue_purge(&qca->txq);
+> >   	skb_queue_purge(&qca->rx_memdump_q);
+> > -	del_timer(&qca->tx_idle_timer);
+> > -	del_timer(&qca->wake_retrans_timer);
+> > +	del_timer_sync(&qca->tx_idle_timer);
+> > +	del_timer_sync(&qca->wake_retrans_timer);
+> 
+> 
+> It seems the wake_retrans_timer could be re-armed from a work queue.
+> 
+> So perhaps we need to make sure qca->workqueue is destroyed
+> 
+> before these del_timer_sync() calls ?
+> 
+> >   	destroy_workqueue(qca->workqueue);
+> 
+> 
+> ie move this destroy_workqueue() up ?
+> 
 
-Patience. :) You posted a patch during the merge window which finished
-three days ago, so basically one can assume you ping folks after three
-days. Three days is too fast for pinging. :(
+What prevents the timer code from queueing work into the destroyed
+workqueue ?
 
-Best regards,
-Krzysztof
+Thanks,
+Guenter

@@ -2,104 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524ED4F6E3B
+	by mail.lfdr.de (Postfix) with ESMTP id BD7474F6E3C
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 01:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbiDFXFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 19:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S237554AbiDFXFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 19:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbiDFXFZ (ORCPT
+        with ESMTP id S237578AbiDFXFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 19:05:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAB0C11CF49
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649286201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tjE4F+VkZbv2xmdpOvOgBYvqlE4FJMvnbAyHbXfLmlo=;
-        b=b0Avp/ttedeitwn3fWeuVkB8SeEaRe8Raul9xlPoieW4dlj6MReeONDSDzPb1gr5VNkgFP
-        sUGpzlOxTedWCltPesvBb4RJ5+qMDBIKTsRljxAgJt2AcfyTLi8uuuDOWQMQvHzCSlnKzi
-        ZF7YMIOf0271xF8gebihTrFsZgAkwc4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-636-DebMNWulMx2-tzQ-BHbpNQ-1; Wed, 06 Apr 2022 19:03:17 -0400
-X-MC-Unique: DebMNWulMx2-tzQ-BHbpNQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7481A1C0692D;
-        Wed,  6 Apr 2022 23:03:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30A48C28102;
-        Wed,  6 Apr 2022 23:03:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 03/14] cifs: Check the IOCB_DIRECT flag, not O_DIRECT
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cifs@vger.kernel.org, dhowells@redhat.com,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@redhat.com>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Date:   Thu, 07 Apr 2022 00:03:14 +0100
-Message-ID: <164928619447.457102.6541196459943955179.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk>
-References: <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FBE1226F4
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 16:03:24 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id b13so3892300pfv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 16:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tsvlof6FPejAIMTXX6OMYR8u1wWfyFACALvOuNHJncA=;
+        b=A+/7G6K8eTFnu4PMRYz0QUP5GVp6FFnb1AZdQbOMps7YfiTuOaHT3bvnrHx9/9cJme
+         Y4kNfVP3q4DcHnFOLRDZxbN/SAtUitkkErqmkCUWaU9mSv722O9otxiHIb4lRSn3GyXw
+         Q0zcY3EjRlSMsBQ12dUWRfLObEdUMX2xDNUzeIzlpr1wb6anMkwR7L9atxyB9HTdN6uu
+         txOzEV6Ly9lh7mQHDZy8C4Gow0t/B6RrAO0/ihuzYeZdAQIqdiuGVot6JNxB8GOXQXyX
+         iGs+bl80jdzr0m7SplBoLOi3B5AQGHihdffEDLAHByL9//QgCVy7SXyY985S7o6RVQcX
+         HcpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tsvlof6FPejAIMTXX6OMYR8u1wWfyFACALvOuNHJncA=;
+        b=qXBp4at9Qb5RRrSIHhTAudVIIGTlJprSGvgAzWA3rv27BA1tJ/sSTnBfd/jjmDtl7f
+         /nxyczKHo6c4SUplyB4gTBR5zu8fq4FrLNnT2cjeFtNSSfwciA7rN8Iha1LTQ5oLEI6E
+         sbrTGapjADuGIhWBd51SKUCw/mHhDUtVt0yuf6vU0etK/Rpw1Et02xv6I8fjsFxwFT1l
+         BR9AYzEARHulB4d88X6C5YSAMM65PZD8TnVTTn2MSVk0+qjFI2nr7B8CbfoAwiMM4P1K
+         8qvEm5X008J8VwEWZdWErh7D6CAglXj3jJVHWhOJKAtJBop3TFdTCcUf2yUT3tXvvwKj
+         G9pw==
+X-Gm-Message-State: AOAM5328ZkJ+7f+R+iFohlRO1QujfIDQvU4IM3nwW6amyEapyd7RtDWf
+        vRR8Hq/tMhlHAxyvrtIxeURHdw==
+X-Google-Smtp-Source: ABdhPJzVikFTDdNywBy6s+xfQqG/MGuqigLUM9aGH0aUuVMGX9x4KNUTrgDUaoI/qXpaiciPozTS6g==
+X-Received: by 2002:a05:6a00:138a:b0:4fd:a7ec:6131 with SMTP id t10-20020a056a00138a00b004fda7ec6131mr11161020pfg.10.1649286204132;
+        Wed, 06 Apr 2022 16:03:24 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm6597611pjb.23.2022.04.06.16.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 16:03:23 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 23:03:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
+ the instruction
+Message-ID: <Yk4cOGC5/B6fKoJD@google.com>
+References: <YkshgrUaF4+MrrXf@google.com>
+ <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
+ <YkzxXw1Aznv4zX0a@google.com>
+ <eed1cea4-409a-f03e-5c31-e82d49bb2101@maciej.szmigiero.name>
+ <Yk3Jd6xAfgVoFgLc@google.com>
+ <5135b502-ce2e-babb-7812-4d4c431a5252@maciej.szmigiero.name>
+ <Yk3uh6f+0nOdybd3@google.com>
+ <cd348e77-cb40-a64c-6b82-24e9a9158946@maciej.szmigiero.name>
+ <Yk39j8f81+iDOsDG@google.com>
+ <7e8f558d-c00a-7170-f671-bd10c0a56557@maciej.szmigiero.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e8f558d-c00a-7170-f671-bd10c0a56557@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the IOCB_DIRECT indicator flag on the I/O context rather than checking to
-see if the file was opened O_DIRECT.
+On Thu, Apr 07, 2022, Maciej S. Szmigiero wrote:
+> On 6.04.2022 22:52, Sean Christopherson wrote:
+> > On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+> > > Another option for saving and restoring a VM would be to add it to
+> > > KVM_{GET,SET}_NESTED_STATE somewhere (maybe as a part of the saved VMCB12
+> > > control area?).
+> > 
+> > Ooh.  What if we keep nested_run_pending=true until the injection completes?  Then
+> > we don't even need an extra flag because nested_run_pending effectively says that
+> > any and all injected events are for L1=>L2.  In KVM_GET_NESTED_STATE, shove the
+> > to-be-injected event into the normal vmc*12 injection field, and ignore all
+> > to-be-injected events in KVM_GET_VCPU_EVENTS if nested_run_pending=true.
+> > 
+> > That should work even for migrating to an older KVM, as keeping nested_run_pending
+> > will cause the target to reprocess the event injection as if it were from nested
+> > VM-Enter, which it technically is.
+> 
+> I guess here by "ignore all to-be-injected events in KVM_GET_VCPU_EVENTS" you
+> mean *moving* back the L1 -> L2 event to be injected from KVM internal data
+> structures like arch.nmi_injected (and so on) to the KVM_GET_NESTED_STATE-returned
+> VMCB12 EVENTINJ field (or its VMX equivalent).
+> 
+> But then the VMM will need to first call KVM_GET_NESTED_STATE (which will do
+> the moving), only then KVM_GET_VCPU_EVENTS (which will then no longer show
+> these events as pending).
+> And their setters in the opposite order when restoring the VM.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: linux-cifs@vger.kernel.org
----
+I wasn't thinking of actually moving things in the source VM, only ignoring events
+in KVM_GET_VCPU_EVENTS.  Getting state shouldn't be destructive, e.g. the source VM
+should still be able to continue running.
 
- fs/cifs/cifsfs.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ahahahaha, and actually looking at the code, there's this gem in KVM_GET_VCPU_EVENTS
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index a47fa44b6d52..fb60b5410789 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -944,7 +944,7 @@ cifs_loose_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	ssize_t rc;
- 	struct inode *inode = file_inode(iocb->ki_filp);
- 
--	if (iocb->ki_filp->f_flags & O_DIRECT)
-+	if (iocb->ki_flags & IOCB_DIRECT)
- 		return cifs_user_readv(iocb, iter);
- 
- 	rc = cifs_revalidate_mapping(inode);
+	/*
+	 * The API doesn't provide the instruction length for software
+	 * exceptions, so don't report them. As long as the guest RIP
+	 * isn't advanced, we should expect to encounter the exception
+	 * again.
+	 */
+	if (kvm_exception_is_soft(vcpu->arch.exception.nr)) {
+		events->exception.injected = 0;
+		events->exception.pending = 0;
+	}
 
+and again for soft interrupts
+
+	events->interrupt.injected =
+		vcpu->arch.interrupt.injected && !vcpu->arch.interrupt.soft;
+
+so through KVM's own incompetency, it's already doing half the work.
+
+This is roughly what I had in mind.  It will "require" moving nested_run_pending
+to kvm_vcpu_arch, but I've been itching for an excuse to do that anyways.
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index eb71727acecb..62c48f6a0815 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4846,6 +4846,8 @@ static int kvm_vcpu_ioctl_x86_set_mce(struct kvm_vcpu *vcpu,
+ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+                                               struct kvm_vcpu_events *events)
+ {
++       bool drop_injected_events = vcpu->arch.nested_run_pending;
++
+        process_nmi(vcpu);
+
+        if (kvm_check_request(KVM_REQ_SMI, vcpu))
+@@ -4872,7 +4874,8 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+         * isn't advanced, we should expect to encounter the exception
+         * again.
+         */
+-       if (kvm_exception_is_soft(vcpu->arch.exception.nr)) {
++       if (drop_injected_events ||
++           kvm_exception_is_soft(vcpu->arch.exception.nr)) {
+                events->exception.injected = 0;
+                events->exception.pending = 0;
+        } else {
+@@ -4893,13 +4896,14 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+        events->exception_has_payload = vcpu->arch.exception.has_payload;
+        events->exception_payload = vcpu->arch.exception.payload;
+
+-       events->interrupt.injected =
+-               vcpu->arch.interrupt.injected && !vcpu->arch.interrupt.soft;
++       events->interrupt.injected = vcpu->arch.interrupt.injected &&
++                                    !vcpu->arch.interrupt.soft &&
++                                    !drop_injected_events;
+        events->interrupt.nr = vcpu->arch.interrupt.nr;
+        events->interrupt.soft = 0;
+        events->interrupt.shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
+
+-       events->nmi.injected = vcpu->arch.nmi_injected;
++       events->nmi.injected = vcpu->arch.nmi_injected && !drop_injected_events;
+        events->nmi.pending = vcpu->arch.nmi_pending != 0;
+        events->nmi.masked = static_call(kvm_x86_get_nmi_mask)(vcpu);
+        events->nmi.pad = 0;
 

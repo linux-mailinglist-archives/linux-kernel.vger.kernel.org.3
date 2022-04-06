@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BEC4F5606
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C40C4F55F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 08:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392105AbiDFFyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 01:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S1390279AbiDFFyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 01:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360919AbiDFDoD (ORCPT
+        with ESMTP id S2360966AbiDFDoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:44:03 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA4182706FD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:11:25 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 2EABE10E56C3;
-        Wed,  6 Apr 2022 10:11:07 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nbtGM-00EFWW-5v; Wed, 06 Apr 2022 10:11:06 +1000
-Date:   Wed, 6 Apr 2022 10:11:06 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Yang Shi <shy828301@gmail.com>, Hillf Danton <hdanton@sina.com>,
-        MM <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
-Message-ID: <20220406001106.GA1609613@dread.disaster.area>
-References: <20220402072103.5140-1-hdanton@sina.com>
- <20220403005618.5263-1-hdanton@sina.com>
- <20220404010948.GV1609613@dread.disaster.area>
- <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
- <20220405051710.GW1609613@dread.disaster.area>
- <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
- <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
- <Yky1FgLrlIOfpCZ+@carbon.dhcp.thefacebook.com>
+        Tue, 5 Apr 2022 23:44:05 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71B816B152;
+        Tue,  5 Apr 2022 17:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649203919;
+        bh=lQZC9KF3fkpp3qkV+BLTCo7NkUkmtr0bB09V3SZnVCY=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=cnGDvje0keNcFijjyhXnLHAG8r/nL0zsJTCxsXIMcILiclPaf+JAm9c6frMQJ9q+I
+         GMTutl8pRgHhaXeeXnxJvVMdm5uUxFzE5MBIv+M6A4Q4/ukFPBgl5wdwbeLfWFFHvI
+         xNgj/ZpADI9aCTmc02Qe10uXActUd0m8OG5tweLY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.239]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N49lJ-1o2OOE2uGn-0105Zq; Wed, 06
+ Apr 2022 02:11:59 +0200
+Message-ID: <ca184e4d-1691-f44a-6054-b7cae52f5077@gmx.de>
+Date:   Wed, 6 Apr 2022 02:11:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yky1FgLrlIOfpCZ+@carbon.dhcp.thefacebook.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=624cda9d
-        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
-        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=7-415B0cAAAA:8
-        a=Fe5XsLPeW7db1_PS-6wA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.17 0000/1126] 5.17.2-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:cYu9JdORc1SmR6BiCGPQiPskdZm+eavF6AOJyRHFXDBuita0uCy
+ bHTYWxbw+Z/KjUN+XDezDDimJupB61QO/covhoz8VMbH7n3PPHf0hbbqitmkmoIvsflcHAR
+ uk8uYDYjgRAJ/CXul5bKLbayP+pvPjYkDNGHb22DRTP721+5IaMRECB82MbiQzjZ+/f8XnP
+ sWWZIj7ulfSdcy806baRQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qnKmeB+oY6I=:MZ26Fl6Oiw4udMXe9NQlPC
+ lM1BKFUII6Eh9f53H1c7laOrQcXDySDgkVqBF1epo/y3JuEPVQRuUMpbyZ4mnHbwJVAPtsIyR
+ mrlTUNswGPGeBilTlDvuW/ggAOCwFToYCzWq1TbdQTjhZ1i6HpMSlF15sYutchgBON/MNx3Qi
+ MjtP8MvH16tj9a3yMoKZe10gnsbNlyRw8J2qe3Z/hfB+ynBnKWbqyaOpUOGcBCGrChbYNdCd5
+ nXHLbvVtK3+M77c1SIFUUQiuQjs2Ons5vucAD5gWheZ3PDMQU02bXPBjCg1wQkLaEjbujxJ9z
+ peWVPz9n8PrwIf05DAl5Rg8TVSgfJcb92TtMoiXJH8LH2Rp/evPFBEas+G4W8neuZoVUjglsr
+ LH31gUSpFIdQVOFzEjhyqyaCns9ysMe5mrnkzXPQ8hWJyzkO2PIMCV3rGhMYX+KgpqioDsPNr
+ oIbJbQU4bKNd2v+CZtd3pwUqQpXSlMHBd9KhNsBz4aJjzN9GKtOiJOzbD0DpWMJUXKucBjlp6
+ Hhsno3FhFtv8RLma7tfbq2JTkcQXNIfBYD9a8oGFkbDKWB+8h4s3YSLDq4tLSnFzUadPEdJsH
+ 1BiHMu3Ll6yK71SNF7+xUsiMl3XzRyz5ACwBlMR5usA2Q2IgZapnsI7XcnyQw5BNeYpY2T8uQ
+ 5kUh68CKf8L0L8uggNGMWXklu+2n0JM1FIPXLqjv8bgT/Lt0f3EvXB8B0Zc7fdPI+lsJxJjrH
+ 25METSOyJpU4FacHYroEzzPOaez794jW53z2pq4MhEhp4FNYBy2i72tY/7thUKxannniM6h/m
+ GLTqW4zfdZxGGeDgC944r6YTcH8Nv6ynH66P8MIkVeLaq4JC1suv8p3RF16eqKWd+4wP0ZI7/
+ soVKmCxfZjaIzsV3r/ojHW6maz5puLgBNTwdeVnkYQdZ/IacQjUsdJlvswmn2q+n7Tpt73cp8
+ C8ZC6Ex9GEZP1mKvPQ/axtPrHetWwDsWO2592BHu4ZaqJJX8/A3/rChASd2YoyUcEScTvXe7Z
+ kJ7sCxJlrvzYd9CLHXr775XIkqw+gkEx1UjfCoOI6n4H48pMwL65JeTtegkzVxJjSPDxuljcY
+ IGd7+NCbSEsWBU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FAKE_REPLY_A1,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 02:31:02PM -0700, Roman Gushchin wrote:
-> On Tue, Apr 05, 2022 at 01:58:59PM -0700, Yang Shi wrote:
-> > On Tue, Apr 5, 2022 at 9:36 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > > On Tue, Apr 05, 2022 at 03:17:10PM +1000, Dave Chinner wrote:
-> > > > On Mon, Apr 04, 2022 at 12:08:25PM -0700, Roman Gushchin wrote:
-> > > > > On Mon, Apr 04, 2022 at 11:09:48AM +1000, Dave Chinner wrote:
-> > IMHO
-> > the number of really freed pages should be returned (I do understand
-> > it is not that easy for now), and returning 0 should be fine.
-> 
-> It's doable, there is already a mechanism in place which hooks into
-> the slub/slab/slob release path and stops the slab reclaim as a whole
-> if enough memory was freed.
+hallo Greg
 
-The reclaim state that accounts for slab pages freed really
-needs to be first class shrinker state that is aggregated at the
-do_shrink_slab() level and passed back to the vmscan code. The
-shrinker infrastructure itself should be aware of the progress each
-shrinker is making - not just objects reclaimed but also pages
-reclaimed - so it can make better decisions about how much work
-should be done by each shrinker.
+5.17.2-rc1
 
-e.g. lots of objects in cache, lots of objects reclaimed, no pages
-reclaimed is indicative of a fragmented slab cache. If this keeps
-happening, we should be trying to apply extra pressure to this
-specific cache because the only method we have for correcting a
-fragmented cache to return some memory is to reclaim lots more
-objects from it. 
+compiles, boots and runs on my x86_64
+(Intel i5-11400, Fedora 36 Beta)
 
-> > The
-> > current logic (returning the number of objects) may feed up something
-> > over-optimistic. I, at least, experienced once or twice that a
-> > significant amount of slab caches were shrunk, but actually 0 pages
-> > were freed actually. TBH the new slab controller may make it worse
-> > since the page may be pinned by the objects from other memcgs.
-> 
-> Of course, the more dense the placement of objects is, the harder is to get
-> the physical pages back. But usually it pays off by having a dramatically
-> lower total number of slab pages.
+Thanks
 
-Unless you have tens of millions of objects in the cache. The dentry
-cache is a prime example of this "lots of tiny cached objects" where
-we have tens of objects per slab page and so can suffer badly from
-internal fragmentation....
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-Cheers,
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Ronald
+

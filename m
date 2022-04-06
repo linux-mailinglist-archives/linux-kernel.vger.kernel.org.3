@@ -2,155 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F824F625A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155714F6267
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiDFOzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S235448AbiDFPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbiDFOyW (ORCPT
+        with ESMTP id S235616AbiDFPAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:54:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE741608C05;
-        Wed,  6 Apr 2022 04:32:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A39EF1F858;
-        Wed,  6 Apr 2022 11:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649244767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 6 Apr 2022 11:00:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8928131FFD3
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649244972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3Xisg031nvUyjGa8rCi6g+/z5EvYZTh85G/9xqOb5KY=;
-        b=P/2Ym6ZL6GdwRefQpv/AEkV8+b4JtOemLvBrqv7RjuD2PfNcJpOfI564pSYltQEcy5BwsY
-        Eu6IOAw83soFaggPo3L0EPH/DUt22OI4vFkCZaFECXqiPUsGpfH4pF6bPfpqnY7LnvcFED
-        1ayP1Qwm9A/UrdjRKmxvE7Yfzzonp98=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649244767;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Xisg031nvUyjGa8rCi6g+/z5EvYZTh85G/9xqOb5KY=;
-        b=vigZobKfTvpGZEYPPCz/hre6y0dvlKsE+qj6qu4Xqu+34dqKdh1/zdH4dAAVBqd/Ov4KA+
-        WonnjSEUQfLHxdAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D96A139F5;
-        Wed,  6 Apr 2022 11:32:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ziL9C196TWIkRgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 06 Apr 2022 11:32:47 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id b51e56ad;
-        Wed, 6 Apr 2022 11:33:11 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-References: <20220401133243.1075-1-lhenriques@suse.de>
-        <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
-        <878rsia391.fsf@brahms.olymp>
-        <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
-Date:   Wed, 06 Apr 2022 12:33:11 +0100
-In-Reply-To: <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com> (Xiubo Li's
-        message of "Wed, 6 Apr 2022 19:18:04 +0800")
-Message-ID: <87zgky8n0o.fsf@brahms.olymp>
+        bh=QsS3+hPNYqFkkpCy/2zflCp4q5xBw1zafG1zPBrhqj4=;
+        b=dY057qsRLqer5mQvBgQZozyVYQuI3qRPWlGE/wyy+AIAV6S6lgDGiF41OQApewJnjpe6Sh
+        Hh31ni/5QVgDtFL34URUSHlXlxRO/tCkQwGWUFRqiuH9mQhBCyAdsuD+BeyTtV+P5E71EO
+        MGYIinvm4vxh2NzArW2PJwQbsNqgGjM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-wWUmEuUWPyifirl7JRkRHA-1; Wed, 06 Apr 2022 07:36:11 -0400
+X-MC-Unique: wWUmEuUWPyifirl7JRkRHA-1
+Received: by mail-ed1-f71.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so1075524edw.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:36:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QsS3+hPNYqFkkpCy/2zflCp4q5xBw1zafG1zPBrhqj4=;
+        b=xkwH73DT5CubzXNEEbm8FphHixSt/ItNJPP0U46XVVHUrr9ryOor8wDzVbHTM45Q45
+         Oba3YoFqKEPyUWkFE3DMzrAc8XhJZmlrPmrAfxsy5sk7/++S7Thv4ST6jVz4VvE6lHUb
+         eu8O1DU/hs+f/6xKy9v6TvpMg2q8Glz66Q6Rc6bHF1E3y2sx5CYr3gJbmfs6Z9913O4n
+         0/gyKiOJYDtaGTGXd0k0FGi95pUHD5kx7TX1VijFrAtWKp4idhkFJIwFRekqb9599fhK
+         wShOURoulZ6OKH7WLXu3R4UsE2QAOxo86U5Y/0MQldWfiMr+i2Y7ZUFVD8BvP6pYejy5
+         ivYA==
+X-Gm-Message-State: AOAM533dO2r/wKCMFFUjp7vaGI98UP0csF+HnyW/sexWg+6m2ZKvnOoO
+        bpcSFS0XynEvGm69gPRgsUknSIyYwO4eWkZHNC/W04DL2pR9n9wfex32fmrc2GLD/morRGMuzSK
+        uQZrNw9c837FZNhyVbrfCMbAx
+X-Received: by 2002:a17:907:6d92:b0:6e5:d50e:9170 with SMTP id sb18-20020a1709076d9200b006e5d50e9170mr7892339ejc.506.1649244970496;
+        Wed, 06 Apr 2022 04:36:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJypxpXVVLOxhtpSoSl0a6R8c9Uqer3rPVAkc8Pe1+YYicYMzoEDo4eBchIbF2poX4V8YaDCTw==
+X-Received: by 2002:a17:907:6d92:b0:6e5:d50e:9170 with SMTP id sb18-20020a1709076d9200b006e5d50e9170mr7892318ejc.506.1649244970217;
+        Wed, 06 Apr 2022 04:36:10 -0700 (PDT)
+Received: from redhat.com ([2.53.144.12])
+        by smtp.gmail.com with ESMTPSA id m20-20020a170906235400b006e718d8b849sm4612248eja.45.2022.04.06.04.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 04:36:09 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 07:36:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, sgarzare@redhat.com
+Subject: Re: [PATCH V2 0/5] rework on the IRQ hardening of virtio
+Message-ID: <20220406073500-mutt-send-email-mst@kernel.org>
+References: <20220406083538.16274-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406083538.16274-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+On Wed, Apr 06, 2022 at 04:35:33PM +0800, Jason Wang wrote:
+> Hi All:
+> 
+> This is a rework on the IRQ hardening for virtio which is done
+> previously by the following commits are reverted:
+> 
+> 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
+> 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
+> 
+> The reason is that it depends on the IRQF_NO_AUTOEN which may conflict
+> with the assumption of the affinity managed IRQ that is used by some
+> virtio drivers. And what's more, it is only done for virtio-pci but
+> not other transports.
+> 
+> In this rework, I try to implement a general virtio solution which
+> borrows the idea of the INTX hardening by introducing a boolean for
+> virtqueue callback enabling and toggle it in virtio_device_ready()
+> and virtio_reset_device(). Then vring_interrupt() can simply check and
+> return early if the driver is not ready.
 
-> On 4/6/22 6:57 PM, Lu=C3=ADs Henriques wrote:
->> Xiubo Li <xiubli@redhat.com> writes:
->>
->>> On 4/1/22 9:32 PM, Lu=C3=ADs Henriques wrote:
->>>> When doing DIO on an encrypted node, we need to invalidate the page ca=
-che in
->>>> the range being written to, otherwise the cache will include invalid d=
-ata.
->>>>
->>>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->>>> ---
->>>>    fs/ceph/file.c | 11 ++++++++++-
->>>>    1 file changed, 10 insertions(+), 1 deletion(-)
->>>>
->>>> Changes since v1:
->>>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_ran=
-ge
->>>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing =
-DIO
->>>>
->>>> Note: I'm not really sure this last change is required, it doesn't rea=
-lly
->>>> affect generic/647 result, but seems to be the most correct.
->>>>
->>>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->>>> index 5072570c2203..b2743c342305 100644
->>>> --- a/fs/ceph/file.c
->>>> +++ b/fs/ceph/file.c
->>>> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_i=
-ter *from, loff_t pos,
->>>>    	if (ret < 0)
->>>>    		return ret;
->>>>    -	ceph_fscache_invalidate(inode, false);
->>>> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
->>>>    	ret =3D invalidate_inode_pages2_range(inode->i_mapping,
->>>>    					    pos >> PAGE_SHIFT,
->>>>    					    (pos + count - 1) >> PAGE_SHIFT);
->>> The above has already invalidated the pages, why doesn't it work ?
->> I suspect the reason is because later on we loop through the number of
->> pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
->
-> Checked the 'copy_page_from_iter()', it will do the kmap for the pages bu=
-t will
-> kunmap them again later. And they shouldn't update the i_mapping if I did=
-n't
-> miss something important.
->
-> For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context i=
-nplace,
-> IMO if it needs to map the page and it should also unmap it just like in
-> 'copy_page_from_iter()'.
->
-> I thought it possibly be when we need to do RMW, it may will update the
-> i_mapping when reading contents, but I checked the code didn't find any=20
-> place is doing this. So I am wondering where tha page caches come from ? =
-If that
-> page caches really from reading the contents, then we should discard it i=
-nstead
-> of flushing it back ?
->
-> BTW, what's the problem without this fixing ? xfstest fails ?
 
-Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
-also checked that the RMW code was never executed in this test.
+All of a sudden all patches are having a wrong mime type.
 
-But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
-change the inode->i_mapping.  In my debugging this seemed to be the case
-for the O_DIRECT path.  That's why I added this extra call here.
+It is application/octet-stream; should be text/plain
 
-Cheers,
---=20
-Lu=C3=ADs
+Pls fix and repost, thanks!
+
+> Please review.
+> 
+> Changes since v1:
+> 
+> - Use transport specific irq synchronization method when possible
+> - Drop the module parameter and enable the hardening unconditonally
+> - Tweak the barrier/ordering facilities used in the code
+> - Reanme irq_soft_enabled to driver_ready
+> - Avoid unnecssary IRQ synchornization (e.g during boot)
+> 
+> Jason Wang (4):
+>   virtio: use virtio_reset_device() when possible
+>   virtio: introduce config op to synchronize vring callbacks
+>   virtio-pci: implement synchronize_vqs()
+>   virtio: harden vring IRQ
+> 
+> Stefano Garzarella (1):
+>   virtio: use virtio_device_ready() in virtio_device_restore()
+> 
+>  drivers/virtio/virtio.c            | 20 ++++++++++++++++----
+>  drivers/virtio/virtio_pci_common.c | 14 ++++++++++++++
+>  drivers/virtio/virtio_pci_common.h |  2 ++
+>  drivers/virtio/virtio_pci_legacy.c |  1 +
+>  drivers/virtio/virtio_pci_modern.c |  2 ++
+>  drivers/virtio/virtio_ring.c       |  9 ++++++++-
+>  include/linux/virtio.h             |  2 ++
+>  include/linux/virtio_config.h      | 24 ++++++++++++++++++++++++
+>  8 files changed, 69 insertions(+), 5 deletions(-)
+> 
+> -- 
+> 2.25.1
+

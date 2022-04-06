@@ -2,349 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC074F611F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7AE4F61C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbiDFOHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S234906AbiDFOa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiDFOG2 (ORCPT
+        with ESMTP id S234614AbiDFOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:06:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F234F685B;
-        Wed,  6 Apr 2022 02:42:33 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED8E0482;
-        Wed,  6 Apr 2022 11:42:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649238151;
-        bh=aUCy+ImicXTtNnSI4HEWGIKuc+zB6N4k+KCfdfk9jqU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RZfHMu5yOfRNKsAdLM9boEqvGF3YOfHSpOEEdR7Hub2u/vMgee51yGT4lQ5CuuXr4
-         DLwgpclcMlFoBsYuWqChCuG9rpXJVFjNJPjy1fSmoOlgrr2YqYGuTLY9jT5r3ZFUHn
-         EsgcnpCAOc4HQXkU9FuCmuEvpKITDz0xmCUAA25s=
-Date:   Wed, 6 Apr 2022 12:42:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 4/5] soc: imx: imx8m-blk-ctrl: support i.MX8MP media blk
- ctrl noc settings
-Message-ID: <Yk1gg2k38ESUp9xC@pendragon.ideasonboard.com>
-References: <20220406082330.2681591-1-peng.fan@oss.nxp.com>
- <20220406082330.2681591-5-peng.fan@oss.nxp.com>
+        Wed, 6 Apr 2022 10:30:18 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C13247D5AD;
+        Wed,  6 Apr 2022 03:46:31 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2369i8Om059241;
+        Wed, 6 Apr 2022 04:44:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649238248;
+        bh=dBMdXXJjf/3rYTmk7prgbpTWI+NgQ9Euuq3gHbvNNck=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=hrxyLtARzQ+/3sDBiD5DiNS5KVJbhqi80QowPdwd48pT3eO+jSXM5Yq8k+4ZJaGSa
+         RDm89WXoDRynJiiD3RaUrxcoRTE8PiTjDdHTaNtZ2WQzcbgSkJd6dctBPEfaBgYZ88
+         /wskW6TJDLEDO8RegI2I5t6iqMslv4RBm8WX3/Ow=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2369i8G3014725
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Apr 2022 04:44:08 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Apr 2022 04:44:07 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Apr 2022 04:44:07 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2369i4eo107538;
+        Wed, 6 Apr 2022 04:44:05 -0500
+From:   Puranjay Mohan <p-mohan@ti.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <vigneshr@ti.com>, <kishon@ti.com>
+Subject: [RFC 02/13] remoteproc: pru: Add APIs to get and put the PRU cores
+Date:   Wed, 6 Apr 2022 15:13:47 +0530
+Message-ID: <20220406094358.7895-3-p-mohan@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220406094358.7895-1-p-mohan@ti.com>
+References: <20220406094358.7895-1-p-mohan@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220406082330.2681591-5-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+From: Tero Kristo <t-kristo@ti.com>
 
-Thank you for the patch.
+Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
+driver to allow client drivers to acquire and release the remoteproc
+device associated with a PRU core. The PRU cores are treated as
+resources with only one client owning it at a time.
 
-On Wed, Apr 06, 2022 at 04:23:29PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The out of reset value of NoC is not a valid value, we need
-> set it to a correct value. We only need to set it after power on.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/soc/imx/imx8m-blk-ctrl.c | 109 +++++++++++++++++++++++++++++++
->  1 file changed, 109 insertions(+)
-> 
-> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> index 3a6abd70520c..5b382b4e6a64 100644
-> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> @@ -12,6 +12,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
->  #include <linux/clk.h>
-> +#include <linux/mfd/syscon.h>
->  
->  #include <dt-bindings/power/imx8mm-power.h>
->  #include <dt-bindings/power/imx8mn-power.h>
-> @@ -29,10 +30,19 @@ struct imx8m_blk_ctrl {
->  	struct notifier_block power_nb;
->  	struct device *bus_power_dev;
->  	struct regmap *regmap;
-> +	struct regmap *noc_regmap;
->  	struct imx8m_blk_ctrl_domain *domains;
->  	struct genpd_onecell_data onecell_data;
->  };
->  
-> +struct imx8m_blk_ctrl_noc_data {
-> +	u32 off;
+The pru_rproc_get() function returns the rproc handle corresponding
+to a PRU core identified by the device tree "ti,prus" property under
+the client node. The pru_rproc_put() is the complementary function
+to pru_rproc_get().
 
-Maybe "offset" ?
+Co-developed-by: Suman Anna <s-anna@ti.com>
+Signed-off-by: Suman Anna <s-anna@ti.com>
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
+Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
+Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+---
+ drivers/remoteproc/pru_rproc.c | 138 +++++++++++++++++++++++++++++++--
+ include/linux/pruss.h          |  56 +++++++++++++
+ 2 files changed, 189 insertions(+), 5 deletions(-)
+ create mode 100644 include/linux/pruss.h
 
-> +	u32 priority;
-> +	u32 mode;
-> +	u32 extctrl;
-> +};
-> +
-> +#define DOMAIN_MAX_NOC	4
-
-And a blank line here.
-
-We have 3 NoC entries at most below, so this could be lowered, but I
-wonder if it wouldn't be nicer to actually drop the macro (see below).
-
->  struct imx8m_blk_ctrl_domain_data {
->  	const char *name;
->  	const char * const *clk_names;
-> @@ -49,6 +59,7 @@ struct imx8m_blk_ctrl_domain_data {
->  	 * register.
->  	 */
->  	u32 mipi_phy_rst_mask;
-> +	const struct imx8m_blk_ctrl_noc_data *noc_data[DOMAIN_MAX_NOC];
-
-This would become just
-
-	const struct imx8m_blk_ctrl_noc_data **noc_data;
-
->  };
->  
->  #define DOMAIN_MAX_CLKS 3
-> @@ -66,6 +77,7 @@ struct imx8m_blk_ctrl_data {
->  	notifier_fn_t power_notifier_fn;
->  	const struct imx8m_blk_ctrl_domain_data *domains;
->  	int num_domains;
-> +	bool has_noc;
->  };
->  
->  static inline struct imx8m_blk_ctrl_domain *
-> @@ -74,6 +86,27 @@ to_imx8m_blk_ctrl_domain(struct generic_pm_domain *genpd)
->  	return container_of(genpd, struct imx8m_blk_ctrl_domain, genpd);
->  }
->  
-> +static int imx8m_blk_ctrl_noc_set(struct imx8m_blk_ctrl_domain *domain)
-> +{
-> +	const struct imx8m_blk_ctrl_domain_data *data = domain->data;
-> +	struct imx8m_blk_ctrl *bc = domain->bc;
-> +	struct regmap *regmap = bc->noc_regmap;
-> +	int i;
-
-As it can never be negative, you can make i an unsigned int.
-
-> +
-> +	if (!data || !regmap)
-> +		return 0;
-> +
-> +	for (i = 0; i < DOMAIN_MAX_NOC; i++) {
-> +		if (!data->noc_data[i])
-> +			continue;
-
-With
-
-		const struct imx8m_blk_ctrl_noc_data *noc_data = &data->noc_data[i];
-
-		if (!noc_data)
-			continue;
-
-you could then write
-
-		regmap_write(regmap, noc_data->off + 0x8, noc_data->priority);
-		regmap_write(regmap, noc_data->off + 0xc, noc_data->mode);
-		regmap_write(regmap, noc_data->off + 0x18, noc_data->extctrl);
-
-which is a bit nicer.
-
-If we drop the harcoded number of NoC entries, the loop could become
-
-	const struct imx8m_blk_ctrl_noc_data *noc_data;
-
-	for (i = 0; data->noc_data[i]; i++) {
-		const struct imx8m_blk_ctrl_noc_data *noc_data = data->noc_data[i];
-
-		regmap_write(regmap, noc_data->off + 0x8, noc_data->priority);
-		regmap_write(regmap, noc_data->off + 0xc, noc_data->mode);
-		regmap_write(regmap, noc_data->off + 0x18, noc_data->extctrl);
-	}
-
-You would then need a sentinel entry at the end of the noc_data array,
-initialized to NULL.
-
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x8, data->noc_data[i]->priority);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0xc, data->noc_data[i]->mode);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x18, data->noc_data[i]->extctrl);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  {
->  	struct imx8m_blk_ctrl_domain *domain = to_imx8m_blk_ctrl_domain(genpd);
-> @@ -117,6 +150,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  	if (data->mipi_phy_rst_mask)
->  		regmap_set_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
->  
-> +	imx8m_blk_ctrl_noc_set(domain);
-> +
->  	/* disable upstream clocks */
->  	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
->  
-> @@ -172,6 +207,7 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->  	const struct imx8m_blk_ctrl_data *bc_data;
->  	struct device *dev = &pdev->dev;
->  	struct imx8m_blk_ctrl *bc;
-> +	struct regmap *regmap;
->  	void __iomem *base;
->  	int i, ret;
->  
-> @@ -218,6 +254,10 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
->  				     "failed to attach power domain\n");
->  
-> +	regmap = syscon_regmap_lookup_by_compatible("fsl,imx8m-noc");
-> +	if (!IS_ERR(regmap))
-> +		bc->noc_regmap = regmap;
-> +
->  	for (i = 0; i < bc_data->num_domains; i++) {
->  		const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
->  		struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
-> @@ -677,6 +717,55 @@ static int imx8mp_media_power_notifier(struct notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->  
-> +#define IMX8MP_MEDIABLK_LCDIF_RD	0
-> +#define IMX8MP_MEDIABLK_LCDIF_WR	1
-> +#define IMX8MP_MEDIABLK_ISI0		2
-> +#define IMX8MP_MEDIABLK_ISI1		3
-> +#define IMX8MP_MEDIABLK_ISI2		4
-
-Would these be the two AXI write and the AXI read ports of the ISI ?
-Could they then be named accordingly (e.g. ISI_WR0, ISI_WR1, ISI_RD) ? I
-don't know which is which though.
-
-> +#define IMX8MP_MEDIABLK_ISP0		5
-> +#define IMX8MP_MEDIABLK_ISP1		6
-> +#define IMX8MP_MEDIABLK_DWE		7
-> +
-> +static const struct imx8m_blk_ctrl_noc_data imx8mp_media_noc_data[] = {
-> +	[IMX8MP_MEDIABLK_LCDIF_RD] = {
-> +		.off = 0x980,
-> +		.priority = 0x80000202,
-> +		.extctrl = 1,
-> +	},
-> +	[IMX8MP_MEDIABLK_LCDIF_WR] = {
-> +		.off = 0xa00,
-> +		.priority = 0x80000202,
-> +		.extctrl = 1,
-> +	},
-> +	[IMX8MP_MEDIABLK_ISI0] = {
-> +		.off = 0xa80,
-> +		.priority = 0x80000202,
-> +		.extctrl = 1,
-> +	},
-> +	[IMX8MP_MEDIABLK_ISI1] = {
-> +		.off = 0xb00,
-> +		.priority = 0x80000202,
-> +		.extctrl = 1,
-> +	},
-> +	[IMX8MP_MEDIABLK_ISI2] = {
-> +		.off = 0xb80,
-> +		.priority = 0x80000202,
-> +		.extctrl = 1,
-> +	},
-> +	[IMX8MP_MEDIABLK_ISP0] = {
-> +		.off = 0xc00,
-> +		.priority = 0x80000707,
-> +	},
-> +	[IMX8MP_MEDIABLK_ISP1] = {
-> +		.off = 0xc80,
-> +		.priority = 0x80000707,
-> +	},
-> +	[IMX8MP_MEDIABLK_DWE] = {
-> +		.off = 0xd00,
-> +		.priority = 0x80000707,
-> +	},
-
-This matches the TF-A implementation.
-
-With the above comments taken into account,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +};
-> +
->  /*
->   * From i.MX 8M Plus Applications Processor Reference Manual, Rev. 1,
->   * section 13.2.2, 13.2.3
-> @@ -708,6 +797,10 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_media_blk_ctl_domain_data[
->  		.gpc_name = "lcdif1",
->  		.rst_mask = BIT(4) | BIT(5) | BIT(23),
->  		.clk_mask = BIT(4) | BIT(5) | BIT(23),
-> +		.noc_data = {
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_LCDIF_RD],
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_LCDIF_WR],
-> +		},
->  	},
->  	[IMX8MP_MEDIABLK_PD_ISI] = {
->  		.name = "mediablk-isi",
-> @@ -716,6 +809,11 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_media_blk_ctl_domain_data[
->  		.gpc_name = "isi",
->  		.rst_mask = BIT(6) | BIT(7),
->  		.clk_mask = BIT(6) | BIT(7),
-> +		.noc_data = {
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_ISI0],
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_ISI1],
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_ISI2],
-> +		},
->  	},
->  	[IMX8MP_MEDIABLK_PD_MIPI_CSI2_2] = {
->  		.name = "mediablk-mipi-csi2-2",
-> @@ -733,6 +831,10 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_media_blk_ctl_domain_data[
->  		.gpc_name = "lcdif2",
->  		.rst_mask = BIT(11) | BIT(12) | BIT(24),
->  		.clk_mask = BIT(11) | BIT(12) | BIT(24),
-> +		.noc_data = {
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_LCDIF_RD],
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_LCDIF_WR],
-> +		},
->  	},
->  	[IMX8MP_MEDIABLK_PD_ISP2] = {
->  		.name = "mediablk-isp2",
-> @@ -749,6 +851,10 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_media_blk_ctl_domain_data[
->  		.gpc_name = "isp1",
->  		.rst_mask = BIT(16) | BIT(17) | BIT(18),
->  		.clk_mask = BIT(16) | BIT(17) | BIT(18),
-> +		.noc_data = {
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_ISP0],
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_ISP1],
-> +		},
->  	},
->  	[IMX8MP_MEDIABLK_PD_DWE] = {
->  		.name = "mediablk-dwe",
-> @@ -757,6 +863,9 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_media_blk_ctl_domain_data[
->  		.gpc_name = "dwe",
->  		.rst_mask = BIT(19) | BIT(20) | BIT(21),
->  		.clk_mask = BIT(19) | BIT(20) | BIT(21),
-> +		.noc_data = {
-> +			&imx8mp_media_noc_data[IMX8MP_MEDIABLK_DWE],
-> +		},
->  	},
->  	[IMX8MP_MEDIABLK_PD_MIPI_DSI_2] = {
->  		.name = "mediablk-mipi-dsi-2",
-
+diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+index 1777a01fa84e..7a35b400287a 100644
+--- a/drivers/remoteproc/pru_rproc.c
++++ b/drivers/remoteproc/pru_rproc.c
+@@ -2,12 +2,13 @@
+ /*
+  * PRU-ICSS remoteproc driver for various TI SoCs
+  *
+- * Copyright (C) 2014-2020 Texas Instruments Incorporated - https://www.ti.com/
++ * Copyright (C) 2014-2022 Texas Instruments Incorporated - https://www.ti.com/
+  *
+  * Author(s):
+  *	Suman Anna <s-anna@ti.com>
+  *	Andrew F. Davis <afd@ti.com>
+  *	Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texas Instruments
++ *	Puranjay Mohan <p-mohan@ti.com>
+  */
+ 
+ #include <linux/bitops.h>
+@@ -16,6 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
++#include <linux/pruss.h>
+ #include <linux/pruss_driver.h>
+ #include <linux/remoteproc.h>
+ 
+@@ -111,6 +113,8 @@ struct pru_private_data {
+  * @rproc: remoteproc pointer for this PRU core
+  * @data: PRU core specific data
+  * @mem_regions: data for each of the PRU memory regions
++ * @client_np: client device node
++ * @lock: mutex to protect client usage
+  * @fw_name: name of firmware image used during loading
+  * @mapped_irq: virtual interrupt numbers of created fw specific mapping
+  * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
+@@ -126,6 +130,8 @@ struct pru_rproc {
+ 	struct rproc *rproc;
+ 	const struct pru_private_data *data;
+ 	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
++	struct device_node *client_np;
++	struct mutex lock; /* client access lock */
+ 	const char *fw_name;
+ 	unsigned int *mapped_irq;
+ 	struct pru_irq_rsc *pru_interrupt_map;
+@@ -146,6 +152,125 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
+ 	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
+ }
+ 
++static struct rproc *__pru_rproc_get(struct device_node *np, int index)
++{
++	struct device_node *rproc_np = NULL;
++	struct platform_device *pdev;
++	struct rproc *rproc;
++
++	rproc_np = of_parse_phandle(np, "ti,prus", index);
++	if (!rproc_np || !of_device_is_available(rproc_np))
++		return ERR_PTR(-ENODEV);
++
++	pdev = of_find_device_by_node(rproc_np);
++	of_node_put(rproc_np);
++
++	if (!pdev || !(&pdev->dev) || !((&pdev->dev)->driver))
++		/* probably PRU not yet probed */
++		return ERR_PTR(-EPROBE_DEFER);
++
++	/* make sure it is PRU rproc */
++	if (!is_pru_rproc(&pdev->dev)) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-ENODEV);
++	}
++
++	rproc = platform_get_drvdata(pdev);
++	put_device(&pdev->dev);
++	if (!rproc)
++		return ERR_PTR(-EPROBE_DEFER);
++
++	get_device(&rproc->dev);
++
++	return rproc;
++}
++
++/**
++ * pru_rproc_get() - get the PRU rproc instance from a device node
++ * @np: the user/client device node
++ * @index: index to use for the ti,prus property
++ * @pru_id: optional pointer to return the PRU remoteproc processor id
++ *
++ * This function looks through a client device node's "ti,prus" property at
++ * index @index and returns the rproc handle for a valid PRU remote processor if
++ * found. The function allows only one user to own the PRU rproc resource at a
++ * time. Caller must call pru_rproc_put() when done with using the rproc, not
++ * required if the function returns a failure.
++ *
++ * When optional @pru_id pointer is passed the PRU remoteproc processor id is
++ * returned.
++ *
++ * Return: rproc handle on success, and an ERR_PTR on failure using one
++ * of the following error values
++ *    -ENODEV if device is not found
++ *    -EBUSY if PRU is already acquired by anyone
++ *    -EPROBE_DEFER is PRU device is not probed yet
++ */
++struct rproc *pru_rproc_get(struct device_node *np, int index,
++			    enum pruss_pru_id *pru_id)
++{
++	struct rproc *rproc;
++	struct pru_rproc *pru;
++	struct device *dev;
++
++	try_module_get(THIS_MODULE);
++
++	rproc = __pru_rproc_get(np, index);
++	if (IS_ERR(rproc))
++		return rproc;
++
++	pru = rproc->priv;
++	dev = &rproc->dev;
++
++	mutex_lock(&pru->lock);
++
++	if (pru->client_np) {
++		mutex_unlock(&pru->lock);
++		put_device(dev);
++		return ERR_PTR(-EBUSY);
++	}
++
++	pru->client_np = np;
++
++	mutex_unlock(&pru->lock);
++
++	if (pru_id)
++		*pru_id = pru->id;
++
++	return rproc;
++}
++EXPORT_SYMBOL_GPL(pru_rproc_get);
++
++/**
++ * pru_rproc_put() - release the PRU rproc resource
++ * @rproc: the rproc resource to release
++ *
++ * Releases the PRU rproc resource and makes it available to other
++ * users.
++ */
++void pru_rproc_put(struct rproc *rproc)
++{
++	struct pru_rproc *pru;
++
++	if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.parent))
++		return;
++
++	pru = rproc->priv;
++
++	mutex_lock(&pru->lock);
++
++	if (!pru->client_np) {
++		mutex_unlock(&pru->lock);
++		return;
++	}
++
++	pru->client_np = NULL;
++	mutex_unlock(&pru->lock);
++
++	put_device(&rproc->dev);
++}
++EXPORT_SYMBOL_GPL(pru_rproc_put);
++
+ static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
+ {
+ 	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
+@@ -438,7 +563,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+ 	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+ 	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+ 	/* PRU1 has its local RAM addresses reversed */
+-	if (pru->id == 1)
++	if (pru->id == PRUSS_PRU1)
+ 		swap(dram0, dram1);
+ 	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+ 
+@@ -747,14 +872,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+ 	case RTU0_IRAM_ADDR_MASK:
+ 		fallthrough;
+ 	case PRU0_IRAM_ADDR_MASK:
+-		pru->id = 0;
++		pru->id = PRUSS_PRU0;
+ 		break;
+ 	case TX_PRU1_IRAM_ADDR_MASK:
+ 		fallthrough;
+ 	case RTU1_IRAM_ADDR_MASK:
+ 		fallthrough;
+ 	case PRU1_IRAM_ADDR_MASK:
+-		pru->id = 1;
++		pru->id = PRUSS_PRU1;
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -816,6 +941,8 @@ static int pru_rproc_probe(struct platform_device *pdev)
+ 	pru->pruss = platform_get_drvdata(ppdev);
+ 	pru->rproc = rproc;
+ 	pru->fw_name = fw_name;
++	pru->client_np = NULL;
++	mutex_init(&pru->lock);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
+ 		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+@@ -903,7 +1030,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
+ 
+ static struct platform_driver pru_rproc_driver = {
+ 	.driver = {
+-		.name   = "pru-rproc",
++		.name   = PRU_RPROC_DRVNAME,
+ 		.of_match_table = pru_rproc_match,
+ 		.suppress_bind_attrs = true,
+ 	},
+@@ -915,5 +1042,6 @@ module_platform_driver(pru_rproc_driver);
+ MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
+ MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
+ MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>");
++MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
+ MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+new file mode 100644
+index 000000000000..fdc719b43db0
+--- /dev/null
++++ b/include/linux/pruss.h
+@@ -0,0 +1,56 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/**
++ * PRU-ICSS Subsystem user interfaces
++ *
++ * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
++ *	Suman Anna <s-anna@ti.com>
++ */
++
++#ifndef __LINUX_PRUSS_H
++#define __LINUX_PRUSS_H
++
++#include <linux/device.h>
++#include <linux/types.h>
++
++#define PRU_RPROC_DRVNAME "pru-rproc"
++
++/*
++ * enum pruss_pru_id - PRU core identifiers
++ */
++enum pruss_pru_id {
++	PRUSS_PRU0 = 0,
++	PRUSS_PRU1,
++	PRUSS_NUM_PRUS,
++};
++
++struct device_node;
++
++#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
++
++struct rproc *pru_rproc_get(struct device_node *np, int index,
++			    enum pruss_pru_id *pru_id);
++void pru_rproc_put(struct rproc *rproc);
++
++#else
++
++static inline struct rproc *
++pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++
++static inline void pru_rproc_put(struct rproc *rproc) { }
++
++#endif /* CONFIG_PRU_REMOTEPROC */
++
++static inline bool is_pru_rproc(struct device *dev)
++{
++	const char *drv_name = dev_driver_string(dev);
++
++	if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC_DRVNAME)))
++		return false;
++
++	return true;
++}
++
++#endif /* __LINUX_PRUSS_H */
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart

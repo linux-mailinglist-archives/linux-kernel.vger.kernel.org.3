@@ -2,84 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC324F60C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8B14F60DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiDFN4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S234115AbiDFN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbiDFN43 (ORCPT
+        with ESMTP id S233934AbiDFN5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:56:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BF34994BF
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:07:03 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DDD9D1F7AC;
-        Wed,  6 Apr 2022 09:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649236021; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JVuBtNXdCP+zuSEWmJnI3uDqUIOa0+UCoEQ4so8Wgwo=;
-        b=nrszIvaqPBUVEmRsiTlyz8lqXk8bNSFdPvUtekx+L0MzbjzrKoc1DKHuPdsY7s4lY2csCL
-        r8tgAVVBD46ZOlcntWWyfgzhC3Tj/GLXvrny2N3PbAp/X665yIv2q+I8bvU/+Bop5FKgt7
-        eJE7cUnxacXsy/GRvlBuJjgj22X7sac=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B1A6EA3B82;
-        Wed,  6 Apr 2022 09:07:01 +0000 (UTC)
-Date:   Wed, 6 Apr 2022 11:07:01 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH printk v2 01/12] printk: rename cpulock functions
-Message-ID: <Yk1YNdPj5KndMA5D@alley>
-References: <20220405132535.649171-1-john.ogness@linutronix.de>
- <20220405132535.649171-2-john.ogness@linutronix.de>
+        Wed, 6 Apr 2022 09:57:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AC6A35770F;
+        Wed,  6 Apr 2022 02:08:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 449E323A;
+        Wed,  6 Apr 2022 02:08:45 -0700 (PDT)
+Received: from [10.57.10.15] (unknown [10.57.10.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41F193F718;
+        Wed,  6 Apr 2022 02:08:44 -0700 (PDT)
+Message-ID: <2dc4266f-02b1-0937-a884-dfa037cc7ffd@arm.com>
+Date:   Wed, 6 Apr 2022 10:08:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405132535.649171-2-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: perf tool: About "perf arm64: Inject missing frames when using
+ 'perf record --call-graph=fp'"
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, alexandre.truong@arm.com
+Cc:     linux-perf-users@vger.kernel.org,
+        "jolsa@kernel.org >> Jiri Olsa" <jolsa@kernel.org>,
+        german.gomez@arm.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+References: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-04-05 15:31:24, John Ogness wrote:
-> Since the printk cpulock is CPU-reentrant and since it is used
-> in all contexts, its usage must be carefully considered and
-> most likely will require programming locklessly. To avoid
-> mistaking the printk cpulock as a typical lock, rename it to
-> cpu_sync. The main functions then become:
+
+
+On 05/04/2022 15:04, John Garry wrote:
+> Hi Alexandre,
 > 
->     printk_cpu_sync_get_irqsave(flags);
->     printk_cpu_sync_put_irqrestore(flags);
+> I notice that with commit b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'") that I get messages spewing the console when running perf record+report, as below:
 > 
-> Add extra notes of caution in the function description to help
-> developers understand the requirements for correct usage.
->
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> john@ubuntu:~/linux$sudo tools/perf/perf record -ag fio null12.fio
+> john@ubuntu:~/linux$sudo tools/perf/perf report > report
+> unwind: can't read reg 29
+> unwind: can't read reg 29
+> unwind: can't read reg 29
+> unwind: can't read reg 29
+> ...
+> 
+> Do you know the possible cause? I haven't checked...
 
-Looks good the me.
+Hi John,
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+I'm going to look into this today. I expect the cause is because we only record
+the link register for this change and then do a best effort unwind to see if
+we can get the return address just from that. So I don't think this is a major issue,
+probably the outcome will be that I mask any of these errors just for this call
+to libunwind that we added. The other main call to libunwind should still print
+these errors.
 
-Best Regards,
-Petr
+One thing that is interesting is why we didn't see this when we were testing
+the patch before, and we've also found it a little bit difficult to reproduce here.
+So there might be more to it than just masking the error, but I'm not sure yet.
+
+Either way, I don't expect that any unwinding is broken, just that it's
+printing an annoying message.
+
+James
+
+> 
+> Thanks,
+> john

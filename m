@@ -2,112 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF164F60A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C294F5DA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 14:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbiDFNyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S231376AbiDFMOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbiDFNxr (ORCPT
+        with ESMTP id S232278AbiDFMMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:53:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5201959ED;
-        Tue,  5 Apr 2022 18:59:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78E9160ABF;
-        Wed,  6 Apr 2022 01:59:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7CC7C385AE;
-        Wed,  6 Apr 2022 01:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649210368;
-        bh=pDwgEh6KmeCPgKnTyof6KSyznbNRaJiPPR8oySZr3rc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=capxQEI0O5lXiCZ51wrnI6lHYT0Rwe0rlsse+qJyO3lag9aPOIjkMZJspSuV/naGy
-         1Uxm1Z0GsGXU+urhiW6rlMyafUJb6VSxu4BRKPvxuXrBm4fA8V3ukjjo81Ut9/xXOd
-         NqEGgjgLUR2xTdDTkMKVuh4Nq5ONoordnW/Xa1YVhQO1xVSpT6MUo60svO97kCkoZs
-         DacL3aR+LmTLVHXRN4hOqhjHAz1ty7W8+nPZlJqYT0td+ybhB6RqQNGZO97K334AL+
-         uPPVPcYCxJ3aN6qYyuSOxxghrOuFjXEiT0HeaIqepHeEYeJ0ac8egcarB2XiJzC2uv
-         yJMy48iqbsXug==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-e2442907a1so1055545fac.8;
-        Tue, 05 Apr 2022 18:59:28 -0700 (PDT)
-X-Gm-Message-State: AOAM5319how0a6zrVIUYuwQEoae5PzDsEEk8FSGj+tPsSgvTUFbkKikk
-        sFcz9BaZxQueTgBze5LBernzGEw7GU70DsqxHq4=
-X-Google-Smtp-Source: ABdhPJyWss1xlGBkA+PCf/HgdAp6TEkP4sbTxbCSm6ZcXecPsMrAuDs3F6O7hTv2eW1CSEDxRr7c5QC//7WPFwPAPc4=
-X-Received: by 2002:a05:6870:ec90:b0:de:33ac:8100 with SMTP id
- eo16-20020a056870ec9000b000de33ac8100mr3008585oab.192.1649210367798; Tue, 05
- Apr 2022 18:59:27 -0700 (PDT)
+        Wed, 6 Apr 2022 08:12:08 -0400
+X-Greylist: delayed 3607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 20:38:54 PDT
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A74F2354D2D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cBzQY
+        bALC2Ft4VBebUDpTOM6eZy0ea20UFYYZFAlbxg=; b=Ue82tJbY8gIXtkv7iVep0
+        E2NOmACflFjlZXfTmk8SeiJDQnpOuN4f4JCdhhXFdgaSlJDHg4sgrbAS8qCWRF4s
+        eeM+qiYHZHZxSckG7kBLk+9Mgf52YZHH1OvaJvz+8JNnCZS037AbSb2Is6IQX7Fk
+        RzV8bnQr+dgsS4ydUQcRWo=
+Received: from localhost.localdomain (unknown [39.99.236.58])
+        by smtp3 (Coremail) with SMTP id DcmowAAXHV229Uxi5SFMAQ--.31622S2;
+        Wed, 06 Apr 2022 10:06:46 +0800 (CST)
+From:   Hongbin Wang <wh_bin@126.com>
+To:     davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, sahern@kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ip6_tunnel: Remove duplicate assignments
+Date:   Tue,  5 Apr 2022 22:06:34 -0400
+Message-Id: <20220406020634.72995-1-wh_bin@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220221095312.3692669-1-o.rempel@pengutronix.de> <20220406012348.GE129381@dragon>
-In-Reply-To: <20220406012348.GE129381@dragon>
-From:   Shawn Guo <shawnguo@kernel.org>
-Date:   Wed, 6 Apr 2022 09:59:17 +0800
-X-Gmail-Original-Message-ID: <CAJBJ56+bmpmDYP+PP3NN+CKkJT8Ls-FLeUBxFxwNLqVbbgHbOQ@mail.gmail.com>
-Message-ID: <CAJBJ56+bmpmDYP+PP3NN+CKkJT8Ls-FLeUBxFxwNLqVbbgHbOQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/8] ARM: dts: imx6qdl-vicut1/vicutgo: Set default
- backlight brightness to maximum
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Jander <david@protonic.nl>, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Robin van der Gracht <robin@protonic.nl>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowAAXHV229Uxi5SFMAQ--.31622S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU7nNVDUUUU
+X-Originating-IP: [39.99.236.58]
+X-CM-SenderInfo: xzkbuxbq6rjloofrz/1tbiGBbaolpEGNmrIwAAsh
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 9:23 AM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Mon, Feb 21, 2022 at 10:53:05AM +0100, Oleksij Rempel wrote:
-> > From: David Jander <david@protonic.nl>
-> >
-> > Recover default behavior of the device and set maximal brightness
-> >
-> > Signed-off-by: David Jander <david@protonic.nl>
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  arch/arm/boot/dts/imx6dl-victgo.dts   | 2 +-
-> >  arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm/boot/dts/imx6dl-victgo.dts b/arch/arm/boot/dts/imx6dl-victgo.dts
-> > index 227c952543d4..e6134efbfabd 100644
-> > --- a/arch/arm/boot/dts/imx6dl-victgo.dts
-> > +++ b/arch/arm/boot/dts/imx6dl-victgo.dts
-> > @@ -28,7 +28,7 @@ backlight: backlight {
-> >               pwms = <&pwm1 0 5000000 0>;
-> >               brightness-levels = <0 16 64 255>;
-> >               num-interpolated-steps = <16>;
-> > -             default-brightness-level = <1>;
-> > +             default-brightness-level = <48>;
->
-> Please take a look at the documentation of the property.
->
->   default-brightness-level:
->     description:
->       The default brightness level (index into the array defined by the
->       "brightness-levels" property).
+There is a same action when the variable is initialized
 
-Ah, never mind, I missed 'num-interpolated-steps' there.
+Signed-off-by: Hongbin Wang <wh_bin@126.com>
+---
+ net/ipv6/ip6_tunnel.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Shawn
+diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+index 53f632a560ec..19325b7600bb 100644
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -257,8 +257,6 @@ static int ip6_tnl_create2(struct net_device *dev)
+ 	struct ip6_tnl_net *ip6n = net_generic(net, ip6_tnl_net_id);
+ 	int err;
+ 
+-	t = netdev_priv(dev);
+-
+ 	dev->rtnl_link_ops = &ip6_link_ops;
+ 	err = register_netdevice(dev);
+ 	if (err < 0)
+-- 
+2.25.1
+

@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028794F6CD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD9A4F6CCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiDFVfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S236305AbiDFVe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236080AbiDFVdh (ORCPT
+        with ESMTP id S234018AbiDFVeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:33:37 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A655E7DA8C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:45:22 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id n8so3040193plh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jzM7G0Ll+2P5HH8PRGJaqO5+fn3hB56LAuMy1DOx49M=;
-        b=N9PnCSfGUwGKms0Qcz+BGacD3rwbxS/4UjxVlDhBhxjbk7OL5JsXFr4vn99VqZiT5r
-         jp3JSm7lUz5Awdj8MZ4U5QQ//19MB7nOINDcsQFPG/LNhn7VtHwTc3d3mDJN7VlO/244
-         rXgn7TCfpctNkvRqd0D6b3voDcOqfCcKLg3SI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jzM7G0Ll+2P5HH8PRGJaqO5+fn3hB56LAuMy1DOx49M=;
-        b=VZLTMSONoMMe+FbP3mn/7H+eLl/avcCYZzYw2UbEZbtUGyofq347kkaNFHgSpha/xL
-         7Hy7fVEAp6MJrP19qwh17CO647//++zuzCMROGKM+Ec82vbwXZ//dRRCj9VJtVWXpg64
-         CU0Y13ITWZEkf6UI355aA2F/NWgsn9NvIJQz22p0if2qdAE45jf593zlFrFYRz0rPQGR
-         3Cy5+Rqne4+IEGgxQW7SoZPaE5BNRVKKjCmfEjT3XTkUP+LziPm6hSxNSS3HWFH5TNsn
-         N7dTlx1M6y8mgI8NhogKpNVA+XqaZgXtUXn28I9FWfz5R2ZUUm5pB33b/LifHIJiUTUG
-         CoDQ==
-X-Gm-Message-State: AOAM530O6a9+EnHmhvGK5BrKg32JNrUA9OcRha2tKhHh33bNLwjqQVkl
-        7Og0B9dc2QV5rfSQr2LyPwet1g==
-X-Google-Smtp-Source: ABdhPJyqvt2FhsTBMqhPGXX7hehPRTDHvClHKhMdYn3odThFMPD3wQEsm03ZhDDhgk5dynFD6f9Ovg==
-X-Received: by 2002:a17:902:d4c8:b0:154:2416:2185 with SMTP id o8-20020a170902d4c800b0015424162185mr10319296plg.25.1649277921882;
-        Wed, 06 Apr 2022 13:45:21 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:dddf:7cc7:1261:9584])
-        by smtp.gmail.com with UTF8SMTPSA id a16-20020a17090a6d9000b001c9c3e2a177sm6414208pjk.27.2022.04.06.13.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 13:45:21 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 13:45:19 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohitkr@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v6 3/3] arm64: dts: qcom: sc7280: Add dt nodes for sound
- card
-Message-ID: <Yk3736Av338XoLH/@google.com>
-References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
- <1649157220-29304-4-git-send-email-quic_srivasam@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649157220-29304-4-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Wed, 6 Apr 2022 17:34:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656721C137;
+        Wed,  6 Apr 2022 13:46:40 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236JIo60013726;
+        Wed, 6 Apr 2022 20:46:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=m96v/xVDd4vOarvxULRjnzqD3C6ItzSsq2ilLdDwCJc=;
+ b=KgfQeX8u0bCBH4KxY4MXPpSAnT5g6ujpat8H9a8RTQfvRxc8+OaURvvSa64XeTQ+0pkm
+ e77Lj7PCLpX/PyHQDeIaAJqFG4oSXpIj+qE8omIt872+7Vl20q2kRW5r+xqAYzPJI0i7
+ 8YXImzBtnueKfXp3hXBD2BV7shwqZ4QCu27At0eJz9DMFVGoREkew5GVXaS5IdQUDbbS
+ OeuZ/su+CIEdfPIP8pulv9VAugLdt3moFS6mdgaJafZ6s/QBUrvDNKUD60ZLcPTmx6Zn
+ wbKLddonD4Sb2niCQbGvNLEKxnNe4Zif3API++qFmJo4DxwKceY4DoFTqCY4bhcNe218 lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f95vx8py9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 20:46:07 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 236Ka8Gr001302;
+        Wed, 6 Apr 2022 20:46:06 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f95vx8pxm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 20:46:06 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236KhIGf027197;
+        Wed, 6 Apr 2022 20:46:03 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3f6e48xykh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 20:46:03 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236Kk8me37814656
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Apr 2022 20:46:08 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30DE152052;
+        Wed,  6 Apr 2022 20:46:01 +0000 (GMT)
+Received: from sig-9-65-95-173.ibm.com (unknown [9.65.95.173])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1F3055204E;
+        Wed,  6 Apr 2022 20:45:59 +0000 (GMT)
+Message-ID: <6bfe3fe98eb7c11520264503fd10da478d6a3fd3.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/7] Add CA enforcement keyring restrictions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, jarkko@kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, nramas@linux.microsoft.com,
+        pvorel@suse.cz, tiwai@suse.de, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Wed, 06 Apr 2022 16:45:58 -0400
+In-Reply-To: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: j7oGSx8GYEFdafEibWGWHDms1J3qshLs
+X-Proofpoint-ORIG-GUID: 1ZtL_67sM-Qxqi_1nqGwIY42WZNXI1xO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_12,2022-04-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=855 phishscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204060102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,149 +95,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:43:40PM +0530, Srinivasa Rao Mandadapu wrote:
-> Add dt nodes for sound card support, which is using WCD938x headset
-> playback, capture, I2S speaker playback and DMICs via VA macro.
+Hi Eric,
+
+On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
+> A key added to the ima keyring must be signed by a key contained within 
+> either the builtin trusted or secondary trusted keyrings. Currently, there are 
+> CA restrictions described in IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY,
+> but these restrictions are not enforced within code. Therefore, keys within 
+> either the builtin or secondary may not be a CA and could be used to
+> vouch for an ima key.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-crd.dts  |  8 +++
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
->  2 files changed, 101 insertions(+)
+> The machine keyring can not be used as another trust anchor for adding keys 
+> to the ima keyring, since CA enforcement does not currently exist [1]. This 
+> would expand the current integrity gap.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> index 224a82d..b1b968a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> @@ -90,6 +90,14 @@ ap_ts_pen_1v8: &i2c13 {
->  	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
->  };
->  
-> +&sound {
-> +	audio-routing =
-> +		"VA DMIC0", "MIC BIAS1",
-> +		"VA DMIC1", "MIC BIAS1",
-> +		"VA DMIC2", "MIC BIAS3",
-> +		"VA DMIC3", "MIC BIAS3";
-> +};
-> +
->  &tlmm {
->  	tp_int_odl: tp-int-odl {
->  		pins = "gpio7";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index e3d8cbf..45e1d82 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -84,6 +84,99 @@
->  		pinctrl-names = "default";
->  		pinctrl-0 = <&nvme_pwren>;
->  	};
-> +
-> +	sound: sound {
-> +		compatible = "google,sc7280-herobrine";
-> +		model = "sc7280-wcd938x-max98360a-1mic";
-> +
-> +		audio-routing =
-> +				"IN1_HPHL", "HPHL_OUT",
-> +				"IN2_HPHR", "HPHR_OUT",
-> +				"AMIC1", "MIC BIAS1",
-> +				"AMIC2", "MIC BIAS2",
-> +				"VA DMIC0", "MIC BIAS3",
-> +				"VA DMIC1", "MIC BIAS3",
-> +				"VA DMIC2", "MIC BIAS1",
-> +				"VA DMIC3", "MIC BIAS1",
-> +				"TX SWR_ADC0", "ADC1_OUTPUT",
-> +				"TX SWR_ADC1", "ADC2_OUTPUT",
-> +				"TX SWR_ADC2", "ADC3_OUTPUT",
-> +				"TX SWR_DMIC0", "DMIC1_OUTPUT",
-> +				"TX SWR_DMIC1", "DMIC2_OUTPUT",
-> +				"TX SWR_DMIC2", "DMIC3_OUTPUT",
-> +				"TX SWR_DMIC3", "DMIC4_OUTPUT",
-> +				"TX SWR_DMIC4", "DMIC5_OUTPUT",
-> +				"TX SWR_DMIC5", "DMIC6_OUTPUT",
-> +				"TX SWR_DMIC6", "DMIC7_OUTPUT",
-> +				"TX SWR_DMIC7", "DMIC8_OUTPUT";
-> +
-> +		qcom,msm-mbhc-hphl-swh = <1>;
-> +		qcom,msm-mbhc-gnd-swh = <1>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		#sound-dai-cells = <0>;
-> +
-> +		dai-link@1 {
-> +			link-name = "Secondary MI2S Playback";
+> Introduce a new root of trust key flag to close this integrity gap for
+> all keyrings.  The first key type to use this is X.509.  When a X.509 
+> certificate is self signed, contains kernCertSign Key Usage and contains 
+> the CA bit, the new flag is set.  Introduce new keyring restrictions 
+> that not only validates a key is signed by a key contained within the 
+> keyring, but also validates the key has the new root of trust key flag 
+> set.  Use this new restriction for keys added to the ima keyring.  Now 
+> that we have CA enforcement, allow the machine keyring to be used as another 
+> trust anchor for the ima keyring.
+> 
+> To recap, all keys that previously loaded into the builtin, secondary or
+> machine keyring will still load after applying this series.  Keys
+> contained within these keyrings may carry the root of trust flag. The
+> ima keyring will use the new root of trust restriction to validate
+> CA enforcement. Other keyrings that require a root of trust could also 
+> use this in the future.
 
-The other link names provide information about the other end
-of the link (DP, WCD, DMIC), while this one describes the SoC side.
-Shouldn't this be "MAX98360A"? Not sure about the 'Playback' part,
-it seems 'link-name' is used as stream name, judging from a few
-samples of peeking into '/proc/asound/pcm' on different devices
-it seems that 'Playback' or 'Capture' is ususally not part of the
-stream name.
+Your initial patch set indicated that you were addressing Linus'
+request to allow end-users the ability "to add their own keys and sign
+modules they trust".  However, from the design of the previous patch
+set and now this one, everything indicates a lot more is going on than
+just allowing end-users to add their own keys.  There would be no
+reason for loading all the MOK keys, rather than just the CA keys, onto
+the "machine" keyring.  Please provide the motivation for this design.
 
-> +			reg = <MI2S_SECONDARY>;
-> +			cpu {
-> +				sound-dai = <&lpass_cpu MI2S_SECONDARY>;
-> +			};
-> +
-> +			codec {
-> +				sound-dai = <&max98360a>;
-> +			};
-> +		};
-> +
-> +		dai-link@5 {
-> +			link-name = "DP Playback";
+Please note that Patch 6/7 permits intermediary CA keys, without any
+mention of it in the cover letter.  Please include this in the
+motivation for this design.
 
-See comment above about 'Playback'. Just 'DP' is maybe a bit short, how
-about 'DisplayPort'?
+thanks,
 
-> +			reg = <LPASS_DP_RX>;
-> +			cpu {
-> +				sound-dai = <&lpass_cpu LPASS_DP_RX>;
-> +			};
-> +
-> +			codec {
-> +				sound-dai = <&mdss_dp>;
-> +			};
-> +		};
-> +
-> +		dai-link@6 {
-> +			link-name = "WCD Playback";
+Mimi
 
-Most instances I found spell out the codec name. It seems here we need
-the 'Playback'/'Capture' info (or something else) to not end up with
-duplicate link names. So my suggestion here would be "WCD9385 Playback".
-
-> +			reg = <LPASS_CDC_DMA_RX0>;
-> +			cpu {
-> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
-> +			};
-> +
-> +			codec {
-> +				sound-dai = <&wcd938x 0>, <&swr0 0>, <&rxmacro 0>;
-> +			};
-> +		};
-> +
-> +		dai-link@19 {
-> +			link-name = "WCD Capture";
-
-"WCD9385 Capture"?
-
-> +			reg = <LPASS_CDC_DMA_TX3>;
-> +			cpu {
-> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
-> +			};
-> +
-> +			codec {
-> +				sound-dai = <&wcd938x 1>, <&swr1 0>, <&txmacro 0>;
-> +			};
-> +		};
-> +
-> +		dai-link@25 {
-> +			link-name = "DMIC Capture";
-
-
-just "DMIC"?

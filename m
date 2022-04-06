@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A014F59E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417144F5800
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238893AbiDFJat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S235355AbiDFIfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580512AbiDFJU7 (ORCPT
+        with ESMTP id S241000AbiDFIbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 05:20:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755332816AF;
-        Tue,  5 Apr 2022 19:30:07 -0700 (PDT)
+        Wed, 6 Apr 2022 04:31:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA31DE6FF;
+        Tue,  5 Apr 2022 19:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C4EAB81FB5;
-        Wed,  6 Apr 2022 02:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F4FC385A0;
-        Wed,  6 Apr 2022 02:30:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7351CE20C3;
+        Wed,  6 Apr 2022 02:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A41C385A1;
+        Wed,  6 Apr 2022 02:30:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649212204;
-        bh=xmoV1wDYDm25L/wEd+wgpbgIUhjzDoq0K9phYwvAZFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pmkqz/0noFRk7vacJLi7o3vg9unVDqrCyTAAmO94kuNLcZpRGMnELojxzt4z7WhJZ
-         MQ3qDz1FiqDLxIYJRTjAk/M2pFxqYYRTQpr0Y0O4tL9+KgYbHjW6ayRs/K2ptMZvEz
-         cVAANQyp3Ln6sbQO15qdCyNHeO0mFkgWRd5ASXpkkXbHXZC8mPQNGEhFa5PliOaizn
-         MfIndUw2XCE0Bkvjc7W+0DeHOGuAeJOWnFaKxKnvQ7E8M75ru8vz9y8kLhvlLuBg3Z
-         GPemXN5w4EG5VauaqfsPEk+rcXHHZZJUP4iyzD8sgcV+bf8lwW3RxwojcilIGweC0s
-         Q8huiUdIzv4gQ==
-Date:   Wed, 6 Apr 2022 02:30:00 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [v8 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-Message-ID: <Ykz7KB221jyfwKzQ@google.com>
-References: <20220402051754.17513-1-jiaxin.yu@mediatek.com>
- <20220402051754.17513-3-jiaxin.yu@mediatek.com>
+        s=k20201202; t=1649212253;
+        bh=kMvDwsLnby/GtbPEZOS6QFj4PiJhpG5J89iehidYyqk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D0s611AuDog/P1rH2bxfW6i93GJXw3xFSVkYcsSK8ZTn0D7N0GXBglI7ZAJYSICcB
+         pIQge7cNsjIzaTtD+sD9FzRgEvGbxSpx44M1DuJO7sumchaLXP1+fCko1rksqEZMws
+         77XREAht9+1A9S3LXIAKqpNvcxHfwRxX3wP8IsCVSVqE7EJmYXWcIKAl6CvA5GANtA
+         v/NC1DudsTJdjhhqXtozbYRjKSTc+4GYSEy9q2kVuGV6iRm9407B6FW6D18mN0ssZR
+         yorREqmSSt30gXRESA20aC9+lqO14XXSqP96aPdjRVzjZShBzyRaNqMdNjLwh8pujL
+         n/M2x3NHuki/Q==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: [PATCH v8 0/4] bootconfig: Support embedding a bootconfig in kernel for non initrd boot
+Date:   Wed,  6 Apr 2022 11:30:48 +0900
+Message-Id: <164921224829.1090670.9700650651725930602.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402051754.17513-3-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,15 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 01:17:52PM +0800, Jiaxin Yu wrote:
-> MT8192 platform will use rt1015 or rt105p codec, so through the
+Hi,
 
-s/rt105p/rt1015p/.
+Here are the 8th version of the patchset to enable kernel embedded bootconfig
+for non-initrd kernel boot environment. This version fixes a build error when
+CONFIG_BLK_DEV_INITRD=n. Previous version is here [1];
 
->  static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
-[...]
-> +	hdmi_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,hdmi-codec", 0);
-> +	if (!hdmi_codec)
-> +		dev_info(&pdev->dev, "The machine don't have hdmi-codec\n");
+[1] https://lore.kernel.org/all/164871505771.178991.7870442736805590948.stgit@devnote2/T/#u
 
-s/don't have/has no/.
+You can embed a bootconfig file into the kernel as a default bootconfig,
+which will be used if there is no initrd or no bootconfig is attached to initrd. 
+
+This needs 2 options: CONFIG_BOOT_CONFIG_EMBED=y and set the file
+path to CONFIG_BOOT_CONFIG_EMBED_FILE. Even if you embed the bootconfig file
+to the kernel, it will not be enabled unless you pass "bootconfig" kernel
+command line option at boot. Moreover, since this is just a "default"
+bootconfig, you can override it with a new bootconfig if you attach another
+bootconfig to the initrd (if possible).
+The CONFIG_BOOT_CONFIG_EMBED_FILE can take both absolute and relative path.
+
+This is requested by Padmanabha at the below thread[2];
+
+[2] https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
+
+Thank you,
+
+---
+
+Masami Hiramatsu (4):
+      bootconfig: Make the bootconfig.o as a normal object file
+      bootconfig: Check the checksum before removing the bootconfig from initrd
+      bootconfig: Support embedding a bootconfig file in kernel
+      docs: bootconfig: Add how to embed the bootconfig into kernel
+
+
+ Documentation/admin-guide/bootconfig.rst |   31 ++++++++++++++++++++++--
+ MAINTAINERS                              |    1 +
+ include/linux/bootconfig.h               |   10 ++++++++
+ init/Kconfig                             |   21 ++++++++++++++++-
+ init/main.c                              |   38 +++++++++++++++---------------
+ lib/.gitignore                           |    1 +
+ lib/Makefile                             |   10 +++++++-
+ lib/bootconfig-data.S                    |   10 ++++++++
+ lib/bootconfig.c                         |   13 ++++++++++
+ 9 files changed, 111 insertions(+), 24 deletions(-)
+ create mode 100644 lib/bootconfig-data.S
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

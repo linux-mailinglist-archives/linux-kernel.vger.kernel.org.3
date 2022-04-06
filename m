@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BABB4F691D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051214F68A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239952AbiDFSDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 14:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S240094AbiDFSE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 14:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240163AbiDFSCx (ORCPT
+        with ESMTP id S239810AbiDFSEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:02:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E997921593E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649263029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wFhqU92i2F2z0WXuiDLML34olBedCCl24eMXRkDAOvo=;
-        b=QlBODx/X9CZL1SFZCE0J41YlrJm/0XAJHEZUeLmxniY3MPa9j7ROOL0fIreBV0iv6P1a66
-        vu2mliTqD/09Dihwqyn9Y52h4LVPBDm+XUqx1MNNk9aKHDqLqyfMnpJZPVs3ITLnPn0DYM
-        bIs0/LY03Ix0ZHEn0uvMo0ewQEragWA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-eGnFJhV1OcmfLwh7wIwl4w-1; Wed, 06 Apr 2022 12:37:08 -0400
-X-MC-Unique: eGnFJhV1OcmfLwh7wIwl4w-1
-Received: by mail-qt1-f197.google.com with SMTP id h11-20020a05622a170b00b002e0769b9018so3405232qtk.14
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 09:37:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wFhqU92i2F2z0WXuiDLML34olBedCCl24eMXRkDAOvo=;
-        b=bdUmdM0YFfPWS22XTyVcE4rhOxflYVUCQaxemrU1VUdN5axOmXPyFNC8CudDK/zTXJ
-         8lGBxwP9Ol99B47NetRnAKlnxLWwlEsAu8cGW+8OGisT1y8uaMWr1zutuYp8We8kLfua
-         Tk6pjEAjxAUX2H2iHjGt/DfG7hfSovZEoOcDuDOZqNxNDqFvyBoa2ERbTq64xIfRHR/l
-         VOTTy+zS7MVs98MHqNrHfxLD2EWmAFi4cqMw/IeGac37A7CCubMI3EROcI1uvrsyEj0L
-         0jU+nYMur/voIe8gW2ETHujrq0SdKzPt3EWHdNtYw6osVrZwCA2uKj7q44t4+eHY49VS
-         HMcA==
-X-Gm-Message-State: AOAM531QuHkFYO8ML2CtyvxNmXN/7kMgoqVKuewaI/cfpBP30IE1DeTF
-        Q/XhifMlFQNlsyFjdtvvalpgRMgHnv6Yt1hue+9uCntZ2/zEUBtGoc5A4bOfSVoMb/edzkAdbzs
-        ph5UwPwKlPXJjImerTANsv+bo
-X-Received: by 2002:ac8:5944:0:b0:2e2:e4b:f4b6 with SMTP id 4-20020ac85944000000b002e20e4bf4b6mr8237199qtz.89.1649263027693;
-        Wed, 06 Apr 2022 09:37:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKGgJPnSloLlwQDmxsXUcDo9JBRUcAOHDi9Zwg8EcQv4I6Ns6POfnDnMyPrNP5djs+1pj2xA==
-X-Received: by 2002:ac8:5944:0:b0:2e2:e4b:f4b6 with SMTP id 4-20020ac85944000000b002e20e4bf4b6mr8237181qtz.89.1649263027461;
-        Wed, 06 Apr 2022 09:37:07 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id t72-20020a37464b000000b0067ec1c9dcaesm10160791qka.44.2022.04.06.09.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 09:37:07 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 09:37:03 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
- __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
- vlv_allow_gt_wake.cold+0x0
-Message-ID: <20220406163703.hhet4ai7ztd7g4j4@treble>
-References: <202204041241.Hw855BWm-lkp@intel.com>
- <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
- <20220406000500.5hlaqy5zrdqsg5mg@treble>
- <87czhv11k1.ffs@tglx>
- <20220406053251.6dyfxrjmmgdwocfc@treble>
- <20220406074330.GD34954@worktop.programming.kicks-ass.net>
+        Wed, 6 Apr 2022 14:04:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F00827139C;
+        Wed,  6 Apr 2022 09:39:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A7261725;
+        Wed,  6 Apr 2022 16:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A22EC385A1;
+        Wed,  6 Apr 2022 16:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649263159;
+        bh=OfUEq6J8iH0Ir0JNWmJZkAViT/357XnNBWg3nMYlceQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=InufhPzdnWEY2M74Pa+HR8qGNaZCtFgwVMs5cB4ussp45Zj1Fsi2Ag2zu7pX7kU3e
+         htvQycQtUDRi0ozVIN/2MEOVA9WNuBzQrlZa+A3cucFn6nOKsnz6lqPRQYF6+gElRY
+         ff6VIr+abgqRRQWd8H1egGrj4OYp+z388yRbfI0oEMZtVaM3yx32osS8VekSdw85un
+         2GZ8sjCKMGZB6hh/ZnaGK54MNJBHQRBSQOrhZU5fp3JCTv8f7Si0vAXGJMihDyclix
+         fEPfv8/LPfwVPWCCiLKQJlGLUbqnRHMBK7JAbfTPUlEW73F8SqZFQ0by3CcNkKd4yz
+         EDdNWDpjnnCnQ==
+Date:   Wed, 6 Apr 2022 09:39:18 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next] sungem: Prepare cleanup of powerpc's
+ asm/prom.h
+Message-ID: <20220406093918.35b97b2e@kernel.org>
+In-Reply-To: <f43aa220-dcef-bc4b-ebb5-74268581e3e6@csgroup.eu>
+References: <fa778bf9c0a23df8a9e6fe2e2b20d936bd0a89af.1648833433.git.christophe.leroy@csgroup.eu>
+        <20220405132215.75f0d5ec@kernel.org>
+        <f43aa220-dcef-bc4b-ebb5-74268581e3e6@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220406074330.GD34954@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 09:43:30AM +0200, Peter Zijlstra wrote:
-> On Tue, Apr 05, 2022 at 10:32:51PM -0700, Josh Poimboeuf wrote:
-> > More broadly, this issue could theoretically happen in some other places
-> > throughout the kernel tree, since _THIS_IP_ is fundamentally unreliable
-> > as currently written.
-> > 
-> > So we could look at making _THIS_IP_ more predictable.
-> > 
-> > Inline asm would work better ("lea 0(%rip), %[rip]"), but then you need
-> > an arch-dependent implementation...
-> 
-> Well, there's a ton of _THIS_IP_ instances all around, and it would be
-> unfortunate to have them grow into actual code :/
+On Wed, 6 Apr 2022 05:53:46 +0000 Christophe Leroy wrote:
+> Le 05/04/2022 =C3=A0 22:22, Jakub Kicinski a =C3=A9crit=C2=A0:
+> > On Sat,  2 Apr 2022 12:17:13 +0200 Christophe Leroy wrote: =20
+> >> powerpc's asm/prom.h brings some headers that it doesn't
+> >> need itself.
+> >>
+> >> In order to clean it up, first add missing headers in
+> >> users of asm/prom.h =20
+> >=20
+> > Could you resend the net-next patches you had? =20
+>=20
+> Sure I can but,
+>=20
+> >=20
+> > They got dropped from patchwork due to net-next being closed during
+> > the merge window. =20
+>=20
+> https://patchwork.kernel.org/project/netdevbpf/list/?series=3D&submitter=
+=3D192363&state=3D*&q=3D&archive=3D&delegate=3D
+>=20
+> As far as I can see they are in patchwork and two of them have been=20
+> accepted, and this one is tagged as 'deferred', so do I have to resend it=
+ ?
 
-What do you mean by growing into actual code?  It's still just a single
-instruction, as was the immediate load before.
-
-Though, you pasted this on irc:
-
-  #define _THIS_IP_  ({ __label__ __here; __here: asm_volatile_goto ("":::: __here); (unsigned long)&&__here; })
-
-which seems decent to me, though less than ideal because it grows an
-ENDBR.  But I like its arch-independence, so yeah, LGTM.
-
--- 
-Josh
-
+Erm, perhaps a clerical error? I don't see them in the tree.
+I'd resend both.

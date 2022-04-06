@@ -2,172 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D94F4F535A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1194F53A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443529AbiDFDeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 23:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S241784AbiDFDdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 23:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446436AbiDFDEx (ORCPT
+        with ESMTP id S1390337AbiDFDEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:04:53 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A584C403DF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:59:28 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id s2so942110pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+pKWlLT8OBUODk8YNvFLSMhBfA/iojejnVtSVsASRAk=;
-        b=YXBL1QT1SI7i+Bh2c/Dc8P9v+q9zH8NYCPf0bo/FnxGd06vvrjm+O0FsoJBk0fLEbN
-         TaQbFXB8NNZ5nHIWMYME2kE1OjLFWBJxGzKfqq81r6V+XTnnibuYyxUjQDDC1SvWvxZh
-         ZmGZTT02QcLWDCHdVr7gAerq/tjYtPmAx7wIvPAAVsLt56zt8AXu8yuNmg1JanvGP+x9
-         vpdZfL07mSEahEQOb/pPxEelhv2k4QH8DOCgTRmA8ssHD5rbeiGZ7EDjvLzqiSTf81Z9
-         c1S5njgI/BUvyLBAbpVZNDPhZH69GLSVdZ+WHHdLvA57R4MqqDkvpKVvRvDnzLutqjII
-         7cqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+pKWlLT8OBUODk8YNvFLSMhBfA/iojejnVtSVsASRAk=;
-        b=hDvmEXB9XTv4f1+o8ZIm+SpIQFSBvA5C8J3o83e+igOQ0KynfDVeEPFnSE64w8z5xj
-         cAJ643i3yKUThehAI3n5yev9f5J//X4O480AZEnJlBichcI+bdtSGvdsXULzhoRjOUI4
-         1JwAygYJLs0JF7n4Q6gUnqpk84tVQIuG5xAyC30I9SmZgSMhAgevK7ZF/ro5ULqQMFJ3
-         fatgdiHz5luLfCMfgI+ptxPRctle2WbSyzOEHBGrFpNZbkxJ5PJTwAP6F7kUoLCbwC95
-         MMRAVX0ptn4iiFC5zhTpGPPVRZhqLWv0+YBY9nyFsjOjyOD6Q5Gnz/MbouelrwTGIc1Z
-         QhuQ==
-X-Gm-Message-State: AOAM532xkeuF8rPmjm7UEZMZy4UZQamBrE/4JMSd9royTZlXVJzMatKP
-        tCzD3WaSBgMGWVBOMRsVa8E=
-X-Google-Smtp-Source: ABdhPJwr8lCDx3qo0NcIt/6xVkEHW9WW1AsHFqpf8jte3twaF6gnt2JTp/x1cETmV5k6VXwhRd9jwQ==
-X-Received: by 2002:a05:6a00:130e:b0:4cc:3c7d:4dec with SMTP id j14-20020a056a00130e00b004cc3c7d4decmr6050466pfu.32.1649203168112;
-        Tue, 05 Apr 2022 16:59:28 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13949197pgc.19.2022.04.05.16.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 16:59:27 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 08:59:18 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, cl@linux.com, vbabka@suse.cz,
-        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
-        roman.gushchin@linux.dev
-Subject: Re: [PATCH 01/10] mm/slab: Decouple ARCH_KMALLOC_MINALIGN from
- ARCH_DMA_MINALIGN
-Message-ID: <YkzX1nM0Ca7apVBt@hyeyoo>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-2-catalin.marinas@arm.com>
+        Tue, 5 Apr 2022 23:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BD33E07;
+        Tue,  5 Apr 2022 17:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCA06153E;
+        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B6B5C385A1;
+        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649203214;
+        bh=KMNIOTy7tQqMiQJt2a1NiAN3Cf5KwEY7COeHi3Y3npQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WY3GCFkU9JF3B4v5HSCFdz0Gj1g3tb96D7PZJkiSm3vvC8jb4MWHldVEgv5bCarKh
+         FWQCvugxZ2/CJSFokNg9fa9+Hgivxt8yKUATeDfmS/qrTyAEFf2bzVv73Qyz8tTQmd
+         wV32dqGQxfQP6I+vUAWitf0/Fu8a5GWZ+W+O3SjU03jfpTzmIPE0DzxD+79U/Mamls
+         smqmtdr/Bvo2LEC6L8pXtT6x62lQUBUDe0+CpAL1stRKfhEU1ZMsz+691auXyuZHM3
+         7TNBTaLkX2QOSi+7vwLyYimeZf/XStjOuJcZHj/p6CRltTsVivnrOoHA/zHGyBJIfx
+         Fk1tgNG+yQunw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5D48E6D402;
+        Wed,  6 Apr 2022 00:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405135758.774016-2-catalin.marinas@arm.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in
+ load_kallsyms()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164920321379.789.15662598832496347807.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Apr 2022 00:00:13 +0000
+References: <20220405145711.49543-1-ytcoode@gmail.com>
+In-Reply-To: <20220405145711.49543-1-ytcoode@gmail.com>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 02:57:49PM +0100, Catalin Marinas wrote:
-> In preparation for supporting a dynamic kmalloc() minimum alignment,
-> allow architectures to define ARCH_KMALLOC_MINALIGN independently of
-> ARCH_DMA_MINALIGN. In addition, always define ARCH_DMA_MINALIGN even if
-> an architecture does not override it.
->
+Hello:
 
-[ +Cc slab maintainer/reviewers ]
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-I get why you want to set minimum alignment of kmalloc() dynamically.
-That's because cache line size can be different and we cannot statically
-know that, right?
-
-But I don't get why you are trying to decouple ARCH_KMALLOC_MINALIGN
-from ARCH_DMA_MINALIGN. kmalloc'ed buffer is always supposed to be DMA-safe.
-
-I'm afraid this series may break some archs/drivers.
-
-in Documentation/dma-api-howto.rst:
-> 2) ARCH_DMA_MINALIGN
+On Tue,  5 Apr 2022 22:57:11 +0800 you wrote:
+> Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
 > 
->   Architectures must ensure that kmalloc'ed buffer is
->   DMA-safe. Drivers and subsystems depend on it. If an architecture
->   isn't fully DMA-coherent (i.e. hardware doesn't ensure that data in
->   the CPU cache is identical to data in main memory),
->   ARCH_DMA_MINALIGN must be set so that the memory allocator
->   makes sure that kmalloc'ed buffer doesn't share a cache line with
->   the others. See arch/arm/include/asm/cache.h as an example.
->
->   Note that ARCH_DMA_MINALIGN is about DMA memory alignment
->   constraints. You don't need to worry about the architecture data
->   alignment constraints (e.g. the alignment constraints about 64-bit
->   objects).
-
-If I'm missing something, please let me know :)
-
-Thanks,
-Hyeonggon
-
-> After this patch, ARCH_DMA_MINALIGN is expected to be used in static
-> alignment annotations and defined by an architecture to be the maximum
-> alignment for all supported configurations/SoCs in a single Image.
-> ARCH_KMALLOC_MINALIGN, if different, is the minimum alignment guaranteed
-> by kmalloc().
-> 
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 > ---
->  include/linux/slab.h | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 373b3ef99f4e..d58211bdeceb 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -187,17 +187,30 @@ bool kmem_valid_obj(void *object);
->  void kmem_dump_obj(void *object);
->  #endif
->  
-> +/*
-> + * slob does not support independent control of ARCH_KMALLOC_MINALIGN and
-> + * ARCH_DMA_MINALIGN.
-> + */
-> +#ifdef CONFIG_SLOB
-> +#undef ARCH_KMALLOC_MINALIGN
-> +#endif
-> +
->  /*
->   * Some archs want to perform DMA into kmalloc caches and need a guaranteed
->   * alignment larger than the alignment of a 64-bit integer.
-> - * Setting ARCH_KMALLOC_MINALIGN in arch headers allows that.
-> + * Setting ARCH_DMA_MINALIGN in arch headers allows that.
->   */
-> -#if defined(ARCH_DMA_MINALIGN) && ARCH_DMA_MINALIGN > 8
-> +#ifndef ARCH_DMA_MINALIGN
-> +#define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-> +#elif ARCH_DMA_MINALIGN > 8 && !defined(ARCH_KMALLOC_MINALIGN)
->  #define ARCH_KMALLOC_MINALIGN ARCH_DMA_MINALIGN
-> -#define KMALLOC_MIN_SIZE ARCH_DMA_MINALIGN
-> -#define KMALLOC_SHIFT_LOW ilog2(ARCH_DMA_MINALIGN)
-> -#else
-> +#endif
-> +
-> +#ifndef ARCH_KMALLOC_MINALIGN
->  #define ARCH_KMALLOC_MINALIGN __alignof__(unsigned long long)
-> +#else
-> +#define KMALLOC_MIN_SIZE ARCH_KMALLOC_MINALIGN
-> +#define KMALLOC_SHIFT_LOW ilog2(KMALLOC_MIN_SIZE)
->  #endif
->  
->  /*
-> 
+>  tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
+    https://git.kernel.org/bpf/bpf-next/c/2d0df01974ce
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

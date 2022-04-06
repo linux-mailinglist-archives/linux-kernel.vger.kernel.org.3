@@ -2,162 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986944F61AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFFB4F61D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiDFOdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S234785AbiDFOd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiDFOdX (ORCPT
+        with ESMTP id S235060AbiDFOdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:33:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF4A4D2757
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:57:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vz10Dy+89MLxg18JfYmzCtx6Kz1MXMYGcBdcILuzAkfk6rwS8ZJOssbnDSHzMdSLhkhcnyRr+SP2zYaczKUq4/4dpFYxcXIKiBB5WoH8yX5Z9hnO8SPSbxtZpSgln2Rf+EI+M/RGDr/g7YCGrz95+o1PBphrb60mXKZ6blQT12OLH6agfmULyUgH86dnpm23/vugkdQLj246Bub7vZoVLSCgsaO0oK+hOXGpv4nV/nIMqr6ol+xnRwGHwuhoiQNMppK99TJnge30R8le20GhgkdFRC6ZvjM+3NxrXCFNdV9oGwt6g3E+4PFiHlUlEXDCvLj3nRbvl+++lR3RNxIyyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rFVW/PsGy90COQ1+V+xVBCjd5AF8+iTJMoukAU8I5EE=;
- b=fEpzJzS2QwmlVGV6Aijao0R582D8ww65ermCUxQ2xYnElY1q9JUNcPuQymW6mkfu1IkcspH54cCIXPfKZgIlcAi6CpM53TYF6nmMgZug05tqBFuGJc8yRSnQ1JyoVYgG+euannjxmVWHB64NWf7FX1qr8H4mCn7FcJ0W6SS9v7zPz0RWXuMANIzYLBvtrDsUucQvwqnT7vtigDWh4kQhj2DL2oZvn8WyumiArmBOldxtQbXaqCIF6wAbJ/72tk3b9yLx51RxoOGqCOwoPgAqM5Av6a6A9AHsY8a49kP4WkRhcs+8cwNtrEg1efSbinPMBgK84CHP5CG9EOTeyUXR0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rFVW/PsGy90COQ1+V+xVBCjd5AF8+iTJMoukAU8I5EE=;
- b=hEHPrUi8TLUEzSNiDX4zgjvP/lFnq8sGgiNpBX51XJZCl+IKAlgSkFR+seN04SWVDbih/FuptvqajFmqTrmJ9biArUQRA1nBXvO9nb3sNxYfiB3goyp1e8yx4k0DvAVJJXAuSSUnGi7UHaQ7J+79cY3RDPmhgHpQ8VGdUA1ayDs=
-Received: from SA9PR03CA0027.namprd03.prod.outlook.com (2603:10b6:806:20::32)
- by SN4PR0201MB3566.namprd02.prod.outlook.com (2603:10b6:803:51::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 10:55:59 +0000
-Received: from SN1NAM02FT0036.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:20:cafe::bc) by SA9PR03CA0027.outlook.office365.com
- (2603:10b6:806:20::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
- Transport; Wed, 6 Apr 2022 10:55:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0036.mail.protection.outlook.com (10.97.4.102) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5144.21 via Frontend Transport; Wed, 6 Apr 2022 10:55:59 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 6 Apr 2022 03:55:33 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 6 Apr 2022 03:55:33 -0700
-Envelope-to: linux-kernel@vger.kernel.org,
- gregkh@linuxfoundation.org,
- corbet@lwn.net,
- linux-arm-kernel@lists.infradead.org,
- arnd@arndb.de
-Received: from [172.19.2.243] (port=36060 helo=xsjwillw50.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <ronak.jain@xilinx.com>)
-        id 1nc3K1-0007fI-Ic; Wed, 06 Apr 2022 03:55:33 -0700
-From:   Ronak Jain <ronak.jain@xilinx.com>
-To:     <michal.simek@xilinx.com>, <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <corbet@lwn.net>,
-        <linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>,
-        <lakshmi.sai.krishna.potthuri@xilinx.com>, <radheys@xilinx.com>,
-        Ronak Jain <ronak.jain@xilinx.com>
-Subject: [PATCH 4/4] firmware: xilinx: enable feature check for ZynqMP
-Date:   Wed, 6 Apr 2022 03:55:26 -0700
-Message-ID: <1649242526-17493-5-git-send-email-ronak.jain@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649242526-17493-1-git-send-email-ronak.jain@xilinx.com>
-References: <1649242526-17493-1-git-send-email-ronak.jain@xilinx.com>
+        Wed, 6 Apr 2022 10:33:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42FF95A6290
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649242632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CLEUfzP7V1U1D4TPRCoAdSvmcyEwuTYxfJcwrVTrZLs=;
+        b=cXIhCfoavPk3yTtu2aIpLVQRywwxFt4m8cSnn3yM8oezvJyniRTEbiabaFy/7XjqwwQssg
+        vhiq+SPGMljwt+0icESQ+EjZ647A3Tb2aTho6v9+VkkVA2qYhZh/S5WuCiioa/gt7MItDw
+        S5c/K5JrvIp7UAVI7Mtnsz903lbXmrw=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-IGO3JEaXOn6q2LYR5X7fqg-1; Wed, 06 Apr 2022 06:57:12 -0400
+X-MC-Unique: IGO3JEaXOn6q2LYR5X7fqg-1
+Received: by mail-pj1-f70.google.com with SMTP id w3-20020a17090ac98300b001b8b914e91aso1499238pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 03:57:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=CLEUfzP7V1U1D4TPRCoAdSvmcyEwuTYxfJcwrVTrZLs=;
+        b=xhcplPGrgIpr5Y8WsJCortfcGLF+OcciCjGxZHTqdRG4C2dje/mH9KTVIpR9lNZckH
+         iykSqsuGBnFKRSH8LeSlOyemxtXZwTkk5yjDrOdN5hnSOiVjMGIrBQqFQLnYMq+zakcG
+         mYHe2bOmstjITUPRjZrQ/Le6PNbZoZPBOymorhziwHTzLvTfPEIUdA6vb7adD3ggESUw
+         meAwn96fPm81ritGDGUcRELPb3iBI/mmIAHTnVfEduXhw07Bl7nKLSE2OiA1EXigFFo4
+         +qG0RnxB2WRl7wdlEWXha4ZWBb8VEZA3Frj2U9ZCJFiSuxWo72ve1EgHU+qkm0pZFc7X
+         MLCg==
+X-Gm-Message-State: AOAM5306fLYRtDJ1PJkGEI7P/BdXOeaqZ8rhA6iOQ2q06Tpoiirpmh4P
+        5/P+5cgx33/NXvfLN3GhDHYTac9Q+Yr+C4Kp05uMP3+ZAQfmZAHrHxqYrZILZusS3PcvSaBgCb1
+        0xo72M5Ga/O/c+IXgsw5lwGXDnnsk6hyLklXD6nWcpZNHwQ1p8rF21XFNALH9/PvFGEr/qWlzeg
+        ==
+X-Received: by 2002:a17:902:c94c:b0:154:45c6:fbea with SMTP id i12-20020a170902c94c00b0015445c6fbeamr8070320pla.117.1649242630617;
+        Wed, 06 Apr 2022 03:57:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjzQPGc5o/jOgRyYCPg9MggcTrzmcnrWA8qdPmr0rX7qUFNgcHSOLTjHMgqRPHp3D0zoMsKw==
+X-Received: by 2002:a17:902:c94c:b0:154:45c6:fbea with SMTP id i12-20020a170902c94c00b0015445c6fbeamr8070295pla.117.1649242630261;
+        Wed, 06 Apr 2022 03:57:10 -0700 (PDT)
+Received: from [10.72.13.31] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056a00190200b004fa865d1fd3sm18859324pfi.86.2022.04.06.03.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 03:57:09 -0700 (PDT)
+Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
+ inodes
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220401133243.1075-1-lhenriques@suse.de>
+ <5146f7a8-94c1-a7aa-db2d-d3ae98c5b83a@redhat.com>
+ <87fsmqa3jj.fsf@brahms.olymp>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <6d8df20e-d99a-0f80-f3e1-3c661351759c@redhat.com>
+Date:   Wed, 6 Apr 2022 18:57:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0165b6cd-4197-4a5f-bd4c-08da17bc08cc
-X-MS-TrafficTypeDiagnostic: SN4PR0201MB3566:EE_
-X-Microsoft-Antispam-PRVS: <SN4PR0201MB35664573B09D5824754C4434A4E79@SN4PR0201MB3566.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5pff+5lqmCjoYU+vqoEtY0AY0/L+99X2iNLnyfhHnq/ZIhRW8abK51ZnN+pzjo0Nv53Ihvc2AeTXeiwIeSr0fdXnBv68o4hQT1VkixyqplGc4WD0tmtCL0TuZRXKcq9/EzDcy52vXvbgjU7DvZu+xlNd03134lJVYCN9c+wNYThsRLoiW5B0pkkq/VKZfm4woCqAfVWGreNEsZlpjlP925sHuKl4C5tatD85mJyBZ8AZGySHb5WOOCHgI0HZTFgYra6wvy9qlRUiFZQgMayWFrDlbnfWLw3rJiu8odllWt8X5PZCFa5PBxvWqaLaB5TuVRc7vuyl8IQKa6NHgxqw/4HDZhExMJX8NEmCBgV5x3qh+GwSO/ah/OstN5ce0nVIcibC8aK0NDWL/O8F73TNhlsdjBz9RC+SOnq0xaYhSrR7ovZESaBR5HR3CckzyN+/b6XUfgI/gtQy5KMuk42u4SmwEYTl1mXM4QW+ZrjK6z1ngHCohXGeMUL54qdkmtgWFQlAKheHORKWFjGZJR4UBBbSB9CC94Vj90u6AGWvlAB6x+lwInGh3pUbP+O/+dVEpoNxo/1qXZA0vh0RJiJ6VFnvf3HAr6ZchVhlppTYolFEmbNWcas/Y/f2ewe1+saXsRfh3QIzqGYHi/Yb8r+HqP0mw/ysXKxYNgV57gqwMd1VBdbvwif2rXI+26KQjSXIbcFGfzJJp+up2MYfIkqUJg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(186003)(54906003)(47076005)(316002)(36756003)(7696005)(40460700003)(2616005)(508600001)(110136005)(336012)(26005)(107886003)(4326008)(2906002)(8936002)(356005)(70206006)(82310400005)(8676002)(70586007)(44832011)(36860700001)(9786002)(6666004)(426003)(5660300002)(7636003)(83380400001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 10:55:59.4491
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0165b6cd-4197-4a5f-bd4c-08da17bc08cc
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0036.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3566
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87fsmqa3jj.fsf@brahms.olymp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the feature check if the PM_FEATURE_CHECK API returns success
-with the supported version for the ZynqMP. Currently, it is enabled
-for Versal only.
 
-Move get_set_conduit_method() at the beginning as the Linux is
-requesting to TF-A for the PM_FEATURE_CHECK API version for which the
-interface should be enabled with TF-A.
+On 4/6/22 6:50 PM, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
+>
+>> On 4/1/22 9:32 PM, Luís Henriques wrote:
+>>> When doing DIO on an encrypted node, we need to invalidate the page cache in
+>>> the range being written to, otherwise the cache will include invalid data.
+>>>
+>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+>>> ---
+>>>    fs/ceph/file.c | 11 ++++++++++-
+>>>    1 file changed, 10 insertions(+), 1 deletion(-)
+>>>
+>>> Changes since v1:
+>>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+>>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>>>
+>>> Note: I'm not really sure this last change is required, it doesn't really
+>>> affect generic/647 result, but seems to be the most correct.
+>>>
+>>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+>>> index 5072570c2203..b2743c342305 100644
+>>> --- a/fs/ceph/file.c
+>>> +++ b/fs/ceph/file.c
+>>> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>>>    	if (ret < 0)
+>>>    		return ret;
+>>>    -	ceph_fscache_invalidate(inode, false);
+>>> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+>>>    	ret = invalidate_inode_pages2_range(inode->i_mapping,
+>>>    					    pos >> PAGE_SHIFT,
+>>>    					    (pos + count - 1) >> PAGE_SHIFT);
+>>> @@ -1895,6 +1895,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>>>    		req->r_inode = inode;
+>>>    		req->r_mtime = mtime;
+>>>    +		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT)) {
+>>> +			ret = invalidate_inode_pages2_range(
+>>> +				inode->i_mapping,
+>>> +				write_pos >> PAGE_SHIFT,
+>>> +				(write_pos + write_len - 1) >> PAGE_SHIFT);
+>>> +			if (ret < 0)
+>>> +				dout("invalidate_inode_pages2_range returned %d\n", ret);
+>>> +		}
+>> Shouldn't we fail it if the 'invalidate_inode_pages2_range()' fails here ?
+> Yeah, I'm not really sure.  I'm simply following the usual pattern where
+> an invalidate_inode_pages2_range() failure is logged and ignored.  And
+> this is not ceph-specific, other filesystems seem to do the same thing.
 
-Signed-off-by: Ronak Jain <ronak.jain@xilinx.com>
----
- drivers/firmware/xilinx/zynqmp.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+I think it should be they are using this to invalidate the range only, 
+do not depend on it to writeback the dirty pages.
 
-diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-index 6ee94f31ac98..7977a494a651 100644
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@ -1662,6 +1662,10 @@ static int zynqmp_firmware_probe(struct platform_device *pdev)
- 	struct zynqmp_devinfo *devinfo;
- 	int ret;
- 
-+	ret = get_set_conduit_method(dev->of_node);
-+	if (ret)
-+		return ret;
-+
- 	np = of_find_compatible_node(NULL, NULL, "xlnx,zynqmp");
- 	if (!np) {
- 		np = of_find_compatible_node(NULL, NULL, "xlnx,versal");
-@@ -1670,11 +1674,14 @@ static int zynqmp_firmware_probe(struct platform_device *pdev)
- 
- 		feature_check_enabled = true;
- 	}
--	of_node_put(np);
- 
--	ret = get_set_conduit_method(dev->of_node);
--	if (ret)
--		return ret;
-+	if (!feature_check_enabled) {
-+		ret = do_feature_check_call(PM_FEATURE_CHECK);
-+		if (ret >= 0)
-+			feature_check_enabled = true;
-+	}
-+
-+	of_node_put(np);
- 
- 	devinfo = devm_kzalloc(dev, sizeof(*devinfo), GFP_KERNEL);
- 	if (!devinfo)
--- 
-2.7.4
+Such as they may will call 'filemap_fdatawrite_range()', etc.
+
+I saw in the beginning of the 'ceph_sync_write()', it will do 
+'filemap_write_and_wait_range()' too. So the dirty pages should have 
+already flushed.
+
+-- Xiubo
+
+
+
+> Cheers,
 

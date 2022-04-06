@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91034F577E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7EC4F5760
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiDFHFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 03:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
+        id S1346560AbiDFHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 03:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386973AbiDFGTp (ORCPT
+        with ESMTP id S238416AbiDFG4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 02:19:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C161B757E;
-        Tue,  5 Apr 2022 22:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xkKN41eLVrIheZpH/2SH1i+aJL00RRx4irbbX94rx9Q=; b=Q/3lDXWd19Mt0b3/k3Rb7zcP5h
-        p5Eze/s2YucUMuPYsP3/q20TplDhpywYDITWcq7DW8bCL9f9peotPecyp39tdZIQ1ExUkalAybXyS
-        Sxt54IpLbAnxVjk06D6a2NNMvqpMHsxgMeosQjblK8oh9AW6ILrD0OEcrPhOIK4bCqie2ImxZgB4X
-        gS/zqX5LtXLSyVWRgAmLMMXXDrccEDWzqicolNHUqaDXH8PiWuHSYpqXNQ8jCr6Cn3U5UgMr7P2gH
-        bzB3VhlCqf6aRtj6S9vDNsm1YM8SxrSXMJeCnnlVBFrEDH/mbtk/QwMI4mI6duvxeYNJiTCqNnT1B
-        dCRczSmQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nby6y-003oOR-F6; Wed, 06 Apr 2022 05:21:44 +0000
-Date:   Tue, 5 Apr 2022 22:21:44 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v7 6/6] pmem: implement pmem_recovery_write()
-Message-ID: <Yk0jaC9rHwwoEV11@infradead.org>
-References: <20220405194747.2386619-1-jane.chu@oracle.com>
- <20220405194747.2386619-7-jane.chu@oracle.com>
+        Wed, 6 Apr 2022 02:56:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A15A1DB7F2;
+        Tue,  5 Apr 2022 22:24:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E5FB619EC;
+        Wed,  6 Apr 2022 05:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241FFC385A1;
+        Wed,  6 Apr 2022 05:24:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649222643;
+        bh=Mul9AJ93AVH0Pdg7HmZn/H/9BvyBCq6o30Igx61Upxc=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Am9WcrfAlbrARvfo6v8rQN4UAAli/FBiMCG+pmwkxJptd2owz3q1KXTJPyBgU39lA
+         7mUSWKzmubvs+ZYaqqJeY7YyJnnoRm5OUBR8T+XSZkqS3vVAW6ZadxLfR3Gx/Rot6G
+         Gem374uz50GhTPFu4tKwjWFTO/Uu8YZ3Rkn7yyb52BzmV9S/JWldfGNTROeWljkDo0
+         bRcGpI1q/2a88MJU1I+FrOTzckRVIVrz9Lj0VQF3qylc/3zUKLzlLCv5NkBYKQotC9
+         2gq8lHuWs21rJdzTBerVR20PgxP5AOOfXFZU74E9ZUD1W5QB6aG0iPywAo/OP5AX3+
+         BS7crmsY4SsdQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] ipw2x00: use DEVICE_ATTR_*() macro
+References: <20220406015444.14408-1-tangmeng@uniontech.com>
+Date:   Wed, 06 Apr 2022 08:23:57 +0300
+In-Reply-To: <20220406015444.14408-1-tangmeng@uniontech.com> (Meng Tang's
+        message of "Wed, 6 Apr 2022 09:54:44 +0800")
+Message-ID: <87y20iss2a.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405194747.2386619-7-jane.chu@oracle.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:47:47PM -0600, Jane Chu wrote:
-> +	off = (unsigned long)addr & ~PAGE_MASK;
+Meng Tang <tangmeng@uniontech.com> writes:
 
-offset_inpage()
+> Use DEVICE_ATTR_*() helper instead of plain DEVICE_ATTR,
+> which makes the code a bit shorter and easier to read.
+>
+> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 
-> +	if (off || !(PAGE_ALIGNED(bytes))) {
+ipw2x00 patches go to wireless trees, I think for this patch
+wireless-next is more approriate than wireless. No need to resend
+because of this.
 
-No need for the inner braces.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-> +	mutex_lock(&pmem->recovery_lock);
-> +	pmem_off = PFN_PHYS(pgoff) + pmem->data_offset;
-> +	cleared = __pmem_clear_poison(pmem, pmem_off, len);
-> +	if (cleared > 0 && cleared < len) {
-> +		dev_warn(dev, "poison cleared only %ld out of %lu\n",
-> +			cleared, len);
-> +		mutex_unlock(&pmem->recovery_lock);
-> +		return 0;
-> +	} else if (cleared < 0) {
-
-No need for an else after a return.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

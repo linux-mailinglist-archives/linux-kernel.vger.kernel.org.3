@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1474F6C9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E654F6CA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiDFV0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S234415AbiDFVaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235825AbiDFVZq (ORCPT
+        with ESMTP id S238095AbiDFV3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:25:46 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A986A2E09B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:22:38 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i27so6575460ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YWIJLXiksS0VQuBG7+M96cyEaIHAtHP1yEeT6FSDVss=;
-        b=eGr2KNoJev3o+7PUlkl/icPgBXus4or9iph30kRO0RlOpzieR/mJ+fg2qhm4/C95/9
-         Ff+RcLhj/Yu39wFVQyeMJlC4BAhtG1fklhyUKR2XebizMWewgnJ+6Dbu9TG01O8gWGEI
-         +z8+WbnJRKA1SIMV2xD6kZQ0kwxfeU/bJoAvfU2vGX6AcAPH5kPSeJ4rLL6Nkg322iDR
-         q/r8te8TdvpiDi3iCrek1q1m9t5ZDyVQeFvuvtvQM0R9sVIJAOPCui6/KEUfywOZBRt0
-         oxQ0xpiVnfZ3YRwYkmQyvu2PJi1ex/9CDXlG8RZKXuY02SeiWJs1Q9quyO06otaKPEa/
-         Udlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YWIJLXiksS0VQuBG7+M96cyEaIHAtHP1yEeT6FSDVss=;
-        b=gOS/KmhrD9cmINuqtVMhGTI5VJoOc4C3BZ7L+lDmKRAWdTDdNgP6F/1kXBkAMLJ/Mq
-         75AKMCUSNCvlmtfWOyEn9Db3XYfXielo6WV3lRumxExZlPmodP1lo8j5QbH+FB6583oT
-         iRRzEX9EBcGBQcS8bYGwMBetShtuKPhXrgo4v3pauGR9HuxDFpNRewZBKKgN35SV6NbP
-         By9cOIZ2Htr+tWAIbztV+uav8qQWpHxerkaXruUbv2YRHzIm4tsI8kMPUiv50r/4/zPy
-         8itnWL3ibR+ttQP9VqHJW5rzzZuLDUjNOFM9Y2LKXauRAFrhXpDnRdgDxiSZq/dUYA1d
-         fFmA==
-X-Gm-Message-State: AOAM530wilvU14DE2zA4u+pgpbevOOMz9SOT9bf0mkesfXgJIFXCp5+b
-        IyUHIOkx9Ri7JClX0OoSoJM3dA==
-X-Google-Smtp-Source: ABdhPJwqFsV1Ew0Jt6UrdnI9S2NRhGLNSLS3IFoqLFvHb+dEkGDyquWATm6TiXZLoQgcbqhgLh/WoA==
-X-Received: by 2002:a17:907:1c9a:b0:6df:bfc3:c9f3 with SMTP id nb26-20020a1709071c9a00b006dfbfc3c9f3mr10367726ejc.679.1649276557243;
-        Wed, 06 Apr 2022 13:22:37 -0700 (PDT)
-Received: from [192.168.1.9] (hst-221-122.medicom.bg. [84.238.221.122])
-        by smtp.googlemail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm6971214ejm.103.2022.04.06.13.22.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 13:22:36 -0700 (PDT)
-Message-ID: <3987e143-59c6-f5dc-77a5-f58043e84de3@linaro.org>
-Date:   Wed, 6 Apr 2022 23:22:35 +0300
+        Wed, 6 Apr 2022 17:29:31 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AD6156087;
+        Wed,  6 Apr 2022 13:31:27 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1ncCIz-0002m1-34; Wed, 06 Apr 2022 22:31:05 +0200
+Message-ID: <cd348e77-cb40-a64c-6b82-24e9a9158946@maciej.szmigiero.name>
+Date:   Wed, 6 Apr 2022 22:30:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 0/2] Introduce Intra-refresh type control
+ Thunderbird/91.7.0
 Content-Language: en-US
-To:     quic_dikshita@quicinc.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
-        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
-        quic_majja@quicinc.com, quic_jdas@quicinc.com
-References: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-6-seanjc@google.com>
+ <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
+ <YkshgrUaF4+MrrXf@google.com>
+ <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
+ <YkzxXw1Aznv4zX0a@google.com>
+ <eed1cea4-409a-f03e-5c31-e82d49bb2101@maciej.szmigiero.name>
+ <Yk3Jd6xAfgVoFgLc@google.com>
+ <5135b502-ce2e-babb-7812-4d4c431a5252@maciej.szmigiero.name>
+ <Yk3uh6f+0nOdybd3@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying the
+ instruction
+In-Reply-To: <Yk3uh6f+0nOdybd3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,49 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dikshita,
-
-I cannot find new version of this patchset with Han's comments addressed?
-
-On 3/14/22 12:09, quic_dikshita@quicinc.com wrote:
-> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+On 6.04.2022 21:48, Sean Christopherson wrote:
+> On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+>> On 6.04.2022 19:10, Sean Christopherson wrote:
+>>> On Wed, Apr 06, 2022, Maciej S. Szmigiero wrote:
+>> And what if it's L0 that is trying to inject a NMI into L2?
+>> In this case is_guest_mode() is true, but the full NMI injection machinery
+>> should be used.
 > 
-> Hi,
+> Gah, you're right, I got misled by a benign bug in nested_vmx_l1_wants_exit() and
+> was thinking that NMIs always exit.  The "L1 wants" part should be conditioned on
+> NMI exiting being enabled.  It's benign because KVM always wants "real" NMIs, and
+> so the path is never encountered.
 > 
-> This series add a new intra-refresh type control for encoders.
-> this can be used to specify which intra refresh to be enabled, random, cyclic or none.
-> 
-> Change since v0:
->  Dropped INTRA_REFRESH_TYPE_NONE as it was not needed.
->  Intra refresh period value as zero will disable the intra  refresh.
-> 
-> Change since v1:
->  Updated the control name for better undestanding.
->  Also updated the documentation accordingly.
-> 
-> Change since v2:
->  Updated the venus driver implementation as well to use the  correct control name. Missed in v2.
-> 
-> Change since v3:
->  Addressed comments from Hans in v4l2 patch.
->  Enabled the support for cyclic intra refresh in venus driver.
-> 
-> Thanks,
-> Dikshita
-> 
-> Dikshita Agarwal (2):
->   media: v4l2-ctrls: Add intra-refresh type control
->   venus: venc: Add support for intra-refresh mode
-> 
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 22 ++++++++++++++++++++++
->  drivers/media/platform/qcom/venus/core.h           |  1 +
->  drivers/media/platform/qcom/venus/venc.c           |  6 +++++-
->  drivers/media/platform/qcom/venus/venc_ctrls.c     | 10 ++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
->  include/uapi/linux/v4l2-controls.h                 |  5 +++++
->  6 files changed, 52 insertions(+), 1 deletion(-)
+> @@ -5980,7 +6005,7 @@ static bool nested_vmx_l1_wants_exit(struct kvm_vcpu *vcpu,
+>          switch ((u16)exit_reason.basic) {
+>          case EXIT_REASON_EXCEPTION_NMI:
+>                  intr_info = vmx_get_intr_info(vcpu);
+> -               if (is_nmi(intr_info))
+> +               if (is_nmi(intr_info) && nested_cpu_has_nmi_exiting(vmcs12))
+>                          return true;
+>                  else if (is_page_fault(intr_info))
+>                          return true;
 > 
 
--- 
-regards,
-Stan
+I guess you mean "benign" when having KVM as L1, since other hypervisors may
+let their L2s handle NMIs themselves.
+
+>> It is also incorrect to block L1 -> L2 NMI injection because either L1
+>> or L2 is currently under NMI blocking: the first case is obvious,
+>> the second because it's L1 that is supposed to take care of proper NMI
+>> blocking for L2 when injecting an NMI there.
+> 
+> Yep, but I don't think there's a bug here.  At least not for nVMX.
+
+I agree this scenario should currently work (including on nSVM) - mentioned
+it just as a constraint on solution space.
+
+>>>> With the code in my previous patch set I planned to use
+>>>> exit_during_event_injection() to detect such case, but if we implement
+>>>> VMCB12 EVENTINJ parsing we can simply add a flag that the relevant event
+>>>> comes from L1, so its normal injection side-effects should be skipped.
+>>>
+>>> Do we still need a flag based on the above?  Honest question... I've been staring
+>>> at all this for the better part of an hour and may have lost track of things.
+>>
+>> If checking just is_guest_mode() is not enough due to reasons I described
+>> above then we need to somehow determine in the NMI / IRQ injection handler
+>> whether the event to be injected into L2 comes from L0 or L1.
+>> For this (assuming we do VMCB12 EVENTINJ parsing) I think we need an extra flag.
+> 
+> Yes :-(  And I believe the extra flag would need to be handled by KVM_{G,S}ET_VCPU_EVENTS.
+>
+
+Another option for saving and restoring a VM would be to add it to
+KVM_{GET,SET}_NESTED_STATE somewhere (maybe as a part of the saved VMCB12
+control area?).
+
+Thanks,
+Maciej

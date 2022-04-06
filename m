@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9C44F5FEF
+	by mail.lfdr.de (Postfix) with ESMTP id 06BC94F5FEE
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbiDFNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S233285AbiDFNaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiDFNKO (ORCPT
+        with ESMTP id S233291AbiDFN3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:10:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FDE2BFC1B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:39:55 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KY7y7322fzdZTR;
-        Wed,  6 Apr 2022 10:39:27 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 10:39:53 +0800
-Subject: Re: [PATCH] filemap: remove obsolete comment in lock_page
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <dhowells@redhat.com>,
-        <william.kucharski@oracle.com>, <vbabka@suse.cz>,
-        <kirill.shutemov@linux.intel.com>, <hannes@cmpxchg.org>,
-        <agruenba@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220402062218.30709-1-linmiaohe@huawei.com>
- <YksPkskcR6AdMaZf@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c728cb4c-6a87-94b6-b087-bbf2b55af35c@huawei.com>
-Date:   Wed, 6 Apr 2022 10:39:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 6 Apr 2022 09:29:21 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29E137B08
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 19:45:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V9JmdQB_1649213146;
+Received: from 30.225.24.86(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V9JmdQB_1649213146)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 06 Apr 2022 10:45:47 +0800
+Message-ID: <1c6b191b-4a2e-0333-b0a3-f76bcd6b6515@linux.alibaba.com>
+Date:   Wed, 6 Apr 2022 10:45:46 +0800
 MIME-Version: 1.0
-In-Reply-To: <YksPkskcR6AdMaZf@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [Linux-cachefs] [PATCH] fscache: Move fscache_cookies_seq_ops
+ specific code under CONFIG_PROC_FS
 Content-Language: en-US
+To:     Yue Hu <huyue2@coolpad.com>, dhowells@redhat.com,
+        linux-cachefs@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zbestahu@163.com, zbestahu@gmail.com
+References: <20220402044728.9669-1-huyue2@coolpad.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220402044728.9669-1-huyue2@coolpad.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/4 23:32, Matthew Wilcox wrote:
-> On Sat, Apr 02, 2022 at 02:22:18PM +0800, Miaohe Lin wrote:
->> lock_page needs the caller to have a reference on the page->mapping inode
->> due to sync_page. Also lock_page_nosync is introduced which does not do a
->> sync_page via commit db37648cd6ce ("[PATCH] mm: non syncing lock_page()").
->> But commit 7eaceaccab5f ("block: remove per-queue plugging") kills off the
->> old plugging along with aops->sync_page() and lock_page_nosync. So there
->> is no need to have a reference on the page->mapping inode when calling
->> lock_page anymore. Remove this obsolete and confusing comment.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> 
-> Thanks.  I'll fix up the changelog (some of the tenses are a little
-> strange) and take this through my pagecache tree.
 
-Many thanks for doing this. :)
 
+On 4/2/22 12:47 PM, Yue Hu wrote:
+> fscache_cookies_seq_ops is only used in proc.c that is compiled under
+> enabled CONFIG_PROC_FS, so move related code under this config. The
+> same case exsits in internal.h.
 > 
->>  include/linux/pagemap.h | 3 ---
->>  1 file changed, 3 deletions(-)
->>
->> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
->> index 993994cd943a..8dfe8e49c427 100644
->> --- a/include/linux/pagemap.h
->> +++ b/include/linux/pagemap.h
->> @@ -908,9 +908,6 @@ static inline void folio_lock(struct folio *folio)
->>  		__folio_lock(folio);
->>  }
->>  
->> -/*
->> - * lock_page may only be called if we have the page's inode pinned.
->> - */
->>  static inline void lock_page(struct page *page)
->>  {
->>  	struct folio *folio;
->> -- 
->> 2.23.0
->>
+> Also, make fscache_lru_cookie_timeout static due to no user outside
+> of cookie.c.
 > 
-> .
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> ---
+>  fs/fscache/cookie.c   | 4 +++-
+>  fs/fscache/internal.h | 4 ++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
+> diff --git a/fs/fscache/cookie.c b/fs/fscache/cookie.c
+> index 9bb1ab5fe5ed..9d3cf0111709 100644
+> --- a/fs/fscache/cookie.c
+> +++ b/fs/fscache/cookie.c
+> @@ -30,7 +30,7 @@ static DEFINE_SPINLOCK(fscache_cookie_lru_lock);
+>  DEFINE_TIMER(fscache_cookie_lru_timer, fscache_cookie_lru_timed_out);
+>  static DECLARE_WORK(fscache_cookie_lru_work, fscache_cookie_lru_worker);
+>  static const char fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] = "-LCAIFUWRD";
+> -unsigned int fscache_lru_cookie_timeout = 10 * HZ;
+> +static unsigned int fscache_lru_cookie_timeout = 10 * HZ;
+>  
+>  void fscache_print_cookie(struct fscache_cookie *cookie, char prefix)
+>  {
+> @@ -1069,6 +1069,7 @@ void __fscache_invalidate(struct fscache_cookie *cookie,
+>  }
+>  EXPORT_SYMBOL(__fscache_invalidate);
+>  
+> +#ifdef CONFIG_PROC_FS
+>  /*
+>   * Generate a list of extant cookies in /proc/fs/fscache/cookies
+>   */
+> @@ -1145,3 +1146,4 @@ const struct seq_operations fscache_cookies_seq_ops = {
+>  	.stop   = fscache_cookies_seq_stop,
+>  	.show   = fscache_cookies_seq_show,
+>  };
+> +#endif
 
+Then I'm afraid fscache_cookies_seq_stop() and
+fscache_cookies_seq_show() also need to be wrapped with "#ifdef
+CONFIG_PROC_F" ...
+
+-- 
+Thanks,
+Jeffle

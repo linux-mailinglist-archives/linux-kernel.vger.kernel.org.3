@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709984F5EB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319344F5E7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbiDFNBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S230449AbiDFNDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiDFNBK (ORCPT
+        with ESMTP id S231490AbiDFNCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:01:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4A85BC1C8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:26:32 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 90CD81EC0426;
-        Wed,  6 Apr 2022 11:25:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649237147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4cZSb3cc+Gu90BQrKaaggIaclA4W6uCeg9JKu/+H7fE=;
-        b=OPQ0p0uQnCJZWG8yZP+JQxzuxibM2vDmCkRqvV7WvCxeAkvhBxP8DukTYbfViuL2uAcrg3
-        x2geai0zDRVlcnAML5np+1n5PyMLnBRdmY5gS1NfXiuPuE3FlfUmmbYyRV6ODwWIirGymO
-        tPatFAlJLZ/RWM2xExOCiuDIpyft8VU=
-Date:   Wed, 6 Apr 2022 11:25:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     linux-kernel@vger.kernel.org, Lewis.Carroll@amd.com,
-        Mario.Limonciello@amd.com, gautham.shenoy@amd.com,
-        Ananth.Narayan@amd.com, bharata@amd.com, len.brown@intel.com,
-        x86@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        chang.seok.bae@intel.com, keescook@chromium.org, metze@samba.org,
-        zhengqi.arch@bytedance.com, mark.rutland@arm.com
-Subject: Re: [PATCH] x86: Prefer MWAIT over HALT on AMD processors
-Message-ID: <Yk1cnYWF+L+OgoCa@zn.tnic>
-References: <20220405130021.557880-1-wyes.karny@amd.com>
- <YkxMtx9zdk+nH33r@zn.tnic>
- <c6ceb0a5-c3fa-790e-d3c7-228c71a477c2@amd.com>
+        Wed, 6 Apr 2022 09:02:16 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9B45BE763;
+        Wed,  6 Apr 2022 02:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649237228; x=1680773228;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=3xqa3zQff+Io2JArriZqk5H3xdDEHifKgrjChaWfIJQ=;
+  b=P8IT8nOS7zIuHLuFqvh879M/wkd6ok/JiTznAggAg5lcRWz7KDCKS3+D
+   Hnp9wCoOJBTIWECzgwP5PFNKSkNvu7yM4y9KM/0zA/Pro5zkP34s3dRYK
+   4ghpvMbnXVYQaTkk7dNXQhOg7x/yu/NFZHHlryNwTYH8NbB4N1pp+ATGU
+   o=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Apr 2022 02:26:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 02:26:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 02:26:54 -0700
+Received: from [10.216.50.162] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
+ 02:26:50 -0700
+Subject: Re: [PATCH V9 4/6] regulator: Add a regulator driver for the PM8008
+ PMIC
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n53tXnOw_hRD-O9juAbJ1FDcEOx1rHqGijZs8fuanqMNfg@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <b57d23c6-bb34-8253-b2ad-8c69f6e92128@quicinc.com>
+Date:   Wed, 6 Apr 2022 14:56:46 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c6ceb0a5-c3fa-790e-d3c7-228c71a477c2@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n53tXnOw_hRD-O9juAbJ1FDcEOx1rHqGijZs8fuanqMNfg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 11:44:52AM +0530, Wyes Karny wrote:
-> If x86_FEATURE_ZEN is set and X86_FEATURE_MWAIT is not set or has
-> X86_BUG_MONITOR then it won't return correct value.
 
-Can that ever happen on Zen uarch?
+On 4/6/2022 12:39 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-04-05 06:50:31)
+>> +
+>> +static struct platform_driver pm8008_regulator_driver = {
+>> +       .driver = {
+>> +               .name           = "qcom,pm8008-regulators",
+> Also, the name should be something like pm8008_regulators
 
-Also, what does this mean: "allow MWAIT early on."?
 
--- 
-Regards/Gruss,
-    Boris.
+I've seen the other qcom regulator driver names, I think I shouldn't be 
+using coma here. How about qcom-pm8008-regulator ? similar to the other 
+regulator drivers
 
-https://people.kernel.org/tglx/notes-about-netiquette
+

@@ -2,230 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098E74F628F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABD74F629C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiDFPEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S235472AbiDFPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235327AbiDFPDt (ORCPT
+        with ESMTP id S235777AbiDFPJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:03:49 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CEE14B026
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:51:50 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id o20so1703398pla.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LexSt4aevETZp9OYJUcU75mB3szv4z4iC4bK+kg4wrw=;
-        b=RLEQBPKPm2Y+qKo1Y5nutRYAEJ5mnhdcakkUzgDrH6n5zbU8poEo1Z+Au767FbLKdH
-         rvPcPSkwsQ8lKYXiANnZG5tIguNgo7izrATjlgpWdTNCpSSHWLKKoVj/xiOZX9gz7oOx
-         KtdbBj2gm9IRc7h5vxNl3gLzLRkionLb9hsDjNnAlmfQC0yJotz/NuT1N1ymnXj4WGBL
-         EmJSmr1BaLb54QF8IAr8sNYYOBQrPJ0zqFfA0ui5ca68eybQo2zlM8n+DwB8UGgmwacG
-         VMX6uwfOg3TA1HDec392SkH8lOVMSCELlIsgj5Zv5n0JigeMiBY7aVbny8HTP/ksr8Of
-         ZpDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LexSt4aevETZp9OYJUcU75mB3szv4z4iC4bK+kg4wrw=;
-        b=iEzSPSOWQBmIykY1vtRavo6CgqdEybDVwPeHNmwlk5zrjr7Z/+AdNqc2tkhJUCY43r
-         dOH0TT12k+rnpfj4+Bj9r1wLlAwYLQ6foy8Q042IozE50s2s+raF8mgZJZoLLG+t6yEQ
-         1fN1hyt+PKu4kLR6AFh/VPuFHbEDmcx6LGbAi7/do0fjDSQC51y8yA16U5JgjC1GLOLD
-         A8ZDear3tv3z82DbYK6GyZX8C39O7jUyIgHxXxU99ylGb+AMq70mFOYMAq4xeFeu8DQq
-         AnbJFBldbAYVA9WxC2YOPcY2RybynOZWLUiXZk8POjd0IrvLEZmi39nEgcVrjgXuktyu
-         u0mg==
-X-Gm-Message-State: AOAM532a6+5EKXeaHD4nM3JsgQ5OUYQiElQQuhb1NscTkV1Lg8IIpCIO
-        xk5xqN4lwURsP2WuKvmkNys=
-X-Google-Smtp-Source: ABdhPJwXJkv8T7an8WY+DDHwwAghsTTZPZLvCw/9PSzzyUVU7ISrUysJcUH2S+tJX1OZ+QT4k87b8g==
-X-Received: by 2002:a17:902:c948:b0:156:c07d:8222 with SMTP id i8-20020a170902c94800b00156c07d8222mr8349170pla.30.1649245846123;
-        Wed, 06 Apr 2022 04:50:46 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056a001ad000b004fb358ffe86sm19212686pfv.137.2022.04.06.04.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 04:50:44 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 20:50:37 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
-        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zqiang <qiang.zhang@windriver.com>, linux-mm@kvack.org
-Subject: Re: [mm/slub] 555b8c8cb3:
- WARNING:at_lib/stackdepot.c:#stack_depot_fetch
-Message-ID: <Yk1+jZjfaJK3Jwwf@hyeyoo>
-References: <20220324095218.GA2108184@odroid>
- <YkcfNjZJSXNsAlLt@hyeyoo>
- <YkpgjgM/aSXd29uj@hyeyoo>
- <Ykqn2z9UVfxFwiU+@elver.google.com>
- <8368021e-86c3-a93f-b29d-efed02135c41@suse.cz>
- <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
- <Ykui2prpzkMvaWBa@hyeyoo>
- <YkwjCUbTbRqslphe@elver.google.com>
- <YkzHG64zxu+nWbg3@hyeyoo>
- <Yk1Qf73cufW6LjOW@elver.google.com>
+        Wed, 6 Apr 2022 11:09:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED39F472F07
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649246650; x=1680782650;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uEpWVDG9mHAzC3vQt8/6DshQkU5+A/w706L6sIKCmZ4=;
+  b=Wbo+Z5XO48d1xnJXvfuaF9Ew3HN9KKbRGwSeqCDE5SC+gRzfLuHDjslQ
+   rO0TgXP1ZRWVAMlXTUk9CSyhST1CzYjOhXlWswSbGZi9s2gmYHOqoJoKM
+   HAOHjdpODydczu6xYKYnFzG74d1SR6XNATIhMFPC+hKP+Ue5gFE+mv0TU
+   hbOMQ4jICPF+M8Ae2TONoAlUQc9vzS5BfANfsuBRuqXI4syZXhyvuY1wk
+   S0PLleJy8eFWbakFc3MZpRIFEO/6X0ILqrdPjaSvxX/oM5iskvMYloB7K
+   lmoTsw+zPmRn7Lv91UROVHHzLTeJ8+f4lBrDmdxk4RV4H5UgGsKBvmMM5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240958360"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="240958360"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:54:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="722484316"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2022 04:54:00 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc4Ea-0004NR-32;
+        Wed, 06 Apr 2022 11:54:00 +0000
+Date:   Wed, 6 Apr 2022 19:53:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Michael Yan <michael.yan@starfivetech.com>,
+        Jenny Zhang <jenny.zhang@starfivetech.com>
+Subject: [esmil:visionfive 39/55] sound/soc/starfive/pwmdac.h:145:6: warning:
+ no previous prototype for 'sf_pwmdac_pcm_push_tx'
+Message-ID: <202204061929.5OKjyPph-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk1Qf73cufW6LjOW@elver.google.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 10:34:07AM +0200, Marco Elver wrote:
-> On Wed, Apr 06, 2022 at 07:47AM +0900, Hyeonggon Yoo wrote:
-> > On Tue, Apr 05, 2022 at 01:07:53PM +0200, Marco Elver wrote:
-> > > On Tue, Apr 05, 2022 at 11:00AM +0900, Hyeonggon Yoo wrote:
-> > > > On Mon, Apr 04, 2022 at 05:18:16PM +0200, Marco Elver wrote:
-> > > > > On Mon, 4 Apr 2022 at 16:20, Vlastimil Babka <vbabka@suse.cz> wrote:
-> > > [...]
-> > > > > > But here we are in mem_dump_obj() -> kmem_dump_obj() -> kmem_obj_info().
-> > > > > > Because kmem_valid_obj() returned true, fooled by folio_test_slab()
-> > > > > > returning true because of the /* Set required slab fields. */ code.
-> > > > > > Yet the illusion is not perfect and we read garbage instead of a valid
-> > > > > > stackdepot handle.
-> > > > > >
-> > > > > > IMHO we should e.g. add the appropriate is_kfence_address() test into
-> > > > > > kmem_valid_obj(), to exclude kfence-allocated objects? Sounds much simpler
-> > > > > > than trying to extend the illusion further to make kmem_dump_obj() work?
-> > > > > > Instead kfence could add its own specific handler to mem_dump_obj() to print
-> > > > > > its debugging data?
-> > > > > 
-> > > > > I think this explanation makes sense!  Indeed, KFENCE already records
-> > > > > allocation stacks internally anyway, so it should be straightforward
-> > > > > to convince it to just print that.
-> > > > >
-> > > > 
-> > > > Thank you both! Yeah the explanation makes sense... thats why KASAN/KCSAN couldn't yield anything -- it was not overwritten.
-> > > > 
-> > > > I'm writing a fix and will test if the bug disappears.
-> > > > This may take few days.
-> > >
-> > 
-> > I did check the bug is not reproduced after simple fix. (reproduced 0 of 373)
-> > This approach was right.
-> > 
-> > > The below should fix it -- I'd like to make kmem_obj_info() do something
-> > > useful for KFENCE objects.
-> > >
-> > 
-> > Agreed.
-> > 
-> [...]
-> > > +	i = get_stack_skipnr(track->stack_entries, track->num_stack_entries, NULL);
-> > > +	for (j = 0; i < track->num_stack_entries && j < KS_ADDRS_COUNT - 1; ++i, ++j)
-> > 
-> > why KS_ADDRS_COUNT - 1 instead of KS_ADDRS_COUNT?
-> 
-> For `kp_stack[j] = NULL` because KFENCE's stack_entries does not have a
-> NULL-delimiter (we have num_stack_entries). But it seems for kp_stack
-> it's only added if `j < KS_ADDR_COUNT`, so I've fixed that.
->
+tree:   https://github.com/esmil/linux visionfive
+head:   7ff84520cb688edd6028a4ac3de3ed684eb22794
+commit: 46f456a9a328b4f2904920484bb3cf5afb654cdc [39/55] ASoC: starfive: Add StarFive JH7100 audio drivers
+config: h8300-randconfig-r004-20220406 (https://download.01.org/0day-ci/archive/20220406/202204061929.5OKjyPph-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/46f456a9a328b4f2904920484bb3cf5afb654cdc
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 46f456a9a328b4f2904920484bb3cf5afb654cdc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash sound/soc/
 
-Okay.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > +		kp_stack[j] = (void *)track->stack_entries[i];
-> > > +	kp_stack[j] = NULL;
-> [...]
-> > > +	kpp->kp_objp = (void *)meta->addr;
-> > > +
-> > 
-> > no need to take meta->lock here?
-> 
-> Yes, in case state is KFENCE_OBJECT_FREED there could be a race.
->
+All warnings (new ones prefixed by >>):
 
-dumping object that is freed sounds like a bug?
-but seems it's better to avoid a race in that case too.
+   In file included from include/linux/err.h:5,
+                    from include/linux/clk.h:12,
+                    from sound/soc/starfive/pwmdac.c:7:
+   include/linux/scatterlist.h: In function 'sg_set_buf':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |         ^~~~~~
+   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |                 ^~~~~~~~~~~~~~~
+   In file included from sound/soc/starfive/pwmdac.c:19:
+   sound/soc/starfive/pwmdac.h: At top level:
+>> sound/soc/starfive/pwmdac.h:145:6: warning: no previous prototype for 'sf_pwmdac_pcm_push_tx' [-Wmissing-prototypes]
+     145 | void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev) { }
+         |      ^~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/starfive/pwmdac.h:146:6: warning: no previous prototype for 'sf_pwmdac_pcm_pop_rx' [-Wmissing-prototypes]
+     146 | void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev) { }
+         |      ^~~~~~~~~~~~~~~~~~~~
+>> sound/soc/starfive/pwmdac.h:147:5: warning: no previous prototype for 'sf_pwmdac_pcm_register' [-Wmissing-prototypes]
+     147 | int sf_pwmdac_pcm_register(struct platform_device *pdev)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
 
-> > > +	kfence_to_kp_stack(&meta->alloc_track, kpp->kp_stack);
-> > > +	if (meta->state == KFENCE_OBJECT_FREED)
-> > > +		kfence_to_kp_stack(&meta->free_track, kpp->kp_free_stack);
-> > > +	/* get_stack_skipnr() ensures the first entry is outside allocator. */
-> > > +	kpp->kp_ret = kpp->kp_stack[0];
-> > > +
-> > > +	return true;
-> > > +}
-> > 
-> > kfence_kmem_obj_info() does not set kp_data_offset. kp_data_offset
-> > may not be zero when e.g.) mem_dump_obj(&rhp->func); in rcutorture case. 
-> 
-> kp_data_offset is the offset e.g. when SLUB has added a redzone:
-> 
-> |		objp0 = kasan_reset_tag(object);
-> |	#ifdef CONFIG_SLUB_DEBUG
-> |		objp = restore_red_left(s, objp0);
-> |	#else
-> |		objp = objp0;
-> |	#endif
-> |		objnr = obj_to_index(s, slab, objp);
-> |		kpp->kp_data_offset = (unsigned long)((char *)objp0 - (char *)objp);
-> 
-> In !CONFIG_SLUB_DEBUG and !(s->flags & SLAB_RED_ZONE) cases it's always
-> 0, and otherwise it's
-> 
-> 	`objp0 - restore_red_left(objp0)` ==
-> 	`object - (object - s->red_left_pad)` ==
-> 	`s->red_left_pad`.
-> 
-> This matters if kp_objp is not the object start accessible by the user.
-> But in the KFENCE case this is always the case so kp_data_offset=0.
->
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
-Ah, right. confused "pointer offset" with "data offset".
-it's always 0 in kfence case.
 
-> > BTW, I would prefer implementing something like kfence_obj_info()
-> > (called by kmem_dump_obj() and called instead of kmem_obj_info())
-> > for better readability.
-> 
-> Hmm, I guess that saves us from having to fix up both slab.c/slub.c. But
-> it makes kmem_obj_info() error-prone to use. What if someone calls
-> kmem_obj_info() in future somewhere else? That caller then would have to
-> remember to also call kfence_obj_info().
->
+vim +/sf_pwmdac_pcm_push_tx +145 sound/soc/starfive/pwmdac.h
 
-Valid point.
-
-> I'd prefer fixing it as close to the root-cause (in kmem_obj_info()) to
-> avoid that.
-> 
-> What do you prefer?
-
-Then what about something like this?
-
-kmem_obj_info(object) {
-	if (object is from kfence)
-		__kfence_obj_info()
-	else
-		__kmem_obj_info()
-}
-
-> 
-> > And when mem_dump_obj() is called, I guess it's for debugging purpose.
-> > I think it would be better to let user know the object is allocated
-> > from kfence pool. maybe adding if (is_kfence_address(object)) pr_cont(" kfence");
-> > in kmem_dump_obj() would be enough?
-> 
-> We can add that.
-> 
-> Thanks,
-> -- Marco
+   137	
+   138	
+   139	
+   140	#if IS_ENABLED(CONFIG_SND_STARFIVE_PWMDAC_PCM)
+   141	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev);
+   142	void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev);
+   143	int sf_pwmdac_pcm_register(struct platform_device *pdev);
+   144	#else
+ > 145	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev) { }
+ > 146	void sf_pwmdac_pcm_pop_rx(struct sf_pwmdac_dev *dev) { }
+ > 147	int sf_pwmdac_pcm_register(struct platform_device *pdev)
+   148	{
+   149		return -EINVAL;
+   150	}
+   151	#endif
+   152	
 
 -- 
-Thanks,
-Hyeonggon
+0-DAY CI Kernel Test Service
+https://01.org/lkp

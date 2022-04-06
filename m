@@ -2,117 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC63F4F644B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FFF4F6483
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbiDFQAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S236944AbiDFQBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236680AbiDFQAM (ORCPT
+        with ESMTP id S236832AbiDFQAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:00:12 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB018267AE2;
-        Wed,  6 Apr 2022 06:29:13 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w18so2584119edi.13;
-        Wed, 06 Apr 2022 06:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TAdeF2TjriYBubCkF56f/a4F6IzUVPXVaF374OCOr+g=;
-        b=nm5+Uz3jFsJmZRbohcag7axU/fqDRUmMfmuNSmMCb3sbGQXPLqO8fa83S3FncyF0ae
-         e3LKkKqYT0U2koDU3HBQdmTH6rHMrIueqhIPnWfe/rC2469rnLbYsGaiWdiBUqgwbMVu
-         q4FC2eLFPBB71mB4FvSfkAX/yhItoGQmi31rHN53DGzIzn67zZJityb2HssRrEeT8ZhN
-         T6NHwh7dZFCkiLGFlpT3nGpLuyvLLOUZ2flY+wYzLFObiW54fHbP3zdavPUq2jTDsFQb
-         Z3cj7kDkQrgjJr+8ikAqGpZaCX9ze2eiIf/LBxeWYx/J1Iqh3jF6ZFouN+/OJUJfoCh3
-         ZTnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TAdeF2TjriYBubCkF56f/a4F6IzUVPXVaF374OCOr+g=;
-        b=O7mdIwZSWQCqp2z6Nc+Y5pAZqqOkkZewVd5ZLC033QdUGw98v48eNkx5o+xKrPaefs
-         BUOXP+jcs2eE9tKTINDXud01GwYln8SDnWDsa+VYvWwBBFLoGdObxL1wN8FrkJpJTJv4
-         Eo88NGOezb05kkK0NwCTwn0WCg7PNSRE2VFOGCoX3skq7TL0nY1i2RKu3Xg6egQtcweM
-         5zXO8T7rNue0fp73P2bclRWSTP+8S+uQ2/hhV0HI/N6oK/FdnDPg47ZNCE4uPk3RhPyl
-         HftRKJL7Y0phSm6NqVpuI+/TC6CZLXYwJHhoYQsWs2B/SS4TWsFp3g9JuuYRFKO3xi8d
-         L3Yg==
-X-Gm-Message-State: AOAM532Tu4CezK3vTz5Z97swc6YgQho7jYIbdMFe77YkUdi93sWtbsRP
-        tL+6vhB6TIviwfpLQX6kdAWMDEpeE2Q=
-X-Google-Smtp-Source: ABdhPJyxrMLxpjO8TG9CT0XE8GKGUPikQnbv7Tsq79lgvao0RSU0reDO/ELn0YcjEDYYHC+X42cUyw==
-X-Received: by 2002:a05:6402:3586:b0:419:6059:f016 with SMTP id y6-20020a056402358600b004196059f016mr8826650edc.402.1649251752205;
-        Wed, 06 Apr 2022 06:29:12 -0700 (PDT)
-Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm6574320ejn.130.2022.04.06.06.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 06:29:10 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 15:29:09 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Aniruddha Rao <anrao@nvidia.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: tegra: Update SDMMC1/3 clock source for Tegra194
-Message-ID: <Yk2VpQIwzlgifZ92@orome>
-References: <1647423885-2569-1-git-send-email-anrao@nvidia.com>
+        Wed, 6 Apr 2022 12:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D292255AB7;
+        Wed,  6 Apr 2022 06:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05226B823DD;
+        Wed,  6 Apr 2022 13:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9BD5AC385A7;
+        Wed,  6 Apr 2022 13:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649251817;
+        bh=r0Jkg5TINenFot4Tj/g1Ta9k+qUla3NNZ2acVa9ZqqE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=f2lALW/iqquEnYqMFl+Q8Bc3OucCzWmO9VeeJdHeu9Gv5ixZR2hQ6F/MlC68mHsQU
+         k0rXAWLgr+Vg0RbCrj06h3WL7F5TtI9s9AKEMxxxNdfdnlfVhAceeqSXVb5DnDHRM6
+         qYbJ5R9NvN+r+RsgLfKsEEGCbW9X05f4VK5eJzjjfKNmJRtUTYNFBr6dz0Oi7o2dl8
+         kINPKBjoOCZr24mzDE1Txwx4Iqv1sebOSv1hIVltYDqgic9IuV2urjDjb/JgMRP9Qf
+         EZ9Xb5d0WH+wa49QslmlrTEdftoUp+hgzPBPjChmNWdoxJeoxU7Y1r3OseVElFucho
+         OXQ7xEAjLwdFA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D7DDE85D15;
+        Wed,  6 Apr 2022 13:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yzJg/fPTiwoLiQ7o"
-Content-Disposition: inline
-In-Reply-To: <1647423885-2569-1-git-send-email-anrao@nvidia.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/3] net: phy: mscc-miim: add MDIO bus frequency
+ support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164925181750.19554.8207066606756390444.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Apr 2022 13:30:17 +0000
+References: <20220405120951.4044875-1-michael@walle.cc>
+In-Reply-To: <20220405120951.4044875-1-michael@walle.cc>
+To:     Michael Walle <michael@walle.cc>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        alexandre.belloni@bootlin.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---yzJg/fPTiwoLiQ7o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-On Wed, Mar 16, 2022 at 03:14:45PM +0530, Aniruddha Rao wrote:
-> The default parent for SDMMC1/3 clock sources can provide maximum frequen=
-cy
-> of 136MHz for SDR104 mode.
-> Update parent clock source for SDMMC1/SDMMC3 instances
-> to increase the output clock frequency to 195MHz and improve the perf.
->=20
-> Signed-off-by: Aniruddha Rao <anrao@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+On Tue,  5 Apr 2022 14:09:48 +0200 you wrote:
+> Introduce MDIO bus frequency support. This way the board can have a
+> faster (or maybe slower) bus frequency than the hardware default.
+> 
+> changes since v2:
+>  - resend, no RFC anymore, because net-next is open again
+> 
+> changes since v1:
+>  - fail probe if clock-frequency is set, but not clock is given
+>  - rename clk_freq to bus_freq
+>  - add maxItems to interrupts property
+>  - put compatible and reg first in the example
+> 
+> [...]
 
-Applied, thanks.
+Here is the summary with links:
+  - [net-next,v3,1/3] dt-bindings: net: convert mscc-miim to YAML format
+    https://git.kernel.org/netdev/net-next/c/ed941f65da81
+  - [net-next,v3,2/3] dt-bindings: net: mscc-miim: add clock and clock-frequency
+    https://git.kernel.org/netdev/net-next/c/b0385d4c1fff
+  - [net-next,v3,3/3] net: phy: mscc-miim: add support to set MDIO bus frequency
+    https://git.kernel.org/netdev/net-next/c/bb2a1934ca01
 
-Thierry
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---yzJg/fPTiwoLiQ7o
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJNlaUACgkQ3SOs138+
-s6E1ZRAApPt7A4HspHmQwlsLJTZszzIlX52I3vgwqWtfK1uUqlN8Bnpqtu3xFTGO
-xfTZQv2Aro0JcHb3/pF1My0qWELyH6hrTd9jIpoLjTIavra09yVRTDhaKaUhS3D0
-lOBuKNcNr43jm38ZmvM5VPQe8bsz26NrYNPj/B4ku1kqv6ZtuNNSLoZD8UYgJRGa
-7OVr6kXfL3LIBtCnsARm+gX6iNE43T1UQ6G+AVn1upe+u/M5G1SU+Xo6uMAd9IyY
-QkutGisxSe5948t7TMvBcatWGMnhzHyGLf42Cbj8WWJFnYSQfnRHB7ay0HOmOakZ
-sGSsTsnTZqNW42bGBL76dkREROokoGjMfkAmWhDNxg/ClZ93AMe1N8VSCg8yWucI
-vwuQ2cOviiBfRJUnb5IEkq3DHA6lQWtU14WTEV+UA7MQawlwv7z/i6NQiIVLztkT
-k6t7yaJYcOyka8Da1fecfPwVzrTXkOniyLMyxA61nTuUHhv03dAt8sJWBFKVwT1k
-BuDDBkv1sRa6rpLWqAT4i+QEEUQtEw3yN/we91ldtej/bJx+kAqYVGGx+3I4pKKE
-SVo/v2LutumGDfBNBE7Fem5Soqhak2YEid/9vvzpcXgkDvsu3TQ5tpNWxh/pnRKE
-pAaxqBI8WXBXcyaQ+v+ViOZ7A23W3BVVHmZPDG34ZAtWG2s/zbk=
-=CDQ0
------END PGP SIGNATURE-----
-
---yzJg/fPTiwoLiQ7o--

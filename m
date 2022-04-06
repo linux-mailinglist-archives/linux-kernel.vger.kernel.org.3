@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682F64F5F94
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8064F5F18
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbiDFNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S232207AbiDFNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiDFNMy (ORCPT
+        with ESMTP id S232026AbiDFNSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:12:54 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1685F90BE;
-        Wed,  6 Apr 2022 02:50:19 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id g20so1932702edw.6;
-        Wed, 06 Apr 2022 02:50:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PO8bgVYc+6yq/GV1chIgW+khCSDiG15QhmYnAA0FTmY=;
-        b=jJY4a1XyPEMAt4EXBRXTFwKg733D9QCnjp+tvaRH5ix3czCPMdBiaFhGrl6pXlKB/9
-         pIgnjxa8JfFVfQAwgIa+yBy47KMzwTPmkxQnuQvzyrn+oEZQxnluyC4h/IPHa7c4z2NR
-         rCTvZe15XxY1xU7J16/Cyfwek8+3rskF/9+/Y7ujEb9T748yip38DNllJ7bxo5hEoyaS
-         vDkrYzSsQy274lfuHEItbgQ1lc4RQtexBjLz75X6JcBPnvEMSKR+KAUAHnR7/qEwx0ny
-         e8YLXLYjEoATiKiQJu1bMgT4Jl5h3FA2TZ/bv7Ga4xThOfLL+0tskUwvOT+0sY0JCjeW
-         OhaA==
-X-Gm-Message-State: AOAM532vz4Dw9LxDqYjIgDKvXTV7NrhizPwW7qr1CpZnTk1DayB8jxj+
-        XlFzVyBFD+jgT/b/jPUVL70=
-X-Google-Smtp-Source: ABdhPJwDepzSDc+UC30gZbKsINVUj0Z32NzckEH9QLPfmT3vbdsNLWRBxxyj70khlKjB9SmuoiVNsA==
-X-Received: by 2002:a50:ed0b:0:b0:41c:cf60:a882 with SMTP id j11-20020a50ed0b000000b0041ccf60a882mr7956124eds.12.1649238539608;
-        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm6356961ejc.95.2022.04.06.02.48.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
-Message-ID: <98c359ba-9563-3da0-d968-ae40cee9d45f@kernel.org>
-Date:   Wed, 6 Apr 2022 11:48:56 +0200
+        Wed, 6 Apr 2022 09:18:33 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AC62EC125
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649239104; x=1680775104;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K4D5i89qRlTIWic6S+jWeNyHDTTwKQUiVi4l1V+GtPQ=;
+  b=ZhmkTup06OI7u7cB9Wuq5oHAswriTIO9R284vkm7tffmEMm6ntISaeOC
+   JyN0mwjLQlavFVVv6YWDdt78US+hxwPDt018E1u71uD0CGZciHCyAE/66
+   Ii/srjRIs7aHkJ4unxBzulrpxpStNWSS35Ulu7xqc5HO+KIjTeI2WGjwD
+   lJ7rCJS15hjgNPA5CLfyvI8jd8U/gkAwguBNMF+2bFN/c2+hBqACwXdCz
+   3wLnbugcheYHVJ3jIJPaoPIil5AtYcVRlP6j1EkB/P3dqRgw1b8YAOol3
+   C6rd4FBgWhCpKnKAqexxZrfqCApg75hO71RhUToa8m9ZmxTPHDFvadYek
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260994171"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="260994171"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 02:51:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="570437455"
+Received: from huipengt-mobl1.ccr.corp.intel.com (HELO [10.254.215.82]) ([10.254.215.82])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 02:51:05 -0700
+Message-ID: <77dafe0b-a601-def6-c6bd-287d464ce892@linux.intel.com>
+Date:   Wed, 6 Apr 2022 17:51:03 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/1] tty: serial: samsung: add spin_lock for interrupt and
- console_write
+Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
 Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
-Cc:     'Krzysztof Kozlowski' <krzk@kernel.org>,
-        'Alim Akhtar' <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        'Chanho Park' <chanho61.park@samsung.com>
-References: <20220406082216.11206-1-jaewon02.kim@samsung.com>
- <CGME20220406081823epcas2p2f7afa27e2402c4fc02c9bee5972bed4f@epcas2p2.samsung.com>
- <20220406082216.11206-2-jaewon02.kim@samsung.com>
- <Yk1NmTdUgMcSIq1O@kroah.com> <042701d84991$ca50d410$5ef27c30$@samsung.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <042701d84991$ca50d410$5ef27c30$@samsung.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+ <20220329053800.3049561-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220329114259.GB1716663@nvidia.com>
+ <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220330115820.GE1716663@nvidia.com>
+ <6ebd4f9b-5824-9489-43c3-7810963ec918@linux.intel.com>
+ <20220404172403.GO2120790@nvidia.com>
+ <5ca5d34a-2394-b8bd-837b-cd6bf3301989@linux.intel.com>
+ <20220405141008.GS2120790@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220405141008.GS2120790@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06. 04. 22, 10:39, Jaewon Kim wrote:
-> On 22. 4. 6. 17:21, Greg Kroah-Hartman wrote:
->> On Wed, Apr 06, 2022 at 05:22:16PM +0900, Jaewon Kim wrote:
->>> The console_write and IRQ handler can run concurrently.
->>> Problems may occurs console_write is continuously executed while the
->>> IRQ handler is running.
+On 2022/4/5 22:10, Jason Gunthorpe wrote:
+> On Tue, Apr 05, 2022 at 02:12:42PM +0800, Lu Baolu wrote:
+>> On 2022/4/5 1:24, Jason Gunthorpe wrote:
+>>> On Mon, Apr 04, 2022 at 01:43:49PM +0800, Lu Baolu wrote:
+>>>> On 2022/3/30 19:58, Jason Gunthorpe wrote:
+>>>>>>> Testing the group size is inherently the wrong test to make.
+>>>>>> What is your suggestion then?
+>>>>> Add a flag to the group that positively indicates the group can never
+>>>>> have more than one member, even after hot plug. eg because it is
+>>>>> impossible due to ACS, or lack of bridges, and so on.
+>>>>
+>>>> The check method seems to be bus specific. For platform devices, perhaps
+>>>> this kind of information should be retrieved from firmware interfaces
+>>>> like APCI or DT.
+>>>>
+>>>>   From this point of view, would it be simpler and more reasonable for the
+>>>> device driver to do such check? After all, it is the device driver that
+>>>> decides whether to provide SVA services to the application via uacce.
 >>>
->>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
->>> ---
->>>   drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
->>>   1 file changed, 12 insertions(+)
->>>
->>> diff --git a/drivers/tty/serial/samsung_tty.c
->>> b/drivers/tty/serial/samsung_tty.c
->>> index e1585fbae909..9db479d728b5 100644
->>> --- a/drivers/tty/serial/samsung_tty.c
->>> +++ b/drivers/tty/serial/samsung_tty.c
->>> @@ -2480,12 +2480,24 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
->>>   			     unsigned int count)
->>>   {
->>>   	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
->>> +	unsigned long flags;
->>> +	bool locked = 1;
+>>> The check has to do with the interconnect, not the device - I don't
+>>> see how a device driver would know any better.
 >>
->> "1" is not a boolean :)
+>> I'm worried about how to support this group flag for devices that are
+>> not connected to the system through PCI buses. If IOMMU can support
+>> sva_bind() only when this flag is set, the SVA on many devices cannot
+>> be supported. Or this flag is always set for non PCI devices by
+>> default?
 > 
-> return value of spin_trylock() is 1 or 0.
-> It seems better to keep it as an int than to change it to bool.
-> I will return it to int.
+> IHMO it is not so different from how we determine if ACS like
+> functionality is supported on non-PCI. It is really just a more narrow
+> application of the existing ACS idea.
+> 
+> For instance it may be that if the iommu_group came from DT we can
+> assume it is static and then singleton can know ACS is reliable.
 
-Hi, no, do not that. Simply use bool/true/false.
+Okay, let me head this direction.
 
-thanks,
--- 
-js
-suse labs
+Best regards,
+baolu

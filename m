@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE304F6285
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695C74F6330
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbiDFPIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S235665AbiDFPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiDFPH5 (ORCPT
+        with ESMTP id S236471AbiDFPXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:07:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CA21BD9A4
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:01:48 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nc4Gd-0000QF-Of; Wed, 06 Apr 2022 13:56:07 +0200
-Message-ID: <4fc33f18fcde29d421a014c22f6ea92a41a39da9.camel@pengutronix.de>
-Subject: Re: [PATCH 0/5] imx: support noc settings with power domain
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "djakov@kernel.org" <djakov@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Cc:     "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 06 Apr 2022 13:56:06 +0200
-In-Reply-To: <DU0PR04MB9417E35732AD4B823726D84D88E79@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220406082330.2681591-1-peng.fan@oss.nxp.com>
-         <6a77a71069d771d408f716d05cafc6b3a1e13cda.camel@pengutronix.de>
-         <DU0PR04MB9417E35732AD4B823726D84D88E79@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 6 Apr 2022 11:23:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B545F38F0;
+        Wed,  6 Apr 2022 05:23:12 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 89D031F4452C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649246250;
+        bh=KeK63JgstL220HZeT8Eh0tNYtvHxor/1CeEp/mCXIg4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g0BD1LF33XBXk5bDckOc92DJvC+EWtN1wj7NORKaXCUpqG+9cOPZJVgOq5Ni+3ahf
+         yjytUdiXEX9nXSsF3TjVgJ0WnzitjiZNCezEc9aH2Y11lfMJnHdYu3s06VCFmnBPJV
+         wxEt11fauvCuNSXhoeHvrn7G7IJ5gR6N6nyDMvZ9HECatNjEG3lJbhggZZgG3+JAE1
+         hqvpI12iQoRdBuCagB70QJZYL37OvkwqFAbVFrEpIcn2FFTCkJQpVDPu11Uf1QEl8M
+         xZu/3hEzTQ8L8cjszOX4LFERAwFSwm6YeaJYSJ29lx4SJwiWTgbVM9uEcan1HPEzjC
+         M8Y4tHajnI0RQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
+        lv.ruyi@zte.com.cn, m.felsch@pengutronix.de,
+        angelogioacchino.delregno@collabora.com, fengping.yu@mediatek.com,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: mt6779-keypad: Move iomem pointer to probe function
+Date:   Wed,  6 Apr 2022 13:56:54 +0200
+Message-Id: <20220406115654.115093-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,88 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 06.04.2022 um 10:55 +0000 schrieb Peng Fan:
-> > Subject: Re: [PATCH 0/5] imx: support noc settings with power domain
-> > 
-> > Hi Peng,
-> > 
-> > Am Mittwoch, dem 06.04.2022 um 16:23 +0800 schrieb Peng Fan (OSS):
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > > 
-> > > i.MX8MP has a design that NoC(Not main NoC) is distributed in multiple
-> > > blocks, such as vpumix, hsiomix and etc. The access to NoC requires
-> > > power domain on and blk ctrl settings configured.
-> > > 
-> > > So the design here is for mixes that not have blk-ctrl, configure the
-> > > NoC in gpcv2 driver, for mixes that have blk-ctrl, configure the NoC
-> > > in blk-ctrl drivers.
-> > > 
-> > > This v1 patchset not apply on Shawn's tree, I picked up Lucas's HSIO
-> > > and Laurent's mediablk patches, then worked out this patchset:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgith
-> > > 
-> > ub.com%2FMrVan%2Flinux%2Ftree%2Fnoc-imx8mp&amp;data=04%7C01%7
-> > Cpeng.fan
-> > > %40nxp.com%7C3bd1d020ad8f4a68efc808da17b28ac8%7C686ea1d3bc2b
-> > 4c6fa92cd9
-> > > 
-> > 9c5c301635%7C0%7C0%7C637848352908363591%7CUnknown%7CTWFpbG
-> > Zsb3d8eyJWIj
-> > > 
-> > oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3
-> > 000&am
-> > > 
-> > p;sdata=ZVeHFy%2FEaWPhAj%2BURGIDXoWYdX5eeQoEIeZYZoxPPNo%3D&a
-> > mp;reserve
-> > > d=0
-> > > 
-> > > Note: This interconnect related functions not added. This patchset is
-> > > only to replace the function did in NXP downstream:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsour
-> > > 
-> > ce.codeaurora.org%2Fexternal%2Fimx%2Fimx-atf%2Ftree%2Fplat%2Fimx%2
-> > Fimx
-> > > 
-> > 8m%2Fimx8mp%2Fgpc.c%3Fh%3Dlf_v2.4%23n157&amp;data=04%7C01%7C
-> > peng.fan%4
-> > > 
-> > 0nxp.com%7C3bd1d020ad8f4a68efc808da17b28ac8%7C686ea1d3bc2b4c6fa
-> > 92cd99c
-> > > 
-> > 5c301635%7C0%7C0%7C637848352908363591%7CUnknown%7CTWFpbGZs
-> > b3d8eyJWIjoi
-> > > 
-> > MC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C30
-> > 00&amp;
-> > > 
-> > sdata=eLawc3SJQBRmVwcOA2%2B6u6d2ZaYxqcO4Gm%2FqEJpqxFE%3D&a
-> > mp;reserved=
-> > > 0
-> > 
-> > As a general comment I think this is implemented the wrong way around.
-> > 
-> > Neither GPC, nor the blk-ctrl should poke into the NoC registers directly. The
-> > NoC driver should attach itself to the power domain via a notifier (same as
-> > the blk-ctrl does with the GPC domains) and should do the necessary NoC
-> > configuration when the power domain is powered up.
-> 
-> If separate NoC in a standalone driver, NoC may be configured not as early as
-> power domain up. Saying lcdif is running, NoC driver probe starts w/o defer
-> probe.
+The mmio base address is used for the only purpose of initializing
+regmap for this driver, hence it's not necessary to have it in the
+main driver structure, as it is used only in the probe() callback.
+Move it local to function mt6779_keypad_pdrv_probe().
 
-The right way to solve this would be to actually implement the
-interconnect bits, so that consumers like the LCDIF that have specific
-NOC bandwidth/latency requirements could request them from the NoC
-driver. Proper probe deferral would come naturally with this.
+This commit brings no functional changes.
 
-The static NoC configuration per domain is quite a cludge IHMO, maybe
-due to the decision to not open up any information about this part of
-the SoC. Spreading support for this hack into multiple drivers doesn't
-sound like a direction we want to take for upstream. At minimum we
-could try to define the interconnect DT bits, so that the LCDIF driver,
-etc. could attach to the NoC driver, giving us proper probe defer
-behavior, even if the actual configuration is still static.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/input/keyboard/mt6779-keypad.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Lucas
+diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+index 0dbbddc7f298..2e7c9187c10f 100644
+--- a/drivers/input/keyboard/mt6779-keypad.c
++++ b/drivers/input/keyboard/mt6779-keypad.c
+@@ -24,7 +24,6 @@ struct mt6779_keypad {
+ 	struct regmap *regmap;
+ 	struct input_dev *input_dev;
+ 	struct clk *clk;
+-	void __iomem *base;
+ 	u32 n_rows;
+ 	u32 n_cols;
+ 	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
+@@ -91,6 +90,7 @@ static void mt6779_keypad_clk_disable(void *data)
+ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+ {
+ 	struct mt6779_keypad *keypad;
++	void __iomem *base;
+ 	int irq;
+ 	u32 debounce;
+ 	bool wakeup;
+@@ -100,11 +100,11 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+ 	if (!keypad)
+ 		return -ENOMEM;
+ 
+-	keypad->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(keypad->base))
+-		return PTR_ERR(keypad->base);
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
+ 
+-	keypad->regmap = devm_regmap_init_mmio(&pdev->dev, keypad->base,
++	keypad->regmap = devm_regmap_init_mmio(&pdev->dev, base,
+ 					       &mt6779_keypad_regmap_cfg);
+ 	if (IS_ERR(keypad->regmap)) {
+ 		dev_err(&pdev->dev,
+-- 
+2.35.1
 

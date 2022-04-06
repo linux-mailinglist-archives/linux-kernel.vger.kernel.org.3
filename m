@@ -2,164 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230374F65AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76CF4F6576
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237761AbiDFQbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S237402AbiDFQbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237556AbiDFQah (ORCPT
+        with ESMTP id S237640AbiDFQah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 12:30:37 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ED941FD1A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:48:20 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n9so694361plc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 18:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tUE3dxQm/ksTxTn0YMfdCief23RhMLZPJwxq1FLJlMc=;
-        b=VDD6vs6I4ZQlRu9OeS2u6w2N8sFH2qI9RbfYFDtXvg9XdFfZxICldOMoE7yokycFxh
-         yuQyWgSPIAK+HELV4CSopTWMPJFA4XXa6j+0duIyjmxDyTV/2aQhlNB37qiN6edt+A+l
-         YKf4BLcWUI+o1ieTRXp19Q8G55/hJgpwrrR8fcNKpbsWe3NA7JyJeE64hoWBFtAaGd+P
-         XySN7WvclIffaDz9YH+XEZmBp4VKMuYdfOMJ8CuG00zY7T+uhq78Y/nlQ3LX0nSrTlpq
-         SSM1ZYh6SRV+g6pnoay+cqEe9rhAWH8yj5JELx/5ziOXmXPfFhpoRGCtQ/5FX5qZXUQC
-         MUnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tUE3dxQm/ksTxTn0YMfdCief23RhMLZPJwxq1FLJlMc=;
-        b=oHcEVS5T3SWwjqUmxg/ndoaqlPAQB8SeQiTKyZIOlKb37f0OwvshdJikCTa2THbLOr
-         PGkh+Q/+1b2TdBItuUKffuVic/g09Z5l/M2IuWjW/3/4AN53jOcz8b2Cb7IU81E5xzuf
-         6Ui29DxIN1Jeow9ZvsrqHCYL6+LbEQsEvifN6wP16L7HWoQLJxjzId8/DzOhpwngscQn
-         X9dEs2EmO5owNupqxgouja+D1Hvx5z9vwSiJxpqw1u6eD4/hklRGOFaz+ugsFnFHv2A7
-         wNUEkYtuly4tb7SY75MVqdCfniiVOr/lnUTw7ew3nHC1S56IFJhPDxmf4IkB7kge4ZH2
-         GqhQ==
-X-Gm-Message-State: AOAM532yi9YlcLrLReNb0CozwNvGeYLWQzk4C6d5/i6eCBweZRT9KGQj
-        4wzcZUXyYfWx+pE86VLDWA+g2BQAJlqFMA==
-X-Google-Smtp-Source: ABdhPJy6Pf+75fs32a7/oPyt8T8e0CpqTdA+RG43t3USzaHGLlu21u/QTbiCC2JdmrrtrrCWV3dd4g==
-X-Received: by 2002:a17:902:da90:b0:154:1510:acc7 with SMTP id j16-20020a170902da9000b001541510acc7mr6258840plx.103.1649209699460;
-        Tue, 05 Apr 2022 18:48:19 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b001c735089cc2sm3534686pjn.54.2022.04.05.18.48.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 18:48:18 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 01:48:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
- the instruction
-Message-ID: <YkzxXw1Aznv4zX0a@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C6A41FD2C;
+        Tue,  5 Apr 2022 18:48:21 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KY6pd6wRQz1HBSF;
+        Wed,  6 Apr 2022 09:47:53 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 6 Apr 2022 09:48:19 +0800
+Message-ID: <84ba6fb8-45e1-461b-1aa3-c97f065cbe60@huawei.com>
+Date:   Wed, 6 Apr 2022 09:48:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7caee33a-da0f-00be-3195-82c3d1cd4cb4@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ima: remove template "ima" as the compiled default
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <linux-integrity@vger.kernel.org>
+CC:     <dmitry.kasatkin@gmail.com>, <roberto.sassu@huawei.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xiujianfeng@huawei.com>,
+        <wangweiyang2@huawei.com>
+References: <20220321074737.138002-1-guozihua@huawei.com>
+ <5c3565f5a46f5728873c9aedd634699ba171fe98.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <5c3565f5a46f5728873c9aedd634699ba171fe98.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
-> On 4.04.2022 18:49, Sean Christopherson wrote:
-> > On Mon, Apr 04, 2022, Maxim Levitsky wrote:
-> > In svm_update_soft_interrupt_rip(), snapshot all information regardless of whether
-> > or not nrips is enabled:
-> > 
-> > 	svm->soft_int_injected = true;
-> > 	svm->soft_int_csbase = svm->vmcb->save.cs.base;
-> > 	svm->soft_int_old_rip = old_rip;
-> > 	svm->soft_int_next_rip = rip;
-> > 
-> > 	if (nrips)
-> > 		kvm_rip_write(vcpu, old_rip);
-> > 
-> > 	if (static_cpu_has(X86_FEATURE_NRIPS))
-> > 		svm->vmcb->control.next_rip = rip;
-> > 
-> > and then in svm_complete_interrupts(), change the linear RIP matching code to look
-> > for the old rip in the nrips case and stuff svm->vmcb->control.next_rip on match.
-> > 
-> > 	bool soft_int_injected = svm->soft_int_injected;
-> > 	unsigned soft_int_rip;
-> > 
-> > 	svm->soft_int_injected = false;
-> > 
-> > 	if (soft_int_injected) {
-> > 		if (nrips)
-> > 			soft_int_rip = svm->soft_int_old_rip;
-> > 		else
-> > 			soft_int_rip = svm->soft_int_next_rip;
-> > 	}
-> > 
-> > 	...
-> > 
-> > 	if soft_int_injected && type == SVM_EXITINTINFO_TYPE_EXEPT &&
-> > 	   kvm_is_linear_rip(vcpu, soft_int_rip + svm->soft_int_csbase)) {
-> > 		if (nrips)
-> > 			svm->vmcb->control.next_rip = svm->soft_int_next_rip;
-> > 		else
-> > 			kvm_rip_write(vcpu, svm->soft_int_old_rip);
-> > 	}
-> > 
-> > 
-> > 
+On 2022/4/5 4:22, Mimi Zohar wrote:
+> Hi Guo,
 > 
-> Despite what the svm_update_soft_interrupt_rip() name might suggest this
-> handles only *soft exceptions*, not *soft interrupts*
-> (which are injected by svm_inject_irq() and also need proper next_rip
-> management).
+> The Subject line above sounds like the default template is currently
+> "ima", which it isn't.   Perhaps "ima: remove the IMA_TEMPLATE Kconfig
+> option" is more accurate.
+> 
+> On Mon, 2022-03-21 at 15:47 +0800, GUO Zihua wrote:
+>> Template "ima" is a legacy template which limits the hash algorithm to
+>> either sha1 or md5. None of them should be considered "strong" these
+>> days. Besides, allowing template "ima" as the compiled default would
+>> also cause the following issue: the cmdline option "ima_hash=" must be
+>> behind "ima_template=", otherwise "ima_hash=" might be rejected.
+>>
+> 
+> True "ima" is a legacy template, but the purpose of removing the
+> IMA_TEMPLATE from the Kconfig is to address the remaining boot command
+> line ordering issue not previously addressed.  This is reasonable
+> because the "ima" template is limited to SHA1 and MD5.  If someone
+> still needs to use the "ima" template, "ima_template=ima" could still
+> be specified on the boot command line.
+> 
+>> The root cause of this issue is that during the processing of ima_hash,
+>> we would try to check whether the hash algorithm is compatible with the
+>> template. If the template is not set at the moment we do the check, we
+>> check the algorithm against the compiled default template. If the
+>> complied default template is "ima", then we reject any hash algorithm
+>> other than sha1 and md5.
+>>
+>> For example, if the compiled default template is "ima", and the default
+>> algorithm is sha1 (which is the current default). In the cmdline, we put
+>> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+>> that ima starts with ima-ng as the template and sha256 as the hash
+>> algorithm. However, during the processing of "ima_hash=",
+>> "ima_template=" has not been processed yet, and hash_setup would check
+>> the configured hash algorithm against the compiled default: ima, and
+>> reject sha256. So at the end, the hash algorithm that is actually used
+>> will be sha1.
+>>
+>> With template "ima" removed from the compiled default, we ensure that the
+>> default tempalte would at least be "ima-ng" which allows for basically
+>> any hash algorithm.
+>>
+>> This change would not break the algorithm compatibility checking for
+>> IMA.
+>>
+>> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+>> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+>> ---
+>>   security/integrity/ima/Kconfig | 14 +++++---------
+>>   1 file changed, 5 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+>> index f3a9cc201c8c..9513df2ac19e 100644
+>> --- a/security/integrity/ima/Kconfig
+>> +++ b/security/integrity/ima/Kconfig
+>> @@ -65,14 +65,11 @@ choice
+>>   	help
+>>   	  Select the default IMA measurement template.
+>>   
+>> -	  The original 'ima' measurement list template contains a
+>> -	  hash, defined as 20 bytes, and a null terminated pathname,
+>> -	  limited to 255 characters.  The 'ima-ng' measurement list
+>> -	  template permits both larger hash digests and longer
+>> -	  pathnames.
+>> -
+>> -	config IMA_TEMPLATE
+>> -		bool "ima"
+>> +	  The 'ima-ng' measurement list template permits various hash
+>> +	  digests and long pathnames. The compiled default template
+>> +	  can be overwritten using the kernel command line
+>> +	  'ima_template=' option.
+>> +
+>>   	config IMA_NG_TEMPLATE
+>>   		bool "ima-ng (default)"
+>>   	config IMA_SIG_TEMPLATE
+>> @@ -82,7 +79,6 @@ endchoice
+>>   config IMA_DEFAULT_TEMPLATE
+>>   	string
+>>   	depends on IMA
+>> -	default "ima" if IMA_TEMPLATE
+>>   	default "ima-ng" if IMA_NG_TEMPLATE
+>>   	default "ima-sig" if IMA_SIG_TEMPLATE
+>>   
+> 
+> The IMA_TEMPLATE definition is removed, but leaves a few references to
+> it.
 
-Yeah, soft interrupts are handled in the next patch.  I couldn't come up with a
-less awful name.
+Thank you very much for the detailed review Mimi! I'll fix these right now.
 
-> Also, I'm not sure that even the proposed updated code above will
-> actually restore the L1-requested next_rip correctly on L1 -> L2
-> re-injection (will review once the full version is available).
-
-Spoiler alert, it doesn't.  Save yourself the review time.  :-)
-
-The missing piece is stashing away the injected event on nested VMRUN.  Those
-events don't get routed through the normal interrupt/exception injection code and
-so the next_rip info is lost on the subsequent #NPF.
-
-Treating soft interrupts/exceptions like they were injected by KVM (which they
-are, technically) works and doesn't seem too gross.  E.g. when prepping vmcb02
-
-	if (svm->nrips_enabled)
-		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
-	else if (boot_cpu_has(X86_FEATURE_NRIPS))
-		vmcb02->control.next_rip    = vmcb12_rip;
-
-	if (is_evtinj_soft(vmcb02->control.event_inj)) {
-		svm->soft_int_injected = true;
-		svm->soft_int_csbase = svm->vmcb->save.cs.base;
-		svm->soft_int_old_rip = vmcb12_rip;
-		if (svm->nrips_enabled)
-			svm->soft_int_next_rip = svm->nested.ctl.next_rip;
-		else
-			svm->soft_int_next_rip = vmcb12_rip;
-	}
-
-And then the VMRUN error path just needs to clear soft_int_injected.
+-- 
+Best
+GUO Zihua

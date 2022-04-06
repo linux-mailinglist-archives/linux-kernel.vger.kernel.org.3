@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845EA4F5ADE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FE94F5AA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585587AbiDFJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S235074AbiDFJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573147AbiDFJe5 (ORCPT
+        with ESMTP id S1573069AbiDFJe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 05:34:57 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3482123BC8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:19:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id d10so1419409edj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:19:16 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F1B125CB9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:19:17 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bq8so2063659ejb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dnqi2X3VqKcJXFMBrImVZdG4X888h8cJCwQ8yMk/hyQ=;
-        b=EJMyMYzIZC1Io2eWJ1YOIP3IOiSYClaGwyinQHYVALb3GKd21ey4O3XwMx8UATe0zC
-         uZEH4Uvxhh5tQFk1B3db2jaD9FxYVSvlMOuVICWR7fkXm1wxcAZJck9tiEyDnR89drM9
-         vAn4cK/rDfxeYMiOMLo+jzy4quD3/r56fXmSsjUwHN6iyqOU6xeZUaws6qxeDnk7aSAe
-         vU4supMeCkcH/s7uuvDPAILaxv4M1vYRsatV6jM9wm4EOmyLFGqVGAGRlBkX9Qy8N2Pw
-         fBAjNPMng5rAMs7OEwaPhxIjwHEo7FhHpoh8ak7crnkuD6/b8dt6iT/lCnsfeVVuiYYH
-         cUnA==
+        bh=XRSeg/Lx0QJPiA9N9HHqOiU0JUD3WFJS5KpLC8e8al8=;
+        b=hAlKLpwqlxQfWYv8WAtYio5MqemQ+ZxJp68y8dLhZnbhPVsvdI5OwQ8eH8e2TLqsB/
+         K+0pv/feOiCVp44t+pTuKjMELYjGkkYB91tC//gM+bMZbVOXcxIyBlE7xEIF7ZSKIkxA
+         nIkIjRFvuAhoW86ZvcE5VDgYsa1z/J08GNO9OJQ1h7L7oS54oHCLUbT04ibs/BZJiaVK
+         emQAa1w0yRPxwJHvZSdhi12NiuS650Nlv3FJ7tmtv/+Nnl1cgiMGSJwuS/0ltx+HC+RW
+         8DChNYEgRgQvSYcKdUNqnSmGyMMcUDqT6GbOyJ6tiWrOencTJo7uJHoVPkfpiZ0/ut4z
+         mTog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dnqi2X3VqKcJXFMBrImVZdG4X888h8cJCwQ8yMk/hyQ=;
-        b=ihVMPluGYzpBGGSp0Nlf8pigSk31pHzIGijv1VEQF0VcFeIzIUWEHtzHHZ42S+IqY0
-         c1dygSuMYMRVtzjw780JwbKs2HDGzk/y3SW1mMzb0I05OnNWMb3OxbSkWORPEiF5arny
-         HMzk4rKwMjQLUqt1x1vlqqLZJpcuQ+ua0/ru5CSeA6cgWVw6sLX92eE93iFEiqUY3iD0
-         rLqHbK3BUNlxwdITNxsh6XeTBZar/z+PN4U7gOQ1Nbm41IVBYTw/MrlPGY08TXkN0jyK
-         6H4nxjtMEPD3BNsA4pLryfsQHW189WSNzIcqHWXZwOG+RX/IFTmnAsPvFk6At6q7QQu1
-         mKXQ==
-X-Gm-Message-State: AOAM530hapT/8iOk34BdgXWG/Jrk/FeRefmLMyOdTaGhrK97Q6bASn6g
-        CMg4ltuT6Xp3urpuStXDkSk=
-X-Google-Smtp-Source: ABdhPJyqAXpogB2imN4UMPk+9i4abNKV4LekV/pZO+b6CjE5Firicrj3bqXI4+6oKiZF8Yt44obGOA==
-X-Received: by 2002:a05:6402:1d55:b0:419:992b:9286 with SMTP id dz21-20020a0564021d5500b00419992b9286mr7158021edb.235.1649225955363;
-        Tue, 05 Apr 2022 23:19:15 -0700 (PDT)
+        bh=XRSeg/Lx0QJPiA9N9HHqOiU0JUD3WFJS5KpLC8e8al8=;
+        b=zo3VhGvg+0Rgo4Ac8BDy16HkyGhwvGQM5prNdBVfYHHsT18r85d6pI/+ttXf5rd4A7
+         3dSndhzQBoDOpINid3YNOseQVwmDnymEgY88w4hes48HfiVlcIAzrq+yUAAm3uyqRlDC
+         dem8GUpWNI8x9UR+rmHASCcfeZRedV6U+BNvVcDK2cmkYbs2Wa5+nJNrpw1le3Cqh/gW
+         NjJoIRpzthvkMr9IEzDNkX0Axk/WX6ZPm8jaVb12dRz1RoEOGmtzY+KC9RN8MF1hOrVQ
+         hNk5yBTi39O0U8Dn/LCCoIbn/YtPSkFuPoolmQ64ObBW8b3eiwBU35jWwk/lPu2LVaKr
+         3Z4w==
+X-Gm-Message-State: AOAM532D8MnbPObeeoSirgbjxm9Vkwj2F8lA4I7E/OAnmtuE3WKAFKAG
+        uy/rK605ZvTtJGZWw3kNQQA=
+X-Google-Smtp-Source: ABdhPJzVASTH+rw+vBWafl7Vx3lSBIUK0lzuB9Wzg1uKkED1RFkQZt+lw06cgao2WU3AdEDbF7/sMQ==
+X-Received: by 2002:a17:906:a046:b0:6b9:20c:47c1 with SMTP id bg6-20020a170906a04600b006b9020c47c1mr6779846ejb.615.1649225956258;
+        Tue, 05 Apr 2022 23:19:16 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50da83000000b0041cdd6e92b1sm2475251edj.27.2022.04.05.23.19.14
+        by smtp.gmail.com with ESMTPSA id q3-20020a50da83000000b0041cdd6e92b1sm2475251edj.27.2022.04.05.23.19.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 23:19:14 -0700 (PDT)
+        Tue, 05 Apr 2022 23:19:15 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 4/5] staging: r8188eu: use round_up() instead of _RND128()
-Date:   Wed,  6 Apr 2022 08:18:58 +0200
-Message-Id: <20220406061859.9011-5-straube.linux@gmail.com>
+Subject: [PATCH 5/5] staging: r8188eu: remove unused _RND* from osdep_service.h
+Date:   Wed,  6 Apr 2022 08:18:59 +0200
+Message-Id: <20220406061859.9011-6-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220406061859.9011-1-straube.linux@gmail.com>
 References: <20220406061859.9011-1-straube.linux@gmail.com>
@@ -71,46 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use in-kernel round_up() instead of custom _RND128().
+Remove the unused macro _RND() and the unused functions _RND256(),
+_RND512() from osdep_service.h.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/hal/usb_ops_linux.c     | 2 +-
- drivers/staging/r8188eu/include/osdep_service.h | 8 --------
- 2 files changed, 1 insertion(+), 9 deletions(-)
+ .../staging/r8188eu/include/osdep_service.h    | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-index 6a65dcf57112..d5e674542a78 100644
---- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-@@ -287,7 +287,7 @@ static int recvbuf2recvframe(struct adapter *adapt, struct sk_buff *pskb)
- 
- 		recvframe_put(precvframe, skb_len);
- 
--		pkt_offset = (u16)_RND128(pkt_offset);
-+		pkt_offset = (u16)round_up(pkt_offset, 128);
- 
- 		if (pattrib->pkt_rpt_type == NORMAL_RX) { /* Normal rx packet */
- 			if (pattrib->physt)
 diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
-index ff44c4a37b9d..f6c55f6c9e1a 100644
+index f6c55f6c9e1a..f1f3e3ba5377 100644
 --- a/drivers/staging/r8188eu/include/osdep_service.h
 +++ b/drivers/staging/r8188eu/include/osdep_service.h
-@@ -96,14 +96,6 @@ static inline void flush_signals_thread(void)
+@@ -94,24 +94,6 @@ static inline void flush_signals_thread(void)
+ 		flush_signals(current);
+ }
  
- #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
- 
--static inline u32 _RND128(u32 sz)
+-#define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
+-
+-static inline u32 _RND256(u32 sz)
 -{
 -	u32	val;
 -
--	val = ((sz >> 7) + ((sz & 127) ? 1: 0)) << 7;
+-	val = ((sz >> 8) + ((sz & 255) ? 1: 0)) << 8;
 -	return val;
 -}
 -
- static inline u32 _RND256(u32 sz)
- {
- 	u32	val;
+-static inline u32 _RND512(u32 sz)
+-{
+-	u32	val;
+-
+-	val = ((sz >> 9) + ((sz & 511) ? 1: 0)) << 9;
+-	return val;
+-}
+-
+ struct rtw_netdev_priv_indicator {
+ 	void *priv;
+ 	u32 sizeof_priv;
 -- 
 2.35.1
 

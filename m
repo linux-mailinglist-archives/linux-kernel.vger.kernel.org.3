@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DA54F5CF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3689A4F5CFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiDFL63 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 6 Apr 2022 07:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S231778AbiDFL7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbiDFL5f (ORCPT
+        with ESMTP id S232253AbiDFL5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:57:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45023709F9;
-        Wed,  6 Apr 2022 00:25:00 -0700 (PDT)
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MadC8-1o9hDu41F4-00c5U0; Wed, 06 Apr 2022 09:24:57 +0200
-Received: by mail-wm1-f42.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso1043042wmn.1;
-        Wed, 06 Apr 2022 00:24:56 -0700 (PDT)
-X-Gm-Message-State: AOAM533CI/PKZm8wa6ZzCWiJZvRVVj9pNqVSm9+IVTqNtjAr3UoMvJxF
-        J+QKINwty/RDjsW5hTQhv/zBoMQF9BsUEcHQ8Pk=
-X-Google-Smtp-Source: ABdhPJwu5LvNECmW4HyBVpv2Cer4xxd1JvOZpZs+VR8+dhKNlRWp+EIRBOEzkloFndgC0TmlXfWSyv+rVVHS3rSKUo4=
-X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
- f19-20020a7bcd13000000b0038bf39c1181mr6437333wmj.20.1649229896617; Wed, 06
- Apr 2022 00:24:56 -0700 (PDT)
+        Wed, 6 Apr 2022 07:57:44 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B1A5255D7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:26:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id qh7so2331639ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yuM6R8v8TiPq5FdXnzgHGP6cxLXx2tfXvc1fPQGyPBI=;
+        b=p6Pc0ixT7qxKXk+mxDu2v4XYCIZeEosUb3J0LRs+z66/uFVsXJwBQcIHLeAJCLEZqm
+         BDP+rEgxhCs10j5/OzaNq75QgoD5JDu54ZWzYoVZGhIEObUWPAbMNWX0eSeBAkgR9QUh
+         HmwNWIexmyxLuiIXhCIcls/oPEWhm6QUWRaIefiArso7wXQJT7x9S1c755ixecS9fAZW
+         Nb56Ykvbmf3dAY/A8PtcXLpyBHu3vy/jboCZEMr++Db2ISpbG7ZILEf4iyLuOqbz9Cgh
+         cfpuxhjQMP26bNGNhfJRM1N1Y+frlLWH7WpI2sGqvy6bqioT9sItLEM9UyNKOafhwh6d
+         NJxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yuM6R8v8TiPq5FdXnzgHGP6cxLXx2tfXvc1fPQGyPBI=;
+        b=P3BtEkke6xAITDdU40XwCFOeWZReqOyly6kcr6gbQlW6OS4xLns7VBQev+kg9wVVdx
+         EPlNUVUoaaWL2V72l3jU270pik5Vn/JVWY6mRRmzCxOMjJNO3e3aMh9BgDdxhnUXOnRD
+         70pXOXJB5hAJ9k/M4tqt4oJ4oLwj6VU+1STCbSby7TeAAxUrKDIpdggGDwqo2Mt5Ppqv
+         fZT6tY9AGZ8Y6Mwwypry4wkBmuINm7jJgTkDOn7hVbP6wtrWCCacRKGA1tm8p5Z4VBka
+         AANRU5vaJHUPESCS82FQdt/IPwNPx8mK29lJbu5M8BuaviEC5PmErw0TZAEud6c0dSbA
+         enBQ==
+X-Gm-Message-State: AOAM530au62lU4u6OnnEBnCEoaX0/0xkfZvudjp+NmFj+D5b9e15WhaV
+        BxIK/Y0ItJRS4sHLdEkyg7pfkA==
+X-Google-Smtp-Source: ABdhPJwkyCtsJH2vwIdQXVVX2u6O4ZU+EN9y3XsOqCwJVzVWy6LcXdfv65/APnX6lC9vhfF9bwaN9Q==
+X-Received: by 2002:a17:907:c16:b0:6db:682:c8c9 with SMTP id ga22-20020a1709070c1600b006db0682c8c9mr7206485ejc.153.1649230013464;
+        Wed, 06 Apr 2022 00:26:53 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o12-20020a50c90c000000b0041907e62024sm7510979edh.85.2022.04.06.00.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 00:26:53 -0700 (PDT)
+Message-ID: <315c957b-8d22-dcef-a5b8-36e92f0897be@linaro.org>
+Date:   Wed, 6 Apr 2022 09:26:52 +0200
 MIME-Version: 1.0
-References: <20220310195229.109477-1-nick.hawkins@hpe.com> <20220310195229.109477-9-nick.hawkins@hpe.com>
- <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com> <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com> <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <fb4def96-4b20-604f-d15d-fef87eb2232d@canonical.com> <PH0PR84MB1718A2CFBFC90C9C0CAA5515881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a0fCE_NM=z68d1m9BTfuKixh1pKLw3gn+Sr7SxKb6UJAg@mail.gmail.com>
- <PH0PR84MB17181C316E55073EBC28C386881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <PH0PR84MB17185ADBA824F9CC9EB3E022881F9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a1080yz9jggOrwz2iQ1sAB2Xe2Emh22uCuqRok60BQSiA@mail.gmail.com>
- <PH0PR84MB17186189F5025374AA39584D88E19@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a2b+ESAAkc=_2hqx0kOxwYVS6mNjMGBKhhipaSj_5jV9g@mail.gmail.com>
- <PH0PR84MB17182115D57EF6032782659C88E09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a1Cc+2oY9djdp11PuOW+TBQ0zf+p8QaDY3aerk1QqaG-g@mail.gmail.com>
- <PH0PR84MB1718925AA3C8FA998C486D7C88E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a3RSST6yvv8Oy13RFd6eZ6cS5yX9TOuK6wxXKUO-qdQ=Q@mail.gmail.com> <PH0PR84MB1718C7447207BF210FBB477788E49@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <PH0PR84MB1718C7447207BF210FBB477788E49@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Apr 2022 09:24:40 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3jr-FkyxLff2cK4=X-4AShnKkeYMRKsvUg=2W0bTviiQ@mail.gmail.com>
-Message-ID: <CAK8P3a3jr-FkyxLff2cK4=X-4AShnKkeYMRKsvUg=2W0bTviiQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] i2c: add binding to prevent device detection
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     "wsa@kernel.org" <wsa@kernel.org>, kernel <kernel@axis.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:hcnm1TFtV4LkuQMWF8cELx0T4BhQx6EAhi4quU+/u9iF33hJC55
- /76vtVx5gh05jtCDOGw7V63xRWEjDcDYj2pikjspANGs5Nx7mXEI/cdg7KZpwi+VRCgN991
- Ju+lDuMrZTGDSG8iWaRnT9uXnsSr0XLeJEP/u0jn2FiI5dGghRIw7lkR/sRc/lJU4yafPZp
- 9VKyxeJ48jncHyNj6UJ3Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hYT6ewNd+/w=:6moe45jsoTjDgHVLcBepkT
- mLDsDSrNCUWq7iuP/pi/3LkhDI/a9CbpFXDLc0qvGvpMBmLR7EPUDQi9kLPBvX8uwzHgpcAeB
- F+AYChYT6Z+Du0y1dT7KJhcE3XtCfISFbTuSXuqaG/7QNa2lRBlOnbGKlswGrkghyKU+jmi5Q
- ILYGgPB+dXBz9lELRJHgAqk/sBpA/AhBLRS0c7VcFqfB8OQpOmfXKh2AE0vLLSgTYBBRpBsWa
- zMYsAkCea1PYAzRg1/Jr+iPeUziLfSjwHtX6lyfqgFZD+p8GEqitmN5H8afb3eEyobA0MdrHd
- nuKTn2m+jshReX2VG25Ox/7WM9XxEQecLqqmZBihxm//P3mGqX5JfsP/LFn3YyUJRd51YHy99
- fttMHwDRQ/iO81FQVK/5TrFhwQ98azrSwKJX1vZNaPiMpH4n98XmMx8GbKGGjinJ68uvkYUg9
- U35Dhy8ALt3zKR9kIKEChVSrWheo0MuHZcjhYLdbiUeRL8GFIv41Izmbq6nPkOV67N6ghUzRD
- OMW2+eZwnXlkjXVb3rK9SKgdoX3EU+Kckah2yKmGR/aqeCbe2nnEPDGKbXo+/0oA0Oh+WizyN
- 2qLt3kHzCQlXHBJgE3o9nqgYaqppV1vEWrJzUXH2qSNSO/0cmWzGq3oXoZouq+dVES2OrGKhP
- bK5n5Z1xFDpoib8URfmArKvIKEw1pPiBeirPObwal7gmdSUPnVKc8HfwZUBAsaBmmcrA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405121627.1560949-1-vincent.whitchurch@axis.com>
+ <20220405121627.1560949-2-vincent.whitchurch@axis.com>
+ <e3247f0f-5d3d-d981-699e-7dcedb30f881@linaro.org>
+ <20220405141255.GD28574@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220405141255.GD28574@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:21 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
->
-> > Right, it is possible to make this work, but it's not recommended, and you have to work around the sanity checks in the code that try to keep you from doing it wrong, as well as any tooling that tries to check for these in the DT.
->
-> I found an example in the kernel where the timer creates a child watchdog device and passes it the base address when creating it. I used this to model the gxp-timer and gxp-wdt. The following files were what I have referenced:
-> drivers/watchdog/ixp4xx_wdt.c
-> drivers/clocksource/timer-ixp4xx.c
+On 05/04/2022 16:12, Vincent Whitchurch wrote:
+> On Tue, Apr 05, 2022 at 03:57:16PM +0200, Krzysztof Kozlowski wrote:
+>> On 05/04/2022 14:16, Vincent Whitchurch wrote:
+>>>  Documentation/devicetree/bindings/i2c/i2c.txt | 4 ++++
+>>
+>> Use the subject matching the subsystem (git log --oneline -- .......).
+> 
+> I did look at the git log when writing the subject, but there's a bunch
+> of variation there so I went for the subject prefix which Wolfram
+> himself used since I assumed he would be the one applying these patches.
+> 
+> $ git log -n5 --oneline origin/master -- Documentation/devicetree/bindings/i2c/i2c.txt
+> 6881e493b08f dt-bindings: net: New binding mctp-i2c-controller
+> 168290fb2675 i2c: add binding to mark a bus as supporting SMBus-Alert
+> e6277308ac21 i2c: add binding to mark a bus as SMBus
+> db36e827d876 dt-bindings: i2c: add generic properties for GPIO bus recovery
+> fad5972a1eca i2c: add 'single-master' property to generic bindings
 
-Yes, I think that is a good example.
+The proper command for a subsystem is:
+git log --oneline -- Documentation/devicetree/bindings/i2c/
 
-> This seems very similar to what you suggested previously except I do not see a private interface in there between the parent and the child device. Is it mandatory to have the private interface between the two? If it is, what would you recommend that interface be? So far without the private interface I am not seeing any issues accessing the registers.
+and then you see mostly different pattern.
 
-I would count passing a register address to the child device as a
-private interface.
-It's a minimalistic one, but that is not a bad thing here.
+Other way, like for example Mark Brown prefers, is:
+i2c: dt-bindings:
+It would be fine as well, but the point is that you did not include the
+dt-bindings prefix here at all and almost always I ignore all such emails.
 
-         Arnd
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+>>> index fc3dd7ec0445..5f7bdf4851e8 100644
+>>> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+>>> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+>>> @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
+>>>  	this information to adapt power management to keep the arbitration awake
+>>>  	all the time, for example. Can not be combined with 'single-master'.
+>>>  
+>>> +- no-detect
+>>> +	states that the system should not attempt to automatically detect
+>>> +	devices which are not explicitly specified as child nodes.
+>>
+>> Focus on the hardware, not on system and behavior. The hardware property
+>> is that bus is completely described in Devicetree or detection does not
+>> work correctly. I guess the property name could stay like this, but the
+>> description could be rephrased.
+> 
+> I'm having a hard time drawing the line between hardware and the
+> "system" here.  The bus being completely described in devicetree doesn't
+> sound like a hardware property to me, but, yes, I can change the
+> description to say that.
+
+Then you need to come up with better description. :) By system I
+understood here Operating System, therefore a Software piece or pieces.
+Bindings should not rather focus on hardware instead of referencing
+software. Software actually not matter for the bindings... There is
+quite clear distinction between hardware and operating system...
+
+Can you explain why do you think "bus being completely described" is not
+a hardware description? Bindings and DTS describe hardware, so one of
+parts of such description is whether nodes and other properties are
+present. If all child nodes are present in DT - no-detect - and this is
+a purely hardware point of view. No software here.
+
+Best regards,
+Krzysztof

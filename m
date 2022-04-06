@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15FB4F6094
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794184F609F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiDFNoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S233505AbiDFNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiDFNnw (ORCPT
+        with ESMTP id S233456AbiDFNeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:43:52 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D65512631;
-        Wed,  6 Apr 2022 03:51:19 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KYLMP4fygzBs2q;
-        Wed,  6 Apr 2022 18:28:33 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 18:32:44 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 18:32:43 +0800
-Subject: Re: [REQUEST DISCUSS]: speed up SCSI error handle for host with
- massive devices
-To:     Hannes Reinecke <hare@suse.de>,
-        Mike Christie <michael.christie@oracle.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        John Garry <john.garry@huawei.com>
-CC:     Wu Bo <wubo40@huawei.com>, Feilong Lin <linfeilong@huawei.com>,
-        <zhangjian013@huawei.com>
-References: <71e09bb4-ff0a-23fe-38b4-fe6425670efa@huawei.com>
- <cd7bda98-2160-9271-9520-e98d1fe00ea5@linux.ibm.com>
- <331aafe1-df9b-cae4-c958-9cf1800e389a@huawei.com>
- <64d5a997-a1bf-7747-072d-711a8248874d@suse.de>
- <c4baacf1-0e86-9660-45f7-50ebc853e6af@huawei.com>
- <1dd69d03-b4f6-ab20-4923-0995b40f045d@suse.de>
- <d2f2c89f-c048-4f04-4d95-27958f0fa46a@huawei.com>
- <78d41ec1-b30c-f6d2-811c-e0e4adbc8f01@oracle.com>
- <84b38f16-2a32-f361-43e5-34bce1012e71@oracle.com>
- <769bcd36-4818-8470-2daa-49ac5c05b33a@suse.de>
-From:   Wenchao Hao <haowenchao@huawei.com>
-Message-ID: <90e4af07-074c-1f60-e64a-e6dbe9a5c1bb@huawei.com>
-Date:   Wed, 6 Apr 2022 18:32:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 6 Apr 2022 09:34:11 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015B84B63E1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:34:24 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ot30so3258381ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 03:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iTXPlXz9Zr5EQou03o/EzBtB8wT2GGE1Oxj4KHnssrs=;
+        b=ayqp+jO7yOZ05GUhmKmLMJU9illW53IQuWYj97Bq0h7OEyqmw3078v9FFmpHAsDAsX
+         spKmsJURhryre2eQUlppZX9/HUMI+W6eoOizaX7iehhukxIce2QAtRFltzvot97mqi5g
+         wkzLHd/GXAJerFP3q1x2xzOele+vfbjGw1VTYhqxLnyW66oK1u7wRDE72iuiN53gsanI
+         rXtjHuLiferpfP6GaXR+e/2+55LTuT8kg2k0SD2i6I/8Spe3SQIHjv+mc1I1GC7cM2Bn
+         lfPpqaubm9GgEOe61Moi+rdCo7ZOQ3yLidHpWgZcNsZorkDZClOB35C15vOMByW5gWia
+         Ohgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iTXPlXz9Zr5EQou03o/EzBtB8wT2GGE1Oxj4KHnssrs=;
+        b=t+DdmCk+IRE2nI7zX0ArzPCwSZA3oc/SeFaUSzrmsKPxB/7F3KS2g4MWnJ/Q03gGCx
+         pRXqOZ+k9KK2qxF9u2V325BetyTL2eZgTdB/RPBucfNdCOychA9R9EE+kS1NiL7VbX6B
+         fokt2AuD/6sA8NDRPjCp/vEinLyj6NDWh0/7qSVY+YYzxlMZMfngZ2hXZkukheO/3gam
+         maTwXkDNQeu2izuX3hjKHAT0Y1lT8KOa8dJY8S6r0NihD81tJwwGuqplGCOnpJhG7igq
+         oyrMZF0LhE8Dqaeu7i8kdt7G7HKEzgcAGSloIkKAppi7VM3pX5XyHsktQvmHRGaNsfV7
+         or6Q==
+X-Gm-Message-State: AOAM530d+AacRA8aKlgUajXKBiUnymg5ZOtSwuZq1iQrL4winHAwJR7n
+        Rd1zy4p+XQU8BqRs539sucylnQ==
+X-Google-Smtp-Source: ABdhPJx9uNXrv9QkGvgAJYDqUioNGXqvB3w7Wp/JIXcWJjl7z4UKv44fp6VMiLyGHlZ2RnmerugK6g==
+X-Received: by 2002:a17:907:3f02:b0:6e7:7172:4437 with SMTP id hq2-20020a1709073f0200b006e771724437mr7358942ejc.361.1649241258989;
+        Wed, 06 Apr 2022 03:34:18 -0700 (PDT)
+Received: from google.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
+        by smtp.gmail.com with ESMTPSA id x3-20020a50d9c3000000b0041c8ce4bcd7sm6543091edj.63.2022.04.06.03.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 03:34:18 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 10:34:15 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <Yk1spw4zIxR73VX8@google.com>
+References: <YkQzfjgTQaDd2E2T@google.com>
+ <YkSaUQX89ZEojsQb@google.com>
+ <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
+ <YkcTTY4YjQs5BRhE@google.com>
+ <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
+ <YksIQYdG41v3KWkr@google.com>
+ <Ykslo2eo2eRXrpFR@google.com>
+ <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
+ <Ykwbqv90C7+8K+Ao@google.com>
+ <YkyEaYiL0BrDYcZv@google.com>
 MIME-Version: 1.0
-In-Reply-To: <769bcd36-4818-8470-2daa-49ac5c05b33a@suse.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkyEaYiL0BrDYcZv@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/4 13:28, Hannes Reinecke wrote:
-> On 4/3/22 19:17, Mike Christie wrote:
->> On 4/3/22 12:14 PM, Mike Christie wrote:
->>> We could share code with scsi_ioctl_reset as well. Drivers that support
->>> TMFs via that ioctl already expect queuecommand to be possibly in the
->>> middle of a run and IO not yet timed out. For example, the code to
->>> block a queue and reset the device could be used for the new EH and
->>> SG_SCSI_RESET_DEVICE handling.
->>>
->>
->> Hannes or others,
->>
->> How do parallel SCSI drivers support scsi_ioctl_reset? Is is not fully
->> supported and more only used for controlled testing?
+On Tuesday 05 Apr 2022 at 18:03:21 (+0000), Sean Christopherson wrote:
+> On Tue, Apr 05, 2022, Quentin Perret wrote:
+> > On Monday 04 Apr 2022 at 15:04:17 (-0700), Andy Lutomirski wrote:
+> > > >>  - it can be very useful for protected VMs to do shared=>private
+> > > >>    conversions. Think of a VM receiving some data from the host in a
+> > > >>    shared buffer, and then it wants to operate on that buffer without
+> > > >>    risking to leak confidential informations in a transient state. In
+> > > >>    that case the most logical thing to do is to convert the buffer back
+> > > >>    to private, do whatever needs to be done on that buffer (decrypting a
+> > > >>    frame, ...), and then share it back with the host to consume it;
+> > > >
+> > > > If performance is a motivation, why would the guest want to do two
+> > > > conversions instead of just doing internal memcpy() to/from a private
+> > > > page?  I would be quite surprised if multiple exits and TLB shootdowns is
+> > > > actually faster, especially at any kind of scale where zapping stage-2
+> > > > PTEs will cause lock contention and IPIs.
+> > > 
+> > > I don't know the numbers or all the details, but this is arm64, which is a
+> > > rather better architecture than x86 in this regard.  So maybe it's not so
+> > > bad, at least in very simple cases, ignoring all implementation details.
+> > > (But see below.)  Also the systems in question tend to have fewer CPUs than
+> > > some of the massive x86 systems out there.
+> > 
+> > Yep. I can try and do some measurements if that's really necessary, but
+> > I'm really convinced the cost of the TLBI for the shared->private
+> > conversion is going to be significantly smaller than the cost of memcpy
+> > the buffer twice in the guest for us.
 > 
-> That's actually a problem in scsi_ioctl_reset(); it really should wait for all I/O to quiesce. Currently it just sets the 'tmf' flag and calls into the various reset functions.
-> 
-> But really, I'd rather get my EH rework in before we're start discussing modifying EH behaviour.
-> Let me repost it ...
-> 
-> Cheers,
-> 
-> Hannes
+> It's not just the TLB shootdown, the VM-Exits aren't free.
 
-Hi hannes:
+Ack, but we can at least work on the rest (number of exits, locking, ...).
+The cost of the memcpy and the TLBI are really incompressible.
 
-According to the statistic, following scenario would cause an abort failed can be handled by LUN reset:
-1. The task execute of disk's FW is abnormal;
-2. Intermittent bit errors or intermittent disconnection;
-3. FW do not response IO;
+> And barring non-trivial
+> improvements to KVM's MMU, e.g. sharding of mmu_lock, modifying the page tables will
+> block all other updates and MMU operations.  Taking mmu_lock for read, should arm64
+> ever convert to a rwlock, is not an option because KVM needs to block other
+> conversions to avoid races.
 
-Following scenario can not be handled by LUN reset:
-1. Disk HW issue, LUN reset can not be handled;
-2. DDR UNC in disk, can not fix, the only way is to power off then power on
-3. FW of disk is out of service, can not fix, the only way is to power off then power on
+FWIW the host mmu_lock isn't all that useful for pKVM. The host doesn't
+have _any_ control over guest page-tables, and the hypervisor can't
+safely rely on the host for locking, so we have hypervisor-level
+synchronization.
 
-And the statistic shows most command abort failed can be handled by LUN reset.
+> Hmm, though batching multiple pages into a single request would mitigate most of
+> the overhead.
 
-So we plan to design a lightweight timeout handle flow as following:
+Yep, there are a few tricks we can play to make this fairly efficient in
+the most common cases. And fine-grain locking at EL2 is really high up
+on the todo list :-)
 
-                 if disable lightweight EH(default)
-scsi_times_out  ====================================> origin EH flow
-   ||                            
-   || if enable lightweight EH 
-   || 
-   \/
-do not using current timeout flow, and branch to another flow which perform following steps:
-
-abort command
-   ||
-   || failed
-   || 
-   \/
-stop single LUN's I/O (need to wait LUN's failed command number equal to busy command  number)
-   ||
-   || failed  (according to our statistic, 90% reset LUN would succeed)
-   ||
-   \/
-reset single LUN
-   ||
-   ||           if host with multi LUNs timeout
-   || failed =====================================> perform Host reset
-   ||                                                   ||
-   ||                                                   || failed
-   ||                                                   ||
-   || <=================================================//
-   ||
-   \/
-offline disk
-
-Since it's a lightweight EH, we prefer offline disk once reset LUN failed.
-These changes would not affect origin EH flow. The advantage of this design is it would not affect
-other LUNs of same host.
+Thanks,
+Quentin

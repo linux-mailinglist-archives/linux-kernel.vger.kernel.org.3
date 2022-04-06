@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4424F6B25
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0CC4F6B42
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiDFUUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S230514AbiDFUWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234104AbiDFUTc (ORCPT
+        with ESMTP id S233836AbiDFUVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:19:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2E728D2A0;
-        Wed,  6 Apr 2022 11:28:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01840B824E1;
-        Wed,  6 Apr 2022 18:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B25FC385A3;
-        Wed,  6 Apr 2022 18:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649269706;
-        bh=NgqVS5WrlftclBEuSycZ8OoPFaK+Gbw/CFEjdjdLH8w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vzSRhOgddLkSmjECL5R9J+p0qSz5XQWO4+szW0tDNy5yLkli3boBGbfl6OYRQ7rML
-         yNY/nOs8IyBSuOrDXN2cNBKkXZOmFXAwAPPhf6rVXTFa+JQGm0P8hozXo3XeUlrsSx
-         LKjp2QsvaFf1RCxWeyF/CdSzCFvRlnEPK7duwhck=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 4.9 41/43] KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
-Date:   Wed,  6 Apr 2022 20:26:50 +0200
-Message-Id: <20220406182437.872916215@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406182436.675069715@linuxfoundation.org>
-References: <20220406182436.675069715@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Wed, 6 Apr 2022 16:21:18 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED535329CAC;
+        Wed,  6 Apr 2022 11:33:47 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id t21so3275940oie.11;
+        Wed, 06 Apr 2022 11:33:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sIlgTwiNbfwFFAy/yXeyQZoSzXEnPFRyql/iL5iCCtE=;
+        b=EavmNT81m2zPk7pJS6EZPpHNfJlHPQ0kUzliAamOJ/6oVjU2AT9jnyz2im4jfY5447
+         B6kp6qB/sWmRE42U/V0UTTWmYcqG2OueC+vYYLYvK/qYJpFjl4rd+dXemTjBuBVXpdIC
+         N+3uMpQOxtjnYnkz68BEc5IOLUIn+4gnzxj1UVZ1zUk8Ii8OCQsMe9Ix3AMLXYxphlcu
+         KeY5Izmx9OsaV/n19OSxUuuNIIgAFqwrLVo3vT5oSb/Sgb1qk1vQ9t9PmTDxwVV7E+VL
+         8TjNtPJ6mO3NFaIMb8p9ZWm927juWoorK0XDxJL8hV/HQMrOzd3Hq9ES0AdY7iQlg6G3
+         2qQA==
+X-Gm-Message-State: AOAM533sAKnXSCTUPR/QEFMzR2HSMfdze9JPyCqVCY72nYDFHsDsvSTY
+        Bn8/arOIhQ7NU80QentuGw==
+X-Google-Smtp-Source: ABdhPJzoDiAm1Di4r6ZLELhVjZd9pldCOh/h5QYfD8dFKDaipx5siYm49mB3Emx2ZZfS+3iBhWYjsA==
+X-Received: by 2002:aca:36c1:0:b0:2ec:cf67:b8ef with SMTP id d184-20020aca36c1000000b002eccf67b8efmr4103516oia.115.1649270027272;
+        Wed, 06 Apr 2022 11:33:47 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b21-20020a9d7555000000b005b24c85da2csm6980665otl.51.2022.04.06.11.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 11:33:46 -0700 (PDT)
+Received: (nullmailer pid 2551211 invoked by uid 1000);
+        Wed, 06 Apr 2022 18:33:46 -0000
+Date:   Wed, 6 Apr 2022 13:33:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        sre@kernel.org, p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH 2/8] dt-bindings: reset: convert Atmel/Microchip reset
+ controller to YAML
+Message-ID: <Yk3dCu8ef9Scbklp@robh.at.kernel.org>
+References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
+ <20220405112724.2760905-3-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405112724.2760905-3-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,62 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+On Tue, 05 Apr 2022 14:27:18 +0300, Claudiu Beznea wrote:
+> Convert Atmel/Microchip reset controller to YAML.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 15 ------
+>  .../reset/atmel,at91sam9260-reset.yaml        | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 15 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> 
 
-commit a5905d6af492ee6a4a2205f0d550b3f931b03d03 upstream.
-
-KVM allows the guest to discover whether the ARCH_WORKAROUND SMCCC are
-implemented, and to preserve that state during migration through its
-firmware register interface.
-
-Add the necessary boiler plate for SMCCC_ARCH_WORKAROUND_3.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-[ kvm code moved to arch/arm/kvm, removed fw regs ABI. Added 32bit stub ]
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm/include/asm/kvm_host.h   |    5 +++++
- arch/arm/kvm/psci.c               |    4 ++++
- arch/arm64/include/asm/kvm_host.h |    4 ++++
- 3 files changed, 13 insertions(+)
-
---- a/arch/arm/include/asm/kvm_host.h
-+++ b/arch/arm/include/asm/kvm_host.h
-@@ -349,4 +349,9 @@ static inline int kvm_arm_have_ssbd(void
- 	return KVM_SSBD_UNKNOWN;
- }
- 
-+static inline bool kvm_arm_spectre_bhb_mitigated(void)
-+{
-+	/* 32bit guests don't need firmware for this */
-+	return false;
-+}
- #endif /* __ARM_KVM_HOST_H__ */
---- a/arch/arm/kvm/psci.c
-+++ b/arch/arm/kvm/psci.c
-@@ -431,6 +431,10 @@ int kvm_hvc_call_handler(struct kvm_vcpu
- 				break;
- 			}
- 			break;
-+		case ARM_SMCCC_ARCH_WORKAROUND_3:
-+			if (kvm_arm_spectre_bhb_mitigated())
-+				val = SMCCC_RET_SUCCESS;
-+			break;
- 		}
- 		break;
- 	default:
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -452,4 +452,8 @@ static inline int kvm_arm_have_ssbd(void
- 	}
- }
- 
-+static inline bool kvm_arm_spectre_bhb_mitigated(void)
-+{
-+	return arm64_get_spectre_bhb_state() == SPECTRE_MITIGATED;
-+}
- #endif /* __ARM64_KVM_HOST_H__ */
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

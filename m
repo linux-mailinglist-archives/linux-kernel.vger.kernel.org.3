@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620B64F6C8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D6E4F6C98
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbiDFVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S235668AbiDFV0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235394AbiDFVYB (ORCPT
+        with ESMTP id S235209AbiDFVZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:24:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D52EC4ED
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:19:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9066AB8254F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 20:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F510C385A3;
-        Wed,  6 Apr 2022 20:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649276363;
-        bh=uYwQNf4aBCpGoDJHxfG+lIO94Xv7pYvgXWwzyJ3IDhM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YwquvnPIe2o/tbGz7xsGoji7vymngVe+SOBBOBq3EJuiO53zpIivN72W0CAs+lRWw
-         chqzfStNFbGnb/RSK+fM56Pyn3s4HqVFjXAyRnQGrS1XANG91xDBaOVNBy4NYzyoeG
-         I/bqFUBN2a9dkpQuAotCiJcdU8oel7sIbkRJevAEtdpwu7slc04MUmyKv1yMi2CX2B
-         bQZ+g8EvDbYjb7+PiRWuibYZpshDZ4kxN1mCDViMDlNU11k0CEwM8LZMVedEftdeoi
-         jsi3IsJ9qNY7AlXdtDlKa704meIBdoGlOmA+Z3OzlORvYoia8Cyg+aL9Boz2INPvTm
-         iPC2DJBMcfVWA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1ncC7c-00GGaV-OQ; Wed, 06 Apr 2022 22:19:20 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     alsa-devel@alsa-project.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] ASoC: Intel: sof_es8336: Add a quirk for Huawei Matebook D15
-Date:   Wed,  6 Apr 2022 22:19:18 +0200
-Message-Id: <ef3d8eda90e0b3a054cd83d75b50adca0fe0e9a1.1649275618.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1649275618.git.mchehab@kernel.org>
-References: <cover.1649275618.git.mchehab@kernel.org>
+        Wed, 6 Apr 2022 17:25:43 -0400
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD35B6;
+        Wed,  6 Apr 2022 13:21:01 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id j8so2951085pll.11;
+        Wed, 06 Apr 2022 13:21:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3mCDtib46azYhoHX+oJIxgCRBmS2BXiXfAVoUab2E94=;
+        b=G/IakRoTiAI0cvScoaTKDrEAtYKZlUYKKy1nKDsjiU+2JCkytRwqvIhWSlYkzzu2UP
+         /pC8bSSOL9fXe1mntksjHBwt4/qDkr49OyaQdYurlfKhU3iB2T/LWCxGviFSxYqzktns
+         ditxD6t8mR2QT/2g+Fo8NsvnUD09JKot3+3tJduNVRminyvWw0sJOk1f9rVLyXdRp+MV
+         1/15Ra1zkLd3GyrzmeT6KWROsuFtBZHjRg9lxjDh8oCfzNz3Cu0YPBb5VJreliZquwsc
+         W6RMZtepyu6DRTxXOL3LTjjtSUCu6iQpJ+SHUQwm9vsnnG2NJyT2+EYtYR7xsj+dOfNn
+         zjIA==
+X-Gm-Message-State: AOAM530LnSArg00wUxm7sZxts/G5W1SBNK0/D9KLfDwYH8QwHnDDOYjV
+        EDW5zrt6ihIYJiiNOpEBRps=
+X-Google-Smtp-Source: ABdhPJxMJ3dzw7N9XtYfZUeTBt4fqiJFyiCzT9SQ10HzjeqEzZaDG86sXBMGiVqyHmM+u0AmHyV3iQ==
+X-Received: by 2002:a17:90b:3a81:b0:1c6:834e:cd61 with SMTP id om1-20020a17090b3a8100b001c6834ecd61mr11840281pjb.149.1649276461210;
+        Wed, 06 Apr 2022 13:21:01 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090a784c00b001c6bdafc995sm5468971pjl.3.2022.04.06.13.20.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 13:21:00 -0700 (PDT)
+Message-ID: <b95bdfa9-4373-8f54-677e-4a764061c61c@acm.org>
+Date:   Wed, 6 Apr 2022 13:20:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+Content-Language: en-US
+To:     Bean Huo <huobean@gmail.com>,
+        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, maxim.uvarov@linaro.org,
+        joakim.bech@linaro.org, ulf.hansson@linaro.org,
+        ilias.apalodimas@linaro.org, arnd@linaro.org,
+        ruchika.gupta@linaro.org, tomas.winkler@intel.com,
+        yang.huang@intel.com, bing.zhu@intel.com,
+        Matti.Moell@opensynergy.com, hmo@opensynergy.com,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220405093759.1126835-1-alex.bennee@linaro.org>
+ <8b3ce88f65fd11523a4d2daab3c617f7089eb1ce.camel@gmail.com>
+ <87r16bk013.fsf@linaro.org>
+ <aeb64d1c4bbddfd8463c07a40ab1fc78be0d158d.camel@gmail.com>
+ <87ee2ajuky.fsf@linaro.org>
+ <c18a2b359046a14250cafa5a619dbe53f2872b5a.camel@gmail.com>
+ <e72812a9-1e5b-a826-d490-62ed23d94116@acm.org>
+ <310d20a04bdaf40672592d9ffa950606d2ceaff7.camel@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <310d20a04bdaf40672592d9ffa950606d2ceaff7.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on experimental tests, Huawei Matebook D15 actually uses
-both gpio0 and gpio1: the first one controls the speaker, while
-the other one controls the headphone.
+On 4/6/22 11:12, Bean Huo wrote:
+> It is from the ufs-utils.
+> 
+> So, do you vote to add the UFS RPMB driver based on this new framework
+> to resolve this conflict?
 
-Also, the headset is mapped as MIC1, instead of MIC2.
+Are any applications using the RPMB code from ufs-utils? It seems to me 
+that the ufs-utils code doe not handle SCSI unit attentions correctly. 
+If a POWER ON unit attention is received as reply to a SECURITY PROTOCOL 
+OUT transaction, the write counter should be reread instead of retrying 
+the SECURITY PROTOCOL OUT command with the same write counter.
 
-So, add a quirk for it.
+Regarding adding a UFS RPMB driver: that seems useful to me since 
+multiple applications make use of the UFS RPMB functionality. My 
+understanding is that currently storageproxyd multiplexes UFS RPMB 
+accesses in Android.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+Thanks,
 
-See [PATCH v4 0/4] at: https://lore.kernel.org/all/cover.1649275618.git.mchehab@kernel.org/
-
- sound/soc/intel/boards/sof_es8336.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index bc5bc6124223..e9bf516ae4c9 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -309,6 +309,15 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
- 		},
- 		.driver_data = (void *)(SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
- 	},
-+	{
-+		.callback = sof_es8336_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
-+			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
-+		},
-+		.driver_data = (void *)(SOF_ES8336_HEADPHONE_GPIO |
-+					SOC_ES8336_HEADSET_MIC1)
-+	},
- 	{}
- };
- 
--- 
-2.35.1
-
+Bart.

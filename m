@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4304A4F6A15
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8ED4F6A1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiDFTiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S232034AbiDFTkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiDFTg7 (ORCPT
+        with ESMTP id S231934AbiDFTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:36:59 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760B71CD7C8;
-        Wed,  6 Apr 2022 10:37:43 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id j83so3129242oih.6;
-        Wed, 06 Apr 2022 10:37:43 -0700 (PDT)
+        Wed, 6 Apr 2022 15:39:35 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62EB1A3967;
+        Wed,  6 Apr 2022 10:45:13 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e1dcc0a327so3746539fac.1;
+        Wed, 06 Apr 2022 10:45:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bWQxY5qyzsRtNQUVZiKXQsEQFjbMtJVPZxjBRNS4c44=;
-        b=tu9pAKPhJmXFM+fWqdsFCValc43P9KWfM7AT2a6ckxloUTaHgxcM84PjJXvsl/D4jw
-         wQF0lMGbgpSYysNniqoh5hSFu8F2mb/okXPehU2c0eiTmnGrMFAEPJ6S9tb384kpVt/0
-         v/OtglcBlB5aMKFPLiBkj3js6z+pOIA+SU6aYc5igtqD5Bxcldz/48ifuG0jwt0NniEj
-         PyzAWqVRGbcKT4OUcWnPnbZDgbirOg1OyhvEyPOaTWr9iClOCun6R+Fazs8W3opdcO2s
-         61DLV9lGo38vyNz1uuw+kPbnnhN5Yo5lP+AXZ4twTLZ9SJhJz+ugdyLV7ixcT5Vv+wBN
-         JyZw==
-X-Gm-Message-State: AOAM530+xk1uG5MvvMnrUxVahhNWL71lEvzF10v9u/bkvhGsUBDfcPad
-        6pvMPwr0Cek2prx7e5VISw==
-X-Google-Smtp-Source: ABdhPJyzi7wqXV7P6dcUFRdbsbYuHW2em5UAKJdXRpZAl/Zz7UV2IAa4hpbuDLSTquX/lfirapIvOA==
-X-Received: by 2002:a05:6808:218d:b0:2da:7a2e:8607 with SMTP id be13-20020a056808218d00b002da7a2e8607mr4070817oib.145.1649266662694;
-        Wed, 06 Apr 2022 10:37:42 -0700 (PDT)
+        bh=L5TvrQjpMWSCvDIj2tp5HdoUF6y6vYimFqx2SemcKe8=;
+        b=U8EDWZGrOhyYcDyd0nLKND9znK9AbRVolGZ8Nf/mIbB+8XJvs3EWdYjLxFehq+14z3
+         ZZzG1qrZW2bI8voW7Q7JHk1N833DoP+LqKUaDNRXZBVWnDzybUnX0KMl3w/TTarlSjRs
+         AAzgwpOj/46iHJ4IZG/yF/7bG24IgdHGK1jDmPRjR0m5DW/QKjtXQb8FPo79lw3ZiPnE
+         fRGXWt5T9Z92SvIGKuBjmi0YYowGVBlLouGOTVMZVMOj2L/4PtglqeXiExxjYMn7BJJO
+         h6slRrskX9TSs4+rId56jpuPCiwfAuofW5TEILdr9/UUe55oMOlNBVqTVduhgX1VNWua
+         R/7w==
+X-Gm-Message-State: AOAM531VtMy+yroPWIWLTn9ccR+x4LQE+I5m9i9pzprfUybomeIZMsj6
+        K9TvERxkDVtrhCU9B9m6nA==
+X-Google-Smtp-Source: ABdhPJxevK8UXw8048KxmB62o7gsRRl5YC6His46gPTV8+KpOCTt5xixSjhRHKnoLPd4JALpA8l/5w==
+X-Received: by 2002:a05:6870:210b:b0:de:6ec1:3f59 with SMTP id f11-20020a056870210b00b000de6ec13f59mr4505084oae.171.1649267112959;
+        Wed, 06 Apr 2022 10:45:12 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l1-20020a056830268100b005c93e625b9dsm7901393otu.46.2022.04.06.10.37.41
+        by smtp.gmail.com with ESMTPSA id hg14-20020a056870790e00b000e1c070a73asm6082977oab.55.2022.04.06.10.45.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 10:37:42 -0700 (PDT)
-Received: (nullmailer pid 2470965 invoked by uid 1000);
-        Wed, 06 Apr 2022 17:37:41 -0000
-Date:   Wed, 6 Apr 2022 12:37:41 -0500
+        Wed, 06 Apr 2022 10:45:11 -0700 (PDT)
+Received: (nullmailer pid 2481762 invoked by uid 1000);
+        Wed, 06 Apr 2022 17:45:10 -0000
+Date:   Wed, 6 Apr 2022 12:45:10 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Dongjin Yang <dj76.yang@samsung.com>
-Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: net: snps: remove duplicate name
-Message-ID: <Yk3P5b1uNln8TK60@robh.at.kernel.org>
-References: <CGME20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
- <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: qcom: qcom,geni-se: refer to
+ dtschema for SPI
+Message-ID: <Yk3RpmKj0eRKnCdU@robh.at.kernel.org>
+References: <20220404064017.68634-1-krzysztof.kozlowski@linaro.org>
+ <20220404064017.68634-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+In-Reply-To: <20220404064017.68634-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 04 Apr 2022 11:28:57 +0900, Dongjin Yang wrote:
-> snps,dwmac has duplicated name for loongson,ls2k-dwmac and
-> loongson,ls7a-dwmac.
+On Mon, 04 Apr 2022 08:40:17 +0200, Krzysztof Kozlowski wrote:
+> After adding DT schema for the SPI controller, the Qualcomm GENI Serial
+> Engine QUP Wrapper Controller bindings can reference it directly for
+> full schema validation.
 > 
-> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> 
 > ---
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> Changes since v2:
+> 1. Add tag.
+> 
+> Changes since v1:
+> 1. None
+> 
+> Patch depends on previous patch (DT schema conversion).
+> ---
+>  .../bindings/soc/qcom/qcom,geni-se.yaml       | 22 +------------------
+>  1 file changed, 1 insertion(+), 21 deletions(-)
 > 
 
-Applied, thanks!
+Reviewed-by: Rob Herring <robh@kernel.org>

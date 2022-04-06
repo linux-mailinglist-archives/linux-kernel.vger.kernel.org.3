@@ -2,135 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A134F5B34
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2CC4F5ADC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbiDFKKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S1348971AbiDFKRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352973AbiDFKJM (ORCPT
+        with ESMTP id S236359AbiDFKPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:09:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ADA22FD8C;
-        Tue,  5 Apr 2022 23:38:48 -0700 (PDT)
-X-UUID: d4e1b5a7c4674690ba3742875695fc36-20220406
-X-UUID: d4e1b5a7c4674690ba3742875695fc36-20220406
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 322571076; Wed, 06 Apr 2022 14:38:42 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 6 Apr 2022 14:38:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 6 Apr
- 2022 14:38:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 14:38:40 +0800
-Message-ID: <4940e2e4ecb5f9f6857dc960ea5dbe43c551df77.camel@mediatek.com>
-Subject: Re: [PATCH v2,1/2] dt-bindings: display: mediatek: dpi: Add
- compatible for MediaTek MT8186
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <xinlei.lee@mediatek.com>,
-        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>
-Date:   Wed, 6 Apr 2022 14:38:40 +0800
-In-Reply-To: <e0d5a344c8ec1f92357bd9d5b8782dded862c549.camel@mediatek.com>
-References: <1648727917-3099-1-git-send-email-xinlei.lee@mediatek.com>
-         <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
-         <e0d5a344c8ec1f92357bd9d5b8782dded862c549.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 6 Apr 2022 06:15:46 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7722C149D10
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:44:01 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23633LSr016210;
+        Wed, 6 Apr 2022 06:43:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qCYyAHYd3qcSSdh6JKTxv2idV/wS9yHsQC0N8moZXfI=;
+ b=bxMWHMLyXufXsKm/clv75+L3yXYVmjso+Md1X7sVo2lMU3hFi9F0xD6MmrTgadgHEEzU
+ ZReHjS7iXvba5y8/pZWSwePQMgr929S8yg+AuwHEdV7uz9A8dSPz2juJ+wanCYPF/8PZ
+ r41ewhMin+bS3J67tZtQvR83ZIvafwH5pYv+miNQQJHHkbAMBYlPzqHrOiUUwN056EL5
+ nm6yDh0aXbUkF5EwqP+MMC18GBGVyBu0N4Tifr6yQm4uK0tQewIYUMRgJ6JD6n4xZBn2
+ stdGDF6tDFcc5mp7G1FNz6UtLy0WDAPjTrJF6hj/Xq6ujQl0P924RAa2HagYZOwcDx46 ew== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f8ut8j6da-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 06:43:50 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2366h6Y8000879;
+        Wed, 6 Apr 2022 06:43:49 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f6e48y7b8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 06:43:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2366VV7u46137770
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Apr 2022 06:31:31 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7823EAE045;
+        Wed,  6 Apr 2022 06:43:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCB5AAE04D;
+        Wed,  6 Apr 2022 06:43:45 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Apr 2022 06:43:45 +0000 (GMT)
+Received: from [9.43.195.169] (unknown [9.43.195.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 9A915600A7;
+        Wed,  6 Apr 2022 16:43:41 +1000 (AEST)
+Message-ID: <d6cb3408-49a4-3c35-6ce0-3b35fd88bb9e@linux.ibm.com>
+Date:   Wed, 6 Apr 2022 16:43:30 +1000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+In-Reply-To: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EKurYAJO1W4zDCRPbPte46L-hT8YgAC9
+X-Proofpoint-ORIG-GUID: EKurYAJO1W4zDCRPbPte46L-hT8YgAC9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_02,2022-04-05_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=970
+ suspectscore=0 spamscore=0 impostorscore=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204060028
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2/4/22 20:52, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-On Fri, 2022-04-01 at 09:38 +0800, Rex-BC Chen wrote:
-> On Thu, 2022-03-31 at 19:58 +0800, xinlei.lee@mediatek.com wrote:
-> > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> > 
-> > Add dt-binding documentation of dpi for MediaTek MT8186 SoC.
-> > 
-> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> > ---
-> >  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml       |
-> > 1
-> > +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > index dd2896a40ff0..a73044c50b5f 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > @@ -22,6 +22,7 @@ properties:
-> >        - mediatek,mt7623-dpi
-> >        - mediatek,mt8173-dpi
-> >        - mediatek,mt8183-dpi
-> > +      - mediatek,mt8186-dpi
-> >        - mediatek,mt8192-dpi
-> >  
-> >    reg:
-> 
-> Hello Xinlei,
-> 
-> From the dts we use, the dpi node needs other properties for MT8186.
-> Please send another patch and add these properties to binding.
-> 
-> assigned-clocks = <&topckgen CLK_TOP_DPI>;
-> assigned-clock-parents = <&topckgen CLK_TOP_TVDPLL_D2>;
+Untested because I don't have your actual patch to change prom.h, but 
+nothing here looks concerning.
 
-According to [1], the assigned-clocks is initial value. Without this
-initial value, I think driver would set this clock again, wouldn't it?
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-[1] 
-https://www.kernel.org/doc/Documentation/devicetree/bindings/clock/clock-bindings.txt
+> ---
+>   drivers/misc/cxl/api.c      | 1 +
+>   drivers/misc/cxl/cxl.h      | 2 ++
+>   drivers/misc/cxl/cxllib.c   | 1 +
+>   drivers/misc/cxl/flash.c    | 1 +
+>   drivers/misc/cxl/guest.c    | 2 ++
+>   drivers/misc/cxl/irq.c      | 1 +
+>   drivers/misc/cxl/main.c     | 1 +
+>   drivers/misc/cxl/native.c   | 1 +
+>   drivers/misc/ocxl/afu_irq.c | 1 +
+>   drivers/misc/ocxl/link.c    | 1 +
+>   10 files changed, 12 insertions(+)
+> 
+> diff --git a/drivers/misc/cxl/api.c b/drivers/misc/cxl/api.c
+> index b493de962153..d85c56530863 100644
+> --- a/drivers/misc/cxl/api.c
+> +++ b/drivers/misc/cxl/api.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/pseudo_fs.h>
+>   #include <linux/sched/mm.h>
+>   #include <linux/mmu_context.h>
+> +#include <linux/irqdomain.h>
+>   
+>   #include "cxl.h"
+>   
+> diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
+> index 5dc0f6093f9d..7a6dd91987fd 100644
+> --- a/drivers/misc/cxl/cxl.h
+> +++ b/drivers/misc/cxl/cxl.h
+> @@ -25,6 +25,8 @@
+>   
+>   extern uint cxl_verbose;
+>   
+> +struct property;
+> +
+>   #define CXL_TIMEOUT 5
+>   
+>   /*
+> diff --git a/drivers/misc/cxl/cxllib.c b/drivers/misc/cxl/cxllib.c
+> index 53b919856426..e5fe0a171472 100644
+> --- a/drivers/misc/cxl/cxllib.c
+> +++ b/drivers/misc/cxl/cxllib.c
+> @@ -5,6 +5,7 @@
+>   
+>   #include <linux/hugetlb.h>
+>   #include <linux/sched/mm.h>
+> +#include <asm/opal-api.h>
+>   #include <asm/pnv-pci.h>
+>   #include <misc/cxllib.h>
+>   
+> diff --git a/drivers/misc/cxl/flash.c b/drivers/misc/cxl/flash.c
+> index 5b93ff51d82a..eee9decc121e 100644
+> --- a/drivers/misc/cxl/flash.c
+> +++ b/drivers/misc/cxl/flash.c
+> @@ -4,6 +4,7 @@
+>   #include <linux/semaphore.h>
+>   #include <linux/slab.h>
+>   #include <linux/uaccess.h>
+> +#include <linux/of.h>
+>   #include <asm/rtas.h>
+>   
+>   #include "cxl.h"
+> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
+> index 9d485c9e3fff..3321c014913c 100644
+> --- a/drivers/misc/cxl/guest.c
+> +++ b/drivers/misc/cxl/guest.c
+> @@ -6,6 +6,8 @@
+>   #include <linux/spinlock.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/delay.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/platform_device.h>
+>   
+>   #include "cxl.h"
+>   #include "hcalls.h"
+> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
+> index 4cb829d5d873..5f0e2dcebb34 100644
+> --- a/drivers/misc/cxl/irq.c
+> +++ b/drivers/misc/cxl/irq.c
+> @@ -4,6 +4,7 @@
+>    */
+>   
+>   #include <linux/interrupt.h>
+> +#include <linux/irqdomain.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/sched.h>
+>   #include <linux/wait.h>
+> diff --git a/drivers/misc/cxl/main.c b/drivers/misc/cxl/main.c
+> index 43b312d06e3e..c1fbf6f588f7 100644
+> --- a/drivers/misc/cxl/main.c
+> +++ b/drivers/misc/cxl/main.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/idr.h>
+>   #include <linux/pci.h>
+> +#include <linux/platform_device.h>
+>   #include <linux/sched/task.h>
+>   
+>   #include <asm/cputable.h>
+> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
+> index 1a7f22836041..50b0c44bb8d7 100644
+> --- a/drivers/misc/cxl/native.c
+> +++ b/drivers/misc/cxl/native.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/mm.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/delay.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/synch.h>
+>   #include <asm/switch_to.h>
+>   #include <misc/cxl-base.h>
+> diff --git a/drivers/misc/ocxl/afu_irq.c b/drivers/misc/ocxl/afu_irq.c
+> index ecdcfae025b7..a06920b7e049 100644
+> --- a/drivers/misc/ocxl/afu_irq.c
+> +++ b/drivers/misc/ocxl/afu_irq.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0+
+>   // Copyright 2017 IBM Corp.
+>   #include <linux/interrupt.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/pnv-ocxl.h>
+>   #include <asm/xive.h>
+>   #include "ocxl_internal.h"
+> diff --git a/drivers/misc/ocxl/link.c b/drivers/misc/ocxl/link.c
+> index 9670d02c927f..4cf4c55a5f00 100644
+> --- a/drivers/misc/ocxl/link.c
+> +++ b/drivers/misc/ocxl/link.c
+> @@ -6,6 +6,7 @@
+>   #include <linux/mm_types.h>
+>   #include <linux/mmu_context.h>
+>   #include <linux/mmu_notifier.h>
+> +#include <linux/irqdomain.h>
+>   #include <asm/copro.h>
+>   #include <asm/pnv-ocxl.h>
+>   #include <asm/xive.h>
 
-Regards,
-CK
-
-> 
-> Thanks
-> 
-> BRs,
-> Rex
-> 
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> 
-https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!wtF15QZZTCzWfRpxNLjZ1VQQ54i40D8STuOo0h18dtz3es-ksLfYQGTEFlb7lg$
->  
-
+-- 
+Andrew Donnellan              OzLabs, ADL Canberra
+ajd@linux.ibm.com             IBM Australia Limited

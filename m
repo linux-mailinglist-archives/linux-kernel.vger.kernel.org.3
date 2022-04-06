@@ -2,213 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F034F6152
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AE44F610F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbiDFOLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S234671AbiDFOMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234359AbiDFOJT (ORCPT
+        with ESMTP id S234577AbiDFOMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:09:19 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1BF4ED0C5;
-        Wed,  6 Apr 2022 03:05:49 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id t7so3377653qta.10;
-        Wed, 06 Apr 2022 03:05:49 -0700 (PDT)
+        Wed, 6 Apr 2022 10:12:15 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E372121A0DF;
+        Wed,  6 Apr 2022 03:06:28 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p17so1511926plo.9;
+        Wed, 06 Apr 2022 03:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2VSAsL2CXxrE77kXFBa8TcwGi/LVtFh7YwP75sQ1TkA=;
-        b=nFH8nSv8u2z2VrycbL7jcP3CAcHZjP/EULtXO9QHdvJOZEKn1TCzlLXc86GXCi7Mmd
-         6OT7TIZ2Q7dJ0U6hVtjdLAIGIQDv9QeeBRJZ4FoPsPOuwqpWlhUW0SSa9GGQZrBK1pSC
-         SYrltpIS39/4lZyqixcMZsrTh/rNTPis01lrBX7rikZlN7xLrQ1986ikQmhJ/rWGmZ/i
-         q+YH4DqQcEtmG5icR7TWQd/CXEexRIXvNFTL1J5v1ODkMCUZVLPhrhO/0kRTVsreKJJV
-         reLzEOgygvOshNCTIsLmubVYawMMiKqMdP/5krBi5ySqz8xGYXe+w52VPQkOPGli3U07
-         GGoQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=57yP5txyEZyDXpbo8tIP1sloT8BEAgWzSMNPoATwlDg=;
+        b=ehDrXAaW3pMqUfx6zSCSo3ez2chyhCErGyezUVm9LK1/D0javYpCUbJcZIXfHfMvkN
+         8UIV/uwH0bb7zEJGYOseWq2ar1EmtgBpi8Gox+OQasCWLVzzBsysSGCPqZ7csA3+Td3B
+         dMru2IP9psWuiXdD27GLpcl1xK5YaKi5o5RfzDNfKouCSPisF0u0YDTQo/TtmxlmCNvR
+         I1PevTkDTfKigc4tGc7Gz67Yxo+M40RoOJfqCyycumlnyj3FL1bsLJ1kHzeIttwSzOLM
+         x9jMos0U8Pf4TpTu1/pxpqYsBWguWjQU56tBLryyJgVZR0EKx8yvXdBvYVnRMBKD41/W
+         UImw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2VSAsL2CXxrE77kXFBa8TcwGi/LVtFh7YwP75sQ1TkA=;
-        b=5etS1P1jT0bCPZT+g4mIKsotL5ijQXTWGOcH/V9aghMHSOCm9BaDq2DIB1l7KTYQr4
-         TM4gXbZQTCvYPjYwJtqdsP+d3/2SZ+XqWw5CWGOueKhv3I2e3mGfUTQf5IzFKArpmw4u
-         8IKBHiFRulTmHq0x1hFSpbBIuUPuJwjmJ/T9Mamu0WZBTLjPqm4hqqcPaiESiVl7uB7C
-         OERTnbUc5dSgAU9i+k5PCZFFKcNwNYYmRx0je5qjLvvdimbtGmIIKhiOsBETSqcw3XgU
-         mjkq65DJHByYcZXSY7zispF7MwH+Ps7OIyTrp05LEhWmt0vWs1vUlPJaSuU7x0EGsibd
-         lOrQ==
-X-Gm-Message-State: AOAM532K/Ez3B6HWirwEd+Fh0LHyQHdLJv2ZTJSpqfYZlh9tWR9qmGtB
-        NJtzjL3sz69Qwy/wM7cAgNIq7bJQKM2zS27n6Fs=
-X-Google-Smtp-Source: ABdhPJzJ51LUKgHNsZSqfo2DF9g+oizaRLxeUSLiFI7JUgaZgBlMXR+GkcR82KzMkbYV3Pw7dmxC8tAPKSbyI0Y+ZMA=
-X-Received: by 2002:a05:622a:82:b0:2e1:d61d:81ec with SMTP id
- o2-20020a05622a008200b002e1d61d81ecmr6628223qtw.674.1649239528097; Wed, 06
- Apr 2022 03:05:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=57yP5txyEZyDXpbo8tIP1sloT8BEAgWzSMNPoATwlDg=;
+        b=xA0DVpVJc7hrUhXdpCOlA/I6D0KEC/Y3ycaCU7ZiI36BrH7ZBJ6+wRBN1tKkMRMlQi
+         5KrheRv0/1b1I6ReksHd+OsH+vRhAPzh1gTkYFP4iUfzrEEtbfPBj5MxB/RROHuexlZR
+         c0eN6EbnogRSjhZrRoVApVzqXm4G08JBKYnh+Kas1f3AecO75BsD+uDIve8ym14iE6Fn
+         975twtJZNgEC8D5MwsHuL+rHZWG8dMQh1/b4MtAjUxq12JwCk1T5Sl0hWfotrJxBbAg4
+         JUbN6zhnml25FPrTgvCCyApH4jzgVbyt3EYopWInTZNbnPz7m1+DJNrba5NB94OOOe1b
+         y2DA==
+X-Gm-Message-State: AOAM533GIPrBITZBla72tDW7D/wuxvIctMjpsTDsVzpPN+/d3XwT7T9i
+        odc+UyJFJDK1eVXWl3FNqTk=
+X-Google-Smtp-Source: ABdhPJylhVZbCyCHSeSScbZqHALx+bT8I3PFeWGu4VLRdO069nloeoxBtQ1mNZowYRE80cEQdXbpCg==
+X-Received: by 2002:a17:90b:4c92:b0:1c7:a9a3:6274 with SMTP id my18-20020a17090b4c9200b001c7a9a36274mr8943122pjb.148.1649239587542;
+        Wed, 06 Apr 2022 03:06:27 -0700 (PDT)
+Received: from CHENGDONGLI-MB0.localdomain ([203.205.141.115])
+        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm5144868pjv.57.2022.04.06.03.06.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 06 Apr 2022 03:06:26 -0700 (PDT)
+From:   Chengdong Li <brytonlee01@gmail.com>
+X-Google-Original-From: Chengdong Li <chengdongli@tencent.com>
+Received: by CHENGDONGLI-MB0.localdomain (Postfix, from userid 501)
+        id 2E2286C7A19C; Wed,  6 Apr 2022 18:06:22 +0800 (CST)
+To:     adrian.hunter@intel.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org
+Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
+Subject: [PATCH v2] perf test tsc: Fix error message report when not supported.
+Date:   Wed,  6 Apr 2022 18:06:09 +0800
+Message-Id: <20220406100609.65239-1-chengdongli@tencent.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220323064944.1351923-1-peng.fan@oss.nxp.com> <20220323064944.1351923-3-peng.fan@oss.nxp.com>
-In-Reply-To: <20220323064944.1351923-3-peng.fan@oss.nxp.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Wed, 6 Apr 2022 13:05:16 +0300
-Message-ID: <CAEnQRZB1LL=d3SBCgNomPErBvzEgTVtbBE_PH=V60v-_9UObEg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] remoteproc: imx_dsp_rproc: use common rproc_elf_load_segments
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.j. Wang" <shengjiu.wang@nxp.com>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 1:34 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> remoteproc elf loader supports the specific case that segments
-> have PT_LOAD and memsz/filesz set to zero, so no duplicate
-> code.
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+By default `perf test tsc` does not return the error message
+when child process detected kernel does not support. Instead, child
+process print error message to stderr, unfortunately the stderr is
+redirected to /dev/null when verbose <= 0.
 
-I think this change OK, but we have a case with the DSP were
-reads/writes should be done in multiples of 32/64.
+This patch did three things:
+- returns TEST_SKIP to parent process instead of TEST_OK when
+  perf_read_tsc_conversion() is not supported.
+- add a new subtest of testing if TSC is supported on current
+  architecture by moving exist code to a separate function.
+- extended test suite definition to contain above two subtests.
 
-We need a way to provide our own "memcpy" function to be used by
-rproc_elf_load_segments.
+Changes since v1 (thanks for the feedback from Adrian Hunter):
+- rebase commit to current source.
 
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 95 +-----------------------------
->  1 file changed, 1 insertion(+), 94 deletions(-)
->
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 2abee78df96e..eee3c44c2146 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -649,99 +649,6 @@ static int imx_dsp_rproc_add_carveout(struct imx_dsp_rproc *priv)
->         return 0;
->  }
->
-> -/**
-> - * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
-> - * @rproc: remote processor which will be booted using these fw segments
-> - * @fw: the ELF firmware image
-> - *
-> - * This function specially checks if memsz is zero or not, otherwise it
-> - * is mostly same as rproc_elf_load_segments().
-> - */
-> -static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc,
-> -                                          const struct firmware *fw)
-> -{
-> -       struct device *dev = &rproc->dev;
-> -       u8 class = fw_elf_get_class(fw);
-> -       u32 elf_phdr_get_size = elf_size_of_phdr(class);
-> -       const u8 *elf_data = fw->data;
-> -       const void *ehdr, *phdr;
-> -       int i, ret = 0;
-> -       u16 phnum;
-> -
-> -       ehdr = elf_data;
-> -       phnum = elf_hdr_get_e_phnum(class, ehdr);
-> -       phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
-> -
-> -       /* go through the available ELF segments */
-> -       for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
-> -               u64 da = elf_phdr_get_p_paddr(class, phdr);
-> -               u64 memsz = elf_phdr_get_p_memsz(class, phdr);
-> -               u64 filesz = elf_phdr_get_p_filesz(class, phdr);
-> -               u64 offset = elf_phdr_get_p_offset(class, phdr);
-> -               u32 type = elf_phdr_get_p_type(class, phdr);
-> -               void *ptr;
-> -
-> -               /*
-> -                *  There is a case that with PT_LOAD type, the
-> -                *  filesz = memsz = 0. If memsz = 0, rproc_da_to_va
-> -                *  should return NULL ptr, then error is returned.
-> -                *  So this case should be skipped from the loop.
-> -                *  Add !memsz checking here.
-> -                */
-> -               if (type != PT_LOAD || !memsz)
-> -                       continue;
-> -
-> -               dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
-> -                       type, da, memsz, filesz);
-> -
-> -               if (filesz > memsz) {
-> -                       dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
-> -                               filesz, memsz);
-> -                       ret = -EINVAL;
-> -                       break;
-> -               }
-> -
-> -               if (offset + filesz > fw->size) {
-> -                       dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
-> -                               offset + filesz, fw->size);
-> -                       ret = -EINVAL;
-> -                       break;
-> -               }
-> -
-> -               if (!rproc_u64_fit_in_size_t(memsz)) {
-> -                       dev_err(dev, "size (%llx) does not fit in size_t type\n",
-> -                               memsz);
-> -                       ret = -EOVERFLOW;
-> -                       break;
-> -               }
-> -
-> -               /* grab the kernel address for this device address */
-> -               ptr = rproc_da_to_va(rproc, da, memsz, NULL);
-> -               if (!ptr) {
-> -                       dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
-> -                               memsz);
-> -                       ret = -EINVAL;
-> -                       break;
-> -               }
-> -
-> -               /* put the segment where the remote processor expects it */
-> -               if (filesz)
-> -                       memcpy(ptr, elf_data + offset, filesz);
-> -
-> -               /*
-> -                * Zero out remaining memory for this segment.
-> -                *
-> -                * This isn't strictly required since dma_alloc_coherent already
-> -                * did this for us. albeit harmless, we may consider removing
-> -                * this.
-> -                */
-> -               if (memsz > filesz)
-> -                       memset(ptr + filesz, 0, memsz - filesz);
-> -       }
-> -
-> -       return ret;
-> -}
-> -
->  /* Prepare function for rproc_ops */
->  static int imx_dsp_rproc_prepare(struct rproc *rproc)
->  {
-> @@ -808,7 +715,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
->         .start          = imx_dsp_rproc_start,
->         .stop           = imx_dsp_rproc_stop,
->         .kick           = imx_dsp_rproc_kick,
-> -       .load           = imx_dsp_rproc_elf_load_segments,
-> +       .load           = rproc_elf_load_segments,
->         .parse_fw       = rproc_elf_load_rsc_table,
->         .sanity_check   = rproc_elf_sanity_check,
->         .get_boot_addr  = rproc_elf_get_boot_addr,
-> --
-> 2.25.1
->
+Signed-off-by: Chengdong Li <chengdongli@tencent.com>
+---
+ tools/perf/tests/perf-time-to-tsc.c | 36 +++++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
+index d12d0ad81801..fc7c380af5a0 100644
+--- a/tools/perf/tests/perf-time-to-tsc.c
++++ b/tools/perf/tests/perf-time-to-tsc.c
+@@ -47,6 +47,17 @@
+ 	}					\
+ }
+ 
++static int test__tsc_is_supported(struct test_suite *test __maybe_unused,
++				  int subtest __maybe_unused)
++{
++	if (!TSC_IS_SUPPORTED) {
++		pr_debug("Test not supported on this architecture");
++		return TEST_SKIP;
++	}
++
++	return TEST_OK;
++}
++
+ /**
+  * test__perf_time_to_tsc - test converting perf time to TSC.
+  *
+@@ -70,7 +81,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+ 	struct perf_cpu_map *cpus = NULL;
+ 	struct evlist *evlist = NULL;
+ 	struct evsel *evsel = NULL;
+-	int err = -1, ret, i;
++	int err = TEST_FAIL, ret, i;
+ 	const char *comm1, *comm2;
+ 	struct perf_tsc_conversion tc;
+ 	struct perf_event_mmap_page *pc;
+@@ -79,10 +90,6 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+ 	u64 test_time, comm1_time = 0, comm2_time = 0;
+ 	struct mmap *md;
+ 
+-	if (!TSC_IS_SUPPORTED) {
+-		pr_debug("Test not supported on this architecture");
+-		return TEST_SKIP;
+-	}
+ 
+ 	threads = thread_map__new(-1, getpid(), UINT_MAX);
+ 	CHECK_NOT_NULL__(threads);
+@@ -124,8 +131,8 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+ 	ret = perf_read_tsc_conversion(pc, &tc);
+ 	if (ret) {
+ 		if (ret == -EOPNOTSUPP) {
+-			fprintf(stderr, " (not supported)");
+-			return 0;
++			pr_debug("perf_read_tsc_conversion is not supported in current kernel");
++			err = TEST_SKIP;
+ 		}
+ 		goto out_err;
+ 	}
+@@ -191,7 +198,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+ 	    test_tsc >= comm2_tsc)
+ 		goto out_err;
+ 
+-	err = 0;
++	err = TEST_OK;
+ 
+ out_err:
+ 	evlist__delete(evlist);
+@@ -200,4 +207,15 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+ 	return err;
+ }
+ 
+-DEFINE_SUITE("Convert perf time to TSC", perf_time_to_tsc);
++static struct test_case time_to_tsc_tests[] = {
++	TEST_CASE_REASON("TSC support", tsc_is_supported,
++			 "This architecture does not support"),
++	TEST_CASE_REASON("Perf time to TSC", perf_time_to_tsc,
++			 "perf_read_tsc_conversion is not supported"),
++	{ .name = NULL, }
++};
++
++struct test_suite suite__perf_time_to_tsc = {
++	.desc = "Convert perf time to TSC",
++	.test_cases = time_to_tsc_tests,
++};
+-- 
+2.27.0
+

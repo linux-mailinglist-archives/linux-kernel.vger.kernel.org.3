@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1C94F6CD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684114F6CDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiDFVgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S236152AbiDFVg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiDFVe2 (ORCPT
+        with ESMTP id S236021AbiDFVe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 17:34:28 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F5B16BCED
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:49:02 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236I6kqQ006378;
-        Wed, 6 Apr 2022 20:48:47 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8B439162
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:49:05 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236KXxDb024447;
+        Wed, 6 Apr 2022 20:48:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=iHXQx76nOltcSEbcuNujPBA+R8M14NFeVFqYrZtPfqA=;
- b=FP+52k1L9RWzhNIm2sd1PGC4Z9T/9E/WzBGr/2UDnaesurWwkOhmzGSi2M3an9fWA0sb
- QPAVYHfcTmon1H/L3n5BZLNthXPaaweGJl/z/GE7bTZsLGWA8UBdkRb/jft6pPLY7Bue
- x2l4mjP9/POCHnq4KRpY3GYhNmI1+HlK4r+vsocKrL8Nkef/iLP8sjnsoJ5fdbf9jmXp
- W80DUKZIThvZ+y3vg4PSYPkdUMrUHBBeCfihPiVB2oWyHNcDH7qJfFBvdsp2cog2w38b
- eerxtsIa+J8nOfOVCHupOvYLjYfc9QR3eXKY5H0jHC3m4EouozjsjfdPA4wHwC0EA417 yA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31j6u2-1
+ s=corp-2021-07-09; bh=CbB8HYoTtQrkgpUR1SAECZ5vTD+acpv+582ig97c9e8=;
+ b=ZlbV0oXjsniRk7/ZCh5tJT4PS15tSHsI3ksRHGj66kS+2ya3r2ciKu0kkyMBQ+gpinc4
+ zKrzAgflUL/d4LVMf8ykVIC060byAJhzVLYw/hcKG6OA6vHxAL1tioxDaPnQxvdSvsqY
+ Xj532z0rc1LTpZAqyAbMtF9j3CCyU5+FwLTQJl1kJHcNKIjiFrxvKnwQ0e1jyqF7vyyR
+ M8zAKBm0Dtf8iUeoCClfJU6kTTS+p5FMYDM1lz5KYDiGVDxzO2jX74amgEGhiFVo9oXF
+ b3WeWnWMSQ5km+5Y4c4utfl9PsbHfMZ8a7suAQzx1NXW1kYvIp0fUWmSYTaQBTs+2eZF Ww== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6f1ta8ty-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Apr 2022 20:48:46 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 236KkcVx007568;
-        Wed, 6 Apr 2022 20:48:46 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97y6tera-1
+        Wed, 06 Apr 2022 20:48:50 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 236KkxEl025441;
+        Wed, 6 Apr 2022 20:48:48 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f974dbg4j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Apr 2022 20:48:46 +0000
+        Wed, 06 Apr 2022 20:48:48 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S/YBoGaT4/euv0o5MA9mpBnfptUaalzAxFqEuyL8NcKc9FdXXga4U3BKQQa2OqY3nZcrW/O+4Z/CGAWvT10i7BPQO6PXYMjsF1UW4zQ4lFJJu6N9TSZC9iDKtQco0f+6Xat2EIHr0y2FnbeQ5R+SyJ6/VjFdjl+GKcDu0AG6q2GQF0+E4JWoMYsXxfv+iyaXY9Tt4xx4QT4SYCMeDJWyjNhs4smTgIWYCvJZsFCyhpCvI0/lqBCgqP+nTL7Q0yYO6uk41uu6h32ling38oi5eV4KBzQRi+zH33/h2cun0EtsXtQG5ZU2DnfXeFUKLAzT4MHwlRnbMey7XfBCoekcXA==
+ b=cRnPVY6bqQMpIlt8y1YANZEmXMja21KCeY4hqd+QMv0xDo0yg8aeEC8SWPOuJJT/9RtPWULezKg8PbEAe+g7WDAlonbEjhMqDPsQ7Gp9I/BQTkQ5h7wKhdSIMD0K7FqGpvy0/HsOqVyJChSsdC8GpZlOl6hpTfWy6p56O5C9PEb+Bvn6TV/3qN4NFIiL6g93dUcyAxvyhEVdLCooqVt64cqRrEUtzbj9oHRi8CEW45PGuk6ZMFouIh+p9HCpU8I4f5brwxu/+19b+PxeIeLOUuTHgqQDtzJCbaSQYEuDuK/wDkuo106MDCHiPHtrfOcEVqdvT124a3S2iWaeE7vbAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iHXQx76nOltcSEbcuNujPBA+R8M14NFeVFqYrZtPfqA=;
- b=TI/aGD/G+YnwDrrKaJ4+aDkWOwSPhVcZUqmuhOfB22ZygUuII3Olp8sJ/LNP/O1H3BKP0yDmv1rBOmRkbqudihnwxrpmXzSmbL21HcbvHPhz0X1qAYdSqv4AwndjWYIp9Au3L5OA6+R1AKuOchv7H237Z+n0FkvHFO15z/a+IkBUt25eGyNWpzype1SRTj+0Rwsn/bmh2hU3nRIHIKQkW0mIW+2JKOlmqUv/k1YJ1Pb4n2THxG97x7LL8vzLSr2Le0TRYDycquy6EDbFfApY1DuPGsEPdJTTk4F+78U7nl4quYRIbStqEqOnuWFsQMTzv3UgXrN4RvAPI6npR4HaVw==
+ bh=CbB8HYoTtQrkgpUR1SAECZ5vTD+acpv+582ig97c9e8=;
+ b=dau7AFnpNVuDKDqeFtsAmFkVDI6f8g61hbwLME7i/jnL9Z6NzVVcTPxvYlkY3B63Mhw0yNN1LP8zjeAFCOFYMco5B/onJnVfoLEdaJ1+7I1cIDR3nCK9qpRJXxcgX++WXaSo+Z8zebr8RI24a9qaWD7QNLpVIcf8yVOxVgaawepEtTdWJ4ZmPyuxOIaFlDLSUu8NMBWCsZa+8hA6cXLNFCnJB0iw+qTriQ97TwPjC5IJSxBq9K8REdskS/fL7S//fFMGrSE5Pt2OvUDErCqdPxFJVTWfk/D2vwCupYnYfwv26VurMV32wmveNFoJxtUjHwBxuDXuCVSKobJRuTED+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iHXQx76nOltcSEbcuNujPBA+R8M14NFeVFqYrZtPfqA=;
- b=lpTDUrKAM/gW69m+B8GzsLrSY5/pKXKRfXifWKIO1i8+MJSpBFWjBjLYEKZieQPqpOmDQuSJmMx24ATsrGXKrBR3d6tZIyTrsB2suY/9HYnyUHbp8xPTcZ34EwFzDHcqP7uVtThDDAXxO1D9kmrXVF+0v1W3djwMwXKW8bJ5gYE=
+ bh=CbB8HYoTtQrkgpUR1SAECZ5vTD+acpv+582ig97c9e8=;
+ b=Zbp/GEdXjPGTrYK8y2iqyc673CB6WLFMrgpr1s0ljy/RhmVROXtp1rarTjN0ODNdXRTYnBcLUUvn3HaCWlQqTnOtB6GnxgmPtU4pMO7EdQ+mRZp7zLtsoPtRVWvNEnmJ0M8Zvuq1Gg7oDM0kS6XmzCjkzLv5a9TzvDV4+bzqeEc=
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by CY4PR10MB1909.namprd10.prod.outlook.com (2603:10b6:903:11f::21) with
+ by BN8PR10MB3362.namprd10.prod.outlook.com (2603:10b6:408:cf::32) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 20:48:44 +0000
+ 2022 20:48:45 +0000
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::245f:e3b1:35fd:43c5]) by BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::245f:e3b1:35fd:43c5%8]) with mapi id 15.20.5144.019; Wed, 6 Apr 2022
- 20:48:44 +0000
+ 20:48:45 +0000
 From:   Mike Kravetz <mike.kravetz@oracle.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
@@ -76,9 +76,9 @@ Cc:     Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
         Ray Fucillo <Ray.Fucillo@intersystems.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [RFC PATCH 4/5] hugetlbfs: catch and handle truncate racing with page faults
-Date:   Wed,  6 Apr 2022 13:48:22 -0700
-Message-Id: <20220406204823.46548-5-mike.kravetz@oracle.com>
+Subject: [RFC PATCH 5/5] hugetlb: Check for pmd unshare and fault/lookup races
+Date:   Wed,  6 Apr 2022 13:48:23 -0700
+Message-Id: <20220406204823.46548-6-mike.kravetz@oracle.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220406204823.46548-1-mike.kravetz@oracle.com>
 References: <20220406204823.46548-1-mike.kravetz@oracle.com>
@@ -89,64 +89,64 @@ X-ClientProxiedBy: MW4PR03CA0012.namprd03.prod.outlook.com
  (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 61a96100-507d-4952-cbf3-08da180ed6d1
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1909:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR10MB19093D22C555F68302143004E2E79@CY4PR10MB1909.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: a5a9d5f0-4c18-4cfe-7860-08da180ed7b4
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3362:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR10MB336223B4BA2E8B0AAEE9258EE2E79@BN8PR10MB3362.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ow2hMhYoRedYKahwckKqxSOI1YTsxlO1qagTMpMKaX/eW0CIIAUUxzYjMlFcJfDzZsz7UR0/4+QahQ7tI51JU/H8pYOIXKA1G/gZcs5wTZlDxPOrjW/4cE/q7FsJambsTA53EfZGo02g3b4U21wkX6TAZ55zlkE6NcqmqziWnc2XQgi2BJeQAIHARi4q+Z5sfxEU7hTP6FQr7qJ3ntbC18SrX3gRDzYvjTFoaFfgaMIfUBwGFLriC19SyycG9g9mJTRjLgOYcSjjuk0IGnhXkDoxJItaLwDW7a/SpWwqg8jQL53qjT5fiVY6ERUFwEySGaoh879NYXe2DRNxROfH0aptkJLVPE5syoPM57X3r1GkDtxrmjkWb2aSFEJvKfUQiaFFsqSUJPy6P89xkZt1GpddivpyYQZRdwt7EsTgKkGDhEs3LRAXdrZtM6PCGTZy92VWV3INdhqY+Way6iLXeiVI0gZoghaFrY1SBJstSBU9pFnprt58DsOw9pCBvXKDUhUGxBuz9OGs6svdxAoipmF9uOtPHHvNngPEzP5LZZY+Moy09tZNADALO0gir9e4dKyo/oYWAOlw36eC+mjhOzsaFUv72jcxNK8EUxKMw7iP7+mHuNGPeH7cy7ltbibm0xJ505KGKA6TGotWX/5maPbguO+Cm4AWDpkF7vvaIgemo/CU0/q/NmNXo+RDDWqTjgRKm+HZkWhYLekl+FXGQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(54906003)(2906002)(26005)(6512007)(52116002)(66476007)(66946007)(4326008)(66556008)(83380400001)(316002)(186003)(6666004)(8676002)(38350700002)(8936002)(86362001)(508600001)(1076003)(6506007)(7416002)(44832011)(36756003)(6486002)(5660300002)(107886003)(2616005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: k1IjBBjmZsaFjrcwHuxWintP10fmGp1MCB4747kd9OYze8+N3dMB1OXF2UE3IXaS9ga7wu8NaOWMQcgEjLkXe/zBnUwo070gzKLsBR5y55WgITk1eSPVz2vpmKY+Z4YIrmSF72p34jF4SLFKa6aRSqi57HSHe5Pxs50Or3HtuqZOvgRYxi+qdmbHGfT5z9lv56+dQ+t+CVtsYPXUwrzea9IXQLEAhCwicQYYMZwLEVisTiCMx4mKj4Dapw+MLptwHymu038DhAakABV3JNvYoLcorfwZVgcla2vXISQ+iAACj+s2OHLKs+1QH0VVQyecfOJdAch44NSe0d1wKD7xoZhAhbwRJI5EaOqvbwiMOh072F4+QqWAqJnR/OB7hZNiJdBC0508sj3vHDQ+ar4QToTiQHD64FTnIZM7CZyYa5sZg1IluwL+E7qC57iwZW9I/Pi/lGpM8I2b19Aw8UK/QVSqCllFVhRBZ1V1S/XNW+OY5FnntRdMxQK0h9p7Pl4eAvhpNyhPHltW/ZNMGgZEF413yk3ADQxdmbhtUHMbeHQ3b1NzxF1nfGP1eBh8OC0lfXan9mqQON7zT4nwtG4nrV7m6897D5Sl5g3qxgKVPpw1+26iNBkHccieC/rsFqTA2WA+TV3+J7WZHZK0xuQIKh4kfmFScXHkc/ZZ4QClNnelwwuQ0PO62WijAQSSTeHGXSqapKKSdBA0ZR58jjAd5w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6666004)(38100700002)(66476007)(86362001)(66556008)(66946007)(83380400001)(8676002)(6486002)(38350700002)(508600001)(186003)(26005)(4326008)(6506007)(54906003)(316002)(1076003)(6512007)(44832011)(2616005)(107886003)(5660300002)(36756003)(8936002)(7416002)(2906002)(52116002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KdGXH4++lCgEcTBLLIAEIFECuNqLsF+WG8O0g/ftvnDOAcw6Cz6NU/RTAT4B?=
- =?us-ascii?Q?iPTKCNThEf+w3pyS+R9QbUjm3cpAHTRWmKP7t2zRDB8rihSJAGd154SZnpu6?=
- =?us-ascii?Q?GIqHkke6OaorFhvM4gnodTF80/vxblTguX751HdWWLF/fbxBxK0ZTh2rvE4t?=
- =?us-ascii?Q?dtCCbOgD5PRXnjAzjHq03d/BUBTmkUdUdlkyQy4L9PYQ6LfCL8Jf+SdAi3xd?=
- =?us-ascii?Q?E/sFZCnNyZ23DmtnJ8ogpb4qypXiWkhbbR+ToB+ft8X8Ds22+vbLqvePouG1?=
- =?us-ascii?Q?6CB1vU3DnUv2jxaJN1LAyse6/WLbGprMIxlueP16AeSMiq4JrCYe+Q2gz1BP?=
- =?us-ascii?Q?Uaz2xzyP0rqB0M5VmOFFmqgORgYmdrOWY7thh/ODhnf88cXNQ7xLXZrQxPy3?=
- =?us-ascii?Q?JKY4gX6PAiaqq/x5T/kQ7mtL8uXqN8tdlapxtBxfxy8LCGuw26TVMEoYYKTR?=
- =?us-ascii?Q?OECK01dCfh+D4DdmvmRDcFksQ0BcmDoNhEzUN3YcON/ZO3jptExBl7JZXJ0U?=
- =?us-ascii?Q?pcE9AzwylXOu+E8AsOJtLkc5uegviIlDND+zzTiJ2BZO2VDnJ6WRFBXlMjZG?=
- =?us-ascii?Q?JzhDlOaD1zg32jg3rdQVcMIN66xooQwMxuHYHHrY4T7HkbapncW1gsC6I2xa?=
- =?us-ascii?Q?qUuvUx6+D/eUqFmeXsibYSR/UmplJxQDIyLYN5DwrU7H8VRhVwfXlbDzhqC/?=
- =?us-ascii?Q?66mtDA3InFVvX46dcnzjlu61zQDmHbxXWz2ZPIwHETli4TpjRM8rryvTJmFO?=
- =?us-ascii?Q?DSNcj18M67gIZvHOvzae2iGOJ34cMRUP/LVJcpPCXvHVeGh2O92s+SZLlTkF?=
- =?us-ascii?Q?gEfMDDNu1IuEl1vrFeuy1STfZIisiDWpTAGVH/nsl61ab9caWF61tLNv6qph?=
- =?us-ascii?Q?ZwMbilE6LQ/rNS4NXhmQv3KKBAwcPHn6YT0gAVjQP1dDkYPqcYDwD97eej1u?=
- =?us-ascii?Q?l2cy/ujJFu73zh0HhAE8aae+p4W0ICZxWzWi/jUtU+PBMbApAjPjAnn1mnZT?=
- =?us-ascii?Q?U6btWX4GWd/rdGV9Xzwdn/DbzA0UsdHuDtD496H8p2+xoEGI3nwQ66vxt/iy?=
- =?us-ascii?Q?qZG8aDWfJ31OMIpFAvlHLQm3CUtKU46dAoBsGfHZh2LBzpH5qrcxox8Sax1p?=
- =?us-ascii?Q?FxN053H3Vs0RAev3Uw75gERpEloBniZBfqj2C5XfaLlC+VDG+GbPjSOR113v?=
- =?us-ascii?Q?BFr1CAWbzNBM6rwYT6tVqlF3YAKSS3Bv+N5cK7SnC/0ggEopNOL3BRMHzw3K?=
- =?us-ascii?Q?Xx4RLmZ4ijk0FyAWQp1wWrKStjnMffEc2aGXImltfT9uwk/MVlB6jTOQvMQD?=
- =?us-ascii?Q?Y+lKovDk+6zCNoq3y3TBzZIyzvzjSHZOhbKHpxsSTutAPi575dS9L6WQHXIf?=
- =?us-ascii?Q?f50a/yXvXWEvkm6GMWKdLV56frQEGcKr90e9H1AScwy4G4kqP/WYKncONYKl?=
- =?us-ascii?Q?zhU4kEzzUYKTfMEfU4mEX5OjYalDRMIl7NGgNP5l9v4l+a4DlvToLQaHN/A/?=
- =?us-ascii?Q?DPHKi6XXGpr4AhifdGNWuwV07N/hNqfaqq1AA3NLxape4U1hHlolYGlCM4Y4?=
- =?us-ascii?Q?dRmKxjXy+wB3/RyxpyQxKJa51L24wzyEo3DdCW1vMGoG6A9F5XdNyTStpV13?=
- =?us-ascii?Q?GwJDR7R3vhe12KKXfBgu4VseziG+yxbvXpYMmPRiRS2s58qSt30XhVO2RxHZ?=
- =?us-ascii?Q?W4le67YLRofIN8dPEX35rnvYF330u9ZzI9ncQbu9KAhEwUyFCbbMe43IYvma?=
- =?us-ascii?Q?2vkd6qdK/1nWzHhNrFHpyUhLoDL4WNw=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AoaUxBLevg1/bWL20/wgc6zPa8S9VjGBg8ylupUVwdKBYq9FD/ypWB+DXmco?=
+ =?us-ascii?Q?lcgNTjC4/1xxc8wcYTblfFshBgJfnp4pyZADxQIDw16CdQ/OiTGSXiuQ4AZB?=
+ =?us-ascii?Q?mRxmFBEykcN7SRfPxzV3AQhQL/mw/s7jfDGrftiPrMb6sppsK6HBsoOlu2gz?=
+ =?us-ascii?Q?8V1bBbUqcHkBi092TjIRA9jbOKaLNZ7Dl+sBn0ZY1nCPmM1JLcVa/gJD3rDo?=
+ =?us-ascii?Q?NohGppe4o//c+HC3oOrYRUA0VUKeiY3Zb/cTOCS2X5WA/fgZsPl+QiuX3JRB?=
+ =?us-ascii?Q?d9U0D0aCqK8YwK/LOKkiu8+DNMDEuLRp7wJ4H/RvaQW8vXSOy6pfl9QqG1hl?=
+ =?us-ascii?Q?EPMAwJFH+8SlSt/0hZ27JprmFMvnznm6Kw8JosL8yTaR+UERdW2LgHKA/GBx?=
+ =?us-ascii?Q?V89SbD6b8uFg+Jsgrqqk4bDRmxlK3hB63NDl6tP6BFTbUMAEaMwbb+WKONtY?=
+ =?us-ascii?Q?FHv2SYUqdYWLV/EPJtxj/5HpD1SAZaMGKodunFVAKcMaRYvaxdc/z4tg/z0o?=
+ =?us-ascii?Q?st4v3F7/eVHYAFT3RHxYWHbuYPWxXMjnp2dRews/JgDENBYTwNBLqmyrvJzl?=
+ =?us-ascii?Q?kLHvdG5vauinVXOKW8KKKs1yiLX0JYImz6qiqCRMr+qGyP9YRFYZ1nv2hi4t?=
+ =?us-ascii?Q?5f/pF+c5jWFTNit843+HhI4hS0rhCjXiuoE5Fdd3Jk4lMhjERiV9LFIxUy5u?=
+ =?us-ascii?Q?vS+f/539ETWbKu3pP09kpC+YrLVgIzrxnfMw8C2vxht5f5odR8ZAzT0Kd2gE?=
+ =?us-ascii?Q?Z2Pty8B2aLIGUEOC3Z8XVbl7tHzg3qX0+BJNHF/IhVuJ5AC/P9KxpUhEO5mk?=
+ =?us-ascii?Q?emYWrdSW10XmF0kS/cSjpifEMmqeXWFFsX1UXKSP9Dtd63+4d6IC24L6qAdI?=
+ =?us-ascii?Q?jOdOYRlm3eii5ZuxyMIneebKBYC+HQlWajxG1Az50VohpQzIIGXic14C2zNn?=
+ =?us-ascii?Q?8WBQ5oiGNqhDA1b4Fv7t3sZBjebkH0fL/IHCZiVIXIOIxqTvlK3AO8jbkG0k?=
+ =?us-ascii?Q?6u9i6Xepp+pXziIh3ujmxTUvu5cIdQp4HZQC1FveHfsUhbwdomS0v4wDKkvk?=
+ =?us-ascii?Q?I1KIaQtYbB8WDkh4uEuoJ+OyH6N/B+OfburoYywIyzQW7F6wPeqV1b+QEeF0?=
+ =?us-ascii?Q?TR25uv9P0iOGslGEhobJzx/kf1FlVSVNwaDU3oBEMJjD6PzYhsrkfo75YCcg?=
+ =?us-ascii?Q?BDuGg7DIoa+MSm9+yzM+52xx0x+PsdpjSesVx5HRUSSTXLSiLY5zwUI88U9E?=
+ =?us-ascii?Q?Yovegu07rA6q3/WeCuZnoZu8RJCCCYsUUEruY5ibtlh10hNdbrHmDeNxD6q/?=
+ =?us-ascii?Q?LoXgyBIOzCRR/cdfHHcKe9F53IIuveDD8HwYXmb4/Ovfgb/HVRp4hmHindPa?=
+ =?us-ascii?Q?MLJp2WBFs3dPvi2q4WiscZaoyVQdElsgvvuZloP+zSjbh3CG7rg2NXKOyWGJ?=
+ =?us-ascii?Q?ni4KPkeAX/xah2Gr7SYYZ8t6cdtIchtqjz9qGmojpnTXw+/KNEwt1UOyumaz?=
+ =?us-ascii?Q?T4mnYOl/dZhuhFQiIKMf5Kg3T5uVJL2z418ywZ5Bn/NQ4kS8Ec8dIBu46sIS?=
+ =?us-ascii?Q?290GjsZskrH6WspHqR4HoLPzJKaKJTeX8EEYkzHCxOtYgvHBk1lnvNlmLxoW?=
+ =?us-ascii?Q?3VTXLs8BcZBIwSzj5khYQwyss5ZWOxzp/421fBw9hSBE4pEYhzOSeqJ/t+Go?=
+ =?us-ascii?Q?kpZQezmhFwpGHfwgycpXn5/1pRG+GC9PHbNr1zrbcnm6uA7gyzmpCVHhyx86?=
+ =?us-ascii?Q?RO1KhQS3EHB8mWrp8rk3de3CmV0rIaU=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61a96100-507d-4952-cbf3-08da180ed6d1
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5a9d5f0-4c18-4cfe-7860-08da180ed7b4
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 20:48:44.0903
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 20:48:45.6071
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rdlEr64zpASTk9lICXffyTK69IMM53pXrWIn0kbjwFBmVIkVepoxnOy1oevuhd4myDcpPhXOjnZAiUrOJ1rq3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1909
+X-MS-Exchange-CrossTenant-UserPrincipalName: R/Nw4MaczzTjfOX3/bmUXeDdzo0BSaPFsbyx8QYQq+nPlY0+3oGgGqpuxY5PJMab1dzbjISA0sHv5le3kEvRNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3362
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
  definitions=2022-04-06_12:2022-04-06,2022-04-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=896 spamscore=0
- suspectscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
  definitions=main-2204060103
-X-Proofpoint-GUID: WVqzha9uuDMeBNOtyT4_LWU-1_AApKPd
-X-Proofpoint-ORIG-GUID: WVqzha9uuDMeBNOtyT4_LWU-1_AApKPd
+X-Proofpoint-ORIG-GUID: ZEYI-vJqnT0ULAbMIX8ko_MaygG70-EO
+X-Proofpoint-GUID: ZEYI-vJqnT0ULAbMIX8ko_MaygG70-EO
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -157,167 +157,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most hugetlb fault handling code checks for faults beyond i_size.
-While there are early checks in the code paths, the most difficult
-to handle are those discovered after taking the page table lock.
-At this point, we have possibly allocated a page and consumed
-associated reservations and possibly added the page to the page cache.
+When a pmd is 'unshared' it effectivelly deletes part of a processes
+page tables.  The routine huge_pmd_unshare must be called with
+i_mmap_rwsem held in write mode and the page table locked.  However,
+consider a page fault happening within that same process.  We could
+have the following race:
 
-When discovering a fault beyond i_size, be sure to:
-- Remove the page from page cache, else it will sit there until the
-  file is removed.
-- Do not restore any reservation for the page consumed.  Otherwise
-  there will be an outstanding reservation for an offset beyond the
-  end of file.
+Faulting thread					Unsharing thread
+...						     ...
+ptep = huge_pte_offset()
+      or
+ptep = huge_pte_alloc()
+...
+						i_mmap_unlock_write
+						lock_page table
+ptep invalid   <------------------------	huge_pmd_unshare
+Could be in a previously			unlock_page_table
+sharing process or worse
+...
+ptl = huge_pte_lock(ptep)
+get/update pte
+set_pte_at(pte, ptep)
 
-The 'truncation' code in remove_inode_hugepages must deal with fault
-code potentially removing a page from the cache after the page was
-returned by pagevec_lookup and before locking the page.  This can be
-discovered by a change in page_mapping().
+If the above race happens, we can update the pte of another process.
+
+Catch this situation by doing another huge_pte_offset/page table
+walk after obtaining the page table lock and compare pointers.  If
+the pointers are different, then we know a race happened and we can
+bail and cleanup.
+
+In fault code, make sure to check for this race AFTER checking for
+faults beyond i_size so page cache can be cleaned up properly.
+
+Do note that even this is not perfect.  The page table lock is in the
+page struct of the pmd page.  We need the pmd pointer (ptep) to get the
+page table lock.  As shown above, we can not even be certain ptep is
+still valid when getting/locking the page table.  The other option is
+to always use 'mm->page_table_lock' for hugetlb page table.
 
 Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
- fs/hugetlbfs/inode.c | 40 ++++++++++++++++++++++------------------
- mm/hugetlb.c         | 28 ++++++++++++++++++++--------
- 2 files changed, 42 insertions(+), 26 deletions(-)
+ mm/hugetlb.c | 33 ++++++++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 0cf352555354..341156c2a7d0 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -490,13 +490,8 @@ static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
- 			 * unmapped in caller.  Unmap (again) now after taking
- 			 * the fault mutex.  The mutex will prevent faults
- 			 * until we finish removing the page.
--			 *
--			 * This race can only happen in the hole punch case.
--			 * Getting here in a truncate operation is a bug.
- 			 */
- 			if (unlikely(page_mapped(page))) {
--				BUG_ON(truncate_op);
--
- 				i_mmap_lock_write(mapping);
- 				hugetlb_vmdelete_list(&mapping->i_mmap,
- 					index * pages_per_huge_page(h),
-@@ -506,22 +501,31 @@ static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
- 
- 			lock_page(page);
- 			/*
--			 * We must free the huge page and remove from page
--			 * cache BEFORE removing the region/reserve map
--			 * (hugetlb_unreserve_pages).  In rare out of memory
--			 * conditions, removal of the region/reserve map could
--			 * fail. Correspondingly, the subpool and global
--			 * reserve usage count can need to be adjusted.
-+			 * After locking page, make sure mapping is the same.
-+			 * We could have raced with page fault populate and
-+			 * backout code.
- 			 */
--			VM_BUG_ON(HPageRestoreReserve(page));
--			hugetlb_delete_from_page_cache(page);
--			freed++;
--			if (!truncate_op) {
--				if (unlikely(hugetlb_unreserve_pages(inode,
-+			if (page_mapping(page) == mapping) {
-+				/*
-+				 * We must free the huge page and remove from
-+				 * page cache BEFORE removing the region/
-+				 * reserve map (hugetlb_unreserve_pages).  In
-+				 * rare out of memory conditions, removal of
-+				 * the region/reserve map could fail.
-+				 * Correspondingly, the subpool and global
-+				 * reserve usage count can need to be adjusted.
-+				 */
-+				VM_BUG_ON(HPageRestoreReserve(page));
-+				hugetlb_delete_from_page_cache(page);
-+				freed++;
-+				if (!truncate_op) {
-+					if (unlikely(
-+					    hugetlb_unreserve_pages(inode,
- 							index, index + 1, 1)))
--					hugetlb_fix_reserve_counts(inode);
-+						hugetlb_fix_reserve_counts(
-+								inode);
-+				}
- 			}
--
- 			unlock_page(page);
- 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
- 		}
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index c6d76f61de98..b8f994961a68 100644
+index b8f994961a68..e5196f0fa09c 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5361,6 +5361,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	spinlock_t *ptl;
- 	unsigned long haddr = address & huge_page_mask(h);
+@@ -4695,6 +4695,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 			    struct vm_area_struct *vma)
+ {
+ 	pte_t *src_pte, *dst_pte, entry, dst_entry;
++	pte_t *src_pte2;
+ 	struct page *ptepage;
+ 	unsigned long addr;
+ 	bool cow = is_cow_mapping(vma->vm_flags);
+@@ -4741,7 +4742,15 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		entry = huge_ptep_get(src_pte);
+ 		dst_entry = huge_ptep_get(dst_pte);
+ again:
+-		if (huge_pte_none(entry) || !huge_pte_none(dst_entry)) {
++
++		src_pte2 = huge_pte_offset(src, addr, sz);
++		if (unlikely(src_pte2 != src_pte)) {
++			/*
++			 * Another thread could have unshared src_pte.
++			 * Just skip.
++			 */
++			;
++		} else if (huge_pte_none(entry) || !huge_pte_none(dst_entry)) {
+ 			/*
+ 			 * Skip if src entry none.  Also, skip in the
+ 			 * unlikely case dst entry !none as this implies
+@@ -5363,6 +5372,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
  	bool new_page, new_pagecache_page = false;
-+	bool beyond_i_size = false;
-+	bool reserve_alloc = false;
+ 	bool beyond_i_size = false;
+ 	bool reserve_alloc = false;
++	pte_t *ptep2;
  
  	/*
  	 * Currently, we are forced to kill the process in the event the
-@@ -5417,6 +5419,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 		clear_huge_page(page, address, pages_per_huge_page(h));
- 		__SetPageUptodate(page);
- 		new_page = true;
-+		if (HPageRestoreReserve(page))
-+			reserve_alloc = true;
- 
- 		if (vma->vm_flags & VM_MAYSHARE) {
- 			int err = hugetlb_add_to_page_cache(page, mapping, idx);
-@@ -5475,8 +5479,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 
- 	ptl = huge_pte_lock(h, mm, ptep);
- 	size = i_size_read(mapping->host) >> huge_page_shift(h);
--	if (idx >= size)
-+	if (idx >= size) {
-+		beyond_i_size = true;
+@@ -5410,8 +5420,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 			 * sure there really is no pte entry.
+ 			 */
+ 			ptl = huge_pte_lock(h, mm, ptep);
++			/* ptep2 checks for racing unshare page tables */
++			ptep2 = huge_pte_offset(mm, haddr, huge_page_size(h));
+ 			ret = 0;
+-			if (huge_pte_none(huge_ptep_get(ptep)))
++			if (ptep2 == ptep && huge_pte_none(huge_ptep_get(ptep)))
+ 				ret = vmf_error(PTR_ERR(page));
+ 			spin_unlock(ptl);
+ 			goto out;
+@@ -5484,6 +5496,11 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
  		goto backout;
-+	}
+ 	}
  
++	/* Check for racing unshare page tables */
++	ptep2 = huge_pte_offset(mm, haddr, huge_page_size(h));
++	if (ptep2 != ptep)
++		goto backout;
++
  	ret = 0;
  	if (!huge_pte_none(huge_ptep_get(ptep)))
-@@ -5514,10 +5520,16 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- backout:
- 	spin_unlock(ptl);
- backout_unlocked:
-+	if (new_pagecache_page && beyond_i_size)
-+		hugetlb_delete_from_page_cache(page);
- 	unlock_page(page);
- 	/* restore reserve for newly allocated pages not in page cache */
--	if (new_page && !new_pagecache_page)
--		restore_reserve_on_error(h, vma, haddr, page);
-+	if (!new_pagecache_page) {
-+		if (reserve_alloc)
-+			SetHPageRestoreReserve(page);
-+		if (new_page)
-+			restore_reserve_on_error(h, vma, haddr, page);
-+	}
- 	put_page(page);
- 	goto out;
- }
-@@ -5812,15 +5824,15 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	 * Recheck the i_size after holding PT lock to make sure not
- 	 * to leave any page mapped (as page_mapped()) beyond the end
- 	 * of the i_size (remove_inode_hugepages() is strict about
--	 * enforcing that). If we bail out here, we'll also leave a
--	 * page in the radix tree in the vm_shared case beyond the end
--	 * of the i_size, but remove_inode_hugepages() will take care
--	 * of it as soon as we drop the hugetlb_fault_mutex_table.
-+	 * enforcing that). If we bail out here, remove the page
-+	 * added to the radix tree.
- 	 */
- 	size = i_size_read(mapping->host) >> huge_page_shift(h);
- 	ret = -EFAULT;
--	if (idx >= size)
-+	if (idx >= size) {
-+		hugetlb_delete_from_page_cache(page);
- 		goto out_release_unlock;
-+	}
+ 		goto backout;
+@@ -5561,7 +5578,7 @@ u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx)
+ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags)
+ {
+-	pte_t *ptep, entry;
++	pte_t *ptep, *ptep2, entry;
+ 	spinlock_t *ptl;
+ 	vm_fault_t ret;
+ 	u32 hash;
+@@ -5640,8 +5657,8 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
  
+ 	ptl = huge_pte_lock(h, mm, ptep);
+ 
+-	/* Check for a racing update before calling hugetlb_cow */
+-	if (unlikely(!pte_same(entry, huge_ptep_get(ptep))))
++	/* Check for a racing update or unshare before calling hugetlb_cow */
++	if (unlikely(ptep2 != ptep || !pte_same(entry, huge_ptep_get(ptep))))
+ 		goto out_ptl;
+ 
+ 	/*
+@@ -5720,6 +5737,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	struct page *page;
+ 	int writable;
+ 	bool page_in_pagecache = false;
++	pte_t *ptep2;
+ 
+ 	if (is_continue) {
+ 		ret = -EFAULT;
+@@ -5834,6 +5852,11 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		goto out_release_unlock;
+ 	}
+ 
++	/* Check for racing unshare page tables */
++	ptep2 = huge_pte_offset(dst_mm, dst_addr, huge_page_size(h));
++	if (unlikely(ptep2 != dst_pte))
++		goto out_release_unlock;
++
  	ret = -EEXIST;
  	if (!huge_pte_none(huge_ptep_get(dst_pte)))
+ 		goto out_release_unlock;
 -- 
 2.35.1
 

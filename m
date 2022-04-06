@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED9A4F63E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4194F63D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbiDFPo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S236323AbiDFPnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiDFPnu (ORCPT
+        with ESMTP id S236556AbiDFPmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:43:50 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3162D4E5B2F;
-        Wed,  6 Apr 2022 06:11:15 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id BEA0F1F448EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649250670;
-        bh=HVSLEwbeNCSnRDzdZpPEXUqj6thaF6OV8UOGSpYxWow=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bnzTxJwSJGH38S+tVlH2/LWfpFQRa8MkqadrdJk7uV06gDjC0GlSM2NVRglux42NV
-         tuxRCa1kNAg0oi4QNgrmt3IYCh2/qOF8EvGVHgUz9KJ7OZQrxhz8tLIcBqpOHtPdK7
-         AThjvWR2o13f7jSoM64oPaZ/wtOQ0w9E0EEo9eabO3rE1lqwdYwviswIeWHTmaM3hz
-         0ILNcmyL3s1xG7U3BmjSefSwqfXyWkABUnvCvW7orNHgW2b70zHrMJOKvjaePD2BUZ
-         q2ZPIOwElLBrjIdQCeb8q2t/YQZH1+ph7zP7t1dl6UKY7jpvx4BqDFaOhKdsw8Gr/4
-         cUsebuoZ/K9pw==
-Message-ID: <d8a737d52aa93f559123ab795ba67c668c81163e.camel@collabora.com>
-Subject: Re: [PATCH v3 16/24] media: rkvdec: h264: Validate and use pic
- width and height in mbs
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Date:   Wed, 06 Apr 2022 09:10:59 -0400
-In-Reply-To: <20220405204426.259074-17-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-         <20220405204426.259074-17-nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Wed, 6 Apr 2022 11:42:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A94D540763;
+        Wed,  6 Apr 2022 06:13:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE5ED60B91;
+        Wed,  6 Apr 2022 13:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFFAC385A3;
+        Wed,  6 Apr 2022 13:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649250784;
+        bh=du2IJejuR196O731zDdWn4d1/Liadb9cNsloiQHCs+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ri9OitEHNHWdhn5HG54c1l8SnRIksGktPa60KFxtITrmjRyVjETFe0oepSHCpEl3O
+         o6WKOjxVBFXnIj/OMJ48zZPLZzTX1Fr38vghfPBCnmr5pC7X3QAiXqAvpGvdttzey7
+         11FgdbZ6ZoI0y7Fgb15UpXIndx3B4NVY4gYHXBE1jHzyb/b1QMV0LfCQ1mrBZy/Wu2
+         TW+IX7n7T3+Y7dQZafgVBOFgA2Z0wjLxp2ncoao2qGv4YQM8JF77Ezr+fDkSn7Lg4N
+         6IowXA5cgaGbbAVFLd2ry98p3DfAB4dXXX6vyPtofcX+6WWEdhTpuy/lIZq1LwfBfP
+         slQ8GQZ6gw24A==
+Received: by pali.im (Postfix)
+        id 0EDEA775; Wed,  6 Apr 2022 15:13:01 +0200 (CEST)
+Date:   Wed, 6 Apr 2022 15:13:00 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Stevens <stevensd@chromium.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] PCI: sysfs: add bypass for config read admin check
+Message-ID: <20220406131300.7pgdcpdhexwvczsb@pali>
+References: <20220406071131.2930035-1-stevensd@google.com>
+ <Yk1KveOnYfSrUJLD@kroah.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk1KveOnYfSrUJLD@kroah.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,156 +59,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 05 avril 2022 =C3=A0 16:44 -0400, Nicolas Dufresne a =C3=A9crit=C2=
-=A0:
-> From: Jonas Karlman <jonas@kwiboo.se>
->=20
-> The width and height in macroblocks is currently configured based on OUTP=
-UT
-> buffer resolution, this works for frame pictures but can cause issues for
-> field pictures.
->=20
-> When frame_mbs_only_flag is 0 the height in mbs should be height of
-> the field instead of height of frame.
->=20
-> Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
-> against OUTPUT buffer resolution and use these values to configure HW.
-> The validation is happening in both try_ctrt() and start() since it is
-> otherwise possible to trick the driver during initialization by changing
-> the OUTPUT format after having set a valid control.
->=20
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 78 ++++++++++++++++------
->  1 file changed, 59 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging=
-/media/rkvdec/rkvdec-h264.c
-> index 0dcbcb1bac80..f081b476340f 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -672,8 +672,16 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
->  		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_ZER=
-O),
->  		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
-> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDTH_=
-IN_MBS);
-> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEIGH=
-T_IN_MBS);
-> +
-> +	/* Use the SPS values since they are already in macroblocks
-> +	 * dimensions, height can be field height (halved) if
-> +	 * V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY is not set and also it allows
-> +	 * decoding smaller images into larger allocation which can be used
-> +	 * to implementing SVC spatial layer support.
-> +	 */
-> +	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
-> +	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS);
-> +
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
->  		  FRAME_MBS_ONLY_FLAG);
->  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD),
-> @@ -1035,13 +1043,59 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_c=
-tx *ctx,
->  	return 0;
->  }
-> =20
-> +static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
-> +				    const struct v4l2_ctrl_h264_sps *sps)
-> +{
-> +	unsigned int width, height;
-> +	/*
-> +	 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> +	 * but it's currently broken in the driver.
-> +	 * Reject them for now, until it's fixed.
-> +	 */
-> +	if (sps->chroma_format_idc > 1)
-> +		/* Only 4:0:0 and 4:2:0 are supported */
-> +		return -EINVAL;
-> +	if (sps->bit_depth_luma_minus8 !=3D sps->bit_depth_chroma_minus8)
-> +		/* Luma and chroma bit depth mismatch */
-> +		return -EINVAL;
-> +	if (sps->bit_depth_luma_minus8 !=3D 0)
-> +		/* Only 8-bit is supported */
-> +		return -EINVAL;
-> +
-> +	width =3D (sps->pic_width_in_mbs_minus1 + 1) * 16;
-> +	height =3D (sps->pic_height_in_map_units_minus1 + 1) * 16;
-> +
-> +	/* when frame_mbs_only_flag is not set, this is field height,
-> +	 * which is half the final height (see (7-18) in the
-> +	 * specification)
-> +	 */
-> +	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> +		height *=3D 2;
-> +
-> +	if (width > ctx->coded_fmt.fmt.pix_mp.width ||
-> +	    height > ctx->coded_fmt.fmt.pix_mp.height)
-> +		return -EINVAL;
+On Wednesday 06 April 2022 10:09:33 Greg Kroah-Hartman wrote:
+> On Wed, Apr 06, 2022 at 04:11:31PM +0900, David Stevens wrote:
+> > From: David Stevens <stevensd@chromium.org>
+> > 
+> > Add a moduleparam that can be set to bypass the check that limits users
+> > without CAP_SYS_ADMIN to only being able to read the first 64 bytes of
+> > the config space. This allows systems without problematic hardware to be
+> > configured to allow users without CAP_SYS_ADMIN to read PCI
+> > capabilities.
+> > 
+> > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > ---
+> >  drivers/pci/pci-sysfs.c | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> > index 602f0fb0b007..162423b3c052 100644
+> > --- a/drivers/pci/pci-sysfs.c
+> > +++ b/drivers/pci/pci-sysfs.c
+> > @@ -28,10 +28,17 @@
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/msi.h>
+> >  #include <linux/of.h>
+> > +#include <linux/moduleparam.h>
+> >  #include "pci.h"
+> >  
+> >  static int sysfs_initialized;	/* = 0 */
+> >  
+> > +static bool allow_unsafe_config_reads;
+> > +module_param_named(allow_unsafe_config_reads,
+> > +		   allow_unsafe_config_reads, bool, 0644);
+> > +MODULE_PARM_DESC(allow_unsafe_config_reads,
+> > +		 "Enable full read access to config space without CAP_SYS_ADMIN.");
+> 
+> No, this is not the 1990's, please do not add system-wide module
+> parameters like this.  Especially ones that circumvent security
+> protections.
+> 
+> Also, where did you document this new option?
+> 
+> Why not just add this to a LSM instead?
+> 
+> >  /* show configuration fields */
+> >  #define pci_config_attr(field, format_string)				\
+> >  static ssize_t								\
+> > @@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp, struct kobject *kobj,
+> >  	u8 *data = (u8 *) buf;
+> >  
+> >  	/* Several chips lock up trying to read undefined config space */
+> > -	if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+> > +	if (allow_unsafe_config_reads ||
+> > +	    file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+> 
+> This feels really dangerous.  What benifit are you getting here by
+> allowing an unpriviliged user to read this information?
 
-I forgot to add traces for these as suggestion by Ezequiel in my review. I =
-think
-the patch is still acceptable as-is, I can later make a patchset on that
-specific subject. I'll would add trace for validation taking place in the
-generic control code, making this all much more consistent (and a smoother
-experience for developers).
+Hello! This is really dangerous.
 
-> +
-> +	return 0;
-> +}
-> +
->  static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
->  {
->  	struct rkvdec_dev *rkvdec =3D ctx->dev;
->  	struct rkvdec_h264_priv_tbl *priv_tbl;
->  	struct rkvdec_h264_ctx *h264_ctx;
-> +	struct v4l2_ctrl *ctrl;
->  	int ret;
-> =20
-> +	ctrl =3D v4l2_ctrl_find(&ctx->ctrl_hdl,
-> +			      V4L2_CID_STATELESS_H264_SPS);
-> +	if (!ctrl)
-> +		return -EINVAL;
-> +
-> +	ret =3D rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-> +	if (ret)
-> +		return ret;
-> +
->  	h264_ctx =3D kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
->  	if (!h264_ctx)
->  		return -ENOMEM;
-> @@ -1139,23 +1193,9 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
-> =20
->  static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl=
- *ctrl)
->  {
-> -	if (ctrl->id =3D=3D V4L2_CID_STATELESS_H264_SPS) {
-> -		const struct v4l2_ctrl_h264_sps *sps =3D ctrl->p_new.p_h264_sps;
-> -		/*
-> -		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> -		 * but it's currently broken in the driver.
-> -		 * Reject them for now, until it's fixed.
-> -		 */
-> -		if (sps->chroma_format_idc > 1)
-> -			/* Only 4:0:0 and 4:2:0 are supported */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 !=3D sps->bit_depth_chroma_minus8)
-> -			/* Luma and chroma bit depth mismatch */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 !=3D 0)
-> -			/* Only 8-bit is supported */
-> -			return -EINVAL;
-> -	}
-> +	if (ctrl->id =3D=3D V4L2_CID_STATELESS_H264_SPS)
-> +		return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-> +
->  	return 0;
->  }
-> =20
-> --=20
-> 2.34.1
->=20
->=20
+Nowadays operating systems are in progress to completely disallow PCI
+config space access from userspace. So doing opposite thing and even
+enable it for unprivileged users in Linux is hazard.
 
+For example NT kernel in Windows 11 already completely disallowed access
+to PCI config space from userspace unless NT kernel is booted in mode
+for local debugging with disabled UEFI secure boot. And access in this
+case is only for highly privileged processes (debug privilege in access
+token).
+
+So... should not we move into same direction like other operating system
+and start disallowing access to PCI config space from userspace
+completely too? For example when kernel lockdown feature is enabled?
+
+In PCI config space of some devices are stored also non-PCI registers
+and accessing them was not really mean for userspace and for sure not
+for unprivileged users. On AMD x86 platforms is into PCI config space of
+some device mapped for example CPU MSR registers (at fixed offset, after
+linked listed of capabilities). Probably in Intel x86 is something
+similar too. On Synopsis Designware based PCIe HW is into PCI config
+space of Root Port mapped large range of IP configuration registers.
+
+So "This allows systems without problematic hardware" means that such
+system must be non-AMD, non-Designware and probably also non-Intel.
+
+> What userspace problem are you trying to solve here that deserves this
+> change?
+> 
+> thanks,
+> 
+> greg k-h

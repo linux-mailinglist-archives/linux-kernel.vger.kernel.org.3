@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157D74F6D79
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5C44F6D7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbiDFVy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S236802AbiDFVyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbiDFVwe (ORCPT
+        with ESMTP id S236769AbiDFVwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 17:52:34 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7A213E3F;
-        Wed,  6 Apr 2022 14:46:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so4224151pjm.0;
-        Wed, 06 Apr 2022 14:46:22 -0700 (PDT)
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF1B1C;
+        Wed,  6 Apr 2022 14:46:25 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id w7so3665341pfu.11;
+        Wed, 06 Apr 2022 14:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CkfyiKrfymnOnK0EWh7i1INSgOHYBA/tWH69CgASpO0=;
-        b=SWGT0CpR2h+e8t/dq9fbCqwGiZLLkh7/LSkWSszvAoyz0gM2C2Mn4NR0XNtKO3jIHO
-         6MI6LH6EKtxhfhBx3V9nRKR2EKKptHiUN5tkesiycFAGO1N5BlAgoNLb/cEOvbhFG4nB
-         QqZpr39h5HdBjq6KeKrcyBrFN3T6woSB/O2M3EjW4KIbcwjxnMe+QgQPuU9T53el1cpr
-         T8m+53Zdl5eI67t+dtfwmYexj6zIN1okpyIan7MUost9AMd5/te5wkHHkV4xB1EKZnc5
-         swZFiki4Ogxqnipn5wfa3VvG1jvboEMltJuAObAiAirDVyBmCe6bpblQfVICSp4Oja1n
-         SVbg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4TY916nBD4Ut+Nhr5Owf/4x969nS99vGSEISx8LykC4=;
+        b=RJ82q/cfiKsbkefiepDYfZNa42h6RfiRlOx3XMeKBk4g4TZ2bQLywvURpUAagmd82y
+         lb+s8YkZD7kduSeDE0YyVYej1NL4LRXN0l9fG3C2MpJx+6SVOx8JeLjmKteMe8SLIfuW
+         CGkJ45MNho5W0GFHKF6w5nFbnMQvlMstMOj5hSe5CP/y+RBuMaRdR3vljCA2m0Mv4TSX
+         7v+JSNZAVBP5kANIIaTpOj/tc/HWx5NG/OA2utiNpqi0LZ4lp/ZBw7VSWrKJQ3LBRXmH
+         KQqHeZ98Jyg1pobH5bGJw1vLEXmeqmi72Xx13uurFTEqzbxOgpY3ehNVLFWULRqpg8lJ
+         wTSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CkfyiKrfymnOnK0EWh7i1INSgOHYBA/tWH69CgASpO0=;
-        b=0+WXrh1koy2OCpyLM/UZx9Qq4kwKr7L/dgRyDurJAkULtdEBkPjb863ch0edEVm9ge
-         0FDfwQ+MAb+nAGpvQwGjGTXIhDZsWcS7+iWR559qGw2EeSAk8wxMl67TUKhAARHjcT2/
-         YYGkvIQgDXGvdfDMLgRpfQE1r+5EK9Tm8oPuYjqIIjH/wbrw1Pncfkqax5EOSe+V43Ch
-         on5EYl/YnVQ4gcfZS/kA0w1iK3bPWFvPs+lprOEefLOYLZwR5+Oo171uNR/LURATwnjw
-         /RQUiQSdEbmRKj6dvd1H5X/pLEwfh3hKXi+18gsEa5NaOpX1Dfmvw0TFzsDoOY1FHeBD
-         +l0w==
-X-Gm-Message-State: AOAM531RUNAsIhzUoyepe1gvtTsY4h5HEmsMp0QT8eW5KCtr3xWTMTKG
-        ACI8Y5OUlmtOADZqxfOwpKE=
-X-Google-Smtp-Source: ABdhPJxwUPsOIMPEeUMSDmd1Dismd7EZeSiKJZLKwwpOnWoiIlPLX8vmG2SjQh+6tbo+/dcs4XrTCg==
-X-Received: by 2002:a17:903:2452:b0:157:69d:744f with SMTP id l18-20020a170903245200b00157069d744fmr54104pls.47.1649281581862;
-        Wed, 06 Apr 2022 14:46:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4TY916nBD4Ut+Nhr5Owf/4x969nS99vGSEISx8LykC4=;
+        b=AJq/t3oWZwT/MJD57mnGvLcHzJuTf0n2RTSxfK36UN/91Iug2nvT0dqI646LwgOwX3
+         QWlxS0TMrNzRhREWUyObTMtvU1eEtb0HCiI2ttCATJZjkixbi1LvRrGUet/slnMYrfip
+         7Ke5LB2s4obmSmmUiMKji3euprwlbX5kIHT6ZJD532sd5svbqChk7GM0+fUw0TAlQLDM
+         Rx0zwOF+sGi8/VHV9HKqmKS0wPxeatJMr1PpG2L2DMzLyEIiOg9/ulWomDofg6muEi3J
+         aBkt2Exl83FwxKqtIEUIU5RM23E/LK5bZEZIid6wRYovqChBoKuVGW2VhtKkOgHecg51
+         ntDQ==
+X-Gm-Message-State: AOAM530QQE3gH9WdNuQB64SPLOrA13pN5f28aPtOY9DCv7WtVu9y+eKw
+        pkGDEn2GagUlzawhuOcydV2AUh1y3ck=
+X-Google-Smtp-Source: ABdhPJymrujSWdJ9eDIu9KAz2sdq4Y92te8s4WDpBHev2kch1+67MiTS2se5qQj+U0MPP4ns3+HvNw==
+X-Received: by 2002:a65:41c3:0:b0:363:5711:e234 with SMTP id b3-20020a6541c3000000b003635711e234mr8760600pgq.386.1649281584631;
+        Wed, 06 Apr 2022 14:46:24 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm6536425pjb.20.2022.04.06.14.46.20
+        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b004fdc453b49asm20361537pfd.39.2022.04.06.14.46.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 14:46:20 -0700 (PDT)
+        Wed, 06 Apr 2022 14:46:23 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-kernel@vger.kernel.org (open list),
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Wang Qing <wangqing@vivo.com>,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v3 00/10] drm/msm: Userspace allocated GPU addresses
-Date:   Wed,  6 Apr 2022 14:46:16 -0700
-Message-Id: <20220406214636.1156978-1-robdclark@gmail.com>
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 01/10] drm/msm/gem: Move prototypes
+Date:   Wed,  6 Apr 2022 14:46:17 -0700
+Message-Id: <20220406214636.1156978-2-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220406214636.1156978-1-robdclark@gmail.com>
+References: <20220406214636.1156978-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,53 +79,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-The first six paches are various cleanups and simplifications.  The
-next two get rid of redundant vma lookups in the submit and retire
-paths.  Following that, fenced vma lets us indicate a fence value
-following which the vma is no longer used, which is needed because
-otherwise userspace could observe the signaled fence prior to
-retire_submits() finishing.  (With userspace allocated GPU addresses
-userspace is tracking when a buffer is no longer used and it's vma can
-be deleted.)  And finally the last patch adds the new uabi for user-
-space allocated iova.
+These belong more cleanly in the gem header.
 
-v2: Fix inuse check in last patch, split GEM_WARN_ON() conversion to
-    separate patch, and nits
-v3: Fix nested fb prepares in 06/10, return -EBUSY if trying to set
-    iova on buffer that already has one in 10/10
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/gpu/drm/msm/msm_drv.h | 23 -----------------------
+ drivers/gpu/drm/msm/msm_gem.h | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 23 deletions(-)
 
-Rob Clark (10):
-  drm/msm/gem: Move prototypes
-  drm/msm/gpu: Drop duplicate fence counter
-  drm/msm/gem: Convert some missed GEM_WARN_ON()s
-  drm/msm/gem: Split out inuse helper
-  drm/msm/gem: Drop PAGE_SHIFT for address space mm
-  drm/msm: Drop msm_gem_iova()
-  drm/msm/gem: Rework vma lookup and pin
-  drm/msm/gem: Split vma lookup and pin
-  drm/msm/gem: Add fenced vma unpin
-  drm/msm: Add a way for userspace to allocate GPU iova
-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c   |   2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c   |   2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c   |   2 +-
- drivers/gpu/drm/msm/adreno/adreno_gpu.c |  14 ++-
- drivers/gpu/drm/msm/msm_drv.c           |  21 ++++
- drivers/gpu/drm/msm/msm_drv.h           |  23 ----
- drivers/gpu/drm/msm/msm_fb.c            |  20 +++-
- drivers/gpu/drm/msm/msm_fence.c         |   6 +-
- drivers/gpu/drm/msm/msm_fence.h         |   3 +
- drivers/gpu/drm/msm/msm_gem.c           | 151 ++++++++++++++----------
- drivers/gpu/drm/msm/msm_gem.h           |  47 +++++++-
- drivers/gpu/drm/msm/msm_gem_submit.c    |  17 ++-
- drivers/gpu/drm/msm/msm_gem_vma.c       |  59 ++++++---
- drivers/gpu/drm/msm/msm_gpu.c           |   8 +-
- drivers/gpu/drm/msm/msm_gpu.h           |   2 +-
- drivers/gpu/drm/msm/msm_ringbuffer.c    |  12 +-
- drivers/gpu/drm/msm/msm_ringbuffer.h    |   1 -
- include/uapi/drm/msm_drm.h              |   3 +
- 18 files changed, 262 insertions(+), 131 deletions(-)
-
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index d661debb50f1..000fe649a0ab 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -250,29 +250,6 @@ void msm_atomic_state_free(struct drm_atomic_state *state);
+ int msm_crtc_enable_vblank(struct drm_crtc *crtc);
+ void msm_crtc_disable_vblank(struct drm_crtc *crtc);
+ 
+-int msm_gem_init_vma(struct msm_gem_address_space *aspace,
+-		struct msm_gem_vma *vma, int npages,
+-		u64 range_start, u64 range_end);
+-void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+-		struct msm_gem_vma *vma);
+-void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
+-		struct msm_gem_vma *vma);
+-int msm_gem_map_vma(struct msm_gem_address_space *aspace,
+-		struct msm_gem_vma *vma, int prot,
+-		struct sg_table *sgt, int npages);
+-void msm_gem_close_vma(struct msm_gem_address_space *aspace,
+-		struct msm_gem_vma *vma);
+-
+-
+-struct msm_gem_address_space *
+-msm_gem_address_space_get(struct msm_gem_address_space *aspace);
+-
+-void msm_gem_address_space_put(struct msm_gem_address_space *aspace);
+-
+-struct msm_gem_address_space *
+-msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
+-		u64 va_start, u64 size);
+-
+ int msm_register_mmu(struct drm_device *dev, struct msm_mmu *mmu);
+ void msm_unregister_mmu(struct drm_device *dev, struct msm_mmu *mmu);
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+index 58e11c282928..947ff7d9b471 100644
+--- a/drivers/gpu/drm/msm/msm_gem.h
++++ b/drivers/gpu/drm/msm/msm_gem.h
+@@ -40,6 +40,15 @@ struct msm_gem_address_space {
+ 	int faults;
+ };
+ 
++struct msm_gem_address_space *
++msm_gem_address_space_get(struct msm_gem_address_space *aspace);
++
++void msm_gem_address_space_put(struct msm_gem_address_space *aspace);
++
++struct msm_gem_address_space *
++msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
++		u64 va_start, u64 size);
++
+ struct msm_gem_vma {
+ 	struct drm_mm_node node;
+ 	uint64_t iova;
+@@ -49,6 +58,19 @@ struct msm_gem_vma {
+ 	int inuse;
+ };
+ 
++int msm_gem_init_vma(struct msm_gem_address_space *aspace,
++		struct msm_gem_vma *vma, int npages,
++		u64 range_start, u64 range_end);
++void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
++		struct msm_gem_vma *vma);
++void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
++		struct msm_gem_vma *vma);
++int msm_gem_map_vma(struct msm_gem_address_space *aspace,
++		struct msm_gem_vma *vma, int prot,
++		struct sg_table *sgt, int npages);
++void msm_gem_close_vma(struct msm_gem_address_space *aspace,
++		struct msm_gem_vma *vma);
++
+ struct msm_gem_object {
+ 	struct drm_gem_object base;
+ 
 -- 
 2.35.1
 

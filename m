@@ -2,111 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B269E4F6AEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE374F6B59
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbiDFULd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S234715AbiDFUZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbiDFUK5 (ORCPT
+        with ESMTP id S234486AbiDFUWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:10:57 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 821741B60E2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:51:41 -0700 (PDT)
-Received: (qmail 195999 invoked by uid 1000); 6 Apr 2022 13:51:40 -0400
-Date:   Wed, 6 Apr 2022 13:51:40 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Wed, 6 Apr 2022 16:22:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795101CEA59;
+        Wed,  6 Apr 2022 10:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649267537; x=1680803537;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NKYqSDBSi2gK7jq1hDnM4aEW04YtFUxd7nZHJ7bseh0=;
+  b=Bm9t/h+TXBGewdWnTVzUKQLc64XIY77jTMjvZAnLclF5viOu/od46bF6
+   K5eHIDOvzcJS3WQV+9O3OHBzIe912CVX/W/ZRBg0Gu80bdQIdZF81YyVM
+   /y8G5MZMvF2tQFN9V4t9ull4sh6+3nqvG7Rviejb7u4AQtF411/8v3qmv
+   9uTEcB8Zi+/2xYrXVoVorgluyQu1k2Xh2hEvzGi046KBCz9MI/WjV/Jah
+   4hGiNwb6e8h+2OYIlmJ29hMWcJYX2LN2xN2i0yxgYFntZB9fF/BySP6OA
+   iRtZaVAPoih7ACpJI15t+Al3RDjxnfdiVC43tgDjdx6Y7qsxe5rwcrvHU
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241706443"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="241706443"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:52:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="658629123"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 10:52:13 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc9pE-0004dP-QV;
+        Wed, 06 Apr 2022 17:52:12 +0000
+Date:   Thu, 7 Apr 2022 01:51:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
- <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
- <20220406195234.4f63cb4a@reki>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v5 4/4] device property: Constify fwnode APIs that uses
+ fwnode_get_next_parent()
+Message-ID: <202204070123.UdpbjnDH-lkp@intel.com>
+References: <20220406130552.30930-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406195234.4f63cb4a@reki>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220406130552.30930-4-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote:
-> > It's not clear to me how breaking I/O operations allows you to do a 
-> > "force eject".  It seems that what you would need is something like 
-> > fsg_store_file() that omits the curlun->prevent_medium_removal check.
-> > Interrupting a lengthy I/O operation doesn't really have anything to do 
-> > with this.
-> 
-> Perhaps I chose the wrong path, it's just how my userspace code works now.
-> If the drive is connected to a Linux host, then in order to clear
-> the "file" and extract the image, I sent a SIGUSR1 signal to the "file-storage"
-> thread. This interrupted long IO operations, reset curlun->prevent_medium_removal
-> and I got the ability to extract.
+Hi Andy,
 
-Oh, I see.  That's kind of an unintended side effect of not calling 
-raise_exception().
+I love your patch! Perhaps something to improve:
 
-And while it does interrupt long I/O operations, it does so in 
-non-sanctioned way.  To the host it will appear as though the gadget's 
-firmware has crashed, since the gadget will stop sending or receiving 
-data.  Eventually the host will time out and reset the gadget.
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on rafael-pm/linux-next linus/master linux/master v5.18-rc1 next-20220406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Maybe that's the sort of thing you want, but I rather doubt it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220407-002511
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220407/202204070123.UdpbjnDH-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d9d353ada8d8c3b1b7f3965ad7fe191bd7dea930
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220407-002511
+        git checkout d9d353ada8d8c3b1b7f3965ad7fe191bd7dea930
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/base/
 
-> It was done in our KVM-over-IP project and worked for several years,
-> just now I want to do it without searching for procfs and the need
-> to use sudo helpers like this:
-> https://github.com/pikvm/kvmd/blob/1b3a2cc/kvmd/helpers/otgmsd/unlock/__init__.py
-> 
-> Maybe it's worth introducing some option that will allow us to ignore
-> curlun->prevent_medium_removal and perform a forced extraction?
-> Something like "allow_force_eject" on the same lavel with "stall".
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Or have a separate sysfs file where any write at all will be interpreted 
-as a forced eject.  Either way would work.
+All warnings (new ones prefixed by >>):
 
-> Will masking the curlun->prevent_medium_removal flag be enough?
+   drivers/base/property.c: In function 'fwnode_get_nth_parent':
+>> drivers/base/property.c:647:42: warning: passing argument 1 of 'fwnode_handle_get' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     647 |                 return fwnode_handle_get(fwnode);
+         |                                          ^~~~~~
+   In file included from include/linux/of.h:22,
+                    from include/linux/irqdomain.h:35,
+                    from include/linux/acpi.h:13,
+                    from drivers/base/property.c:10:
+   include/linux/property.h:123:63: note: expected 'struct fwnode_handle *' but argument is of type 'const struct fwnode_handle *'
+     123 | struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~
 
-I think so.  But it will be blocked to some extent by long-running I/O 
-operations, because those operations acquire the filesem rw-semaphore 
-for reading.
 
-More precisely, each individual command holds the rw-semaphore.  But the 
-semaphore is dropped between commands, and a long-running I/O operation 
-typically consists of many separate commands.  So the blocking may be 
-acceptable.
+vim +647 drivers/base/property.c
 
-> > Or to keep this ability restricted to the superuser, if that is desired.
-> 
-> Indeed.
-> 
-> > You should not call send_sig_info() directly; instead call 
-> > raise_exception().  It already does the work you need (including some 
-> > things you left out).
-> 
-> raise_exception() assumes the setting of a new state, and I did not want to do this,
-> since the same does not happen when throwing a signal from userspace.
+87e5e95db31a27 Sakari Ailus    2019-10-03  629  
+87e5e95db31a27 Sakari Ailus    2019-10-03  630  /**
+87e5e95db31a27 Sakari Ailus    2019-10-03  631   * fwnode_get_nth_parent - Return an nth parent of a node
+87e5e95db31a27 Sakari Ailus    2019-10-03  632   * @fwnode: The node the parent of which is requested
+87e5e95db31a27 Sakari Ailus    2019-10-03  633   * @depth: Distance of the parent from the node
+87e5e95db31a27 Sakari Ailus    2019-10-03  634   *
+87e5e95db31a27 Sakari Ailus    2019-10-03  635   * Returns the nth parent of a node. If there is no parent at the requested
+87e5e95db31a27 Sakari Ailus    2019-10-03  636   * @depth, %NULL is returned. If @depth is 0, the functionality is equivalent to
+87e5e95db31a27 Sakari Ailus    2019-10-03  637   * fwnode_handle_get(). For @depth == 1, it is fwnode_get_parent() and so on.
+87e5e95db31a27 Sakari Ailus    2019-10-03  638   *
+87e5e95db31a27 Sakari Ailus    2019-10-03  639   * The caller is responsible for calling fwnode_handle_put() for the returned
+87e5e95db31a27 Sakari Ailus    2019-10-03  640   * node.
+87e5e95db31a27 Sakari Ailus    2019-10-03  641   */
+d9d353ada8d8c3 Andy Shevchenko 2022-04-06  642  struct fwnode_handle *fwnode_get_nth_parent(const struct fwnode_handle *fwnode, unsigned int depth)
+87e5e95db31a27 Sakari Ailus    2019-10-03  643  {
+040f806ecab6cd Andy Shevchenko 2022-04-06  644  	struct fwnode_handle *parent;
+87e5e95db31a27 Sakari Ailus    2019-10-03  645  
+040f806ecab6cd Andy Shevchenko 2022-04-06  646  	if (depth == 0)
+040f806ecab6cd Andy Shevchenko 2022-04-06 @647  		return fwnode_handle_get(fwnode);
+87e5e95db31a27 Sakari Ailus    2019-10-03  648  
+040f806ecab6cd Andy Shevchenko 2022-04-06  649  	fwnode_for_each_parent_node(fwnode, parent) {
+040f806ecab6cd Andy Shevchenko 2022-04-06  650  		if (--depth == 0)
+040f806ecab6cd Andy Shevchenko 2022-04-06  651  			return parent;
+040f806ecab6cd Andy Shevchenko 2022-04-06  652  	}
+040f806ecab6cd Andy Shevchenko 2022-04-06  653  	return NULL;
+87e5e95db31a27 Sakari Ailus    2019-10-03  654  }
+87e5e95db31a27 Sakari Ailus    2019-10-03  655  EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
+87e5e95db31a27 Sakari Ailus    2019-10-03  656  
 
-Userspace isn't supposed to send the USR1 signal, only the INT, TERM, or 
-KILL signals.  USR1 is supposed to be reserved for the driver's internal 
-use.  Unfortunately, AFAIK there's no way to allow the driver to send a 
-signal to itself without also allowing the signal to be sent by 
-userspace.  :-(
-
-And sending the signal _does_ set a new state, whether you intended to 
-or not.  Although in this case, the new state is always the same as the 
-old state, i.e., FSG_STATE_NORMAL.
-
-Alan Stern
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

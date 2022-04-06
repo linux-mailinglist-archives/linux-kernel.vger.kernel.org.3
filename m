@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132644F5B4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D4B4F5B24
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348147AbiDFKEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S243824AbiDFJkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 05:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244241AbiDFKEW (ORCPT
+        with ESMTP id S1583056AbiDFJfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:04:22 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9138340BF62;
-        Tue,  5 Apr 2022 18:36:33 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o20so642927pla.13;
-        Tue, 05 Apr 2022 18:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dQGt0hnIOOf7L1JuGQZGg/PcLeKIC3qip1gbK+mzCmQ=;
-        b=N5sYcPCxeFzL+oR6KcDkZZPbAtqkL7S5r/QcUwlEHafidZcrSl0JxLSg4JdgUN9HwP
-         h16r3YCdRmpRkncFnQSoNxGZKKx69bfEoEHZ+fOVw2V8891iLIHMqg3rSZUFMlsoJGkp
-         OAPGxAFEqpTpsdxL6PX10XpmyHSLPo8wiK70IFuOHa+8rO7d0hc9cy4BXfrm5+I1Oeqx
-         wh2JEb8r4MoGNYhkSLQO468DG0of51JTHZsL5sTV/OBOvIiXzFLmqH1PzWBRq7BIYFGl
-         1Y2RhKY5EVPOK7KVgANGkc5K1cIzht5gWbb4KPsWkyx/IUpFUfjGHhOoEbumyysrHigd
-         jGKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dQGt0hnIOOf7L1JuGQZGg/PcLeKIC3qip1gbK+mzCmQ=;
-        b=VvLYFbuZX1bfOygnhJNBiPcC0p+7P5KvTCu5o9QDpNVJhDsaZReLmTH9u1uyhwTvjO
-         CbFYG0V4WUivh8/IbhgpudmT6hxuuUiOlLklAYMALRBnVdhWszEN5WZtHPcOFx/uJOTi
-         FHTX3O4tz64BFIrtjUofiXr/CXPcnX+GbOGYlBGvXYE3HEa5KZJK5UHZ0WjmX2V0zO64
-         WU+KFGitmIaMtEU+8BKrp2cJalvUpH91TzmajLfzryRCS7cAhf3Twku2mHluV4xKTRYO
-         Z4d3sLv9hz3b5C4tXYMLuKnE2fPVIk85r/3rnxZwpLBpHDB53Ri6ZOTB5wlZ7BB971/q
-         Yctw==
-X-Gm-Message-State: AOAM532Xyh8jBMPr8n/9zdleesHlJqjS627VTCF8fqc11UGIU6D99uda
-        dhai6+Y0v8u4fJOivQCgcIkb+6eHIKGLa6sh+Rk=
-X-Google-Smtp-Source: ABdhPJw5QFM+vNDCFa2VadQ1b8E1P6bLhj+BMc/5gCwJv919kaUP05fclMh98ha1+H76fQksEzyOCgJcGXD0VIDz0A4=
-X-Received: by 2002:a17:902:da84:b0:154:3b08:4523 with SMTP id
- j4-20020a170902da8400b001543b084523mr6437007plx.65.1649208992907; Tue, 05 Apr
- 2022 18:36:32 -0700 (PDT)
+        Wed, 6 Apr 2022 05:35:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B0068FB8
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649209314; x=1680745314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jS0mTy6ZTROUsnVE2643D/khG3eHsXQHKYgDfRMLldc=;
+  b=QrW3DlQgqD6sdaIrPERmioWm2pcug3ymwKtzANBntvF5g4ls2qWDUnab
+   Yrh48KJldQOnFeREjajCHtHQk3bW0835TnjFyFULIpVgS/i8qmCc1FotG
+   7g2ilRa5+hshD8/w70bwvAXrl3Akunqa7uTAAGONDJDU4b3WNmHSU3ZEy
+   mCN7AThH0D0QaS36BmXjD0DTZUBp2zou7SnsDx8nbRYgFDZhJAm9gem7s
+   wRkRNzwc1FGEa9g45WANbrCG03gWHoqNV/LwHl4btgO/S53B6tzeL0RhD
+   1Dc9ipKQrCLZweDJY9vF81MN3MthzP2jNG3TqhfFbKtFoH5cZtJS65VOV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="324091443"
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="324091443"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 18:41:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="570275381"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 18:41:48 -0700
+Date:   Wed, 6 Apr 2022 09:41:47 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>, Wei Xu <weixugc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        fengwei.yin@intel.com
+Subject: Re: [NUMA Balancing] e39bb6be9f: will-it-scale.per_thread_ops 64.4%
+ improvement
+Message-ID: <20220406014147.GA64277@shbuild999.sh.intel.com>
+References: <20220401094214.GA8368@xsang-OptiPlex-9020>
+ <CAHk-=wg+mJrTvun6qkdEnkZk9FSyj6vNYU2j7QY-iPn0g_y1nw@mail.gmail.com>
+ <20220402085005.GC32311@shbuild999.sh.intel.com>
 MIME-Version: 1.0
-References: <20220405070407.513532867@linuxfoundation.org>
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 5 Apr 2022 19:36:21 -0600
-Message-ID: <CAFU3qobksUSEOs9BQFFKieWH2HrpFqDVj+iKJOsrESy5MhLGgQ@mail.gmail.com>
-Subject: Re: [PATCH 5.17 0000/1126] 5.17.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402085005.GC32311@shbuild999.sh.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:40 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.2 release.
-> There are 1126 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.2-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-Hi Greg,
+On Sat, Apr 02, 2022 at 04:50:05PM +0800, Feng Tang wrote:
+> Hi Linus,
+> 
+> On Fri, Apr 01, 2022 at 09:35:24AM -0700, Linus Torvalds wrote:
+> > On Fri, Apr 1, 2022 at 2:42 AM kernel test robot <oliver.sang@intel.com> wrote:
+> > >
+> > > FYI, we noticed a 64.4% improvement of will-it-scale.per_thread_ops due to commit:
+> > > e39bb6be9f2b ("NUMA Balancing: add page promotion counter")
+> > 
+> > That looks odd and unlikely.
+> > 
+> > That commit only modifies some page counting statistics. Sure, it
+> > could be another cache layout thing, and maybe it's due to the subtle
+> > change in how NUMA_PAGE_MIGRATE gets counted, but it still looks a bit
+> > odd.
+> 
+> We did a quick check about cache stuff by disabling HW cache prefetch
+> completely (writing 0xf to MSR 0x1a4), and the performance change
+> is almost gone:
+> 
+>   ee97347fe058d020     e39bb6be9f2b39a6dbaeff48436 
+>   ----------------     --------------------------- 
+>     134793            -1.4%     132867        will-it-scale.per_thread_ops
+> 
+> The test box is a Cascadelake machine with 4 nodes, and the similar trend
+> is found on a 2 nodes machine, that the commit has 55% improvement with
+> HW cache prefetch enabled, and has less than 1% change when disabled.
+> 
+> Though we still cannot pin-point the exact place affected.
+ 
+We did more tests and debugs, and here are some updates:
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+* For the HW cache prefetcher, we narrowed down it to be related with
+  'L2 cache prefetcher', and not the 'L2 adjacent cache line prefetcher'.
+  We can't find any documents about the detail of the prefetcher, which
+  make it hard to analyze how the performance is affected
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+* Debug shows the change is related with the struct 'mem_cgroup''s size
+  change, that with commit ee97347fe058d020, its size is 4096, which turns
+  to 4160 with commit e39bb6be9f2b3.
+  - commit e39bb6be9f2b adds one counter 'PGPROMOTE_SUCCESS' and some
+    code change, if we remove the code change and leave the counter,
+    the 60% improvement remains.
+  - revert e39bb6be9f2b, and only add 16 bytes padding inside 'mem_cgroup',
+    the 60% change also remains. Debug patch is as below:
 
-     Total time: 0.440 [sec]
+	diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+	index a68dce3873fcc..2bd56fb2e5b5f 100644
+	--- a/include/linux/memcontrol.h
+	+++ b/include/linux/memcontrol.h
+	@@ -303,6 +303,8 @@ struct mem_cgroup {
+		/* memory.stat */
+		struct memcg_vmstats	vmstats;
+	 
+	+	unsigned long padding[2];
+	+
+		/* memory.events */
+		atomic_long_t		memory_events[MEMCG_NR_MEMORY_EVENTS];
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
+Thanks,
+Feng
 
-     Total time: 8.552 [sec]
-
-       8.552299 usecs/op
-         116927 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+> Also per our experience, the patch changing vm statistics can easily
+> trigger strange performance bumps for micro-benchmarks like will-it-scale,
+> stress-ng etc.
+> 
+> Thanks,
+> Feng
+> 
+> 
+> >                Linus

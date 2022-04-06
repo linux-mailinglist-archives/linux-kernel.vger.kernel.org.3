@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297084F5F58
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7F24F5ECA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbiDFNPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231524AbiDFNDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiDFNOD (ORCPT
+        with ESMTP id S231315AbiDFNCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:14:03 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEA31D66DF;
-        Wed,  6 Apr 2022 02:52:31 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KYJbY3GntzBrxP;
-        Wed,  6 Apr 2022 17:08:57 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 6 Apr 2022 17:13:02 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 6 Apr
- 2022 17:13:07 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <jagan@amarulasolutions.com>, <m.szyprowski@samsung.com>,
-        <robert.foss@linaro.org>
-Subject: [PATCH -next] drm/exynos: mic: fix return value check in exynos_mic_probe()
-Date:   Wed, 6 Apr 2022 17:22:00 +0800
-Message-ID: <20220406092200.2581262-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 09:02:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B14725BED21
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:27:15 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-315-eHuEyMOaOeqDmfbYcncWLQ-1; Wed, 06 Apr 2022 10:23:40 +0100
+X-MC-Unique: eHuEyMOaOeqDmfbYcncWLQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 6 Apr 2022 10:23:38 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 6 Apr 2022 10:23:38 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Borislav Petkov' <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/11] treewide: Fix a bunch of shift overflows
+Thread-Topic: [PATCH 00/11] treewide: Fix a bunch of shift overflows
+Thread-Index: AQHYSUP0CefNvAXd5kC8AbgGV9iuxqzim78A
+Date:   Wed, 6 Apr 2022 09:23:38 +0000
+Message-ID: <4d8265050e2446e295ac60e5c0e4bcee@AcuMS.aculab.com>
+References: <20220405151517.29753-1-bp@alien8.de>
+In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,32 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If of_graph_get_remote_node() fails, it returns NULL pointer, replaces
-IS_ERR() check with NULL pointer check.
-
-Fixes: dd8b6803bc49 ("exynos: drm: dsi: Attach in_bridge in MIC driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/gpu/drm/exynos/exynos_drm_mic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_mic.c b/drivers/gpu/drm/exynos/exynos_drm_mic.c
-index 9e06f8e2a863..43fc357a6682 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_mic.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_mic.c
-@@ -434,9 +434,9 @@ static int exynos_mic_probe(struct platform_device *pdev)
- 
- 	remote = of_graph_get_remote_node(dev->of_node, 1, 0);
- 	mic->next_bridge = of_drm_find_bridge(remote);
--	if (IS_ERR(mic->next_bridge)) {
-+	if (!mic->next_bridge) {
- 		DRM_DEV_ERROR(dev, "mic: Failed to find next bridge\n");
--		ret = PTR_ERR(mic->next_bridge);
-+		ret = -EINVAL;
- 		goto err;
- 	}
- 
--- 
-2.25.1
+RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDA1IEFwcmlsIDIwMjIgMTY6MTUNCi4uLg0K
+PiBEdWUgdG8gc29tZSByZWNlbnQgY2hhbmdlcyB3aGljaCBhZGRlZCAtZnNhbml0aXplLXNoaWZ0
+IHRvIHRoZSBidWlsZA0KPiBvcHRpb25zIG9mIGFuIGFsbG1vZGNvbmZpZywgaXQgc3RhcnRlZCBm
+YWlsaW5nIGhlcmUgd2l0aCBhbiBvbGQgZ2NjDQo+IGJlY2F1c2UgZ2V0dGluZyBhbiBvdmVyZmxv
+dyB3aGlsZSBzaGlmdGluZyBpcyB1bmRlZmluZWQgQzk5IGJlaGF2aW9yLg0KDQpBbm5veWluZ2x5
+IGl0IGlzIGV4dHJlbWVseSB1bmxpa2VseSB0aGF0IGEgMnMgY29tcGxpbWVudA0Kc3lzdGVtIHdv
+dWxkIGV2ZXIgZ2VuZXJhdGUgYW55dGhpbmcgb3RoZXIgdGhhbiB0aGUgZXhwZWN0ZWQNCnZhbHVl
+IC0gaWUgdGhlIHZhbHVlIG9idGFpbmVkIGJ5IGRvaW5nIHRoZSBjYWxjdWxhdGlvbg0Kd2l0aCB1
+bnNpZ25lZCB2YWx1ZXMgYW5kIHRoZW4gZ2V0dGluZyB0aGUgcmVzdWx0IGNhc3QgYmFjaw0KdG8g
+c2lnbmVkICh3aGljaCBpcyBJSVJDIGltcGxlbWVudGF0aW9uIGRlZmluZWQpLg0KDQpJdCBpc24n
+dCBhcyB0aG91Z2ggdGhlcmUgYXJlIG1hbnkgMXMgY29tcGxpbWVudCBzeXN0ZW1zIG91dA0KdGhl
+cmUsIGFuZCBwcm9iYWJseSBldmVuIGZld2VyICdzaWduIG92ZXJwdW5jaCcgb25lcy4NCk5ldmVy
+IG1pbmQgdHJ5aW5nIHRvIGZpbmQgYSB3b3JraW5nIEMgY29tcGlsZXIgZm9yIHRoZW0uDQoNCldo
+YXQgc29ydCBvZiBjcmFjayBhcmUgdGhlIEMgc3RhbmRhcmRzIGJvZHkgYW5kIGNvbXBpbGVyDQpw
+ZW9wbGUgYWN0dWFsbHkgc21va2luZz8NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 

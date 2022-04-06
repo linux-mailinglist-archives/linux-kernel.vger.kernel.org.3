@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3765E4F6119
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1B74F615B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiDFONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S234230AbiDFOLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbiDFOMj (ORCPT
+        with ESMTP id S234557AbiDFOLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:12:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB6E638186
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649239850; x=1680775850;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=F1zju/9kmX6n6dT8p0E7zyZ2nCVHgfYrynN7MVqmilQ=;
-  b=K4ImYtrsD9+VcJzk8gE709/onLqqkjzpLpVUntp/Ipf0JK5nUe8A82AU
-   OsVrhFEm5zFmPx4VoVj/OQJk0pEisIPTu/Lgt1SfkwsoMG8A5VxdAV34I
-   TxIqPl7B8/dILjyNIawQzc69N3gEhXkMjYHm3AHYqOAqHApWc/Qvu8X5u
-   P3Cz4Z7zCFTe3fUB6fBL5n8j2oP89nJ9tsZT7pWosE+3lybfkV0ldNHKr
-   6yxP4YCpMd2JeojsWhUEiheNkyN9hQxW0T7b6SJI8P14Z2U9SmAkoyGlT
-   SFGT8ip4A65mb2M8tsX6BNbKBxfkKfnJrAyAg4LFe9tfnKVB8NSnw7bKW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260996160"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="260996160"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:02:26 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="570442421"
-Received: from huipengt-mobl1.ccr.corp.intel.com (HELO [10.254.215.82]) ([10.254.215.82])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:02:19 -0700
-Message-ID: <821dc298-47fb-6d06-ba75-de5d62a97b7a@linux.intel.com>
-Date:   Wed, 6 Apr 2022 18:02:16 +0800
+        Wed, 6 Apr 2022 10:11:02 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC410FAF7;
+        Wed,  6 Apr 2022 03:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649239549; x=1680775549;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UzpLkLsQSybYrDctDJM7hazMV+345ZJBUluwhHnkHow=;
+  b=zV7ZUNi0+RKZ+oCQB4whtuJTcbI6/vCjFes8qlF2BG7eWjbV5IOkP3MS
+   XqUg7ZzCIKqGQN91shMqA9PGfV8kBAqgjg96OPIaHpInqx8/FYm6FKRwP
+   taIopUY0tQffylehSitNVsyzIk0TjHFhMy5nEA9WsJhKeb337ngOPxYvw
+   e9qwq4ZzpiXvGTggpazLZ8QGTx8BDXP2v0ys1RrDDaNpi1pZn8YptOny3
+   qgEhRzrhfzKaCC20oyDT2bClg5vUP0MhkQKXLG/AljQHcuWn+lSjA2k0L
+   WMIghSev/ylqVlomf3HAWNO3qrL0dWyGIVhqOSzll6zYjItoiPzWeFiui
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643698800"; 
+   d="scan'208";a="91453048"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 03:03:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Apr 2022 03:03:44 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 03:03:42 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH 1/2] spi: atmel-quadspi.c: Fix the buswidth adjustment between spi-mem and controller
+Date:   Wed, 6 Apr 2022 13:03:39 +0300
+Message-ID: <20220406100340.224975-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com,
-        "Alex Williamson (alex.williamson@redhat.com)" 
-        <alex.williamson@redhat.com>, "Raj, Ashok" <ashok.raj@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-3-baolu.lu@linux.intel.com>
- <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220329114259.GB1716663@nvidia.com>
- <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220330115820.GE1716663@nvidia.com>
- <BN9PR11MB527691E38BAC4F89FB17BDB98C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220330143008.GB2111031@nvidia.com>
- <BL1PR11MB52718E663EF48C45D97FEEF38CE39@BL1PR11MB5271.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
-In-Reply-To: <BL1PR11MB52718E663EF48C45D97FEEF38CE39@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+Use the spi_mem_default_supports_op() core helper in order to take into
+account the buswidth specified by the user in device tree.
 
-On 2022/4/2 15:12, Tian, Kevin wrote:
->>>> Add a flag to the group that positively indicates the group can never
->>>> have more than one member, even after hot plug. eg because it is
->>>> impossible due to ACS, or lack of bridges, and so on.
->>> OK, I see your point. It essentially refers to a singleton group which
->>> is immutable to hotplug.
->> Yes, known at creation time, not retroactively enforced because
->> someone used SVA
->>
-> We may check following conditions to set the immutable flag when
-> a new group is created for a device in pci_device_group():
-> 
-> 1) ACS is enabled in the upstream path of the device;
-> 2) the device is single function or ACS is enabled on a multi-function device;
-> 3) the device type is PCI_EXP_TYPE_ENDPOINT (thus no hotplug);
-> 4) no 'dma aliasing' on this device;
-> 
-> The last one is a bit conservative as it also precludes a device which aliasing
-> dma due to quirks from being treated as a singleton group. But doing so
-> saves the effort on trying to separate different aliasing scenarios as defined
-> in pci_for_each_dma_alias(). Probably we can go this way as the first step.
-> 
-> Once the flag is set on a group no other event can change it. If a new
-> identified device hits an existing singleton group in pci_device_group()
-> then it's a bug.
+Cc: <stable@vger.kernel.org>
+Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/spi/atmel-quadspi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-How about below implementation?
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index 92d9610df1fd..938017a60c8e 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -277,6 +277,9 @@ static int atmel_qspi_find_mode(const struct spi_mem_op *op)
+ static bool atmel_qspi_supports_op(struct spi_mem *mem,
+ 				   const struct spi_mem_op *op)
+ {
++	if (!spi_mem_default_supports_op(mem, op))
++		return false;
++
+ 	if (atmel_qspi_find_mode(op) < 0)
+ 		return false;
+ 
+-- 
+2.25.1
 
-/* callback for pci_for_each_dma_alias() */
-static int has_pci_alias(struct pci_dev *pdev, u16 alias, void *opaque)
-{
-	return -EEXIST;
-}
-
-static bool pci_dev_is_immutably_isolated(struct pci_dev *pdev)
-{
-	/* Skip bridges. */
-	if (pci_is_bridge(pdev))
-		return false;
-
-	/* Either connect to root bridge or the ACS-enabled bridge. */
-	if (!pci_is_root_bus(pdev->bus) &&
-	    !pci_acs_enabled(pdev->bus->self, REQ_ACS_FLAGS))
-		return false;
-
-	/* ACS is required for MFD. */
-	if (pdev->multifunction && !pci_acs_enabled(pdev, REQ_ACS_FLAGS))
-		return false;
-
-	/* Make sure no PCI alias. */
-	if (pci_for_each_dma_alias(pdev, has_pci_alias, NULL))
-		return false;
-
-	return true;
-}
-
-I didn't get why do we need to check the PCI_EXP_TYPE_ENDPOINT device
-type. Can you please elaborate a bit more?
-
-Best regards,
-baolu

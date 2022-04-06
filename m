@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA774F61C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06804F61D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235017AbiDFOdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S235151AbiDFOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbiDFOdT (ORCPT
+        with ESMTP id S234924AbiDFOg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:33:19 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F634CFD98;
-        Wed,  6 Apr 2022 03:56:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 53A95210EE;
-        Wed,  6 Apr 2022 10:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649242611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PpR2c+ZPg7BJ6Xw9sfecT6Aa7dhhvXuHhhVja5spSqs=;
-        b=yko3N8qgVwjgizn2PcGGICV1W5NyvHA7sY5gcwixgQRD8PyPF69wxAYem6Gs2rrhtym8wS
-        sjPY5HKJuGMOWHI4IHi4crycbXQUeA0T9Rvh8eqtyXYQWmo3bC2z4JyPcDZuQ2xm+SfDb8
-        60KHerAZNfH2nrNJ4/3xCIyxrskdotk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649242611;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PpR2c+ZPg7BJ6Xw9sfecT6Aa7dhhvXuHhhVja5spSqs=;
-        b=g1qWpppB4rQ16gU9UhsmyCxI4cK6uo7iUhgYQfPTDxsD2ms8bZ+A7sySU2vSWxCjFErZjn
-        zxih2HoSopIqKFBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF2A913A8E;
-        Wed,  6 Apr 2022 10:56:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FzeFL/JxTWKlMwAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 06 Apr 2022 10:56:50 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 00935f4b;
-        Wed, 6 Apr 2022 10:57:14 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-References: <20220401133243.1075-1-lhenriques@suse.de>
-        <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
-Date:   Wed, 06 Apr 2022 11:57:14 +0100
-In-Reply-To: <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com> (Xiubo Li's
-        message of "Wed, 6 Apr 2022 14:28:27 +0800")
-Message-ID: <878rsia391.fsf@brahms.olymp>
+        Wed, 6 Apr 2022 10:36:56 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3EB4557F2;
+        Wed,  6 Apr 2022 04:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
+        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=dcCn6+XhT4ZAObTnqeDa3+6jzJY/nPJWbAVScaaz0bE=; b=kQqBANK8BkSsr7+yPmY+Z09efb
+        0NOveqsRX9wrNdCFVXF3J7Kr26T56o2BgYYrrD0jeoekQZkIe0TDN+4d99hR04yYGpj7/adwmWZcy
+        dYUrxYIc73Kk/I1LEnAkxfk4ldascCUl2i3HfC4tKXcdMyWi9snsBXDlpl06K6FF4cJ4=;
+Received: from p200300daa70ef200456864e8b8d10029.dip0.t-ipconnect.de ([2003:da:a70e:f200:4568:64e8:b8d1:29] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nc3PP-0001v5-AM; Wed, 06 Apr 2022 13:01:07 +0200
+Message-ID: <318163cb-c771-c7eb-73ba-35c66f7d0e68@nbd.name>
+Date:   Wed, 6 Apr 2022 13:01:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-6-nbd@nbd.name>
+ <4bafe244-6a3d-d0ec-59d3-3f3f00e71caf@linaro.org>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
+ mirror node on MT7622
+In-Reply-To: <4bafe244-6a3d-d0ec-59d3-3f3f00e71caf@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,68 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
 
-> On 4/1/22 9:32 PM, Lu=C3=ADs Henriques wrote:
->> When doing DIO on an encrypted node, we need to invalidate the page cach=
-e in
->> the range being written to, otherwise the cache will include invalid dat=
-a.
->>
->> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+On 06.04.22 10:20, Krzysztof Kozlowski wrote:
+> On 05/04/2022 21:57, Felix Fietkau wrote:
+>> From: Lorenzo Bianconi <lorenzo@kernel.org>
+>> 
+>> This patch adds the pcie mirror document bindings for MT7622 SoC.
+>> The feature is used for intercepting PCIe MMIO access for the WED core
+>> Add related info in mediatek-net bindings.
+>> 
+>> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 >> ---
->>   fs/ceph/file.c | 11 ++++++++++-
->>   1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> Changes since v1:
->> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
->> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
->>
->> Note: I'm not really sure this last change is required, it doesn't really
->> affect generic/647 result, but seems to be the most correct.
->>
->> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->> index 5072570c2203..b2743c342305 100644
->> --- a/fs/ceph/file.c
->> +++ b/fs/ceph/file.c
->> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_ite=
-r *from, loff_t pos,
->>   	if (ret < 0)
->>   		return ret;
->>   -	ceph_fscache_invalidate(inode, false);
->> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
->>   	ret =3D invalidate_inode_pages2_range(inode->i_mapping,
->>   					    pos >> PAGE_SHIFT,
->>   					    (pos + count - 1) >> PAGE_SHIFT);
->
-> The above has already invalidated the pages, why doesn't it work ?
+>>  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
+> 
+> Eh, I wanted to ask to not put it inside arm/, but judging by your usage
+> - you did not create drivers for both of these (WED and PCIe mirror).
+> 
+> You only need them to expose address spaces via syscon.
+> 
+> This actually looks hacky. Either WED and PCIe mirror are part of
+> network driver, then add the address spaces via "reg". If they are not,
+> but instead they are separate blocks, why you don't have drivers for them?
+The code that uses the WED block is built into the Ethernet driver, but 
+not all SoCs that use this ethernet core have it. Also, there are two 
+WED blocks, and I'm not sure if future SoCs might have a different 
+number of them at some point.
+The WED code also needs to access registers of the ethernet MAC.
+One reason for having a separate device is this:
+As long as WED is not in use, ethernet supports coherent DMA for 
+increased performance. When the first wireless device attaches to WED, 
+IO coherency gets disabled and the ethernet DMA rings are cleaned up and 
+allocated again, this time with the struct device of WED (which doesn't 
+have the dma-coherent property).
 
-I suspect the reason is because later on we loop through the number of
-pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
-
-Cheers,
---=20
-Lu=C3=ADs
-
->
-> -- Xiubo
->
->> @@ -1895,6 +1895,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_it=
-er *from, loff_t pos,
->>   		req->r_inode =3D inode;
->>   		req->r_mtime =3D mtime;
->>   +		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT)) {
->> +			ret =3D invalidate_inode_pages2_range(
->> +				inode->i_mapping,
->> +				write_pos >> PAGE_SHIFT,
->> +				(write_pos + write_len - 1) >> PAGE_SHIFT);
->> +			if (ret < 0)
->> +				dout("invalidate_inode_pages2_range returned %d\n", ret);
->> +		}
->> +
->>   		/* Set up the assertion */
->>   		if (rmw) {
->>   			/*
->>
->
-
+- Felix

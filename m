@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FFF4F6483
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA86E4F649A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbiDFQBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S236584AbiDFQCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236832AbiDFQAU (ORCPT
+        with ESMTP id S236990AbiDFQAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:00:20 -0400
+        Wed, 6 Apr 2022 12:00:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D292255AB7;
-        Wed,  6 Apr 2022 06:30:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708A1C4069;
+        Wed,  6 Apr 2022 06:31:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05226B823DD;
-        Wed,  6 Apr 2022 13:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9BD5AC385A7;
-        Wed,  6 Apr 2022 13:30:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53B18B823DC;
+        Wed,  6 Apr 2022 13:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DAF8C385A3;
+        Wed,  6 Apr 2022 13:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649251817;
-        bh=r0Jkg5TINenFot4Tj/g1Ta9k+qUla3NNZ2acVa9ZqqE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=f2lALW/iqquEnYqMFl+Q8Bc3OucCzWmO9VeeJdHeu9Gv5ixZR2hQ6F/MlC68mHsQU
-         k0rXAWLgr+Vg0RbCrj06h3WL7F5TtI9s9AKEMxxxNdfdnlfVhAceeqSXVb5DnDHRM6
-         qYbJ5R9NvN+r+RsgLfKsEEGCbW9X05f4VK5eJzjjfKNmJRtUTYNFBr6dz0Oi7o2dl8
-         kINPKBjoOCZr24mzDE1Txwx4Iqv1sebOSv1hIVltYDqgic9IuV2urjDjb/JgMRP9Qf
-         EZ9Xb5d0WH+wa49QslmlrTEdftoUp+hgzPBPjChmNWdoxJeoxU7Y1r3OseVElFucho
-         OXQ7xEAjLwdFA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D7DDE85D15;
-        Wed,  6 Apr 2022 13:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1649251883;
+        bh=Xc7+Od94RAwOKTzuYqP9McmHPkRVyqgshD8F5nfq0IQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DEviX4osjrypqtzkbq3NvjTNXgHYAd2izpUe3KiGInTFbeSZMJEPaL+ZBPtYa7K4U
+         c7Nj41Z9HsnKOGqD0bf1x9vRhQKKT9TSYFUOt6ORGC89Cei2QJGTqCJuIUXFE2VdLP
+         ftuGxgNTa1j5uv+bAfUHwrhsl70Bu3jpURXWw5xsIBXJLIZ+aQzhAhrLK5Z58GOiVS
+         kcttVX0IISnn9tMvtPzbeuTRASFYD8RtATjadyheoX6rnS+2slASa+U/HP7cBi6kOZ
+         kVVAn3X4DdrpnCxD0+ruxgQIcYFhWgkmXWxcUcOwQ76RSqr97HIO89fjFyySn0kzpF
+         o4pPFwtJkNXDQ==
+Date:   Wed, 6 Apr 2022 21:31:17 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH] arm64: dts: imx8mm-venice: fix spi2 pin configuration
+Message-ID: <20220406133117.GT129381@dragon>
+References: <20220228101617.12694-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/3] net: phy: mscc-miim: add MDIO bus frequency
- support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164925181750.19554.8207066606756390444.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 13:30:17 +0000
-References: <20220405120951.4044875-1-michael@walle.cc>
-In-Reply-To: <20220405120951.4044875-1-michael@walle.cc>
-To:     Michael Walle <michael@walle.cc>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        alexandre.belloni@bootlin.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228101617.12694-1-johan@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,37 +58,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue,  5 Apr 2022 14:09:48 +0200 you wrote:
-> Introduce MDIO bus frequency support. This way the board can have a
-> faster (or maybe slower) bus frequency than the hardware default.
+On Mon, Feb 28, 2022 at 11:16:17AM +0100, Johan Hovold wrote:
+> Due to what looks like a copy-paste error, the ECSPI2_MISO pad is not
+> muxed for SPI mode and causes reads from a slave-device connected to the
+> SPI header to always return zero.
 > 
-> changes since v2:
->  - resend, no RFC anymore, because net-next is open again
+> Configure the ECSPI2_MISO pad for SPI mode on the gw71xx, gw72xx and
+> gw73xx families of boards that got this wrong.
 > 
-> changes since v1:
->  - fail probe if clock-frequency is set, but not clock is given
->  - rename clk_freq to bus_freq
->  - add maxItems to interrupts property
->  - put compatible and reg first in the example
-> 
-> [...]
+> Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
+> Cc: stable@vger.kernel.org      # 5.12
+> Cc: Tim Harvey <tharvey@gateworks.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Here is the summary with links:
-  - [net-next,v3,1/3] dt-bindings: net: convert mscc-miim to YAML format
-    https://git.kernel.org/netdev/net-next/c/ed941f65da81
-  - [net-next,v3,2/3] dt-bindings: net: mscc-miim: add clock and clock-frequency
-    https://git.kernel.org/netdev/net-next/c/b0385d4c1fff
-  - [net-next,v3,3/3] net: phy: mscc-miim: add support to set MDIO bus frequency
-    https://git.kernel.org/netdev/net-next/c/bb2a1934ca01
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Applied, thanks!

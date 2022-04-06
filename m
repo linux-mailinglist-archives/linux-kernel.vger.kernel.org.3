@@ -2,208 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE304F6438
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AC14F6460
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiDFQDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S237024AbiDFQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236925AbiDFQCG (ORCPT
+        with ESMTP id S236731AbiDFQCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 12:02:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC1B34DD24;
-        Wed,  6 Apr 2022 06:32:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE18278C52;
+        Wed,  6 Apr 2022 06:32:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE0AE615F2;
-        Wed,  6 Apr 2022 13:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B71BC385A1;
-        Wed,  6 Apr 2022 13:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649251956;
-        bh=yVtK4OSU/dz7cCD7phTmXOaCwuF/h2svpJZzwvXXAsA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m2E73t23BrnyOD/+HPsx4+PRxqhU25KUf8RwocNfFy4KvnbUQtYBgALtv/829Y+Yj
-         EdSgOtO/TWXv7i5tweZFPLGDroNAQ2bY1WhKvG6ulS0xD7TNOgDi8Fav8N8I9p00vE
-         KvsEohRTPQqFs4z8wLlPGkELTD7+4w0aYM9ah4w6L4ZHhugxDP048LB6acYzE7dBHp
-         zHCFoUGv4/qZ0fMNzhNkUj41DSkP+cOeDk7tDlZEkLlhvnmKr8dDhvC/s+7DAWePo5
-         Z8lQ7Gp9rvnD0VnV8Ju0QBUnNgEU708dAWpHw91y0vUbZEw83dIl/NfQEJLpf45gdj
-         +Z21D2+nf6wQQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V2] csky: optimize memcpy_{from,to}io() and memset_io()
-Date:   Wed,  6 Apr 2022 21:32:22 +0800
-Message-Id: <20220406133222.724347-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C08961F7AE;
+        Wed,  6 Apr 2022 13:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649251951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fRYpW0cKkoFsVs1W48NO42/Imz4z4xmT/W/n6IF74TY=;
+        b=D3hjbmmd26QzFyFTDA48Xbsqomr7pFOECORnOpXG1KTLfMV7NWnPZNb1whNYDl0jBJdcyN
+        9ueIMQSlDdUzEDsxOSGDBOtP8iwqmksJZYEGIjGRb1l2Miof/x0AR5AO08NskWCwyPRTk8
+        l+gQ7z7loZ9aHCWiaiJSchJerdgl6cE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 89BE3139F5;
+        Wed,  6 Apr 2022 13:32:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CqxIIG+WTWLhAwAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 06 Apr 2022 13:32:31 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Subject: [PATCH] xen/balloon: fix page onlining when populating new zone
+Date:   Wed,  6 Apr 2022 15:32:29 +0200
+Message-Id: <20220406133229.15979-1-jgross@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+When onlining a new memory page in a guest the Xen balloon driver is
+adding it to the ballooned pages instead making it available to be
+used immediately. This is meant to enable to add a new upper memory
+limit to a guest via hotplugging memory, without having to assign the
+new memory in one go.
 
-Optimize memcpy_{from,to}io() and memset_io() by transferring in
-64 bit as much as possible with minimized barrier usage.  This
-simplest optimization brings faster throughput compare to current
-byte-by-byte read and write with barrier in the loop. Code's
-skeleton is taken from the powerpc & arm64.
+In case the upper memory limit will be raised above 4G, the new memory
+will populate the ZONE_NORMAL memory zone, which wasn't populated
+before. The newly populated zone won't be added to the list of zones
+looked at by the page allocator though, as only zones with available
+memory are being added, and the memory isn't yet available as it is
+ballooned out.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+This will result in the new memory being assigned to the guest, but
+without the allocator being able to use it.
+
+When running as a PV guest the situation is even worse: when having
+been started with less memory than allowed, and the upper limit being
+lower than 4G, ballooning up will have the same effect as hotplugging
+new memory. This is due to the usage of the zone device functionality
+since commit 9e2369c06c8a ("xen: add helpers to allocate unpopulated
+memory") for creating mappings of other guest's pages, which as a side
+effect is being used for PV guest ballooning, too.
+
+Fix this by checking in xen_online_page() whether the new memory page
+will be the first in a new zone. If this is the case, add another page
+to the balloon and use the first memory page of the new chunk as a
+replacement for this now ballooned out page. This will result in the
+newly populated zone containing one page being available for the page
+allocator, which in turn will lead to the zone being added to the
+allocator.
+
+Cc: stable@vger.kernel.org
+Fixes: 9e2369c06c8a ("xen: add helpers to allocate unpopulated memory")
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
-Changes in V2:
- - Fixup compile error by Makefile missing io.o
----
- arch/csky/include/asm/io.h | 11 +++++
- arch/csky/kernel/Makefile  |  2 +-
- arch/csky/kernel/io.c      | 91 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 103 insertions(+), 1 deletion(-)
- create mode 100644 arch/csky/kernel/io.c
+ drivers/xen/balloon.c | 72 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 65 insertions(+), 7 deletions(-)
 
-diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-index f82654053dc0..adb64e26194f 100644
---- a/arch/csky/include/asm/io.h
-+++ b/arch/csky/include/asm/io.h
-@@ -32,6 +32,17 @@
- #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
- #endif
+diff --git a/drivers/xen/balloon.c b/drivers/xen/balloon.c
+index dfe26fa17e95..f895c54c4c65 100644
+--- a/drivers/xen/balloon.c
++++ b/drivers/xen/balloon.c
+@@ -355,14 +355,77 @@ static enum bp_state reserve_additional_memory(void)
+ 	return BP_ECANCELED;
+ }
  
-+/*
-+ * String version of I/O memory access operations.
-+ */
-+extern void __memcpy_fromio(void *, const volatile void __iomem *, size_t);
-+extern void __memcpy_toio(volatile void __iomem *, const void *, size_t);
-+extern void __memset_io(volatile void __iomem *, int, size_t);
++static struct page *alloc_page_for_balloon(gfp_t gfp)
++{
++	struct page *page;
 +
-+#define memset_io(c,v,l)        __memset_io((c),(v),(l))
-+#define memcpy_fromio(a,c,l)    __memcpy_fromio((a),(c),(l))
-+#define memcpy_toio(c,a,l)      __memcpy_toio((c),(a),(l))
++	page = alloc_page(gfp);
++	if (page == NULL)
++		return NULL;
 +
- /*
-  * I/O memory mapping functions.
-  */
-diff --git a/arch/csky/kernel/Makefile b/arch/csky/kernel/Makefile
-index 6c0f36010ed0..4eb41421ca5b 100644
---- a/arch/csky/kernel/Makefile
-+++ b/arch/csky/kernel/Makefile
-@@ -2,7 +2,7 @@
- extra-y := head.o vmlinux.lds
++	adjust_managed_page_count(page, -1);
++	xenmem_reservation_scrub_page(page);
++
++	return page;
++}
++
++static void add_page_to_balloon(struct page *page)
++{
++	xenmem_reservation_va_mapping_reset(1, &page);
++	balloon_append(page);
++}
++
+ static void xen_online_page(struct page *page, unsigned int order)
+ {
+ 	unsigned long i, size = (1 << order);
+ 	unsigned long start_pfn = page_to_pfn(page);
+ 	struct page *p;
++	struct zone *zone;
  
- obj-y += entry.o atomic.o signal.o traps.o irq.o time.o vdso.o vdso/
--obj-y += power.o syscall.o syscall_table.o setup.o
-+obj-y += power.o syscall.o syscall_table.o setup.o io.o
- obj-y += process.o cpu-probe.o ptrace.o stacktrace.o
- obj-y += probes/
+ 	pr_debug("Online %lu pages starting at pfn 0x%lx\n", size, start_pfn);
+ 	mutex_lock(&balloon_mutex);
++	zone = page_zone(pfn_to_page(start_pfn));
++
++	/*
++	 * In case a new memory zone is going to be populated, we need to
++	 * ensure at least one page is made available for the memory allocator.
++	 * As the number of pages per zone is updated only after a batch of
++	 * pages having been added, use the number of managed pages as an
++	 * additional indicator for a new zone.
++	 * Otherwise this zone won't be added to the zonelist resulting in the
++	 * zone's memory not usable by the kernel.
++	 * Add an already valid page to the balloon and replace it with the
++	 * first page of the to be added new memory chunk.
++	 */
++	if (!populated_zone(zone) && !managed_zone(zone)) {
++		xen_pfn_t frame;
++
++		pr_info("Populating new zone\n");
++
++		p = alloc_page_for_balloon(GFP_ATOMIC);
++		if (!p) {
++			pr_err("Failed to allocate replacement balloon page!\n");
++			pr_err("New onlined memory might not be usable.\n");
++		} else {
++			kmap_flush_unused();
++			add_page_to_balloon(p);
++			flush_tlb_all();
++			frame = xen_page_to_gfn(p);
++			xenmem_reservation_decrease(1, &frame);
++			balloon_stats.current_pages--;
++		}
++
++		p = pfn_to_page(start_pfn);
++		frame = page_to_xen_pfn(p);
++		if (xenmem_reservation_increase(1, &frame) > 0) {
++			xenmem_reservation_va_mapping_update(1, &p, &frame);
++			free_reserved_page(p);
++			balloon_stats.current_pages++;
++
++			start_pfn++;
++			size--;
++		}
++	}
+ 	for (i = 0; i < size; i++) {
+ 		p = pfn_to_page(start_pfn + i);
+ 		balloon_append(p);
+@@ -452,14 +515,12 @@ static enum bp_state decrease_reservation(unsigned long nr_pages, gfp_t gfp)
+ 		nr_pages = ARRAY_SIZE(frame_list);
  
-diff --git a/arch/csky/kernel/io.c b/arch/csky/kernel/io.c
-new file mode 100644
-index 000000000000..5883f13fa2b1
---- /dev/null
-+++ b/arch/csky/kernel/io.c
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/export.h>
-+#include <linux/types.h>
-+#include <linux/io.h>
-+
-+/*
-+ * Copy data from IO memory space to "real" memory space.
-+ */
-+void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
-+{
-+	while (count && !IS_ALIGNED((unsigned long)from, 4)) {
-+		*(u8 *)to = __raw_readb(from);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+
-+	while (count >= 4) {
-+		*(u32 *)to = __raw_readl(from);
-+		from += 4;
-+		to += 4;
-+		count -= 4;
-+	}
-+
-+	while (count) {
-+		*(u8 *)to = __raw_readb(from);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memcpy_fromio);
-+
-+/*
-+ * Copy data from "real" memory space to IO memory space.
-+ */
-+void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
-+{
-+	while (count && !IS_ALIGNED((unsigned long)to, 4)) {
-+		__raw_writeb(*(u8 *)from, to);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+
-+	while (count >= 4) {
-+		__raw_writel(*(u32 *)from, to);
-+		from += 4;
-+		to += 4;
-+		count -= 4;
-+	}
-+
-+	while (count) {
-+		__raw_writeb(*(u8 *)from, to);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memcpy_toio);
-+
-+/*
-+ * "memset" on IO memory space.
-+ */
-+void __memset_io(volatile void __iomem *dst, int c, size_t count)
-+{
-+	u32 qc = (u8)c;
-+
-+	qc |= qc << 8;
-+	qc |= qc << 16;
-+
-+	while (count && !IS_ALIGNED((unsigned long)dst, 4)) {
-+		__raw_writeb(c, dst);
-+		dst++;
-+		count--;
-+	}
-+
-+	while (count >= 4) {
-+		__raw_writel(qc, dst);
-+		dst += 4;
-+		count -= 4;
-+	}
-+
-+	while (count) {
-+		__raw_writeb(c, dst);
-+		dst++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memset_io);
+ 	for (i = 0; i < nr_pages; i++) {
+-		page = alloc_page(gfp);
++		page = alloc_page_for_balloon(gfp);
+ 		if (page == NULL) {
+ 			nr_pages = i;
+ 			state = BP_EAGAIN;
+ 			break;
+ 		}
+-		adjust_managed_page_count(page, -1);
+-		xenmem_reservation_scrub_page(page);
+ 		list_add(&page->lru, &pages);
+ 	}
+ 
+@@ -480,11 +541,8 @@ static enum bp_state decrease_reservation(unsigned long nr_pages, gfp_t gfp)
+ 	list_for_each_entry_safe(page, tmp, &pages, lru) {
+ 		frame_list[i++] = xen_page_to_gfn(page);
+ 
+-		xenmem_reservation_va_mapping_reset(1, &page);
+-
+ 		list_del(&page->lru);
+-
+-		balloon_append(page);
++		add_page_to_balloon(page);
+ 	}
+ 
+ 	flush_tlb_all();
 -- 
-2.25.1
+2.34.1
 

@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3494C4F5F71
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2D34F5F7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiDFNHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S232882AbiDFN3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiDFNGU (ORCPT
+        with ESMTP id S233557AbiDFN1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:06:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1A043F1E0;
-        Tue,  5 Apr 2022 18:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649210144; x=1680746144;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UKNgpjiRni3tL6WxubyxbhjwOmfI6ZOVCE+2k1BSHyg=;
-  b=DbmfcPplIz3fNRGb8eHMynR0kmHqi53PqgcwETm+Xm0kS2yhpyIJbDxN
-   kmT4bFJ0ubBzgyj3g4rolgkaTy6VopHZGwPwmaPjU+xNGUOi594reRQ8y
-   UqC234NtdYb0bobpILpcIAvx6lx3nHH3M4upOu/3E5h9dtBhk7WuPnq8x
-   41M0W8cC9jKxfpRbheCFWSec/9RBx2nh7tJSrhP2EB7dcw7t7wRoZju1Z
-   D8Osg4U3nHZhIYiwjwpj4J10zqekuZiEycN9D/f3KHXVek7MIj06W3bus
-   gVWoaznbeVieIlWecJSwvc/EiJ5WWWLM+kI8FXh8tO0zo3xm+C5DTn0lZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243063871"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="243063871"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 18:55:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="652151630"
-Received: from dchang1-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.29.17])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 18:55:30 -0700
-Message-ID: <cec13fb656f05d8c9d231c225587072076448d71.camel@intel.com>
-Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
- allocate/free MKTME keyid
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Wed, 06 Apr 2022 13:55:28 +1200
-In-Reply-To: <20220331201550.GC2084469@ls.amr.corp.intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
-         <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
-         <20220331201550.GC2084469@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 6 Apr 2022 09:27:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F7C5F8F1
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:57:51 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KY6zR06WPzDqKX;
+        Wed,  6 Apr 2022 09:55:30 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 09:57:49 +0800
+Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
+ (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 6 Apr
+ 2022 09:57:49 +0800
+Subject: Re: [PATCH v3 2/2] drivers/perf: hisi: Add Support for CPA PMU
+To:     John Garry <john.garry@huawei.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     Zhangshaokun <zhangshaokun@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220321070124.41338-1-liuqi115@huawei.com>
+ <20220321070124.41338-3-liuqi115@huawei.com>
+ <823dedd5-38e2-21a9-cd4f-1ba966af902d@huawei.com>
+From:   "liuqi (BA)" <liuqi115@huawei.com>
+Message-ID: <c189bc40-b73c-5653-2717-0dabdd4ec964@huawei.com>
+Date:   Wed, 6 Apr 2022 09:57:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <823dedd5-38e2-21a9-cd4f-1ba966af902d@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.67]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +62,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-31 at 13:15 -0700, Isaku Yamahata wrote:
-> On Thu, Mar 31, 2022 at 02:21:06PM +1300,
-> Kai Huang <kai.huang@intel.com> wrote:
-> 
-> > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > 
-> > > MKTME keyid is assigned to guest TD.  The memory controller encrypts guest
-> > > TD memory with key id.  Add helper functions to allocate/free MKTME keyid
-> > > so that TDX KVM assign keyid.
-> > 
-> > Using MKTME keyid is wrong, at least not accurate I think.  We should use
-> > explicitly use "TDX private KeyID", which is clearly documented in the spec:
-> >   
-> > https://software.intel.com/content/dam/develop/external/us/en/documents-tps/intel-tdx-cpu-architectural-specification.pdf
-> > 
-> > Also, description of IA32_MKTME_KEYID_PARTITIONING MSR clearly says TDX private
-> > KeyIDs span the range (NUM_MKTME_KIDS+1) through
-> > (NUM_MKTME_KIDS+NUM_TDX_PRIV_KIDS).  So please just use TDX private KeyID here.
-> > 
-> > 
-> > > 
-> > > Also export MKTME global keyid that is used to encrypt TDX module and its
-> > > memory.
-> > 
-> > This needs explanation why the global keyID needs to be exported.
-> 
-> How about the followings?
-> 
-> TDX private host key id is assigned to guest TD.  The memory controller
-> encrypts guest TD memory with the assigned host key id (HIKD).  Add helper
-> functions to allocate/free TDX private host key id so that TDX KVM manage
-> it.
 
-HIKD -> HKID.  
+Hi John,
 
-You may also want to use KeyID in consistent way (KeyID, keyid, key id, etc).
-The spec uses KeyID.
+Thanks for the comments. some replies inline.
+
+On 2022/4/5 16:28, John Garry wrote:
+> On 21/03/2022 07:01, Qi Liu wrote:
+>> On HiSilicon Hip09 platform, there is a CPA(Coherency Protocol Agent) on
+> 
+> leave whitespace before '('
+> 
+ok, will fix this.
+>> each SICL (Super I/O Cluster) which implements packet format translation,
+>> route parsing and traffic statistic.
+> 
+> statistics
+will fix this, thanks.
+> 
+>>
+>> CPA PMU has 8 PMU counters and interrupt is supported to handle counter
+>> overflow. Let's support its driver under the framework of HiSilicon PMU
+>> driver.
+>>
+> 
+> Generally this looks ok, just some small comments to consider.
+> 
+> Thanks,
+> John
+> 
+>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>> ---
+>>   drivers/perf/hisilicon/Makefile              |   2 +-
+>>   drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c | 400 +++++++++++++++++++
+>>   include/linux/cpuhotplug.h                   |   1 +
+>>   3 files changed, 402 insertions(+), 1 deletion(-)
+>>   create mode 100644 drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+>>
+>> diff --git a/drivers/perf/hisilicon/Makefile 
+>> b/drivers/perf/hisilicon/Makefile
+>> index 506ed39e3266..6be83517acaa 100644
+>> --- a/drivers/perf/hisilicon/Makefile
+>> +++ b/drivers/perf/hisilicon/Makefile
+>> @@ -1,6 +1,6 @@
+>>   # SPDX-License-Identifier: GPL-2.0-only
+>>   obj-$(CONFIG_HISI_PMU) += hisi_uncore_pmu.o hisi_uncore_l3c_pmu.o \
+>>                 hisi_uncore_hha_pmu.o hisi_uncore_ddrc_pmu.o 
+>> hisi_uncore_sllc_pmu.o \
+>> -              hisi_uncore_pa_pmu.o
+>> +              hisi_uncore_pa_pmu.o hisi_uncore_cpa_pmu.o
+>>   obj-$(CONFIG_HISI_PCIE_PMU) += hisi_pcie_pmu.o
+>> diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c 
+>> b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+>> new file mode 100644
+>> index 000000000000..3f1d9c3f99fe
+>> --- /dev/null
+>> +++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+>> @@ -0,0 +1,400 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * HiSilicon SoC CPA(Coherency Protocol Agent) uncore hardware event 
+>> counters support
+> 
+> I am not sure why we even mention uncore for something which is not in a 
+> SCCL
+> 
+
+we metion uncore as it use hisi_uncore_pmu framework, I'll drop this 
+next time.
+>> + *
+>> + * Copyright (C) 2022 HiSilicon Limited
+>> + * Author: Qi Liu <liuqi115@huawei.com>
+>> + *
+>> + * This code is based on the uncore PMUs like arm-cci and arm-ccn.
+>> + */
+>> +
+[...]
+>> +
+>> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
+>> +                  struct hisi_pmu *cpa_pmu)
+>> +{
+>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+>> +                     &cpa_pmu->sicl_id)) {
+>> +        dev_err(&pdev->dev, "Can not read cpa_pmu sicl-id\n");
+> 
+> I don't think that you need to mention "cpa_pmu"
+
+will drop it.
 
 > 
-> Also export the global TDX private host key id that is used to encrypt TDX
-> module, its memory and some dynamic data (e.g. TDR).  When VMM releasing
-> encrypted page to reuse it, the page needs to be flushed with the used host
-> key id.  VMM needs the global TDX private host key id to flush such pages
-> TDX module accesses with the global TDX private host key id.
-> 
-> 
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
+>> +                     &cpa_pmu->index_id)) {
+>> +        dev_err(&pdev->dev, "Cannot read idx-id\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    cpa_pmu->ccl_id = -1;
+>> +    cpa_pmu->sccl_id = -1;
+>> +    cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>> +    if (IS_ERR(cpa_pmu->base))
+>> +        return PTR_ERR(cpa_pmu->base);
+>> +
+>> +    cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
+>> +
+>> +    return 0;
+>> +}
+>> +
 
-Find to me.
+[...]
 
+>> +
+>> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
+>> +{
+>> +    struct hisi_pmu *cpa_pmu;
+>> +    char *name;
+>> +    int ret;
+>> +
+>> +    cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
+>> +    if (!cpa_pmu)
+>> +        return -ENOMEM;
+>> +
+>> +    ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+
+>> +
+>> +    ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
+>> +    if (ret) {
+>> +        dev_err(cpa_pmu->dev, "PMU register failed\n");
+>> +        cpuhp_state_remove_instance_nocalls(
+>> +            CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
+>> +        return ret;
+>> +    }
+>> +
+>> +    platform_set_drvdata(pdev, cpa_pmu);
+>> +
+>> +    /* Power Management should be disabled before using CPA PMU. */
+>> +    hisi_cpa_pmu_disable_pm(cpa_pmu);
+> 
+> maybe you can move this earlier in the probe, before registering
+> 
+got it, will do this.
+
+>> +    return ret;
+>> +}
+>> +
+>> +static int hisi_cpa_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +    struct hisi_pmu *cpa_pmu = platform_get_drvdata(pdev);
+>> +
+>> +    hisi_cpa_pmu_enable_pm(cpa_pmu);
+> 
+> why do we do this?
+
+restore CPA registers after remove CPA PMU driver, as we disable pmu in 
+probe function.
+
+> 
+>> +    perf_pmu_unregister(&cpa_pmu->pmu);
+>> +    
+>> cpuhp_state_remove_instance_nocalls(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>> +                        &cpa_pmu->node);
+>> +    return 0;
+>> +}
+>> +
+>> +static struct platform_driver hisi_cpa_pmu_driver = {
+>> +    .driver = {
+>> +        .name = "hisi_cpa_pmu",
+>> +        .acpi_match_table = ACPI_PTR(hisi_cpa_pmu_acpi_match),
+>> +        .suppress_bind_attrs = true,
+>> +    },
+>> +    .probe = hisi_cpa_pmu_probe,
+>> +    .remove = hisi_cpa_pmu_remove,
+>> +};
+>> +
+>> +static int __init hisi_cpa_pmu_module_init(void)
+>> +{
+>> +    int ret;
+>> +
+>> +    ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>> +                      "AP_PERF_ARM_HISI_CPA_ONLINE",
+>> +                      hisi_uncore_pmu_online_cpu,
+>> +                      hisi_uncore_pmu_offline_cpu);
+>> +    if (ret) {
+>> +        pr_err("CPA PMU: setup hotplug: %d\n", ret);
+> 
+> you don't mention failed
+> 
+> And mostly we use lowercase for the driver name and maybe consider using 
+> pr_fmt
+> 
+got it, will fix this next time.
+
+Thanks,
+Qi
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = platform_driver_register(&hisi_cpa_pmu_driver);
+>> +    if (ret)
+>> +        cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
+>> +
+>> +    return ret;
+>> +}
+>> +module_init(hisi_cpa_pmu_module_init);
+>> +
+>> +static void __exit hisi_cpa_pmu_module_exit(void)
+>> +{
+>> +    platform_driver_unregister(&hisi_cpa_pmu_driver);
+>> +    cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
+>> +}
+>> +module_exit(hisi_cpa_pmu_module_exit);
+>> +
+>> +MODULE_DESCRIPTION("HiSilicon SoC CPA uncore PMU driver");
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
+>> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+>> index 411a428ace4d..d55063719904 100644
+>> --- a/include/linux/cpuhotplug.h
+>> +++ b/include/linux/cpuhotplug.h
+>> @@ -220,6 +220,7 @@ enum cpuhp_state {
+>>       CPUHP_AP_PERF_S390_SF_ONLINE,
+>>       CPUHP_AP_PERF_ARM_CCI_ONLINE,
+>>       CPUHP_AP_PERF_ARM_CCN_ONLINE,
+>> +    CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>>       CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
+>>       CPUHP_AP_PERF_ARM_HISI_HHA_ONLINE,
+>>       CPUHP_AP_PERF_ARM_HISI_L3_ONLINE,
+> 
+> .

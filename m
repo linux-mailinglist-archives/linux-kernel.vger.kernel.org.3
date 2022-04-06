@@ -2,157 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CDF4F57EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D404F57AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbiDFI0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S244975AbiDFIHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359202AbiDFIY0 (ORCPT
+        with ESMTP id S242803AbiDFIDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:24:26 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EA21FAA2D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:23:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id w21so887001pgm.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 18:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=het7xQEY6AiunexNVt3R9JrRc+WqABKqnLlFmve94Cc=;
-        b=itRW2E0kExcc0Xbaqr5Rh6BbC+cbZkZDFpK9xbhZMF0juee9my0sm58u9xyFrLsprz
-         ot2kFFHJ1bTgUg/fkR0IR5ACSG3O2kY3wbGZKsfnHPRgqglv6F20nLcOqRJYT6abN+b/
-         XUJnGOA9Pkr8343tkubrNfuBP3p0OT+EyRVXTb43d3x+xb9/TdGS7afMW/Ax8Qo/pUJj
-         /CkF2+7+R+QXIikz7cnO0nvZHX2zpv6hjyWAHgQSjiCrAqBOMM1nv1aRMn4TW+KAl1cm
-         H1HVHdBs+dCQa9JdCslDgZkoOj6P5HsLWe+AkWTDb0ClwzJ5EsIyIwJvQzH8Gy+hoUBN
-         956Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=het7xQEY6AiunexNVt3R9JrRc+WqABKqnLlFmve94Cc=;
-        b=43IMJqRNGyLGvyWgkMQ+Y1a9YGg+JbhfQv4cp+UnPKRBHC1B2Q39V9LCIuUvZxxnHg
-         O1hVnC0BFC4p5NaQOMv30gNWzHrsM4RveU7d7yRgoHIhuAfxIQ7RKRB1+l5yZCRXW5Uc
-         jtdFzgoDEjOY0QxKoyFJ/UMYZzVZEolDgO1apDIrABbd5Zn2ftizO/HsDEntGx4YdlX4
-         7Fs9NMBgW4LMLpFMhP2NBVkInWgPRaRfrbe9JEJ8MCYmfQbSin11pC847j7HJdMbguVw
-         113Cj3w6+EH7WKeccKrNSc/8gGlkG2zjJDurY/YNsknwXcc42K9puXkn/9ZbZNgBoS4u
-         IblA==
-X-Gm-Message-State: AOAM5324QDFS07EkpUBX/hTqcWh0Bh5XT90jP0LC+tUOpLCB3cOSo4UD
-        Z4J7GWfg3Two8WwSRefuotq+CQ==
-X-Google-Smtp-Source: ABdhPJzL8bboghyNu1DtoVv4HWrIhBJdeVZOAv1DNCUs8URWTJG38gLEY45sMuuz7zbtkBkVvRIltg==
-X-Received: by 2002:a05:6a02:28a:b0:385:f767:34f4 with SMTP id bk10-20020a056a02028a00b00385f76734f4mr5163616pgb.299.1649208179490;
-        Tue, 05 Apr 2022 18:22:59 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm3663556pjl.39.2022.04.05.18.22.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 18:22:58 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 01:22:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vasant Karasulli <vkarasulli@suse.de>
-Cc:     linux-kernel@vger.kernel.org, jroedel@suse.de, kvm@vger.kernel.org,
-        bp@alien8.de, x86@kernel.org, thomas.lendacky@amd.com,
-        varad.gautam@suse.com
-Subject: Re: [PATCH v6 2/4] x86/tests: Add tests for AMD SEV-ES #VC handling
- Add KUnit based tests to validate Linux's VC handling for instructions cpuid
- and wbinvd. These tests: 1. install a kretprobe on the #VC handler
- (sev_es_ghcb_hv_call, to access GHCB before/after the resulting VMGEXIT). 2.
- trigger an NAE by executing either cpuid or wbinvd. 3. check that the
- kretprobe was hit with the right exit_code available in GHCB.
-Message-ID: <Ykzrb1uyPZ2AKWos@google.com>
-References: <20220318094532.7023-1-vkarasulli@suse.de>
- <20220318094532.7023-3-vkarasulli@suse.de>
-MIME-Version: 1.0
+        Wed, 6 Apr 2022 04:03:21 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F2C21A8B6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:23:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Eorw/CDiAIl4U0fr/ogCwOfafaYNBUwK3ue9u6YCsf3/YiSnjZOULLFdKq52O2zb4NmWLQ9bjiHmDvjFHymAisudB2Dyz8ru2Rt36Nqd+or43pBufsfamCTCjgg+7unDjpWKcVLfaTFyCAs0POOlNKLyGeocOcXktLu4T375jlFwo+QstcxEm1c3k3cDYVrKWpndz7RMDTUKtS9wzUgyWCoTwIC5wU+4BkMjdXXanW9kSLMtJdV9ovl8/1wjjQCF8AeS7bjIWteOmbMZ8IqCR/oH0zPG92uE5UfwiVO2zqZY6lVDrnRn0MagQk3/6UObklWG480II6if57BRJTrLaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VX7nY/maTs39c3y0E+mRpnC5bmYRevtZdC0o0y0MuR0=;
+ b=AfpXln2Mb3GZxPqlwGBbZ8+65YT0VG5T1atFhZTdaL3e0EsRPib2WAjjNWCVrfFOALRVz+G1qKQtTHvdxy0JAGvyGiSQ5XqpnFCcd2j9zNRKFwEyLV2dI3F2do75BWyZiiuzfmc27/0KRtu2ckqyaJ9d/43qWgq6XoG7iPbnATfVPSL72a447p6sgCIafuznwSCt8rw2ncpqeMJ68QxxGB+eWP/++87HqyJOvea22Sc/RSCv8qC9XqRb4F2wQdtmwuyzR6YukC+nsgBrm+tisRvijj+6m+wExDSuQZiHpMz2FDyZknJgBqg9lFL0MNqZNryMPSxEcBO4wMRLrUhm2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VX7nY/maTs39c3y0E+mRpnC5bmYRevtZdC0o0y0MuR0=;
+ b=G8CBcKUJIEnVmPrZkiz8P1sv/GK/ovuDZ3G7zdNCVC+AHIR5ICx38I9AgREpKxweZ52pdkKVdZK4BM81u2KZjrNqPFI79bmkpUbyF8EPuSWpl1QWBTD5KQoWtXUx+AmhhLdUI3HVkpBSpS1TFPVfTIDHsgehJ8VBEBudpxaqpZDAfhS6/ZOA3rlG3GnFKmdto2PmsrLnWlQfXZbyUlUyDTAq+i/ySpy2el76hMXzP3s3iMvcijNnzjLmYvNYwXGikPARk626HBmtzDD7oomY4FaxLmkdbtHT6wo1xmYForgRY14NCI2vnWj5/OXY6Vzouc7SqEYfNBfzXJmlYdzvaQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BL1PR12MB5030.namprd12.prod.outlook.com (2603:10b6:208:313::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 01:23:37 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%5]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 01:23:37 +0000
+Date:   Tue, 5 Apr 2022 22:23:34 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 03/11] iommu/sva: Add iommu_domain type for SVA
+Message-ID: <20220406012334.GZ2120790@nvidia.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+ <20220329053800.3049561-4-baolu.lu@linux.intel.com>
+ <20220330190201.GB2120790@nvidia.com>
+ <BN9PR11MB5276A39F481E2E31B0FCFEAE8CE39@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220402233210.GM2120790@nvidia.com>
+ <BN9PR11MB527660D99D154F922B0A628B8CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318094532.7023-3-vkarasulli@suse.de>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <BN9PR11MB527660D99D154F922B0A628B8CE79@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: CH2PR20CA0009.namprd20.prod.outlook.com
+ (2603:10b6:610:58::19) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0f87a791-54dd-47d4-49d4-08da176c12e0
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5030:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5030FC15C765F50152BA0A0BC2E79@BL1PR12MB5030.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pd15dthn/j+rvXK5Hml1lQDpGAmO16+GzEDvK8awvj1U5EDg51Va4EAY7nTK5AFzj0YuqXslMTPuWvHN18t9pP4r9DseDYSDxBfHMevUj/Zlimbu/N9dsYuxQf1uciDdSTIGgW9AI8WjqmGJNVa3/FD3i0UG7ZXgOjVvOIGiHrCXKd3DIAOX3+XMak2DCKMU6ZAUfHOpnYCBdho2H1GEylWYPGcFGqNZHkxiY2JbJWDaVls14pySX60b0FuxvFxvrsm8ipRPkqmYv0O84RvgITOICtM9+DtVe/yCfMF+8QHp7zpfwbMBnmBxCZi8q9lNl2YbH0rI8TawVRC0dYxJHBTNJbtU+s04+VyyPI01YRmdCYt+gS5eauiMfGveW8hVkS0xbRuwMZLgqIp7FbmZZNfpoG8cWFOhtwjXQvgehCcIAAK3PKSLAUFerNnwqPDZ7yslokSUq5lR6/Y8hXTEQ7chpYw/3RKgio5A+Sr/YNywNLXeBhvCVBieUicXWUQp9rvGI9otSvvDV71F0MKgjb+jiOUM816I6De6Ql5m2rGSrdtJeKvtSpGvCn2fLtp2iQzo9HhxzbPmVRqLv5O+WxQ84qprvL12l+32nm4Lwykn4r7IzDqHuBhTKmzttJU4GAlxwQ38peDESLLRgMrl7Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(84040400005)(54906003)(186003)(26005)(6916009)(2906002)(38100700002)(66476007)(66946007)(4326008)(66556008)(83380400001)(8676002)(6666004)(316002)(6512007)(86362001)(6486002)(33656002)(7416002)(8936002)(4744005)(1076003)(5660300002)(508600001)(36756003)(2616005)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?INVuSyJMcG7Qa5E00EEamJn1isgpVFjkr4did4xhEAHiPzjvhP476PmHgff0?=
+ =?us-ascii?Q?l8Gr0GM9y7SoUsRUc6PpLNcNmZrj2kB3G5DyGWWXRjoTgyo1DT5TUXcLrw7K?=
+ =?us-ascii?Q?5+KKj3qYfGFybhXrmczsUr2QhmmkoNXkK8sfrqAVlgRRDTwj3x2B91cb/FA6?=
+ =?us-ascii?Q?Jt0cPlbA3imkyg0fV2jDHlrf5xNmT2aaFDzDdML6a/j5RNF/94HnFSTmgMYq?=
+ =?us-ascii?Q?tHjlvF1tKJASRSUvpdSonHb3mVilxevCegeFmlTptOhNQN0hVdgxDuKcqKXq?=
+ =?us-ascii?Q?bDcrOZwyZliHmv3wYCre0XAkx/PdycSKeRuphzuQpySKZ6Sbwa05EvHpKhGy?=
+ =?us-ascii?Q?tL+AsU1AfaIvxj++otTXS5OTAl9i7Oj8oSJc0qWru16gEz9aL8EbAWr+eJ7h?=
+ =?us-ascii?Q?c5WHD9rmRbMEag121xx2EcBWmZI5rxbOVrbs1nwfkCHLq/fsgxpl6SceJT//?=
+ =?us-ascii?Q?eQP9zVDucZ34naKW/k/rvyTJCfNHCScN9riSyTjaEIKi3oRzrtomRRlip9+k?=
+ =?us-ascii?Q?gQAGhsUkWxljPYXbAHZ93JBmgJhVX1x14/6Wx7ZXeTLRGCXk/NkIYG9lXfe0?=
+ =?us-ascii?Q?5+d9eYSOeAErc12thKFn+YzYALVo7TVEZyoIoDWJOcjkrcJy1UtwWyEkM2sI?=
+ =?us-ascii?Q?9ITbfONLvZUjA+dPbAfTGh4yJVhFnuJpg9y3gI0ufJATUA/eEdCWkOJ0W0fq?=
+ =?us-ascii?Q?DQMtykNyaIfkwiQYjXmuze1xphp/E4Nlk6N9A+wRrhsfNUZt+S4HU/wdibXh?=
+ =?us-ascii?Q?NbaMIhGXj0pJ4VNoLlzrKWeJYT9pG4uLBMdyEuJItdMoS6/StS4AkC7Wk5B1?=
+ =?us-ascii?Q?XPH+/ASjzZuep2+gJ6uPT65Yymgx/azKOgKq2V4E96D587GwyGvfVWDIMpz2?=
+ =?us-ascii?Q?Xihk5rxT84lnDGm3AStEOYlnQDjqNuRl9EgpyjhFtpOhCBcxkHTbIFeNgc0C?=
+ =?us-ascii?Q?dIul+7IgAfajSQ0mzAYulqAbSPA23Vp+zRIkbnfi/DOSNhDRvTgFoXhI/TI1?=
+ =?us-ascii?Q?APa9m4JYupWwKwRuSqomlHVxp9iKbk5DyV9nzdL7GLhExEYjhw+/JEIl4SlJ?=
+ =?us-ascii?Q?eNBADM2eGg6xWamMr2GD10jYQwglNGgkzFDjULgqc1bQp22L/XVU2+zkAB0z?=
+ =?us-ascii?Q?bFje1MeMB5gRNCzdPQNMhh5f8hHH2hzcPLDyNtluAQMlI+pLReVUv6XWOXXS?=
+ =?us-ascii?Q?cSbOo5Dd9PLVHxJNnyuNQs+v8iUk9AoQDxtunWsT/6WO9rfJDIPLXW6ifjUF?=
+ =?us-ascii?Q?A+VMBcY7aNjIkk/gH/+6B16xGzuN63Ns7dXLs0WonTLCCQMZjWLcqdgptU0U?=
+ =?us-ascii?Q?4dcnzns8RmrwXKcpI2jFiGzuZg8mi6dFZ0zs5HhxyccgQ9sWP6WIxB9zLL4D?=
+ =?us-ascii?Q?W7EMXJtjMG2p7nwl+eOTJOzCEhHpWfDeBtfRB0/6iirEv7H7T5lCgvIs61aX?=
+ =?us-ascii?Q?u7sL/IF2TMMws+nqL9aG4o+nR7PVjE9POas3rrI8cqSmCIbJmPBCY8T9tL+k?=
+ =?us-ascii?Q?s6H3b8nd6VJnN14fydmoJo8mvFzDe1O8zPt2/m5xI4cdCCiBkiO10tbeW1WR?=
+ =?us-ascii?Q?Yz/f/J9lpMN6lC+M7HxYRrCZQyEQoMlECcMRZcHSgYhvzWNWV/Tf1yoqSEPf?=
+ =?us-ascii?Q?EZ4DIzS3oJfRBruc4fBMHe8Q5F8DbIYhHuZirczsJmThlaTH567N08tm6Nn7?=
+ =?us-ascii?Q?JI6Rdrv11bSsjtz43/QTp78JvOq5/ZZZPjEzkJ/0CQmMDYh5TgQKlQPXN2VT?=
+ =?us-ascii?Q?2fNU+TGYyg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f87a791-54dd-47d4-49d4-08da176c12e0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 01:23:36.9285
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D5mWF1cGdSlbwuVb5enGYF7EWLtATY+GVBrCo14EpNOUmb+Qh8+fwGosRdHQ1gvn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5030
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The shortlog and changelog are all messed up.  Ditto for the other patches in this
-series.
+On Wed, Apr 06, 2022 at 01:00:13AM +0000, Tian, Kevin wrote:
 
-On Fri, Mar 18, 2022, Vasant Karasulli wrote:
-> Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
-> ---
->  arch/x86/tests/Makefile      |   2 +
->  arch/x86/tests/sev-test-vc.c | 114 +++++++++++++++++++++++++++++++++++
->  2 files changed, 116 insertions(+)
->  create mode 100644 arch/x86/tests/sev-test-vc.c
+> > Because domains wrap more than just the IOPTE format, they have
+> > additional data related to the IOMMU HW block itself. Imagine a SOC
+> > with two IOMMU HW blocks that can both process the CPU IOPTE format,
+> > but have different configuration.
+> 
+> Curious. Is it hypothesis or real? If real can you help give a concrete
+> example?
 
-...
+Look at arm_smmu_attach_dev() - the domain has exactly one smmu
+pointer which contains the base address for the SMMU IP block. If the
+domain doesn't match the smmu pointer from the struct device it won't
+allow attaching.
 
-> +int sev_es_test_vc_init(struct kunit *test)
-> +{
-> +	int ret;
-> +
-> +	if (!cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-> +		kunit_info(test, "Not a SEV-ES guest. Skipping.");
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	memset(&hv_call_krp, 0, sizeof(hv_call_krp));
-> +	hv_call_krp.entry_handler = hv_call_krp_entry;
-> +	hv_call_krp.handler = hv_call_krp_ret;
-> +	hv_call_krp.maxactive = 100;
-> +	hv_call_krp.data_size = sizeof(unsigned long);
-> +	hv_call_krp.kp.symbol_name = "sev_es_ghcb_hv_call";
-> +	hv_call_krp.kp.addr = 0;
-> +
-> +	ret = register_kretprobe(&hv_call_krp);
-> +	if (ret) {
-> +		kunit_info(test, "Could not register kretprobe. Skipping.");
-> +		goto out;
-> +	}
-> +
-> +	test->priv = kunit_kzalloc(test, sizeof(u64), GFP_KERNEL);
+I know of ARM SOCs with many copies of the SMMU IP block.
 
-Allocating 8 bytes and storing the pointer an 8-byte field is rather pointless :-)
+So at least with current drivers ARM seems to have this limitation.
 
-> +	if (!test->priv) {
-> +		ret = -ENOMEM;
-> +		kunit_info(test, "Could not allocate. Skipping.");
-> +		goto out;
-> +	}
-> +
-> +out:
-> +	return ret;
-> +}
-> +
-> +void sev_es_test_vc_exit(struct kunit *test)
-> +{
-> +	if (test->priv)
-> +		kunit_kfree(test, test->priv);
-> +
-> +	if (hv_call_krp.kp.addr)
-> +		unregister_kretprobe(&hv_call_krp);
-> +}
-> +
-> +#define check_op(kt, ec, op)			\
-> +do {						\
-> +	struct kunit *t = (struct kunit *) kt;	\
-> +	op;					\
-> +	KUNIT_EXPECT_EQ(t, (typeof(ec)) ec,	\
-> +		*((typeof(ec) *)(t->priv)));		\
-> +} while (0)
-> +
-> +static void sev_es_nae_cpuid(struct kunit *test)
-> +{
-> +	unsigned int cpuid_fn = 0x8000001f;
-> +
-> +	check_op(test, SVM_EXIT_CPUID, native_cpuid_eax(cpuid_fn));
-
-Are there plans to go beyond basic checks?  Neat idea, but it seems like it will
-be prone to bitrot since it requires a somewhat esoteric setup and an opt-in config.
-And odds are very good that if the kernel can make it this far as an SEV-ES guest,
-it's gotten the basics right.
+Jason

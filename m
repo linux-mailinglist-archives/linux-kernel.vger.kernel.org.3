@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90B64F6974
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B3F4F6A53
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiDFS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 14:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S232558AbiDFTtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiDFSwj (ORCPT
+        with ESMTP id S232691AbiDFTtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:52:39 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346041B8FCB;
-        Wed,  6 Apr 2022 11:36:39 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id m12so4423393ljp.8;
-        Wed, 06 Apr 2022 11:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MTXXhBg+FTagJspmijIFe2Eoza61RgpH2nZKIaqAxBo=;
-        b=m5KfhJDcvYaZq+SMyHRlozyi4aK9XzE9sGY198GkLb5v0PHpiaIk1+SFOo3D3yLQCT
-         LGKZZjXZiWBSa+8vgBE3XjAeDeOVkwkIKVL6qT63eW1fsmC7nSik2rfsiG+m5j5bWIFV
-         X5r6kO4k7AqSmfPO04I0epjb+8K1pdtxEir3HlPjfXNboaA3aUMpiPSn+FD4e8/2vzWn
-         0Qg9oK/GyV5mvCAWVB2UEd261/NYvDuic1Aw258anORoZ34JXgQN6AD2BnXPozV71egt
-         hsP3KxmrY98y+Eot9qn+ImfP+yIuXeq80iwWFCbCHEKc6CsQtwYOqihgP2hFCpPPcwGE
-         pqug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MTXXhBg+FTagJspmijIFe2Eoza61RgpH2nZKIaqAxBo=;
-        b=XSvIQ3lNS4cbaEhDLvRYzATRXqaIDNO3CKyDN2iHehJEu2BzQzYWgAKfHcAbpwQR1S
-         7YEOF7e+L4QO1xKGVXsymZRAbE8A0A80WnM+plhWldJNN5mWpHIGOYX3SMdGinJDDB5U
-         M+YlJI0QI6/YCX8MdToP5yqk4ZeusVxUnNu9DzOmj9vnW0yNibqdWceVFkT7s0nSOWp1
-         KybZMxXm3j88ojS7SmkubVtLGUkzCxJOuStgD2Dswsy7H3DquX1gxL57T0JYTH028Nwa
-         6/Ur93WBawWpKPnO5fDPGClcYPeh+MhjJtGFNwynYHY/ygt3ZxTR8G8sAkudXkq95AjD
-         Ntuw==
-X-Gm-Message-State: AOAM533kM1HnxGBnuz76gJuiNXV8odvNhhWrmLnXRfkr+XY1baH2GsY6
-        0dmdl36IaDNA2DuOrzoyUyI=
-X-Google-Smtp-Source: ABdhPJw7qDfUNjQQxm/7WkFnUA2kpGQV5Yz1O7JPZNHsIhiQxnUF4d7sPtt0/vvICgEyb+rAdyWSJg==
-X-Received: by 2002:a2e:9e19:0:b0:247:deb7:cd9f with SMTP id e25-20020a2e9e19000000b00247deb7cd9fmr5998897ljk.261.1649270197298;
-        Wed, 06 Apr 2022 11:36:37 -0700 (PDT)
-Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id t17-20020a192d51000000b0044a5a9960f9sm1907346lft.236.2022.04.06.11.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:36:35 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 21:36:34 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <20220406213634.104cae45@reki>
-In-Reply-To: <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
-        <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
-        <20220406195234.4f63cb4a@reki>
-        <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Apr 2022 15:49:09 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A64210447
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649270261; x=1680806261;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vwP7tqcATHHZbPTdGKag4qVPI+s/ZhYdH5Hhb5WB3pI=;
+  b=j+5OrFIiKUhF+fcNunzY4ArMaiuIa32lbz8thRQ4tT0YZr+q0bDWPagA
+   c0Q9CiX2YPZixw1k4X47Kg85Cw6SpWaXsSVR+F2w0m0jQ0fb1eeCpwZ+9
+   mgN4kX7Uj0RwcV3J+kqJ7Hwpgj7hgaVwckn5In/8Fb54eL0J2gFA2crAG
+   Qc3C7ZKPdgTj885dwfvdGnk0DVHUeLEa+ab3ePExxI34nnqyLMzzBvttu
+   4no6rlblGsv7DXZ2CFk/pWpAtdObIc3mRQZtaHVXFZ2uP3pZACjkdJwuf
+   MVxR4oC/+e8Oa+bI7jgQ+Vpp7Q225dwTkErrL0DRlzALRJ2EBQlX5TjsO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="321822244"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="321822244"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:37:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="588483890"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.19.90]) ([10.212.19.90])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:37:40 -0700
+Message-ID: <b19466ad-afae-7c70-cd28-73e3959c48f4@intel.com>
+Date:   Wed, 6 Apr 2022 11:37:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] staging: r8188eu: correct misspelling in comment
+ 'tppe' -> 'type'
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <cover.1649233201.git.remckee0@gmail.com>
+ <edaab7d38893e4f1cbb3c281b617c74fa91f0fe7.1649233201.git.remckee0@gmail.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <edaab7d38893e4f1cbb3c281b617c74fa91f0fe7.1649233201.git.remckee0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,98 +67,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=92 Wed, 6 Apr 2022 13:51:40 -0400
-Alan Stern <stern@rowland.harvard.edu> wrote:
 
-> On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote:
-> > > It's not clear to me how breaking I/O operations allows you to do a=20
-> > > "force eject".  It seems that what you would need is something like=20
-> > > fsg_store_file() that omits the curlun->prevent_medium_removal check.
-> > > Interrupting a lengthy I/O operation doesn't really have anything to =
-do=20
-> > > with this. =20
-> >=20
-> > Perhaps I chose the wrong path, it's just how my userspace code works n=
-ow.
-> > If the drive is connected to a Linux host, then in order to clear
-> > the "file" and extract the image, I sent a SIGUSR1 signal to the "file-=
-storage"
-> > thread. This interrupted long IO operations, reset curlun->prevent_medi=
-um_removal
-> > and I got the ability to extract. =20
->=20
-> Oh, I see.  That's kind of an unintended side effect of not calling=20
-> raise_exception().
->=20
-> And while it does interrupt long I/O operations, it does so in=20
-> non-sanctioned way.  To the host it will appear as though the gadget's=20
-> firmware has crashed, since the gadget will stop sending or receiving=20
-> data.  Eventually the host will time out and reset the gadget.
->=20
-> Maybe that's the sort of thing you want, but I rather doubt it.
+On 4/6/2022 1:30 AM, Rebecca Mckeever wrote:
+> Correct spelling typo.
+>
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> index cd20811ae152..f4a277e6b654 100644
+> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> @@ -1162,7 +1162,7 @@ u8 p2p_protocol_wk_cmd(struct adapter *padapter, int intCmdType)
+>   	}
+>   
+>   	pdrvextra_cmd_parm->ec_id = P2P_PROTO_WK_CID;
+> -	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command tppe. */
+> +	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command type. */
 
-It's hard to say how it actually should work in case of force removing.
-At least the currect approach with SIGUSR1 is really working on thousands
-systems and with Linux, Mac and Windows. I believe that the criterion
-of the experiment is quite important here. I know of several other utilities
-that use SIGUSR1 for similar purposes.
+Nothing to do with this patch. Just saw intCmdType. Suggest another 
+patch to fix this mixed case function parameter. Maybe cmd_type instead?
 
-> > Will masking the curlun->prevent_medium_removal flag be enough? =20
->=20
-> I think so.  But it will be blocked to some extent by long-running I/O=20
-> operations, because those operations acquire the filesem rw-semaphore=20
-> for reading.
->=20
-> More precisely, each individual command holds the rw-semaphore.  But the=
-=20
-> semaphore is dropped between commands, and a long-running I/O operation=20
-> typically consists of many separate commands.  So the blocking may be=20
-> acceptable.
 
-It is very important for KVM-over-IP to be able to command "turn it off imm=
-ediately".
-In this context, I would prefer "break_io" rather than "allow_force_remove".
-
-> > > You should not call send_sig_info() directly; instead call=20
-> > > raise_exception().  It already does the work you need (including some=
-=20
-> > > things you left out). =20
-> >=20
-> > raise_exception() assumes the setting of a new state, and I did not wan=
-t to do this,
-> > since the same does not happen when throwing a signal from userspace. =
-=20
->=20
-> Userspace isn't supposed to send the USR1 signal, only the INT, TERM, or=
-=20
-> KILL signals.  USR1 is supposed to be reserved for the driver's internal=
-=20
-> use.  Unfortunately, AFAIK there's no way to allow the driver to send a=20
-> signal to itself without also allowing the signal to be sent by=20
-> userspace.  :-(
-
-It's funny that you actually helped me solve my problem thanks to this undo=
-cumented
-behavior. If it were not for the ability to send a signal, I would not be a=
-ble to make
-the necessary code, and my software would always be waiting for the complet=
-ion of IO.
-
-So here I am grateful to you - I didn't have to patch the kernel a few year=
-s ago,
-and now I just want to turn it into a clear feature :)
-
-Given the needs of the userspace code, maybe the suggested "break_io"
-would be the best choice?
-
-> And sending the signal _does_ set a new state, whether you intended to=20
-> or not.  Although in this case, the new state is always the same as the=20
-> old state, i.e., FSG_STATE_NORMAL.
-
-So I could call raise_exception(fsg->common, FSG_STATE_NORMAL) instead of s=
-ending
-the signal from break_io handler. There will be a slight difference
-in exception_req_tag and exception_arg, but it does not seem to cause any s=
-ide effects.
-Please correct me if I'm wrong.
-
+>   	pdrvextra_cmd_parm->pbuf = NULL;		/*	Must be NULL here */
+>   
+>   	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));

@@ -2,132 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92684F5BE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583554F5D00
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiDFLDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S231990AbiDFL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241614AbiDFLCR (ORCPT
+        with ESMTP id S232851AbiDFL6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:02:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A20528D10
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:29:37 -0700 (PDT)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mw9Lu-1nsZaW0HZ6-00s6Zi for <linux-kernel@vger.kernel.org>; Wed, 06 Apr
- 2022 09:29:36 +0200
-Received: by mail-wr1-f45.google.com with SMTP id m30so1847161wrb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 00:29:36 -0700 (PDT)
-X-Gm-Message-State: AOAM532P/fXUxY7BOSmVH0Q7fTc8Mn3OTAWZhdzEpjf6x/jNxBHoXUyH
-        WMjNQBKtDmaY+PcNTBUV2FDMqSD8SNNB6pw1u4k=
-X-Google-Smtp-Source: ABdhPJzyKGu3dTz7c5wCMIgY8RrIo/iPoFC4jg/w0bCaH/HFgYzcAZoBaAjqJoBHz9Ym+MjmIi1iL6FIKFnTMAWf6Vc=
-X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
- e12-20020a056000178c00b002040648b4c4mr5325019wrg.219.1649230175681; Wed, 06
- Apr 2022 00:29:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-2-catalin.marinas@arm.com> <YkzX1nM0Ca7apVBt@hyeyoo>
-In-Reply-To: <YkzX1nM0Ca7apVBt@hyeyoo>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Apr 2022 09:29:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1K0=jwYEHVu=X7oAWk9dzaOYAdFsidwVRKCJVReSV3+g@mail.gmail.com>
-Message-ID: <CAK8P3a1K0=jwYEHVu=X7oAWk9dzaOYAdFsidwVRKCJVReSV3+g@mail.gmail.com>
-Subject: Re: [PATCH 01/10] mm/slab: Decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINALIGN
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>, roman.gushchin@linux.dev
+        Wed, 6 Apr 2022 07:58:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529E55282E1;
+        Wed,  6 Apr 2022 00:29:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE7361B07;
+        Wed,  6 Apr 2022 07:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5EB4C385A1;
+        Wed,  6 Apr 2022 07:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649230159;
+        bh=WHZxYEvNQiEvtRPZJjD6sKPf3DA/I8Quteci7raP7+Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=MsicdsXTVN+4lvCDpJgIPSRDbktbL6zh0EK3k2no2cKH6aQa+UN7k3DdvMSGOIJLd
+         aitJqfAcYad/4kvevRDfPDeioeaIQU1B0lgdHCV+qPzGDwHZbTR0Im5mcrmsec6DzQ
+         6qbEm+j55w5Tsnv1lKR6mwHIMk0uwl473EfQ6u527pNWeKbOBWt9SgfOq1Igu681Re
+         AiR7DuxdTi5MAD5TkYXGCwywvY11C7WfpfpRiuPmg/u2554jkDVYHssth2rX8pqZoE
+         PoagkEueDKRcOHnVSLXgvpMMV1WC6LZjIMT9jcH5riyhRBLHf+OI8Wx2GgOcTx6ela
+         gno1GVqyY3O9g==
+Message-ID: <2bf954521a3cfc7c677887b1eef772cfcc9e3157.camel@kernel.org>
+Subject: Re: [PATCH V3 14/30] x86/sgx: Support restricting of enclave page
+ permissions
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, nathaniel@profian.com
+Date:   Wed, 06 Apr 2022 10:30:28 +0300
+In-Reply-To: <38603303-f683-cb79-57e5-57fad5c5ae3b@intel.com>
+References: <cover.1648847675.git.reinette.chatre@intel.com>
+         <8ed9ee98ca26c9eefde0fd49062bca6e7b9efe80.1648847675.git.reinette.chatre@intel.com>
+         <c9071aa19076c7c618294f0c9cb830a8be96ae09.camel@kernel.org>
+         <26ab773de8842d03b40caf8645ca86884b195901.camel@kernel.org>
+         <91a02d50b2cba34dfb058fd864ba20ef1e6a5554.camel@kernel.org>
+         <10303ca73ea02a300636580e87446766374f66cb.camel@kernel.org>
+         <6e0feeadc562b9e3f0a524040469d4f5c3484824.camel@kernel.org>
+         <ca08465b6fa8af4121592c6381023fda5e0ade70.camel@kernel.org>
+         <59910ad4-a898-4eb2-5e2b-856c686b53fb@intel.com>
+         <0f44fba956288bcad69e076f84118bc50f8e5d2f.camel@kernel.org>
+         <38603303-f683-cb79-57e5-57fad5c5ae3b@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:So8h0q9ZQICwqajKA7j398ySPx4gnTPbhPGpZie+33Zigmexopl
- wSZmniBKQ0uIGXvbmFrT9K+Y10U4VM+UL6jXszHDMaveFq3nGa3woJDbH3+KLk9N8qU7FWW
- HWLS84Ip/+/TSIwnuKhOBrm9kA77xV7hK4SFos1xlP+0qm9E/zhBKv5t3fHiIhRz7E7T1iJ
- SC4KVpTMICvFF7Fa2Z/UA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:easS4jZt73c=:R0u25Ml8TVTrQg81cUg1Kd
- UbE1c4mBHm5Ub9TSNuIFb1Q+cNHVGZtAQI7t0Ajf4q3SA8dk+YiHiFBE6tWhCCBXkblq4D2Zf
- 0oA3RPzv/WARltUFvidfFzHDgx8Htwxqf893dEE8xvRcfY3B+cM3z5i4clWXash6h2KCZo2ga
- dhmgry5dvnhb1UjI+A/pxv6NL/aameEgGnuGrPt6/WNvuzWn8E3nHopWY32ruwx4yRjk3rV4l
- uGM65pBTfuZP86pAGBtnIgRld74YIjD6u6thEEdcC3G5Ly1417/B7Dw1MVfv1NzFbBbfEhEiU
- vQ2RXYqmEtDx8oKSTzE3POV1KkDPZaAACH57jBiD8Z6Xi5M0v+vnOGJNJHSr+8Is2hT8VFON/
- 3KbNE45omKqeVSPTPVw8l4oKXtMYDgk69eH4Nm+KW00aTxnctVuPJfeCNjIr8PtQ2hbvzLtSc
- q5GVnNr/oO0w9/OWiLvNSXh62PzeM2U5oVk5hri3F1470byaRK+/BdXIphxpCDOpm1yk0XrAX
- 2redUoIRjS8pdplL5q5HhivImHlLVG0p6n9IkDIKH8BdU4kew/4yBWikMtnJLHpwbOElZSejE
- 3LuOUV3/KDfSb1a/gv6NU7QIKrtDVXp58w6t8bHe2NihfUtD2LOORPgKNTQQm3IoeKqpRZ1hl
- wbzrmKPOc1PHOfqCnWVJud2PSSIZuhxTYVZx3aoNICarJgqf6M0CAh6wCwQa/YZ+CalKjAJ3T
- IEiEU3JGzuQJAkBSLqnLh91YReh/dWOO8sY9x1V2Jlp5TLTS40CAWsUSs3YWf4QNr13aaZwTK
- ThJo3/VIr5FFMgMt5D9vEf8kQzZx2cxFcJBsfM2BkvSMleEeDA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 1:59 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->
-> On Tue, Apr 05, 2022 at 02:57:49PM +0100, Catalin Marinas wrote:
-> > In preparation for supporting a dynamic kmalloc() minimum alignment,
-> > allow architectures to define ARCH_KMALLOC_MINALIGN independently of
-> > ARCH_DMA_MINALIGN. In addition, always define ARCH_DMA_MINALIGN even if
-> > an architecture does not override it.
-> >
->
-> [ +Cc slab maintainer/reviewers ]
->
-> I get why you want to set minimum alignment of kmalloc() dynamically.
-> That's because cache line size can be different and we cannot statically
-> know that, right?
->
-> But I don't get why you are trying to decouple ARCH_KMALLOC_MINALIGN
-> from ARCH_DMA_MINALIGN. kmalloc'ed buffer is always supposed to be DMA-safe.
->
-> I'm afraid this series may break some archs/drivers.
->
-> in Documentation/dma-api-howto.rst:
-> > 2) ARCH_DMA_MINALIGN
-> >
-> >   Architectures must ensure that kmalloc'ed buffer is
-> >   DMA-safe. Drivers and subsystems depend on it. If an architecture
-> >   isn't fully DMA-coherent (i.e. hardware doesn't ensure that data in
-> >   the CPU cache is identical to data in main memory),
-> >   ARCH_DMA_MINALIGN must be set so that the memory allocator
-> >   makes sure that kmalloc'ed buffer doesn't share a cache line with
-> >   the others. See arch/arm/include/asm/cache.h as an example.
-> >
-> >   Note that ARCH_DMA_MINALIGN is about DMA memory alignment
-> >   constraints. You don't need to worry about the architecture data
-> >   alignment constraints (e.g. the alignment constraints about 64-bit
-> >   objects).
->
-> If I'm missing something, please let me know :)
+On Tue, 2022-04-05 at 11:59 -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+>=20
+> On 4/5/2022 11:39 AM, Jarkko Sakkinen wrote:
+> > On Tue, 2022-04-05 at 09:49 -0700, Reinette Chatre wrote:
+> > > Hi Jarkko,
+> > >=20
+> > > On 4/5/2022 7:52 AM, Jarkko Sakkinen wrote:
+> > > > n Tue, 2022-04-05 at 17:27 +0300, Jarkko Sakkinen wrote:
+> > > > > According to SDM having page type as regular is fine for EMODPR,
+> > > > > i.e. that's why I did not care about having it in SECINFO.
+> > > > >=20
+> > > > > Given that the opcode itself contains validation, I wonder
+> > > > > why this needs to be done:
+> > > > >=20
+> > > > > if (secinfo.flags & ~SGX_SECINFO_PERMISSION_MASK)
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > > >=20
+> > > > > if (memchr_inv(secinfo.reserved, 0, sizeof(secinfo.reserved)))
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > > >=20
+> > > > > perm =3D secinfo.flags & SGX_SECINFO_PERMISSION_MASK;
+> > > > >=20
+> > > > > I.e. why duplicate validation and why does it have different
+> > > > > invariant than the opcode?
+> > > >=20
+> > > > Right it is done to prevent exceptions and also pseudo-code
+> > > > has this validation:
+> > > >=20
+> > > > IF (EPCM(DS:RCX).PT is not PT_REG) THEN #PF(DS:RCX); FI;=20
+> > >=20
+> > > The current type of the page is validated - not the page type
+> > > provided in the parameters of the command.
+> > >=20
+> > > >=20
+> > > > This is clearly wrong:
+> > >=20
+> > > Could you please elaborate what is wrong? The hardware only checks
+> > > the permission bits and that is what is provided.
+> >=20
+> > I think it's for most a bit confusing that it takes a special Linux
+> > defined SECINFO instead of what you read from spec.=20
+> >=20
+> > >=20
+> > > >=20
+> > > > /*
+> > > > =C2=A0* Return valid permission fields from a secinfo structure pro=
+vided by
+> > > > =C2=A0* user space. The secinfo structure is required to only have =
+bits in
+> > > > =C2=A0* the permission fields set.
+> > > > =C2=A0*/
+> > > > static int sgx_perm_from_user_secinfo(void __user *_secinfo, u64 *s=
+ecinfo_perm)
+> > > >=20
+> > > > It means that the API requires a malformed data as input.
+> > >=20
+> > > It is not clear to me how this is malformed. The API requires that on=
+ly
+> > > the permission bits are set in the secinfo, only the permission bits =
+in secinfo
+> > > is provided to the hardware, and the hardware only checks the permiss=
+ion bits.
+> > >=20
+> > > >=20
+> > > > Maybe it would be better idea then to replace secinfo with just the
+> > > > permission field?
+> > >=20
+> > > That is what I implemented in V1 [1], but was asked to change to seci=
+nfo. I could
+> > > go back to that if you prefer.
+> >=20
+> > Yeah, if I was the one saying that, I was clearly wrong. But also
+> > perspective is now very different after using a lot of these
+> > features.
+>=20
+> No problem, I understand.
+>=20
+> I plan to replace the current "secinfo" field in struct sgx_enclave_restr=
+ict_permissions
+> with a new "permissions" field that contain only the permissions. Please =
+let
+> me know if you have concerns with this (I also discuss this more in reply=
+ to
+> your other message related to the page type change ioctl()).
 
-It helps in two ways:
+I'm cool with it but if it is named as "permissions", then=C2=A0
+it is already software-defined entity, i.e. meaning just that
+have this check in place in the ioctl:
 
-- you can start with a relatively large hardcoded ARCH_DMA_MINALIGN
-  of 128 or 256 bytes, depending on what the largest possible line size
-  is for any machine you want to support, and then drop that down to
-  32 or 64 bytes based on runtime detection. This should always be safe,
-  and it means a very sizable chunk of wasted memory can be recovered.
+if (addp->permissions & !(PROT_READ | PROT_WRITE | PROT_EXEC))
+	return -EINVAL;
 
-- On systems that are fully cache coherent, there is no need to align
-  kmallloc() allocations for DMA safety at all, on these, we can drop the
-  size even below the cache line. This does not apply on most of the
-  cheaper embedded or mobile SoCs, but it helps a lot on the machines
-  you'd find in a data center.
-
-        Arnd
+BR, Jarkko

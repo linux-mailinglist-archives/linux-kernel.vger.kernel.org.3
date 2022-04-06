@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52C24F6BD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03C34F6BC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235033AbiDFU4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S234313AbiDFUzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234829AbiDFU4K (ORCPT
+        with ESMTP id S234611AbiDFUzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:56:10 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF8E3D2142;
-        Wed,  6 Apr 2022 12:16:08 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-df02f7e2c9so3971781fac.10;
-        Wed, 06 Apr 2022 12:16:08 -0700 (PDT)
+        Wed, 6 Apr 2022 16:55:17 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C383E3D5194;
+        Wed,  6 Apr 2022 12:17:32 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e2442907a1so3633166fac.8;
+        Wed, 06 Apr 2022 12:17:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=joF76rv1su2HJkDHzu00cHwinoChYU2eD7dMmYK9hq4=;
-        b=mEVXWiZHw5fXGIccRn5zCRYqFaftEFWdquK4vftIIqwdJvK8HA+Svjk0kbMZ5IdH04
-         eIXAm6xLmDgy5q81EqD9lK3vpTbDZGeqZz5UeDhs8/OSdT9BnHLmDU6nEhj5e4VUJ+O1
-         TwN0pynE0o6739Y3EYu74+mmODbx7nR5u5XgbIKsbVn3zkor7iY3DSKF3rD9z32Dq7Rk
-         dJjRma6tt1wDUCnF+mW6IQ8DLMVgD9pKPzojb1V+2qGTPPz6er6HUpIk4jxxkXFF5QCK
-         e8zWDTrzqwnGyPQ5iHDAa0drqBfraJIbMmqOmlYoYVfV7fGsa5rjkQDZqUWOz6KV8K+e
-         1TNw==
-X-Gm-Message-State: AOAM531tdCDg96iANg/Pcs4pkRS0azCAiTLtjPEYbUOUo7cZ0qD/c4tZ
-        8ILUzsyobq4ioNuWrvD57A==
-X-Google-Smtp-Source: ABdhPJzT/qS77COXOCRXvBFiaDxtp4Pbns326cuyD89xK5mSxhPwPbzIwdSd6Xf2u0GHhg3Wj7L3sA==
-X-Received: by 2002:a05:6870:9a10:b0:e1:fe1b:be44 with SMTP id fo16-20020a0568709a1000b000e1fe1bbe44mr4827226oab.250.1649272567951;
-        Wed, 06 Apr 2022 12:16:07 -0700 (PDT)
+        bh=+elv5nUcYO+9KxIPsGLm8mW7Otl7wTZ4tdEnucwBh/c=;
+        b=sLmennbdlBWZSwfIzISplH5XthZ61aHvz+6WZnd83vyqTRRWt1Pbkp/O/a851/RO8C
+         q2SgGyiGkBBCftm7FAd84G2yV432bSUITj/2fdlZ1ZuIlntVKv62b8l10UHFYAcfbtPx
+         s40EWiDhejKLwf+DSdBpbqAMXNMsLRpMSbaJn1yh6rjcHlbJDRy69hq0sKIzl1T5kMpL
+         Wn5XIfyFKVcpyLhZKY0ZKc4lkhwbln410YOYY6hyCJTW9iuDGWDhk7h0HliQwRJ0aIiA
+         TAxBDKo5w+0L1CTH7M7SgnWhIhQjURDcGc9BeI641owdWwZaqJqASz7hFQdJRWU/Hyck
+         S/2Q==
+X-Gm-Message-State: AOAM533uN4la/lF/WRHLyGLom3JOA73Yhc5wIm87erPjzlPtOruXHEGI
+        pzNUK2665wryGvA+TKmHEg==
+X-Google-Smtp-Source: ABdhPJzWUypFFpBzMufl7IKO2Huhe7Ol7N6/hBhhXxa5wzfiiHRzIVxOp8s5NaDTX2ceV8BZrbhv6g==
+X-Received: by 2002:a05:6870:9628:b0:e1:c420:af75 with SMTP id d40-20020a056870962800b000e1c420af75mr4617093oaq.246.1649272652036;
+        Wed, 06 Apr 2022 12:17:32 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t15-20020a056808158f00b002e331356c87sm6708039oiw.39.2022.04.06.12.16.07
+        by smtp.gmail.com with ESMTPSA id k30-20020a056870819e00b000e18ee342c0sm7171247oae.18.2022.04.06.12.17.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 12:16:07 -0700 (PDT)
-Received: (nullmailer pid 2612457 invoked by uid 1000);
-        Wed, 06 Apr 2022 19:16:07 -0000
-Date:   Wed, 6 Apr 2022 14:16:07 -0500
+        Wed, 06 Apr 2022 12:17:31 -0700 (PDT)
+Received: (nullmailer pid 2614465 invoked by uid 1000);
+        Wed, 06 Apr 2022 19:17:30 -0000
+Date:   Wed, 6 Apr 2022 14:17:30 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, soc@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>, soc@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] arm/arm64: dts: qcom: Fix boolean properties with
- values
-Message-ID: <Yk3m92Sj26/v1mLG@robh.at.kernel.org>
+Subject: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with values
+Message-ID: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -73,119 +72,272 @@ in behavior with this patch.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-Can someone please apply this for 5.18.
+Can someone apply this for 5.18.
 
- arch/arm/boot/dts/qcom-apq8064-pins.dtsi            | 12 ++++++------
- arch/arm64/boot/dts/qcom/msm8996.dtsi               |  4 ++--
- arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi |  2 +-
- arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |  2 +-
- 4 files changed, 10 insertions(+), 10 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
+ .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
+ 8 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064-pins.dtsi b/arch/arm/boot/dts/qcom-apq8064-pins.dtsi
-index cbe42c4153a0..b4d286a6fab1 100644
---- a/arch/arm/boot/dts/qcom-apq8064-pins.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064-pins.dtsi
-@@ -76,7 +76,7 @@ mux {
- 		pinconf {
- 			pins = "gpio20", "gpio21";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+index aff857df25cf..1df84335925b 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+@@ -262,25 +262,25 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
  
-@@ -116,7 +116,7 @@ mux {
- 		pinconf {
- 			pins = "gpio24", "gpio25";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+ 					gpio5 {
+ 						pins = "gpio5";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
  
-@@ -141,7 +141,7 @@ mux {
- 		pinconf {
- 			pins = "gpio8", "gpio9";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
  
-@@ -166,7 +166,7 @@ mux {
- 		pinconf {
- 			pins = "gpio12", "gpio13";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
  
-@@ -229,7 +229,7 @@ mux {
- 		pinconf {
- 			pins = "gpio16", "gpio17";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
+index 4631504c3c7a..1ab132c152bb 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
+@@ -462,25 +462,25 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
  
-@@ -282,7 +282,7 @@ mux {
- 		pinconf {
- 			pins = "gpio84", "gpio85";
- 			drive-strength = <2>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
+ 					gpio5 {
+ 						pins = "gpio5";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
  
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 4f1f88a2ec02..a94b44d44b63 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1247,14 +1247,14 @@ blsp1_i2c3_default: blsp1-i2c2-default {
- 				pins = "gpio47", "gpio48";
- 				function = "blsp_i2c3";
- 				drive-strength = <16>;
--				bias-disable = <0>;
-+				bias-disable;
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+index a7d7cfd66379..634d0f493c2e 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+@@ -174,19 +174,19 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
+index 0bd66f9c620b..0b219e72765e 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
+@@ -148,19 +148,19 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
+index 75eb743a7242..0fe772b04bd0 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
+@@ -59,7 +59,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <7>;
+ 					maxim,active-fps-power-down-slot = <0>;
+@@ -68,7 +68,7 @@ gpio1 {
+ 				gpio2_3 {
+ 					pins = "gpio2", "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+@@ -80,7 +80,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
  			};
  
- 			blsp1_i2c3_sleep: blsp1-i2c2-sleep {
- 				pins = "gpio47", "gpio48";
- 				function = "gpio";
- 				drive-strength = <2>;
--				bias-disable = <0>;
-+				bias-disable;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
+index 10347b6e6e84..936a309e288c 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
+@@ -1351,7 +1351,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <7>;
+ 					maxim,active-fps-power-down-slot = <0>;
+@@ -1360,14 +1360,14 @@ gpio1 {
+ 				gpio2 {
+ 					pins = "gpio2";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+@@ -1379,7 +1379,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
  			};
  
- 			blsp2_uart3_4pins_default: blsp2-uart2-4pins {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-index e90f99ef5323..e47c74e513af 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-@@ -33,7 +33,7 @@ trips {
- };
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+index 72c2dc3c14ea..f6446120c267 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+@@ -195,7 +195,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_NONE>;
+ 					maxim,active-fps-power-up-slot = <0>;
+ 					maxim,active-fps-power-down-slot = <7>;
+@@ -204,7 +204,7 @@ gpio1 {
+ 				gpio2 {
+ 					pins = "gpio2";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <0>;
+ 					maxim,active-fps-power-down-slot = <7>;
+@@ -213,7 +213,7 @@ gpio2 {
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <4>;
+ 					maxim,active-fps-power-down-slot = <3>;
+@@ -227,7 +227,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
+ 			};
  
- &alc5682 {
--	realtek,dmic-clk-driving-high = "true";
-+	realtek,dmic-clk-driving-high;
- };
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+index a263d51882ee..e42384f097d6 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+@@ -1386,7 +1386,7 @@ gpio0_1_2_7 {
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <4>;
+ 					maxim,active-fps-power-down-slot = <2>;
+@@ -1395,7 +1395,7 @@ gpio3 {
+ 				gpio5_6 {
+ 					pins = "gpio5", "gpio6";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
  
- &cpu6_alert0 {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-index 7f42e5315ecb..ad0d6147b6c8 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-@@ -619,7 +619,7 @@ mux {
- 			pins = "gpio6", "gpio25", "gpio26";
- 			function = "gpio";
- 			drive-strength = <8>;
--			bias-disable = <0>;
-+			bias-disable;
- 		};
- 	};
- 
+ 				gpio4 {
 -- 
 2.32.0
 

@@ -2,92 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD9A4F6CCC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889734F6CCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbiDFVe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S231542AbiDFVej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbiDFVeC (ORCPT
+        with ESMTP id S235029AbiDFVeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:34:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656721C137;
-        Wed,  6 Apr 2022 13:46:40 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236JIo60013726;
-        Wed, 6 Apr 2022 20:46:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=m96v/xVDd4vOarvxULRjnzqD3C6ItzSsq2ilLdDwCJc=;
- b=KgfQeX8u0bCBH4KxY4MXPpSAnT5g6ujpat8H9a8RTQfvRxc8+OaURvvSa64XeTQ+0pkm
- e77Lj7PCLpX/PyHQDeIaAJqFG4oSXpIj+qE8omIt872+7Vl20q2kRW5r+xqAYzPJI0i7
- 8YXImzBtnueKfXp3hXBD2BV7shwqZ4QCu27At0eJz9DMFVGoREkew5GVXaS5IdQUDbbS
- OeuZ/su+CIEdfPIP8pulv9VAugLdt3moFS6mdgaJafZ6s/QBUrvDNKUD60ZLcPTmx6Zn
- wbKLddonD4Sb2niCQbGvNLEKxnNe4Zif3API++qFmJo4DxwKceY4DoFTqCY4bhcNe218 lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f95vx8py9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 20:46:07 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 236Ka8Gr001302;
-        Wed, 6 Apr 2022 20:46:06 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f95vx8pxm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 20:46:06 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236KhIGf027197;
-        Wed, 6 Apr 2022 20:46:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3f6e48xykh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 20:46:03 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236Kk8me37814656
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 20:46:08 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30DE152052;
-        Wed,  6 Apr 2022 20:46:01 +0000 (GMT)
-Received: from sig-9-65-95-173.ibm.com (unknown [9.65.95.173])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1F3055204E;
-        Wed,  6 Apr 2022 20:45:59 +0000 (GMT)
-Message-ID: <6bfe3fe98eb7c11520264503fd10da478d6a3fd3.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/7] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, jarkko@kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        roberto.sassu@huawei.com, nramas@linux.microsoft.com,
-        pvorel@suse.cz, tiwai@suse.de, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Wed, 06 Apr 2022 16:45:58 -0400
-In-Reply-To: <20220406015337.4000739-1-eric.snowberg@oracle.com>
-References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: j7oGSx8GYEFdafEibWGWHDms1J3qshLs
-X-Proofpoint-ORIG-GUID: 1ZtL_67sM-Qxqi_1nqGwIY42WZNXI1xO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_12,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=855 phishscore=0 spamscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 6 Apr 2022 17:34:03 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6BA15837
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649278005; x=1680814005;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fvqODK3ztO62zOAA8u1/PyrlpBqIrBsKoDcGqSej0RU=;
+  b=WFJw+Ekc2kM5ev7HRIJqJxwOqSRcPiLLUbQib/+lJ36VTwcgltu1ELmy
+   dHXbR2chl7fRBEIabrOfPyTOoUB9cDf7/8gn+2O0t5EyhX6K9tt2N5YCl
+   oVvfbFTW/g0xbBGpi+p5ibFPfCt2G2zMy7Tc0vyyJMmgXrUICJs98J0qB
+   nddD9Y2sh3y3GCFe+8HxiUa7QqfpoJ44NCObT2DWJ3cgGR10QOg4jGePa
+   cs44D0ymFcxVQA9jNESzZyS44pAffVTISD8KYSUcxB9hX8MkE5F1YEl3w
+   1xx6K7bX1dc7Upr+y1n8Pp9DNGp7ut9o2QRF8DQE5SFEOdC5mJFmDMnFE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="321844975"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="321844975"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 13:46:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="658683636"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 13:46:43 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncCY7-0004jp-7C;
+        Wed, 06 Apr 2022 20:46:43 +0000
+Date:   Thu, 7 Apr 2022 04:46:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-ceph 22/22]
+ fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
+Message-ID: <202204070429.h8hMgEQm-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,50 +64,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-ceph
+head:   3eaf3110a87879d1fdaf472fd14885c99aa919a0
+commit: 3eaf3110a87879d1fdaf472fd14885c99aa919a0 [22/22] ceph: Pass an iter down from writepages
+config: hexagon-randconfig-r014-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070429.h8hMgEQm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/3eaf3110a87879d1fdaf472fd14885c99aa919a0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-ceph
+        git checkout 3eaf3110a87879d1fdaf472fd14885c99aa919a0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
 
-On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
-> A key added to the ima keyring must be signed by a key contained within 
-> either the builtin trusted or secondary trusted keyrings. Currently, there are 
-> CA restrictions described in IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY,
-> but these restrictions are not enforced within code. Therefore, keys within 
-> either the builtin or secondary may not be a CA and could be used to
-> vouch for an ima key.
-> 
-> The machine keyring can not be used as another trust anchor for adding keys 
-> to the ima keyring, since CA enforcement does not currently exist [1]. This 
-> would expand the current integrity gap.
-> 
-> Introduce a new root of trust key flag to close this integrity gap for
-> all keyrings.  The first key type to use this is X.509.  When a X.509 
-> certificate is self signed, contains kernCertSign Key Usage and contains 
-> the CA bit, the new flag is set.  Introduce new keyring restrictions 
-> that not only validates a key is signed by a key contained within the 
-> keyring, but also validates the key has the new root of trust key flag 
-> set.  Use this new restriction for keys added to the ima keyring.  Now 
-> that we have CA enforcement, allow the machine keyring to be used as another 
-> trust anchor for the ima keyring.
-> 
-> To recap, all keys that previously loaded into the builtin, secondary or
-> machine keyring will still load after applying this series.  Keys
-> contained within these keyrings may carry the root of trust flag. The
-> ima keyring will use the new root of trust restriction to validate
-> CA enforcement. Other keyrings that require a root of trust could also 
-> use this in the future.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Your initial patch set indicated that you were addressing Linus'
-request to allow end-users the ability "to add their own keys and sign
-modules they trust".  However, from the design of the previous patch
-set and now this one, everything indicates a lot more is going on than
-just allowing end-users to add their own keys.  There would be no
-reason for loading all the MOK keys, rather than just the CA keys, onto
-the "machine" keyring.  Please provide the motivation for this design.
+All errors (new ones prefixed by >>):
 
-Please note that Patch 6/7 permits intermediary CA keys, without any
-mention of it in the cover letter.  Please include this in the
-motivation for this design.
+>> fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
+                                   if (skips >= 5 || need_resched())
+                                       ^
+   fs/ceph/addr.c:1049:5: error: use of undeclared identifier 'skips'
+                                   skips++;
+                                   ^
+   2 errors generated.
 
-thanks,
 
-Mimi
+vim +/skips +1047 fs/ceph/addr.c
 
+   982	
+   983	/*
+   984	 * write a region of pages back to the server
+   985	 */
+   986	static int ceph_writepages_region(struct address_space *mapping,
+   987					  struct writeback_control *wbc,
+   988					  struct ceph_snap_context *snapc,
+   989					  struct ceph_writeback_ctl *ceph_wbc,
+   990					  loff_t start, loff_t end, loff_t *_next)
+   991	{
+   992		struct folio *folio;
+   993		ssize_t ret;
+   994	
+   995		printk("%s(%llx,%llx)", __func__, start, end);
+   996	
+   997		do {
+   998			pgoff_t index = start / PAGE_SIZE;
+   999			pgoff_t end = end / PAGE_SIZE;
+  1000	
+  1001			folio = ceph_scan_for_writeable_page(mapping, snapc, index, end);
+  1002			if (!folio)
+  1003				break;
+  1004	
+  1005			start = folio_pos(folio); /* May regress with THPs */
+  1006	
+  1007			printk("wback %lx\n", folio_index(folio));
+  1008	
+  1009			/* At this point we hold neither the i_pages lock nor the
+  1010			 * page lock: the page may be truncated or invalidated
+  1011			 * (changing page->mapping to NULL), or even swizzled
+  1012			 * back from swapper_space to tmpfs file mapping
+  1013			 */
+  1014			if (wbc->sync_mode != WB_SYNC_NONE) {
+  1015				ret = folio_lock_killable(folio);
+  1016				if (ret < 0) {
+  1017					folio_put(folio);
+  1018					return ret;
+  1019				}
+  1020			} else {
+  1021				if (!folio_trylock(folio)) {
+  1022					folio_put(folio);
+  1023					return 0;
+  1024				}
+  1025			}
+  1026	
+  1027			if (folio_mapping(folio) != mapping ||
+  1028			    folio_get_private(folio) != snapc ||
+  1029			    !folio_test_dirty(folio)) {
+  1030				start += folio_size(folio);
+  1031				folio_unlock(folio);
+  1032				folio_put(folio);
+  1033				continue;
+  1034			}
+  1035	
+  1036			if (folio_test_writeback(folio) ||
+  1037			    folio_test_fscache(folio)) {
+  1038				folio_unlock(folio);
+  1039				if (wbc->sync_mode != WB_SYNC_NONE) {
+  1040					folio_wait_writeback(folio);
+  1041					folio_wait_fscache(folio);
+  1042				} else {
+  1043					start += folio_size(folio);
+  1044				}
+  1045				folio_put(folio);
+  1046				if (wbc->sync_mode == WB_SYNC_NONE) {
+> 1047					if (skips >= 5 || need_resched())
+  1048						break;
+  1049					skips++;
+  1050				}
+  1051				continue;
+  1052			}
+  1053	
+  1054			if (!folio_clear_dirty_for_io(folio))
+  1055				BUG();
+  1056			ret = ceph_write_back_from_locked_folio(mapping, wbc, snapc, ceph_wbc,
+  1057								folio, start, end);
+  1058			folio_put(folio);
+  1059			if (ret < 0)
+  1060				return ret;
+  1061	
+  1062			start += ret;
+  1063	
+  1064			cond_resched();
+  1065		} while (wbc->nr_to_write > 0);
+  1066	
+  1067		*_next = start;
+  1068		printk("%s() = 0 [%llx]\n", __func__, *_next);
+  1069		return 0;
+  1070	}
+  1071	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

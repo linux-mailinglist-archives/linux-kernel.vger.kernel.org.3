@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF60A4F6AAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41364F6A8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbiDFUAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S233237AbiDFTyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiDFT7c (ORCPT
+        with ESMTP id S235471AbiDFTxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:59:32 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210322E1627
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:29:42 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 2so3210023pjw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 10:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rr+xzlj7vxdfalta/rr/vaKILwxRPcQ5/NXkWgY8K0M=;
-        b=B1sq59hw7ckgQoFKnsvmJEAip8CSip0a3sLJR00RxPH+khENkQjAQh+kGzBFbqGjv8
-         citQ4qw67DSyfwtGlKNNuIWL2hIUe6J9qjHzgonZu6wuCG7dLAtC8e1IjtXwMAze0sDj
-         RLNQx0bJkjkiIxjwT0lKFRoFztKbmKj/m+Y+I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rr+xzlj7vxdfalta/rr/vaKILwxRPcQ5/NXkWgY8K0M=;
-        b=6qOAGBQ6h2k6WIhqmrTo2WfMwKSy6wM/B+tgWoSZ8eO0dtHcR8WkyQ9BK+iEUNgouv
-         H7GZASEOjU+1rBtI9xtEKOIeank8TnHidLRHSfmIz690YlcW0afzw38+R9Z6Izstnelf
-         TmEBfmlStnYkWss8n0oe9I0pGCvy4U4xagm1lyheWJO6CgUEqFSqgUmLlISyqo9GBEdJ
-         3UU0kCyaX9DZFODo/c8CSI+brCbSKeznNbFqsyQusjTgra00LIIp06sJlY3+s/Ion3Zk
-         n/1PXZvLQZx3QkemlYvD4gUFPW04RobZz1amZxgOBCv11ILTQ85U8uJDpBlcW5+HsCQR
-         eMOA==
-X-Gm-Message-State: AOAM531FKtksUwkPNJQOCA/RUE7Xv/nrz64LZQfnheCQ6AIEt4XET+SP
-        Qw49wSZoF9TbBYWAYSNzNfq0XQ==
-X-Google-Smtp-Source: ABdhPJwdSFDwLNqsqc2vubhlC0RRxfBG/wKDtKr3C4VRsDexJML+RuUfa9a4Gqn1DJb+ZvQadwh34w==
-X-Received: by 2002:a17:902:da83:b0:156:aa83:8409 with SMTP id j3-20020a170902da8300b00156aa838409mr9949694plx.22.1649266181846;
-        Wed, 06 Apr 2022 10:29:41 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:dddf:7cc7:1261:9584])
-        by smtp.gmail.com with UTF8SMTPSA id z10-20020a17090a8b8a00b001ca7bafba51sm6126276pjn.0.2022.04.06.10.29.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 10:29:41 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 10:29:39 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        dianders@chromium.org
-Subject: Re: [V2] drivers/tty/serial/qcom-geni-serial: Do stop_rx in suspend
- path for console if console_suspend is disabled
-Message-ID: <Yk3OA8CLoijOyDDf@google.com>
-References: <1649233612-30844-1-git-send-email-quic_vnivarth@quicinc.com>
+        Wed, 6 Apr 2022 15:53:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF22EC4FF;
+        Wed,  6 Apr 2022 10:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85555B803F7;
+        Wed,  6 Apr 2022 17:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F5BC385A1;
+        Wed,  6 Apr 2022 17:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649266214;
+        bh=TzTlpFZtH0J+36S9N9L4ND/H/yCs90y6P3aB8Lln2MI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CDIGt5bbay39GvswOhiiR9x75f4CZ8870l7rpiON7ocOR7Me8MM0zEhEwZm/0UnWZ
+         xb0eOyjBo1tE5/yrUkFFzNGfXk0IMQqFaXgvgQmgnx6t7Q/ieFGMllaRCJ0+/hmhAa
+         OVI2CLkcS36qkpexDIETUelaifR4eghO4GfP5Ywwe29lEOvaVO1fe6+lhP3kUGCEun
+         M9CkpTS01zPwawvH3vfQYBHxYkZOtnXmEJfzGPJaZAf5UF7vkoe77u2dcRQ06Zi/h+
+         Lzf7r9aeghgL7ZPdLdOoLFa9eIAk2MUQfK6SeqnSay9Tbwd0nJRipOO2YEoIAW1THs
+         3pqmcTIqow9Sg==
+Received: by wens.tw (Postfix, from userid 1000)
+        id 4A61B5F8E8; Thu,  7 Apr 2022 01:30:11 +0800 (CST)
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Chen-Yu Tsai <wens@csie.org>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: vendor-prefixes: Add prefix for SINO WEALTH Eletronics Ltd.
+Date:   Thu,  7 Apr 2022 01:29:53 +0800
+Message-Id: <20220406172956.3953-2-wens@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220406172956.3953-1-wens@kernel.org>
+References: <20220406172956.3953-1-wens@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649233612-30844-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,47 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 01:56:52PM +0530, Vijaya Krishna Nivarthi wrote:
-> For the case of console_suspend disabled, if back to back suspend/resume
-> test is executed, at the end of test, sometimes console would appear to
-> be frozen not responding to input. This would happen because, for
-> console_suspend disabled, suspend/resume routines only turn resources
-> off/on but don't do a port close/open.
-> As a result, during resume, some rx transactions come in before system is
-> ready, malfunction of rx happens in turn resulting in console appearing
-> to be stuck.
-> 
-> Do a stop_rx in suspend sequence to prevent this. start_rx is already
-> present in resume sequence as part of call to set_termios which does a
-> stop_rx/start_rx.
-> 
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 1543a60..6f767c7 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1481,6 +1481,10 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
->  	struct uart_port *uport = &port->uport;
->  	struct qcom_geni_private_data *private_data = uport->private_data;
->  
-> +	/* do a stop_rx here, start_rx is handled in uart_resume_port by call to setermios */
-> +	if (!console_suspend_enabled && uart_console(uport))
+From: Chen-Yu Tsai <wens@csie.org>
 
-nit: I think for a human reader would be slightly clearer to swap the order
-of the conditions, i.e.:
+Add a vendor prefix entry for SINO WEALTH Eletronics Ltd.
+(http://www.sinowealth.com).
 
-	if (uart_console(uport) && !console_suspend_enabled)
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +		uport->ops->stop_rx(uport);
-> +
->  	/*
->  	 * This is done so we can hit the lowest possible state in suspend
->  	 * even with no_console_suspend
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..79b72e370ade 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1130,6 +1130,8 @@ patternProperties:
+     description: Sinlinx Electronics Technology Co., LTD
+   "^sinovoip,.*":
+     description: SinoVoip Co., Ltd
++  "^sinowealth,.*":
++    description: SINO WEALTH Electronic Ltd.
+   "^sipeed,.*":
+     description: Shenzhen Sipeed Technology Co., Ltd.
+   "^sirf,.*":
+-- 
+2.34.1
 
-v1 one had additional changes which weren't directly related with
-console_suspend. They looked worthwhile though, please make sure to
-send them in separate patches.

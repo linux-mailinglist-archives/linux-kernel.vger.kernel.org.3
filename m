@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309094F609E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4F94F6078
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbiDFNtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S233909AbiDFNtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233693AbiDFNsr (ORCPT
+        with ESMTP id S233738AbiDFNtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:48:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E2F3EBBB0
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649243492; x=1680779492;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5zAPlitVhq7Zz5awiIbt0Hh0xmnzODkAAmPavcozI8E=;
-  b=k82Pod7XocIbdQe/mGxZT7SONngLpWTCE212KTidzgQOx8TnOGxvXZEe
-   1C5PDC02mKGZN3K/WfQIVP3VvLEdHsewxM0r/OdJKr9HCRvM8Bl4bwj83
-   a8p2j8q4NE3GaS0J8iH2dLsgMJr5MWArPE4Zfrxvg+can6g8zI8OPN/jw
-   cXdI3sD3afLnHeCEXx8rPy4ohnvmswJNx4r128L/5eYaRhUl/eMsX5plo
-   RPqkHjDfQHuUXKVOpQw+eR9dmnXQe2DEq4fcK16ZCdogdggeAA0GgCTqB
-   xW1UhWj1qzrbIZXl0Fo8faHVnvZCwAtgwxNIVwuHJP9fhGyEwwtQbyGv6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="248540598"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="248540598"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:11:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="570468489"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.173.64]) ([10.249.173.64])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:11:29 -0700
-Subject: Re: [kbuild-all] Re:
- [ammarfaizi2-block:paulmck/linux-rcu/fastexp.2022.04.01a 109/158] WARNING:
- modpost: vmlinux.o(.text+0xbcac06): Section mismatch in reference from the
- function ieee802154_iface_init() to the variable .init.text:.L0
-To:     paulmck@kernel.org, kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-References: <202204040012.4Fu9uBps-lkp@intel.com>
- <20220403183040.GP4285@paulmck-ThinkPad-P17-Gen-1>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <53cf3eac-37d5-17d6-3805-416a71256e98@intel.com>
-Date:   Wed, 6 Apr 2022 19:11:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Wed, 6 Apr 2022 09:49:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00B66D1B68;
+        Wed,  6 Apr 2022 04:17:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68401B82014;
+        Wed,  6 Apr 2022 11:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE273C385A3;
+        Wed,  6 Apr 2022 11:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649243874;
+        bh=7LHnVNHcEpVspRSCfG1S+Ca+XYKk7J8eU7YTFtzdfYI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=r3tjcj3EM5yCFNFZOvxZ8VmWUC2KgykSEsAsh26vJHbZc8GehVMB58ImJfzOJOCHN
+         l/CUQltVX6S2BK5NhGYZXYg3+G2gPIQs0mQ4eV08paTjUnMv0bjJ3PVX2Rgta96Yi6
+         2eoZUhFtXk313tib0tsUbGV+TaWqT7ORMqxgFzcUCM69x/46qwOlm/IofdiVsLTEgk
+         Nu9LhLVwZXaxDAn0DJQMiADlfyf02NHxANnWXmIfV+t7i/Po4ycMjfPE6p7raFdVxY
+         urq7Fm9JuXlK1DbDwfohaxpaxD0b4LzIyqS3GWDXrBra9Ei7t0lceqh95uADMOcL6B
+         9olZAcSnD8m1g==
+Date:   Wed, 6 Apr 2022 06:17:51 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [RFC] PCI: sysfs: add bypass for config read admin check
+Message-ID: <20220406111751.GA132418@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20220403183040.GP4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406071131.2930035-1-stevensd@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[+cc Kees]
 
-
-On 4/4/2022 2:30 AM, Paul E. McKenney wrote:
-> On Mon, Apr 04, 2022 at 12:20:22AM +0800, kernel test robot wrote:
->> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/fastexp.2022.04.01a
->> head:   d9f3e7d671416fdf5b61f094765754269b652db0
->> commit: c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba [109/158] rcu: Add polled expedited grace-period primitives
->> config: 	 (https://download.01.org/0day-ci/archive/20220404/202204040012.4Fu9uBps-lkp@intel.com/config)
->> compiler: riscv32-linux-gcc (GCC) 11.2.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://github.com/ammarfaizi2/linux-block/commit/c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba
->>          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->>          git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/fastexp.2022.04.01a
->>          git checkout c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> WARNING: modpost: vmlinux.o(.text+0xbcac06): Section mismatch in reference from the function ieee802154_iface_init() to the variable .init.text:.L0
->> The function ieee802154_iface_init() references
->> the variable __init .L0 .
->> This is often because ieee802154_iface_init lacks a __init
->> annotation or the annotation of .L0 is wrong.
->>
->> Note: the below error/warnings can be found in parent commit:
->> << WARNING: modpost: vmlinux.o(.text+0x432e6): Section mismatch in reference from the function dma_get_required_mask() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xe35ca): Section mismatch in reference from the function mlock_page_drain() to the variable .init.text:.LVL125
->> << WARNING: modpost: vmlinux.o(.text+0x96a46e): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a5b4): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a5c0): Section mismatch in reference from the function rpmsg_send() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a5d4): Section mismatch in reference from the function rpmsg_sendto() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a5e8): Section mismatch in reference from the function rpmsg_send_offchannel() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a5fc): Section mismatch in reference from the function rpmsg_trysend() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a610): Section mismatch in reference from the function rpmsg_trysendto() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0x96a624): Section mismatch in reference from the function rpmsg_poll() to the variable .init.text:.L0
+On Wed, Apr 06, 2022 at 04:11:31PM +0900, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
 > 
-> I freely confess that I have no idea what any of these error messages
-> are trying to tell me.  What is ".init.txt.L0"?  How did my patch affect
-> ieee802154_iface_init() or the register_netdevice_notifier() function
-> that it invokes?  For that matter, how did my patch cause an access to
-> be made to __init data from a non-__init function?
+> Add a moduleparam that can be set to bypass the check that limits users
+> without CAP_SYS_ADMIN to only being able to read the first 64 bytes of
+> the config space. This allows systems without problematic hardware to be
+> configured to allow users without CAP_SYS_ADMIN to read PCI
+> capabilities.
+
+Can you expand this a bit to explain the purpose of this?  I guess it
+makes "lspci -v" work without having to be root?  How much of a
+problem is that?  Is there some specific use case that needs this
+change?  Maybe there's some way to address that without having to add
+a new parameter that bypasses CAP_SYS_ADMIN.
+
+> Signed-off-by: David Stevens <stevensd@chromium.org>
+> ---
+>  drivers/pci/pci-sysfs.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> 							Thanx, Paul
-
-Hi Paul,
-
-Sorry for the inconvenience, only below warning was triggered by the commit:
-
- >> All warnings (new ones prefixed by >>, old ones prefixed by <<):
- >>
- >>>> WARNING: modpost: vmlinux.o(.text+0xbcac06): Section mismatch in 
-reference from the function ieee802154_iface_init() to the variable 
-.init.text:.L0
-
-the others are for reference only:
- >> Note: the below error/warnings can be found in parent commit
-
-The problem has existed for some time before your patch, we'll add it to
-ignore list to avoid noise.
-
-Best Regards,
-Rong Chen
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 602f0fb0b007..162423b3c052 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -28,10 +28,17 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/msi.h>
+>  #include <linux/of.h>
+> +#include <linux/moduleparam.h>
+>  #include "pci.h"
+>  
+>  static int sysfs_initialized;	/* = 0 */
+>  
+> +static bool allow_unsafe_config_reads;
+> +module_param_named(allow_unsafe_config_reads,
+> +		   allow_unsafe_config_reads, bool, 0644);
+> +MODULE_PARM_DESC(allow_unsafe_config_reads,
+> +		 "Enable full read access to config space without CAP_SYS_ADMIN.");
+> +
+>  /* show configuration fields */
+>  #define pci_config_attr(field, format_string)				\
+>  static ssize_t								\
+> @@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp, struct kobject *kobj,
+>  	u8 *data = (u8 *) buf;
+>  
+>  	/* Several chips lock up trying to read undefined config space */
+> -	if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+> +	if (allow_unsafe_config_reads ||
+> +	    file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
+>  		size = dev->cfg_size;
+>  	else if (dev->hdr_type == PCI_HEADER_TYPE_CARDBUS)
+>  		size = 128;
+> -- 
+> 2.35.1.1094.g7c7d902a7c-goog
+> 

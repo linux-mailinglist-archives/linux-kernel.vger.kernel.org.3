@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155044F6095
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2634F604D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbiDFNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S233790AbiDFNul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiDFNtv (ORCPT
+        with ESMTP id S233635AbiDFNu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:49:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3D2754810C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649243894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T51nUGVFPsaMwX8h/2sdMdqNeNEULQqvsXIM6IrN6Fo=;
-        b=i30Sw88YzN3DFmGrmZDIkBQkO2iL4MAaK/yeVxMocKEIfrqM4/0ifanvE+fYIS3JG50NMV
-        +M+UBwBbIWRBHHtGIlFefYIpmiUyfY4Iexo0nJdD9dw6GT3z3qZR/QaVuzOYkw4czMFs09
-        vmaBeN2jX7ZpXwk6CvQQJdftIJoM6cs=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-lW1EL5XgO7eJ0ieOnyaJtg-1; Wed, 06 Apr 2022 07:18:12 -0400
-X-MC-Unique: lW1EL5XgO7eJ0ieOnyaJtg-1
-Received: by mail-pj1-f70.google.com with SMTP id rm11-20020a17090b3ecb00b001c713925e58so3621918pjb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 04:18:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=T51nUGVFPsaMwX8h/2sdMdqNeNEULQqvsXIM6IrN6Fo=;
-        b=cT2e1ZlBF90QsdptMBlT5H/0sIdE2/b009ERqppapNVNXHe2LbFlu+G6F8FmoeRTLr
-         0qBRegvw+G1whE7ujXIyPNbASuXxo30xxI2eEgxjIhbULExnjtaT8izFJ9jAKJUJ6FxV
-         r+USBpB8nXQer7efDrLiPHg+ZcvxzvO0ksymMGR2O3CEs7Dg175fK4ZbZ/SW4AwCaJ2g
-         AfeY/DtmziAamsyBZqHnJRmxMQr3VPEYdYIskBylUA70Rw2wKefJ8tq/wgyxQmB6CN0H
-         skKXuipAELgq/Ta2EdY7KxWDp8+nXEEOLEURW1zlRjMk4B91de1oFEU5t65tTyGz4V8b
-         LvMA==
-X-Gm-Message-State: AOAM533qM/vcG0QI/emCZfmwWAbDXVElnU3xs54Msmy73gGbArUwR5nH
-        Ifn7J9EK+z16I2zBhIZJxIA8aitw502AE92aLhuJ5dpg4Qn9zz3PGfp9XDdJpSZOZjXOVFvbxSK
-        yseAYjV2BM3ZJy5SyWtsG8VTYaUfvnUzGjC+7kK9MvM9rR2DfJwSUhr3TTi0N7zkoOjw8h5xlTw
-        ==
-X-Received: by 2002:a63:7258:0:b0:398:7298:c4b6 with SMTP id c24-20020a637258000000b003987298c4b6mr6699800pgn.436.1649243891038;
-        Wed, 06 Apr 2022 04:18:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy8t21PSJeeAJdSmJKtGQjbB4egYfrj8qXnO9fjKJ7QjnIrdPXcNk67JzQEAwqrRHW2XAtrkw==
-X-Received: by 2002:a63:7258:0:b0:398:7298:c4b6 with SMTP id c24-20020a637258000000b003987298c4b6mr6699767pgn.436.1649243890639;
-        Wed, 06 Apr 2022 04:18:10 -0700 (PDT)
-Received: from [10.72.13.31] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id ay9-20020a056a00300900b004fae1346aa1sm17350811pfb.122.2022.04.06.04.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 04:18:09 -0700 (PDT)
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220401133243.1075-1-lhenriques@suse.de>
- <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
- <878rsia391.fsf@brahms.olymp>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
-Date:   Wed, 6 Apr 2022 19:18:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 6 Apr 2022 09:50:29 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E776DB4D9;
+        Wed,  6 Apr 2022 04:20:40 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 236BIgjD021840;
+        Wed, 6 Apr 2022 06:18:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649243922;
+        bh=qg6EV2IZc1k/9CqC+u3u9RiNmaa89xg9kphbIADuZ+g=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=zQJGOIk/wYiqKUt6EV0CQTtSGiDru84V6lTgBPUw569T7+Wm3Jkf1U60kDwMuQA0u
+         docahuL6oiEbnx/swKDlQb4dxe55WSRlZcqf89N7AeC17drJ1gGd2qrfRJf0gBxJeu
+         QVxuADL/hRKgwqLobCco1iB4P+UqhluPNejUTd88=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 236BIgWg037134
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Apr 2022 06:18:42 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Apr 2022 06:18:41 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Apr 2022 06:18:41 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 236BIcf8012911;
+        Wed, 6 Apr 2022 06:18:39 -0500
+Message-ID: <f8130c2a-f51d-21fd-d999-886ce9559e9c@ti.com>
+Date:   Wed, 6 Apr 2022 14:18:38 +0300
 MIME-Version: 1.0
-In-Reply-To: <878rsia391.fsf@brahms.olymp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
 Content-Language: en-US
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+To:     Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+CC:     Kurt Kanzenbach <kurt@linutronix.de>,
+        Michael Walle <michael@walle.cc>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@armlinux.org.uk>, <mlichvar@redhat.com>,
+        <netdev@vger.kernel.org>, <qiangqing.zhang@nxp.com>,
+        <vladimir.oltean@nxp.com>
+References: <20220104014215.GA20062@hoboy.vegasvil.org>
+ <20220404150508.3945833-1-michael@walle.cc> <YksMvHgXZxA+YZci@lunn.ch>
+ <e5a6f6193b86388ed7a081939b8745be@walle.cc> <877d83rjjc.fsf@kurt>
+ <ad4a8d3efbeaacf241a19bfbca5976f9@walle.cc> <87wng3pyjl.fsf@kurt>
+ <defe77d9-1a41-7112-0ef6-a12aa2b725ab@ti.com> <YkxEIZfA0H8yvrzn@lunn.ch>
+ <20220405154821.GB6509@hoboy.vegasvil.org>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+In-Reply-To: <20220405154821.GB6509@hoboy.vegasvil.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,59 +78,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/6/22 6:57 PM, Luís Henriques wrote:
-> Xiubo Li <xiubli@redhat.com> writes:
->
->> On 4/1/22 9:32 PM, Luís Henriques wrote:
->>> When doing DIO on an encrypted node, we need to invalidate the page cache in
->>> the range being written to, otherwise the cache will include invalid data.
->>>
->>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->>> ---
->>>    fs/ceph/file.c | 11 ++++++++++-
->>>    1 file changed, 10 insertions(+), 1 deletion(-)
->>>
->>> Changes since v1:
->>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
->>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
->>>
->>> Note: I'm not really sure this last change is required, it doesn't really
->>> affect generic/647 result, but seems to be the most correct.
->>>
->>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->>> index 5072570c2203..b2743c342305 100644
->>> --- a/fs/ceph/file.c
->>> +++ b/fs/ceph/file.c
->>> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
->>>    	if (ret < 0)
->>>    		return ret;
->>>    -	ceph_fscache_invalidate(inode, false);
->>> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
->>>    	ret = invalidate_inode_pages2_range(inode->i_mapping,
->>>    					    pos >> PAGE_SHIFT,
->>>    					    (pos + count - 1) >> PAGE_SHIFT);
->> The above has already invalidated the pages, why doesn't it work ?
-> I suspect the reason is because later on we loop through the number of
-> pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
 
-Checked the 'copy_page_from_iter()', it will do the kmap for the pages 
-but will kunmap them again later. And they shouldn't update the 
-i_mapping if I didn't miss something important.
+On 05/04/2022 18:48, Richard Cochran wrote:
+> On Tue, Apr 05, 2022 at 03:29:05PM +0200, Andrew Lunn wrote:
+> 
+>> Maybe. Device tree is supposed to describe the hardware, not how you
+>> configure the hardware. Which PTP you using is a configuration choice,
+>> so i expect some people will argue it should not be in DT.
+> 
+> +1
+> 
+> Pure DT means no configuration choices.
+> 
+> (but you find many examples that break the rules!)
+> 
 
-For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context 
-inplace, IMO if it needs to map the page and it should also unmap it 
-just like in 'copy_page_from_iter()'.
+My point was related to one of issues described by Michael Walle in this thread:
+- supporting TS by the PHY may require also additional board support;
+- phy_has_hwtstamp() defined statically by PHY drivers without taking into account board design;
+- Kconfig option Doesn't really work with generic distro support and not allowed per-port cfg.
 
-I thought it possibly be when we need to do RMW, it may will update the 
-i_mapping when reading contents, but I checked the code didn't find any 
-place is doing this. So I am wondering where tha page caches come from ? 
-If that page caches really from reading the contents, then we should 
-discard it instead of flushing it back ?
+So adding smth like "hwtstamp-en" will clear identify that this particular PHY on this particular board
+supports time stamping.
+(or hwtstamp-full/hwtstamp-rx/hwtstamp-tx).
 
-BTW, what's the problem without this fixing ? xfstest fails ?
+Of course, it will not help with default or dynamic selection of time stamping layer :(,
+but it will be one problem less.
 
-
--- Xiubo
-
-> Cheers,
-
+-- 
+Best regards,
+Grygorii, Ukraine

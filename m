@@ -2,219 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CC44F62E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB89F4F62D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiDFPRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S235889AbiDFPNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbiDFPPo (ORCPT
+        with ESMTP id S236251AbiDFPNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:15:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 765875A1C90
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 05:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649247312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ubOv2fch/wckoTm8HS8GYp3/vOZS2zK/ygF8PnquGr8=;
-        b=PBsKPCLRFXh952aYBNotz1k4LyQ/kXGwWUita+KI0E6FieLhVEoksx2LYMd+3ANDoIqTwq
-        PpBV+5+6EivFgq2JuVtdc+cIyY5cONcBTguXcVWtaDRQwmFiUSlcrI/LMCDpfc8sITFjOl
-        95HD2tCVoHp72Ci0oJWnlaTV8X/JVDE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-RLIBlsecO2-9doDsHzlzGg-1; Wed, 06 Apr 2022 08:04:53 -0400
-X-MC-Unique: RLIBlsecO2-9doDsHzlzGg-1
-Received: by mail-wm1-f69.google.com with SMTP id r6-20020a05600c35c600b0038e6db5da9cso609049wmq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 05:04:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ubOv2fch/wckoTm8HS8GYp3/vOZS2zK/ygF8PnquGr8=;
-        b=LudaAU3V3oAgeFQVQzv8VPIkZiOSWsrhSjCLs/VmbjnPQT1+yaEzcy2R5wuwJWlpbE
-         A7NY99I04nqSxCVCZWd8/TekRPhf6oicuF/wKzufAD9R+dFXY+9nHthyNjXwLCDnmBaG
-         DeuD0vbTP23WgIZFw/+Qq5kd+/az0CiB3+07mqiIXGwDHh+pyQdn7xAsyLUitJUdrDgi
-         SBWvvRJIjqJ4GIImbP987aO7d8Se5qyzu0pAcm8g4ZTmPPoAViOEeAI05/IyPsYG54ik
-         4xrTwRfPsf4m7m364Dgk3LX1Q/AWALkH43hocaBok7GXkg/OqtJ3sLqEyKKE8dJLJyP1
-         Vi7w==
-X-Gm-Message-State: AOAM532H54sFOs4HmmeOxqLg7zR8A5UIfBnQHWQGtqsJnmE96WTPBkXO
-        QhyzHKG2W2KVlEmZSisMnmEyMCRGzearfyijkQQ2qphxBNBNfdtnhfkuNV7WF7pHEkZJURRbhDs
-        PU7g+qrlwEZ0EO8R0f5bV++pZ
-X-Received: by 2002:adf:912f:0:b0:204:3be:1a5b with SMTP id j44-20020adf912f000000b0020403be1a5bmr6806918wrj.467.1649246691960;
-        Wed, 06 Apr 2022 05:04:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwQR5ApoQJ3GQmL6XrNhmVtOvy3kWPmBXxQ5CQD1Yy517tuy3/gi8RA32uBI1lksiBw4nQHkQ==
-X-Received: by 2002:adf:912f:0:b0:204:3be:1a5b with SMTP id j44-20020adf912f000000b0020403be1a5bmr6806890wrj.467.1649246691562;
-        Wed, 06 Apr 2022 05:04:51 -0700 (PDT)
-Received: from redhat.com ([2.55.136.193])
-        by smtp.gmail.com with ESMTPSA id w1-20020a5d6081000000b002061b616b83sm5145435wrt.39.2022.04.06.05.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 05:04:50 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 08:04:46 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, sgarzare@redhat.com,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH V2 5/5] virtio: harden vring IRQ
-Message-ID: <20220406080135-mutt-send-email-mst@kernel.org>
-References: <20220406083538.16274-1-jasowang@redhat.com>
- <20220406083538.16274-6-jasowang@redhat.com>
+        Wed, 6 Apr 2022 11:13:04 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0B4633A17;
+        Wed,  6 Apr 2022 05:14:22 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 64dfcd7fc68f3766; Wed, 6 Apr 2022 14:06:39 +0200
+Received: from kreacher.localnet (unknown [213.134.186.238])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3AAC166BD30;
+        Wed,  6 Apr 2022 14:06:38 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
+Date:   Wed, 06 Apr 2022 14:06:37 +0200
+Message-ID: <11967527.O9o76ZdvQC@kreacher>
+In-Reply-To: <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
+References: <20220204233219.GA228585@bhelgaas> <2632919.mvXUDI8C0e@kreacher> <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406083538.16274-6-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.186.238
+X-CLIENT-HOSTNAME: 213.134.186.238
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhudetieeugeetgfeiteetffevheehgfeileekudejkefhtedtgfdvleevveekgeenucffohhmrghinhepohhuthhlohhokhdrtghomhdpkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeeirddvfeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekiedrvdefkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopegrsghhshgrhhhusehnvhhiughirgdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghr
+ nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 04:35:38PM +0800, Jason Wang wrote:
-> This is a rework on the previous IRQ hardening that is done for
-> virtio-pci where several drawbacks were found and were reverted:
+On Wednesday, April 6, 2022 7:32:45 AM CEST Abhishek Sahu wrote:
+> On 4/5/2022 10:20 PM, Rafael J. Wysocki wrote:
+> > On Tuesday, April 5, 2022 6:36:34 PM CEST Abhishek Sahu wrote:
+> >> On 2/8/2022 4:00 PM, Abhishek Sahu wrote:
+> >>> On 2/8/2022 12:28 AM, Rafael J. Wysocki wrote:
+> >>>> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
+> >>>>> [+cc Rafael, hoping for your review :)
+> >>>>
+> >>>> +Mika
+> >>>>
+> >>>>> Wonder if we should add something like this to MAINTAINERS so you get
+> >>>>> cc'd on power-related things:
+> >>>>>
+> >>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+> >>>>> index ea3e6c914384..3d9a211cad5d 100644
+> >>>>> --- a/MAINTAINERS
+> >>>>> +++ b/MAINTAINERS
+> >>>>> @@ -15422,6 +15422,7 @@ F:    include/linux/pm.h
+> >>>>>  F:   include/linux/pm_*
+> >>>>>  F:   include/linux/powercap.h
+> >>>>>  F:   kernel/configs/nopm.config
+> >>>>> +K:   pci_[a-z_]*power[a-z_]*\(
+> >>>>
+> >>>> It seems so, but generally PM patches should be CCed to linux-pm anyway.
+> >>>>
+> >>>>>
+> >>>>>  DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
+> >>>>>  M:   Daniel Lezcano <daniel.lezcano@kernel.org>
+> >>>>> ]
+> >>>>>
+> >>>>> On Mon, Jan 24, 2022 at 05:51:07PM +0530, Abhishek Sahu wrote:
+> >>>>>> Consider the following sequence during PCI device runtime
+> >>>>>> suspend/resume:
+> >>>>>>
+> >>>>>> 1. PCI device goes into runtime suspended state. The PCI state
+> >>>>>>    will be changed to PCI_D0 and then pci_platform_power_transition()
+> >>>>>>    will be called which changes the ACPI state to ACPI_STATE_D3_HOT.
+> >>>>
+> >>>> You mean PCI_D3hot I suppose?
+> >>>>
+> >>>
+> >>>  Yes. It should be PCI_D3hot here.
+> >>>
+> >>>>>> 2. Parent bridge goes into runtime suspended state. If parent
+> >>>>>>    bridge supports D3cold, then it will change the power state of all its
+> >>>>>>    children to D3cold state and the power will be removed.
+> >>>>>>
+> >>>>>> 3. During wake-up time, the bridge will be runtime resumed first
+> >>>>>>    and pci_power_up() will be called for the bridge. Now, the power
+> >>>>>>    supply will be resumed.
+> >>>>>>
+> >>>>>> 4. pci_resume_bus() will be called which will internally invoke
+> >>>>>>    pci_restore_standard_config(). pci_update_current_state()
+> >>>>>>    will read PCI_PM_CTRL register and the current_state will be
+> >>>>>>    updated to D0.
+> >>>>>>
+> >>>>>> In the above process, at step 4, the ACPI device state will still be
+> >>>>>> ACPI_STATE_D3_HOT since pci_platform_power_transition() is not being
+> >>>>>> invoked.
+> >>>>
+> >>>> I'm not quite following.
+> >>>>
+> >>>> I'm assuming that this description applies to the endpoint device that was
+> >>>> previously put into D3_hot.
+> >>>>
+> >>>
+> >>>  Yes. This is applicable for endpoint devices which was previously put
+> >>>  into D3hot.
+> >>>
+> >>>> Since its current state is D3_hot, it is not D0 (in particular) and the
+> >>>> pci_set_power_state() in pci_restore_standard_config() should put int into
+> >>>> D0 proper, including the platform firmware part.
+> >>>>
+> >>>
+> >>>  The pci_restore_standard_config() for endpoint devices are being called
+> >>>  internally during wake-up of upstream bridge.
+> >>>
+> >>>  pci_power_up(struct pci_dev *dev)
+> >>>  {
+> >>>       ...
+> >>>       if (dev->runtime_d3cold) {
+> >>>         /*
+> >>>          * When powering on a bridge from D3cold, the whole hierarchy
+> >>>          * may be powered on into D0uninitialized state, resume them to
+> >>>          * give them a chance to suspend again
+> >>>          */
+> >>>         pci_resume_bus(dev->subordinate);
+> >>>     }
+> >>>     ...
+> >>>  }
+> >>>
+> >>>  For the upstream bridge, the above code will trigger the wake-up of
+> >>>  endpoint devices and then following code will be executed for the
+> >>>  endpoint devices:
+> >>>
+> >>>  pci_update_current_state(struct pci_dev *dev, pci_power_t state)
+> >>>  {
+> >>>     if (platform_pci_get_power_state(dev) == PCI_D3cold ||
+> >>>         !pci_device_is_present(dev)) {
+> >>>         dev->current_state = PCI_D3cold;
+> >>>     } else if (dev->pm_cap) {
+> >>>         u16 pmcsr;
+> >>>
+> >>>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> >>>         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> >>>     } else {
+> >>>         dev->current_state = state;
+> >>>     }
+> >>>  }
+> >>>
+> >>>  In the above code, the current_state will be set to D0 for the
+> >>>  endpoint devices since it will go into second block where
+> >>>  it will read the PM_CTRL register.
+> >>>
+> >>>>>> We need call the pci_platform_power_transition() with state
+> >>>>>> D0 to change the ACPI state to ACPI_STATE_D0.
+> >>>>>>
+> >>>>>> This patch calls pci_power_up() if current power state is D0 inside
+> >>>>>> pci_restore_standard_config(). This pci_power_up() will change the
+> >>>>>> ACPI state to ACPI_STATE_D0.
+> >>>>>>
+> >>>>>> Following are the steps to confirm:
+> >>>>>>
+> >>>>>> Enable the debug prints in acpi_pci_set_power_state()
+> >>>>>>
+> >>>>>> 0000:01:00.0 is PCI device and 0000:00:01.0 is parent bridge device
+> >>>>>>
+> >>>>>> Before:
+> >>>>>>
+> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
+> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
+> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
+> >>>>>>
+> >>>>>> After:
+> >>>>>>
+> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
+> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
+> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
+> >>>>>> 0000:01:00.0: power state changed by ACPI to D0
+> >>>>>>
+> >>>>>> So with this patch, the PCI device ACPI state is also being
+> >>>>>> changed to D0.
+> >>>>>>
+> >>>>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> >>>>>> ---
+> >>>>>>  drivers/pci/pci-driver.c | 14 +++++++++++---
+> >>>>>>  1 file changed, 11 insertions(+), 3 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> >>>>>> index 588588cfda48..64e0cca12f16 100644
+> >>>>>> --- a/drivers/pci/pci-driver.c
+> >>>>>> +++ b/drivers/pci/pci-driver.c
+> >>>>>> @@ -521,14 +521,22 @@ static void pci_device_shutdown(struct device *dev)
+> >>>>>>   */
+> >>>>>>  static int pci_restore_standard_config(struct pci_dev *pci_dev)
+> >>>>>>  {
+> >>>>>> +   int error = 0;
+> >>>>>>     pci_update_current_state(pci_dev, PCI_UNKNOWN);
+> >>>>>>
+> >>>>>>     if (pci_dev->current_state != PCI_D0) {
+> >>>>>> -           int error = pci_set_power_state(pci_dev, PCI_D0);
+> >>>>>> -           if (error)
+> >>>>>> -                   return error;
+> >>>>>> +           error = pci_set_power_state(pci_dev, PCI_D0);
+> >>>>>> +   } else {
+> >>>>>> +           /*
+> >>>>>> +            * The platform power state can still be non-D0, so this is
+> >>>>>> +            * required to change the platform power state to D0.
+> >>>>>> +            */
+> >>>>
+> >>>> This really isn't expected to happen.
+> >>>>
+> >>>> If the device's power state has been changed to D3hot by ACPI, it is not in D0.
+> >>>>
+> >>>> It looks like the state tracking is not working here.
+> >>>>
+> >>>
+> >>>  The state setting to D0 is happening due to the current logic present in
+> >>>  pci_update_current_state(). If we can fix the logic in
+> >>>  pci_update_current_state() to detect this condition and return state D3hot,
+> >>>  then it should also fix the issue.
+> >>>
+> >>>  Thanks,
+> >>>  Abhishek
+> >>>
+> >>
+> >>  Hi Rafael/Mika,
+> >>
+> >>  Could you please help regarding the correct way to fix this issue.
+> >>  I can update the patch accordingly.
+> > 
+> > I think you can try one of the patches posted recently:
+> > 
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F3623886.MHq7AAxBmi%40kreacher%2F&amp;data=04%7C01%7Cabhsahu%40nvidia.com%7Cae4c8574f5a44973514a08da172471d6%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637847743178405297%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=aasJ79EICVnlJQ4EbXA2AtZFW0qnRsMkHEZRI8mnDI8%3D&amp;reserved=0
+> > 
+> > Thanks!
+> > 
+> > 
+> > 
 > 
-> 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
->    that is used by some device such as virtio-blk
-> 2) done only for PCI transport
+>  Thanks Rafael.
+>  I have applied both the changes and still the issue which I mentioned is happening.
 > 
-> In this patch, we tries to borrow the idea from the INTX IRQ hardening
-> in the reverted commit 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
-> by introducing a global device_ready variable for each
-> virtio_device. Then we can to toggle it during
-> virtio_reset_device()/virtio_device_ready(). A
-> virtio_synchornize_vqs() is used in both virtio_device_ready() and
-> virtio_reset_device() to synchronize with the vring callbacks. With
-> this, vring_interrupt() can return check and early if driver_ready is
-> false.
+>  Following are the prints:
 > 
-> Note that the hardening is only done for vring interrupt since the
-> config interrupt hardening is already done in commit 22b7050a024d7
-> ("virtio: defer config changed notifications"). But the method that is
-> used by config interrupt can't be reused by the vring interrupt
-> handler because it uses spinlock to do the synchronization which is
-> expensive.
+>  0000:01:00.0: power state changed by ACPI to D3hot
+>  0000:00:01.0: power state changed by ACPI to D3cold
+>  0000:00:01.0: power state changed by ACPI to D0
 > 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/virtio/virtio.c       | 11 +++++++++++
->  drivers/virtio/virtio_ring.c  |  9 ++++++++-
->  include/linux/virtio.h        |  2 ++
->  include/linux/virtio_config.h |  8 ++++++++
->  4 files changed, 29 insertions(+), 1 deletion(-)
+>  So ACPI state change is still not happening for PCI endpoint devices.
 > 
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index 8dde44ea044a..2f3a6f8e3d9c 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -220,6 +220,17 @@ static int virtio_features_ok(struct virtio_device *dev)
->   * */
->  void virtio_reset_device(struct virtio_device *dev)
->  {
-> +	if (READ_ONCE(dev->driver_ready)) {
-> +		/*
-> +		 * The below virtio_synchronize_vqs() guarantees that any
-> +		 * interrupt for this line arriving after
-> +		 * virtio_synchronize_vqs() has completed is guaranteed to see
-> +		 * driver_ready == false.
-> +		 */
-> +		WRITE_ONCE(dev->driver_ready, false);
-> +		virtio_synchronize_vqs(dev);
-> +	}
-> +
->  	dev->config->reset(dev);
->  }
->  EXPORT_SYMBOL_GPL(virtio_reset_device);
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index cfb028ca238e..a4592e55c9f8 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -2127,10 +2127,17 @@ static inline bool more_used(const struct vring_virtqueue *vq)
->  	return vq->packed_ring ? more_used_packed(vq) : more_used_split(vq);
->  }
->  
-> -irqreturn_t vring_interrupt(int irq, void *_vq)
-> +irqreturn_t vring_interrupt(int irq, void *v)
->  {
-> +	struct virtqueue *_vq = v;
-> +	struct virtio_device *vdev = _vq->vdev;
->  	struct vring_virtqueue *vq = to_vvq(_vq);
->  
-> +	if (!READ_ONCE(vdev->driver_ready)) {
+>  Also, the I checked the code and the pci_power_up() will not be called
+>  for endpoint devices. For endpoints, pci_restore_standard_config() will
+>  be called first where the current state will come as D0.
+
+OK, I see.
+
+The problem is that if the PCI device goes to D0 because of the bridge power-up,
+it's ACPI companion's power state may not follow, which means that we really
+want to do a full power-up in there.
+
+Please test the appended patch with the patch from
+
+https://patchwork.kernel.org/project/linux-pm/patch/3623886.MHq7AAxBmi@kreacher/
+
+still applied.
+
+---
+ drivers/pci/pci-driver.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
+ 	 * to a driver because although we left it in D0, it may have gone to
+ 	 * D3cold when the bridge above it runtime suspended.
+ 	 */
+-	pci_restore_standard_config(pci_dev);
++	pci_pm_default_resume_early(pci_dev);
+ 
+ 	if (!pci_dev->driver)
+ 		return 0;
 
 
-I am not sure why we need READ_ONCE here, it's done under lock.
-
-
-Accrdingly, same thing above for READ_ONCE and WRITE_ONCE.
-
-
-> +		dev_warn_once(&vdev->dev, "virtio vring IRQ raised before DRIVER_OK");
-> +		return IRQ_NONE;
-> +	}
-> +
->  	if (!more_used(vq)) {
->  		pr_debug("virtqueue interrupt with no work for %p\n", vq);
->  		return IRQ_NONE;
-> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> index 5464f398912a..dfa2638a293e 100644
-> --- a/include/linux/virtio.h
-> +++ b/include/linux/virtio.h
-> @@ -95,6 +95,7 @@ dma_addr_t virtqueue_get_used_addr(struct virtqueue *vq);
->   * @failed: saved value for VIRTIO_CONFIG_S_FAILED bit (for restore)
->   * @config_enabled: configuration change reporting enabled
->   * @config_change_pending: configuration change reported while disabled
-> + * @driver_ready: whehter the driver is ready (e.g for vring callbacks)
->   * @config_lock: protects configuration change reporting
->   * @dev: underlying device.
->   * @id: the device type identification (used to match it with a driver).
-> @@ -109,6 +110,7 @@ struct virtio_device {
->  	bool failed;
->  	bool config_enabled;
->  	bool config_change_pending;
-> +	bool driver_ready;
->  	spinlock_t config_lock;
->  	spinlock_t vqs_list_lock; /* Protects VQs list access */
->  	struct device dev;
-> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> index 08b73d9bbff2..c9e207bf2c9c 100644
-> --- a/include/linux/virtio_config.h
-> +++ b/include/linux/virtio_config.h
-> @@ -246,6 +246,14 @@ void virtio_device_ready(struct virtio_device *dev)
->  {
->  	unsigned status = dev->config->get_status(dev);
->  
-> +	virtio_synchronize_vqs(dev);
-> +        /*
-> +         * The above virtio_synchronize_vqs() make sure
-
-
-makes sure
-
-> +         * vring_interrupt() will see the driver specific setup if it
-> +         * see driver_ready as true.
-
-sees
-
-> +         */
-> +	WRITE_ONCE(dev->driver_ready, true);
-> +
->  	BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
->  	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
->  }
-> -- 
-> 2.25.1
 

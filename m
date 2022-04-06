@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8D14F615A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1315A4F60F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiDFOJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S234477AbiDFOJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiDFOIT (ORCPT
+        with ESMTP id S235051AbiDFOIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:08:19 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A1E49E435
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:57:09 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso3976396pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=3qKR+9UnHfH7y3GmZazKtwO1JgDzyIRfNNCTfPUQzPQ=;
-        b=T3HnXpLMVHF84AhdAnlosPkOaV9Jf1AjBveZ6piPcw9aDZW1oz4WzNV2VhuUNw/R2C
-         J+zpHigYJ7kSTbrfi/JOJd/Ye1VvqmGmrrnv4r4BlvLI7X2At5ameEPt54Wou+JUQxrp
-         ibuMUAdTv4PeAIClj6apPHezgvlvgWZzZv7mAA4vnm9EEeqx1QyTxrTI5RVOSI1jz65E
-         a12ad43olBO8boyJ+XDOVKvfUeGq+qikcUCOeNeKotPR7Cdw1PGt5rTIZYF8LbiXXJxD
-         jqV5SdO3xpqL9bxSS2rvIZUbIISbhzGKCFeogBLA4+pz90zogiw7/xDsQwBhe4kX5ZFQ
-         cZgQ==
+        Wed, 6 Apr 2022 10:08:40 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E09429D25F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 02:57:15 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id g22so1978680edz.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 02:57:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=3qKR+9UnHfH7y3GmZazKtwO1JgDzyIRfNNCTfPUQzPQ=;
-        b=2OeQ46q7paymPBXfyy5kM9DD6bmjiTaYZQp4GiOs+e53eSQpFR6Cct8D/Dupc+Yms7
-         /+kJeSzADnRnk1zFQPgXjYW5GZhwOyVQ+gcdEJJr1qzOpHYjuIyI9v7WUre64wSL4FOh
-         7B0U2sQ1fxz1KsYd7uCmdu58QIbHfK4/auNgvPR49uY92Qp+Td9JfXq2PD4ziCCTpLrg
-         0DnsLdM9t8lR5nCbUv5FU7M4yNq2kJUEzTsRStnPav9gtXcszq2RHuHwSSlUKaahubJg
-         fR26tDo+BEKXYDbgdmppEefAF+eznb6sLsmG5vRhnyiG5bINBDGil8OKBNJEjASAPmes
-         9o6A==
-X-Gm-Message-State: AOAM532Y+/aTVIRaxmneBCl44Cgdd0yGGMJUogGTPU5ROz5smypTt5/5
-        mnDPhb+SKnY2xovPGffg8Do=
-X-Google-Smtp-Source: ABdhPJyaTfQXuOcyyB4tlk7RTPW0lnRDh830vmHgHzSF2CCzCjDUWDY2jx4oMSGO99Ww3z/x8GSojw==
-X-Received: by 2002:a17:902:a588:b0:156:599c:6278 with SMTP id az8-20020a170902a58800b00156599c6278mr7641266plb.109.1649239029282;
-        Wed, 06 Apr 2022 02:57:09 -0700 (PDT)
-Received: from localhost.localdomain ([150.109.127.35])
-        by smtp.gmail.com with ESMTPSA id lp4-20020a17090b4a8400b001c9ada2f28fsm5581497pjb.8.2022.04.06.02.57.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 Apr 2022 02:57:08 -0700 (PDT)
-From:   zgpeng <zgpeng.linux@gmail.com>
-X-Google-Original-From: zgpeng <zgpeng@tencent.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/fair: Move calculate of avg_load to a better location
-Date:   Wed,  6 Apr 2022 17:57:05 +0800
-Message-Id: <1649239025-10010-1-git-send-email-zgpeng@tencent.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DZ+POTcsaLkbMBo1CqBhzn/vBLLAxpoEW4QABrQlisQ=;
+        b=CRTnuQGhMYTEe3X2W6mPLm/rYVRez1DDjvF3norRcXMqm0kR5DF1fyXugZDH4Q/ZJE
+         HO7KjSES2fw061YnAiRTCHNmJ4y/X1chnVfNxCcayYvzRwwb+p+IrPP8bWSw/jLv/yq2
+         TVmmeEJdH4eXZ7jEYQKx2DkZ7DTDzEdfHxuIdg9YH6uCAwSj9C7aDvAZC1ZZMKTFxpzZ
+         hvt7SJCf7wKlI7F/F9P+azTvbK+wW7IrxGt2U72CYVgcMq3tX9/p4W5wy1moNYAs9kus
+         92b/rRLNCQTDA4HtNwRR4Kc++OCHMfLWLwg7iP48HYfG7m3iKRVSQAJJ4AOXm9JuZx78
+         uTtw==
+X-Gm-Message-State: AOAM533EP3b/8QgkVsoivskviLxtkoai8Ck9rfiG/mt4PFo1H5fKvxbB
+        5l+WbSFb+YiSF+WkN0wBVHFxNT4R+HU=
+X-Google-Smtp-Source: ABdhPJxpg8ho5fSv2sVWTjZY4TksMQ+SF2ZZRW0S++abhw2YiStIbejQjLOOG1NE+CNGVeHgAb3h9g==
+X-Received: by 2002:a05:6402:31e2:b0:41c:dd5e:3c61 with SMTP id dy2-20020a05640231e200b0041cdd5e3c61mr7797701edb.407.1649239033620;
+        Wed, 06 Apr 2022 02:57:13 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id j12-20020a50e0cc000000b0041cd813ac01sm3691091edl.28.2022.04.06.02.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 02:57:13 -0700 (PDT)
+Message-ID: <19e11d77-1f81-c5a8-8a72-4fb7616438bf@kernel.org>
+Date:   Wed, 6 Apr 2022 11:57:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] tty/sysrq: change the definition of sysrq_key_table's
+ element to make it more readable
+Content-Language: en-US
+To:     wujunwen <wudaemon@163.com>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220405153625.55689-1-wudaemon@163.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220405153625.55689-1-wudaemon@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In calculate_imbalance function, when the value of local->avg_load is
-greater than or equal to busiest->avg_load, the calculated sds->avg_load is
-not used. So this calculation can be placed in a more appropriate position.
+Hi,
 
-Signed-off-by: zgpeng <zgpeng@tencent.com>
-Reviewed-by: Samuel Liao <samuelliao@tencent.com>
----
- kernel/sched/fair.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 05. 04. 22, 17:36, wujunwen wrote:
+> the definition of sysrq_key_table's elements, like sysrq_thaw_op and
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4bd299..601f8bd 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9460,8 +9460,6 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 		local->avg_load = (local->group_load * SCHED_CAPACITY_SCALE) /
- 				  local->group_capacity;
- 
--		sds->avg_load = (sds->total_load * SCHED_CAPACITY_SCALE) /
--				sds->total_capacity;
- 		/*
- 		 * If the local group is more loaded than the selected
- 		 * busiest group don't try to pull any tasks.
-@@ -9470,6 +9468,9 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 			env->imbalance = 0;
- 			return;
- 		}
-+
-+		sds->avg_load = (sds->total_load * SCHED_CAPACITY_SCALE) /
-+				sds->total_capacity;
- 	}
- 
- 	/*
+The starts the sentence, so should be with capital T.
+
+> sysrq_showallcpus_op are massive,
+
+massive?
+
+> so we should make it consistent.
+
+You should elaborate consistent to what.
+
+> Signed-off-by: wujunwen <wudaemon@163.com>
+
+Is this really your real full name?
+
+Other than that, the patch appears to be correct.
+
+>   drivers/tty/sysrq.c | 14 ++++++--------
+>   1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> index bbfd004449b5..9485156bf48b 100644
+> --- a/drivers/tty/sysrq.c
+> +++ b/drivers/tty/sysrq.c
+> @@ -274,6 +274,8 @@ static const struct sysrq_key_op sysrq_showallcpus_op = {
+>   	.action_msg	= "Show backtrace of all active CPUs",
+>   	.enable_mask	= SYSRQ_ENABLE_DUMP,
+>   };
+> +#else
+> +#define sysrq_showallcpus_op (*(const struct sysrq_key_op *)NULL)
+>   #endif
+>   
+>   static void sysrq_handle_showregs(int key)
+> @@ -405,6 +407,7 @@ static const struct sysrq_key_op sysrq_moom_op = {
+>   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
+>   };
+>   
+> +#ifdef CONFIG_BLOCK
+>   static void sysrq_handle_thaw(int key)
+>   {
+>   	emergency_thaw_all();
+> @@ -415,6 +418,9 @@ static const struct sysrq_key_op sysrq_thaw_op = {
+>   	.action_msg	= "Emergency Thaw of all frozen filesystems",
+>   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
+>   };
+> +#else
+> +#define sysrq_thaw_op (*(const struct sysrq_key_op *)NULL)
+> +#endif
+>   
+>   static void sysrq_handle_kill(int key)
+>   {
+> @@ -468,17 +474,9 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
+>   	NULL,				/* g */
+>   	NULL,				/* h - reserved for help */
+>   	&sysrq_kill_op,			/* i */
+> -#ifdef CONFIG_BLOCK
+>   	&sysrq_thaw_op,			/* j */
+> -#else
+> -	NULL,				/* j */
+> -#endif
+>   	&sysrq_SAK_op,			/* k */
+> -#ifdef CONFIG_SMP
+>   	&sysrq_showallcpus_op,		/* l */
+> -#else
+> -	NULL,				/* l */
+> -#endif
+>   	&sysrq_showmem_op,		/* m */
+>   	&sysrq_unrt_op,			/* n */
+>   	/* o: This will often be registered as 'Off' at init time */
+
+
 -- 
-2.9.5
-
+js
+suse labs

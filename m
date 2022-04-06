@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFC44F5CAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1234F5CEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiDFLzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S230231AbiDFLzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiDFLy5 (ORCPT
+        with ESMTP id S231251AbiDFLyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:54:57 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2096D2DBFF1;
-        Wed,  6 Apr 2022 00:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649229404; x=1680765404;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=G8TAxFuMIH2k2HAYU7fzVN3wL8YmlGxi1x8C6tasnho=;
-  b=xypWVrB73Siu4NHZtcB2SgV+cBlneJ71qSOTF+80qifkROoacMV14oSb
-   ulI5uMOys0d/uryyEavFTea+RAnH8TRz7Ggp70KY5yrY/PZvEDtiMj/uV
-   aS09iCyLM5xrI5mqKhgNZBSlMEWZ2dLMQlHgoDRAaxbdvgy4rvcVWYrdB
-   c=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 06 Apr 2022 00:16:37 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 06 Apr 2022 00:16:35 -0700
-X-QCInternal: smtphost
-Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 06 Apr 2022 12:46:34 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 0F7223B51; Wed,  6 Apr 2022 12:46:34 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [V3 3/3] arch: arm64: dts: qcom: Configure cts sleep pinctrl to bias-bus-hold
-Date:   Wed,  6 Apr 2022 12:46:02 +0530
-Message-Id: <1649229362-31183-4-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649229362-31183-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1649229362-31183-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 07:54:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2FC2DBFE7;
+        Wed,  6 Apr 2022 00:16:42 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYG2L3gttz67tDy;
+        Wed,  6 Apr 2022 15:13:30 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 09:16:27 +0200
+Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 08:16:26 +0100
+Message-ID: <febb03e4-ea1d-c7e1-58a6-fa564c902af0@huawei.com>
+Date:   Wed, 6 Apr 2022 08:16:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 2/2] libata: Inline ata_qc_new_init() in
+ ata_scsi_qc_new()
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+References: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
+ <1649083990-207133-3-git-send-email-john.garry@huawei.com>
+ <20220405055252.GA23698@lst.de>
+ <f7bbb09f-562f-fce2-cd16-a1c67fc334b5@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <f7bbb09f-562f-fce2-cd16-a1c67fc334b5@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.80.129]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WLAN rail was leaking power during RBSC/sleep even after turning BT off.
-Change sleep pinctrl configuration to handle same.
+On 06/04/2022 02:48, Damien Le Moal wrote:
+> On 4/5/22 14:52, Christoph Hellwig wrote:
+>> On Mon, Apr 04, 2022 at 10:53:10PM +0800, John Garry wrote:
+>>> From: Christoph Hellwig <hch@lst.de>
+>>>
+>>> It is a bit pointless to have ata_qc_new_init() in libata-core.c 
+>>> since it
+>>> pokes scsi internals, so inline it in ata_scsi_qc_new() (in 
+>>> libata-scsi.c).
+>>>
+>>> <Christoph, please provide signed-off-by>
+>>> [jpg, Take Christoph's change from list and form into a patch]
+>>> Signed-off-by: John Garry <john.garry@huawei.com>
+>>
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>>
+>> Although I still think merging the two patches into one to avoid all
+>> the churn would be much better.
+> 
+> I agree. Let's merge these 2 patches.
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
-v3: apply same change to active state and other sc7280*.dts* as well
-v2: used bias-bus-hold as per review comments
-v1: intial patch used bias-disable for sleep pinctrl in sc7280-idp only
----
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+I'd say that they are distinct changes.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index b833ba1..602ebd4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -398,8 +398,11 @@ mos_bt_uart: &uart7 {
- 
- /* For mos_bt_uart */
- &qup_uart7_cts {
--	/* Configure a pull-down on CTS to match the pull of the Bluetooth module. */
--	bias-pull-down;
-+	/*
-+	 * Configure a bias-bus-hold on CTS to lower power usage
-+	 * when BT is turned off.
-+	 */
-+	bias-bus-hold;
- };
- 
- /* For mos_bt_uart */
-@@ -490,10 +493,10 @@ mos_bt_uart: &uart7 {
- 		pins = "gpio28";
- 		function = "gpio";
- 		/*
--		 * Configure a pull-down on CTS to match the pull of
--		 * the Bluetooth module.
-+		 * Configure a bias-bus-hold on CTS to lower power usage
-+		 * when BT is turned off.
- 		 */
--		bias-pull-down;
-+		bias-bus-hold;
- 	};
- 
- 	/* For mos_bt_uart */
--- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+Anyway, if that is the preference then who shall be the author? 
+Considering I did most effort I will be and add Christoph as 
+co-developed-by - please let me know if not ok.
 
+thanks,
+John

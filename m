@@ -2,81 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F964F69BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909A74F6A2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiDFTXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S231654AbiDFToe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiDFTVc (ORCPT
+        with ESMTP id S231992AbiDFTng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:21:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFF27FC8F;
-        Wed,  6 Apr 2022 10:57:37 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236GnQo5000971;
-        Wed, 6 Apr 2022 17:57:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=EIZq0sEIJfeT9I1Gb/BlkG7lb68M6yMU1xY9qv8gko4=;
- b=HCMx6RCatU8Mp6xEbENFmX+GMruYA+tG6wMu11gINCI2+9YsnTHg/QljyByAHTw3MSJl
- 9uocU14EVTdeokB6f7IPOkcJZ2E4utRC7Ixh3M+kTFa2DBj2m1FEKe0vTOBuEvBrQkWo
- 0CMncOqGt4sgUxdoMcrKfV02/h3ik805ihOlKaOg7RB9l8AvAutn49d7+bXF0lqgS5kf
- xHVbyHi+4siDF2E/qKbogAmaPfk9ZZdeR8eznS2WT2gX1JefPj6PTWJilKH5G7/1JgJz
- BEzgro8q+G5yCsW+7KULBiogpA4ASCiy50D7jDFoQMKFDXE+hXx6+Mv1UuuYG1hI0MfO jg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f8ya1btrv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:57:27 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236HrDxV027660;
-        Wed, 6 Apr 2022 17:57:25 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f6e4908sx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:57:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236HvNPf35520920
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 17:57:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21BF44C044;
-        Wed,  6 Apr 2022 17:57:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0FD14C040;
-        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.211.90.125])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        disgoel@linux.vnet.ibm.com
-Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com
-Subject: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
-Date:   Wed,  6 Apr 2022 23:27:15 +0530
-Message-Id: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 6 Apr 2022 15:43:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93DE156086;
+        Wed,  6 Apr 2022 10:58:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 187121F45822
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649267902;
+        bh=L6qng+F82oavfDa6788iqCCq/nZ4DDudHD6oBSS4ZsU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ToMdnMOajCHGEsuTDq2o7irGVZ/vonCu8rKAo9Cl7YKcX5zG+YLzs283SlHbCODto
+         SvsFtpNgtXUn9yXXpOuo7RLiBBfG5Z9IaGauAV63nQI0UzJksGgEO+RofqjEpkD+1r
+         G85f67ACEFpyYBQcM49XTiyzQjF0z7PjiLw2fdR+sG/+TVsQ5JelVAJ2wqNkVZy6sO
+         pb8nAU9BAz+GDjm8lewRSn+hphoBWSsGtGP/202jzhha496yxJ999aNnnAgN4r9fvh
+         dMhRNLu1nptPL2TD4eYI8nVPAYT5zkyCwzuIkTn1dv6Sq2hWKVyn1WwIp8a2AEZBL5
+         orNXEQmAXctuA==
+Message-ID: <71c796610c3c9e1c8a117045c3764e40681a680a.camel@collabora.com>
+Subject: Re: [PATCH v3 00/24] H.264 Field Decoding Support for Frame-based
+ Decoders
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Wed, 06 Apr 2022 13:58:11 -0400
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
-X-Proofpoint-ORIG-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_09,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- phishscore=0 clxscore=1011 impostorscore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +52,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
-CPU set. This cpu set is used further in pthread_attr_setaffinity_np
-and by pthread_create in the code. But in current code, allocated
-cpu set is not freed. Fix this by adding CPU_FREE after its usage
-is done.
+Hello everyone,
 
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
----
- tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
- 1 file changed, 1 insertion(+)
+its not clear if that cover made it this time, though it will now. Adding a
+comment below ...
 
-diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-index b019e0b8221c..17c41f216bef 100644
---- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-@@ -732,6 +732,7 @@ int main(int argc, char *argv[])
- 		pthread_attr_destroy(&thread_attr);
- 	}
- 
-+	CPU_FREE(cpu_set);
- 	if (!continuous_mode) {
- 		pthread_join(cpu_threads[0], &retval);
- 		shutdown((long)retval, "perf_test_thread()", __LINE__);
--- 
-2.35.1
+Le mardi 05 avril 2022 =C3=A0 16:44 -0400, Nicolas Dufresne a =C3=A9crit=C2=
+=A0:
+> Until now, only Cedrus (a slice base decoder) supported interlaced
+> decoding.  In order to support field decoding in our frame-based decoder,
+> the v4l2-h264 library needed adaptation to produce the appropriate
+> reference lists.
+>=20
+> This patch extends the v4l2-h264 library to produce the larger references
+> list needed to represent fields separately. Hantro, MTK-VCODEC and RKVDEC
+> drivers have been adapted to accommodate the larger lists. Though, only
+> Hantro and RKVDEC actually have HW support for field decoding. So only
+> these two have been updated to make use of the larger lists. All this wor=
+k
+> has been done using the H.264 specification, LibreELEC downstream kernel
+> patches, Rockchip MPP reference software and Hantro reference software.
+>=20
+> For reviewers, the following is the map of all commit. Patches that could
+> be merge independently of this serie are marked as independent. Note that
+> the test results do depend on the generic fixes.
+>=20
+> 01    : Documentation fix (independent)
+> 02-03 : Improving some generic traces (independent)
+> 04    : Minor v4l2-h264 fix (independent)
+> 05-11 : v4l2-h264 field decoding support
+> 12-16 : rkvdec h.264 generic fixes (independent)
+> 17-20 : rkvdec h.264 field decoding support
+> 21-24 : hantro h.264 field decoding support
+>=20
+> All this work have been tested using GStreamer mainline implementation
+> but also with FFMPEG LibreELEC fork using the testing tool fluster
+> running through the ITU-T H.264 (2016-02) AVCv2 set of bitstream. Before
+> this patch, the scores were:
+>=20
+> Hantro:
+>   FFMPEG:   88/135
+>   GSteamer: 90/135
+> RKVDEC:
+>   FFMPEG:   73/135
+>   GSteamer: 77/135
+>=20
+> And after these changes:
+>=20
+> Hantro:
+>   FFMPEG:   118/135
+>   GSteamer: 129/135
+
+I have also tested on IMX8MQ now, same results. This exercise the
+hantro_g1_h264.c code.
+
+> RKVDEC:
+>   FFMPEG:   118/135
+>   GSteamer: 129/135
+>=20
+> Note that a bug in FFMPEG / LibreELEC fork was noticed and fixed with the
+> following change:
+>=20
+> diff --git a/libavcodec/v4l2_request_h264.c b/libavcodec/v4l2_request_h26=
+4.c
+> index 88da8f0a2d..394bae0550 100644
+> --- a/libavcodec/v4l2_request_h264.c
+> +++ b/libavcodec/v4l2_request_h264.c
+> @@ -66,7 +66,7 @@ static void fill_dpb_entry(struct v4l2_h264_dpb_entry *=
+entry, const H264Picture
+>  {
+>      entry->reference_ts =3D ff_v4l2_request_get_capture_timestamp(pic->f=
+);
+>      entry->pic_num =3D pic->pic_id;
+> -    entry->frame_num =3D pic->frame_num;
+> +    entry->frame_num =3D pic->long_ref ? pic->pic_id : pic->frame_num;
+>      entry->fields =3D pic->reference & V4L2_H264_FRAME_REF;
+>      entry->flags =3D V4L2_H264_DPB_ENTRY_FLAG_VALID;
+>      if (entry->fields)
+>=20
+> Some useful links:
+>=20
+> Detailed Hantro Results:     https://gitlab.freedesktop.org/-/snippets/51=
+89
+> Detailed RKVDEC Results:     https://gitlab.freedesktop.org/-/snippets/52=
+53
+> ITU-T H.264 (2016-02) AVCv2: https://www.itu.int/net/itu-t/sigdb/spevideo=
+/VideoForm-s.aspx?val=3D102002641
+> Fluster:                     https://github.com/fluendo/fluster
+> GStreamer:                   https://gitlab.freedesktop.org/gstreamer/gst=
+reamer/
+> FFMPEG Fork:                 https://github.com/jernejsk/FFmpeg/tree/v4l2=
+-request-hwaccel-4.4
+> Rockchip MPP:                https://github.com/rockchip-linux/mpp
+>=20
+> Changes in v3:
+> - Improved debug message on timestamp miss-match
+> - Moved H264 SPS validation into rkvdec-h264
+> - Added more comments around H264 SPS validation
+> - Also validate at streamon (rkvdec start())
+> - Applied more Review-by and Fixes tag
+> - Fixed Signed-off-by chain in Jonas patch
+>=20
+> Changes in v2:
+> - Applied most of Sebastian's suggestion in comments and commit messages.
+> - Use a bool for dpb_valid and dpb_bottom in rkvdec
+> - Dropped one wrong typo fix (media: v4l2-mem2mem: Fix typo in trace mess=
+age)
+> - Dropped Alex fix (media: rkvdec-h264: Don't hardcode SPS/PPS parameters
+>   + I will carry this one later, it seems cosmetic
+>=20
+> Jonas Karlman (5):
+>   media: rkvdec: h264: Fix bit depth wrap in pps packet
+>   media: rkvdec: h264: Validate and use pic width and height in mbs
+>   media: rkvdec: h264: Fix reference frame_num wrap for second field
+>   media: rkvdec: Ensure decoded resolution fit coded resolution
+>   media: hantro: h264: Make dpb entry management more robust
+>=20
+> Nicolas Dufresne (18):
+>   media: doc: Document dual use of H.264 pic_num/frame_num
+>   media: v4l2-mem2mem: Trace on implicit un-hold
+>   media: h264: Avoid wrapping long_term_frame_idx
+>   media: h264: Use v4l2_h264_reference for reflist
+>   media: h264: Increase reference lists size to 32
+>   media: h264: Store current picture fields
+>   media: h264: Store all fields into the unordered list
+>   media: v4l2: Trace calculated p/b0/b1 initial reflist
+>   media: h264: Sort p/b reflist using frame_num
+>   media: v4l2: Reorder field reflist
+>   media: rkvdec: Stop overclocking the decoder
+>   media: rkvdec: h264: Fix dpb_valid implementation
+>   media: rkvdec: Move H264 SPS validation in rkvdec-h264
+>   media: rkvdec-h264: Add field decoding support
+>   media: rkvdec: Enable capture buffer holding for H264
+>   media: hantro: Stop using H.264 parameter pic_num
+>   media: hantro: Add H.264 field decoding support
+>   media: hantro: Enable HOLD_CAPTURE_BUF for H.264
+>=20
+> Sebastian Fricke (1):
+>   media: videobuf2-v4l2: Warn on holding buffers without support
+>=20
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   |  10 +-
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |   7 +-
+>  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  17 +-
+>  drivers/media/v4l2-core/v4l2-h264.c           | 261 ++++++++++++++----
+>  drivers/media/v4l2-core/v4l2-mem2mem.c        |   1 +
+>  .../staging/media/hantro/hantro_g1_h264_dec.c |  38 +--
+>  drivers/staging/media/hantro/hantro_h264.c    | 119 ++++++--
+>  drivers/staging/media/hantro/hantro_hw.h      |   7 +-
+>  drivers/staging/media/hantro/hantro_v4l2.c    |  25 ++
+>  .../media/hantro/rockchip_vpu2_hw_h264_dec.c  |  98 +++----
+>  drivers/staging/media/rkvdec/rkvdec-h264.c    | 154 ++++++++---
+>  drivers/staging/media/rkvdec/rkvdec.c         |  35 +--
+>  drivers/staging/media/rkvdec/rkvdec.h         |   2 +
+>  include/media/v4l2-h264.h                     |  31 ++-
+>  14 files changed, 580 insertions(+), 225 deletions(-)
+>=20
+> --=20
+> 2.34.1
+>=20
+>=20
 

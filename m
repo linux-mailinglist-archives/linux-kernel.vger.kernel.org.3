@@ -2,243 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187EC4F5F4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682F64F5F94
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiDFNOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S232012AbiDFNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiDFNM0 (ORCPT
+        with ESMTP id S233719AbiDFNMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:12:26 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1825F6704;
-        Wed,  6 Apr 2022 02:45:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 001FB482;
-        Wed,  6 Apr 2022 11:45:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649238352;
-        bh=jlDjIElqodWntU54EXI4PqRLKycv+S7VoD7sYNoZ+MA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W/4BgXPUOHhX425m+MUkUHTOJZ45pthLQY5exomOvPagRPNTOoixOROTXVejXykNY
-         JTHxEcMc1RDoJyDuy+NjENLMxURYmt2REHtcadnDFN/AGveelgYU/hkOi5xyeONJyO
-         9WYMmaLMmi583OJrj5XwmZlQzBzkZfhW5dYxz0vw=
-Date:   Wed, 6 Apr 2022 12:45:48 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 5/5] soc: imx: imx8mp-blk-ctrl: introduce HSIO blk ctrl
- noc settings
-Message-ID: <Yk1hTNYYY47Pau8/@pendragon.ideasonboard.com>
-References: <20220406082330.2681591-1-peng.fan@oss.nxp.com>
- <20220406082330.2681591-6-peng.fan@oss.nxp.com>
+        Wed, 6 Apr 2022 09:12:54 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1685F90BE;
+        Wed,  6 Apr 2022 02:50:19 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id g20so1932702edw.6;
+        Wed, 06 Apr 2022 02:50:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PO8bgVYc+6yq/GV1chIgW+khCSDiG15QhmYnAA0FTmY=;
+        b=jJY4a1XyPEMAt4EXBRXTFwKg733D9QCnjp+tvaRH5ix3czCPMdBiaFhGrl6pXlKB/9
+         pIgnjxa8JfFVfQAwgIa+yBy47KMzwTPmkxQnuQvzyrn+oEZQxnluyC4h/IPHa7c4z2NR
+         rCTvZe15XxY1xU7J16/Cyfwek8+3rskF/9+/Y7ujEb9T748yip38DNllJ7bxo5hEoyaS
+         vDkrYzSsQy274lfuHEItbgQ1lc4RQtexBjLz75X6JcBPnvEMSKR+KAUAHnR7/qEwx0ny
+         e8YLXLYjEoATiKiQJu1bMgT4Jl5h3FA2TZ/bv7Ga4xThOfLL+0tskUwvOT+0sY0JCjeW
+         OhaA==
+X-Gm-Message-State: AOAM532vz4Dw9LxDqYjIgDKvXTV7NrhizPwW7qr1CpZnTk1DayB8jxj+
+        XlFzVyBFD+jgT/b/jPUVL70=
+X-Google-Smtp-Source: ABdhPJwDepzSDc+UC30gZbKsINVUj0Z32NzckEH9QLPfmT3vbdsNLWRBxxyj70khlKjB9SmuoiVNsA==
+X-Received: by 2002:a50:ed0b:0:b0:41c:cf60:a882 with SMTP id j11-20020a50ed0b000000b0041ccf60a882mr7956124eds.12.1649238539608;
+        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm6356961ejc.95.2022.04.06.02.48.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
+Message-ID: <98c359ba-9563-3da0-d968-ae40cee9d45f@kernel.org>
+Date:   Wed, 6 Apr 2022 11:48:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220406082330.2681591-6-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/1] tty: serial: samsung: add spin_lock for interrupt and
+ console_write
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+Cc:     'Krzysztof Kozlowski' <krzk@kernel.org>,
+        'Alim Akhtar' <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        'Chanho Park' <chanho61.park@samsung.com>
+References: <20220406082216.11206-1-jaewon02.kim@samsung.com>
+ <CGME20220406081823epcas2p2f7afa27e2402c4fc02c9bee5972bed4f@epcas2p2.samsung.com>
+ <20220406082216.11206-2-jaewon02.kim@samsung.com>
+ <Yk1NmTdUgMcSIq1O@kroah.com> <042701d84991$ca50d410$5ef27c30$@samsung.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <042701d84991$ca50d410$5ef27c30$@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
-
-Thank you for the patch.
-
-On Wed, Apr 06, 2022 at 04:23:30PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 06. 04. 22, 10:39, Jaewon Kim wrote:
+> On 22. 4. 6. 17:21, Greg Kroah-Hartman wrote:
+>> On Wed, Apr 06, 2022 at 05:22:16PM +0900, Jaewon Kim wrote:
+>>> The console_write and IRQ handler can run concurrently.
+>>> Problems may occurs console_write is continuously executed while the
+>>> IRQ handler is running.
+>>>
+>>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>>> ---
+>>>   drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+>>>   1 file changed, 12 insertions(+)
+>>>
+>>> diff --git a/drivers/tty/serial/samsung_tty.c
+>>> b/drivers/tty/serial/samsung_tty.c
+>>> index e1585fbae909..9db479d728b5 100644
+>>> --- a/drivers/tty/serial/samsung_tty.c
+>>> +++ b/drivers/tty/serial/samsung_tty.c
+>>> @@ -2480,12 +2480,24 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
+>>>   			     unsigned int count)
+>>>   {
+>>>   	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
+>>> +	unsigned long flags;
+>>> +	bool locked = 1;
+>>
+>> "1" is not a boolean :)
 > 
-> The out of reset value of HSIO NoC is not a valid value, we need
-> set it to a correct value. We only need to set it after power on.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/soc/imx/imx8mp-blk-ctrl.c | 74 +++++++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
-> 
-> diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
-> index e832c007b063..929fd9b770ae 100644
-> --- a/drivers/soc/imx/imx8mp-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
-> @@ -12,6 +12,7 @@
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-> +#include <linux/mfd/syscon.h>
->  
->  #include <dt-bindings/power/imx8mp-power.h>
->  
-> @@ -26,14 +27,24 @@ struct imx8mp_hsio_blk_ctrl {
->  	struct notifier_block power_nb;
->  	struct device *bus_power_dev;
->  	struct regmap *regmap;
-> +	struct regmap *noc_regmap;
->  	struct imx8mp_hsio_blk_ctrl_domain *domains;
->  	struct genpd_onecell_data onecell_data;
->  };
->  
-> +struct imx8mp_hsio_blk_ctrl_noc_data {
-> +	u32 off;
-> +	u32 priority;
-> +	u32 mode;
-> +	u32 extctrl;
-> +};
+> return value of spin_trylock() is 1 or 0.
+> It seems better to keep it as an int than to change it to bool.
+> I will return it to int.
 
-Maybe the data structure, and possibly the imx8mp_hsio_noc_set()
-function, could be shared with imx8m-blk-ctrl.c ? It's much code, so if
-it causes too much trouble, feel free to ignore.
+Hi, no, do not that. Simply use bool/true/false.
 
-The other comments on patch 4/5 apply to this one too.
-
-> +
-> +#define DOMAIN_MAX_NOC	2
->  struct imx8mp_hsio_blk_ctrl_domain_data {
->  	const char *name;
->  	const char *clk_name;
->  	const char *gpc_name;
-> +	const struct imx8mp_hsio_blk_ctrl_noc_data *noc_data[DOMAIN_MAX_NOC];
->  };
->  
->  struct imx8mp_hsio_blk_ctrl_domain {
-> @@ -41,6 +52,7 @@ struct imx8mp_hsio_blk_ctrl_domain {
->  	struct clk *clk;
->  	struct device *power_dev;
->  	struct imx8mp_hsio_blk_ctrl *bc;
-> +	const struct imx8mp_hsio_blk_ctrl_domain_data *data;
->  	int id;
->  };
->  
-> @@ -50,6 +62,27 @@ to_imx8mp_hsio_blk_ctrl_domain(struct generic_pm_domain *genpd)
->  	return container_of(genpd, struct imx8mp_hsio_blk_ctrl_domain, genpd);
->  }
->  
-> +static int imx8mp_hsio_noc_set(struct imx8mp_hsio_blk_ctrl_domain *domain)
-> +{
-> +	const struct imx8mp_hsio_blk_ctrl_domain_data *data = domain->data;
-> +	struct imx8mp_hsio_blk_ctrl *bc = domain->bc;
-> +	struct regmap *regmap = bc->noc_regmap;
-> +	int i;
-> +
-> +	if (!data || !regmap)
-> +		return 0;
-> +
-> +	for (i = 0; i < DOMAIN_MAX_NOC; i++) {
-> +		if (!data->noc_data[i])
-> +			continue;
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x8, data->noc_data[i]->priority);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0xc, data->noc_data[i]->mode);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x18, data->noc_data[i]->extctrl);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int imx8mp_hsio_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  {
->  	struct imx8mp_hsio_blk_ctrl_domain *domain =
-> @@ -89,6 +122,8 @@ static int imx8mp_hsio_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  		goto clk_disable;
->  	}
->  
-> +	imx8mp_hsio_noc_set(domain);
-> +
->  	return 0;
->  
->  clk_disable:
-> @@ -143,11 +178,39 @@ imx8m_blk_ctrl_xlate(struct of_phandle_args *args, void *data)
->  
->  static struct lock_class_key blk_ctrl_genpd_lock_class;
->  
-> +#define IMX8MP_HSIOBLK_NOC_PCIE	0
-> +#define IMX8MP_HSIOBLK_USB1	1
-> +#define IMX8MP_HSIOBLK_USB2	2
-> +#define IMX8MP_HSIOBLK_PCIE	3
-> +
-> +static const struct imx8mp_hsio_blk_ctrl_noc_data imx8mp_hsio_noc_data[] = {
-> +	[IMX8MP_HSIOBLK_NOC_PCIE] = {
-> +		.off = 0x780,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_USB1] = {
-> +		.off = 0x800,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_USB2] = {
-> +		.off = 0x880,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_PCIE] = {
-> +		.off = 0x900,
-> +		.priority = 0x80000303,
-> +	},
-> +};
-> +
->  static const struct imx8mp_hsio_blk_ctrl_domain_data imx8mp_hsio_domain_data[] = {
->  	[IMX8MP_HSIOBLK_PD_USB] = {
->  		.name = "hsioblk-usb",
->  		.clk_name = "usb",
->  		.gpc_name = "usb",
-> +		.noc_data = {
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_USB1],
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_USB2]
-> +		},
->  	},
->  	[IMX8MP_HSIOBLK_PD_USB_PHY1] = {
->  		.name = "hsioblk-usb-phy1",
-> @@ -161,6 +224,10 @@ static const struct imx8mp_hsio_blk_ctrl_domain_data imx8mp_hsio_domain_data[] =
->  		.name = "hsioblk-pcie",
->  		.clk_name = "pcie",
->  		.gpc_name = "pcie",
-> +		.noc_data = {
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_NOC_PCIE],
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_PCIE]
-> +		},
->  	},
->  	[IMX8MP_HSIOBLK_PD_PCIE_PHY] = {
->  		.name = "hsioblk-pcie-phy",
-> @@ -215,6 +282,7 @@ static int imx8mp_hsio_blk_ctrl_probe(struct platform_device *pdev)
->  	int num_domains = ARRAY_SIZE(imx8mp_hsio_domain_data);
->  	struct device *dev = &pdev->dev;
->  	struct imx8mp_hsio_blk_ctrl *bc;
-> +	struct regmap *regmap;
->  	void __iomem *base;
->  	int i, ret;
->  
-> @@ -259,11 +327,17 @@ static int imx8mp_hsio_blk_ctrl_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
->  				     "failed to attach bus power domain\n");
->  
-> +	regmap = syscon_regmap_lookup_by_compatible("fsl,imx8m-noc");
-> +	if (!IS_ERR(regmap))
-> +		bc->noc_regmap = regmap;
-> +
->  	for (i = 0; i < num_domains; i++) {
->  		const struct imx8mp_hsio_blk_ctrl_domain_data *data =
->  				&imx8mp_hsio_domain_data[i];
->  		struct imx8mp_hsio_blk_ctrl_domain *domain = &bc->domains[i];
->  
-> +		domain->data = data;
-> +
->  		if (data->clk_name) {
->  			domain->clk = devm_clk_get(dev, data->clk_name);
->  			if (IS_ERR(domain->clk)) {
-> -- 
-> 2.25.1
-> 
-
+thanks,
 -- 
-Regards,
-
-Laurent Pinchart
+js
+suse labs

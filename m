@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417144F5800
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7474F57EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235355AbiDFIfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 04:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S239274AbiDFIf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiDFIbl (ORCPT
+        with ESMTP id S1349697AbiDFIco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:31:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA31DE6FF;
-        Tue,  5 Apr 2022 19:30:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B7351CE20C3;
-        Wed,  6 Apr 2022 02:30:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A41C385A1;
-        Wed,  6 Apr 2022 02:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649212253;
-        bh=kMvDwsLnby/GtbPEZOS6QFj4PiJhpG5J89iehidYyqk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=D0s611AuDog/P1rH2bxfW6i93GJXw3xFSVkYcsSK8ZTn0D7N0GXBglI7ZAJYSICcB
-         pIQge7cNsjIzaTtD+sD9FzRgEvGbxSpx44M1DuJO7sumchaLXP1+fCko1rksqEZMws
-         77XREAht9+1A9S3LXIAKqpNvcxHfwRxX3wP8IsCVSVqE7EJmYXWcIKAl6CvA5GANtA
-         v/NC1DudsTJdjhhqXtozbYRjKSTc+4GYSEy9q2kVuGV6iRm9407B6FW6D18mN0ssZR
-         yorREqmSSt30gXRESA20aC9+lqO14XXSqP96aPdjRVzjZShBzyRaNqMdNjLwh8pujL
-         n/M2x3NHuki/Q==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: [PATCH v8 0/4] bootconfig: Support embedding a bootconfig in kernel for non initrd boot
-Date:   Wed,  6 Apr 2022 11:30:48 +0900
-Message-Id: <164921224829.1090670.9700650651725930602.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-User-Agent: StGit/0.19
+        Wed, 6 Apr 2022 04:32:44 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F474187BA3;
+        Tue,  5 Apr 2022 19:37:40 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 6 Apr
+ 2022 10:37:38 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 6 Apr
+ 2022 10:37:37 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-s390@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] s390: Simplify the calculation of variables
+Date:   Wed, 6 Apr 2022 10:37:31 +0800
+Message-ID: <1649212651-32038-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <Ykq2H+POaGs0GHVU@osiris>
+References: <Ykq2H+POaGs0GHVU@osiris>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,51 +50,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fix the following coccicheck warnings:
+./arch/s390/include/asm/scsw.h:695:47-49: WARNING
+ !A || A && B is equivalent to !A || B
 
-Here are the 8th version of the patchset to enable kernel embedded bootconfig
-for non-initrd kernel boot environment. This version fixes a build error when
-CONFIG_BLK_DEV_INITRD=n. Previous version is here [1];
+I apply a readable version just to get rid of a warning.
 
-[1] https://lore.kernel.org/all/164871505771.178991.7870442736805590948.stgit@devnote2/T/#u
-
-You can embed a bootconfig file into the kernel as a default bootconfig,
-which will be used if there is no initrd or no bootconfig is attached to initrd. 
-
-This needs 2 options: CONFIG_BOOT_CONFIG_EMBED=y and set the file
-path to CONFIG_BOOT_CONFIG_EMBED_FILE. Even if you embed the bootconfig file
-to the kernel, it will not be enabled unless you pass "bootconfig" kernel
-command line option at boot. Moreover, since this is just a "default"
-bootconfig, you can override it with a new bootconfig if you attach another
-bootconfig to the initrd (if possible).
-The CONFIG_BOOT_CONFIG_EMBED_FILE can take both absolute and relative path.
-
-This is requested by Padmanabha at the below thread[2];
-
-[2] https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
-
-Thank you,
-
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 ---
+V1->V2: apply a readable and simple version as suggestion.
 
-Masami Hiramatsu (4):
-      bootconfig: Make the bootconfig.o as a normal object file
-      bootconfig: Check the checksum before removing the bootconfig from initrd
-      bootconfig: Support embedding a bootconfig file in kernel
-      docs: bootconfig: Add how to embed the bootconfig into kernel
+ arch/s390/include/asm/scsw.h | 47 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 15 deletions(-)
 
+diff --git a/arch/s390/include/asm/scsw.h b/arch/s390/include/asm/scsw.h
+index a7c3ccf681da..b7e65f96de3c 100644
+--- a/arch/s390/include/asm/scsw.h
++++ b/arch/s390/include/asm/scsw.h
+@@ -508,9 +508,13 @@ static inline int scsw_cmd_is_valid_zcc(union scsw *scsw)
+  */
+ static inline int scsw_cmd_is_valid_ectl(union scsw *scsw)
+ {
+-	return (scsw->cmd.stctl & SCSW_STCTL_STATUS_PEND) &&
+-	       !(scsw->cmd.stctl & SCSW_STCTL_INTER_STATUS) &&
+-	       (scsw->cmd.stctl & SCSW_STCTL_ALERT_STATUS);
++	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
++		return 0;
++	if (scsw->tm.stctl & SCSW_STCTL_INTER_STATUS)
++		return 0;
++	if (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS)
++		return 1;
++	return 0;
+ }
+ 
+ /**
+@@ -522,10 +526,15 @@ static inline int scsw_cmd_is_valid_ectl(union scsw *scsw)
+  */
+ static inline int scsw_cmd_is_valid_pno(union scsw *scsw)
+ {
+-	return (scsw->cmd.fctl != 0) &&
+-	       (scsw->cmd.stctl & SCSW_STCTL_STATUS_PEND) &&
+-	       (!(scsw->cmd.stctl & SCSW_STCTL_INTER_STATUS) ||
+-		  (scsw->cmd.actl & SCSW_ACTL_SUSPENDED));
++	if (!scsw->tm.fctl)
++		return 0;
++	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
++		return 0;
++	if (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS))
++		return 1;
++	if (scsw->tm.actl & SCSW_ACTL_SUSPENDED)
++		return 1;
++	return 0;
+ }
+ 
+ /**
+@@ -675,9 +684,13 @@ static inline int scsw_tm_is_valid_q(union scsw *scsw)
+  */
+ static inline int scsw_tm_is_valid_ectl(union scsw *scsw)
+ {
+-	return (scsw->tm.stctl & SCSW_STCTL_STATUS_PEND) &&
+-	       !(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) &&
+-	       (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS);
++	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
++		return 0;
++	if (scsw->tm.stctl & SCSW_STCTL_INTER_STATUS)
++		return 0;
++	if (scsw->tm.stctl & SCSW_STCTL_ALERT_STATUS)
++		return 1;
++	return 0;
+ }
+ 
+ /**
+@@ -689,11 +702,15 @@ static inline int scsw_tm_is_valid_ectl(union scsw *scsw)
+  */
+ static inline int scsw_tm_is_valid_pno(union scsw *scsw)
+ {
+-	return (scsw->tm.fctl != 0) &&
+-	       (scsw->tm.stctl & SCSW_STCTL_STATUS_PEND) &&
+-	       (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) ||
+-		 ((scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) &&
+-		  (scsw->tm.actl & SCSW_ACTL_SUSPENDED)));
++	if (!scsw->tm.fctl)
++		return 0;
++	if (!(scsw->tm.stctl & SCSW_STCTL_STATUS_PEND))
++		return 0;
++	if (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS))
++		return 1;
++	if (scsw->tm.actl & SCSW_ACTL_SUSPENDED)
++		return 1;
++	return 0;
+ }
+ 
+ /**
+-- 
+2.7.4
 
- Documentation/admin-guide/bootconfig.rst |   31 ++++++++++++++++++++++--
- MAINTAINERS                              |    1 +
- include/linux/bootconfig.h               |   10 ++++++++
- init/Kconfig                             |   21 ++++++++++++++++-
- init/main.c                              |   38 +++++++++++++++---------------
- lib/.gitignore                           |    1 +
- lib/Makefile                             |   10 +++++++-
- lib/bootconfig-data.S                    |   10 ++++++++
- lib/bootconfig.c                         |   13 ++++++++++
- 9 files changed, 111 insertions(+), 24 deletions(-)
- create mode 100644 lib/bootconfig-data.S
-
---
-Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

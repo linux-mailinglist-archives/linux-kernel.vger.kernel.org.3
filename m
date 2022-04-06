@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B18D4F6AAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAAB4F6A20
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbiDFT7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S232303AbiDFTlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbiDFT7O (ORCPT
+        with ESMTP id S229506AbiDFTks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:59:14 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685A184B41;
-        Wed,  6 Apr 2022 11:12:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id l26so6009579ejx.1;
-        Wed, 06 Apr 2022 11:12:10 -0700 (PDT)
+        Wed, 6 Apr 2022 15:40:48 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B872619531F;
+        Wed,  6 Apr 2022 11:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=rXbbQCVhuhsoQHUcvprMC174QHX0agKLOmkRY9IDpdE=;
-        b=L2r2dk38UjYEmmQ6Zb889rsVtzKdkRW6mfhmbqlWGD+gzxr+uPHq8LAnvMl4I5ImOI
-         OZ4wE6nBgFz+dD+/lkCnD4jl9ltKkvzLMAyiFjnpeCw1KhwZ09pCIpuuMJiE425oLlFk
-         Zx6j3VI1DPJ1LpVEHrT6ghtUBRYIHNX5RunsVlKFK/dSnSzSoKU/RSnNKAHU3bWLUKtT
-         PhFGNm0cRB+n4l+zHG+Dh7Zpm6/uQ+oGN3rHI8vpfWXgd2RlVCiYBhgM+zplPiRhLYBr
-         yQ1bUfHmWwTrJF+wYtfolaGz8wuBY96lROeb+5E5/9ddpZ+H5aFr1+fY8ZZSHi9LivN+
-         BSLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=rXbbQCVhuhsoQHUcvprMC174QHX0agKLOmkRY9IDpdE=;
-        b=0A8giAWBy6oJCWRNiQPGya19Tmfy6hIwjm3T/zdYa8CP5R6EQbgB0SIC8pox/WrjkO
-         VfggltCyglhEvIxd0YZdxqMs7PadcW6hZks5TOJujtuinCyypy3mMMJKLEwlGVqbzsrP
-         j/cUFMF9dJuNFWLhq1FKrXJBIqi1H8WNS6qvFaJPe6LHdRZFDRPgxHjIzWM8qXsKChYv
-         uzyAFOCfOGMM1kR1b1zm1Jork7utnjHd7DGdFh58EoOx6pQFaigsv6HquUJ+QngiQAbC
-         OHYYpxVAs+J3n9RAISDp9tCxLfsHh2j7dFt2MGgKcY/EfnTap3Skp3u4c8aTBwIUR7Yk
-         z2cw==
-X-Gm-Message-State: AOAM530WZWc6blwNakPlC3N3hq0YXPg/Xww8dobVWnamWG42gxIccVvY
-        5iWRq0qcJDYHPXKF8KuCNq5YjmDgcmg=
-X-Google-Smtp-Source: ABdhPJyH9XlY7jFrDCQzWHAwrBPcC67MWt7UOM/3j6QJrMSUpkz489pT0aMAcALwtywAOHYvRcig6A==
-X-Received: by 2002:a17:906:dc8e:b0:6e7:1713:5de9 with SMTP id cs14-20020a170906dc8e00b006e717135de9mr9678902ejc.71.1649268729074;
-        Wed, 06 Apr 2022 11:12:09 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id l11-20020a509dcb000000b0041cbaf0ce2asm6146675edk.6.2022.04.06.11.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:12:07 -0700 (PDT)
-Message-ID: <310d20a04bdaf40672592d9ffa950606d2ceaff7.camel@gmail.com>
-Subject: Re: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-From:   Bean Huo <huobean@gmail.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Alex =?ISO-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, maxim.uvarov@linaro.org,
-        joakim.bech@linaro.org, ulf.hansson@linaro.org,
-        ilias.apalodimas@linaro.org, arnd@linaro.org,
-        ruchika.gupta@linaro.org, tomas.winkler@intel.com,
-        yang.huang@intel.com, bing.zhu@intel.com,
-        Matti.Moell@opensynergy.com, hmo@opensynergy.com,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
-Date:   Wed, 06 Apr 2022 20:12:07 +0200
-In-Reply-To: <e72812a9-1e5b-a826-d490-62ed23d94116@acm.org>
-References: <20220405093759.1126835-1-alex.bennee@linaro.org>
-         <8b3ce88f65fd11523a4d2daab3c617f7089eb1ce.camel@gmail.com>
-         <87r16bk013.fsf@linaro.org>
-         <aeb64d1c4bbddfd8463c07a40ab1fc78be0d158d.camel@gmail.com>
-         <87ee2ajuky.fsf@linaro.org>
-         <c18a2b359046a14250cafa5a619dbe53f2872b5a.camel@gmail.com>
-         <e72812a9-1e5b-a826-d490-62ed23d94116@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.0-1 
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649268823; x=1680804823;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BXJ0GIop+UGWRaFV2rjdj0GKaXIQVFtY0SlM5haDrWY=;
+  b=E8Zv7mLGURkFsCxLUiVXMQOxCUZxhxhLbe++Uwipe7x3cWscrzswCZ07
+   L3h/rzg0PO+MfuxZt0dnen+2RNZReJcT6rw8cWsMRGw74H7gPRN1IaDc7
+   i1Zr3SiOTI8GZIJ6wKWXKg+GFA/M0yU9sC0JNOAR3kXtD87vzBqQjXhVF
+   8=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 06 Apr 2022 11:13:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:13:20 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 11:13:20 -0700
+Received: from [10.110.72.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
+ 11:13:19 -0700
+Message-ID: <960102bb-2944-4be0-ab09-7cd2eb0c2cf9@quicinc.com>
+Date:   Wed, 6 Apr 2022 11:13:18 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 7/7] kbuild: read *.mod to get objects passed to $(LD) or
+ $(AR)
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        <linux-kbuild@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20220406153023.500847-1-masahiroy@kernel.org>
+ <20220406153023.500847-8-masahiroy@kernel.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220406153023.500847-8-masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA0LTA2IGF0IDEwOjMyIC0wNzAwLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6
-Cj4gPiBJdCdzIHRoZSBTQ1NJIEJTRyBkcml2ZXIsIGluIGZhY3QsIHdlIGRvbid0IGhhdmUgYSBk
-ZWRpY2F0ZWQgVUZTCj4gPiBSUE1CCj4gPiBkcml2ZXIgaW4gdGhlIGtlcm5lbC4gUlBNQiBpcyBh
-IHdlbGwga25vd24gTFUsIHdlIGFyZSB1c2luZwo+ID4gdXNlcnNwYWNlCj4gPiB0b29scyB0byBp
-c3N1ZSBTQ1NJIGNvbW1hbmRzIGRpcmVjdGx5IHRvIHRoZSBVRlMgUlBNQiBMVSB2aWEKPiA+IGlv
-Y3RsKCkKPiA+IGZyb20gdGhlIEJTRyBkZXZpY2Ugbm9kZSBpbiB0aGUgL2Rldi9zZy8gZm9sZGVy
-Lgo+ID4gCj4gPiBIZXJlIGlzIHRoZSBCU0cgcGFydCBvZiB0aGUgY29kZSBpbiB0aGUgdXNlcnNw
-YWNlIHRvb2xzOgo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqAgaW9faGRyX3Y0Lmd1YXJkID0g
-J1EnOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgIGlvX2hkcl92NC5wcm90b2NvbCA9IEJTR19QUk9U
-T0NPTF9TQ1NJOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgIGlvX2hkcl92NC5zdWJwcm90b2NvbCA9
-IEJTR19TVUJfUFJPVE9DT0xfU0NTSV9DTUQ7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqAgaW9faGRy
-X3Y0LnJlc3BvbnNlID0gKF9fdTY0KXNlbnNlX2J1ZmZlcjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDC
-oCBpb19oZHJfdjQubWF4X3Jlc3BvbnNlX2xlbiA9IFNFTlNFX0JVRkZfTEVOOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoMKgIGlvX2hkcl92NC5yZXF1ZXN0X2xlbiA9IGNtZF9sZW47Cj4gPiDCoMKgwqDC
-oMKgwqDCoMKgwqAgaW9faGRyX3Y0LnJlcXVlc3QgPSAoX191NjQpY2RiOwo+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgIGlvY3RsKGZkLCBTR19J
-TywgJmlvX2hkcl92NCkpCj4gCj4gSGkgQmVhbiwKPiAKPiBJJ20gbm90IHN1cmUgd2hlcmUgdGhl
-IGFib3ZlIGNvbWVzIGZyb20/IFRoZSBBbmRyb2lkIFJQTUIgY2xpZW50IHVzZXMKPiBzbGlnaHRs
-eSBkaWZmZXJlbnQgY29kZS4gQWRkaXRpb25hbGx5LCB0aGUgcmV0cnkgbG9vcCBhcm91bmQgdGhl
-IAo+IHN1Ym1pc3Npb24gb2YgU0cvSU8gY29tbWFuZHMgaXMgdmVyeSBpbXBvcnRhbnQuIFNlZSBh
-bHNvIHRoZSAKPiBjaGVja19zZ19pb19oZHIoKSBjYWxsIGluIHNlbmRfdWZzX3JwbWJfcmVxKCku
-IFNlZSBhbHNvIAo+IGh0dHBzOi8vY3MuYW5kcm9pZC5jb20vYW5kcm9pZC9wbGF0Zm9ybS9zdXBl
-cnByb2plY3QvKy9tYXN0ZXI6c3lzdGVtL2NvcmUvdHJ1c3R5L3N0b3JhZ2UvcHJveHkvcnBtYi5j
-Cj4gCj4gCkJhcnQsCgpJdCBpcyBmcm9tIHRoZSB1ZnMtdXRpbHMuCgpTbywgZG8geW91IHZvdGUg
-dG8gYWRkIHRoZSBVRlMgUlBNQiBkcml2ZXIgYmFzZWQgb24gdGhpcyBuZXcgZnJhbWV3b3JrCnRv
-IHJlc29sdmUgdGhpcyBjb25mbGljdD8KCgpLaW5kIHJlZ2FyZHMsCkJlYW4KCj4gVGhhbmtzLAo+
-IAoKCj4gQmFydC4KCg==
+On 4/6/2022 8:30 AM, Masahiro Yamada wrote:
+> ld and ar support @file, which command-line options are read from.
+> 
+> Now that *.mod lists the member objects in the correct order, without
+> duplication, it is ready to be passed to ld and ar.
+> 
+> By using the @file syntax, people will not be worried about the pitfall
+> described in the NOTE.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>   scripts/Makefile.build | 10 +++-------
+>   1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 3da731cf6978..f6a506318795 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -450,22 +450,18 @@ quiet_cmd_ar_lib = AR      $@
+>   $(obj)/lib.a: $(lib-y) FORCE
+>   	$(call if_changed,ar_lib)
+>   
+> -# NOTE:
+> -# Do not replace $(filter %.o,^) with $(real-prereqs). When a single object
+> -# module is turned into a multi object module, $^ will contain header file
+> -# dependencies recorded in the .*.cmd file.
+>   ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+>   quiet_cmd_link_multi-m = AR [M]  $@
+>   cmd_link_multi-m =						\
+>   	$(cmd_update_lto_symversions);				\
+>   	rm -f $@; 						\
+> -	$(AR) cDPrsT $@ $(filter %.o,$^)
+> +	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+>   else
+>   quiet_cmd_link_multi-m = LD [M]  $@
+> -      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ $(filter %.o,$^)
+> +      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@)
+>   endif
+>   
+> -$(multi-obj-m): FORCE
+> +$(multi-obj-m): %.o: %.mod FORCE
+>   	$(call if_changed,link_multi-m)
+>   $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+>   
 
+Looks like this also addresses the out-of-tree issue described in 
+<https://lore.kernel.org/linux-kbuild/1610500731-30960-2-git-send-email-jjohnson@codeaurora.org/>
+
+:)
+
+/jeff

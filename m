@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245EC4F611C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937C14F61D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbiDFONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S234320AbiDFO0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbiDFOMe (ORCPT
+        with ESMTP id S234696AbiDFOZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:12:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 981896381A2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 03:10:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A1AC23A;
-        Wed,  6 Apr 2022 03:04:53 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.10.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C67DC3F718;
-        Wed,  6 Apr 2022 03:04:50 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 11:04:41 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, james.morse@arm.com
-Subject: Re: [RFC PATCH -next V2 0/7]arm64: add machine check safe support
-Message-ID: <Yk1luUxEIP3Dxt5c@FVFF77S0Q05N>
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
+        Wed, 6 Apr 2022 10:25:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0493534201C;
+        Wed,  6 Apr 2022 03:35:53 -0700 (PDT)
+X-UUID: e083e76070ff486d94d015fd75f891d4-20220406
+X-UUID: e083e76070ff486d94d015fd75f891d4-20220406
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 487573804; Wed, 06 Apr 2022 18:05:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 6 Apr 2022 18:05:16 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 6 Apr 2022 18:05:16 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <nfraprado@collabora.com>, <tzungbi@google.com>
+CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [v9 0/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Date:   Wed, 6 Apr 2022 18:05:10 +0800
+Message-ID: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406091311.3354723-1-tongtiangen@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,112 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The series reuses mt8192-mt6359-rt1015-rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-In future, for the arm64 uaccess stuff, could you please CC me, and for the
-arm64 RAS bits (e.g. the SEA handling), could you please CC James Morse?
+Changes from v8:
+  - fix typos.
 
-On Wed, Apr 06, 2022 at 09:13:04AM +0000, Tong Tiangen wrote:
-> This patchset is based on[1].
+Changes from v7:
+  - "mediatek,hdmi-codec" is an optional property, the code and the
+    binding document should match.
 
-That link below appears to be a single patch. Sending that separately makes
-this harder to review, so in future could you please send this as a combined
-series?
+Changes from v6:
+  - "speaker-codec" changes to "speaker-codecs" due to there may be two
+    speaker codec.
 
-> With the increase of memory capacity and density, the probability of
-> memory error increases. The increasing size and density of server RAM
-> in the data center and cloud have shown increased uncorrectable memory
-> errors.
-> 
-> Currently, the kernel has a mechanism to recover from hardware memory
-> errors. This patchset provides an new recovery mechanism.
-> 
-> For ARM64, the hardware error handling is do_sea() which divided into
-> two cases:
-> 1. The user state consumed the memory errors, the solution is kill th
->      user process and isolate the error page.
-> 2. The kernel state consumed the memory errors, the solution is panic.
-> 
-> For kernelspace, Undifferentiated panic maybe not the optimal choice,
-> it can be handled better.
-> 
-> This patchset deals with four sscenarios of hardware memory error consumed
-> in kernelspace:
-> 1. copy_from_user.
-> 2. get_user.
+Changes from v5:
+  - "mediatek,headset-codec" and "mediatek,speaker-codec" drop prefix
+    and move to properties from patternProperties.
 
-What about atomics to user memory? e.g. futexes, or the armv8_deprecated
-emulations?
+Changes form v4:
+  - split a large patch into three small patches for easy reviewing
+  - correct coding style
 
-It seems the assumption is that writing to user memory (e.g. copy_to_user() and
-put_user()) don't matter? Could you please mention why? e.g. do we never take
-an exception for writes to memory with errors?
+Changes from v3:
+  - fix build error: too many arguments for format
+    [-Werror-format-extra-args]
 
-> 3. cow(copy on write).
-> 4. pagecache reading.
+Changes from v2:
+  - fix build warnings such as "data argument not used by format string"
 
-There are a bunch of other places where we'll access user memory via the linear
-map, so I assume this is just a best-effort "try not to die" rather than "never
-die" ?
+Changes from v1:
+  - uses the snd_soc_of_get_dai_link_codecs to complete the
+  configuration of dai_link's codecs
+  - uses definitions to simplifies card name and compatible name
 
-Are there other places we might need/want to expand this to in future?
+Jiaxin Yu (4):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible and new
+    properties
+  ASoC: mediatek: mt8192: refactor for I2S3 DAI link of speaker
+  ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI links of headset
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
 
-Thanks,
-Mark.
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |  32 +++
+ sound/soc/mediatek/Kconfig                    |   1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 199 +++++++++++-------
+ 3 files changed, 153 insertions(+), 79 deletions(-)
 
-> These four scenarios have similarities. Although the error is consumed in
-> the kernel state, but the consumed data belongs to the user state.
-> 
-> The processing scheme is based on CONFIG_ARCH_HAS_COPY_MC and uses the
-> process killing plus isolate error page to replace kernel panic.
-> 
-> [1]https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
-> 
-> Since V2:
->  1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
->    ARM64_UCE_KERNEL_RECOVERY.
->  2.Add two new scenarios, cow and pagecache reading.
->  3.Fix two small bug(the first two patch).
-> 
-> Tong Tiangen (7):
->   x86: fix copy_mc_to_user compile error
->   arm64: fix page_address return value in copy_highpage
->   arm64: add support for machine check error safe
->   arm64: add copy_from_user to machine check safe
->   arm64: add get_user to machine check safe
->   arm64: add cow to machine check safe
->   arm64: add pagecache reading to machine check safe
-> 
->  arch/arm64/Kconfig                   |  1 +
->  arch/arm64/include/asm/asm-extable.h | 25 +++++++
->  arch/arm64/include/asm/asm-uaccess.h | 16 +++++
->  arch/arm64/include/asm/esr.h         |  5 ++
->  arch/arm64/include/asm/extable.h     |  2 +-
->  arch/arm64/include/asm/page.h        | 10 +++
->  arch/arm64/include/asm/uaccess.h     | 17 ++++-
->  arch/arm64/kernel/probes/kprobes.c   |  2 +-
->  arch/arm64/lib/Makefile              |  2 +
->  arch/arm64/lib/copy_from_user.S      | 11 ++--
->  arch/arm64/lib/copy_page_mc.S        | 98 ++++++++++++++++++++++++++++
->  arch/arm64/lib/copy_to_user_mc.S     | 78 ++++++++++++++++++++++
->  arch/arm64/mm/copypage.c             | 36 ++++++++--
->  arch/arm64/mm/extable.c              | 21 +++++-
->  arch/arm64/mm/fault.c                | 30 ++++++++-
->  arch/x86/include/asm/uaccess.h       |  1 +
->  include/linux/highmem.h              |  8 +++
->  include/linux/uaccess.h              |  8 +++
->  include/linux/uio.h                  |  9 ++-
->  lib/iov_iter.c                       | 85 +++++++++++++++++++-----
->  mm/memory.c                          |  2 +-
->  21 files changed, 432 insertions(+), 35 deletions(-)
->  create mode 100644 arch/arm64/lib/copy_page_mc.S
->  create mode 100644 arch/arm64/lib/copy_to_user_mc.S
-> 
-> -- 
-> 2.18.0.huawei.25
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+2.25.1
+

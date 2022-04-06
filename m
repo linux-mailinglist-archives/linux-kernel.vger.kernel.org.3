@@ -2,142 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7A84F6584
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EE34F6597
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 18:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237969AbiDFQgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 12:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S237958AbiDFQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 12:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237855AbiDFQgK (ORCPT
+        with ESMTP id S238765AbiDFQiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:36:10 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E01CD7C5;
-        Wed,  6 Apr 2022 06:54:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zq5Wz0MIx83xXFdENNgYKfZwdhiABCP5qe8NNfdLpDihBO7Y3N+GgQKrMtdLgIAAfRAItaB8oUmFdQX/tWfs/nTN3yDAsZD1o+FY4En1whe8ZaL5qz/H64bWPyImESFLG27H9KZ3NBP434TkMhlzCcJmtivPH7iNwalLbqE8LGIHXRH9K9ZD7UyyXJgrRbrYbe0U2lWsN7bciSCCjcCieiVwJPZB5+N0qD9r0yzN76YhIAnLpx+TAkKvNiZXXIdY8n6JzRphtGWNUdn+0ZtbHG9HOxT8ONO7Oy43uPYvyouChsKobh1EqXenvKYirYG9iTRXY1dFacC2PW7wT45VXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=51ebBRoOpjgO7xjAcjgrfC3aKeje9aSvxO/OfJrv0ew=;
- b=jq5uVhb/8wgQeZJUc7YckYPidg3cPGQgjH4sB/N4rD4W/7j/iEvCNb1mRHUGq8A+RVJgW5g1D7l8l+mQyVfqSFvJ5vZc5WyRRz3Li73wCM2NVzUGcAwDeFenSoYnJXtpoqhDBg9Xy0fkUJrTZD4SsBvk/EBjGzxwRT/GWu0NFliQLRIWzeLtwlBJ+jT1RAV6Nbh5+cEeR9ifl/pCNh9qXA4/Sg19V0SWLNBqy0OH+pqr1Qt2EH0z6/Ltyqzqu+hErTCSs1c753Q0VL27TLqMk3ct58bjGrDE+ovwR3UQwOJ3BoL1Nwx3jvsuxpkjnfJXopQEDhyfXItQkWVy5Uq4eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=greyhouse.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=51ebBRoOpjgO7xjAcjgrfC3aKeje9aSvxO/OfJrv0ew=;
- b=laqQQSNVy4gW/lIohl+iT1vmat1w4A0+a3PL9hVbwgIUwH3seCzO7pHnmDopWJWvrDI8V9q4dsCtEiIYU/iM8xnebiUkswzhZ0jsvTuoLejoMoXfg/ZufcbLuACWtfaJdSImCHAHyHvfcy8gw718QI3XNTJIrSfSv6bIN9vMeq55w9KyouoolvbbLyiiKXvTMKhBVTeBGv+uODHoiGXN+vbMoW+jFxNC6V8MGXPZjMbyRfezj9Tit/Hoas5Ttua2JC9X5XowqkQTAUdNBxfGBlcHfsd3LqJVPmoVa0Aia+bhVDSQUGgHelWX1Z+WUAAw22PkPxqAymp5c6vvqHl42w==
-Received: from BN1PR13CA0018.namprd13.prod.outlook.com (2603:10b6:408:e2::23)
- by CY4PR1201MB0152.namprd12.prod.outlook.com (2603:10b6:910:1b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 13:54:39 +0000
-Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e2:cafe::4d) by BN1PR13CA0018.outlook.office365.com
- (2603:10b6:408:e2::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21 via Frontend
- Transport; Wed, 6 Apr 2022 13:54:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5144.20 via Frontend Transport; Wed, 6 Apr 2022 13:54:38 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 6 Apr
- 2022 13:54:38 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Apr 2022
- 06:54:37 -0700
-Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Wed, 6 Apr
- 2022 06:54:34 -0700
-From:   Gal Pressman <gal@nvidia.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Jay Vosburgh" <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        "Andy Gospodarek" <andy@greyhouse.net>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Gal Pressman <gal@nvidia.com>
-Subject: [PATCH] bonding: Update layer2 and layer2+3 hash formula documentation
-Date:   Wed, 6 Apr 2022 16:54:20 +0300
-Message-ID: <20220406135420.21682-1-gal@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Apr 2022 12:38:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C172F8FE0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:57:27 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so4477750ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 06:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
+        b=TIHndFfPo+aaXhrleHu1XKHsvk8SmC+eKthCJ1x8k1jOU+FlmZp1HraGZe+KRNSejw
+         lAdLIaFuzOEvGXFyAJm6TYPZxSDLp8r3tTzTA7hH4bWGi5bmSlmjb/JhO4m81EX/23zo
+         JMC37cyMVhkPc2YolTh/ZQH4C8yQX30KAKqpvHjDMS121yd+bZ+kGjC4fw/VSDTd/Bel
+         r++sz3h90Y1q3YMtz3u9vkqTtI9AnQYD9Dxw44zbHFq/3sIfbG/fosSlnR1j3w9I45Hd
+         c20ZFtPU/2IMcvlxH0WaArlfD88e06eBvHl6UAsbzD3EpoCHHQmgMnUL6JnMa80b+0IK
+         VdEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
+        b=JLb+mhrbA1Xml2dKCcrI/GDIQHPshi5mtwUxP+4d4NsULzRfsQWLYocza2mMEWwP7Q
+         29ynB3Ih3qL3t8qNew4fYNObcsjy1Br+2yaYVaN9CSg0r5jcXUCrkzTBHYL5l8lEOvXF
+         D351YdkKRyB61aCZSDOWaNmE4g5xe5qmCi7ktkjugD42i/yDPSqXeevHX5gXqTDu077A
+         FKmeBEtd961ZvF+hgjYcl4oh3slnwXCX++ObID/H0qLoXPVLBBge9LRAn8Gwy4NTB+Ix
+         fKBMD52cEZbAc4j6xN9b3WAdE6SZCdKVOvnrQ9ldyE7zgECWC50KgUrgzl+kFLtws9j8
+         DqOw==
+X-Gm-Message-State: AOAM532bX9xtSyUWyJ+02ShOFVTvGZQ1v/PzcCtrjiOVUKkpyS3CsNdt
+        pdSU6myPxaEuqykSY/kDHbI30tpEuomdUoS/ldE=
+X-Google-Smtp-Source: ABdhPJzFnHz+H9bUAOi37zIlujICLHHCorayrVW8scWF90/ZOC3VDJeoKK7oBD1gDjScx2MY4DTEtjSy2PyuLZI+P4Y=
+X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
+ sd6-20020a1709076e0600b006e4dae79574mr8718896ejc.540.1649253445762; Wed, 06
+ Apr 2022 06:57:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 95988924-912f-46fc-2b5d-08da17d4fe18
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0152:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB0152E46F7566A6B0428EF53FC2E79@CY4PR1201MB0152.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y55mxTUSfTqzs2KNZiRTgqHhN52BjWfUm6ABxcGPOwDqq3THqqypnhJA0JFLXAOtA55J1pMj6Xrh1TVjwivBPcVBKpoH1rOtLuHs9lH4qiWArBIf2aOknVk3yyYPDf8lh47VwZyanxZZHjz/nuiZpTw7znB3geJCWPzMyI69F6xjKJlxVEsduOshxKWym4D2DCQ5G7JLjPG2qt/mKrBHzj+HNMOdE7w9E519i1sVWLKH15wbYWK49c7C5P1M9Dp9gEJEJ0ELLxC+ivsvPD96ElayTCNCl8ABvyX28Z75jZzvxQ2OqwkaMHqG3lrclo42h384WDzRlOc9qRiyd264R9oItAzVf/sLwMnGOVjAT1JNTsuRJzo7c8nS7X147GDtUlxoYKGJa8wSK1wIC05Wc9RVQyk8ZYgOaTqbqVP9XexUxObwEDHE73HrlBs7f6Sh0cHQJNt4uL7zW6Mgo5d/YNcPkA8fDFtQTRdDxgirSuU1FTrapWf3uTncQeh/J8Adp7ZCDN7008Kzo7Plu/aPFOe5E2FN2z3xyKFubfEPooJZxQUWh6cyDJ9lSgH5tGDQLMzGKHbPSKYtchcfGvqQzpmRoVGX3lvR1/8UM5nrV+QBO/HjyWFxi7YXi1fplE4oy6lpKRzAtOTWHVVc8Z1pbLLHLdLNDPX0wGZEOdI/MEu38lcyhLvs43wgqG7R4LTokGP37EsE7wWkQuNAHAB7tQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(2906002)(316002)(7696005)(356005)(6666004)(110136005)(36756003)(36860700001)(47076005)(4326008)(70586007)(8676002)(70206006)(83380400001)(5660300002)(40460700003)(7416002)(82310400005)(54906003)(107886003)(1076003)(2616005)(186003)(508600001)(336012)(26005)(81166007)(8936002)(86362001)(426003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 13:54:38.7974
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95988924-912f-46fc-2b5d-08da17d4fe18
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0152
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 6 Apr 2022 14:57:14 +0100
+Message-ID: <CAHpNFcObr9v28HTpqKS=eAKC5wV2z7k0NaVXz94ga6JN1kJ_vA@mail.gmail.com>
+Subject: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU & CPU
+ though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using layer2 or layer2+3 hash, only the 5th byte of the MAC
-addresses is used.
+https://lkml.org/lkml/2022/4/6/401
 
-Signed-off-by: Gal Pressman <gal@nvidia.com>
----
- Documentation/networking/bonding.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+*
+[PATCH v7 13/14] drm/msm: Update generated headers Vinod Koul
+  [PATCH v7 07/14] drm/msm/disp/dpu1: Add support for DSC in encoder Vinod =
+Koul
+  [PATCH v7 09/14] drm/msm: Add missing num_dspp field documentation Vinod =
+Koul
+  [PATCH v7 06/14] drm/msm/disp/dpu1: Add DSC support in hw_ctl Vinod Koul
+  [PATCH v7 08/14] drm/msm/dpu: don't use merge_3d if DSC merge topo
+... Vinod Koul
+  [PATCH v7 03/14] drm/msm/disp/dpu1: Add support for DSC Vinod Koul
+  [PATCH v7 01/14] drm/msm/dsi: add support for dsc data Vinod Koul
+[New] [PATCH v7 00/14] drm/msm: Add Display Stream Compression Support
+Vinod Koul
+*
+3D Mux , 3D Mu-X by GPU & CPU though SiMD & AVX 32Bit IfNotOR to a
+Single planar Frame Buffer is logical in the case of Multi Window
+desktops,
+A Blitter Frame Works well for X-OR.
 
-diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
-index 525e6842dd33..43be3782e5df 100644
---- a/Documentation/networking/bonding.rst
-+++ b/Documentation/networking/bonding.rst
-@@ -894,7 +894,7 @@ xmit_hash_policy
- 		Uses XOR of hardware MAC addresses and packet type ID
- 		field to generate the hash. The formula is
- 
--		hash = source MAC XOR destination MAC XOR packet type ID
-+		hash = source MAC[5] XOR destination MAC[5] XOR packet type ID
- 		slave number = hash modulo slave count
- 
- 		This algorithm will place all traffic to a particular
-@@ -910,7 +910,7 @@ xmit_hash_policy
- 		Uses XOR of hardware MAC addresses and IP addresses to
- 		generate the hash.  The formula is
- 
--		hash = source MAC XOR destination MAC XOR packet type ID
-+		hash = source MAC[5] XOR destination MAC[5] XOR packet type ID
- 		hash = hash XOR source IP XOR destination IP
- 		hash = hash XOR (hash RSHIFT 16)
- 		hash = hash XOR (hash RSHIFT 8)
--- 
-2.25.1
+The relevance is that a Single Frame buffer per Eye does 3D Imagery!
+(Google Glass & MS & PS4 VR)
 
+We can and will need more; For this Substance Called Flexibility we
+need 2 Details:
+
+ReDirectable DMA & Multi Frame Blitter...
+
+By this method we can literally write every detail if we wish in
+Shader, But we do not need to worry!
+
+X-OR Blitter Recovers from Overwrite by detecting details that are new.
+
+Simple is best but keep in mind that CPU Frame Buffer (In RAM & Cache)
+& GPU Frame Buffer (in GPU) & Direct Access RAM : ReBAR to
+Transparently access GPU RAM!
+
+Allowing ALL.
+
+****
+
+Vector Compression VESA Standard Display protocol 3 +
+DSC : Zero compression or low level compression version of DSC
+1.2bc
+
+Frame by Frame compression with vector prediction.
+
+X-OR Frame Buffer Compression & Blank Space Compression:
+
+X-OR X=3D1 New Data & X=3D0 being not sent,
+Therefore Masking the frame buffer,
+
+A Frame buffer needs a cleared aria; A curve or ellipsoid for example,
+Draw the ellipsoid; This is the mask & can be in 3 levels:
+
+X-OR : Draw or not Draw Aria : Blitter XOR
+AND : Draw 1 Value & The other : Blitter Additive
+Variable Value Resistor : Draw 1 Value +- The other : Blitter + or - Modifi=
+er
+*
+
+Vector Compression VESA Standard Display protocol 3 : RS
+
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+"QFT a Zero compression or low level compression version of DSC
+1.2bc
+
+X-OR Frame Buffer Compression & Blank Space Compression:
+Vector Compression VESA Standard Display protocol 3"
+
+"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
+latency=E2=80=9D, which is the amount of time between a frame being ready f=
+or
+transport in the GPU and that frame being completely displayed. This
+latency is the sum of the transport time through the source=E2=80=99s outpu=
+t
+circuits, the transport time across the interface, the processing of
+the video data in the display, and the painting of the screen with the
+new data. This overall latency affects the responsiveness of games:
+how long it appears between a button is pressed to the time at which
+the resultant action is observed on the screen.
+
+
+While there are a lot of variables in this equation, not many are
+adjustable from an HDMI specification perspective. QFT operates on the
+transport portion of this equation by reducing the time it takes to
+send only the active video across the cable. This results in reduced
+display latency and increased responsiveness."
+*
+
+(c)Rupert S
+
+Include vector today *important* RS
+https://vesa.org/vesa-display-compression-codecs/
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
+ml
+
+https://bit.ly/VESA_BT
+
+Rupert S

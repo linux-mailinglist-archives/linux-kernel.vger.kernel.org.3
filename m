@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4924F63C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58804F63DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236707AbiDFPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S236595AbiDFPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbiDFPs1 (ORCPT
+        with ESMTP id S236881AbiDFPrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:48:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719434961DE;
-        Wed,  6 Apr 2022 06:09:31 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1B58C210F4;
-        Wed,  6 Apr 2022 13:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649250535;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ny6SkW/jjvFpcVUGJahdGz/N3Zi6Zn73i10e9D2Lh3E=;
-        b=UZlmD6C1rcVd7c9TYRt/MA0lDF47JspYw//BPhBSRvqyAnMd4a3lIiZ4eizQW9DFdw/MHF
-        1dWIeP+32cmwnnlMnyAgHZDmH0NzATbB6x2tf2x2b3ag10oCI9XF2FAx26O0dmeSq2S0Oo
-        nCF+YTvEuyLdMC6V7+atUIVQr7+R+HQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649250535;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ny6SkW/jjvFpcVUGJahdGz/N3Zi6Zn73i10e9D2Lh3E=;
-        b=85Vj1nlNdiZXDGccmK9QqluymfR/owT8jdecNZDrZ/7Xncs1RHkrzEnpmk5uyyEvqjRY7E
-        BtKfJojqA68BCgCA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id C6AD5A3B83;
-        Wed,  6 Apr 2022 13:08:54 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 32AB9DA80E; Wed,  6 Apr 2022 15:04:53 +0200 (CEST)
-Date:   Wed, 6 Apr 2022 15:04:53 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     cgel.zte@gmail.com
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] Btrfs: remove redundant judgment
-Message-ID: <20220406130453.GB15609@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, cgel.zte@gmail.com, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220406090404.2488787-1-lv.ruyi@zte.com.cn>
+        Wed, 6 Apr 2022 11:47:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CB03B6647;
+        Wed,  6 Apr 2022 06:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649250311; x=1680786311;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zjf7X0lVKs4SoEyMp3osHnKJa+EJjosbh+q7mblHMAE=;
+  b=DAn5I6sNtpKkbG9r/NAjWptVjxqPznJQk2IGaRuOx8XyCAAxwVml7NnM
+   ySqWn8fcWul+ESpIyYStfmXsRc9RMWOIsxl+fqMG+xqSKMLkvgulQxBKB
+   V8bgX9JZmaemRRrzWEhZOFTWWdoWe8+mLYxh4C/6KF/OUryHm3isx+zjT
+   xt+4J3jbdzUO9N+Tsszc7cppVWse9wjOiNSbGm04RZzphMp+gav2sKAWI
+   SZfteNR/au4Bhy8MjD1VKB0iAd/HuxZc5aqjJuDwmF7kfbxNFQcYsQXzE
+   KuV3iIyFpgXn3Y4wvjyNZgb4XfCUlahaB/Heh3gK+9Hl8pMCdtBb2q1iy
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643698800"; 
+   d="scan'208";a="151730482"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 06:05:10 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Apr 2022 06:05:09 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 06:05:06 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>
+CC:     <alexandre.belloni@bootlin.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>,
+        Mihai Sain <mihai.sain@microchip.com>
+Subject: [PATCH] ARM: dts: at91: sama7g5ek: Align the impedance of the QSPI0's HSIO and PCB lines
+Date:   Wed, 6 Apr 2022 16:05:05 +0300
+Message-ID: <20220406130505.422042-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406090404.2488787-1-lv.ruyi@zte.com.cn>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 09:04:04AM +0000, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
-> 
-> iput() has already handled null and non-null parameter. so there is no
-> need to use if().
+The impedance of the QSPI PCB lines on the sama7g5ek is 50 Ohms.
+Align the output impedance of the QSPI0 HSIOs by setting a medium drive
+strength which corresponds to an impedance of 56 Ohms when VDD is in the
+3.0V - 3.6V range. The high drive strength setting corresponds to an
+output impedance of 42 Ohms on the QSPI0 HSIOs.
 
-Ok, we can drop the check, have you looked if there are more similar
-places to update?
+Suggested-by: Mihai Sain <mihai.sain@microchip.com>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ arch/arm/boot/dts/at91-sama7g5ek.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
+index 08685a10eda1..8f9643170ba3 100644
+--- a/arch/arm/boot/dts/at91-sama7g5ek.dts
++++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
+@@ -655,7 +655,7 @@ pinctrl_qspi: qspi {
+ 			 <PIN_PB21__QSPI0_INT>;
+ 		bias-disable;
+ 		slew-rate = <0>;
+-		atmel,drive-strength = <ATMEL_PIO_DRVSTR_HI>;
++		atmel,drive-strength = <ATMEL_PIO_DRVSTR_ME>;
+ 	};
+ 
+ 	pinctrl_sdmmc0_default: sdmmc0_default {
+-- 
+2.25.1
+

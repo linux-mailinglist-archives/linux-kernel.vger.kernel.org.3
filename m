@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8B14F60DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5334F614E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiDFN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S233920AbiDFN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiDFN5M (ORCPT
+        with ESMTP id S233907AbiDFN5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:57:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AC6A35770F;
-        Wed,  6 Apr 2022 02:08:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 449E323A;
-        Wed,  6 Apr 2022 02:08:45 -0700 (PDT)
-Received: from [10.57.10.15] (unknown [10.57.10.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41F193F718;
-        Wed,  6 Apr 2022 02:08:44 -0700 (PDT)
-Message-ID: <2dc4266f-02b1-0937-a884-dfa037cc7ffd@arm.com>
-Date:   Wed, 6 Apr 2022 10:08:42 +0100
+        Wed, 6 Apr 2022 09:57:21 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348F7362FDE;
+        Wed,  6 Apr 2022 02:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=2bYtZaY82UR+toaii6rgTQB2neDCnsVr9ZEMwIx3gBE=;
+        b=VpHybvzSO3sJrDCGfrS+4p8/OyKo7WnJ2YQdpUZRiHkbC0oIohsCKP7QH5dGR4DN+EJlNyIrvEbDg
+         krZnJ1dMl/x8NGrpj9o6sA1ej/VIF8QkOn6QGNEtqk3ed/Ww0BtutQnJ0rbi4zwpLuUUolkZxnUfrz
+         TcvgjoqOtHB5FLpappca3IS3vM6iJQuA1YDAfCygfJ4gWFJxWklEkpsDFiqaPdybsfiooWRfzjD9op
+         wD/jsNI9K+2/TNjhDgNqOWTwC8xt3svZMbHYzNvA1nelokFE8gEGcza8Xg50hHyWbWFdHVhGZeH0ZG
+         4hSAi5Q2mpyK2GieI7mE6zNF2YAa4Pw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000008,0.004499)], BW: [Enabled, t: (0.000016,0.000001)], RTDA: [Enabled, t: (0.065283), Hit: No, Details: v2.33.0; Id: 15.52k7j2.1fvv2599b.8gs; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 6 Apr 2022 12:09:15 +0300
+Date:   Wed, 6 Apr 2022 12:09:08 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH net] net: phy: marvell-88x2222: set proper phydev->port
+Message-ID: <20220406090908.mkpvndnsby5f3473@h-e2.ddg>
+References: <20220405150305.151573-1-i.bornyakov@metrotek.ru>
+ <Ykxq0wx7eMiZCXgx@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: perf tool: About "perf arm64: Inject missing frames when using
- 'perf record --call-graph=fp'"
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, alexandre.truong@arm.com
-Cc:     linux-perf-users@vger.kernel.org,
-        "jolsa@kernel.org >> Jiri Olsa" <jolsa@kernel.org>,
-        german.gomez@arm.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-References: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ykxq0wx7eMiZCXgx@lunn.ch>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 05/04/2022 15:04, John Garry wrote:
-> Hi Alexandre,
+On Tue, Apr 05, 2022 at 06:14:11PM +0200, Andrew Lunn wrote:
+> On Tue, Apr 05, 2022 at 06:03:05PM +0300, Ivan Bornyakov wrote:
+> > phydev->port was not set and always reported as PORT_TP.
+> > Set phydev->port according to inserted SFP module.
 > 
-> I notice that with commit b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'") that I get messages spewing the console when running perf record+report, as below:
+> This is definitely something for Russell to review.
 > 
-> john@ubuntu:~/linux$sudo tools/perf/perf record -ag fio null12.fio
-> john@ubuntu:~/linux$sudo tools/perf/perf report > report
-> unwind: can't read reg 29
-> unwind: can't read reg 29
-> unwind: can't read reg 29
-> unwind: can't read reg 29
-> ...
+> But i'm wondering if this is the correct place to do this? What about
+> at803x and marvell10g?
+
+I guess them need this too, but I only have HW with Marvell 88X2222.
+
+> It seems like this should be done once in the
+> core somewhere, not in each driver.
 > 
-> Do you know the possible cause? I haven't checked...
+>      Andrew
 
-Hi John,
+Apart from sfp_parse_port(), sfp_parse_support() and
+sfp_select_interface() are also present in all
+sfp_upstream_ops->module_insert PHY callbacks.
 
-I'm going to look into this today. I expect the cause is because we only record
-the link register for this change and then do a best effort unwind to see if
-we can get the return address just from that. So I don't think this is a major issue,
-probably the outcome will be that I mask any of these errors just for this call
-to libunwind that we added. The other main call to libunwind should still print
-these errors.
-
-One thing that is interesting is why we didn't see this when we were testing
-the patch before, and we've also found it a little bit difficult to reproduce here.
-So there might be more to it than just masking the error, but I'm not sure yet.
-
-Either way, I don't expect that any unwinding is broken, just that it's
-printing an annoying message.
-
-James
-
-> 
-> Thanks,
-> john

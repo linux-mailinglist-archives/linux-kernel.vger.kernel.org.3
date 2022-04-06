@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079C84F58EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CF04F5809
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358175AbiDFJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S244777AbiDFIec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451246AbiDFI6L (ORCPT
+        with ESMTP id S1359317AbiDFId0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:58:11 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B694F4D;
-        Tue,  5 Apr 2022 20:01:18 -0700 (PDT)
-X-UUID: 86ce2accd19941c19653cafc602097aa-20220406
-X-UUID: 86ce2accd19941c19653cafc602097aa-20220406
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 48669215; Wed, 06 Apr 2022 11:00:58 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 6 Apr 2022 11:00:12 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 6 Apr
- 2022 11:00:11 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 11:00:11 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <robh+dt@kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <jassisinghbrar@gmail.com>,
-        <fparent@baylibre.com>, <yongqiang.niu@mediatek.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v10 0/4] add display support for MediaTek SoC MT8186
-Date:   Wed, 6 Apr 2022 11:00:05 +0800
-Message-ID: <20220406030009.2357-1-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 6 Apr 2022 04:33:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CB18B30
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:01:26 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KY8PS4LtzzQjJN;
+        Wed,  6 Apr 2022 10:59:40 +0800 (CST)
+Received: from dggpeml500009.china.huawei.com (7.185.36.209) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 6 Apr 2022 11:01:24 +0800
+Received: from [10.174.177.235] (10.174.177.235) by
+ dggpeml500009.china.huawei.com (7.185.36.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 6 Apr 2022 11:01:24 +0800
+Message-ID: <25a24259-3ac3-81ab-1c28-f2a4886888b5@huawei.com>
+Date:   Wed, 6 Apr 2022 11:01:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [f2fs-dev] [PATCH 4/5] f2fs: get rid of stale fault injection
+ code
+Content-Language: en-US
+To:     Chao Yu <chao@kernel.org>, <jaegeuk@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>
+References: <20220401071909.505086-1-yuyufen@huawei.com>
+ <20220401071909.505086-5-yuyufen@huawei.com>
+ <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
+From:   Yufen Yu <yuyufen@huawei.com>
+In-Reply-To: <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.235]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500009.china.huawei.com (7.185.36.209)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v10:
-1. Rebase to 5.18-rc1
-2. Drop "dt-bindings: display: mediatek: add aal binding for MT8183".
-   I will move it to another series.
+Hi,
 
-v9:
-1. Revise [1/5] dt-bindings: display: mediatek: add aal binding for MT8183.
+On 2022/4/1 16:28, Chao Yu wrote:
+> On 2022/4/1 15:19, Yufen Yu via Linux-f2fs-devel wrote:
+>> Nowly, we can use new fault injection framework. Just delete the
+>> stale fault injection code.
+>>
+>> Signed-off-by: Yufen Yu <yuyufen@huawei.com>
+>> ---
+>>   fs/f2fs/checkpoint.c |  2 +-
+>>   fs/f2fs/f2fs.h       | 51 ++----------------------------------------
+>>   fs/f2fs/super.c      | 53 --------------------------------------------
+>>   fs/f2fs/sysfs.c      | 23 -------------------
+>>   4 files changed, 3 insertions(+), 126 deletions(-)
+>>
 
-v8:
-1. Revise [1/5] dt-bindings: display: mediatek: add aal binding for MT8183.
+...
 
-v7:
-1. Rebase to chunkuang.hu/linux.git mediatek-drm-fixes
+>>               break;
+>> @@ -1963,14 +1920,6 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+>>       if (F2FS_IO_SIZE_BITS(sbi))
+>>           seq_printf(seq, ",io_bits=%u",
+>>                   F2FS_OPTION(sbi).write_io_size_bits);
+>> -#ifdef CONFIG_F2FS_FAULT_INJECTION
+>> -    if (test_opt(sbi, FAULT_INJECTION)) {
+>> -        seq_printf(seq, ",fault_injection=%u",
+>> -                F2FS_OPTION(sbi).fault_info.inject_rate);
+>> -        seq_printf(seq, ",fault_type=%u",
+>> -                F2FS_OPTION(sbi).fault_info.inject_type);
+>> -    }
+>> -#endif
+> 
+> This will cause regression due to it breaks application usage w/ -o
+> fault_* mountoption..., I don't think this is the right way.
 
-v6:
-1. Remove mmsys patches which are accepted.
-2. Fix error of dt-binding.
 
-v5:
-1. Add binding patch of aal for MT8183.
-2. Revise enum to const.
-3. Change to use enum for mutex.
-4. Remove patches which are accepted by maintainers. (mmsys and mutex)
+Thanks for catching this. I admit it's a problem. But, IMO fault_* mount
+option are mostly been used in test, not in actual product. So, I think
+it may just affect some test applications. With the common fault injection
+framework, it can be more easy and flexible to do fault injection test.
+Therefore, I want to remove the two mount options directly.
 
-v4:
-1. Remove binding of dsi and dpi.
-2. Revise aal binding.
-3. Fix indention in [4/5].
+If you really worried about compatibility, how about just reserving the
+two inject_* options but without doing any thing for them. We actually
+configure fault injections by debugfs in this patch.
 
-v3:
-1. Modify display binding based on mtk display binding patch. ([1])
-2. Remove patch: drm/mediatek: separate postmask component from mtk_disp_drv.c
-3. Remove compatible of 8186 ovl because we can re-use compatible of 8192 for 8186.
-4. Fix issue of space before tab on mutex patch.
+Or do you have more better suggestion?
 
-[1]: repo: chunkuang.hu/linux.git, branch: mediatek-drm-next, id: 4ed545e7d10049b5492afc184e61a67e478a2cfd
+Thanks,
+Yufen
 
-v2:
-1. Add binding documentation for mmsys, mutex and mtk_display.
-2. Remove duplicated definition of postmask registers on mtk_drm_drv.
-3. Add disp_ovl support for MT8186.
-4. Add detailed commit messages.
 
-Rex-BC Chen (3):
-  dt-bindings: display: mediatek: revise enum to const
-  dt-bindings: display: mediatek: change to use enum for mutex
-  dt-bindings: display: mediatek: add MT8186 SoC binding
 
-Yongqiang Niu (1):
-  drm/mediatek: add display support for MT8186
 
- .../display/mediatek/mediatek,aal.yaml        |  5 ++-
- .../display/mediatek/mediatek,ccorr.yaml      |  5 ++-
- .../display/mediatek/mediatek,color.yaml      |  7 ++--
- .../display/mediatek/mediatek,dither.yaml     |  4 +--
- .../display/mediatek/mediatek,gamma.yaml      |  4 +--
- .../display/mediatek/mediatek,mutex.yaml      | 25 ++++++--------
- .../display/mediatek/mediatek,ovl-2l.yaml     |  4 +++
- .../display/mediatek/mediatek,ovl.yaml        |  8 +++--
- .../display/mediatek/mediatek,postmask.yaml   |  4 +++
- .../display/mediatek/mediatek,rdma.yaml       |  7 ++--
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 33 +++++++++++++++++++
- 11 files changed, 74 insertions(+), 32 deletions(-)
 
--- 
-2.18.0
 

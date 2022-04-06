@@ -2,248 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2CC4F5ADC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340E14F5B0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348971AbiDFKRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S1378376AbiDFKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236359AbiDFKPq (ORCPT
+        with ESMTP id S239477AbiDFKQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:15:46 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7722C149D10
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:44:01 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23633LSr016210;
-        Wed, 6 Apr 2022 06:43:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qCYyAHYd3qcSSdh6JKTxv2idV/wS9yHsQC0N8moZXfI=;
- b=bxMWHMLyXufXsKm/clv75+L3yXYVmjso+Md1X7sVo2lMU3hFi9F0xD6MmrTgadgHEEzU
- ZReHjS7iXvba5y8/pZWSwePQMgr929S8yg+AuwHEdV7uz9A8dSPz2juJ+wanCYPF/8PZ
- r41ewhMin+bS3J67tZtQvR83ZIvafwH5pYv+miNQQJHHkbAMBYlPzqHrOiUUwN056EL5
- nm6yDh0aXbUkF5EwqP+MMC18GBGVyBu0N4Tifr6yQm4uK0tQewIYUMRgJ6JD6n4xZBn2
- stdGDF6tDFcc5mp7G1FNz6UtLy0WDAPjTrJF6hj/Xq6ujQl0P924RAa2HagYZOwcDx46 ew== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f8ut8j6da-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 06:43:50 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2366h6Y8000879;
-        Wed, 6 Apr 2022 06:43:49 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f6e48y7b8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 06:43:48 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2366VV7u46137770
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 06:31:31 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7823EAE045;
-        Wed,  6 Apr 2022 06:43:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCB5AAE04D;
-        Wed,  6 Apr 2022 06:43:45 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 06:43:45 +0000 (GMT)
-Received: from [9.43.195.169] (unknown [9.43.195.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 6 Apr 2022 06:16:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69EFDAFF9;
+        Tue,  5 Apr 2022 23:44:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 9A915600A7;
-        Wed,  6 Apr 2022 16:43:41 +1000 (AEST)
-Message-ID: <d6cb3408-49a4-3c35-6ce0-3b35fd88bb9e@linux.ibm.com>
-Date:   Wed, 6 Apr 2022 16:43:30 +1000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8279061685;
+        Wed,  6 Apr 2022 06:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3BEC385A3;
+        Wed,  6 Apr 2022 06:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649227451;
+        bh=BJfgiIoQUQYLiIMc6u/jkdzzSqCbxhlaeFQX+3zNbYg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HYjekCYckPQzlYNTIu2rKllAWs8+5lcZdBvpLZ9xI5S8TRTJdcr5ttJmpzrvgTHqq
+         eBOI+yY11Z3TJfcpG2JyiFMML5RGLQZJsboe9I9cTJW2Ci/Keo8fzQZrlMX9+bPIxk
+         AneKP08C/7KyS3208//LaXSwa3QQlgkeONwROWpgAiYNlAFxBuTIrw8A3WPWPvibxK
+         HsSwUsWha+bf7a+9bZ0PSFRY3uXveqsQ8JsThOC8+cr4nY85wQurMMEQ5RP1cJlBgD
+         8RLXoGCs8CFKCBH9Jm/YxFpfluX7bvVavRQrfH460j6li/IMFTeYAGgBTxFJMxa/rE
+         gvsdmmG1GQPOA==
+Date:   Wed, 6 Apr 2022 12:14:07 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v6 14/14] drm/msm/dsi: Add support for DSC configuration
+Message-ID: <Yk02t+sZS0I7heY3@matsya>
+References: <20220404163436.956875-1-vkoul@kernel.org>
+ <20220404163436.956875-15-vkoul@kernel.org>
+ <f5fc9704-5c22-8c95-b6d6-e2c20145672c@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-In-Reply-To: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EKurYAJO1W4zDCRPbPte46L-hT8YgAC9
-X-Proofpoint-ORIG-GUID: EKurYAJO1W4zDCRPbPte46L-hT8YgAC9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_02,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=970
- suspectscore=0 spamscore=0 impostorscore=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060028
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5fc9704-5c22-8c95-b6d6-e2c20145672c@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 20:52, Christophe Leroy wrote:
-> powerpc's asm/prom.h brings some headers that it doesn't
-> need itself.
+On 06-04-22, 02:42, Dmitry Baryshkov wrote:
+> On 04/04/2022 19:34, Vinod Koul wrote:
+> > When DSC is enabled, we need to configure DSI registers accordingly and
+> > configure the respective stream compression registers.
+> > 
+> > Add support to calculate the register setting based on DSC params and
+> > timing information and configure these registers.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 98 +++++++++++++++++++++++++++++-
+> >   1 file changed, 97 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index eb0be34add45..f3ed6c40b9e1 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -912,6 +912,65 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+> >   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
+> >   }
+> > +static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
+> > +{
+> > +	struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +	u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+> > +	u32 slice_per_intf, total_bytes_per_intf;
+> > +	u32 pkt_per_line;
+> > +	u32 bytes_in_slice;
+> > +	u32 eol_byte_num;
+> > +
+> > +	/* first calculate dsc parameters and then program
+> > +	 * compress mode registers
+> > +	 */
+> > +	intf_width = hdisplay;
+> > +	slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> > +
+> > +	/* If slice_per_pkt is greater than slice_per_intf
+> > +	 * then default to 1. This can happen during partial
+> > +	 * update.
+> > +	 */
+> > +	if (slice_per_intf > dsc->drm->slice_count)
+> > +		dsc->drm->slice_count = 1;
+> > +
+> > +	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> > +	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * dsc->drm->bits_per_pixel, 8);
+> > +
+> > +	dsc->drm->slice_chunk_size = bytes_in_slice;
+> > +
+> > +	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
+> > +
+> > +	eol_byte_num = total_bytes_per_intf % 3;
+> > +	pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > +
+> > +	if (is_cmd_mode) /* packet data type */
+> > +		reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
+> > +	else
+> > +		reg = DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(MIPI_DSI_COMPRESSED_PIXEL_STREAM);
+> > +
+> > +	/* DSI_VIDEO_COMPRESSION_MODE & DSI_COMMAND_COMPRESSION_MODE
+> > +	 * registers have similar offsets, so for below common code use
+> > +	 * DSI_VIDEO_COMPRESSION_MODE_XXXX for setting bits
+> > +	 */
+> > +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(pkt_per_line >> 1);
+> > +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(eol_byte_num);
+> > +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EN;
+> > +
+> > +	if (is_cmd_mode) {
+> > +		reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> > +		reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> > +
+> > +		reg_ctrl |= reg;
+> > +		reg_ctrl2 |= DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(bytes_in_slice);
+> > +
+> > +		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
 > 
-> In order to clean it up, first add missing headers in
-> users of asm/prom.h
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> reg_ctrl, as reported by testing robot
 
-Untested because I don't have your actual patch to change prom.h, but 
-nothing here looks concerning.
+Yes, I did run W=1 check for the patches, with gcc I do not see this
+warning :(
 
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
-
-> ---
->   drivers/misc/cxl/api.c      | 1 +
->   drivers/misc/cxl/cxl.h      | 2 ++
->   drivers/misc/cxl/cxllib.c   | 1 +
->   drivers/misc/cxl/flash.c    | 1 +
->   drivers/misc/cxl/guest.c    | 2 ++
->   drivers/misc/cxl/irq.c      | 1 +
->   drivers/misc/cxl/main.c     | 1 +
->   drivers/misc/cxl/native.c   | 1 +
->   drivers/misc/ocxl/afu_irq.c | 1 +
->   drivers/misc/ocxl/link.c    | 1 +
->   10 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/misc/cxl/api.c b/drivers/misc/cxl/api.c
-> index b493de962153..d85c56530863 100644
-> --- a/drivers/misc/cxl/api.c
-> +++ b/drivers/misc/cxl/api.c
-> @@ -12,6 +12,7 @@
->   #include <linux/pseudo_fs.h>
->   #include <linux/sched/mm.h>
->   #include <linux/mmu_context.h>
-> +#include <linux/irqdomain.h>
->   
->   #include "cxl.h"
->   
-> diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
-> index 5dc0f6093f9d..7a6dd91987fd 100644
-> --- a/drivers/misc/cxl/cxl.h
-> +++ b/drivers/misc/cxl/cxl.h
-> @@ -25,6 +25,8 @@
->   
->   extern uint cxl_verbose;
->   
-> +struct property;
-> +
->   #define CXL_TIMEOUT 5
->   
->   /*
-> diff --git a/drivers/misc/cxl/cxllib.c b/drivers/misc/cxl/cxllib.c
-> index 53b919856426..e5fe0a171472 100644
-> --- a/drivers/misc/cxl/cxllib.c
-> +++ b/drivers/misc/cxl/cxllib.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/hugetlb.h>
->   #include <linux/sched/mm.h>
-> +#include <asm/opal-api.h>
->   #include <asm/pnv-pci.h>
->   #include <misc/cxllib.h>
->   
-> diff --git a/drivers/misc/cxl/flash.c b/drivers/misc/cxl/flash.c
-> index 5b93ff51d82a..eee9decc121e 100644
-> --- a/drivers/misc/cxl/flash.c
-> +++ b/drivers/misc/cxl/flash.c
-> @@ -4,6 +4,7 @@
->   #include <linux/semaphore.h>
->   #include <linux/slab.h>
->   #include <linux/uaccess.h>
-> +#include <linux/of.h>
->   #include <asm/rtas.h>
->   
->   #include "cxl.h"
-> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
-> index 9d485c9e3fff..3321c014913c 100644
-> --- a/drivers/misc/cxl/guest.c
-> +++ b/drivers/misc/cxl/guest.c
-> @@ -6,6 +6,8 @@
->   #include <linux/spinlock.h>
->   #include <linux/uaccess.h>
->   #include <linux/delay.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/platform_device.h>
->   
->   #include "cxl.h"
->   #include "hcalls.h"
-> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
-> index 4cb829d5d873..5f0e2dcebb34 100644
-> --- a/drivers/misc/cxl/irq.c
-> +++ b/drivers/misc/cxl/irq.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #include <linux/interrupt.h>
-> +#include <linux/irqdomain.h>
->   #include <linux/workqueue.h>
->   #include <linux/sched.h>
->   #include <linux/wait.h>
-> diff --git a/drivers/misc/cxl/main.c b/drivers/misc/cxl/main.c
-> index 43b312d06e3e..c1fbf6f588f7 100644
-> --- a/drivers/misc/cxl/main.c
-> +++ b/drivers/misc/cxl/main.c
-> @@ -15,6 +15,7 @@
->   #include <linux/slab.h>
->   #include <linux/idr.h>
->   #include <linux/pci.h>
-> +#include <linux/platform_device.h>
->   #include <linux/sched/task.h>
->   
->   #include <asm/cputable.h>
-> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
-> index 1a7f22836041..50b0c44bb8d7 100644
-> --- a/drivers/misc/cxl/native.c
-> +++ b/drivers/misc/cxl/native.c
-> @@ -11,6 +11,7 @@
->   #include <linux/mm.h>
->   #include <linux/uaccess.h>
->   #include <linux/delay.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/synch.h>
->   #include <asm/switch_to.h>
->   #include <misc/cxl-base.h>
-> diff --git a/drivers/misc/ocxl/afu_irq.c b/drivers/misc/ocxl/afu_irq.c
-> index ecdcfae025b7..a06920b7e049 100644
-> --- a/drivers/misc/ocxl/afu_irq.c
-> +++ b/drivers/misc/ocxl/afu_irq.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0+
->   // Copyright 2017 IBM Corp.
->   #include <linux/interrupt.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/pnv-ocxl.h>
->   #include <asm/xive.h>
->   #include "ocxl_internal.h"
-> diff --git a/drivers/misc/ocxl/link.c b/drivers/misc/ocxl/link.c
-> index 9670d02c927f..4cf4c55a5f00 100644
-> --- a/drivers/misc/ocxl/link.c
-> +++ b/drivers/misc/ocxl/link.c
-> @@ -6,6 +6,7 @@
->   #include <linux/mm_types.h>
->   #include <linux/mmu_context.h>
->   #include <linux/mmu_notifier.h>
-> +#include <linux/irqdomain.h>
->   #include <asm/copro.h>
->   #include <asm/pnv-ocxl.h>
->   #include <asm/xive.h>
+I have fixed and will send updated revision shortly
 
 -- 
-Andrew Donnellan              OzLabs, ADL Canberra
-ajd@linux.ibm.com             IBM Australia Limited
+~Vinod

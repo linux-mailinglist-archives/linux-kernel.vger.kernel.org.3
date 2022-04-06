@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66AA4F5B0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 12:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630084F5CE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345455AbiDFKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 06:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S230500AbiDFLvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382591AbiDFK34 (ORCPT
+        with ESMTP id S231163AbiDFLup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:29:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9780B3DF34A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 23:53:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Apr 2022 07:50:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DC51C9454;
+        Tue,  5 Apr 2022 23:54:11 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:ff63:de1f:2a77:5241] (unknown [IPv6:2a01:e0a:120:3210:ff63:de1f:2a77:5241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 443EEB82104
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:53:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034B5C385AA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649228026;
-        bh=tO8JMyLzIZ8EITkhp2PubbOl10W7/jlZTi8jH9cyTLA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k0dPNLOFXD0NO7pwwnpOcM17yCmaDTXu/JTYP0X6yByGl0JOQucrjAtJzkKILFDgt
-         DSTQSo8yPhjvPvBmNbyel6rRrt4/15PnMN2lQziq+CZsz+70pBbIMzzgV+x68fasH+
-         4kdp54NwrvPrw4kBJvX/ZZd5D/AHZ8ZYujG4Q50Rytum/nCOH6J4D19SSUqnLyq444
-         YfdmhdsqppJBjydZK5tzib2BZGfDrLMND8tWRVc9Us67lKdqeXFuCfY8+CV8AvO3Ll
-         WevPFimEj1/yXJ0a5UbDE/hDXuJAFcXSo0VdeqeNdudgysy1K5L8cmk8egw2FN9s4x
-         /UryyMD+J4sxA==
-Received: by mail-ot1-f49.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso1124875otf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 23:53:45 -0700 (PDT)
-X-Gm-Message-State: AOAM530CPeRsdj3/mAcKPM0g5lLTlvWl6FvUTzSjqsNu6vrAT4rFAbvz
-        la2jJwomShCMy8cv4xUu1HRfzvNhG7QKgQ1GwTA=
-X-Google-Smtp-Source: ABdhPJwt+MqYoXIE9XnpjhA1n4uGXTgDOGNThyoHryIuaDZN64VMoEbM5En07e+MLJhoR+DsVsRXvaQFlGgRZfSRASs=
-X-Received: by 2002:a05:6830:1e9c:b0:5cd:8c15:5799 with SMTP id
- n28-20020a0568301e9c00b005cd8c155799mr2506585otr.265.1649228025072; Tue, 05
- Apr 2022 23:53:45 -0700 (PDT)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8091E1F44519;
+        Wed,  6 Apr 2022 07:54:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649228050;
+        bh=tqnMuI8tFUvTxaTXTOvtQ2qzTn9cKLNn18CehTYmq8w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hpbelg9ITQRa7aKF8ZvmRAihh+Xif2IZ1f80s4ReZW/+hjfUjbf6YDv0q+uTSAAyU
+         +hp+8WaicFUXLVxHALbFU932x/O6gAmvj2w3STI3dwKIPTyEQbU63eAFAijijUcX5a
+         7QQB0Ed4hvVe1vByawUjFE1muivhK0HdFyqeMdjcToNxpvOg5X90+fExd/Atfomwox
+         XZS4lRr3b+/3cIbpuJgdJqsqjK55zAYRosi7aupAcwRd/Yluf91gLoLCkZzmWhfLeK
+         P00ix/kzuCyg8he3Oxjp8uUq1LYP4VLO5WrBtyecAbkLYNBxowyjPZXPkQXSvLTRWR
+         g/RXf+JtfVQaw==
+Message-ID: <bf938b83-2b57-95b3-4bcb-f967bbb46413@collabora.com>
+Date:   Wed, 6 Apr 2022 08:54:07 +0200
 MIME-Version: 1.0
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-8-catalin.marinas@arm.com> <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
-In-Reply-To: <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 6 Apr 2022 08:53:33 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
-Message-ID: <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+ <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+ <4386971.LvFx2qVVIh@jernej-laptop>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <4386971.LvFx2qVVIh@jernej-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 00:57, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
-> > ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
-> > operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
-> > alignment.
-> >
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > ---
-> >  include/linux/crypto.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
-> > index 2324ab6f1846..654b9c355575 100644
-> > --- a/include/linux/crypto.h
-> > +++ b/include/linux/crypto.h
-> > @@ -167,7 +167,7 @@
-> >   * maintenance for non-coherent DMA (cache invalidation in particular) does not
-> >   * affect data that may be accessed by the CPU concurrently.
-> >   */
-> > -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
-> > +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
->
-> I think this should remain as ARCH_KMALLOC_MINALIGN with the
-> comment above modified.  The reason is that we assume memory
-> returned by kmalloc is already aligned to this value.
->
-> Ard, you added the comment regarding the DMA requirement, so
-> does anything actually rely on this? If they do, they now need
-> to do their own alignment.
->
 
-This patch looks incorrect to me, as ARCH_DMA_MINALIGN is not
-#define'd on all architectures.
+Le 05/04/2022 à 20:40, Jernej Škrabec a écrit :
+> Hi Benjamin!
+>
+> Dne torek, 05. april 2022 ob 18:07:41 CEST je Benjamin Gaignard napisal(a):
+>> Le 27/02/2022 à 15:49, Jernej Skrabec a écrit :
+>>> First two patches add 10-bit formats to UAPI, third extends filtering
+>>> mechanism, fourth fixes incorrect assumption, fifth moves register
+>>> configuration code to proper place, sixth and seventh enable 10-bit
+>>> VP9 decoding on Allwinner H6 and last increases core frequency on
+>>> Allwinner H6.
+>>>
+>>> I'm sending this as RFC to get some comments:
+>>> 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+>>> 2. is extended filtering mechanism ok?
+>>>
+>>> I would also like if these patches are tested on some more HW.
+>>> Additionally, can someone test tiled P010?
+>>>
+>>> Please take a look.
+>> Hi Jernej,
+>>
+>> I have create a branch to test this series with VP9 and HEVC:
+>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_imx
+>> 8m Feel free to pick what I may need in it.
+>>
+>> That doesn't improve fluster scores, I think more dev are still needed in
+>> GST before getting something fully functional.
+>> Anyway I able to select P010 pixel format if the input is a 10bit bitstream.
+> What kind of improvements do you expect? Actually, this series is designed to
+> change nothing for platforms, where 10-bit format is not added into the list
+> of supported formats. I think reasons are quite obvious. First, not every
+> device may support 10-bit output. Second, as you might already figured it out,
+> registers in this series are set only for legacy cores. I have no idea, what
+> needs to be done for newer ones, since I don't have them. Anyway, I tested
+> this with fluster and only one additional test passes, because it is the only
+> one for 10-bit YUV420.
 
-But I am fine with the intent: ARCH_DMA_MINALIGN will be >=
-ARCH_KMALLOC_MINALIGN, and so the compile time layout of structs will
-take the worst cast minimum DMA alignment into account, whereas their
-placement in memory when they allocated dynamically may be aligned to
-ARCH_KMALLOC_MINALIGN only. Since the latter will be based on the
-actual cache geometry, this should be fine.
+In this series you will find that I have added the registers for the new cores,
+fix hevc to be able to use 10-bit, and enable that in IMX8M.
 
-Apart from the 'shash desc on stack' issue solved by the patch that
-also introduced the above comment(660d2062190d), I've never looked
-into the actual memory footprint of the crypto related data structures
-resulting from this alignment, but it seems to me that /if/ this is
-significant, we should be able to punt this to the drivers that
-actually need this, rather than impose it for the whole system. (This
-would involve over-allocating the context struct, and aligning up the
-pointer in the various xxx_ctx() getters iff needed by the driver in
-question)
+Regards,
+Benjamin
 
-I'll put this on my list of things to look at.
+>
+> Best regards,
+> Jernej
+>
+>

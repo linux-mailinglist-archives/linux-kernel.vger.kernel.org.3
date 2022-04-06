@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15CC4F6C12
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE7D4F6C17
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbiDFVFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S235289AbiDFVIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiDFVEi (ORCPT
+        with ESMTP id S235681AbiDFVH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:04:38 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976BA2EF140
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:38:36 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id z6so4327232iot.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 12:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vGHNAGNQJ+jili+nDe/Ec5j5ASwqbtr085CgGssJUDU=;
-        b=I0xeLq/G4IGv2sgI720zwJl21NVzHNM0zXEmIIoNpVWVvAuiDk++aM58zqwTTspPp/
-         nx+uQRw6RU+ZMJaEglvXfzu7kMuQEurl1j67Rb2Q1T5MyE0s5r15Zt6XyN672AWgpnCb
-         MwNjLn8PPJY1qY9bP3MJ56sF3OPkym0v8KiGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vGHNAGNQJ+jili+nDe/Ec5j5ASwqbtr085CgGssJUDU=;
-        b=mgbOpLIe3tqYsl4X9lDdRWQqYIO5ddk7Yxjpy5jO6X8k5Rq0hgp/97Cr6j2N/Qi0rD
-         Orugw4G+8AUIOGLHcBxNWecX6UNfP60rLJpWENhqmcLKtW950t3S3XP+8XBIjyV322sm
-         nBv5N0CyZEhY0SZjA3I/1zYxgmTiVLNbxBN7UVaAos7SewcELv6X49S+bcGq+AIGbTHU
-         4urf+Nn4zMgg6OEXQHRYqSQTf2RTpY5gGtUW2e2egBYjSWXID7jYTDYk3wIkH677f+GA
-         KmvEhhPIRQUFtpbPylP94f3haLuxENCQ8FQmVK/MenpCuGI97/jypi9u0qgyZp1CMJg0
-         5Ryg==
-X-Gm-Message-State: AOAM533bx7k1rl4RAXZWtA8TvsdK9EQRj64z0MuJJ4wnmqOVxDnwzGir
-        sEFKH/c+ktp+nuyfkA9ispRQGQ==
-X-Google-Smtp-Source: ABdhPJysv2MloHTozqtk5nZiHOCb1+hWcKHSHjfhz5NKnhYsEEK3VKL1DiiZ7tK4C6bXa/5onGGRfA==
-X-Received: by 2002:a5d:83d2:0:b0:64c:fbd3:e792 with SMTP id u18-20020a5d83d2000000b0064cfbd3e792mr4841279ior.59.1649273914715;
-        Wed, 06 Apr 2022 12:38:34 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id k3-20020a0566022a4300b0064ca623b65esm11875297iov.4.2022.04.06.12.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 12:38:34 -0700 (PDT)
-Subject: Re: [PATCH v2] selftest/vm clarify error statement in gup_test
-To:     Matthew Wilcox <willy@infradead.org>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
- <YkzDoBUAhydtvnR0@casper.infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bc04ce83-eed8-f35e-9816-bdd9d0ac1470@linuxfoundation.org>
-Date:   Wed, 6 Apr 2022 13:38:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 6 Apr 2022 17:07:29 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694D61544A5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:44:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=b/yv+G2D/AyXnxxxBegRVdVItcYI
+        qK+AIz+rFuNHmlk=; b=lsonHqlCA/T9AMMb6/TL6M6sGUf+PMDYuq2sNXPAO2Jy
+        RCl231zou34UZHbyPff7W/8mH6r+fw27c0jtbpFoeB0WXNvyvKUjxNFd6nF96EV1
+        JQGtuHI1akI3RYHX10rbfUN5BIU1d/zMXhyiLq67UVGerijLNSstFDc4+TzY6eY=
+Received: (qmail 2875506 invoked from network); 6 Apr 2022 21:44:00 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Apr 2022 21:44:00 +0200
+X-UD-Smtp-Session: l3s3148p1@BgA8lQHcxscgAQnoAH8rAHnYTrcYCkZJ
+Date:   Wed, 6 Apr 2022 21:44:00 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
+Message-ID: <Yk3tgDr0/OHHAsj8@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <20211006182314.10585-1-andrew_gabbasov@mentor.com>
+ <Yg6ls0zyTDe7LQbK@kunai>
+ <20220323215229.GA9403@lxhi-065>
+ <YkQ31VMqj1MXqBd3@shikoro>
+ <YkQ6XRITOFZ7hLXV@shikoro>
+ <20220331160207.GA27757@lxhi-065>
+ <YkcqoIMF2uw4FSZh@ninjato>
+ <20220405093048.GA7151@lxhi-065>
+ <YkwPQSPed18iyHox@ninjato>
+ <20220406173245.GA14970@lxhi-065>
 MIME-Version: 1.0
-In-Reply-To: <YkzDoBUAhydtvnR0@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vvvA8QkHvg0eR6XU"
+Content-Disposition: inline
+In-Reply-To: <20220406173245.GA14970@lxhi-065>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 4:33 PM, Matthew Wilcox wrote:
-> On Tue, Apr 05, 2022 at 09:48:09PM +0000, Sidhartha Kumar wrote:
->> -		perror("open");
->> -		exit(1);
->> +		switch (errno) {
->> +		case EACCES:
->> +			if (getuid())
->> +				printf("Please run this test as root\n");
-> 
-> Shouldn't all these be fprintf(stderr, ...); ?
-> 
-> 
 
-printf() is consistent with the other messages in this file. Either
-works.
+--vvvA8QkHvg0eR6XU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
--- Shuah
+
+> > Well, yes, that shows that I am mostly successful with reporting back to
+> > the BSP team :D
+>=20
+> 100%! I remember the early days of Renesas R-Car Gen3 kernels, with
+> literally thousands of patches on top of v4.2/v4.4/v4.6 vanilla tags.
+>=20
+> It felt like mission impossible to upstream those. But here we are. Kudos!
+
+Wow, thanks! I am glad you appreciate our work!
+
+All the best,
+
+   Wolfram
+
+
+--vvvA8QkHvg0eR6XU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJN7XsACgkQFA3kzBSg
+KbY49Q//Vsun4MCNLYIWAolcD5l+Zi3fPQD1emTij4M1JjtdzeO/x2L7BAoHaAu/
+oD31uZcLL3Vu0fD8SKhhax68LONGOfzic0x/c5VG3X07MGXKyDrfjfac8sVeLt4s
+wkxrgWGrsMQCdwIsRce86zD6pPjUvDsJxRWQO/o5WbCAAStTEng269fWlHx+G6RJ
+f59dHOabUQWuxmLv+3piZ5Ou+OIHUNhwRZS0l8NZZDs8qer6SagUvJN2YONhx8y0
+Til6gFE1qJaRNR9oEfmu8WpB21dmY9SfTqc6L/DFVx9c2ZApgSpszsizJ3XaHPQq
+wqjAaftHYRtSC25cfbrs22r9zwTN/SHRb7665EuwO2kZfqxnn9hk18XXCzrgqjZ2
+S/eugRZXmz/mmid8A7fjW/duuQQCx46l7YbcqPmafoGAkWMViiEjDuw44efPw8Zr
+znx7dptSZa+NPtfOKlGopPqSSDShMdK/mXi1DWbkyP7yxpVyXqdeMeytWGByjHsP
+GfNTWmdFLDwcxCSrnmnokkeJL05BhlsqPcSmOdPxFzp+XPA4mozS8a4z0Pb4ZWQd
+/WhEsht+6uHJnxJvRa6NRw/4zBgAVROi2BbXjwOU2e36OiXSutdE5IQTtDeLKtET
+EK/5e23Xt0nWg8yvyb+tmQ1ngzH3rawUMyUQSYZDQ0/UZJYbcQ8=
+=OkMM
+-----END PGP SIGNATURE-----
+
+--vvvA8QkHvg0eR6XU--

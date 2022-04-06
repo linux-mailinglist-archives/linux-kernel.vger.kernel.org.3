@@ -2,80 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B60E4F6A14
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF074F6A07
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiDFTil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
+        id S231743AbiDFTf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiDFThj (ORCPT
+        with ESMTP id S231732AbiDFTfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:37:39 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7638DEF793;
-        Wed,  6 Apr 2022 11:18:02 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id e189so3243939oia.8;
-        Wed, 06 Apr 2022 11:18:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2yVQ2J4c2VWHwJ0B/X8jXLgF6GbJE3tf471KObA5vHk=;
-        b=NzvOZtbR4boKOvMVeF3JPwcJHPU+XnXVU5sB3kfU2Si7BTFWwd6UngeYHxtd/jAhl6
-         Xt++q75rJJEJdlIWCRp2iwZmXoX0Tkx47e+yhW0JOco0e6nDFo4zz4skQxaH9VZwZnKx
-         ifvuMq+KSNivwqHAqUv1FG4VN8FSZ4yt/LDcgwba1jvx2we5wKqROWhtxYYFZJJcUyQD
-         PfpI3EtwC13Ukb5B7885GxjhbHRB9MN0Rkf8mKdmbIxe69I8nupb+ITOPXOD4YUximiX
-         xb8YocVNeaH/2tz9cnWzBqDMdDc3QQeHegdnBd5d0Ir5XyeZ8yZDNYLJbaSv/ggcg0Kv
-         heQA==
-X-Gm-Message-State: AOAM530oanjGdL7sqDEKSRRpDmlFNybb//8wdHqrrX2C2eq05Cyi2vSo
-        URE5yENM+T8obP8bmPyFiw==
-X-Google-Smtp-Source: ABdhPJyCcrX550X5kHn4yyhHay12s23rJTOjmXniu90yHWq2OuGi3MAmBp+k3YVN0ThvPyumKI1Tvg==
-X-Received: by 2002:a05:6808:2008:b0:2da:5b12:83ff with SMTP id q8-20020a056808200800b002da5b1283ffmr4036695oiw.216.1649269081713;
-        Wed, 06 Apr 2022 11:18:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05680800c300b002f935a7daa9sm6676425oic.19.2022.04.06.11.18.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:18:01 -0700 (PDT)
-Received: (nullmailer pid 2529145 invoked by uid 1000);
-        Wed, 06 Apr 2022 18:18:00 -0000
-Date:   Wed, 6 Apr 2022 13:18:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH] dt-bindings: reset: uniphier-glue: Clean up clocks,
- resets, and their names using compatible string
-Message-ID: <Yk3ZWK3kazy2MD1E@robh.at.kernel.org>
-References: <1649145378-30358-1-git-send-email-hayashi.kunihiko@socionext.com>
+        Wed, 6 Apr 2022 15:35:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9E3229CA7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649269395; x=1680805395;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=92yacfNwebATUCEf+W25F15FIBUvP6Pv62+QEoq9dhg=;
+  b=FaTYtkJxhqEnvKn2CLQ2H39EHH7AsZIi8yphWZ71OQb95qvKWK7qpYSa
+   lj/24B6kVLZeRW2+3zh2FhqgWquiYdqRqGgfOCAFo5jSfKhUL9MgzwClE
+   DNvbd8hpzxSHMqUW520ZLnBHCQm6gAj9U+OJEdExcIK1ywLSKoOcw2Osf
+   Aa1aqO+Db3XQQqhju7g7AidhBt1qvvF7U5YmxvCJPuDLM5NSIyHgXqg2o
+   u06cSwGep1oOcJlegUbRuBzAphMNpNRM4IFwgtzhyFFH/3kRONiRBwUt9
+   bQLSIBH64hYJPXVGs9XrRtUvQ/TujQu2Klbj1AfSBaekH412DH1LIf7K4
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248648179"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="248648179"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:23:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="524589359"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 11:23:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncAJF-0004eN-Ee;
+        Wed, 06 Apr 2022 18:23:13 +0000
+Date:   Thu, 7 Apr 2022 02:22:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:robh/linux/dt/pop-pci-nodes 2/2]
+ drivers/pci/of.c:84: undefined reference to `.of_attach_node'
+Message-ID: <202204070238.tRrrzyyE-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1649145378-30358-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Apr 2022 16:56:18 +0900, Kunihiko Hayashi wrote:
-> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clocks,
-> resets, and their names that can be taken by the compatible string.
-> 
-> The order of clock-names and reset-names doesn't change here.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../reset/socionext,uniphier-glue-reset.yaml  | 52 ++++++++++++++-----
->  1 file changed, 38 insertions(+), 14 deletions(-)
-> 
+tree:   https://github.com/ammarfaizi2/linux-block robh/linux/dt/pop-pci-nodes
+head:   b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+commit: b9198a9525a97d05b0bb2a7282fede92d7d2d93d [2/2] PCI: Create DT nodes if they don't exist
+config: powerpc64-buildonly-randconfig-r001-20220405 (https://download.01.org/0day-ci/archive/20220407/202204070238.tRrrzyyE-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block robh/linux/dt/pop-pci-nodes
+        git checkout b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> powerpc64-linux-ld: warning: discarding dynamic section .glink
+>> powerpc64-linux-ld: warning: discarding dynamic section .plt
+   powerpc64-linux-ld: linkage table error against `of_attach_node'
+   powerpc64-linux-ld: stubs don't match calculated size
+   powerpc64-linux-ld: can not build stubs: bad value
+   powerpc64-linux-ld: drivers/pci/of.o: in function `make_dev_node':
+>> drivers/pci/of.c:84: undefined reference to `.of_attach_node'
+>> powerpc64-linux-ld: drivers/pci/of.c:84: undefined reference to `.of_attach_node'
+   powerpc64-linux-ld: drivers/pci/of.o: in function `make_bus_node':
+   drivers/pci/of.c:97: undefined reference to `.of_attach_node'
+   powerpc64-linux-ld: drivers/pci/of.c:97: undefined reference to `.of_attach_node'
+
+
+vim +84 drivers/pci/of.c
+
+    59	
+    60	void make_dev_node(struct pci_dev *dev)
+    61	{
+    62		struct device_node *node;
+    63		struct property *prop;
+    64		__be32 *val;
+    65	
+    66		node = make_node();
+    67	
+    68		prop = kzalloc(sizeof(*prop) + sizeof(__be32) * 5, GFP_KERNEL);
+    69		prop->name = "reg";
+    70		prop->value = prop + 1;
+    71		prop->length = sizeof(__be32) * 5;
+    72		val = prop->value;
+    73		val[0] = __cpu_to_be32(dev->devfn << 8);
+    74		val[4] = __cpu_to_be32(SZ_4K);
+    75		node->properties = prop;
+    76	
+    77		if (pci_is_bridge(dev)) {
+    78			add_bus_props(node);
+    79			node->full_name = kasprintf(GFP_KERNEL, "pci@%x,%x", PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+    80		} else
+    81			node->full_name = kasprintf(GFP_KERNEL, "dev@%x,%x", PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+    82	
+    83		node->parent = dev->bus->dev.of_node;
+  > 84		of_attach_node(node);
+    85		dev->dev.of_node = node;
+    86	}
+    87	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

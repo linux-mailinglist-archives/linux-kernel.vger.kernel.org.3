@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4C54F6DE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C494F6DE2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbiDFWj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S236106AbiDFWkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiDFWj4 (ORCPT
+        with ESMTP id S229957AbiDFWka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 18:39:56 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD65B27
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 15:37:58 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id w7so3768034pfu.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 15:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=898oZtU49x5Qm0CpxcvXo6MY6Axk2cKRFpUrygV+kwg=;
-        b=fhhF+bMKOUw5/3ZHEoqCk4xhqBwNaSvetO+uQiDdsAeAZQMBiD+4OY4KxkT5haQLNB
-         /Ogeh1aOjDihjBKWPX2lcBHCt2nkMUiAoe3s8+7SS9eCNZenDe37QliCuPQH4Yhv9adb
-         t3zuvRDLyETvBNk97Ezip2jDBlP635hW4vPh2GJwA5H5zGGpVMA/Ytfrfaf+11vYacoZ
-         AZ1PWidNLUNAwgYNK8GwcljRyEWi9NvciX9j6WpakbEnTsPgDVObFsOAtdluUzgBabO3
-         s29iDlWPQdsb8wKAp1V8aHWI3N1l+kMyEwRbU9OSPXcs/QCzASpTIk0mGsdulQ4NsSd5
-         5iBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=898oZtU49x5Qm0CpxcvXo6MY6Axk2cKRFpUrygV+kwg=;
-        b=nB81bAzUTlXNVsmXv0qjFgrIDSflGjGMM+aiJekZYDfBba1IxEJh/IR5tcOqbqRghv
-         kUsF3J8YrHNo8EPmYXKzhhP6UO3mnRqz6rZlR58FA4ME90wQJciBXGvqiJMRub28hEXh
-         VlvegnqdWzDjYngg+/kWcjNcKHg10LA8lBfWyfffY4BxqCMKBfTV4CGBIeqistt6en7c
-         jUbGALlkMvWeb2L5uS8sKbfNmbTGRcvvbexu9TNOZeYZWcAeE9vyyLvfK/t/e7NXfj9i
-         DOeVDXkxZb44chTNC4PpWAaVJDd3t9GSWbmiWD5v8Ha0gcFg2J6Z7zUiiaaM6GhMYr2G
-         58Zw==
-X-Gm-Message-State: AOAM531WzifmxUNTZrMxhfKXQuuciRk2CLXpxiDNgL/W+tsrLf/VGGId
-        cN0hcmR49ARrNRmseDvRPIttOA==
-X-Google-Smtp-Source: ABdhPJxdFqHBRBIOp+Psd59OAmPDwQRlB8FtqtHsCvhe+79VLNJ1TnP7c1Kbd6L8u+McnjLHXs/lHw==
-X-Received: by 2002:a63:1f55:0:b0:382:65eb:3073 with SMTP id q21-20020a631f55000000b0038265eb3073mr9073795pgm.624.1649284677698;
-        Wed, 06 Apr 2022 15:37:57 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090a784c00b001c6bdafc995sm5586089pjl.3.2022.04.06.15.37.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 15:37:57 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     christoph.boehmwalder@linbit.com
-Cc:     linux-block@vger.kernel.org, drbd-dev@lists.linbit.com,
-        lars.ellenberg@linbit.com, philipp.reisner@linbit.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220406190715.1938174-1-christoph.boehmwalder@linbit.com>
-References: <20220406190715.1938174-1-christoph.boehmwalder@linbit.com>
-Subject: Re: [PATCH 0/7] DRBD updates for 5.19
-Message-Id: <164928467657.11110.6351742208734304925.b4-ty@kernel.dk>
-Date:   Wed, 06 Apr 2022 16:37:56 -0600
+        Wed, 6 Apr 2022 18:40:30 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A6A1928A;
+        Wed,  6 Apr 2022 15:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649284712; x=1680820712;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Cjtx56urfcl65Nbxp0gNQfOnI14k9WmRegTAhY8jDjE=;
+  b=huKNO56PJFJOcs4YeC/oNy+K+74X6Jf0NYVR1fgeKW0F4lR29dZ3j757
+   cI5b+1UWvdTEm7EeOfhIoDBXBSW3dX6SPVQUITpT6i44pmTBP3qhfs34a
+   MBBAOk+n/fIn7Lb9bTnsRaDyl/WG0wNtIoo2rjApA2MNqq7g0uq94T2Wk
+   lmQr1XXauAXSvBFYUbW49KQd9s7fmHpAtoOyR+3PjOqRpenOmgqHqN3VI
+   4rCpeSLiNrGNF+rJsdz19D8OXk1yupgwlbvaFnU3jqWL940FYtrz/cG7F
+   6ibLRcnuRF6rOCaQ1ELMnQynwAKRWklZvXtkdNmFHXaHUJqY6bRtTXrU3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241101939"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="241101939"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 15:38:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="722699716"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2022 15:38:31 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Apr 2022 15:38:31 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Apr 2022 15:38:31 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Wed, 6 Apr 2022 15:38:30 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        "Borislav Petkov" <bp@alien8.de>
+CC:     "hpa@zytor.com" <hpa@zytor.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [RFC PATCH 3/5] x86/mce: Introduce a function pointer
+ mce_handle_storm
+Thread-Topic: [RFC PATCH 3/5] x86/mce: Introduce a function pointer
+ mce_handle_storm
+Thread-Index: AQHYSYCbmdtpU5l4YUOkIK8b/jgkFqzjeaRg
+Date:   Wed, 6 Apr 2022 22:38:30 +0000
+Message-ID: <34f2279e49e04761acd273ec4e54e062@intel.com>
+References: <20220406063542.183946-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220406063542.183946-4-Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <20220406063542.183946-4-Smita.KoralahalliChannabasappa@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 21:07:08 +0200, Christoph Böhmwalder wrote:
-> Mostly cosmetic changes, bound for 5.19.
-> 
-> Arnd Bergmann (2):
->   drbd: fix duplicate array initializer
->   drbd: address enum mismatch warnings
-> 
-> Cai Huoqing (2):
->   drbd: Make use of PFN_UP helper macro
->   drbd: Replace "unsigned" with "unsigned int"
-> 
-> [...]
+> Introduce a function pointer "mce_handle_storm". This function pointer
+> does the vendor specific storm handling. In Intel it points to a routine
+> to set different thresholds in IA32_MCi_CTL2.
 
-Applied, thanks!
+Boris did some cleanups in machine check code to get rid of places
+where function pointers were used. E.g.
 
-[1/7] drbd: fix duplicate array initializer
-      commit: adff355a6d6602d6be7be4c98e39d1d957a7e53f
-[2/7] drbd: address enum mismatch warnings
-      commit: a9cb5060fabb46187c8b00ac740bc30f045baa8e
-[3/7] block: drbd: drbd_receiver: Remove redundant assignment to err
-      commit: c8057a1ec541f972d0ca2ab14a77bd0f6a1919e3
-[4/7] drbd: Make use of PFN_UP helper macro
-      commit: 25dddd7771061c0d7176d396117244e19ce30858
-[5/7] drbd: Replace "unsigned" with "unsigned int"
-      commit: ad94e90806ac935c91dc6f048cec6c6ec4069cec
-[6/7] drdb: Switch to kvfree_rcu() API
-      commit: 40dad92d68aab52919d98524eb8aa87ed23596c8
-[7/7] drbd: Return true/false (not 1/0) from bool functions
-      commit: c0bf7a4c2313c46f2ba14b78a622a7e32bbbb2ac
+cc466666ab09 x86/mce: Get rid of the ->quirk_no_way_out() indirect call
+8121b8f947be x86/mce: Get rid of msr_ops
+cbe1de162d82 x86/mce: Get rid of machine_check_vector
+631adc7b0bba x86/mce: Get rid of the mce_severity function pointer
 
-Best regards,
--- 
-Jens Axboe
+Was that to help with the "noinstr" cleanup?  I'm not sure if that
+would apply here (in which case mce_handle_storm would be
+a regular function with a switch on "vendor".)
 
-
+-Tony

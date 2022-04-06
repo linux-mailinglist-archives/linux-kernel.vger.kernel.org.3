@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4344F63B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890564F63B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 17:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236122AbiDFPsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 11:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S236343AbiDFPtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 11:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236945AbiDFPry (ORCPT
+        with ESMTP id S236964AbiDFPrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:47:54 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D0C2C2EDD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 06:05:24 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id f18so2543581edc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 06:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PM54LwgT2Mgw5AMkSV1qMvIZs90k76HVAm+mIhFW/Ko=;
-        b=dDSmSxNu4cKou0wKKJy2RxvoXv2oI6xKR2vY3pb3rpGtbFJSq+v9Sour4amtkG8OmK
-         /mIlDVEuFioJxUYt/uLZELUgdXQw0ov1GNV1lrpYe6lLXJddt79EqvJAQITLd3WaNVH7
-         RZkDvqmMSe65o+jVNmIxDSjYRyulxd4z4O6RUWbk8rC6zzIUeWQYB0okxXTU0SvhHXZA
-         FOlx5xH2zFxCf3OE8/9JHhuxHDnwAY1LJRZbWwasq6aNf43sSQc+pAeLfaWwXG6joBqH
-         7NUBr0fvlYsspSPTWRfWfZ9QRS8Vfkb6O9IoizmZOkjDfsVP23+M9cveQTa0tzHjUgJl
-         d64Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PM54LwgT2Mgw5AMkSV1qMvIZs90k76HVAm+mIhFW/Ko=;
-        b=idPM+BQR9ud6AeurUrLKzphM+7CvuA6Xpf4bqyJkxVfO9Xw0US5oJ7jRepCKSjBIFV
-         kcHg+talwQP4Dj+ojVAmz+/vIRDRtGf240NCkYH2tjMQn0E/ReAL1yBUNEtZ6r9Hz0v3
-         NbbKlg0J0CZl6wv2EdNoejg1CZnH7Q5KX7/2Rl47/Ms3af+cURSFT8GTtzD9Ml5w/C+J
-         UdE7v5K4SlMV45m1qh7DyvDdAbd7w1MwfTe+QIUcfPxBISRR5E15f42YdAWAfwgEkyJy
-         EqXdM46c695qAfHgst/twMu966fKwiV8SlIJDdOQYRE3bwcSEy+NA7rehuONlXSWHf0Z
-         7txg==
-X-Gm-Message-State: AOAM531nC5edEDaJtlSlxRKX8on5PsOKCSU+br5iVXtkX3a9UbVduJpN
-        QHlHIezAzuAWecYJzZcFyvFXtg==
-X-Google-Smtp-Source: ABdhPJyAEVGuwpVr2eJbNmM3Bn7rwdqn15Yyq6WvWvI8cuWdHW0Fh3+ITY+ecK+a12QzHGzVyv/MtQ==
-X-Received: by 2002:a05:6402:34cf:b0:419:75b1:99ad with SMTP id w15-20020a05640234cf00b0041975b199admr8672622edc.228.1649250322915;
-        Wed, 06 Apr 2022 06:05:22 -0700 (PDT)
-Received: from google.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id j22-20020a50ed16000000b00419366b2146sm8158326eds.43.2022.04.06.06.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 06:05:22 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 13:05:18 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <Yk2QDmvKR2ipsA29@google.com>
-References: <YkQzfjgTQaDd2E2T@google.com>
- <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
- <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
- <YksIQYdG41v3KWkr@google.com>
- <Ykslo2eo2eRXrpFR@google.com>
- <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
- <Ykwbqv90C7+8K+Ao@google.com>
- <54acbba9-f4fd-48c1-9028-d596d9f63069@www.fastmail.com>
+        Wed, 6 Apr 2022 11:47:55 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DF1136FD7;
+        Wed,  6 Apr 2022 06:05:35 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:ff63:de1f:2a77:5241] (unknown [IPv6:2a01:e0a:120:3210:ff63:de1f:2a77:5241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B83D61F44155;
+        Wed,  6 Apr 2022 14:05:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649250334;
+        bh=8ZGg2lyWu5RKnQ3rLN2WnQy5xuyBOPkO3yKRiol9ycU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QXe3LgxAeKlxnjsV0YDwzLSqEuWxxSQTFm4c5lDQh7ro0gZ1d7zmkZFifpFQRblU9
+         do7GBLvZwEgY+g4qM/a8YIgRzjlTOFLO91XPTliuqqNrSIgLdQGGEsX6cHFnC9yZhw
+         RNH18tulbkuqUByzBkSxpE4Zdgv63kYcILwdiK9y5u+jkqOyDXfQHmaAGdm8OSZQNo
+         +HE2ZpqMMqq485f8yIUEmTZkqISkUmT+9ty6wwt2vI5ETDU2MaeUJ2RUSplEVEOdHl
+         P+Z41DAXsl2y6UfUZaXjavK2cxCk1K1Fb6sjaGjTm5/czRkR6IxLbqn2FkI4W0tLs/
+         RtjW5pkGjK2Rg==
+Message-ID: <a1069c94-4c3c-ee4d-738a-752bb1d12dac@collabora.com>
+Date:   Wed, 6 Apr 2022 15:05:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54acbba9-f4fd-48c1-9028-d596d9f63069@www.fastmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Adam Ford <aford173@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        "jernej.skrabec" <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
+        knaerzche@gmail.com, jc@kynesim.co.uk
+References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
+ <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com>
+ <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
+ <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com>
+ <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
+ <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
+ <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
+ <163202bd-ea51-e80a-1481-568fae25b045@collabora.com>
+ <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
+ <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
+ <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
+ <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com>
+ <CAHCN7x+YuXFrMe6dYo_VhkG7ey1jcPTpOMCM1=qoTivZO9U2Rw@mail.gmail.com>
+ <f495aa2b-81f7-a3cd-a6dd-cc5ae5f0a81f@collabora.com>
+ <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 05 Apr 2022 at 10:51:36 (-0700), Andy Lutomirski wrote:
-> Let's try actually counting syscalls and mode transitions, at least approximately.  For non-direct IO (DMA allocation on guest side, not straight to/from pagecache or similar):
-> 
-> Guest writes to shared DMA buffer.  Assume the guest is smart and reuses the buffer.
-> Guest writes descriptor to shared virtio ring.
-> Guest rings virtio doorbell, which causes an exit.
-> *** guest -> hypervisor -> host ***
-> host reads virtio ring (mmaped shared memory)
-> host does pread() to read the DMA buffer or reads mmapped buffer
-> host does the IO
-> resume guest
-> *** host -> hypervisor -> guest ***
-> 
-> This is essentially optimal in terms of transitions.  The data is copied on the guest side (which may well be mandatory depending on what guest userspace did to initiate the IO) and on the host (which may well be mandatory depending on what the host is doing with the data).
-> 
-> Now let's try straight-from-guest-pagecache or otherwise zero-copy on the guest side.  Without nondestructive changes, the guest needs a bounce buffer and it looks just like the above.  One extra copy, zero extra mode transitions.  With nondestructive changes, it's a bit more like physical hardware with an IOMMU:
-> 
-> Guest shares the page.
-> *** guest -> hypervisor ***
-> Hypervisor adds a PTE.  Let's assume we're being very optimal and the host is not synchronously notified.
-> *** hypervisor -> guest ***
-> Guest writes descriptor to shared virtio ring.
-> Guest rings virtio doorbell, which causes an exit.
-> *** guest -> hypervisor -> host ***
-> host reads virtio ring (mmaped shared memory)
-> 
-> mmap  *** syscall ***
-> host does the IO
-> munmap *** syscall, TLBI ***
-> 
-> resume guest
-> *** host -> hypervisor -> guest ***
-> Guest unshares the page.
-> *** guest -> hypervisor ***
-> Hypervisor removes PTE.  TLBI.
-> *** hypervisor -> guest ***
-> 
-> This is quite expensive.  For small IO, pread() or splice() in the host may be a lot faster.  Even for large IO, splice() may still win.
 
-Right, that would work nicely for pages that are shared transiently, but
-less so for long-term shares. But I guess your proposal below should do
-the trick.
+Le 06/04/2022 à 15:02, Nicolas Dufresne a écrit :
+> Le mercredi 06 avril 2022 à 14:50 +0200, Benjamin Gaignard a écrit :
+>>> default=1 value=1
+>>> 1: Frame-Based
+>>>                    hevc_start_code 0x00a40a96 (menu)   : min=1 max=1
+>>> default=1 value=1
+>>> 1: Annex B Start Code
+>> It is the same so that suggest the issue is coming from GStreamer plugin.
+> Can you report the GStreamer commit hash you have building on ? Also please
+> validate the creation date of the plugin (libgstv4l2codecs.so) against your
+> source update date. Reminder that GStreamer is now mono-repo (just in case).
+>
+> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+> Hash: 54b7c1f98084c85d103446cc3f2edce42ad53b0f
+>
+> Benjamin, can you confirm you have no local changes and this is the hash you are
+> building from ?
 
-> I can imagine clever improvements.  First, let's get rid of mmap() + munmap().  Instead use a special device mapping with special semantics, not regular memory.  (mmap and munmap are expensive even ignoring any arch and TLB stuff.)  The rule is that, if the page is shared, access works, and if private, access doesn't, but it's still mapped.  The hypervisor and the host cooperate to make it so.
+Yes that is the hash I'm using without local changes
 
-As long as the page can't be GUP'd I _think_ this shouldn't be a
-problem. We can have the hypervisor re-inject the fault in the host. And
-the host fault handler will deal with it just fine if the fault was
-taken from userspace (inject a SEGV), or from the kernel through uaccess
-macros. But we do get into issues if the host kernel can be tricked into
-accessing the page via e.g. kmap(). I've been able to trigger this by
-strace-ing a userspace process which passes a pointer to private memory
-to a syscall. strace will inspect the syscall argument using
-process_vm_readv(), which will pin_user_pages_remote() and access the
-page via kmap(), and then we're in trouble. But preventing GUP would
-prevent this by construction I think?
+Benjamin
 
-FWIW memfd_secret() did look like a good solution to this, but it lacks
-the bidirectional notifiers with KVM that is offered by this patch
-series, which is needed to allow KVM to handle guest faults, and also
-offers a good framework to support future extensions (e.g.
-hypervisor-assisted page migration, swap, ...). So yes, ideally
-pKVM would use a kind of hybrid between memfd_secret and the private fd
-proposed here, or something else providing similar properties.
-
-Thanks,
-Quentin
+>
+> regards,
+> Nicolas
+>

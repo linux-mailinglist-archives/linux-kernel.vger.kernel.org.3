@@ -2,120 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374FB4F6065
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF594F5EA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiDFNse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S230205AbiDFMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 08:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiDFNsH (ORCPT
+        with ESMTP id S229863AbiDFMuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:48:07 -0400
-X-Greylist: delayed 6968 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 04:04:44 PDT
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31C52E54D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:04:44 -0700 (PDT)
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 4339A803B0DB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:08:36 +0000 (UTC)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 063B71003F401
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:08:35 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id c1eUnbjfuQs3Cc1eUnhkQD; Wed, 06 Apr 2022 09:08:35 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=A+Opg4aG c=1 sm=1 tr=0 ts=624d5893
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=z0gMJWrwH1QA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=ZeFZwYX2NddpyQBIYx0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nUVhw/DqtI6TDwW5cKdD/Hgy36VOLAfB37jUTelqyT0=; b=2OdqUEzwUwjNtbtDmCfCQVr7lK
-        I2ROf5jZLGQAMWWpikDu2+e3dZfCQTXAOWwHZJKAs+toYpinfL44rriMzoAxVA4oSxrFTUhMG5BmK
-        qY3UfCFs1FIE0FAJMTFp1rOuSZ06lnUMnB39w5ZzrVYL6ugcPR0t2sZZocrTjSOj3NTjdVtIG5C6i
-        P1GrUqh56Yr84ww2xTGGD17axlGYv6HwFEPyezpE8ebUbRMwYE6+DTm+aPgRPi7V6AQ4kE9Wqgz+H
-        acqouceVpbhAtmjy04Ueg3g86wP0n6j23Q30h+qM6VMD4Lhivkw3UmerdYz4vtyuHGg6xVjHKj/oG
-        +93pBoIA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36032 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nc1eT-003WtS-BE; Wed, 06 Apr 2022 03:08:33 -0600
-Subject: Re: [PATCH 5.17 0000/1126] 5.17.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220405070407.513532867@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-Message-ID: <957affaf-ff9a-db30-d089-6db9750e1d13@w6rz.net>
-Date:   Wed, 6 Apr 2022 02:08:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 6 Apr 2022 08:50:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299FC12AB0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:54:25 -0700 (PDT)
+Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KYJGD3StlzdZY5;
+        Wed,  6 Apr 2022 16:53:56 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 16:54:23 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 6 Apr 2022 16:54:22 +0800
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Tong Tiangen <tongtiangen@huawei.com>
+Subject: [RFC PATCH -next V2 0/7]arm64: add machine check safe support
+Date:   Wed, 6 Apr 2022 09:13:04 +0000
+Message-ID: <20220406091311.3354723-1-tongtiangen@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nc1eT-003WtS-BE
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36032
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 12:12 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.2 release.
-> There are 1126 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This patchset is based on[1].
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+With the increase of memory capacity and density, the probability of
+memory error increases. The increasing size and density of server RAM
+in the data center and cloud have shown increased uncorrectable memory
+errors.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Currently, the kernel has a mechanism to recover from hardware memory
+errors. This patchset provides an new recovery mechanism.
+
+For ARM64, the hardware error handling is do_sea() which divided into
+two cases:
+1. The user state consumed the memory errors, the solution is kill th
+     user process and isolate the error page.
+2. The kernel state consumed the memory errors, the solution is panic.
+
+For kernelspace, Undifferentiated panic maybe not the optimal choice,
+it can be handled better.
+
+This patchset deals with four sscenarios of hardware memory error consumed
+in kernelspace:
+1. copy_from_user.
+2. get_user.
+3. cow(copy on write).
+4. pagecache reading.
+
+These four scenarios have similarities. Although the error is consumed in
+the kernel state, but the consumed data belongs to the user state.
+
+The processing scheme is based on CONFIG_ARCH_HAS_COPY_MC and uses the
+process killing plus isolate error page to replace kernel panic.
+
+[1]https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+
+Since V2:
+ 1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
+   ARM64_UCE_KERNEL_RECOVERY.
+ 2.Add two new scenarios, cow and pagecache reading.
+ 3.Fix two small bug(the first two patch).
+
+Tong Tiangen (7):
+  x86: fix copy_mc_to_user compile error
+  arm64: fix page_address return value in copy_highpage
+  arm64: add support for machine check error safe
+  arm64: add copy_from_user to machine check safe
+  arm64: add get_user to machine check safe
+  arm64: add cow to machine check safe
+  arm64: add pagecache reading to machine check safe
+
+ arch/arm64/Kconfig                   |  1 +
+ arch/arm64/include/asm/asm-extable.h | 25 +++++++
+ arch/arm64/include/asm/asm-uaccess.h | 16 +++++
+ arch/arm64/include/asm/esr.h         |  5 ++
+ arch/arm64/include/asm/extable.h     |  2 +-
+ arch/arm64/include/asm/page.h        | 10 +++
+ arch/arm64/include/asm/uaccess.h     | 17 ++++-
+ arch/arm64/kernel/probes/kprobes.c   |  2 +-
+ arch/arm64/lib/Makefile              |  2 +
+ arch/arm64/lib/copy_from_user.S      | 11 ++--
+ arch/arm64/lib/copy_page_mc.S        | 98 ++++++++++++++++++++++++++++
+ arch/arm64/lib/copy_to_user_mc.S     | 78 ++++++++++++++++++++++
+ arch/arm64/mm/copypage.c             | 36 ++++++++--
+ arch/arm64/mm/extable.c              | 21 +++++-
+ arch/arm64/mm/fault.c                | 30 ++++++++-
+ arch/x86/include/asm/uaccess.h       |  1 +
+ include/linux/highmem.h              |  8 +++
+ include/linux/uaccess.h              |  8 +++
+ include/linux/uio.h                  |  9 ++-
+ lib/iov_iter.c                       | 85 +++++++++++++++++++-----
+ mm/memory.c                          |  2 +-
+ 21 files changed, 432 insertions(+), 35 deletions(-)
+ create mode 100644 arch/arm64/lib/copy_page_mc.S
+ create mode 100644 arch/arm64/lib/copy_to_user_mc.S
+
+-- 
+2.18.0.huawei.25
 

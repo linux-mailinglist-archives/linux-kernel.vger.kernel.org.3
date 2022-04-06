@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB034F6790
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5364F6710
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbiDFRWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S238940AbiDFRXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238885AbiDFRVQ (ORCPT
+        with ESMTP id S239499AbiDFRXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:21:16 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC84A482E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:19:47 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B5797320214B;
-        Wed,  6 Apr 2022 11:19:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 06 Apr 2022 11:19:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to; s=fm3; bh=RypWu
-        AcjXYhvuMrAXCozdcgxcIlBzpaT89Q2nmHZmv8=; b=iEA4AuDoPggKN096HOVI5
-        bHlUpSMzgSupgdJAnxGAGJqz+Jvalaudj7F3k9G8g8Sfq5NOu7MopfrnZDIQhNuC
-        o+KHZ1KsgkelKMm9XJlUbIJjNFlks0Jv1AeLCn81O7H4LgBBRqUMhyZT+IFWufRq
-        5wzUpeSxQnFhfbn2bBm5M1nCXOVIgKPZruF5012eTdndUGvhju48xppjdBQp+Njo
-        ao56JcYBpACCLOmfqdUX1sunoodAXUOaSr1mv1Y/Cqrs9s/Wsvx5fUUig5qhnvm5
-        LkVDuV3U4HMs4Sixmj4FZVLFYt6R4E+ObPrhemAtk3lf725y5T6rzjUw7JsgF9n7
-        A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm3; bh=RypWuAcjXYhvuMrAXCozdcgxcIlBz
-        paT89Q2nmHZmv8=; b=Mi9UhQlYlFA+5GOhJKjv1ga8m/lGC0uEsQjiUXcaVK4tS
-        M50O6bFsrYQKpmqxZ+u1aE6mTSlFiC/yJ5ZjSZyTJ/28N8YCuQ6RJvQSxhje328O
-        4BEYu0l6eiC9ObiBqiS51IA6ZUv5t2y83Qp2KhZqjpNrb793aYreLTc+BoHP19fd
-        9bwQ2fLSf7siiA/u4JaizoYKA19G8saIodBB5LFlbImMh3cPtKdMj5mXkcRXlvUV
-        WDhPg1Ian5uhb1TtZGpZauW7IkHAA7hWxi3wuvbmssZRfOmL5HOaaxmhID3i//J6
-        VNQ/ZjuGk16QWQzaXgJxzDwnabkWFxG0sjWWL2XgA==
-X-ME-Sender: <xms:kq9NYip4qTGsIebt7pTaYsTtCfGGn2ckye7ZsJtqjwSszrUKURjcbQ>
-    <xme:kq9NYgoCzOFEAuQvku59Iix28xTXziQpiZJIxx_f_qXG6yIyOtzbnonhjyFLOL50-
-    1sOODJUxeyaapmApQ>
-X-ME-Received: <xmr:kq9NYnMySvJyp9MUFvir4_QJVMlpSyToPvMOAbNCw7_ON5IFjwPcbgp0e8GAhv4n7Gu8A6jGnb-BB6TSOg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhggtgfgsehtqhertdertdejnecuhfhrohhmpegkihcu
-    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeekgf
-    fgleejfeegjedttefhhedvgfffvdeffeekjeetgffhtedvudffkeegleettdenucevlhhu
-    shhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
-    gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:kq9NYh450lNQwPhkWmSg2moOMEddBvZ1HrqrvvBCDLKltD9DCJMNeg>
-    <xmx:kq9NYh4Kv3d0LP4QzYNGtKlYDgwDcWdYO85mqYoZy78f4LVAo7CNsw>
-    <xmx:kq9NYhjf_Hc4eX_AO2i2BHjlHMoXOhhURkoaKsyg2HRjrzd7eVPlsg>
-    <xmx:kq9NYmHdfyuRoe7-mAUn9i0OmjBuDyYJxaSadtIHiQDzf2Q2XIm54g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 6 Apr 2022 11:19:45 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v10 5/5] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Wed,  6 Apr 2022 11:18:58 -0400
-Message-Id: <20220406151858.3149821-6-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406151858.3149821-1-zi.yan@sent.com>
-References: <20220406151858.3149821-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Wed, 6 Apr 2022 13:23:02 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502AF140DF3
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:22:13 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t25so4678055lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uTfG28cRodiq/+2LJPZqP5fNSiZIDmn4jveiK6bxlps=;
+        b=XI8nDaN0YTRRNOuuWDmD8ZTIYZbINFcKXcZ1ur9Xcei88v3/EKSmM8tCwJMOQ3TfmC
+         RyeuZDtXfUgVT55tcrcFqV3NaqcLriA2zG0gxqu+y7xA9c1+M3ZfRdh+SozpG5YadYWX
+         +05bbdM9jD1n3FYWXPjTNyFW2xjzqT+etMHWvHo60SOBQ85ceGIF1aT6EChLR0EPZjVi
+         hwnMsa00bl0U5Ar0ZNXYxFjTqQbOai5YDm6RsOVUbH9+EMA8zKTxk6QDKrI4psvh9OT0
+         tdtFHR7UCohyPOfPRX+srh53WrkZpWZFdvOlvYzO0pjU5a0DR42aYRKl3AyoYIn6SeHe
+         VrTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uTfG28cRodiq/+2LJPZqP5fNSiZIDmn4jveiK6bxlps=;
+        b=WTqSIwKdWrXp/4ttou+XI4MmDEPFrtk3l8K2jwOOkJX8CqJE5Wkr2I6WWEiB3vrAYq
+         vAI5nuze9tDfxHNbsRTpdy566WI90KGLR64DhBy69WnfWES6lqV3y1Bz8mXWIZJjUTTe
+         DfiPEjM11BvaRbd4wCDCCgbKz4xkk2c/OfiAB/2Fvh3A4exkuDoZYb/VikmwAEOp+jN0
+         UVsQTjcTEEUrpzxhXN/uwKEo3o3rwIFRPvVohU9HOeyrukQ5KhwJurI/a7cYOQD5lmsc
+         s9b3UOrML0f2dHalH76zs+2QLvV4Y1QXHChzkgj/P36eP/nWdxq6snPc6HMmECAioY8D
+         LqEQ==
+X-Gm-Message-State: AOAM531cuHu8P8DeBqLTDbNxXRls8s8QjuamNn6sOPEqunkh0GBnT6yZ
+        IDLqS2m/UwvvGoXKAgfA6DSx1wnf8alcNqKPlp1GyA==
+X-Google-Smtp-Source: ABdhPJzsC6htLHc6A2/+kZT4bQJxCHdpcaZojKgrHPwgl3D8qEq+Zb8UlKmQKu0ryToG3Gwrpq9AfLEiPzDPsf9WPqY=
+X-Received: by 2002:ac2:5f19:0:b0:44a:f3de:58bd with SMTP id
+ 25-20020ac25f19000000b0044af3de58bdmr6480353lfq.645.1649258530121; Wed, 06
+ Apr 2022 08:22:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1649239025-10010-1-git-send-email-zgpeng@tencent.com>
+In-Reply-To: <1649239025-10010-1-git-send-email-zgpeng@tencent.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 6 Apr 2022 17:21:58 +0200
+Message-ID: <CAKfTPtCv=pBDsvWDguFXtf_YZDf2Yx+xrpc3hDevQFz6BoadJA@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Move calculate of avg_load to a better location
+To:     zgpeng <zgpeng.linux@gmail.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On Wed, 6 Apr 2022 at 11:57, zgpeng <zgpeng.linux@gmail.com> wrote:
+>
+> In calculate_imbalance function, when the value of local->avg_load is
+> greater than or equal to busiest->avg_load, the calculated sds->avg_load is
+> not used. So this calculation can be placed in a more appropriate position.
+>
+> Signed-off-by: zgpeng <zgpeng@tencent.com>
+> Reviewed-by: Samuel Liao <samuelliao@tencent.com>
 
-alloc_contig_range() now only needs to be aligned to pageblock_nr_pages,
-drop virtio_mem size requirement that it needs to be MAX_ORDER_NR_PAGES.
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- drivers/virtio/virtio_mem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index e7d6b679596d..e07486f01999 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,10 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_me=
-m *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
-=20
- 	/*
--	 * TODO: once alloc_contig_range() works reliably with pageblock
--	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
-+	 * alloc_contig_range() works reliably with pageblock
-+	 * granularity on ZONE_NORMAL, use pageblock_nr_pages.
- 	 */
--	sb_size =3D PAGE_SIZE * MAX_ORDER_NR_PAGES;
-+	sb_size =3D PAGE_SIZE * pageblock_nr_pages;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
-=20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
---=20
-2.35.1
-
+> ---
+>  kernel/sched/fair.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index d4bd299..601f8bd 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9460,8 +9460,6 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+>                 local->avg_load = (local->group_load * SCHED_CAPACITY_SCALE) /
+>                                   local->group_capacity;
+>
+> -               sds->avg_load = (sds->total_load * SCHED_CAPACITY_SCALE) /
+> -                               sds->total_capacity;
+>                 /*
+>                  * If the local group is more loaded than the selected
+>                  * busiest group don't try to pull any tasks.
+> @@ -9470,6 +9468,9 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+>                         env->imbalance = 0;
+>                         return;
+>                 }
+> +
+> +               sds->avg_load = (sds->total_load * SCHED_CAPACITY_SCALE) /
+> +                               sds->total_capacity;
+>         }
+>
+>         /*
+> --
+> 2.9.5
+>

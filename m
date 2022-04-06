@@ -2,381 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F7A4F6BD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8694F4F6BC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiDFU4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S234566AbiDFUz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbiDFU4Q (ORCPT
+        with ESMTP id S234008AbiDFUzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:56:16 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8709020594B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:14:35 -0700 (PDT)
+        Wed, 6 Apr 2022 16:55:32 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE041E747B;
+        Wed,  6 Apr 2022 12:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649272475; x=1680808475;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oAKjWDOmFrLjQPvniplPrp9IyhgRMd0ibvWMz/2RM1w=;
-  b=N2NugzdgPcVnuN8q9O2YAT3ivc2JZHbG2Oj1knx+TJEjaCuhNqgfo94t
-   6OX/BgeJTJFipsjCjoQVavZpsEP8txKfGkayQQVDSdf9rhzAe/E+5Cxct
-   y4HowMAh5bDzZ0+vjNgwMDU7hJEicjlowRZHBscGEJSsu9NVPBbgx7FX6
-   jt8yGnQw5QlTF35MKl1bZiQD+xsLYgBG6AzPnO7Zo6CUVPiGJzsELKIbf
-   YGr6S2mTfRWkIUPr/9gqE5Jk5x/yH+oDvh6qQIpi4gdB1aQmGfFXrjE9D
-   acr+sTuZk1X8fVd5r9efk38md1pkuJPeYrQLhiE1nt7ZWD0u1Xz0NLIgD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261313902"
+  t=1649272438; x=1680808438;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hmChWSS47V4a0LW2pCM6AfL0ioInywaKnceFmTKCBIQ=;
+  b=X6hX5ZKSNXcvFHpeO+VoUrRrGZxMK7pra+7WegS4QoUNalzs0ug0iP+j
+   5C+e3Z/Fca1p0USO/qeE8w9jm3ftxtJktWrgVmesD/7Zmiv+xnnK2JWwE
+   VVUWC+HAfdkcLxtoBf4lnNS3Gn7uKG3HlMB7o4gdBK1J3hzSPYgSEheiR
+   9edwaDicVgODsI1W1pdXRe0XW7xTyd4UAH1R6gliqRazVFjkTQTsX3Air
+   hMP/J+sptqSeKERuzp3Wgow6GscyvCzRITNqJJEK/kcpw45etPzDIOR9B
+   pCa1FDd4h6bus3RJ1sDuV2/eMAR+x7KEwivgBJqWX4I2tbWBSNCz9hwz7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243270592"
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="261313902"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 12:14:32 -0700
+   d="scan'208";a="243270592"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 12:13:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="549683123"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 06 Apr 2022 12:14:29 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncB6r-0004ft-5Q;
-        Wed, 06 Apr 2022 19:14:29 +0000
-Date:   Thu, 7 Apr 2022 03:13:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/cirrus/cs89x0.c:897:41: error: implicit
- declaration of function 'isa_virt_to_bus'; did you mean 'virt_to_bus'?
-Message-ID: <202204070314.EnN7uIbj-lkp@intel.com>
+   d="scan'208";a="609023479"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 12:13:57 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Apr 2022 12:13:56 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 6 Apr 2022 12:13:56 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 6 Apr 2022 12:13:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b/2j1DQFkHD1+zHW1l8BRr8Y1rT/G8fglOGUl9zUwX8OG6LjvZbfHDZLI1vlkkiML4qaGwtjyVD0cVg4AfMvCXnYtxHYAMiUWu1AAb0T6AdSIRtye5NQQSrzywHUsZynHBEKuu/JzM3vs+aNME+Ecs8nEg2xx8Jn4roINJNsJDL4gPVOPKxZ+T4IYo3bheLZKkYblEBzmIEp19A4clrc/sWfiGVpfjZPwXSwjXM0RDwX1UjNQKzhmPWos1AlLUy056ogqGwQJam4qJ6h8xKV7gD7rquOr8yCoGq8QfQg29UuvOE3VajGyUhgdfruv9bwKr0bqJZoNhHZTa0ba62D3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hmChWSS47V4a0LW2pCM6AfL0ioInywaKnceFmTKCBIQ=;
+ b=e7qrgRWqQ4IIugATUFPxeVsFM/QEmiFxbQJlV13fRdjaxrzKAwrFUYl1AIKgfwwrRlAb+TKfFnywCExbAD/MNwe8AyukyGJB5ZBUhcNjsklc4rnayOcSosB1UAIC0qWMQX1xFRGjyZH+5dZHGYM1f7aD8h/sMGx2/DX3VkJTGr6OtECe8MGf6nsKhleUAopm5bX2XIgQv+72OIiMdormft0HfuLwuh25nGY2NJLW15uK5tE+QF6xEByfa31oWV/95PoongWw/WwiYEp/SHfIToulTTCz5QKuP8hoFKP9roYYgy/kEMhuP79X1N2pqCkDjwTRXsVRREQoSZyIw/TDmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
+ by SA0PR11MB4654.namprd11.prod.outlook.com (2603:10b6:806:98::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21; Wed, 6 Apr
+ 2022 19:13:54 +0000
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b%7]) with mapi id 15.20.5144.021; Wed, 6 Apr 2022
+ 19:13:54 +0000
+From:   "Krishnan, Neelima" <neelima.krishnan@intel.com>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "antonio.gomez.iglesias@linux.intel.com" 
+        <antonio.gomez.iglesias@linux.intel.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>
+Subject: RE: [PATCH v2 2/2] x86/tsx: Disable TSX development mode at boot
+Thread-Topic: [PATCH v2 2/2] x86/tsx: Disable TSX development mode at boot
+Thread-Index: AQHYNMqKOgkLislM80KYh4A57z5ulqzWqTmAgADa5QCAC+PPYA==
+Date:   Wed, 6 Apr 2022 19:13:54 +0000
+Message-ID: <CO1PR11MB476963E645081B2DE6FB91C88CE79@CO1PR11MB4769.namprd11.prod.outlook.com>
+References: <cover.1646943780.git.pawan.kumar.gupta@linux.intel.com>
+ <347bd844da3a333a9793c6687d4e4eb3b2419a3e.1646943780.git.pawan.kumar.gupta@linux.intel.com>
+ <YkMyo2Jw8iYx9wAU@zn.tnic> <20220330052730.odzigmf4dkqkqfhk@guptapa-desk>
+In-Reply-To: <20220330052730.odzigmf4dkqkqfhk@guptapa-desk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.401.20
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3f68226e-d51b-4de1-bbb0-08da180197ab
+x-ms-traffictypediagnostic: SA0PR11MB4654:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <SA0PR11MB465418FB928A2D2E79FB15938CE79@SA0PR11MB4654.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UxC10mrZXb+T0d7f3ywgy5QwgSYDbsW86vHEf+mRdamslnhpAuSFruj+KCRxIzp2YZTPweiPrRTTu1Z60a8DvKsk4ID0Ra/qwZVDbeHfmgBvQIfWxWAjUItp8wYj4Yp/JeeCYv9Uvem8Kl8Kd7DTw5YBpWZEV3N/GoTXU5thBe5RJV/S44yYFR0FJXg65sxLawygNN2HFTjD3Im8aRNV5u5eT50YWHaMgMs2XT27kMS6eFzHsHz4LqGV+SYSZ5f2f2IX+SbCMvDvmBWy048SNziV5+v+OV6eyD0z1eUYQGc/6zMNxcHghXtEDDnmVsx5O+dAHOImcjIZkvorYCJ4UYAaLfjNhTcyCiNbqMAj+YDfAql6GWhdTKmi9EtCliKDTpPMNVH5Ul5LbHD+ufTcs68Eo30wj2X/y+JPSg1N4O5zLUj0fNw1N8z9f4FIiRLszW7icmeHN2O/ZGrQ8jCB0FdeDumz40wSuWR3SfKjBoJn3Uab57wSyl94QFwOuiP1SxG65oppc3N7gUpwmWWWJEj2m6OdYv2Rh1V5r/3o2G+FDHcPSHjKswRnPFnga6UBIMIAiHPmKFlnBUNuiAYcv4rJjXW0O252Z+8VKAJu1AuQhpDtlbpUZvKgGIoyMJHKMp5pAsQktPNNp5ygcExscWhgojYch+jrwKsA0ia8YxnbyR1lJnGGA02N0stZrXk7/JBAVKisFF0UT9ai6Bgc+PKwYm1zDWcLofVCbBg6jFsBW4K2sI5Nd+VoWX8wHZoDaZTemWUe2cU4VcaaknKfKn75gGaqlwrMCGeCSHSW1kKDmL7CVBoHW63HuORNjaUP
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(82960400001)(38070700005)(83380400001)(26005)(186003)(122000001)(8936002)(5660300002)(7416002)(38100700002)(52536014)(6506007)(508600001)(66946007)(8676002)(55016003)(4326008)(64756008)(2906002)(66476007)(9686003)(7696005)(53546011)(316002)(66556008)(71200400001)(966005)(110136005)(66446008)(54906003)(76116006)(33656002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YnBxSytVR3VjTHhHcFJYZW9kRnJucktQT290b3RLa2RGd3d2VHhmNlg2NDA1?=
+ =?utf-8?B?YUVnWEt1bi9zSGVSUjlKZEh2RFU0YW16aGdiRGJ3L1VJeEswNFJObXlMQytj?=
+ =?utf-8?B?bkcyb2kvYU5qQVEwMGU4aTVDWjY5ZDRpWHk4bzFLOXpDSUlJNnhSV2IwZ0Fx?=
+ =?utf-8?B?WFNuTTN1M212VTU1UnJXYVdtemhGQXJQcitwUGNzR3RYTG9IeVNyTTVyMVR2?=
+ =?utf-8?B?ejZFd0tyQ1JqZXhhS0dKbU9CMnQ4K0NFeTcvYjNUL2lUa0RIUzVIMkZvb1ox?=
+ =?utf-8?B?eENEekNRcUQrK0d0Z2M2Z2dVS0pRUnZ5cXM1SXZTTlU1ZDVnbTByalhLZzRJ?=
+ =?utf-8?B?N3ZWZ3F2N0tJUlhxUmhRdlZEMC9leWtsaTZ2eit1aXFoT2s5NForaG5LbE94?=
+ =?utf-8?B?Z0huUDAwNVE3SVpKVUg1WU9KM1VCSTY1WnlQcDFDdVU0M2NFLzdWaHJBZDZ5?=
+ =?utf-8?B?a2djTWFYYnduK2JpLy9nVUtaSVZoeEttV0E2dm5nUVIydm15c0V0cnp3YjRl?=
+ =?utf-8?B?Z21mV3dwQVpMdFJ6aXorek9MN0FCSG5HUXhZUzZIWUtSUUx3SkFwUGZWNHRC?=
+ =?utf-8?B?cTNrdXVXN3R4UEYvOTNPY0NLTVRzMmRaU3VvV1hmUUVuYnhkcVM1Q2lRKzcx?=
+ =?utf-8?B?akhLL3pMK2tiNmZweUpGL0pUTzNiYWM4NmpSdkpnVWNGdDc4Y2FEckpvdW15?=
+ =?utf-8?B?bFZHWHVYNStHTUlUUmF1OUJxNXM5N1NEQlpKNTVCZzJuWnFIeDhYa3prUmps?=
+ =?utf-8?B?Mm5pbnJjMFM3eDNqTGZwQzhYVVd0Y0h2eHhlT2FKNFFKMEU3WlMxWFJtZk5J?=
+ =?utf-8?B?dkdvUnJHMXZxdnZKamM4c1lBc3J1ZGw0UWJOMERkcDBCdDQwSU5xanZLTEV3?=
+ =?utf-8?B?M2NTbUF0cWpmRlFDN3NobXlVcHBYREIrRzArN3hoZFBuQUc4VDBJU2V6WjR2?=
+ =?utf-8?B?SExqRVg2UFpEYWczWDR5TGlCL09tT2NYV1NwL2VNRGw5WWFrOXlCR25pN1Zy?=
+ =?utf-8?B?Q1pnY0ptanBVN3hKQ1kyekplSUF5NWIvMzJuZHJZYkpmNlVvOEI3bWZ5WFZL?=
+ =?utf-8?B?K01lTldJZWNkRkNqOTFMZTAxRURZbWVHYU9SazhCNXZNT2ZMM003cmpPMWE3?=
+ =?utf-8?B?OVBsWkRGTFBvYy9VdmJreHZja2svd1JjK3l3UFlabzlnQTA0bXJGTGp1SDI2?=
+ =?utf-8?B?ancxVmpwQlRSR3JPNUhzNmxIZlJIaDlJUm5wLzJ4a0RpMHBEVDNKVStDL3d4?=
+ =?utf-8?B?TmRHWlArWEhIVW9XZUMzWm9UeE5maSt4d3B4VFZLWFNpK1B5WVRTYzZ3ejNL?=
+ =?utf-8?B?SUdKekJ0V29qMGU5RlcvNk9RUVZySUhwanhsbHZ0VjFROEtFblhmZnJqTjg3?=
+ =?utf-8?B?OFNONXJnamFVTHFjeWhZMy9nR0Z3eE1hYjR3SytwZ0FOckRoREhEbjFWSG8y?=
+ =?utf-8?B?WWRjTW45V2tPMmVPK2NrVUZMSnc1dkQ4NEFsbE1GQUJPbWFuR3p2NmtFb05I?=
+ =?utf-8?B?V3YrTWp1OFRTd3JseEk4dHdiUnJuenZOODRlc2pqUFJIeHVSV2YvZ1NDbzg5?=
+ =?utf-8?B?NDNBVm4zc1U2R0Z2aXRPOUJYY1ZpU3ZNS3NVOXpndUJYcEZST3lXcVczQ1hw?=
+ =?utf-8?B?enIxa25iUUFoeFVnVmRiRitRUWJ4cWZlK3RBZ1IzQTdNUFFoMlR3bkJranI2?=
+ =?utf-8?B?NlBOd3JmUlZQMGpqSDNpWGU1UFhIZTRuSnkzMC9mK0xBTFBqVjBCdGdmaHZh?=
+ =?utf-8?B?ZFdObE8wNzhRd052TklvNnpaVlprZkpkYnJjWmcvUGZkaDdnL1lmT2w4RnFZ?=
+ =?utf-8?B?dFd1d1RSaHYrbkFnUEtqZ2Qrb0lsb2pOZ0hIUTJRZFhGOGRYRm52QlVHeVpH?=
+ =?utf-8?B?b21UWEFLUjNLRzgrcFRKRXJ1R2c0b3ZhWHBXLzNBRno1cUs3MEtzcHJVaXFq?=
+ =?utf-8?B?SzF2bVBRdDdYS09GTmJlSmJDUHBJK1FEZnkrSTFXa3AybkNDa0g4R0djY1BS?=
+ =?utf-8?B?eUtXQ1JZSy9URUNCUTVQZktvaFBBSk90WnJyZ1czN0JraGM1WDRWL1hVeEZ0?=
+ =?utf-8?B?MXF3L2VWMDEwU1p6ZVFVeEhJdDBQUXRHNG5wNFFoOTZvbU5zOTZMOGpyalZP?=
+ =?utf-8?B?R05PQUtWcm1IQWNycEdCL05IMjZZcEljSlh4Qzl1emR1cjZjSkx5N3NwdkJ0?=
+ =?utf-8?B?K0lZb0NabmxvaVYwbEFIS1VZNEgrckJpaW5YcmRXTUE4NUpXY2ZJMGlwdGZ5?=
+ =?utf-8?B?ZDNOc2J6a3I0VU4xQksrL3JFMDNlMnhsNU5BUS9uYU5jYm02anQwS1pNOE4v?=
+ =?utf-8?B?VFBlMWxyaXlWbmN0S2x0STBwL0lacDIrUHQ3dGpBZVVaVjlkQTdxQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f68226e-d51b-4de1-bbb0-08da180197ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2022 19:13:54.4213
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fNav3IE2OmaCCU09MTQQDETp611ipaJXhXIhIEvm337dv3kgEbEs3I4jBO9mrUW1XxJlUHcEb34eg7aDhFC/GmdeuH8GlGBBzJ4U9gTzH+w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4654
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 47fd22f2b84765a2f7e3f150282497b902624547 cs89x0: rework driver configuration
-date:   8 months ago
-config: m68k-randconfig-r025-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070314.EnN7uIbj-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47fd22f2b84765a2f7e3f150282497b902624547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 47fd22f2b84765a2f7e3f150282497b902624547
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/ethernet/cirrus/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/kernel.h:19,
-                    from include/linux/list.h:9,
-                    from include/linux/module.h:12,
-                    from drivers/net/ethernet/cirrus/cs89x0.c:51:
-   drivers/net/ethernet/cirrus/cs89x0.c: In function 'net_open':
->> drivers/net/ethernet/cirrus/cs89x0.c:897:41: error: implicit declaration of function 'isa_virt_to_bus'; did you mean 'virt_to_bus'? [-Werror=implicit-function-declaration]
-     897 |                          (unsigned long)isa_virt_to_bus(lp->dma_buff));
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/printk.h:141:31: note: in definition of macro 'no_printk'
-     141 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                               ^~~~~~~~~~~
-   drivers/net/ethernet/cirrus/cs89x0.c:86:17: note: in expansion of macro 'pr_debug'
-      86 |                 pr_##level(fmt, ##__VA_ARGS__);                 \
-         |                 ^~~
-   drivers/net/ethernet/cirrus/cs89x0.c:894:17: note: in expansion of macro 'cs89_dbg'
-     894 |                 cs89_dbg(1, debug, "%s: dma %lx %lx\n",
-         |                 ^~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +897 drivers/net/ethernet/cirrus/cs89x0.c
-
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   825  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   826  static int
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   827  net_open(struct net_device *dev)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   828  {
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   829  	struct net_local *lp = netdev_priv(dev);
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   830  	int result = 0;
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   831  	int i;
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   832  	int ret;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   833  
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   834  	if (dev->irq < 2) {
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   835  		/* Allow interrupts to be generated by the chip */
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   836  /* Cirrus' release had this: */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   837  #if 0
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   838  		writereg(dev, PP_BusCTL, readreg(dev, PP_BusCTL) | ENABLE_IRQ);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   839  #endif
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   840  /* And 2.3.47 had this: */
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   841  		writereg(dev, PP_BusCTL, ENABLE_IRQ | MEMORY_ON);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   842  
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   843  		for (i = 2; i < CS8920_NO_INTS; i++) {
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   844  			if ((1 << i) & lp->irq_map) {
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   845  				if (request_irq(i, net_interrupt, 0, dev->name,
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   846  						dev) == 0) {
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   847  					dev->irq = i;
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   848  					write_irq(dev, lp->chip_type, i);
-6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   849  					/* writereg(dev, PP_BufCFG, GENERATE_SW_INTERRUPT); */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   850  					break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   851  				}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   852  			}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   853  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   854  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   855  		if (i >= CS8920_NO_INTS) {
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   856  			writereg(dev, PP_BusCTL, 0);	/* disable interrupts. */
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   857  			pr_err("can't get an interrupt\n");
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   858  			ret = -EAGAIN;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   859  			goto bad_out;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   860  		}
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   861  	} else {
-47fd22f2b84765 drivers/net/ethernet/cirrus/cs89x0.c Arnd Bergmann  2021-08-03   862  #if IS_ENABLED(CONFIG_CS89x0_ISA)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   863  		if (((1 << dev->irq) & lp->irq_map) == 0) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   864  			pr_err("%s: IRQ %d is not in our map of allowable IRQs, which is %x\n",
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   865  			       dev->name, dev->irq, lp->irq_map);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   866  			ret = -EAGAIN;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   867  			goto bad_out;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   868  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   869  #endif
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   870  /* FIXME: Cirrus' release had this: */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   871  		writereg(dev, PP_BusCTL, readreg(dev, PP_BusCTL)|ENABLE_IRQ);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   872  /* And 2.3.47 had this: */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   873  #if 0
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   874  		writereg(dev, PP_BusCTL, ENABLE_IRQ | MEMORY_ON);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   875  #endif
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   876  		write_irq(dev, lp->chip_type, dev->irq);
-a0607fd3a25ba1 drivers/net/cs89x0.c                 Joe Perches    2009-11-18   877  		ret = request_irq(dev->irq, net_interrupt, 0, dev->name, dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   878  		if (ret) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   879  			pr_err("request_irq(%d) failed\n", dev->irq);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   880  			goto bad_out;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   881  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   882  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   883  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   884  #if ALLOW_DMA
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   885  	if (lp->use_dma && (lp->isa_config & ANY_ISA_DMA)) {
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   886  		unsigned long flags;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   887  		lp->dma_buff = (unsigned char *)__get_dma_pages(GFP_KERNEL,
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   888  								get_order(lp->dmasize * 1024));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   889  		if (!lp->dma_buff) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   890  			pr_err("%s: cannot get %dK memory for DMA\n",
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   891  			       dev->name, lp->dmasize);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   892  			goto release_irq;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   893  		}
-808e9a77358995 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   894  		cs89_dbg(1, debug, "%s: dma %lx %lx\n",
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   895  			 dev->name,
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   896  			 (unsigned long)lp->dma_buff,
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  @897  			 (unsigned long)isa_virt_to_bus(lp->dma_buff));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   898  		if ((unsigned long)lp->dma_buff >= MAX_DMA_ADDRESS ||
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   899  		    !dma_page_eq(lp->dma_buff,
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   900  				 lp->dma_buff + lp->dmasize * 1024 - 1)) {
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   901  			pr_err("%s: not usable as DMA buffer\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   902  			goto release_irq;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   903  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   904  		memset(lp->dma_buff, 0, lp->dmasize * 1024);	/* Why? */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   905  		if (request_dma(dev->dma, dev->name)) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   906  			pr_err("%s: cannot get dma channel %d\n",
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   907  			       dev->name, dev->dma);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   908  			goto release_irq;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   909  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   910  		write_dma(dev, lp->chip_type, dev->dma);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   911  		lp->rx_dma_ptr = lp->dma_buff;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   912  		lp->end_dma_buff = lp->dma_buff + lp->dmasize * 1024;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   913  		spin_lock_irqsave(&lp->lock, flags);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   914  		disable_dma(dev->dma);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   915  		clear_dma_ff(dev->dma);
-ef0657c49e0f93 drivers/net/cs89x0.c                 Julia Lawall   2009-07-06   916  		set_dma_mode(dev->dma, DMA_RX_MODE); /* auto_init as well */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   917  		set_dma_addr(dev->dma, isa_virt_to_bus(lp->dma_buff));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   918  		set_dma_count(dev->dma, lp->dmasize * 1024);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   919  		enable_dma(dev->dma);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   920  		spin_unlock_irqrestore(&lp->lock, flags);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   921  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   922  #endif	/* ALLOW_DMA */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   923  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   924  	/* set the Ethernet address */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   925  	for (i = 0; i < ETH_ALEN / 2; i++)
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   926  		writereg(dev, PP_IA + i * 2,
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   927  			 (dev->dev_addr[i * 2] |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   928  			  (dev->dev_addr[i * 2 + 1] << 8)));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   929  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   930  	/* while we're testing the interface, leave interrupts disabled */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   931  	writereg(dev, PP_BusCTL, MEMORY_ON);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   932  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   933  	/* Set the LineCTL quintuplet based on adapter configuration read from EEPROM */
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   934  	if ((lp->adapter_cnf & A_CNF_EXTND_10B_2) &&
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   935  	    (lp->adapter_cnf & A_CNF_LOW_RX_SQUELCH))
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   936  		lp->linectl = LOW_RX_SQUELCH;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   937  	else
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   938  		lp->linectl = 0;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   939  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   940  	/* check to make sure that they have the "right" hardware available */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   941  	switch (lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   942  	case A_CNF_MEDIA_10B_T:
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   943  		result = lp->adapter_cnf & A_CNF_10B_T;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   944  		break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   945  	case A_CNF_MEDIA_AUI:
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   946  		result = lp->adapter_cnf & A_CNF_AUI;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   947  		break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   948  	case A_CNF_MEDIA_10B_2:
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   949  		result = lp->adapter_cnf & A_CNF_10B_2;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   950  		break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   951  	default:
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   952  		result = lp->adapter_cnf & (A_CNF_10B_T |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   953  					    A_CNF_AUI |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   954  					    A_CNF_10B_2);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   955  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   956  	if (!result) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   957  		pr_err("%s: EEPROM is configured for unavailable media\n",
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   958  		       dev->name);
-17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   959  release_dma:
-17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   960  #if ALLOW_DMA
-17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   961  		free_dma(dev->dma);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   962  release_irq:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   963  		release_dma_buff(lp);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   964  #endif
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   965  		writereg(dev, PP_LineCTL,
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   966  			 readreg(dev, PP_LineCTL) & ~(SERIAL_TX_ON | SERIAL_RX_ON));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   967  		free_irq(dev->irq, dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   968  		ret = -EAGAIN;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   969  		goto bad_out;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   970  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   971  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   972  	/* set the hardware to the configured choice */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   973  	switch (lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   974  	case A_CNF_MEDIA_10B_T:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   975  		result = detect_tp(dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   976  		if (result == DETECTED_NONE) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   977  			pr_warn("%s: 10Base-T (RJ-45) has no cable\n",
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   978  				dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   979  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   980  				result = DETECTED_RJ45H; /* Yes! I don't care if I see a link pulse */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   981  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   982  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   983  	case A_CNF_MEDIA_AUI:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   984  		result = detect_aui(dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   985  		if (result == DETECTED_NONE) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   986  			pr_warn("%s: 10Base-5 (AUI) has no cable\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   987  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   988  				result = DETECTED_AUI; /* Yes! I don't care if I see a carrrier */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   989  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   990  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   991  	case A_CNF_MEDIA_10B_2:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   992  		result = detect_bnc(dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   993  		if (result == DETECTED_NONE) {
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   994  			pr_warn("%s: 10Base-2 (BNC) has no cable\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   995  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   996  				result = DETECTED_BNC; /* Yes! I don't care if I can xmit a packet */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   997  		}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   998  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   999  	case A_CNF_MEDIA_AUTO:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1000  		writereg(dev, PP_LineCTL, lp->linectl | AUTO_AUI_10BASET);
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1001  		if (lp->adapter_cnf & A_CNF_10B_T) {
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1002  			result = detect_tp(dev);
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1003  			if (result != DETECTED_NONE)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1004  				break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1005  		}
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1006  		if (lp->adapter_cnf & A_CNF_AUI) {
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1007  			result = detect_aui(dev);
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1008  			if (result != DETECTED_NONE)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1009  				break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1010  		}
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1011  		if (lp->adapter_cnf & A_CNF_10B_2) {
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1012  			result = detect_bnc(dev);
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1013  			if (result != DETECTED_NONE)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1014  				break;
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1015  		}
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1016  		pr_err("%s: no media detected\n", dev->name);
-17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30  1017  		goto release_dma;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1018  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1019  	switch (result) {
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1020  	case DETECTED_NONE:
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1021  		pr_err("%s: no network cable attached to configured media\n",
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1022  		       dev->name);
-17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30  1023  		goto release_dma;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1024  	case DETECTED_RJ45H:
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1025  		pr_info("%s: using half-duplex 10Base-T (RJ-45)\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1026  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1027  	case DETECTED_RJ45F:
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1028  		pr_info("%s: using full-duplex 10Base-T (RJ-45)\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1029  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1030  	case DETECTED_AUI:
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1031  		pr_info("%s: using 10Base-5 (AUI)\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1032  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1033  	case DETECTED_BNC:
-dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1034  		pr_info("%s: using 10Base-2 (BNC)\n", dev->name);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1035  		break;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1036  	}
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1037  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1038  	/* Turn on both receive and transmit operations */
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1039  	writereg(dev, PP_LineCTL,
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1040  		 readreg(dev, PP_LineCTL) | SERIAL_RX_ON | SERIAL_TX_ON);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1041  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1042  	/* Receive only error free packets addressed to this card */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1043  	lp->rx_mode = 0;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1044  	writereg(dev, PP_RxCTL, DEF_RX_ACCEPT);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1045  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1046  	lp->curr_rx_cfg = RX_OK_ENBL | RX_CRC_ERROR_ENBL;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1047  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1048  	if (lp->isa_config & STREAM_TRANSFER)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1049  		lp->curr_rx_cfg |= RX_STREAM_ENBL;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1050  #if ALLOW_DMA
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1051  	set_dma_cfg(dev);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1052  #endif
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1053  	writereg(dev, PP_RxCFG, lp->curr_rx_cfg);
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1054  
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1055  	writereg(dev, PP_TxCFG, (TX_LOST_CRS_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1056  				 TX_SQE_ERROR_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1057  				 TX_OK_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1058  				 TX_LATE_COL_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1059  				 TX_JBR_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1060  				 TX_ANY_COL_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1061  				 TX_16_COL_ENBL));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1062  
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1063  	writereg(dev, PP_BufCFG, (READY_FOR_TX_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1064  				  RX_MISS_COUNT_OVRFLOW_ENBL |
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1065  #if ALLOW_DMA
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1066  				  dma_bufcfg(dev) |
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1067  #endif
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1068  				  TX_COL_COUNT_OVRFLOW_ENBL |
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1069  				  TX_UNDERRUN_ENBL));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1070  
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1071  	/* now that we've got our act together, enable everything */
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1072  	writereg(dev, PP_BusCTL, (ENABLE_IRQ
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1073  				  | (dev->mem_start ? MEMORY_ON : 0) /* turn memory on */
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1074  #if ALLOW_DMA
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1075  				  | dma_busctl(dev)
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1076  #endif
-ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1077  			 ));
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1078  	netif_start_queue(dev);
-808e9a77358995 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1079  	cs89_dbg(1, debug, "net_open() succeeded\n");
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1080  	return 0;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1081  bad_out:
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1082  	return ret;
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1083  }
-^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1084  
-
-:::::: The code at line 897 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+DQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBQYXdhbiBHdXB0YSA8cGF3YW4u
+a3VtYXIuZ3VwdGFAbGludXguaW50ZWwuY29tPiANClNlbnQ6IFR1ZXNkYXksIE1hcmNoIDI5LCAy
+MDIyIDEwOjI4IFBNDQpUbzogQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+DQpDYzogVGhv
+bWFzIEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9uaXguZGU+OyBJbmdvIE1vbG5hciA8bWluZ29AcmVk
+aGF0LmNvbT47IERhdmUgSGFuc2VuIDxkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb20+OyB4ODZA
+a2VybmVsLm9yZzsgSC4gUGV0ZXIgQW52aW4gPGhwYUB6eXRvci5jb20+OyBBbmRpIEtsZWVuIDxh
+a0BsaW51eC5pbnRlbC5jb20+OyBMdWNrLCBUb255IDx0b255Lmx1Y2tAaW50ZWwuY29tPjsgbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgYW50b25pby5nb21lei5pZ2xlc2lhc0BsaW51eC5p
+bnRlbC5jb207IEtyaXNobmFuLCBOZWVsaW1hIDxuZWVsaW1hLmtyaXNobmFuQGludGVsLmNvbT47
+IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc7IENvb3BlciwgQW5kcmV3IDxhbmRyZXcuY29vcGVyM0Bj
+aXRyaXguY29tPjsgUG9pbWJvZSwgSm9zaCA8anBvaW1ib2VAcmVkaGF0LmNvbT4NClN1YmplY3Q6
+IFJlOiBbUEFUQ0ggdjIgMi8yXSB4ODYvdHN4OiBEaXNhYmxlIFRTWCBkZXZlbG9wbWVudCBtb2Rl
+IGF0IGJvb3QNCg0KT24gVHVlLCBNYXIgMjksIDIwMjIgYXQgMDY6MjQ6MDNQTSArMDIwMCwgQm9y
+aXNsYXYgUGV0a292IHdyb3RlOg0KPk9uIFRodSwgTWFyIDEwLCAyMDIyIGF0IDAyOjAyOjA5UE0g
+LTA4MDAsIFBhd2FuIEd1cHRhIHdyb3RlOg0KPj4gQSBtaWNyb2NvZGUgdXBkYXRlIG9uIHNvbWUg
+SW50ZWwgcHJvY2Vzc29ycyBjYXVzZXMgYWxsIFRTWCANCj4+IHRyYW5zYWN0aW9ucyB0byBhbHdh
+eXMgYWJvcnQgYnkgZGVmYXVsdCBbKl0uIE1pY3JvY29kZSBhbHNvIGFkZGVkIA0KPj4gZnVuY3Rp
+b25hbGl0eSB0byByZS1lbmFibGUgVFNYIGZvciBkZXZlbG9wbWVudCBwdXJwb3NlLiBXaXRoIHRo
+aXMgDQo+PiBtaWNyb2NvZGUgbG9hZGVkLCBpZiB0c3g9b24gd2FzIHBhc3NlZCBvbiB0aGUgY21k
+bGluZSwgYW5kIFRTWCANCj4+IGRldmVsb3BtZW50IG1vZGUgd2FzIGFscmVhZHkgZW5hYmxlZCBi
+ZWZvcmUgdGhlIGtlcm5lbCBib290LCBpdCBtYXkgDQo+PiBtYWtlIHRoZSBzeXN0ZW0gdnVsbmVy
+YWJsZSB0byBUU1ggQXN5bmNocm9ub3VzIEFib3J0IChUQUEpLg0KPj4NCj4+IFRvIGJlIG9uIHNh
+ZmVyIHNpZGUsIHVuY29uZGl0aW9uYWxseSBkaXNhYmxlIFRTWCBkZXZlbG9wbWVudCBtb2RlIGF0
+IA0KPj4gYm9vdC4gSWYgbmVlZGVkLCBhIHVzZXIgY2FuIGVuYWJsZSBpdCB1c2luZyBtc3ItdG9v
+bHMuDQo+Pg0KPj4gWypdIEludGVsIFRyYW5zYWN0aW9uYWwgU3luY2hyb25pemF0aW9uIEV4dGVu
+c2lvbiAoSW50ZWwgVFNYKSBEaXNhYmxlIFVwZGF0ZSBmb3IgU2VsZWN0ZWQgUHJvY2Vzc29ycw0K
+Pj4gICAgIGh0dHBzOi8vY2RyZHYyLmludGVsLmNvbS92MS9kbC9nZXRDb250ZW50LzY0MzU1Nw0K
+Pj4NCj4+IFN1Z2dlc3RlZC1ieTogQW5kcmV3IENvb3BlciA8YW5kcmV3LmNvb3BlcjNAY2l0cml4
+LmNvbT4NCj4+IFN1Z2dlc3RlZC1ieTogQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+DQo+
+PiBTaWduZWQtb2ZmLWJ5OiBQYXdhbiBHdXB0YSA8cGF3YW4ua3VtYXIuZ3VwdGFAbGludXguaW50
+ZWwuY29tPg0KPj4gQ2M6IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPg0KPj4gLS0tDQo+PiAgYXJj
+aC94ODYvaW5jbHVkZS9hc20vbXNyLWluZGV4LmggICAgICAgfCAgNCArLS0NCj4+ICBhcmNoL3g4
+Ni9rZXJuZWwvY3B1L2NwdS5oICAgICAgICAgICAgICB8ICAxICsNCj4+ICBhcmNoL3g4Ni9rZXJu
+ZWwvY3B1L2ludGVsLmMgICAgICAgICAgICB8ICA0ICsrKw0KPj4gIGFyY2gveDg2L2tlcm5lbC9j
+cHUvdHN4LmMgICAgICAgICAgICAgIHwgMzQgKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4+
+ICB0b29scy9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9tc3ItaW5kZXguaCB8ICA0ICstLQ0KPj4gIDUg
+ZmlsZXMgY2hhbmdlZCwgNDMgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4NCj5Eb2Vz
+IHRoaXMgYSBsb3QgbW9yZSBlbmNhcHN1bGF0ZWQgdmVyc2lvbiB3b3JrIHRvbz8NCg0KPk5lZWxp
+bWEgaXMgdGVzdGluZyB0aGlzIHBhdGNoLCBzaGUgd2lsbCBzaGFyZSB0aGUgcmVzdWx0cyB0b21v
+cnJvdy4NCg0KRm9sbG93aW5nIHVwIG9uIHRoaXMgZW1haWwgdGhyZWFkLCBJIGRpZCBzb21lIGJh
+c2ljIGZ1bmN0aW9uYWwgdmFsaWRhdGlvbiBvZiB0aGUgcGF0Y2hbMV0uIA0KSW5pdGlhbGx5IEkg
+cmFuIGludG8gdGhlIGJ1ZyB3aGVyZSB0aGUgbWl0aWdhdGlvbiB3YXMgZ2V0dGluZyBkaXNhYmxl
+ZCBpbiBvbmUgQ1BVIGFmdGVyIGEgc3VzcGVuZC9yZXN1bWUgWzJdLiANCkJ1dCBhZnRlciBhcHBs
+eWluZyB0aGUgcGF0Y2ggWzFdIG9uIGxhdGVzdCB1cHN0cmVhbSwgd2l0aCB0aGUgZml4IGZvciBy
+ZXN0b3Jpbmcgc3BlY3VsYXRpb24gcmVsYXRlZCBNU1JzIGR1cmluZyBzMyByZXN1bWUgWzJdLCBt
+eSB0ZXN0cyBhcmUgcGFzc2luZy4gDQoNClF1aWNrIHN1bW1hcnkgb2YgdGVzdGNhc2VzIGV4ZWN1
+dGVkOg0KVGVzdGNhc2UgMTogIFZlcmlmeSBSVE1fQUxMT1cgd2FzIGdldHRpbmcgcmVzZXQgYWZ0
+ZXIga2V4ZWMgcmVib290DQpUZXN0Y2FzZTI6IFZlcmlmeSBUU1hfQ1RSTF9NU1IgaXMgcmVzdG9y
+ZWQgYWZ0ZXIgc3lzdGVtIGdvZXMgdG8gUzMgc3VzcGVuZCBzdGF0ZQ0KDQpbMV0gaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvbGttbC9Za015bzJKdzhpWXg5d0FVQHpuLnRuaWMvDQpbMl0gaHR0cHM6
+Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2NvbW1pdC9lMmExMjU2YjE3YjE2ZjliOWFkZjFi
+NmZlYTU2ODE5ZTdiNjhlNDYzDQoNClRoYW5rcw0KTmVlbGltYQ0K

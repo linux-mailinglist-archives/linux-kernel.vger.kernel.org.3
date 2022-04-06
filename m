@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1394F686D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38DC4F681B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239793AbiDFRzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S239686AbiDFRxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239691AbiDFRza (ORCPT
+        with ESMTP id S240102AbiDFRww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:55:30 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F103C8C36
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:20:23 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso2021821ili.18
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 09:20:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=LPDWwLlqsdkU08oFWKxHzU6RAOblUfdn4Uz94Jc/vec=;
-        b=wKFsvYPJ/SgxrWbfD2xfsE4D8NkZfytbmj0uT7ur6rMX02KI/5YtvSypQHfa3YjN61
-         pgV4l/uquGB3a1Y7/WLsZh07wJxrddrazrj52Jyda5L7SK7hrlREqOtTPZjP7bCRDP9i
-         Hu+8PRCKd6BSZzIYiOvGDWlFUhcSoEAruqw0hs6D78hF3l/GZpUqJgcAnnGGNJKs+b5q
-         tlibHGkQBCqgV7ONTLU4hpGhRiX1jIXUFEDAyQuAAFRaard19CSw9SbuqgP09BqrbZDS
-         urSN/T4EI7XeFLuk0xlgM86nj7BYR+/Mqbv/FzzdYdNJlE9MEcFNigI8my3sGeTjbQN+
-         oAoA==
-X-Gm-Message-State: AOAM530aKUUlbTcHobXfBBNYzgAU2TcDFGYNxE4DRyft6DYUE+8cpNdM
-        lwKFgZBU5zZL4CrKHG94vMw8PTNukjqhG8wevjvlKCeVCTxu
-X-Google-Smtp-Source: ABdhPJybY8vgvTKMRiNccae0QC/VP+OHClBhZJ4ZVV687OjbRUQ5PiLnMtqB43Gzv8vfuLCtaMYjfVILFwqwuOyL8UFqvPnXw7fa
+        Wed, 6 Apr 2022 13:52:52 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B19A1B3707
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 09:21:40 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id BAE3E3F6AE;
+        Wed,  6 Apr 2022 18:21:37 +0200 (CEST)
+Date:   Wed, 6 Apr 2022 18:21:36 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Joel Selvaraj <jo@jsfamily.in>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sdm845-xiaomi-beryllium: enable
+ qcom wled backlight and link to panel
+Message-ID: <20220406162136.g4lwvhnm3xnyupuu@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Joel Selvaraj <jo@jsfamily.in>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>
+References: <20220401001810.81507-1-jo@jsfamily.in>
+ <BY5PR02MB70092607CD7CDD8CF8BCD464D9E09@BY5PR02MB7009.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a84:b0:2ca:d62:ebf8 with SMTP id
- k4-20020a056e021a8400b002ca0d62ebf8mr4533187ilv.120.1649262022655; Wed, 06
- Apr 2022 09:20:22 -0700 (PDT)
-Date:   Wed, 06 Apr 2022 09:20:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000008dae05dbfebd85@google.com>
-Subject: [syzbot] upstream build error (17)
-From:   syzbot <syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        mingo@redhat.com, pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BY5PR02MB70092607CD7CDD8CF8BCD464D9E09@BY5PR02MB7009.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +66,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022-04-01 05:48:10, Joel Selvaraj wrote:
+> Xiaomi Poco F1 uses the QCOM WLED driver for backlight control.
+> Enable and link it to the panel to use it.
+> 
+> Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
 
-syzbot found the following issue on:
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-HEAD commit:    3e732ebf7316 Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ca0687700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eba855fbe3373b4f
-dashboard link: https://syzkaller.appspot.com/bug?extid=6b36bab98e240873fd5a
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> ---
+> Changes in v2:
+>  - Remove qcom,enabled-strings property as either it or qcom,num-strings
+>    should be present. qcom,num-strings is specified and sufficient.
+>    (Marijn Suijten's Suggestion)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com
+Thanks :)
 
-arch/x86/kvm/emulate.c:3332:5: error: stack frame size (2552) exceeds limit (2048) in function 'emulator_task_switch' [-Werror,-Wframe-larger-than]
-sound/usb/mixer_s1810c.c:543:5: error: stack frame size (2072) exceeds limit (2048) in function 'snd_sc1810_init_mixer' [-Werror,-Wframe-larger-than]
-drivers/block/loop.c:1524:12: error: stack frame size (2648) exceeds limit (2048) in function 'lo_ioctl' [-Werror,-Wframe-larger-than]
-crypto/ecc.c:1362:6: error: stack frame size (3640) exceeds limit (2048) in function 'ecc_point_mult_shamir' [-Werror,-Wframe-larger-than]
-crypto/ecc.c:1280:13: error: stack frame size (3832) exceeds limit (2048) in function 'ecc_point_mult' [-Werror,-Wframe-larger-than]
-fs/ocfs2/dlm/dlmdomain.c:2101:19: error: stack frame size (2104) exceeds limit (2048) in function 'dlm_register_domain' [-Werror,-Wframe-larger-than]
-net/qrtr/ns.c:661:13: error: stack frame size (3096) exceeds limit (2048) in function 'qrtr_ns_worker' [-Werror,-Wframe-larger-than]
+>  arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+> index 798fc72578a7..d88dc07205f7 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+> @@ -231,6 +231,7 @@ panel@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+>  
+> +		backlight = <&pmi8998_wled>;
+>  		reset-gpios = <&tlmm 6 GPIO_ACTIVE_LOW>;
+>  
+>  		port {
+> @@ -314,6 +315,17 @@ vol_up_pin_a: vol-up-active {
+>  	};
+>  };
+>  
+> +&pmi8998_wled {
+> +	status = "okay";
+> +	qcom,current-boost-limit = <970>;
+> +	qcom,ovp-millivolt = <29600>;
+> +	qcom,current-limit-microamp = <20000>;
+> +	qcom,num-strings = <2>;
+> +	qcom,switching-freq = <600>;
+> +	qcom,external-pfet;
+> +	qcom,cabc;
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Unlike the number of connected strings and configured ovp/current
+limits, aren't external-pfet (and probably switching-freq, perhaps CABC)
+hardware features that are common across all users of `pmi8998`?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+- Marijn
+
+> +};
+> +
+>  &pm8998_pon {
+>  	resin {
+>  		compatible = "qcom,pm8941-resin";
+> -- 
+> 2.35.1
+> 

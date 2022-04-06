@@ -2,154 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F244F5894
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 11:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D634F574E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 10:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382728AbiDFJDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S231935AbiDFIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 04:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444335AbiDFIzz (ORCPT
+        with ESMTP id S1579846AbiDFIB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 04:55:55 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B05CBD7EC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 18:19:12 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id b18so2003176qtk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 18:19:12 -0700 (PDT)
+        Wed, 6 Apr 2022 04:01:59 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2A1ED9C9;
+        Tue,  5 Apr 2022 18:20:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ltcvV+C7kil5CYjCysURQLuzPIKMQweHN21HRD3MalEfYvafa48qgPYvjt7ACzfHSkDe31Vx0/cczFb2vblADHryq6rt/zXmMCbnLJHuFlQ8Nui78dqIixWRbtqeNe0etrdFd2shFCIaMYz1M2q6omRu6iV9cfbC0y9gbHj4XBXiH5Q30bd4VZTLtVMvEAfYh03cbg9uKWE2INwvVpppsMvjkTBvPn4NZJ8O9Auc65VN5BSqiqEsKwj1a2mE/tgvPIh4Z9py0jy6hsWI2G1C9Yxtbf8Si+gl1UjfD1InNciVQ3HJ/FgY50oe2L8J9VgFTiip4f6pZ/auSZM0WyN3mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VXb9X5yBGCE/Yv1MuBWWaiCSAPduSoTpjKKur/aLeSI=;
+ b=gPZKvqdTH67ShqIF/CkqzGendt5v1HzepLECXXwnAQSOnWXJ31RtPGcEK6t0nBg3JKktTBiSqd0/cJBv14kq9DNETVmo55pHO/3nNLmjZh4X8eokMiQkXHkWiXzjGO1OIAExHYSSC2E3lk96Cvi5jpMYlm8KQKq7VA+eUg2sJsf+COQRo2UHmmcddVOblcl2m/RkEUOzFH96KhWE0ZNpvnvtXTPmN1QBFLejFhREC1eAcLqIVYals3aGWHkynhaJXOmYWDn6FKg6EJv+dYw6Onc3VvAXrzRkcbbXV3RpCzxcxzcaFY6dHhA0XCNIRiJD0YdT40ExWA1Cjkp0+r+7Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
+ dkim=pass header.d=quantatw.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=emQSRtRyiIFOLZBRRD9ok+SvUgg5HT0mxHFWqehp0vo=;
-        b=liEzV1DvukrzML5boo3DbzOsgqEOmW0TeGZTRGeDBUiO58NX4hoZ95SKtZ0x5lxoy/
-         D+UyQgPzqMzwbGKoyaljyyvCPgry06NMaGJrvORwjJXzRsgikKeJ59XIt4sCqr0WH0PZ
-         foni+TAvduk8iqwj62A/m+7RyRpjJBxUB0ZQuBILLV3XWPtEe0uOWPBOQpClr8ZbCf5y
-         zVh7ul4pC0MnQA170gM0tkNixTeWAKfJGqKxvJxx70YiTFBWKtvIabgOhUdKlW7P5lPu
-         veOX0IOPELZ3Oq1VYBpIdI3ZRGMHlbBCRZutv8u83QPzUSNJFnymCzyO7+6+Vq8+zHSE
-         TpRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=emQSRtRyiIFOLZBRRD9ok+SvUgg5HT0mxHFWqehp0vo=;
-        b=8PFNyWFedcvGSHVTdsxgLZqOLwtc6cc4d539Um443TxPeIrDQcv8MaAJl1na9+6qZ9
-         LsenNuMYoArXYUjfZSFCxR7dzZG+5cYG0OzRzp53gcCd4vv/0S/vnJ06rLo6Kltt0Ehu
-         o+/TyldIsvAFEl7USxO0QPrzn7ClAK84CjRwGOEa2n+a2snK31Ru/T11ywHhwkXInxV7
-         3Gdgp+s/wgghUqAVyuKp3/M6jVqvx5/Q78M9FwUfruv6NM3DzjTsnQD1TrGdrRABnf6h
-         sb1Yk/ncHqFy/Itx+jtzzZ/5/P92S+Te9v4SP3itDMPkz0aoN2FERQ2CXJL/fbtc628y
-         OAgg==
-X-Gm-Message-State: AOAM532BAlqwa1fZiG6Azv9rCAeRyzxl166jIZ5Ue2TZC6dz7yNOlloN
-        PinU0hBytGWRa5wgin39M5hVCadwCc8=
-X-Google-Smtp-Source: ABdhPJw3H1ruWxhuQ05X1p8z8JYG/k0+IbQoPX9aYytL4Pwxr7a6RJLhDMF3ORYFkO683VqFRlZ0KQ==
-X-Received: by 2002:a05:620a:2886:b0:699:bab7:ae78 with SMTP id j6-20020a05620a288600b00699bab7ae78mr4108850qkp.618.1649207951145;
-        Tue, 05 Apr 2022 18:19:11 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x18-20020a05622a001200b002eb856d7786sm12382288qtw.84.2022.04.05.18.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 18:19:10 -0700 (PDT)
-Message-ID: <624cea8e.1c69fb81.422be.e03b@mx.google.com>
-X-Google-Original-Message-ID: <20220406011907.GA2458824@cgel.zte@gmail.com>
-Date:   Wed, 6 Apr 2022 01:19:07 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>, kbuild-all@lists.01.org,
-        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
-        eparis@redhat.com, dai.shixin@zte.com.cn,
-        Yang Yang <yang.yang29@zte.com.cn>, linux-audit@redhat.com,
-        ink@jurassic.park.msu.ru, huang.junhua@zte.com.cn,
-        guo.xiaofeng@zte.com.cn, mattst88@gmail.com
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <CAHC9VhTaCNqfTOi8X5G3AheBFzTYCzGnt_-=fNFc5Z1o8gPm9Q@mail.gmail.com>
- <62465bf3.1c69fb81.d5424.365e@mx.google.com>
- <2777189.mvXUDI8C0e@x2>
- <CAHC9VhRYHhHPx42BKa0gp974uzwHoXZWqmwt9o=1rox7tHyy1w@mail.gmail.com>
- <624803f7.1c69fb81.972da.2dd0@mx.google.com>
- <YksVuhfv8weLCxX/@madcap2.tricolour.ca>
+ d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VXb9X5yBGCE/Yv1MuBWWaiCSAPduSoTpjKKur/aLeSI=;
+ b=0ovV/7CGM0iqTZYCadk41YcZ3qRazwVf1NubxR84oqX5Ow//fZVokL2fBUosF2+m+NKuzgWE+4psExRbjtWdIJDkaW+3Iy+rOosSbBzV/8NLEe4OM8vvRvIkrNE6RYWKKVKmPlMhg1/j4x7Asqv+RwYFHTR3kjH4s2I5h+uCndQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quantatw.com;
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
+ by TYZPR04MB4446.apcprd04.prod.outlook.com (2603:1096:400:4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 01:20:24 +0000
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::9c61:c8e7:d1ad:c65f]) by HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::9c61:c8e7:d1ad:c65f%6]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 01:20:24 +0000
+From:   Potin Lai <potin.lai@quantatw.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/3] net: mdio: aspeed: Introduce read write function for c22 and c45
+Date:   Wed,  6 Apr 2022 09:20:01 +0800
+Message-Id: <20220406012002.15128-3-potin.lai@quantatw.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220406012002.15128-1-potin.lai@quantatw.com>
+References: <20220406012002.15128-1-potin.lai@quantatw.com>
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0129.apcprd02.prod.outlook.com
+ (2603:1096:202:16::13) To HK0PR04MB3282.apcprd04.prod.outlook.com
+ (2603:1096:203:89::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YksVuhfv8weLCxX/@madcap2.tricolour.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: de17ab40-fbf0-45f6-3bb9-08da176ba058
+X-MS-TrafficTypeDiagnostic: TYZPR04MB4446:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR04MB4446412794F9BB3729BC27A78EE79@TYZPR04MB4446.apcprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VRmOV9V+9IflT4yWaIQRAE/tnJeWfA/t3YpAFbTgNj/YGer5SujYEpYPLyMLofnC7W+iukcWO6cpM1Judu/1DE4nXd2SEjXaImOOwh4F13qhlO992+uVBIRFS+rrHbS0zs6RB8bGtGvTPa9SZhNCm23fbQC28AFi4EdB/AH0ZaqKoZrX6Guzq+nUKEoV7aOJm5SHzV74+cdYNIadRuV9Th7mVaFOnr98i7utYMTZO9XD0QcEr+y8Zn/Q7Tk/PMZP/89ToX2OfsP8ETFVPYgcDVi915vFNuGFY3Jgw5o8WTfodfofzMFyk6Vi2qZquki4MpcwVngyQEGne/YfkFnpG1BwoCgKKMlgvzl8WJlC1ZuLIjNYuPcqNmFP0SfYbzEYp+bfIRnXFXQG/Wx8VSeVMHJ4Ij3bTBwSkXAVIWUWdkRa5emdciLauA3KYtbvJ1Qfee9DoOQFKieplrPN6Pjyqjo9acILSF77kUhgPL+eiPqbBSy7T/PzAPJu3jBrFKsviSfYB2/uaHWXyEuTZeRA4OlmWzNEikpQ2NWMvxga6skQhMPGq83xnffsBQeXNKRBgm9aT3fEM0EOfNxXDQPcvhiiGaFWiiSK/2SJ19oObUojATD8NFjWV7Nv3LERie91tLVC/bM2SVVHdMNhEIthBWIf+uE5ulE6t2Hi/1l+Yb/JOaDk67Ob3FS53bG6z1FrWLxMNv2DDVBqSDSsDCjyUg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(66946007)(5660300002)(52116002)(38350700002)(38100700002)(6506007)(6666004)(8676002)(6512007)(66476007)(66556008)(2616005)(4326008)(110136005)(86362001)(8936002)(186003)(6486002)(26005)(7416002)(36756003)(44832011)(316002)(1076003)(2906002)(54906003)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W8xK0ze5vRSxxIuIZcccbufg7lpFySRS/QY3xGx4lgj69zFi8aE4bLCP0Ivy?=
+ =?us-ascii?Q?mfHUr0/44AI479+7ItMswTwKA7Rt1aPuwPzDn3qFFr8Ytau4YXjQy/nSKgiD?=
+ =?us-ascii?Q?OMTmXGVaiUStfyeO0g68LCNj00ZqXkY3XJCdaE/TMI5scQJPhdwakl7bsSt3?=
+ =?us-ascii?Q?KDBNVtBXT9LkYW7as6H6/zOlAb9ZvxqV4YxgnLxn3NdMjjNU9hosJLfwZL/1?=
+ =?us-ascii?Q?Y8FIXZbccwjU1ygjLfBTTbZbmY4lw9p+rBvvJb/6nR04Zy7tMmPWbcWum8VT?=
+ =?us-ascii?Q?TedxmzCiH8PRnq4RKh339+Vg75O3e8P3P1Cn+s7wELYCNx62knBQKYw8n/Q+?=
+ =?us-ascii?Q?pK4E1F+S4eAqpS55EHQT2weL2z/wn4bXxhnIfqt6Kw1z8gIMPCyh/Th9o5L6?=
+ =?us-ascii?Q?I0OLKFM7HXopxMnkPSfa0lTA6PsbK72rsujWmUewazoPwml3dMNbR0QFmOEq?=
+ =?us-ascii?Q?2ApeGvSzkY0CY/LuTbxUJWANYj6tTJP2V6gHgSGhKm6nrhNL8fxnJjMHNwYv?=
+ =?us-ascii?Q?87SorH811Hu1sujNnqifybkpFfgsF785WlFLcE1HoMgKqoJaN6LKcTftvddj?=
+ =?us-ascii?Q?OPGPSCyXvb/8OwE7IeKvTnN6lkiQXQgyQGIO2O+J3hvVUFHedJXad6LnUzPH?=
+ =?us-ascii?Q?s1b4JW6NSsm0JhFW1ppKbtDtkccS0W8o/TY+gfGviHLb2GaSD6bya0Xmjng2?=
+ =?us-ascii?Q?ftFu1MZDWVXgkUQmDkp/1V31F+TJjJXyfcf53M9JmF9c8T2QEz3fWwLNhJ+H?=
+ =?us-ascii?Q?llgS7W1R773JOpKan0g/JURl1cKrqky0Dazo6zTtDQWk8BUsaCe4NVDYwhYv?=
+ =?us-ascii?Q?z+NyNaXQ4LiNG6Nq+Y3Bg+X8naAa78UvkxGRu4lAOXYXvmLu+4GSGOayxCtV?=
+ =?us-ascii?Q?pJxCEKBlglVr6mipq++cIQGXmcxc2NpiLfgjUkE0fLkObtGhlvLENBBJ4ONw?=
+ =?us-ascii?Q?rDp7f0GdFqqp/7kvTyigVS5WBTr96inWl4l8M8VF0zeiZhXQyAy6lR/CJ1la?=
+ =?us-ascii?Q?8wBQhxtEJItPq+AclLWLxHFsOyAzKEXeXVwweoCDGFw/Qy2utPmewgz9N42w?=
+ =?us-ascii?Q?Z3LO1Qz6mbbB85mF7ZGVp+cWMQbQT7Zq1gmsZ79vrRsizSke1hYM/6aT/VPb?=
+ =?us-ascii?Q?lza2hfZECcmihJ9zruWjuvLyNcKS+yVZf68920WoYso504vV9NZ6/lFDkjBw?=
+ =?us-ascii?Q?5CnRjHQqtfZ72g0E5YAmcJJBP5JlkyulbWKb977Lawh7gUpPNGwni1cROZQw?=
+ =?us-ascii?Q?hyXBeQ3yDYC7QiYrZvWG5vzKABL09BXDDfMQWD1mvdqE8o1p3zKsc+/QHWus?=
+ =?us-ascii?Q?5iwhSVGeJcQ2HeN+N9CpgsXu779fmF9wcX1jDMSNS1ieOgAkSyKqDyuClAyx?=
+ =?us-ascii?Q?W7eb1jzAiuHp73PcinGxYEpdt+baHKt12G+6dg4c/GO/Tx6LPCHebwdtacQC?=
+ =?us-ascii?Q?p7r+MVUN0hz03eIiKwXg551cVARxTB377GEB64KWlYlYkRiVqXIJEBj0eTCz?=
+ =?us-ascii?Q?UGQI/SSL79YxRaNcZMuY0e2zKiWYlUSy3/aY74VylnQmczqbabQRaVaFhhC/?=
+ =?us-ascii?Q?iZ777KIM7oLq3+NGi5EVZtZvhMa+KX1WM6Xja4b8pYJGu+suB9yAwTWu0iz5?=
+ =?us-ascii?Q?E6jlp2lRkVNzXfMxZYwq0EwX/894myWlu69f1OMlnWpIqRCFoYwFcZ3SzI6+?=
+ =?us-ascii?Q?QGMS8tUo2fO1yoT++gK2Pt6m93STz/Rqz9LOyOC3xp109u+b4WUzaht8vq9l?=
+ =?us-ascii?Q?GCoWG9xhaHuZInt4+IgaiTZLfPdDwPI=3D?=
+X-OriginatorOrg: quantatw.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de17ab40-fbf0-45f6-3bb9-08da176ba058
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 01:20:24.6360
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x9GYlawlNqdzFjLvB3oOkYTee1LAYs7nbk8Zu+h3u9lW5c5UesEtakpAwzS5e03t0KLeVX4HV63f6Le/seQFpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB4446
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:58:50AM -0400, Richard Guy Briggs wrote:
-> On 2022-04-02 08:06, CGEL wrote:
-> > On Fri, Apr 01, 2022 at 10:16:45AM -0400, Paul Moore wrote:
-> > > On Fri, Apr 1, 2022 at 9:39 AM Steve Grubb <sgrubb@redhat.com> wrote:
-> > > > On Thursday, March 31, 2022 9:57:05 PM EDT CGEL wrote:
-> > > > > On Thu, Mar 31, 2022 at 10:16:23AM -0400, Paul Moore wrote:
-> > > > > > On Wed, Mar 30, 2022 at 10:29 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > > > > > On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
-> > > > > > > > If audit is not generating SYSCALL records, even for invalid/ENOSYS
-> > > > > > > > syscalls, I would consider that a bug which should be fixed.
-> > > > > > >
-> > > > > > > If we fix this bug, do you think audit invalid/ENOSYS syscalls better
-> > > > > > > be forcible or be a rule that can be configure? I think configure is
-> > > > > > > better.
-> > > > > >
-> > > > > > It isn't clear to me exactly what you are asking, but I would expect
-> > > > > > the existing audit syscall filtering mechanism to work regardless if
-> > > > > > the syscall is valid or not.
-> > > > >
-> > > > > Thanks, I try to make it more clear. We found that auditctl would only
-> > > > > set rule with syscall number (>=0 && <2047) ...
-> > > 
-> > > That is exactly why I wrote the warning below in my response ...
-> > >
-> > I think the question is more clear now.
-> > 
-> > 1) libaudit.c wants to forbid setting invalid syscall, but inconsistent
-> > Currently way(>=0 && <2047) is inconsistent, syscall with number 2000 and
-> > syscall with number 3000 are both invalid syscall. But 2000 can be set by
-> > auditctl, and 3000 cannot be set by auditctl.
-> > A better way to do this forbidden is to use __NR_syscalls(asm-generic/unistd.h).
-> > 
-> > 2) if libaudit.c do the right forbidden, kernel better ignore invalid syscall
-> > See this patch.
-> > 
-> > If we want audit invalid syscall as you said before. libaudit.c should not
-> > do the forbidden, auditctl should allow setting syscall rule with 'any' number.
-> > So do you think we should fix libaudit.c?
-> 
-> I'm having a bit of trouble understanding what you've said above.
-> 
-> The kernel ultimately must protect itself from malice and mistakes, so
-> it must verify all data sent to it.
-> 
-> Userspace can help by knowing what that kernel policy is so it can avoid
-> violating that policy or provide useful feedback if it can't.  Userspace
-> can be used to make things more efficient, but the kernel is the last
-> step for security.
-> 
-> If userspace and the kernel are mismatched or out of sync, then the
-> kernel enforces policy to protect itself.
->
-Much appreciate for your interpretation. Have you get any idea of how
-to solve the mismatched? From your viewpoint, I think it's better for
-kernel to not handle syscall of syscall number<0, because it's invaild
-of all arch, and has no value for attacker to probing for specific
-syscall numbers.
-> > > > > > Beware that there are some limitations
-> > > > > > to the audit syscall filter, which are unfortunately baked into the
-> > > > > > current design/implementation, which may affect this to some extent.
-> > > 
-> > > -- 
-> > > paul-moore.com
-> 
-> - RGB
-> 
-> --
-> Richard Guy Briggs <rgb@redhat.com>
-> Sr. S/W Engineer, Kernel Security, Base Operating Systems
-> Remote, Ottawa, Red Hat Canada
-> IRC: rgb, SunRaycer
-> Voice: +1.647.777.2635, Internal: (81) 32635
+Add following additional functions to move out the implementation from
+aspeed_mdio_read() and aspeed_mdio_write().
+
+c22:
+ - aspeed_mdio_read_c22()
+ - aspeed_mdio_write_c22()
+
+c45:
+ - aspeed_mdio_read_c45()
+ - aspeed_mdio_write_c45()
+
+Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+---
+ drivers/net/mdio/mdio-aspeed.c | 46 +++++++++++++++++++++++++---------
+ 1 file changed, 34 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
+index f22be2f069e9..5becddb56117 100644
+--- a/drivers/net/mdio/mdio-aspeed.c
++++ b/drivers/net/mdio/mdio-aspeed.c
+@@ -79,17 +79,10 @@ static int aspeed_mdio_get_data(struct mii_bus *bus)
+ 	return FIELD_GET(ASPEED_MDIO_DATA_MIIRDATA, data);
+ }
+ 
+-static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
++static int aspeed_mdio_read_c22(struct mii_bus *bus, int addr, int regnum)
+ {
+ 	int rc;
+ 
+-	dev_dbg(&bus->dev, "%s: addr: %d, regnum: %d\n", __func__, addr,
+-		regnum);
+-
+-	/* Just clause 22 for the moment */
+-	if (regnum & MII_ADDR_C45)
+-		return -EOPNOTSUPP;
+-
+ 	rc = aspeed_mdio_op(bus, ASPEED_MDIO_CTRL_ST_C22, MDIO_C22_OP_READ,
+ 			    addr, regnum, 0);
+ 	if (rc < 0)
+@@ -98,17 +91,46 @@ static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
+ 	return aspeed_mdio_get_data(bus);
+ }
+ 
++static int aspeed_mdio_write_c22(struct mii_bus *bus, int addr, int regnum,
++				 u16 val)
++{
++	return aspeed_mdio_op(bus, ASPEED_MDIO_CTRL_ST_C22, MDIO_C22_OP_WRITE,
++			      addr, regnum, val);
++}
++
++static int aspeed_mdio_read_c45(struct mii_bus *bus, int addr, int regnum)
++{
++	/* TODO: add c45 support */
++	return -EOPNOTSUPP;
++}
++
++static int aspeed_mdio_write_c45(struct mii_bus *bus, int addr, int regnum,
++				 u16 val)
++{
++	/* TODO: add c45 support */
++	return -EOPNOTSUPP;
++}
++
++static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
++{
++	dev_dbg(&bus->dev, "%s: addr: %d, regnum: %d\n", __func__, addr,
++		regnum);
++
++	if (regnum & MII_ADDR_C45)
++		return aspeed_mdio_read_c45(bus, addr, regnum);
++
++	return aspeed_mdio_read_c22(bus, addr, regnum);
++}
++
+ static int aspeed_mdio_write(struct mii_bus *bus, int addr, int regnum, u16 val)
+ {
+ 	dev_dbg(&bus->dev, "%s: addr: %d, regnum: %d, val: 0x%x\n",
+ 		__func__, addr, regnum, val);
+ 
+-	/* Just clause 22 for the moment */
+ 	if (regnum & MII_ADDR_C45)
+-		return -EOPNOTSUPP;
++		return aspeed_mdio_write_c45(bus, addr, regnum, val);
+ 
+-	return aspeed_mdio_op(bus, ASPEED_MDIO_CTRL_ST_C22, MDIO_C22_OP_WRITE,
+-			      addr, regnum, val);
++	return aspeed_mdio_write_c22(bus, addr, regnum, val);
+ }
+ 
+ static int aspeed_mdio_probe(struct platform_device *pdev)
+-- 
+2.17.1
+

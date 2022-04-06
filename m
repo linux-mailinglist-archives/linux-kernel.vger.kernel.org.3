@@ -2,278 +2,667 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293A34F5CB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED1B4F5CC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiDFLxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S230477AbiDFLxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiDFLw2 (ORCPT
+        with ESMTP id S231158AbiDFLwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:52:28 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5DE1578DF;
-        Wed,  6 Apr 2022 00:02:18 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2361wpMD012380;
-        Wed, 6 Apr 2022 09:01:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=PdnnQJRXavXSh3CmzKzX/kx5oqJ1f3QD+6IefacJ2r0=;
- b=w/H69w7mAuCvvoP9FW0DmISJg6T2wcSTdeCf2aKfpS+Eu6cNrdxe5ctmWuHoEX2dlqMF
- Rb7d7JcvxFLUy1ZFas6e2NdNizvpStG9lLIvmhJAm2ahv8i61mlr52hnGNWSAz/lSD5z
- PbiUkApo3yn2ZUmp6No2Yq1sDZi0Y7LEMpB3/hygQfwqYbplNKKKrniwiSAwnu9qdev+
- zQies66XuPIHQIpUG/MidMlvbZkjpLVQzZ9g2PmnKJkxnda1nInqaeY/5O3M7lHkWu6X
- JOoqqyrwuNR1maXyA/lpLOwWc1SVP3p60Hi9kWt9aNRl6EKMrojMks3p4CDTBg238NvP lw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du0uh1x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 09:01:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5CE6110002A;
-        Wed,  6 Apr 2022 09:01:15 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4ED00222227;
-        Wed,  6 Apr 2022 09:01:15 +0200 (CEST)
-Received: from [10.201.21.201] (10.75.127.48) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 6 Apr
- 2022 09:01:14 +0200
-Message-ID: <3695dc2a-7518-dee4-a647-821c7cda4a0f@foss.st.com>
-Date:   Wed, 6 Apr 2022 09:01:13 +0200
+        Wed, 6 Apr 2022 07:52:30 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D447D98599
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 00:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649228541; x=1680764541;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VWq3dxvx/JDvBTbejAVhSOsAQj5R8fdRjubelTEgmkk=;
+  b=jNsa70F2E9CY8KL+sPnTEZpD9H+SFWE0YHsE1JuhVytZh+PRhfJQhC7H
+   o4v48MC3Qkfv0h0WCO5+BXWkcHJzxRAmCe8uGnM4oz2B6r5HNwxxVe839
+   cUr+tsZZ9rsAH223rAYor3M+guC90iJttRTXaZ/Agg77inDgvdcuLZ1IL
+   BIAjP2wDiViwt/2c1iSlBIVQQTP0YcD275haSNljX2XF4UiiHaj/9HLJc
+   L6Iq5w4asircVNUzmpozd+RlSfFfhwSF7isk20Z+8DTfgh38p32e9ycoQ
+   Wlx1AjvUr3U823dGlt00oKMJ3UjXCuBbcqWBNORLJc0Wu0XWEPoa/2o9B
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240902614"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="240902614"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 00:02:21 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="570385316"
+Received: from yangy10-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.212.195])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 00:02:18 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Rik van Riel <riel@surriel.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: [PATCH] sched,topology: Update sched topology atomically
+Date:   Wed,  6 Apr 2022 15:01:59 +0800
+Message-Id: <20220406070159.68111-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Regression with v5.18-rc1 tag on STM32F7 and STM32H7 based boards
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>, Arnd Bergmann <arnd@arndb.de>
-CC:     Hugh Dickins <hughd@googl.com>, <mpatocka@redhat.com>,
-        <lczerner@redhat.com>, <djwong@kernel.org>, <hch@lst.de>,
-        <zkabelac@redhat.com>, <miklos@szeredi.hu>, <bp@suse.de>,
-        <akpm@linux-foundation.org>,
-        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
-        Valentin CARON - foss <valentin.caron@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        <linux-m68k@lists.linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Russell King <linux@armlinux.org.uk>
-References: <481a13f8-d339-f726-0418-ab4258228e91@foss.st.com>
- <95a0d1dd-bcce-76c7-97b9-8374c9913321@google.com>
- <7f2993a9-adc5-2b90-9218-c4ca8239c3e@google.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <7f2993a9-adc5-2b90-9218-c4ca8239c3e@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_02,2022-04-05_01,2022-02-23_01
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hugh, 
+When Peter Zijlstra reviewed commit 0fb3978b0aac ("sched/numa: Fix
+NUMA topology for systems with CPU-less nodes") [1], he pointed out
+that sched_domains_numa_distance and sched_domains_numa_masks are made
+separate RCU variables.  That could go side-ways if there were a
+function using both, although there isn't for now.
 
-On 4/6/22 08:22, Hugh Dickins wrote:
-> Asking Arnd and others below: should noMMU arches have a good ZERO_PAGE?
-> 
-> On Tue, 5 Apr 2022, Hugh Dickins wrote:
->> On Tue, 5 Apr 2022, Patrice CHOTARD wrote:
->>>
->>> We found an issue with last kernel tag v5.18-rc1 on stm32f746-disco and 
->>> stm32h743-disco boards (ARMV7-M SoCs).
->>>
->>> Kernel hangs when executing SetPageUptodate(ZERO_PAGE(0)); in mm/filemap.c.
->>>
->>> By reverting commit 56a8c8eb1eaf ("tmpfs: do not allocate pages on read"), 
->>> kernel boots without any issue.
->>
->> Sorry about that, thanks a lot for finding.
->>
->> I see that arch/arm/configs/stm32_defconfig says CONFIG_MMU is not set:
->> please confirm that is the case here.
->>
->> Yes, it looks as if NOMMU platforms are liable to have a bogus (that's my
->> reading, but it may be unfair) definition for ZERO_PAGE(vaddr), and I was
->> walking on ice to touch it without regard for !CONFIG_MMU.
->>
->> CONFIG_SHMEM depends on CONFIG_MMU, so that PageUptodate is only needed
->> when CONFIG_MMU.
->>
->> Easily fixed by an #ifdef CONFIG_MMU there in mm/filemap.c, but I'll hunt
->> around (again) for a better place to do it - though I won't want to touch
->> all the architectures for it.  I'll post later today.
-> 
-> I could put #ifdef CONFIG_MMU around the SetPageUptodate(ZERO_PAGE(0))
-> added to pagecache_init(); or if that's considered distasteful, I could
-> skip making it potentially useful to other filesystems, revert the change
-> to pagecache_init(), and just do it in mm/shmem.c's CONFIG_SHMEM (hence
-> CONFIG_MMU) instance of shmem_init().
-> 
-> But I wonder if it's safe for noMMU architectures to go on without a
-> working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
-> drivers, fs, crypto and more, and it's not at all obvious (to me) that
-> they all depend on CONFIG_MMU.  Some might cause (unreported) crashes,
-> some might use an unzeroed page in place of a pageful of zeroes.
-> 
-> arm noMMU and h8300 noMMU and m68k noMMU each has
-> #define ZERO_PAGE(vaddr)	(virt_to_page(0))
-> which seems riskily wrong to me.
-> 
-> h8300 and m68k actually go to the trouble of allocating an empty_zero_page
-> for this, but then forget to link it up to the ZERO_PAGE(vaddr) definition,
-> which is what all the common code uses.
-> 
-> arm noMMU does not presently allocate such a page; and I do not feel
-> entitled to steal a page from arm noMMU platforms, for a hypothetical
-> case, without agreement.
-> 
-> But here's an unbuilt and untested patch for consideration - which of
-> course should be split in three if agreed (and perhaps the h8300 part
-> quietly forgotten if h8300 is already on its way out).
-> 
-> (Yes, arm uses empty_zero_page in a different way from all the other
-> architectures; but that's okay, and I think arm's way, with virt_to_page()
-> already baked in, is better than the others; but I've no wish to get into
-> changing them.)
-> 
-> Patrice, does this patch build and run for you? I have no appreciation
-> of arm early startup issues, and may have got it horribly wrong.
+So we update sched_domains_numa_distance and sched_domains_numa_masks
+and some other related sched topology parameters atomically to address
+the potential issues.
 
-This patch is okay on my side on both boards (STM32F7 and STM32H7), boot are OK.
+[1] https://lkml.kernel.org/r/20220214121553.582248-1-ying.huang@intel.com
 
-Thanks for your reactivity ;-)
-Patrice
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+---
+ kernel/sched/fair.c     |  47 ++++++---
+ kernel/sched/sched.h    |  14 ++-
+ kernel/sched/topology.c | 223 +++++++++++++++++++---------------------
+ 3 files changed, 151 insertions(+), 133 deletions(-)
 
-> 
-> Thanks,
-> Hugh
-> 
->  arch/arm/include/asm/pgtable-nommu.h |    3 ++-
->  arch/arm/mm/nommu.c                  |   16 ++++++++++++++++
->  arch/h8300/include/asm/pgtable.h     |    6 +++++-
->  arch/h8300/mm/init.c                 |    5 +++--
->  arch/m68k/include/asm/pgtable_no.h   |    5 ++++-
->  5 files changed, 30 insertions(+), 5 deletions(-)
-> 
-> --- a/arch/arm/include/asm/pgtable-nommu.h
-> +++ b/arch/arm/include/asm/pgtable-nommu.h
-> @@ -48,7 +48,8 @@ typedef pte_t *pte_addr_t;
->   * ZERO_PAGE is a global shared page that is always zero: used
->   * for zero-mapped memory areas etc..
->   */
-> -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-> +extern struct page *empty_zero_page;
-> +#define ZERO_PAGE(vaddr)	(empty_zero_page)
->  
->  /*
->   * Mark the prot value as uncacheable and unbufferable.
-> --- a/arch/arm/mm/nommu.c
-> +++ b/arch/arm/mm/nommu.c
-> @@ -24,6 +24,13 @@
->  
->  #include "mm.h"
->  
-> +/*
-> + * empty_zero_page is a special page that is used for
-> + * zero-initialized data and COW.
-> + */
-> +struct page *empty_zero_page;
-> +EXPORT_SYMBOL(empty_zero_page);
-> +
->  unsigned long vectors_base;
->  
->  #ifdef CONFIG_ARM_MPU
-> @@ -148,9 +155,18 @@ void __init adjust_lowmem_bounds(void)
->   */
->  void __init paging_init(const struct machine_desc *mdesc)
->  {
-> +	void *zero_page;
-> +
->  	early_trap_init((void *)vectors_base);
->  	mpu_setup();
->  	bootmem_init();
-> +
-> +	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> +	if (!zero_page)
-> +		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-> +		      __func__, PAGE_SIZE, PAGE_SIZE);
-> +	empty_zero_page = virt_to_page(zero_page);
-> +	flush_dcache_page(empty_zero_page);
->  }
->  
->  /*
-> --- a/arch/h8300/include/asm/pgtable.h
-> +++ b/arch/h8300/include/asm/pgtable.h
-> @@ -19,11 +19,15 @@ extern void paging_init(void);
->  
->  static inline int pte_file(pte_t pte) { return 0; }
->  #define swapper_pg_dir ((pgd_t *) 0)
-> +
-> +/* zero page used for uninitialized stuff */
-> +extern void *empty_zero_page;
-> +
->  /*
->   * ZERO_PAGE is a global shared page that is always zero: used
->   * for zero-mapped memory areas etc..
->   */
-> -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-> +#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
->  
->  /*
->   * These would be in other places but having them here reduces the diffs.
-> --- a/arch/h8300/mm/init.c
-> +++ b/arch/h8300/mm/init.c
-> @@ -41,7 +41,8 @@
->   * ZERO_PAGE is a special page that is used for zero-initialized
->   * data and COW.
->   */
-> -unsigned long empty_zero_page;
-> +void *empty_zero_page;
-> +EXPORT_SYMBOL(empty_zero_page);
->  
->  /*
->   * paging_init() continues the virtual memory environment setup which
-> @@ -65,7 +66,7 @@ void __init paging_init(void)
->  	 * Initialize the bad page table and bad page to point
->  	 * to a couple of allocated pages.
->  	 */
-> -	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> +	empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
->  	if (!empty_zero_page)
->  		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
->  		      __func__, PAGE_SIZE, PAGE_SIZE);
-> --- a/arch/m68k/include/asm/pgtable_no.h
-> +++ b/arch/m68k/include/asm/pgtable_no.h
-> @@ -38,11 +38,14 @@ extern void paging_init(void);
->  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
->  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
->  
-> +/* zero page used for uninitialized stuff */
-> +extern void *empty_zero_page;
-> +
->  /*
->   * ZERO_PAGE is a global shared page that is always zero: used
->   * for zero-mapped memory areas etc..
->   */
-> -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-> +#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
->  
->  /*
->   * All 32bit addresses are effectively valid for vmalloc...
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index d4bd299d67ab..546e7347fafc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1294,17 +1294,22 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
+ 					int lim_dist, bool task)
+ {
+ 	unsigned long score = 0;
+-	int node, max_dist;
++	int node, max_dist, type;
++	struct sched_numa_topology *topology;
++
++	rcu_read_lock();
++	topology = rcu_dereference(sched_numa_topology);
++	type = topology->type;
++	max_dist = topology->max_distance;
++	rcu_read_unlock();
+ 
+ 	/*
+ 	 * All nodes are directly connected, and the same distance
+ 	 * from each other. No need for fancy placement algorithms.
+ 	 */
+-	if (sched_numa_topology_type == NUMA_DIRECT)
++	if (type == NUMA_DIRECT)
+ 		return 0;
+ 
+-	/* sched_max_numa_distance may be changed in parallel. */
+-	max_dist = READ_ONCE(sched_max_numa_distance);
+ 	/*
+ 	 * This code is called for each node, introducing N^2 complexity,
+ 	 * which should be ok given the number of nodes rarely exceeds 8.
+@@ -1327,7 +1332,7 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
+ 		 * "hoplimit", only nodes closer by than "hoplimit" are part
+ 		 * of each group. Skip other nodes.
+ 		 */
+-		if (sched_numa_topology_type == NUMA_BACKPLANE && dist >= lim_dist)
++		if (type == NUMA_BACKPLANE && dist >= lim_dist)
+ 			continue;
+ 
+ 		/* Add up the faults from nearby nodes. */
+@@ -1344,7 +1349,7 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
+ 		 * The further away a node is, the less the faults count.
+ 		 * This seems to result in good task placement.
+ 		 */
+-		if (sched_numa_topology_type == NUMA_GLUELESS_MESH) {
++		if (type == NUMA_GLUELESS_MESH) {
+ 			faults *= (max_dist - dist);
+ 			faults /= (max_dist - LOCAL_DISTANCE);
+ 		}
+@@ -1971,7 +1976,13 @@ static int task_numa_migrate(struct task_struct *p)
+ 	long taskimp, groupimp;
+ 	struct numa_group *ng;
+ 	struct rq *best_rq;
+-	int nid, ret, dist;
++	int nid, ret, dist, type;
++	struct sched_numa_topology *topology;
++
++	rcu_read_lock();
++	topology = rcu_dereference(sched_numa_topology);
++	type = topology->type;
++	rcu_read_unlock();
+ 
+ 	/*
+ 	 * Pick the lowest SD_NUMA domain, as that would have the smallest
+@@ -2026,8 +2037,7 @@ static int task_numa_migrate(struct task_struct *p)
+ 				continue;
+ 
+ 			dist = node_distance(env.src_nid, env.dst_nid);
+-			if (sched_numa_topology_type == NUMA_BACKPLANE &&
+-						dist != env.dist) {
++			if (type == NUMA_BACKPLANE && dist != env.dist) {
+ 				taskweight = task_weight(p, env.src_nid, dist);
+ 				groupweight = group_weight(p, env.src_nid, dist);
+ 			}
+@@ -2262,10 +2272,17 @@ static u64 numa_get_avg_runtime(struct task_struct *p, u64 *period)
+ static int preferred_group_nid(struct task_struct *p, int nid)
+ {
+ 	nodemask_t nodes;
+-	int dist;
++	int dist, max_dist, type;
++	struct sched_numa_topology *topology;
++
++	rcu_read_lock();
++	topology = rcu_dereference(sched_numa_topology);
++	type = topology->type;
++	max_dist = topology->max_distance;
++	rcu_read_unlock();
+ 
+ 	/* Direct connections between all NUMA nodes. */
+-	if (sched_numa_topology_type == NUMA_DIRECT)
++	if (type == NUMA_DIRECT)
+ 		return nid;
+ 
+ 	/*
+@@ -2273,14 +2290,12 @@ static int preferred_group_nid(struct task_struct *p, int nid)
+ 	 * scores nodes according to the number of NUMA hinting faults on
+ 	 * both the node itself, and on nearby nodes.
+ 	 */
+-	if (sched_numa_topology_type == NUMA_GLUELESS_MESH) {
++	if (type == NUMA_GLUELESS_MESH) {
+ 		unsigned long score, max_score = 0;
+ 		int node, max_node = nid;
+ 
+-		dist = sched_max_numa_distance;
+-
+ 		for_each_node_state(node, N_CPU) {
+-			score = group_weight(p, node, dist);
++			score = group_weight(p, node, max_dist);
+ 			if (score > max_score) {
+ 				max_score = score;
+ 				max_node = node;
+@@ -2299,7 +2314,7 @@ static int preferred_group_nid(struct task_struct *p, int nid)
+ 	 * keep the complexity of the search down.
+ 	 */
+ 	nodes = node_states[N_CPU];
+-	for (dist = sched_max_numa_distance; dist > LOCAL_DISTANCE; dist--) {
++	for (dist = max_dist; dist > LOCAL_DISTANCE; dist--) {
+ 		unsigned long max_faults = 0;
+ 		nodemask_t max_group = NODE_MASK_NONE;
+ 		int a, b;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 58263f90c559..21a7aea01286 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1644,8 +1644,18 @@ enum numa_topology_type {
+ 	NUMA_GLUELESS_MESH,
+ 	NUMA_BACKPLANE,
+ };
+-extern enum numa_topology_type sched_numa_topology_type;
+-extern int sched_max_numa_distance;
++
++struct sched_numa_topology {
++	enum numa_topology_type	type;
++	int			nr_levels;
++	int			max_distance;
++	int			*distances;
++	struct cpumask		***masks;
++	struct rcu_head		rcu;
++};
++
++extern struct sched_numa_topology *sched_numa_topology;
++
+ extern bool find_numa_distance(int distance);
+ extern void sched_init_numa(int offline_node);
+ extern void sched_update_numa(int cpu, bool online);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 810750e62118..19523b23034f 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1483,14 +1483,10 @@ static void claim_allocations(int cpu, struct sched_domain *sd)
+ }
+ 
+ #ifdef CONFIG_NUMA
+-enum numa_topology_type sched_numa_topology_type;
++struct sched_numa_topology	default_numa_topology;
++struct sched_numa_topology	*sched_numa_topology = &default_numa_topology;
+ 
+-static int			sched_domains_numa_levels;
+ static int			sched_domains_curr_level;
+-
+-int				sched_max_numa_distance;
+-static int			*sched_domains_numa_distance;
+-static struct cpumask		***sched_domains_numa_masks;
+ #endif
+ 
+ /*
+@@ -1601,7 +1597,7 @@ sd_init(struct sched_domain_topology_level *tl,
+ 
+ 		sd->flags &= ~SD_PREFER_SIBLING;
+ 		sd->flags |= SD_SERIALIZE;
+-		if (sched_domains_numa_distance[tl->numa_level] > node_reclaim_distance) {
++		if (sched_numa_topology->distances[tl->numa_level] > node_reclaim_distance) {
+ 			sd->flags &= ~(SD_BALANCE_EXEC |
+ 				       SD_BALANCE_FORK |
+ 				       SD_WAKE_AFFINE);
+@@ -1648,7 +1644,8 @@ static struct sched_domain_topology_level default_topology[] = {
+ 
+ static struct sched_domain_topology_level *sched_domain_topology =
+ 	default_topology;
+-static struct sched_domain_topology_level *sched_domain_topology_saved;
++static struct sched_domain_topology_level *sched_domain_topology_default =
++	default_topology;
+ 
+ #define for_each_sd_topology(tl)			\
+ 	for (tl = sched_domain_topology; tl->mask; tl++)
+@@ -1659,14 +1656,14 @@ void set_sched_topology(struct sched_domain_topology_level *tl)
+ 		return;
+ 
+ 	sched_domain_topology = tl;
+-	sched_domain_topology_saved = NULL;
++	sched_domain_topology_default = tl;
+ }
+ 
+ #ifdef CONFIG_NUMA
+ 
+ static const struct cpumask *sd_numa_mask(int cpu)
+ {
+-	return sched_domains_numa_masks[sched_domains_curr_level][cpu_to_node(cpu)];
++	return sched_numa_topology->masks[sched_domains_curr_level][cpu_to_node(cpu)];
+ }
+ 
+ static void sched_numa_warn(const char *str)
+@@ -1697,22 +1694,20 @@ static void sched_numa_warn(const char *str)
+ bool find_numa_distance(int distance)
+ {
+ 	bool found = false;
+-	int i, *distances;
++	int i;
++	struct sched_numa_topology *topology;
+ 
+ 	if (distance == node_distance(0, 0))
+ 		return true;
+ 
+ 	rcu_read_lock();
+-	distances = rcu_dereference(sched_domains_numa_distance);
+-	if (!distances)
+-		goto unlock;
+-	for (i = 0; i < sched_domains_numa_levels; i++) {
+-		if (distances[i] == distance) {
++	topology = rcu_dereference(sched_numa_topology);
++	for (i = 0; i < topology->nr_levels; i++) {
++		if (topology->distances[i] == distance) {
+ 			found = true;
+ 			break;
+ 		}
+ 	}
+-unlock:
+ 	rcu_read_unlock();
+ 
+ 	return found;
+@@ -1743,14 +1738,15 @@ bool find_numa_distance(int distance)
+  *   there is an intermediary node C, which is < N hops away from both
+  *   nodes A and B, the system is a glueless mesh.
+  */
+-static void init_numa_topology_type(int offline_node)
++static void init_numa_topology_type(int offline_node,
++				    struct sched_numa_topology *topology)
+ {
+ 	int a, b, c, n;
+ 
+-	n = sched_max_numa_distance;
++	n = topology->max_distance;
+ 
+-	if (sched_domains_numa_levels <= 2) {
+-		sched_numa_topology_type = NUMA_DIRECT;
++	if (topology->nr_levels <= 2) {
++		topology->type = NUMA_DIRECT;
+ 		return;
+ 	}
+ 
+@@ -1764,32 +1760,77 @@ static void init_numa_topology_type(int offline_node)
+ 			for_each_cpu_node_but(c, offline_node) {
+ 				if (node_distance(a, c) < n &&
+ 				    node_distance(b, c) < n) {
+-					sched_numa_topology_type =
+-							NUMA_GLUELESS_MESH;
++					topology->type = NUMA_GLUELESS_MESH;
+ 					return;
+ 				}
+ 			}
+ 
+-			sched_numa_topology_type = NUMA_BACKPLANE;
++			topology->type = NUMA_BACKPLANE;
+ 			return;
+ 		}
+ 	}
+ 
+ 	pr_err("Failed to find a NUMA topology type, defaulting to DIRECT\n");
+-	sched_numa_topology_type = NUMA_DIRECT;
++	topology->type = NUMA_DIRECT;
++}
++
++static void sched_numa_topology_free(struct sched_numa_topology *topology)
++{
++	int i, j;
++
++	if (!topology)
++		return;
++
++	kfree(topology->distances);
++	for (i = 0; i < topology->nr_levels && topology->masks; i++) {
++		if (!topology->masks[i])
++			continue;
++		for_each_node(j)
++			kfree(topology->masks[i][j]);
++		kfree(topology->masks[i]);
++	}
++	kfree(topology->masks);
++	kfree(topology);
+ }
+ 
++static void sched_numa_topology_free_rcu(struct rcu_head *head)
++{
++	struct sched_numa_topology *topology;
++
++	topology = container_of(head, struct sched_numa_topology, rcu);
++	sched_numa_topology_free(topology);
++}
++
++static void sched_numa_topology_switch(struct sched_numa_topology *topology,
++				       struct sched_domain_topology_level *tl)
++{
++	struct sched_numa_topology *old_topology = sched_numa_topology;
++	struct sched_domain_topology_level *old_tl = sched_domain_topology;
++
++	rcu_assign_pointer(sched_numa_topology, topology);
++	sched_domain_topology = tl;
++
++	if (old_topology == &default_numa_topology)
++		return;
++
++	init_rcu_head(&old_topology->rcu);
++	call_rcu(&old_topology->rcu, sched_numa_topology_free_rcu);
++	kfree(old_tl);
++}
+ 
+ #define NR_DISTANCE_VALUES (1 << DISTANCE_BITS)
+ 
+ void sched_init_numa(int offline_node)
+ {
+ 	struct sched_domain_topology_level *tl;
+-	unsigned long *distance_map;
++	unsigned long *distance_map = NULL;
+ 	int nr_levels = 0;
+ 	int i, j;
+-	int *distances;
+-	struct cpumask ***masks;
++	struct sched_numa_topology *topology;
++
++	topology = kzalloc(sizeof(*topology), GFP_KERNEL);
++	if (!topology)
++		goto err;
+ 
+ 	/*
+ 	 * O(nr_nodes^2) deduplicating selection sort -- in order to find the
+@@ -1797,7 +1838,7 @@ void sched_init_numa(int offline_node)
+ 	 */
+ 	distance_map = bitmap_alloc(NR_DISTANCE_VALUES, GFP_KERNEL);
+ 	if (!distance_map)
+-		return;
++		goto err;
+ 
+ 	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
+ 	for_each_cpu_node_but(i, offline_node) {
+@@ -1806,8 +1847,7 @@ void sched_init_numa(int offline_node)
+ 
+ 			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
+ 				sched_numa_warn("Invalid distance value range");
+-				bitmap_free(distance_map);
+-				return;
++                                goto err;
+ 			}
+ 
+ 			bitmap_set(distance_map, distance, 1);
+@@ -1818,20 +1858,19 @@ void sched_init_numa(int offline_node)
+ 	 * allocate memory accordingly.
+ 	 */
+ 	nr_levels = bitmap_weight(distance_map, NR_DISTANCE_VALUES);
++	topology->nr_levels = nr_levels;
+ 
+-	distances = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
+-	if (!distances) {
+-		bitmap_free(distance_map);
+-		return;
+-	}
++	topology->distances = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
++	if (!topology->distances)
++		goto err;
+ 
+ 	for (i = 0, j = 0; i < nr_levels; i++, j++) {
+ 		j = find_next_bit(distance_map, NR_DISTANCE_VALUES, j);
+-		distances[i] = j;
++		topology->distances[i] = j;
+ 	}
+-	rcu_assign_pointer(sched_domains_numa_distance, distances);
+ 
+ 	bitmap_free(distance_map);
++	distance_map = NULL;
+ 
+ 	/*
+ 	 * 'nr_levels' contains the number of unique distances
+@@ -1840,51 +1879,39 @@ void sched_init_numa(int offline_node)
+ 	 * numbers.
+ 	 */
+ 
+-	/*
+-	 * Here, we should temporarily reset sched_domains_numa_levels to 0.
+-	 * If it fails to allocate memory for array sched_domains_numa_masks[][],
+-	 * the array will contain less then 'nr_levels' members. This could be
+-	 * dangerous when we use it to iterate array sched_domains_numa_masks[][]
+-	 * in other functions.
+-	 *
+-	 * We reset it to 'nr_levels' at the end of this function.
+-	 */
+-	sched_domains_numa_levels = 0;
+-
+-	masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
+-	if (!masks)
+-		return;
++	topology->masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
++	if (!topology->masks)
++		goto err;
+ 
+ 	/*
+ 	 * Now for each level, construct a mask per node which contains all
+ 	 * CPUs of nodes that are that many hops away from us.
+ 	 */
+ 	for (i = 0; i < nr_levels; i++) {
+-		masks[i] = kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
+-		if (!masks[i])
+-			return;
++		topology->masks[i] = kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
++		if (!topology->masks[i])
++			goto err;
+ 
+ 		for_each_cpu_node_but(j, offline_node) {
+ 			struct cpumask *mask = kzalloc(cpumask_size(), GFP_KERNEL);
+ 			int k;
+ 
+ 			if (!mask)
+-				return;
++				goto err;
+ 
+-			masks[i][j] = mask;
++			topology->masks[i][j] = mask;
+ 
+ 			for_each_cpu_node_but(k, offline_node) {
+ 				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
+ 					sched_numa_warn("Node-distance not symmetric");
+ 
+-				if (node_distance(j, k) > sched_domains_numa_distance[i])
++				if (node_distance(j, k) > topology->distances[i])
+ 					continue;
+ 
+ 				cpumask_or(mask, mask, cpumask_of_node(k));
+ 			}
+ 		}
+ 	}
+-	rcu_assign_pointer(sched_domains_numa_masks, masks);
+ 
+ 	/* Compute default topology size */
+ 	for (i = 0; sched_domain_topology[i].mask; i++);
+@@ -1892,7 +1919,7 @@ void sched_init_numa(int offline_node)
+ 	tl = kzalloc((i + nr_levels + 1) *
+ 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
+ 	if (!tl)
+-		return;
++		goto err;
+ 
+ 	/*
+ 	 * Copy the default topology bits..
+@@ -1922,48 +1949,17 @@ void sched_init_numa(int offline_node)
+ 		};
+ 	}
+ 
+-	sched_domain_topology_saved = sched_domain_topology;
+-	sched_domain_topology = tl;
++	topology->max_distance = topology->distances[nr_levels - 1];
++	init_numa_topology_type(offline_node, topology);
+ 
+-	sched_domains_numa_levels = nr_levels;
+-	WRITE_ONCE(sched_max_numa_distance, sched_domains_numa_distance[nr_levels - 1]);
++	sched_numa_topology_switch(topology, tl);
+ 
+-	init_numa_topology_type(offline_node);
+-}
+-
+-
+-static void sched_reset_numa(void)
+-{
+-	int nr_levels, *distances;
+-	struct cpumask ***masks;
+-
+-	nr_levels = sched_domains_numa_levels;
+-	sched_domains_numa_levels = 0;
+-	sched_max_numa_distance = 0;
+-	sched_numa_topology_type = NUMA_DIRECT;
+-	distances = sched_domains_numa_distance;
+-	rcu_assign_pointer(sched_domains_numa_distance, NULL);
+-	masks = sched_domains_numa_masks;
+-	rcu_assign_pointer(sched_domains_numa_masks, NULL);
+-	if (distances || masks) {
+-		int i, j;
+-
+-		synchronize_rcu();
+-		kfree(distances);
+-		for (i = 0; i < nr_levels && masks; i++) {
+-			if (!masks[i])
+-				continue;
+-			for_each_node(j)
+-				kfree(masks[i][j]);
+-			kfree(masks[i]);
+-		}
+-		kfree(masks);
+-	}
+-	if (sched_domain_topology_saved) {
+-		kfree(sched_domain_topology);
+-		sched_domain_topology = sched_domain_topology_saved;
+-		sched_domain_topology_saved = NULL;
+-	}
++	return;
++err:
++	bitmap_free(distance_map);
++	sched_numa_topology_free(topology);
++	sched_numa_topology_switch(&default_numa_topology,
++				   sched_domain_topology_default);
+ }
+ 
+ /*
+@@ -1981,7 +1977,6 @@ void sched_update_numa(int cpu, bool online)
+ 	if (cpumask_weight(cpumask_of_node(node)) != 1)
+ 		return;
+ 
+-	sched_reset_numa();
+ 	sched_init_numa(online ? NUMA_NO_NODE : node);
+ }
+ 
+@@ -1990,14 +1985,15 @@ void sched_domains_numa_masks_set(unsigned int cpu)
+ 	int node = cpu_to_node(cpu);
+ 	int i, j;
+ 
+-	for (i = 0; i < sched_domains_numa_levels; i++) {
++	for (i = 0; i < sched_numa_topology->nr_levels; i++) {
+ 		for (j = 0; j < nr_node_ids; j++) {
+ 			if (!node_state(j, N_CPU))
+ 				continue;
+ 
+ 			/* Set ourselves in the remote node's masks */
+-			if (node_distance(j, node) <= sched_domains_numa_distance[i])
+-				cpumask_set_cpu(cpu, sched_domains_numa_masks[i][j]);
++			if (node_distance(j, node) <=
++			    sched_numa_topology->distances[i])
++				cpumask_set_cpu(cpu, sched_numa_topology->masks[i][j]);
+ 		}
+ 	}
+ }
+@@ -2006,10 +2002,10 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
+ {
+ 	int i, j;
+ 
+-	for (i = 0; i < sched_domains_numa_levels; i++) {
++	for (i = 0; i < sched_numa_topology->nr_levels; i++) {
+ 		for (j = 0; j < nr_node_ids; j++) {
+-			if (sched_domains_numa_masks[i][j])
+-				cpumask_clear_cpu(cpu, sched_domains_numa_masks[i][j]);
++			if (sched_numa_topology->masks[i][j])
++				cpumask_clear_cpu(cpu, sched_numa_topology->masks[i][j]);
+ 		}
+ 	}
+ }
+@@ -2025,22 +2021,19 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
+ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
+ {
+ 	int i, j = cpu_to_node(cpu), found = nr_cpu_ids;
+-	struct cpumask ***masks;
++	struct sched_numa_topology *topology;
+ 
+ 	rcu_read_lock();
+-	masks = rcu_dereference(sched_domains_numa_masks);
+-	if (!masks)
+-		goto unlock;
+-	for (i = 0; i < sched_domains_numa_levels; i++) {
+-		if (!masks[i][j])
++	topology = rcu_dereference(sched_numa_topology);
++	for (i = 0; i < topology->nr_levels; i++) {
++		if (!topology->masks[i][j])
+ 			break;
+-		cpu = cpumask_any_and(cpus, masks[i][j]);
++		cpu = cpumask_any_and(cpus, topology->masks[i][j]);
+ 		if (cpu < nr_cpu_ids) {
+ 			found = cpu;
+ 			break;
+ 		}
+ 	}
+-unlock:
+ 	rcu_read_unlock();
+ 
+ 	return found;
+-- 
+2.30.2
+

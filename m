@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFC34F60F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407994F6123
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiDFOGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S234101AbiDFOGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiDFOGQ (ORCPT
+        with ESMTP id S234414AbiDFOGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:06:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81C0475846;
-        Wed,  6 Apr 2022 02:41:25 -0700 (PDT)
+        Wed, 6 Apr 2022 10:06:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4A95E1617;
+        Wed,  6 Apr 2022 02:41:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F1161629;
-        Wed,  6 Apr 2022 09:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718B7C385A8;
-        Wed,  6 Apr 2022 09:40:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BAB3B81FB7;
+        Wed,  6 Apr 2022 09:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5C3C385A5;
+        Wed,  6 Apr 2022 09:40:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649238049;
-        bh=x+m2MWCq6qFwh90X4cyqG6Rzi2rBlGxar0o6fHyYx9k=;
+        s=k20201202; t=1649238058;
+        bh=RpvkJ8U0VEvDlnAfPxDQLxtSZdt5YWgvrhTLE0lWbvU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jNSeNrDj23At6EHMPg1C8m5Oz1arUCkHbccAcgjer2F7/6FHRapW4xfDAHAZYW/Df
-         aEIh8Te2D4fRXNsmMgLuApoKtzl/pfOI7BW13H47pqcJxPPjpLAfU1bnnQGDTYXHjU
-         EurkrPKnep+qF8WfOUjA9EzY0zUPoaUJBts96en6WJFhJqR5RllepO8IBL0CWkAfPl
-         Az3BR9ktB5iE2RjlEx9TGXNpb0CvZc6YWHN/Y0TEpdNbj+Y32U0SGv5gc4Wlxncuc+
-         dO0kpvU5ngEHubgD0vmY56ClCoR4EjF1rfHHEvBIVpROYwMo5BTGntacPbwgMtmCT2
-         6BgIxgM1ukXRA==
+        b=JWoiR9184jsH+018F/xTLXks9hYr+DwGOb/3kbRSY3qXBG5V717+8zDckA3v0GUKY
+         oPGiAwSj8RQRaiaFqzXlMuA3gSWSQ+dSQW/XxkGFTWVCF/Yt5vTl9BxhhiPhHc8fjo
+         vRV91lO/omFbgt2J8Ww5r7tmgRDBKlOtug7JdVNE9ZGkXKbxdvoTMaBoLvrEdvPpDB
+         u05jh0tayZEHaJrfiNf7m5qHkQ8cCNfJ4JXpnCrmLHGun/VlnaUesn4stzhtULhBoY
+         xs1lVMMmUH3MLmxQrm/9OAhn/baFvtzO+frytZqoL/c4tHYyiqo4cGbjUxQfTOtGgm
+         H6wFAzL/IdODw==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Rob Clark <robdclark@gmail.com>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org
-Subject: [PATCH v7 02/14] drm/msm/dsi: Pass DSC params to drm_panel
-Date:   Wed,  6 Apr 2022 15:10:19 +0530
-Message-Id: <20220406094031.1027376-3-vkoul@kernel.org>
+Subject: [PATCH v7 04/14] drm/msm/disp/dpu1: Add support for DSC in pingpong block
+Date:   Wed,  6 Apr 2022 15:10:21 +0530
+Message-Id: <20220406094031.1027376-5-vkoul@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220406094031.1027376-1-vkoul@kernel.org>
 References: <20220406094031.1027376-1-vkoul@kernel.org>
@@ -61,167 +61,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When DSC is enabled, we need to get the DSC parameters from the panel
-driver, so add a dsc parameter in panel to fetch and pass DSC
-configuration for DSI panels to DPU encoder, which will enable and
-then configure DSC hardware blocks accordingly.
+In SDM845, DSC can be enabled by writing to pingpong block registers, so
+add support for DSC in hw_pp
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 ++
- drivers/gpu/drm/msm/dsi/dsi.c               |  5 +++++
- drivers/gpu/drm/msm/dsi/dsi.h               |  1 +
- drivers/gpu/drm/msm/dsi/dsi_host.c          | 22 +++++++++++++++++++++
- drivers/gpu/drm/msm/msm_drv.h               |  6 ++++++
- include/drm/drm_panel.h                     |  7 +++++++
- 7 files changed, 45 insertions(+)
+ .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 32 +++++++++++++++++++
+ .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-index 42db6ce12caf..ef873e5285a0 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-@@ -27,6 +27,7 @@
-  *                      based on num_of_h_tiles
-  * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
-  *				 used instead of panel TE in cmd mode panels
-+ * @dsc:		DSC configuration data for DSC-enabled displays
-  */
- struct msm_display_info {
- 	int intf_type;
-@@ -34,6 +35,7 @@ struct msm_display_info {
- 	uint32_t num_of_h_tiles;
- 	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
- 	bool is_te_using_watchdog_timer;
-+	struct msm_display_dsc_config *dsc;
- };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+index 55766c97c4c8..47c6ab6caf95 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+@@ -28,6 +28,9 @@
+ #define PP_FBC_MODE                     0x034
+ #define PP_FBC_BUDGET_CTL               0x038
+ #define PP_FBC_LOSSY_MODE               0x03C
++#define PP_DSC_MODE                     0x0a0
++#define PP_DCE_DATA_IN_SWAP             0x0ac
++#define PP_DCE_DATA_OUT_SWAP            0x0c8
  
- /**
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index e29796c4f27b..e64154407425 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -582,6 +582,8 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
- 			MSM_DISPLAY_CAP_CMD_MODE :
- 			MSM_DISPLAY_CAP_VID_MODE;
- 
-+		info.dsc = msm_dsi_get_dsc_config(priv->dsi[i]);
-+
- 		if (msm_dsi_is_bonded_dsi(priv->dsi[i]) && priv->dsi[other]) {
- 			rc = msm_dsi_modeset_init(priv->dsi[other], dev, encoder);
- 			if (rc) {
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-index c12e66aa42a3..06a76834be52 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi.c
-@@ -21,6 +21,11 @@ bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi)
- 	return !(host_flags & MIPI_DSI_MODE_VIDEO);
+ #define PP_DITHER_EN			0x000
+ #define PP_DITHER_BITDEPTH		0x004
+@@ -245,6 +248,32 @@ static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
+ 	return line;
  }
  
-+struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
++static int dpu_hw_pp_dsc_enable(struct dpu_hw_pingpong *pp)
 +{
-+	return msm_dsi_host_get_dsc_config(msm_dsi->host);
++	struct dpu_hw_blk_reg_map *c = &pp->hw;
++
++	DPU_REG_WRITE(c, PP_DSC_MODE, 1);
++	return 0;
 +}
 +
- static int dsi_get_phy(struct msm_dsi *msm_dsi)
- {
- 	struct platform_device *pdev = msm_dsi->pdev;
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
-index c8dedc95428c..16cd9b2fce86 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.h
-+++ b/drivers/gpu/drm/msm/dsi/dsi.h
-@@ -152,6 +152,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
- int dsi_calc_clk_rate_6g(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
- void msm_dsi_host_snapshot(struct msm_disp_state *disp_state, struct mipi_dsi_host *host);
- void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host);
-+struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host);
- 
- /* dsi phy */
- struct msm_dsi_phy;
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 4a8a9b31ce1d..cb2e179127ea 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -2061,9 +2061,24 @@ int msm_dsi_host_modeset_init(struct mipi_dsi_host *host,
- {
- 	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
- 	const struct msm_dsi_cfg_handler *cfg_hnd = msm_host->cfg_hnd;
-+	struct drm_panel *panel;
- 	int ret;
- 
- 	msm_host->dev = dev;
-+	panel = msm_dsi_host_get_panel(&msm_host->base);
-+
-+	if (panel && panel->dsc) {
-+		struct msm_display_dsc_config *dsc = msm_host->dsc;
-+
-+		if (!dsc) {
-+			dsc = devm_kzalloc(&msm_host->pdev->dev, sizeof(*dsc), GFP_KERNEL);
-+			if (!dsc)
-+				return -ENOMEM;
-+			dsc->drm = panel->dsc;
-+			msm_host->dsc = dsc;
-+		}
-+	}
-+
- 	ret = cfg_hnd->ops->tx_buf_alloc(msm_host, SZ_4K);
- 	if (ret) {
- 		pr_err("%s: alloc tx gem obj failed, %d\n", __func__, ret);
-@@ -2628,3 +2643,10 @@ void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host)
- 		dsi_write(msm_host, REG_DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER,
- 				DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER_SW_TRIGGER);
- }
-+
-+struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host)
++static void dpu_hw_pp_dsc_disable(struct dpu_hw_pingpong *pp)
 +{
-+	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
++	struct dpu_hw_blk_reg_map *c = &pp->hw;
 +
-+	return msm_host->dsc;
++	DPU_REG_WRITE(c, PP_DSC_MODE, 0);
 +}
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index 57aee75f5022..2a3280df7b12 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -336,6 +336,7 @@ void msm_dsi_snapshot(struct msm_disp_state *disp_state, struct msm_dsi *msm_dsi
- bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi);
- bool msm_dsi_is_bonded_dsi(struct msm_dsi *msm_dsi);
- bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi);
-+struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi);
- #else
- static inline void __init msm_dsi_register(void)
- {
-@@ -364,6 +365,11 @@ static inline bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi)
- {
- 	return false;
- }
 +
-+static inline struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
++static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
 +{
-+	return NULL;
++	struct dpu_hw_blk_reg_map *pp_c = &pp->hw;
++	int data;
++
++	data = DPU_REG_READ(pp_c, PP_DCE_DATA_OUT_SWAP);
++	data |= BIT(18); /* endian flip */
++	DPU_REG_WRITE(pp_c, PP_DCE_DATA_OUT_SWAP, data);
++	return 0;
 +}
- #endif
++
+ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+ 				unsigned long features)
+ {
+@@ -256,6 +285,9 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+ 	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
+ 	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
+ 	c->ops.get_line_count = dpu_hw_pp_get_line_count;
++	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
++	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
++	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
  
- #ifdef CONFIG_DRM_MSM_DP
-diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
-index 4602f833eb51..eb8ae9bf32ed 100644
---- a/include/drm/drm_panel.h
-+++ b/include/drm/drm_panel.h
-@@ -171,6 +171,13 @@ struct drm_panel {
- 	 * Panel entry in registry.
+ 	if (test_bit(DPU_PINGPONG_DITHER, &features))
+ 		c->ops.setup_dither = dpu_hw_pp_setup_dither;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+index 89d08a715c16..12758468d9ca 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+@@ -124,6 +124,20 @@ struct dpu_hw_pingpong_ops {
  	 */
- 	struct list_head list;
+ 	void (*setup_dither)(struct dpu_hw_pingpong *pp,
+ 			struct dpu_hw_dither_cfg *cfg);
++	/**
++	 * Enable DSC
++	 */
++	int (*enable_dsc)(struct dpu_hw_pingpong *pp);
 +
 +	/**
-+	 * @dsc:
-+	 *
-+	 * Panel DSC pps payload to be sent
++	 * Disable DSC
 +	 */
-+	struct drm_dsc_config *dsc;
++	void (*disable_dsc)(struct dpu_hw_pingpong *pp);
++
++	/**
++	 * Setup DSC
++	 */
++	int (*setup_dsc)(struct dpu_hw_pingpong *pp);
  };
  
- void drm_panel_init(struct drm_panel *panel, struct device *dev,
+ struct dpu_hw_merge_3d;
 -- 
 2.34.1
 

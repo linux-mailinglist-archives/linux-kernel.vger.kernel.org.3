@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ACD4F6B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1427E4F6B6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbiDFUaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S234528AbiDFUax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiDFU3t (ORCPT
+        with ESMTP id S234578AbiDFUae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:29:49 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A47D35917D;
-        Wed,  6 Apr 2022 11:51:39 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id q129so3369668oif.4;
-        Wed, 06 Apr 2022 11:51:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Gozy76Oz1wSXA73FeGE7SmqQLAsoVOY+2sTGF1aa6Zw=;
-        b=fE7TexvMuLOaLXKK6EJNxA2vmmayp5QSrYZI/MnurdJ55hJ+Py0CVtE6dZvcUps7rV
-         fzk0Cd/zGQrRsqlA+F+vsiTIoK6GcYCm9BTVEzC4htL7PNQU9ji+WW0AGV1w6VyOEyxm
-         1eoNmFFgbAA1Yorn38Mq1jvnBWAML+UlRTJy9F8WikrFOF91Hm2M+hYjkZ9k9yndWG8c
-         Rf75OiifImh0lYOP4vQljoTpJsDxJeMayool18TBqC9qiBtc6g+Ez1WGflos+FftI19y
-         hmtpJw9GLvO0AhU0W3b5KHKwoTiKxE3roc5qFDRrWOt76/c8lw/YanvANIrw57O/VpHR
-         j0pQ==
-X-Gm-Message-State: AOAM530pEjf1hXo46Tm7rJqxtE+xFCP2BrYotBmtTP+g1lCbzAebCOc0
-        NPkL1N4pE91RpqlU60MKJw==
-X-Google-Smtp-Source: ABdhPJx7UbafJNQyyivVdWkXjR46A1bh1Oaa+gC8ZwvqpNeu9q5dFGeK8oeuLmNIra2NA7b2IOOAYA==
-X-Received: by 2002:a05:6808:2386:b0:2f9:a7fb:54f5 with SMTP id bp6-20020a056808238600b002f9a7fb54f5mr396861oib.33.1649271098704;
-        Wed, 06 Apr 2022 11:51:38 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p11-20020acabf0b000000b002ef93581a46sm6655340oif.2.2022.04.06.11.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:51:38 -0700 (PDT)
-Received: (nullmailer pid 2576022 invoked by uid 1000);
-        Wed, 06 Apr 2022 18:51:37 -0000
-Date:   Wed, 6 Apr 2022 13:51:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     sanjayc@nvidia.com, bbasu@nvidia.com, linux-tegra@vger.kernel.org,
-        ksitaraman@nvidia.com, treding@nvidia.com, jonathanh@nvidia.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org
-Subject: Re: [Patch v4 1/4] dt-bindings: Document Tegra CCPLEX Cluster
-Message-ID: <Yk3hOafGDk/W1qPA@robh.at.kernel.org>
-References: <20220405130119.4697-1-sumitg@nvidia.com>
- <20220405130119.4697-2-sumitg@nvidia.com>
+        Wed, 6 Apr 2022 16:30:34 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E772B35C056
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 11:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649271211; x=1680807211;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eHCPzuLEPLNJFzg+yjgofv3fkWvATV0iUvebvyap6JA=;
+  b=YA8JlQOiQ9qZBNT+nXxC7EzCvNJWV+KTmFFr0pXxuv+TKPnWWcs6CBMK
+   oOrGHmuTwdGz7VUqpNYjsX7ZH+k1atjpyY6EIE46v7+nE0UPInBsIwBiL
+   ND6IpbMJyopolPMw9OXqmjX/0a08R7uNZDp3mmy9yJHe1zc2We4UPOQba
+   bID1i62Zc4Y4YDfyC8j6D9k2hNNMqVSZyAHjEYvhidTJvI/e0sMc8ijzH
+   oOUyiC1ytMkJjIKfsMMu5Zl1gUYf88CNYPBz0drtRQvxAZ7dd/DEa2kTL
+   YhvfcJV7H4rnKDC211VDUz93o69BOmX9swXD7Ut6ORljsqmB8suR2dkMv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286103018"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="286103018"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 11:53:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="851384654"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Apr 2022 11:53:28 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncAmW-0004ey-88;
+        Wed, 06 Apr 2022 18:53:28 +0000
+Date:   Thu, 7 Apr 2022 02:53:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Jun <jun.li@nxp.com>, myungjoo.ham@samsung.com,
+        cw00.choi@samsung.com, krzk@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        frank.li@nxp.com, xu.yang_2@nxp.com
+Subject: Re: [PATCH] extcon: ptn5150: add usb role class support
+Message-ID: <202204070226.kTAMpspa-lkp@intel.com>
+References: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405130119.4697-2-sumitg@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Apr 2022 18:31:16 +0530, Sumit Gupta wrote:
-> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
-> registers that initiate CPU frequency/voltage transitions.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> 
+Hi Li,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on chanwoo-extcon/extcon-next]
+[also build test ERROR on v5.18-rc1 next-20220406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jun/extcon-ptn5150-add-usb-role-class-support/20220406-212038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
+config: parisc-randconfig-r031-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070226.kTAMpspa-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/beb6b76258bb1ae1e371486cd4fe97fee393ac83
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Jun/extcon-ptn5150-add-usb-role-class-support/20220406-212038
+        git checkout beb6b76258bb1ae1e371486cd4fe97fee393ac83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   hppa-linux-ld: drivers/extcon/extcon-ptn5150.o: in function `ptn5150_put_role_sw':
+>> (.text+0x20): undefined reference to `usb_role_switch_put'
+   hppa-linux-ld: drivers/extcon/extcon-ptn5150.o: in function `ptn5150_check_state':
+>> (.text+0xc8): undefined reference to `usb_role_switch_set_role'
+>> hppa-linux-ld: (.text+0x11c): undefined reference to `usb_role_switch_set_role'
+   hppa-linux-ld: drivers/extcon/extcon-ptn5150.o: in function `ptn5150_irq_work':
+   (.text+0x1f4): undefined reference to `usb_role_switch_set_role'
+   hppa-linux-ld: drivers/extcon/extcon-ptn5150.o: in function `ptn5150_i2c_probe':
+>> (.text+0x4fc): undefined reference to `usb_role_switch_get'
+>> hppa-linux-ld: (.text+0x53c): undefined reference to `usb_role_switch_put'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for USB_ROLE_SWITCH
+   Depends on USB_SUPPORT
+   Selected by
+   - EXTCON_PTN5150 && EXTCON && I2C && (GPIOLIB || COMPILE_TEST
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

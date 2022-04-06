@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4216A4F6099
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309094F609E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiDFNs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S233852AbiDFNtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiDFNso (ORCPT
+        with ESMTP id S233693AbiDFNsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:48:44 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C249B53A47F;
-        Wed,  6 Apr 2022 04:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649243481; x=1680779481;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mxkshQ7DDAtNUIY1aajFWQJrYfPpGlQ9uDSHZOGjqiI=;
-  b=EsWPwr5CSgYMV4Waf7GpJ64j+Cw3w6pnEpnohcyvK/Xj9esptbl1E8e8
-   3fjbh2x5/+BSG5Q67eIWjJ7Tmu3EtB0bzUf30GzEoRtGCcYUwwF+3Ey1M
-   Yszan+Tt79P+k7JGZw4Ew/OGudZTLL6mFx0P8lO42vF+LfQWSYRKupnFT
-   c=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Apr 2022 04:11:20 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:11:19 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 04:11:19 -0700
-Received: from mpubbise-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 04:11:15 -0700
-From:   Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <swboyd@chromium.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_sibis@quicinc.com>,
-        <kuabhs@chromium.org>, <quic_pillair@quicinc.com>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
-Subject: [PATCH v11] arm64: dts: qcom: sc7280: Add WPSS remoteproc node
-Date:   Wed, 6 Apr 2022 16:41:01 +0530
-Message-ID: <20220406111101.27412-1-quic_mpubbise@quicinc.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 6 Apr 2022 09:48:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E2F3EBBB0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 04:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649243492; x=1680779492;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=5zAPlitVhq7Zz5awiIbt0Hh0xmnzODkAAmPavcozI8E=;
+  b=k82Pod7XocIbdQe/mGxZT7SONngLpWTCE212KTidzgQOx8TnOGxvXZEe
+   1C5PDC02mKGZN3K/WfQIVP3VvLEdHsewxM0r/OdJKr9HCRvM8Bl4bwj83
+   a8p2j8q4NE3GaS0J8iH2dLsgMJr5MWArPE4Zfrxvg+can6g8zI8OPN/jw
+   cXdI3sD3afLnHeCEXx8rPy4ohnvmswJNx4r128L/5eYaRhUl/eMsX5plo
+   RPqkHjDfQHuUXKVOpQw+eR9dmnXQe2DEq4fcK16ZCdogdggeAA0GgCTqB
+   xW1UhWj1qzrbIZXl0Fo8faHVnvZCwAtgwxNIVwuHJP9fhGyEwwtQbyGv6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="248540598"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="248540598"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:11:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="570468489"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.173.64]) ([10.249.173.64])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:11:29 -0700
+Subject: Re: [kbuild-all] Re:
+ [ammarfaizi2-block:paulmck/linux-rcu/fastexp.2022.04.01a 109/158] WARNING:
+ modpost: vmlinux.o(.text+0xbcac06): Section mismatch in reference from the
+ function ieee802154_iface_init() to the variable .init.text:.L0
+To:     paulmck@kernel.org, kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+References: <202204040012.4Fu9uBps-lkp@intel.com>
+ <20220403183040.GP4285@paulmck-ThinkPad-P17-Gen-1>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <53cf3eac-37d5-17d6-3805-416a71256e98@intel.com>
+Date:   Wed, 6 Apr 2022 19:11:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220403183040.GP4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,110 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rakesh Pillai <quic_pillair@quicinc.com>
 
-Add the WPSS remoteproc node in dts for
-PIL loading.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Rakesh Pillai <quic_pillair@quicinc.com>
-Signed-off-by: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
----
-Changes from v10:
-- Rebased on ToT
+On 4/4/2022 2:30 AM, Paul E. McKenney wrote:
+> On Mon, Apr 04, 2022 at 12:20:22AM +0800, kernel test robot wrote:
+>> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/fastexp.2022.04.01a
+>> head:   d9f3e7d671416fdf5b61f094765754269b652db0
+>> commit: c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba [109/158] rcu: Add polled expedited grace-period primitives
+>> config: 	 (https://download.01.org/0day-ci/archive/20220404/202204040012.4Fu9uBps-lkp@intel.com/config)
+>> compiler: riscv32-linux-gcc (GCC) 11.2.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://github.com/ammarfaizi2/linux-block/commit/c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba
+>>          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>>          git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/fastexp.2022.04.01a
+>>          git checkout c1468fd1496363a0b2b2cb89e8ec2ba5e1dce9ba
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+>>
+>>>> WARNING: modpost: vmlinux.o(.text+0xbcac06): Section mismatch in reference from the function ieee802154_iface_init() to the variable .init.text:.L0
+>> The function ieee802154_iface_init() references
+>> the variable __init .L0 .
+>> This is often because ieee802154_iface_init lacks a __init
+>> annotation or the annotation of .L0 is wrong.
+>>
+>> Note: the below error/warnings can be found in parent commit:
+>> << WARNING: modpost: vmlinux.o(.text+0x432e6): Section mismatch in reference from the function dma_get_required_mask() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0xe35ca): Section mismatch in reference from the function mlock_page_drain() to the variable .init.text:.LVL125
+>> << WARNING: modpost: vmlinux.o(.text+0x96a46e): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a5b4): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a5c0): Section mismatch in reference from the function rpmsg_send() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a5d4): Section mismatch in reference from the function rpmsg_sendto() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a5e8): Section mismatch in reference from the function rpmsg_send_offchannel() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a5fc): Section mismatch in reference from the function rpmsg_trysend() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a610): Section mismatch in reference from the function rpmsg_trysendto() to the variable .init.text:.L0
+>> << WARNING: modpost: vmlinux.o(.text+0x96a624): Section mismatch in reference from the function rpmsg_poll() to the variable .init.text:.L0
+> 
+> I freely confess that I have no idea what any of these error messages
+> are trying to tell me.  What is ".init.txt.L0"?  How did my patch affect
+> ieee802154_iface_init() or the register_netdevice_notifier() function
+> that it invokes?  For that matter, how did my patch cause an access to
+> be made to __init data from a non-__init function?
+> 
+> 							Thanx, Paul
 
-Changes from v9:
-- Rebased on ToT
+Hi Paul,
 
-Changes from v8:
-- Enable remoteproc_wpss from sc7280-idp.dtsi as the change is common for IDP and IDP2
+Sorry for the inconvenience, only below warning was triggered by the commit:
 
-Changes from v7:
-- Remove wpss_mem from reserved memory. Its part of board dtsi.
+ >> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+ >>
+ >>>> WARNING: modpost: vmlinux.o(.text+0xbcac06): Section mismatch in 
+reference from the function ieee802154_iface_init() to the variable 
+.init.text:.L0
 
-Changes from v6:
-- Swap the oder of two properties in wpss_mem reserved memory
+the others are for reference only:
+ >> Note: the below error/warnings can be found in parent commit
 
-Changes from v5:
-- Update the clock names
+The problem has existed for some time before your patch, we'll add it to
+ignore list to avoid noise.
 
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  3 ++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 51 ++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index ecbf2b89d896..f61a3e15fa8b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -547,3 +547,6 @@ sw_ctrl: sw-ctrl {
- 	};
- };
- 
-+&remoteproc_wpss {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index f0b64be63c21..b757e8ad1199 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2842,6 +2842,57 @@ qspi: spi@88dc000 {
- 			status = "disabled";
- 		};
- 
-+		remoteproc_wpss: remoteproc@8a00000 {
-+			compatible = "qcom,sc7280-wpss-pil";
-+			reg = <0 0x08a00000 0 0x10000>;
-+
-+			interrupts-extended = <&intc GIC_SPI 587 IRQ_TYPE_EDGE_RISING>,
-+					      <&wpss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&wpss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&wpss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&wpss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-+					      <&wpss_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready", "handover",
-+					  "stop-ack", "shutdown-ack";
-+
-+			clocks = <&gcc GCC_WPSS_AHB_BDG_MST_CLK>,
-+				 <&gcc GCC_WPSS_AHB_CLK>,
-+				 <&gcc GCC_WPSS_RSCP_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "ahb_bdg", "ahb",
-+				      "rscp", "xo";
-+
-+			power-domains = <&rpmhpd SC7280_CX>,
-+					<&rpmhpd SC7280_MX>;
-+			power-domain-names = "cx", "mx";
-+
-+			memory-region = <&wpss_mem>;
-+
-+			qcom,qmp = <&aoss_qmp>;
-+
-+			qcom,smem-states = <&wpss_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			resets = <&aoss_reset AOSS_CC_WCSS_RESTART>,
-+				 <&pdc_reset PDC_WPSS_SYNC_RESET>;
-+			reset-names = "restart", "pdc_sync";
-+
-+			qcom,halt-regs = <&tcsr_mutex 0x37000>;
-+
-+			status = "disabled";
-+
-+			glink-edge {
-+				interrupts-extended = <&ipcc IPCC_CLIENT_WPSS
-+							     IPCC_MPROC_SIGNAL_GLINK_QMP
-+							     IRQ_TYPE_EDGE_RISING>;
-+				mboxes = <&ipcc IPCC_CLIENT_WPSS
-+						IPCC_MPROC_SIGNAL_GLINK_QMP>;
-+
-+				label = "wpss";
-+				qcom,remote-pid = <13>;
-+			};
-+		};
-+
- 		dc_noc: interconnect@90e0000 {
- 			reg = <0 0x090e0000 0 0x5080>;
- 			compatible = "qcom,sc7280-dc-noc";
--- 
-2.35.1
-
+Best Regards,
+Rong Chen

@@ -2,160 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665B64F5CC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E414F5BE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiDFLyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S1352857AbiDFKtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 06:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiDFLxP (ORCPT
+        with ESMTP id S1350873AbiDFKrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:53:15 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BD11F1605;
-        Wed,  6 Apr 2022 00:09:04 -0700 (PDT)
-X-UUID: c835b0a0749d4d8195d7d630a6eceb4f-20220406
-X-UUID: c835b0a0749d4d8195d7d630a6eceb4f-20220406
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1601077540; Wed, 06 Apr 2022 15:08:59 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 6 Apr 2022 15:08:58 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 6 Apr
- 2022 15:08:58 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 15:08:58 +0800
-Message-ID: <ae8ba0030d42d078580233f1710c592992e7d778.camel@mediatek.com>
-Subject: Re: [PATCH v2,1/2] dt-bindings: display: mediatek: dpi: Add
- compatible for MediaTek MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <xinlei.lee@mediatek.com>,
-        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>
-Date:   Wed, 6 Apr 2022 15:08:58 +0800
-In-Reply-To: <4940e2e4ecb5f9f6857dc960ea5dbe43c551df77.camel@mediatek.com>
-References: <1648727917-3099-1-git-send-email-xinlei.lee@mediatek.com>
-         <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
-         <e0d5a344c8ec1f92357bd9d5b8782dded862c549.camel@mediatek.com>
-         <4940e2e4ecb5f9f6857dc960ea5dbe43c551df77.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Wed, 6 Apr 2022 06:47:52 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60123.outbound.protection.outlook.com [40.107.6.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ED0502836;
+        Wed,  6 Apr 2022 00:11:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qlsm+6E0FG/k8/3Kg5t570/dYsDS2Vc50FLIVVhvgzDfO0Cttjdf58paW9XczgEspBX9XJzzQgw2YHoBhdqnuhNyQvaHjtXwbijIgBruRE6ksRmcR2X7SD1ZsoVHpb5GN+mBVcT0qqz1RhEcZhFLftjpXsh0F0WDtBS27KX+Sc6ZtDHL2gGSLWh7fa8C8Em9mGFSJKl4QdAPKjPAw3iNsyueafDpQ91cR3bZDsqntTxZrx5XMTylqclAXTX4idcJVbCFkOFck9b/uEN6w5S4zfYCrHAtiasQF1xKkfqf7KDy7wDeI4hg25Pf61KV01xeWEHehyq29rWomnKQSollfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WAKaDrqBPQu8KA9BFDTRMDsdo9K98EkJaTG2m9eb3GY=;
+ b=VWiqha1DU05pZatYjcCE+trg9hzUJzSH87V4JxdMRaEKBOO9d4vd6rcnFa2SpDgp+DKgVCdzhPNQ6phDRE5wm6S9DNBtuO6Z65zYI09vauwcqfUuhiQlh6zUeX7f3ghYHXiQ/1t7nkpj+bnHEPjs8RZ3zyLnbrJlLk2pD/+Jwyu19Ikj22KvCDOliAeu5Wv4Hh7EZncDebFUxfrEyTSO9MvVPluuXEdwNHY52nVFrl6u5+L8qh4IXxqWNGeyh6zRbOV4UikpBOiWsBb2gkh4pO8nXAOdJ2oDd79cYD81fmfmTju52BLzMOwOaOt9ry5uHwSn8ANRPpCN0KdU+qu1Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WAKaDrqBPQu8KA9BFDTRMDsdo9K98EkJaTG2m9eb3GY=;
+ b=XV09DW1OKiKvGlJA0ZuSOhX3vuVzZjEIn50mpjYvvGJnOG5c9V4UFcp+dNt+77QpmDW1vpMhQs4V4oPDSpLMjSFZxkrtrcrxiqrQrTIFCV53Ou1WdznAXZVwxYMBlOoElsOiTq6Ha+v0YnJI+jHmxq0UahQNHCg8Hr+4D1gQfF8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
+ by DU2PR10MB5093.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:2d6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 07:11:19 +0000
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ac3d:2f31:c9d8:75bc]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ac3d:2f31:c9d8:75bc%7]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 07:11:19 +0000
+Message-ID: <961fd021-3391-da16-1ebe-508110a5d173@kontron.de>
+Date:   Wed, 6 Apr 2022 09:11:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 9/9] arm64: dts: imx8mm-kontron: fix ethernet node name
+Content-Language: en-US
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-10-o.rempel@pengutronix.de>
+ <20220406011310.GC129381@dragon>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20220406011310.GC129381@dragon>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS8PR07CA0024.eurprd07.prod.outlook.com
+ (2603:10a6:20b:451::7) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:157::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 379e5acf-52d8-4ce7-6d54-08da179ca5bc
+X-MS-TrafficTypeDiagnostic: DU2PR10MB5093:EE_
+X-Microsoft-Antispam-PRVS: <DU2PR10MB50930D5D1B1BED4536215770E9E79@DU2PR10MB5093.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k4bdsBXOJltwiGVzRCp6Axt5T+xMCYvqCdRWsr82l98lXDb/X/iDiw2ZcWz5BNbSx/G0plUxy6jCeRMeTE6k49lqBlXr7pqJQsPtu642TBBIe6Dz+dO5CP+NUCLXV+fUmM1TvWG5F7NZ5TarvjYav3B1rGsqCa6Rr8DdznpTXCH5CT/KNd/H/etBqqPdVm+DF4LPgGnvFJ/Qa8Lm/MjtUUdZWLhiksFkrmUYcHABJPD7c5BC7/YwMcZPGduOPjiIaxnwhMCTHbSr/5ZA/yJOq/R0l5NXmoeTLLKq3L2gGx5fNNZPswXVjxkPxuISFb5Q80D3FS3hpUb2iz/a6EZIXbs1C4X+zn8sJfnHY5U9M4YCUMn3HetCBi9q8jtoVtAcEfDRmfYEDgZ2Tu0L5FHCFwR5FA25cCZCtzxdhgL7xrg8k1sHfn0cq3NretE7X4xXWRsXgfMHM5of8IqC0tV+b08HPlomO5cdL7znUAOXDz8gTzdQ3KLKYoX2OesYzRO7+NjNHyi1P8HdapG+5PmCOFLZcvpvM7kLXrOG8T6rKVZtuFpfNQb8FrLXKiOxhZu83MR1mf2g790mijuG4Uk89McQdp1ag3XbzMo/KtfsNDLrH/fuFqoFQHpezfzWKrv9VVZ9NNBz/R3fVwvloaxyRu26EsC7igPqp+VfRI3TO73foOgwD5T3ND+79y7CeXOFbPx2p1TG+FiQ631sTbBGL5oyNSq0mcqT84h1raYxfAis12R7qdsG1jEAiRSEZQd6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(7416002)(5660300002)(66476007)(36756003)(38100700002)(508600001)(31686004)(8936002)(44832011)(66946007)(316002)(2906002)(8676002)(4326008)(6512007)(6666004)(83380400001)(6486002)(110136005)(31696002)(54906003)(86362001)(2616005)(186003)(26005)(6506007)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGdxRXhZRW03OGFJbGtwSXUxL3hQUE8xS0U3WVU0TzZVY0k4RUZKYW1BekNz?=
+ =?utf-8?B?aFlHaEZra2tzbllTcDNueGY2RFRqeTBuSDZFRWplMTZTRjh0cHZsOEJEOUsr?=
+ =?utf-8?B?NkFoVFk2cVA2Z3dsODlXTW02aTRmUWlaMmxweGNKSm45YkM0SmZLVDZsRFZL?=
+ =?utf-8?B?Y1hjYmUrTldIVzR4NkRyMzFEYkIrdXVVdXlmeUdTcVF1S1pXOHhEYjh3ckRL?=
+ =?utf-8?B?SDRRZGdOVDNsM0pPRi85N25vM044ZEdwT2dzb05FSEd3a2tqNFdKcGdXOGhu?=
+ =?utf-8?B?UTUrRUJnaEhhYjFzUXN2KzUyRzBqeW9haHBES2RnWjRlRXBITEVVV1k3VE1i?=
+ =?utf-8?B?OWxxS2JvQmRFZVR3eGpYTEhRRnRFWkVqZDBiaHFnVFp3OHlnYzEzK2d4M0Uw?=
+ =?utf-8?B?Ty9tR3d2UG9nU1RoOW5aQ0tIZWpwK0l6RUN1Uy9WS0NKMDB5bFV5RkJSeURB?=
+ =?utf-8?B?d0t2MDRzUExQWU9xUW1SM3dlb3VBMnF6clhXVVhwclVVU3oxdTU4bG5UU0d5?=
+ =?utf-8?B?c0xxN2VMMDRTWlVzazNnU0RYY0ZvenNhcXFSUUhQSTlZZEpueHNzcnp3b3hT?=
+ =?utf-8?B?WjlyNDkzQmtTZzNtWG1TOGlRUnZNOFRkb3N6c3hlTVZIUUZZS25rN2xhZ0Np?=
+ =?utf-8?B?K2pURFYzZXdic3BKWFdZaU83c0dFNTA3NVMzQnFQTGF2N3dyM1YwcTZjSVBX?=
+ =?utf-8?B?QmFqa1owcXVmMFVXZ1hqUiszSFRLSDBwbVVjOHhwblUzVWM2d2RzQVZUWk8v?=
+ =?utf-8?B?UCsxWkFHU3VTc3gzNllISjdidW5tL0NhTERWMzRqODhxYVBCVzJ0ZVh2QlVi?=
+ =?utf-8?B?bjUzeGJqZTlTTTN4c3pLTFZaOFhPY002ellVOXdzSkxpRUFsNXVRbXlFRFRh?=
+ =?utf-8?B?enJkemxUSFNLaXJFUWNVenVzU1lxN2hwTHVrYk42bks4UW9seVpxMXhzNDFT?=
+ =?utf-8?B?ZjlsSE9VaFZHL2lmTmRPRkJBQmU1S3MrbHRTM1JBRzdoNlh2STdoS3IrYkV4?=
+ =?utf-8?B?ZWtDQ2JDeGlYZmZOMnZzZ2ZPdSthWUFkdVVTRS9Uc1YyeFZoWjJkOGRmTnVl?=
+ =?utf-8?B?OVdwSkRaNVVJazNNTkF2U1Z2R3EzTUd2RVVaeXl3d2FHSFNEZG5RZUlUYmVm?=
+ =?utf-8?B?ZDU4UDVacUpjdXUzaFpWeUdIRWRZSVZEamJ4bUJ3RVlSbzFxc09QMlptbmxt?=
+ =?utf-8?B?aHhFeHZVK2xQSjZ3ZTZSOTVFWW9Pci85c3hWUXdrc1pNalVETGJRc1pvR0VJ?=
+ =?utf-8?B?VWUvTzZ0RTQwK3hwV05zUnpWcVNNVGhpOVMrREJGYzZwcW5iZGdVWVJJRVcx?=
+ =?utf-8?B?L2lSd1Jacmp3MU9DdGRKWWRjTUVIbkwxTjlwRVhZMUpTZmxUV2RKRUhrS1ZH?=
+ =?utf-8?B?Z2NFcWV3Qm4wSHhYZmNLaHczKzBOUFpUa0RJbUNrK2QzZ05oaGlYRjVyeURI?=
+ =?utf-8?B?MnZtdEZVYkpROGdXNTlGU29RTUtsRXpFUUVHZ3RSTnNUQ2JrMkdZWEJ1bWR4?=
+ =?utf-8?B?ai8vUjExZVNnSUZGaFZhR0k0cFZHUjdlN3N3dzgvWHBXZkF4QlVpNk56UjR4?=
+ =?utf-8?B?NXE4VDVHVWd6dGIwT0drT2g4dGE3b1l0SmFoVUlDNC92Z3JaL1hRdmRrR1VV?=
+ =?utf-8?B?YXZGTmdtNDBPbTdUZ0RvNjcvaGNiMEFmc0ZMSFk2OFNCbTh5TVB1cjVNbGZY?=
+ =?utf-8?B?OXlRMXFucWE5UUovTU16dnU1S0M3eVVBaElML2NZU1NWNFNSY0VTbnI0dytk?=
+ =?utf-8?B?ZStjNFR0QVZIaWo4algvb2xtZllLTE5mdXRhdHd1ZitoY0JYa2NQb0Vpb2pk?=
+ =?utf-8?B?ZFA1THhlcmxnZnhEbzJabWFGNGFwcmd4QWpRMU1WbmlDNjFQWmkyYjQ2aVpP?=
+ =?utf-8?B?bXJrMTFlRmwrY0V5U1l2YU9UYUtvRVVVZzFiNDI1YjNkWGhsSytYSFJ5UU9M?=
+ =?utf-8?B?czVIR2d3dWVpc25jbnpBVFVCT1lEVjdDUGtKZDRlOVFrR2h5bUxFTFhtc2ky?=
+ =?utf-8?B?VGg1TnQ2Y1Z4R0VjcU43TmdXaEJrOVI0eWRuZDVncDZidWlpMHIrb0RNTDNE?=
+ =?utf-8?B?dW4yckluVnVOWG5sdXFOQU5XMTczc2FWV1pXaTJlQThXSTBGRjlmQnllQXkv?=
+ =?utf-8?B?angrc2FBVVB4N0FuTlpIQzdacEVyNnpXNkhkc1pWcEZqWnY3OUc2U1NsQ2Ja?=
+ =?utf-8?B?YWJnTUxMdmlPSWtOVTg0Y09BYjlJWDZKYnlWRHA2WXI1YkJYT2xnaG1yVVNE?=
+ =?utf-8?B?dXBjWnh4U005QTRzbHBpTTh0VUJCcDFRSUpUVjMyYkltZ3RYSlhWRUhyYkF3?=
+ =?utf-8?B?WlpieFI2UDBSNzFiRUpKVi80eDQzUENJZDhpa05RbjViOEIrWWZDSVRoMklE?=
+ =?utf-8?Q?r4/1NQMvYQqKk11Y=3D?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 379e5acf-52d8-4ce7-6d54-08da179ca5bc
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 07:11:19.0522
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g0kHuSKE9jkfvJs/pi607v1OcbVLjR8Ku05bAwrLdRSz9a0KsQ1jZJfK7rTNjLD+wRNqtH3DBZNE67yanFnJD7cu7ThLn6d7WxR36EWqYuw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR10MB5093
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 14:38 +0800, CK Hu wrote:
-> Hi,
+Am 06.04.22 um 03:13 schrieb Shawn Guo:
+> + Frieder Schrempf who is the board owner.
 > 
-> On Fri, 2022-04-01 at 09:38 +0800, Rex-BC Chen wrote:
-> > On Thu, 2022-03-31 at 19:58 +0800, xinlei.lee@mediatek.com wrote:
-> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> > > 
-> > > Add dt-binding documentation of dpi for MediaTek MT8186 SoC.
-> > > 
-> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> > > ---
-> > >  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml      
-> > >  |
-> > > 1
-> > > +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi
-> > > .y
-> > > am
-> > > l
-> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi
-> > > .y
-> > > am
-> > > l
-> > > index dd2896a40ff0..a73044c50b5f 100644
-> > > ---
-> > > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi
-> > > .y
-> > > am
-> > > l
-> > > +++
-> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi
-> > > .y
-> > > am
-> > > l
-> > > @@ -22,6 +22,7 @@ properties:
-> > >        - mediatek,mt7623-dpi
-> > >        - mediatek,mt8173-dpi
-> > >        - mediatek,mt8183-dpi
-> > > +      - mediatek,mt8186-dpi
-> > >        - mediatek,mt8192-dpi
-> > >  
-> > >    reg:
-> > 
-> > Hello Xinlei,
-> > 
-> > From the dts we use, the dpi node needs other properties for
-> > MT8186.
-> > Please send another patch and add these properties to binding.
-> > 
-> > assigned-clocks = <&topckgen CLK_TOP_DPI>;
-> > assigned-clock-parents = <&topckgen CLK_TOP_TVDPLL_D2>;
+> On Wed, Feb 16, 2022 at 08:49:27AM +0100, Oleksij Rempel wrote:
+>> The node name of Ethernet controller should be "ethernet" instead of
+>> "usbether" as required by Ethernet controller devicetree schema:
+>>  Documentation/devicetree/bindings/net/ethernet-controller.yaml
+>>
+>> This patch can potentially affect boot loaders patching against full
+>> node path instead of using device aliases.
 > 
-> According to [1], the assigned-clocks is initial value. Without this
-> initial value, I think driver would set this clock again, wouldn't
-> it?
+> Frieder,
 > 
-> [1] 
-> 
-https://www.kernel.org/doc/Documentation/devicetree/bindings/clock/clock-bindings.txt
-> 
-> Regards,
-> CK
-> 
+> Are you okay with that?
 
-Hello CK,
+Yes!
 
-OK, Thanks for your explanation.
-
-
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-
-BRs,
-Rex
-> > 
-> > Thanks
-> > 
-> > BRs,
-> > Rex
-> > 
-> > 
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > 
 > 
+> Shawn
 > 
-https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!wtF15QZZTCzWfRpxNLjZ1VQQ54i40D8STuOo0h18dtz3es-ksLfYQGTEFlb7lg$
-> >  
-> 
-> 
+>>
+>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
+Acked-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+>> ---
+>>  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+>> index d40caf14ac4a..23be1ec538ba 100644
+>> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+>> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+>> @@ -182,7 +182,7 @@ usb1@1 {
+>>  		#address-cells = <1>;
+>>  		#size-cells = <0>;
+>>  
+>> -		usbnet: usbether@1 {
+>> +		usbnet: ethernet@1 {
+>>  			compatible = "usb424,ec00";
+>>  			reg = <1>;
+>>  			local-mac-address = [ 00 00 00 00 00 00 ];
+>> -- 
+>> 2.30.2
+>>

@@ -2,148 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3CF4F68CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D76F4F694D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 20:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240452AbiDFSOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 14:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S240512AbiDFSPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 14:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240248AbiDFSO0 (ORCPT
+        with ESMTP id S240487AbiDFSO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:14:26 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2122C21FF6A;
-        Wed,  6 Apr 2022 09:52:09 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-de3ca1efbaso3534790fac.9;
-        Wed, 06 Apr 2022 09:52:09 -0700 (PDT)
+        Wed, 6 Apr 2022 14:14:56 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D4239313;
+        Wed,  6 Apr 2022 09:52:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h11so4069758ljb.2;
+        Wed, 06 Apr 2022 09:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=3uOnnnRcHyGaYWBW4Eshs7k8QuZm369r3CQ2+mOAwQY=;
-        b=ct4X6WqxuU/Q1UMCjoyR9Z012Uf01Ku3mKkW2dTVq7fENlE1OrhMArUQnWla7qXY/0
-         rVY929iY98LRRp8e2z1qqXhIZJ9vikZ2vcauuubzw4RJG5nBxGRsxt0jpvcoTiKaQPVs
-         vqgLAZ1uWHEZZyuEgXcmXj+ed/kg7vPfJrdMrDncxIoU12szbY8Fq0exTo6eX/Ue7PtZ
-         2GXO5K+FdLtO1uFIGuz1OBOu7bGap58RPt761BiW37HDoViGOmoCH0w06Vw/ZlayidCV
-         Br0JRxjsUfAR0n/qt4FQrpd0K+z//E/KWxQ8BvgJ1/XRcYKTQzFFH1Y7bBj894ykp1Zg
-         iy0w==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hivMJCrPDEZ4f+6hmVn6hj8p1TUlQCQz9AqY1gEV4jw=;
+        b=hACzY332OhkbK68D5QIPTEzAVPoRFXE8oksSkVa9KtQBEdACNqGv72zJEHLEI9QZXM
+         5QbmA8jMYkJAMi6wxongOZTVHNuxKsQzpl93lNvMqD+v361Bl2v1ughzSO3jjiy0zxFq
+         MizUaFtb9P8OElMN3GdLUk5Ip4XauCy6D5JePUfqKonY0w4LDDCF1tzvLJQqsda70lv5
+         gYK7y3Lzv0sl81d1wGpL9v/a3kt9bO4nRouZRxAXPmLxgtv8gG8QRUPgFcq2CQDaITSr
+         9SkrFbz8AfeNW7avb566/PPsHGBqO6BnSJsg3b7Fc0w2MZv0GGPgmP3NDX8pl6V0nY7H
+         W3lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=3uOnnnRcHyGaYWBW4Eshs7k8QuZm369r3CQ2+mOAwQY=;
-        b=FGh8ENyVS9gEv9ZXHp3oKCU3e9L+tarnrl6U5djElWEZkdgmBIviKBJ3DZZZivzbEQ
-         HulA2I1ptupi3XmF4Dr+U25isU3pDMwr507QlaUtc6HcfASwHEO+TnsHGfXoA9iUjZ8a
-         m4+vllc0KzVWvG8bH+WuF72VWEXv/zKGOWtRGtajL8FNSYJM3B4b0fqlUqb3sxRy3EZz
-         SC6eonYYj3IauzedfoPxMgZpd0d+Giji7ptFqeIIgm7Z6Vb9TgyAj5NA+ItHgMUmcriT
-         Gxy5zhMN5lpKVXp8LdWVfAfopjnK7qbJ2Jm9+SLU83V0HYdd9u2rdNTe+YdAjDEZA5Dc
-         K/WA==
-X-Gm-Message-State: AOAM532XcPOiHw4oG8yqD95BbzUG+KiahZD0SPLZozeiuni3JqvELDXa
-        Q+2gZUxxgkkfZBe0pYe0weaEkuhwLAM=
-X-Google-Smtp-Source: ABdhPJzIq8kq3b771EmaP3j5xGWSpBUW3dMUn6h+lR60x1GwKAVKSSWQdPM319x8/9myD4UZKiw/Fg==
-X-Received: by 2002:a05:6870:c34c:b0:da:b3f:326a with SMTP id e12-20020a056870c34c00b000da0b3f326amr4423684oak.282.1649263928427;
-        Wed, 06 Apr 2022 09:52:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s41-20020a05683043a900b005cdb244c9c3sm7284357otv.47.2022.04.06.09.52.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 09:52:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ebc0923a-48c1-ccd4-6b89-c4ba9ac48da4@roeck-us.net>
-Date:   Wed, 6 Apr 2022 09:52:05 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hivMJCrPDEZ4f+6hmVn6hj8p1TUlQCQz9AqY1gEV4jw=;
+        b=WKPGK/pVvjQMJrYSDF1bF0LgeJHMaGlW6JoRwTJJeJSvMnksi4HiJM+9+lkZxvgZSC
+         /EdNoZAmdih/l5i/Utq6GyuKPm7++W/fZ1E8v98SEdc8byrk0YR1qLLkp54PHCWCsGqC
+         l0Yi3Y9N5ErG7Uvgii7uZde9TlN2714vfFpkgfwMFc8gLQ9M3ZT+Q3NOV+mguF9G2Wd8
+         HiWKUaVtGVZ+RVMxQtv4KtmjZkIuKu+3aE/mSkaDuEBpqOUXcKyXuisF+2TQCQ1yuGId
+         Zz3WHAcrcnhirqoDvMZvu3x3APBLbl1GcT6rT3IeNC7JHfoq70p+ZVfGuoiZd9Dw3Npm
+         B8Rw==
+X-Gm-Message-State: AOAM532c2fC/HMrOkM4oRoRRLUH0DkoT35bhQFpxro21EvBWx/NVPpO2
+        5ed6ij9f4IFEt4g+HfpY+EA=
+X-Google-Smtp-Source: ABdhPJzVbE2XPzujOfnuB8RNCRrD7x9ttQeAciO1x5BAFgV/ApAg7IheulSAKOAU4qCPuEQLGzyqog==
+X-Received: by 2002:a2e:9e43:0:b0:24b:3c6:3832 with SMTP id g3-20020a2e9e43000000b0024b03c63832mr5707412ljk.63.1649263956916;
+        Wed, 06 Apr 2022 09:52:36 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id k19-20020a056512331300b0044a8470fe29sm1883995lfe.19.2022.04.06.09.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 09:52:35 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 19:52:34 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <20220406195234.4f63cb4a@reki>
+In-Reply-To: <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+References: <20220406092445.215288-1-mdevaev@gmail.com>
+ <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        will@kernel.org, qperret@google.com, maz@kernel.org
-References: <20220405141954.1489782-1-sebastianene@google.com>
- <20220405141954.1489782-3-sebastianene@google.com>
- <20220405211551.GB2121947@roeck-us.net> <Yk3ARqLLPssVIM2/@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest
- vCPUs
-In-Reply-To: <Yk3ARqLLPssVIM2/@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 09:31, Sebastian Ene wrote:
-> On Tue, Apr 05, 2022 at 02:15:51PM -0700, Guenter Roeck wrote:
->> Sebastian,
->>
-> 
-> Hello Guenter,
-> 
->> On Tue, Apr 05, 2022 at 02:19:55PM +0000, Sebastian Ene wrote:
->>> This patch adds support for a virtual watchdog which relies on the
->>> per-cpu hrtimers to pet at regular intervals.
->>>
->>
->> The watchdog subsystem is not intended to detect soft and hard lockups.
->> It is intended to detect userspace issues. A watchdog driver requires
->> a userspace compinent which needs to ping the watchdog on a regular basis
->> to prevent timeouts (and watchdog drivers are supposed to use the
->> watchdog kernel API).
->>
-> 
-> Thanks for getting back ! I wanted to create a mechanism to detect
-> stalls on vCPUs and I am not sure if the current watchdog subsystem has a way
-> to create per-CPU binded watchdogs (in the same way as Power PC has
-> kernel/watchdog.c).
-> The per-CPU watchdog is needed to account for time that the guest is not
-> running(either scheduled out or waiting for an event) to prevent spurious
-> reset events caused by the watchdog.
-> 
->> What you have here is a CPU stall detection mechanism, similar to the
->> existing soft/hard lockup detection mechanism. This code does not
->> belong into the watchdog subsystem; it is similar to the existing
->> hard/softlockup detection code (kernel/watchdog.c) and should reside
->> at the same location.
->>
-> 
-> I agree that this doesn't belong to the watchdog subsytem but the current
-> stall detection mechanism calls through MMIO into a virtual device
-> 'qemu,virt-watchdog'. Calling a device from (kernel/watchdog.c) isn't
-> something that we should avoid ?
-> 
+> It's not clear to me how breaking I/O operations allows you to do a 
+> "force eject".  It seems that what you would need is something like 
+> fsg_store_file() that omits the curlun->prevent_medium_removal check.
+> Interrupting a lengthy I/O operation doesn't really have anything to do 
+> with this.
 
-You are introducing qemu,virt-watchdog, so it seems to me that any argument
-along that line doesn't really apply.
+Perhaps I chose the wrong path, it's just how my userspace code works now.
+If the drive is connected to a Linux host, then in order to clear
+the "file" and extract the image, I sent a SIGUSR1 signal to the "file-storage"
+thread. This interrupted long IO operations, reset curlun->prevent_medium_removal
+and I got the ability to extract.
 
-I think it is more a matter for core kernel developers to discuss and
-decide how this functionality is best instantiated. It doesn't _have_
-to be a device, after all, just like the current lockup detection
-code is not a device. Either case, I am not really the right person
-to discuss this since it is a matter of core kernel code which I am
-not sufficiently familiar with. All I can say is that watchdog drivers
-in the watchdog subsystem have a different scope.
+It was done in our KVM-over-IP project and worked for several years,
+just now I want to do it without searching for procfs and the need
+to use sudo helpers like this:
+https://github.com/pikvm/kvmd/blob/1b3a2cc/kvmd/helpers/otgmsd/unlock/__init__.py
 
-Guenter
+Maybe it's worth introducing some option that will allow us to ignore
+curlun->prevent_medium_removal and perform a forced extraction?
+Something like "allow_force_eject" on the same lavel with "stall".
+Will masking the curlun->prevent_medium_removal flag be enough?
 
->> Having said that, I could imagine a watchdog driver to be used in VMs,
->> but that would be similar to existing watchdog drivers. The easiest way
->> to get there would probably be to just instantiate one of the watchdog
->> devices already supported by qemu.
->>
-> 
-> I am looking forward for your response,
-> 
->> Guenter
-> 
-> Cheers,
-> Sebastian
+> Or to keep this ability restricted to the superuser, if that is desired.
 
+Indeed.
+
+> You should not call send_sig_info() directly; instead call 
+> raise_exception().  It already does the work you need (including some 
+> things you left out).
+
+raise_exception() assumes the setting of a new state, and I did not want to do this,
+since the same does not happen when throwing a signal from userspace.

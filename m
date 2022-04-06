@@ -2,138 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9894F5ED7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8640E4F5FF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiDFNDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S233370AbiDFN3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbiDFNCe (ORCPT
+        with ESMTP id S233646AbiDFN2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:02:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DABC141456;
-        Wed,  6 Apr 2022 02:27:48 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id y32so3038278lfa.6;
-        Wed, 06 Apr 2022 02:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m3IQ7CoZ6vlav2yUsjjiGW1nzTDdZ4wf2eol2IE81cQ=;
-        b=VBZ7KQ/NZDgWKsyvuVHZCw6NEKu2hgdV+Xk4R1wwE2jCwieAxP/SKuN3X0c8YofH8f
-         tJmrZO7ssCkesBW6AnVxtRRLKBg8f3aKHvtZNpjSSPLrn27GceasbmCIBYY/dUNZ6ReL
-         6dhOM1SWbJ3TxxDwIn15J8WJjI+MtFCdFRyL/czvfgtKV+/kEcG+X/q5m4DNSijPdFlu
-         lnUdYWj4gDJy3N1370tOYnR0FlFGDlt4XdC1Kiox1yheVMTnK1VoZgQXYUXaoTRavptG
-         WWuVwGiBHB4NvX8IZdzXsVHWQxpbAPPSk93IdG9BjpbmuVm80m6lr3Gwm8uuDVtPVOny
-         k8HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m3IQ7CoZ6vlav2yUsjjiGW1nzTDdZ4wf2eol2IE81cQ=;
-        b=vKMeuJB78EjbtIqbZ2mZNWfX3x5NjhtUUB2xZSTxHthn7PHpw9naFgXxI04+M0aVjn
-         twkdNxtF+YTBnzvIpvoKb0NiYGnhp66iAejdoveyx8RfxPassA7Sac0pxu/OrO92N7o2
-         QNgrMcYSPc3bJSKMN15M/LMit74z1NXlg3dvJ7142gmxcsSsPVo7N+IKAcZ286VfDxds
-         OaVvf2hHUXsWlqqsa7MdpB21EutnK+t0E01AyuQ58M2XlUUeGcCsaXaTxLR5J4LszCn3
-         g4+0I9+WsCFlfIfBfV44HSAJ7uwYJ0GM4yQ0M7QLbLZH9x2VKD2W/xQoOH0M5B0SzhrE
-         GpGw==
-X-Gm-Message-State: AOAM532gGLhNo1o5H2XW6SB1drGb8ceUIDImgrx2PN0blosd4IVh8UZc
-        CrJ4li9wx974YSHVko2MRjSggv0k33fb5oqy
-X-Google-Smtp-Source: ABdhPJxz0CiarLexgsE9kHwbeL5jl5eAo9sOJTTGGKFBmvBW9mOs2pCfQBQ35/Sz6sZFoPlUKfpRPQ==
-X-Received: by 2002:a05:6512:3b06:b0:44a:5bbc:4d2 with SMTP id f6-20020a0565123b0600b0044a5bbc04d2mr5463156lfv.571.1649237266379;
-        Wed, 06 Apr 2022 02:27:46 -0700 (PDT)
-Received: from localhost.localdomain (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id r23-20020a2e94d7000000b0024b1565bba8sm988627ljh.118.2022.04.06.02.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 02:27:45 -0700 (PDT)
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     mdevaev@gmail.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_mass_storage: break IO operations via configfs
-Date:   Wed,  6 Apr 2022 12:24:45 +0300
-Message-Id: <20220406092445.215288-1-mdevaev@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 6 Apr 2022 09:28:01 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 578D01BE117;
+        Wed,  6 Apr 2022 03:25:47 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 236BF1C8112B;
+        Wed,  6 Apr 2022 17:25:44 +0800 (CST)
+Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 6 Apr
+ 2022 17:25:43 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS03.nuvoton.com
+ (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Wed, 6 Apr 2022
+ 17:25:43 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Wed, 6 Apr 2022 17:25:42 +0800
+Message-ID: <ab89589f-6dd7-d4ff-635d-ff8dbd2d3e02@nuvoton.com>
+Date:   Wed, 6 Apr 2022 17:25:42 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220307091923.9909-1-ychuang3@nuvoton.com>
+ <20220307091923.9909-4-ychuang3@nuvoton.com>
+ <2669852c-5bb6-1edf-bf58-ea815f54d50f@kernel.org>
+ <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
+ <bba99b9d-6960-f6e8-0ee4-0b5fe8a5601d@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <bba99b9d-6960-f6e8-0ee4-0b5fe8a5601d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the SIGUSR1 signal sent to the "file-storage" thread
-from the userspace, it is possible to break IO operations
-that block the gadget. Thus, it is possible to implement
-"force eject" without stopping the gadget and umounting
-it from the host side.
 
-There are two problems here:
 
-  - In order to send a signal, we need to find the thread
-    in procfs, but if several mass storage gadgets are created
-    in the system, each process has the same name and it is
-    impossible to distinguish one gadget from another.
+On 2022/4/6 下午 03:14, Krzysztof Kozlowski wrote:
+> On 06/04/2022 04:58, Jacky Huang wrote:
+>>>> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+>>>> index 639e01a4d855..28e01442094f 100644
+>>>> --- a/arch/arm64/boot/dts/Makefile
+>>>> +++ b/arch/arm64/boot/dts/Makefile
+>>>> @@ -30,3 +30,4 @@ subdir-y += synaptics
+>>>>    subdir-y += ti
+>>>>    subdir-y += toshiba
+>>>>    subdir-y += xilinx
+>>>> +subdir-y += nuvoton
+>>>> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
+>>>> new file mode 100644
+>>>> index 000000000000..e1e0c466bf5e
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
+>>>> @@ -0,0 +1,2 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0
+>>>> +dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
+>>> ARCH_NUVOTON does not exist.
+>> I would add the following to end of arch/arm64/Kconfig.platforms,
+> Don't add things at the end of files but rather in respective place
+> without messing the order.
 
-  - Root privileges are required to send the signal.
+OK, I will put it to the right place in alphanumeric order.
+It should be between ARCH_MXC and ARCH_QCOM.
 
-The proposed "break_io" interface solves both problems.
-It allows us to get rid of the procfs search and delegate
-sending the signal to a regular user.
+>
+>> and
+>> add the
+>> modification to this patch series.
+>>
+>> config ARCH_MA35D1
+>>       bool "Nuvoton MA35D1 SOC Family"
+> We do not add options for specific SoCs, but for entire families, so
+> ARCH_NUVOTON is correct.
 
-Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
----
- drivers/usb/gadget/function/f_mass_storage.c | 22 ++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Yes, I would like to modify it as the following:
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 6ad669dde41c..e9b7c59e1dc4 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -3239,6 +3239,27 @@ static ssize_t fsg_opts_stall_store(struct config_item *item, const char *page,
- 
- CONFIGFS_ATTR(fsg_opts_, stall);
- 
-+static ssize_t fsg_opts_break_io_store(struct config_item *item,
-+				       const char *page, size_t len)
-+{
-+	struct fsg_opts *opts = to_fsg_opts(item);
-+	unsigned long flags;
-+
-+	mutex_lock(&opts->lock);
-+	spin_lock_irqsave(&opts->common->lock, flags);
-+
-+	if (opts->common->thread_task)
-+		send_sig_info(SIGUSR1, SEND_SIG_PRIV,
-+			      opts->common->thread_task);
-+
-+	spin_unlock_irqrestore(&opts->common->lock, flags);
-+	mutex_unlock(&opts->lock);
-+
-+	return len;
-+}
-+
-+CONFIGFS_ATTR_WO(fsg_opts_, break_io);
-+
- #ifdef CONFIG_USB_GADGET_DEBUG_FILES
- static ssize_t fsg_opts_num_buffers_show(struct config_item *item, char *page)
- {
-@@ -3283,6 +3304,7 @@ CONFIGFS_ATTR(fsg_opts_, num_buffers);
- 
- static struct configfs_attribute *fsg_attrs[] = {
- 	&fsg_opts_attr_stall,
-+	&fsg_opts_attr_break_io,
- #ifdef CONFIG_USB_GADGET_DEBUG_FILES
- 	&fsg_opts_attr_num_buffers,
- #endif
--- 
-2.35.1
+config ARCH_NUVOTON
+     bool "Nuvoton SoC Family"
+     select PINCTRL
+     select PINCTRL_MA35D1
+     select PM
+     select GPIOLIB
+     select SOC_BUS
+     help
+       This enables support for Nuvoton MA35D1 ARMv8 SoC.
+
+(Currently, we have MA35D1 only in the support list for arm64 SoC.).
+
+>>       select PINCTRL
+>>       select PINCTRL_MA35D1
+>>       select PM
+>>       select GPIOLIB
+>>       select SOC_BUS
+>>       select VIDEOMODE_HELPERS
+>>       select FB_MODE_HELPERS
+>>       help
+>>         This enables support for Nuvoton MA35D1 SOC Family.
+>>
+>>
+>>>> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>>>> new file mode 100644
+>>>> index 000000000000..38e4f734da0f
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>>>> @@ -0,0 +1,23 @@
+>>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>>>> +/*
+>>>> + * Device Tree Source for MA35D1 Evaluation Board (EVB)
+>>>> + *
+>>>> + * Copyright (C) 2021 Nuvoton Technology Corp.
+>>>> + */
+>>>> +
+>>>> +/dts-v1/;
+>>>> +#include "ma35d1.dtsi"
+>>>> +
+>>>> +/ {
+>>>> +       model = "Nuvoton MA35D1-EVB";
+>>>> +
+>>>> +       chosen {
+>>>> +               bootargs = "console=ttyS0,115200n8";
+>>> No bootargs. "chosen", please.
+>> OK, I would modify it as:
+>>
+>> chosen {
+>>           stdout-path = "serial0:115200n8";
+>>       };
+>>
+>>
+>>>> +       };
+>>> You need compatible and bindings.
+>> I will add the compatible here
+>> compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1"
+>>
+>> And, I should create a new binding file
+>> Documentation/devicetree/bindings/arm/nuvoton.yaml to this patch series.
+>> And the property would be:
+>>
+>> properties:
+>>     compatible:
+>>       description: Nuvoton MA35D1-EVB
+>>       items:
+>>         - const: nuvoton,ma35d1-evb
+>>         - const: nuvoton,ma35d1
+>>
+>>
+>> Is it OK?
+> Yes
+>
+>
+>
+> Best regards,
+> Krzysztof
+
+Thanks for your review.
+
+Sincerely,
+Jacky
+
 

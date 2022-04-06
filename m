@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CC74F602D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2EF4F6056
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 15:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbiDFNin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 09:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S233312AbiDFNiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 09:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiDFNhd (ORCPT
+        with ESMTP id S233851AbiDFNhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 09:37:33 -0400
+        Wed, 6 Apr 2022 09:37:36 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BD368F4CC;
-        Wed,  6 Apr 2022 03:38:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690B368FBA1;
+        Wed,  6 Apr 2022 03:39:07 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id C74DE1F40636
+        with ESMTPSA id 62E321F40636
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649241526;
-        bh=5GWmZjBirWLKxTJDH+AOnbEW/7YRX30utZckHcSznsA=;
+        s=mail; t=1649241544;
+        bh=Wt6H1/5KeIwiv84NwDktEXWbagGeTc+A2tTQdBJ3m/M=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b1yhGPYeG8w7Hp3otl5OwFcOZbuTdGDLENoQCChDRid7NyaHwJgMzTFezCf/36fV2
-         fuQOYSawPvsvy2Gil0LJd3sKx2+iNHU5Z4uP1KTdPjDCbN6zti6mJwrFqE/0mULBDa
-         MtpEJV+jra0//NFIIRW8QWD0FXJMBPQqRUx5zS7pyhDoIGAMd3uI9rU/mc7OwIX76V
-         4CbeW4SEYM6BK09Mdij+l+jwkckSSGuGVOX6qG0lKjWZSGR43dbXQSq+O7AfSps4PQ
-         D+HY0d/19iLzO9ZI2pjsLvnk0S8sbVY7t0/n1m8IXHILCglQspsK4DfeKx3NeaVWux
-         V7Uhzleh+dAMA==
-Message-ID: <19a1af29-19a7-a546-b565-a2cc973a7f28@collabora.com>
-Date:   Wed, 6 Apr 2022 12:38:42 +0200
+        b=hJXdG7l7xrjiCg6g8MWK7luueDWq70aow8lvQ6vnOWPs9zVmi0JNIIc5MWqIyomGP
+         wkMZgWzgAdiwsoVsfGspG3eIJsMdhGaVqiX/foIUhBT6QcVRpYeJCi4l6LH9+AfNoA
+         B4erpzjUZ5+wNT/w4SX6p0QB7uae9VJ+LNVqo8Jp1sFBDdu76zuAbqMsMhS9t+Oakt
+         SI7wF/TKilhHc0+wt379jA/DQ59AcOOkDETmpZIAzVg8U2h6Isuhnk5CQA3zyXxpO0
+         FILEIiEBjOnrt/MGSL8aWwAyOuHgrh+1uI8ON3fe7f5zvk9M1CawuUF+JtdoKi1ikq
+         V3LYUnWeMTVFw==
+Message-ID: <ff4e0e14-b0cc-feed-6038-45d383a0fd4a@collabora.com>
+Date:   Wed, 6 Apr 2022 12:39:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: Correct disp_aal
- binding for MT8183
+Subject: Re: [PATCH 2/3] arm64: dts: mt8183: Correct disp_aal node compatible
 Content-Language: en-US
 To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
         robh+dt@kernel.org, krzk+dt@kernel.org
@@ -46,10 +45,10 @@ Cc:     matthias.bgg@gmail.com, p.zabel@pengutronix.de, airlied@linux.ie,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220406094654.29722-1-rex-bc.chen@mediatek.com>
- <20220406094654.29722-2-rex-bc.chen@mediatek.com>
+ <20220406094654.29722-3-rex-bc.chen@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220406094654.29722-2-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220406094654.29722-3-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,14 +69,4 @@ Il 06/04/22 11:46, Rex-BC Chen ha scritto:
 > 
 > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-Hello!
-Yes, I definitely agree with this change, it makes no sense to have both
-8173 and 8183 compatibles for 8183 (and similar).
-
-Though, please, add a note in this commit message advertising that the
-mistake was only in the yaml binding, as the driver doesn't require any
-functional changes, so that things are clear for people with less expertise
-on MediaTek platforms.
-
-After that:
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

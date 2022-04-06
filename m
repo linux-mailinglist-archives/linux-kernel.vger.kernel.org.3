@@ -2,428 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E1A4F6CD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028794F6CD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235823AbiDFVfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
+        id S234092AbiDFVfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiDFVdh (ORCPT
+        with ESMTP id S236080AbiDFVdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 17:33:37 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54620D5EBD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:45:27 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id h63so4412214iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:45:27 -0700 (PDT)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A655E7DA8C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:45:22 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id n8so3040193plh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=VxHQDdLjbV2xVhzYdeJTN4O1ik7ZzhuU3bG2DYD0SI8=;
-        b=JGUsiQ25I6IdbXAsgr+6M+4fRkq/2m1diP/Lc4dv5FN8k10rAAx4DGaTfBLoSoaQtq
-         SH03d+t/53LBARM/wqBrVCE2kzrnE4OovSV990IC3FxVZDAe89p65yv3uOg5/3AoyKf+
-         pt3L7ZewO8EMS5HmFMF5l+yZ1dOz1WToPAW1pCS7Tcd51PwC3z+eg5JPz4nUiVPspid5
-         v8nXJ1fYpcfWsey/HgR7LD0uuwpLHXwka4mQsm/a40TfhWG34GXIxDh8WZydpLjSCKET
-         zT27w6UVw82qyIFMOqythgn+nNwPHFg38fUxajsn0r7XcmWEwpTrMYd4zsVy72Jzc82p
-         G03A==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jzM7G0Ll+2P5HH8PRGJaqO5+fn3hB56LAuMy1DOx49M=;
+        b=N9PnCSfGUwGKms0Qcz+BGacD3rwbxS/4UjxVlDhBhxjbk7OL5JsXFr4vn99VqZiT5r
+         jp3JSm7lUz5Awdj8MZ4U5QQ//19MB7nOINDcsQFPG/LNhn7VtHwTc3d3mDJN7VlO/244
+         rXgn7TCfpctNkvRqd0D6b3voDcOqfCcKLg3SI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=VxHQDdLjbV2xVhzYdeJTN4O1ik7ZzhuU3bG2DYD0SI8=;
-        b=Sdf/R1F9/FW0IUjz8aU09FyaOIi/ob34wYoYxLTZ3X4iPD3RAUMO0ZJ3WQEaaunpmv
-         D6JBCvMrkiBCVTpIqZ3WlvB5OnI6ISL8G9+hLW0yHeuMJJwVY0wPcSwLN657P23p7XW/
-         peVpjqGmQkt7S/PxmSiSYW720F86iNW/3co24mKTmoWKMhOuMcvegfj8BEuy8OF370WR
-         uXxZkx2sYbTuzZ6QJJzUuwEmKYZVhaJKomanoF+XBJdCzI8uyiKVZxVtuOkqtqySbyk3
-         1lpuwFmW0J87amTaXiHzVhOUrMt6rHNOHNtrCgoYXZXk6tPOyDJpfAtIbLaQiOlx4xLR
-         omig==
-X-Gm-Message-State: AOAM531iDdRAjh1yV0C/WU1t4oiihrz+ecd8OiPNJ50drccerICWCxZH
-        oDhbWL2pI43KDBrZpJzIi/tlAKEy94BGaQzV3BE=
-X-Google-Smtp-Source: ABdhPJxSuSInvhdxSoEqf3lFmNiw+IYwDAMd5AjnhFrs8wUhbtyw4f2+L6iIAsKkp5YtLCZKATGe+OaMhWagKsCndZI=
-X-Received: by 2002:a05:6638:737:b0:317:d5e0:2b3a with SMTP id
- j23-20020a056638073700b00317d5e02b3amr5290567jad.52.1649277926517; Wed, 06
- Apr 2022 13:45:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jzM7G0Ll+2P5HH8PRGJaqO5+fn3hB56LAuMy1DOx49M=;
+        b=VZLTMSONoMMe+FbP3mn/7H+eLl/avcCYZzYw2UbEZbtUGyofq347kkaNFHgSpha/xL
+         7Hy7fVEAp6MJrP19qwh17CO647//++zuzCMROGKM+Ec82vbwXZ//dRRCj9VJtVWXpg64
+         CU0Y13ITWZEkf6UI355aA2F/NWgsn9NvIJQz22p0if2qdAE45jf593zlFrFYRz0rPQGR
+         3Cy5+Rqne4+IEGgxQW7SoZPaE5BNRVKKjCmfEjT3XTkUP+LziPm6hSxNSS3HWFH5TNsn
+         N7dTlx1M6y8mgI8NhogKpNVA+XqaZgXtUXn28I9FWfz5R2ZUUm5pB33b/LifHIJiUTUG
+         CoDQ==
+X-Gm-Message-State: AOAM530O6a9+EnHmhvGK5BrKg32JNrUA9OcRha2tKhHh33bNLwjqQVkl
+        7Og0B9dc2QV5rfSQr2LyPwet1g==
+X-Google-Smtp-Source: ABdhPJyqvt2FhsTBMqhPGXX7hehPRTDHvClHKhMdYn3odThFMPD3wQEsm03ZhDDhgk5dynFD6f9Ovg==
+X-Received: by 2002:a17:902:d4c8:b0:154:2416:2185 with SMTP id o8-20020a170902d4c800b0015424162185mr10319296plg.25.1649277921882;
+        Wed, 06 Apr 2022 13:45:21 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:dddf:7cc7:1261:9584])
+        by smtp.gmail.com with UTF8SMTPSA id a16-20020a17090a6d9000b001c9c3e2a177sm6414208pjk.27.2022.04.06.13.45.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 13:45:21 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 13:45:19 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohitkr@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v6 3/3] arm64: dts: qcom: sc7280: Add dt nodes for sound
+ card
+Message-ID: <Yk3736Av338XoLH/@google.com>
+References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649157220-29304-4-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <YktYX2OnLtyobRYD@kernel.org> <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
- <YkxWcYzph5pC1EK8@kernel.org> <CA+icZUVMtrqRA-a3k8N0fVcszm=Sn2Jb9nMfF8mXqvSTu2HUhw@mail.gmail.com>
- <Ykyfzn6Z8Wkf1Ccl@kernel.org> <Yky4TjOLiVvOcLYN@kernel.org>
-In-Reply-To: <Yky4TjOLiVvOcLYN@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 6 Apr 2022 22:44:50 +0200
-Message-ID: <CA+icZUXTC8qFVaDF159n2AWkdA99xx+qyg0+DpW=n=N7ygpLOQ@mail.gmail.com>
-Subject: Re: Build perf with clang, failure with libperf
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1649157220-29304-4-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:44 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
-> Em Tue, Apr 05, 2022 at 05:00:14PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Tue, Apr 05, 2022 at 05:46:00PM +0200, Sedat Dilek escreveu:
-> > > So, we should include scripts/Makefile.clang or enhance
-> > > tools/scripts/Makefile.include where LLVM/Clang stuff is defined (and
-> > > can be overridden).
-> >
-> > > Jiri pointed out he needed two options (when I recall correctly):
-> > >
-> > > [1] -Wno-unused-command-line-argument
->
-> I didn't see this one so far, but this one, and for the python case,
-> appears on clang 13 on:
->
->   22    45.02 archlinux:base                : FAIL clang version 13.0.1
->
->   CC      /tmp/build/perf/arch/x86/util/pmu.o
-> clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-> error: command '/usr/sbin/clang' failed with exit code 1
->   MKDIR   /tmp/build/perf/ui/stdio/
-> cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
->   CC      /tmp/build/perf/arch/x86/util/kvm-stat.o
-> make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
-> make[2]: *** Waiting for unfinished jobs....
->
+On Tue, Apr 05, 2022 at 04:43:40PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add dt nodes for sound card support, which is using WCD938x headset
+> playback, capture, I2S speaker playback and DMICs via VA macro.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts  |  8 +++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
+>  2 files changed, 101 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index 224a82d..b1b968a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> @@ -90,6 +90,14 @@ ap_ts_pen_1v8: &i2c13 {
+>  	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+>  };
+>  
+> +&sound {
+> +	audio-routing =
+> +		"VA DMIC0", "MIC BIAS1",
+> +		"VA DMIC1", "MIC BIAS1",
+> +		"VA DMIC2", "MIC BIAS3",
+> +		"VA DMIC3", "MIC BIAS3";
+> +};
+> +
+>  &tlmm {
+>  	tp_int_odl: tp-int-odl {
+>  		pins = "gpio7";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index e3d8cbf..45e1d82 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -84,6 +84,99 @@
+>  		pinctrl-names = "default";
+>  		pinctrl-0 = <&nvme_pwren>;
+>  	};
+> +
+> +	sound: sound {
+> +		compatible = "google,sc7280-herobrine";
+> +		model = "sc7280-wcd938x-max98360a-1mic";
+> +
+> +		audio-routing =
+> +				"IN1_HPHL", "HPHL_OUT",
+> +				"IN2_HPHR", "HPHR_OUT",
+> +				"AMIC1", "MIC BIAS1",
+> +				"AMIC2", "MIC BIAS2",
+> +				"VA DMIC0", "MIC BIAS3",
+> +				"VA DMIC1", "MIC BIAS3",
+> +				"VA DMIC2", "MIC BIAS1",
+> +				"VA DMIC3", "MIC BIAS1",
+> +				"TX SWR_ADC0", "ADC1_OUTPUT",
+> +				"TX SWR_ADC1", "ADC2_OUTPUT",
+> +				"TX SWR_ADC2", "ADC3_OUTPUT",
+> +				"TX SWR_DMIC0", "DMIC1_OUTPUT",
+> +				"TX SWR_DMIC1", "DMIC2_OUTPUT",
+> +				"TX SWR_DMIC2", "DMIC3_OUTPUT",
+> +				"TX SWR_DMIC3", "DMIC4_OUTPUT",
+> +				"TX SWR_DMIC4", "DMIC5_OUTPUT",
+> +				"TX SWR_DMIC5", "DMIC6_OUTPUT",
+> +				"TX SWR_DMIC6", "DMIC7_OUTPUT",
+> +				"TX SWR_DMIC7", "DMIC8_OUTPUT";
+> +
+> +		qcom,msm-mbhc-hphl-swh = <1>;
+> +		qcom,msm-mbhc-gnd-swh = <1>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		#sound-dai-cells = <0>;
+> +
+> +		dai-link@1 {
+> +			link-name = "Secondary MI2S Playback";
 
-Thanks for your big testing with diverse combinations of LLVM/GCC toolchains!
+The other link names provide information about the other end
+of the link (DP, WCD, DMIC), while this one describes the SoC side.
+Shouldn't this be "MAX98360A"? Not sure about the 'Playback' part,
+it seems 'link-name' is used as stream name, judging from a few
+samples of peeking into '/proc/asound/pcm' on different devices
+it seems that 'Playback' or 'Capture' is ususally not part of the
+stream name.
 
-Yepp, looks like Jiri's testing/breakage is confirmed;
+> +			reg = <MI2S_SECONDARY>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu MI2S_SECONDARY>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&max98360a>;
+> +			};
+> +		};
+> +
+> +		dai-link@5 {
+> +			link-name = "DP Playback";
 
-So enhance:
+See comment above about 'Playback'. Just 'DP' is maybe a bit short, how
+about 'DisplayPort'?
 
-tools/perf/Makefile.config:      CFLAGS += -Wno-compound-token-split-by-macro
+> +			reg = <LPASS_DP_RX>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_DP_RX>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&mdss_dp>;
+> +			};
+> +		};
+> +
+> +		dai-link@6 {
+> +			link-name = "WCD Playback";
 
-tools/build/feature/Makefile:  FLAGS_PERL_EMBED +=
--Wno-compound-token-split-by-macro
+Most instances I found spell out the codec name. It seems here we need
+the 'Playback'/'Capture' info (or something else) to not end up with
+duplicate link names. So my suggestion here would be "WCD9385 Playback".
 
-...with ?:
+> +			reg = <LPASS_CDC_DMA_RX0>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&wcd938x 0>, <&swr0 0>, <&rxmacro 0>;
+> +			};
+> +		};
+> +
+> +		dai-link@19 {
+> +			link-name = "WCD Capture";
 
--Wno-unused-command-line-argument
-( -Wno-ignored-optimization-argument )
+"WCD9385 Capture"?
 
-...or use "call cc-option" ?
+> +			reg = <LPASS_CDC_DMA_TX3>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&wcd938x 1>, <&swr1 0>, <&txmacro 0>;
+> +			};
+> +		};
+> +
+> +		dai-link@25 {
+> +			link-name = "DMIC Capture";
 
-Looks like tools/ build ECO system allows this:
 
-$ git grep 'call cc-option' tools/
-tools/build/Build.include:# Usage: cflags-y += $(call
-cc-option,-march=winchip-c6,-march=i586)
-tools/thermal/tmon/Makefile:override CFLAGS+= $(call
-cc-option,-O3,-O1) ${WARNFLAGS}
-tools/thermal/tmon/Makefile:override CFLAGS+= $(call
-cc-option,-fstack-protector-strong)
-
-Thanks.
-
-- sed@ -
-
->
-> > > Example:
-> > > tools/testing/selftests/bpf/Makefile-# Silence some warnings when
-> > > compiled with clang
-> > > tools/testing/selftests/bpf/Makefile-ifneq ($(LLVM),)
-> > > tools/testing/selftests/bpf/Makefile:CFLAGS += -Wno-unused-command-line-argument
-> > > tools/testing/selftests/bpf/Makefile-endif
-> > >
-> > > ^^ Here you see it is checked for LLVM.
-> > > Again, put that stuff in one single place - tools/scripts/Makefile.include
-> > >
-> > > [2] -Wno-ignored-optimization-argument
-> > >
-> > > Both [1] and [2] were not needed in my case.
-> > >
-> > > [1] is always good to have - not only for perf.
-> > >
-> > > AFAICS, you wanted to consolidate PERL_EMBED_XXX and FLAGS_PERL_EMBED
-> > > at a single place.
-> > > 1. tools/build/feature/Makefile
-> > > 2. tools/perf/Makefile.config
-> >
-> > Yeah, at some point I'll do it, probably in the 5.19 window.
-> >
-> > > Can not say where we all need perl check/requirement - maybe put that
-> > > stuff to the place where we define/check for toolchain/compiler (see
-> > > above)?
-> > >
-> > > Again, all these issues happen because of -Werror is strictly set.
-> > >
-> > > I put my patches around that area (see 2nd patch) - without checking
-> > > if the LLVM/Clang toolchain is used or not.
-> > > Both patches are attached.
-> >
-> > I saw those patches, even added a:
-> >
-> > Based-on-a-patch-by: Sedat Dilek <sedat.dilek@gmail.com>
-> >
-> > > $ git show -1 for-5.17/tools-feature_detect_libperl-clang-dileks-v3
-> > > commit 72ba634c9b39547197900d8b64ff36134af3ed08
-> > > (for-5.17/tools-feature_detect_libperl-clang-dileks-v3)
-> > > Author: Sedat Dilek <sedat.dilek@gmail.com>
-> > > Date:   Sun Mar 13 12:37:06 2022 +0100
-> > >
-> > >    tools: feature-detect: libperl: Sync PERL_EMBED_CCOPTS with perf
-> > >
-> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > > index 1480910c792e..fa6be127f483 100644
-> > > --- a/tools/build/feature/Makefile
-> > > +++ b/tools/build/feature/Makefile
-> > > @@ -217,7 +217,8 @@ strip-libs = $(filter-out -l%,$(1))
-> > > PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
-> > > PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
-> > > PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-> > > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> > > +PERL_EMBED_CCOPTS = $(perl -MExtUtils::Embed -e ccopts 2>/dev/null)
-> > > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> > > FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-> > >
-> > > $(OUTPUT)test-libperl.bin:
-> > >
-> > > $ git show -1 for-5.17/perf-libperl_support-clang-dileks
-> > > commit 316a1917ec05772ab0f99dad534fabdd74547865
-> > > (for-5.17/perf-libperl_support-clang-dileks)
-> > > Author: Sedat Dilek <sedat.dilek@gmail.com>
-> > > Date:   Sun Mar 6 11:29:50 2022 +0100
-> > >
-> > >    perf: Fix libperl support with clang and perl v5.34
-> > >
-> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > > index 1480910c792e..ef9b37c5c652 100644
-> > > --- a/tools/build/feature/Makefile
-> > > +++ b/tools/build/feature/Makefile
-> > > @@ -81,7 +81,7 @@ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
-> > >
-> > > all: $(FILES)
-> > >
-> > > -__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst
-> > > %.bin,%.c,$(@F)) $(LDFLAGS)
-> > > +__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror
-> > > -Wno-compound-token-split-by-macro -o $@ $(patsubst %.bin,%.c,$(@F))
-> > > $(LDFLAGS)
-> > >   BUILD = $(__BUILD) > $(@:.bin=.make.output) 2>&1
-> > >
-> > > __BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst
-> > > %.bin,%.cpp,$(@F)) $(LDFLAGS)
-> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > > index 96ad944ca6a8..acc987daf56e 100644
-> > > --- a/tools/perf/Makefile.config
-> > > +++ b/tools/perf/Makefile.config
-> > > @@ -213,7 +213,7 @@ endif
-> > >
-> > > # Treat warnings as errors unless directed not to
-> > > ifneq ($(WERROR),0)
-> > > -  CORE_CFLAGS += -Werror
-> > > +  CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
-> >
-> > Ok, you added it right after -Werror, which is equivalent, in the
-> > feature test case, to what I did.
-> >
-> > I'll take that into account when working on having all this in a single
-> > place, next merge window.
-> >
-> > >   CXXFLAGS += -Werror
-> > >   HOSTCFLAGS += -Werror
-> > > endif
-> > >
-> > > With both patches I am able to build perf-5.17 with LLVM/Clang v14 and
-> > > -std=gnu11 and perl v5.34.
-> > >
-> > > It's good when Jiri tests on his system.
-> >
-> > Right, I'll test on these containers, with many gcc and clang versions:
-> >
-> >    1 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
-> >    2 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
-> >    3 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
-> >    4 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
-> >    5 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
-> >    6 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
-> >    7 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
-> >    8 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
-> >    9 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
-> >   10 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
-> >   11 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
-> >   12 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
-> >   13 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
-> >   14 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 13.0.1
-> >   15 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
-> >   16 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
-> >   17 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
-> >   18 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20211202 (ALT Sisyphus 11.2.1-alt2) , ALT Linux Team clang version 12.0.1
-> >   19 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
-> >   20 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
-> >   21 amazonlinux:devel             : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.amzn2022)
-> >   22 archlinux:base                : FAIL clang version 13.0.1
-> >   23 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
-> >   24 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10) , clang version 13.0.0 (Red Hat 13.0.0-3.module_el8.6.0+1074+380cef3f)
-> >   25 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20220322 releases/gcc-11.2.0-884-gf45603f39b , clang version 13.0.0
-> >   26 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
-> >   27 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , Debian clang version 11.0.1-2~deb10u1
-> >   28 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
-> >   29 debian:experimental           : Ok   gcc (Debian 11.2.0-19) 11.2.0 , Debian clang version 13.0.1-3+b2
-> >   30 debian:experimental-x-arm64   : Ok   aarch64-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
-> >   31 debian:experimental-x-mips    : Ok   mips-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
-> >   32 debian:experimental-x-mips64  : Ok   mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110
-> >   33 debian:experimental-x-mipsel  : Ok   mipsel-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
-> >   34 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.5.0 (tags/RELEASE_350/final)
-> >   35 fedora:23                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.7.0 (tags/RELEASE_370/final)
-> >   36 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) , clang version 3.8.1 (tags/RELEASE_381/final)
-> >   37 fedora:24-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710
-> >   38 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) , clang version 3.9.1 (tags/RELEASE_391/final)
-> >   39 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) , clang version 4.0.1 (tags/RELEASE_401/final)
-> >   40 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) , clang version 5.0.2 (tags/RELEASE_502/final)
-> >   41 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 6.0.1 (tags/RELEASE_601/final)
-> >   42 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 7.0.1 (Fedora 7.0.1-6.fc29)
-> >   43 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 8.0.0 (Fedora 8.0.0-3.fc30)
-> >   44 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
-> >   45 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
-> >   46 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
-> >   47 fedora:34                     : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
-> >   48 fedora:34-x-ARC-glibc         : Ok   arc-linux-gcc (ARC HS GNU/Linux glibc toolchain 2019.03-rc1) 8.3.1 20190225
-> >   49 fedora:34-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1) 8.3.1 20190225
-> >   50 fedora:35                     : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
-> >   51 fedora:36                     : FAIL gcc version 12.0.1 20220308 (Red Hat 12.0.1-0) (GCC)
-> >   52 fedora:rawhide                : Ok   gcc (GCC) 12.0.1 20220308 (Red Hat 12.0.1-0) , clang version 13.0.1 (Fedora 13.0.1-1.fc37)
-> >   53 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
-> >   54 mageia:6                      : Ok   gcc (Mageia 5.5.0-1.mga6) 5.5.0 , clang version 3.9.1 (tags/RELEASE_391/final)
-> >   55 mageia:7                      : FAIL clang version 8.0.0 (Mageia 8.0.0-1.mga7)
-> >   56 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
-> >   57 openmandriva:4.2              : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
-> >   58 openmandriva:cooker           : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
-> >   59 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] , clang version 5.0.1 (tags/RELEASE_501/final 312548)
-> >   60 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 7.0.1 (tags/RELEASE_701/final 349238)
-> >   61 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1
-> >   62 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
-> >   63 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
-> >   64 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 11.2.1 20211124 [revision 7510c23c1ec53aa4a62705f0384079661342ff7b] , clang version 13.0.0
-> >   65 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
-> >   66 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module+el8.5.0+715+58f51d49)
-> >   67 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 , clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)
-> >   68 ubuntu:16.04-x-arm            : Ok   arm-linux-gnueabihf-gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   69 ubuntu:16.04-x-arm64          : Ok   aarch64-linux-gnu-gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   70 ubuntu:16.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   71 ubuntu:16.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   72 ubuntu:16.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   73 ubuntu:16.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> >   74 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 , clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
-> >   75 ubuntu:18.04-x-arm            : Ok   arm-linux-gnueabihf-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   76 ubuntu:18.04-x-arm64          : Ok   aarch64-linux-gnu-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   77 ubuntu:18.04-x-m68k           : Ok   m68k-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   78 ubuntu:18.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   79 ubuntu:18.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   80 ubuntu:18.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   81 ubuntu:18.04-x-riscv64        : Ok   riscv64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   82 ubuntu:18.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   83 ubuntu:18.04-x-sh4            : Ok   sh4-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   84 ubuntu:18.04-x-sparc64        : Ok   sparc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-> >   85 ubuntu:20.04                  : FAIL clang version 10.0.0-4ubuntu1
-> >   86 ubuntu:20.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
-> >   87 ubuntu:20.10                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1~20.10) 10.3.0 , Ubuntu clang version 11.0.0-2
-> >   88 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
-> >   89 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
-> >   90 ubuntu:22.04                  : FAIL gcc version 11.2.0 (Ubuntu 11.2.0-18ubuntu1)
-> >
-> > > I can test your patch with my next kernel-build, but can not promise.
-> > > Do you have it somewhere in a Git repo/branch or a (LORE) link for
-> > > easy application?
-> >
-> > git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tmp.perf/urgent
-> >
-> > > Did not check if b4 tool is able to extract it as patch out of your
-> > > original email.
-> > >
-> > > - Sedat -
-> >
-> > > From 72ba634c9b39547197900d8b64ff36134af3ed08 Mon Sep 17 00:00:00 2001
-> > > From: Sedat Dilek <sedat.dilek@gmail.com>
-> > > Date: Sun, 13 Mar 2022 12:37:06 +0100
-> > > Subject: [PATCH] tools: feature-detect: libperl: Sync PERL_EMBED_CCOPTS with
-> > >  perf
-> > >
-> > > ---
-> > >  tools/build/feature/Makefile | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > > index 1480910c792e..fa6be127f483 100644
-> > > --- a/tools/build/feature/Makefile
-> > > +++ b/tools/build/feature/Makefile
-> > > @@ -217,7 +217,8 @@ strip-libs = $(filter-out -l%,$(1))
-> > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
-> > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
-> > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-> > > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> > > +PERL_EMBED_CCOPTS = $(perl -MExtUtils::Embed -e ccopts 2>/dev/null)
-> > > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> > >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-> > >
-> > >  $(OUTPUT)test-libperl.bin:
-> > > --
-> > > 2.35.1
-> > >
-> >
-> > > From 316a1917ec05772ab0f99dad534fabdd74547865 Mon Sep 17 00:00:00 2001
-> > > From: Sedat Dilek <sedat.dilek@gmail.com>
-> > > Date: Sun, 6 Mar 2022 11:29:50 +0100
-> > > Subject: [PATCH] perf: Fix libperl support with clang and perl v5.34
-> > >
-> > > ---
-> > >  tools/build/feature/Makefile | 2 +-
-> > >  tools/perf/Makefile.config   | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > > index 1480910c792e..ef9b37c5c652 100644
-> > > --- a/tools/build/feature/Makefile
-> > > +++ b/tools/build/feature/Makefile
-> > > @@ -81,7 +81,7 @@ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
-> > >
-> > >  all: $(FILES)
-> > >
-> > > -__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
-> > > +__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -Wno-compound-token-split-by-macro -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
-> > >    BUILD = $(__BUILD) > $(@:.bin=.make.output) 2>&1
-> > >
-> > >  __BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
-> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > > index 96ad944ca6a8..acc987daf56e 100644
-> > > --- a/tools/perf/Makefile.config
-> > > +++ b/tools/perf/Makefile.config
-> > > @@ -213,7 +213,7 @@ endif
-> > >
-> > >  # Treat warnings as errors unless directed not to
-> > >  ifneq ($(WERROR),0)
-> > > -  CORE_CFLAGS += -Werror
-> > > +  CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
-> > >    CXXFLAGS += -Werror
-> > >    HOSTCFLAGS += -Werror
-> > >  endif
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > - Arnaldo
->
-> --
->
-> - Arnaldo
+just "DMIC"?

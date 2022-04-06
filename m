@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAC94F69A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A73B4F6A64
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiDFTRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S232706AbiDFTv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiDFTPh (ORCPT
+        with ESMTP id S232890AbiDFTuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:15:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B08216F99;
+        Wed, 6 Apr 2022 15:50:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4362E216A56;
         Wed,  6 Apr 2022 10:20:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E52DDB824E9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6C15B824E6;
         Wed,  6 Apr 2022 17:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E92AC385A5;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FAAAC385A3;
         Wed,  6 Apr 2022 17:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649265612;
-        bh=MMU5XGllo+8yHGXnAXzQ3+JJnqca7TBXCTyeXdUvgaA=;
+        bh=Mo8HirllIynk/z8CgfkYFr8U2nZhqSzLoJnSPMEkdKc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DOaGlWEJrdtAqZXkQyVy1N1txuyk5/oz1bUyME6JV2nkUEFsT8JHPimoJpJklBtMH
-         TRCG7xju/Au4KsRZWr1o5UdPB7gxYqJn/pMhcX7AM8VNjlQu14tPhV/T9eyhB59wau
-         Q7C3OAcWZBtjsebYCxAYHByjH2VEPtwdbbsdwUC6AvsECoD/cVuZFUXpMxqJAKmQ5J
-         uHqdk9f2P0ucLYNOFVhTXCQ2Iy+6abGm70xwF4pWdnzuwJZgXjU+C1wd3T0Lk8fsG5
-         rdeEBc1dBsJ8LkoSKp280LbLEOXF9PqgafaPqbO/F8Nzqto4RsloqLVeu49HxmNeCm
-         kaoLomJdkzvxQ==
+        b=PeKFiO72mWGWyUeFzVUOvAhDJ1IQt8fp0nSbB/BY5edlC2n4AiR1okEfvfImJtCbD
+         7oSEsIeAzWcfiItk+Okk0aEiMFwaXWlitF1IXmvJi3TfzsfawdqV1rkhORDa3GIU1A
+         S/8WZdgi8lBDW6MLjNBBDzMaJROw3COQJnhTTLBBgaD30S8ZoYdt/1e6mAwIbal+R+
+         f029O143joNsXcBWh7EpaBUTTkinQhSIdrrBuMSrJuMS0kfsx3SELZ56c04ZTLpHOT
+         asuEOUdwOCoFA+QAoQk81p082YhCJOhmunmJdwOPe+Uum1xHtoPVKDcy/qlnXz1shJ
+         J4sLX+8iF6w7A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B49CE85BCB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5252BE85D53;
         Wed,  6 Apr 2022 17:20:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Fix issues in parse_num_list()
+Subject: Re: [PATCH][next] libbpf: Fix spelling mistake "libaries" -> "libraries"
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164926561223.23950.5441480485947664508.git-patchwork-notify@kernel.org>
+Message-Id: <164926561233.23950.5713179481350505645.git-patchwork-notify@kernel.org>
 Date:   Wed, 06 Apr 2022 17:20:12 +0000
-References: <20220406003622.73539-1-ytcoode@gmail.com>
-In-Reply-To: <20220406003622.73539-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     andrii.nakryiko@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220406080835.14879-1-colin.i.king@gmail.com>
+In-Reply-To: <20220406080835.14879-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,19 +65,17 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Wed,  6 Apr 2022 08:36:22 +0800 you wrote:
-> The function does not check that parsing_end is false after parsing
-> argument. Thus, if the final part of the argument is something like '4-',
-> which is invalid, parse_num_list() will discard it instead of returning
-> -EINVAL.
+On Wed,  6 Apr 2022 09:08:35 +0100 you wrote:
+> There is a spelling mistake in a pr_warn message. Fix it.
 > 
-> Before:
-> 
-> [...]
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/lib/bpf/usdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - [bpf-next,v3] selftests/bpf: Fix issues in parse_num_list()
-    https://git.kernel.org/bpf/bpf-next/c/958ddfd75d83
+  - [next] libbpf: Fix spelling mistake "libaries" -> "libraries"
+    https://git.kernel.org/bpf/bpf-next/c/a8d600f6bcd4
 
 You are awesome, thank you!
 -- 

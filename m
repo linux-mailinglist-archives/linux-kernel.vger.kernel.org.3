@@ -2,105 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2764F6D01
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13D14F6CF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 23:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbiDFVkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 17:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S236716AbiDFVkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 17:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbiDFVh6 (ORCPT
+        with ESMTP id S237703AbiDFViV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:37:58 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D8A35A87
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:54:14 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f16so1361433lfe.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:54:14 -0700 (PDT)
+        Wed, 6 Apr 2022 17:38:21 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E526141DB6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 13:57:18 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id c15so4877399ljr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 13:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ww++6lY9qtCS7Tb+W0av3e3vzWAaXVMYqc4+oMmKte8=;
-        b=Y7H9oQ83ZoDYg0JVp6YP02u5yok/m9H+AZNO+MhqFB9W1g5zG7tAGi+Oj8SKEPk9NC
-         ueYJqUvbX9+gtEoXkd16FGau9RxsCKE5kYzbhfZVsKGHGWsPbst50jQVVUB+Kbrtupra
-         uQpRAfybu8aJNDdPe6e/52z3hCTj204qqw3VkSQOEZCpJSpSzEUt/d9yBl+4QU+9dLTC
-         hOeoX8BbKtKAVAS7+4Xq5zSIsAO72K5V7oEIsDY0z5H3vIUAJPUUk2kOOJ3bmJzo/a0l
-         CWiZpFAFzAguez+e8/4uzSrjej+N7uFugl1jSssOU2MVfJvhlR9kZ4qj5gT7cDSMm8AD
-         cDtg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EmyOlWKtSNxj3DWsfduxZVZU5wGOGPxKyvHvnTz6lcI=;
+        b=jq7jeMYa1/GWNQdm7SpRK9Xvt9vCIu2PnkTUcUEhDN34fqe8A1mwBwZbQpRoVisRQk
+         bFNscfrmInpYye5WJvFEAB0/cDGkv2uaKerUby43BamFasp0304fBfSOwFXNB85SDP6X
+         6MZEi480XiupbZ6uw1oGqX/NJ4IMuKzpDnjxrsEo6e11UCbZTHhkb6hoDvTeNN45MKmN
+         rCI5Fe7l4au7J5uZWduHjBOQjW++4F7r9A9Tx/lipjSwToZzpZhVGgfBt6NrBKAVvQym
+         V6qW9bScNq3LR6f8VDqy4g3BhP+ZZx2aBhMZKOAjzgUjbQFRREvDHX42uU2HVWeEciXz
+         TGAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ww++6lY9qtCS7Tb+W0av3e3vzWAaXVMYqc4+oMmKte8=;
-        b=YQAG35FHAaYXxzPNsK0DGroOZX8yH5fKqBHQrHLZeUAdhPrXHSLE3C510BpaXKXEYl
-         AarBBA1YOPeT7exPv4/6WWj31Q4LWZxaOg3nGVGdtLdkRkmsT1KVJ80T/Noic9cQDQBN
-         nJ4GENb+yndqVDlRG3YrevZ+UWzD9tCEbig1i/3QPad5dElhtf+ECzzML+Y8/KtX+3Si
-         T7Z/vGgSMp3qD44HRbipJhJOFZsYlluheZkL/zgIfDtmSRhCMd8757j80zUg6Zz3A9be
-         WlyXFulGZcAX4o79DlNOVCWNjB3T7l12LRnrlZElPehMvrvT/PUFRYVyokPH2BI6B/hJ
-         1jtQ==
-X-Gm-Message-State: AOAM5333BvhkDiBGaT53TqhyeuMB1pJCfvd0ECvbuZFh+bmzpW3Aco9f
-        WuE/ntpLwjsXsBXxWCCszq3VeZ6lbSKofXm4jQpo3A==
-X-Google-Smtp-Source: ABdhPJwPaUYkfsnPk3yf26f0Mn8XqDz21sD5lQkfNpVMQidnilf7I+YC/Lepuh3g5n53maIwiKXy/aHv7TarIED6BLw=
-X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
- b30-20020a0565120b9e00b0044a10eb9607mr6999490lfv.626.1649278452698; Wed, 06
- Apr 2022 13:54:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EmyOlWKtSNxj3DWsfduxZVZU5wGOGPxKyvHvnTz6lcI=;
+        b=XoVtz+EshjnzgmUUHFOA2p+HyZIIqINxSGs4klPpfPBJix/5MilSXH+hN8PQoWUmoD
+         7/KH9ZKnhczMgckZuZrtgihxHMTGzuZsK44pieaw/reSQ12nsQouAWBSSk/SALsiow6M
+         lQIp7TnzDttt1lyq4NGTEa52IgNSaAW2YAchihsjnqR6VpXoDpuiat+LP4tiYOZ0H9zk
+         ftFxm1I1/VUtaqJWc3tq6TVxq59CO3sgLJijt3XpeUR8jDFPMY1z875n1WOnMrLQh6tN
+         3akDxRL4vXQnyjvhuIm1+N0xoi+veKltRg6cQ4hSKxcfePImmnLkTaJgvpIafn9uPi9S
+         QjEg==
+X-Gm-Message-State: AOAM531quVOz3it2jl7peSg9VcOlRrmDNjVN2EOVk41xJKY95DoikxBh
+        1so0b/7As5hQylJCOhAenym1Xg==
+X-Google-Smtp-Source: ABdhPJykjllUjWrbBsbw9MgTMptQWUmRwtV9PhKiS1HBV5kr4L/Yq3KlfOAlxjrC6M1nHBmpsq2SLw==
+X-Received: by 2002:a2e:bf1d:0:b0:247:dea7:f657 with SMTP id c29-20020a2ebf1d000000b00247dea7f657mr6468467ljr.454.1649278636823;
+        Wed, 06 Apr 2022 13:57:16 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id t19-20020a19dc13000000b0044b022fd9f1sm1246586lfg.160.2022.04.06.13.57.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 13:57:16 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] clocksource/drivers/ixp4xx: Drop boardfile probe path
+Date:   Wed,  6 Apr 2022 22:55:05 +0200
+Message-Id: <20220406205505.2332821-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-2-masahiroy@kernel.org>
-In-Reply-To: <20220406153023.500847-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 6 Apr 2022 13:54:01 -0700
-Message-ID: <CAKwvOdmjdF1mE5LYXm67KPT1kLgignZSNmwY5KfAuiu7hUseYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] kbuild: reuse suffix-search to refactor multi_depend
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The complicated part of multi_depend is the same as suffix-search.
->
-> Reuse it.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+The boardfiles for IXP4xx have been deleted. Delete all the
+quirks and code dealing with that boot path and rely solely on
+device tree boot.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/clocksource/Kconfig                |  2 +-
+ drivers/clocksource/timer-ixp4xx.c         | 25 ----------------------
+ include/linux/platform_data/timer-ixp4xx.h | 11 ----------
+ 3 files changed, 1 insertion(+), 37 deletions(-)
+ delete mode 100644 include/linux/platform_data/timer-ixp4xx.h
 
-> ---
->
->  scripts/Makefile.lib | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 9f69ecdd7977..d56cda3c1e8a 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -238,7 +238,7 @@ endif
->  define multi_depend
->  $(foreach m, $(notdir $1), \
->         $(eval $(obj)/$m: \
-> -       $(addprefix $(obj)/, $(foreach s, $3, $($(m:%$(strip $2)=%$(s)))))))
-> +       $(addprefix $(obj)/, $(call suffix-search, $m, $2, $3))))
->  endef
->
->  # Copy a file
-> --
-> 2.32.0
->
-
-
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 1589ae7d5abb..8182ff2d12fe 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -80,7 +80,7 @@ config IXP4XX_TIMER
+ 	bool "Intel XScale IXP4xx timer driver" if COMPILE_TEST
+ 	depends on HAS_IOMEM
+ 	select CLKSRC_MMIO
+-	select TIMER_OF if OF
++	select TIMER_OF
+ 	help
+ 	  Enables support for the Intel XScale IXP4xx SoC timer.
+ 
+diff --git a/drivers/clocksource/timer-ixp4xx.c b/drivers/clocksource/timer-ixp4xx.c
+index cbb184953510..720ed70a2964 100644
+--- a/drivers/clocksource/timer-ixp4xx.c
++++ b/drivers/clocksource/timer-ixp4xx.c
+@@ -19,8 +19,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+-/* Goes away with OF conversion */
+-#include <linux/platform_data/timer-ixp4xx.h>
+ 
+ /*
+  * Constants to make it easy to access Timer Control/Status registers
+@@ -263,28 +261,6 @@ static struct platform_driver ixp4xx_timer_driver = {
+ };
+ builtin_platform_driver(ixp4xx_timer_driver);
+ 
+-/**
+- * ixp4xx_timer_setup() - Timer setup function to be called from boardfiles
+- * @timerbase: physical base of timer block
+- * @timer_irq: Linux IRQ number for the timer
+- * @timer_freq: Fixed frequency of the timer
+- */
+-void __init ixp4xx_timer_setup(resource_size_t timerbase,
+-			       int timer_irq,
+-			       unsigned int timer_freq)
+-{
+-	void __iomem *base;
+-
+-	base = ioremap(timerbase, 0x100);
+-	if (!base) {
+-		pr_crit("IXP4xx: can't remap timer\n");
+-		return;
+-	}
+-	ixp4xx_timer_register(base, timer_irq, timer_freq);
+-}
+-EXPORT_SYMBOL_GPL(ixp4xx_timer_setup);
+-
+-#ifdef CONFIG_OF
+ static __init int ixp4xx_of_timer_init(struct device_node *np)
+ {
+ 	void __iomem *base;
+@@ -315,4 +291,3 @@ static __init int ixp4xx_of_timer_init(struct device_node *np)
+ 	return ret;
+ }
+ TIMER_OF_DECLARE(ixp4xx, "intel,ixp4xx-timer", ixp4xx_of_timer_init);
+-#endif
+diff --git a/include/linux/platform_data/timer-ixp4xx.h b/include/linux/platform_data/timer-ixp4xx.h
+deleted file mode 100644
+index ee92ae7edaed..000000000000
+--- a/include/linux/platform_data/timer-ixp4xx.h
++++ /dev/null
+@@ -1,11 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __TIMER_IXP4XX_H
+-#define __TIMER_IXP4XX_H
+-
+-#include <linux/ioport.h>
+-
+-void __init ixp4xx_timer_setup(resource_size_t timerbase,
+-			       int timer_irq,
+-			       unsigned int timer_freq);
+-
+-#endif
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.1
+

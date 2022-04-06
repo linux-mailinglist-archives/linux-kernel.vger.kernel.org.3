@@ -2,183 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6940F4F66AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031D14F66A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbiDFRUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S238700AbiDFRVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238700AbiDFRUh (ORCPT
+        with ESMTP id S238834AbiDFRUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:20:37 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E86E2CF1CA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:18:33 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id w18so2991335edi.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:18:33 -0700 (PDT)
+        Wed, 6 Apr 2022 13:20:25 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CB2320DB6;
+        Wed,  6 Apr 2022 08:18:23 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k23so3728567wrd.8;
+        Wed, 06 Apr 2022 08:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nKwkK10Z219eaNtTvbaclsEiamXSVs+FNo2ty5mHsKo=;
-        b=S1op2j+cyW9lQWw00SOcofbFHdT3E57y5jJKpzzhgK6+y+jrtuTVbjmUjwbeu6IkUN
-         78P1TjwAAvLxVD0Ju8UifXumvgVrNqiVvEIVfizpxQryRR07d2Qkk+VBe+3x9DcvNQhl
-         Lox9myyWXfC5I2yQ9jS5VmipsXUMdqstiVlkA=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=U40qc6GQ+SYodTIzBOdqOZLwZjwjzDI8PPMpjuLO23M=;
+        b=qGKYV5W384zdQNQ8zw1aGodGOdwK21gS5pz/8yEd9vW0X5PoY6zkvso/jy0OD2ZpMl
+         R6cGMhidVv1PRHXyAaPP34WONoy9IJuyWOY3emvm4Pc+Qa0/ymhjs+k0p3UAMRjQ+bYP
+         S1Rbh1ffDrpxOH/N0luR86LQVoWz3wpcez7Eu7PpGXY4HjxsXBn136wgErywTkxrbtL4
+         gr0iQDR4xH6CCvfaUACbfC311BeaKXYn8VbIodSo173OK9I7wfNVegD4wBes3R2AfHCU
+         AvEfr4/J7RLiLGyHmQC0ixgvXmzLB1h6SNh2w4lY9ytIRlqnH6/1n3XGymYCLzEFLco+
+         GXAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nKwkK10Z219eaNtTvbaclsEiamXSVs+FNo2ty5mHsKo=;
-        b=yHqnAmK/c5i/iY6FNHXcs0rW5Qip6PrRYQyx4ImbV+UIkARMgrDjQB0e71BKRdt8XB
-         6mdFD60BkF3Zv0mxD1zKid7F66vxgR0SRiluB6apEyK2B/R8oV1fDHZFeQFU289f0C8u
-         o5Rkzr4TgeMhbPBq7rI8mv7fEAdAWRQ6SJ9XBrWAFcOb8UaNjAs9chIS7bk5rS3ohYCt
-         TB5llu6Lt/b9hykfo6UZRJ+XgHtZuc4J2KK5gwawdgQsbdtNRFFut0JvZYedunY9omLq
-         DS5mBLCzgamC0lZtC1+GriZa9cgNOlNtXlJO0wmenKZQZb4fhdjCPqmm5gPrVtBZ7IaH
-         VKKQ==
-X-Gm-Message-State: AOAM531cfIbEPD5LMF/DiMdF1yF3Wm7A1CM5+7FHpJiKwrbxKsg5Fnnt
-        8VYUtEC5EKH7ZPf8TkC/L9hnzjJ0d2hG8uhnMfc=
-X-Google-Smtp-Source: ABdhPJyTm/DowELpD42ZQUpr/ps4QnSfq6Hp3dUYqIeKGfGusktJ+mxF5xX64wayGQz8aV120QOa6Q==
-X-Received: by 2002:aa7:cfda:0:b0:41c:bd28:a7da with SMTP id r26-20020aa7cfda000000b0041cbd28a7damr9210913edy.129.1649258311831;
-        Wed, 06 Apr 2022 08:18:31 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id f5-20020a17090624c500b006cee6661b6esm6706209ejb.10.2022.04.06.08.18.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 08:18:28 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id q19so3737401wrc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:18:26 -0700 (PDT)
-X-Received: by 2002:a5d:5551:0:b0:203:f916:e319 with SMTP id
- g17-20020a5d5551000000b00203f916e319mr7123258wrw.422.1649258305814; Wed, 06
- Apr 2022 08:18:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=U40qc6GQ+SYodTIzBOdqOZLwZjwjzDI8PPMpjuLO23M=;
+        b=O98jNvcPlf7gYGZn8jtRWy616QyxSuFE2WOM1fblkpojeVW9qBZZwnqas7P2hsOiAI
+         DLD720cCJOsmSDbtBxbUa15osxmroKvigjrEO+a+j3qT6DyxMnOB4djwspzeEkLi6Gn9
+         pG6UReDoTWR2thMae9YtEhfVQllFPakFnAcjccJfS4VgWWhdh/hfhRh7kBQl9si59LXu
+         iuf2rCj4uf9+kdDuYg4XCRBrzXRFgJqM8e1Sgp7HdiCXe0ozCOPffqCzU0wxaVFZS0Gh
+         QCx7bJLuv/5Ed1x3Fvr3jNYaFpZOpOy6dzq+zMtK7vwr7PxpacOcS35pkqH9Xgokzkk4
+         VB4g==
+X-Gm-Message-State: AOAM533hY4AvpUGioLtHhQjh1p/FIeu1gQ2HnSukaa7CfpRWhQX4CLVG
+        pNQuZ9rjXTtSmLc6uCnGrJs=
+X-Google-Smtp-Source: ABdhPJyCYjrUpOXRKUOMNlOKspcPqmHHJD1TpshBOnLqE/8upHaCgOAE57aqeMsyScW3cblgtmrGfw==
+X-Received: by 2002:a5d:528b:0:b0:203:d928:834c with SMTP id c11-20020a5d528b000000b00203d928834cmr7312065wrv.500.1649258302003;
+        Wed, 06 Apr 2022 08:18:22 -0700 (PDT)
+Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
+        by smtp.gmail.com with ESMTPSA id s10-20020adf978a000000b002060c258514sm10062623wrb.23.2022.04.06.08.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 08:18:20 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 17:18:18 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Brian Silverman <bsilver16384@gmail.com>
+Cc:     Brian Silverman <brian.silverman@bluerivertech.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Dan Murphy <dmurphy@ti.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
+ devices
+Message-ID: <Yk2vOj8wKi4FdPg2@orome>
+References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
 MIME-Version: 1.0
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
- <20220303214300.59468-2-bjorn.andersson@linaro.org> <CAD=FV=WkgcJA6-niUh0L5_jLNSS=Hv0xrR5QZghPmNriekH7XA@mail.gmail.com>
-In-Reply-To: <CAD=FV=WkgcJA6-niUh0L5_jLNSS=Hv0xrR5QZghPmNriekH7XA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 6 Apr 2022 08:18:13 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xa4wW2AH1RzwQRiTZt__Eptr2+Li5SmfZyUjTvNTkOcA@mail.gmail.com>
-Message-ID: <CAD=FV=Xa4wW2AH1RzwQRiTZt__Eptr2+Li5SmfZyUjTvNTkOcA@mail.gmail.com>
-Subject: Re: [PATCH v14 2/2] leds: Add driver for Qualcomm LPG
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BsOhgM1lSoA88Bvi"
+Content-Disposition: inline
+In-Reply-To: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
 
-On Thu, Mar 3, 2022 at 2:10 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Thu, Mar 3, 2022 at 1:41 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > with their output being routed to various other components, such as
-> > current sinks or GPIOs.
-> >
-> > Each LPG instance can operate on fixed parameters or based on a shared
-> > lookup-table, altering the duty cycle over time. This provides the means
-> > for hardware assisted transitions of LED brightness.
-> >
-> > A typical use case for the fixed parameter mode is to drive a PWM
-> > backlight control signal, the driver therefor allows each LPG instance
-> > to be exposed to the kernel either through the LED framework or the PWM
-> > framework.
-> >
-> > A typical use case for the LED configuration is to drive RGB LEDs in
-> > smartphones etc, for which the driver supports multiple channels to be
-> > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > generators will be synchronized, to allow for multi-color patterns.
-> >
-> > The idea of modelling this as a LED driver ontop of a PWM driver was
-> > considered, but setting the properties related to patterns does not fit
-> > in the PWM API. Similarly the idea of just duplicating the lower bits in
-> > a PWM and LED driver separately was considered, but this would not allow
-> > the PWM channels and LEDs to be configured on a per-board basis. The
-> > driver implements the more complex LED interface, and provides a PWM
-> > interface on the side of that, in the same driver.
-> >
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >
-> > Changes since v13:
-> > - Fixed mixed space/tab indentation in documentation
-> > - Added 0 as to lpg_clk_rates[] to match the hardware state, to avoid + 1 in
-> >   lpg_apply_freq() and - 1 in lpg_pwm_get_state()
-> > - Don't divide with 0 if current clock is 0 in lpg_pwm_get_state(), just return
-> >   period = duty = 0 in this case
-> > - Renamed "clk" in struct lpg_channel to clk_sel
-> > - Renamed "pre_div" in struct lpg_channel to pre_div_sel
-> >
-> > Changes since v12:
-> > - Initialize ret in lpg_pwm_apply()
-> >
-> > Changes since v11:
-> > - Extended commit message to cover decision to put pwm_chip in the LED driver
-> > - Added Documentation, in particular for the hw_pattern format
-> > - Added a lock to synchronize requests from LED and PWM frameworks
-> > - Turned out that the 9bit selector differs per channel in some PMICs, so
-> >   replaced bitmask in lpg_data with lookup based on QPNP SUBTYPE
-> > - Fixed kerneldoc for the struct device pointer in struct lpg
-> > - Rewrote conditional in lut_free() to make it easier to read
-> > - Corrected and deduplicated max_period expression in lpg_calc_freq()
-> > - Extended nom/dom to numerator/denominator in lpg_calc_freq()
-> > - Replaced 1 << 9 with LPG_RESOLUTION in one more place in lpg_calc_freq()
-> > - Use FIELD_PREP() in lpg_apply_freq() as masks was introduced for reading the
-> >   same in get_state()
-> > - Cleaned up the pattern format, to allow specifying both low and high pause
-> >   with and without pingpong mode.
-> > - Only update frequency and pwm_value if PWM channel is enabled in lpg_pwm_apply
-> > - Make lpg_pwm_get_state() read the hardware state, in order to pick up e.g.
-> >   bootloader backlight configuration
-> > - Use devm_bitmap_zalloc() to allocate the lut_bitmap
-> > - Use dev_err_probe() in lpg_probe()
-> > - Extended Kconfig help text to mention module name and satisfy checkpatch
-> >
-> >  Documentation/leds/leds-qcom-lpg.rst |   76 ++
-> >  drivers/leds/Kconfig                 |    3 +
-> >  drivers/leds/Makefile                |    3 +
-> >  drivers/leds/rgb/Kconfig             |   18 +
-> >  drivers/leds/rgb/Makefile            |    3 +
-> >  drivers/leds/rgb/leds-qcom-lpg.c     | 1405 ++++++++++++++++++++++++++
-> >  6 files changed, 1508 insertions(+)
->
-> Gets rid of the KASAN error and PWM still works for me, so happy to add back:
->
-> Tested-by: Douglas Anderson <dianders@chromium.org>
->
-> I haven't done a full review of the driver but I did a once-over of
-> the changes between v12 and v13 and they look good to me.
+--BsOhgM1lSoA88Bvi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With v5.18-rc1 released, this seems like it would be an ideal time to
-land this driver and its bindings in a for-next branch for the leds
-subsystem. Is there anything blocking it? Are you the right person to
-land them? Ideally the bindings / driver (patch #1 and #2) from
-Satya's series [1] could land right atop it since it's ready too?
+On Wed, Jan 05, 2022 at 04:25:09PM -0800, Brian Silverman wrote:
+> It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
+> existing m_can driver works with it after handling the glue logic.
+>=20
+> The code is a combination of pieces from m_can_platform and NVIDIA's
+> driver [1].
+>=20
+> [1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidi=
+a/drivers/net/can/mttcan/hal/m_ttcan.c
+>=20
+> Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+> ---
+> I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
+> switched to m_can which has been much better. I'm looking for feedback
+> on whether I should ensure rebasing hasn't broken anything, write up DT
+> documentation, and submit this patch for real. The driver works great,
+> but I've got some questions about submitting it.
+>=20
+> question: This has liberal copying of GPL code from NVIDIA's
+> non-upstreamed m_ttcan driver. Is that OK?
+>=20
+> corollary: I don't know what any of this glue logic does. I do know the
+> device doesn't work without it. I can't find any documentation of what
+> these addresses do.
+>=20
+> question: There is some duplication between this and m_can_platform. It
+> doesn't seem too bad to me, but is this the preferred way to do it or is
+> there another alternative?
+>=20
+> question: Do new DT bindings need to be in the YAML format, or is the
+> .txt one OK?
+>=20
+>  drivers/net/can/m_can/Kconfig       |  10 +
+>  drivers/net/can/m_can/Makefile      |   1 +
+>  drivers/net/can/m_can/m_can_tegra.c | 362 ++++++++++++++++++++++++++++
+>  3 files changed, 373 insertions(+)
+>  create mode 100644 drivers/net/can/m_can/m_can_tegra.c
 
-[1] https://lore.kernel.org/r/1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com/
+Sorry for the late reply, I completely missed this. I think along with
+the DT bindings it'd be great if you could provide DT updates for the
+platform that you tested this on so we can get that upstream as well.
 
-Thanks!
+I don't know much about CAN so I can't comment on those pieces, so just
+a few thoughts on the integration bits.
 
--Doug
+> diff --git a/drivers/net/can/m_can/m_can_tegra.c b/drivers/net/can/m_can/=
+m_can_tegra.c
+[...]
+> +static int m_can_tegra_probe(struct platform_device *pdev)
+> +{
+[...]
+> +	ret =3D clk_set_parent(can_clk, pclk);
+> +	if (ret) {
+> +		goto probe_fail;
+> +	}
+> +
+> +	ret =3D fwnode_property_read_u32(dev_fwnode(&pdev->dev), "can-clk-rate"=
+, &rate);
+> +	if (ret) {
+> +		goto probe_fail;
+> +	}
+> +
+> +	new_rate =3D clk_round_rate(can_clk, rate);
+> +	if (!new_rate)
+> +		dev_warn(&pdev->dev, "incorrect CAN clock rate\n");
+> +
+> +	ret =3D clk_set_rate(can_clk, new_rate > 0 ? new_rate : rate);
+> +	if (ret) {
+> +		goto probe_fail;
+> +	}
+> +
+> +	ret =3D clk_set_rate(host_clk, new_rate > 0 ? new_rate : rate);
+> +	if (ret) {
+> +		goto probe_fail;
+> +	}
+> +
+> +	if (core_clk) {
+> +		ret =3D fwnode_property_read_u32(dev_fwnode(&pdev->dev), "core-clk-rat=
+e", &rate);
+> +		if (ret) {
+> +			goto probe_fail;
+> +		}
+> +		new_rate =3D clk_round_rate(core_clk, rate);
+> +		if (!new_rate)
+> +			dev_warn(&pdev->dev, "incorrect CAN_CORE clock rate\n");
+> +
+> +		ret =3D clk_set_rate(core_clk, new_rate > 0 ? new_rate : rate);
+> +		if (ret) {
+> +			goto probe_fail;
+> +		}
+> +	}
+
+Can all of this clock setup not be simplified by using the standard
+assigned-clocks, assigned-clock-parent and assigned-clock-rates DT
+properties?
+
+> +
+> +	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "m_can");
+> +	addr =3D devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(addr)) {
+> +		ret =3D PTR_ERR(addr);
+> +		goto probe_fail;
+> +	}
+> +
+> +	irq =3D platform_get_irq_byname(pdev, "int0");
+> +	if (irq < 0) {
+> +		ret =3D -ENODEV;
+> +		goto probe_fail;
+> +	}
+
+If there's only one of these, it doesn't make much sense to name them.
+But perhaps this can be discussed when reviewing the DT bindings.
+
+[...]
+> +static const struct of_device_id m_can_of_table[] =3D {
+> +	{ .compatible =3D "nvidia,tegra194-m_can", .data =3D NULL },
+
+We typically name the compatible string after the IP block name. The TRM
+references this as simply "CAN", so I think "nvidia,tegra194-can" would
+be more in line with what we use for existing Tegra hardware.
+
+Thierry
+
+--BsOhgM1lSoA88Bvi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJNrzgACgkQ3SOs138+
+s6H85hAAjpQPOGIqFtsZNbZ6ZNiio0A9LQhmCQTjcW2fIixt0g7Yqk4Hn8Df1FAg
+fJibRWvhio+Yor4JWUIP9NsntbgywoKoUSO1rX+LX66KP0Q23laOft/oYZc3soAu
+kVBeL4JsvcwJOKY1K/smty4OY2zC6G4fojBdYnc6kQhoFyTKxER9Tx6/RTRgDz/n
+8vbWejOjxEgrAJpJ+a/xKPCDf8N0qfXLITcdT2v29HAorgL8QmTnYZ3ky2ROMEKn
+BD08Dw14Fe45NCm98H/ACd4sFBuLKmaB2B9P+XlZVO4z8LDxAvpdHPoghD/nfGTa
+IV0RlDYgwpsq+hfwkucjNaznaQxK7uIYobCp8jqZXdqkxNELRCa+W/4Fk64b3oHQ
+f0r9HJWDFRkU/8XWFP2fxNvP52HhM1bAJIgoO/F2xLprgIjcniQCT1wbuGBkICxM
+g0mf7W0pbzHT2drCnaolNNTB2Zugey5ulbf0pFe88x9taFr2H0P3anEVJyasMJM/
+u0PFhTxcSd4osAV/eWNDYv4qE2pVASHt7TssKpPfiNdcu8+7BT0zKqqZfSG+NoLC
+Buh5kX8GP+hFpj1E8eQZfTztaL1R3dsJRCRB0i/V7do2KpSnTxUoC0XVVNBdevJZ
+OXzSVUXyfKhEnAsmp5It1Eso1iVTmMA5iO80O4T+ynxbK0DYfbw=
+=Nf/A
+-----END PGP SIGNATURE-----
+
+--BsOhgM1lSoA88Bvi--

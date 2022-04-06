@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218EA4F6B88
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDB54F6B8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 22:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234478AbiDFUop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 16:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S233807AbiDFUou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 16:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiDFUoM (ORCPT
+        with ESMTP id S232023AbiDFUoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:44:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C873B1229
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 12:00:47 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Apr 2022 16:44:39 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07893B21B7;
+        Wed,  6 Apr 2022 12:00:55 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id da974e533c45d771; Wed, 6 Apr 2022 21:00:54 +0200
+Received: from kreacher.localnet (unknown [213.134.186.238])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 864671EC0541;
-        Wed,  6 Apr 2022 21:00:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649271641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nVtR34tb07UE9Vh8kqXmqxis7soj7DeR1fabMcehfKk=;
-        b=O4BAWDQjL0fuQD7LGSfPrQ7Vcwh5qc7yVk0HEDaOp8DDjECmIDCb7wN2F0uHncwqEdSRZg
-        +FNqqVNo838Fkvo8yhXXlIjclP/zVl1XgyCn4nzdsWefi45aG8MO289TFtQ2oWZn64n8al
-        kvoZSBNYSdLfn7CWQFljegiUmmcKTBE=
-Date:   Wed, 6 Apr 2022 21:00:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Tai <thomas.tai@oracle.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH V4 1/7] x86/traps: Move pt_regs only in fixup_bad_iret()
-Message-ID: <Yk3jVrXoVpxuR0Mp@zn.tnic>
-References: <20220318143016.124387-1-jiangshanlai@gmail.com>
- <20220318143016.124387-2-jiangshanlai@gmail.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 0F19566BD10;
+        Wed,  6 Apr 2022 21:00:53 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH v1] PCI: PM: Power up all devices during runtime resume
+Date:   Wed, 06 Apr 2022 21:00:52 +0200
+Message-ID: <4412361.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220318143016.124387-2-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.186.238
+X-CLIENT-HOSTNAME: 213.134.186.238
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedgudefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdevgfetueetheekudeuvdduteelvefftdfftdejjeeukeffteeikefgiefghedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekiedrvdefkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeeirddvfeekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghs
+ sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 10:30:10PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> fixup_bad_iret() and sync_regs() have similar arguments and do similar
-> work that copies full or partial pt_regs to a place and switches stack
-> after return.  They are quite the same, but fixup_bad_iret() not only
-> copies the pt_regs but also the return address of error_entry() while
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-What return address of error_entry()? You lost me here.
+Currently, endpoint devices may not be powered up entirely during
+runtime resume that follows a D3hot -> D0 transition of the parent
+bridge.
 
-fixup_bad_iret() moves the stack frame while sync_regs() switches to the
-thread stack. I have no clue what you mean.
+Namely, even if the power state of an endpoint device, as indicated
+by its PCI_PM_CTRL register, is D0 after powering up its parent
+bridge, it may be still necessary to bring its ACPI companion into
+D0 and that should be done before accessing it.  However, the current
+code assumes that reading the PCI_PM_CTRL register is sufficient to
+establish the endpoint device's power state, which may lead to
+problems.
 
-> sync_regs() copies the pt_regs only and the return address of
-> error_entry() was preserved and handled in ASM code.
+Address that by forcing a power-up of all PCI devices, including the
+platform firmware part of it, during runtime resume.
 
-Nope, no idea.
+Link: https://lore.kernel.org/linux-pm/11967527.O9o76ZdvQC@kreacher
+Fixes: 5775b843a619 ("PCI: Restore config space on runtime resume despite being unbound")
+Reported-by: Abhishek Sahu <abhsahu@nvidia.com>
+Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci-driver.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
+ 	 * to a driver because although we left it in D0, it may have gone to
+ 	 * D3cold when the bridge above it runtime suspended.
+ 	 */
+-	pci_restore_standard_config(pci_dev);
++	pci_pm_default_resume_early(pci_dev);
  
-> This patch makes fixup_bad_iret() work like sync_regs() and the
-
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
-
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-> handling of the return address of error_entry() is moved in ASM code.
-> 
-> It removes the need to use the struct bad_iret_stack, simplifies
-> fixup_bad_iret() and makes the ASM error_entry() call fixup_bad_iret()
-> as the same as calling sync_regs() which adds readability because
-> the calling patterns are exactly the same.
-
-So fixup_bad_iret() gets the stack ptr passed in by doing:
-
-        mov     %rsp, %rdi
-        call    fixup_bad_iret
-        mov     %rax, %rsp
+ 	if (!pci_dev->driver)
+ 		return 0;
 
 
-and error_regs()
 
-        movq    %rsp, %rdi                      /* arg0 = pt_regs pointer */
-        call    sync_regs
-        movq    %rax, %rsp                      /* switch stack */
-
-the same way.
-
-Confused.
-
-> It is prepared for later patch to do the stack switch after the
-> error_entry() which simplifies the code further.
-
-Looking at your next patch, is all this dance done just so that you can
-do
-
-	leaq    8(%rsp), %rdi
-
-in order to pass in pt_regs to both functions?
-
-And get rid of the saving/restoring %r12?
-
-Is that what the whole noise is about?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

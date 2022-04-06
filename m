@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531854F674F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17E04F67A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 19:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239105AbiDFRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 13:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
+        id S239382AbiDFRfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 13:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbiDFRex (ORCPT
+        with ESMTP id S239295AbiDFRev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 13:34:53 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4EF1F6BE7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 08:41:54 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d5so4758454lfj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 08:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WIVsdQsPt2lxmnjdpo863Zg6K+OImetGpesYpOQLQrY=;
-        b=miXKVMm0bdpNo8et8CZm7eD33XHm+hRGYT5aUy/TjlYtIbm8+mQgqEB71S4VfHGLU5
-         4BrZqQae+7jH7cSgOVqtH4rAJA6AtEycG5yWt/1K8hOBGtWcv6af58Fny759ak3zTWcx
-         st/uFU6mUpXZ2yldbatFSNSGeQbjjuTWR7uNA/JWuxH0U3ZM5xD1KodgyJTd4koONW53
-         QTzflRlgvGq0UaFb4ufnA6wOAUW0aqelgom78FQOXlMjNsKK11QbYgD3VxAvw9D7SCgW
-         sPBeiuza/3cB9IstHe+dlqqOjawFexBxrJDnSJSqCaggD9GQX/PTm4RkKjVmc8CgP2FM
-         z5xg==
+        Wed, 6 Apr 2022 13:34:51 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFA0220335;
+        Wed,  6 Apr 2022 08:41:47 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id r8so2787809oib.5;
+        Wed, 06 Apr 2022 08:41:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WIVsdQsPt2lxmnjdpo863Zg6K+OImetGpesYpOQLQrY=;
-        b=lJImb9Y7keCmJA9AtZLi5MdHEUApArS0JxOmvAmWukjbSL0kJThL0SYVhTXZ2M/3HD
-         3LjZeObT3Ek6ze0m2Scjh6HbgixRH3GwIqq9ypNSlwlPG/n4rlBP2A7AobV3u5+dFaMo
-         12qKBeu2D7tufmTIM60wgPqhcm/Xx/12qrdn1AQDCaAfFKVUkWdonUfvLnPg8iYd+vko
-         yuol39iyNOfmyOrT6RFBMSXvtzbRHm8qLw8goWxo9l6Mo/VbvUg+Pqr9re8WffP9Iy9t
-         g/CxYshaljnPM0HR24R7bJbhgU1it2lJctMXReVYGIaoy++XwxxbEkJrMtSg1oiJ8zCr
-         Hiwg==
-X-Gm-Message-State: AOAM533/LtOsOyya+c+2cJNfri8BMOuXQTTs52V7hgbO9LmCwaRCBs5j
-        RBwcOyiA4NBE2HKCYhX9c0aVGgjFfQ70IVGqkbovPA==
-X-Google-Smtp-Source: ABdhPJxcJUN8YmcY60C5+lVqseVI93O5+3mb5MF+QKmQFOUn2PLcEHssbp2CqD/3x1eZBKiCg9zFAUEoMy0CxpVXUqk=
-X-Received: by 2002:a05:6512:250:b0:44a:47c6:96a7 with SMTP id
- b16-20020a056512025000b0044a47c696a7mr6136832lfo.46.1649259712451; Wed, 06
- Apr 2022 08:41:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CSjXS3liiZsQ5y+dsNvQXrAg4KGiXpv7ZiLu0UE4ATo=;
+        b=NAo5q6itzjUS+NlX/U7TVFtpy9+vbMKonuPYTvwqsOdxPQlvP4xZBA4CwSDcuG3mV9
+         Sq5K83XSawg3teRzpodaTEHPdTSRur0fDOteh/wl0qaNnB4bKFj24sL5sHeiHSzb9mv2
+         TLeFCrueCH2jxme00JV1Z1ksZHa8tJLugdxc48QCUlb0hwjAbvoIe0GlV8spIXHY28WC
+         8nRcMp6TvVfudCnCn8eGtZs0dlwmvhjSZl/2kt7fiDmPnuH5u8bjQi2idNHPmbLVRyxK
+         Vuelsw1gfK/jgu+XAf6F+AIlxvu/RKqVtBb+0hsKNLa/nmCIe3rDGRdLuu+/MRXcJi2j
+         D1gA==
+X-Gm-Message-State: AOAM531pgLibVwT1Uch02RVDU8JiJogG7Jr3EhkeZ+U9B1iDf9jO41xd
+        jkP7sKPg00PcQmAQ75foag==
+X-Google-Smtp-Source: ABdhPJxbIZn0sFuEhJ20HhaeEdyTBrFvADnchwCiV0ko8mITBghdswBGY+ASd5Yd9f7doax3tDWvbg==
+X-Received: by 2002:a05:6808:144a:b0:2ef:9fa2:ba7f with SMTP id x10-20020a056808144a00b002ef9fa2ba7fmr3693043oiv.88.1649259706857;
+        Wed, 06 Apr 2022 08:41:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v13-20020a4ae6cd000000b00328882a2388sm6181366oot.14.2022.04.06.08.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 08:41:46 -0700 (PDT)
+Received: (nullmailer pid 2298416 invoked by uid 1000);
+        Wed, 06 Apr 2022 15:41:45 -0000
+Date:   Wed, 6 Apr 2022 10:41:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Fabio Baltieri <fabiobaltieri@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: update google,cros-ec-pwm
+ documentation
+Message-ID: <Yk20uTE/Vdm2c6jI@robh.at.kernel.org>
+References: <20220331125818.3776912-1-fabiobaltieri@chromium.org>
+ <20220331125818.3776912-4-fabiobaltieri@chromium.org>
 MIME-Version: 1.0
-References: <1649245580-27256-1-git-send-email-zgpeng@tencent.com>
-In-Reply-To: <1649245580-27256-1-git-send-email-zgpeng@tencent.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 6 Apr 2022 17:41:41 +0200
-Message-ID: <CAKfTPtDCXP8pt=F563sovxXJr-ALFuxNtE+1gWL-s7A-h4waew@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Simplify the scene where both local and
- busiest are group_fully_busy
-To:     zgpeng <zgpeng.linux@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331125818.3776912-4-fabiobaltieri@chromium.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,50 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 13:46, zgpeng <zgpeng.linux@gmail.com> wrote:
->
-> When both local and busiest group are group_fully_busy type, because
-> the avg_load of the group of type group_fully_busy is not calculated, the
-> avg_load value is equal to 0. In this case, load balancing will not actually
-> done, because after a series of calculations in the calculate_imbalance, it
-> will be considered that load balance is not required. Therefore,it is not
-> necessary to enter calculate_imbalance to do some useless work.
->
-> Signed-off-by: zgpeng <zgpeng@tencent.com>
-> Reviewed-by: Samuel Liao <samuelliao@tencent.com>
+On Thu, Mar 31, 2022 at 12:58:17PM +0000, Fabio Baltieri wrote:
+> Update google,cros-ec-pwm node documentation to mention the
+> google,use_pwm_type property.
+> 
+> Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
 > ---
->  kernel/sched/fair.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 9f75303..cc1d6c4 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9634,6 +9634,18 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->                          * busiest doesn't have any tasks waiting to run
->                          */
->                         goto out_balanced;
+>  .../devicetree/bindings/pwm/google,cros-ec-pwm.yaml         | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
+> index 4cfbffd8414a..9c895c990ed8 100644
+> --- a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
+> @@ -19,6 +19,12 @@ description: |
+>  properties:
+>    compatible:
+>      const: google,cros-ec-pwm
 > +
+> +  google,use-pwm-type:
+> +    description:
+> +      Use PWM types (CROS_EC_PWM_DT_<...>) instead of generic channels.
+> +    type: boolean
 
-We are there because both local and busiest are not overloaded, local
-is idle or newly_idle and there might be an opportunity to pull a
-waiting task on local to use this local cpu. I wonder if we should not
-cover this opportunity in calculate_imbalance instead of skipping it
+Either do a new compatible string if the cell interpretation is mutually 
+exclusive (channel number vs. type) or split the number space for the 
+1st cell between type and channel number. IOW, set a bit (31?) to 
+signify the number is a type, not a channel.
 
-> +               if (local->group_type == group_fully_busy)
-> +                       /*
-> +                        * If local group is group_fully_busy, the code goes here,
-> +                        * the type of busiest group must also be group_fully_busy.
-> +                        * Because the avg_load of the group_fully_busy type is not
-> +                        * calculated at present, it is actually equal to 0. In this
-> +                        * scenario, load balance is not performed. therefore, it can
-> +                        * be returned directly here, and there is no need to do some
-> +                        * useless work in calculate_imbalance.
-> +                        */
-> +                       goto out_balanced;
->         }
->
->  force_balance:
-> --
-> 2.9.5
->
+Rob

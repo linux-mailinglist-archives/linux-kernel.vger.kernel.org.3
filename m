@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E785F4F6DA9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C354F6DAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 00:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbiDFWJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 18:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S236925AbiDFWK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 18:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiDFWJS (ORCPT
+        with ESMTP id S229763AbiDFWKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 18:09:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDF32A71C;
-        Wed,  6 Apr 2022 15:07:20 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649282839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=52XeoShnHmdAQ+XobvAW3OjjBZFsGfa67mgB/KHswHw=;
-        b=rTC+MTir7K3GQwjDaTnq/Dtgs9ZArTDUo8SEVZ8/M7l0Ij82aZQsxfxt4MSQvDZPqhzjbe
-        KmAvC/1zLhXu9TrKuiWPVKsLn5MkyxZifWmaI51hUsVzMe0GDKkIWnzWUHhVTGRrnRGhjq
-        CPvfqO/kjVbIhCUE1MYr/B7f0pAb0dfqz4tJo1i3kltxcKiulF8Amz9MStp5aiBF/OTg59
-        bXSaUVq2t1wWWpZbtctl9uOmg1cKLed7IhXjmITB4bhTVpfo6majJv+iwx1LHnCAkSm1k1
-        9jlnuq5Tg7dEz82ISrh4peEjS5Xc3bEjIsKWPZv3e/zZ+bMPHUImxf/kov3uWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649282839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=52XeoShnHmdAQ+XobvAW3OjjBZFsGfa67mgB/KHswHw=;
-        b=l/De9Ow9qS0nayBe3dC2SF/mqKKOsu2s5yJnnCR+HzzwO6gGPHvUKa7HHa8ezn5dzKZ2ry
-        un2P6HyZnfHvUxAg==
-To:     Reto Buerki <reet@codelabs.ch>, dwmw2@infradead.org
-Cc:     x86@kernel.org, kvm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, joro@8bytes.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, maz@misterjones.org,
-        decui@microsoft.com
-Subject: Re: [PATCH v3 12/35] x86/msi: Provide msi message shadow structs
-In-Reply-To: <20220406083624.38739-1-reet@codelabs.ch>
-References: <20201024213535.443185-13-dwmw2@infradead.org>
- <20220406083624.38739-1-reet@codelabs.ch>
-Date:   Thu, 07 Apr 2022 00:07:18 +0200
-Message-ID: <87sfqpzx0p.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 6 Apr 2022 18:10:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71BB312D0B6;
+        Wed,  6 Apr 2022 15:08:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B69112FC;
+        Wed,  6 Apr 2022 15:08:25 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.9.217])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4CC4A3F5A1;
+        Wed,  6 Apr 2022 15:08:23 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        amit.kachhap@gmail.com, linux-pm@vger.kernel.org
+Subject: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
+Date:   Wed,  6 Apr 2022 23:08:04 +0100
+Message-Id: <20220406220809.22555-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06 2022 at 10:36, Reto Buerki wrote:
-> While working on some out-of-tree patches, we noticed that assignment to
-> dmar_subhandle of struct x86_msi_data lead to a QEMU warning about
-> reserved bits in MSI data being set:
->
-> qemu-system-x86_64: vtd_interrupt_remap_msi: invalid IR MSI (sid=256, address=0xfee003d8, data=0x10000)
->
-> This message originates from hw/i386/intel_iommu.c in QEMU:
->
-> #define VTD_IR_MSI_DATA_RESERVED (0xffff0000)
-> if (origin->data & VTD_IR_MSI_DATA_RESERVED) { ... }
->
-> Looking at struct x86_msi_data, it appears that it is actually 48-bits in size
-> since the bitfield containing the vector, delivery_mode etc is 2 bytes wide
-> followed by dmar_subhandle which is 32 bits. Thus assignment to dmar_subhandle
-> leads to bits > 16 being set.
->
-> If I am not mistaken, the MSI data field should be 32-bits wide for all
-> platforms (struct msi_msg, include/linux/msi.h). Is this analysis
-> correct or did I miss something wrt. handling of dmar_subhandle?
+Hi all,
 
-It's correct and I'm completely surprised that this went unnoticed
-for more than a year. Where is that brown paperbag...
+This is the 3rd version of patch set which tries to address issues which are
+due to missing proper information about CPU performance in time.
 
-Thanks,
+The issue description:
+1. "Cpufreq statistics cover the time when CPUs are in idle states, so they
+   are not suitable for certain purposes, like thermal control." Rafael [2]
+2. Thermal governor Intelligent Power Allocation (IPA) has to estimate power,
+   for the last period, e.g. 100ms, for each CPU in the Cluster, to grant new
+   power and set max possible frequency. Currently in some cases it gets big
+   error, when the frequency of CPU changed in the middle. It is due to the
+   fact that IPA reads the current frequency for the CPU, not aware of all
+   other frequencies which were actively (not in idle) used in the last 100ms.
 
-        tglx
+This code focuses on tracking the events of idle entry/exit for each CPU
+and combine them with the frequency tracked statistics inside internal
+statistics arrays (per-CPU). In the old cpufreq stats we have one shared
+statistics array for the policy (all CPUs) and not take into account
+periods when each CPU was in idle.
+
+Sometimes the IPA error between old estimation signal and reality is quite
+big (>50%).
+
+changelog:
+v3:
+- moved the core implementation into the cpufreq and not
+  creating a new framework (as sugested by Rafael)
+- updated all function names and APIs
+v2 [1]
+
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/all/20210706131828.22309-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/all/CAJZ5v0gzpfT__EyrVuZSr32ms7-YJZw7qEok0WZECv1iDRRvWA@mail.gmail.com/
+
+Lukasz Luba (5):
+  cpufreq: stats: Introduce Cpufreq Active Stats
+  cpuidle: Add Cpufreq Active Stats calls tracking idle entry/exit
+  thermal: Add interface to cooling devices to handle governor change
+  thermal: power allocator: Prepare power actors and calm down when not
+    used
+  thermal: cpufreq_cooling: Improve power estimation using Cpufreq
+    Active Stats
+
+ MAINTAINERS                           |   2 +-
+ drivers/cpufreq/cpufreq_stats.c       | 872 ++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle.c             |   5 +
+ drivers/thermal/cpufreq_cooling.c     | 131 ++++
+ drivers/thermal/gov_power_allocator.c |  71 +++
+ include/linux/cpufreq_stats.h         | 131 ++++
+ include/linux/thermal.h               |   1 +
+ 7 files changed, 1212 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/cpufreq_stats.h
+
+-- 
+2.17.1
 

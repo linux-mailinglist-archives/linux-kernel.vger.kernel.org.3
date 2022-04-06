@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1B74F615B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53184F60FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 16:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiDFOLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 10:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S234445AbiDFOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 10:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234557AbiDFOLC (ORCPT
+        with ESMTP id S234457AbiDFOJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:11:02 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC410FAF7;
+        Wed, 6 Apr 2022 10:09:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64C44ED0CF;
         Wed,  6 Apr 2022 03:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649239549; x=1680775549;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UzpLkLsQSybYrDctDJM7hazMV+345ZJBUluwhHnkHow=;
-  b=zV7ZUNi0+RKZ+oCQB4whtuJTcbI6/vCjFes8qlF2BG7eWjbV5IOkP3MS
-   XqUg7ZzCIKqGQN91shMqA9PGfV8kBAqgjg96OPIaHpInqx8/FYm6FKRwP
-   taIopUY0tQffylehSitNVsyzIk0TjHFhMy5nEA9WsJhKeb337ngOPxYvw
-   e9qwq4ZzpiXvGTggpazLZ8QGTx8BDXP2v0ys1RrDDaNpi1pZn8YptOny3
-   qgEhRzrhfzKaCC20oyDT2bClg5vUP0MhkQKXLG/AljQHcuWn+lSjA2k0L
-   WMIghSev/ylqVlomf3HAWNO3qrL0dWyGIVhqOSzll6zYjItoiPzWeFiui
+  t=1649239550; x=1680775550;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YPQ9VGLSnWsFaAo16s8N0avyz4Em8x1yBOhaaJvn2Ic=;
+  b=SzBq+cmJwQjCAEeumYgYIGnwYAt7Fn5ThYAgQNYeaGgZkJBLe7MDuWtO
+   K4cIKE3ilQV+kjdv5Qg4U90MevprMrXhZtc/KMtF0gv7rN0EwKwIiKA2+
+   /EhpBgxkmOZD0btk7zdJlXHie3MvRkJVTY1+Q9FduOuNotxJjvta2BZbM
+   PNZHwXzV1o9sPM/ODoAK00DDeHyCl4nir5YAqMxdNaMgVoMOhED3JPfux
+   NTm+5iOtDZtf8lvWdffDJvTDXN0uBZ0AVPuOL1eD8Y3wWBSutEt0oP5Nm
+   MJyHKrLHhgOTWmMaC+fc+E+vUoWErRJcox6pU3L6bW/QrN6p4kXPkvjou
    g==;
 X-IronPort-AV: E=Sophos;i="5.90,239,1643698800"; 
-   d="scan'208";a="91453048"
+   d="scan'208";a="168611982"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 03:03:45 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 03:03:47 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 6 Apr 2022 03:03:44 -0700
+ 15.1.2375.17; Wed, 6 Apr 2022 03:03:47 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 03:03:42 -0700
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 03:03:45 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <broonie@kernel.org>
 CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
         <claudiu.beznea@microchip.com>, <linux-spi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        "Tudor Ambarus" <tudor.ambarus@microchip.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH 1/2] spi: atmel-quadspi.c: Fix the buswidth adjustment between spi-mem and controller
-Date:   Wed, 6 Apr 2022 13:03:39 +0300
-Message-ID: <20220406100340.224975-1-tudor.ambarus@microchip.com>
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PATCH 2/2] spi: atmel-quadspi: Remove duplicated DTR checks
+Date:   Wed, 6 Apr 2022 13:03:40 +0300
+Message-ID: <20220406100340.224975-2-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220406100340.224975-1-tudor.ambarus@microchip.com>
+References: <20220406100340.224975-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -64,29 +65,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the spi_mem_default_supports_op() core helper in order to take into
-account the buswidth specified by the user in device tree.
+Remove the DTR checks as they are already handled in
+spi_mem_default_supports_op(). This code removal was intentionally not done
+in the previous patch that introduced the use of the
+spi_mem_default_supports_op() core helper and fixed the buswidth adjustment
+between SPIMEM and the SPI controller, so that the fix can be easily
+backported to stable kernels.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 ---
- drivers/spi/atmel-quadspi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/spi/atmel-quadspi.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
 diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index 92d9610df1fd..938017a60c8e 100644
+index 938017a60c8e..480c0c8c18e4 100644
 --- a/drivers/spi/atmel-quadspi.c
 +++ b/drivers/spi/atmel-quadspi.c
-@@ -277,6 +277,9 @@ static int atmel_qspi_find_mode(const struct spi_mem_op *op)
- static bool atmel_qspi_supports_op(struct spi_mem *mem,
- 				   const struct spi_mem_op *op)
- {
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+
- 	if (atmel_qspi_find_mode(op) < 0)
+@@ -288,12 +288,6 @@ static bool atmel_qspi_supports_op(struct spi_mem *mem,
+ 		op->dummy.nbytes == 0)
  		return false;
+ 
+-	/* DTR ops not supported. */
+-	if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
+-		return false;
+-	if (op->cmd.nbytes != 1)
+-		return false;
+-
+ 	return true;
+ }
  
 -- 
 2.25.1

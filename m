@@ -2,221 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EACA4F6A23
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857B94F6A46
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 21:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiDFTmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 15:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S231397AbiDFTr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 15:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiDFTmB (ORCPT
+        with ESMTP id S231789AbiDFTrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:42:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A94F6005A;
-        Wed,  6 Apr 2022 10:51:54 -0700 (PDT)
+        Wed, 6 Apr 2022 15:47:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A28B1CABED
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 10:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649267514; x=1680803514;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=e3PAH8KNuq0G7/EEf+7+elCQECWG3SBCQhimjF6jxlM=;
-  b=jydN0xdUNlaaAijI/xgOlcOnhQvlSlYVUvvPTVYpAUrBqJRLSiO1uK5w
-   DsegdeOZkX1n+thgjZHmhVS0xxGkNesSibHYesbHdGTQaL5VbZAT8Zqcd
-   +IvI81kGD4eyWnwAT/tguHLFbOqakk12nNrYze5Git6F53JcGNiBYQYto
-   u2hLOm1/Oy0iqOJGFwzt289NPfBPQuHt7Szka10FWiyQPZuV+MtC7D95/
-   Q4VX3SaX7mYPozMD29n97im07S3FBU4oIoGf3PdTNFuBraOb/LruI0oza
-   cxGN6bWHs5KF1xYIbN6Ir7t0OJX2IX58Umr1RyfwBy8Q0fXTR4JaXF/yS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="259952300"
+  t=1649267535; x=1680803535;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ox5ATFu+xqgQXkmgla1zDR6lDbcZQAbNxoWh967Te9Q=;
+  b=Jvv7urYW3soXFkFh6xgdhcR1n3tyrSZ6RUc6+ujHM6y9GVPa3ypkPDW7
+   XkJFskL1xM2VtSWli3eb4kNJrpziDWeYpw/g6YI5I3xSRY+GuDudlRzu7
+   4sfGszKyZSerErUfqYEfzbrrge/Vx2FAPOFTt2QLMohGR49PIoaw9nfMC
+   noeb872x0jGV8rHrVFJw0fDYqLsiSAwCZiwqjcNEU0q4Y/Vm/rZDkho8X
+   iy14l+QsLgQnQ53WZhU4GnOh4D+2Rn8XJTrWDiLDcdqumIr7CiV9pasWk
+   VXTKBsWAbxFLI399m8ZJKpcOFjxH7pf4AmyvF+4qhAahcPqpWk46Rb1Lw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261110337"
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="259952300"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:51:53 -0700
+   d="scan'208";a="261110337"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 10:52:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="652473848"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2022 10:51:53 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 6 Apr 2022 10:51:53 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 6 Apr 2022 10:51:52 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 6 Apr 2022 10:51:52 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 6 Apr 2022 10:51:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iilW5p6QM6LW3DMTeoJd7iYk7h8NymG/4BOKDi+fmBl8HuIVZ0zMUgxRvgGA+LFD0y0k2sBUpOJk/R7EPL+8GrSGEMred++87MyN9//LsfMan4Xh0sl7LBL172s0sP8zdjP56j0HafEAqe3i/mkN4eX1x6lOhoqiCamZtkjCXUkqF3hXD75hmbUzwjWNMqh6bbOzrgkyLYZ03KwULUX6tSufE/cW5c2oZoraJsyrUdS5DQmLPPHXVxMfBet26W3OsO4H/8mTo8/95uldbKt0uaQs7tPoI/QfNGVeHdT7pUZVKGRLJHdTEEp63TT1TUKNHtzdWmB/6ziXUzHyKaOoJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rdegSsy7Rsou3x7SV08IckIWrZ/u8yKsI0rEgvk+3lo=;
- b=NfA3UrtUUW+dC1pM85ZQAb/ZWouHnNrFcpOJwnzGcLbZDYz8D3t/R1dAdoxF6sIj0/+afQX1xWjPvEZOEDH9rYzPo2ESwKkm8EStobu3NrcYruovDLjmvLRaRXcYG6LgGAkeg+Mfb/pDDWj6o/l7oE+sTOBwe20aoMut9wL2hhnBUrNDmEpy1vJQouQ6p5jdyy89FJwlFghN6xBV/BlJaOaQZrDW6uKKTEXhdcs2yYDufyB+eZ9M6Xc0bE3C107Yon8ImZx3xQEiXlxVtrcAoIvr6VCWxxJifLfF73JkOZKJi2r6XKVq1vVRr2OzeHpSqNs620UuqOMrgJwdZiMrEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by BYAPR11MB3303.namprd11.prod.outlook.com (2603:10b6:a03:18::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 17:51:48 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5144.021; Wed, 6 Apr 2022
- 17:51:48 +0000
-Message-ID: <8010f544-852a-d7cd-3c3b-4e9cbcef3ab9@intel.com>
-Date:   Wed, 6 Apr 2022 10:51:44 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH V3 14/30] x86/sgx: Support restricting of enclave page
- permissions
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, <dave.hansen@linux.intel.com>,
-        <tglx@linutronix.de>, <bp@alien8.de>, <luto@kernel.org>,
-        <mingo@redhat.com>, <linux-sgx@vger.kernel.org>, <x86@kernel.org>
-CC:     <seanjc@google.com>, <kai.huang@intel.com>,
-        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
-        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
-        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        <nathaniel@profian.com>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
- <8ed9ee98ca26c9eefde0fd49062bca6e7b9efe80.1648847675.git.reinette.chatre@intel.com>
- <c9071aa19076c7c618294f0c9cb830a8be96ae09.camel@kernel.org>
- <26ab773de8842d03b40caf8645ca86884b195901.camel@kernel.org>
- <91a02d50b2cba34dfb058fd864ba20ef1e6a5554.camel@kernel.org>
- <10303ca73ea02a300636580e87446766374f66cb.camel@kernel.org>
- <6e0feeadc562b9e3f0a524040469d4f5c3484824.camel@kernel.org>
- <ca08465b6fa8af4121592c6381023fda5e0ade70.camel@kernel.org>
- <59910ad4-a898-4eb2-5e2b-856c686b53fb@intel.com>
- <0f44fba956288bcad69e076f84118bc50f8e5d2f.camel@kernel.org>
- <38603303-f683-cb79-57e5-57fad5c5ae3b@intel.com>
- <2bf954521a3cfc7c677887b1eef772cfcc9e3157.camel@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <2bf954521a3cfc7c677887b1eef772cfcc9e3157.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4P221CA0028.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::33) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+   d="scan'208";a="588470254"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 06 Apr 2022 10:52:13 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc9pE-0004dR-Rb;
+        Wed, 06 Apr 2022 17:52:12 +0000
+Date:   Thu, 7 Apr 2022 01:51:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 94/107]
+ drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for
+ '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,
+  struct nsim_dev_linecard *, unsigned int)'
+Message-ID: <202204070134.R3rLQYRH-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3b526051-9674-4f19-f8a6-08da17f61f44
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3303:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BYAPR11MB3303C89390E3622AC5395968F8E79@BYAPR11MB3303.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GfXor9kYkMswo+xc8/rfCYoKaBvseYVtDaoESU0PQsU/NrBPbfjKnarD5+6rpev+mgBla3fcUOtchw0CgmQIVg712uQwrdRdB0VLRX6vttyiHYyoe2KjWoVQ21+OefXEKa4oYikMnZGAhZ8YKBT7EtGnaYdQRpUiFw6mHI3GobXA0qjTEjYQkpn2i1xFWbW9QO9SYKqvBLH9QP5uSfrN0CBouS4FIY3nZJk5Qv5tWS/q7wYowzLoRqx2S07PAL95EnNsxg4BalEwRb+/NlA1alnat2VmSVtwaXxrLpM4fzcHmV1Amr+F7t43MeURwIShMhJNnKgvsEU5C/LwCaGpEBXoMVx9VvescchoQ60p8icpg5qYhxIELYeOvQEoS9KxLPQCezd0nN1CDbqEgt9HyqsTQ7bG+cTeXJ4PBUmlRT3KwAoDq76O8mVvWwTadhVW2S0cUVIc1g5ZK+o2fJOBPGDt1fi3gKdqYaIvtBJsUnZqmsEBRZzOWws/psAyyPz3G5Ek5RbA6mI5SdkX11WITpBKCWTWEEekAyivEBq8I6Zy0d31LV2szH2M0ujhi0BNsqynIGZKYA/X2A2k6TeTB0WjduVeRKks6pb6hPqV9lgULWIKbwwvcW4Iz2VxUHMRtMdEKQrRk5s7ZQ7YNtxFHbnf6EhKTbo0MXms+/kIALFeDCK3GCfzuADG+u9+9DAxOD2sckoetKezgJD5eP5UhberywZTurHVn7Pu2xsZrau4etpQMJTgDnZmoLl0xzK9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(7416002)(44832011)(6506007)(36756003)(86362001)(8936002)(508600001)(2616005)(31686004)(31696002)(6486002)(5660300002)(2906002)(38100700002)(26005)(83380400001)(316002)(186003)(6666004)(82960400001)(8676002)(6512007)(66476007)(4326008)(66556008)(53546011)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTVkMjdzaUduaU5taGJUYmdjQ0hCanF2dm04QVNSOG5aNC8yOHBFeHQvQ0NZ?=
- =?utf-8?B?MnV0UTdrU280a3BmbmI3Z0xpTlF2ZjI1ekUwUnE4YUFqdGNnRDk1Rlh6UG5X?=
- =?utf-8?B?bVlqV0tKSXBPYjB0MTNJd0FFanNsc0s5V2FPT0FJczNadzlPbjFJMlVSbTZ6?=
- =?utf-8?B?T0ZrVXJXeWFJMVRVeHFOMEJCZk00a1NzalI3Q1MxSGkyL0tNdTBYRmE0dHZR?=
- =?utf-8?B?dk04L1N5NTZvOVVpSVJXZE9ubUVzajdKSklBU2E5RWE4cHBiUFJlWEhwZ05E?=
- =?utf-8?B?TmRDdDlTbGowR3JwTzBteFE0cElKcWlCc1BDU2k3QUR6emVJUHJNbEdCdXZZ?=
- =?utf-8?B?bkQ1WFJNSGdTeTZuSEhTb2l1RW9IRkRLWVhFZzNZZG1xdzJXS1lVbzhDR1dI?=
- =?utf-8?B?RzN1QnN2eEVOMyt3UFNkZDNMZmpEcGV0M0p5cktEc0o2UUc5QUs3UEtUTDVR?=
- =?utf-8?B?Y3p5K3hGV0QyUzFyUGFJMUdjV1lDYlhyeEh0VmF1ams1YXVmdnVRalk1cXlP?=
- =?utf-8?B?ZXR1VitJR2U3WEU5bDVrR1RpN2tReW5iWnZ6RHZCdmpPeXNyRERXN25Ia21w?=
- =?utf-8?B?VXBDUWZvSDBnTHAwRzduU2JJbnRhVjBhaXJqbmxhcUJHSG4rOVhhUHE2MWZy?=
- =?utf-8?B?L3ZKQWI0aFVSVWp5cS9MNS8wUlV6RXBtZFBKNDZPVEN3UUkyaFRkTk9ZMVJZ?=
- =?utf-8?B?bVFZQVU3d0ZsSzJOZEtCQ3Z1d2t0WnRISE9vTjNYZzkwMHRSV1RNcS84TE1V?=
- =?utf-8?B?dnNBLzlkSlovY1ZwNjN4UnUvcEFOQ1dWRFhPT1lGZTRuVkhhRzUxMVFpYnVy?=
- =?utf-8?B?cjRwbVZsMGtuNEQxTXF6MjhaWktEM0tsWTZGdld5ZXJqQ3FTRFEzN1ZQQ1ps?=
- =?utf-8?B?QTNuNjZpZGVkRTl6Zlk4eUErRloyek1UN3ZMbWRrODRwT3UxWnMrN3B0TjRM?=
- =?utf-8?B?RGIzei9xZndqUEdDMHBGcnE2YmN6bUt0cU10UWpqS0VBMjBKL2pyUTZFd3lJ?=
- =?utf-8?B?STZuQ3dNU292d3RuRFF2dXBxcXUvV3d0dEhGWFI5MEhGUEpCSzhiZFZiSWQ2?=
- =?utf-8?B?OS9ENUowUEloby9RQkkvS0YwbFh2cVUzc0Rubm14YkJFUWM3cy8wSXNMdVpR?=
- =?utf-8?B?dEEzUzVjVFl1NXYwUjdZSWVOWVZiVkRPb1J3VEIzTXV3MEdTSmVuYnpLTjFi?=
- =?utf-8?B?K09aMGVCamp5N1RPZVNiK3pwNmhYVkNpS3NNem1ISldsZkRWNHVTaUdUOVVH?=
- =?utf-8?B?QzI1bDZ6QWlBeVh3em9HdXUwVUFoaEhLa0JML0lYN09VUHZtVm80bGhZL2dD?=
- =?utf-8?B?d0RDYUZ1RzNNRXJ1RVczU3E2VVllblJzR0hZUW41Z3RuRzR4VytJMGZvbS9u?=
- =?utf-8?B?UDlIdnZtREMxdG9pbWcxQ2FKWWJlMS9UMXVtbEJBK0c5aWlEM29selFjQVBQ?=
- =?utf-8?B?ZENxQjBLaFJvUmNlZkVPZGYrNXJLTUlWN1NLN3BWS1ZTcEZRbit0SkpNSUFP?=
- =?utf-8?B?RG01VXZNMjFVWmw0RlFYN1JZdzQ1WDg4dUtQZkVrbkM1dkRabzhTN1h5VTVS?=
- =?utf-8?B?QW9HQ1lWSXhRRHBwbnFFL1JvRVNJYnlHOU5VUktkTXNQbCtkZ2Q4a0NETnpa?=
- =?utf-8?B?L0o4NGZyd21XWW81dDNOSmhtWkRQSUExNG94eDM1K0I1TjI4eVlabTNVRjdh?=
- =?utf-8?B?eWM5aFVqdTNhamo1OEg4bXRnOWp3bXVnRDhXUkFNTFBMaGI0ZHdURjBzbTFu?=
- =?utf-8?B?dStjSEZiSGZrSUVramNNQUtnb1ZLQjh4TEJ1Z1R3SnFQSllzdU15alZGS2s1?=
- =?utf-8?B?YUEvR2J4RjE2cVFVRzM1a0RLVmNDclJnSDZWUlVGVzhkR1FRNVdJRjh0eHl6?=
- =?utf-8?B?RXlZRkZKWE9LOXRGNFZpRFRlN3g5MU50UWdVUHhEZW1LVk13RkFwdHRJdDdC?=
- =?utf-8?B?S0w3d3BRS3FBNTE4SGUrSzZzMGkzaFJTQkcxUDZwYnBpWWpKZWQ1NjdsaUpk?=
- =?utf-8?B?V3M4RXpRQ3E5Q3dBbjN6UFJtNG1mT0dpVEFUM2NhWHJUU1VIcmk5L3VYUE5u?=
- =?utf-8?B?d294a1RZZCtaRnpFb3djU1ZJakEvSDRUcHZKL003ZGU2K3V0WkxtSWs0UlVw?=
- =?utf-8?B?SjNBSGNlOWt5TStOUnNzenQxQ1dQQnZRWjJCSVpDaXg5N1NtbG9Fa2tHaitP?=
- =?utf-8?B?enZvT3JFMDJWVitqbEZxQVpoNVRkVHVHSkpRSmk5WEc4SDNUeXRlSGZvLzNl?=
- =?utf-8?B?WUZxTjRBRW02YW5yeVFCVzZqOFIxVnZKbDl3ejA3ZlIxR1BsajRGc0JDREd4?=
- =?utf-8?B?cmlSbHRERmpDNlBPSTBPeWdPWjJwMStWVVBmYXF6QnVzNkdtaEVGR3p0NTJN?=
- =?utf-8?Q?Lmjdf7cv44WqAgaA=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b526051-9674-4f19-f8a6-08da17f61f44
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 17:51:48.3947
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s/h4cRodUvEELmnmh56bhHhEeq4ZqgGcaYRXImsXBaMRhZKDEJh0yfjhhE16aRDXw3EQg+QKz9JzgAgHvXpFJKInCbD/hrmPywdGeQI7VM4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3303
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   902ba56740ea4a18fafa90b3fa057f70baff52ab
+commit: dfd22c2838bb1870d2aaf9b911dbe414a475b5f9 [94/107] netdevsim: allow port objects to be linked with line cards
+config: openrisc-buildonly-randconfig-r001-20220405 (https://download.01.org/0day-ci/archive/20220407/202204070134.R3rLQYRH-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/dfd22c2838bb1870d2aaf9b911dbe414a475b5f9
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout dfd22c2838bb1870d2aaf9b911dbe414a475b5f9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/net/netdevsim/
 
-On 4/6/2022 12:30 AM, Jarkko Sakkinen wrote:
-> On Tue, 2022-04-05 at 11:59 -0700, Reinette Chatre wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/openrisc/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/debugfs.h:15,
+                    from drivers/net/netdevsim/dev.c:18:
+   drivers/net/netdevsim/dev.c: In function 'nsim_esw_switchdev_enable':
+   include/linux/stddef.h:8:14: warning: passing argument 3 of '__nsim_dev_port_add' makes integer from pointer without a cast [-Wint-conversion]
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+         |              |
+         |              void *
+   drivers/net/netdevsim/dev.c:638:43: note: in expansion of macro 'NULL'
+     638 |                                           NULL, i);
+         |                                           ^~~~
+   drivers/net/netdevsim/dev.c:613:34: note: expected 'unsigned int' but argument is of type 'void *'
+     613 |                     unsigned int port_index);
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~
+   drivers/net/netdevsim/dev.c:637:23: error: too many arguments to function '__nsim_dev_port_add'
+     637 |                 err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
+         |                       ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:612:1: note: declared here
+     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:651:25: error: too many arguments to function '__nsim_dev_port_del'
+     651 |                         __nsim_dev_port_del(nsim_dev_port, NULL, i);
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:614:13: note: declared here
+     614 | static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
+         |             ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c: At top level:
+>> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,  struct nsim_dev_linecard *, unsigned int)'
+    1393 | static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         |            ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:612:1: note: previous declaration of '__nsim_dev_port_add' with type 'int(struct nsim_dev *, enum nsim_dev_port_type,  unsigned int)'
+     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:612:1: warning: '__nsim_dev_port_add' used but never defined
 
 
->> I plan to replace the current "secinfo" field in struct sgx_enclave_restrict_permissions
->> with a new "permissions" field that contain only the permissions. Please let
->> me know if you have concerns with this (I also discuss this more in reply to
->> your other message related to the page type change ioctl()).
-> 
-> I'm cool with it but if it is named as "permissions", then 
-> it is already software-defined entity, i.e. meaning just that
-> have this check in place in the ioctl:
-> 
-> if (addp->permissions & !(PROT_READ | PROT_WRITE | PROT_EXEC))
-> 	return -EINVAL;
-> 
+vim +1393 drivers/net/netdevsim/dev.c
 
-I assume that we do still want to ensure that
-PROT_READ is always set.
+150e8f8a1bae1d Jiri Pirko      2019-08-09  1392  
+814b9ce65ec3b5 Dmytro Linkin   2021-06-02 @1393  static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1394  			       struct nsim_dev_linecard *nsim_dev_linecard,
+7f36a77ade6eef Jiri Pirko      2019-10-03  1395  			       unsigned int port_index)
+7f36a77ade6eef Jiri Pirko      2019-10-03  1396  {
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1397  	struct devlink_port_attrs attrs = {};
+7f36a77ade6eef Jiri Pirko      2019-10-03  1398  	struct nsim_dev_port *nsim_dev_port;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1399  	struct devlink_port *devlink_port;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1400  	int err;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1401  
+5e388f3dc38c72 Jakub Kicinski  2021-10-30  1402  	if (type == NSIM_DEV_PORT_TYPE_VF && !nsim_dev_get_vfs(nsim_dev))
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1403  		return -EINVAL;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1404  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1405  	nsim_dev_port = kzalloc(sizeof(*nsim_dev_port), GFP_KERNEL);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1406  	if (!nsim_dev_port)
+7f36a77ade6eef Jiri Pirko      2019-10-03  1407  		return -ENOMEM;
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1408  	nsim_dev_port->port_index = nsim_dev_port_index(type, nsim_dev_linecard,
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1409  							port_index);
+814b9ce65ec3b5 Dmytro Linkin   2021-06-02  1410  	nsim_dev_port->port_type = type;
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1411  	nsim_dev_port->linecard = nsim_dev_linecard;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1412  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1413  	devlink_port = &nsim_dev_port->devlink_port;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1414  	if (nsim_dev_port_is_pf(nsim_dev_port)) {
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1415  		attrs.flavour = DEVLINK_PORT_FLAVOUR_PHYSICAL;
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1416  		attrs.phys.port_number = port_index + 1;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1417  	} else {
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1418  		attrs.flavour = DEVLINK_PORT_FLAVOUR_PCI_VF;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1419  		attrs.pci_vf.pf = 0;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1420  		attrs.pci_vf.vf = port_index;
+92ba1f29e6e2f1 Dmytro Linkin   2021-06-02  1421  	}
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1422  	memcpy(attrs.switch_id.id, nsim_dev->switch_id.id, nsim_dev->switch_id.id_len);
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1423  	attrs.switch_id.id_len = nsim_dev->switch_id.id_len;
+71ad8d55f8e5ea Danielle Ratson 2020-07-09  1424  	devlink_port_attrs_set(devlink_port, &attrs);
+76eea6c2e663f7 Jakub Kicinski  2022-03-18  1425  	err = devl_port_register(priv_to_devlink(nsim_dev), devlink_port,
+814b9ce65ec3b5 Dmytro Linkin   2021-06-02  1426  				 nsim_dev_port->port_index);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1427  	if (err)
+7f36a77ade6eef Jiri Pirko      2019-10-03  1428  		goto err_port_free;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1429  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1430  	err = nsim_dev_port_debugfs_init(nsim_dev, nsim_dev_port);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1431  	if (err)
+7f36a77ade6eef Jiri Pirko      2019-10-03  1432  		goto err_dl_port_unregister;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1433  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1434  	nsim_dev_port->ns = nsim_create(nsim_dev, nsim_dev_port);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1435  	if (IS_ERR(nsim_dev_port->ns)) {
+7f36a77ade6eef Jiri Pirko      2019-10-03  1436  		err = PTR_ERR(nsim_dev_port->ns);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1437  		goto err_port_debugfs_exit;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1438  	}
+7f36a77ade6eef Jiri Pirko      2019-10-03  1439  
+885dfe121b3862 Dmytro Linkin   2021-06-02  1440  	if (nsim_dev_port_is_vf(nsim_dev_port)) {
+76eea6c2e663f7 Jakub Kicinski  2022-03-18  1441  		err = devl_rate_leaf_create(&nsim_dev_port->devlink_port,
+885dfe121b3862 Dmytro Linkin   2021-06-02  1442  					    nsim_dev_port);
+885dfe121b3862 Dmytro Linkin   2021-06-02  1443  		if (err)
+885dfe121b3862 Dmytro Linkin   2021-06-02  1444  			goto err_nsim_destroy;
+885dfe121b3862 Dmytro Linkin   2021-06-02  1445  	}
+885dfe121b3862 Dmytro Linkin   2021-06-02  1446  
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1447  	if (nsim_dev_linecard)
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1448  		list_add(&nsim_dev_port->list_lc, &nsim_dev_linecard->port_list);
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1449  	else
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1450  		netif_carrier_on(nsim_dev_port->ns->netdev);
+dfd22c2838bb18 Jiri Pirko      2021-01-12  1451  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1452  	devlink_port_type_eth_set(devlink_port, nsim_dev_port->ns->netdev);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1453  	list_add(&nsim_dev_port->list, &nsim_dev->port_list);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1454  
+7f36a77ade6eef Jiri Pirko      2019-10-03  1455  	return 0;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1456  
+885dfe121b3862 Dmytro Linkin   2021-06-02  1457  err_nsim_destroy:
+885dfe121b3862 Dmytro Linkin   2021-06-02  1458  	nsim_destroy(nsim_dev_port->ns);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1459  err_port_debugfs_exit:
+7f36a77ade6eef Jiri Pirko      2019-10-03  1460  	nsim_dev_port_debugfs_exit(nsim_dev_port);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1461  err_dl_port_unregister:
+76eea6c2e663f7 Jakub Kicinski  2022-03-18  1462  	devl_port_unregister(devlink_port);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1463  err_port_free:
+7f36a77ade6eef Jiri Pirko      2019-10-03  1464  	kfree(nsim_dev_port);
+7f36a77ade6eef Jiri Pirko      2019-10-03  1465  	return err;
+7f36a77ade6eef Jiri Pirko      2019-10-03  1466  }
+7f36a77ade6eef Jiri Pirko      2019-10-03  1467  
 
-I was planning to keep it in the "SGX language" since
-this is about changing EPCM permissions with values from
-a runtime understanding SGX permissions in secinfo that will
-be provided to hardware understanding SGX permissions in
-secinfo.
+:::::: The code at line 1393 was first introduced by commit
+:::::: 814b9ce65ec3b53404eeda7a11e1abb4af8d7df3 netdevsim: Implement port types and indexing
 
-Thus:
+:::::: TO: Dmytro Linkin <dlinkin@nvidia.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
-if (params.permissions & ~SGX_SECINFO_PERMISSION_MASK)
-	return -EINVAL;
-
-if (!(params.permissions & SGX_SECINFO_R))
-	return -EINVAL;
-
-
-Reinette
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

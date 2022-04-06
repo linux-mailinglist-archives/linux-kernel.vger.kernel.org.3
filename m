@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF514F5CC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4E24F5CBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 13:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiDFLoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 07:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S230013AbiDFLop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 07:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiDFLnb (ORCPT
+        with ESMTP id S230196AbiDFLoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:43:31 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2E83EF036;
-        Wed,  6 Apr 2022 01:30:02 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id g15-20020a17090adb0f00b001caa9a230c7so5093973pjv.5;
-        Wed, 06 Apr 2022 01:30:02 -0700 (PDT)
+        Wed, 6 Apr 2022 07:44:14 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CE65857E8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 01:30:35 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p15so2786684lfk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 01:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=IG1tkBL/llWliJGxLdIJUi+tn1T0VL64oyH/UZUw89c=;
-        b=SuqWhpwWFVJORPBYictUdK1YVpb62bflKnyxPmSDylk4t4mpsacQXP0e0bg/5JTKEC
-         n/6nEYPEhb2+pvcdD6DgkxeqBPq1SdPAKkwd1xphOBd30FQvRZDm2RbCGYJf3db8BXSf
-         UBMyMBB++GIO9kKUpNxoHV/EqC3AocBa/CmtomvOL6DLydOBTgYprp8bpA0iILXom5qY
-         n1BQOAhvx5LqLHhtC7FOgdda3kzHsG672YGhjXKNxdORJms8ac4dxf/2e4LGsSua+MTU
-         bWEGtOBIqhN86wohnIFNLwy7wYEpYDQFQF860pwQkezrTTYsjPuxUthP5Oe5mldDiR20
-         BcJA==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SCKZqgCi3PtFGSDXkz/WMuyQV3cdA+J7prWZVg1YWbs=;
+        b=TyvMpMUbt31Ysj9Fc/+vh86RKCcvo6OnmtNUmwrsCaotOfR8DkxNghoTyLAX/7axC1
+         hqHINnGcyQvd9Xyu2uwXExFdhI+G0CdR6x7UEW1WTrJbbLZ3flcVUTmWZvdGbuPrJ9rC
+         Mg/g1Qd+9u/TzZgzi7zumvP35+tC52NUIfV60=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IG1tkBL/llWliJGxLdIJUi+tn1T0VL64oyH/UZUw89c=;
-        b=m+bWw1lMPyDbM8iMH/K5Snp3VEjypF9vSYrhY/mEbKPgienyHdriAOa6Gb4XBsawbU
-         SDF77tQlfOgEXIQSMKET9Ail53jJhobkxbBKWi9QxZhCt9QwZyex885PfmAoNY17SAvD
-         Kt0uP7hGxXD+Qbm9Pu2aSWUukiH8MkYd+ApIYHRN/seJO4e8xE83lsCngf+yQNZUADZN
-         YwvVIvJKt79ngQ1WzF6EsScSfQD/lXus743LAWin+SD+ijGBcuFuiHJ7me9DV2Bui+Ac
-         nuBnOv8sgpiyqD1myztEchNNPgnmHDsNHKT4JKyQd9QHXrhlD9e2RtRYYPcTMzyQpl1d
-         waaw==
-X-Gm-Message-State: AOAM530TvNc/CNWOWPa0DEL/JFfIPJNbmfkvttEQKT/v2WTct1R6GHsh
-        p/TshBiU+7cNCboU8esWOSU=
-X-Google-Smtp-Source: ABdhPJzwpB0jmLPHgl0m4pBgOkxvpvOMrOed5iwoQGGrTg/E7fJwZG3bBoGNUAptXhObL+JcKmqcJQ==
-X-Received: by 2002:a17:903:40c7:b0:156:8b56:5fa1 with SMTP id t7-20020a17090340c700b001568b565fa1mr7484133pld.108.1649233802239;
-        Wed, 06 Apr 2022 01:30:02 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id r8-20020a17090a0ac800b001c9e35d3a3asm4904977pje.24.2022.04.06.01.29.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:30:01 -0700 (PDT)
-From:   Tony Huang <tonyhuang.sunplus@gmail.com>
-To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        krzysztof.kozlowski@linaro.org
-Cc:     wells.lu@sunplus.com, lh.Kuo@sunplus.com, tony.huang@sunplus.com,
-        Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: [PATCH v6 0/2] Add mmc driver for Sunplus SP7021 SOC
-Date:   Wed,  6 Apr 2022 16:29:47 +0800
-Message-Id: <cover.1649229258.git.tonyhuang.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SCKZqgCi3PtFGSDXkz/WMuyQV3cdA+J7prWZVg1YWbs=;
+        b=RCiLmHQB4x/U1FjK3lBS19i5ZMfB7o5b5Jsgf0PGHLy4zXvDLmDJhbED7sMaX7M04m
+         mTa+NDZ5YXIS1wqJDYDApMOVILu3V4gMPl5UUKxyd+Y+r+WLAzpFEEXWOOFezJyzCTPh
+         cUTHGwrlZM0m4cKzQoa73dVmiDl6ZkD6gbUb/Xzp/HSshYsaosuZgYoeLKkJloUIhR4E
+         UxCDJit15FdE0pwjcV3CuADiZu3Bbzuxa+wN4FEc7YbpwUcHgHFpZcKyjfARgQT77c4a
+         ConHW5nnWSXbqbbU7joRZ89lKWq3ImU+Tqvayyeq3Lu+SzsiD/i5aPo80GgikVq1eFzp
+         rPyw==
+X-Gm-Message-State: AOAM5317J8STNPeVrrTgsoX56kjYj1oBtuasRqVSfkLZ/39R3XKZLWHT
+        EUKB4U9aoljJ69X8nyKs9cdTEQ==
+X-Google-Smtp-Source: ABdhPJx8TPy213ruGo/58y5WqOOIerENqAQR6I3YAx6hbCBNhViJxXFVnzCyEKsCLHONvWCl6kcUxQ==
+X-Received: by 2002:a05:6512:1045:b0:44a:6422:4c8 with SMTP id c5-20020a056512104500b0044a642204c8mr5505234lfb.253.1649233834119;
+        Wed, 06 Apr 2022 01:30:34 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id o3-20020a198c03000000b00448b7b1780csm1765878lfd.63.2022.04.06.01.30.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 01:30:33 -0700 (PDT)
+Message-ID: <cf7449c2-71ef-aed1-c871-c9ae7202b3fc@rasmusvillemoes.dk>
+Date:   Wed, 6 Apr 2022 10:30:32 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/5] x86/alternative: record .altinstructions section
+ entity size
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <20220311144312.88466-1-adobriyan@gmail.com>
+ <20220311144312.88466-3-adobriyan@gmail.com>
+ <20220312211740.GG28057@worktop.programming.kicks-ass.net>
+ <Yi4ybwog/H4gk5Ts@localhost.localdomain> <87o81f1gh9.ffs@tglx>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <87o81f1gh9.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a patch series for mmc driver for Sunplus SP7021 SOC.
+On 05/04/2022 21.24, Thomas Gleixner wrote:
+> On Sun, Mar 13 2022 at 21:05, Alexey Dobriyan wrote:
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-etc.) into a single chip. It is designed for industrial control.
+> That does not matter. M merges any duplications in sections with the
+> same [section] name, entity size and flags.
+> 
+>      .pushsection .bar "aM" @progbits, 4
+>      .byte 0x01, 0x02, 0x03, 0x04
+>      .popsection
+> 
+>      .pushsection .bar "aM" @progbits, 4
+>      .byte 0x01, 0x02, 0x03, 0x04
+>      .popsection
+> 
+> Will create a section .bar with lenght 4 and the content:
+>      0x1,0x2,0x3,0x4
+> 
+> What saves you here is the fact that the altinstruction entries are
+> guaranteed to be unique, but that wants a big fat comment.
 
-Refer to:
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-https://tibbo.com/store/plus1.html
+Actually, I think what saves this is that the linker at least currently
+ignores the merge flag for sections with relocations; from binutils
+bfd/merge.c:
 
-Tony Huang (2):
-  dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
-  mmc: Add mmc driver for Sunplus SP7021
+  if ((sec->flags & SEC_RELOC) != 0)
+    {
+      /* We aren't prepared to handle relocations in merged sections.  */
+      return true;
+    }
 
- .../devicetree/bindings/mmc/sunplus,mmc.yaml       |   62 +
- MAINTAINERS                                        |    7 +
- drivers/mmc/host/Kconfig                           |    9 +
- drivers/mmc/host/Makefile                          |    1 +
- drivers/mmc/host/sunplus-mmc.c                     | 1200 ++++++++++++++++++++
- 5 files changed, 1279 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
- create mode 100644 drivers/mmc/host/sunplus-mmc.c
+I do think it is theoretically possible for two altinstruction entries
+to end up being identical after relocations have been applied (same
+relative offsets to both the .text section and their replacement
+instructions).
 
--- 
-2.7.4
-
+Rasmus

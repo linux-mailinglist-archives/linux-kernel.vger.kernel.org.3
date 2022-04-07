@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B344F8479
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9B44F83E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345446AbiDGQD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S1345181AbiDGPq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiDGQDW (ORCPT
+        with ESMTP id S1345029AbiDGPqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:03:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C161DEA81;
-        Thu,  7 Apr 2022 09:01:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B4FBECE27EE;
-        Thu,  7 Apr 2022 16:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04483C385A5;
-        Thu,  7 Apr 2022 16:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649347278;
-        bh=yAnO4c7MDGXcf6Gal/+bTFrLqSTatoGBMYjleu4Ss1Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uM+vZOCA5IzJZCsNSrAwwXCQY5jXsP16RBrgP9QPhmPtbO18pA/p6hfvg/57+7Yso
-         eE0k1MYJZtSZua5T9kMskawRJBhAdmofen15mx0p4YcU7F6J2Ate+Uy7U6obPMuizX
-         m2T4u2m5a7B+PYlVK1IyT/nwdjwwzJm/Ct1jIJIHitF6YPgUzeacK00CrIh9nxo3uN
-         PS2NRkLzeDEzDRqIQOvVqUy1vmMTrdaDUO7N50sT1JNQcV4odlcprUkUB7VXqI5lSy
-         WhSDkQAN5baOCzlGDwu+pnIqM8237y8XAV6uijFUXe+9obFohCdduB1rbO6AecohqC
-         /pVOZ+QafMZHw==
-Date:   Thu, 7 Apr 2022 11:01:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V7 03/10] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220407160116.GA239672@bhelgaas>
+        Thu, 7 Apr 2022 11:46:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF26C31DD;
+        Thu,  7 Apr 2022 08:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649346251; x=1680882251;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pNOhE9/kv8vrHZD2BZf+FPGAZBIr/4yQ5tgZOcRzFbg=;
+  b=OyWlzofPCp/B/M+veNTK4V9IJcJBRfIfk1h8wUxa0a2trquQKUp9SqbA
+   L1EFZfCKhUN4CmoOaAFDj6UV19Kre5sWmgDQnkzrkJCvVwxyZTez4Wesx
+   89KfwQwHEqsx49iQNZ6rLQ9ziJ4y5BP5JMx64rhfv7R0WTwajftR3YlF9
+   yElErfMvrIRthAEhADrYVj8jnMKODJLzk0DqTrRnt4fLcdicT+VQtpRVK
+   FIn5p4r89uMrj5Tux1AzhewR5QbqGqfoDe/Okc92Rf0aQCVz4/1re3za7
+   34GcnBpGRs2WoipBuhb5qmYeT0FYcbIXfJQ+aMrMP1Kmy7T/axCne65Gm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261051683"
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="261051683"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 08:43:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="550114073"
+Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
+  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 08:43:51 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <len.brown@intel.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Chen Yu <yu.chen.surf@gmail.com>, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency invariance
+Date:   Fri,  8 Apr 2022 07:42:58 +0800
+Message-Id: <20220407234258.569681-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk4EvRDd/Kw5rEil@iweiny-desk3>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,48 +66,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 02:23:09PM -0700, Ira Weiny wrote:
-> On Wed, Apr 06, 2022 at 11:11:10AM +0100, Jonathan Cameron wrote:
-> > On Tue, 5 Apr 2022 16:22:11 -0700
-> > Ira Weiny <ira.weiny@intel.com> wrote:
-> > > On Sat, Apr 02, 2022 at 04:48:45PM +0200, Lukas Wunner wrote:
-> > > > On Thu, Mar 31, 2022 at 08:19:56AM -0700, Ira Weiny wrote:  
-> > > > > On Wed, Mar 30, 2022 at 10:50:31PM -0700, Christoph Hellwig wrote:  
-> > > > > > On Wed, Mar 30, 2022 at 04:59:13PM -0700, ira.weiny@intel.com wrote:  
-> > > > > > > Introduced in a PCI v6.0[1], DOE provides a config space based mailbox
-> > > > > > > with standard protocol discovery.  Each mailbox is accessed through a
-> > > > > > > DOE Extended Capability.  
-> > > > > > 
-> > > > > > I really don't think this should be built unconditionally and bloat
-> > > > > > every single kernel built with PCI support.  
-> > > > > 
-> > > > > I can add a Kconfig.  
-> > > > 
-> > > > Ideally, that config option should live in the pcie/ subdirectory,
-> > > > i.e. in drivers/pci/pcie/Kconfig, alongside drivers/pci/pcie/doe.c,
-> > > > as we try to consolidate PCIe-specific features there and reserve
-> > > > core code in drivers/pci/*.c for functionality that also applies
-> > > > to Conventional PCI.  
-> > > 
-> > > Thanks for letting me know about this direction.  I was unaware of this.
-> > 
-> > We had this in the pcie directory, but Bjorn asked us to move it to the pci
-> > directory as there isn't anything specific to PCIe about DOE. You could
-> > implement it on pci-x (maybe 2.0?) I think even though it's in the PCIe specification.
-> > 
-> > https://lore.kernel.org/linux-pci/20210413194927.GA2241331@bjorn-Precision-5520/
-> 
-> :-/
-> 
-> I'd forgotten that far back.
-> 
-> Bjorn?
+Problem statement:
+Once the user has disabled turbo frequency by
+echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
+the cfs_rq's util_avg becomes quite small when compared with
+CPU capacity.
 
-I would still prefer it in drivers/pci because I don't think
-there's enough value to justify the pcie/ subdirectory.  We have
-ats.c, ecam.c, iov.c, pci-pf-stub.c, and vc.c in drivers/pci even
-though they're PCIe-specific.  Other files in drivers/pci like
-access.c, pci-acpi.c, pci.c, probe.c, etc also have some PCIe
-content.
+Step to reproduce:
 
-Bjorn
+echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+
+./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
+would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
+with a CPU utilization of 99%. [1]
+
+top result:
+%Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+
+check util_avg:
+cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
+  .util_avg                      : 611
+
+So the util_avg/cpu capacity is 611/1024, which is much smaller than
+98.4% shown in the top result.
+
+This might impact some logic in the scheduler. For example, group_is_overloaded()
+would compare the group_capacity and group_util in the sched group, to
+check if this sched group is overloaded or not. With this gap, even
+when there is a nearly 100% workload, the sched group will not be regarded
+as overloaded. Besides group_is_overloaded(), there are also other victims.
+There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
+The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
+This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
+domain is overloaded.
+
+Analysis:
+CPU frequency invariance has caused this difference. In summary,
+the util_sum of cfs rq would decay quite fast when the CPU is in
+idle, when the CPU frequency invariance is enabled.
+
+The detail is as followed:
+
+As depicted in update_rq_clock_pelt(), when the frequency invariance
+is enabled, there would be two clock variables on each rq, clock_task
+and clock_pelt:
+
+   The clock_pelt scales the time to reflect the effective amount of
+   computation done during the running delta time but then syncs back to
+   clock_task when rq is idle.
+
+   absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
+   @ max frequency  ------******---------------******---------------
+   @ half frequency ------************---------************---------
+   clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
+
+The fast decay of util_sum during idle is due to:
+1. rq->clock_pelt is always behind rq->clock_task
+2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
+3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
+   a lot to rq->clock_task
+4. Enters ___update_load_sum() again, the idle period is calculated by
+   rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
+   The lower the CPU frequency is, the larger the delta =
+   rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
+   used to decay the util_sum only, the util_sum drops significantly during
+   idle period.
+
+Proposal:
+This symptom is not only caused by disabling turbo frequency, but it
+would also appear if the user limits the max frequency at runtime. Because
+if the frequency is always lower than the max frequency,
+CPU frequency invariance would decay the util_sum quite fast during idle.
+
+As some end users would disable turbo after boot up, this patch aims to
+present this symptom and deals with turbo scenarios for now. It might
+be ideal if CPU frequency invariance is aware of the max CPU frequency
+(user specified) at runtime in the future.
+
+[Previous patch seems to be lost on LKML, this is a resend, sorry for any
+inconvenience]
+
+Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
+Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 846bb3a78788..2216b24b6f84 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1322,6 +1322,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
+ 	mutex_unlock(&intel_pstate_limits_lock);
+ 
+ 	intel_pstate_update_policies();
++	arch_set_max_freq_ratio(global.no_turbo);
+ 
+ 	mutex_unlock(&intel_pstate_driver_lock);
+ 
+-- 
+2.25.1
+

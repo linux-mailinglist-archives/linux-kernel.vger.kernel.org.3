@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875F14F79FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F17F4F7A00
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243210AbiDGIoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S243221AbiDGIon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243200AbiDGIoL (ORCPT
+        with ESMTP id S240566AbiDGIom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:44:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035625DE76;
-        Thu,  7 Apr 2022 01:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649320931; x=1680856931;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=yy+cT/a1EMFV/vsEI4YTD6dp4j+4Ch2HlkBQzyfLhT4=;
-  b=Gj28QSS3gxZx1AU7aoJ6GOLhq5kuehve13weHUKlmXxihvG4XpeE6Q2/
-   +hXB+Pzw5AJSbW84JCVJypOam65HHlUyjWoJqRfBVxfWy5ua4QwPKdl4i
-   nG29IayLzE06pS3eSbZQV0c2WZueUyFBxKTwuVpjQRxzWMuN5ToD1yGpp
-   w9bJ9xkgUSmTb+UhIzwd6//jZW3fTFToOXM5gVp/bgyb3jFXNDIH9pKFn
-   bn2wo30CzGu7GsmhE1kyenz6oTj2BYqMVBer8WK1/nSqKY8Keea5kbtro
-   BbUadHWOv4TghYMcnq3/zeKbwg0hckKuS+y4Dp1nufeNWrAxUhJOqztyN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261443694"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="261443694"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:42:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="722872202"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.125]) ([10.255.28.125])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:42:09 -0700
-Message-ID: <55f6f971-94ef-00d8-6f99-c040b103d56f@intel.com>
-Date:   Thu, 7 Apr 2022 16:42:06 +0800
+        Thu, 7 Apr 2022 04:44:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E3846143;
+        Thu,  7 Apr 2022 01:42:40 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYvwh6pJ9zgYQL;
+        Thu,  7 Apr 2022 16:40:52 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Apr 2022 16:42:35 +0800
+CC:     <kbuild-all@lists.01.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH v6 4/7] hisi_ptt: Add tune function support for HiSilicon
+ PCIe Tune and Trace device
+To:     kernel test robot <lkp@intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <john.garry@huawei.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <robin.murphy@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+References: <20220406071730.41031-5-yangyicong@hisilicon.com>
+ <202204071201.AcePULOR-lkp@intel.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <73483350-8df9-967f-ba35-d910aa39b635@huawei.com>
+Date:   Thu, 7 Apr 2022 16:42:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] KVM: nVMX: Clear IDT vectoring on nested VM-Exit for
- double/triple fault
-Content-Language: en-US
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>
-References: <20220407002315.78092-1-seanjc@google.com>
- <20220407002315.78092-4-seanjc@google.com>
- <a23077a5-777f-85fb-05fa-b91e21aca0e7@intel.com>
-In-Reply-To: <a23077a5-777f-85fb-05fa-b91e21aca0e7@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202204071201.AcePULOR-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/2022 4:02 PM, Xiaoyao Li wrote:
-> On 4/7/2022 8:23 AM, Sean Christopherson wrote:
->> Clear the IDT vectoring field in vmcs12 on next VM-Exit due to a double
->> or triple fault.  Per the SDM, a VM-Exit isn't considered to occur during
->> event delivery if the exit is due to an intercepted double fault or a
->> triple fault.  Opportunistically move the default clearing (no event
->> "pending") into the helper so that it's more obvious that KVM does indeed
->> handle this case.
->>
->> Note, the double fault case is worded rather wierdly in the SDM:
->>
->>    The original event results in a double-fault exception that causes the
->>    VM exit directly.
->>
->> Temporarily ignoring injected events, double faults can _only_ occur if
->> an exception occurs while attempting to deliver a different exception,
->> i.e. there's _always_ an original event.  And for injected double fault,
->> while there's no original event, injected events are never subject to
->> interception.
->>
->> Presumably the SDM is calling out that a the vectoring info will be valid
->> if a different exit occurs after a double fault, e.g. if a #PF occurs and
->> is intercepted while vectoring #DF, then the vectoring info will show the
->> double fault. 
+On 2022/4/7 12:28, kernel test robot wrote:
+> Hi Yicong,
 > 
-> Wouldn't it be a tripe fault exit in this case?
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on joro-iommu/next]
+> [also build test WARNING on linus/master linux/master v5.18-rc1 next-20220406]
+> [cannot apply to tip/perf/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/Add-support-for-HiSilicon-PCIe-Tune-and-Trace-device/20220406-200044
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
+> config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220407/202204071201.AcePULOR-lkp@intel.com/config)
+> compiler: alpha-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/9400668b70cbcd5ec74a52f043c3a333b80135f8
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Yicong-Yang/Add-support-for-HiSilicon-PCIe-Tune-and-Trace-device/20220406-200044
+>         git checkout 9400668b70cbcd5ec74a52f043c3a333b80135f8
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/hwtracing/ptt/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/hwtracing/ptt/hisi_ptt.c: In function 'hisi_ptt_tune_data_get':
+>>> drivers/hwtracing/ptt/hisi_ptt.c:46:16: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744073709551615' to '4294967295' [-Woverflow]
+>       46 |         writel(~0UL, hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+>          |                ^~~~
 
-It won't since #PF is intercepted by exception bitmap in your case.
+Thanks for the report. using of ~0U will fix this.
 
->> In other words, the clause can simply be read as:
->>
->>    The VM exit is caused by a double-fault exception.
+>    drivers/hwtracing/ptt/hisi_ptt.c: At top level:
+>    drivers/hwtracing/ptt/hisi_ptt.c:1131:6: warning: no previous prototype for 'hisi_ptt_remove' [-Wmissing-prototypes]
+>     1131 | void hisi_ptt_remove(struct pci_dev *pdev)
+>          |      ^~~~~~~~~~~~~~~
 > 
 
+for here I missed the static identifier. will fix. thanks.
+
+> 
+> vim +46 drivers/hwtracing/ptt/hisi_ptt.c
+> 
+>     33	
+>     34	static int hisi_ptt_tune_data_get(struct hisi_ptt *hisi_ptt,
+>     35					  u32 event, u16 *data)
+>     36	{
+>     37		u32 reg;
+>     38	
+>     39		reg = readl(hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>     40		reg &= ~(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB);
+>     41		reg |= FIELD_PREP(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB,
+>     42				  event);
+>     43		writel(reg, hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>     44	
+>     45		/* Write all 1 to indicates it's the read process */
+>   > 46		writel(~0UL, hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+>     47	
+>     48		if (!hisi_ptt_wait_tuning_finish(hisi_ptt))
+>     49			return -ETIMEDOUT;
+>     50	
+>     51		reg = readl(hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+>     52		reg &= HISI_PTT_TUNING_DATA_VAL_MASK;
+>     53		*data = FIELD_GET(HISI_PTT_TUNING_DATA_VAL_MASK, reg);
+>     54	
+>     55		return 0;
+>     56	}
+>     57	
+> 

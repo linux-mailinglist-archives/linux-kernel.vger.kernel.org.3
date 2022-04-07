@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FB74F7BDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734374F7BDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243883AbiDGJlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S243938AbiDGJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243888AbiDGJkc (ORCPT
+        with ESMTP id S243881AbiDGJke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:40:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B5E1B60AF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:31 -0700 (PDT)
+        Thu, 7 Apr 2022 05:40:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001381B7567
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ACA661BA3
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD2FC385A0;
-        Thu,  7 Apr 2022 09:38:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B16BB826EC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225A9C385A4;
+        Thu,  7 Apr 2022 09:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649324310;
-        bh=adF1/u6h/yegMPzzisg329Q0g2d5Lbh7VljvdQ1YYYQ=;
+        s=k20201202; t=1649324312;
+        bh=5s9OskJhRbRG2UiHya741d2AQEc7gXNCfqv7+61bHTo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hCB1/fkwTCH2unz21ih2gLjBEiMAF1KdSZ4WhRN7qciOvwFUNath4zjir7qUW39SQ
-         rZ9ydITNmrSTo9uy0qz2Jb0SC09klswxG74knIkPS6dqMfiL9z7+E/Dxv2P+sLv1eu
-         DlVweSMnx5z8PlQBgwaL4lIqzWA9sKGFRGWqp//PgpyYBzq/wrUiUArljpVmc3wwca
-         BlT9CRatUmEZS5l2DobvxXsbqMGTrAqkTXmoUDKkF8uV2AQ9PNcdAp7IsiAkb3LVzy
-         QpRvkBkGgUJap8Hzke30OEjz0QLJX1gVYBxplxXdMMwsRzfPGhOqAwp5WdiRRM519l
-         AnDKbSNXc0IGw==
+        b=oSgF3ttao0gVuOlFBOMt9yHpO0kCnAqrr5505QzbDPd51pMmOkIeBjYcQRtVRyGyP
+         Ait3GuJuxl0/lyEPOO4Yf1AciPnd5o3Rd6UmadIK6jXimksRI2/q/QI7GfhL1og0f8
+         F6sKXWjfmQQ4Flol+icFsLEmIGMmrSm6bN00haeFXqCqdpm6W5o2m0QaQt4+lM9sbs
+         fwtOS8sWrSWcg5SE2Pyoq7Gn2rcmpwi4TnsOLybt/P1gf7xJVUPwLiBLS3aa9V9W1A
+         2lCl6vYS7ej/9+1Rn4IHNx95h1v9aaKr5YDa+hHBXezAn6TPRcVsue0kemWQfKEp+7
+         Xj0dRH+U6rSmg==
 From:   Mark Brown <broonie@kernel.org>
-To:     steve@sk2.org, lgirdwood@gmail.com
-Cc:     patches@opensource.cirrus.com, wsa@kernel.org,
+To:     rf@opensource.cirrus.com
+Cc:     patches@opensource.cirrus.com, dan.carpenter@oracle.com,
+        lkp@intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220405122411.2096387-1-steve@sk2.org>
-References: <20220405122411.2096387-1-steve@sk2.org>
-Subject: Re: [PATCH v2] ASoC: wm*: use simple i2c probe function
-Message-Id: <164932430929.3844153.715158855370193185.b4-ty@kernel.org>
-Date:   Thu, 07 Apr 2022 10:38:29 +0100
+In-Reply-To: <20220404113252.1152659-1-rf@opensource.cirrus.com>
+References: <20220404113252.1152659-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH] ASoC: simple-card-utils: Avoid NULL deref in asoc_simple_set_tdm()
+Message-Id: <164932431085.3844153.445127549627667818.b4-ty@kernel.org>
+Date:   Thu, 07 Apr 2022 10:38:30 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,16 +55,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 14:24:11 +0200, Stephen Kitt wrote:
-> The i2c probe functions here don't use the id information provided in
-> their second argument, so the single-parameter i2c probe function
-> ("probe_new") can be used instead.
+On Mon, 4 Apr 2022 12:32:52 +0100, Richard Fitzgerald wrote:
+> Don't dereference simple_dai before it has been checked for NULL.
 > 
-> wm8731.c is excluded and will be submitted separately.
 > 
-> This avoids scanning the identifier tables during probes.
-> 
-> [...]
 
 Applied to
 
@@ -71,8 +66,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: wm*: use simple i2c probe function
-      commit: 97b0b6e3fb8a390205f3266b1fba3e195b9edf30
+[1/1] ASoC: simple-card-utils: Avoid NULL deref in asoc_simple_set_tdm()
+      commit: 51a630a7051f7f4f1cfdd64c20c7110f9907c230
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

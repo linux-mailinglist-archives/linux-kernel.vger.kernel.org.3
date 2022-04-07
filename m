@@ -2,179 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912FB4F828C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B0D4F82B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbiDGPMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S1344582AbiDGPYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiDGPLz (ORCPT
+        with ESMTP id S1344585AbiDGPYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:11:55 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DB82BB18;
-        Thu,  7 Apr 2022 08:09:55 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso4087110otj.5;
-        Thu, 07 Apr 2022 08:09:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mvsoNOk9u8RV2yVCZLMb/29uYaw0/4/Qw5+UfuDkMks=;
-        b=ec2YPQw+MOwqh33IbQ6jfO5ewzH9X6jl14iOKTglcII8F3l0PuXw++gXCgaNN8FfKO
-         lDBEr6GwssmRWJV9YxgwvieXOwyKSLhXUIVtWMiSFcNg/k2HQWAIhHIadKjQb9U3MzmK
-         kyLa3oMqSmEGXay2bgXNHr6nKHHQcB85MICWNJw7EkbXrQQQyIZIQYkDXa7rd8QCnUTX
-         ZliN5vGinAHWQxxalsIviBrhwSemnl5svIbNimC+7i0/HWKTrb7CU2/Ppwr4wv0HrKEn
-         93ZsAIm5vkQ+j9fOm4WSfKInzy2MaGpMhKM18Se0190HbtItgpfoHGuazFvjmaETYVZf
-         q4xA==
-X-Gm-Message-State: AOAM532R/aQn279nKLoaTcasdUgIglW1MG489F1/pr0Q1Hahr1FdjChC
-        ncrtggWy/Edw51/YzIDI8/6P8aZTXw==
-X-Google-Smtp-Source: ABdhPJzdNp+SArorak1XGGcOGrCQUd+SwHej8ANssNSIJv2Vtew9hsSojZk7jiFJDg5SzFN4KY51PA==
-X-Received: by 2002:a9d:136:0:b0:5cd:9e9b:4872 with SMTP id 51-20020a9d0136000000b005cd9e9b4872mr5150803otu.192.1649344194343;
-        Thu, 07 Apr 2022 08:09:54 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q39-20020a4a88ea000000b0032165eb3af8sm7531169ooh.42.2022.04.07.08.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 08:09:54 -0700 (PDT)
-Received: (nullmailer pid 1105330 invoked by uid 1000);
-        Thu, 07 Apr 2022 15:09:53 -0000
-Date:   Thu, 7 Apr 2022 10:09:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Puranjay Mohan <p-mohan@ti.com>
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org, vigneshr@ti.com,
-        kishon@ti.com
-Subject: Re: [RFC 01/13] dt-bindings: remoteproc: Add PRU consumer bindings
-Message-ID: <Yk7+wXwDHrtjFo9s@robh.at.kernel.org>
-References: <20220406094358.7895-1-p-mohan@ti.com>
- <20220406094358.7895-2-p-mohan@ti.com>
+        Thu, 7 Apr 2022 11:24:34 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 08:22:30 PDT
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C204E20C1A5;
+        Thu,  7 Apr 2022 08:22:30 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 912AB4C0234;
+        Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1649344344;
+        bh=Yda2j6lrq6q/8Qr9IDcdSxoBwSuVmTqIZ8v84YOihVo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TJgGnxlrKn8w/dTVJabinCWu1YmEkCvUpZAU6BV90HfAEYs22cvbp1/htmgqBGhbL
+         PkKQZpacG0Z9yoSTt5pz/mxO6ykFwvj0wZDIz2cWyhNACgdbpnKhicDJkzj63tAKy2
+         3ZuX7wM8Azckyzg31tuX6amKQ8dRZCsa2RfCYWqs+Lintbih9xgxxyRkyXlR5ImnUv
+         /XxlXZwh5HYdgVk6wOOBsUqSuGJM2ma97tQjavRixV4YTCNjKjD/nmj5zIkgKnfX6D
+         YFa4bh/mNtvr+Zsf6+Wj4d/9fDhJFOJ4z3INYB64mQ/xQWOOMyCRcde9S4WEfJ67VE
+         DgPfsPQLGvzVA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 8CEDA254; Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 5FBA3252;
+        Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 5BD1024E;
+        Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 3C8BB4A02E4; Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 847E94A0238;
+        Thu,  7 Apr 2022 17:12:20 +0200 (CEST)
+        (Extended-Queue-bit xtech_fn@fff.in.tum.de)
+Date:   Thu, 7 Apr 2022 17:12:15 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406094358.7895-2-p-mohan@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:13:46PM +0530, Puranjay Mohan wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add a YAML binding document for PRU consumers. The binding includes
-> all the common properties that can be used by different PRU consumer
-> or application nodes and supported by the PRU remoteproc driver.
-> These are used to configure the PRU hardware for specific user
-> applications.
-> 
-> The application nodes themselves should define their own bindings.
-> 
-> Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> ---
->  .../bindings/remoteproc/ti,pru-consumer.yaml  | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> new file mode 100644
-> index 000000000000..c245fe1de656
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common TI PRU Consumer Binding
-> +
-> +maintainers:
-> +  - Suman Anna <s-anna@ti.com>
-> +
-> +description: |
-> +  A PRU application/consumer/user node typically uses one or more PRU device
-> +  nodes to implement a PRU application/functionality. Each application/client
-> +  node would need a reference to at least a PRU node, and optionally define
-> +  some properties needed for hardware/firmware configuration. The below
-> +  properties are a list of common properties supported by the PRU remoteproc
-> +  infrastructure.
-> +
-> +  The application nodes shall define their own bindings like regular platform
-> +  devices, so below are in addition to each node's bindings.
-> +
-> +properties:
-> +  ti,prus:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+Hi all,
 
-Needs contraints. A phandle-array is really a matrix of phandles and 
-args. If no args, something like this:
+work on my dependency checker tool is progressing nicely, and it is
+flagging, what I believe is, a harmful addr to ctrl dependency
+transformation. For context, see [1] and [2]. I'm using the Clang
+compiler.
 
-minItems: ??
-maxItems: ??
-items:
-  maxItems: 1
+The dependency in question runs from line 618 into the for loop
+increment, i.e. the third expresion in the for loop condition, in line
+622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
 
-> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
-> +
-> +  firmware-name:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    description: |
-> +      firmwares for the PRU cores, the default firmware for the core from
-> +      the PRU node will be used if not provided. The firmware names should
-> +      correspond to the PRU cores listed in the 'ti,prus' property
-> +
-> +  ti,pruss-gp-mux-sel:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    maxItems: 6
-> +    items:
-> +        enum: [0, 1, 2, 3, 4]
-> +    description: |
-> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
-> +      This selects the internal muxing scheme for the PRU instance. Values
-> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
-> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
-> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
-> +      same slice in the associative array. If the array size is smaller than
-> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
-> +      PRU core is used.
-> +
-> +required:
-> +  - ti,prus
-> +
-> +dependencies:
-> +  firmware-name: [ 'ti,prus' ]
-> +  ti,pruss-gp-mux-sel: [ 'ti,prus' ]
-> +
-> +additionalProperties: true
+I did my best to reverse-engineer some pseudocode from Clang's IR for
+showing what I think is going on.
 
-This must be false unless it is a common, shared schema.
+Clang's unoptimised version:
 
-> +
-> +examples:
-> +  - |
-> +    /* PRU application node example */
-> +    pru-app {
-> +        ti,prus = <&pru0>, <&pru1>;
-> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
-> +        ti,pruss-gp-mux-sel = <2>, <1>;
-> +    };
-> -- 
-> 2.17.1
+> restart:
+> 	if(place_holder != NULL)
+> 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> 	if(delegation != NULL)
+> 		if(delegation != place_holder_deleg)
+> 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
 > 
+> 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> 		/*
+> 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> 		 * "delegation" might be assigned either a value depending on 
+> 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> 		 * or NULL.
+> 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> 		 * points to.
+> 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> 		 * and the for loop's increment is executed.
+> 		 */
+> 	}
+
+Clang's optimised version:
+
+> restart:
+> 	if(place_holder == NULL) {
+> 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> 	} else {
+> 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> 			if(cmp == place_holder_deleg) {
+> 				delegation = place_holder_deleg;
+> 			} else {
+> 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> 			}
+> 		} else {
+> 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> 		}
+> 	}
 > 
+> 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> 		/*
+> 		 * At this point, "delegation" cannot depend on line 618 anymore
+> 		 * since the "rcu_dereference()" was only used for an assignment
+> 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> 		 * Therefore, the loop increment cannot depend on the
+> 		 * "rcu_dereference()" either. The dependency chain has been
+> 		 * broken.
+> 		 */
+>         }
+
+The above is an abstraction of the following control flow path in
+"nfs_server_return_marked_delegations()":
+
+1. When "nfs_server_return_marked_delegations()" gets called, it has no
+choice but to skip the dependency beginning in line 620, since
+"place_holder" is NULL the first time round.
+
+2. Now take a path until "place_holder", the condition for the
+dependency beginning, becomes true and "!delegation || delegation !=
+place_holder_deleg", the condition for the assignment in line 620,
+becomes false. Then, enter the loop again and take a path to one of the
+"goto restart" statements without reassigning to "delegation".
+
+3. After going back to "restart", since the condition for line 618
+became true, "rcu_dereference()" into "delegation".
+
+4. Enter the for loop again, but avoid the "goto restart" statements in
+the first iteration and ensure that "&(delegation)->super_list !=
+&server->delegations", the loop condition, remains true and "delegation"
+isn't assigned NULL.
+
+5. When the for loop condition is reached for the second time, the loop
+increment is executed and there is an address dependency.
+
+Now, why would the compiler decide to assign "place_holder_deleg" to
+"delegation" instead of what "rcu_dereference()" returned? Here's my
+attempt at explaining.
+
+In the pseudo code above, i.e. in the optimised IR, the assignment of
+"place_holder_deleg" is guarded by two conditions. It is executed iff
+"place_holder" isn't NULL and the "rcu_dereference()" didn't return
+NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+NULL" holds at line 617, then "delegation == rcu_dereference() ==
+place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+would be wrong.
+
+Assume control flow has just reached the first if, i.e. line 617, in
+source code. Since "place_holder" isn't NULL, it will execute the first
+if's body and "rcu_dereference()" into "delegation" (618). Now it has
+reached the second if. Per our aussmption, "rcu_dereference()" returned
+something that wasn't NULL. Therefore, "!delegation", the first part of
+the second if condition's OR, will be false.
+
+However, if we want "rcu_dereference() == delegation" to hold after the
+two if's, we can't enter the second if anyway, as it will overwrite
+"delegation" with a value that might not be equal to what
+"rcu_dereference()" returned. So, we want the second part of the second
+if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+as well.
+
+When is that the case? It is the case when "delegation ==
+place_holder_deleg" holds.
+
+So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+to hold after the two if's, "place_holder != NULL && rcu_dereference()
+!= NULL" must hold before the two if's, which is what we wanted to show
+and what the compiler figured out too.
+
+TL;DR: it appears the compiler optimisation is plausible, yet it still
+breaks the address dependency.
+
+For those interested, I have made the unoptimised and optimised IR CFGs
+available. In the optimised one, the interesting part is the transition
+from "if.end" to "if.end13".
+
+Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+
+Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+
+What do you think?
+
+Many thanks,
+Paul
+
+[1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+[2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u

@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4CD4F791D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8214B4F7928
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiDGIJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S237668AbiDGIKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242698AbiDGIHP (ORCPT
+        with ESMTP id S242927AbiDGIH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:07:15 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB015AAD0;
-        Thu,  7 Apr 2022 01:05:15 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id h4so6561903wrc.13;
-        Thu, 07 Apr 2022 01:05:15 -0700 (PDT)
+        Thu, 7 Apr 2022 04:07:59 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D38F18A3C6;
+        Thu,  7 Apr 2022 01:05:28 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id a11so7393847qtb.12;
+        Thu, 07 Apr 2022 01:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LomUbG6PUJaOAyEeNPYEZc4yxOTynNZPy0VtcUyX4ZY=;
+        b=qEXiGdWO0X885lVsV8evUW3Xj83FkNLGn+sz2Ih0nGowdrhhpAS2CFVNTlxHVHOu1K
+         ycdLIJlkG/QO8uws4gGTEownETCyqcDPh2QaVRpIzDrOLMZZQ4ilO41WK2eY8mTxpMmr
+         RNlHObg18i8GFQAbkYB3tTUvh0Ewyytn1gHI86RsOI8yBnP4KN8wuvV57H4QX3f0brGd
+         zAf72uESLzGygARFlD0yEEIbSN1LdpibjcarKCVlUTr8KWaZfnbTtwyMqKsOb8dv11Ey
+         LY9qCnbipxWjN8DZ53MyYc2dAJKSWb0m9DYKt77SoZsebcoW+xkJtl2pqTaPasHCMOQT
+         Sm1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=k5Z8OUhRelN5FFoWfx6yeRuNCnOOHjN18Zd6brbR9SU=;
-        b=PtI2+yLW3StPs6vlHQ3CCez8aCoDkMC41BmeACTvGOhmClXu+ETzfrmHXe2LfGtw+Y
-         mzlWfjPr6LgPIq4byAeKUp9bVFGvkoiqXSGwtQS1ZqTG2YX1feuink69kDI/cczyqV0W
-         WOEyn2Jyw/TZeTB1wfqtWbctFp3vzhOLq9grGEoU/wIGDNMkclxJIaSwDHrQLq2Qfomk
-         Iss/5vAlvx02Dr0dSVDMl/UihsG98nmqN2juf8nJuwCCBz+wpnRyU78qqplLBCgB04XD
-         GZqej45rrTqXS8cookvrGgKjdXeVO+rXRat5mz53yUUiCZI5SL/FzGJrJ/L/q8GBg440
-         KGSA==
-X-Gm-Message-State: AOAM532c91gsipTWKVybtzWaZrOGLeaU/rJ/bp4otkn3cKZOMvO9mxDM
-        DeiJ3JwUtrxwasEpdV3xyH0=
-X-Google-Smtp-Source: ABdhPJw8gESXWjC2gFPHl9EZ0YUgdmxtQHzQMJ3vbvugJZriyw/pHYEHwSHrUZLKqJMXehIo+aPzVg==
-X-Received: by 2002:a5d:6d0a:0:b0:204:109f:7833 with SMTP id e10-20020a5d6d0a000000b00204109f7833mr9927973wrq.76.1649318714105;
-        Thu, 07 Apr 2022 01:05:14 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05600c4e4d00b0038e44e316c1sm6682893wmq.6.2022.04.07.01.05.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 01:05:13 -0700 (PDT)
-Message-ID: <5be92b82-da56-2591-dbf1-fbf63f91c37b@kernel.org>
-Date:   Thu, 7 Apr 2022 10:05:12 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LomUbG6PUJaOAyEeNPYEZc4yxOTynNZPy0VtcUyX4ZY=;
+        b=dfy2NB34mOkqKoQrBjxs4U6cffjp+mBNaOiHj6IYOdLKrQwMcjrKvB0a5SMWjInDSI
+         O3SaQEnPLQJNsVPvfdOPA9ezDrjdRg2YSj+e29eGbkGFfwrqkdHYVkcFq5rzOtuzvGTH
+         azApvnYbYU/GER2dl8EFkVdzLMUoF34tdvBnyZasFdeK7zWs03FlNHmyVckZXK5MvrkU
+         +EjUh2IIjlBlwTrXVoxPwFI6NIjKY0H5cV75nKmiyNW0K9mbMt69yFUGFDQ0cDDo297e
+         is77QQGofPDtIK/HYrUMX8HWrvoWfjMOVvcQe9X50iOLIZtQMRuWJqwyB5GLcR0nCTCF
+         WO5A==
+X-Gm-Message-State: AOAM530jVFwrHlEcS1XJVek1/2cjmVIKrbwL8Touqx5lv8me8EwT8xES
+        Gg/Qhb9zcHUunWuOb5fQGMKw+I25Chfl0zzp+h0=
+X-Google-Smtp-Source: ABdhPJziSL8XilgioJ+e1Mjq34CoarB6ZiDVs658zsFvAH5lr0ZDr829LIWqEJ1qLVoQacv9INCueTY+IzGIft5r+m0=
+X-Received: by 2002:a05:622a:14cd:b0:2e1:d83a:6fdd with SMTP id
+ u13-20020a05622a14cd00b002e1d83a6fddmr10643425qtx.401.1649318727682; Thu, 07
+ Apr 2022 01:05:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/1] tty: serial: samsung: add spin_lock for interrupt
- and console_write
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20220407071619.102249-1-jaewon02.kim@samsung.com>
- <CGME20220407071223epcas2p16bb11821a0894a3375e84d17c4ff0844@epcas2p1.samsung.com>
- <20220407071619.102249-2-jaewon02.kim@samsung.com>
- <b53be23f-7935-dae3-9dc8-f850493a5fa9@kernel.org>
- <6dcddc8a-7ca2-b424-fc8f-7000be3f9116@linaro.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <6dcddc8a-7ca2-b424-fc8f-7000be3f9116@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220323064944.1351923-1-peng.fan@oss.nxp.com>
+ <20220323064944.1351923-3-peng.fan@oss.nxp.com> <CAEnQRZB1LL=d3SBCgNomPErBvzEgTVtbBE_PH=V60v-_9UObEg@mail.gmail.com>
+ <DU0PR04MB9417DEFA09AB85211AA72A2E88E79@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <CAEnQRZBS8nLjVuTv739BjBFEnPDnN0iRkvdouT0ooJrEDDbH4A@mail.gmail.com>
+In-Reply-To: <CAEnQRZBS8nLjVuTv739BjBFEnPDnN0iRkvdouT0ooJrEDDbH4A@mail.gmail.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Thu, 7 Apr 2022 11:05:14 +0300
+Message-ID: <CAEnQRZDpsMQUTSBvhztsnApEkWqtnjxf-NbNbr+L22mmiAV8AA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] remoteproc: imx_dsp_rproc: use common rproc_elf_load_segments
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 04. 22, 9:58, Krzysztof Kozlowski wrote:
-> On 07/04/2022 09:46, Jiri Slaby wrote:
->> On 07. 04. 22, 9:16, Jaewon Kim wrote:
->>> The console_write and IRQ handler can run concurrently.
->>> Problems may occurs console_write is continuously executed while
->>> the IRQ handler is running.
->>
->>   From the patch POV:
->>
->> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
->>
->> But given this is a v3 with no version changelog below "---", you've
->> just kicked the Greg's bot to wake up :P.
->>
-> 
-> There was a cover letter with such changelog:
-> https://lore.kernel.org/all/20220407071619.102249-1-jaewon02.kim@samsung.com/
-> 
-> It's indeed easy to miss...
+On Wed, Apr 6, 2022 at 2:25 PM Daniel Baluta <daniel.baluta@gmail.com> wrote:
+>
+> On Wed, Apr 6, 2022 at 1:58 PM Peng Fan <peng.fan@nxp.com> wrote:
+> >
+> > > Subject: Re: [PATCH 2/2] remoteproc: imx_dsp_rproc: use common
+> > > rproc_elf_load_segments
+> > >
+> > > On Thu, Mar 24, 2022 at 1:34 AM Peng Fan (OSS) <peng.fan@oss.nxp.com>
+> > > wrote:
+> > > >
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > >
+> > > > remoteproc elf loader supports the specific case that segments have
+> > > > PT_LOAD and memsz/filesz set to zero, so no duplicate code.
+> > > >
+> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Ah, OK, my bad -- I skipped it as usual -- I don't consider cover 
-letters that useful. And in this case, even more provided it is for a 
-single patch.
+Acked-by: Daniel Baluta <daniel.baluta@nxp.com>
 
-thanks,
--- 
-js
-suse labs
+Peng,
+
+I'm fine going on with this now. Next we need to replace the boolean is_iomem
+with a flags parameter to hold ATT_IOMEM, ATT_IOMEM32, etc.
+
+> > >
+> > > I think this change OK, but we have a case with the DSP were reads/writes
+> > > should be done in multiples of 32/64.
+> > >
+> > > We need a way to provide our own "memcpy" function to be used by
+> > > rproc_elf_load_segments.
+> >
+> > I think when generating elf file, the sections needs to be 32/64bits aligned.
+>
+> Sure, that could be a fix. But some malicious user can crash the kernel
+> by crafting an elf with unaligned sections.

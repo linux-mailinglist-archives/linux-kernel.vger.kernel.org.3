@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DEC4F7151
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382914F713C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240592AbiDGBaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S241482AbiDGBbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240488AbiDGBUC (ORCPT
+        with ESMTP id S240476AbiDGBUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:20:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30CA1834E3;
-        Wed,  6 Apr 2022 18:16:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F6C361DE0;
-        Thu,  7 Apr 2022 01:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0D1C385A3;
-        Thu,  7 Apr 2022 01:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649294204;
-        bh=deQcE5huTZNxSBkP31w2RjSrH7C3S05UosG3oIPcmm0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XjKedp0d7XQJRPleMKXDYdTslyKC02Fh1fptR2Ngi2ucScQHp80TJFmddtY6ogQiM
-         4WNLEFmoNgn/1BiZfAscEz3pHXkQJXF7cQOteCeGuyIZ0Q172tXQ7mmRi4KTu1cEVU
-         GbEBHBH8MJMvPGJJ+vZpus/w/MTXZnYe3BTDGXqC5XKcBZtG6GN4AWpJ858XuUnG1O
-         0pCB2np/j+cNtXV/8tYu+sJyYJxtdWDkkA9uSs6Cyrw50Wko0zN7VDaDWY4A+uwvmy
-         jJ/p2KtvZirqkW6DMqRQJ18MInAXDY6W5svPwxW3A/H4gKqqSj+ciQhcxFpHq1WWjY
-         SrybQlpQzdamA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hao Sun <sunhao.th@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-nilfs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 11/11] nilfs2: fix lockdep warnings during disk space reclamation
-Date:   Wed,  6 Apr 2022 21:16:08 -0400
-Message-Id: <20220407011609.115258-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
-References: <20220407011609.115258-1-sashal@kernel.org>
+        Wed, 6 Apr 2022 21:20:01 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFC11877DF
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:16:27 -0700 (PDT)
+X-UUID: 4faf0ad1f71f4071a821c860f7d89bd2-20220407
+X-UUID: 4faf0ad1f71f4071a821c860f7d89bd2-20220407
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 921465962; Thu, 07 Apr 2022 09:16:16 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 7 Apr 2022 09:16:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Apr 2022 09:16:15 +0800
+Message-ID: <8fbabb83e838169697a06a1b525252c99018a93f.camel@mediatek.com>
+Subject: Re: [RESEND v4 PATCH] drm/mediatek: Fix mtk_cec_mask()
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Jie Qiu <jie.qiu@mediatek.com>,
+        "Junzhi Zhao" <junzhi.zhao@mediatek.com>
+CC:     Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 7 Apr 2022 09:16:15 +0800
+In-Reply-To: <20220315232301.2434-1-miles.chen@mediatek.com>
+References: <20220315232301.2434-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,347 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Hi, Miles:
 
-[ Upstream commit 6e211930f79aa45d422009a5f2e5467d2369ffe5 ]
+On Wed, 2022-03-16 at 07:23 +0800, Miles Chen wrote:
+> In current implementation, mtk_cec_mask() writes val into target
+> register
+> and ignores the mask. After talking to our hdmi experts,
+> mtk_cec_mask()
+> should read a register, clean only mask bits, and update (val | mask)
+> bits
+> to the register.
 
-During disk space reclamation, nilfs2 still emits the following lockdep
-warning due to page/folio operations on shadowed page caches that nilfs2
-uses to get a snapshot of DAT file in memory:
+Applied to mediatek-drm-next [1], thanks.
 
-  WARNING: CPU: 0 PID: 2643 at include/linux/backing-dev.h:272 __folio_mark_dirty+0x645/0x670
-  ...
-  RIP: 0010:__folio_mark_dirty+0x645/0x670
-  ...
-  Call Trace:
-    filemap_dirty_folio+0x74/0xd0
-    __set_page_dirty_nobuffers+0x85/0xb0
-    nilfs_copy_dirty_pages+0x288/0x510 [nilfs2]
-    nilfs_mdt_save_to_shadow_map+0x50/0xe0 [nilfs2]
-    nilfs_clean_segments+0xee/0x5d0 [nilfs2]
-    nilfs_ioctl_clean_segments.isra.19+0xb08/0xf40 [nilfs2]
-    nilfs_ioctl+0xc52/0xfb0 [nilfs2]
-    __x64_sys_ioctl+0x11d/0x170
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
-This fixes the remaining warning by using inode objects to hold those
-page caches.
+Regards,
+CK
 
-Link: https://lkml.kernel.org/r/1647867427-30498-3-git-send-email-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Hao Sun <sunhao.th@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/nilfs2/dat.c   |  4 ++-
- fs/nilfs2/inode.c | 63 ++++++++++++++++++++++++++++++++++++++++++++---
- fs/nilfs2/mdt.c   | 38 +++++++++++++++++++---------
- fs/nilfs2/mdt.h   |  6 ++---
- fs/nilfs2/nilfs.h |  2 ++
- 5 files changed, 92 insertions(+), 21 deletions(-)
-
-diff --git a/fs/nilfs2/dat.c b/fs/nilfs2/dat.c
-index 6f4066636be9..a3523a243e11 100644
---- a/fs/nilfs2/dat.c
-+++ b/fs/nilfs2/dat.c
-@@ -497,7 +497,9 @@ int nilfs_dat_read(struct super_block *sb, size_t entry_size,
- 	di = NILFS_DAT_I(dat);
- 	lockdep_set_class(&di->mi.mi_sem, &dat_lock_key);
- 	nilfs_palloc_setup_cache(dat, &di->palloc_cache);
--	nilfs_mdt_setup_shadow_map(dat, &di->shadow);
-+	err = nilfs_mdt_setup_shadow_map(dat, &di->shadow);
-+	if (err)
-+		goto failed;
- 
- 	err = nilfs_read_inode_common(dat, raw_inode);
- 	if (err)
-diff --git a/fs/nilfs2/inode.c b/fs/nilfs2/inode.c
-index b0a0822e371c..35b0bfe9324f 100644
---- a/fs/nilfs2/inode.c
-+++ b/fs/nilfs2/inode.c
-@@ -29,6 +29,7 @@
-  * @root: pointer on NILFS root object (mounted checkpoint)
-  * @for_gc: inode for GC flag
-  * @for_btnc: inode for B-tree node cache flag
-+ * @for_shadow: inode for shadowed page cache flag
-  */
- struct nilfs_iget_args {
- 	u64 ino;
-@@ -36,6 +37,7 @@ struct nilfs_iget_args {
- 	struct nilfs_root *root;
- 	bool for_gc;
- 	bool for_btnc;
-+	bool for_shadow;
- };
- 
- static int nilfs_iget_test(struct inode *inode, void *opaque);
-@@ -325,7 +327,7 @@ static int nilfs_insert_inode_locked(struct inode *inode,
- {
- 	struct nilfs_iget_args args = {
- 		.ino = ino, .root = root, .cno = 0, .for_gc = false,
--		.for_btnc = false
-+		.for_btnc = false, .for_shadow = false
- 	};
- 
- 	return insert_inode_locked4(inode, ino, nilfs_iget_test, &args);
-@@ -543,6 +545,12 @@ static int nilfs_iget_test(struct inode *inode, void *opaque)
- 	} else if (args->for_btnc) {
- 		return 0;
- 	}
-+	if (test_bit(NILFS_I_SHADOW, &ii->i_state)) {
-+		if (!args->for_shadow)
-+			return 0;
-+	} else if (args->for_shadow) {
-+		return 0;
-+	}
- 
- 	if (!test_bit(NILFS_I_GCINODE, &ii->i_state))
- 		return !args->for_gc;
-@@ -564,6 +572,8 @@ static int nilfs_iget_set(struct inode *inode, void *opaque)
- 		NILFS_I(inode)->i_state = BIT(NILFS_I_GCINODE);
- 	if (args->for_btnc)
- 		NILFS_I(inode)->i_state |= BIT(NILFS_I_BTNC);
-+	if (args->for_shadow)
-+		NILFS_I(inode)->i_state |= BIT(NILFS_I_SHADOW);
- 	return 0;
- }
- 
-@@ -572,7 +582,7 @@ struct inode *nilfs_ilookup(struct super_block *sb, struct nilfs_root *root,
- {
- 	struct nilfs_iget_args args = {
- 		.ino = ino, .root = root, .cno = 0, .for_gc = false,
--		.for_btnc = false
-+		.for_btnc = false, .for_shadow = false
- 	};
- 
- 	return ilookup5(sb, ino, nilfs_iget_test, &args);
-@@ -583,7 +593,7 @@ struct inode *nilfs_iget_locked(struct super_block *sb, struct nilfs_root *root,
- {
- 	struct nilfs_iget_args args = {
- 		.ino = ino, .root = root, .cno = 0, .for_gc = false,
--		.for_btnc = false
-+		.for_btnc = false, .for_shadow = false
- 	};
- 
- 	return iget5_locked(sb, ino, nilfs_iget_test, nilfs_iget_set, &args);
-@@ -615,7 +625,7 @@ struct inode *nilfs_iget_for_gc(struct super_block *sb, unsigned long ino,
- {
- 	struct nilfs_iget_args args = {
- 		.ino = ino, .root = NULL, .cno = cno, .for_gc = true,
--		.for_btnc = false
-+		.for_btnc = false, .for_shadow = false
- 	};
- 	struct inode *inode;
- 	int err;
-@@ -662,6 +672,7 @@ int nilfs_attach_btree_node_cache(struct inode *inode)
- 	args.cno = ii->i_cno;
- 	args.for_gc = test_bit(NILFS_I_GCINODE, &ii->i_state) != 0;
- 	args.for_btnc = true;
-+	args.for_shadow = test_bit(NILFS_I_SHADOW, &ii->i_state) != 0;
- 
- 	btnc_inode = iget5_locked(inode->i_sb, inode->i_ino, nilfs_iget_test,
- 				  nilfs_iget_set, &args);
-@@ -697,6 +708,50 @@ void nilfs_detach_btree_node_cache(struct inode *inode)
- 	}
- }
- 
-+/**
-+ * nilfs_iget_for_shadow - obtain inode for shadow mapping
-+ * @inode: inode object that uses shadow mapping
-+ *
-+ * nilfs_iget_for_shadow() allocates a pair of inodes that holds page
-+ * caches for shadow mapping.  The page cache for data pages is set up
-+ * in one inode and the one for b-tree node pages is set up in the
-+ * other inode, which is attached to the former inode.
-+ *
-+ * Return Value: On success, a pointer to the inode for data pages is
-+ * returned. On errors, one of the following negative error code is returned
-+ * in a pointer type.
-+ *
-+ * %-ENOMEM - Insufficient memory available.
-+ */
-+struct inode *nilfs_iget_for_shadow(struct inode *inode)
-+{
-+	struct nilfs_iget_args args = {
-+		.ino = inode->i_ino, .root = NULL, .cno = 0, .for_gc = false,
-+		.for_btnc = false, .for_shadow = true
-+	};
-+	struct inode *s_inode;
-+	int err;
-+
-+	s_inode = iget5_locked(inode->i_sb, inode->i_ino, nilfs_iget_test,
-+			       nilfs_iget_set, &args);
-+	if (unlikely(!s_inode))
-+		return ERR_PTR(-ENOMEM);
-+	if (!(s_inode->i_state & I_NEW))
-+		return inode;
-+
-+	NILFS_I(s_inode)->i_flags = 0;
-+	memset(NILFS_I(s_inode)->i_bmap, 0, sizeof(struct nilfs_bmap));
-+	mapping_set_gfp_mask(s_inode->i_mapping, GFP_NOFS);
-+
-+	err = nilfs_attach_btree_node_cache(s_inode);
-+	if (unlikely(err)) {
-+		iget_failed(s_inode);
-+		return ERR_PTR(err);
-+	}
-+	unlock_new_inode(s_inode);
-+	return s_inode;
-+}
-+
- void nilfs_write_inode_common(struct inode *inode,
- 			      struct nilfs_inode *raw_inode, int has_bmap)
- {
-diff --git a/fs/nilfs2/mdt.c b/fs/nilfs2/mdt.c
-index 3a1200220b97..7c9055d767d1 100644
---- a/fs/nilfs2/mdt.c
-+++ b/fs/nilfs2/mdt.c
-@@ -469,9 +469,18 @@ int nilfs_mdt_init(struct inode *inode, gfp_t gfp_mask, size_t objsz)
- void nilfs_mdt_clear(struct inode *inode)
- {
- 	struct nilfs_mdt_info *mdi = NILFS_MDT(inode);
-+	struct nilfs_shadow_map *shadow = mdi->mi_shadow;
- 
- 	if (mdi->mi_palloc_cache)
- 		nilfs_palloc_destroy_cache(inode);
-+
-+	if (shadow) {
-+		struct inode *s_inode = shadow->inode;
-+
-+		shadow->inode = NULL;
-+		iput(s_inode);
-+		mdi->mi_shadow = NULL;
-+	}
- }
- 
- /**
-@@ -505,12 +514,15 @@ int nilfs_mdt_setup_shadow_map(struct inode *inode,
- 			       struct nilfs_shadow_map *shadow)
- {
- 	struct nilfs_mdt_info *mi = NILFS_MDT(inode);
-+	struct inode *s_inode;
- 
- 	INIT_LIST_HEAD(&shadow->frozen_buffers);
--	address_space_init_once(&shadow->frozen_data);
--	nilfs_mapping_init(&shadow->frozen_data, inode);
--	address_space_init_once(&shadow->frozen_btnodes);
--	nilfs_mapping_init(&shadow->frozen_btnodes, inode);
-+
-+	s_inode = nilfs_iget_for_shadow(inode);
-+	if (IS_ERR(s_inode))
-+		return PTR_ERR(s_inode);
-+
-+	shadow->inode = s_inode;
- 	mi->mi_shadow = shadow;
- 	return 0;
- }
-@@ -524,13 +536,14 @@ int nilfs_mdt_save_to_shadow_map(struct inode *inode)
- 	struct nilfs_mdt_info *mi = NILFS_MDT(inode);
- 	struct nilfs_inode_info *ii = NILFS_I(inode);
- 	struct nilfs_shadow_map *shadow = mi->mi_shadow;
-+	struct inode *s_inode = shadow->inode;
- 	int ret;
- 
--	ret = nilfs_copy_dirty_pages(&shadow->frozen_data, inode->i_mapping);
-+	ret = nilfs_copy_dirty_pages(s_inode->i_mapping, inode->i_mapping);
- 	if (ret)
- 		goto out;
- 
--	ret = nilfs_copy_dirty_pages(&shadow->frozen_btnodes,
-+	ret = nilfs_copy_dirty_pages(NILFS_I(s_inode)->i_assoc_inode->i_mapping,
- 				     ii->i_assoc_inode->i_mapping);
- 	if (ret)
- 		goto out;
-@@ -547,7 +560,7 @@ int nilfs_mdt_freeze_buffer(struct inode *inode, struct buffer_head *bh)
- 	struct page *page;
- 	int blkbits = inode->i_blkbits;
- 
--	page = grab_cache_page(&shadow->frozen_data, bh->b_page->index);
-+	page = grab_cache_page(shadow->inode->i_mapping, bh->b_page->index);
- 	if (!page)
- 		return -ENOMEM;
- 
-@@ -579,7 +592,7 @@ nilfs_mdt_get_frozen_buffer(struct inode *inode, struct buffer_head *bh)
- 	struct page *page;
- 	int n;
- 
--	page = find_lock_page(&shadow->frozen_data, bh->b_page->index);
-+	page = find_lock_page(shadow->inode->i_mapping, bh->b_page->index);
- 	if (page) {
- 		if (page_has_buffers(page)) {
- 			n = bh_offset(bh) >> inode->i_blkbits;
-@@ -620,11 +633,11 @@ void nilfs_mdt_restore_from_shadow_map(struct inode *inode)
- 		nilfs_palloc_clear_cache(inode);
- 
- 	nilfs_clear_dirty_pages(inode->i_mapping, true);
--	nilfs_copy_back_pages(inode->i_mapping, &shadow->frozen_data);
-+	nilfs_copy_back_pages(inode->i_mapping, shadow->inode->i_mapping);
- 
- 	nilfs_clear_dirty_pages(ii->i_assoc_inode->i_mapping, true);
- 	nilfs_copy_back_pages(ii->i_assoc_inode->i_mapping,
--			      &shadow->frozen_btnodes);
-+			      NILFS_I(shadow->inode)->i_assoc_inode->i_mapping);
- 
- 	nilfs_bmap_restore(ii->i_bmap, &shadow->bmap_store);
- 
-@@ -639,10 +652,11 @@ void nilfs_mdt_clear_shadow_map(struct inode *inode)
- {
- 	struct nilfs_mdt_info *mi = NILFS_MDT(inode);
- 	struct nilfs_shadow_map *shadow = mi->mi_shadow;
-+	struct inode *shadow_btnc_inode = NILFS_I(shadow->inode)->i_assoc_inode;
- 
- 	down_write(&mi->mi_sem);
- 	nilfs_release_frozen_buffers(shadow);
--	truncate_inode_pages(&shadow->frozen_data, 0);
--	truncate_inode_pages(&shadow->frozen_btnodes, 0);
-+	truncate_inode_pages(shadow->inode->i_mapping, 0);
-+	truncate_inode_pages(shadow_btnc_inode->i_mapping, 0);
- 	up_write(&mi->mi_sem);
- }
-diff --git a/fs/nilfs2/mdt.h b/fs/nilfs2/mdt.h
-index e77aea4bb921..9d8ac0d27c16 100644
---- a/fs/nilfs2/mdt.h
-+++ b/fs/nilfs2/mdt.h
-@@ -18,14 +18,12 @@
- /**
-  * struct nilfs_shadow_map - shadow mapping of meta data file
-  * @bmap_store: shadow copy of bmap state
-- * @frozen_data: shadowed dirty data pages
-- * @frozen_btnodes: shadowed dirty b-tree nodes' pages
-+ * @inode: holder of page caches used in shadow mapping
-  * @frozen_buffers: list of frozen buffers
-  */
- struct nilfs_shadow_map {
- 	struct nilfs_bmap_store bmap_store;
--	struct address_space frozen_data;
--	struct address_space frozen_btnodes;
-+	struct inode *inode;
- 	struct list_head frozen_buffers;
- };
- 
-diff --git a/fs/nilfs2/nilfs.h b/fs/nilfs2/nilfs.h
-index a63aa5b5993c..8699bdc9e391 100644
---- a/fs/nilfs2/nilfs.h
-+++ b/fs/nilfs2/nilfs.h
-@@ -92,6 +92,7 @@ enum {
- 	NILFS_I_BMAP,			/* has bmap and btnode_cache */
- 	NILFS_I_GCINODE,		/* inode for GC, on memory only */
- 	NILFS_I_BTNC,			/* inode for btree node cache */
-+	NILFS_I_SHADOW,			/* inode for shadowed page cache */
- };
- 
- /*
-@@ -261,6 +262,7 @@ extern struct inode *nilfs_iget_for_gc(struct super_block *sb,
- 				       unsigned long ino, __u64 cno);
- int nilfs_attach_btree_node_cache(struct inode *inode);
- void nilfs_detach_btree_node_cache(struct inode *inode);
-+struct inode *nilfs_iget_for_shadow(struct inode *inode);
- extern void nilfs_update_inode(struct inode *, struct buffer_head *, int);
- extern void nilfs_truncate(struct inode *);
- extern void nilfs_evict_inode(struct inode *);
--- 
-2.35.1
+> 
+> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+> Cc: CK Hu <ck.hu@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> 
+> ---
+> 
+> Change since v1:
+> add Fixes tag
+> 
+> Change since v2:
+> add explanation of mtk_cec_mask()
+> 
+> Change since v3:
+> change misleading subject and modify the commit message since this is
+> a bug fix patch
+> 
+> ---
+>  drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c
+> b/drivers/gpu/drm/mediatek/mtk_cec.c
+> index e9cef5c0c8f7..cdfa648910b2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec,
+> unsigned int offset,
+>  	u32 tmp = readl(cec->regs + offset) & ~mask;
+>  
+>  	tmp |= val & mask;
+> -	writel(val, cec->regs + offset);
+> +	writel(tmp, cec->regs + offset);
+>  }
+>  
+>  void mtk_cec_set_hpd_event(struct device *dev,
 

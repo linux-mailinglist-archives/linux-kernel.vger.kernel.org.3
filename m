@@ -2,241 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BAA4F7DCB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672594F7DCE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244704AbiDGLTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S244698AbiDGLUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244804AbiDGLST (ORCPT
+        with ESMTP id S244739AbiDGLTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:18:19 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95456710D0;
-        Thu,  7 Apr 2022 04:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649330174;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=vGhCyz1GPf2jh1WBHKte1uugDSUBVLnc0vdCb4M+ec4=;
-    b=HnTl5Nq1rQqjIns7XRRSlVSHLw4DmZySH3duvU89b1kI+S+ZjTnIyK4y85w2Y5LyfE
-    90rO8Ln0U32u/rjgdp2vQK+w3DIao+tXVBl2Gihev+Z3GxXJ627LLNBcNwYqY7slxrl0
-    YI6AogwqEbR8ETCREEsoatUBCLNuERAisCPM54AijYhJp6CZwddSpfcYU4EkjriTBGgp
-    xEV0PnEd7csDXe/JkDEpVTM8lnwMA6xBm3dmcLmbXqH4+XQN7OIKdpqzgoQnj4oP7BnI
-    qiJLWNQta1q2RmWsZOnP2uGY8DkOazG9sTT1XmRzhypBm69l3wU55spADop4txkAuYXL
-    yv/g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDFsCr4="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy37BGDjxF
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 7 Apr 2022 13:16:13 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Ripard <maxime@cerno.tech>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        letux-kernel@openphoenux.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v18 3/3] drm/ingenic: Add dw-hdmi driver specialization for jz4780
-Date:   Thu,  7 Apr 2022 13:16:11 +0200
-Message-Id: <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1649330170.git.hns@goldelico.com>
-References: <cover.1649330170.git.hns@goldelico.com>
+        Thu, 7 Apr 2022 07:19:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3E0186EE;
+        Thu,  7 Apr 2022 04:17:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 533AF1F85A;
+        Thu,  7 Apr 2022 11:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649330240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dDQfiRLPVufvuVPTY+UISB3k5/4wdwlCC/3nm8qjtgk=;
+        b=PRC6lKgDiL1NRZkKcmcZuYOdO1EGXE33ge2qnp2I6aWxhzhrHKmUqqwvuMEck4mxhxLjOE
+        iKDrz1r1YxoUlCv+EitCl+h5BpSRLKQ+uz1vIIckZit4bm6jKC+8fzIjWLmDC2UhXrN7PH
+        XCTrO2rBAKLxrizqg+mJdITG7aDpBn8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1355313A66;
+        Thu,  7 Apr 2022 11:17:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XolAA0DITmJEaAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 07 Apr 2022 11:17:20 +0000
+Message-ID: <5e97a7f5-1fc9-d0b4-006e-6894d5653c06@suse.com>
+Date:   Thu, 7 Apr 2022 13:17:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
+References: <20220407093221.1090-1-jgross@suse.com>
+ <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
+ <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
+ <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+In-Reply-To: <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------nskH6gXR0GLd03pWvxgkqJK0"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Boddie <paul@boddie.org.uk>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------nskH6gXR0GLd03pWvxgkqJK0
+Content-Type: multipart/mixed; boundary="------------qUBVfqv5H5ox4HKrWPGghlVf";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Michal Hocko <mhocko@suse.com>
+Cc: xen-devel@lists.xenproject.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ stable@vger.kernel.org,
+ =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?=
+ <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
+Message-ID: <5e97a7f5-1fc9-d0b4-006e-6894d5653c06@suse.com>
+Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+References: <20220407093221.1090-1-jgross@suse.com>
+ <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
+ <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
+ <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
+In-Reply-To: <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
 
-A specialisation of the generic Synopsys HDMI driver is employed for
-JZ4780 HDMI support. This requires a new driver, plus device tree and
-configuration modifications.
+--------------qUBVfqv5H5ox4HKrWPGghlVf
+Content-Type: multipart/mixed; boundary="------------0Ft6bscHGfCDkhcPpHvpVFr1"
 
-Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+--------------0Ft6bscHGfCDkhcPpHvpVFr1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Note that there is no hpd-gpio installed on the CI20 board HDMI
-connector. Hence there is no hpd detection by the connector driver
-and we have to enable polling in the dw-hdmi core driver.
+T24gMDcuMDQuMjIgMTM6MDcsIE1pY2hhbCBIb2NrbyB3cm90ZToNCj4gT24gVGh1IDA3LTA0
+LTIyIDEyOjQ1OjQxLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4gT24gMDcuMDQuMjIgMTI6
+MzQsIE1pY2hhbCBIb2NrbyB3cm90ZToNCj4+PiBDY2luZyBNZWwNCj4+Pg0KPj4+IE9uIFRo
+dSAwNy0wNC0yMiAxMTozMjoyMSwgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4+Pj4gU2luY2Ug
+Y29tbWl0IDlkM2JlMjFiZjljMCAoIm1tLCBwYWdlX2FsbG9jOiBzaW1wbGlmeSB6b25lbGlz
+dA0KPj4+PiBpbml0aWFsaXphdGlvbiIpIG9ubHkgem9uZXMgd2l0aCBmcmVlIG1lbW9yeSBh
+cmUgaW5jbHVkZWQgaW4gYSBidWlsdA0KPj4+PiB6b25lbGlzdC4gVGhpcyBpcyBwcm9ibGVt
+YXRpYyB3aGVuIGUuZy4gYWxsIG1lbW9yeSBvZiBhIHpvbmUgaGFzIGJlZW4NCj4+Pj4gYmFs
+bG9vbmVkIG91dC4NCj4+Pg0KPj4+IFdoYXQgaXMgdGhlIGFjdHVhbCBwcm9ibGVtIHRoZXJl
+Pw0KPj4NCj4+IFdoZW4gcnVubmluZyBhcyBYZW4gZ3Vlc3QgbmV3IGhvdHBsdWdnZWQgbWVt
+b3J5IHdpbGwgbm90IGJlIG9ubGluZWQNCj4+IGF1dG9tYXRpY2FsbHksIGJ1dCBvbmx5IG9u
+IHNwZWNpYWwgcmVxdWVzdC4gVGhpcyBpcyBkb25lIGluIG9yZGVyIHRvDQo+PiBzdXBwb3J0
+IGFkZGluZyBlLmcuIHRoZSBwb3NzaWJpbGl0eSB0byB1c2UgYW5vdGhlciBHQiBvZiBtZW1v
+cnksIHdoaWxlDQo+PiBhZGRpbmcgb25seSBhIHBhcnQgb2YgdGhhdCBtZW1vcnkgaW5pdGlh
+bGx5Lg0KPj4NCj4+IEluIGNhc2UgYWRkaW5nIHRoYXQgbWVtb3J5IGlzIHBvcHVsYXRpbmcg
+YSBuZXcgem9uZSwgdGhlIHBhZ2UgYWxsb2NhdG9yDQo+PiB3b24ndCBiZSBhYmxlIHRvIHVz
+ZSB0aGlzIG1lbW9yeSB3aGVuIGl0IGlzIG9ubGluZWQsIGFzIHRoZSB6b25lIHdhc24ndA0K
+Pj4gYWRkZWQgdG8gdGhlIHpvbmVsaXN0LCBkdWUgdG8gbWFuYWdlZF96b25lKCkgcmV0dXJu
+aW5nIDAuDQo+IA0KPiBIb3cgaXMgdGhhdCBtZW1vcnkgb25saW5lZD8gQmVjYXVzZSAicmVn
+dWxhciIgb25saW5pbmcgKG9ubGluZV9wYWdlcygpKQ0KPiBkb2VzIHJlYnVpbGQgem9uZWxp
+c3RzIGlmIHRoZWlyIHpvbmUgaGFzbid0IGJlZW4gcG9wdWxhdGVkIGJlZm9yZS4NCg0KVGhl
+IFhlbiBiYWxsb29uIGRyaXZlciBoYXMgYW4gb3duIGNhbGxiYWNrIGZvciBvbmxpbmluZyBw
+YWdlcy4gVGhlIHBhZ2VzDQphcmUganVzdCBhZGRlZCB0byB0aGUgYmFsbG9vbmVkLW91dCBw
+YWdlIGxpc3Qgd2l0aG91dCBoYW5kaW5nIHRoZW0gdG8gdGhlDQphbGxvY2F0b3IuIFRoaXMg
+aXMgZG9uZSBvbmx5IHdoZW4gdGhlIGd1ZXN0IGlzIGJhbGxvb25lZCB1cC4NCg0KU28gdGhl
+IHByb2JsZW0gaXMgdGhhdCBhIG5ldyB6b25lIGlzIGJlaW5nIHBvcHVsYXRlZCwgYnV0IGl0
+IHdvbid0IGhhdmUNCmZyZWUgcGFnZXMgd2hlbiB0aGUgem9uZWxpc3RzIGFyZSByZWJ1aWx0
+Lg0KDQoNCkp1ZXJnZW4NCg0K
+--------------0Ft6bscHGfCDkhcPpHvpVFr1
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-For that we need to set .poll_enabled but that struct component
-can only be accessed by core code. Hence we use the public
-setter function drm_kms_helper_hotplug_event() introduced before.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Also note that we disable Color Space Conversion since it is not
-working on jz4780.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- drivers/gpu/drm/ingenic/Kconfig           |   9 ++
- drivers/gpu/drm/ingenic/Makefile          |   1 +
- drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 103 ++++++++++++++++++++++
- 3 files changed, 113 insertions(+)
- create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+--------------0Ft6bscHGfCDkhcPpHvpVFr1--
 
-diff --git a/drivers/gpu/drm/ingenic/Kconfig b/drivers/gpu/drm/ingenic/Kconfig
-index 001f59fb06d56..090830bcbde7f 100644
---- a/drivers/gpu/drm/ingenic/Kconfig
-+++ b/drivers/gpu/drm/ingenic/Kconfig
-@@ -24,4 +24,13 @@ config DRM_INGENIC_IPU
- 
- 	  The Image Processing Unit (IPU) will appear as a second primary plane.
- 
-+config DRM_INGENIC_DW_HDMI
-+	tristate "Ingenic specific support for Synopsys DW HDMI"
-+	depends on MACH_JZ4780
-+	select DRM_DW_HDMI
-+	help
-+	  Choose this option to enable Synopsys DesignWare HDMI based driver.
-+	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
-+	  select this option.
-+
- endif
-diff --git a/drivers/gpu/drm/ingenic/Makefile b/drivers/gpu/drm/ingenic/Makefile
-index d313326bdddbb..f10cc1c5a5f22 100644
---- a/drivers/gpu/drm/ingenic/Makefile
-+++ b/drivers/gpu/drm/ingenic/Makefile
-@@ -1,3 +1,4 @@
- obj-$(CONFIG_DRM_INGENIC) += ingenic-drm.o
- ingenic-drm-y = ingenic-drm-drv.o
- ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) += ingenic-ipu.o
-+obj-$(CONFIG_DRM_INGENIC_DW_HDMI) += ingenic-dw-hdmi.o
-diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-new file mode 100644
-index 0000000000000..72f8b44998a51
---- /dev/null
-+++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-+ * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-+ *
-+ * Derived from dw_hdmi-imx.c with i.MX portions removed.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+
-+#include <drm/bridge/dw_hdmi.h>
-+#include <drm/drm_of.h>
-+#include <drm/drm_print.h>
-+
-+static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
-+	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 0x0000 } } },
-+	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142, 0x0005 } } },
-+	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2, 0x000a } } },
-+	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002, 0x000f } } },
-+	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000, 0x0000 } } }
-+};
-+
-+static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] = {
-+	/*pixelclk     bpp8    bpp10   bpp12 */
-+	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
-+	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
-+	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
-+	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
-+	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
-+	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
-+	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
-+};
-+
-+/*
-+ * Resistance term 133Ohm Cfg
-+ * PREEMP config 0.00
-+ * TX/CK level 10
-+ */
-+static const struct dw_hdmi_phy_config ingenic_phy_config[] = {
-+	/*pixelclk   symbol   term   vlev */
-+	{ 216000000, 0x800d, 0x0005, 0x01ad},
-+	{ ~0UL,      0x0000, 0x0000, 0x0000}
-+};
-+
-+static enum drm_mode_status
-+ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
-+			   const struct drm_display_info *info,
-+			   const struct drm_display_mode *mode)
-+{
-+	if (mode->clock < 13500)
-+		return MODE_CLOCK_LOW;
-+	/* FIXME: Hardware is capable of 270MHz, but setup data is missing. */
-+	if (mode->clock > 216000)
-+		return MODE_CLOCK_HIGH;
-+
-+	return MODE_OK;
-+}
-+
-+static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data = {
-+	.mpll_cfg   = ingenic_mpll_cfg,
-+	.cur_ctr    = ingenic_cur_ctr,
-+	.phy_config = ingenic_phy_config,
-+	.mode_valid = ingenic_dw_hdmi_mode_valid,
-+	.output_port	= 1,
-+};
-+
-+static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
-+	{ .compatible = "ingenic,jz4780-dw-hdmi" },
-+	{ /* Sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
-+
-+static void ingenic_dw_hdmi_cleanup(void *data)
-+{
-+	struct dw_hdmi *hdmi = (struct dw_hdmi *)data;
-+
-+	dw_hdmi_remove(hdmi);
-+}
-+
-+static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-+{
-+	struct dw_hdmi *hdmi;
-+
-+	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
-+	if (IS_ERR(hdmi))
-+		return PTR_ERR(hdmi);
-+
-+	return devm_add_action_or_reset(&pdev->dev, ingenic_dw_hdmi_cleanup, hdmi);
-+}
-+
-+static struct platform_driver ingenic_dw_hdmi_driver = {
-+	.probe  = ingenic_dw_hdmi_probe,
-+	.driver = {
-+		.name = "dw-hdmi-ingenic",
-+		.of_match_table = ingenic_dw_hdmi_dt_ids,
-+	},
-+};
-+module_platform_driver(ingenic_dw_hdmi_driver);
-+
-+MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:dw-hdmi-ingenic");
--- 
-2.33.0
+--------------qUBVfqv5H5ox4HKrWPGghlVf--
 
+--------------nskH6gXR0GLd03pWvxgkqJK0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJOyD8FAwAAAAAACgkQsN6d1ii/Ey/g
++Af/RaYeBV8VeGsuNXwt+3+abYnZw1S6fHU0/1SAUHlwvSU6ZjAUZva6kquKTk1nER67MDIbJFYk
+DtwPu0ga+1z9j3MOajigjUJf2J+Zd24fQFMnQpjUn+ghR93kcgG/R06/ZsY7c4S03Xzr2KJ/bhFM
+hiDDo9yCUkNZDvdYvGiy1D6zc8xOayskvmCnqeY2XHKXSmrvERBr67MFs5My6xBGNL1DcTz7zwRW
+/OvTjuMzCzCX1sYdiI6WLg0ij1kn8MuyCstIshfU7VaE1shf7blsOlHiBRLsMcDsKH9YzYZI+TG+
+56sSCuHViR+r08oUxiduznDOnhgLkPwXj3Th/TgZQQ==
+=ods5
+-----END PGP SIGNATURE-----
+
+--------------nskH6gXR0GLd03pWvxgkqJK0--

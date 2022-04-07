@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4030D4F8900
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8105A4F8A03
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiDGUkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S230225AbiDGUlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiDGUj5 (ORCPT
+        with ESMTP id S230211AbiDGUkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:39:57 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14E93354D17;
-        Thu,  7 Apr 2022 13:26:09 -0700 (PDT)
-Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 324E6201CBCC;
-        Thu,  7 Apr 2022 13:26:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 324E6201CBCC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649363168;
-        bh=pBJjoP6HBM9BMHnhHHaiEURpWVqcRsKUpUuk8SoRtTQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=a6NRBZTILpb2I0lPawXCowwNYiD5FEHMK9pnYTYL3zeo3UtYuyZDY/GujINlEz7wv
-         qFozDl4KHfDQ8vp5BnZmx++lCPlxttAFcDLT01GS2qmbo8vbFLwFaYM821aRGiAxuV
-         JSfKebUPQR2MinG3+tfTzHuG2JDatLISytOmUJ74=
-From:   madvenka@linux.microsoft.com
-To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [RFC PATCH v1 9/9] dwarf: Enable livepatch for ARM64
-Date:   Thu,  7 Apr 2022 15:25:18 -0500
-Message-Id: <20220407202518.19780-10-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407202518.19780-1-madvenka@linux.microsoft.com>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
+        Thu, 7 Apr 2022 16:40:12 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34102357874
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=/DzCNuw1K0S8Qc22VHqjl8ySUIhp
+        YJjf0kBvjKhVz3k=; b=l9xKMUGEprvhIgfx1LT3ILLwl24wHtZWpUzUz9P4gaxN
+        +UmmuOkbEw7uvk4kFGvEdvnuVCxjDjiXaKl7zvW0DWRWwIJ0fa/eprtBwvGJpmat
+        OD5/nOxO1Ioz+GgJQMZ3iLTa03vT2uZT0yurcI+95ZiDuAXcmwFayv4Db1kXufU=
+Received: (qmail 3331153 invoked from network); 7 Apr 2022 22:26:28 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Apr 2022 22:26:28 +0200
+X-UD-Smtp-Session: l3s3148p1@IWHwShbcCtAgAQnoAEUrAF1rv4rSPqUC
+Date:   Thu, 7 Apr 2022 22:26:28 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/10] mmc: core: improve API to make clear hw_reset
+ from bus_ops is for cards
+Message-ID: <Yk9I9GDHBcYjpbYf@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
+ <20220321115059.21803-9-wsa+renesas@sang-engineering.com>
+ <CAPDyKFqwgxhRPBabxfUTC+8UVegWrTg3F0nRn3PoToiO2DWtvQ@mail.gmail.com>
+ <Yk1JA4TWO9bTt0kb@ninjato>
+ <CAPDyKFpMAE9mYXUBEsVSm-9EHAC-o5hTxgKNUjYYvo0dzqfEZg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kaalbi9RWUHNZPvN"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpMAE9mYXUBEsVSm-9EHAC-o5hTxgKNUjYYvo0dzqfEZg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Enable livepatch in arch/arm64/Kconfig.
+--kaalbi9RWUHNZPvN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+> Perhaps one simply needs to make a patch to convert them (most of
+> them) to take a "card" as an in-parameter to really see if that
+> improves the understanding of code.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c82a3a93297f..6cb00b3770cf 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -222,6 +222,9 @@ config ARM64
- 	select THREAD_INFO_IN_TASK
- 	select HAVE_STACK_VALIDATION	if DWARF_FP
- 	select STACK_VALIDATION		if HAVE_STACK_VALIDATION
-+	select HAVE_RELIABLE_STACKTRACE	if STACK_VALIDATION
-+	select HAVE_LIVEPATCH		if HAVE_DYNAMIC_FTRACE_WITH_REGS && HAVE_RELIABLE_STACKTRACE
-+
- 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
- 	select TRACE_IRQFLAGS_SUPPORT
- 	help
-@@ -2066,3 +2069,5 @@ source "arch/arm64/kvm/Kconfig"
- if CRYPTO
- source "arch/arm64/crypto/Kconfig"
- endif
-+
-+source "kernel/livepatch/Kconfig"
--- 
-2.25.1
+Might be worth it, but looks like a seperate patch to me, focused on
+bus_ops, not on {h|s}w_reset. I might try it next.
 
+
+--kaalbi9RWUHNZPvN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJPSPQACgkQFA3kzBSg
+KbYMNw//S5oncEujrr57DMlPnp0JRQPRfnkX2eKuWWduDURH0jgTSVBYVBS/Ocgx
+TH9rOelWGErX604rRZetXRiDTbR/RzhLSXsBu0/esr3Pe6xCBtFDeJYeKx50kfqs
+XvghmwimIl1gdwqL9W/kKHnruXmi3ehkrAf17HIguYl/WclSu3JZwOCwGg6QTN1P
+9A+/sCfCFtkHGKfB+YIg9/QhXLpfdpBhXYS3tVHWsrxbUv1CeXNmzhRCgKscebfw
+wdlNWZtlr4Prvd/Mzf5FmeenOkKJvvBehqthsmKMKBPXoLYdxlxhRcFKmrk/YsoG
+tRdziMvuXa6n66uwR2dqY8icf8o9f+eTx26m3N8e076U6pfaBZlCb1xBtBQk19bN
++AXx0rQdZvTbtvf0c0Ud8nQAp5XCgqaT4LZGpa5ruHwxtHXEcM748emYu8QJ40a6
+WA2mBlH/mIKeT4rdr2WECco7g4jipw+boT4MDTxGtOLXG0swJCdnel4XNkyeT3p+
+cLVXtyWQyV7uWI1imOnXQ7wLt6aH68a75wkNd4RtoXmEKv7srfI1BWIOltfrsUvj
+MPvA6IWgHOtTUiOXdfKDlexyD6Lv6fyX8UP3t/fHFoTj/vZ7V0R9NAadvzRviDFu
+sYaTzbLul64ysYR+GXRWbx1jO2b63cnJV23igzKvpOnhkrniCqo=
+=iuKv
+-----END PGP SIGNATURE-----
+
+--kaalbi9RWUHNZPvN--

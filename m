@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3854F77D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029284F77DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242014AbiDGHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S242007AbiDGHnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242001AbiDGHm0 (ORCPT
+        with ESMTP id S234831AbiDGHn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:42:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71C57E5AA;
-        Thu,  7 Apr 2022 00:40:24 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A15501F85A;
-        Thu,  7 Apr 2022 07:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649317223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7tdKrRRhBcgriuTuifhqw7ASOmfz1N4EF+9FSFvKM0E=;
-        b=r6Fua2gzlgwm1Hp5y5shaiTcDw1GVtrXgPXQb3p55UEWWygcN+jDp11/05+NYmm1vYKIPm
-        7lKd36aXjuqVnfrCXhRi1YOIr/f0RG7VdejwUm/BA3RtBxq+NH8LIxlM76mVrvdJ9L4eTi
-        qlUYyggclZvcVPbb3HDCBf6Y35i3cPo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DF5F4A3B82;
-        Thu,  7 Apr 2022 07:40:18 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 09:40:22 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-Message-ID: <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
-References: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
- <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
- <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
- <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
- <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
- <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
- <Ykrkx4JML4c81gBV@dhcp22.suse.cz>
- <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
- <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
- <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
+        Thu, 7 Apr 2022 03:43:28 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1E713E91
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:41:26 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id CD35C5C00F3;
+        Thu,  7 Apr 2022 03:41:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 07 Apr 2022 03:41:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=E5WwNkxjxuplPWCGj
+        QQ/3iwf7bpXyQh3ViqACliJVaw=; b=dFVX11qSj0Ex3Yws1r6v4ZgPBlMXVR94K
+        YvcSvW8maccat0avzMMo8udpzFr0ZDjkS7PYaELqxgWEZGXzHaGbFQVQUmHJTung
+        SYYojpfplangm1RTmaORJ4eNJon8ca1/rElYQTDo2ZWmjvanL6UHwjyEcADBHIrO
+        QUbqNIJ1LPI/pbOpKmH3c04TKV0GCC+GOzJ4sgxZYExzhYUCG4WWzCFUMjrqA93u
+        CTV/PttKppyJVoAmo3MqndZOFRdtej3NPICAS8jjq5tOlKojbcE+4c2l/4Qro3Ck
+        VIuPKFXuTRt0sJtcUt/xv38gYsZLRX17T2KPH+Ili2aSm86n2NNqQ==
+X-ME-Sender: <xms:pZVOYuStpV9iaou38vOJl6qEubouyZ4EY4EwrYeObx8OEoLwEmXuiA>
+    <xme:pZVOYjz-6-F0TsExhiQn6ec3ZTMIwHOfdT875shsvf-qxKH3V9B0exEif9x4PeY7z
+    TmeXELtuHxoBuGrphg>
+X-ME-Received: <xmr:pZVOYr1_lZa37nZ8FyDGAOZXzl1xz3TPR1gh8t06491CFjUYXFz-Azun0IkSvqVqmnOOentyJlXzwJ4B_Cg9bttkfTpazF_lt7w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejjedguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvufgjkfhfgggtsehmtderredttdejnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvfffgffduleekjedtveffleeiieeileffhffhgeekhfeigfekjeetuedv
+    veelgeenucffohhmrghinhepohiilhgrsghsrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieek
+    khdrohhrgh
+X-ME-Proxy: <xmx:pZVOYqCdilv9VpC6hPSuGKyZoqfhM0qCnXxc9PhV12zdRpamG4Zb4A>
+    <xmx:pZVOYnihZs9X2EyoVSJu4C96p9vh0bJJcMrO-XDpLeHc4IVcabT-XQ>
+    <xmx:pZVOYmosS-8l5WO--_CuqrpyQCL2hyDMtkZuSb6rHWJe6TkZpg3AWg>
+    <xmx:pZVOYniPgdruzBOe7mxXmEKmSJ4KnyUEYBj7Hb0AlBmMFtS0kMvyIg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 7 Apr 2022 03:41:22 -0400 (EDT)
+Date:   Thu, 7 Apr 2022 17:41:20 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] macintosh: fix via-pmu and via-cuda build errors
+In-Reply-To: <e0d0b771-2459-1050-03f8-1bd1f70d7569@csgroup.eu>
+Message-ID: <2187e41c-aecf-ff8c-9e53-d5f0c3f2283f@linux-m68k.org>
+References: <20220407023700.7216-1-rdunlap@infradead.org> <c8c2b89b-8546-8449-a27e-ef6e89186e26@infradead.org> <e0d0b771-2459-1050-03f8-1bd1f70d7569@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463811774-248027180-1649317280=:20562"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 06-04-22 10:11:19, Zhaoyang Huang wrote:
-> On Tue, Apr 5, 2022 at 8:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
-> > [...]
-> > > Please be noticed that this patch DOES protect the memcg when external
-> > > pressure is 1GB as fixed low does.
-> >
-> > This is getting more and more confusing (at least to me). Could you
-> > describe the behavior of the reclaim for the following setups/situations?
-> >
-> > a) mostly reclaiming a clean page cache - via kswapd
-> > b) same as above but the direct reclaim is necessary but very
-> >    lightweight
-> > c) direct reclaim makes fwd progress but not enough to satisfy the
-> >    allocation request (so the reclaim has to be retried)
-> > d) direct reclaim not making progress and low limit protection is
-> >    ignored.
-> >
-> > Say we have several memcgs and only some have low memory protection
-> > configured. What is the user observable state of the protected group and
-> > when and how much the protection can be updated?
-> I am not sure if I understand you right. Do you have suspicions on the
-> test result as you think protected memcg has no chance to update the
-> protection or the global reclaim should have been satisfied with the
-> reclaiming(step d is hard to reach?). Let me try to answer it under my
-> understanding, please give me feedback if you need more info. The
-> protection is updated while mem_cgroup_calculate_protection is called
-> during either kswapd or direct reclaim for each round of the priority
-> reclaiming and then the memcg's lruvec will be reached in step d.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This means that limits are altered even if there is memory to be
-reclaimed from other memcgs. Why? How does this line up with the
-basic property of the low limit to act as a protection from the reclaim?
+---1463811774-248027180-1649317280=:20562
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-> > I think it would be also helpful to describe the high level semantic of
-> > this feature.
+On Thu, 7 Apr 2022, Christophe Leroy wrote:
 
-Please focus on this part. Without a high level semantic explained we
-will not move forward.
--- 
-Michal Hocko
-SUSE Labs
+> Le 07/04/2022 =C3=A0 05:16, Randy Dunlap a =C3=A9crit=C2=A0:
+> >=20
+> >=20
+> > On 4/6/22 19:37, Randy Dunlap wrote:
+> >> When CONFIG_INPUT=3Dm, the input_*() family of functions is not
+> >> available to builtin drivers.
+> >>
+> >> When CONFIG_RTC_CLASS is not set, rtc_tm_to_time64() is not defined.
+> >>
+> >> Fix multiple build errors by making these Kconfig symbols required by
+> >> ADB_CUDA (RTC_CLASS) and ADB_PMU (RTC_CLASS and INPUT).
+> >=20
+> > Ah yes, Finn has already fixed the INPUT problems here.
+>=20
+> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/d987663bbed18d7db=
+f106db6066a759040b4e57a.1647837028.git.fthain@linux-m68k.org/
+>=20
+> >=20
+> > Maybe that patch hasn't been merged anywhere yet?
+>=20
+> The patch has comments, I guess we are waiting for a new version ?
+>=20
+
+I'll send a new version, though I expect it will attract comments too.
+---1463811774-248027180-1649317280=:20562--

@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428F34F7223
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582BC4F7225
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239249AbiDGCjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        id S231450AbiDGCjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbiDGCjB (ORCPT
+        with ESMTP id S239239AbiDGCjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:39:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5643A18DA9A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 19:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=kgDQ0x9PzIJO+UDMqsy6uHWPV2myzYqJHPpaULldhHc=; b=Nw5C0wWx7J6HtbRkZf6yUMPlv/
-        lqizwFjhgcu3V2Rpm7giEpd6nq9GKOSnhCN+QapuQ8+FDHIVjDCv3pqR+4bXs6Iv5gi+Ad4JBmg0Z
-        WrvulMfEM2/vepzgQi7IIunk7JyM/5yzTsyWdzaajnEPUAWYRO7bWzvBzrkrdpBghyxMxPu2kv0Oq
-        QxFGWVIuYdtsszCAnxKxYYPEJ7axiIDC60atrPRWA5aMYTj+++xfuCZ0cyzPYC+9hVJB4RmljOVVk
-        XxXtsLoT4beOtkiVMf9Ez8NZ67n2QTRtjjr4Nhh5ecaNg6jYo4o3sSgHDBjMVj4+hUCytIlf8bUIe
-        TQQMvNcQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ncI17-008taA-9K; Thu, 07 Apr 2022 02:37:01 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
+        Wed, 6 Apr 2022 22:39:07 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D822ADF;
+        Wed,  6 Apr 2022 19:37:08 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q19so3786953pgm.6;
+        Wed, 06 Apr 2022 19:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=YY4xm0Ao2hFqDf4Z8dPBnmSK82yFlxFIuMj1IZ+m9lA=;
+        b=P4cFrrMSdA21LaxqYCgENK9leFvpEhtQxTtS3vUL702ONItdn/YdVLU7xJkF5mfSkb
+         diKVsicn58moUarbr+gMsqfz0UAjiNfDi7x/ddGrMbHMl8p+nyUovfZdIUHGPG36gn64
+         TYMvQ9RXRjrtJJ58cQLOGfAK+1Xri53yxgIW1Zj6iGySCsBEFWFD48U1c6F69SGxkD7V
+         05a6rObG7eQg4+VoraBmkbbFi1s5MxBLsQNtthbnd+o75QPHgYUJ7KQzD4EzEbrT06ej
+         +9vc7dOFh5Mbxx/Vmekbc8JDY8NZT3AgqVwtJH+XQDwHBnwpjNE2to4mKsuTkBLrewnE
+         xSQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=YY4xm0Ao2hFqDf4Z8dPBnmSK82yFlxFIuMj1IZ+m9lA=;
+        b=U8jTAnU71LQ2uKgsXWmXyJpjmqcjNqVdJ8PFB6lN2/jZeNQf3G8HSjKpdL3FKA+Gnh
+         vIohG6C/S4xRpAORSnx+uZbXlJhJqH4lSopmORdA76AisOdF7upgLHaAvWwa6oKyTmAO
+         SaPuPSbHw5P2yOYRcIZJRve/vbdLLQ9weKb30f7ktLnidpipYZOJbAWod0rhFCth7grQ
+         mJ06S07Ju/h6U60PymPhydXDnMm0Wm7XzZ0OdXww0sqGNuOqQma/AyuHbqTqPIhmSYHw
+         vlAWWIOwJwSzE3wdRv4zsfYczatW9FNffqBjras3J3ai8FfDAWvIDx4HcwwGW1fI974L
+         IZCg==
+X-Gm-Message-State: AOAM533HHf3X31QfJU8ny41dCEC6iTfLJEyJ6Gt/J6AWy0tPqSsY7iLQ
+        7QhihsSrZiVC/qCKevuLVfdZaIHBcZicSYLkOvA=
+X-Google-Smtp-Source: ABdhPJzMrt+kkgp2S6Kt2D+Gby1fNQ789xRPcVSZaN3s+5BJTGpYw2XWL9SnNUVuUfs5Uky6vJFSKQ==
+X-Received: by 2002:a05:6a00:22d1:b0:4fa:e87c:9424 with SMTP id f17-20020a056a0022d100b004fae87c9424mr11904767pfj.51.1649299027752;
+        Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm862467pff.142.2022.04.06.19.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
+Message-ID: <624e4e53.1c69fb81.43bdc.41e1@mx.google.com>
+Date:   Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
+X-Google-Original-Date: Thu, 07 Apr 2022 02:37:05 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220406133055.820319940@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 000/911] 5.15.33-rc2 review
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] macintosh: fix via-pmu and via-cuda build errors
-Date:   Wed,  6 Apr 2022 19:37:00 -0700
-Message-Id: <20220407023700.7216-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_INPUT=m, the input_*() family of functions is not
-available to builtin drivers.
+On Wed,  6 Apr 2022 15:44:09 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.33 release.
+> There are 911 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.33-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-When CONFIG_RTC_CLASS is not set, rtc_tm_to_time64() is not defined.
+5.15.33-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Fix multiple build errors by making these Kconfig symbols required by
-ADB_CUDA (RTC_CLASS) and ADB_PMU (RTC_CLASS and INPUT).
-
-m68k-linux-ld: drivers/macintosh/via-pmu.o: in function `pmu_set_rtc_time':
-drivers/macintosh/via-pmu.c:1758: undefined reference to `rtc_tm_to_time64'
-m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `input_report_key':
-include/linux/input.h:425: undefined reference to `input_event'
-m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `input_report_switch':
-include/linux/input.h:445: undefined reference to `input_event'
-m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `via_pmu_event_init':
-drivers/macintosh/via-pmu-event.c:38: undefined reference to `input_allocate_device'
-m68k-linux-ld: drivers/macintosh/via-pmu-event.c:53: undefined reference to `input_register_device'
-m68k-linux-ld: drivers/macintosh/via-pmu-event.c:55: undefined reference to `input_free_device'
-m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
-drivers/macintosh/via-cuda.c:797: undefined reference to `rtc_tm_to_time64'
-
-Fixes: 0792a2c8e0bb ("macintosh: Use common code to access RTC")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Finn Thain <fthain@linux-m68k.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: linuxppc-dev@lists.ozlabs.org
----
-This is a big hammer type of patch. We could possibly do (a) some
-conditional code blocks for RTC_CLASS and (b) only build via-pmu-event
-if CONFIG_INPUT=y if needed.
-
- drivers/macintosh/Kconfig |    3 +++
- 1 file changed, 3 insertions(+)
-
---- a/drivers/macintosh/Kconfig
-+++ b/drivers/macintosh/Kconfig
-@@ -44,6 +44,7 @@ config ADB_IOP
- config ADB_CUDA
- 	bool "Support for Cuda/Egret based Macs and PowerMacs"
- 	depends on (ADB || PPC_PMAC) && !PPC_PMAC64
-+	depends on RTC_CLASS
- 	help
- 	  This provides support for Cuda/Egret based Macintosh and
- 	  Power Macintosh systems. This includes most m68k based Macs,
-@@ -57,6 +58,8 @@ config ADB_CUDA
- config ADB_PMU
- 	bool "Support for PMU based PowerMacs and PowerBooks"
- 	depends on PPC_PMAC || MAC
-+	depends on INPUT=y
-+	depends on RTC_CLASS
- 	help
- 	  On PowerBooks, iBooks, and recent iMacs and Power Macintoshes, the
- 	  PMU is an embedded microprocessor whose primary function is to

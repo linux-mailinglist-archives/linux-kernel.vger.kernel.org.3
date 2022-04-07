@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1404F7989
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170E04F797C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242944AbiDGIYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S242957AbiDGIZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242928AbiDGIYf (ORCPT
+        with ESMTP id S231650AbiDGIZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:24:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3ED5D5D5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:22:33 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9EB471EC0576;
-        Thu,  7 Apr 2022 10:22:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649319747;
+        Thu, 7 Apr 2022 04:25:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C89101F8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649319792;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5Hb/bWnnQF7B+DwLlDibGcNGX0QaOWAblGZu3fJEPkc=;
-        b=grJh0Z2KtRu7pqvtr/Np+PhXKwilRe5qUTPemZGU7MQdQOBHNWleo0Y1vKlplBu8nTEMbk
-        JO2oX5/9sKS0lnW+HDsjDTlp/PgUvkDBknXGeN5MesyTGWREZ0x4RgF1lMHx+tMRwFdTM4
-        BUDYnKa4LCLeJ5voQvBe6qwWj5FQvPM=
-Date:   Thu, 7 Apr 2022 10:22:25 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Tai <thomas.tai@oracle.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH V4 1/7] x86/traps: Move pt_regs only in fixup_bad_iret()
-Message-ID: <Yk6fQfgo975pW3t0@zn.tnic>
-References: <20220318143016.124387-1-jiangshanlai@gmail.com>
- <20220318143016.124387-2-jiangshanlai@gmail.com>
- <Yk3jVrXoVpxuR0Mp@zn.tnic>
- <CAJhGHyBFbtyUs-nf0+gWm2a3hiS5BxZ3jk=sbGNw-4ShB8AtzQ@mail.gmail.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Ak2L++rWGA7iZB3bqmGGUjd7xVRHy3vUvtqw/fn7ZM=;
+        b=jL8rHmXi9ta4KzWQQyQYRmb3eRNFJzsyzpCxUy2IaWCDTmJYGO1v3R0TXGnVzAkrESwvEt
+        u0GsPNmCrheOYBdOjgIIOGTAkcrfDODUHmBQrdYvrPBg/q+uvMEWZGfjJ7NVzBIHg2d6bz
+        CrtoMx3yRjJJSbLE3iVyiz+3w/e/Wcc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-zTkK1J7yO4e4MR8O9dveWQ-1; Thu, 07 Apr 2022 04:23:11 -0400
+X-MC-Unique: zTkK1J7yO4e4MR8O9dveWQ-1
+Received: by mail-wm1-f70.google.com with SMTP id m3-20020a05600c3b0300b0038e74402cb6so2621005wms.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 01:23:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=6Ak2L++rWGA7iZB3bqmGGUjd7xVRHy3vUvtqw/fn7ZM=;
+        b=EmCDLEG0q91PX2XwlQaA8z66z2bz3LIC7BmTOWBnqsoufCk2j8NaXjIls2u38XiZTu
+         w/Lcr2qoCb3464x6xHeM7fVJgQwi3vqzB9RxhRhblz28iorN5R0LRRLWXJb0vnY66MC2
+         Eq0GR5v5dIwUmcewKIQqb545LPLdyZgR6sTSaTG88bzHxwb1meU9EoEFR/WNcgbdttOr
+         0aUqXj82pwgDuXAh0K4qM0sdjy725pgTd7Oj295/9qgrCgBGwjDAeWRSWb07q43lVggp
+         RPHaanNyC5pc+UmuNKld4FxyTs4927VFWjfGK8A2b7RZyYjTlwPZIDLj9nb+vcmVJfIq
+         taSA==
+X-Gm-Message-State: AOAM532uxJ1wyn8LlMzydvk+m9aFsjn+WTIDq1NcEfcqQFwjJiMWyrVG
+        IHNJNUbEIks0037Ei8/Ce0QHtIxEgr1aAi/lr5rtpsE96tyPstYlVV+PsHNjWvbuVgOnWKvg9La
+        y2HskxY7/6nrz+Cio08c7VPbh
+X-Received: by 2002:adf:8046:0:b0:205:db94:4766 with SMTP id 64-20020adf8046000000b00205db944766mr9967284wrk.565.1649319789894;
+        Thu, 07 Apr 2022 01:23:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2Tu0tp6Y15gnR0aUGERxnoLQ64ptBmMTawYi6J5rkgZz3tkxFuWT9Vp/1zCYi8qjcSciYkA==
+X-Received: by 2002:adf:8046:0:b0:205:db94:4766 with SMTP id 64-20020adf8046000000b00205db944766mr9967251wrk.565.1649319789519;
+        Thu, 07 Apr 2022 01:23:09 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id k11-20020a5d6d4b000000b0020599079f68sm16415621wri.106.2022.04.07.01.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 01:23:09 -0700 (PDT)
+Message-ID: <89ad978d-e95e-d3ea-5c8f-acf4b28f992c@redhat.com>
+Date:   Thu, 7 Apr 2022 10:23:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyBFbtyUs-nf0+gWm2a3hiS5BxZ3jk=sbGNw-4ShB8AtzQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>
+References: <20220406133229.15979-1-jgross@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] xen/balloon: fix page onlining when populating new zone
+In-Reply-To: <20220406133229.15979-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,30 +89,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 03:03:08PM +0800, Lai Jiangshan wrote:
-> sync_regs() is called before the return address of error_entry()
-> popped into %r12 while fixup_bad_iret() is called with the return
-> address of error_entry() still on the stack.  And the primitives of
-> fixup_bad_iret() and sync_regs() are different which also means
-> they are not the same way.
+On 06.04.22 15:32, Juergen Gross wrote:
+> When onlining a new memory page in a guest the Xen balloon driver is
+> adding it to the ballooned pages instead making it available to be
+> used immediately. This is meant to enable to add a new upper memory
+> limit to a guest via hotplugging memory, without having to assign the
+> new memory in one go.
 > 
-> After this change, they become the same way.
+> In case the upper memory limit will be raised above 4G, the new memory
+> will populate the ZONE_NORMAL memory zone, which wasn't populated
+> before. The newly populated zone won't be added to the list of zones
+> looked at by the page allocator though, as only zones with available
+> memory are being added, and the memory isn't yet available as it is
+> ballooned out.
+
+I think we just recently discussed these corner cases on the -mm list.
+The issue is having effectively populated zones without manages pages
+because everything is inflated in a balloon.
+
+That can theoretically also happen when managing to fully inflate the
+balloon in one zone and then, somehow, the zones get rebuilt.
+
+build_zonerefs_node() documents "Add all populated zones of a node to
+the zonelist" but checks for managed zones, which is wrong.
+
+See https://lkml.kernel.org/r/20220201070044.zbm3obsoimhz3xd3@master
+
 > 
-> IMO, sync_regs() is grace while fixup_bad_iret() is a bad C function
-> or is not a pure C function because it is handling the return address
-> of its parent function which is better done by the compiler or ASM
-> code.
+> This will result in the new memory being assigned to the guest, but
+> without the allocator being able to use it.
+> 
+> When running as a PV guest the situation is even worse: when having
+> been started with less memory than allowed, and the upper limit being
+> lower than 4G, ballooning up will have the same effect as hotplugging
+> new memory. This is due to the usage of the zone device functionality
+> since commit 9e2369c06c8a ("xen: add helpers to allocate unpopulated
+> memory") for creating mappings of other guest's pages, which as a side
+> effect is being used for PV guest ballooning, too.
+> 
+> Fix this by checking in xen_online_page() whether the new memory page
+> will be the first in a new zone. If this is the case, add another page
+> to the balloon and use the first memory page of the new chunk as a
+> replacement for this now ballooned out page. This will result in the
+> newly populated zone containing one page being available for the page
+> allocator, which in turn will lead to the zone being added to the
+> allocator.
 
-Maybe there was a reason it was done this way:
+This somehow feels like a hack for something that should be handled in
+the core instead :/
 
-  b645af2d5905 ("x86_64, traps: Rework bad_iret")
-
-although I don't see anything relevant in the text explaining this.
-
-Andy?
 
 -- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+David / dhildenb
+

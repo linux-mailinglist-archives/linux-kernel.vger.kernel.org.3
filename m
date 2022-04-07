@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A6A4F85B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33C74F85B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346016AbiDGRS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S1346035AbiDGRSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiDGRSV (ORCPT
+        with ESMTP id S1346022AbiDGRSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:18:21 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4103319321A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:16:21 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb2bc9018aso53925047b3.18
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:16:21 -0700 (PDT)
+        Thu, 7 Apr 2022 13:18:50 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D2ADB2EC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:16:49 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u14so6236194pjj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=m+o8vH305sH+IlbC7nxi+b473EiNSwI1NcAhd5gcKNg=;
-        b=o+RQ8J/gC363Mlt3fxzfhIWxELTFITTjaGnXwvQL2n8ybudr7pgauF47SCrVAj2Mi3
-         iQCY+SifSUxbn8w7qenVGfVtga/hVGMJAA55alpuJzKeOLcgkucnWTsiNmpqblC0kYRO
-         ZXRdrzzNC8ZIPF5mJlbXP8d9jkQytK59iAct01jj4gLmSLbv2RCcI0UYsC5oNJd4mH/Z
-         y9AM1fE7cY9mHD1S4J81bhR2UqmSM5a0oteoav40LcRNn4DGGAtEoh11JbPw+hldjXOH
-         Wd8KbHfs1hv1BonwD+Cmlixr8czYZJaOvHgMvzEP8VfkamkZU4HDLMa3Tz1PwgXLiftd
-         ncNQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CzjnguXiadlz7eUY9Kx6829Is7Jt6JaiEaPs+5sqqTA=;
+        b=FJ1qN4a5bVhIVqPz+llJc+3m0NxSx14176vB3YwGMMqbFFd7DF300IuvPiiFbY3DYI
+         jlfeGcnzmuptkWrsHOCwZAcOAFceTx3nM3m7kJDHX4w3s1kdb3hn4NBYZfJPiPwV8fVv
+         fLHh0HqH3V31MlMTLoxyGq1UUGxwhgaOsQkKaNLUOucnXuRK1xX36Ryy5fIjdInxDw6+
+         r57NNFPjU0p00GyZxiIJndYJfs4csq6zOhkkpYRHWkxKQpxJZw7Q6/R2+N0D+EfQhwYF
+         cULrVncucRpwZTcwYOJOwPcjqlAUmUV+TIW9dfl2teEOwLl2nIAQpm6mb3DcvOt/WuaW
+         uLcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=m+o8vH305sH+IlbC7nxi+b473EiNSwI1NcAhd5gcKNg=;
-        b=J46SymGQAXeHMcRqvkB5kC51WxwPXNIqQp62+mw+OcyoZl3K4QbZViPjbC2heIhn9M
-         Ibvh+tBMjWj8DXUUvIjwua6lvC0RFCpaj44Jh7FEl/lolpu1V1CcOEbnYFOx1S0nUkAy
-         2lYSfJGsn1EiGWEJp0pNSfsEQJUUAGUFBQId0AaCnGDJAt+Y7eF9Lj5j8n8XgaE14dp1
-         aSef9SlRG/50m3ucVvAceZ3BKYITwnYExeFMnskkENM5jlM+SX4a4lNgY46K1USWAWH0
-         N/MtmFg4NVha8lFSrkP19b+MzhH4UjWUS2zr4nipc7Yw3Yo9TWvRmd0Z2S2KecoP57s2
-         cBRQ==
-X-Gm-Message-State: AOAM533EOQgwuL07ko8nLT6ZjFS8fT1hCwXdZP92TmK9hiL0rHeykF6J
-        DZ2yK2WPB8MgylqrmQS8GAVK9pt59HjHx6I=
-X-Google-Smtp-Source: ABdhPJwB7Q4sp3n8PJrlqof8f5/fiXurYzXoeOtomKaGguidvlKHK9cIepPKzksFxW3s/Y46jwKoMLhDfy+eeys=
-X-Received: from lixiaoyan-desktop.svl.corp.google.com ([2620:0:1000:3002:cd29:e4bc:e58c:dcd6])
- (user=lixiaoyan job=sendgmr) by 2002:a05:6902:20e:b0:627:f1cb:a9ee with SMTP
- id j14-20020a056902020e00b00627f1cba9eemr10500309ybs.129.1649351780504; Thu,
- 07 Apr 2022 10:16:20 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 10:15:54 -0700
-Message-Id: <20220407171554.2712631-1-lixiaoyan@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH net-next] fou: Remove XRFM from NET_FOU Kconfig
-From:   Coco Li <lixiaoyan@google.com>
-To:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        willem de bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Coco Li <lixiaoyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CzjnguXiadlz7eUY9Kx6829Is7Jt6JaiEaPs+5sqqTA=;
+        b=C9c7SbkzDH+0xr1KL5PaEbzHVZlUI/sYeoKN3qnyEv9qJKDUsMdw1b42UVEU05wO5H
+         wEGq8lMUfLc0ivbZ55EKWqgtdg+o5mbj+9+U1XjejwzlU6Lh6TtEfkZLsTrMjeurpeCM
+         Gz8LVzfk2RJSPy1udeXz31XGnJjoSFtwuD5Nf94PFt2rbHGJc4eWBiOMSzrZnBWtLsPL
+         UkPaK5XTPklR2dZnuMaogSKBLBCAWpZGDvHEXhziR5CBCK5cOuy7c4ofC8pyLMZ/1fQe
+         5aldN59Q7KIntVL1kZ67rWe+2zWhIhnLmxbZDtm95maEi8foHkdHTyrhg7K+1tp8S8gV
+         BELw==
+X-Gm-Message-State: AOAM532y6jH2ME9P+rrrTnZbUPW1cNpi6uZYTBY3L5Iwd7hvMAfMCFmf
+        8iJEOy+ZJ+jDBqn4jc5mx2A=
+X-Google-Smtp-Source: ABdhPJwP7cEeCx5ye1HcJ+QRcDwu2/wTSd5heTYmutBYTgXHY7Lzwr/v9H4cd8Np28CzJsv60CRj4A==
+X-Received: by 2002:a17:903:205:b0:157:c51:12cd with SMTP id r5-20020a170903020500b001570c5112cdmr3342521plh.94.1649351806027;
+        Thu, 07 Apr 2022 10:16:46 -0700 (PDT)
+Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
+        by smtp.gmail.com with ESMTPSA id il3-20020a17090b164300b001c6d5ed3cacsm10209485pjb.1.2022.04.07.10.16.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 10:16:45 -0700 (PDT)
+Message-ID: <57747e9a-10e0-e4f6-0644-5225396802f9@gmail.com>
+Date:   Fri, 8 Apr 2022 02:16:41 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ASoC: rt5682: Add jack kcontrol
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+References: <20220407141316.5099-1-akihiko.odaki@gmail.com>
+ <Yk7+jbQ0KBM0zVh9@sirena.org.uk>
+ <96dae189-c0ff-4054-3d00-41c3b44c2cd6@gmail.com>
+ <Yk8Ktyyt0veW4g+j@sirena.org.uk>
+ <f86a10e1-b5a7-5c59-8e53-cec65d97234b@gmail.com>
+ <Yk8TLUnEHRKstyxq@sirena.org.uk>
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+In-Reply-To: <Yk8TLUnEHRKstyxq@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XRFM is no longer needed for configuring FOU tunnels
-(CONFIG_NET_FOU_IP_TUNNELS), remove from Kconfig.
+On 2022/04/08 1:37, Mark Brown wrote:
+> j
+> On Fri, Apr 08, 2022 at 01:11:22AM +0900, Akihiko Odaki wrote:
+>> On 2022/04/08 1:00, Mark Brown wrote:
+> 
+>>> That bit is very common but there's still machine specific aspects - is
+>>> the required hardware wired up, if it is wired up how exactly are things
+>>> wired (separate microphone jack, headset jack, one of many jacks?).  A
+>>> lot of the machine driver part of things is about labeling things so
+>>> that it can be displayed in a way that's easy to connect to the physical
+>>> system.  Generally the machine driver would define a jack and then
+>>> connect the CODEC to it.
+> 
+>> Whether the required hardware wired is told from the user of the codec via
+>> jack's type specified with snd_soc_card_jack_new(). The other details live
+>> in the codec.
+> 
+> So I'm confused about what problem this patch is intended to fix.  It
+> really sounds like there's some issue with the driver not using standard
+> interfaces that you're trying to work around but the changelog is not at
+> all clear.  The "doesn't use DAPM" bit is a bit of a warning sign, it
+> sounds like the audio signals to and from the CODEC aren't being
+> connected to the jack properly.
+> 
+> Look at how other devices with jack detection hardware handle this and
+> follow a similar pattern.
 
-Built and installed kernel and setup GUE/FOU tunnels.
+The situation actually seems quite a mess. You can find many drivers not 
+using DAPM pins by searching for snd_soc_card_jack_new() calls with 
+num_pins argument is 0. ams-delta-audio is exceptional as it adds DAPM 
+pins later with snd_soc_jack_add_pins().
 
-Signed-off-by: Coco Li <lixiaoyan@google.com>
----
- net/ipv4/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+They do not have kcontrols for the jacks. The only exception is 
+skl_hda_dsp_generic which calls snd_jack_add_new_kctl() as my patch 
+does. Looking at other devices is probably not helpful to find an 
+alternative in this case.
 
-diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
-index 87983e70f03f..e983bb0c5012 100644
---- a/net/ipv4/Kconfig
-+++ b/net/ipv4/Kconfig
-@@ -321,7 +321,6 @@ config NET_UDP_TUNNEL
- 
- config NET_FOU
- 	tristate "IP: Foo (IP protocols) over UDP"
--	select XFRM
- 	select NET_UDP_TUNNEL
- 	help
- 	  Foo over UDP allows any IP protocol to be directly encapsulated
--- 
-2.35.1.1178.g4f1659d476-goog
-
+Regards,
+Akihiko Odaki

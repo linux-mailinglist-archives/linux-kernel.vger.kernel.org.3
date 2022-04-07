@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE874F8714
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402874F8716
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346852AbiDGSar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S1346858AbiDGSbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiDGSao (ORCPT
+        with ESMTP id S229710AbiDGSbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:30:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7451D117997
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:28:44 -0700 (PDT)
+        Thu, 7 Apr 2022 14:31:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95551158B85;
+        Thu,  7 Apr 2022 11:29:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E389F61D82
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9239EC385A4;
-        Thu,  7 Apr 2022 18:28:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 401CAB82954;
+        Thu,  7 Apr 2022 18:29:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A97AC385A4;
+        Thu,  7 Apr 2022 18:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649356123;
-        bh=KXuI+L3w9Z+hWbCVUNJjBVgqsQdywLD3Cgb4k1A4MyM=;
+        s=korg; t=1649356170;
+        bh=3ESWRa8y3Crt+FGw6DXenQcOcGcaggrhqxa3bNagFq8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OSTmqpdXdMR4dTBSJzbShdzgRXW9GFkSV2irjpwGelaRuzHAyMbxykVvNPt4aHEBF
-         RfiTzGNF8wCVVZmS2mZbn+j2of8xoZxxZTHxzxGzn/BomOuW423R2HueDdq1gdIqSq
-         PgXjawVP5VpA6hV4s7JpUM1lmJ67/18AKuOSSTBE=
-Date:   Thu, 7 Apr 2022 20:28:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        florian.c.schilhabel@googlemail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] staging: rtl8712: remove unnecessary parentheses
-Message-ID: <Yk8tVxot2znwyWLm@kroah.com>
-References: <20220407125947.8525-1-eng.alaamohamedsoliman.am@gmail.com>
- <Yk8jbTSjvsHXpX2U@kroah.com>
- <96a1de63-5b66-b6a6-731e-d7263f3328a5@gmail.com>
+        b=cXPIEQoT1+cyaYC/bmQ1rejmpgLH+87EXzUqTajntsEDwYwjg6GSBJQ/3JQBecmkd
+         Srf+GO03/OZ4e82bHzWVOlAOgybPuvIxoc133sg64+EOIgI+pDDDGoRnGyLK4vV14r
+         uQQZQWzoPJgXz/35gvJUe3DqUOfyAJiBU8ijl/iQ=
+Date:   Thu, 7 Apr 2022 20:29:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc2 review
+Message-ID: <Yk8th5hj6cW7kSPZ@kroah.com>
+References: <20220406133013.264188813@linuxfoundation.org>
+ <7d1903b5-7139-94df-11ec-02de782b8008@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96a1de63-5b66-b6a6-731e-d7263f3328a5@gmail.com>
+In-Reply-To: <7d1903b5-7139-94df-11ec-02de782b8008@roeck-us.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -55,39 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 08:02:37PM +0200, Alaa Mohamed wrote:
+On Thu, Apr 07, 2022 at 10:42:15AM -0700, Guenter Roeck wrote:
+> On 4/6/22 06:43, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.110 release.
+> > There are 597 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
+> > Anything received after that time might be too late.
+> > 
 > 
-> On ٧‏/٤‏/٢٠٢٢ ١٩:٤٦, Greg KH wrote:
-> > On Thu, Apr 07, 2022 at 02:59:47PM +0200, Alaa Mohamed wrote:
-> > > Reported by checkpatch:
-> > > 
-> > > Remove unnecessary parentheses around structure field references
-> > > 
-> > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> > > ---
-> > > Changes in v2:
-> > > 	- Edit commit subject
-> > > 	- Edit commit message
-> > > 	- Fix the same check in more lines
-> > > 	- Remove space before '.skey' in
-> > > "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
-> > > ---
-> > > Changes in v3:
-> > > 	return the space before '.skey' in
-> > > "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86
-> > > ---
-> > > Changes in v4:
-> > > 	edit commit message to be clearer.
-> > > ---
-> > Why did you send this patch twice?
-> That was by mistake , sorry
+> Trying again ...
+> 
+> Test results for v5.10.109-598-gf8a7d8111f45:
+> 
+> Build results:
+> 	total: 161 pass: 150 fail: 11
+> Failed builds:
+> 	alpha:defconfig
+> 	alpha:allmodconfig
+> 	csky:defconfig
+> 	m68k:defconfig
+> 	m68k:allmodconfig
+> 	m68k:sun3_defconfig
+> 	m68k_nommu:m5475evb_defconfig
+> 	microblaze:mmu_defconfig
+> 	nds32:defconfig
+> 	nds32:allmodconfig
+> 	um:defconfig
+> Qemu test results:
+> 	total: 477 pass: 453 fail: 24
+> Failed tests:
+> 	<all alpha>
+> 	q800:m68040:mac_defconfig:initrd
+> 	q800:m68040:mac_defconfig:rootfs
+> 	<all microblaze>
+> 
+> Common error is:
+> 
+> fs/binfmt_elf.c: In function 'fill_note_info':
+> fs/binfmt_elf.c:2056:53: error: 'regs' undeclared
+> 
+> Looks like a bad backport of upstream commit 9ec7d3230717
+> ("coredump/elf: Pass coredump_params into fill_note_info").
+> Only seen on architectures defining CORE_DUMP_USE_REGSET.
 
-When you do so, please let us know which to take, as it is hard to know
-if there was a difference or not.
-
-Realize that for some of us, we get hundreds of patches to review daily.
-Being obvious as to what to, and not to, ignore, is helpful.
-
-thanks,
-
-greg k-h
+Ugh, I'll try to fix this up again, thanks for letting me know...

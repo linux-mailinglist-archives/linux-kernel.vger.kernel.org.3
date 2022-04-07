@@ -2,202 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE79D4F8151
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D164F8153
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343828AbiDGOLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S1343835AbiDGOMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241608AbiDGOLD (ORCPT
+        with ESMTP id S229500AbiDGOMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:11:03 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D091252B9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:09:02 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id g9so9782718ybf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+EmVfi/hJj5qY2xCfktuOrsdnIsyWAZ1Xcq7QuGbQNU=;
-        b=Ex0ysAb+dbnteaKCmZ7UzEeMPi3ALwl7oqU2U5u9eYa2mlnSFM4mUMgA5+4eAYtPyP
-         vC+JnwL0zhy6DpGw5JXfCvK4xzfjxOtppDH8k1rbCF47dlkDEvwfGl+CPja0wNS7GbSn
-         /yXvqONPVbKl+RNbKMmxOjC8HRzkgQwpkv247GLGf6rsXcW2Je5SJAMJeVATgBnzV08Z
-         dzHq5JNaohuG8MmLktFBTVxjQ10O5QHzokpNukEJUKNgLnfj101mie1rX77SGShNmnn6
-         XLLko4jrbeL7eBcrzfbVOTxCTWr1xZiD7oCPRvS7mNzmNypgLQaNj7erZEeJpYz8tKKr
-         jOjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+EmVfi/hJj5qY2xCfktuOrsdnIsyWAZ1Xcq7QuGbQNU=;
-        b=cIG1YQiA8qWEKh+Yn2Ry1iZ30xLg09ND/0A+zLxaCJlKlbMlEgLlsXKNvjvl6IXNtg
-         7R+bGx/+e9p5Irp+3u6ERvmuxFEv35iMynTjUaHHNGtcjI66wtzFKSQkzLHFds5Sadu2
-         YLXsO/AlJwSuYrseJDgys6HhVd70+xN5P61jgfP4xwNTJR+LL7ZQ7xlAbCVx/13rqPr+
-         6a74Yc/nliZlW1IZ6rZNCrsc2Ks28vZYI8HuM74HzUucUtl5atQ6qnh43f1f5t97aevr
-         +TOjuBne5B40Ejm7TfTO5gLMQjwHqr7xZbKYZ+AJXIdS+KTXCVO2DdwJWIza5LTaZJRh
-         c1+A==
-X-Gm-Message-State: AOAM530PVKViFSLKSiuO7aOaPSBG+2hfaH+rP+O/ObXzqo7Y8r28q48j
-        67OKbQHVb/opg0iL8rEscfNr8TvIwy82Eyd++Sqoug==
-X-Google-Smtp-Source: ABdhPJzTvMi/3phYwR9zHtqgXBwUBV0TEXLktdu1cNKs3HjpUdrL+s6rSTIYWysxJj9pyyZwmiiVD8zXjS9/3p7Dml4=
-X-Received: by 2002:a25:3009:0:b0:63d:b1c1:e8e2 with SMTP id
- w9-20020a253009000000b0063db1c1e8e2mr10273569ybw.387.1649340541824; Thu, 07
- Apr 2022 07:09:01 -0700 (PDT)
+        Thu, 7 Apr 2022 10:12:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992BD6268;
+        Thu,  7 Apr 2022 07:10:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45B55B8277A;
+        Thu,  7 Apr 2022 14:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735B0C385A5;
+        Thu,  7 Apr 2022 14:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649340599;
+        bh=5IvxfxxDjdk54PPCzdkREMRze6Mrx0MFKG/E78j6HHU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fV03GPeBUFq2WwJ8Xnd7LTMHkbG5F8ZbQ44ia7yf8Sct+KL+YhVpLdwaulgiZVGd2
+         CfLZ3gm+AjlBLX+dMhVkJcNxShVlP1lmN6TcX464S09O82LOoUMzoWwUKYrGl+tzCg
+         06VeuM8SPGXdhxCiKYQxLjJOguTd9naHGg6u/KuWS6sfvCSI49OOS9CsmhV9jnMFII
+         XMCLfN2ruJsheH6IGE9jdmzfygXJNrURiGs2URRDgD/kc7ymUfV6+caQ+fQte9Syb/
+         HUFaMruuM8a4eINL391MeizikqbIQjodZle6KRiIFPECMQejglGI02YgnLYqHrNpms
+         bI6ydkXuAQAjQ==
+Date:   Thu, 7 Apr 2022 22:09:50 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 14/20] erofs: register fscache context for primary
+ data blob
+Message-ID: <Yk7wrmKYHbhJM8CY@debian>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-15-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220407112512.2099221-1-kongweibin2@huawei.com>
-In-Reply-To: <20220407112512.2099221-1-kongweibin2@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 7 Apr 2022 07:08:50 -0700
-Message-ID: <CANn89iLx5HRnyRShNatPveTBhdjoQTxaRn-8_gYk-6_NuSCiOQ@mail.gmail.com>
-Subject: Re: [PATCH] ipv6:fix crash when idev is NULL
-To:     kongweibin <kongweibin2@huawei.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, rose.chen@huawei.com,
-        liaichun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220406075612.60298-15-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 4:26 AM kongweibin <kongweibin2@huawei.com> wrote:
->
-> When the remote device uses tc command to construct exception packages,
-> and send it to the local device, which acts as a forwarding device, it
-> will crash.
->
-> the tc cmd such as:
-> tc qdisc del dev vxlan100 root
-> tc qdisc add dev vxlan100 root netem corrupt 5%
+On Wed, Apr 06, 2022 at 03:56:06PM +0800, Jeffle Xu wrote:
+> Registers fscache context for primary data blob. Also move the
+> initialization of s_op and related fields forward, since anonymous
+> inode will be allocated under the super block when registering the
+> fscache context.
+> 
+> Something worth mentioning about the cleanup routine.
+> 
+> 1. The fscache context will instantiate anonymous inodes under the super
+> block. Release these anonymous inodes when .put_super() is called, or
+> we'll get "VFS: Busy inodes after unmount." warning.
+> 
+> 2. The fscache context is initialized prior to the root inode. If
+> .kill_sb() is called when mount failed, .put_super() won't be called
+> when root inode has not been initialized yet. Thus .kill_sb() shall
+> also contain the cleanup routine.
+> 
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
 
-Probably not related to your fix.
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
->
-> When using dev_get_by_index_rcu to get net_device struct, once the
-> package is abnormal, the corresponding net_device can't be found
-> according with error device index, then return a null value, which
-> value will be directly used in the policy check below, resulting in
-> system crash.
->
-> Anyway, we can't directly use the idev variable. We need to ensure
-> that it is a valid value.
->
-> kernel version is base on kernel-5.10.0, and the stack information
-> of the crash is as follows:
->
-> [ 4484.161259] IPVS: __ip_vs_del_service: enter
-> [ 4484.162263] IPVS: __ip_vs_del_service: enter
-> [ 4686.564468] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000240
-> [ 4686.565109] Mem abort info:
-> [ 4686.565328]   ESR = 0x96000004
-> [ 4686.565564]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [ 4686.565948]   SET = 0, FnV = 0
-> [ 4686.566184]   EA = 0, S1PTW = 0
-> [ 4686.566427] Data abort info:
-> [ 4686.566651]   ISV = 0, ISS = 0x00000004
-> [ 4686.567024]   CM = 0, WnR = 0
-> [ 4686.567261] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000102daa000
-> [ 4686.567708] [0000000000000240] pgd=0000000000000000, p4d=0000000000000000
-> [ 4686.568182] Internal error: Oops: 96000004 [#1] SMP
-> [ 4686.568530] CPU: 1 PID: 0 Comm: swapper/1 Kdump: loaded Tainted: G        W  O      5.10.0-xxxxxx.aarch64 #1
-> [ 4686.569316] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-> [ 4686.569787] pstate: 40400005 (nZcv daif +PAN -UAO -TCO BTYPE=--)
-> [ 4686.570214] pc : ip6_forward+0xb4/0x744
-> [ 4686.570499] lr : ip6_forward+0x5c/0x744
-> [ 4686.570782] sp : ffff80008800ba00
-> [ 4686.571098] x29: ffff80008800ba00 x28: ffff0000c02e39c0
-> [ 4686.571560] x27: ffff0000f6e97000 x26: ffff800089cfa500
-> [ 4686.572021] x25: ffff80008800bc98 x24: ffff80008800bc08
-> [ 4686.572487] x23: ffff800089cfa500 x22: ffff0000cbfd6c94
-> [ 4686.572953] x21: 0000000000000000 x20: ffff80008800bb38
-> [ 4686.573416] x19: ffff0000c995fc00 x18: 0000000000000000
-> [ 4686.573882] x17: 0000000000000000 x16: ffff8000881b65c0
-> [ 4686.574350] x15: 0000000000000000 x14: 0000000000000000
-> [ 4686.574816] x13: 0000000065f01475 x12: 0000000002cc68fd
-> [ 4686.575298] x11: 00000000d44127a3 x10: b181f30000000000
-> [ 4686.575760] x9 : ffff800088d5d9cc x8 : ffff0000c02e39c0
-> [ 4686.576224] x7 : 0000000000000000 x6 : 0000000000000000
-> [ 4686.576686] x5 : ffff0000c995fc00 x4 : ffff80008800bb38
-> [ 4686.577148] x3 : 0000000000000000 x2 : ffff0000cbfd6ec0
-> [ 4686.577609] x1 : 0000000000000000 x0 : 0000000000000000
-> [ 4686.578079] Call trace:
-> [ 4686.578323]  ip6_forward+0xb4/0x744
-> [ 4686.578646]  ip6_sublist_rcv_finish+0x6c/0x90
-> [ 4686.579051]  ip6_list_rcv_finish.constprop.0+0x198/0x260
-> [ 4686.579512]  ip6_sublist_rcv+0x40/0xb0
-> [ 4686.579852]  ipv6_list_rcv+0x144/0x180
-> [ 4686.580197]  __netif_receive_skb_list_core+0x154/0x28c
-> [ 4686.580643]  __netif_receive_skb_list+0x120/0x1a0
-> [ 4686.581057]  netif_receive_skb_list_internal+0xe4/0x1f0
-> [ 4686.581508]  napi_complete_done+0x70/0x1f0
-> [ 4686.581883]  virtnet_poll+0x214/0x2b0 [virtio_net]
-> [ 4686.582309]  napi_poll+0xcc/0x264
-> [ 4686.582617]  net_rx_action+0xd4/0x21c
-> [ 4686.582969]  __do_softirq+0x130/0x358
-> [ 4686.583308]  irq_exit+0x12c/0x150
-> [ 4686.583621]  __handle_domain_irq+0x88/0xf0
-> [ 4686.583991]  gic_handle_irq+0x78/0x2c0
-> [ 4686.584332]  el1_irq+0xc8/0x180
-> [ 4686.584628]  arch_cpu_idle+0x18/0x40
-> [ 4686.584960]  default_idle_call+0x5c/0x1c0
-> [ 4686.585323]  cpuidle_idle_call+0x174/0x1b0
-> [ 4686.585690]  do_idle+0xc8/0x160
-> [ 4686.585989]  cpu_startup_entry+0x30/0x10c
-> [ 4686.586351]  secondary_start_kernel+0x158/0x1e4
-> [ 4686.586754] Code: b9401842 34002ce2 b940d021 35000281 (b94242a1)
-> [ 4686.587301] kernel fault(0x1) notification starting on CPU 1
-> [ 4686.587787] kernel fault(0x1) notification finished on CPU 1
->
-> Signed-off-by: kongweibin <kongweibin2@huawei.com>
-
-Always provide a Fixes: tag for fixes.
-
-And CC patch author for feedback.
-
-In this case I suspect:
-
-commit ccd27f05ae7b8ebc40af5b004e94517a919aa862
-Author: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Date:   Tue Jul 6 11:13:35 2021 +0200
-
-    ipv6: fix 'disable_policy' for fwd packets
-
-
+Thanks,
+Gao Xiang
 
 > ---
->  net/ipv6/ip6_output.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-> index 54cabf1c2..347b5600d 100644
-> --- a/net/ipv6/ip6_output.c
-> +++ b/net/ipv6/ip6_output.c
-> @@ -495,6 +495,9 @@ int ip6_forward(struct sk_buff *skb)
->         u32 mtu;
->
->         idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
-> +       if (!idev)
-> +               goto drop;
+>  fs/erofs/internal.h |  1 +
+>  fs/erofs/super.c    | 15 +++++++++++----
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 3a4a344cfed3..eb37b33bce37 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -155,6 +155,7 @@ struct erofs_sb_info {
+>  
+>  	/* fscache support */
+>  	struct fscache_volume *volume;
+> +	struct erofs_fscache *s_fscache;
+>  };
+>  
+>  #define EROFS_SB(sb) ((struct erofs_sb_info *)(sb)->s_fs_info)
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 6590ed1b7d3b..9498b899b73b 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -585,6 +585,9 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	int err;
+>  
+>  	sb->s_magic = EROFS_SUPER_MAGIC;
+> +	sb->s_flags |= SB_RDONLY | SB_NOATIME;
+> +	sb->s_maxbytes = MAX_LFS_FILESIZE;
+> +	sb->s_op = &erofs_sops;
+>  
+>  	if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
+>  		erofs_err(sb, "failed to set erofs blksize");
+> @@ -605,6 +608,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  		err = erofs_fscache_register_fs(sb);
+>  		if (err)
+>  			return err;
 > +
->         if (net->ipv6.devconf_all->forwarding == 0)
->                 goto error;
->
-> --
-> 2.23.0
->
+> +		err = erofs_fscache_register_cookie(sb, &sbi->s_fscache,
+> +						    sbi->opt.fsid, true);
+> +		if (err)
+> +			return err;
+>  	}
+>  
+>  	err = erofs_read_superblock(sb);
+> @@ -619,11 +627,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  			clear_opt(&sbi->opt, DAX_ALWAYS);
+>  		}
+>  	}
+> -	sb->s_flags |= SB_RDONLY | SB_NOATIME;
+> -	sb->s_maxbytes = MAX_LFS_FILESIZE;
+> -	sb->s_time_gran = 1;
+>  
+> -	sb->s_op = &erofs_sops;
+> +	sb->s_time_gran = 1;
+>  	sb->s_xattr = erofs_xattr_handlers;
+>  
+>  	if (test_opt(&sbi->opt, POSIX_ACL))
+> @@ -763,6 +768,7 @@ static void erofs_kill_sb(struct super_block *sb)
+>  
+>  	erofs_free_dev_context(sbi->devs);
+>  	fs_put_dax(sbi->dax_dev);
+> +	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+>  	erofs_fscache_unregister_fs(sb);
+>  	kfree(sbi);
+>  	sb->s_fs_info = NULL;
+> @@ -781,6 +787,7 @@ static void erofs_put_super(struct super_block *sb)
+>  	iput(sbi->managed_cache);
+>  	sbi->managed_cache = NULL;
+>  #endif
+> +	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+>  }
+>  
+>  static struct file_system_type erofs_fs_type = {
+> -- 
+> 2.27.0
+> 

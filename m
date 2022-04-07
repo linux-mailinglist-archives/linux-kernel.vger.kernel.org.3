@@ -2,174 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC7E4F881E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673F84F8832
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiDGTb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S230087AbiDGTi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiDGTax (ORCPT
+        with ESMTP id S229670AbiDGTiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:30:53 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A978E29C943
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:28:45 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id d10so7663834edj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:28:45 -0700 (PDT)
+        Thu, 7 Apr 2022 15:38:24 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6268F2E9101
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:35:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b24so7576664edu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4GbYZVMFElHvzO+iQClMBl41EoDQR5lCZDpNuOsesIM=;
-        b=f32jQxMh6cZJunXjmKXPIN2VZ4JZ80H5ldflvegBNmDDa31AknYQsB+Nj3CURL2CXY
-         5OwinzxJ6SpDcYo6Cp01D1NtEwCAPf8lAcDUBx09nsGpQOTM7VQGqU6UEN/JOe2IGdjE
-         QtrPIYNvH0+yEcrelL4w09e7Mk0p9T32Nj+PQokm4HWUlm27K+K3sxqD2bMlAFCe/wlq
-         XF/q0jJCT/fxtpwgFS/yNMLU13bdueiDNaHFQCGhbkrF/KxcAUwZDd0C9OQUrp6Ej/43
-         aaLKtoUKZ7IzdqabGq2yDjTBRJu990iN0h8FPrbWIyaxVKbiJIsHLE++xkGX6UPJUCcS
-         PZVg==
+        bh=rNwKqGxuMSmu4ITdMt4hiQ6a/iL0Wffb/UMWAJM9vH0=;
+        b=hsmvyBbxXvdx21ikiwmuVndGz4VB9w7Tp8QBKQn+4CNqn/NDD64qxOegLGjhBwUvk3
+         1E+8EUa5A2Auwb3N3Llk4fxWapEcn3LN0wxkTDB1P9oj27ObGxdhFs1Fmom5yEAvf4+0
+         Sv0kaRJ/+TffnA0DPFpUTnFmRLwCPyKQvOmGmGM9rnwe+GURB2bz0ghQGZSfxK3QHZrk
+         NqAUOD/MDWWFbu4ci+xw0dluP9fgDaVkoG0pVyFmoRAvxyYTBdu00RdXAJ/pAqd4S6aR
+         fozXIq5Ahdtd4zb8ETOFZSYh6dMmR0zl7kVWfhmWN1TufP0wK2yDZGelYLssdjZzPHsr
+         edfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4GbYZVMFElHvzO+iQClMBl41EoDQR5lCZDpNuOsesIM=;
-        b=jEsXGogr3KoByIAUGSJsVi+v+dVju/BIyWR3tEA4KxgByqk6+vjHIEbaPn+mEyC4Pn
-         3Yx14taBtEYCW4BtKhwrYqdBzGqzEd4HU3XkCYq61jbdW4aCS89E7DfpODF6KPD/Fjrq
-         bHYBWEGMf7DDIHAQQpFpRXPg6WmvupgGYPcahdcdADldBf3KOOkrUxdgIDQ9MhdfIWpb
-         pjA4tkYvrkBz78DKpO0zLICJhx0LxgijORshKNII+/ynT5N2gTKNSGLSyJU5iTh+a4sH
-         CF4r6f0zmai+SnR46/8anLb8ikYBxFMcbHEJw60UMynR8FJ2pEFvyJmlm9DyPlVNh6FB
-         QAkQ==
-X-Gm-Message-State: AOAM532pApWNpakOjzX4c/86np5+Qw9iy/rVtpQZqnFd4+NzprMqz+z6
-        CxiQFbsuQnem8XLLyWLTR/A=
-X-Google-Smtp-Source: ABdhPJwa2YoCvcD2WKGzObGQEXzbP4u8iJPAKRnadWcx7XVVMMiZd+6wnUsRPw0XVcwmt143NjEf5A==
-X-Received: by 2002:a05:6402:4247:b0:419:3990:3db6 with SMTP id g7-20020a056402424700b0041939903db6mr15627565edb.193.1649359709066;
-        Thu, 07 Apr 2022 12:28:29 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id k14-20020a50e18e000000b0041b6f23f7f6sm9652798edl.22.2022.04.07.12.28.28
+        bh=rNwKqGxuMSmu4ITdMt4hiQ6a/iL0Wffb/UMWAJM9vH0=;
+        b=CUjawfDTOJcMRhK59TvWeNVr88dsBc/bzRwN7hEKItq6YGZawip7ALQ2So/uiXIKw8
+         wNwxTZCNXvg5TRTQHr6ZQK0wbQPFUs5PAdU1qeut/paKn11tjoOcsUtFsRK+ySphHY39
+         d+nwt65F/knW2bFwgHGvGulrUVTH1OOXiLIFCaJzpqDEyvdjNAyXy23ZzwXp7prVyiP3
+         BxY5uGPm9oq2vxixDHAS+msdz1qBMXJAUgws6CuJ9wN55Flnj0kH4d0vvjroTRm7Czm1
+         0xIW3GK9VH2z9PJ2PvlXIhGVyD8RRB0mi4kRehikXv/mtnhDvguJ4t1xQhe3mCXXqs/T
+         1NcQ==
+X-Gm-Message-State: AOAM532r+cY/EjaWopHLW4Wu3VTC0i7siNqBFdTUrZ4X/vSqNlJj14p2
+        siM4zm1oLZ5uDc6lkKLZwYlNrL569jIfl+2z
+X-Google-Smtp-Source: ABdhPJx538vA9HnshG5J/vO6w3P62mH/HcbQXvcsr2oa0UiljWyZJm8pcZNCtCmIOY/cboHmSFz0hA==
+X-Received: by 2002:a50:c3c6:0:b0:416:293f:1f42 with SMTP id i6-20020a50c3c6000000b00416293f1f42mr15809234edf.187.1649359849767;
+        Thu, 07 Apr 2022 12:30:49 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id ds5-20020a170907724500b006df8f39dadesm7964617ejc.218.2022.04.07.12.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:28:28 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 8/8] staging: r8188eu: clean up rtw_ioctl.h
-Date:   Thu,  7 Apr 2022 21:28:19 +0200
-Message-Id: <20220407192819.10661-9-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407192819.10661-1-straube.linux@gmail.com>
-References: <20220407192819.10661-1-straube.linux@gmail.com>
+        Thu, 07 Apr 2022 12:30:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Daniel Palmer <daniel@thingy.jp>,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org,
+        Jason Cooper <jason@lakedaemon.net>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bert Vermeulen <bert@biot.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nishanth Menon <nm@ti.com>, linux-oxnas@groups.io,
+        Linus Walleij <linusw@kernel.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Walle <michael@walle.cc>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Suman Anna <s-anna@ti.com>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        openbmc@lists.ozlabs.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 01/18] ARM: dts: nspire: use lower case hex addresses in node unit addresses
+Date:   Thu,  7 Apr 2022 21:30:39 +0200
+Message-Id: <164935983571.16396.11670729285639659849.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220317115542.450032-2-krzysztof.kozlowski@canonical.com>
+References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com> <20220317115542.450032-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are lots of unused macros, structs, etc. in the header
-rtw_ioctl.h. Remove them.
+On Thu, 17 Mar 2022 12:55:25 +0100, Krzysztof Kozlowski wrote:
+> Convert all hex addresses in node unit addresses to lower case to fix
+> dt_binding_check and dtc W=1 warnings.
+> 
+> Conversion was done using sed:
+> 
+>   $ sed -e 's/@\([a-zA-Z0-9_-]*\) {/@\L\1 {/' -i arch/arm/boot/dts/nspire*
+>   $ sed -e 's/<0x\([a-zA-Z0-9_-]*\) /<0x\L\1 /g' -i arch/arm/boot/dts/nspire*
+> 
+> [...]
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/include/rtw_ioctl.h | 79 ---------------------
- 1 file changed, 79 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/staging/r8188eu/include/rtw_ioctl.h b/drivers/staging/r8188eu/include/rtw_ioctl.h
-index a36bd7313755..c704f3040ac8 100644
---- a/drivers/staging/r8188eu/include/rtw_ioctl.h
-+++ b/drivers/staging/r8188eu/include/rtw_ioctl.h
-@@ -7,86 +7,7 @@
- #include "osdep_service.h"
- #include "drv_types.h"
- 
--#ifndef OID_802_11_CAPABILITY
--	#define OID_802_11_CAPABILITY	0x0d010122
--#endif
--
--#ifndef OID_802_11_PMKID
--	#define OID_802_11_PMKID	0x0d010123
--#endif
--
--/*  For DDK-defined OIDs */
--#define OID_NDIS_SEG1	0x00010100
--#define OID_NDIS_SEG2	0x00010200
--#define OID_NDIS_SEG3	0x00020100
--#define OID_NDIS_SEG4	0x01010100
--#define OID_NDIS_SEG5	0x01020100
--#define OID_NDIS_SEG6	0x01020200
--#define OID_NDIS_SEG7	0xFD010100
--#define OID_NDIS_SEG8	0x0D010100
--#define OID_NDIS_SEG9	0x0D010200
--#define OID_NDIS_SEG10	0x0D020200
--
--#define SZ_OID_NDIS_SEG1	23
--#define SZ_OID_NDIS_SEG2	3
--#define SZ_OID_NDIS_SEG3	6
--#define SZ_OID_NDIS_SEG4	6
--#define SZ_OID_NDIS_SEG5	4
--#define SZ_OID_NDIS_SEG6	8
--#define SZ_OID_NDIS_SEG7	7
--#define SZ_OID_NDIS_SEG8	36
--#define SZ_OID_NDIS_SEG9	24
--#define SZ_OID_NDIS_SEG10	19
--
--/*  For Realtek-defined OIDs */
--#define OID_MP_SEG1		0xFF871100
--#define OID_MP_SEG2		0xFF818000
--
--#define OID_MP_SEG3		0xFF818700
--#define OID_MP_SEG4		0xFF011100
--
--enum oid_type {
--	QUERY_OID,
--	SET_OID
--};
--
--struct oid_funs_node {
--	unsigned int oid_start; /* the starting number for OID */
--	unsigned int oid_end; /* the ending number for OID */
--	struct oid_obj_priv *node_array;
--	unsigned int array_sz; /* the size of node_array */
--	int query_counter; /* count the number of query hits for this segment */
--	int set_counter; /* count the number of set hits for this segment */
--};
--
--struct oid_par_priv {
--	void		*adapter_context;
--	NDIS_OID	oid;
--	void		*information_buf;
--	u32		information_buf_len;
--	u32		*bytes_rw;
--	u32		*bytes_needed;
--	enum oid_type	type_of_oid;
--	u32		dbg;
--};
--
--struct oid_obj_priv {
--	unsigned char	dbg; /*  0: without OID debug message
--			      *  1: with OID debug message */
--	int (*oidfuns)(struct oid_par_priv *poid_par_priv);
--};
--
- extern struct iw_handler_def  rtw_handlers_def;
--
--int drv_query_info(struct  net_device *miniportadaptercontext, NDIS_OID oid,
--		   void *informationbuffer, u32 informationbufferlength,
--		   u32 *byteswritten, u32 *bytesneeded);
--
--int drv_set_info(struct  net_device *MiniportAdapterContext,
--		 NDIS_OID oid, void *informationbuffer,
--		 u32 informationbufferlength, u32 *bytesread,
--		 u32 *bytesneeded);
--
- extern int ui_pid[3];
- 
- #endif /*  #ifndef __INC_CEINFO_ */
+[01/18] ARM: dts: nspire: use lower case hex addresses in node unit addresses
+        commit: fa04ccac619085332563fb433ffc4ecc8ba5489e
+
+Best regards,
 -- 
-2.35.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

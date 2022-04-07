@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983AD4F8260
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51E54F8263
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344402AbiDGPFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        id S1344421AbiDGPGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242225AbiDGPFO (ORCPT
+        with ESMTP id S1344418AbiDGPGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:05:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC424591;
-        Thu,  7 Apr 2022 08:03:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 979EF1F85E;
-        Thu,  7 Apr 2022 15:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649343793; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P2Y60UUpdzO4c/QznoyK437PUhA6xIvNYdqt68NitxY=;
-        b=kYgeAbzpzunMhckxZibDJdHxuJ601n8vSHGYrrxwCDMG8e1Bmg/7jm+dO7Yrt0mP0nyPD+
-        1gl2sOGYqMba6AQtRLIZWan0+yDxIEwOXeJiq1S/i5PkZU6kmJBA5Vt3wi4W5q07GXKhsP
-        cVs3g2qvXAHPQf20Zkc9mIGfXu7uuFM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649343793;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P2Y60UUpdzO4c/QznoyK437PUhA6xIvNYdqt68NitxY=;
-        b=heBsnwuHmVko6H1Zte3P++6tL4z/CdhC6qQnFfXHE9UlbUvWyJrBm7wz9xQLyjv5OK8v5Y
-        +Mx0ZOYcycuverDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 47DEC13485;
-        Thu,  7 Apr 2022 15:03:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id p6oNDzH9TmKVZAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 07 Apr 2022 15:03:13 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id e89d1ce4;
-        Thu, 7 Apr 2022 15:03:36 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ceph: invalidate pages when doing direct/sync writes
-References: <20220407143834.7516-1-lhenriques@suse.de>
-        <96a44a4224b67b9ec36198bc0586064df5c4ad2a.camel@kernel.org>
-Date:   Thu, 07 Apr 2022 16:03:36 +0100
-In-Reply-To: <96a44a4224b67b9ec36198bc0586064df5c4ad2a.camel@kernel.org> (Jeff
-        Layton's message of "Thu, 07 Apr 2022 10:42:57 -0400")
-Message-ID: <87k0c17x6f.fsf@brahms.olymp>
+        Thu, 7 Apr 2022 11:06:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6CD1B29DC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649343845; x=1680879845;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=Y3VPFPEBEueMVx8dW2rbCqqe+xkFwaxTb9dysb5/jW4=;
+  b=SvpNrF/ZCwWO0p9BEUgbfJx/b7lZ7cDiKr6M/fQvkNRoTZ3PLs42A5ED
+   9RQpPrBwVkt8sVSBvdtPOfmURXuc5aLm571IB5vAZ9x8x9Bu9kIqRbS0a
+   0KCvoupiS74T/UwAT5D2PltvBlkTmgiLoawWnxIL+yCG+nL290CAe7aTv
+   d9ASxR8cvKC5qFXf+79Oypx6UN8CJMZ2MhNkY5N8fx0h4YnYhG4DmAkl0
+   mPejXBqwuaGt9YtgMuQoO1KtESwRqgy6xhcrmExrmppn3sHzH/UcofIEa
+   a4OikKwZMgAoqr1iIsKSW6TPg33WVfHiU2qwxH86nidbmmITu9zdLynCu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10309"; a="258943885"
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="258943885"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 08:03:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="571089386"
+Received: from kgibala-mobl.ger.corp.intel.com (HELO localhost) ([10.249.142.48])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 08:03:41 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org
+Cc:     Zhi Wang <zhi.a.wang@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Vivi Rodrigo <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Subject: Re: [PATCH v9 1/3] i915/gvt: Separate the MMIO tracking table from
+ GVT-g
+In-Reply-To: <20220407071945.72148-2-zhi.a.wang@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220407071945.72148-1-zhi.a.wang@intel.com>
+ <20220407071945.72148-2-zhi.a.wang@intel.com>
+Date:   Thu, 07 Apr 2022 18:03:38 +0300
+Message-ID: <874k35541h.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,63 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> writes:
+On Thu, 07 Apr 2022, Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+> diff --git a/drivers/gpu/drm/i915/intel_gvt.h b/drivers/gpu/drm/i915/inte=
+l_gvt.h
+> index d7d3fb6186fd..7665d7cf0bdd 100644
+> --- a/drivers/gpu/drm/i915/intel_gvt.h
+> +++ b/drivers/gpu/drm/i915/intel_gvt.h
+> @@ -26,7 +26,17 @@
+>=20=20
+>  struct drm_i915_private;
+>=20=20
+> +#include <linux/kernel.h>
 
-> On Thu, 2022-04-07 at 15:38 +0100, Lu=C3=ADs Henriques wrote:
->> When doing a direct/sync write, we need to invalidate the page cache in
->> the range being written to.  If we don't do this, the cache will include
->> invalid data as we just did a write that avoided the page cache.
->>=20
->> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->> ---
->>  fs/ceph/file.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>=20
->> Ok, here's a new attempt.  After discussion in this thread and on IRC, I
->> think this is the right fix.  generic/647 now passes with and without
->> encryption.  Thanks!
->>=20
->> Changes since v2:
->> - Invalidation needs to be done after a write
->>=20
->> Changes since v1:
->> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
->> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
->>=20
->> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->> index 5072570c2203..63e67eb60310 100644
->> --- a/fs/ceph/file.c
->> +++ b/fs/ceph/file.c
->> @@ -1938,6 +1938,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_it=
-er *from, loff_t pos,
->>  			break;
->>  		}
->>  		ceph_clear_error_write(ci);
->> +		ret =3D invalidate_inode_pages2_range(
->> +				inode->i_mapping,
->> +				pos >> PAGE_SHIFT,
->> +				(pos + len - 1) >> PAGE_SHIFT);
->> +		if (ret < 0) {
->> +			dout("invalidate_inode_pages2_range returned %d\n",
->> +			     ret);
->> +			ret =3D 0;
->> +		}
->>  		pos +=3D len;
->>  		written +=3D len;
->>  		dout("sync_write written %d\n", written);
->
-> Looks good. I suspect we can also remove the
-> invalidate_indode_pages2_range call earlier in this function too. I may
-> roll that into this patch.
+You only need <linux/types.h>. Please add it before the forward
+declaration above.
 
-Right, that occurred to me as well but I wasn't really sure that would be
-safe.
+> +
+>  #ifdef CONFIG_DRM_I915_GVT
+> +
+> +struct intel_gvt_mmio_table_iter {
+> +	struct drm_i915_private *i915;
+> +	void *data;
+> +	int (*handle_mmio_cb)(struct intel_gvt_mmio_table_iter *iter,
+> +			      u32 offset, u32 size);
+> +};
+> +
+>  int intel_gvt_init(struct drm_i915_private *dev_priv);
+>  void intel_gvt_driver_remove(struct drm_i915_private *dev_priv);
+>  int intel_gvt_init_device(struct drm_i915_private *dev_priv);
+> @@ -34,6 +44,7 @@ void intel_gvt_clean_device(struct drm_i915_private *de=
+v_priv);
+>  int intel_gvt_init_host(void);
+>  void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv);
+>  void intel_gvt_resume(struct drm_i915_private *dev_priv);
+> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter);
+>  #else
+>  static inline int intel_gvt_init(struct drm_i915_private *dev_priv)
+>  {
+> @@ -51,6 +62,16 @@ static inline void intel_gvt_sanitize_options(struct d=
+rm_i915_private *dev_priv)
+>  static inline void intel_gvt_resume(struct drm_i915_private *dev_priv)
+>  {
+>  }
+> +
+> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
+> +{
+> +	return 0;
+> +}
 
-> I'll give this an xfstests run with fscrypt enabled and see how it does.
+The CONFIG_DRM_I915_GVT=3Dy counterpart for this is in mmio.h. Should be
+both in the same header.
 
-I'll do the same here, I just run a few tests on a vstart cluster.  But
-I'll definitely give it some more testing.
+> +
+> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
+> +{
+> +	return 0;
+> +}
+>  #endif
+>=20=20
+>  #endif /* _INTEL_GVT_H_ */
+> diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/dr=
+m/i915/intel_gvt_mmio_table.c
+> new file mode 100644
+> index 000000000000..d29491a6d209
+> --- /dev/null
+> +++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+> @@ -0,0 +1,1290 @@
+> +// SPDX-License-Identifier: MIT
+> +/*
+> + * Copyright =C2=A9 2020 Intel Corporation
+> + */
+> +
+> +#include "i915_drv.h"
+> +#include "i915_reg.h"
+> +#include "display/vlv_dsi_pll_regs.h"
+> +#include "gt/intel_gt_regs.h"
+> +#include "intel_mchbar_regs.h"
+> +#include "i915_pvinfo.h"
+> +#include "intel_gvt.h"
+> +#include "gvt/gvt.h"
 
-Cheers,
+Generally we have the include lists sorted.
+
+Other than the nitpicks above, the series is
+
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+
+
+BR,
+Jani.
+
+
 --=20
-Lu=C3=ADs
+Jani Nikula, Intel Open Source Graphics Center

@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227D44F87FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429DB4F8803
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiDGTZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S230118AbiDGTZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiDGTZQ (ORCPT
+        with ESMTP id S229870AbiDGTZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:25:16 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DDE270858
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:23:13 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id p21so8071529ioj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:23:13 -0700 (PDT)
+        Thu, 7 Apr 2022 15:25:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D94A273375
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:23:42 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id k23so12937191ejd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l8OgFspqIU7b4vxeuPh92V4JMHLE7mkjNVSAXOwkoiI=;
-        b=hqEsqkdUEZnH1z3sA9zbHCvR08eMANE+TcmOmjbDqr6CSsj75T6hADaySzUCuq0SeM
-         w8EgXroBrA+8AiQz6o5psyA0BnEiA5dPpuNR5VWR5JMeOkqZYfSeU9xOJDozQ/6B7iTE
-         EQEw0P1idXPRoOOjCOI0PDLVMOiRJSlqTlSm8=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F8jh3aySWQnb7HDAbhAs/0sUcQxLP63pLiPbekNgjDk=;
+        b=yRIm7uIDbSW+Sg1A2IhWkxOHGJVYcI3y7DB2yfTZcoVewxcnlALiBa7vyZkkmR38CV
+         w+bOFE1HyCSDJhp5sZbXF+zDodx3h+lg8J2PKFWgT7OmShhoaaKCiYRXypSjtOQJauTc
+         eWLIHo0EuMpbS9/3YMD8h91DBBiL4EFry0FOp+5/qRVSjLXQs4vA37UuZwQ4+NHbgHOY
+         taTArVhqqNvkyG4R+/dEMfA2SxINkmf0NJh0hK6N1FqjN7Hs7A04KOf56QUGgsBO81Yt
+         s6/JAo1m7QnUjLGjRBYAQXYh11W4WymB4ZJcSh3QrIYHo4117i+ioQUGTu9AI6XbEXqW
+         J9CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=l8OgFspqIU7b4vxeuPh92V4JMHLE7mkjNVSAXOwkoiI=;
-        b=Eu0rQflSD1ncLxUCajzE/BpOjKjXVsh/2f5ffYBhtlk5yMkIcOby+e5zwHDqWrYIxT
-         8GpeyHPWneZ8IHcyXnNLFgG1d39JJ52itXLbUeM+yGH1RefIiG3aqupH4iqe4Mcb4UHU
-         41aZuSikmxeGx05yB64ViksplGUai232KUsD+VOU14/eP+JugQxGz3ogJVdHneZK2Iy3
-         25rt/y2pOYxQidGVYDg0AW28XKmlhxMm2+Io/+WnIh25vBaoTUVu7H1j9cV6qm8i6SMY
-         dPeB9/8SzQYKYnNZo8LUhsOgM9+vlu+REL0+bpf6pOiVc92WH1EwXKMPw43T12nXj4tV
-         5FKg==
-X-Gm-Message-State: AOAM530YGI/nlRHGdqPiMsZOdg/QPcmG5V8HDb98cdkaaZj2Jge0obBr
-        v5D09tO6dLQTtTD4Itbof4ly3A==
-X-Google-Smtp-Source: ABdhPJxo55dq2+4K1HsfVCjcmhVHiDxQKD4sjTU1sAei6R98e/vSm8ep5Z2aHOSWZ1QeDYi08Ztk2w==
-X-Received: by 2002:a05:6602:490:b0:638:c8ed:1e38 with SMTP id y16-20020a056602049000b00638c8ed1e38mr6848815iov.202.1649359392707;
-        Thu, 07 Apr 2022 12:23:12 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056e020ecc00b002ca53aba365sm5885794ilk.64.2022.04.07.12.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 12:23:11 -0700 (PDT)
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix return value checks in
- perf_event_stackmap.c
-To:     Yuntao Wang <ytcoode@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220407153814.104914-1-ytcoode@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7ac36fbe-aa44-9311-320b-1e953c29a3c4@linuxfoundation.org>
-Date:   Thu, 7 Apr 2022 13:23:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=F8jh3aySWQnb7HDAbhAs/0sUcQxLP63pLiPbekNgjDk=;
+        b=Wpfd9OoSDB58x0QuVfTcueLbtsHY4lEM65ghzAhWNJ2IRV3dEN2H4vaEOU82O1W8lV
+         6bXi+sRMDjAojpxvvHvAHfHhHKZiWdFI8vQme5/yuyAVnx3+q7QqDakgI6qJrRjJvByc
+         RRh4QElPSw8NS8yx4j57Zvcys/QPxn0XDTAW9HT9Rm7LQo8Mg9CJlAXrvTmOpb/4RuR8
+         B4g8l292MMThH3isVP8cuKUHjKPl/SG7ss365Flqg2LjYcz26moOCMHd6A6gQLbfbSkI
+         +8lEa+akOM2t3T65ZFTkGEytHD94O39ScIRJb0poqXHkr1ywsLT+ujeLWgmjnDDZMsMn
+         GaKw==
+X-Gm-Message-State: AOAM533st5RQRHnHjXb2ws0L8AS1Ac0bddfZhSc/O4CxWjPmB6XeH6Ay
+        ftd2xiHFeCQiR46DIBctJvw9mQ==
+X-Google-Smtp-Source: ABdhPJzrWsOtA3cDQUOjCsx0X3xlU/Jjh6w2JQBPVga+/8xRbPxBvqcrPFrmzfSbC6oPJdzo5iI/Pg==
+X-Received: by 2002:a17:907:3e1d:b0:6d7:1031:7e0 with SMTP id hp29-20020a1709073e1d00b006d7103107e0mr14482142ejc.580.1649359420885;
+        Thu, 07 Apr 2022 12:23:40 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id x4-20020a170906b08400b006e493cb583esm7870340ejy.47.2022.04.07.12.23.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 12:23:40 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [RESEND PATCH] dt-bindings: usb: samsung,exynos-usb2: add missing required reg
+Date:   Thu,  7 Apr 2022 21:23:38 +0200
+Message-Id: <20220407192338.14849-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220407153814.104914-1-ytcoode@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 9:38 AM, Yuntao Wang wrote:
-> The bpf_get_stackid() function may also return 0 on success.
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Can you add couple of sentences to describe what this patch
-does? bpf_get_stackid() may also return doesn't really say
-anything about why this patch is needed.
+"reg" property is required on Samsung S5PV210/Exynos EHCI/OHCI
+controllers.
 
-> 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->   tools/testing/selftests/bpf/progs/perf_event_stackmap.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> index b3fcb5274ee0..f793280a3238 100644
-> --- a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> +++ b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> @@ -35,10 +35,10 @@ int oncpu(void *ctx)
->   	long val;
->   
->   	val = bpf_get_stackid(ctx, &stackmap, 0);
-> -	if (val > 0)
-> +	if (val >= 0)
->   		stackid_kernel = 2;
->   	val = bpf_get_stackid(ctx, &stackmap, BPF_F_USER_STACK);
-> -	if (val > 0)
-> +	if (val >= 0)
->   		stackid_user = 2;
->   
->   	trace = bpf_map_lookup_elem(&stackdata_map, &key);
-> 
-Linux 5.18-rc1 shows a couple of more bpf_get_stackid() in this function.
-Removed in bpf-next - I assume.
+Fixes: 4bf2283cb208 ("dt-bindings: usb: samsung,exynos-usb2: convert to dtschema")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
-The change is good. I would like to see it explained better in the
-commit log.
+---
 
-With the commit log fixed to explain why this change is needed and
-what happens if val equals to 0 condition isn't checked:
+Fix for commit in v5.18-rc1.
+---
+ Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
+index 340dff8d19c3..9c92defbba01 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
+@@ -62,6 +62,7 @@ required:
+   - interrupts
+   - phys
+   - phy-names
++  - reg
+ 
+ allOf:
+   - if:
+-- 
+2.32.0
 
-thanks,
--- Shuah

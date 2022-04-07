@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D52F4F86D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F317F4F86D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346726AbiDGSEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S1346741AbiDGSEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346705AbiDGSEA (ORCPT
+        with ESMTP id S229632AbiDGSEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:04:00 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BDBB8237
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:02:00 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b15so6158231pfm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:02:00 -0700 (PDT)
+        Thu, 7 Apr 2022 14:04:41 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D42C6F3A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:02:41 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y8so996225pfw.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=F4m+NmCt6OQn1SzMUe8Cohym4BG+NQ3hA7612DJmQk8=;
-        b=gxJe8yE0vDDooVk/tyWuz6yS5lmQYS/Wkon9uCa6FbL1Vp+1car52FqOuW/+gvGVtr
-         uRFXlYXosH7BLeaJQ/dxhonfjStPz7APnzrBFOHVy8ov9Dm1Qt5vTegZpuZo3JL4j/yS
-         Mt/CLtsQsj2t2PTylkSKsg9ChciEv8RgvBrkE=
+        bh=zbKPegUyU45rH7gKXzXri3LhcGQyiXiZ1PMj8OU0FUE=;
+        b=WMCAx2IfBApetXXM+o1hQqfbJJFX3JosvV/3p1o7C8/ibPs7xeX4qidxmU+Fvco93Y
+         4pk+iLH4xmNMXIh+8wTSS36ZAK4Shtfyz5i5XfjD/iZGMnhsvT7TvSz/fNqjrlVwID7e
+         5I+lfT5wZ9s20r5rj0lth1+csSfBiNebQzYfuPLpYtAVYVvPr7APYIe/PufbSYn9bLuO
+         GXHIqnRxPdYvDe+mLtl693jF5vJ8gyREX5JC2k+RAPwyQy3yZbO6yseboHoWrzXy7TEl
+         W4LU/O5IriVnhmUPr68/P/OP/5WPKJ1VB9ds3/BLJfc4q7j50pbQd+WLLlwMRPdi/PS6
+         5ZnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=F4m+NmCt6OQn1SzMUe8Cohym4BG+NQ3hA7612DJmQk8=;
-        b=y/txIyY4iTn2tvLx9qmPuIbhOtmjDotYFQ7cEGE54TwPOOjyQnNunMnwrd5/Jm6M4o
-         1XDcM1AytzO0MkI4v41/75prqY3hLo3wqTNSGD7qLFEETf5kTxcHGkcR7Olda0m3uvjH
-         rOFUYBBWgHGz2YNZ778FUU6FpbmeHWAVRaw6Ac6091cDiwVkQDDmp8OesC1NHG01R5iF
-         3V8tnOSBmQZ7Tn/4sf7tLdgj+fYASenesH0CRAPCoKcpnJZPnssW8Ko5c3LncD9xQeD2
-         /BZR7MLCZrYljojyLqKJnh7d1ZifbBaoP8SzFXBEllvZZQcSNSHwXbkk+kMsrQO30Air
-         Q+Ig==
-X-Gm-Message-State: AOAM530y56rp2Rfl/+p//2PvSypsJr9EM+2Gch5uK9KXo8UCu9TvzN7b
-        D84oEMBNA2LCQAuEs2srlrVsjQ==
-X-Google-Smtp-Source: ABdhPJzRd2qZYYwG5AfxTyIymC3MZj/ozFy0iyV+2G1omVsn91D0Sgr3xC08x23KE/K5bh1F6e4nmg==
-X-Received: by 2002:a05:6a00:190a:b0:4fa:e4e9:7126 with SMTP id y10-20020a056a00190a00b004fae4e97126mr15410147pfi.65.1649354519621;
-        Thu, 07 Apr 2022 11:01:59 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:693e:9ca0:42a0:6bf7])
-        by smtp.gmail.com with UTF8SMTPSA id x12-20020aa7956c000000b004fdf7a4d49dsm16020425pfq.158.2022.04.07.11.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:01:59 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 11:01:57 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v12 4/6] usb: dwc3: qcom: Keep power domain on to retain
- controller status
-Message-ID: <Yk8nFZhLgdTQsllD@google.com>
-References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649321104-31322-5-git-send-email-quic_c_sanm@quicinc.com>
+        bh=zbKPegUyU45rH7gKXzXri3LhcGQyiXiZ1PMj8OU0FUE=;
+        b=T/fCkD5rMm4RK3e/ME8pB4dYOjJ+o4fyPjLMeopeFS4Wo7C18USHl2w7LxJLGkUjUH
+         hr/rWXged7QJOJp5OgqFS4BH7h4gfvNvXSos+JqKEiJqOooRhCgUKDWn3E1PJfBPkhXH
+         O+Xom89mOenyZOwrB0fo9zj7m+P72nZT4jpidNlvJYPs/0zemwk+qUu4mUvhVkO+p9RW
+         /2urPyaxDKYLfdnDoJGBL4HB5kRtBwFt/6wSix3p1rtfjz26kU1p1IS7Yktk6IIFwZPq
+         tf1HzI5JrNnzGpfaQrRfr6/I46o/gsREz2R+94dbuG4aNWOoVkgMHOr92vAgaHoK0Z7q
+         RtSA==
+X-Gm-Message-State: AOAM530ayYR4t+l9MMGUAVMH6jisYJOUh/qmjh92wK048qrS8tsGm/Xb
+        vJ6/9JO+t1JK4LT8Pk7xPUb/Ug==
+X-Google-Smtp-Source: ABdhPJxpRm9mSw+aTuqx1VxQurUVq7hqNTK0hkzfMmj9tFaZLwawtq+kEVdY+TdodFQhTaaG5iN2uA==
+X-Received: by 2002:a63:2b0d:0:b0:386:322:f05c with SMTP id r13-20020a632b0d000000b003860322f05cmr12320393pgr.11.1649354560357;
+        Thu, 07 Apr 2022 11:02:40 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm26051672pfh.143.2022.04.07.11.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 11:02:39 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 18:02:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/31] KVM: x86: hyper-v: Resurrect dedicated
+ KVM_REQ_HV_TLB_FLUSH flag
+Message-ID: <Yk8nPJ45PJzN9o+L@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-2-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1649321104-31322-5-git-send-email-quic_c_sanm@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220407155645.940890-2-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,63 +77,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:15:02PM +0530, Sandeep Maheswaram wrote:
-> Keep the power domain on in order to retain controller status and
-> to support wakeup from devices.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9804a19..35087cf 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -17,6 +17,7 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> @@ -724,6 +725,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	struct resource		*res, *parent_res = NULL;
->  	int			ret, i;
->  	bool			ignore_pipe_clk;
-> +	struct generic_pm_domain *genpd;
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index e9647614dc8c..3c54f6804b7b 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3341,7 +3341,12 @@ void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
+>  	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
+>  		kvm_vcpu_flush_tlb_current(vcpu);
 >  
->  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
->  	if (!qcom)
-> @@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, qcom);
->  	qcom->dev = &pdev->dev;
->  
-> +	genpd = pd_to_genpd(qcom->dev->pm_domain);
+> -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu))
+> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+> +		kvm_vcpu_flush_tlb_guest(vcpu);
+> +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +	}
 > +
->  	if (has_acpi_companion(dev)) {
->  		qcom->acpi_pdata = acpi_device_get_match_data(dev);
->  		if (!qcom->acpi_pdata) {
-> @@ -839,6 +843,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto interconnect_exit;
->  
-> +	genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+> +	if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
+>  		kvm_vcpu_flush_tlb_guest(vcpu);
 
-Not sure it really matters, but could this be done conditionally based
-on device_can_wakeup() of the dwc3 core device?
+It'd be slightly more performant to do:
 
-> +
->  	device_init_wakeup(&pdev->dev, 1);
+	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+		kvm_vcpu_flush_tlb_guest(vcpu);
+		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+	} else if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu)) {
+		kvm_hv_vcpu_flush_tlb(vcpu);
+	}
 
-Now that the dwc3 core looks at the wakeup-source property it seems
-this driver should enable wakeup only when it is enabled for the
-core.
+And then when the code becomes
 
-Actually I wonder if it would make sense to leave wakeup for dwc3-qcom
-'officially' disabled, and just make all wakeup related decisions
-based on the wakeup configuration of the dwc3 core (as
-dwc3_qcom_en/disable_interrupts() already do). The separate wakeup
-policies for dwc3 core and dwc3-qcom are confusing and don't seem to
-add any value.
+
+	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+		kvm_vcpu_flush_tlb_guest(vcpu);
+		if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
+			kvm_hv_vcpu_empty_flush_tlb(vcpu);
+	} else if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu)) {
+		kvm_hv_vcpu_flush_tlb(vcpu);
+	}
+
+the elif will help unsuspecting readers see that the HV_TLB_FLUSH request is
+cleared by kvm_check_request() in the TLB_FLUSH_GUEST path.
+
+The elif could result in having to bail from VM-Entry if the request becomes
+pending after the check/clear inside TLB_FLUSH_GUEST, but that should be a very
+rare case.
+
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_service_local_tlb_flush_requests);
+> -- 
+> 2.35.1
+> 

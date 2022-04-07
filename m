@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4B94F8962
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7694F88FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiDGVA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S230270AbiDGVDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiDGVA0 (ORCPT
+        with ESMTP id S230320AbiDGVC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:00:26 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA2C15E88F
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:58:18 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so7850142edw.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:58:18 -0700 (PDT)
+        Thu, 7 Apr 2022 17:02:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AEE1689DA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:00:58 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 2so6776790pjw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=LtV+LimrEebMzUK1IOhvEXGb2ymNgMZl7qh+Db0K2zNRN9P2+inYAeLmBHYB2w6OkO
-         mn/kik52wDH8tc8FUpvnPbCEntUH62DwQiMG6ydiIqlYKJmkEYvdOUC8WI9fYcl0ysB1
-         H6FwSKAovj274rvZkqlyUAzRkERYk49kh8aZUoMkYXZSgZxVakbuGIBuJ5MwSay6PeWy
-         mzuQZ7aln0oPp2FhclYJyvKN5snzc2HBQQSTWgLAs7rRk1QNqx4VpUvRU2ENIa5w2Yxt
-         4cczopCH7g7pzQE8kYQ/fYdIrqeKWaHCjByr9giggQf34469Y2UAfBvapmZcmSD+hqiH
-         /fjQ==
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=T89PGJOFZzxYWMDwvjRB/Z88pam+GDQn5BMEWkthb7M=;
+        b=PYkmmEq+wWwbgsDjy2r0zLqZdWnZzr9RPm3tsi9QgmKZ55ZFGOBL7ismmtci8NnOqA
+         QwjzsxsfQZowVyVKLdGzYlep6EtNAIuCCciw4T1gmRbAzgOm1VuluJCQoa2U0r8bhiDw
+         7rApu70mhjU/bZ50dve7YTbQxOq+FyCzMq2wSqLE2wBJgRHH1awi+N60bTVDBsrYN0ez
+         wvS+BBU41hr2sUr5GY6M2dpTvM9pqlnbw2ZTNIuOHnOQXP4I7CsrM+B9U0sWAfQZyJVt
+         3wOxdAEqBsGPYdthDTtIhzxUT4JoIp1GPSbW7f6vv6o8Lmaf4OYyyifXFB7aXsHZxTvA
+         lOrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=0ZnPgwW/2RtecoJ5mDGIh++3mFgEEeRw7yWxi95jCSL9daz9eeEhfXSg4abNb0v7yQ
-         wdkfBK79cZV16ufL8gzw+8MwXeKgh+FSFryOhLKc8S4eOn/ac58ytF/J1VRLsDzki+sy
-         45hygOd+qH8uCJDnDgWlEaROKAVJGRJWkyUlieLSUd2D19l1GCfsUe3H9mp2XWs6ij7Z
-         b6KYpqrLz9vuP1dQbHwl9MMPutwTBLHmbmTPFm4tFDs5IJGD4X2NDkXD7xlrGIpITJQD
-         wjb8gPojju09Ox2+0TjvhBVPgdSmU1AgU23KkYyCwgLo+QQAVsKk0FA9S8l+dkGiQv3P
-         ZbMw==
-X-Gm-Message-State: AOAM530p4A079J0AOCGZefjDbx0Mv7KagSIX+y04IgTj5oDODIZx8l9m
-        UrZS1Z9A1DDJvYGEf0XHMcPjIA==
-X-Google-Smtp-Source: ABdhPJzKZKgo7bJk0AYUXlwb2y8mbmmQYcn7Gd1R46cDu+04zIt7arhMKkYnlMab8y4eU6cP1/Q3hg==
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id el4-20020a056402360400b0041cc4e62988mr16115607edb.157.1649365097189;
-        Thu, 07 Apr 2022 13:58:17 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id b11-20020a17090630cb00b006e83fb1e6b1sm738450ejb.100.2022.04.07.13.58.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 13:58:16 -0700 (PDT)
-Message-ID: <827e5f9c-13ef-08fb-d167-80c6c4ea5631@linaro.org>
-Date:   Thu, 7 Apr 2022 22:58:15 +0200
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=T89PGJOFZzxYWMDwvjRB/Z88pam+GDQn5BMEWkthb7M=;
+        b=S6svlIkBCN7nXaHThZVWjvJRm6GS3kS35/aGEQKebqsTtYKqiP5iVdeq44FQg8s41d
+         36blvlq6cHmGMEpP5t8/+WfGdX/TSFjc9s+9p2mbKwx3al2TvabJD4+KuTwPG/Bvs/Ud
+         Z1VOrqs5VfSNTTiKpK3Pjb9v5Iz0C9JWg0BlYTg00xDqkzooNlGGYck1Y4o/uLdtsW4U
+         /IV4w5Xf8Rw0Wj4sEG46/8/NUw+OedfLWfFZKgqauObxXNUc6slTyFfQCVAIwzxe96HF
+         UXsiZGDuQ4O87rXellXE9AjjiBOTXdw4LMmWz8+RcmIec2tg1iZSgUTlEAILGuP9eR85
+         DhaA==
+X-Gm-Message-State: AOAM5306Pw8sZwcuqyINx93biMPHV/wacNEgRT3PP2N1wfsRWD+WTtox
+        69lSEr5OxXlETMbVblTmkPE0Tg==
+X-Google-Smtp-Source: ABdhPJxHXJI8ZwUsmQLqz+S7V7nFeavAxKmMZFLLTRBKs1+kp6SUn6toVb+DF/8xo0UvOhDHuAuXmA==
+X-Received: by 2002:a17:902:cf08:b0:151:9d28:f46f with SMTP id i8-20020a170902cf0800b001519d28f46fmr15519474plg.53.1649365257397;
+        Thu, 07 Apr 2022 14:00:57 -0700 (PDT)
+Received: from bsegall-linux.svl.corp.google.com.localhost ([2620:15c:2cd:202:ca7d:71e3:d0a7:79b7])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056a001a0c00b004e1307b249csm24027695pfv.69.2022.04.07.14.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 14:00:56 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com
+Subject: Re: [PATCH 2/2] sched/fair: Delete useless condition in
+ tg_unthrottle_up()
+References: <20220407021729.16655-1-zhouchengming@bytedance.com>
+        <20220407021729.16655-2-zhouchengming@bytedance.com>
+Date:   Thu, 07 Apr 2022 14:00:54 -0700
+In-Reply-To: <20220407021729.16655-2-zhouchengming@bytedance.com> (Chengming
+        Zhou's message of "Thu, 7 Apr 2022 10:17:29 +0800")
+Message-ID: <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        dac2@pensando.io, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-12-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,95 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 01:36, Brad Larson wrote:
-> Add Pensando common and Elba SoC specific device nodes
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
+Chengming Zhou <zhouchengming@bytedance.com> writes:
+
+> Fully decayed cfs_rq is impossible to have queued entities,
+> the first condition "!cfs_rq_is_decayed(cfs_rq)" is enough
+> to cover.
+
+In particular, cfs_rq->load.weight is part of cfs_rq_is_decayed.
+
+Reviewed-by: Ben Segall <bsegall@google.com>
+
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 > ---
-> Change from V3:
-> - Changed to dual copyright (GPL-2.0+ OR MIT)
-> - Minor changes from review input
-
-Thank you for your patch. There is something to discuss/improve.
-
-(...)
-
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85263";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&spi0 {
-> +	num-cs = <4>;
-> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-> +		   <&porta 7 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +	spi0_cs0@0 {
-
-Generic node name needed matching the class of a devicxe.
-
-> +		compatible = "semtech,sx1301";	/* Enable spidev */
-
-This comment is a bit odd... did you just use random compatible from
-spidev instead of defining proper compatible?
-
-
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-
-Why address/size cells?
-
-> +		spi-max-frequency = <12000000>;
-> +		reg = <0>;
-
-Please put reg just after compatible. It's the most common pattern.
-
-> +	};
-> +
-> +	spi0_cs1@1 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <1>;
-> +	};
-> +
-
-(...)
-
-> +
-> +		emmc: mmc@30440000 {
-> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
-> +			clocks = <&emmc_clk>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +			reg = <0x0 0x30440000 0x0 0x10000>,
-> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
-> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
-> +			cdns,phy-input-delay-legacy = <0x4>;
-> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
-> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
-> +			mmc-ddr-1_8v;
-> +			status = "disabled";
-> +		};
-> +
-> +		mssoc: mssoc@307c0000 {
-
-Generic node name.
-
-> +			compatible = "syscon", "simple-mfd";
-
-This does not look correct. Syscon is okay, but why do you need
-simple-mfd (there are no children here)?
-
-> +			reg = <0x0 0x307c0000 0x0 0x3000>;
-> +		};
-> +	};
-> +};
-
-
-Best regards,
-Krzysztof
+>  kernel/sched/fair.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index e6fa5d1141b4..17c13c38b1c2 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4850,7 +4850,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+>  					     cfs_rq->throttled_clock_task;
+>  
+>  		/* Add cfs_rq with load or one or more already running entities to the list */
+> -		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
+> +		if (!cfs_rq_is_decayed(cfs_rq))
+>  			list_add_leaf_cfs_rq(cfs_rq);
+>  	}

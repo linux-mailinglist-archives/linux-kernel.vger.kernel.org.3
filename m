@@ -2,214 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E97A4F8105
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CFC4F8107
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242229AbiDGNys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S1343697AbiDGNzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242816AbiDGNyo (ORCPT
+        with ESMTP id S242816AbiDGNzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:54:44 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6531179A9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:52:43 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZ2pL6SPHz67yBh;
-        Thu,  7 Apr 2022 21:50:50 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 15:52:40 +0200
-Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
- 2022 14:52:39 +0100
-Message-ID: <300b0973-841a-0dc3-16b4-0028427abe12@huawei.com>
-Date:   Thu, 7 Apr 2022 14:52:37 +0100
+        Thu, 7 Apr 2022 09:55:03 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6401118665;
+        Thu,  7 Apr 2022 06:53:02 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id d10so6553859edj.0;
+        Thu, 07 Apr 2022 06:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RtLEHMXofVwSigiZFruK1cViTW610dtmPpogWRx2vYw=;
+        b=Q9vW21lD4OBM6tWcGgFjv4mr1Jlw8Y1HftqW6nKVE/kn8NU5nrtIRuKRZ0kvV5JTDa
+         JUIetz7mC/8jEWgICzJHIl4QnlxBdT+jVEqvtH0UAYgP4jy2vakI7MqoldoILxFAhipM
+         rBZCcxUXu0rIT6myNSOl1RMcCC9Sc6j5VPisJVSEDH54xkT8EXDyOWHL0yscGmpYhjbV
+         KfOwAyduR8/tR1m3PPOg05GbXbxQKDc7iZVqSKQmTrUGeAWAeOkQMCB/kbuuPXp3IlVh
+         UDk3ntcbwvFhkEBMRU57NgsggAtGvAOggUEGqHq8zLqJETfBvEzHsuOa0jkHeVwd4u/+
+         PkuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RtLEHMXofVwSigiZFruK1cViTW610dtmPpogWRx2vYw=;
+        b=tuvUA6ZWUePU3votAoHpJvbhglY5ne0s7/bSOEqSkhVulzSvHfVi26i9f3rjhyqsRz
+         nut1Wq1KD/RRSjwaQ5MImTn0h7yxLeEgFwjzJwGVh17LsgKhXISpCkfqGKGpQqws6gPj
+         +KedLLNkr/v3Oso7ddua2aNA8RnlobjG1G2BwENkwt14pKEOf7cZlRxARd/sducpWg0o
+         8M3zDAQBlBb5SbQsXjKxY9aQ7cpW8zsk/OpaMm6LkeAAtKKeWa4MICtFUvKChXvtZBHv
+         i8oF5sVx8uCB/u6HF7Sb76dqTRtRD+kxkx6HWCMlreTsSFkmo4u83pPdSDKIe3UL7+34
+         JwBw==
+X-Gm-Message-State: AOAM531OlRS3xTzWQ324nteU4VA9PoP4XPiViAfVE/78ey1usTja1Jwg
+        t+F2f01y9d2d9maKhg7HvK8=
+X-Google-Smtp-Source: ABdhPJzfQSBegI2RHjRgjDsZUux0MM3e853t44jeZ9G6UHrN1tVMWA0IqES/TdKb+emQmclu7SoEyQ==
+X-Received: by 2002:a05:6402:2688:b0:419:5dde:4700 with SMTP id w8-20020a056402268800b004195dde4700mr14644996edd.124.1649339581190;
+        Thu, 07 Apr 2022 06:53:01 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id c1-20020a50cf01000000b0041cb7e02a5csm7389585edk.87.2022.04.07.06.52.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 06:53:00 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <37a736d0-1f25-79be-4c3f-c8e8a5a62528@redhat.com>
+Date:   Thu, 7 Apr 2022 15:52:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RESEND v5 5/5] iova: Add iova_len argument to
- iova_domain_init_rcaches()
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
-CC:     <mst@redhat.com>, <jasowang@redhat.com>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <chenxiang66@hisilicon.com>, <jean-philippe@linaro.org>,
-        <linuxarm@huawei.com>
-References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
- <1649071634-188535-6-git-send-email-john.garry@huawei.com>
- <b09aeef5-106c-b477-e16b-a537929cb7c1@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <b09aeef5-106c-b477-e16b-a537929cb7c1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 045/104] KVM: x86/tdp_mmu: make REMOVED_SPTE
+ include shadow_initial value
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <6614d2a2bc34441ed598830392b425fdf8e5ca52.1646422845.git.isaku.yamahata@intel.com>
+ <3f93de19-0685-3045-22db-7e05492bb5a4@redhat.com>
+ <Yk4j0cCR5fnQKw1F@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yk4j0cCR5fnQKw1F@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.80.129]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 09:27, Leizhen (ThunderTown) wrote:
-> 
+On 4/7/22 01:35, Sean Christopherson wrote:
+>> Please rename the existing REMOVED_SPTE to REMOVED_SPTE_MASK, and call this
+>> simply REMOVED_SPTE.  This also makes the patch smaller.
+> Can we name it either __REMOVE_SPTE or REMOVED_SPTE_VAL?  It's most definitely
+> not a mask, it's a full value, e.g. spte |= REMOVED_SPTE_MASK is completely wrong.
 
-Thanks for having a look....
+REMOVED_SPTE_VAL is fine.
 
-> 
-> On 2022/4/4 19:27, John Garry wrote:
->> Add max opt argument to iova_domain_init_rcaches(), and use it to set the
->> rcaches range.
->>
->> Also fix up all users to set this value (at 0, meaning use default),
->> including a wrapper for that, iova_domain_init_rcaches_default().
->>
->> For dma-iommu.c we derive the iova_len argument from the IOMMU group
->> max opt DMA size.
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
->> ---
->>   drivers/iommu/dma-iommu.c            | 15 ++++++++++++++-
->>   drivers/iommu/iova.c                 | 19 ++++++++++++++++---
->>   drivers/vdpa/vdpa_user/iova_domain.c |  4 ++--
->>   include/linux/iova.h                 |  3 ++-
->>   4 files changed, 34 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 42ca42ff1b5d..19f35624611c 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -525,6 +525,8 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->>   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
->>   	unsigned long order, base_pfn;
->>   	struct iova_domain *iovad;
->> +	size_t max_opt_dma_size;
->> +	unsigned long iova_len = 0;
->>   	int ret;
->>   
->>   	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
->> @@ -560,7 +562,18 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->>   	}
->>   
->>   	init_iova_domain(iovad, 1UL << order, base_pfn);
->> -	ret = iova_domain_init_rcaches(iovad);
->> +
->> +	max_opt_dma_size = iommu_group_get_max_opt_dma_size(dev->iommu_group);
->> +	if (max_opt_dma_size) {
->> +		unsigned long shift = __ffs(1UL << order);
->> +
->> +		iova_len = roundup_pow_of_two(max_opt_dma_size);
->> +		iova_len >>= shift;
->> +		if (!iova_len)
->> +			iova_len = 1;
-> 
-> How about move "iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);" here? So that,
-> iova_domain_init_rcaches() can remain the same. And iova_domain_init_rcaches_default() does
-> not need to be added.
-> 
-
-I see your idea. I will say that I would rather not add 
-iova_domain_init_rcaches_default(). But personally I think it's better 
-to setup all rcache stuff only once and inside 
-iova_domain_init_rcaches(), as it is today.
-
-In addition, it doesn't look reasonable to expose iova_len_to_rcache_max().
-
-But maybe it's ok. Other opinion would be welcome...
-
-Thanks,
-John
-
->> +	}
->> +
->> +	ret = iova_domain_init_rcaches(iovad, iova_len);
->>   	if (ret)
->>   		return ret;
->>   
->> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
->> index 5c22b9187b79..d65e79e132ee 100644
->> --- a/drivers/iommu/iova.c
->> +++ b/drivers/iommu/iova.c
->> @@ -706,12 +706,20 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
->>   	mag->pfns[mag->size++] = pfn;
->>   }
->>   
->> -int iova_domain_init_rcaches(struct iova_domain *iovad)
->> +static unsigned long iova_len_to_rcache_max(unsigned long iova_len)
->> +{
->> +	return order_base_2(iova_len) + 1;
->> +}
->> +
->> +int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len)
->>   {
->>   	unsigned int cpu;
->>   	int i, ret;
->>   
->> -	iovad->rcache_max_size = 6; /* Arbitrarily high default */
->> +	if (iova_len)
->> +		iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);
->> +	else
->> +		iovad->rcache_max_size = 6; /* Arbitrarily high default */
->>   
->>   	iovad->rcaches = kcalloc(iovad->rcache_max_size,
->>   				 sizeof(struct iova_rcache),
->> @@ -755,7 +763,12 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
->>   	free_iova_rcaches(iovad);
->>   	return ret;
->>   }
->> -EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
->> +
->> +int iova_domain_init_rcaches_default(struct iova_domain *iovad)
->> +{
->> +	return iova_domain_init_rcaches(iovad, 0);
->> +}
->> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches_default);
->>   
->>   /*
->>    * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
->> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
->> index 6daa3978d290..3a2acef98a4a 100644
->> --- a/drivers/vdpa/vdpa_user/iova_domain.c
->> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
->> @@ -514,12 +514,12 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->>   	spin_lock_init(&domain->iotlb_lock);
->>   	init_iova_domain(&domain->stream_iovad,
->>   			PAGE_SIZE, IOVA_START_PFN);
->> -	ret = iova_domain_init_rcaches(&domain->stream_iovad);
->> +	ret = iova_domain_init_rcaches_default(&domain->stream_iovad);
->>   	if (ret)
->>   		goto err_iovad_stream;
->>   	init_iova_domain(&domain->consistent_iovad,
->>   			PAGE_SIZE, bounce_pfns);
->> -	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
->> +	ret = iova_domain_init_rcaches_default(&domain->consistent_iovad);
->>   	if (ret)
->>   		goto err_iovad_consistent;
->>   
->> diff --git a/include/linux/iova.h b/include/linux/iova.h
->> index 02f7222fa85a..56281434ce0c 100644
->> --- a/include/linux/iova.h
->> +++ b/include/linux/iova.h
->> @@ -95,7 +95,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
->>   	unsigned long pfn_hi);
->>   void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->>   	unsigned long start_pfn);
->> -int iova_domain_init_rcaches(struct iova_domain *iovad);
->> +int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len);
->> +int iova_domain_init_rcaches_default(struct iova_domain *iovad);
->>   struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
->>   void put_iova_domain(struct iova_domain *iovad);
->>   #else
->>
-> 
-
+Paolo

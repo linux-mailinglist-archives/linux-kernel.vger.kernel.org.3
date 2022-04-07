@@ -2,72 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039754F7D5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B244F7D5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244603AbiDGK7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S244610AbiDGK7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiDGK7S (ORCPT
+        with ESMTP id S231424AbiDGK7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:59:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228DBD0825;
-        Thu,  7 Apr 2022 03:57:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649329036;
+        Thu, 7 Apr 2022 06:59:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE761C111
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649329060;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cK/2bkoA02UyzP4mMhmuqQ/iW/61hv9fi4vsvs8ceCU=;
-        b=TfW9zlJRKaDll5Jy+B33MGMmjIDAdRs0zOJo6bfLMzAlQ04oXktXoRg+amsZx1WleMd8uP
-        FenTKCJ1Y39Hs9fGhZ0V+SOLXFxeUF0CLOOSXXZNUEDajKsAfWCu7WT183lMnZ/eJHh+JY
-        vFa79b7fOQVCDjLAwFqj8c+GBykf+o0hBiab2B8JGEMA7lMq9OJBi4kV6mdNdcbR8lKxbg
-        jTSflHsb1/Q2IA4KZLJEJ7+FM2C8m23OHXhAfSedfCGD/ElJ1WOIrDDoqE5KX+hNUjhvRz
-        PCxFnIsyl00yXApO4+Nw5NXjxpuQEJIHjRxuWakNwnv/HeuCxlhCR3Z/dVuvDA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649329036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cK/2bkoA02UyzP4mMhmuqQ/iW/61hv9fi4vsvs8ceCU=;
-        b=h6JLYSTQ62JWr8RAJ7YLStxO5ydQ6a5Fd3Yg89BAmXhr8wypFathLq3Ks7YDGJt6nHI1ew
-        26gZ4oPMOYbQ05BQ==
-To:     Liao Chang <liaochang1@huawei.com>, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, liaochang1@huawei.com,
-        clg@kaod.org, nitesh@redhat.com, edumazet@google.com,
-        peterz@infradead.org, joshdon@google.com, masahiroy@kernel.org,
-        nathan@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        gustavoars@kernel.org, arnd@arndb.de, chris@chrisdown.name,
-        dmitry.torokhov@gmail.com, linux@rasmusvillemoes.dk,
-        daniel@iogearbox.net, john.ogness@linutronix.de, will@kernel.org,
-        dave@stgolabs.net, frederic@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        heying24@huawei.com, guohanjun@huawei.com, weiyongjun1@huawei.com
-Subject: Re: [RFC 0/3] softirq: Introduce softirq throttling
-In-Reply-To: <20220406025241.191300-1-liaochang1@huawei.com>
-References: <20220406025241.191300-1-liaochang1@huawei.com>
-Date:   Thu, 07 Apr 2022 12:57:15 +0200
-Message-ID: <87bkxdjh4k.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OODoJ8pFOZGJN2UYeqJECfB5fJd3ylT7ksI+gG/N4Z4=;
+        b=Ug3nTSQPvuBJe0BGXqZ0iZdwtyfHjqBSKN96ahqpU/HPG/HJ9M7Q4Bej/MgDXdH4d3OnBe
+        2NOSM7Fh9p72dkSgzIBUQiepvKjz0Zt5YnqlHcvj8I9ba5l6XdnFSluZ4cfGfC2/DAimsb
+        qM17DshKaylkaMmh+ChnwXFUc3OdMYM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-569-24LuU1uEPFiGVMyNxK409A-1; Thu, 07 Apr 2022 06:57:32 -0400
+X-MC-Unique: 24LuU1uEPFiGVMyNxK409A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D71D4100BAA7;
+        Thu,  7 Apr 2022 10:57:31 +0000 (UTC)
+Received: from kate-fedora.redhat.com (unknown [10.2.16.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E290E407DEC9;
+        Thu,  7 Apr 2022 10:57:28 +0000 (UTC)
+From:   Kate Hsuan <hpa@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+        Kate Hsuan <hpa@redhat.com>
+Subject: [PATCH v2] staging: media: ipu3: Fix AWB x_start position when rightmost stripe is used
+Date:   Thu,  7 Apr 2022 18:57:24 +0800
+Message-Id: <20220407105724.308930-1-hpa@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06 2022 at 10:52, Liao Chang wrote:
+A not calibrated x_start setting would result in an incorrect AWB location
+configuration on a sensor when only the rightmost stripe is used. x_start
+should be calibrated by subtracting the stripe offset to set the coordinate
+to the correct position on the second stripe.
 
-Why are you sending this twice within a few hours? See
-Documentation/process/
+Signed-off-by: Kate Hsuan <hpa@redhat.com>
+---
+Correct the patch. The correction should be awb, not awb_fr.
+---
+ drivers/staging/media/ipu3/ipu3-css-params.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Thanks,
+diff --git a/drivers/staging/media/ipu3/ipu3-css-params.c b/drivers/staging/media/ipu3/ipu3-css-params.c
+index f84cf11358a8..76ad802d694e 100644
+--- a/drivers/staging/media/ipu3/ipu3-css-params.c
++++ b/drivers/staging/media/ipu3/ipu3-css-params.c
+@@ -2636,6 +2636,17 @@ int imgu_css_cfg_acc(struct imgu_css *css, unsigned int pipe,
+ 	    acc->stripe.down_scaled_stripes[1].offset + min_overlap) {
+ 		/* Enable only for rightmost stripe, disable left */
+ 		acc->awb.stripes[0].rgbs_thr_b &= ~IPU3_UAPI_AWB_RGBS_THR_B_EN;
++
++		acc->awb.stripes[1].grid.x_start =
++			(acc->awb.stripes[1].grid.x_start -
++			 acc->stripe.down_scaled_stripes[1].offset) &
++			IPU3_UAPI_GRID_START_MASK;
++
++		b_w_log2 = acc->awb.stripes[1].grid.block_width_log2;
++		acc->awb.stripes[1].grid.x_end =
++			imgu_css_grid_end(acc->awb.stripes[1].grid.x_start,
++					  acc->awb.stripes[1].grid.width,
++					  b_w_log2);
+ 	} else if (acc->awb.config.grid.x_end <=
+ 		   acc->stripe.bds_out_stripes[0].width - min_overlap) {
+ 		/* Enable only for leftmost stripe, disable right */
+-- 
+2.35.1
 
-        tglx

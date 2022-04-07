@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957C24F8A33
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3910C4F8927
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbiDGVl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S231974AbiDGVsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiDGVlX (ORCPT
+        with ESMTP id S231963AbiDGVr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:41:23 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 578ECFD6E9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:39:21 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-320-WR3U6Ba6MeKh1xc75li2gw-1; Thu, 07 Apr 2022 22:39:18 +0100
-X-MC-Unique: WR3U6Ba6MeKh1xc75li2gw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 7 Apr 2022 22:39:17 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 7 Apr 2022 22:39:17 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nick Desaulniers' <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-CC:     "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: RE: [PATCH 6/7] kbuild: make *.mod not depend on *.o
-Thread-Topic: [PATCH 6/7] kbuild: make *.mod not depend on *.o
-Thread-Index: AQHYSqlwlFlZ8XvVlkmR3e+Fu9qwr6zk+UXQ
-Date:   Thu, 7 Apr 2022 21:39:16 +0000
-Message-ID: <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
-References: <20220406153023.500847-1-masahiroy@kernel.org>
- <20220406153023.500847-7-masahiroy@kernel.org>
- <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com>
-In-Reply-To: <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 7 Apr 2022 17:47:58 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4996DDB4A1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:45:55 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id E2378100486E6
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:45:54 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id cZwwnApAHb2WGcZwwnUTBv; Thu, 07 Apr 2022 21:45:54 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=JN7+D+Gb c=1 sm=1 tr=0 ts=624f5b92
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LA+Ldue742tnPKrZ7OYb6+pwjpCKYUk2X8FrA2E3xM4=; b=38YlYpV5SKjvofgTyrhvQA+pfR
+        5H+6Nb3UjFi5GDUdvYS5KvUuz7pXxWXjP2MoonQXOCtYTJB5A238ajLW4F5kBv3ogPYflTAqmB95U
+        Q2iWd2vm4OZcYkTfymIlnLgMh04h3Fg/GxyFA75G4eyHXyXpuqF33JqfLwHUvZyDsiV85R0usc0c5
+        +v4b5MxM7uyPLf6ORwTwQAAtBdfiQMn93l2mK1835uLcJoC0+cJesokWUjGUFk+dMJp5DNsAHjDPt
+        RKpmDx4t/C3Gda9NwmgjxnAQ1USqzIf6TteuSygwr4SzYfC1Wu8P+1jCsMhK0QPQ44t4jHoU8ETU+
+        WKD212Jg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36566 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1ncZwv-000DMD-KT; Thu, 07 Apr 2022 15:45:53 -0600
+Subject: Re: [PATCH 5.15 000/911] 5.15.33-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220406133055.820319940@linuxfoundation.org>
+In-Reply-To: <20220406133055.820319940@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <75067e12-9501-8603-b008-24284f47f8c0@w6rz.net>
+Date:   Thu, 7 Apr 2022 14:45:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ncZwv-000DMD-KT
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36566
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwNyBBcHJpbCAyMDIyIDE4OjU5DQo+IA0K
-PiBPbiBXZWQsIEFwciA2LCAyMDIyIGF0IDg6MzEgQU0gTWFzYWhpcm8gWWFtYWRhIDxtYXNhaGly
-b3lAa2VybmVsLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiBUaGUgZGVwZW5kZW5jeQ0KPiA+DQo+ID4g
-ICAgICQob2JqKS8lLm1vZDogJChvYmopLyUkKG1vZC1wcmVsaW5rLWV4dCkubw0KPiA+DQo+ID4g
-Li4uIGV4aXN0cyBiZWNhdXNlICoubW9kIGZpbGVzIHByZXZpb3VzbHkgY29udGFpbmVkIHVuZGVm
-aW5lZCBzeW1ib2xzLA0KPiA+IHdoaWNoIGFyZSBjb21wdXRlZCBmcm9tICoubyBmaWxlcyB3aGVu
-IENPTkZJR19UUklNX1VOVVNFRF9LU1lNUz15Lg0KPiA+DQo+ID4gTm93IHRoYXQgdGhlIHVuZGVm
-aW5lZCBzeW1ib2xzIGFyZSBwdXQgaW50byBzZXBhcmF0ZSAqLnVzeW1zIGZpbGVzLA0KPiA+IHRo
-ZXJlIGlzIG5vIHJlYXNvbiB0byBtYWtlICoubW9kIGRlcGVuZCBvbiAqLm8gZmlsZXMuDQo+ID4N
-Cj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3Jn
-Pg0KPiA+IC0tLQ0KPiA+DQo+ID4gIE1ha2VmaWxlICAgICAgICAgICAgICAgfCAzICsrLQ0KPiA+
-ICBzY3JpcHRzL01ha2VmaWxlLmJ1aWxkIHwgNSArKy0tLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQs
-IDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9N
-YWtlZmlsZSBiL01ha2VmaWxlDQo+ID4gaW5kZXggODJlZTg5MzkwOWU5Li5lOTE1YWFjZDAyYjAg
-MTAwNjQ0DQo+ID4gLS0tIGEvTWFrZWZpbGUNCj4gPiArKysgYi9NYWtlZmlsZQ0KPiA+IEBAIC0x
-NzkyLDcgKzE3OTIsOCBAQCBpZmRlZiBzaW5nbGUtYnVpbGQNCj4gPg0KPiA+ICAjIC5rbyBpcyBz
-cGVjaWFsIGJlY2F1c2UgbW9kcG9zdCBpcyBuZWVkZWQNCj4gPiAgc2luZ2xlLWtvIDo9ICQoc29y
-dCAkKGZpbHRlciAlLmtvLCAkKE1BS0VDTURHT0FMUykpKQ0KPiA+IC1zaW5nbGUtbm8ta28gOj0g
-JChzb3J0ICQocGF0c3Vic3QgJS5rbywlLm1vZCwgJChNQUtFQ01ER09BTFMpKSkNCj4gPiArc2lu
-Z2xlLW5vLWtvIDo9ICQoZmlsdGVyLW91dCAkKHNpbmdsZS1rbyksICQoTUFLRUNNREdPQUxTKSkg
-XA0KPiA+ICsgICAgICAgICAgICAgICAkKGZvcmVhY2ggeCwgbyBtb2QsICQocGF0c3Vic3QgJS5r
-bywgJS4keCwgJChzaW5nbGUta28pKSkNCj4gDQo+IEknbSBvbiBib2FyZCB3aXRoIHRoaXMgcGF0
-Y2gsIGFuZCB0aGUgb3ZlcmFsbCBnb2FsIHdpdGggdGhlIHNlcmllcy4gTXkNCj4gYnJhaW4gaXMg
-aGF2aW5nIGEgaGFyZCB0aW1lIHBhcnNpbmcgYG8gbW9kYCB0aG91Z2guIENhbiB5b3Ugd2FsayBt
-ZQ0KPiB0aHJvdWdoIHRoYXQ/IEFyZSB0aG9zZSB0YXJnZXRzIGZvciAubyBhbmQgLm1vZCBmaWxl
-cywgcmVzcGVjdGl2ZWx5Pw0KDQpJIHRoaW5rIEknZCBkbzoNCnNpbmdsZS1uby1rbyA6PSAkKGZp
-bHRlci1vdXQgJChzaW5nbGUta28pLCAkKE1BS0VDTURHT0FMUykpDQpzaW5nbGUtbm8ta28gKz0g
-JChwYXRzdWJzdCAlLmtvLCAlLm8sICQoc2luZ2xlLWtvKSkNCnNpbmdsZS1uby1rbyArPSAkKHBh
-dHN1YnN0ICUua28sICUubW9kLCAkKHNpbmdsZS1rbykpDQoNCkFsdGhvdWdoIHlvdSBjYW4gdXNl
-IHRoZSBzaW1wbGVyIFNZU1YgbWFrZSBzdWZmaXggc3Vic3RpdHV0aW9uIHN5bnRheDoNCnNpbmds
-ZS1uby1rbyArPSAkKHNpbmdsZS1rbzoua289Lm8pICQoc2luZ2xlLWtvOi5rbz0ubW9kKQ0KDQoJ
-RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
-dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
-OTczODYgKFdhbGVzKQ0K
+On 4/6/22 6:44 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.33 release.
+> There are 911 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.33-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
 

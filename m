@@ -2,51 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7A64F782A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6504F7828
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242312AbiDGHyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        id S242325AbiDGHyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiDGHyO (ORCPT
+        with ESMTP id S242318AbiDGHyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:54:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BC418C0E4
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:52:14 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8BC90210EF;
-        Thu,  7 Apr 2022 07:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649317933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zWmpc092tOcya/29a+FKCu5SoYVLPEQ0a1ocdxoIgpU=;
-        b=ljLPYDRFHHB+SzzZTc9hlSm2Gj/QtdkeLU18ocSv7uYFV6dW9uZk/9g/R/g1FwXuaICviB
-        Rl5iRgu0TJG7LzIwQYdWcC/kjxlZDS9D+wWT7bpxhDTrMQUmd24o2ppC+rkMYmn/yEPb0o
-        /sgQLKx5JWJYsmQPKGV/RVhFqpSpeLE=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D78DAA3B87;
-        Thu,  7 Apr 2022 07:52:07 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 09:52:11 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     ying.huang@intel.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
-Message-ID: <Yk6YKwZR5JjBokOs@dhcp22.suse.cz>
-References: <20220407020953.475626-1-shy828301@gmail.com>
+        Thu, 7 Apr 2022 03:54:23 -0400
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E21C31B84ED;
+        Thu,  7 Apr 2022 00:52:23 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id 014CC1E80D17;
+        Thu,  7 Apr 2022 15:52:06 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WxWf7QKsoZzt; Thu,  7 Apr 2022 15:52:03 +0800 (CST)
+Received: from ubuntu.localdomain (unknown [101.228.248.165])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id 3F7C61E80C8C;
+        Thu,  7 Apr 2022 15:52:02 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] NFS: remove unnecessary type castings
+Date:   Thu,  7 Apr 2022 00:52:16 -0700
+Message-Id: <20220407075216.116940-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407020953.475626-1-shy828301@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,117 +46,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc Aaron who has introduced the per node swap changes]
+remove unnecessary casts.
 
-On Wed 06-04-22 19:09:53, Yang Shi wrote:
-> The swap devices are linked to per node priority lists, the swap device
-> closer to the node has higher priority on that node's priority list.
-> This is supposed to improve I/O latency, particularly for some fast
-> devices.  But the current code gets nid by calling numa_node_id() which
-> actually returns the nid that the reclaimer is running on instead of the
-> nid that the page belongs to.
-> 
-> Pass the page's nid dow to get_swap_pages() in order to pick up the
-> right swap device.  But it doesn't work for the swap slots cache which
-> is per cpu.  We could skip swap slots cache if the current node is not
-> the page's node, but it may be overkilling. So keep using the current
-> node's swap slots cache.  The issue was found by visual code inspection
-> so it is not sure how much improvement could be achieved due to lack of
-> suitable testing device.  But anyway the current code does violate the
-> design.
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+---
+ fs/nfs/inode.c      | 6 +++---
+ fs/nfs/nfs42xattr.c | 2 +-
+ fs/nfs/nfs4idmap.c  | 4 ++--
+ fs/nfs/nfs4proc.c   | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Do you have any perf numbers for this change?
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index 7eb3b08d702f..c1d0f10cbc67 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -318,7 +318,7 @@ struct nfs_find_desc {
+ static int
+ nfs_find_actor(struct inode *inode, void *opaque)
+ {
+-	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
++	struct nfs_find_desc	*desc = opaque;
+ 	struct nfs_fh		*fh = desc->fh;
+ 	struct nfs_fattr	*fattr = desc->fattr;
  
-> Cc: Huang Ying <ying.huang@intel.com>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  include/linux/swap.h | 3 ++-
->  mm/swap_slots.c      | 7 ++++---
->  mm/swapfile.c        | 5 ++---
->  3 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 27093b477c5f..e442cf6b61ea 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -497,7 +497,8 @@ extern void si_swapinfo(struct sysinfo *);
->  extern swp_entry_t get_swap_page(struct page *page);
->  extern void put_swap_page(struct page *page, swp_entry_t entry);
->  extern swp_entry_t get_swap_page_of_type(int);
-> -extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size);
-> +extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size,
-> +			  int node);
->  extern int add_swap_count_continuation(swp_entry_t, gfp_t);
->  extern void swap_shmem_alloc(swp_entry_t);
->  extern int swap_duplicate(swp_entry_t);
-> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-> index 2b5531840583..a1c5cf6a4302 100644
-> --- a/mm/swap_slots.c
-> +++ b/mm/swap_slots.c
-> @@ -264,7 +264,7 @@ static int refill_swap_slots_cache(struct swap_slots_cache *cache)
->  	cache->cur = 0;
->  	if (swap_slot_cache_active)
->  		cache->nr = get_swap_pages(SWAP_SLOTS_CACHE_SIZE,
-> -					   cache->slots, 1);
-> +					   cache->slots, 1, numa_node_id());
->  
->  	return cache->nr;
->  }
-> @@ -305,12 +305,13 @@ swp_entry_t get_swap_page(struct page *page)
->  {
->  	swp_entry_t entry;
->  	struct swap_slots_cache *cache;
-> +	int nid = page_to_nid(page);
->  
->  	entry.val = 0;
->  
->  	if (PageTransHuge(page)) {
->  		if (IS_ENABLED(CONFIG_THP_SWAP))
-> -			get_swap_pages(1, &entry, HPAGE_PMD_NR);
-> +			get_swap_pages(1, &entry, HPAGE_PMD_NR, nid);
->  		goto out;
->  	}
->  
-> @@ -342,7 +343,7 @@ swp_entry_t get_swap_page(struct page *page)
->  			goto out;
->  	}
->  
-> -	get_swap_pages(1, &entry, 1);
-> +	get_swap_pages(1, &entry, 1, nid);
->  out:
->  	if (mem_cgroup_try_charge_swap(page, entry)) {
->  		put_swap_page(page, entry);
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 63c61f8b2611..151fffe0fd60 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1036,13 +1036,13 @@ static void swap_free_cluster(struct swap_info_struct *si, unsigned long idx)
->  	swap_range_free(si, offset, SWAPFILE_CLUSTER);
->  }
->  
-> -int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
-> +int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size,
-> +		   int node)
->  {
->  	unsigned long size = swap_entry_size(entry_size);
->  	struct swap_info_struct *si, *next;
->  	long avail_pgs;
->  	int n_ret = 0;
-> -	int node;
->  
->  	/* Only single cluster request supported */
->  	WARN_ON_ONCE(n_goal > 1 && size == SWAPFILE_CLUSTER);
-> @@ -1060,7 +1060,6 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
->  	atomic_long_sub(n_goal * size, &nr_swap_pages);
->  
->  start_over:
-> -	node = numa_node_id();
->  	plist_for_each_entry_safe(si, next, &swap_avail_heads[node], avail_lists[node]) {
->  		/* requeue si to after same-priority siblings */
->  		plist_requeue(&si->avail_lists[node], &swap_avail_heads[node]);
-> -- 
-> 2.26.3
-
+@@ -336,7 +336,7 @@ nfs_find_actor(struct inode *inode, void *opaque)
+ static int
+ nfs_init_locked(struct inode *inode, void *opaque)
+ {
+-	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
++	struct nfs_find_desc	*desc = opaque;
+ 	struct nfs_fattr	*fattr = desc->fattr;
+ 
+ 	set_nfs_fileid(inode, fattr->fileid);
+@@ -2271,7 +2271,7 @@ static inline void nfs4_init_once(struct nfs_inode *nfsi)
+ 
+ static void init_once(void *foo)
+ {
+-	struct nfs_inode *nfsi = (struct nfs_inode *) foo;
++	struct nfs_inode *nfsi = foo;
+ 
+ 	inode_init_once(&nfsi->vfs_inode);
+ 	INIT_LIST_HEAD(&nfsi->open_files);
+diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
+index ad3405c64b9e..34245aa7e9de 100644
+--- a/fs/nfs/nfs42xattr.c
++++ b/fs/nfs/nfs42xattr.c
+@@ -981,7 +981,7 @@ nfs4_xattr_entry_count(struct shrinker *shrink, struct shrink_control *sc)
+ 
+ static void nfs4_xattr_cache_init_once(void *p)
+ {
+-	struct nfs4_xattr_cache *cache = (struct nfs4_xattr_cache *)p;
++	struct nfs4_xattr_cache *cache = p;
+ 
+ 	spin_lock_init(&cache->listxattr_lock);
+ 	atomic_long_set(&cache->nent, 0);
+diff --git a/fs/nfs/nfs4idmap.c b/fs/nfs/nfs4idmap.c
+index f331866dd418..3cba5a225f5f 100644
+--- a/fs/nfs/nfs4idmap.c
++++ b/fs/nfs/nfs4idmap.c
+@@ -585,7 +585,7 @@ static int nfs_idmap_legacy_upcall(struct key *authkey, void *aux)
+ 	struct request_key_auth *rka = get_request_key_auth(authkey);
+ 	struct rpc_pipe_msg *msg;
+ 	struct idmap_msg *im;
+-	struct idmap *idmap = (struct idmap *)aux;
++	struct idmap *idmap = aux;
+ 	struct key *key = rka->target_key;
+ 	int ret = -ENOKEY;
+ 
+@@ -668,7 +668,7 @@ idmap_pipe_downcall(struct file *filp, const char __user *src, size_t mlen)
+ {
+ 	struct request_key_auth *rka;
+ 	struct rpc_inode *rpci = RPC_I(file_inode(filp));
+-	struct idmap *idmap = (struct idmap *)rpci->private;
++	struct idmap *idmap = rpci->private;
+ 	struct key *authkey;
+ 	struct idmap_msg im;
+ 	size_t namelen_in;
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index e3f5b380cefe..4131d27c382d 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -6564,7 +6564,7 @@ static void nfs4_delegreturn_prepare(struct rpc_task *task, void *data)
+ 	struct nfs4_delegreturndata *d_data;
+ 	struct pnfs_layout_hdr *lo;
+ 
+-	d_data = (struct nfs4_delegreturndata *)data;
++	d_data = data;
+ 
+ 	if (!d_data->lr.roc && nfs4_wait_on_layoutreturn(d_data->inode, task)) {
+ 		nfs4_sequence_done(task, &d_data->res.seq_res);
+@@ -8808,7 +8808,7 @@ int nfs4_proc_exchange_id(struct nfs_client *clp, const struct cred *cred)
+ void nfs4_test_session_trunk(struct rpc_clnt *clnt, struct rpc_xprt *xprt,
+ 			    void *data)
+ {
+-	struct nfs4_add_xprt_data *adata = (struct nfs4_add_xprt_data *)data;
++	struct nfs4_add_xprt_data *adata = data;
+ 	struct rpc_task *task;
+ 	int status;
+ 
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+

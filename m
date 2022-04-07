@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7C74F8674
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E5C4F867A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346536AbiDGRqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S1346547AbiDGRqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346533AbiDGRqS (ORCPT
+        with ESMTP id S1346548AbiDGRqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:46:18 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED46B22C1C1;
-        Thu,  7 Apr 2022 10:44:17 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id w17-20020a056830111100b005b22c584b93so4376715otq.11;
-        Thu, 07 Apr 2022 10:44:17 -0700 (PDT)
+        Thu, 7 Apr 2022 13:46:32 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADD622C8DC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:44:31 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s137so2829976pgs.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=iOmaGvSY3sNiCGul1zIbS6aLQalKU4+HuWoR1U7SG0M=;
-        b=hsDUetQPYoAK5U6TbthwBdVp+Xh9SKjYl1nBV1wTCzjUl+DY5aDvgwD1yvu5ey2aj0
-         4Lkl0djKYjy3n0xvpQnhKLKfSFO97Akqe/EKliMA+RihY8rpphxqVrGSDhHKM8Qoi/X9
-         SZuOADlbR6xPW4O2bZTbrnNXvRWahzlycyi58hekpJZc1etmdYdBRmr7YoHPaVanO73m
-         BwvFuZHDYJVTn33IwKjAhweICLkYhpJ4Wl8xqoOzrDWnCWZU4CnEKVYxuj62C/OLjuLy
-         TKuZhtLd7ln2hsRjb+T0kSsJfbO08JD7g4iYPRCcDg71UsHBQlz2wVL0DKi4Cz7DIGW8
-         0ddw==
+        bh=qtoCtjXmVQ0hZo+pdgUMIKZ+OC7BYRWQN9tD6eVQtks=;
+        b=Ev+c+8F1X8VSZoYa+u+L7bRSkLtSGbgtXQMchuEWerfAy2WqXdaO4e7p28uSMMtQgm
+         pDR0dADnMTGQo9FfSSyJnIzwK0HUiHup+PIVo4DZ+9RHdkJ/CJuJ5oOU+jL9mYIUn/1O
+         DG1Pc7TDGx35uQZx8en4XtMgq2PaZvKjP1Qkq2WqDUuaROtkdhl6WNRe5GMPm/4Z5qdI
+         42QrrKeAzAS/UtpN0G0OQZ2GG+Ah2MGybWoH7cuGo/wEnPyJeo0/IFMppHHGsu6w6e3j
+         At3TAzfOxOs3r1wCZK6eaw2NPU53IOz5maScWNTiw7PapkK7/zSMaeTuKG8eEgSr1HGN
+         YRXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=iOmaGvSY3sNiCGul1zIbS6aLQalKU4+HuWoR1U7SG0M=;
-        b=HpU65Xfnr9NyeiMAkMwug5tHSN6nW+G2tLdNGHpxwd4lUFzZPIwPeCD2RMHWsQPgtp
-         c1pzCdWna9jy5YMt3QfjXLRMjLpW7/nIh4+p0cIb+3KTo9eU4r0gOyFpXRfix01njAGp
-         6F7/62lJa7YjrkfeMxMF87KVkzWVL/afcaBt61cw783CdCxXPrDMbdL1pJRVk76I3/uk
-         40qTvB4yVb8zfgwCbroupanT/XaNezO1xSIBpC3M+JdBshheNSGPlV+abz6FI4xDexsZ
-         z5fPXdMCHkCWb6fGaxgu0miv47hFbgqSyvsln4oig2omxaeCsHhF73O+dBUg9h2KZEvA
-         Iygg==
-X-Gm-Message-State: AOAM531PvZu+OdHxhmm9eO8EVQj6jEKMAvYa6wRCtv2ogrJD4io5QPAb
-        O8npo9d6muabv/1hFzdXMFw=
-X-Google-Smtp-Source: ABdhPJwVdHTvCPJEdmoLOVj2BbC0PrkyGlmpkbTU8prjKmhtnb7PXJpSDNqK8RWTD0xUijtU4Xfepg==
-X-Received: by 2002:a9d:6447:0:b0:5b2:35ae:7ad6 with SMTP id m7-20020a9d6447000000b005b235ae7ad6mr5138430otl.275.1649353454994;
-        Thu, 07 Apr 2022 10:44:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f50-20020a9d03b5000000b005c959dd643csm8244683otf.3.2022.04.07.10.44.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qtoCtjXmVQ0hZo+pdgUMIKZ+OC7BYRWQN9tD6eVQtks=;
+        b=pA7nOcD0tHCDdgDU0VD87tEMafME057qdAH5FEhXuvEMhIITvL1beL6RALB6PopEvp
+         hX9tNYeMJgtyiedqGRK/BJmkUixxjNA6IZh3Ger4ZtVmKGs67zCgZ8isZOOE0DI6UtGA
+         VEEUpFg2EIRPi0bDZ5mJexeRCjFTBakWOYYniTOqTirde6F0W9G39zz7VhzcvyL65FRt
+         0ZsdHohdCA+XIdx69O5oF+vxb6K+nWhy5G/z9FdCiUXbIect6zjinu/0BZNva6Dl7M1k
+         nlSJ6WlF7bnd40wUD9MvO5jnApvhHMhqQ04j1fXqPk1DYauKAaUglLVuODV4jWytgYVs
+         V5xg==
+X-Gm-Message-State: AOAM530R7/gikinge/H8/BsrzgsiMmq9XQgE0M4tNMPBw7CS3tFHl9z4
+        /xHrsJSThKjCho7cLaxg78tTNA==
+X-Google-Smtp-Source: ABdhPJy7qfGblefp8sNr9ibdBDFyvIk0blXRzO3MeBDTAHyb8i0bLadwNu//+AOg4gqqmwUjNPEHww==
+X-Received: by 2002:a63:338e:0:b0:398:4302:c503 with SMTP id z136-20020a63338e000000b003984302c503mr12329013pgz.217.1649353469205;
+        Thu, 07 Apr 2022 10:44:29 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k187-20020a636fc4000000b003983a01b896sm19417131pgc.90.2022.04.07.10.44.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:44:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 7 Apr 2022 10:44:12 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 0000/1014] 5.16.19-rc2 review
-Message-ID: <20220407174412.GB1827081@roeck-us.net>
-References: <20220406133109.570377390@linuxfoundation.org>
+        Thu, 07 Apr 2022 10:44:28 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 17:44:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/31] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+Message-ID: <Yk8i+A3E9/JL96A2@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-4-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406133109.570377390@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220407155645.940890-4-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:44:28PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.19 release.
-> There are 1014 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
-> 
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> @@ -1840,15 +1891,47 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
+>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> -
+> -	kvm_vcpu_flush_tlb_guest(vcpu);
+> -
+> -	if (!hv_vcpu)
+> +	struct kvm_vcpu_hv_tlbflush_entry *entry;
+> +	int read_idx, write_idx;
+> +	u64 address;
+> +	u32 count;
+> +	int i, j;
+> +
+> +	if (!tdp_enabled || !hv_vcpu) {
+> +		kvm_vcpu_flush_tlb_guest(vcpu);
+>  		return;
+> +	}
+>  
+>  	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
+> +	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
+> +
+> +	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
+> +	smp_rmb();
+>  
+> -	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+> +	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
+> +		entry = &tlb_flush_ring->entries[i];
+> +
+> +		if (entry->flush_all)
+> +			goto out_flush_all;
+> +
+> +		/*
+> +		 * Lower 12 bits of 'address' encode the number of additional
+> +		 * pages to flush.
+> +		 */
+> +		address = entry->addr & PAGE_MASK;
+> +		count = (entry->addr & ~PAGE_MASK) + 1;
+> +		for (j = 0; j < count; j++)
+> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
+> +	}
+> +	++vcpu->stat.tlb_flush;
+> +	goto out_empty_ring;
+> +
+> +out_flush_all:
+> +	kvm_vcpu_flush_tlb_guest(vcpu);
+> +
+> +out_empty_ring:
+> +	tlb_flush_ring->read_idx = write_idx;
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Does this need WRITE_ONCE?  My usual "I suck at memory ordering" disclaimer applies.

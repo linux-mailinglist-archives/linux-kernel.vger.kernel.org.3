@@ -2,154 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A25C4F7FF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547E64F8001
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343591AbiDGNF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S1343576AbiDGNGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245710AbiDGNEz (ORCPT
+        with ESMTP id S245710AbiDGNFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:04:55 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFC425DA87
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:02:39 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so4286748wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 06:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=zePmYqnoiJyf+1Lf8/w9HZZrf5s74LQRywQYpmtC4Uo=;
-        b=aOtDhxVV4qjk0xfUuYqHziiA8VGeTKF1HElejfxHi6BQbXmmCkiv8kWyP0iMKE1eoj
-         I6Qa3hAe/L+8kDlFT7sD6wIyZV9D52crpKAVD4J1fKpWNCe+rvEvnhxDk7S9hUxds/Jr
-         pAvnhcZA7EdhNUp7iKILsao9UF+gP3bfXsEevBuMX0XybZIxieBglRU55IH0Wms2TPRx
-         WLkUamhH7AYoQeh7/RoUIIXBdAChNILAi8Bm5HnYDa6XOjyH2xmKH1xZdaAx3SVjJIbo
-         AUUehMr2RCeewHPVIj+Ek0GLYfs0rKDz6hFZlR7UK6phFEWaOeFRKRhJWnsoB4jTjDbF
-         ilNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=zePmYqnoiJyf+1Lf8/w9HZZrf5s74LQRywQYpmtC4Uo=;
-        b=4MOIKJ8nnFNBIfFGhzekgk7+0Qrpmg2wyUEz0kDgI7dQJD51Wp5SiTvLtrHfn+VEX0
-         CSM8flQBQFJdG+5UpzCinfB2+8JK6zGkcCWIM15x3ao7nns+24NKCxAYIqbaG2AAMtqk
-         EhBOJvN98UdeoNgVr62ULqFtcXKEx4rYJg9EK4RfllTbobbSheZBRmCNksBU7y/uVnSw
-         jcsO1Sr1ZRGWm6GDFG7lVbrqjrsTxuQgzjbqaRaVj6YXP2h+AdREYQZ9N8F0KlUxnbJ+
-         +Ke+778AoaGnlaEnB4hZCiD24LMIZkc4xYGO64nvRZ8gRjCR9bPTkhtdnOEgjDWkEbGS
-         WItg==
-X-Gm-Message-State: AOAM533hMpSOjlfkPd7QX7iYaZdL5OcXEKY/KqprQIk3WRub2wnj6kCk
-        WJgN2Xi61PIQNn2rZT/2iPI=
-X-Google-Smtp-Source: ABdhPJwyfNjZTadB4RQVa25gJ8ziL0lzUyqXFZTMngsm8aIgnegzsop9odb48NysuAyExw/+jjJyQQ==
-X-Received: by 2002:a05:600c:1c8d:b0:38c:db69:5759 with SMTP id k13-20020a05600c1c8d00b0038cdb695759mr12503401wms.204.1649336557820;
-        Thu, 07 Apr 2022 06:02:37 -0700 (PDT)
-Received: from [192.168.8.100] ([197.210.8.128])
-        by smtp.gmail.com with ESMTPSA id 3-20020a5d47a3000000b0020412ba45f6sm20614453wrb.8.2022.04.07.06.02.31
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Thu, 07 Apr 2022 06:02:36 -0700 (PDT)
-Message-ID: <624ee0ec.1c69fb81.402d4.61a5@mx.google.com>
-From:   John Madueke <harunamusa1026@gmail.com>
-X-Google-Original-From: "John Madueke" <info@agromail.com>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 7 Apr 2022 09:05:51 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1363025B449;
+        Thu,  7 Apr 2022 06:03:45 -0700 (PDT)
+X-UUID: 69fa78a6114c440dae54c1391fa946dd-20220407
+X-UUID: 69fa78a6114c440dae54c1391fa946dd-20220407
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1895093916; Thu, 07 Apr 2022 21:03:41 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 7 Apr 2022 21:03:41 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 7 Apr
+ 2022 21:03:40 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Apr 2022 21:03:40 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Kevin Hilman <khilman@baylibre.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>, <tzungbi@google.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, <cujomalainey@google.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <sound-open-firmware@alsa-project.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v7 0/1] firmware: mtk: add adsp ipc protocol for SOF
+Date:   Thu, 7 Apr 2022 21:03:37 +0800
+Message-ID: <20220407130338.28939-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Greetings, (CAN I TRUST YOU)
-To:     Recipients <info@agromail.com>
-Date:   Thu, 07 Apr 2022 14:02:24 +0100
-Reply-To: john.madu@aliyun.com
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: vanguardngr.com]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [197.210.8.128 listed in zen.spamhaus.org]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [harunamusa1026[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [harunamusa1026[at]gmail.com]
-        *  0.0 T_US_DOLLARS_3 BODY: Mentions millions of $ ($NN,NNN,NNN.NN)
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.1 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.4 MONEY_FRAUD_3 Lots of money and several fraud phrases
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *****
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings, (CAN I TRUST YOU)
+This patch provides mediatek adsp ipc support for SOF.
+ADSP IPC protocol offers (send/recv) interfaces using
+mediatek-mailbox APIs.
 
-My name is CHIMEZIE John Madueke, I got your contact from the chamber of co=
-mmerce as an accredited Investor.
-My mother, Mrs. Dieziani Alison-Madueke was the former Minister of Petroleu=
-m from April 2010 =E2=80=93 28 May 2015 Under the Administration of the for=
-mer President of Nigeria, Mr. Goodluck Ebele Johnathan.
+This patch was tested and confirmed to with SOF fw on MT8195
+cherry board.
 
-During my mother's tenure in office, she was able to acquire millions of do=
-llars through deals done with several multinational oil corporations using =
-her office as the Minister of Petroleum. A lot of these funds were invested=
- and deposited in SECURITY BANK. One of such investments is the acquisition=
- of Gold mines and bullion in excess of two hundred and fifty million dolla=
-rs ($250,000,000.00) .
+Based on matthias.bgg/linux.git, v5.18-next/soc
+changes since v6:
+- rebase to matthias.bgg/linux.git, v5.18-next/soc
+- Prefer "GPL" over "GPL v2" for MODULE_LICENSE
 
-As you can see from the current trend of events and change of Government in=
- Nigeria, the present administration and wicked enemies of my mother are wi=
-tch-hunting and accusing her of bribery and corruption. She stands to lose =
-it all if care is not taken,  all that we have suffered for. I reject it an=
-d will not stand by and watch this happen!
+changes since v5:
+- fix WARNING: modpost: missing MODULE_LICENSE() in drivers/mailbox
+  /mtk-adsp-mailbox.o. Add MODULE_LICENSE in the last line.
+- Due to WARNING: Missing or malformed SPDX-License-Identifier tag
+  in line 1 in checkpatch, we don't remove SPDX-License in line 1.
 
-Currently, my hard working mother is ill with cancer and battling for her d=
-ear life in a London hospital. As if this is not enough suffering already, =
-the British National Crime Agency has arrested her for questioning on these=
- corruption charges.
+changes since v4:
+- add error message for wrong mbox chan
 
-So read the news below:
+changes since v3:
+- rebase on v5.16-rc8
+- update reviewers
 
-http://www.vanguardngr.com/2015/10/diezani-alison-madueke-arrested-in-londo=
-n/
+changes since v2:
+- add out tag for two memory free phases
 
-I will want you to help me secure my mothers properties (fund) so that we c=
-an invest it in your Country. Can you assist me? You will be greatly reward=
-ed. I believe we can do business together...
+changes since v1:
+- add comments for mtk_adsp_ipc_send and mtk_adsp_ipc_recv
+- remove useless MODULE_LICENSE
+- change label name to out_free
 
-Please reply if you think you can be of assistance and we can establish com=
-munication. l am ready and willing to divulge more information to you upon =
-your positive response. Please let me know your thoughts.
 
-My best wishes,
+Allen-KH Cheng (1):
+  firmware: mediatek: add adsp ipc protocol interface
 
-CHIMEZIE John Madueke
-john.madu@aliyun.com
+ drivers/firmware/Kconfig                      |   1 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/mediatek/Kconfig             |   9 +
+ drivers/firmware/mediatek/Makefile            |   2 +
+ drivers/firmware/mediatek/mtk-adsp-ipc.c      | 161 ++++++++++++++++++
+ .../linux/firmware/mediatek/mtk-adsp-ipc.h    |  65 +++++++
+ 6 files changed, 239 insertions(+)
+ create mode 100644 drivers/firmware/mediatek/Kconfig
+ create mode 100644 drivers/firmware/mediatek/Makefile
+ create mode 100644 drivers/firmware/mediatek/mtk-adsp-ipc.c
+ create mode 100644 include/linux/firmware/mediatek/mtk-adsp-ipc.h
+
+-- 
+2.18.0
+

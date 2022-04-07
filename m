@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1363C4F8754
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BCD4F8759
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346965AbiDGSuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S1346978AbiDGSwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346958AbiDGSuA (ORCPT
+        with ESMTP id S233651AbiDGSwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:50:00 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6295D133668
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:47:59 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id t4so5731216pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2OeHEZDx64EG8oP0xt3lvxv4lipweyChyS0IcTq6KnI=;
-        b=RXi8AjBxjh6VVtl9LSNNrBkDo2V5rtsQX9fbYvncg96tdARjL8rbloMFzh2CYhbirF
-         o8CXs1dCnDL/xC27cvDXwWoOAntnZtgL7dlz7wSpJ4cU2Bfh//d2tzJpSkcxBVc9y/9R
-         xf0WFhO8motAdyNOcYiTBF1BJsTwTrQDvSmkyax6jl73/y5E/FAsWBzy4FYR1foI5p1/
-         VM/Ub831ejGzfxc65yZ7+6FvPhupwwwOM15xRWf6qfJGchIMeFQ1Uzl017Mpj5UVCivI
-         MRONizHwQAMJCgkK71Z9pS2NrwGkdGIy0J4eV/Ok64Oul31qdIkLAdQcb5WPZlGoFJe/
-         20Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2OeHEZDx64EG8oP0xt3lvxv4lipweyChyS0IcTq6KnI=;
-        b=0cVBS/BUN6WzS+6UEvqtoql0Dh22tTWuK/EUo4Tnb1CYo6zS+89LWuHXXADJzZ1TRj
-         MVPe8LOt1dJJmwRYyA1tQWIOe0nouSdu+yoDzjo9iBx2QbBpQjeUCZFPd6yQf82XLtvx
-         lIOT9fWhEJVlBplzfEj5LcfRmKjZeJU0la9S8eft3PewKWXTQEuVrjB2YSSHFKqNlhNS
-         uiPXvCuzVeYR0gn/gXGt0hBZ8OS9Sd4Wv1glwXvozzpFwK+TlWR3yahS1HRTxFFK+Q9X
-         VX+GOufUaFhN3u7jcP0XmEzH7Pyu0xUJaxJH1pD7JiPx+LGeH0U/EHGP35MreATre/po
-         1d/g==
-X-Gm-Message-State: AOAM5324nLwxqf6BVQMEBRszqz131p4Hjj3cu6EuziOcQDAe+f+m7tdm
-        gBTRfmoW6iV9FXsf3sAYW0ix0w==
-X-Google-Smtp-Source: ABdhPJz599fEIYbjkY/5HRqf5EtFxU5iWR3SXbcCPa8oI0rzDn415HElhVzRla/90uLDGV8DelsX0g==
-X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr15578775pfe.60.1649357278600;
-        Thu, 07 Apr 2022 11:47:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a9-20020a056a000c8900b004fb37ecc6bbsm24428974pfv.65.2022.04.07.11.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 11:47:57 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 18:47:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Thu, 7 Apr 2022 14:52:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2934F1070AA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:50:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5E59B8260F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84832C385A0;
+        Thu,  7 Apr 2022 18:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649357402;
+        bh=TAbTE0lF5EexKN7OT4x7M57eBGM9nfMRRu7XhDuXa7Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CY7Npgnd7FKGA3gbSEsqEtlyjwFcX4266dB0hKhe/xIimNF74mFoc1p5+ioGavU+o
+         vNaGZ0+J5rsL+UnPXnZ4CMQsTjXTh0KRemNqxmafuX+fwVBdTMYd3GPO797hau7Jlo
+         ZpKxsGinzrqtF/r4e1scLFiBjlA3puYz6RPWVE6sP0Qd9GcCFxCRO7UtYX6H3Rr91O
+         nkxRQ/IFvWTBFVyBUQ3i1885FEOvlkkbxi/adnepTeCIQXQp1LWAfbSBMqztipnY3W
+         IBO97sIZ1PlYuyF3wqwALgN6cNUkH85cv03E+ZdBmmGWzK1PMMPWUCEoJgDDlPncBh
+         zkHpwyIlxTAZQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1ncXCi-000Rug-4j; Thu, 07 Apr 2022 20:50:00 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     alsa-devel@alsa-project.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 16/31] KVM: nVMX: hyper-v: Direct TLB flush
-Message-ID: <Yk8x2rF/UkuXY/X2@google.com>
-References: <20220407155645.940890-1-vkuznets@redhat.com>
- <20220407155645.940890-17-vkuznets@redhat.com>
+Subject: [PATCH v5 0/4] Make headphone work on Huawei Matebook D15
+Date:   Thu,  7 Apr 2022 20:49:55 +0200
+Message-Id: <cover.1649357263.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407155645.940890-17-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
-> Enable Direct TLB flush feature on nVMX when:
-> - Enlightened VMCS is in use.
-> - Direct TLB flush flag is enabled in eVMCS.
-> - Direct TLB flush is enabled in partition assist page.
+Huawei Matebook D15 uses two different GPIOs are used to control the output:
 
-Yeah, KVM definitely needs a different name for "Direct TLB flush".  I don't have
-any good ideas offhand, but honestly anything is better than "Direct".
+	- gpio0 controls the speaker output;
+	- gpio1 controls the headphone output.
 
-> Perform synthetic vmexit to L1 after processing TLB flush call upon
-> request (HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH).
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
+Changing both at the same time cause spurious events that are mis-interpreted
+as input events, causing troubles on apps. So, a delay is needed before turning
+on such gpios.
 
-...
+Also, the headset microphone is connected to MIC1, instead of MIC2 port.
 
-> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> index 8862692a4c5d..ab0949c22d2d 100644
-> --- a/arch/x86/kvm/vmx/evmcs.h
-> +++ b/arch/x86/kvm/vmx/evmcs.h
-> @@ -65,6 +65,8 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
->  #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
->  #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
->  
-> +#define HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH 0x10000031
+With this patch, plugging a headphone causes a jack event to trigger the speaker
+supply, powering down the speaker and powering up the headphone output.
+Removing the headphone also triggers the power supply, powering up the speaker
+and powering down the headphone.
 
-LOL, I guess I have to appreciate the cleverness.  Bit 28 is cleared for all
-exits except when using an SMI transfer monitor, and then it's set only if MTF
-is pending.
+The headset microphone also works. 
 
-  The remainder of the field (bits 31:28 and bits 26:16) is cleared to 0 (certain
-  SMM VM exits may set some of these bits; see Section 31.15.2.3).
+---
 
-  If the SMM VM exit occurred in VMX non-root operation and an MTF VM exit was
-  pending, bit 28 of the exit-reason field is set; otherwise, it is cleared.
+v5:
+  - dropped an uneeded differential mux from the boards driver.
 
-So despite all appearances, Microsoft didn't actually steal a bit from Intel,
-they're just abusing a bit that (a) will never be set so long as the VMM doesn't
-use parallel SMM and (b) architecturally can't be set in conjuction with many
-exit reasons (everything that's _not_ some form of SMI).
+v4:
+  - add support for headset microphone on MIC1 port.
 
-Can you add a comment note to document this?
+v3:
+  - add a patch changing GPIO quirk speaker naming. Patch 2 got rebased on the top of it.
 
-/*
- * Note, Hyper-V isn't actually stealing bit 28 from Intel, just abusing it by
- * pairing it with architecturally impossible exit reasons.  Bit 28 is set only
- * on SMI exits to a SMI tranfer monitor (STM) and if and only if a MTF VM-Exit
- * is pending.  I.e. it will never be set by hardware for non-SMI exits (there
- * are only three), nor will it ever be set unless the VMM is an STM.
- */
+Mauro Carvalho Chehab (3):
+  ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+  ASoC: Intel: sof_es8336: add a quirk for headset at mic1 port
+  ASoC: Intel: sof_es8336: Add a quirk for Huawei Matebook D15
 
->  struct evmcs_field {
->  	u16 offset;
->  	u16 clean_field;
-> @@ -244,6 +246,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
->  			uint16_t *vmcs_version);
->  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
->  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
-> +bool nested_evmcs_direct_flush_enabled(struct kvm_vcpu *vcpu);
+Pierre-Louis Bossart (1):
+  ASoC: Intel: sof_es8336: simplify speaker gpio naming
+
+ sound/soc/intel/boards/sof_es8336.c | 117 +++++++++++++++++++++-------
+ 1 file changed, 89 insertions(+), 28 deletions(-)
+
+-- 
+2.35.1
+
+

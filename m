@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436D34F74F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6130F4F74F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240795AbiDGEpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 00:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S240766AbiDGEsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 00:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240750AbiDGEox (ORCPT
+        with ESMTP id S240803AbiDGErd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 00:44:53 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DED1017F0;
-        Wed,  6 Apr 2022 21:42:51 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dr20so8297902ejc.6;
-        Wed, 06 Apr 2022 21:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=n4HcXuOXAZE6zoHCC/T33DPT/bULLpPnOSYZG5xwNiM=;
-        b=OYCMJRqmnh+B04rA+lkcc6Tlxx/poyV9w7qffpk4eAaYIEU3DKUsnhDwnIxKU96asq
-         2NIgU9uLB3YkkzlgSAnq0ZPUrN/vC+Nq0K7hDQCZdFRC6e4fSdUigklwY/7f4WXMaW8x
-         YZ47E5a982hGjh6fepld1dKvkAmch7se4vGCilW+j6dsX2yQ8U1STz4WkwJf9nwtPMjC
-         Lx7TCjiJdQ74ZTwN612hxYTgsnWCrhMbTg9+zZYWeReSDkPR6NbY/20/VzaAQYY40Far
-         +2Dz3KIjT+AUYIjo17uM3qsRp61sE8+ofojcRhaI6MMEz6gpDLbaZ94ofPgdp4PHnEaU
-         e+Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=n4HcXuOXAZE6zoHCC/T33DPT/bULLpPnOSYZG5xwNiM=;
-        b=qKu5gWzSeRh1+pIxdqFKR4yRacWNjohu7a7yxYWW7X/KjEbBHxU6AgA0Ku7poWAZvm
-         DZ1aNRLFWGn2+yJ8MrqFE9CZV+CCCzclgO7tvbUq/72XqzvNZnMeFvW+J2xmj1apodew
-         ooYqPHsyYXBnJgyrdN/5eiHnCFF8Wr8gMePWd7VI31sajoB6FToyqsBccN+Isq5CmY1k
-         1UiqXTwg9NdzMQvQizujEV7mnhbziy0MfeGDtGmgcg2n392youXGlQB5yw39GRK5o+u1
-         CJ7PGgOtkurS+wmry/bUeBTBfwOcgZHC5brAj/ZkYQxS3Pf6ewW3SKRFqZen0LUX942F
-         kLdw==
-X-Gm-Message-State: AOAM530vNH1QmfdZ/9OhrQUhUxW8MbOfdR74QmEWZzU6GBobIRb2dlhs
-        kkyAg7chlSPYvpI16F7oBqY=
-X-Google-Smtp-Source: ABdhPJxrygnMfLK8eagvxGviFG90GKXnm04NyWO6ssvyhvKoxhRK6ZP9BtRjtVzfuNBoGZXcylcLNg==
-X-Received: by 2002:a17:907:6d96:b0:6df:f199:6a7c with SMTP id sb22-20020a1709076d9600b006dff1996a7cmr11603771ejc.137.1649306569679;
-        Wed, 06 Apr 2022 21:42:49 -0700 (PDT)
-Received: from anparri.mshome.net (host-87-11-75-174.retail.telecomitalia.it. [87.11.75.174])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170906374300b006e7f060bf6asm4199455ejc.207.2022.04.06.21.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 21:42:49 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH 2/2] hv_netvsc: Print value of invalid ID in netvsc_send_{completion,tx_complete}()
-Date:   Thu,  7 Apr 2022 06:40:34 +0200
-Message-Id: <20220407044034.379971-3-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407044034.379971-1-parri.andrea@gmail.com>
-References: <20220407044034.379971-1-parri.andrea@gmail.com>
+        Thu, 7 Apr 2022 00:47:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DE4B28;
+        Wed,  6 Apr 2022 21:45:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYpj13M0Wz4x5W;
+        Thu,  7 Apr 2022 14:45:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649306726;
+        bh=nboON7t6FGjROyfVQUKf5whIOw0I2W4Po+mSYogO1MA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qfYeiIxBJiRBD8xOndebn6NfWnTQ0yho8SJZeoWV9bdNIMSGx8lAnMe1Lu7sqj83B
+         432V0I7zcZQm2GkIgp5UOycXsp48K6bZMWDYRF4AbQnTna6EaATD8ZEeIq6HgWemQc
+         pESq9Z6kSS2nMJUtXEaUM00Jju3nXf1rKhbzgoAj7zy40BdyztW8n/Om0mndbYdR9f
+         BqPFhBFdUZBPcrdOvMnnfGv2W23QN/7sD6DcIC0JMy5G3+/0MxmVkF7BFNlQao1nbs
+         57zj7nS+UcsF1NTNLvmh9GBN2bUWE+PEPqE4I3WisxOSbj371rU9ECzBT4RRFupObu
+         vfHLZdnBXHtuQ==
+Date:   Thu, 7 Apr 2022 14:45:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: linux-next: runtime warning after merge of the cel-fixes tree
+Message-ID: <20220407144524.2a592ed6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/mmSWu2=IIrDB.qOXQSmL4o4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That being useful for debugging purposes.
+--Sig_/mmSWu2=IIrDB.qOXQSmL4o4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Notice that the packet descriptor is in "private" guest memory, so
-that Hyper-V can not tamper with it.
+Hi all,
 
-While at it, remove two unnecessary u64-casts.
+After merging the cel-fixes tree, today's linux-next build (powerpc
+pseries_le_defconfig) produced this warning:
 
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
----
- drivers/net/hyperv/netvsc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ftrace: allocating 33539 entries in 13 pages
+ftrace: allocated 13 pages with 3 groups
+trace event string verifier disabled
+rcu: Hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=3D2048 to nr_cpu_ids=3D1.
+	Rude variant of Tasks RCU enabled.
+	Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_ids=3D1
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:431 trace_event_raw_i=
+nit+0x1a4/0x7d0
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.18.0-rc1 #2
+NIP:  c0000000002c0924 LR: c0000000002c0ce8 CTR: c0000000002c0990
+REGS: c000000002787a00 TRAP: 0700   Not tainted  (5.18.0-rc1)
+MSR:  8000000002021033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 44000282  XER: 20000000
+CFAR: c0000000002c0b34 IRQMASK: 1=20
+GPR00: c0000000002c0cd0 c000000002787ca0 c00000000278ae00 0000000000000000=
+=20
+GPR04: 000000000000002c 0000000000000005 0000000000000057 c0000000002c08ac=
+=20
+GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: c0000000002c0780 c000000002950000 0000000000000003 0000000000000000=
+=20
+GPR16: 0000000002bf00d0 000000007e68ebc8 c000000000fb0758 000508b58019388f=
+=20
+GPR20: 0000000000000000 0000000000000001 c000000000fb0748 0000000000000003=
+=20
+GPR24: 0000000000000000 0000000000000000 0000000000000001 0000000000000000=
+=20
+GPR28: c0000000026fcde0 c0000000026f60e0 000000000000005f c0000000026f613f=
+=20
+NIP [c0000000002c0924] trace_event_raw_init+0x1a4/0x7d0
+LR [c0000000002c0ce8] trace_event_raw_init+0x568/0x7d0
+Call Trace:
+[c000000002787ca0] [c0000000002c0cd0] trace_event_raw_init+0x550/0x7d0 (unr=
+eliable)
+[c000000002787da0] [c0000000002bd908] event_init+0x78/0x100
+[c000000002787e10] [c0000000020346ac] trace_event_init+0xc8/0x334
+[c000000002787eb0] [c000000002033d20] trace_init+0x18/0x2c
+[c000000002787ed0] [c000000002004318] start_kernel+0x598/0x8d8
+[c000000002787f90] [c00000000000d19c] start_here_common+0x1c/0x600
+Instruction dump:
+41800348 60000000 60420000 3bde0001 7fdf07b4 7ffdfa14 891f0000 710a00ff=20
+4082ff5c 2c3a0000 38600000 41820230 <0fe00000> f9c10070 f9e10078 fa010080=20
+---[ end trace 0000000000000000 ]---
+event svc_defer_recv has unsafe dereference of argument 1
+print_fmt: "addr=3D%pISpc dr=3D%p xid=3D0x%08x", (struct sockaddr *)__get_d=
+ynamic_array(addr), REC->dr, REC->xid
+event svc_defer_queue has unsafe dereference of argument 1
+print_fmt: "addr=3D%pISpc dr=3D%p xid=3D0x%08x", (struct sockaddr *)__get_d=
+ynamic_array(addr), REC->dr, REC->xid
+event svc_defer_drop has unsafe dereference of argument 1
+print_fmt: "addr=3D%pISpc dr=3D%p xid=3D0x%08x", (struct sockaddr *)__get_d=
+ynamic_array(addr), REC->dr, REC->xid
+NR_IRQS: 512, nr_irqs: 512, preallocated irqs: 16
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
 
-diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
-index 9442f751ad3aa..4061af5baaea3 100644
---- a/drivers/net/hyperv/netvsc.c
-+++ b/drivers/net/hyperv/netvsc.c
-@@ -792,9 +792,9 @@ static void netvsc_send_tx_complete(struct net_device *ndev,
- 	int queue_sends;
- 	u64 cmd_rqst;
- 
--	cmd_rqst = channel->request_addr_callback(channel, (u64)desc->trans_id);
-+	cmd_rqst = channel->request_addr_callback(channel, desc->trans_id);
- 	if (cmd_rqst == VMBUS_RQST_ERROR) {
--		netdev_err(ndev, "Incorrect transaction id\n");
-+		netdev_err(ndev, "Invalid transaction ID %llx\n", desc->trans_id);
- 		return;
- 	}
- 
-@@ -854,9 +854,9 @@ static void netvsc_send_completion(struct net_device *ndev,
- 	/* First check if this is a VMBUS completion without data payload */
- 	if (!msglen) {
- 		cmd_rqst = incoming_channel->request_addr_callback(incoming_channel,
--								   (u64)desc->trans_id);
-+								   desc->trans_id);
- 		if (cmd_rqst == VMBUS_RQST_ERROR) {
--			netdev_err(ndev, "Invalid transaction id\n");
-+			netdev_err(ndev, "Invalid transaction ID %llx\n", desc->trans_id);
- 			return;
- 		}
- 
--- 
-2.25.1
+Introduced by commit
 
+  e2e917f8677d ("SUNRPC: Fix the svc_deferred_event trace class")
+
+At least reverting that commit makes the warning go away.
+
+I have left that commit reverted for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mmSWu2=IIrDB.qOXQSmL4o4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJObGQACgkQAVBC80lX
+0GyE2wf/aGM5jaE1UYPkt402jf3FnD++s6vDpNtL3TdInMu1BvQomoHhWEXOeLZl
+3YLmQqZ5KkGEwIxW4XzNdZOehfvNcwZ1Vy0+jlntByXxm5sJ6bbK1UTX1XHtEFKg
+V2crd4KrFvbtWR362m3DAjU8phBm8EnvKxEBRpIuSfG/MbuhM6KAnEOX25Z4qklq
+VIjLe/byUihoGf7v++eTYWmn63Mi6bpxHz7t+EB57Nb0gwoX0u2jTFaxnMfCoyqz
+TDeqVtJ8NTBxeq0LG7yOLzyRlqxeGEIeDJwa3uh+hVBnag8YqKfnqtNF4NCmSxS2
+GvThRU9lb+G3a9y4a1+MSry8WjfqVQ==
+=skcD
+-----END PGP SIGNATURE-----
+
+--Sig_/mmSWu2=IIrDB.qOXQSmL4o4--

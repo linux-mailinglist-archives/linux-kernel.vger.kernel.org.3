@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B484F8057
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA1C4F8058
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343624AbiDGNT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S1343632AbiDGNUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244230AbiDGNTm (ORCPT
+        with ESMTP id S1343627AbiDGNTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:19:42 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A9425C5AE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:17:42 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id m16so4866577plx.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 06:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xaFEdMdha8h42RWuuCwkqr0VCzd2sB+RNX9htkQaFF8=;
-        b=Q4WySDtp3npUzYr7LCaMAKpcChHDjH5EtYUxBS5WjOSTpOpufANpns13Wj+Gr5G4fd
-         4PLyrEBAHnA8hP7wi5Fp4DWo3gcHnsvGkCyd9de+rZCEyRvhfh+9OyU43/6ViKKekO3t
-         ACFLGS30cXfOQMNSCfPt8RKp3Z/31TLN7JJLVJHkGsuC8p+owLhPH1Jmuaowilivo7tK
-         VJjHd2wg0+tNykHOV//TkfGAyTOj1fc/5aM8aqbyUgrgZDMQteysSqAFbFCCMB2llKt+
-         RIGkunul47ZCrDyTAnmjYJweTgzfRcLRQ0qiyCL6wyUIX0BAF95+9a+hsJhych8H1lSg
-         ScGg==
+        Thu, 7 Apr 2022 09:19:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01E8E25CBBE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649337473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Xg006do2juJkqTWAxGfwqxVTFvDtf8Ouv8ifluSAu0=;
+        b=GXz3RdQi6O2Rf4KRNuP0qwtKUKoqvW0o0w30DH9tttGzfko1zVn8V1XlpJxrUWAFrJoKZE
+        7TuYpK/Lx4BUAfRgpr2m7J73qYBhUw89SuQIVd/x9ZWhKWKYX9Hjm+1tIZFB/Yb+NRXOB1
+        9DlFJoqw7f6Apvn3svF0wDDNemUEXpE=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-vrxD0qKRMQObayLuM_Uj1A-1; Thu, 07 Apr 2022 09:17:51 -0400
+X-MC-Unique: vrxD0qKRMQObayLuM_Uj1A-1
+Received: by mail-lf1-f72.google.com with SMTP id g20-20020a056512119400b0044ada577e3dso1826714lfr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 06:17:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xaFEdMdha8h42RWuuCwkqr0VCzd2sB+RNX9htkQaFF8=;
-        b=co/vLwE4fZSAaIIG618gomKAIjxvJlRVBklZenGirytIxPsKa0qiO+RJfsrY9dTcT0
-         tlfAPUuv+fbneEgUWQV8w4NCcy002l6Qx9n7Oz9HbzPxEEhWuNhcCFXPpQaZAx/Djtyu
-         jx+heM6N4WNX90htVJ/2c/15M/lFTtvt33LRuPCfDVHEfGgv3qERBs37Io9owSzi4myL
-         V/DP95F4Zhw+Db90P6CY3PqzCEgV6Y0Wrr+MLxUzWSWUHYXgGFbanimL3kYNrhG7N3oa
-         LMG1zVFjQOt4ptv7aWLbsniA4h9KyHAwisj+U02AGyNpRvjhtq1SDK/Q7MVu4q1M6I7j
-         iZkA==
-X-Gm-Message-State: AOAM530dVI4++CGWR/CsukzBcExNNWq4gWkAgVFxZlSIU5avqaknT7ZB
-        b06/nxeV3kxZDyMa34smL5rjpw==
-X-Google-Smtp-Source: ABdhPJzAIA6zaue5y4/HWCW1DduN5qnV98L+dQLWSOQjhzJalpap83t1+9GZcLK+U+u0+q/rNrvpXQ==
-X-Received: by 2002:a17:90b:4c12:b0:1c6:f450:729d with SMTP id na18-20020a17090b4c1200b001c6f450729dmr16146151pjb.190.1649337462055;
-        Thu, 07 Apr 2022 06:17:42 -0700 (PDT)
-Received: from localhost ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id d5-20020a056a0024c500b004fae56b2921sm22997159pfv.167.2022.04.07.06.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 06:17:41 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 21:17:38 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
-Subject: Re: [PATCH] userfaultfd/selftests: use swap() instead of open coding
- it
-Message-ID: <Yk7kJsk6Y+ASF7ZA@FVFYT0MHHV2J.usts.net>
-References: <20220407123141.4998-1-guozhengkui@vivo.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Xg006do2juJkqTWAxGfwqxVTFvDtf8Ouv8ifluSAu0=;
+        b=Zfd0Y5YgdQPTHH1Ljz+pfPrhab7cU6OhzMFBoz6lV0Nq1IJBC9uPVWcgM6yOnO1d3V
+         dw+ZsuYsoYhDwHtkFPsoenZGbfpMPpRla3tVKelBeBSfBhfRCcIUbfO4Ur3vR0yNErzL
+         3DiJynTj0MSqaBcJRmT7jDMcT+L+9va3Nadcy7sY762q513fRAKjl2k91AUP5sZb5Zxg
+         6OgiR7epT+jVOB6X6fso2g0OPjpsREfHbzCMwEgq7tRg+o6qkJNGvJSsqDRyrHM63m6V
+         CWeJVTuZra0HfOt0/cZ7IbsrlUBNZVXYRUVUQfWOTmBfMRsiV1K9ko3U12L6V2/ZVcZ7
+         86Dg==
+X-Gm-Message-State: AOAM532fGgBsc3XXl2ZTk6Y2LuqmJanJmIfOitx0nPlnlD01PqehJ7Rm
+        cc3Z3mBBgW4CTyMYSEMmzWTAkKYd2bONOgy2LoG+R2vrLYx1IDvDh3z9x6TKa9DATgXQb2wjLel
+        kpz+itjxvJqIRDIVG5ECOuNHHdm8ODfXhx/EibNCm
+X-Received: by 2002:a2e:9ad7:0:b0:24b:fa3:6a8d with SMTP id p23-20020a2e9ad7000000b0024b0fa36a8dmr8750734ljj.363.1649337470354;
+        Thu, 07 Apr 2022 06:17:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzOH3NMQzvLRuhgYGmMuiioeRpPbM3obm6q7/YkChssQxnH4v5W6zhC8c8fZS+DA2TNFh36USctJCoGkt+xtXA=
+X-Received: by 2002:a2e:9ad7:0:b0:24b:fa3:6a8d with SMTP id
+ p23-20020a2e9ad7000000b0024b0fa36a8dmr8750702ljj.363.1649337469936; Thu, 07
+ Apr 2022 06:17:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407123141.4998-1-guozhengkui@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+References: <20220407105724.308930-1-hpa@redhat.com> <20220407115133.GL3293@kadam>
+In-Reply-To: <20220407115133.GL3293@kadam>
+From:   Kate Hsuan <hpa@redhat.com>
+Date:   Thu, 7 Apr 2022 21:17:38 +0800
+Message-ID: <CAEth8oG_GAuammtSqKzyj+Vq6ZsQJJOEeFhgxYhxXHViDYvkow@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: media: ipu3: Fix AWB x_start position when
+ rightmost stripe is used
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hans De Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +79,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 08:31:41PM +0800, Guo Zhengkui wrote:
-> Address the following coccicheck warning:
-> 
-> tools/testing/selftests/vm/userfaultfd.c:1536:21-22: WARNING opportunity
-> for swap().
-> tools/testing/selftests/vm/userfaultfd.c:1540:33-34: WARNING opportunity
-> for swap().
-> 
-> by using swap() for the swapping of variable values and drop
-> `tmp_area` that is not needed any more.
-> 
-> `swap()` macro in userfaultfd.c is introduced in commit 681696862bc18
-> ("selftests: vm: remove dependecy from internal kernel macros")
-> 
-> It has been tested with gcc (Debian 8.3.0-6) 8.3.0.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+Hi Dan,
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+On Thu, Apr 7, 2022 at 7:52 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Thu, Apr 07, 2022 at 06:57:24PM +0800, Kate Hsuan wrote:
+> > A not calibrated x_start setting would result in an incorrect AWB location
+> > configuration on a sensor when only the rightmost stripe is used. x_start
+> > should be calibrated by subtracting the stripe offset to set the coordinate
+> > to the correct position on the second stripe.
+> >
 
-Thanks.
+>
+> I wish the commit description said more about what the bug looks like to
+> the user.  This is the front facing camera, right?  Is part of the video
+> blank or what's the deal?
+
+This is IPU3 image processor. I tried to fix the configuration issues
+on stripe 1 coordinate settings.
+
+>
+> > Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> > ---
+> > Correct the patch. The correction should be awb, not awb_fr.
+>
+> I tried to review the original patch and it was impossible.  I saw
+> you're from an @redhat.com email address so I decided it must be right.
+>
+> I kind of get that you need to be a domain expert to review these
+> patches but this function is such a mess...
+
+Sorry for the misunderstanding in my comments.
+Since I made some mistakes on my v1 patch, so I had corrected this
+part and quickly sent the v2 patch. You are welcome to pinpoint the
+errors for my v2 patch. I could fix them.
+
+Thank you.
+
+>
+> regards,
+> dan carpenter
+>
+
+
+-- 
+BR,
+Kate
+

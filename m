@@ -2,138 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDA24F7C98
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10004F7CA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244171AbiDGKVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S244190AbiDGKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbiDGKVK (ORCPT
+        with ESMTP id S244186AbiDGKXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:21:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EA523E3FF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:19:10 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1ncPEA-0004DC-QT; Thu, 07 Apr 2022 12:18:58 +0200
-Message-ID: <0316d3b81dda8f1de97238483758566becbbb9fc.camel@pengutronix.de>
-Subject: Re: [PATCH] dmaengine: imx-sdma: fix regression with uart scripts
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        Vinod Koul <vkoul@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robin Gong <yibin.gong@nxp.com>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Thu, 07 Apr 2022 12:18:57 +0200
-In-Reply-To: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
-References: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 7 Apr 2022 06:23:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187941AB9FE;
+        Thu,  7 Apr 2022 03:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649326902; x=1680862902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=14uR+X8D1hFafUVEmn6fSTwQ5pea2ecTUrj5n9ZrzLQ=;
+  b=lSVOjOVSyIDMpxpVb+NikGKkdpG14vXVIfX4V47zzxc/kBUU5Wcdhclo
+   HSkg8qNaoGvKy1L5rqgHhETS9JMPxyyTLIpkuIKuAYv0VeZJ7q4sBD57D
+   CHsxB5odDR8Y1aD8mljOzV3UKT6FxoocWmnn26mWSclkbeUkTwlBEVDgm
+   usqXlO90hwXJdlCXVZ9vxgO0kAyHGlOCVhbQNbbY6oFN09Z/lHghiPbtl
+   t+MDrg2h2RYZZk4FQbilPmkv4QeYWt6mVVZ8+sgiNvulivCeed2YB0KIM
+   qK1IMAkqOHbV4ct4LZSNwP1GOc77198KEVCBkhl8MqNC4xcKGqNA2NjGi
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248809078"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="248809078"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 03:21:18 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="722903528"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 03:21:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ncPEu-000KjM-I7;
+        Thu, 07 Apr 2022 13:19:44 +0300
+Date:   Thu, 7 Apr 2022 13:19:44 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH v5 1/4] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <Yk66wHWlMg3QLy6u@smile.fi.intel.com>
+References: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
+ <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 06.04.2022 um 18:48 -0400 schrieb Kevin Groeneveld:
-> Commit b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script") broke
-> uart rx on imx5 when using sdma firmware from older Freescale 2.6.35
-> kernel. In this case reading addr->uartXX_2_mcu_addr was going out of
-> bounds of the firmware memory and corrupting the uart script addresses.
-> 
-> Simply adding a bounds check before accessing addr->uartXX_2_mcu_addr
-> does not work as the uartXX_2_mcu_addr members are now beyond the size
-> of the older firmware and the uart addresses would never be populated
-> in that case. There are other ways to fix this but overall the logic
-> seems clearer to me to revert the uartXX_2_mcu_ram_addr structure
-> entries back to uartXX_2_mcu_addr, change the newer entries to
-> uartXX_2_mcu_rom_addr and update the logic accordingly.
-> 
-> Fixes: b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script")
-> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+On Wed, Apr 06, 2022 at 08:05:23PM +0200, Michael Walle wrote:
 
-I clearly didn't think about this case when reviewing the breaking
-change. The solution in this patch looks fine to me.
+...
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-
-> ---
->  drivers/dma/imx-sdma.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+> > +	if (IS_ERR_OR_NULL(fwnode))
+> > +		return -ENOENT;
+> > +
+> >  	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+> >  				 nargs, index, args);
+> > +	if (ret == 0)
+> > +		return ret;
+> > 
+> > -	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
+> > -	    !IS_ERR_OR_NULL(fwnode->secondary))
+> > -		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
+> > -					 prop, nargs_prop, nargs, index, args);
+> > +	if (IS_ERR_OR_NULL(fwnode->secondary))
+> > +		return -ENOENT;
 > 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 70c0aa931ddf..b708d029b6e9 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -198,12 +198,12 @@ struct sdma_script_start_addrs {
->  	s32 per_2_firi_addr;
->  	s32 mcu_2_firi_addr;
->  	s32 uart_2_per_addr;
-> -	s32 uart_2_mcu_ram_addr;
-> +	s32 uart_2_mcu_addr;
->  	s32 per_2_app_addr;
->  	s32 mcu_2_app_addr;
->  	s32 per_2_per_addr;
->  	s32 uartsh_2_per_addr;
-> -	s32 uartsh_2_mcu_ram_addr;
-> +	s32 uartsh_2_mcu_addr;
->  	s32 per_2_shp_addr;
->  	s32 mcu_2_shp_addr;
->  	s32 ata_2_mcu_addr;
-> @@ -232,8 +232,8 @@ struct sdma_script_start_addrs {
->  	s32 mcu_2_ecspi_addr;
->  	s32 mcu_2_sai_addr;
->  	s32 sai_2_mcu_addr;
-> -	s32 uart_2_mcu_addr;
-> -	s32 uartsh_2_mcu_addr;
-> +	s32 uart_2_mcu_rom_addr;
-> +	s32 uartsh_2_mcu_rom_addr;
->  	/* End of v3 array */
->  	s32 mcu_2_zqspi_addr;
->  	/* End of v4 array */
-> @@ -1796,17 +1796,17 @@ static void sdma_add_scripts(struct sdma_engine *sdma,
->  			saddr_arr[i] = addr_arr[i];
->  
->  	/*
-> -	 * get uart_2_mcu_addr/uartsh_2_mcu_addr rom script specially because
-> -	 * they are now replaced by uart_2_mcu_ram_addr/uartsh_2_mcu_ram_addr
-> -	 * to be compatible with legacy freescale/nxp sdma firmware, and they
-> -	 * are located in the bottom part of sdma_script_start_addrs which are
-> -	 * beyond the SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1.
-> +	 * For compatibility with NXP internal legacy kernel before 4.19 which
-> +	 * is based on uart ram script and mainline kernel based on uart rom
-> +	 * script, both uart ram/rom scripts are present in newer sdma
-> +	 * firmware. Use the rom versions if they are present (V3 or newer).
->  	 */
-> -	if (addr->uart_2_mcu_addr)
-> -		sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_addr;
-> -	if (addr->uartsh_2_mcu_addr)
-> -		sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_addr;
-> -
-> +	if (sdma->script_number >= SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3) {
-> +		if (addr->uart_2_mcu_rom_addr)
-> +			sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_rom_addr;
-> +		if (addr->uartsh_2_mcu_rom_addr)
-> +			sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_rom_addr;
-> +	}
->  }
->  
->  static void sdma_load_firmware(const struct firmware *fw, void *context)
+> Doesn't this mean you overwrite any return code != 0 with -ENOENT?
+> Is this intended?
+
+Indeed, it would shadow the error code.
+So, it should go with
+
+	if (IS_ERR_OR_NULL(fwnode->secondary))
+		return ret;
+
+then.
+
+> In any case:
+> Tested-by: Michael Walle <michael@walle.cc>
+
+Thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 

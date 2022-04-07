@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6E44F75E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730F44F75DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241025AbiDGGYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S240985AbiDGGXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241057AbiDGGYY (ORCPT
+        with ESMTP id S234876AbiDGGXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:24:24 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DEA1F622F;
-        Wed,  6 Apr 2022 23:22:25 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id s2so4574709pfh.6;
-        Wed, 06 Apr 2022 23:22:25 -0700 (PDT)
+        Thu, 7 Apr 2022 02:23:32 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C543634C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:21:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l26so8723126ejx.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kHpIqwHUOiHtY4NBo/hXOV1Enmw9fot8Ao21/zKsXT8=;
-        b=ZU5c7yXdEvgtKowVB/ueRPVH6VmgosLnYS9+2S10DxWgfCqtZKUgtpG5IZrT/okHu/
-         Gp/V7G5zxttq9KUjOrFq15TqenuzlgzwHmZdXqtXyVkEFr0ZDcJotLyhDIYU68EahC9O
-         WqaXEfFjhvVe7AgJrI6EpajB50e3TTEnzYjfyLH0OMOEH0KyBiHmkkVnnFnsULVf/7DL
-         QysxgcpiYvIpqwZ9OFQfs38zo+ulhOf1Qzu70PTN9wi/wzHxe6JVveEbDUvjSPtp+7Xb
-         +0dcbw7yTWDE8t61TrFYnlPrMj8ubpOLNDiET4F3cqXSbsbBD2Hw/LV+ioQjuJdapvsw
-         DhZA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lFeu13B4GooKw5hC3dcio6xNxGQNDFEh6M5pue+v5h8=;
+        b=K3W43Xpr4w6Uel8V1O2QRTwL4Z9UmJkdK9muSQytlVH4Gzn6W03AvpfAouMfVteW8c
+         6E0I3EDINF5FrFoKrNCVgs89YXkKFEZZSFRmCNa2OM7OWjk+O1WZhNHA9hl0HkrVqQAR
+         /5HnpHGp7lTpeHeujdPqx3qi+fzJaZdunPLC1NdS2vHrQtqV4B6GS8Fi2ji4gNqfK9Dv
+         hHaAXSR+bLm7RZyUO8JzRdZqmGyuaMQEriuWcjbmQoJokfBUzEwzvppNgdjJZuGLlhTO
+         0TQ2/yoh0k7Uh5SvI7NrHeKEZTiRTBaRq+No3p8rygDtXFkqayE5vYAnw3u9ia2KHnyQ
+         D6Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kHpIqwHUOiHtY4NBo/hXOV1Enmw9fot8Ao21/zKsXT8=;
-        b=mghOwascXoQYo7YtpgVt4pIzeBI845Z3CsyTnI8Hvyy/k/vR7Q1pk2UqAiClbgdHry
-         CdOuNEW/1YFGUP8RBFkTEOx4F0UlQ098F1UE2LDmWP/Ezb89TNnC7zUR6QuicM51oONw
-         0nS6VGGUPeGE1xGHwbCq2/VCICiu4FZqIXkL00jd1Et6lvxznY1jZXizIU1r91YLm+SC
-         jjrFXOLSkZjoeBpsibE0LcxXyyqD4ZEYKqNZ4aYriu2GyrfEHdmLg599+9mr/Cpr2aM0
-         yrX5VPD/N/MPerWT2Iit6TXexVkMAtxIWdUz5LuGzUdEQ4VrDH2Ui7BBzavti6xBDoUC
-         pPog==
-X-Gm-Message-State: AOAM5304JHt+GG/+Wz7rbpK3V9Tgj1fRf5qA3QCKRtuIutzAqIqp7xH7
-        t60R5FlBgpxEuh9VtgnyiXE=
-X-Google-Smtp-Source: ABdhPJyK44TM3UAcZTeL0f4dm2wmOmpnvWcO2KjzZdL2YmP7TnoXs+0HKQsyZjSg1wQIEbh4Tze4og==
-X-Received: by 2002:a05:6a00:2450:b0:4f7:bf07:c063 with SMTP id d16-20020a056a00245000b004f7bf07c063mr12676690pfj.51.1649312544461;
-        Wed, 06 Apr 2022 23:22:24 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.118])
-        by smtp.gmail.com with ESMTPSA id k92-20020a17090a4ce500b001ca69b5c034sm7522829pjh.46.2022.04.06.23.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 23:22:23 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, xeb@mail.ru,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, benbjiang@tencent.com
-Subject: [PATCH RESEND net-next v5 4/4] net: icmp: add skb drop reasons to icmp protocol
-Date:   Thu,  7 Apr 2022 14:20:52 +0800
-Message-Id: <20220407062052.15907-5-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407062052.15907-1-imagedong@tencent.com>
-References: <20220407062052.15907-1-imagedong@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lFeu13B4GooKw5hC3dcio6xNxGQNDFEh6M5pue+v5h8=;
+        b=1IEX5ydYutJ7CtNCIFgWT+Z9vtXOIlWOpEaGxPCMB0G27xm8W7gEnBVbDCXrcDgLt9
+         U/cYmKrgCxOqfYvcjdI4t+g8Kt20KfViDT0vnl8Zecd/KTLCRtorGNzWrZZW0KIfvC0/
+         u9oC4006zZwK/lfqZ1MXCD6ThmyrQcgIO6MgGojwWmPfpWwVypGMvWsJNhcqNwXW40LO
+         ntsmnikpwn4aqwKmt26x5Ma9zkQLMKPEu5rOzMqv16GVuDSu3dktAQJnXQ9ZBOaYUGFy
+         bcSaamuKK1Dj08uDAOlAT8avCU1NC672XIbRM3zUrsNLmRy9rZ8odTJxjyIQwlWHJExH
+         2X7A==
+X-Gm-Message-State: AOAM530Me2Y8yYgosL2kvR9kawEWjM3Ukq6kA/cgK7WGJU5BKjB0KBh1
+        KksKBCtdXPxeq7vPooE+l80=
+X-Google-Smtp-Source: ABdhPJzJvVu/Mpc49n67UlRPTuoOw32LgOaTHZZqxWaAICiarYth54KIQ/X745zarR/GrOyHAryZZg==
+X-Received: by 2002:a17:906:7751:b0:6ce:e3c:81a6 with SMTP id o17-20020a170906775100b006ce0e3c81a6mr11286345ejn.278.1649312491633;
+        Wed, 06 Apr 2022 23:21:31 -0700 (PDT)
+Received: from [192.168.178.21] (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
+        by smtp.gmail.com with ESMTPSA id gv9-20020a170906f10900b006d7128b2e6fsm7340540ejb.162.2022.04.06.23.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 23:21:30 -0700 (PDT)
+Message-ID: <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
+Date:   Thu, 7 Apr 2022 08:21:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/amdgpu: Fix code with incorrect enum type
+Content-Language: en-US
+To:     Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Joseph Greathouse <Joseph.Greathouse@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20220406165057.97492-1-h0tc0d3@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20220406165057.97492-1-h0tc0d3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,461 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Am 06.04.22 um 18:50 schrieb Grigory Vasilyev:
+> Instead of the 'amdgpu_ring_priority_level' type,
+> the 'amdgpu_gfx_pipe_priority' type was used,
+> which is an error when setting ring priority.
+> This is a minor error, but may cause problems in the future.
+>
+> Instead of AMDGPU_RING_PRIO_2 = 2, we can use AMDGPU_RING_PRIO_MAX = 3,
+> but AMDGPU_RING_PRIO_2 = 2 is used for compatibility with
+> AMDGPU_GFX_PIPE_PRIO_HIGH = 2, and not change the behavior of the
+> code.
+>
+> Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
 
-Replace kfree_skb() used in icmp_rcv() and icmpv6_rcv() with
-kfree_skb_reason().
+Good catch, Acked-by: Christian König <christian.koenig@amd.com>
 
-In order to get the reasons of the skb drops after icmp message handle,
-we change the return type of 'handler()' in 'struct icmp_control' from
-'bool' to 'enum skb_drop_reason'. This may change its original
-intention, as 'false' means failure, but 'SKB_NOT_DROPPED_YET' means
-success now. Therefore, all 'handler' and the call of them need to be
-handled. Following 'handler' functions are involved:
-
-icmp_unreach()
-icmp_redirect()
-icmp_echo()
-icmp_timestamp()
-icmp_discard()
-
-And following new drop reasons are added:
-
-SKB_DROP_REASON_ICMP_CSUM
-SKB_DROP_REASON_INVALID_PROTO
-
-The reason 'INVALID_PROTO' is introduced for the case that the packet
-doesn't follow rfc 1122 and is dropped. This is not a common case, and
-I believe we can locate the problem from the data in the packet. For now,
-this 'INVALID_PROTO' is used for the icmp broadcasts with wrong types.
-
-Maybe there should be a document file for these reasons. For example,
-list all the case that causes the 'UNHANDLED_PROTO' and 'INVALID_PROTO'
-drop reason. Therefore, users can locate their problems according to the
-document.
-
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v5:
-- rename SKB_DROP_REASON_RFC_1122 to SKB_DROP_REASON_INVALID_PROTO
-
-v4:
-- remove SKB_DROP_REASON_ICMP_TYPE and SKB_DROP_REASON_ICMP_BROADCAST
-  and introduce the SKB_DROP_REASON_RFC_1122
----
- include/linux/skbuff.h     |  5 +++
- include/net/ping.h         |  2 +-
- include/trace/events/skb.h |  2 +
- net/ipv4/icmp.c            | 75 ++++++++++++++++++++++----------------
- net/ipv4/ping.c            | 14 ++++---
- net/ipv6/icmp.c            | 24 +++++++-----
- 6 files changed, 75 insertions(+), 47 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 10ba07892c46..92e8c8d7410e 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -442,6 +442,11 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_TAP_TXFILTER,	/* dropped by tx filter implemented
- 					 * at tun/tap, e.g., check_filter()
- 					 */
-+	SKB_DROP_REASON_ICMP_CSUM,	/* ICMP checksum error */
-+	SKB_DROP_REASON_INVALID_PROTO,	/* the packet doesn't follow RFC
-+					 * 2211, such as a broadcasts
-+					 * ICMP_TIMESTAMP
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/net/ping.h b/include/net/ping.h
-index 2fe78874318c..b68fbfdb606f 100644
---- a/include/net/ping.h
-+++ b/include/net/ping.h
-@@ -76,7 +76,7 @@ int  ping_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int noblock,
- int  ping_common_sendmsg(int family, struct msghdr *msg, size_t len,
- 			 void *user_icmph, size_t icmph_len);
- int  ping_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
--bool ping_rcv(struct sk_buff *skb);
-+enum skb_drop_reason ping_rcv(struct sk_buff *skb);
- 
- #ifdef CONFIG_PROC_FS
- void *ping_seq_start(struct seq_file *seq, loff_t *pos, sa_family_t family);
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 85abd7cbd221..42647114fffe 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -61,6 +61,8 @@
- 	EM(SKB_DROP_REASON_HDR_TRUNC, HDR_TRUNC)		\
- 	EM(SKB_DROP_REASON_TAP_FILTER, TAP_FILTER)		\
- 	EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)		\
-+	EM(SKB_DROP_REASON_ICMP_CSUM, ICMP_CSUM)		\
-+	EM(SKB_DROP_REASON_INVALID_PROTO, INVALID_PROTO)	\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-index 72a375c7f417..236debd9fded 100644
---- a/net/ipv4/icmp.c
-+++ b/net/ipv4/icmp.c
-@@ -186,7 +186,7 @@ EXPORT_SYMBOL(icmp_err_convert);
-  */
- 
- struct icmp_control {
--	bool (*handler)(struct sk_buff *skb);
-+	enum skb_drop_reason (*handler)(struct sk_buff *skb);
- 	short   error;		/* This ICMP is classed as an error message */
- };
- 
-@@ -839,8 +839,9 @@ static bool icmp_tag_validation(int proto)
-  *	ICMP_PARAMETERPROB.
-  */
- 
--static bool icmp_unreach(struct sk_buff *skb)
-+static enum skb_drop_reason icmp_unreach(struct sk_buff *skb)
- {
-+	enum skb_drop_reason reason = SKB_NOT_DROPPED_YET;
- 	const struct iphdr *iph;
- 	struct icmphdr *icmph;
- 	struct net *net;
-@@ -860,8 +861,10 @@ static bool icmp_unreach(struct sk_buff *skb)
- 	icmph = icmp_hdr(skb);
- 	iph   = (const struct iphdr *)skb->data;
- 
--	if (iph->ihl < 5) /* Mangled header, drop. */
-+	if (iph->ihl < 5)  { /* Mangled header, drop. */
-+		reason = SKB_DROP_REASON_IP_INHDR;
- 		goto out_err;
-+	}
- 
- 	switch (icmph->type) {
- 	case ICMP_DEST_UNREACH:
-@@ -941,10 +944,10 @@ static bool icmp_unreach(struct sk_buff *skb)
- 	icmp_socket_deliver(skb, info);
- 
- out:
--	return true;
-+	return reason;
- out_err:
- 	__ICMP_INC_STATS(net, ICMP_MIB_INERRORS);
--	return false;
-+	return reason ?: SKB_DROP_REASON_NOT_SPECIFIED;
- }
- 
- 
-@@ -952,20 +955,20 @@ static bool icmp_unreach(struct sk_buff *skb)
-  *	Handle ICMP_REDIRECT.
-  */
- 
--static bool icmp_redirect(struct sk_buff *skb)
-+static enum skb_drop_reason icmp_redirect(struct sk_buff *skb)
- {
- 	if (skb->len < sizeof(struct iphdr)) {
- 		__ICMP_INC_STATS(dev_net(skb->dev), ICMP_MIB_INERRORS);
--		return false;
-+		return SKB_DROP_REASON_PKT_TOO_SMALL;
- 	}
- 
- 	if (!pskb_may_pull(skb, sizeof(struct iphdr))) {
- 		/* there aught to be a stat */
--		return false;
-+		return SKB_DROP_REASON_NOMEM;
- 	}
- 
- 	icmp_socket_deliver(skb, ntohl(icmp_hdr(skb)->un.gateway));
--	return true;
-+	return SKB_NOT_DROPPED_YET;
- }
- 
- /*
-@@ -982,7 +985,7 @@ static bool icmp_redirect(struct sk_buff *skb)
-  *	See also WRT handling of options once they are done and working.
-  */
- 
--static bool icmp_echo(struct sk_buff *skb)
-+static enum skb_drop_reason icmp_echo(struct sk_buff *skb)
- {
- 	struct icmp_bxm icmp_param;
- 	struct net *net;
-@@ -990,7 +993,7 @@ static bool icmp_echo(struct sk_buff *skb)
- 	net = dev_net(skb_dst(skb)->dev);
- 	/* should there be an ICMP stat for ignored echos? */
- 	if (net->ipv4.sysctl_icmp_echo_ignore_all)
--		return true;
-+		return SKB_NOT_DROPPED_YET;
- 
- 	icmp_param.data.icmph	   = *icmp_hdr(skb);
- 	icmp_param.skb		   = skb;
-@@ -1001,10 +1004,10 @@ static bool icmp_echo(struct sk_buff *skb)
- 	if (icmp_param.data.icmph.type == ICMP_ECHO)
- 		icmp_param.data.icmph.type = ICMP_ECHOREPLY;
- 	else if (!icmp_build_probe(skb, &icmp_param.data.icmph))
--		return true;
-+		return SKB_NOT_DROPPED_YET;
- 
- 	icmp_reply(&icmp_param, skb);
--	return true;
-+	return SKB_NOT_DROPPED_YET;
- }
- 
- /*	Helper for icmp_echo and icmpv6_echo_reply.
-@@ -1122,7 +1125,7 @@ EXPORT_SYMBOL_GPL(icmp_build_probe);
-  *		  MUST be accurate to a few minutes.
-  *		  MUST be updated at least at 15Hz.
-  */
--static bool icmp_timestamp(struct sk_buff *skb)
-+static enum skb_drop_reason icmp_timestamp(struct sk_buff *skb)
- {
- 	struct icmp_bxm icmp_param;
- 	/*
-@@ -1147,17 +1150,17 @@ static bool icmp_timestamp(struct sk_buff *skb)
- 	icmp_param.data_len	   = 0;
- 	icmp_param.head_len	   = sizeof(struct icmphdr) + 12;
- 	icmp_reply(&icmp_param, skb);
--	return true;
-+	return SKB_NOT_DROPPED_YET;
- 
- out_err:
- 	__ICMP_INC_STATS(dev_net(skb_dst(skb)->dev), ICMP_MIB_INERRORS);
--	return false;
-+	return SKB_DROP_REASON_PKT_TOO_SMALL;
- }
- 
--static bool icmp_discard(struct sk_buff *skb)
-+static enum skb_drop_reason icmp_discard(struct sk_buff *skb)
- {
- 	/* pretend it was a success */
--	return true;
-+	return SKB_NOT_DROPPED_YET;
- }
- 
- /*
-@@ -1165,18 +1168,20 @@ static bool icmp_discard(struct sk_buff *skb)
-  */
- int icmp_rcv(struct sk_buff *skb)
- {
--	struct icmphdr *icmph;
-+	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
- 	struct rtable *rt = skb_rtable(skb);
- 	struct net *net = dev_net(rt->dst.dev);
--	bool success;
-+	struct icmphdr *icmph;
- 
- 	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb)) {
- 		struct sec_path *sp = skb_sec_path(skb);
- 		int nh;
- 
- 		if (!(sp && sp->xvec[sp->len - 1]->props.flags &
--				 XFRM_STATE_ICMP))
-+				 XFRM_STATE_ICMP)) {
-+			reason = SKB_DROP_REASON_XFRM_POLICY;
- 			goto drop;
-+		}
- 
- 		if (!pskb_may_pull(skb, sizeof(*icmph) + sizeof(struct iphdr)))
- 			goto drop;
-@@ -1184,8 +1189,11 @@ int icmp_rcv(struct sk_buff *skb)
- 		nh = skb_network_offset(skb);
- 		skb_set_network_header(skb, sizeof(*icmph));
- 
--		if (!xfrm4_policy_check_reverse(NULL, XFRM_POLICY_IN, skb))
-+		if (!xfrm4_policy_check_reverse(NULL, XFRM_POLICY_IN,
-+						skb)) {
-+			reason = SKB_DROP_REASON_XFRM_POLICY;
- 			goto drop;
-+		}
- 
- 		skb_set_network_header(skb, nh);
- 	}
-@@ -1207,13 +1215,13 @@ int icmp_rcv(struct sk_buff *skb)
- 		/* We can't use icmp_pointers[].handler() because it is an array of
- 		 * size NR_ICMP_TYPES + 1 (19 elements) and PROBE has code 42.
- 		 */
--		success = icmp_echo(skb);
--		goto success_check;
-+		reason = icmp_echo(skb);
-+		goto reason_check;
- 	}
- 
- 	if (icmph->type == ICMP_EXT_ECHOREPLY) {
--		success = ping_rcv(skb);
--		goto success_check;
-+		reason = ping_rcv(skb);
-+		goto reason_check;
- 	}
- 
- 	/*
-@@ -1222,8 +1230,10 @@ int icmp_rcv(struct sk_buff *skb)
- 	 *	RFC 1122: 3.2.2  Unknown ICMP messages types MUST be silently
- 	 *		  discarded.
- 	 */
--	if (icmph->type > NR_ICMP_TYPES)
-+	if (icmph->type > NR_ICMP_TYPES) {
-+		reason = SKB_DROP_REASON_UNHANDLED_PROTO;
- 		goto error;
-+	}
- 
- 	/*
- 	 *	Parse the ICMP message
-@@ -1239,27 +1249,30 @@ int icmp_rcv(struct sk_buff *skb)
- 		if ((icmph->type == ICMP_ECHO ||
- 		     icmph->type == ICMP_TIMESTAMP) &&
- 		    net->ipv4.sysctl_icmp_echo_ignore_broadcasts) {
-+			reason = SKB_DROP_REASON_INVALID_PROTO;
- 			goto error;
- 		}
- 		if (icmph->type != ICMP_ECHO &&
- 		    icmph->type != ICMP_TIMESTAMP &&
- 		    icmph->type != ICMP_ADDRESS &&
- 		    icmph->type != ICMP_ADDRESSREPLY) {
-+			reason = SKB_DROP_REASON_INVALID_PROTO;
- 			goto error;
- 		}
- 	}
- 
--	success = icmp_pointers[icmph->type].handler(skb);
--success_check:
--	if (success)  {
-+	reason = icmp_pointers[icmph->type].handler(skb);
-+reason_check:
-+	if (!reason)  {
- 		consume_skb(skb);
- 		return NET_RX_SUCCESS;
- 	}
- 
- drop:
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, reason);
- 	return NET_RX_DROP;
- csum_error:
-+	reason = SKB_DROP_REASON_ICMP_CSUM;
- 	__ICMP_INC_STATS(net, ICMP_MIB_CSUMERRORS);
- error:
- 	__ICMP_INC_STATS(net, ICMP_MIB_INERRORS);
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 877270ad17c9..b383e0393206 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -960,12 +960,12 @@ EXPORT_SYMBOL_GPL(ping_queue_rcv_skb);
-  *	All we need to do is get the socket.
-  */
- 
--bool ping_rcv(struct sk_buff *skb)
-+enum skb_drop_reason ping_rcv(struct sk_buff *skb)
- {
-+	enum skb_drop_reason reason = SKB_DROP_REASON_NO_SOCKET;
- 	struct sock *sk;
- 	struct net *net = dev_net(skb->dev);
- 	struct icmphdr *icmph = icmp_hdr(skb);
--	bool rc = false;
- 
- 	/* We assume the packet has already been checked by icmp_rcv */
- 
-@@ -980,15 +980,17 @@ bool ping_rcv(struct sk_buff *skb)
- 		struct sk_buff *skb2 = skb_clone(skb, GFP_ATOMIC);
- 
- 		pr_debug("rcv on socket %p\n", sk);
--		if (skb2 && !ping_queue_rcv_skb(sk, skb2))
--			rc = true;
-+		if (skb2)
-+			reason = __ping_queue_rcv_skb(sk, skb2);
-+		else
-+			reason = SKB_DROP_REASON_NOMEM;
- 		sock_put(sk);
- 	}
- 
--	if (!rc)
-+	if (reason)
- 		pr_debug("no socket, dropping\n");
- 
--	return rc;
-+	return reason;
- }
- EXPORT_SYMBOL_GPL(ping_rcv);
- 
-diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
-index e6b978ea0e87..01c8003c9fc9 100644
---- a/net/ipv6/icmp.c
-+++ b/net/ipv6/icmp.c
-@@ -864,21 +864,23 @@ void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info)
- 
- static int icmpv6_rcv(struct sk_buff *skb)
- {
-+	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
- 	struct net *net = dev_net(skb->dev);
- 	struct net_device *dev = icmp6_dev(skb);
- 	struct inet6_dev *idev = __in6_dev_get(dev);
- 	const struct in6_addr *saddr, *daddr;
- 	struct icmp6hdr *hdr;
- 	u8 type;
--	bool success = false;
- 
- 	if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb)) {
- 		struct sec_path *sp = skb_sec_path(skb);
- 		int nh;
- 
- 		if (!(sp && sp->xvec[sp->len - 1]->props.flags &
--				 XFRM_STATE_ICMP))
-+				 XFRM_STATE_ICMP)) {
-+			reason = SKB_DROP_REASON_XFRM_POLICY;
- 			goto drop_no_count;
-+		}
- 
- 		if (!pskb_may_pull(skb, sizeof(*hdr) + sizeof(struct ipv6hdr)))
- 			goto drop_no_count;
-@@ -886,8 +888,11 @@ static int icmpv6_rcv(struct sk_buff *skb)
- 		nh = skb_network_offset(skb);
- 		skb_set_network_header(skb, sizeof(*hdr));
- 
--		if (!xfrm6_policy_check_reverse(NULL, XFRM_POLICY_IN, skb))
-+		if (!xfrm6_policy_check_reverse(NULL, XFRM_POLICY_IN,
-+						skb)) {
-+			reason = SKB_DROP_REASON_XFRM_POLICY;
- 			goto drop_no_count;
-+		}
- 
- 		skb_set_network_header(skb, nh);
- 	}
-@@ -924,11 +929,11 @@ static int icmpv6_rcv(struct sk_buff *skb)
- 		break;
- 
- 	case ICMPV6_ECHO_REPLY:
--		success = ping_rcv(skb);
-+		reason = ping_rcv(skb);
- 		break;
- 
- 	case ICMPV6_EXT_ECHO_REPLY:
--		success = ping_rcv(skb);
-+		reason = ping_rcv(skb);
- 		break;
- 
- 	case ICMPV6_PKT_TOOBIG:
-@@ -994,19 +999,20 @@ static int icmpv6_rcv(struct sk_buff *skb)
- 	/* until the v6 path can be better sorted assume failure and
- 	 * preserve the status quo behaviour for the rest of the paths to here
- 	 */
--	if (success)
--		consume_skb(skb);
-+	if (reason)
-+		kfree_skb_reason(skb, reason);
- 	else
--		kfree_skb(skb);
-+		consume_skb(skb);
- 
- 	return 0;
- 
- csum_error:
-+	reason = SKB_DROP_REASON_ICMP_CSUM;
- 	__ICMP6_INC_STATS(dev_net(dev), idev, ICMP6_MIB_CSUMERRORS);
- discard_it:
- 	__ICMP6_INC_STATS(dev_net(dev), idev, ICMP6_MIB_INERRORS);
- drop_no_count:
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, reason);
- 	return 0;
- }
- 
--- 
-2.35.1
+> ---
+>   drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
+> index 5554084ec1f1..9bc26395f833 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
+> @@ -1929,7 +1929,7 @@ static int gfx_v8_0_compute_ring_init(struct amdgpu_device *adev, int ring_id,
+>   		+ ring->pipe;
+>   
+>   	hw_prio = amdgpu_gfx_is_high_priority_compute_queue(adev, ring) ?
+> -			AMDGPU_GFX_PIPE_PRIO_HIGH : AMDGPU_RING_PRIO_DEFAULT;
+> +			AMDGPU_RING_PRIO_2 : AMDGPU_RING_PRIO_DEFAULT;
+>   	/* type-2 packets are deprecated on MEC, use type-3 instead */
+>   	r = amdgpu_ring_init(adev, ring, 1024, &adev->gfx.eop_irq, irq_type,
+>   			     hw_prio, NULL);
 

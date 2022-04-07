@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0AF4F878D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964734F8791
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347066AbiDGTAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S1347073AbiDGTBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344697AbiDGTA2 (ORCPT
+        with ESMTP id S1344697AbiDGTBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:00:28 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388622C1F9;
-        Thu,  7 Apr 2022 11:58:28 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id bx5so6432183pjb.3;
-        Thu, 07 Apr 2022 11:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:references:in-reply-to:content-transfer-encoding;
-        bh=yKgPeVJkTTlWR029OHJcWm7UBvWngodu9rlPvPCMr6Y=;
-        b=jomUKr/FmOEincstQR4oMTygKKFGXBM4cSjfY4PjaAdmrEohbp/FJlBg9sLG8u7QZV
-         goOfSMhBZQ1UWgB/2lZ6nOe7KD5lKYNtCu6AZejkOAgd5W1asEK/20/C7Q1yJn6lQjMt
-         bLotFTz543CCq2jlpC4vNusHqjChc31S8q2Lr0dbEApz4DZdk4DdeYb9iwrJcLWC6mg1
-         hcKZ6yHSe0WKX/D4jIfKjqBEwnDoLMLUvkfccD4XEa5K2k4dYwcdC4PZeFPs8Y5MonZr
-         hDwrvaP5l04k15mWPt4b4tL5YouGf4vPPIaAhu+DQNPgUt4XeNsBdlvvTbDxP/6lnR5V
-         GjEg==
+        Thu, 7 Apr 2022 15:01:07 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056EC22C6CE;
+        Thu,  7 Apr 2022 11:59:06 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-dacc470e03so7376113fac.5;
+        Thu, 07 Apr 2022 11:59:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=yKgPeVJkTTlWR029OHJcWm7UBvWngodu9rlPvPCMr6Y=;
-        b=S6u7gTZPL3SCi1TsFv3Hggb444AJwSvgKInEAHzvTbdbVdgQCN6Nfit210Ra+DeBAt
-         o3VfJb3LIGLD75Ic7m542MzE9KoDQhvyGAADFGcltHb0kHyva6sZ29/e7isDgKDNsuP4
-         YllSpyA6Icf5O8DmQrwFuNuZQ16x6lq1Zjrb6N77xSJ3NnJmZ2q8jKe/+z3kDYVQK1FW
-         ywc6Kn4RIttQdWWrhzzeJgzkPNNshGl6629MfbrxbxMEaSQYbDSp4yWwbPL8gTk4NIsZ
-         Bz0T/arAzOUyc01yCgwLD4slhyy7vRsGIQFoktxSQLzP8WxOhKBvvw9p3B3Wn8o3aihT
-         4A7w==
-X-Gm-Message-State: AOAM5331x3Q1n7xQZ596sSSt5G15knSyn+zX8e5o+v0hJb8x1bKN2e+N
-        JklXntDRFelCstdB+y29USU=
-X-Google-Smtp-Source: ABdhPJw7RDFshyF2mZ4IAK662zZndtPImnSAASy9IyTLGW191XweGKY1oiefRDVbQWeHcPDBLNA2Gg==
-X-Received: by 2002:a17:902:db05:b0:154:8219:ce1f with SMTP id m5-20020a170902db0500b001548219ce1fmr15633528plx.82.1649357907813;
-        Thu, 07 Apr 2022 11:58:27 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d21-20020a056a0010d500b004fd9ee64134sm23108673pfu.74.2022.04.07.11.58.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:58:27 -0700 (PDT)
-Message-ID: <b5b45fc7-44ff-57a2-0b21-a78c7cd13b68@gmail.com>
-Date:   Thu, 7 Apr 2022 11:58:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] ARM: dts: broadcom: align SPI NOR node name with
- dtschema
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=afrFLzt1gRoFoVRMojGGVgBPp/vAdD+p5A9V+fiaSKw=;
+        b=6r9fkr5C27LSai/tqOR8G+fynQmwoqUjpHjhMiq4cJhIc9wCLTmW4asUi18wMe01PU
+         1sSdbn6CTlWGchdmrvZ6HWrxTA7uGKRhmNAH07gYXBOVpJtuGK3PoG8jM+481dj6sutJ
+         n0ZwiluwdY2rkpfBQti2yL3KmPnK24C/L1JiZDtX0M5cQh4zwpM2rk/N1PJmXLHZat8d
+         sOSo17FQaT4jNT0iAP+01txVJJ5yAd5cN3VFIvQYX7d0RsIMxpwHoqlKlxoe74e03hz8
+         e2xcyswuKlLtOrPto60rZc2HJEVu7KmBAfIs9Fv1d+VM97nmd6iNAOr0bw9cuRzP6PRr
+         ElrQ==
+X-Gm-Message-State: AOAM532Sl/K9OYXpjvkwCRKDKMtTRXjQXfuXD1cvqS0fx4QKyPyteOqg
+        YP59k4tCXrqLDhUkg8Nllw==
+X-Google-Smtp-Source: ABdhPJxNUG2HZcl4skpjdoCUqh+tz6W3QDAPX323irG1n56LqoDXcyZehrhf7pPhSiaz6mtTAfvVUw==
+X-Received: by 2002:a05:6870:5584:b0:e1:e254:141d with SMTP id n4-20020a056870558400b000e1e254141dmr7201344oao.95.1649357945276;
+        Thu, 07 Apr 2022 11:59:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm7568561oos.22.2022.04.07.11.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 11:59:04 -0700 (PDT)
+Received: (nullmailer pid 1783762 invoked by uid 1000);
+        Thu, 07 Apr 2022 18:59:04 -0000
+Date:   Thu, 7 Apr 2022 13:59:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
- <20220407185506.2575806-1-f.fainelli@gmail.com>
-In-Reply-To: <20220407185506.2575806-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: dma: uniphier: Use unevaluatedProperties
+Message-ID: <Yk80eFKwDVnU67p/@robh.at.kernel.org>
+References: <1649317447-20996-1-git-send-email-hayashi.kunihiko@socionext.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649317447-20996-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 11:55, Florian Fainelli wrote:
-> On Thu,  7 Apr 2022 16:32:10 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> The node names should be generic and SPI NOR dtschema expects "flash".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> 
-> Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+On Thu, Apr 07, 2022 at 04:44:07PM +0900, Kunihiko Hayashi wrote:
+> This refers common bindings, so this is preferred for
+> unevaluatedProperties instead of additionalProperties.
 
-Should have been devicetree/next, applied in the expected branch.
--- 
-Florian
+Yes and no. If you want to define specific common properties are used 
+(and not used), then listing them in the specific schema with 
+'additionalProperties' is the right way to do that. If all properties in 
+the referenced schema are valid, then unevaluatedProperties is correct.
+
+If we wanted using unevaluatedProperties to be a hard rule, we could 
+make the meta-schema enforce that.
+
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml    | 2 +-
+>  .../devicetree/bindings/dma/socionext,uniphier-xdmac.yaml       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml b/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
+> index e7bf6dd7da29..b40f247e07be 100644
+> --- a/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
+> +++ b/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
+> @@ -45,7 +45,7 @@ required:
+>    - clocks
+>    - '#dma-cells'
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml b/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
+> index 371f18773198..b2bd21cbeb7f 100644
+> --- a/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
+> +++ b/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
+> @@ -40,7 +40,7 @@ properties:
+>      minimum: 1
+>      maximum: 16
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  required:
+>    - compatible
+> -- 
+> 2.25.1
+> 
+> 

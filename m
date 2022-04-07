@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F47F4F78E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238B24F78DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239377AbiDGIDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S240597AbiDGIDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242657AbiDGICf (ORCPT
+        with ESMTP id S242707AbiDGICv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:02:35 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01BE15A212;
-        Thu,  7 Apr 2022 01:00:33 -0700 (PDT)
-X-UUID: 89029e00520c4ab5921938707430a045-20220407
-X-UUID: 89029e00520c4ab5921938707430a045-20220407
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        Thu, 7 Apr 2022 04:02:51 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F44A340E0;
+        Thu,  7 Apr 2022 01:00:50 -0700 (PDT)
+X-UUID: 9a2a65eb16014e93a3cc3465ba6d2a84-20220407
+X-UUID: 9a2a65eb16014e93a3cc3465ba6d2a84-20220407
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2015332760; Thu, 07 Apr 2022 16:00:30 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1837876273; Thu, 07 Apr 2022 16:00:43 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 7 Apr 2022 16:00:29 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 7 Apr 2022 16:00:42 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 7 Apr 2022 16:00:27 +0800
+ Transport; Thu, 7 Apr 2022 16:00:40 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
         "Matthias Brugger" <matthias.bgg@gmail.com>,
@@ -47,9 +47,9 @@ CC:     Robin Murphy <robin.murphy@arm.com>,
         <angelogioacchino.delregno@collabora.com>,
         <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
         <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Subject: [PATCH v6 19/34] iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
-Date:   Thu, 7 Apr 2022 15:57:11 +0800
-Message-ID: <20220407075726.17771-20-yong.wu@mediatek.com>
+Subject: [PATCH v6 20/34] iommu/mediatek: Add infra iommu support
+Date:   Thu, 7 Apr 2022 15:57:12 +0800
+Message-ID: <20220407075726.17771-21-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220407075726.17771-1-yong.wu@mediatek.com>
 References: <20220407075726.17771-1-yong.wu@mediatek.com>
@@ -65,77 +65,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The power/clock of infra iommu is always on, and it doesn't have the
-device link with the master devices, then the infra iommu device's PM
-status is not active, thus we add A PM_CLK_AO flag for infra iommu.
+The infra iommu enable bits in mt8195 is in the pericfg register segment,
+use regmap to update it.
 
-The tlb operation is a bit not clear here, there are 2 special cases.
-Comment them in the code.
+If infra iommu master translation fault, It doesn't have the larbid/portid,
+thus print out the whole register value.
+
+Since regmap_update_bits may fail, add return value for mtk_iommu_config.
 
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ drivers/iommu/mtk_iommu.c | 36 +++++++++++++++++++++++++++++-------
+ drivers/iommu/mtk_iommu.h |  2 ++
+ 2 files changed, 31 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index b737613e9046..afb77a530f32 100644
+index afb77a530f32..d975c892b332 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -130,6 +130,8 @@
- #define MTK_IOMMU_TYPE_MM		(0x0 << 13)
- #define MTK_IOMMU_TYPE_INFRA		(0x1 << 13)
- #define MTK_IOMMU_TYPE_MASK		(0x3 << 13)
-+/* PM and clock always on. e.g. infra iommu */
-+#define PM_CLK_AO			BIT(15)
+@@ -112,6 +112,8 @@
  
- #define MTK_IOMMU_HAS_FLAG(pdata, _x)	(!!(((pdata)->flags) & (_x)))
+ #define MTK_PROTECT_PA_ALIGN			256
  
-@@ -235,13 +237,33 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
- 					   struct mtk_iommu_data *data)
- {
- 	struct list_head *head = data->hw_list;
-+	bool check_pm_status;
- 	unsigned long flags;
- 	int ret;
- 	u32 tmp;
- 
- 	for_each_m4u(data, head) {
--		if (pm_runtime_get_if_in_use(data->dev) <= 0)
--			continue;
-+		/*
-+		 * To avoid resume the iommu device frequently when the iommu device
-+		 * is not active, it doesn't always call pm_runtime_get here, then tlb
-+		 * flush depends on the tlb flush all in the runtime resume.
-+		 *
-+		 * There are 2 special cases:
-+		 *
-+		 * Case1: The iommu dev doesn't have power domain but has bclk. This case
-+		 * should also avoid the tlb flush while the dev is not active to mute
-+		 * the tlb timeout log. like mt8173.
-+		 *
-+		 * Case2: The power/clock of infra iommu is always on, and it doesn't
-+		 * have the device link with the master devices. This case should avoid
-+		 * the PM status check.
-+		 */
-+		check_pm_status = !MTK_IOMMU_HAS_FLAG(data->plat_data, PM_CLK_AO);
++#define PERICFG_IOMMU_1				0x714
 +
-+		if (check_pm_status) {
-+			if (pm_runtime_get_if_in_use(data->dev) <= 0)
-+				continue;
-+		}
- 
- 		spin_lock_irqsave(&data->tlb_lock, flags);
- 		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-@@ -268,7 +290,8 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
- 			mtk_iommu_tlb_flush_all(data);
- 		}
- 
--		pm_runtime_put(data->dev);
-+		if (check_pm_status)
-+			pm_runtime_put(data->dev);
+ #define HAS_4GB_MODE			BIT(0)
+ /* HW will use the EMI clock if there isn't the "bclk". */
+ #define HAS_BCLK			BIT(1)
+@@ -343,8 +345,8 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
+ 			       write ? IOMMU_FAULT_WRITE : IOMMU_FAULT_READ)) {
+ 		dev_err_ratelimited(
+ 			data->dev,
+-			"fault type=0x%x iova=0x%llx pa=0x%llx larb=%d port=%d layer=%d %s\n",
+-			int_state, fault_iova, fault_pa, fault_larb, fault_port,
++			"fault type=0x%x iova=0x%llx pa=0x%llx master=0x%x(larb=%d port=%d) layer=%d %s\n",
++			int_state, fault_iova, fault_pa, regval, fault_larb, fault_port,
+ 			layer, write ? "write" : "read");
  	}
+ 
+@@ -388,14 +390,15 @@ static int mtk_iommu_get_domain_id(struct device *dev,
+ 	return -EINVAL;
  }
+ 
+-static void mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
+-			     bool enable, unsigned int domid)
++static int mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
++			    bool enable, unsigned int domid)
+ {
+ 	struct mtk_smi_larb_iommu    *larb_mmu;
+ 	unsigned int                 larbid, portid;
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+ 	const struct mtk_iommu_iova_region *region;
+-	int i;
++	u32 peri_mmuen, peri_mmuen_msk;
++	int i, ret = 0;
+ 
+ 	for (i = 0; i < fwspec->num_ids; ++i) {
+ 		larbid = MTK_M4U_TO_LARB(fwspec->ids[i]);
+@@ -415,8 +418,19 @@ static void mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
+ 				larb_mmu->mmu |= MTK_SMI_MMU_EN(portid);
+ 			else
+ 				larb_mmu->mmu &= ~MTK_SMI_MMU_EN(portid);
++		} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
++			peri_mmuen_msk = BIT(portid);
++			peri_mmuen = enable ? peri_mmuen_msk : 0;
++
++			ret = regmap_update_bits(data->pericfg, PERICFG_IOMMU_1,
++						 peri_mmuen_msk, peri_mmuen);
++			if (ret)
++				dev_err(dev, "%s iommu(%s) inframaster 0x%x fail(%d).\n",
++					enable ? "enable" : "disable",
++					dev_name(data->dev), peri_mmuen_msk, ret);
+ 		}
+ 	}
++	return ret;
+ }
+ 
+ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
+@@ -531,8 +545,7 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
+ 	}
+ 	mutex_unlock(&data->mutex);
+ 
+-	mtk_iommu_config(data, dev, true, domid);
+-	return 0;
++	return mtk_iommu_config(data, dev, true, domid);
+ 
+ err_unlock:
+ 	mutex_unlock(&data->mutex);
+@@ -995,6 +1008,15 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 		ret = mtk_iommu_mm_dts_parse(dev, &match, data);
+ 		if (ret)
+ 			goto out_runtime_disable;
++	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
++		   data->plat_data->pericfg_comp_str) {
++		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
++		if (IS_ERR(infracfg)) {
++			ret = PTR_ERR(infracfg);
++			goto out_runtime_disable;
++		}
++
++		data->pericfg = infracfg;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, data);
+diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
+index f41e32252056..56838fad8c73 100644
+--- a/drivers/iommu/mtk_iommu.h
++++ b/drivers/iommu/mtk_iommu.h
+@@ -55,6 +55,7 @@ struct mtk_iommu_plat_data {
+ 	u32                 flags;
+ 	u32                 inv_sel_reg;
+ 
++	char					*pericfg_comp_str;
+ 	struct list_head			*hw_list;
+ 	unsigned int				iova_region_nr;
+ 	const struct mtk_iommu_iova_region	*iova_region;
+@@ -80,6 +81,7 @@ struct mtk_iommu_data {
+ 	struct device			*smicomm_dev;
+ 
+ 	struct dma_iommu_mapping	*mapping; /* For mtk_iommu_v1.c */
++	struct regmap			*pericfg;
+ 
+ 	struct mutex			mutex; /* Protect m4u_group/m4u_dom above */
  
 -- 
 2.18.0

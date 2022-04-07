@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E500D4F7D60
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA04D4F7D63
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244622AbiDGK74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S244617AbiDGLA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244611AbiDGK7s (ORCPT
+        with ESMTP id S244618AbiDGLAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:59:48 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1181C111
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:57:47 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2eba37104a2so57785307b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 03:57:47 -0700 (PDT)
+        Thu, 7 Apr 2022 07:00:21 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369010FDC1;
+        Thu,  7 Apr 2022 03:58:21 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d40so1408774lfv.11;
+        Thu, 07 Apr 2022 03:58:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YAih2VV1b6Dcv2ql7IplEJePRdAhH/c4e8CUvFmbIkM=;
-        b=RhiOo3F/DFP9jE1JwzXHVjf6v7lROXvN4/jHBAoAoVYeVj6yvERnzQ+dTjcMSEDyx/
-         bHNxajnQZ5tu6+C5jDCGAWVMDB64ZHj8b4t0XnLFj11z6c7pQWhuJ7Duhe/JWFMlGYgt
-         xQ7uJC8PDzHuVzKeSd02a/jBRIG6c1wIdUQh8oNcstgALIue74Ja+FWB2YtdMJVR8ejs
-         zWHmwU0Cx+jhv3DZtz2xhgqAbY4G2YXVooDXdxYYGoJCWIJUl7YVlIKO4E7MGin26Cni
-         NtXaw00B267uxAu3y7+X1QUNXin0j3TlEomeovWVHNjb0ocXNuwVB0x4qGCJ5f3gr7b8
-         m6gg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iPP0D+z0IDd44ZdD/ERMbUpce+RzSVT1iFXSNsCKFkI=;
+        b=Vrq3wqT9Yy+lScwQjwrpYNdVVuF+df1AXf8NKz8voG6upS7Z4DtBYThuw4jsNCxTBw
+         VCQtG8QXyitctbs84e93WkRvhXOgQ9NBlM8D4IhKzeN1qbS2CH9iNrUtzYfUzbUYVrU6
+         3JwKKjwDSWC6LUG02OfB4P2/Xra94QxQIZwDG8aPn41LA7Zu0qdUo4BSNKjBStscZu2j
+         0kygSVGI6KSfbElmC/yhKmJZWf6uUW9/z/DX5B+YimDBXWJSNo7C5F68qQzB3M9lORbs
+         KkDWkceeTixfH2xhyGr55UoxWsN9gilmZJb0gu8Cm0YMC02C8eGKs4ppv8SMDslgrzzN
+         t2nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YAih2VV1b6Dcv2ql7IplEJePRdAhH/c4e8CUvFmbIkM=;
-        b=kOtV7N81v7qtesVHuJj5a1J2A5/b6a0d2fWYJ1/O8CdPe6uBOiME1Zg0QQrN+1qN3h
-         dfadYYGuRDUluG5hvhHOv67arBa7PdAHvtJd1Uhy2fA6kyM5ouOEBd77FmyxhQDJ3IwN
-         7+bgLu5c1ZQkwiFKj/zTERfZv0pKqqXuH53KtaOd0kj6+cvflAozYjn992zhlPPCD8r0
-         zaAOJWkeS/X5NKOAPcFXwv1K8XebKXogb+qPohWxswI6c5XhB7ZBG3OK5YL+ZFklyK20
-         B+vk3A0akiFveOEOYT8j+h9makxIigfEK7eZJp5QSyPgYTxflba+qSbqiqsdQUXwQi9G
-         iCqg==
-X-Gm-Message-State: AOAM531VuA7h1VsKLnMGk43kV16R5Lg2t1f3VefgYbIRqKWsA7zIeVIS
-        VfpGQSYQoz4LDbEb3t08PC7J5fzQqH26QsA31A7BeA==
-X-Google-Smtp-Source: ABdhPJwp2W5YUJOYwcWLmJlNNa7zvEs/sKpsR8lqYUbzifXd3DYC/LjeMUVIM06c4fR1fXOc/JXDbb4dywQrUKtMpUA=
-X-Received: by 2002:a05:690c:826:b0:2eb:753b:169d with SMTP id
- by6-20020a05690c082600b002eb753b169dmr10646711ywb.265.1649329067023; Thu, 07
- Apr 2022 03:57:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iPP0D+z0IDd44ZdD/ERMbUpce+RzSVT1iFXSNsCKFkI=;
+        b=NamFtQnW38amL9EHw8KFkrtng98GGgChMSDAwmUFaZOPV/gY6IwsFks77+rLf5xHTQ
+         sH6cNbMK3PswJY62lkH19Zy+U8FBu2/xF3o6by+eKfV3jm62QXf3Tjp4wdW6wsN/SpiF
+         8xxyhwvjSn5djq547W1A1BuyZ2Ul+AQSCiLTdYDhznomf0ny8nCeQdzx9s78XzGS4rCN
+         st9Uj6KnFqtY46WiXTat1OKmzDo2lzCwSZmuWizz8ShRhwNn7Dn0mkO4SBL6f42GNs6Z
+         QhUjVsTUG7qXPSXIFDphUkHBMsSphaCvi2kuMT/uLg5VoubjKbmE8rTtTm02zxWZBEFY
+         80Kw==
+X-Gm-Message-State: AOAM533nEMfTX8BIOXOuw7P8PdCigwvZDMKEcfizr0+gDDFsK6TMerm9
+        LKQiFPu47vl32Qzx426S56r24ze0t1I=
+X-Google-Smtp-Source: ABdhPJxBPt8+NklYLn0p3RGLWz4vBwvu2EdD0iFMLgbtVOvvDsf9T1DjGMJmF3jliMOVv5Xj9usMsg==
+X-Received: by 2002:a05:6512:150f:b0:45d:ccac:c43c with SMTP id bq15-20020a056512150f00b0045dccacc43cmr9467948lfb.604.1649329099065;
+        Thu, 07 Apr 2022 03:58:19 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id k18-20020ac24572000000b0044ae25d47d7sm1990273lfm.143.2022.04.07.03.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 03:58:18 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] Make AUX gpio pin optional for ktd2692
+Date:   Thu,  7 Apr 2022 13:58:07 +0300
+Message-Id: <20220407105810.20399-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220406133122.897434068@linuxfoundation.org>
-In-Reply-To: <20220406133122.897434068@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 7 Apr 2022 16:27:34 +0530
-Message-ID: <CA+G9fYvROA9D0g3n74Qx7GsZP-Lu7-U7_XcryzoeEo=ZD2QX9g@mail.gmail.com>
-Subject: Re: [PATCH 5.17 0000/1123] 5.17.2-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,182 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 19:15, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.2 release.
-> There are 1123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.2-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Some appliances of ktd2692 don't have the AUX pin connected to
+a GPIO. Specifically, Samsung Galaxy J5 (2015), which uses ktd2692
+for driving the front flash LED, has the pin not connected anywhere on
+schematics. Make specifying the AUX pin optional, since it is additional
+functionality and only affects amount of current going through the LED.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Also convert the txt device-tree bindings to yaml and pick up maintainership
+over the yaml binding and the driver itself.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+v2:
+- fix the dt_binding_check
 
-## Build
-* kernel: 5.17.2-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.17.y
-* git commit: 8137844a8b59104952c8c826fb8e300aa7ef97ad
-* git describe: v5.17.1-1124-g8137844a8b59
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y-sanity/buil=
-d/v5.17.1-1124-g8137844a8b59
+Markuss Broks (2):
+  dt-bindings: leds: convert ktd2692 bindings to yaml
+  leds: ktd2692: Make aux-gpios optional
 
-## Test Regressions (compared to v5.17.1-1123-g290ba5383d2c)
-No test regressions found.
+ .../bindings/leds/kinetic,ktd2692.yaml        | 87 +++++++++++++++++++
+ .../devicetree/bindings/leds/leds-ktd2692.txt | 50 -----------
+ MAINTAINERS                                   |  6 ++
+ drivers/leds/flash/leds-ktd2692.c             | 18 ++--
+ 4 files changed, 103 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
 
-## Metric Regressions (compared to v5.17.1-1123-g290ba5383d2c)
-No metric regressions found.
+-- 
+2.35.1
 
-## Test Fixes (compared to v5.17.1-1123-g290ba5383d2c)
-No test fixes found.
-
-## Metric Fixes (compared to v5.17.1-1123-g290ba5383d2c)
-No metric fixes found.
-
-## Test result summary
-total: 97365, pass: 81969, fail: 2175, skip: 13221, xfail: 0
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 40 total, 40 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-test[
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

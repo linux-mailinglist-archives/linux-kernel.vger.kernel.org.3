@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9634F7A94
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3974F7A8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiDGI5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S243356AbiDGI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234575AbiDGI5o (ORCPT
+        with ESMTP id S234575AbiDGI5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:57:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C82167F86
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649321744; x=1680857744;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8oNth3LWFsKCpX8HwZT36uUknbe79ilbHXkiY4G2yCQ=;
-  b=lwF04ZFoXyjKU/sUS97CkAp5RpVvJhqd1JXD3pmeuQpK9CLdHW82T+ye
-   YLr7WO4eiULE9Uuuivx6sagVL+Fg3SzXU45/1eocnrLDQ7T+ieQV3VkLk
-   ebWeNCxBRuPjPp1O2IfHkc7QqbgrHKe54/ZPgVa6SPu2G05i+VQ5p3DmU
-   w7hSklHLwWvfF2tpw+WVJkNAsSQtxoZtmNo5SkKO3OchRT0UrtUIr5Bf+
-   fNJxL+P+4bjRjNAP+S5Etryr6tctQJAa3DL6Fv4eNh0WXMF07DQVzBGDl
-   lcq/NGuW+hqZiM5rgdH78JHmDKd6Zp3rpe3kgaaOwvGMGoKL5iMYWQ39U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261446219"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="261446219"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:55:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="549928167"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 01:55:37 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncNvU-0005GN-N8;
-        Thu, 07 Apr 2022 08:55:36 +0000
-Date:   Thu, 7 Apr 2022 16:54:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kas:lam 10/10] arch/x86/kernel/proc.c:35:24: error:
- 'X86_THREAD_LAM_U48' undeclared; did you mean 'X86_CR3_LAM_U48'?
-Message-ID: <202204071610.T6fPhCnP-lkp@intel.com>
+        Thu, 7 Apr 2022 04:57:06 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04DE1C7F26;
+        Thu,  7 Apr 2022 01:55:05 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso6035448pjb.0;
+        Thu, 07 Apr 2022 01:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=e/SRJZVa+pnGFAQo/DwKcWQpRPq+V+tMl7YCYye8ky8=;
+        b=Za5XoHpE3z6/fpXB3ca8tbDAq9xX0zhpil4PKZb0dvl/rgE7sgQg/bkx4mHJY/IH6P
+         cxjXlZrvDwbZsfqacuCmxrQTj/qqlcy0c7kC9y7DUMM7hER+FC6zVmEghCMBeQo1s9uG
+         U3FLUTf0zpoFMszLWUbyisyJzur9Z/1hWs9jg6yYjkWVNcxYJZRyO8YptFBnwLPM0YNb
+         Nc3MEaFgzw6zKKzbbcU0ghuGBbxJYjMxb34t16Alh+BkliXaf088ALOrs+vuWYh8mMpa
+         i8a92U9ExfWjLS+/1QSgKbjwNxdnZZs288jgwSFDt+WF0iwMmV8ye4lQBiYuvsHUYZWz
+         6sXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e/SRJZVa+pnGFAQo/DwKcWQpRPq+V+tMl7YCYye8ky8=;
+        b=HbCig1hR2hMG33ps6PxVk5vNDuC/IW2A8L9yNNu/hvcir36CgrdD4fh/DKzqDu6HyD
+         YtmzbyFutirf1CBMQyRwrMXseM08lMzlrSXUp6I65XFsGyXV3L3/xZUeA2EjZPfkvOV+
+         0HpIThUJVD2ocY1a5scqdq1yCY/CYswpmJu+Hv7ZCj6GJGlqR/2DP7aZmg6vLS0Y0z7T
+         v388i9Vdll3q9WplcKwhRVWVdMH3H1J9Wof+nSKl15oUih1Su0EkyK4XNvqeEOvF/v7H
+         +BXbI0ArZh3v0Cmi5q7CvmjIn0NkHyEkuaigWlOwXvOnSqFwJATB8PvZdIPpSoEtJC+S
+         KKlw==
+X-Gm-Message-State: AOAM531EWXuGSB1pw7gHF5JSGgazxcH8iAJvfdAqSepGkcAUZBnOxD0s
+        fOdChWDwet8SxbR7BgIl68U=
+X-Google-Smtp-Source: ABdhPJzq6mIJdzeGR7PpscKazLC0a0+GeljWRO9npUDAFsvbjAAsjD2jwiPFr4UEIWuK3k51pQoe7A==
+X-Received: by 2002:a17:90a:7f94:b0:1cb:1853:da1b with SMTP id m20-20020a17090a7f9400b001cb1853da1bmr1334040pjl.14.1649321705066;
+        Thu, 07 Apr 2022 01:55:05 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-43.three.co.id. [116.206.28.43])
+        by smtp.gmail.com with ESMTPSA id t38-20020a634626000000b0039cc30b7c93sm1672908pga.82.2022.04.07.01.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 01:55:04 -0700 (PDT)
+Message-ID: <7a7fbb50-2f6f-ad99-2bf5-68b2b4028acc@gmail.com>
+Date:   Thu, 7 Apr 2022 15:54:58 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.16 0000/1014] 5.16.19-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220406133109.570377390@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220406133109.570377390@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-head:   73447e771c55e18598a6fbf6adee1002aee18ea0
-commit: 73447e771c55e18598a6fbf6adee1002aee18ea0 [10/10] x86: Expose thread features status in /proc/$PID/arch_status
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220407/202204071610.T6fPhCnP-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=73447e771c55e18598a6fbf6adee1002aee18ea0
-        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
-        git fetch --no-tags kas lam
-        git checkout 73447e771c55e18598a6fbf6adee1002aee18ea0
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 06/04/22 20.44, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.19 release.
+> There are 1014 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
+powerpc (ps3_defconfig, gcc 11.2.0).
 
-All errors (new ones prefixed by >>):
-
-   arch/x86/kernel/proc.c: In function 'dump_features':
->> arch/x86/kernel/proc.c:35:24: error: 'X86_THREAD_LAM_U48' undeclared (first use in this function); did you mean 'X86_CR3_LAM_U48'?
-      35 |         if (features & X86_THREAD_LAM_U48)
-         |                        ^~~~~~~~~~~~~~~~~~
-         |                        X86_CR3_LAM_U48
-   arch/x86/kernel/proc.c:35:24: note: each undeclared identifier is reported only once for each function it appears in
->> arch/x86/kernel/proc.c:37:24: error: 'X86_THREAD_LAM_U57' undeclared (first use in this function); did you mean 'X86_CR3_LAM_U57'?
-      37 |         if (features & X86_THREAD_LAM_U57)
-         |                        ^~~~~~~~~~~~~~~~~~
-         |                        X86_CR3_LAM_U57
-
-
-vim +35 arch/x86/kernel/proc.c
-
-    32	
-    33	static void dump_features(struct seq_file *m, unsigned long features)
-    34	{
-  > 35		if (features & X86_THREAD_LAM_U48)
-    36			seq_puts(m, "lam_u48 ");
-  > 37		if (features & X86_THREAD_LAM_U57)
-    38			seq_puts(m, "lam_u57 ");
-    39	}
-    40	
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara

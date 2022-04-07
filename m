@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31F94F7D14
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A54D4F7D16
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244562AbiDGKhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:37:17 -0400
+        id S237637AbiDGKjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:39:16 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244503AbiDGKgr (ORCPT
+        with ESMTP id S244690AbiDGKhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:36:47 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A0018A7A6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:34:05 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y6so4506461plg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 03:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ujLNXWvcoTkgsry9MTgtB72dmND/1PFu6sESLiS4+5Q=;
-        b=IRSMB39q0CkKZ7RhIs/Puw/gDrCfZqc84S2LziFCQ2v31cXA038xuV2TnDuQwdTqtX
-         oQP68wBFvqS0P67Wu65Z1ImXWFUJ5J5ZmMDfviT2s2FvkOXcaaRb68QMHqSwDC9mHzXp
-         bZfCENUVcTaBnAzz4hEQbHsNxqap60kTK+AMSq9SR1uBOqhBPoVbu1L7cUHTbQw4s+g8
-         Jm8KHgQHc5pS6caVI17xlHNuxOkF9d5Fmxqg/T7252I14hURjFA9vGMAYyZX1ERKOHHp
-         AiHo3lBLT7yjAoYjQB2YZsRZCCDvQL2A1MnEJlHEC38o9O8oV4kD+NuoA+1joxlTgFx2
-         nrYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ujLNXWvcoTkgsry9MTgtB72dmND/1PFu6sESLiS4+5Q=;
-        b=Z2e0laXKlUDa/jZg5tolT/v43GBApi3cxCssA3FtpkGKrETReA+8vSkN1omMYwnWqy
-         iTNAvkCfk0Gygmgc20liqsI3L+aszttV2P2DwIz3QtY7GIaagAYu6c7BDvMhwNZzcDPO
-         FEIbnelskKlL4/9zoHu/p2z/3zkB3XkRJAVPrAkyBqUeBVps6+QfrcGUq64c6nv5isIX
-         aD9R+fnG8CChothlae6DylpN9tU7MdgvrEAy1/J4grkE/jq0VYoalP+0jidjIZhdFwQE
-         DLbga9H8wQh4IcVwvQEaE35saYVylsVPWjGPA0g90L5D9m9xOVeuphtYrC4n5fkl5Wi9
-         MpeQ==
-X-Gm-Message-State: AOAM530KCwm3dcGSJjfUy/Wi0iTQX9iZaEoy7KqiFG4z/3nAx27/Bee+
-        nWNXPaGKRAzv0TFOVPNQX872vA==
-X-Google-Smtp-Source: ABdhPJwoETx1Gs+umqB0Nk2NhJr5PIpA6CfK0Uc2IZapKwxyVzkhpH2VfsDLbd7RH2LZx2NVXkGLMA==
-X-Received: by 2002:a17:902:f2d3:b0:156:a551:fba3 with SMTP id h19-20020a170902f2d300b00156a551fba3mr13033984plc.64.1649327644604;
-        Thu, 07 Apr 2022 03:34:04 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056a0022c400b004fb2292cd74sm22601362pfj.206.2022.04.07.03.34.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 03:34:04 -0700 (PDT)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        zhouchengming@bytedance.com, songmuchun@bytedance.com,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put() completes
-Date:   Thu,  7 Apr 2022 18:33:35 +0800
-Message-Id: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Thu, 7 Apr 2022 06:37:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B8C1AE19A;
+        Thu,  7 Apr 2022 03:34:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 938FE21115;
+        Thu,  7 Apr 2022 10:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649327681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sO0QE8JyTuj2LMUjDwYdva6iLYEDQBctYiGgxMGKAN8=;
+        b=LwAe3jQ5+TGKWdY4ZX3tUU+fSU5rP4vpxcto9Sc4TqPdlpx/37BzVOasiq+mZLyGY2r3Zg
+        aSkdPXBFU824M9PVCIeBYcjeBeW/5V9U3ZQA6IwASjiNwGdtrFXUf+auXBLpqpRdKE9xIn
+        3timskGhpz+vIVqqyIju/BRrPH9QULc=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5DE87A3B95;
+        Thu,  7 Apr 2022 10:34:41 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 12:34:40 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
+        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+Message-ID: <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
+References: <20220407093221.1090-1-jgross@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407093221.1090-1-jgross@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
-before calling percpu_ref_put(), which will cause the value of
-percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
-returns.
+Ccing Mel
 
-	CPU0				CPU1
+On Thu 07-04-22 11:32:21, Juergen Gross wrote:
+> Since commit 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist
+> initialization") only zones with free memory are included in a built
+> zonelist. This is problematic when e.g. all memory of a zone has been
+> ballooned out.
 
-percpu_ref_switch_to_atomic_sync(&ref)
---> percpu_ref_switch_to_atomic(&ref)
-    --> percpu_ref_get(ref);	/* put after confirmation */
-	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
+What is the actual problem there?
 
-					percpu_ref_switch_to_atomic_rcu
-					--> percpu_ref_call_confirm_rcu
-					    --> data->confirm_switch = NULL;
-						wake_up_all(&percpu_ref_switch_waitq);
+> Use populated_zone() when building a zonelist as it has been done
+> before that commit.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist initialization")
 
-    /* here waiting to wake up */
-    wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
-						(A)percpu_ref_put(ref);
-/* The value of &ref is unstable! */
-percpu_ref_is_zero(&ref)
-						(B)percpu_ref_put(ref);
+Did you mean to refer to 
+6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with
+pages managed by the buddy allocator")?
 
-As shown above, assuming that the counts on each cpu add up to 0 before
-calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
-to atomic mode, percpu_ref_is_zero() can return true. But actually it will
-return different values in the two cases of A and B, which is not what
-we expected.
+> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index bdc8f60ae462..3d0662af3289 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6128,7 +6128,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
+>  	do {
+>  		zone_type--;
+>  		zone = pgdat->node_zones + zone_type;
+> -		if (managed_zone(zone)) {
+> +		if (populated_zone(zone)) {
+>  			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+>  			check_highest_zone(zone_type);
+>  		}
+> -- 
+> 2.34.1
 
-Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
-just to ensure that the conversion to atomic mode is completed, but it
-should not return with an extra reference count.
-
-Calling wake_up_all() after percpu_ref_put() ensures that the value of
-percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
-So just do it.
-
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- lib/percpu-refcount.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
-index af9302141bcf..b11b4152c8cd 100644
---- a/lib/percpu-refcount.c
-+++ b/lib/percpu-refcount.c
-@@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
- 
- 	data->confirm_switch(ref);
- 	data->confirm_switch = NULL;
--	wake_up_all(&percpu_ref_switch_waitq);
- 
- 	if (!data->allow_reinit)
- 		__percpu_ref_exit(ref);
- 
- 	/* drop ref from percpu_ref_switch_to_atomic() */
- 	percpu_ref_put(ref);
-+
-+	wake_up_all(&percpu_ref_switch_waitq);
- }
- 
- static void percpu_ref_switch_to_atomic_rcu(struct rcu_head *rcu)
 -- 
-2.20.1
-
+Michal Hocko
+SUSE Labs

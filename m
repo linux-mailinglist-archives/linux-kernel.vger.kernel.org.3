@@ -2,157 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398534F8596
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B3C4F859D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345952AbiDGRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S1345970AbiDGRM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239064AbiDGRKT (ORCPT
+        with ESMTP id S1346001AbiDGRMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:10:19 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1A82CE03
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:08:18 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id z8so6294247oix.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JqDkTinK10x3zeolGbydLx/yEZJP4ImSGKmYcvP6lVQ=;
-        b=Cy0VXhmnAEqP0lRJ0KQuwUy715TtVttVKnb19XsHu+WELC6cFz4o3We4LkuxtsJYIR
-         Di3N1+8prGyIRhYxREa/bbeMsylUltqSC4+WRA7TqQv1qm8UCzeUwGYDYmw8YKHJEf9Z
-         04x1BYmO7f/FAI3j/O9jTgK0tyiQxdbUurLzX3Ymyxm03m1bvBllSiZgGdEfD0Ryrsyp
-         MJHwx0eF5rHTH+brtzbUTyGdYEzq6lvEIZFtsiFGfXDAxewiOFiWrlfPMkot2B56Cw90
-         VaHAdRR1AQW3Qw4Ny+MBKI+761GiyxeWIsLhSVsmJLnE+7ZA6n4Q1XYWaV6p6NxlA8jp
-         e2kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JqDkTinK10x3zeolGbydLx/yEZJP4ImSGKmYcvP6lVQ=;
-        b=bXfcXmAHz9oGEhBa1keApm9gofymwqsTg+QLEfq7lzdrPhHmdqcUkMvObRU5IfAX+x
-         e+H7ZI+cnzSnmXVqZsuOpJaKKhF1XnsDO7kUHHAa0CeWUMCS2YFWZnHzr7oQKknmORma
-         LRGcmm34HUWDbPKZwxWcbC8zkyOl1jn/cBDKoltu1Bh1+o1bL64uIxJwwzuE+bVU1cHQ
-         6rHWdvrIoWyppZCIorjfY3SyMPgEXzdDYI0Rq+4J7C25vZ3VTgMsJ4mVs2tSdtkOioop
-         +iKACDqFWtqUTKF0y7tZuinasqX1ESvAPAgRYun2ppNqOh+DTH8vNaL7uqnV4EYzWEKd
-         1qlQ==
-X-Gm-Message-State: AOAM533C47rnP/HZNiVbT2e5dyPGk24YQU9zu/h5cwA4F6CkaDHV4hOL
-        67HZKHYRYyO4kxauOYSlqDDUoGH9abmN8USIYEZIsDM/FNw=
-X-Google-Smtp-Source: ABdhPJxylZ9P0pQvwI6USl2YGwdfB/0/fgO3ea3ZdU5f2ipIyl5F1+aUvZ2K86YyCnVCnX962vuWjCpdcgbpRakh+Vw=
-X-Received: by 2002:aca:6006:0:b0:2f9:c685:f4e2 with SMTP id
- u6-20020aca6006000000b002f9c685f4e2mr446739oib.200.1649351298327; Thu, 07 Apr
- 2022 10:08:18 -0700 (PDT)
+        Thu, 7 Apr 2022 13:12:31 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCA41E9637
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:10:29 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649351427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RKada/syRdNLHr4WO/ASA7jzsH+BuRSFKa7ozmTSlP8=;
+        b=Z4SrfJi1IGw71HQV0HTQYn56ug6Z0kofWnjvTZo2iPvxqU64LoNhJVplJ5jFu+qEAbkYmk
+        N3DtZ2QlQGuJZ2Suddbcc68RzATXbn5Kvs9psFJWBnnTmlr0P5HMnFK7ffrD0YvmCS7AqZ
+        6RgTwrxuq3IFOaz3KM8s/pAoHSHFs6M=
+From:   andrey.konovalov@linux.dev
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] kasan: mark KASAN_VMALLOC flags as kasan_vmalloc_flags_t
+Date:   Thu,  7 Apr 2022 19:08:37 +0200
+Message-Id: <52d8fccdd3a48d4bdfd0ff522553bac2a13f1579.1649351254.git.andreyknvl@google.com>
 MIME-Version: 1.0
-References: <20220407121230.132627-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220407121230.132627-1-kai.heng.feng@canonical.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 7 Apr 2022 13:08:07 -0400
-Message-ID: <CADnq5_Oq4nS1A8MxosTn=0EztBCDeURmGq9WBW9886E9y-sO7Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Ensure HDA function is suspended before ASIC reset
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 8:21 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> DP/HDMI audio on AMD PRO VII stops working after S3:
-> [  149.450391] amdgpu 0000:63:00.0: amdgpu: MODE1 reset
-> [  149.450395] amdgpu 0000:63:00.0: amdgpu: GPU mode1 reset
-> [  149.450494] amdgpu 0000:63:00.0: amdgpu: GPU psp mode1 reset
-> [  149.983693] snd_hda_intel 0000:63:00.1: refused to change power state from D0 to D3hot
-> [  150.003439] amdgpu 0000:63:00.0: refused to change power state from D0 to D3hot
-> ...
-> [  155.432975] snd_hda_intel 0000:63:00.1: CORB reset timeout#2, CORBRP = 65535
+From: Andrey Konovalov <andreyknvl@google.com>
 
-As an aside, shouldn't device links order this properly already?  I
-thought that was the whole point of them.  We have quirks in PCI
-quirks.c to create device links for all GPU integrated peripherals
-(audio, usb, ucsi).
+Fix sparse warning:
 
-Alex
+mm/kasan/shadow.c:496:15: warning: restricted kasan_vmalloc_flags_t degrades to integer
 
->
-> The offending commit is daf8de0874ab5b ("drm/amdgpu: always reset the asic in
-> suspend (v2)"). Commit 34452ac3038a7 ("drm/amdgpu: don't use BACO for
-> reset in S3 ") doesn't help, so the issue is something different.
->
-> Assuming that to make HDA resume to D0 fully realized, it needs to be
-> successfully put to D3 first. And this guesswork proves working, by
-> moving amdgpu_asic_reset() to noirq callback, so it's called after HDA
-> function is in D3.
->
-> Fixes: daf8de0874ab5b ("drm/amdgpu: always reset the asic in suspend (v2)")
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> index bb1c025d90019..31f7229e7ea89 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> @@ -2323,18 +2323,23 @@ static int amdgpu_pmops_suspend(struct device *dev)
->  {
->         struct drm_device *drm_dev = dev_get_drvdata(dev);
->         struct amdgpu_device *adev = drm_to_adev(drm_dev);
-> -       int r;
->
->         if (amdgpu_acpi_is_s0ix_active(adev))
->                 adev->in_s0ix = true;
->         else
->                 adev->in_s3 = true;
-> -       r = amdgpu_device_suspend(drm_dev, true);
-> -       if (r)
-> -               return r;
-> +       return amdgpu_device_suspend(drm_dev, true);
-> +}
-> +
-> +static int amdgpu_pmops_suspend_noirq(struct device *dev)
-> +{
-> +       struct drm_device *drm_dev = dev_get_drvdata(dev);
-> +       struct amdgpu_device *adev = drm_to_adev(drm_dev);
-> +
->         if (!adev->in_s0ix)
-> -               r = amdgpu_asic_reset(adev);
-> -       return r;
-> +               return amdgpu_asic_reset(adev);
-> +
-> +       return 0;
->  }
->
->  static int amdgpu_pmops_resume(struct device *dev)
-> @@ -2575,6 +2580,7 @@ static const struct dev_pm_ops amdgpu_pm_ops = {
->         .prepare = amdgpu_pmops_prepare,
->         .complete = amdgpu_pmops_complete,
->         .suspend = amdgpu_pmops_suspend,
-> +       .suspend_noirq = amdgpu_pmops_suspend_noirq,
->         .resume = amdgpu_pmops_resume,
->         .freeze = amdgpu_pmops_freeze,
->         .thaw = amdgpu_pmops_thaw,
-> --
-> 2.34.1
->
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ include/linux/kasan.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index ceebcb9de7bf..b092277bf48d 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -23,10 +23,10 @@ struct task_struct;
+ 
+ typedef unsigned int __bitwise kasan_vmalloc_flags_t;
+ 
+-#define KASAN_VMALLOC_NONE		0x00u
+-#define KASAN_VMALLOC_INIT		0x01u
+-#define KASAN_VMALLOC_VM_ALLOC		0x02u
+-#define KASAN_VMALLOC_PROT_NORMAL	0x04u
++#define KASAN_VMALLOC_NONE		((__force kasan_vmalloc_flags_t)0x00u)
++#define KASAN_VMALLOC_INIT		((__force kasan_vmalloc_flags_t)0x01u)
++#define KASAN_VMALLOC_VM_ALLOC		((__force kasan_vmalloc_flags_t)0x02u)
++#define KASAN_VMALLOC_PROT_NORMAL	((__force kasan_vmalloc_flags_t)0x04u)
+ 
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+ 
+-- 
+2.25.1
+

@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01784F7C37
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23024F7C3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244050AbiDGJ6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S244072AbiDGJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244051AbiDGJ6o (ORCPT
+        with ESMTP id S244058AbiDGJ7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:58:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E6FEF;
-        Thu,  7 Apr 2022 02:56:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8F167212B7;
-        Thu,  7 Apr 2022 09:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649325381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IlRD7m/alIJncAcf5ZsFIg2sRj4ry7LBP76Q3+m8Fv0=;
-        b=UKcH9KkS3V5pJFKjQTrgHntE36GmrRlMKttleodgavjTOO4sIry5rjlFnvmWUk+RlhxYpD
-        UULtSZJpg0Ou1egwUxOTGJfzoz2l0kn9b21jZF6g7Ixb97QLzQkRiSBe3koCPaQLd63jYl
-        kZKL4+gZ1GU9ZkRrER5szKvrJZF+QoM=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BAFEFA3B83;
-        Thu,  7 Apr 2022 09:56:19 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 11:56:19 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, Marco Elver <elver@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Phil Auld <pauld@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH printk v2 09/12] printk: add functions to prefer direct
- printing
-Message-ID: <Yk61Q+w7tWTjh8xl@alley>
-References: <20220405132535.649171-1-john.ogness@linutronix.de>
- <20220405132535.649171-10-john.ogness@linutronix.de>
+        Thu, 7 Apr 2022 05:59:45 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F47645C;
+        Thu,  7 Apr 2022 02:57:44 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 17so6782770lji.1;
+        Thu, 07 Apr 2022 02:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v5UAfKxsrsRPvh+meKdkGbOkhRM3tNuXSuWFqHVxSXs=;
+        b=m3YGQUepXhCvyRxD5o4/1/8dJwfSqa900VjhrgSGI09drgozJj46mc06D3MszpYN5M
+         jlYFphQm7t4z0kWI/eNluuJ2Tv3d3SQisTc4OuY+EgvXiBF85r9th6ucqr5vLN7ynuKR
+         aJ3uQspwY+wbi32vnAD7ej0+I7za05t0o6cIqFxw3byiq132kHi8X8xP3sX9iTmalokJ
+         U0HN/mcG0wC6fy83qgQrjwfIim2iiRqkvgaaHZysXmN81JYWeKUD22dMnxLJ8d2KnnvU
+         qg3Vusbb04fxIuGMBJmNrYjNMu86OQrzogTKd8WC/BHKeiniDcxI8SX7XzyDBON/+O4Q
+         dHZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v5UAfKxsrsRPvh+meKdkGbOkhRM3tNuXSuWFqHVxSXs=;
+        b=l/DMucsbhhLLabozuaNDHjrWgMdXy6CoB0/ZgRV8sESozgx4I4uMoVl5R8bLcEg59b
+         +l0gjdG7wXVMvKvaHww0FRos5TC3kiSurYcIQV43FN5YflCsFlCKJQ9/t2y+zERX7jpf
+         IY6GnwPP0R1S2bmPBcTQPCofNBzhPJI1d9Yr6zrzNRUeadZLzBdIgQDOoOvN24hmOABt
+         HnNeHaV4Ir+uX1s60NfaiSFw584Zff1tTtv+z4/5lF3Ve/7CojblsH/MSPtgbpsxnhuG
+         OV4fT3RzG2UB3oy1fjD5NrNfAuQI7a8uOF0bHD8w0GsZ0COof347NOgh5QhI1nnlQkXz
+         CbaA==
+X-Gm-Message-State: AOAM532EvQOJUrkxPP6adudsAgWhhllHKWKCUufj9j3+mxFGIgwdI3RX
+        WTEGL3j9SNxh2RLN6uraeFQEuHwxyz9XNNnf3XyY0bsVXTo=
+X-Google-Smtp-Source: ABdhPJyz9uV69vNu9Xkhp5TJC8HBxV2DDog4ohbuQHHfoDApG8f+V+4nHmjPwPczr9oZDDOIOrwnGBVRazYGtFts0ug=
+X-Received: by 2002:a2e:9c03:0:b0:24a:fe64:2c12 with SMTP id
+ s3-20020a2e9c03000000b0024afe642c12mr8033891lji.101.1649325462634; Thu, 07
+ Apr 2022 02:57:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405132535.649171-10-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220322115148.3870-1-dharamhans87@gmail.com> <CACUYsyG=RmUkX0b_0_1PmC4B_Oute5DnAf-xxFOr6h95ArPZDg@mail.gmail.com>
+In-Reply-To: <CACUYsyG=RmUkX0b_0_1PmC4B_Oute5DnAf-xxFOr6h95ArPZDg@mail.gmail.com>
+From:   Dharmendra Hans <dharamhans87@gmail.com>
+Date:   Thu, 7 Apr 2022 15:27:31 +0530
+Message-ID: <CACUYsyGkg2+wSfaZUt+B1woQRu96s1RY+b59RPoVE7QkTEsUtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] FUSE: Implement atomic lookup + open
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-04-05 15:31:32, John Ogness wrote:
-> Once kthread printing is available, console printing will no longer
-> occur in the context of the printk caller. However, there are some
-> special contexts where it is desirable for the printk caller to
-> directly print out kernel messages. Using pr_flush() to wait for
-> threaded printers is only possible if the caller is in a sleepable
-> context and the kthreads are active. That is not always the case.
-> 
-> Introduce printk_prefer_direct_enter() and printk_prefer_direct_exit()
-> functions to explicitly (and globally) activate/deactivate preferred
-> direct console printing. The term "direct console printing" refers to
-> printing to all enabled consoles from the context of the printk
-> caller. The term "prefer" is used because this type of printing is
-> only best effort. If the console is currently locked or other
-> printers are already actively printing, the printk caller will need
-> to rely on the other contexts to handle the printing.
-> 
-> This preferred direct printing is how all printing is currently
-> handled (unless explicitly deferred).
-> 
-> When kthread printing is introduced, there may be some unanticipated
-> problems due to kthreads being unable to flush important messages.
-> In order to minimize such risks, preferred direct printing is
-> activated for the primary important messages when the system
-> experiences general types of major errors. These are:
-> 
->  - emergency reboot/shutdown
->  - cpu and rcu stalls
->  - hard and soft lockups
->  - hung tasks
->  - warn
->  - sysrq
-> 
-> Note that since kthread printing does not yet exist, no behavior
-> changes result from this commit. This is only implementing the
-> counter and marking the various places where preferred direct
-> printing is active.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-
-Looks good to me. Let's see how it works in practice.
-It is possible that we will need to add it on more
-locations. But it is also possible that we will be
-able to remove it somewhere.
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+On Tue, Mar 29, 2022 at 4:37 PM Dharmendra Hans <dharamhans87@gmail.com> wrote:
+>
+> On Tue, Mar 22, 2022 at 5:22 PM Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> >
+> > In FUSE, as of now, uncached lookups are expensive over the wire.
+> > E.g additional latencies and stressing (meta data) servers from
+> > thousands of clients. These lookup calls possibly can be avoided
+> > in some cases. Incoming two patches addresses this issue.
+> >
+> > First patch handles the case where we open first time a file/dir or create
+> > a file (O_CREAT) but do a lookup first on it. After lookup is performed
+> > we make another call into libfuse to open the file. Now these two separate
+> > calls into libfuse can be combined and performed as a single call into
+> > libfuse.
+> >
+> > Second patch handles the case when we are opening an already existing file
+> > (positive dentry). Before this open call, we re-validate the inode and
+> > this re-validation does a lookup on the file and verify the inode.
+> > This separate lookup also can be avoided (for non-dir) and combined
+> > with open call into libfuse.
+> >
+> > Here is the link to the libfuse pull request which implements atomic open
+> > https://github.com/libfuse/libfuse/pull/644
+> >
+> > I am going to post performance results shortly.
+> >
+> >
+> > Dharmendra Singh (2):
+> >   FUSE: Implement atomic lookup + open
+> >   FUSE: Avoid lookup in d_revalidate()
+>
+> A gentle reminder to look into the above patch set.
+Sending a gentle reminder again to look into the requested patches.

@@ -2,111 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B3C4F79EC
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9F84F79E9
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243150AbiDGIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S243165AbiDGIgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242813AbiDGIgZ (ORCPT
+        with ESMTP id S243158AbiDGIgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:36:25 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20124A74E;
-        Thu,  7 Apr 2022 01:34:24 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id A93533201D51;
-        Thu,  7 Apr 2022 04:34:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 07 Apr 2022 04:34:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=OrAVdtI06jlWzu77P
-        ZjIBfUVfDfo5qupQAsNYfVHmic=; b=REyfza793XvLwCmAbyDR3j41ku76wmjj9
-        t8ZPCQN8csyCmQMKvB42XV1AmWwt4wNNrxmwPC81RF5b8fAADR0pQalFI8qXYPT0
-        7/q14rkEhdtYWx6Ir/coc19eP4KQ2iDLO5MNs9cjC74Tfci0AMnCeGRILehn1Tbg
-        zdS1YIVs1JnZtUmSbl0qDXyVGx7RDN2AtppERAi3Ke56NSptXrFZhqEyJaH0jf/o
-        R7Q19bQDBPRh9KMpteNmIHQXlpkVdxrVY6aYJfkMqCrUCBayiLSBrdr/ZXf3zR2b
-        tu/TkEybMrURbop9YitH5hmy4TK32Gu+HMKnytWHiS9lprsHPdZhg==
-X-ME-Sender: <xms:C6JOYtK2DPSocN3KHcYO1iOuhmb_8QucNUitWsEdflBe5SjkWL3z7w>
-    <xme:C6JOYpKfOENfQGi6p5TQEf0B56wNDQN0OEWecppa37hMLlUM4UeTRwUsN7v5_uWR_
-    gdivHGWAWTeZwKzFeM>
-X-ME-Received: <xmr:C6JOYlt1cSyCTnjfVsxU4pZWO98PYUdKI639jzGKmXtOWFI39-wzOshV4dfyZO2-z4mumNSVWnPG-KabALraSf6EYOe47AA-Ns0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepffduhfegfedvieetudfgleeugeehkeekfeevfffhieevteelvdfhtdevffet
-    uedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
-    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:C6JOYuYlhjomGYyc5L-B0gj8YiRk3ocqfwcnhRXyBdTdBjBsqf4E2Q>
-    <xmx:C6JOYkaLdhGJWMS4ZendpX0uu_pT9copGfWauEd59dUXQNsKrfWXUA>
-    <xmx:C6JOYiDNCIq3SX3-pZu8JnT1DvO4ImNd48uhrFtgNYCkYCD6b3A6Qg>
-    <xmx:DKJOYhL6uTbYkgTwgpQB8D8qsnBrmU8mlCw4mwAwA48dlrIgR419LQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Apr 2022 04:34:17 -0400 (EDT)
-Date:   Thu, 7 Apr 2022 18:34:15 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-cc:     Arnd Bergmann <arnd@arndb.de>, Rob Landley <rob@landley.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Thu, 7 Apr 2022 04:36:39 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A08A24A121;
+        Thu,  7 Apr 2022 01:34:40 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id BF869101C60; Thu,  7 Apr 2022 08:34:37 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 09:34:37 +0100
+From:   Sean Young <sean@mess.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-Subject: Re: [RFC PULL] remove arch/h8300
-In-Reply-To: <04c0374f-0044-c84d-1820-d743a4061906@physik.fu-berlin.de>
-Message-ID: <ca79546d-4e64-b8a-b63a-dfd0ebce8fed@linux-m68k.org>
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com> <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com> <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
- <c3e7ee64-68fc-ed53-4a90-9f9296583d7c@landley.net> <CAK8P3a14b6djqPw8Dea5uW2PPEABbe0pNXV5EX0529oDrW1ZAg@mail.gmail.com> <04c0374f-0044-c84d-1820-d743a4061906@physik.fu-berlin.de>
+        stable <stable@vger.kernel.org>,
+        =?utf-8?B?0JzQuNGF0LDQuNC7?= <vrserver1@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH 5.16 0172/1017] media: gpio-ir-tx: fix transmit with long
+ spaces on Orange Pi PC
+Message-ID: <Yk6iHfvLffyocjrK@gofer.mess.org>
+References: <20220405070354.155796697@linuxfoundation.org>
+ <20220405070359.334460978@linuxfoundation.org>
+ <CAMuHMdUovU-zaPPCV0tbOMEy3GsH6heSe+21koW3Ti3S+4qD5g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUovU-zaPPCV0tbOMEy3GsH6heSe+21koW3Ti3S+4qD5g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022, John Paul Adrian Glaubitz wrote:
-
-> On 4/7/22 09:17, Arnd Bergmann wrote:
-> > On Wed, Apr 6, 2022 at 11:25 PM Rob Landley wrote:
-> > 
-> >> I'm interested in H8300 because it's a tiny architecture (under 6k 
-> >> lines total, in 93 files) and thus a good way to see what a minimal 
-> >> Linux port looks like. If somebody would like to suggest a different 
-> >> one for that...
-> > 
-> > Anything that is maintained is usually a better example, and it helps 
-> > when the code is not old enough to have accumulated a lot of historic 
-> > baggage.
+On Tue, Apr 05, 2022 at 03:16:07PM +0200, Geert Uytterhoeven wrote:
+> On Tue, Apr 5, 2022 at 1:33 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> > From: Sean Young <sean@mess.org>
+> >
+> > commit 5ad05ecad4326ddaa26a83ba2233a67be24c1aaa upstream.
+> >
+> > Calling udelay for than 1000us does not always yield the correct
+> > results.
+> >
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Михаил <vrserver1@gmail.com>
+> > Signed-off-by: Sean Young <sean@mess.org>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/media/rc/gpio-ir-tx.c |   28 +++++++++++++++++++++-------
+> >  1 file changed, 21 insertions(+), 7 deletions(-)
+> >
+> > --- a/drivers/media/rc/gpio-ir-tx.c
+> > +++ b/drivers/media/rc/gpio-ir-tx.c
+> > @@ -48,11 +48,29 @@ static int gpio_ir_tx_set_carrier(struct
+> >         return 0;
+> >  }
+> >
+> > +static void delay_until(ktime_t until)
+> > +{
+> > +       /*
+> > +        * delta should never exceed 0.5 seconds (IR_MAX_DURATION) and on
+> > +        * m68k ndelay(s64) does not compile; so use s32 rather than s64.
+> > +        */
+> > +       s32 delta;
+> > +
+> > +       while (true) {
+> > +               delta = ktime_us_delta(until, ktime_get());
+> > +               if (delta <= 0)
+> > +                       return;
+> > +
+> > +               /* udelay more than 1ms may not work */
+> > +               delta = min(delta, 1000);
+> > +               udelay(delta);
+> > +       }
 > 
-> But if it's not a lot of code, would it really accumulate a lot of 
-> cruft?
+> Yeah, that's why we have mdelay(), which loops around udelay() if no
+> arch-specific implementation is provided.
+
+That is a good point. That doesn't make this patch incorrect, just a bit ugly.
+Can this patch be merged as-is please, and I'll write an patch upstream that
+simplifies the code.
+
+Thanks
+Sean
+
 > 
-
-Where you see "TODO" in Documentation/features/*/*/arch-support.txt it may 
-mean that an architecture is preventing the removal of an old API.
-
-You're quite right, though, it is incorrect to call this an "accumulation" 
-of baggage. It is actually the failure to remove cruft. (OTOH, shiny new 
-things can be said to "accumulate". That's how cruft gets made.)
+> > +}
+> > +
+> >  static void gpio_ir_tx_unmodulated(struct gpio_ir *gpio_ir, uint *txbuf,
+> >                                    uint count)
+> >  {
+> >         ktime_t edge;
+> > -       s32 delta;
+> >         int i;
+> >
+> >         local_irq_disable();
+> > @@ -63,9 +81,7 @@ static void gpio_ir_tx_unmodulated(struc
+> >                 gpiod_set_value(gpio_ir->gpio, !(i % 2));
+> >
+> >                 edge = ktime_add_us(edge, txbuf[i]);
+> > -               delta = ktime_us_delta(edge, ktime_get());
+> > -               if (delta > 0)
+> > -                       udelay(delta);
+> > +               delay_until(edge);
+> >         }
+> >
+> >         gpiod_set_value(gpio_ir->gpio, 0);
+> > @@ -97,9 +113,7 @@ static void gpio_ir_tx_modulated(struct
+> >                 if (i % 2) {
+> >                         // space
+> >                         edge = ktime_add_us(edge, txbuf[i]);
+> > -                       delta = ktime_us_delta(edge, ktime_get());
+> > -                       if (delta > 0)
+> > -                               udelay(delta);
+> > +                       delay_until(edge);
+> >                 } else {
+> >                         // pulse
+> >                         ktime_t last = ktime_add_us(edge, txbuf[i]);
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0078C4F74FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549C24F745B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240828AbiDGEvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 00:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S231807AbiDGEGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 00:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240830AbiDGEvV (ORCPT
+        with ESMTP id S229571AbiDGEGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 00:51:21 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D158D10F6FB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 21:49:18 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id j20-20020a17090ae61400b001ca9553d073so5032995pjy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 21:49:18 -0700 (PDT)
+        Thu, 7 Apr 2022 00:06:32 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7B65E0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 21:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y7rbcSp4fuzvzN4uIAMZ1TVJvFtHbPKyD1JNqsKzlus=;
-        b=Q2xkmVxAyy3CrxlyqbBn2kZxvgiIjGR0OydNdl3GHhHTSrkQsl3LO+TnP/g6RD/+5q
-         W8YMZ6PCB4s7iuDnWizmM7VOBD5gsjMzQ/+Bb2epAxyAq4UqS+rYWwPcsw0KGHZugI0l
-         1xW3jYS2CEqnPSMRwA5ctFd+mEc7dIp8hgTNSmFw9BwEPOK5gCiQLGaNCmk2xkhBnT1j
-         QAdC6a84hGgC3SYX97577QBqbcz4kvTsEX3Dpo2C6hJdlW2ulbJldPeGPjQ/uuuA61UT
-         8ZZ9szJhn0szhbDd4bkPYMfSpTGKge1FcEYWhcIgWoxTr+Y8W3CX8c2o9jUICwDvbfz5
-         SWXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y7rbcSp4fuzvzN4uIAMZ1TVJvFtHbPKyD1JNqsKzlus=;
-        b=lhDGf0wL6Dr/4RmIaCt9hcKBNV7krMYVaiSjPPYiPJYyLrGyCFGnSnvyxIUFTkSj3w
-         CrVWjrmYOoNCJeziGA7NBxEfENXKrsUnjFGHz2la1j4nEjhUxG8oAHaJ2uCEnYTDphBm
-         tSITCJdGB8SPnA0jpWQdLT5dvK3iuR2Ksdzt79T+gMW0zUqRDxjV9COLFXftqF4ZaQOx
-         dxqmUQKamRXzliW2y9holHYFZIPYChjhAhaI1MTFyKeoRW8Ms9KCRv22E0pDCsgcMplx
-         BGP2dHiArBQKR99He0xO4QY4SM0Qj70pJdXoB2Qngybyf8o2GW70u2wLmWxlSGAmCvPJ
-         ZDCw==
-X-Gm-Message-State: AOAM533TXrWjaGVUOosAV/4mHdg9QJnXEerKIvsS61cHKA416ztCcqHX
-        +K7Wf/+TLGFYi/ygaMM4Te0LLw==
-X-Google-Smtp-Source: ABdhPJywP1gsaETWFMYATeJF/uQxkBYNCMWvbNfGmYqHmdg23ZJoCF8A2ZAS6fpxy2loB+0t1XPJJw==
-X-Received: by 2002:a17:90b:3e8c:b0:1c7:3001:f359 with SMTP id rj12-20020a17090b3e8c00b001c73001f359mr13814906pjb.179.1649306958293;
-        Wed, 06 Apr 2022 21:49:18 -0700 (PDT)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:c0af:e9e:e3fa:ae9f])
-        by smtp.gmail.com with ESMTPSA id k13-20020aa7820d000000b004fa72a52040sm20976546pfi.172.2022.04.06.21.49.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 21:49:17 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>, Suman Anna <s-anna@ti.com>,
-        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Drew Fustini <dfustini@baylibre.com>
-Subject: [PATCH] dt-bindings: soc: ti: wkup_m3_ipc: convert bindings to json-schema
-Date:   Wed,  6 Apr 2022 20:22:10 -0700
-Message-Id: <20220407032208.2249485-1-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Hb3fQ72S8kwAbM+KS3Vg2Hf5vL+s7WtSbsiDvS5WHCU=;
+  b=L2Rah73/y/lODEkv+pnO0oc8qwWdfoNi19axFMr/wGC4R4io84GXPXoY
+   +ti2mkiI90FqH6N23M6gv32apMRMGgzCsFhJKIAOycrhvBq5fUIQ4t//1
+   cTCN/5n92hy/cYGFcVDfofk3kdaE6U6P2fR5RBCfBEzTmKYh0B38c5m3L
+   U=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,241,1643670000"; 
+   d="scan'208";a="10799887"
+Received: from lputeaux-656-1-153-249.w217-128.abo.wanadoo.fr (HELO hadrien) ([217.128.47.249])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 06:04:30 +0200
+Date:   Thu, 7 Apr 2022 06:04:28 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: rtl8712: remove unnecessary parentheses
+In-Reply-To: <20220406215051.20483-1-eng.alaamohamedsoliman.am@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204070601380.2191@hadrien>
+References: <20220406215051.20483-1-eng.alaamohamedsoliman.am@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,173 +54,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the wkup_m3_ipc bindings documentation to json-schema.
 
-Link: https://lore.kernel.org/linux-arm-kernel/20220221125522.l3tntb6i7yjxp6vb@flattered/
-Suggested-by: Nishanth Menon <nm@ti.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- .../bindings/soc/ti/wkup_m3_ipc.txt           | 57 ------------
- .../bindings/soc/ti/wkup_m3_ipc.yaml          | 86 +++++++++++++++++++
- 2 files changed, 86 insertions(+), 57 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
- create mode 100644 Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-deleted file mode 100644
-index 401550487ed6..000000000000
---- a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-+++ /dev/null
-@@ -1,57 +0,0 @@
--Wakeup M3 IPC Driver
--=====================
--
--The TI AM33xx and AM43xx family of devices use a small Cortex M3 co-processor
--(commonly referred to as Wakeup M3 or CM3) to help with various low power tasks
--that cannot be controlled from the MPU, like suspend/resume and certain deep
--C-states for CPU Idle. Once the wkup_m3_ipc driver uses the wkup_m3_rproc driver
--to boot the wkup_m3, it handles communication with the CM3 using IPC registers
--present in the SoC's control module and a mailbox. The wkup_m3_ipc exposes an
--API to allow the SoC PM code to execute specific PM tasks.
--
--Wkup M3 Device Node:
--====================
--A wkup_m3_ipc device node is used to represent the IPC registers within an
--SoC.
--
--Required properties:
----------------------
--- compatible:		Should be,
--				"ti,am3352-wkup-m3-ipc" for AM33xx SoCs
--				"ti,am4372-wkup-m3-ipc" for AM43xx SoCs
--- reg:			Contains the IPC register address space to communicate
--			with the Wakeup M3 processor
--- interrupts:		Contains the interrupt information for the wkup_m3
--			interrupt that signals the MPU.
--- ti,rproc:		phandle to the wkup_m3 rproc node so the IPC driver
--			can boot it.
--- mboxes:		phandles used by IPC framework to get correct mbox
--			channel for communication. Must point to appropriate
--			mbox_wkupm3 child node.
--
--Example:
----------
--/* AM33xx */
--	l4_wkup: l4_wkup@44c00000 {
--		...
--
--		scm: scm@210000 {
--			compatible = "ti,am3-scm", "simple-bus";
--			reg = <0x210000 0x2000>;
--			#address-cells = <1>;
--			#size-cells = <1>;
--			ranges = <0 0x210000 0x2000>;
--
--			...
--
--			wkup_m3_ipc: wkup_m3_ipc@1324 {
--				compatible = "ti,am3352-wkup-m3-ipc";
--				reg = <0x1324 0x24>;
--				interrupts = <78>;
--				ti,rproc = <&wkup_m3>;
--				mboxes = <&mailbox &mbox_wkupm3>;
--			};
--
--			...
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.yaml
-new file mode 100644
-index 000000000000..04ed5ada1d28
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.yaml
-@@ -0,0 +1,86 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/ti/wkup_m3_ipc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Wakeup M3 IPC device
-+
-+maintainers:
-+  - Dave Gerlach <d-gerlach@ti.com>
-+  - Drew Fustini <dfustini@baylibre.com>
-+
-+description: |+
-+
-+  The TI AM33xx and AM43xx family of devices use a small Cortex M3 co-processor
-+  (commonly referred to as Wakeup M3 or CM3) to help with various low power tasks
-+  that cannot be controlled from the MPU, like suspend/resume and certain deep
-+  C-states for CPU Idle. Once the wkup_m3_ipc driver uses the wkup_m3_rproc driver
-+  to boot the wkup_m3, it handles communication with the CM3 using IPC registers
-+  present in the SoC's control module and a mailbox. The wkup_m3_ipc exposes an
-+  API to allow the SoC PM code to execute specific PM tasks.
-+
-+  Wkup M3 Device Node
-+  ====================
-+  A wkup_m3_ipc device node is used to represent the IPC registers within an
-+  SoC.
-+
-+properties:
-+
-+  compatible:
-+    enum:
-+      - ti,am3352-wkup-m3-ipc # for AM33xx SoCs
-+      - ti,am4372-wkup-m3-ipc # for AM43xx SoCs
-+
-+  reg:
-+    description:
-+      Contains the IPC register address space to communicate with the
-+      Wakeup M3 processor
-+    maxItems: 1
-+
-+  interrupts:
-+    description:
-+      Contains the interrupt information for the wkup_m3 interrupt that
-+      signals the MPU
-+    maxItems: 1
-+
-+  ti,rproc:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the wkup_m3 rproc node so the IPC driver can boot it
-+
-+  mboxes:
-+    description:
-+      phandles used by IPC framework to get correct mbox
-+      channel for communication. Must point to appropriate
-+      mbox_wkupm3 child node.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - ti,rproc
-+  - mboxes
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    soc {
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        mailbox: mailbox {
-+            #mbox-cells = <1>;
-+        };
-+
-+        wkup_m3_ipc: wkup_m3_ipc@1324 {
-+           compatible = "ti,am3352-wkup-m3-ipc";
-+           reg = <0x1324 0x24>;
-+           interrupts = <78>;
-+           ti,rproc = <&wkup_m3>;
-+           mboxes = <&mailbox &mbox_wkupm3>;
-+        };
-+    };
-+...
--- 
-2.32.0
+On Wed, 6 Apr 2022, Alaa Mohamed wrote:
 
+> Reported by checkpatch:
+>
+> CHECK: Unnecessary parentheses around param->u.crypt.key[16]: 85
+> CHECK: Unnecessary parentheses around param->u.crypt.key[24]: 87
+> CHECK: Unnecessary parentheses around padapter->mlmepriv: 603
+> CHECK: Unnecessary parentheses around wrqu->encoding: 1497
+> CHECK: Unnecessary parentheses around wrqu->encoding: 1592
+> CHECK: Unnecessary parentheses around padapter->mlmepriv: 1593
+> CHECK: Unnecessary parentheses around wrqu->param: 1673
+> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1967
+> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1977
+> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1999
+
+This is not what I was suggesting.  What do all of these things have in
+common?  How would you describe them in a single English sentence?
+
+>
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+> Changes in v2:
+> 	- Edit commit subject
+> 	- Edit commit message
+> 	- Fix the same check in more lines
+> 	- Remove space before '.skey' in
+> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
+
+This is another change (no parentheses involved), so it should be in
+another patch.  Also, all changes should be described in the log message.
+
+julia
+
+> ---
+>  drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 24 +++++++++----------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> index 3b6926613257..e11332352285 100644
+> --- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> +++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+> @@ -81,10 +81,10 @@ static inline void handle_pairwise_key(struct sta_info *psta,
+>  	memcpy(psta->x_UncstKey.skey, param->u.crypt.key,
+>  	       (param->u.crypt. key_len > 16 ? 16 : param->u.crypt.key_len));
+>  	if (strcmp(param->u.crypt.alg, "TKIP") == 0) { /* set mic key */
+> -		memcpy(psta->tkiptxmickey. skey,
+> -		       &(param->u.crypt.key[16]), 8);
+> -		memcpy(psta->tkiprxmickey. skey,
+> -		       &(param->u.crypt.key[24]), 8);
+> +		memcpy(psta->tkiptxmickey.skey,
+> +		       &param->u.crypt.key[16], 8);
+> +		memcpy(psta->tkiprxmickey.skey,
+> +		       &param->u.crypt.key[24], 8);
+>  		padapter->securitypriv. busetkipkey = false;
+>  		mod_timer(&padapter->securitypriv.tkip_timer,
+>  			  jiffies + msecs_to_jiffies(50));
+> @@ -600,7 +600,7 @@ static int r8711_wx_get_name(struct net_device *dev,
+>  	u32 ht_ielen = 0;
+>  	char *p;
+>  	u8 ht_cap = false;
+> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+>  	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
+>  	u8 *prates;
+>
+> @@ -1494,7 +1494,7 @@ static int r8711_wx_set_enc(struct net_device *dev,
+>  	u32 keyindex_provided;
+>  	struct NDIS_802_11_WEP	 wep;
+>  	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
+> -	struct iw_point *erq = &(wrqu->encoding);
+> +	struct iw_point *erq = &wrqu->encoding;
+>  	struct _adapter *padapter = netdev_priv(dev);
+>
+>  	key = erq->flags & IW_ENCODE_INDEX;
+> @@ -1589,8 +1589,8 @@ static int r8711_wx_get_enc(struct net_device *dev,
+>  {
+>  	uint key;
+>  	struct _adapter *padapter = netdev_priv(dev);
+> -	struct iw_point *erq = &(wrqu->encoding);
+> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+> +	struct iw_point *erq = &wrqu->encoding;
+> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+>  	union Keytype *dk = padapter->securitypriv.DefKey;
+>
+>  	if (!check_fwstate(pmlmepriv, _FW_LINKED)) {
+> @@ -1670,7 +1670,7 @@ static int r871x_wx_set_auth(struct net_device *dev,
+>  				union iwreq_data *wrqu, char *extra)
+>  {
+>  	struct _adapter *padapter = netdev_priv(dev);
+> -	struct iw_param *param = (struct iw_param *)&(wrqu->param);
+> +	struct iw_param *param = (struct iw_param *)&wrqu->param;
+>  	int paramid;
+>  	int paramval;
+>  	int ret = 0;
+> @@ -1964,7 +1964,7 @@ static int r871x_get_ap_info(struct net_device *dev,
+>  		return -EINVAL;
+>  	data[32] = 0;
+>
+> -	spin_lock_irqsave(&(pmlmepriv->scanned_queue.lock), irqL);
+> +	spin_lock_irqsave(&pmlmepriv->scanned_queue.lock, irqL);
+>  	phead = &queue->queue;
+>  	plist = phead->next;
+>  	while (1) {
+> @@ -1974,7 +1974,7 @@ static int r871x_get_ap_info(struct net_device *dev,
+>  		if (!mac_pton(data, bssid)) {
+>  			netdev_info(dev, "r8712u: Invalid BSSID '%s'.\n",
+>  				    (u8 *)data);
+> -			spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock),
+> +			spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock,
+>  					       irqL);
+>  			return -EINVAL;
+>  		}
+> @@ -1996,7 +1996,7 @@ static int r871x_get_ap_info(struct net_device *dev,
+>  		}
+>  		plist = plist->next;
+>  	}
+> -	spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock), irqL);
+> +	spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock, irqL);
+>  	if (pdata->length >= 34) {
+>  		if (copy_to_user((u8 __user *)pdata->pointer + 32,
+>  		    (u8 *)&pdata->flags, 1))
+> --
+> 2.35.1
+>
+>
+>

@@ -2,179 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890F64F81EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954DB4F81F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241907AbiDGOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S242734AbiDGOkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344124AbiDGOkZ (ORCPT
+        with ESMTP id S231358AbiDGOks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:40:25 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08992163E3C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:38:23 -0700 (PDT)
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KZ3rL3S5qz1HBbG;
-        Thu,  7 Apr 2022 22:37:38 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 22:38:06 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 22:38:05 +0800
-Message-ID: <ac80045b-24f0-a163-ea96-be0d01c48d29@huawei.com>
-Date:   Thu, 7 Apr 2022 22:38:04 +0800
+        Thu, 7 Apr 2022 10:40:48 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 358B11A7766;
+        Thu,  7 Apr 2022 07:38:42 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 22:38:13
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.181.226.201]
+Date:   Thu, 7 Apr 2022 22:38:13 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jason Gunthorpe" <jgg@ziepe.ca>
+Cc:     "Dan Carpenter" <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: Re: Re: [PATCH 09/11] drivers: infiniband: hw: Fix deadlock in
+ irdma_cleanup_cm_core()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220407142355.GV64706@ziepe.ca>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <4069b99042d28c8e51b941d9e698b99d1656ed33.1649310812.git.duoming@zju.edu.cn>
+ <20220407112455.GK3293@kadam>
+ <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
+ <20220407142355.GV64706@ziepe.ca>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH -next V2 5/7] arm64: add get_user to machine check
- safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
- <20220406091311.3354723-6-tongtiangen@huawei.com>
- <Yk14AwR92MX0LKqZ@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yk14AwR92MX0LKqZ@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <403bbe08.3fc24.18004762739.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgB3HwBV905iIZ2UAQ--.29189W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4NAVZdtZE9jgAGsa
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/4/6 19:22, Mark Rutland 写道:
-> On Wed, Apr 06, 2022 at 09:13:09AM +0000, Tong Tiangen wrote:
->> Add scenarios get_user to machine check safe. The processing of
->> EX_TYPE_UACCESS_ERR_ZERO and EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY is same
->> and both return -EFAULT.
-> 
-> Which uaccess cases do we expect to *not* be recoverable?
-> 
-> Naively I would assume that if we're going to treat a memory error on a uaccess
-> as fatal to userspace we should be able to do that for *any* uacesses.
-> 
-> The commit message should explain why we need the distinction between a
-> recoverable uaccess and a non-recoverable uaccess.
-> 
-> Thanks,
-> Mark.
-> 
-
-Currently, any memory error consumed in kernel mode will lead to panic
-(do_sea()).
-
-My idea is that not all memory errors consumed in kernel mode are fatal,
-such as copy_ from_ user/get_ user is a memory error consumed when
-reading user data in the process context. In this case, we can not let 
-the kernel panic, just kill the process without affecting the operation
-of the system.
-
-However, not all uaccess can be recovered without affecting the normal
-operation of the system. The key is not whether it is uaccess, but 
-whether there are key data affecting the normal operation of the system 
-in the read page.
-
-Thanks,
-Tong.
-
-
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   arch/arm64/include/asm/asm-extable.h | 14 +++++++++++++-
->>   arch/arm64/include/asm/uaccess.h     |  2 +-
->>   arch/arm64/mm/extable.c              |  1 +
->>   3 files changed, 15 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
->> index 74d1db74fd86..bfc2d224cbae 100644
->> --- a/arch/arm64/include/asm/asm-extable.h
->> +++ b/arch/arm64/include/asm/asm-extable.h
->> @@ -10,8 +10,11 @@
->>   
->>   /* _MC indicates that can fixup from machine check errors */
->>   #define EX_TYPE_FIXUP_MC		5
->> +#define EX_TYPE_UACCESS_ERR_ZERO_MC	6
->>   
->> -#define IS_EX_TYPE_MC(type) (type == EX_TYPE_FIXUP_MC)
->> +#define IS_EX_TYPE_MC(type)			\
->> +	(type == EX_TYPE_FIXUP_MC ||		\
->> +	 type == EX_TYPE_UACCESS_ERR_ZERO_MC)
->>   
->>   #ifdef __ASSEMBLY__
->>   
->> @@ -77,6 +80,15 @@
->>   #define EX_DATA_REG(reg, gpr)						\
->>   	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
->>   
->> +#define _ASM_EXTABLE_UACCESS_ERR_ZERO_MC(insn, fixup, err, zero)		\
->> +	__DEFINE_ASM_GPR_NUMS							\
->> +	__ASM_EXTABLE_RAW(#insn, #fixup,					\
->> +			  __stringify(EX_TYPE_UACCESS_ERR_ZERO_MC),		\
->> +			  "("							\
->> +			    EX_DATA_REG(ERR, err) " | "				\
->> +			    EX_DATA_REG(ZERO, zero)				\
->> +			  ")")
->> +
->>   #define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
->>   	__DEFINE_ASM_GPR_NUMS						\
->>   	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
->> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
->> index e8dce0cc5eaa..24b662407fbd 100644
->> --- a/arch/arm64/include/asm/uaccess.h
->> +++ b/arch/arm64/include/asm/uaccess.h
->> @@ -236,7 +236,7 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
->>   	asm volatile(							\
->>   	"1:	" load "	" reg "1, [%2]\n"			\
->>   	"2:\n"								\
->> -	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
->> +	_ASM_EXTABLE_UACCESS_ERR_ZERO_MC(1b, 2b, %w0, %w1)		\
->>   	: "+r" (err), "=&r" (x)						\
->>   	: "r" (addr))
->>   
->> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
->> index f1134c88e849..7c05f8d2bce0 100644
->> --- a/arch/arm64/mm/extable.c
->> +++ b/arch/arm64/mm/extable.c
->> @@ -95,6 +95,7 @@ bool fixup_exception(struct pt_regs *regs, unsigned int esr)
->>   	case EX_TYPE_BPF:
->>   		return ex_handler_bpf(ex, regs);
->>   	case EX_TYPE_UACCESS_ERR_ZERO:
->> +	case EX_TYPE_UACCESS_ERR_ZERO_MC:
->>   		return ex_handler_uaccess_err_zero(ex, regs);
->>   	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
->>   		return ex_handler_load_unaligned_zeropad(ex, regs);
->> -- 
->> 2.18.0.huawei.25
->>
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> .
+SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTE6MjM6NTUgLTAzMDAgSmFzb24gR3VudGhvcnBl
+IHdyb3RlOgoKPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pbmZpbmliYW5kL2h3L2lyZG1h
+L2NtLmMgYi9kcml2ZXJzL2luZmluaWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gPiA+IGluZGV4IGRl
+ZGIzYjdlZGQ4Li4wMTlkZDhiZmUwOCAxMDA2NDQKPiA+ID4gPiArKysgYi9kcml2ZXJzL2luZmlu
+aWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gPiA+IEBAIC0zMjUyLDggKzMyNTIsMTEgQEAgdm9pZCBp
+cmRtYV9jbGVhbnVwX2NtX2NvcmUoc3RydWN0IGlyZG1hX2NtX2NvcmUgKmNtX2NvcmUpCj4gPiA+
+ID4gIAkJcmV0dXJuOwo+ID4gPiA+ICAKPiA+ID4gPiAgCXNwaW5fbG9ja19pcnFzYXZlKCZjbV9j
+b3JlLT5odF9sb2NrLCBmbGFncyk7Cj4gPiA+ID4gLQlpZiAodGltZXJfcGVuZGluZygmY21fY29y
+ZS0+dGNwX3RpbWVyKSkKPiA+ID4gPiArCWlmICh0aW1lcl9wZW5kaW5nKCZjbV9jb3JlLT50Y3Bf
+dGltZXIpKSB7Cj4gPiA+ID4gKwkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmY21fY29yZS0+aHRf
+bG9jaywgZmxhZ3MpOwo+ID4gPiA+ICAJCWRlbF90aW1lcl9zeW5jKCZjbV9jb3JlLT50Y3BfdGlt
+ZXIpOwo+ID4gPiA+ICsJCXNwaW5fbG9ja19pcnFzYXZlKCZjbV9jb3JlLT5odF9sb2NrLCBmbGFn
+cyk7Cj4gPiA+ID4gKwl9Cj4gPiA+ID4gIAlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZjbV9jb3Jl
+LT5odF9sb2NrLCBmbGFncyk7Cj4gPiA+IAo+ID4gPiBUaGlzIGxvY2sgZG9lc24ndCBzZWVtIHRv
+IGJlIHByb3RlY3RpbmcgYW55dGhpbmcuICBBbHNvIGRvIHdlIG5lZWQgdG8KPiA+ID4gY2hlY2sg
+dGltZXJfcGVuZGluZygpPyAgSSB0aGluayB0aGUgZGVsX3RpbWVyX3N5bmMoKSBmdW5jdGlvbiB3
+aWxsIGp1c3QKPiA+ID4gcmV0dXJuIGRpcmVjdGx5IGlmIHRoZXJlIGlzbid0IGEgcGVuZGluZyBs
+b2NrPwo+ID4gCj4gPiBUaGFua3MgYSBsb3QgZm9yIHlvdXIgYWR2aWNlLCBJIHdpbGwgcmVtb3Zl
+IHRoZSB0aW1lcl9wZW5kaW5nKCkgYW5kIHRoZQo+ID4gcmVkdW5kYW50IGxvY2suCj4gCj4gRG9l
+cyBkZWxfdGltZXJfc3luYyB3b3JrIHdpdGggYSBzZWxmLXJlc2NoZWR1bGluZyB0aW1lciBsaWtl
+IHRoaXMgaGFzPwoKVGhlIGRlbF90aW1lcl9zeW5jKCkgd2lsbCBraWxsIHRoZSB0aW1lciBhbHRo
+b3VnaCBpdCBpcyBzZWxmLXJlc2NoZWR1bGluZy4KV2UgY291bGQgdXNlIG90aGVyIGZ1bmN0aW9u
+cyB0byBhcm91c2UgdGltZXIgYWdhaW4gYmVzaWRlcyB0aW1lciBoYW5kbGVyIGl0c2VsZi4KCkJl
+c3QgcmVnYXJkcywKRHVvbWluZyBaaG91Cg==

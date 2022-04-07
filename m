@@ -2,128 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8983C4F7EBB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F944F7EBE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237961AbiDGMJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S238369AbiDGMLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiDGMJf (ORCPT
+        with ESMTP id S234562AbiDGMLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:09:35 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CB3F47C9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:07:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id x24so1175738edl.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:07:35 -0700 (PDT)
+        Thu, 7 Apr 2022 08:11:03 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A5A1017E0;
+        Thu,  7 Apr 2022 05:09:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id k2so6129559edj.9;
+        Thu, 07 Apr 2022 05:09:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RXZ9lKydxs9kO1JxJb9dd9FMIU/aXNoy++vgijFww0k=;
-        b=fLD8z1WxhKcc6h+Y8bC7AhGku/THlFtrhKM2rXzhUBuY0kZjjS+0nP32uiXsbKo5/g
-         khQVI75054BWUQlt5DPpOFfvB1C+p6Bg6JYLxddgQE2rlBw4T2ZAoRz1jur9dTuSv+4a
-         PuPwoait6By0LinqVCigKsk27Pu1PN4dao0w9VO5oGnS21ll8SA/av/uBJlwRKY1Sa9T
-         uPHNnqI9qcgn07ejmI3ZrgOto5D/UYJV+PRTfpGcbrBnPd44tF7LRqJuSl52TmPmcq1a
-         KEn44H29T8tDkwyZrPS4ekqYz6E73UKuBcnVAcr7NeH3f5F/2pYyzup2hEtYL4f0Hy9M
-         ATcw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=48DPePUYeyEwdbAHaYGxh409PflykhIhQcraUAIMxpY=;
+        b=gZ/W139f5QyNs8aJNtETI6BzNJyv1a58fLCc4VjSp9brXwn8ri0Y57Mgjr2/dqhwQs
+         ak74uKPa1L4BplgpckKopeYeL5j74tKIq4nmgZxYXCzq5xdDhzc3bu2BpzEiNqoC6Y7j
+         70EXK3r20OG3dvMS+epr7WxHAZiVOX14zEB4FIsqXlqZyljPf9iQQdVjwy/rrR6rE3hl
+         jrRGRxPbyK3FVThRM0ypZafRTZxUqC66Kev3LNW9vhGpDxHVJ6z0GjlwHq3rWdfa3zxw
+         IgfORrH8uaP+zYPfNtIrrf4uOuknK0rNQOXmkCq3KEu0ZOHhpcW+dMpItb0YDgy9o0ct
+         aDFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RXZ9lKydxs9kO1JxJb9dd9FMIU/aXNoy++vgijFww0k=;
-        b=eLZ5h0peAZDHukPVNYKKJ1xAINFCXUyHu7bjDzWR5EAwn/fGT2GWQP0J8rvAO6J4bR
-         F23s48VMmCDerBJNrzbCZovraiBdLYl85NuawBCHOAnGOCrPjBpVvAAtgflfzLIyjK/G
-         BmID8mQ7jQ0eRXkC+3XJ6uz8o0sq/Q7yHQ9DvE4P888bnoKvIn2VgRmG9C9udZ3rPZV3
-         HkcoYbDHFLJNbV1Dzr97Y/5HJt6qX0lhGaOiXi4dg4S7tcerT2r283TtR853DWPw9CDT
-         7xsxEbIIY687G0mHy81CjcA5hibvXYLunauGmqyv1IBVRkOLSM8AaEwepSdXxg/BJKCo
-         RWWA==
-X-Gm-Message-State: AOAM532zlueb+9UIuvJU5V79TFzWWapD6okIyVMB/21zqGQ232y0B/U7
-        nrBa+mhQXKnCid9oHujU0Kf2Gg==
-X-Google-Smtp-Source: ABdhPJxY5BbGCb1UPDSfWzKyt1vTRnHHRckAjtmhaAzU6YN/28sHmSGj6JzYZN3UfrqHa7RW1CKLYg==
-X-Received: by 2002:a05:6402:209:b0:416:5211:841f with SMTP id t9-20020a056402020900b004165211841fmr14082498edv.59.1649333254265;
-        Thu, 07 Apr 2022 05:07:34 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id k26-20020a056402049a00b004197b0867e0sm9133959edv.42.2022.04.07.05.07.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 05:07:33 -0700 (PDT)
-Message-ID: <01250e59-eb49-43fb-666e-c1592d9dc922@linaro.org>
-Date:   Thu, 7 Apr 2022 14:07:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=48DPePUYeyEwdbAHaYGxh409PflykhIhQcraUAIMxpY=;
+        b=EfACKPfVdj2o68tWYuaKfDNYpDNuMDTCzdxh3bwGg1KSBvSGIIKAgSjhl6CiW6onNg
+         E/AUhaTSfjn5DMlcK73pp5uzL/aEpPSa6Sol2LbSasUrCLTIM/kGmbYiTUjWPvCFfMbP
+         vyf2TASCJ9Y2X4n91UFZmueAzK2CmwZA3007LDM/9SQj17KPTftCTh8fZ1oGqLW9/ueB
+         IGzhzaoma4Seu+YBe6o1xUV4rEIW3HeTtoDAn2FevMY96F+Cz4gMUJ9xxzEI22/IRc5V
+         /Dj7ARRohNXDgU7ZH4naoz3QqElPM93dqsL17H7SuHKN+Q8TjDv3X1R4InLMLTGgYXcW
+         79sQ==
+X-Gm-Message-State: AOAM533efQ1EwnR//XBH8g743eAwBT5bZAeFgYdZW6x74onjrJpHBQ9o
+        0lFK3r0G5YqkIL8bV3Kf1XH8B2asg2ok3+2HKzocRueEwpE=
+X-Google-Smtp-Source: ABdhPJz4hu2VQoELrGIeFJJOW4mMYVGE70JuuheH0xtLKehp6KjOjSVQJHQr+5Krpb70xaT2qjO+7BNm+J8BvwxPJ3E=
+X-Received: by 2002:a05:6402:27d4:b0:419:5105:f7e7 with SMTP id
+ c20-20020a05640227d400b004195105f7e7mr13882128ede.356.1649333341748; Thu, 07
+ Apr 2022 05:09:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] ARM: dts: lan966x: Add QSPI nodes
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        arnd@arndb.de, robh+dt@kernel.org, krzk+dt@kernel.org,
-        alexandre.belloni@bootlin.com, olof@lixom.net, soc@kernel.org,
-        nicolas.ferre@microchip.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        tudor.ambarus@microchip.com, Manohar.Puri@microchip.com
-References: <20220407105835.10962-1-kavyasree.kotagiri@microchip.com>
- <20220407105835.10962-2-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407105835.10962-2-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220405140906.222350-1-Jason@zx2c4.com>
+In-Reply-To: <20220405140906.222350-1-Jason@zx2c4.com>
+From:   Sandy Harris <sandyinchina@gmail.com>
+Date:   Thu, 7 Apr 2022 20:08:49 +0800
+Message-ID: <CACXcFmnFiH6zD=rQXjzyUOa8+DcnOoTETUxA=a=xB3A=MmGO0Q@mail.gmail.com>
+Subject: Re: [PATCH] random: opportunistically initialize on /dev/urandom reads
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your patch. There is something to discuss/improve.
+Does this help?
 
+I have some code I'm not yet ready to submit as patches. Here's some
+of it that could be used to initialise the pool (& I think also the
+counter for chacha). The paper linked in the comments suggests that
+adding a bit reversal would improve diffusion, but I have not done
+that yet.
 
-This should be sent with your DT bindings patch in one patchset.
+/**************************************************************************
+ * Load a 64-bit word with data from whatever source we have
+ *
+ *       arch_get_random_long()
+ *       hardware RNG
+ *       emulated HWRNG in a VM
+ *
+ * When there are two sources, alternate.
+ *
+ * If you have no better source, or if one fails,
+ * or if the argument 'fast' is set, then fall back
+ * to random_get_entropy().
+ *
+ * Also use random_get_entropy() sometimes even
+ * if we have a good source, to avoid trusting
+ * the source completely
+ ***************************************************************************/
 
-On 07/04/2022 12:58, Kavyasree Kotagiri wrote:
-> LAN966x SoC supports 3 instances of QSPI.
-> Data and clock of qspi0, qspi1, qspi2 works upto 100Mhz.
+static int load_count = 0;
+static spinlock_t source_lock;
+static unsigned long source_value __latent_entropy ;
 
-s/upto/up to/
+#define rotl64(x,n) ((x>>(n)) | (x<<(n)))
 
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
->  arch/arm/boot/dts/lan966x.dtsi | 48 ++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-> index 7d2869648050..b3c687db0aea 100644
-> --- a/arch/arm/boot/dts/lan966x.dtsi
-> +++ b/arch/arm/boot/dts/lan966x.dtsi
-> @@ -196,6 +196,54 @@
->  			status = "disabled";
->  		};
->  
-> +		qspi0: spi@e0804000 {
-> +			compatible = "microchip,lan966x-qspi";
-> +			reg = <0xe0804000 0x100>,
-> +			      <0x20000000 0x08000000>;
-> +			reg-names = "qspi_base", "qspi_mmap";
-> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks GCK_ID_QSPI0>;
-> +			clock-names = "gclk";
+static int get_hw_long(unsigned long *x)
+{
+    int ret ;
+    unsigned s = sizeof(unsigned long) ;
+    ret = get_random_bytes_arch((u8 *) x, s) ;
+    return (ret == s) ? 1 : 0 ;
+}
 
-This is not correct with the DT schema.
+/* This should be a Mersenne number, (2^x)-1 */
+#define MIX_MASK 15
 
-> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(0)>,
-> +			       <&dma0 AT91_XDMAC_DT_PERID(1)>;
-> +			dma-names = "rx", "tx";
+#define GOT_A    IS_ENABLED(CONFIG_ARCH_RANDOM)
+#define GOT_H    IS_ENABLED(CONFIG_HW_RANDOM)
 
-This as well.
+static unsigned long get_64(int fast)
+{
+        int ret = 0 ;
+    unsigned long x, flags ;
 
-You can test schema with 'make dtbs_check DT_SCHEMA_FILES=...."
-(check the docs for help what is needed to do it).
-
-
-Best regards,
-Krzysztof
+    if (!fast && (GOT_A||GOT_H) && (load_count&MIX_MASK))    {
+        if (GOT_A && GOT_H)    {
+            if (load_count & 1)
+                ret = arch_get_random_long(&x) ;
+            else    ret = get_hw_long(&x) ;
+            /*
+             * if the chosen source failed
+             * then try the other
+             */
+            if (!ret)
+                if (load_count & 1)
+                    ret = get_hw_long(&x) ;
+                else    ret = arch_get_random_long(&x) ;
+        }
+        if (GOT_A && !GOT_H)
+            ret = arch_get_random_long(&x) ;
+        if (GOT_H && !GOT_A)
+            ret = get_hw_long(&x) ;
+    }
+        /*
+     * fast is nonzero, so not trying expensive methods
+     *
+         * or no source configured, neither GOT_A nor GOT_H set
+         * or configured one(s) failed, ret is still zero
+     *
+     * or it is just time for a different source
+     * (load_count&MIX_MASK) == 0
+     */
+        if (!ret)
+        x = random_get_entropy() ;
+    /*
+     * use 19-bit rotation, based on
+     * https://eprint.iacr.org/2021/523.pdf
+     */
+    spin_lock_irqsave(&source_lock, flags);
+    source_value = rotl64(source_value, 19) ^ x ;
+        load_count++ ;
+    spin_unlock_irqrestore(&source_lock, flags);
+    memzero_explicit(x, sizeof(x)) ;
+    return(source_value) ;
+}

@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468174F84FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0C74F8501
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345480AbiDGQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S1345720AbiDGQbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiDGQaz (ORCPT
+        with ESMTP id S230077AbiDGQbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:30:55 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34FB2654B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:28:54 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bh17so11959051ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:28:54 -0700 (PDT)
+        Thu, 7 Apr 2022 12:31:17 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61639AF1FB;
+        Thu,  7 Apr 2022 09:29:12 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id l36so10450432ybj.12;
+        Thu, 07 Apr 2022 09:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2Vv5wRMLm7eAUwbieA9P9R0i+n/Nx3ujFLOcNigvPcM=;
-        b=Nh9bB1KB4S3CAncBLCOeNhoQBW4BpFg7ZxBEKFPIdrPjYLLIXTykS08+eEDZhFWyZ8
-         Thpi+P0aSF7sVwTnCRHfToCT9gHhhfKUTdrju+t5E7uyVVjlUwgssiadvrQKU9v4qNGE
-         UGaJC8AOLzUArHajp1eLxKaJ3Si9FAGFRr300FrLTKdRBLX62d7XQVrFh69vwxlKtd2C
-         WxnNkYIZtoWVODJra1ZHi7tF1gH3RYCAfr02mNt988D5DFXmHfcUd4rFetFQle6MGTMj
-         Ci6AYLRrWkvEwU37AQ9XJIDCkWAEFa0AQGz/XDUlpe355EzgRwDt0SJo0W1IsGoPS7Kn
-         a4Qg==
+        bh=NDM7wlMq64JzrOWsB+7BgQsvGKPEysooG41+nOUmUp0=;
+        b=KVKDK10IKH4hrbWXVdHXMgr7bRQOJ1oaOsNvUM3pw5sLy/QGpajD5M0JmmIj0hcT4C
+         RreBmGFooTRgUbrJg/cUIjQSvre/H3DogX5vOfUb+oJbSm1fgryOaxHZIiG0yoyII9OP
+         z8SIxf3voNWu32GFXzTOVbqS2h3XTHXICU9vbVT5QY0R/BD9t9FUaRa/uMeC+dXFchD8
+         p9if1WAU9tmrooVu9Un2iHQEoMvXlTdcnl91ODWRx2RurFvlydITOGZcz/q7Plonk0Ay
+         Jj48eozySQ7kwpRVrFWhdMl9mkR9lBX0TAJZbNdqSmbELGHKPGFKLv+5e70QWka8L5Hv
+         f7kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2Vv5wRMLm7eAUwbieA9P9R0i+n/Nx3ujFLOcNigvPcM=;
-        b=5oQ4MKzFFrHtfOEkTTZXOT0fy4IHn8WVyMjWEesJlvnLcp3ZsLMRXj+8gQ/dvimtif
-         ZqHQfDS8PX7MUhKVObE5NFDvbMzghauAP1yw9VWooso/z8uTGtIgzlbukVFvOlPF0ZfA
-         EJtAC/exZDRbTpz8xE97xeM/xJBv2bOi5LB8MdmI+iCCNkSQGU2dkBTdFYGfpIUh8wQf
-         stmxvlIcDmcZi56hAyW95kwPZQGP7t/xKi18zRbsq+tc6TXtGNhXd6CmcJibeslcszPv
-         LA/pQvboHigGRY1+vl8D9XlHD36rwo/0ns+J7T0xj8uetdxkzVp+1a5maFjWsx1r6B69
-         WAXg==
-X-Gm-Message-State: AOAM530XMtLXw9gDxXxI6F3UyXtdVi5N/vFJLb1DF8PerPZd5paymZFW
-        UpaJKkh/cw1CVg83VhAbilQ6B5QrnfeiqZOzidEafQ==
-X-Google-Smtp-Source: ABdhPJySuUD0Vc5Fggv3BJDcImC7/nHme84hjtmjDS8hx74rIZfA/aVAQ1ZlYO8FDlK29GQs74zzLvfuZR+3cWp4Nvs=
-X-Received: by 2002:a17:906:300f:b0:6e0:b38d:777d with SMTP id
- 15-20020a170906300f00b006e0b38d777dmr14328595ejz.189.1649348933215; Thu, 07
- Apr 2022 09:28:53 -0700 (PDT)
+        bh=NDM7wlMq64JzrOWsB+7BgQsvGKPEysooG41+nOUmUp0=;
+        b=qs/NcFB5xmfM4YP4owAYP0d26ShsZ6qocnPMQxHPYpfBwX7Wk+cQ1ABmpyLWdabwT4
+         UYBYAlIqxlqBk6WhH7W+uoT3YtdGUUFRvssfvYzG0OCMb37IjhiQ4HgEHW0Gc+WNIvO1
+         ckZ1hFOCJymTb0Oif9gHmXR7q2vdzxxHoJYRNzoDihwoX9DyREyscPJQDVUc/qUQKgg8
+         CiddJ7pYDnjy6z04dD3cykJrTtRLJboT9/rZ3wTisCgKKrRe8GN8lHe1w3PlmbSzKN3G
+         DpaZL/0k3KbRca5J5OpDLB7zXXgcR0mU5i/dl3mp2iaWmIUOlaKaoSgSSiQWcHZpJHuA
+         gKXQ==
+X-Gm-Message-State: AOAM532HG0Mbiaojje/uFubD+YmSA6tdXuwq0T7s+X3bYg9FsRKKq+sy
+        VdU/QnLrOlgBIrzNnL+Kp9f50WTEtpC9quV69KM=
+X-Google-Smtp-Source: ABdhPJyghH3SAS7jw4XD4ro17jnPvwM4geTQKWtoA4Skyngk8dgdvRIXCcwVkW3zJsVO4yB7KIYeo+N681NWg1Dj3rY=
+X-Received: by 2002:a25:9783:0:b0:63e:f532:8374 with SMTP id
+ i3-20020a259783000000b0063ef5328374mr109005ybo.415.1649348944476; Thu, 07 Apr
+ 2022 09:29:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
- <Yk4DGZfpYbK8dofL@chromium.org> <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
- <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
-In-Reply-To: <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 7 Apr 2022 09:28:41 -0700
-Message-ID: <CABXOdTet5ynSXf94qMimobJF4LLzHc89cVbwJ5NuAz8G6jmVdQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
+References: <1649312827-728-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1649312827-728-1-git-send-email-ssengar@linux.microsoft.com>
+From:   Deepak Rawat <drawat.floss@gmail.com>
+Date:   Thu, 7 Apr 2022 09:28:53 -0700
+Message-ID: <CAHFnvW2V0tz25D4YMxYMNqYs5uMkbjEoc6p93e6naBhvybzmoQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/hyperv: Added error message for fb size greater
+ then allocated
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,58 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 6:16 PM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
-[ ... ]
-> >>>        ec_dev = dev_get_drvdata(&typec->ec->ec->dev);
-
-I completely missed the part that this is not on the parent.
-
-> >>> +     if (!ec_dev)
-> >>> +             return -EPROBE_DEFER;
-[ ... ]
+On Wed, Apr 6, 2022 at 11:27 PM Saurabh Sengar
+<ssengar@linux.microsoft.com> wrote:
 >
-> 1. The parent exists and dev_get_drvdata(pdev->dev.parent) returns
-> non-NULL value. However, dev_get_drvdata(&typec->ec->ec->dev) returns
-> NULL. (Yes, that is confusing.) I'm wondering
-
-I am actually surprised that typec->ec->ec is not NULL. Underlying
-problem (or, one underlying problem) is that it is set in
-cros_ec_register():
-
-        /* Register a platform device for the main EC instance */
-        ec_dev->ec = platform_device_register_data(ec_dev->dev, "cros-ec-dev",
-                                        PLATFORM_DEVID_AUTO, &ec_p,
-                                        sizeof(struct cros_ec_platform));
-
-"cros-ec-dev" is the mfd device which instantiates the character
-device. On devicetree (arm64) systems, the typec device is registered
-as child of google,cros-ec-spi and thus should be instantiated only
-after the spi device has been instantiated. The same should happen on
-ACPI systems, but I don't know if that is really correct.
-
-I don't know what exactly is happening, but apparently typec
-registration happens in parallel with cros-ec-dev registration, which
-is delayed because the character device is not loaded. As mentioned, I
-don't understand why typec->ec->ec is not NULL. Can you check what it
-points to ?
-
-Thanks,
-Guenter
-
-> dev_get_drvdata(pdev->dev.parent) returned NULL in the following crash
-> log but it would be a problem distinct from what is handled with my patch:
-> https://lore.kernel.org/lkml/CABXOdTe9u_DW=NZM1-J120Gu1gibDy8SsgHP3bJwwLsE_iuLAQ@mail.gmail.com/
+> Added error message when the size of requested framebuffer is more then
+> the allocated size by vmbus mmio region for framebuffer
 >
-> 2. My patch returns -EPROBE_DEFER instead of -ENODEV and I confirmed it
-> will eventually be instantiated.
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+> v1 -> v2 : Corrected Sign-off
 >
-> Regards,
-> Akihiko Odaki
+>  drivers/gpu/drm/hyperv/hyperv_drm_modeset.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> >
-> > Guenter
-> >
-> >> Thanks,
-> >>
-> >> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/platform/chrome?id=ffebd90532728086007038986900426544e3df4e
+> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
+> index e82b815..92587f0 100644
+> --- a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
+> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
+> @@ -123,8 +123,11 @@ static int hyperv_pipe_check(struct drm_simple_display_pipe *pipe,
+>         if (fb->format->format != DRM_FORMAT_XRGB8888)
+>                 return -EINVAL;
+>
+> -       if (fb->pitches[0] * fb->height > hv->fb_size)
+> +       if (fb->pitches[0] * fb->height > hv->fb_size) {
+> +               drm_err(&hv->dev, "hv->hdev, fb size requested by process %s for %d X %d (pitch %d) is greater then allocated size %ld\n",
+> +               current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
+
+Any reason to add an error message here. Since this function is called
+whenever there is an update, avoid printing an error here.
+
+>                 return -EINVAL;
+> +       }
+>
+>         return 0;
+>  }
+> --
+> 1.8.3.1
 >

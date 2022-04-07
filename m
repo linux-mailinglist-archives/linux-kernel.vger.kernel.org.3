@@ -2,93 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2AE4F71E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A035A4F71E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiDGCTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S232590AbiDGCL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbiDGCS5 (ORCPT
+        with ESMTP id S229486AbiDGCLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:18:57 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5377F94C6;
-        Wed,  6 Apr 2022 19:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649297818; x=1680833818;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=llF4ThJA8WXHbpmx9IR7QlE6waiGypoC/axSTEFWsaU=;
-  b=U1NkePxPQ8xO6B2xi3K/Mb6zofXd2B0gxKhi3GMCS/mx0Zaca7FyWL81
-   v2O0IvNeVz2K9HRTkmEmbGbeDGPypV2J+7ei/zesjMo1oyncdLZsYg7fN
-   l8aOk8WLinlKb1lIVQkzArN53/cRqPqbQkRlr3TWzUqn7QIj/qv6VqvSU
-   tQ7hWNEwAmI4LD4w2yty2uzBE/I1MyoIj0B0D3y1xSjP39ujysMCRLila
-   D4N+XFD7qjMP59DNx8UUjLQaRTRFkOUHWCuPQ45wJclZvbx046AhMfy7g
-   xifkikx9k6gMUvyKNKvE3UhXqW/bar6L77I47sgH4hyTAWJZquRscfjSs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="321901648"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="321901648"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:16:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="524183462"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga002.jf.intel.com with ESMTP; 06 Apr 2022 19:16:56 -0700
-Date:   Thu, 7 Apr 2022 10:09:35 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-pr-ip: fix unsigned comparison with less
-  than zero
-Message-ID: <20220407020935.GA256292@yilunxu-OptiPlex-7050>
-References: <20220405185349.220607-1-marpagan@redhat.com>
- <d39cdc4c-0dc5-f929-17fa-ffbaf9e767c7@redhat.com>
+        Wed, 6 Apr 2022 22:11:54 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB9F1D7639
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 19:09:55 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f10so3611949plr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 19:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M+O7LWtD3njsRsXh/enOovxdjHInOFNE0TrUJIhcwQg=;
+        b=M1XrD/HjeUe2Pse7ZbeBbFFcct4bE2pD6MXo42RO6THqxXPfare2aRyBfEUsR1fCQK
+         5DXA9NUtPWnRTBaCu+d5xpzIOIFSWEC23I7u5btu33iytlsr94MCYwfAikqwr2r7Ac9O
+         /0+sph2VOWDQo3WLXx10bnnr6dsrv7Aku2GPgfGMWSm/NZsgyvJ0ZYcEKR9luOVrmypM
+         eDAi4CCFWA1j7FwUteawBfrLByL2Pz+vTpGviuG4ksoCPze8EyNLu7fYXh0yJv1tPmzl
+         5NxX/4N55d5Q6ALrn4OC0ZD0KzYK3L5L1IgTSHzdrmgd31xbAD6/t3G8vv+9MgbpZ+WK
+         jZZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M+O7LWtD3njsRsXh/enOovxdjHInOFNE0TrUJIhcwQg=;
+        b=mRE7kPkYlwvKfP78Q7qer1qbT12zmIPs7LfdvHOIZvy8mR8BIGmkRkhKeEQYj6aIG9
+         e0FxeLSpqeXpTPMyfG4HDjrtdxGUgne5a8tBjf2ctI4387tqZPwmGu1HQmkPC7h0J73F
+         UPXxWXVw8+uMuUkNq9VIsWco241pT0VTYZNHPFp9po5uoYsse3KSq31iJmIBpgYrjODG
+         4mLt3ARDKxz59LI5nKdZnRJnT4+aeSvNOt40WH4z6QoJburxx5wUVCAUl0IDFCFBz+JB
+         pgYO2qTnEm2NOtrPUgioSU5uSZuQI8wpJRg9OIHDM6t1NDe90ccbPNO90MIyh4nWqZa3
+         /0KQ==
+X-Gm-Message-State: AOAM532PGDoZjO5fYjyYq2pXtN0i+21t1dRBuWdBkuiDa4lQATqxTM+P
+        KhkxUBdqaGt10Qu5D8Giwlk/MYW29XU=
+X-Google-Smtp-Source: ABdhPJyOrw6bfZu5Yoop0ZZnjQWY1vVVpBUP/2p9EGqB1+jb8JJiep3qFIiqeHMkga2FYITHQ/aw7g==
+X-Received: by 2002:a17:90a:de82:b0:1ca:b7e7:c794 with SMTP id n2-20020a17090ade8200b001cab7e7c794mr13097442pjv.181.1649297395265;
+        Wed, 06 Apr 2022 19:09:55 -0700 (PDT)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056a000c8b00b004fade889fb3sm21703716pfv.18.2022.04.06.19.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 19:09:54 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     ying.huang@intel.com, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: swap: determine swap device by using page nid
+Date:   Wed,  6 Apr 2022 19:09:53 -0700
+Message-Id: <20220407020953.475626-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d39cdc4c-0dc5-f929-17fa-ffbaf9e767c7@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 07:18:21AM -0700, Tom Rix wrote:
-> 
-> On 4/5/22 11:53 AM, Marco Pagani wrote:
-> > Fix the "comparison with less than zero" warning reported by
-> > cppcheck for the unsigned (size_t) parameter "count" of the
-> > "alt_pr_fpga_write()" function.
-> > 
-> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > ---
-> >   drivers/fpga/altera-pr-ip-core.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-> > index be0667968d33..2ff3d8e46a0c 100644
-> > --- a/drivers/fpga/altera-pr-ip-core.c
-> > +++ b/drivers/fpga/altera-pr-ip-core.c
-> > @@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
-> >   	u32 *buffer_32 = (u32 *)buf;
-> >   	size_t i = 0;
-> > -	if (count <= 0)
-> > +	if (count == 0)
-> >   		return -EINVAL;
-> 
-> Reviewed-by: Tom Rix <trix@redhat.com>
+The swap devices are linked to per node priority lists, the swap device
+closer to the node has higher priority on that node's priority list.
+This is supposed to improve I/O latency, particularly for some fast
+devices.  But the current code gets nid by calling numa_node_id() which
+actually returns the nid that the reclaimer is running on instead of the
+nid that the page belongs to.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Pass the page's nid dow to get_swap_pages() in order to pick up the
+right swap device.  But it doesn't work for the swap slots cache which
+is per cpu.  We could skip swap slots cache if the current node is not
+the page's node, but it may be overkilling. So keep using the current
+node's swap slots cache.  The issue was found by visual code inspection
+so it is not sure how much improvement could be achieved due to lack of
+suitable testing device.  But anyway the current code does violate the
+design.
 
-> 
-> >   	/* Write out the complete 32-bit chunks */
+Cc: Huang Ying <ying.huang@intel.com>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+ include/linux/swap.h | 3 ++-
+ mm/swap_slots.c      | 7 ++++---
+ mm/swapfile.c        | 5 ++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 27093b477c5f..e442cf6b61ea 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -497,7 +497,8 @@ extern void si_swapinfo(struct sysinfo *);
+ extern swp_entry_t get_swap_page(struct page *page);
+ extern void put_swap_page(struct page *page, swp_entry_t entry);
+ extern swp_entry_t get_swap_page_of_type(int);
+-extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size);
++extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size,
++			  int node);
+ extern int add_swap_count_continuation(swp_entry_t, gfp_t);
+ extern void swap_shmem_alloc(swp_entry_t);
+ extern int swap_duplicate(swp_entry_t);
+diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+index 2b5531840583..a1c5cf6a4302 100644
+--- a/mm/swap_slots.c
++++ b/mm/swap_slots.c
+@@ -264,7 +264,7 @@ static int refill_swap_slots_cache(struct swap_slots_cache *cache)
+ 	cache->cur = 0;
+ 	if (swap_slot_cache_active)
+ 		cache->nr = get_swap_pages(SWAP_SLOTS_CACHE_SIZE,
+-					   cache->slots, 1);
++					   cache->slots, 1, numa_node_id());
+ 
+ 	return cache->nr;
+ }
+@@ -305,12 +305,13 @@ swp_entry_t get_swap_page(struct page *page)
+ {
+ 	swp_entry_t entry;
+ 	struct swap_slots_cache *cache;
++	int nid = page_to_nid(page);
+ 
+ 	entry.val = 0;
+ 
+ 	if (PageTransHuge(page)) {
+ 		if (IS_ENABLED(CONFIG_THP_SWAP))
+-			get_swap_pages(1, &entry, HPAGE_PMD_NR);
++			get_swap_pages(1, &entry, HPAGE_PMD_NR, nid);
+ 		goto out;
+ 	}
+ 
+@@ -342,7 +343,7 @@ swp_entry_t get_swap_page(struct page *page)
+ 			goto out;
+ 	}
+ 
+-	get_swap_pages(1, &entry, 1);
++	get_swap_pages(1, &entry, 1, nid);
+ out:
+ 	if (mem_cgroup_try_charge_swap(page, entry)) {
+ 		put_swap_page(page, entry);
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 63c61f8b2611..151fffe0fd60 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1036,13 +1036,13 @@ static void swap_free_cluster(struct swap_info_struct *si, unsigned long idx)
+ 	swap_range_free(si, offset, SWAPFILE_CLUSTER);
+ }
+ 
+-int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
++int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size,
++		   int node)
+ {
+ 	unsigned long size = swap_entry_size(entry_size);
+ 	struct swap_info_struct *si, *next;
+ 	long avail_pgs;
+ 	int n_ret = 0;
+-	int node;
+ 
+ 	/* Only single cluster request supported */
+ 	WARN_ON_ONCE(n_goal > 1 && size == SWAPFILE_CLUSTER);
+@@ -1060,7 +1060,6 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
+ 	atomic_long_sub(n_goal * size, &nr_swap_pages);
+ 
+ start_over:
+-	node = numa_node_id();
+ 	plist_for_each_entry_safe(si, next, &swap_avail_heads[node], avail_lists[node]) {
+ 		/* requeue si to after same-priority siblings */
+ 		plist_requeue(&si->avail_lists[node], &swap_avail_heads[node]);
+-- 
+2.26.3
+

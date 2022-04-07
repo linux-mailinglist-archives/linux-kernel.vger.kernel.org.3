@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEEE4F86A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A014F86AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346650AbiDGRyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S233480AbiDGR40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346635AbiDGRyi (ORCPT
+        with ESMTP id S232194AbiDGR4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:54:38 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68FD22EBFF;
-        Thu,  7 Apr 2022 10:52:34 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so4384360otq.13;
-        Thu, 07 Apr 2022 10:52:34 -0700 (PDT)
+        Thu, 7 Apr 2022 13:56:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76CCF66ADD
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649354054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CK9Z5mVDe4mgBGspYQzzn8gJDiHvz3qCsQ86FE3l+us=;
+        b=WRXydbvXYfYpSEMZIYZNKUVjEfx//g2Sv5ZmeMayiluOaiTSHJYVzxCuqrCpmwtpr0So16
+        Ey84+AzbccnLk5ftCHqoWqKelPdbXz3i8Gitdwcq9paSS+5G1yIW8FR6i4K8mVPj95b4Ph
+        q5LreLl5+XgRFWdDWu1Xn2OUSRmn3wE=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-5H-BLEXWOOWfd-95GyRc2Q-1; Thu, 07 Apr 2022 13:54:13 -0400
+X-MC-Unique: 5H-BLEXWOOWfd-95GyRc2Q-1
+Received: by mail-pf1-f199.google.com with SMTP id o11-20020a62cd0b000000b0050564575a89so1866728pfg.14
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:54:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mo3WCvv9BObQyiASkaZil+j+BG8MFzY+q8FFufHymq8=;
-        b=qxBWcWL06lf0nByXjtBBN7nszl/e9ZNQN2M5OCf+9EGEZ8RE+k+tyr0cD+Jw0lume9
-         Nsd0okH1TeSal74D25yzhmGfjJcnLHOhBLruAxPLH8hvdxHfQc7/Wu3X0e9+S4pLita8
-         3AIvLvc0wfvU+AgthyMdqY8PRHNx/JLpwe8IaAyzSdtxBeCMtzTRlRtH0be1ockqK3q4
-         P4MNKM8Pa6Wrn3M8soX2W6Cc8cz4YJFBxpmANXbAhmcay9CWAcxeETyRf+C1U+xOXqEo
-         UgIRA8mqf6lwE52sxUruBhII3POeY6d1uL04r/Tod+vmyJinSkTONL9f3xYVhT6HsujW
-         xDUg==
-X-Gm-Message-State: AOAM533B+sTiEE4J8Rh0xOa0ZY3j1uIk5PCrHzBL0ejEyk+yjA5HKpVq
-        F+OVSba5Puf1gSzamDdAi2C8GoOdDA==
-X-Google-Smtp-Source: ABdhPJxuvm+7/qiSF8An8GtUmg5yWdMv1srUohUwkdVkIhM2C1sSKa5MPdT8Vf7bqJSbeLibdUtO6w==
-X-Received: by 2002:a9d:7496:0:b0:5e6:b2bd:1d1d with SMTP id t22-20020a9d7496000000b005e6b2bd1d1dmr1409484otk.23.1649353952112;
-        Thu, 07 Apr 2022 10:52:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bp21-20020a056820199500b003298e6877c7sm1619204oob.29.2022.04.07.10.52.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CK9Z5mVDe4mgBGspYQzzn8gJDiHvz3qCsQ86FE3l+us=;
+        b=i+qJYccEeszrURyStVn5zk+qNOmaqZhj7pSavXZ4d8FFs9OGYS6+1nSSq+n0N32qRa
+         Nn9piPcAmsw0cSWk67fP5KEcxV5LsHInRGKZx9YUb4jMVtgVm1fNla9Mf67+qBGZ9w2M
+         sy4Jsek3TiSUhQkLJ+vwEmv8TggEVhk0E03+71zGdxS/LjmRTKdcObx3eiMV/vlpR/lX
+         Y4eUIqk0qe/w2uo1YGinaes0MUYFSFe/vBbzrkD2PbyHF5S8IP7KIR90ytWKqY+31ODB
+         VK1DDn71mFDLfk+LRHMAUb6tCgCzW7+zbQcmVBxaYeLnbynZ5hN3FVBMjeDPWbcwMS91
+         lSsQ==
+X-Gm-Message-State: AOAM531SEV/4e3Q7Bx/g418dnQbfJZB5ofaMl1vxycC1K8TFzXRJIOt+
+        ilC84/LSTBNsolB8ukip+gdkVxtH0dLwH9USeGFU/aYgkOWthaN37t3TRRmdtKirHKYgWFhs7UM
+        bVXRWpfW+zZArqrctA4BXz+9Q
+X-Received: by 2002:a65:6b92:0:b0:39c:c97b:1b57 with SMTP id d18-20020a656b92000000b0039cc97b1b57mr3129947pgw.517.1649354052365;
+        Thu, 07 Apr 2022 10:54:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxY+f9QwoacEBY4kuGoqYuYwACBfLXX9MLBnkeSnGdArm5ggb+OlgU6GsrW0+ANYwvG2th5MA==
+X-Received: by 2002:a65:6b92:0:b0:39c:c97b:1b57 with SMTP id d18-20020a656b92000000b0039cc97b1b57mr3129928pgw.517.1649354051960;
+        Thu, 07 Apr 2022 10:54:11 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm23439873pfl.15.2022.04.07.10.54.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:52:31 -0700 (PDT)
-Received: (nullmailer pid 1639829 invoked by uid 1000);
-        Thu, 07 Apr 2022 17:52:31 -0000
-Date:   Thu, 7 Apr 2022 12:52:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: add Enclustra
-Message-ID: <Yk8k38diGzzDDL1N@robh.at.kernel.org>
-References: <20220406160728.720902-1-krzysztof.kozlowski@linaro.org>
+        Thu, 07 Apr 2022 10:54:11 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] rtw89: ser: add a break statement
+Date:   Thu,  7 Apr 2022 13:53:49 -0400
+Message-Id: <20220407175349.3053362-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406160728.720902-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 06 Apr 2022 18:07:28 +0200, Krzysztof Kozlowski wrote:
-> Add vendor prefix for Enclustra GmbH (https://www.enclustra.com).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Hi Rob,
-> 
-> Could you pick it up directly?
-> 
-> This was missed from old patchset:
-> https://lore.kernel.org/linux-devicetree/20211227133131.134369-1-krzysztof.kozlowski@canonical.com/
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+The clang build fails with
+ser.c:397:2: error: unannotated fall-through
+  between switch labels [-Werror,-Wimplicit-fallthrough]
+        default:
+        ^
+The case above the default does not have a break.
+So add one.
 
-Applied, thanks!
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/realtek/rtw89/ser.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/wireless/realtek/rtw89/ser.c b/drivers/net/wireless/realtek/rtw89/ser.c
+index 25d1df10f226..5aebd6839d29 100644
+--- a/drivers/net/wireless/realtek/rtw89/ser.c
++++ b/drivers/net/wireless/realtek/rtw89/ser.c
+@@ -394,6 +394,7 @@ static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
+ 		break;
+ 	case SER_EV_STATE_OUT:
+ 		rtw89_hci_recovery_start(rtwdev);
++		break;
+ 	default:
+ 		break;
+ 	}
+-- 
+2.27.0
+

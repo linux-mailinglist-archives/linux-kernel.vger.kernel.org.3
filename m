@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B464F8B1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3F04F8B04
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbiDGXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S232571AbiDGXmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiDGXib (ORCPT
+        with ESMTP id S231423AbiDGXmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:38:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3806114B873
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:36:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 389ACB829AE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C49C385A0;
-        Thu,  7 Apr 2022 23:36:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oPAyUYdx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649374582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/oJ/z2jjF9yKf+0yz98/oEb//RMsOp8WmTEy4bbiSGc=;
-        b=oPAyUYdxkI6FJnYItYHUWQAXW6HSgNTYQfMmcgp27ZkPxdxQ9GSj0H9X8zmTKwRtsjFceJ
-        1oIXhytwD2CHyEt5q//ZXkhZ3WNVAkssJ02sbu6ZmPfZCY3lXQetOnk1oBj/qZ5ltaYcez
-        pUHodnXYFkbMQ7H5DXNV0StJQcrd/vI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4d99eea8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 7 Apr 2022 23:36:22 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
-Cc:     tytso@mit.edu, sultan@kerneltoast.com,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH v2] random: allow partial reads if later user copies fail
-Date:   Fri,  8 Apr 2022 01:35:58 +0200
-Message-Id: <20220407233558.3369-1-Jason@zx2c4.com>
-In-Reply-To: <20220407193433.523299-1-Jason@zx2c4.com>
-References: <20220407193433.523299-1-Jason@zx2c4.com>
+        Thu, 7 Apr 2022 19:42:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1119BB1E8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649374816; x=1680910816;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0VtU0UneVuCkQyvNiHQoIuOKZgrxrtzsJsTWmdxkcV4=;
+  b=Fb+Fx/4kf/PsCdcKN5vzoYuwXX3q/dEydt85CUjqaHQXDBkiuA/vaCTB
+   /92au/qyxctvPwADhLEn0VWVN196K+/Cpg5fJ2ba67C5s51fAz6BUzDsd
+   jCKyfshrI05wX2lfLF8u5twpsno6x1RJgE04Ju6lDD9mwAaUV1AWmjjwg
+   jG5tFIX2fq+zaMJ2ddV4khwH5q53JLcGvkJE4EhzsgvGGgvP2eyamPMrq
+   K0SDN00ZwLG93/0RJ2Zdrlhpk9MU2Efgh7pylK4pM7sym1zfA0Tie0DXx
+   2zavh9SNxzJReOCdfGriSy46xPeyh+WvSgSMm1fBZgp0aTWJxYe9jvNue
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241397956"
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="241397956"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:40:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="506344200"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2022 16:40:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncbjZ-0005rv-Ml;
+        Thu, 07 Apr 2022 23:40:13 +0000
+Date:   Fri, 8 Apr 2022 07:39:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 2/5] include/linux/kallsyms.h:107:5: warning:
+ no previous prototype for function 'kallsyms_lookup_names'
+Message-ID: <202204080713.3jWhtN6s-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than failing entirely if a copy_to_user() fails at some point,
-instead we should return a partial read for the amount that succeeded
-prior, unless none succeeded at all, in which case we return -EFAULT as
-before.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   baa78873a24a7e0f21b0a01e82214ce9a096e147
+commit: 3f047c53b0e7e747b76f0b3d032e476efbe1222f [2/5] kallsyms: Add kallsyms_lookup_names function
+config: powerpc-mpc8313_rdb_defconfig (https://download.01.org/0day-ci/archive/20220408/202204080713.3jWhtN6s-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=3f047c53b0e7e747b76f0b3d032e476efbe1222f
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 3f047c53b0e7e747b76f0b3d032e476efbe1222f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-This makes it consistent with other reader interfaces. For example, the
-following snippet for /dev/zero outputs "4" followed by "1":
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  int fd;
-  void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-  assert(x != MAP_FAILED);
-  fd = open("/dev/zero", O_RDONLY);
-  assert(fd >= 0);
-  printf("%zd\n", read(fd, x, 4));
-  printf("%zd\n", read(fd, x + 4095, 4));
-  close(fd);
+All warnings (new ones prefixed by >>):
 
-This brings that same standard behavior to the various RNG reader
-interfaces.
+   In file included from arch/powerpc/kernel/asm-offsets.c:36:
+   In file included from arch/powerpc/include/asm/dbell.h:17:
+   In file included from arch/powerpc/include/asm/kvm_ppc.h:19:
+   In file included from include/linux/kvm_host.h:32:
+   In file included from include/linux/ftrace.h:12:
+>> include/linux/kallsyms.h:107:5: warning: no previous prototype for function 'kallsyms_lookup_names' [-Wmissing-prototypes]
+   int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+       ^
+   include/linux/kallsyms.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+   ^
+   static 
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:65: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-While we're at it, we can streamline the loop logic a little bit.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jann Horn <jannh@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v1->v2:
-- Do partial copies within individual blocks, not just per-block, also
-  following how /dev/zero and ordinary filesystem files work.
+vim +/kallsyms_lookup_names +107 include/linux/kallsyms.h
 
- drivers/char/random.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+   106	
+ > 107	int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+   108	{
+   109		return -ERANGE;
+   110	}
+   111	
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index e15063d61460..df43c5060f00 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -523,8 +523,7 @@ EXPORT_SYMBOL(get_random_bytes);
- 
- static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
- {
--	ssize_t ret = 0;
--	size_t len;
-+	size_t len, left, ret = 0;
- 	u32 chacha_state[CHACHA_STATE_WORDS];
- 	u8 output[CHACHA_BLOCK_SIZE];
- 
-@@ -543,37 +542,40 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
- 	 * the user directly.
- 	 */
- 	if (nbytes <= CHACHA_KEY_SIZE) {
--		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
-+		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
- 		goto out_zero_chacha;
- 	}
- 
--	do {
-+	for (;;) {
- 		chacha20_block(chacha_state, output);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
- 
- 		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
--		if (copy_to_user(buf, output, len)) {
--			ret = -EFAULT;
-+		left = copy_to_user(buf, output, len);
-+		if (left) {
-+			ret += len - left;
- 			break;
- 		}
- 
--		nbytes -= len;
- 		buf += len;
- 		ret += len;
-+		nbytes -= len;
-+		if (!nbytes)
-+			break;
- 
- 		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
--		if (!(ret % PAGE_SIZE) && nbytes) {
-+		if (ret % PAGE_SIZE == 0) {
- 			if (signal_pending(current))
- 				break;
- 			cond_resched();
- 		}
--	} while (nbytes);
-+	}
- 
- 	memzero_explicit(output, sizeof(output));
- out_zero_chacha:
- 	memzero_explicit(chacha_state, sizeof(chacha_state));
--	return ret;
-+	return ret ? ret : -EFAULT;
- }
- 
- /*
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

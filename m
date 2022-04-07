@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108334F833B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C1A4F82AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344732AbiDGPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S245057AbiDGPVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241773AbiDGPaP (ORCPT
+        with ESMTP id S229531AbiDGPVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:30:15 -0400
-Received: from 10.mo584.mail-out.ovh.net (10.mo584.mail-out.ovh.net [188.165.33.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476F21A9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:28:14 -0700 (PDT)
-Received: from player796.ha.ovh.net (unknown [10.108.20.237])
-        by mo584.mail-out.ovh.net (Postfix) with ESMTP id A0C3423C59
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:20:01 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player796.ha.ovh.net (Postfix) with ESMTPSA id EDE11293300BF;
-        Thu,  7 Apr 2022 15:19:52 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G0038066544b-4782-433a-b284-babe47db37b3,
-                    5995496A90EC26C6A3824F4C00BBD29EFE55D398) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH v2 04/10] clk: max9485: use simple i2c probe function
-Date:   Thu,  7 Apr 2022 17:18:25 +0200
-Message-Id: <20220407151831.2371706-5-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220407151831.2371706-1-steve@sk2.org>
-References: <20220407151831.2371706-1-steve@sk2.org>
+        Thu, 7 Apr 2022 11:21:51 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4061FAA25
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:19:28 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id f18so6809867edc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 08:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=pYsYOgntjjlvEHgT5JCPXmKVWoZYP+JG9X5DaFbpiDk=;
+        b=dF5xHwBR29D9nYOAbS7SpTSRKvNoXqg3FwidUbuXMXwA2aP3JY+/kWS7KlOmMm/Gy0
+         T5VuMhOpx4cqcL6RluzwTF8Ad5xcueuXfg0SbJgulSwA09CJO2G+TBnrDr/z9JoX6LnE
+         FY5CnDYX5B7u/2pMv7EwBAjXlXN3Xdss23Gw44KTiu+XhEAG8JSmu8/turfGAg66sCWB
+         0e3TEjxKScWpzImYMGM7GQiDQeD1GKfxW4ahkCjJZLwYA2NEzOoVo1BKX2lhLrHdtPlr
+         wOqQoG/bd+b6ytynKOgP6jWrL35Mi9o4H8Su8MqEkHmkeq2hXMbrKWoHxGonNzj8E8E5
+         1T5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pYsYOgntjjlvEHgT5JCPXmKVWoZYP+JG9X5DaFbpiDk=;
+        b=BXsj9s+1IxwNSpG2qOc9COxWnM4y9Z7j3PkGReNxK1gc+Mlmc5sqGApAxgcNixDVyx
+         zjoSDqQ5g3/UdyH08nGMqD2kYL0OuNB+pxh7arWv+V8ZAiGtF59rEspG435covT/Foi7
+         buz4d8KNOJV1oqb6c2WBTXDSrRVVE3poEaNGyNLF+5fthmu5kwf30r/bmwqf3IVmxw+8
+         KrfCvduC6SKqREUkNgmJTSlntaE3pPyxKOQBFZnnFbO6shFOLKqnGDpHNSdEmqnFYbqr
+         4ftYLi6cCR//5vPLp7LXLUBz4HFp6pR4+2EtLfT++5tNnhwZgcQgJR9AOuUo0dCxICnV
+         xO3w==
+X-Gm-Message-State: AOAM531wBUlPtkJMFa4GDbcLnBh+0jI2hqo8rFsjYQo5r+IgMxm9Ei8w
+        QW9M0sEZnSdq0uR/aR/sFgkulg==
+X-Google-Smtp-Source: ABdhPJwLbpgSA+Jg7fYudXJFmcMqkdL4fgQYcsmaQKmizJG3dS0PYSHabAoeLbOFMycDRwFLxR8M2w==
+X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr15045423edc.86.1649344707223;
+        Thu, 07 Apr 2022 08:18:27 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170906848100b006e8053c7cdcsm3217716ejx.39.2022.04.07.08.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 08:18:26 -0700 (PDT)
+Message-ID: <27f5eed0-e59f-9441-4e2f-3a2c5d8dddad@linaro.org>
+Date:   Thu, 7 Apr 2022 17:18:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 81064795355776646
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] dt-bindings: soc: ti: wkup_m3_ipc: convert bindings to
+ json-schema
+Content-Language: en-US
+To:     Drew Fustini <dfustini@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>, Suman Anna <s-anna@ti.com>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407141750.2289293-1-dfustini@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407141750.2289293-1-dfustini@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c probe function here doesn't use the id information provided in
-its second argument, so the single-parameter i2c probe function
-("probe_new") can be used instead.
+On 07/04/2022 16:17, Drew Fustini wrote:
+> Convert the wkup_m3_ipc bindings documentation to json-schema.
+> 
+> Link: https://lore.kernel.org/linux-arm-kernel/20220221125522.l3tntb6i7yjxp6vb@flattered/
+> Suggested-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> ---
+>  .../bindings/soc/ti/wkup_m3_ipc.txt           | 57 -------------
+>  .../bindings/soc/ti/wkup_m3_ipc.yaml          | 81 +++++++++++++++++++
 
-This avoids scanning the identifier tables during probes.
+Changes look good, thanks for fixing, although I forgot about one thing
+- all other files are using 'hyphens' in file name, so please keep it
+consistent with them.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/clk/clk-max9485.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/clk/clk-max9485.c b/drivers/clk/clk-max9485.c
-index 5e80f3d090f3..5f85b0a32872 100644
---- a/drivers/clk/clk-max9485.c
-+++ b/drivers/clk/clk-max9485.c
-@@ -254,8 +254,7 @@ max9485_of_clk_get(struct of_phandle_args *clkspec, void *data)
- 	return &drvdata->hw[idx].hw;
- }
- 
--static int max9485_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int max9485_i2c_probe(struct i2c_client *client)
- {
- 	struct max9485_driver_data *drvdata;
- 	struct device *dev = &client->dev;
-@@ -377,7 +376,7 @@ static struct i2c_driver max9485_driver = {
- 		.pm		= &max9485_pm_ops,
- 		.of_match_table	= max9485_dt_ids,
- 	},
--	.probe = max9485_i2c_probe,
-+	.probe_new = max9485_i2c_probe,
- 	.id_table = max9485_i2c_ids,
- };
- module_i2c_driver(max9485_driver);
--- 
-2.27.0
 
+Best regards,
+Krzysztof

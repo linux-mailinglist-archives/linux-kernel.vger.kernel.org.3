@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533D84F7EB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0831E4F7EB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiDGMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S237536AbiDGMIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbiDGMH2 (ORCPT
+        with ESMTP id S237148AbiDGMIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:07:28 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D30C4E13
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:05:23 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n6so10294192ejc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bwsyQ5Vu4W5RWwfy6VtuRb8dpLJkggv+g3kZE12CFcQ=;
-        b=Tgo1TI51TajsJx0sXfbOwR5Gyu9coBohhsu8zhdZpA5kKuZTg8NJboDw/1NK+7+giS
-         63z3ioCQc/KKpkCRyUx1Kql1U0zHvzD2P+/4t1emulGnKynZOlcd40K5G4UbsZaCWuAG
-         WcJcqH+2My0E/GLm6+1ysAUPqpBiuwkB/Vk/BtyU67L3p+ibRJGDzA3J23HKmFE22/PQ
-         /2Hr4TZpBJx3jL0uIwyDjYIP5eg7tNEawLpH78UFM6f39HNe6u0bIaJ8TCnEt/hqXxel
-         +/k51tILeOrMFz8JeqTe5wa2qG3pKBEqqoYZl9ekM9Y3LMDG+wBH/HuFSwQgX+hGf/sn
-         b0Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bwsyQ5Vu4W5RWwfy6VtuRb8dpLJkggv+g3kZE12CFcQ=;
-        b=SYR1DBKkwL4d7fcatoluilDOIMgiXCxIqRyOUVyeutiiO9PzuqF7xPcYVl5HI7/Eeb
-         qWrUwZ8mcKaIHx+SbgUzti+PPBB7Qy51ttW2IdOcKnyZboEtNYO90p5geOgG7fsCuydL
-         BAs33Oq3E6PN+l5MmNG4lRIfjwFOnZmTXmrU8GDJPsbm35sMCW25Cu+LqCVMMIVO88Kl
-         pWH0iqBFkgK7vAjNEbH+w0RWmYFF8GXLGYf7sJd1Ca4AovR5EdjPLpJ4W7bpZ2fVZVue
-         MKU6WD4I3z9uNvHi61mdx+IdCSCqNSFi0YMaGesUloj8pcdiBHriwKmB3h89tb7wiG1Z
-         tgWw==
-X-Gm-Message-State: AOAM531BLdqXDdgatZtWMpX1z9Qf+zSd2x/skgO9Xxe0SkX3IU65b5Bk
-        bL5rh3xVyM/j6QUSybpHMVSsXg==
-X-Google-Smtp-Source: ABdhPJw306Xv8hi4MiEDFStVaE0H2lWBzMserAaLf5q9MTAVjR/RGdsOIDq6FnIZCvCQRrdAPOBNOA==
-X-Received: by 2002:a17:907:6ea4:b0:6e1:260e:a232 with SMTP id sh36-20020a1709076ea400b006e1260ea232mr13324944ejc.15.1649333121669;
-        Thu, 07 Apr 2022 05:05:21 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b0041934547989sm9247017edp.55.2022.04.07.05.05.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 05:05:21 -0700 (PDT)
-Message-ID: <bc71266a-50c9-ef0f-6bc1-20df79782d32@linaro.org>
-Date:   Thu, 7 Apr 2022 14:05:20 +0200
+        Thu, 7 Apr 2022 08:08:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131EAB0A4C;
+        Thu,  7 Apr 2022 05:06:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C4B5F1F85A;
+        Thu,  7 Apr 2022 12:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649333198; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UpuTzjjU3dwrDNlWUgU1m4VL7JE5wjWtlut0wOZ6+Us=;
+        b=bamm/WXnOVYE8ZOho6XQUe7FCEZovOUuJfhlzWNhhXeUA04h7c/K9EahBbNmRzY3a1B0GV
+        PYCeX6iSGlyPLVgg+TcAICaXy7ccBN1LFAaAz/36KVQU1wVrrWfK5NFQkqu3UV7fDyUDHl
+        I7ddY451v2TFm/p8DP18Y42M5VrwxQE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 851E113485;
+        Thu,  7 Apr 2022 12:06:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1/lNH87TTmIFBQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 07 Apr 2022 12:06:38 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, Michal Hocko <mhocko@suse.com>
+Subject: [PATCH v2] mm, page_alloc: fix build_zonerefs_node()
+Date:   Thu,  7 Apr 2022 14:06:37 +0200
+Message-Id: <20220407120637.9035-1-jgross@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Manohar.Puri@microchip.com
-References: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 12:54, Kavyasree Kotagiri wrote:
-> LAN966x SoC supports 3 QSPI controllers. Each of them support
-> data and clock frequency upto 100Mhz DDR and QUAD protocol.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
->  Documentation/devicetree/bindings/spi/atmel,quadspi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> index 1d493add4053..100d6e7f2748 100644
-> --- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> @@ -19,6 +19,7 @@ properties:
->        - microchip,sam9x60-qspi
->        - microchip,sama7g5-qspi
->        - microchip,sama7g5-ospi
-> +      - microchip,lan966x-qspi
+Since commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim from
+zones with pages managed by the buddy allocator") only zones with free
+memory are included in a built zonelist. This is problematic when e.g.
+all memory of a zone has been ballooned out when zonelists are being
+rebuilt.
 
-Expect the comment you got about wildcard, please also put it in
-alphabetical order. As you can check, the other entries are ordered.
+The decision whether to rebuild the zonelists when onlining new memory
+is done based on populated_zone() returning 0 for the zone the memory
+will be added to. The new zone is added to the zonelists only, if it
+has free memory pages (managed_zone() returns a non-zero value) after
+the memory has been onlined. This implies, that onlining memory will
+always free the added pages to the allocator immediately, but this is
+not true in all cases: when e.g. running as a Xen guest the onlined
+new memory will be added only to the ballooned memory list, it will be
+freed only when the guest is being ballooned up afterwards.
 
-Best regards,
-Krzysztof
+Another problem with using managed_zone() for the decision whether a
+zone is being added to the zonelists is, that a zone with all memory
+used will in fact be removed from all zonelists in case the zonelists
+happen to be rebuilt.
+
+Use populated_zone() when building a zonelist as it has been done
+before that commit.
+
+Cc: stable@vger.kernel.org
+Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+---
+V2:
+- updated commit message (Michal Hocko)
+---
+ mm/page_alloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index bdc8f60ae462..3d0662af3289 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6128,7 +6128,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
+ 	do {
+ 		zone_type--;
+ 		zone = pgdat->node_zones + zone_type;
+-		if (managed_zone(zone)) {
++		if (populated_zone(zone)) {
+ 			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+ 			check_highest_zone(zone_type);
+ 		}
+-- 
+2.34.1
+

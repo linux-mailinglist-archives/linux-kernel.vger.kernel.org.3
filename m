@@ -2,78 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A914F869D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0F04F86A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346627AbiDGRxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:53:18 -0400
+        id S1346641AbiDGRxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:53:21 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346623AbiDGRxL (ORCPT
+        with ESMTP id S1346630AbiDGRxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:53:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95C22EBE4
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:51:04 -0700 (PDT)
+        Thu, 7 Apr 2022 13:53:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29B722EB35;
+        Thu,  7 Apr 2022 10:51:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98EE661976
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 17:51:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3832C385A4;
-        Thu,  7 Apr 2022 17:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649353863;
-        bh=iBZxPWDIqKLn9hWgPpT2DzF41eYn3xaK1WuVBDT9kLA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rv4C6fFhFdNrF+mn6KNyC1rHVUJ42ECR/3tD6579FzZhMQxJk0hqN7t29aISztqOo
-         s5gKFaflSIeBKeuUzilYcTpLB/2wlj97czZCH4fc9OfaucwI7Zx914WCBD0Qvp5HKR
-         LOKRpyMrm9ibvvFZnylA9crvK9SPH8B83cdY/02E=
-Date:   Thu, 7 Apr 2022 19:51:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     xkernel.wang@foxmail.com
-Cc:     paskripkin@gmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] staging: r8188eu: check the return of kzalloc()
-Message-ID: <Yk8khN/Htc0zVY9d@kroah.com>
-References: <tencent_5AB92A7786438342357C5669E7BF0C249505@qq.com>
- <tencent_15C23F2EC8197361EE200714C54E78B45206@qq.com>
- <9c307f1e-aa95-08e6-3a01-825caba19a30@gmail.com>
- <tencent_0D5C6E0E160AA0702025FDFF35906EE69E07@qq.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C510B82901;
+        Thu,  7 Apr 2022 17:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E26C385A0;
+        Thu,  7 Apr 2022 17:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649353869;
+        bh=cmP0BZ3fNUvcP7KxHKtR0yiNgwGpwH3espXWf6j0OxA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ib2H7AYJZPo72aQsw1/OYImofH7OAeCmw1QztjPZCt5O7vxkDFE3uXOi5E3ORoV/K
+         GHIbKSEdMghvbX/hZBM7JZxdjReU0uda2rUmEpwYxyRgZNtv7daLjG0NvC53UhnWSO
+         lOr+jHVCnKOJR19X1z+r2NAlMzRtN6UzKqfxz+4AHbnWalXuJHl8a3CvsmJf65gXHc
+         TrLgEGJD3Vgwv7EvremvCWzqboi9Tod94Y4FAGtJ+ICkXc7fNGUr0nEfJWkiW+ADSk
+         Nz9CghzPAtZZ0CpoFIfYZEeKMvooc/1zoVfFxKkP64oNi7RFkuEYDDXui6ZlspGzxs
+         K9/WHcmwdmfLQ==
+Date:   Thu, 7 Apr 2022 12:51:07 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 3/3] PCI: ACPI: PM: Power up devices in D3cold before
+ scanning them
+Message-ID: <20220407175107.GA252647@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_0D5C6E0E160AA0702025FDFF35906EE69E07@qq.com>
+In-Reply-To: <5729439.MhkbZ0Pkbq@kreacher>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:03:49AM +0800, xkernel.wang@foxmail.com wrote:
-> On Thursday, April 7, 2022 3:22 AM +0800, paskripkin@gmail.com wrote:
-> > > -void rtw_alloc_hwxmits(struct adapter *padapter)
-> > > +s32 rtw_alloc_hwxmits(struct adapter *padapter)
-> > >   {
-> > 
-> > What about plain 'int'? I know that s32 is typedef for 'int', but 'int'
-> > looks more natural
-> > 
+On Mon, Apr 04, 2022 at 05:25:04PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> I agree with you.
-> Since the type of `_rtw_init_xmit_priv` is `s32`, I directly changed the
-> type of `rtw_alloc_hwxmits` to `s32` (they are neighbors in rtw_xmit.h).
-> In fact, there are many places where `s32` appears together with `int` 
-> in related files, so maybe we can leave it as a future work to make all 
-> of them a unified form.
+> The initial configuration of ACPI power resources on some systems
+> implies that some PCI devices on them are initially in D3cold.
+> 
+> In some cases, especially for PCIe Root Ports, this is a "logical"
+> D3cold, meaning that the configuration space of the device is
+> accessible, but some of its functionality may be missing, but it
+> very well may be real D3cold, in which case the device will not
+> be accessible at all.  However, the PCI bus type driver will need
+> to access its configuration space in order to enumerate it.
+> 
+> To prevent possible device enumeration failures that may ensue as
+> a result of ACPI power resources being initially in the "off"
+> state, power up all children of the host bridge ACPI device object
+> that hold valid _ADR objects (which indicates that they will be
+> enumerated by the PCI bus type driver) and do that to all children
+> of the ACPI device objects corresponding to PCI bridges (including
+> PCIe ports).
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-No, get this one right to start with.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-thanks,
-
-greg k-h
+> ---
+>  drivers/acpi/pci_root.c |    2 ++
+>  drivers/pci/pci-acpi.c  |    3 +++
+>  2 files changed, 5 insertions(+)
+> 
+> Index: linux-pm/drivers/acpi/pci_root.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/pci_root.c
+> +++ linux-pm/drivers/acpi/pci_root.c
+> @@ -927,6 +927,8 @@ struct pci_bus *acpi_pci_root_create(str
+>  		host_bridge->preserve_config = 1;
+>  	ACPI_FREE(obj);
+>  
+> +	acpi_dev_power_up_children_with_adr(device);
+> +
+>  	pci_scan_child_bus(bus);
+>  	pci_set_host_bridge_release(host_bridge, acpi_pci_root_release_info,
+>  				    info);
+> Index: linux-pm/drivers/pci/pci-acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci-acpi.c
+> +++ linux-pm/drivers/pci/pci-acpi.c
+> @@ -1374,6 +1374,9 @@ void pci_acpi_setup(struct device *dev,
+>  
+>  	acpi_pci_wakeup(pci_dev, false);
+>  	acpi_device_power_add_dependent(adev, dev);
+> +
+> +	if (pci_is_bridge(pci_dev))
+> +		acpi_dev_power_up_children_with_adr(adev);
+>  }
+>  
+>  void pci_acpi_cleanup(struct device *dev, struct acpi_device *adev)
+> 
+> 
+> 

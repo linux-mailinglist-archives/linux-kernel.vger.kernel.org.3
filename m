@@ -2,188 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B530B4F6F21
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7088D4F6F25
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiDGAZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 20:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S231570AbiDGA0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 20:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiDGAZW (ORCPT
+        with ESMTP id S232424AbiDGA0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 20:25:22 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399911404D3
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:23:24 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id om8-20020a17090b3a8800b001c68e7ccd5fso4721298pjb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 17:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=Gw4AjJsA/huEQANT6E1aBllpAkZiad7BFxNLgPrG5WM=;
-        b=YvIBHN/BqYeWAOxEMGtEuwiypyCUcpDjB9N+7wYo9VQKTMOX6+/C1Bp/286i2PwOL2
-         1GeH5Ckgc9vXqhFlrApJLwys+ePDi3vIYQal4kGEVoOpo/KTQzeC59dM6R3hHbfAfSSD
-         oI3SwtjtQRXDenZrjqgmBPyRNNlPuko6RjEA7PUY8gRdXA7WnxQhsA1QQwagDSlntOl+
-         LzlupGRDorcDYzr6xgif0cTyjWO6O8RnrNBhk2kVhbJD3buzvs1SUMGIFsB5odMxHyUT
-         RD3XEg9xqpVzq0S3C0Mhs33gv0Ask60oqrvpZ4e8F1HHf76q7mxAEEqARvj9lA4mFNd2
-         pxvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=Gw4AjJsA/huEQANT6E1aBllpAkZiad7BFxNLgPrG5WM=;
-        b=H+mWFwchEkHwxCGKtmZ+G+YiVpBD5AjLHfoHI48bxWMUVr5wBPtQyH0QWhXhD6tXE7
-         ey2CQuk2k+ustj4+W9xKWVKmcYcPWVfJ/rZiNIvTk7JDE5/7gYMCSzeUt15d7keHs37n
-         Op1RxLYOFuN/m7lhACVP4skXIxDjOqk0KVrEYjSHWt1nBasPFFY6Pve+0BMQhn+G082x
-         uSoionXNVFH4jd7V7KPnr/FtZeFaFx26ILGvTs9/75DQQfvF+dRJne5ji2BtNZzqjf9A
-         VSqE8Xx3N6LdP48djNgv7RRmoA2XRjI/lnjboYueA6NCxSdkWYwLQjKm5hpobUWZii30
-         mqFQ==
-X-Gm-Message-State: AOAM530xUCb32GaO8OGzKUNVXG2+ylzSyu3NHThLymG7sww3JGX6FQam
-        /YmiGHZilfgmP5qF6zaHU9BRAinuIj4=
-X-Google-Smtp-Source: ABdhPJzSiZkaETBojCsv7IWI0RK07JvVJU7L4qlX/g7XDi239S68bTdfNqx9nqYezPB4E0TYCCsbh9JgSgo=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:858b:b0:1c6:5bc8:781a with SMTP id
- m11-20020a17090a858b00b001c65bc8781amr253317pjn.0.1649291003322; Wed, 06 Apr
- 2022 17:23:23 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  7 Apr 2022 00:23:15 +0000
-In-Reply-To: <20220407002315.78092-1-seanjc@google.com>
-Message-Id: <20220407002315.78092-4-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220407002315.78092-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH 3/3] KVM: nVMX: Clear IDT vectoring on nested VM-Exit for
- double/triple fault
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 20:26:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD55D22518
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649291056; x=1680827056;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VczgxrXQUNG9Gl/m9qVu5UsyXkzA+UWvHN8IdxMQyM8=;
+  b=Pbd2LOC1fttrxoSJ5fdbMbt8nU4qAWq+lvUQMDmUDFI7lXX13GJxdbnO
+   B3wwnOXKRov1JhVHaAo8p460KEn++XcQEme0S/T4PWsGrcBT+0XGCtMHk
+   /mON+bucuxVlc5PVg9f47ZVe3zn0khz+RYu51Q+KyF1dxr5f4BywAnM0Z
+   2m5tHKhqTom/xGENsyZfnxBey/AGlpGmPlCYBsC8D9CBJJmLtB7pbF6g/
+   Duo7Jw2D9wZe8HeXu5LPwY3KydnUJ/OTx+8JDJm4LM8xXL82lR+4QICSV
+   Cdh+psBnjQRE+IsIGGfF5IyEb1GrVWuYRXEsphSzGlornLqdjugHbOyeE
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248715552"
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="248715552"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 17:24:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
+   d="scan'208";a="524702374"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 17:24:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncFwb-0004tN-Qz;
+        Thu, 07 Apr 2022 00:24:13 +0000
+Date:   Thu, 7 Apr 2022 08:23:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/tdfxfb.c:1118:17: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202204070836.REcAD90D-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clear the IDT vectoring field in vmcs12 on next VM-Exit due to a double
-or triple fault.  Per the SDM, a VM-Exit isn't considered to occur during
-event delivery if the exit is due to an intercepted double fault or a
-triple fault.  Opportunistically move the default clearing (no event
-"pending") into the helper so that it's more obvious that KVM does indeed
-handle this case.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
+date:   7 weeks ago
+config: mips-randconfig-s032-20220405 (https://download.01.org/0day-ci/archive/20220407/202204070836.REcAD90D-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/video/fbdev/
 
-Note, the double fault case is worded rather wierdly in the SDM:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  The original event results in a double-fault exception that causes the
-  VM exit directly.
 
-Temporarily ignoring injected events, double faults can _only_ occur if
-an exception occurs while attempting to deliver a different exception,
-i.e. there's _always_ an original event.  And for injected double fault,
-while there's no original event, injected events are never subject to
-interception.
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+>> drivers/video/fbdev/tdfxfb.c:1118:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *cursorbase @@
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     expected void const *
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     got unsigned char [noderef] [usertype] __iomem *cursorbase
+>> drivers/video/fbdev/tdfxfb.c:1118:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *cursorbase @@
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     expected void const *
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     got unsigned char [noderef] [usertype] __iomem *cursorbase
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got unsigned char [noderef] [usertype] __iomem *cursorbase @@
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     expected void *
+   drivers/video/fbdev/tdfxfb.c:1118:17: sparse:     got unsigned char [noderef] [usertype] __iomem *cursorbase
+   drivers/video/fbdev/tdfxfb.c:1129:33: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/tdfxfb.c:1132:33: sparse: sparse: cast removes address space '__iomem' of expression
+--
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   drivers/video/fbdev/atmel_lcdfb.c:354:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __iomem *screen_base @@     got void * @@
+   drivers/video/fbdev/atmel_lcdfb.c:354:27: sparse:     expected char [noderef] __iomem *screen_base
+   drivers/video/fbdev/atmel_lcdfb.c:354:27: sparse:     got void *
+>> drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     expected void const *
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     got char [noderef] __iomem *screen_base
+>> drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     expected void const *
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     expected void *
+   drivers/video/fbdev/atmel_lcdfb.c:362:9: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void *cpu_addr @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse:     expected void *cpu_addr
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void *cpu_addr @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse:     expected void *cpu_addr
+   drivers/video/fbdev/atmel_lcdfb.c:333:59: sparse:     got char [noderef] __iomem *screen_base
+--
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   drivers/video/fbdev/pvr2fb.c:336:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:336:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:338:31: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:345:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:347:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:349:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:540:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:541:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:560:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:569:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:573:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:574:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:579:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:580:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:581:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:584:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:585:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:588:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:591:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:595:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:595:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:596:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:600:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:612:19: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:614:17: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:616:17: sparse: sparse: cast removes address space '__iomem' of expression
+>> drivers/video/fbdev/pvr2fb.c:800:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     expected void const *
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     got char [noderef] __iomem *screen_base
+>> drivers/video/fbdev/pvr2fb.c:800:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     expected void const *
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     expected void *
+   drivers/video/fbdev/pvr2fb.c:800:9: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/pvr2fb.c:832:15: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:1071:11: sparse: sparse: Using plain integer as NULL pointer
+   drivers/video/fbdev/pvr2fb.c:233:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:233:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:240:9: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/pvr2fb.c:240:9: sparse: sparse: cast removes address space '__iomem' of expression
+--
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+>> drivers/video/fbdev/sstfb.c:337:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     expected void const *
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     got char [noderef] __iomem *screen_base
+>> drivers/video/fbdev/sstfb.c:337:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     expected void const *
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/sstfb.c:337:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     expected void *
+   drivers/video/fbdev/sstfb.c:337:9: sparse:     got char [noderef] __iomem *screen_base
+--
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+>> drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *dst @@
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     expected void const *
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     got unsigned char [noderef] [usertype] __iomem *dst
+>> drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *dst @@
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     expected void const *
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     got unsigned char [noderef] [usertype] __iomem *dst
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got unsigned char [noderef] [usertype] __iomem *dst @@
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     expected void *
+   drivers/video/fbdev/aty/mach64_cursor.c:156:13: sparse:     got unsigned char [noderef] [usertype] __iomem *dst
+   drivers/video/fbdev/aty/mach64_cursor.c:187:25: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/video/fbdev/aty/mach64_cursor.c:188:25: sparse: sparse: cast removes address space '__iomem' of expression
 
-Presumably the SDM is calling out that a the vectoring info will be valid
-if a different exit occurs after a double fault, e.g. if a #PF occurs and
-is intercepted while vectoring #DF, then the vectoring info will show the
-double fault.  In other words, the clause can simply be read as:
+vim +1118 drivers/video/fbdev/tdfxfb.c
 
-  The VM exit is caused by a double-fault exception.
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1038  
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1039  static int tdfxfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1040  {
+a807f618b625944 drivers/video/tdfxfb.c Antonino A. Daplas 2006-01-09  1041  	struct tdfx_par *par = info->par;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1042  	u32 vidcfg;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1043  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1044  	if (!hwcursor)
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1045  		return -EINVAL;	/* just to force soft_cursor() call */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1046  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1047  	/* Too large of a cursor or wrong bpp :-( */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1048  	if (cursor->image.width > 64 ||
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1049  	    cursor->image.height > 64 ||
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1050  	    cursor->image.depth > 1)
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1051  		return -EINVAL;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1052  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1053  	vidcfg = tdfx_inl(par, VIDPROCCFG);
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1054  	if (cursor->enable)
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1055  		tdfx_outl(par, VIDPROCCFG, vidcfg | VIDCFG_HWCURSOR_ENABLE);
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1056  	else
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1057  		tdfx_outl(par, VIDPROCCFG, vidcfg & ~VIDCFG_HWCURSOR_ENABLE);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1058  
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1059  	/*
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1060  	 * If the cursor is not be changed this means either we want the
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1061  	 * current cursor state (if enable is set) or we want to query what
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1062  	 * we can do with the cursor (if enable is not set)
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1063  	 */
+8af1d50f7f67937 drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1064  	if (!cursor->set)
+8af1d50f7f67937 drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1065  		return 0;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1066  
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1067  	/* fix cursor color - XFree86 forgets to restore it properly */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1068  	if (cursor->set & FB_CUR_SETCMAP) {
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1069  		struct fb_cmap cmap = info->cmap;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1070  		u32 bg_idx = cursor->image.bg_color;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1071  		u32 fg_idx = cursor->image.fg_color;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1072  		unsigned long bg_color, fg_color;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1073  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1074  		fg_color = (((u32)cmap.red[fg_idx]   & 0xff00) << 8) |
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1075  			   (((u32)cmap.green[fg_idx] & 0xff00) << 0) |
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1076  			   (((u32)cmap.blue[fg_idx]  & 0xff00) >> 8);
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1077  		bg_color = (((u32)cmap.red[bg_idx]   & 0xff00) << 8) |
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1078  			   (((u32)cmap.green[bg_idx] & 0xff00) << 0) |
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1079  			   (((u32)cmap.blue[bg_idx]  & 0xff00) >> 8);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1080  		banshee_make_room(par, 2);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1081  		tdfx_outl(par, HWCURC0, bg_color);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1082  		tdfx_outl(par, HWCURC1, fg_color);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1083  	}
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1084  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1085  	if (cursor->set & FB_CUR_SETPOS) {
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1086  		int x = cursor->image.dx;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1087  		int y = cursor->image.dy - info->var.yoffset;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1088  
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1089  		x += 63;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1090  		y += 63;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1091  		banshee_make_room(par, 1);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1092  		tdfx_outl(par, HWCURLOC, (y << 16) + x);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1093  	}
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1094  	if (cursor->set & (FB_CUR_SETIMAGE | FB_CUR_SETSHAPE)) {
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1095  		/*
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1096  		 * Voodoo 3 and above cards use 2 monochrome cursor patterns.
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1097  		 *    The reason is so the card can fetch 8 words at a time
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1098  		 * and are stored on chip for use for the next 8 scanlines.
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1099  		 * This reduces the number of times for access to draw the
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1100  		 * cursor for each screen refresh.
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1101  		 *    Each pattern is a bitmap of 64 bit wide and 64 bit high
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1102  		 * (total of 8192 bits or 1024 bytes). The two patterns are
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1103  		 * stored in such a way that pattern 0 always resides in the
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1104  		 * lower half (least significant 64 bits) of a 128 bit word
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1105  		 * and pattern 1 the upper half. If you examine the data of
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1106  		 * the cursor image the graphics card uses then from the
+25985edcedea639 drivers/video/tdfxfb.c Lucas De Marchi    2011-03-30  1107  		 * beginning you see line one of pattern 0, line one of
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1108  		 * pattern 1, line two of pattern 0, line two of pattern 1,
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1109  		 * etc etc. The linear stride for the cursor is always 16 bytes
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1110  		 * (128 bits) which is the maximum cursor width times two for
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1111  		 * the two monochrome patterns.
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1112  		 */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1113  		u8 __iomem *cursorbase = info->screen_base + info->fix.smem_len;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1114  		u8 *bitmap = (u8 *)cursor->image.data;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1115  		u8 *mask = (u8 *)cursor->mask;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1116  		int i;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1117  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16 @1118  		fb_memset(cursorbase, 0, 1024);
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1119  
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1120  		for (i = 0; i < cursor->image.height; i++) {
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1121  			int h = 0;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1122  			int j = (cursor->image.width + 7) >> 3;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1123  
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1124  			for (; j > 0; j--) {
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1125  				u8 data = *mask ^ *bitmap;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1126  				if (cursor->rop == ROP_COPY)
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1127  					data = *mask & *bitmap;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1128  				/* Pattern 0. Copy the cursor mask to it */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1129  				fb_writeb(*mask, cursorbase + h);
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1130  				mask++;
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1131  				/* Pattern 1. Copy the cursor bitmap to it */
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1132  				fb_writeb(data, cursorbase + h + 8);
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1133  				bitmap++;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1134  				h++;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1135  			}
+90b0f08536531ab drivers/video/tdfxfb.c Krzysztof Helt     2007-10-16  1136  			cursorbase += 16;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1137  		}
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1138  	}
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1139  	return 0;
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1140  }
+^1da177e4c3f415 drivers/video/tdfxfb.c Linus Torvalds     2005-04-16  1141  
 
-Fixes: 4704d0befb07 ("KVM: nVMX: Exiting from L2 to L1")
-Cc: Chenyi Qiang <chenyi.qiang@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c | 32 ++++++++++++++++++++++++++++----
- arch/x86/kvm/vmx/vmcs.h   |  5 +++++
- 2 files changed, 33 insertions(+), 4 deletions(-)
+:::::: The code at line 1118 was first introduced by commit
+:::::: 90b0f08536531abbbe7b5d4944792da08cadde01 tdfxfb: hardware cursor
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 9a4938955bad..a6688663da4d 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3691,12 +3691,34 @@ vmcs12_guest_cr4(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12)
- }
- 
- static void vmcs12_save_pending_event(struct kvm_vcpu *vcpu,
--				      struct vmcs12 *vmcs12)
-+				      struct vmcs12 *vmcs12,
-+				      u32 vm_exit_reason, u32 exit_intr_info)
- {
- 	u32 idt_vectoring;
- 	unsigned int nr;
- 
--	if (vcpu->arch.exception.injected) {
-+	/*
-+	 * Per the SDM, VM-Exits due to double and triple faults are never
-+	 * considered to occur during event delivery, even if the double/triple
-+	 * fault is the result of an escalating vectoring issue.
-+	 *
-+	 * Note, the SDM qualifies the double fault behavior with "The original
-+	 * event results in a double-fault exception".  It's unclear why the
-+	 * qualification exists since exits due to double fault can occur only
-+	 * while vectoring a different exception (injected events are never
-+	 * subject to interception), i.e. there's _always_ an original event.
-+	 *
-+	 * The SDM also uses NMI as a confusing example for the "original event
-+	 * causes the VM exit directly" clause.  NMI isn't special in any way,
-+	 * the same rule applies to all events that cause an exit directly.
-+	 * NMI is an odd choice for the example because NMIs can only occur on
-+	 * instruction boundaries, i.e. they _can't_ occur during vectoring.
-+	 */
-+	if ((u16)vm_exit_reason == EXIT_REASON_TRIPLE_FAULT ||
-+	    ((u16)vm_exit_reason == EXIT_REASON_EXCEPTION_NMI &&
-+	     is_double_fault(exit_intr_info))) {
-+		vmcs12->idt_vectoring_info_field = 0;
-+	} else if (vcpu->arch.exception.injected) {
- 		nr = vcpu->arch.exception.nr;
- 		idt_vectoring = nr | VECTORING_INFO_VALID_MASK;
- 
-@@ -3729,6 +3751,8 @@ static void vmcs12_save_pending_event(struct kvm_vcpu *vcpu,
- 			idt_vectoring |= INTR_TYPE_EXT_INTR;
- 
- 		vmcs12->idt_vectoring_info_field = idt_vectoring;
-+	} else {
-+		vmcs12->idt_vectoring_info_field = 0;
- 	}
- }
- 
-@@ -4215,8 +4239,8 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 		 * Transfer the event that L0 or L1 may wanted to inject into
- 		 * L2 to IDT_VECTORING_INFO_FIELD.
- 		 */
--		vmcs12->idt_vectoring_info_field = 0;
--		vmcs12_save_pending_event(vcpu, vmcs12);
-+		vmcs12_save_pending_event(vcpu, vmcs12,
-+					  vm_exit_reason, exit_intr_info);
- 
- 		vmcs12->vm_exit_intr_info = exit_intr_info;
- 		vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
-diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
-index e325c290a816..2b9d7a7e83f7 100644
---- a/arch/x86/kvm/vmx/vmcs.h
-+++ b/arch/x86/kvm/vmx/vmcs.h
-@@ -104,6 +104,11 @@ static inline bool is_breakpoint(u32 intr_info)
- 	return is_exception_n(intr_info, BP_VECTOR);
- }
- 
-+static inline bool is_double_fault(u32 intr_info)
-+{
-+	return is_exception_n(intr_info, DF_VECTOR);
-+}
-+
- static inline bool is_page_fault(u32 intr_info)
- {
- 	return is_exception_n(intr_info, PF_VECTOR);
+:::::: TO: Krzysztof Helt <krzysztof.h1@wp.pl>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+
 -- 
-2.35.1.1094.g7c7d902a7c-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,248 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE784F85E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BDF4F8636
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346299AbiDGRZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S1346348AbiDGRaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346172AbiDGRYR (ORCPT
+        with ESMTP id S1346506AbiDGR1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:24:17 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044DA2DA85
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:22:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so3716018pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:22:12 -0700 (PDT)
+        Thu, 7 Apr 2022 13:27:37 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FEFDE3D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:23:48 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h5so4555916pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=She3iuzrzbaRPTDd7X1kPR3PqaIMp+t50YFOrpufiXk=;
-        b=IxfhMKVqwDA57n3w64UxRNmCnwWO8EYUJOMKmVANIi45zdJ2IUS1jg2dE3mgR2kjnV
-         NCWxfyBol7MXkbweK9+2Swr/MgmO91Pf7SaAlCYtF9OyPZ2H6ZYe7fK/JQVb8Uk7I6NG
-         AGzIwD+Rc/fteCao/lmkMVt+rRXToa0OAjUTQ=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DFecdRo1OcDJL+E53AYAzBMzke472lhEFN6Lut7X4Ts=;
+        b=RR0h+gY5cOptCFHpbs2kfVqhRd2qnjomTxAX3aw6Z2qukKffYeou0GZ7qiZMXepddM
+         Mdetx+EF5JkUPT1QcKOq7Z8Ce+cYwUQOcv+2b6w4ghfO8gVfSm80kV6smnGW1SQB56lJ
+         q5rsQJHhIz1/1UnwQqwflKnteNhxueIt55HPQJiUJdG3h+Ud4w4uY1lnQIP2l/XlTcA8
+         e+qxhc6VeDth+AaDhNEFM8E5Tp84A2zcvd985556vxoZaohNr47+QJA5015Vq1wS3KGa
+         jUpAHcZ6HJz4g6RxhpX/vo5K+SGTpnzk0PH+pY00W7xEdnnq00YucTWDWjBWIf9JiOjf
+         bgTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=She3iuzrzbaRPTDd7X1kPR3PqaIMp+t50YFOrpufiXk=;
-        b=CyA28BZxWa2lomV9F4eSkgmdJPveOiyIS/AH4cVY1bcwKq+90FvFQFWcne/Pi/8VHC
-         eqWlQvXWq9oux5JbFl87ovqQ21cTobz1TZzrOgOGzurxOGEZHEkp8bbK8zu98Qc5yTAX
-         9CPiJg4HOAj9Ba3u1P4/DMmIek/905Ubk6vokXHocBgF/dmvo5DjXXayJNCjoQTWsQYA
-         uI+kHtHAKegGhSnOvdNs36/aZS7xxdCOL9NW2/dTOOypbQgk5G3EV/61gQpbXdOoqPl/
-         ze4zolHf4O4xGFvD0CI1Dbv2iRN5oBtna2PgGIMS5Xt16o7cK5Rd8fqERAhLkztD84UZ
-         nWyA==
-X-Gm-Message-State: AOAM532J1Hnxpkl1oeYLn6Fi+gAn2jTYoyY+U/Bgr4iGxxsvS5DhxtuA
-        RLPOakOARATASlQHPaDcJJwotw==
-X-Google-Smtp-Source: ABdhPJztnYKWD0X7iGmVdvLXP4E9csn/kOzp+ih1iJwiRFjwqK6xCqUyjfuNRE/7cSV8KpsXM4p/Ng==
-X-Received: by 2002:a17:90b:4f8e:b0:1c7:3652:21bc with SMTP id qe14-20020a17090b4f8e00b001c7365221bcmr16931794pjb.38.1649352131931;
-        Thu, 07 Apr 2022 10:22:11 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:693e:9ca0:42a0:6bf7])
-        by smtp.gmail.com with UTF8SMTPSA id a38-20020a056a001d2600b004f70d5e92basm23833193pfx.34.2022.04.07.10.22.10
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DFecdRo1OcDJL+E53AYAzBMzke472lhEFN6Lut7X4Ts=;
+        b=s5kDz1m3PXYtE937ocJskKAZ2PZSwBP0XijxdJd+wqMWg1V/sthZy2UNYbFFhat51d
+         jMnvNhmCEuoUZAhMA8V+wB5Z7tCnPgdQ3os+GZRJnb3cZ7HlebHD9N9L8eo4pKbRFX0v
+         CiPrp2nsYImzFzyzr3s7ZaExCvnuwiE/ZVRLzGENGhaStsl3iBM3apWRJKfHblPHt905
+         Sd/eEIetMBAx4L0r2Ok8T491L4Jv7xAQYpjRbkEV4yIjv1D4pI28lvVl7WY7+OpbN+qO
+         5T6XSa69Ksq1zbA9MCCTCj4ex00K+ZfK+AI3haeyekVG7gzPBTJVftEtUO8LfHK5ns/q
+         //xA==
+X-Gm-Message-State: AOAM531p8p6rqxMuNC7RChUvy5i9iBNfocjNX2alEgwj/RyqUkq98g1U
+        NtZJ098XcFkZJcldakEZakY=
+X-Google-Smtp-Source: ABdhPJxYiR0NcIeHKJJ/5fG4QYKdRPTuU7O5K/S9aM2IXV5B9pWF/vjBEHR94NW+9djC/DDGTvUATw==
+X-Received: by 2002:a62:84d3:0:b0:4fa:72e2:1c64 with SMTP id k202-20020a6284d3000000b004fa72e21c64mr15392218pfd.29.1649352196013;
+        Thu, 07 Apr 2022 10:23:16 -0700 (PDT)
+Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
+        by smtp.gmail.com with ESMTPSA id y16-20020a637d10000000b00381268f2c6fsm19720585pgc.4.2022.04.07.10.23.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 10:22:11 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 10:22:09 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v12 1/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yk8dwZqo7WnoolOd@google.com>
-References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649321104-31322-2-git-send-email-quic_c_sanm@quicinc.com>
+        Thu, 07 Apr 2022 10:23:15 -0700 (PDT)
+Message-ID: <e14f1964-2692-df77-35ac-78236fc84ee2@gmail.com>
+Date:   Fri, 8 Apr 2022 02:23:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649321104-31322-2-git-send-email-quic_c_sanm@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
+Content-Language: en-US
+To:     Benson Leung <bleung@google.com>
+Cc:     Guenter Roeck <groeck@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
+ <Yk4DGZfpYbK8dofL@chromium.org>
+ <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
+ <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
+ <CABXOdTet5ynSXf94qMimobJF4LLzHc89cVbwJ5NuAz8G6jmVdQ@mail.gmail.com>
+ <0fdba110-8743-3b2d-cb30-3a89b7cfa592@gmail.com>
+ <Yk8atphiUdlU0gPO@google.com>
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+In-Reply-To: <Yk8atphiUdlU0gPO@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:14:59PM +0530, Sandeep Maheswaram wrote:
-> During suspend read the status of all port and set hs phy mode
-> based on current speed. Use this hs phy mode to configure wakeup
-> interrupts in qcom glue driver.
+On 2022/04/08 2:09, Benson Leung wrote:
+> Hi Akihiko,
 > 
-> Also check during suspend if any wakeup capable devices are
-> connected to the controller (directly or through hubs), if there
-> are none set a flag to indicate that the PHY is powered
-> down during suspend.
+> On Fri, Apr 08, 2022 at 02:03:52AM +0900, Akihiko Odaki wrote:
+>> If I read the code correctly, the registration itself happens synchronously
+>> and platform_device_register_data() always returns a non-NULL value unless
+>> it returns -ENOMEM. The driver, however, can be asynchronously bound and
+>> dev_get_drvdata(&typec->ec->ec->dev) can return NULL as the consequence. It
+>> would have a call trace like the following when scheduling asynchronous
+>> driver binding:
+>> platform_device_register_data()
+>> platform_device_register_resndata()
+>> platform_device_register_full()
+>> -  This always creates and returns platform_device.
+>> platform_device_add()
+>> - This adds the created platform_device.
+>> device_add()
+>> bus_probe_device()
+>> device_initial_probe()
+>> __device_attach()
+>> - This schedules asynchronous probing.
+>>
+>> typec->ec->ec should be pointing to the correct platform_device as the
+>> patched driver works without Oops on my computer. It is not NULL at least.
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 29 ++++++++++++++++++++---------
->  drivers/usb/dwc3/core.h |  4 ++++
->  drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
->  3 files changed, 49 insertions(+), 9 deletions(-)
+> Can you provide more information about your test computer in this case?
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 1170b80..b102a22 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -32,6 +32,7 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/hcd.h>
->  
->  #include "core.h"
->  #include "gadget.h"
-> @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  {
->  	unsigned long	flags;
->  	u32 reg;
-> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
->  
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
-> @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> -		}
-> +		dwc3_set_phy_speed_mode(dwc);
->  
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
->  		if (dwc->dis_u2_susphy_quirk ||
-> @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  
->  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
->  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> +
-> +		if (!PMSG_IS_AUTO(msg)) {
-> +			if (device_may_wakeup(dwc->dev) &&
-> +			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
-
-Did you ever try whether you could use device_children_wakeup_capable() from
-[1] instead of usb_wakeup_enabled_descendants()?
-
-[1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-
-> +				dwc->phy_power_off = false;
-> +			} else {
-> +				dwc->phy_power_off = true;
-> +				dwc3_core_exit(dwc);
-> +			}
-> +		}
->  		break;
->  	case DWC3_GCTL_PRTCAP_OTG:
->  		/* do nothing during runtime_suspend */
-> @@ -1939,11 +1949,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
->  		if (!PMSG_IS_AUTO(msg)) {
-> -			ret = dwc3_core_init_for_resume(dwc);
-> -			if (ret)
-> -				return ret;
-> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> -			break;
-> +			if (dwc->phy_power_off) {
-> +				ret = dwc3_core_init_for_resume(dwc);
-> +				if (ret)
-> +					return ret;
-> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> +			}
->  		}
->  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
->  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 5c9d467..de58995 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1154,6 +1154,9 @@ struct dwc3 {
->  
->  	bool			phys_ready;
->  
-> +	unsigned int            hs_phy_mode;
-> +	bool			phy_power_off;
-> +
->  	struct ulpi		*ulpi;
->  	bool			ulpi_ready;
->  
-> @@ -1537,6 +1540,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
->  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
->  int dwc3_host_init(struct dwc3 *dwc);
->  void dwc3_host_exit(struct dwc3 *dwc);
-> +void dwc3_set_phy_speed_mode(struct dwc3 *dwc);
->  #else
->  static inline int dwc3_host_init(struct dwc3 *dwc)
->  { return 0; }
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index eda8719..74e7d92 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -13,6 +13,7 @@
->  #include <linux/platform_device.h>
->  
->  #include "core.h"
-> +#include "../host/xhci.h"
->  
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->  					int irq, char *name)
-> @@ -138,3 +139,27 @@ void dwc3_host_exit(struct dwc3 *dwc)
->  {
->  	platform_device_unregister(dwc->xhci);
->  }
-> +
-> +void dwc3_set_phy_speed_mode(struct dwc3 *dwc)
-
-IMO the name is a bit confusing, it suggests that the speed at which
-the PHY operates is changed, which isn't the case. I suggest to change
-the name to dwc3_determine_phy_speed_mode() (or something similar).
-
-> +{
-> +
-> +	int i, num_ports;
-> +	u32 reg;
-> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> +
-> +	dwc->hs_phy_mode = 0;
-> +
-> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> +
-> +	num_ports = HCS_MAX_PORTS(reg);
-> +	for (i = 0; i < num_ports; i++) {
-> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> +		if (reg & PORT_PE) {
-> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> +			else if (DEV_LOWSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> +		}
-> +	}
-> +}
-> -- 
-> 2.7.4
+> Is it a Chromebook running stock firmware (if so, please let us know which
+> model, and which firmware version it is running).
+> In the past, we've also gotten some reports from people running MrChromebox
+> custom firmware on older Chromebooks which have exposed other bugs in
+> this driver.
 > 
+> Let us know if that's the case here, and where we can get that firmware.
+
+My computer is Lenovo ThinkPad C13 Yoga Chromebook. It is running the 
+stock firmware. The firmware was updated by running the following 
+command on Google Chrome OS Version 99.0.4844.86 (Official Build) (64-Bit):
+chromeos-firmwareupdate --mode=recovery
+
+Regards,
+Akihiko Odaki
+
+> 
+> Thanks,
+> Benson
+> 
+

@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201994F837C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E204F8389
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344812AbiDGPeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S1345160AbiDGPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344819AbiDGPcA (ORCPT
+        with ESMTP id S1344820AbiDGPcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Apr 2022 11:32:00 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053ABDA;
-        Thu,  7 Apr 2022 08:29:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A16C38;
+        Thu,  7 Apr 2022 08:30:00 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4da4:8da5:b6b4:93c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id DF1091F467BE;
-        Thu,  7 Apr 2022 16:29:57 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8164B1F467AD;
+        Thu,  7 Apr 2022 16:29:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649345398;
-        bh=2H0AecT5VkWqKaQDkT33QndJcjd2dbxusZfkP2t8gCc=;
+        s=mail; t=1649345399;
+        bh=dxFd90PKaKs1drm560L1Ce28iJxwQPcN4TYFhRoGyhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FwYyL1wmLS1ymhW1eAnnuceBLYFdc7SRo8JD0wsnPI15qVy6MKgQ2Crd9TG0t2iJ1
-         qQ8HaeJNg/gyZvt4DdgTasw+axBx26Qf2U3/0XCVgsS6nAZO+VWjKH5E2+5OkBxZmL
-         2oEAI9/SGanS+eXrLRqUin218hW1JGGKjlcAI2++nFaOCF6mY0ZzjYTvpzXM11+Ucy
-         Eds92w8iCWMt6GT02XErHJQ5CJPNa2vZ8LUNEO3499l8C3NQELiuritP0T/2C0gGzU
-         f6CaYaNKR2nVO03wrmVqKE0OaCNQl6XqoqY76SW4m3tQAR1zPawXKZQjoZ//APXrUC
-         elHnA3zcFu+jA==
+        b=T0+o1SMjyTfUJ1JxuyqfIxLwsWc5AytKLHwNWsBY0f/TfUe5TOYxp3DX3sgsLlsmw
+         ob1Fu51AMUUXE1dn8g9E/4xeF6bTIQe69h10h7cyLlht79925nE+dYU/iOCKhmR8Yj
+         /cUEaMFq81FzLqcnaOeXpaS2G2YJMD8teswr+ynWpdZGc8i8DVVPXDlYMolD6JfHDg
+         a2b80qpMeJH07ZivXjAjHz5qU8mC1modbfKTjQmuittdRA1Yz76OUH70YYe/w2Asao
+         nZ6Zlw3PXE8jZGsXwDXuKlzHjKICUVKYP5qCGv8f09XSq6PMMy/UksupEuCNSLxv9M
+         jN+Wwvc/L8J2w==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         sebastian.fricke@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 15/17] media: uapi: HEVC: fix padding in v4l2 control structures
-Date:   Thu,  7 Apr 2022 17:29:38 +0200
-Message-Id: <20220407152940.738159-16-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 16/17] media: uapi: Change data_bit_offset definition
+Date:   Thu,  7 Apr 2022 17:29:39 +0200
+Message-Id: <20220407152940.738159-17-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
 References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
@@ -61,137 +61,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix padding where needed to remove holes and stay align on cache boundaries
+'F.7.3.6.1 General slice segment header syntax' section of HEVC
+specification describes that a slice header always end byte aligned,
+therefore we only need to provide the data offset in byte.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst   |  6 +++---
- drivers/media/v4l2-core/v4l2-ctrls-core.c         |  1 -
- include/media/hevc-ctrls.h                        | 15 +++++++++------
- 3 files changed, 12 insertions(+), 10 deletions(-)
+version 5:
+- Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 4 ++--
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 2 +-
+ include/media/hevc-ctrls.h                                | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index a604dedce17c..a3b1a063deba 100644
+index a3b1a063deba..48b3f533bc17 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3474,9 +3474,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     * - __u8
-       - ``num_active_dpb_entries``
-       - The number of entries in ``dpb``.
--    * - struct :c:type:`v4l2_hevc_dpb_entry`
--      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
--      - The decoded picture buffer, for meta-data about reference frames.
-     * - __u8
-       - ``num_poc_st_curr_before``
-       - The number of reference pictures in the short-term set that come before
-@@ -3500,6 +3497,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-       - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocLtCurr as described in section 8.3.2 "Decoding process for reference
-         picture set": provides the index of the long term references in DPB array.
-+    * - struct :c:type:`v4l2_hevc_dpb_entry`
-+      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-+      - The decoded picture buffer, for meta-data about reference frames.
-     * - __u64
-       - ``flags``
-       - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 6a48c9022b74..b8529ab6fda9 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -837,7 +837,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
- 		p_hevc_slice_params = p;
+@@ -2986,8 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+       - ``bit_size``
+       - Size (in bits) of the current slice data.
+     * - __u32
+-      - ``data_bit_offset``
+-      - Offset (in bits) to the video data in the current slice data.
++      - ``data_byte_offset``
++      - Offset (in bytes) to the video data in the current slice data.
+     * - __u32
+       - ``num_entry_point_offsets``
+       - Specifies the number of entry point offset syntax elements in the slice header.
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index d04521ffd920..4f31f2f3b745 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -405,7 +405,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	/* Initialize bitstream access. */
+ 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
  
--		zero_padding(p_hevc_slice_params->pred_weight_table);
- 		zero_padding(*p_hevc_slice_params);
- 		break;
+-	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
++	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8);
+ 
+ 	/* Bitstream parameters. */
  
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 63be1a174516..e6cdd122726c 100644
+index e6cdd122726c..1834072c0a43 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -133,7 +133,9 @@ struct v4l2_ctrl_hevc_sps {
- 	__u8	chroma_format_idc;
- 	__u8	sps_max_sub_layers_minus1;
- 
-+	__u8	padding[6];
- 	__u64	flags;
-+	__u8	reserved[24];
- };
- 
- #define V4L2_HEVC_PPS_FLAG_DEPENDENT_SLICE_SEGMENT_ENABLED	(1ULL << 0)
-@@ -210,9 +212,10 @@ struct v4l2_ctrl_hevc_pps {
- 	__s8	pps_beta_offset_div2;
- 	__s8	pps_tc_offset_div2;
- 	__u8	log2_parallel_merge_level_minus2;
-+	__u8	padding[9];
- 
--	__u8	padding[4];
- 	__u64	flags;
-+	__u8	reserved[56];
- };
- 
- #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
-@@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
- 	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
- 	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
- 
--	__u8	padding[6];
--
- 	__u8	luma_log2_weight_denom;
- 	__s8	delta_chroma_log2_weight_denom;
- };
-@@ -379,18 +380,20 @@ struct v4l2_ctrl_hevc_slice_params {
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
- 	__u8	pic_struct;
- 
-+	__u8	reserved;
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
- 	__u32	slice_segment_addr;
- 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u16	short_term_ref_pic_set_size;
- 	__u16	long_term_ref_pic_set_size;
--	__u8	padding;
- 
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
- 	struct v4l2_hevc_pred_weight_table pred_weight_table;
- 
-+	__u8	reserved1[6];
- 	__u64	flags;
-+	__u8	padding[40];
- };
- 
- #define V4L2_HEVC_DECODE_PARAM_FLAG_IRAP_PIC		0x1
-@@ -402,7 +405,6 @@ struct v4l2_ctrl_hevc_slice_params {
+@@ -310,7 +310,7 @@ struct v4l2_hevc_pred_weight_table {
+  * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
   *
-  * @pic_order_cnt_val: picture order count
-  * @num_active_dpb_entries: the number of entries in dpb
-- * @dpb: the decoded picture buffer, for meta-data about reference frames
-  * @num_poc_st_curr_before: the number of reference pictures in the short-term
-  *			    set that come before the current frame
-  * @num_poc_st_curr_after: the number of reference pictures in the short-term
-@@ -413,18 +415,19 @@ struct v4l2_ctrl_hevc_slice_params {
-  * @poc_st_curr_after: provides the index of the short term after references
-  *		       in DPB array
-  * @poc_lt_curr: provides the index of the long term references in DPB array
-+ * @dpb: the decoded picture buffer, for meta-data about reference frames
-  * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
+  * @bit_size: size (in bits) of the current slice data
+- * @data_bit_offset: offset (in bits) to the video data in the current slice data
++ * @data_byte_offset: offset (in bytes) to the video data in the current slice data
+  * @num_entry_point_offsets: specifies the number of entry point offset syntax
+  *			     elements in the slice header.
+  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+@@ -354,7 +354,7 @@ struct v4l2_hevc_pred_weight_table {
   */
- struct v4l2_ctrl_hevc_decode_params {
- 	__s32	pic_order_cnt_val;
- 	__u8	num_active_dpb_entries;
--	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	num_poc_st_curr_before;
- 	__u8	num_poc_st_curr_after;
- 	__u8	num_poc_lt_curr;
- 	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u64	flags;
- };
- 
+ struct v4l2_ctrl_hevc_slice_params {
+ 	__u32	bit_size;
+-	__u32	data_bit_offset;
++	__u32	data_byte_offset;
+ 	__u32	num_entry_point_offsets;
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+ 	__u8	nal_unit_type;
 -- 
 2.32.0
 

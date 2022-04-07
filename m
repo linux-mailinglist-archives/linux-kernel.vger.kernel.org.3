@@ -2,123 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118494F7D81
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B204F7D92
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiDGLIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S239574AbiDGLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiDGLIT (ORCPT
+        with ESMTP id S234265AbiDGLJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:08:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544BA7C7A6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 04:06:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55947B82729
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:06:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8100C385A0;
-        Thu,  7 Apr 2022 11:06:13 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 12:06:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yk7Fos65Z8FxkDAQ@arm.com>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-8-catalin.marinas@arm.com>
- <Yk5/FpCR10sndTR1@n131-248-037.byted.org>
- <Yk6t9jhof9MJV6TG@arm.com>
- <CAMZfGtUWGkMNndjWFRqwimzV4m+Z63ZpLdyrFAFn3oV+EXGSZw@mail.gmail.com>
+        Thu, 7 Apr 2022 07:09:38 -0400
+X-Greylist: delayed 94491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 04:07:36 PDT
+Received: from mail.codelabs.ch (mail.codelabs.ch [109.202.192.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF75007D;
+        Thu,  7 Apr 2022 04:07:35 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.codelabs.ch (Postfix) with ESMTP id 8AC6B220002;
+        Thu,  7 Apr 2022 13:07:32 +0200 (CEST)
+Received: from mail.codelabs.ch ([127.0.0.1])
+        by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id H1ereBzHd7rt; Thu,  7 Apr 2022 13:07:31 +0200 (CEST)
+Received: from skyhawk.codelabs.ch (unknown [IPv6:2a02:168:860f:0:34fa:d8d6:c16a:a546])
+        by mail.codelabs.ch (Postfix) with ESMTPSA id 6A8E3220001;
+        Thu,  7 Apr 2022 13:07:31 +0200 (CEST)
+From:   Reto Buerki <reet@codelabs.ch>
+To:     tglx@linutronix.de, dwmw2@infradead.org
+Cc:     x86@kernel.org, kvm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, joro@8bytes.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, maz@misterjones.org,
+        decui@microsoft.com
+Subject: [PATCH] x86/msi: Fix msi message data shadow struct
+Date:   Thu,  7 Apr 2022 13:06:47 +0200
+Message-Id: <20220407110647.67372-1-reet@codelabs.ch>
+In-Reply-To: <87pmltzwtr.ffs@tglx>
+References: <87pmltzwtr.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtUWGkMNndjWFRqwimzV4m+Z63ZpLdyrFAFn3oV+EXGSZw@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 06:00:10PM +0800, Muchun Song wrote:
-> On Thu, Apr 7, 2022 at 5:25 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Thu, Apr 07, 2022 at 02:14:15PM +0800, Muchun Song wrote:
-> > > On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
-> > > > ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
-> > > > operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
-> > > > alignment.
-> > > >
-> > > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > > ---
-> > > >  include/linux/crypto.h | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
-> > > > index 2324ab6f1846..654b9c355575 100644
-> > > > --- a/include/linux/crypto.h
-> > > > +++ b/include/linux/crypto.h
-> > > > @@ -167,7 +167,7 @@
-> > > >   * maintenance for non-coherent DMA (cache invalidation in particular) does not
-> > > >   * affect data that may be accessed by the CPU concurrently.
-> > > >   */
-> > > > -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
-> > > > +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
-> > >
-> > > I don't think this should be changed since ARCH_KMALLOC_MINALIGN is
-> > > already aligned with the size what you need.
-> >
-> > With this series, ARCH_KMALLOC_MINALIGN is no longer safe for
-> > non-coherent DMA on all arm64 SoCs, that's what ARCH_DMA_MINALIGN will
-> > cover.
-> >
-> > Now, looking at the comment for CRYPTO_MINALIGN, one aspect it covers is
-> > the minimum alignment required by C for the crypto_tfm structure access.
-> > So a smaller ARCH_KMALLOC_MINALIGN would do. But the other part of the
-> > comment mentions in-structure alignment for non-coherent DMA. Here we'd
-> > need the upper bound alignment, ARCH_DMA_MINALIGN.
-> >
-> > I'll follow up on Herbert's email as I think he has a good point on
-> > structure vs kmalloc() alignment.
-> 
-> Got it. Now I know what you want to do. You want to set
-> ARCH_KMALLOC_MINALIGN to 64, however, the smallest
-> size of kmem_cache depends on the cache line size at
-> runtime.  But we have to know the safe alignment at building
-> time.  So we have to make those align with ARCH_DMA_MINALIGN.
-> Right?  
+The x86 MSI message data is 32 bits in total and is either in
+compatibility or remappable format, see Intel Virtualization Technology
+for Directed I/O, section 5.1.2.
 
-Right.
+Fixes: 6285aa50736 ("x86/msi: Provide msi message shadow structs")
+Co-developed-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
+Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
+Signed-off-by: Reto Buerki <reet@codelabs.ch>
+---
+ arch/x86/include/asm/msi.h | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-> I think you are on the right road since most CPUs have a 64-byte cache
-> line.
-
-Yeah, apart from about three SoCs with 128, the rest use 64-byte cache
-lines.
-
-Longer term we should try reduce such alignment below the cache line
-size *if* the SoC fully DMA-coherent (like x86). In that case cache
-maintenance for DMA doesn't exist, so there's no risk to smaller
-allocations. Of course, one can use a kmem_cache_create() with
-SLAB_HWCACHE_ALIGN and get the cacheline alignment for performance
-reasons.
-
+diff --git a/arch/x86/include/asm/msi.h b/arch/x86/include/asm/msi.h
+index b85147d75626..d71c7e8b738d 100644
+--- a/arch/x86/include/asm/msi.h
++++ b/arch/x86/include/asm/msi.h
+@@ -12,14 +12,17 @@ int pci_msi_prepare(struct irq_domain *domain, struct device *dev, int nvec,
+ /* Structs and defines for the X86 specific MSI message format */
+ 
+ typedef struct x86_msi_data {
+-	u32	vector			:  8,
+-		delivery_mode		:  3,
+-		dest_mode_logical	:  1,
+-		reserved		:  2,
+-		active_low		:  1,
+-		is_level		:  1;
+-
+-	u32	dmar_subhandle;
++	union {
++		struct {
++			u32	vector			:  8,
++				delivery_mode		:  3,
++				dest_mode_logical	:  1,
++				reserved		:  2,
++				active_low		:  1,
++				is_level		:  1;
++		};
++		u32	dmar_subhandle;
++	};
+ } __attribute__ ((packed)) arch_msi_msg_data_t;
+ #define arch_msi_msg_data	x86_msi_data
+ 
 -- 
-Catalin
+2.30.2
+

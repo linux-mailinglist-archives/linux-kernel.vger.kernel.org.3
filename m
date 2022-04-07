@@ -2,504 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807EF4F7F72
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434DF4F7F6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245425AbiDGMuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S245402AbiDGMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245413AbiDGMtz (ORCPT
+        with ESMTP id S245389AbiDGMtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:49:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFF2DA0AB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:47:52 -0700 (PDT)
-Received: from kwepemi100026.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZ1P60vvXzdZkv;
-        Thu,  7 Apr 2022 20:47:22 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100026.china.huawei.com (7.221.188.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 20:47:50 +0800
-Received: from localhost.localdomain (10.67.164.66) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 20:47:49 +0800
-From:   Qi Liu <liuqi115@huawei.com>
-To:     <will@kernel.org>, <mark.rutland@arm.com>, <john.garry@huawei.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangshaokun@hisilicon.com>
-Subject: [PATCH v4 2/2] drivers/perf: hisi: Add Support for CPA PMU
-Date:   Thu, 7 Apr 2022 20:46:17 +0800
-Message-ID: <20220407124617.54521-3-liuqi115@huawei.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20220407124617.54521-1-liuqi115@huawei.com>
-References: <20220407124617.54521-1-liuqi115@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 08:49:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C027E5A5;
+        Thu,  7 Apr 2022 05:47:04 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237CflWE022118;
+        Thu, 7 Apr 2022 12:46:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=joPMwLoNAohCU3AInhV9r4dWEXIX77OEcC2bPJ3D/JA=;
+ b=Fy6NxTb8+yINWVsoR+bh25miUPx1JVy4af6mfANw7ooBFDrS+JZQzduOAgt9dPJhy3Dh
+ 2J82g1v1P8CAILGy/cvXio8Naa1cqhxZmjxBO8BPTLQQ0+mHBRXTIrJU86hSYBIzBblY
+ ygt/rXPuAk3sXkD8DNmlaDitfkNTGxAOHbQ6zYUjZrI9/Qy7PNWOpwEJjktKtY70RLVf
+ 9CrK6Z0E0khnpkAmhHHaxe+LonAuSrXv0bGvTh4UY++Nz2hvrg12NmmfA5w4PAljDUVn
+ wp4B8CT/b5h/hvvmelQZoTzXN3WJpgCPVo+6sAE/zm59CxwkfvWSKuvrst+Ig5FQsl5v HA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f9w8vbk2g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 12:46:56 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 237Cis4A027687;
+        Thu, 7 Apr 2022 12:46:55 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f9w8vbk1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 12:46:55 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 237CXeMp030670;
+        Thu, 7 Apr 2022 12:46:53 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f6e491wc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 12:46:53 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 237CkpAo40501718
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Apr 2022 12:46:51 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48AF2A404D;
+        Thu,  7 Apr 2022 12:46:51 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 419C0A4040;
+        Thu,  7 Apr 2022 12:46:50 +0000 (GMT)
+Received: from sig-9-65-64-98.ibm.com (unknown [9.65.64.98])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Apr 2022 12:46:50 +0000 (GMT)
+Message-ID: <d4ac7695a9a2be9750c62218bb3c262d28367208.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 0/1] ima: fix boot command line issue
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     GUO Zihua <guozihua@huawei.com>, linux-integrity@vger.kernel.org
+Cc:     dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 08:46:49 -0400
+In-Reply-To: <20220407021619.146410-1-guozihua@huawei.com>
+References: <20220407021619.146410-1-guozihua@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CV9jpD3xNsFOsf6FNmwkpIpAOH_V783l
+X-Proofpoint-GUID: -oc9aErTMu2IKK7B6bMEvB-YP5AP_7Sk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-07_01,2022-04-07_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 mlxlogscore=914 adultscore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204070063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On HiSilicon Hip09 platform, there is a CPA (Coherency Protocol Agent) on
-each SICL (Super I/O Cluster) which implements packet format translation,
-route parsing and traffic statistics.
+On Thu, 2022-04-07 at 10:16 +0800, GUO Zihua wrote:
+> Change log:
+>   v3:
+>     Update commit message following Mimi's advice, update comments for
+>     config.
+>   v2:
+>     update commit message and subject following Mimi's advice. Remove
+>     references for CONFIG_IMA_TEMPLATE as well.
 
-CPA PMU has 8 PMU counters and interrupt is supported to handle counter
-overflow. Let's support its driver under the framework of HiSilicon PMU
-driver.
+For future referece, the change log can be added after the break line
+(---) in the patch itself.  No need for a cover letter for a single
+patch.
 
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
----
- drivers/perf/hisilicon/Makefile              |   2 +-
- drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c | 401 +++++++++++++++++++
- include/linux/cpuhotplug.h                   |   1 +
- 3 files changed, 403 insertions(+), 1 deletion(-)
- create mode 100644 drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+thanks,
 
-diff --git a/drivers/perf/hisilicon/Makefile b/drivers/perf/hisilicon/Makefile
-index 506ed39e3266..6be83517acaa 100644
---- a/drivers/perf/hisilicon/Makefile
-+++ b/drivers/perf/hisilicon/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_HISI_PMU) += hisi_uncore_pmu.o hisi_uncore_l3c_pmu.o \
- 			  hisi_uncore_hha_pmu.o hisi_uncore_ddrc_pmu.o hisi_uncore_sllc_pmu.o \
--			  hisi_uncore_pa_pmu.o
-+			  hisi_uncore_pa_pmu.o hisi_uncore_cpa_pmu.o
- 
- obj-$(CONFIG_HISI_PCIE_PMU) += hisi_pcie_pmu.o
-diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-new file mode 100644
-index 000000000000..d6b8e4037076
---- /dev/null
-+++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-@@ -0,0 +1,401 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * HiSilicon SoC CPA(Coherency Protocol Agent) hardware event counters support
-+ *
-+ * Copyright (C) 2022 HiSilicon Limited
-+ * Author: Qi Liu <liuqi115@huawei.com>
-+ *
-+ * This code is based on the uncore PMUs like arm-cci and arm-ccn.
-+ */
-+
-+#define pr_fmt(fmt) "cpa pmu: " fmt
-+#include <linux/acpi.h>
-+#include <linux/bug.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/list.h>
-+#include <linux/smp.h>
-+
-+#include "hisi_uncore_pmu.h"
-+
-+/* CPA register definition */
-+#define CPA_PERF_CTRL		0x1c00
-+#define CPA_EVENT_CTRL		0x1c04
-+#define CPA_INT_MASK		0x1c70
-+#define CPA_INT_STATUS		0x1c78
-+#define CPA_INT_CLEAR		0x1c7c
-+#define CPA_EVENT_TYPE0		0x1c80
-+#define CPA_VERSION		0x1cf0
-+#define CPA_CNT0_LOWER		0x1d00
-+#define CPA_CFG_REG		0x0534
-+
-+/* CPA operation command */
-+#define CPA_PERF_CTRL_EN	BIT_ULL(0)
-+#define CPA_EVTYPE_MASK		0xffUL
-+#define CPA_PM_CTRL		BIT_ULL(9)
-+
-+/* CPA has 8-counters */
-+#define CPA_NR_COUNTERS		0x8
-+#define CPA_COUNTER_BITS	64
-+#define CPA_NR_EVENTS		0xff
-+#define CPA_REG_OFFSET		0x8
-+
-+static u32 hisi_cpa_pmu_get_counter_offset(int idx)
-+{
-+	return (CPA_CNT0_LOWER + idx * CPA_REG_OFFSET);
-+}
-+
-+static u64 hisi_cpa_pmu_read_counter(struct hisi_pmu *cpa_pmu,
-+				     struct hw_perf_event *hwc)
-+{
-+	return readq(cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
-+}
-+
-+static void hisi_cpa_pmu_write_counter(struct hisi_pmu *cpa_pmu,
-+				       struct hw_perf_event *hwc, u64 val)
-+{
-+	writeq(val, cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
-+}
-+
-+static void hisi_cpa_pmu_write_evtype(struct hisi_pmu *cpa_pmu, int idx, u32 type)
-+{
-+	u32 reg, reg_idx, shift, val;
-+
-+	/*
-+	 * Select the appropriate event select register(CPA_EVENT_TYPE0/1).
-+	 * There are 2 event select registers for the 8 hardware counters.
-+	 * Event code is 8-bits and for the former 4 hardware counters,
-+	 * CPA_EVENT_TYPE0 is chosen. For the latter 4 hardware counters,
-+	 * CPA_EVENT_TYPE1 is chosen.
-+	 */
-+	reg = CPA_EVENT_TYPE0 + (idx / 4) * 4;
-+	reg_idx = idx % 4;
-+	shift = CPA_REG_OFFSET * reg_idx;
-+
-+	/* Write event code to CPA_EVENT_TYPEx Register */
-+	val = readl(cpa_pmu->base + reg);
-+	val &= ~(CPA_EVTYPE_MASK << shift);
-+	val |= type << shift;
-+	writel(val, cpa_pmu->base + reg);
-+}
-+
-+static void hisi_cpa_pmu_start_counters(struct hisi_pmu *cpa_pmu)
-+{
-+	u32 val;
-+
-+	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
-+	val |= CPA_PERF_CTRL_EN;
-+	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
-+}
-+
-+static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
-+{
-+	u32 val;
-+
-+	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
-+	val &= ~(CPA_PERF_CTRL_EN);
-+	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
-+}
-+
-+static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
-+{
-+	u32 val;
-+
-+	val = readl(cpa_pmu->base + CPA_CFG_REG);
-+	val |= CPA_PM_CTRL;
-+	writel(val, cpa_pmu->base + CPA_CFG_REG);
-+}
-+
-+static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
-+{
-+	u32 val;
-+
-+	val = readl(cpa_pmu->base + CPA_CFG_REG);
-+	val &= ~(CPA_PM_CTRL);
-+	writel(val, cpa_pmu->base + CPA_CFG_REG);
-+}
-+
-+static void hisi_cpa_pmu_enable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-+{
-+	u32 val;
-+
-+	/* Enable counter index in CPA_EVENT_CTRL register */
-+	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
-+	val |= 1 << hwc->idx;
-+	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
-+}
-+
-+static void hisi_cpa_pmu_disable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-+{
-+	u32 val;
-+
-+	/* Clear counter index in CPA_EVENT_CTRL register */
-+	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
-+	val &= ~(1UL << hwc->idx);
-+	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
-+}
-+
-+static void hisi_cpa_pmu_enable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-+{
-+	u32 val;
-+
-+	/* Write 0 to enable interrupt */
-+	val = readl(cpa_pmu->base + CPA_INT_MASK);
-+	val &= ~(1UL << hwc->idx);
-+	writel(val, cpa_pmu->base + CPA_INT_MASK);
-+}
-+
-+static void hisi_cpa_pmu_disable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-+{
-+	u32 val;
-+
-+	/* Write 1 to mask interrupt */
-+	val = readl(cpa_pmu->base + CPA_INT_MASK);
-+	val |= 1 << hwc->idx;
-+	writel(val, cpa_pmu->base + CPA_INT_MASK);
-+}
-+
-+static u32 hisi_cpa_pmu_get_int_status(struct hisi_pmu *cpa_pmu)
-+{
-+	return readl(cpa_pmu->base + CPA_INT_STATUS);
-+}
-+
-+static void hisi_cpa_pmu_clear_int_status(struct hisi_pmu *cpa_pmu, int idx)
-+{
-+	writel(1 << idx, cpa_pmu->base + CPA_INT_CLEAR);
-+}
-+
-+static const struct acpi_device_id hisi_cpa_pmu_acpi_match[] = {
-+	{ "HISI0281", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, hisi_cpa_pmu_acpi_match);
-+
-+static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
-+				  struct hisi_pmu *cpa_pmu)
-+{
-+	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
-+				     &cpa_pmu->sicl_id)) {
-+		dev_err(&pdev->dev, "Can not read sicl-id\n");
-+		return -EINVAL;
-+	}
-+
-+	if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
-+				     &cpa_pmu->index_id)) {
-+		dev_err(&pdev->dev, "Cannot read idx-id\n");
-+		return -EINVAL;
-+	}
-+
-+	cpa_pmu->ccl_id = -1;
-+	cpa_pmu->sccl_id = -1;
-+	cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(cpa_pmu->base))
-+		return PTR_ERR(cpa_pmu->base);
-+
-+	cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
-+
-+	return 0;
-+}
-+
-+static struct attribute *hisi_cpa_pmu_format_attr[] = {
-+	HISI_PMU_FORMAT_ATTR(event, "config:0-15"),
-+	NULL
-+};
-+
-+static const struct attribute_group hisi_cpa_pmu_format_group = {
-+	.name = "format",
-+	.attrs = hisi_cpa_pmu_format_attr,
-+};
-+
-+static struct attribute *hisi_cpa_pmu_events_attr[] = {
-+	HISI_PMU_EVENT_ATTR(cpa_cycles,		0x00),
-+	HISI_PMU_EVENT_ATTR(cpa_p1_wr_dat,	0x61),
-+	HISI_PMU_EVENT_ATTR(cpa_p1_rd_dat,	0x62),
-+	HISI_PMU_EVENT_ATTR(cpa_p0_wr_dat,	0xE1),
-+	HISI_PMU_EVENT_ATTR(cpa_p0_rd_dat,	0xE2),
-+	NULL
-+};
-+
-+static const struct attribute_group hisi_cpa_pmu_events_group = {
-+	.name = "events",
-+	.attrs = hisi_cpa_pmu_events_attr,
-+};
-+
-+static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
-+
-+static struct attribute *hisi_cpa_pmu_cpumask_attrs[] = {
-+	&dev_attr_cpumask.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group hisi_cpa_pmu_cpumask_attr_group = {
-+	.attrs = hisi_cpa_pmu_cpumask_attrs,
-+};
-+
-+static struct device_attribute hisi_cpa_pmu_identifier_attr =
-+	__ATTR(identifier, 0444, hisi_uncore_pmu_identifier_attr_show, NULL);
-+
-+static struct attribute *hisi_cpa_pmu_identifier_attrs[] = {
-+	&hisi_cpa_pmu_identifier_attr.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group hisi_cpa_pmu_identifier_group = {
-+	.attrs = hisi_cpa_pmu_identifier_attrs,
-+};
-+
-+static const struct attribute_group *hisi_cpa_pmu_attr_groups[] = {
-+	&hisi_cpa_pmu_format_group,
-+	&hisi_cpa_pmu_events_group,
-+	&hisi_cpa_pmu_cpumask_attr_group,
-+	&hisi_cpa_pmu_identifier_group,
-+	NULL
-+};
-+
-+static const struct hisi_uncore_ops hisi_uncore_cpa_pmu_ops = {
-+	.write_evtype           = hisi_cpa_pmu_write_evtype,
-+	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
-+	.start_counters		= hisi_cpa_pmu_start_counters,
-+	.stop_counters		= hisi_cpa_pmu_stop_counters,
-+	.enable_counter		= hisi_cpa_pmu_enable_counter,
-+	.disable_counter	= hisi_cpa_pmu_disable_counter,
-+	.enable_counter_int	= hisi_cpa_pmu_enable_counter_int,
-+	.disable_counter_int	= hisi_cpa_pmu_disable_counter_int,
-+	.write_counter		= hisi_cpa_pmu_write_counter,
-+	.read_counter		= hisi_cpa_pmu_read_counter,
-+	.get_int_status		= hisi_cpa_pmu_get_int_status,
-+	.clear_int_status	= hisi_cpa_pmu_clear_int_status,
-+};
-+
-+static int hisi_cpa_pmu_dev_probe(struct platform_device *pdev,
-+				  struct hisi_pmu *cpa_pmu)
-+{
-+	int ret;
-+
-+	ret = hisi_cpa_pmu_init_data(pdev, cpa_pmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = hisi_uncore_pmu_init_irq(cpa_pmu, pdev);
-+	if (ret)
-+		return ret;
-+
-+	cpa_pmu->counter_bits = CPA_COUNTER_BITS;
-+	cpa_pmu->check_event = CPA_NR_EVENTS;
-+	cpa_pmu->pmu_events.attr_groups = hisi_cpa_pmu_attr_groups;
-+	cpa_pmu->ops = &hisi_uncore_cpa_pmu_ops;
-+	cpa_pmu->num_counters = CPA_NR_COUNTERS;
-+	cpa_pmu->dev = &pdev->dev;
-+	cpa_pmu->on_cpu = -1;
-+
-+	return 0;
-+}
-+
-+static int hisi_cpa_pmu_probe(struct platform_device *pdev)
-+{
-+	struct hisi_pmu *cpa_pmu;
-+	char *name;
-+	int ret;
-+
-+	cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
-+	if (!cpa_pmu)
-+		return -ENOMEM;
-+
-+	ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
-+	if (ret)
-+		return ret;
-+
-+	/* Power Management should be disabled before using CPA PMU. */
-+	hisi_cpa_pmu_disable_pm(cpa_pmu);
-+
-+	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
-+				       &cpa_pmu->node);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
-+		return ret;
-+	}
-+
-+	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_cpa%u", cpa_pmu->sicl_id,
-+			      cpa_pmu->index_id);
-+
-+	cpa_pmu->pmu = (struct pmu) {
-+		.name		= name,
-+		.module		= THIS_MODULE,
-+		.task_ctx_nr	= perf_invalid_context,
-+		.event_init	= hisi_uncore_pmu_event_init,
-+		.pmu_enable	= hisi_uncore_pmu_enable,
-+		.pmu_disable	= hisi_uncore_pmu_disable,
-+		.add		= hisi_uncore_pmu_add,
-+		.del		= hisi_uncore_pmu_del,
-+		.start		= hisi_uncore_pmu_start,
-+		.stop		= hisi_uncore_pmu_stop,
-+		.read		= hisi_uncore_pmu_read,
-+		.attr_groups	= cpa_pmu->pmu_events.attr_groups,
-+		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
-+	};
-+
-+	ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
-+	if (ret) {
-+		dev_err(cpa_pmu->dev, "PMU register failed\n");
-+		cpuhp_state_remove_instance_nocalls(
-+			CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, cpa_pmu);
-+	return ret;
-+}
-+
-+static int hisi_cpa_pmu_remove(struct platform_device *pdev)
-+{
-+	struct hisi_pmu *cpa_pmu = platform_get_drvdata(pdev);
-+
-+	perf_pmu_unregister(&cpa_pmu->pmu);
-+	cpuhp_state_remove_instance_nocalls(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
-+					    &cpa_pmu->node);
-+	hisi_cpa_pmu_enable_pm(cpa_pmu);
-+	return 0;
-+}
-+
-+static struct platform_driver hisi_cpa_pmu_driver = {
-+	.driver = {
-+		.name = "hisi_cpa_pmu",
-+		.acpi_match_table = ACPI_PTR(hisi_cpa_pmu_acpi_match),
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe = hisi_cpa_pmu_probe,
-+	.remove = hisi_cpa_pmu_remove,
-+};
-+
-+static int __init hisi_cpa_pmu_module_init(void)
-+{
-+	int ret;
-+
-+	ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
-+				      "AP_PERF_ARM_HISI_CPA_ONLINE",
-+				      hisi_uncore_pmu_online_cpu,
-+				      hisi_uncore_pmu_offline_cpu);
-+	if (ret) {
-+		pr_err("setup hotplug failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = platform_driver_register(&hisi_cpa_pmu_driver);
-+	if (ret)
-+		cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
-+
-+	return ret;
-+}
-+module_init(hisi_cpa_pmu_module_init);
-+
-+static void __exit hisi_cpa_pmu_module_exit(void)
-+{
-+	platform_driver_unregister(&hisi_cpa_pmu_driver);
-+	cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
-+}
-+module_exit(hisi_cpa_pmu_module_exit);
-+
-+MODULE_DESCRIPTION("HiSilicon SoC CPA uncore PMU driver");
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 411a428ace4d..d55063719904 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -220,6 +220,7 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_S390_SF_ONLINE,
- 	CPUHP_AP_PERF_ARM_CCI_ONLINE,
- 	CPUHP_AP_PERF_ARM_CCN_ONLINE,
-+	CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
- 	CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
- 	CPUHP_AP_PERF_ARM_HISI_HHA_ONLINE,
- 	CPUHP_AP_PERF_ARM_HISI_L3_ONLINE,
--- 
-2.24.0
+Mimi
+
 

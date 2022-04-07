@@ -2,92 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA05D4F896A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8FF4F8931
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiDGVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
+        id S231158AbiDGVSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiDGVP2 (ORCPT
+        with ESMTP id S231168AbiDGVSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:15:28 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA0185471
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649366007; x=1680902007;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tr79FsVhT0SDcd/3/chhFRDQVCbUp+hAXKvJvfS+W4Y=;
-  b=gKgyjEmShqlszTb4N2FrJfnPVz8mbBcxuBJB82pGunl6LhX0y8HdNV9c
-   +KwpGq6uYOL49WjK/GDijYAheNHvJPwExx7ZT9uT51Kk3HtKO1r7x/ljm
-   Kglu6RJ1ncdTdFnoNeAyCuTPQZfGWhcbY0K3rgI/X8CmUpi5XYT+enTiq
-   cR8QFbhyUgtmB8ZLp9CBXXUFRJMoqRpyxyO7YDbfUko6ABzzD12Lov7Uo
-   MwamddwWN6DqGuQzy9jETGs6y9OdqvQ9+nt+9d59betkNtq9us+BLlE92
-   uyla4SG5xB2xeSd5ANEATatTBvjgxV1CrWKpEJ25BKBA/+pZn77ynCBBh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322131786"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="322131786"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 14:13:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="659222508"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2022 14:13:26 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncZRV-0005mx-Nu;
-        Thu, 07 Apr 2022 21:13:25 +0000
-Date:   Fri, 8 Apr 2022 05:12:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/fixes 2/5] kallsyms.c:undefined reference to
- `kallsyms_on_each_symbol'
-Message-ID: <202204080514.PCPEh2hd-lkp@intel.com>
+        Thu, 7 Apr 2022 17:18:14 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AE4187BB9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:16:09 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bg10so13476194ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vnl9fzY51zFGbBPdJOVdC/ObBDnpccOA1T51DHqDBAY=;
+        b=FVbhn2jeAkOUEO9Ba9dfgzN+akctgRkp9e8r/OJGtqUO8lzYFJKk/UdmdWrBlgHaR3
+         KBJ3mNPV/aiTD/fHS1DW2fByC91nuDhG3OdD7zFRhc/uDatPtMNeQh5GUggnbBLtSKYR
+         GZDMg+3zMYCU4207u4AgQTlXovz3nYCf1r8oOvJfnTbn73Zz3/we4qONKWT5cNFdqDmf
+         VVSbzEvmlAb6oFkjHuC0TPxUtb4JOCVIx9svyPfWTwe0fguaQ/u+qGTFNRuHIN7UpmPV
+         J9wNCno+UXczE04DoeY6HzidrQtulmBYfY8jFf9ZHrKMbPOa4WWVan08K3dmENV+KtCl
+         ev1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vnl9fzY51zFGbBPdJOVdC/ObBDnpccOA1T51DHqDBAY=;
+        b=Z7CyNmxuG/d7+qk7Qn2d6E7P9tQWEXM8ibGuM2tCqWv8C+AWBcfpcQckPBb3nf8n01
+         sIvsw5qQjQRADS/ngcM+TJOLY1cDOqvK9OCejjbrM8PUxXPXX1RDRE2cH8LVzMH5WoSQ
+         KPDiJ86LCXaB/Vh0OnMDMfYd0PI72yvFF3IZlS2dnFIpLQmgA9HyWhMzneCl4c3dXLCY
+         gORnfFqj6x7eZLbzA6QR21JRwqeLs9LugAgUz//ds6Z2I+B6dITXDsMY0gBfb0dEYRKs
+         xm+LZGu9zI0DMmynSNfGF8rrFIXBQetuNA6nFyZXoT9B/FkvLZfUueNwJz4n6IDhf4Ze
+         EvzA==
+X-Gm-Message-State: AOAM531aLUDLWINCjRm4rCE2ssKmUL9lmpYkhznWhElVOJUtD3JD3PtB
+        zE1hUXRsBygjaBEFVLZxRGXM4A==
+X-Google-Smtp-Source: ABdhPJxrUjB7NB/DdRcPGk5eJGqzzzhSc4M6yqToNPSbJYPvv7fa0w3Cx6385NlAPKEiekuaF9jheQ==
+X-Received: by 2002:a17:906:730e:b0:6e0:2ad8:12c8 with SMTP id di14-20020a170906730e00b006e02ad812c8mr15160740ejc.623.1649366167733;
+        Thu, 07 Apr 2022 14:16:07 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170906340400b006d077e850b5sm7951415ejb.23.2022.04.07.14.16.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 14:16:07 -0700 (PDT)
+Message-ID: <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
+Date:   Thu, 7 Apr 2022 23:16:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
+ interconnect fields
+Content-Language: en-US
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20220407172145.31903-1-jonathan@marek.ca>
+ <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
-head:   baa78873a24a7e0f21b0a01e82214ce9a096e147
-commit: 3f047c53b0e7e747b76f0b3d032e476efbe1222f [2/5] kallsyms: Add kallsyms_lookup_names function
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220408/202204080514.PCPEh2hd-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=3f047c53b0e7e747b76f0b3d032e476efbe1222f
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/fixes
-        git checkout 3f047c53b0e7e747b76f0b3d032e476efbe1222f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 07/04/2022 21:40, Vladimir Zapolskiy wrote:
+> On 4/7/22 20:21, Jonathan Marek wrote:
+>> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
+>> Ignored and undocumented with upstream UFS driver so delete for now.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is the upstream and they are documented here, although as pointed
+by Vladimir this was rather a reverse-documentation. The documentation
+might be incorrect, but then the bindings should be corrected instead of
+only modifying the DTS.
 
-All errors (new ones prefixed by >>):
+> 
+> Basically the description was added by a commit 462c5c0aa798 ("dt-bindings: ufs:
+> qcom,ufs: convert to dtschema").
+> 
+> It's questionable, if an example in the new yaml file is totally correct
+> in connection to the discussed issue.
 
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x1d: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   ld: kernel/kallsyms.o: in function `kallsyms_lookup_names':
->> kallsyms.c:(.text+0xb4e): undefined reference to `kallsyms_on_each_symbol'
+To be honest - the example probably is not correct, because it was based
+on existing DTS without your patch. :)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Another question is whether the interconnect properties are here correct
+at all. I assumed that DTS is correct because it should describe the
+hardware, even if driver does not use it. However maybe that was a false
+assumption...
+
+
+Best regards,
+Krzysztof

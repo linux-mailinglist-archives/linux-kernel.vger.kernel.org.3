@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0F94F7EAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB324F7EA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240178AbiDGMGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S245109AbiDGMGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245130AbiDGMGI (ORCPT
+        with ESMTP id S239537AbiDGMG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:06:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968E0C31DE;
-        Thu,  7 Apr 2022 05:04:02 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 50D771F85A;
-        Thu,  7 Apr 2022 12:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649333041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yD6Hv0Qev4TUL19bY/g1Sx375Qm9AbFeZHHdH3oY4hs=;
-        b=nyUXqwYZBdRJ+l/n+nNGbkZWDe7Bqq+oy/9xD+GmBS6dBr+gvMlU+jcSshfTcrFJFz1eKf
-        WOdzx1NwqOpGiWVEPbEodpWKamYAO+1G6nea8neoVBEI9wnICynBWROc1V3VeqRcWfHsxN
-        oH6daT+1azkNl7uvjrk1FB4sy6VhfOs=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0887EA3B96;
-        Thu,  7 Apr 2022 12:04:00 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 14:04:00 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
-Message-ID: <Yk7TMKBAkuSVZRLT@dhcp22.suse.cz>
-References: <20220407093221.1090-1-jgross@suse.com>
- <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
- <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
- <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
- <5e97a7f5-1fc9-d0b4-006e-6894d5653c06@suse.com>
- <Yk7NqTlw7lmFzpKb@dhcp22.suse.cz>
- <770d8283-4315-3d83-4f8b-723308fffe5c@redhat.com>
+        Thu, 7 Apr 2022 08:06:28 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC57C31DE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:04:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b24so6108512edu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TUagL1wODEikqUkLow3v0XH4BykbzucN8xEfLth78H4=;
+        b=nnqmHk9r0F5jBw+maKTb6Sufj2aR12l7WrSCYLy+X52Zpl4xvhm3vApI8BfPZ/FSca
+         HwzngoAMEytBgAXx1PNW+b2tl/TAti6xietSCob3HMt5mlOCiubX6i0Ggn4mfdljUpps
+         vNPg1+Y/lvjLyBJkgf3IEKYOp8t7Hm7W1yCXMrJ+77edH7nDm23GGZz6eKW9LeWK/P0D
+         zrTb8WSUD9w/KXU7BR0oL/kdGJksFN6WXoMWdRCT9V4DeGEWHZiGfSyTnraS9eQsxGm8
+         eG83cMtly6GLGHunfjX/WRKVpeXQL0tuWbMK3qcGDVQZkfB3qmjO0N48MHzDLDytvW5w
+         LYsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TUagL1wODEikqUkLow3v0XH4BykbzucN8xEfLth78H4=;
+        b=KOcF7tcrEavL9l+OklZT79XCOKdkJmmCX+5G29OSRTaq2JPXfdVsnEGnxAj0w7Wbtc
+         R1jKxVOVGWVYK5nwQn9edshAxzatc2A8Xl9vaZ91ZML56uUXFGLzzZBuPVFO43svG3n2
+         80DsCMi/NI2YMGSN2ToIibl6icI8GyJQoyhhYYZ103CiGw04LrGxwqqqBjPLNKxT/dbh
+         WUWX3agxg+hLoD+e5xiDjQnxr4zAYq3T5PAPAastMj2tJhsa7H+0aoMa8ot24Hj40axo
+         e17gxTqqw7zJYVBjAJzco4PdO/ELjBvozVCs1TmeOgcTG/TjR+KqCPlSqdHkwtlz5YDu
+         /ENQ==
+X-Gm-Message-State: AOAM531Sfj0LE8A5zhRZTDSJDlDIwXAPsFzFo7xotcaWvI7qiElywRuA
+        U/c2h31fcudEHxCx78+G2escwg==
+X-Google-Smtp-Source: ABdhPJxdmNVJ/HA/fsikeQAjG7ODJWyGCaxh4P4WauvZgQ4v3hxlwTN/dO22tLf5iCaB6uKilwN9NQ==
+X-Received: by 2002:aa7:d1d0:0:b0:41c:c19e:a0d6 with SMTP id g16-20020aa7d1d0000000b0041cc19ea0d6mr13790784edp.179.1649333065649;
+        Thu, 07 Apr 2022 05:04:25 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170906390200b006e7f5fedbe7sm4073522eje.3.2022.04.07.05.04.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 05:04:25 -0700 (PDT)
+Message-ID: <65a57655-2311-0f9d-8667-851755aaec1f@linaro.org>
+Date:   Thu, 7 Apr 2022 14:04:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <770d8283-4315-3d83-4f8b-723308fffe5c@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Mark Brown <broonie@kernel.org>
+Cc:     Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        devicetree@vger.kernel.org, kavyasree.kotagiri@microchip.com,
+        krzk+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        tudor.ambarus@microchip.com
+References: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
+ <20220407112345.148316-1-michael@walle.cc> <Yk7LjrvqSLbzPYkw@sirena.org.uk>
+ <561bbc1cf43c3795eee67e10537ba365@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <561bbc1cf43c3795eee67e10537ba365@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 07-04-22 13:58:44, David Hildenbrand wrote:
-[...]
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 3589febc6d31..130a2feceddc 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -6112,10 +6112,8 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
-> >  	do {
-> >  		zone_type--;
-> >  		zone = pgdat->node_zones + zone_type;
-> > -		if (managed_zone(zone)) {
-> > -			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
-> > -			check_highest_zone(zone_type);
-> > -		}
-> > +		zoneref_set_zone(zone, &zonerefs[nr_zones++]);
-> > +		check_highest_zone(zone_type);
-> >  	} while (zone_type);
-> >  
-> >  	return nr_zones;
+On 07/04/2022 13:41, Michael Walle wrote:
+> Am 2022-04-07 13:31, schrieb Mark Brown:
+>> On Thu, Apr 07, 2022 at 01:23:45PM +0200, Michael Walle wrote:
+>>> The subject should also be prefixed with "dt-bindings: ".
+>>
+>> I tend to complain about people doing that.
 > 
-> I don't think having !populated zones in the zonelist is a particularly
-> good idea. Populated vs !populated changes only during page
-> onlininge/offlining.
-> 
-> If I'm not wrong, with your patch we'd even include ZONE_DEVICE here ...
+> After all it is mentioned to use that prefix in
+> Documentation/devicetree/bindings/submitting-patches.rst. I try to
+> remember when submitting SPI related bindings.
 
-What kind of problem that would cause? The allocator wouldn't see any
-pages at all so it would fallback to the next one. Maybe kswapd would
-need some tweak to have a bail out condition but as mentioned in the
-thread already. !populated or !managed for that matter are not all that
-much different from completely depleted zones. The fact that we are
-making that distinction has led to some bugs and I suspect it makes the
-code more complex without a very good reason.
+From my point of view, the dt-bindings prefix is still expected, just
+after "spi:" (and other Marks' subsystems), because that's I am
+filtering the bindings.
 
-> I'd vote for going with the simple fix first, which should be good
-> enough AFAIKT.
+Your submissions had the prefix in wrong place, this one patch does not
+have it all. :(
 
-yes, see the other reply
-
--- 
-Michal Hocko
-SUSE Labs
+Best regards,
+Krzysztof

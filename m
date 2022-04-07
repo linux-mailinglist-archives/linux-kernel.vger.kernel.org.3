@@ -2,110 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F874F850F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7464F8518
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345759AbiDGQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S240195AbiDGQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiDGQjI (ORCPT
+        with ESMTP id S231684AbiDGQnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:39:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9161777D0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E107B8092D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAFEC385A4;
-        Thu,  7 Apr 2022 16:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649349426;
-        bh=anQLnsuZxYc4YusrMg10WYGJTNoSFZFyAbngTsYWJWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MeF0uNyyDZzNOfXb9zUW1ftJBxaHSlt6MObKb6s0BTNxUNtyW0lFoawXT0zMd8biU
-         pyqo1BWrOCMPNYTfZ66BNUZnLqrtLxk7pFLwUgqBD5CX0hKn/Y4mpUjHd0Mi4mKaQ8
-         YD9TNJta/h9laHydGgegv6HOVBGF2c/eVh+5RwzceEPyjFVqGCbcKON8iKHxpv0zb4
-         NIGekAl0KkJJ574m7dBxP1xcotWdLh84f1yCIzzXhL64WdIh50aRoAjeqrtgJKREQv
-         M5CGWtlSIYn4PlgnXO/WobFneA1owfz5rpaAb1YEY4qj8vSOeM1lxY5vKevedXQGui
-         EQhk7UaTrKtcQ==
-Date:   Thu, 7 Apr 2022 17:37:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH] ASoC: rt5682: Add jack kcontrol
-Message-ID: <Yk8TLUnEHRKstyxq@sirena.org.uk>
-References: <20220407141316.5099-1-akihiko.odaki@gmail.com>
- <Yk7+jbQ0KBM0zVh9@sirena.org.uk>
- <96dae189-c0ff-4054-3d00-41c3b44c2cd6@gmail.com>
- <Yk8Ktyyt0veW4g+j@sirena.org.uk>
- <f86a10e1-b5a7-5c59-8e53-cec65d97234b@gmail.com>
+        Thu, 7 Apr 2022 12:43:37 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959C3195D97;
+        Thu,  7 Apr 2022 09:41:36 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id l36so10513989ybj.12;
+        Thu, 07 Apr 2022 09:41:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ag3ZPrDaG7eymU9bbXcPlL6ed5F1nvkJ2snTyLrGnXs=;
+        b=CukGAeIT43xM17pCPytcQyhT370asJLMKxD1G9ALDllv6I6Rd669Do8qgvq+QygIuN
+         Hxo7ghI6dKZzSAph4osOml+Wkf70N5bCpgBxvb43p7jVL0stg4RR6wTTe3SLwNoICBEG
+         n5LRZ9uD+Na4ElubNJPiax/so7/1vNezIAuqTzQZPNGbmDK5cjt0tCkr0+k8ARP0YUFV
+         TYpB4U37Oj2Wha7PWbWQttTJjENuA/LbIg2UMA4xk1J7a7xWW/AgWCR3m+UAyOd/m2IA
+         /zVyQBo/Pfqt817qd6YERWrN7a7SuvCwp/e56OWnsAuSC45dezzMOBkJKkiVjc53exMA
+         95xQ==
+X-Gm-Message-State: AOAM533p5tXleLMDRy7XioiEVmArbS7PDQyeJpc4hiICWo6pOtwtdqL1
+        9OgbfOvCauo8vajNcfs6TArNBnrAor1U7SfVcEc=
+X-Google-Smtp-Source: ABdhPJwWQD4BFr0N61om2oTZkMiWX4Rr2YEQ3mpLAc2fGixxeUMxNh9UrphFjXkRcH94v9AOqW3Qm14l5jYbhkvU+LY=
+X-Received: by 2002:a25:8409:0:b0:63c:bea7:30af with SMTP id
+ u9-20020a258409000000b0063cbea730afmr9874223ybk.633.1649349695694; Thu, 07
+ Apr 2022 09:41:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="K9Hi8t9P2T4/0vtf"
-Content-Disposition: inline
-In-Reply-To: <f86a10e1-b5a7-5c59-8e53-cec65d97234b@gmail.com>
-X-Cookie: Look ere ye leap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407131602.14727-1-yangyicong@hisilicon.com> <20220407154257.GA235990@bhelgaas>
+In-Reply-To: <20220407154257.GA235990@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 7 Apr 2022 18:41:24 +0200
+Message-ID: <CAJZ5v0gWzDsh8VWY+EzO6WxyO6Fe1GcRzVfABVOaO0ywJegLwA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ACPI: Decouple the negotiation of ASPM and other PCIe services
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Yicong Yang <yangyicong@hisilicon.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 7, 2022 at 5:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Rafael]
+>
+> On Thu, Apr 07, 2022 at 09:16:02PM +0800, Yicong Yang wrote:
+> > Currently we regard ASPM as a necessary PCIe service and if it's disabled
+> > by pcie_aspm=off we cannot enable other services like AER and hotplug.
+> > However the ASPM is just one of the PCIe services and other services
+> > mentioned no dependency on this. So this patch decouples the negotiation
+> > of ASPM and other PCIe services, then we can make use of other services
+> > in the absence of ASPM.
+>
+> Why do you want to boot with "pcie_aspm=off"?  If we have to use a
+> PCI-related parameter to boot, something is already wrong, so if
+> there's a problem that requires ASPM to be disabled, we should fix
+> that first.
+>
+> If there's a known hardware or firmware issue with ASPM, we should
+> quirk it so users don't have to discover this parameter.
+>
+> > Aaron Sierra tried to fix this originally:
+> > https://lore.kernel.org/linux-pci/20190702201318.GC128603@google.com/
+>
+> Yes.  My question from that review is still open:
+>
+>   But Rafael added ACPI_PCIE_REQ_SUPPORT with 415e12b23792 ("PCI/ACPI:
+>   Request _OSC control once for each root bridge (v3)") [1], apparently
+>   related to a bug [2].  I assume there was some reason for requiring
+>   all those things together, so I'd really like his comments.
 
---K9Hi8t9P2T4/0vtf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Well, it was quite a few years ago.
 
-j
-On Fri, Apr 08, 2022 at 01:11:22AM +0900, Akihiko Odaki wrote:
-> On 2022/04/08 1:00, Mark Brown wrote:
+>   [1] https://git.kernel.org/linus/415e12b23792
+>   [2] https://bugzilla.kernel.org/show_bug.cgi?id=20232
+>
+> Rafael clearly said in [1] that we need to:
+>
+>   ... check if all of the requisite _OSC support bits are set before
+>   calling acpi_pci_osc_control_set() for a given root complex.
 
-> > That bit is very common but there's still machine specific aspects - is
-> > the required hardware wired up, if it is wired up how exactly are things
-> > wired (separate microphone jack, headset jack, one of many jacks?).  A
-> > lot of the machine driver part of things is about labeling things so
-> > that it can be displayed in a way that's easy to connect to the physical
-> > system.  Generally the machine driver would define a jack and then
-> > connect the CODEC to it.
+IIRC, the idea was to avoid requesting native control of anything PCIe
+if those bits were not set in the mask, because otherwise we wouldn't
+be able to get PME and native hotplug control which were not
+configurable at that time.  [PME is still not configurable and
+potentially related to hotplug, because they may use the same MSI IRQ
+in principle, but the native hotplug is configurable now anyway.]
 
-> Whether the required hardware wired is told from the user of the codec via
-> jack's type specified with snd_soc_card_jack_new(). The other details live
-> in the codec.
+> We would still need to explain why Rafael thought all these _OSC
+> support bits were required, but now they're not.
+>
+> _OSC does not negotiate directly for control of ASPM (though of course
+> it *does* negotiate for control of the PCIe Capability, which contains
+> the ASPM control bits), but the PCI Firmware spec, r3.3, sec 4.5.3, has
+> this comment in a sample _OSC implementation:
+>
+>   // Only allow native hot plug control if the OS supports:
+>   // * ASPM
+>   // * Clock PM
+>   // * MSI/MSI-X
+>
+> which matches the current ACPI_PCIE_REQ_SUPPORT.
+>
+> So I think I would approach this by reworking the _OSC negotiation so
+> we always advertise "OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT"
+> if CONFIG_PCIEASPM=y.
 
-So I'm confused about what problem this patch is intended to fix.  It
-really sounds like there's some issue with the driver not using standard
-interfaces that you're trying to work around but the changelog is not at
-all clear.  The "doesn't use DAPM" bit is a bit of a warning sign, it
-sounds like the audio signals to and from the CODEC aren't being
-connected to the jack properly.
+That'd be reasonable IMO.
 
-Look at how other devices with jack detection hardware handle this and
-follow a similar pattern.
+> Advertising support for ASPM doesn't mean Linux has to actually
+> *enable* it, so we could make a different mechanism to prevent use of
+> ASPM if we have a device or platform quirk or we're booting with
+> "pcie_aspm=off".
 
---K9Hi8t9P2T4/0vtf
-Content-Type: application/pgp-signature; name="signature.asc"
+Right.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJPEywACgkQJNaLcl1U
-h9BD0wf/VfBhw9GQTwXU5Qj1Mq/d+fRP1+2jj+kUbV7xuu9nyDuVH7YLFP/Da2G5
-dFgQBgY6vSA7++fPrbG4kqzGpvLPcNy6s+kjZHj2anBccZg/4Q9yADqp5ifggHcj
-o/ltdaGMidJydvYgAF0EZnoW37eKRXNR/caF2nvE4aa7X9t/e3FOFQsfEP9nYi6Y
-8zyr5aUabYQe5NYx903wgSoUKQoc0c8VS820KAxyoSw5T7Y3O/CprXZyFk8Wc05y
-OpPLRzW2d/fqjWe/bhzaC2AYICirJSaO7R6fAMaV12fbZJj4i+F5K3+CU/7GlWc0
-H3WCDElgw0O9PivSGGwzUasIlzOWYw==
-=9nxM
------END PGP SIGNATURE-----
-
---K9Hi8t9P2T4/0vtf--
+Note that if we don't request the native control of a PCIe feature,
+this basically gives the BIOS a licence to scribble on the related
+device registers and some of the features are not independent, so we
+may need to advertise support for two features in order to get control
+of just one of them.

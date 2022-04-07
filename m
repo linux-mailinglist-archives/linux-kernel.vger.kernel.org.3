@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0FA4F75D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05104F75D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240969AbiDGGRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S240964AbiDGGUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiDGGRg (ORCPT
+        with ESMTP id S236654AbiDGGUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:17:36 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4D71F047C;
-        Wed,  6 Apr 2022 23:15:35 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
- 2022 14:15:31 +0800
-Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
- 2022 14:15:30 +0800
-Message-ID: <bd43807d-a2d7-5742-4253-c443cdf5c2f0@zhaoxin.com>
-Date:   Thu, 7 Apr 2022 14:15:29 +0800
+        Thu, 7 Apr 2022 02:20:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222D1A8C17;
+        Wed,  6 Apr 2022 23:18:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE0A61D0D;
+        Thu,  7 Apr 2022 06:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB1AC385A0;
+        Thu,  7 Apr 2022 06:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649312320;
+        bh=WNjt/W0EC5NHsxTNHptluiTrADyC31f+9oWaPnEp5d0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HYerDy/KYCFxq39gnJ4RAqvZZ3raYPvCXbukjYlfWMfdsehpkjbkcRJoWGFl8Qv/K
+         Jc3iEUV7A/EAEiqc1uacaPN04am8D5R3JmocyWfL5fkyjLY/ShDRa8KeBmTGJYrhed
+         GSvUer54e2rVTaXRQqVnoMl2kZifHYi6YCgYhJQY=
+Date:   Thu, 7 Apr 2022 08:18:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alessandro Zummo <a.zummo@towertech.it>, stable@vger.kernel.org
+Subject: Re: [PATCH v16 1/4] tty: goldfish: introduce
+ gf_ioread32()/gf_iowrite32()
+Message-ID: <Yk6CO11wyo86ylee@kroah.com>
+References: <20220406201523.243733-1-laurent@vivier.eu>
+ <20220406201523.243733-2-laurent@vivier.eu>
+ <Yk5tNOPE4b2QbHLG@kroah.com>
+ <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
- <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
- <YkxoHY2SVomGwGdh@rowland.harvard.edu>
- <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
- <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/7 00:20, Alan Stern wrote:
-> On Wed, Apr 06, 2022 at 10:38:28AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> On 2022/4/6 00:02, Alan Stern wrote:
->>> In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
->>> it does:
->>>
->>> 	The resume kernel boots;
->>>
->>> 	If your patch causes STS_PCD to be set at this point, the flag
->>> 	should get cleared shortly afterward by ehci_irq;
->>>
->>> 	ehci-hcd goes into runtime suspend;
->>>
->>> 	The kernel reads the system image that was stored earlier when
->>> 	hibernation began;
->>>
->>> 	After the image is loaded, the system goes into the freeze
->>> 	state (this does not call any routines in ehci-hcd);
->> On this phase, pci_pm_freeze will be called for pci device. In this
->> function, pm_runtime_resume will be called to resume already
->> runtime-suspend devices. which will cause ehci_resume to be called.
->> Thus STS_PCD flag will be set in ehci_resume function.
+On Thu, Apr 07, 2022 at 08:00:08AM +0200, Laurent Vivier wrote:
+> Le 07/04/2022 à 06:48, Greg KH a écrit :
+> > On Wed, Apr 06, 2022 at 10:15:20PM +0200, Laurent Vivier wrote:
+> > > Revert
+> > > commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > 
+> > > and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+> > > defined by the architecture.
+> > > 
+> > > Cc: stable@vger.kernel.org # v5.11+
+> > > Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> > > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > ---
+> > >   drivers/tty/goldfish.c   | 20 ++++++++++----------
+> > >   include/linux/goldfish.h | 15 +++++++++++----
+> > >   2 files changed, 21 insertions(+), 14 deletions(-)
+> > > 
+> > 
+> > Why is this a commit for the stable trees?  What bug does it fix?  You
+> > did not describe the problem in the changelog text at all, this looks
+> > like a housekeeping change only.
 > 
-> Aha!  I was missing that piece of information, thanks.
+> Arnd asked for that in:
 > 
-> But this still doesn't explain why check_root_hub_suspended is failing.
-> That routine checks the HCD_RH_RUNNING bit, which gets set in
-> hcd_bus_resume.  hcd_bus_resume gets called as part of resuming the root
-> hub, and in ehci-hcd this happens when ehci_irq sees that STS_PCD is set
-> and calls usb_hcd_resume_root_hub.  That routine queues a wakeup request
-> on the pm_wq work queue, which is then supposed to run hcd_resume_work
-> to actually restart the root hub.
-> 
-> But pm_wq is a freezable work queue!  While the system is in the freeze
-> state, the work queue isn't running.  This means that the root hub
-> should remain suspended until the end of the freeze phase, and so the
-> call to check_root_hub_suspended should succeed.
-> 
-> Can you check to see what's really happening on your system?  Something
-> must be wrong with my analysis, but I can't tell what it is.  I'm still
-> puzzled.
-> 
-> Alan Stern
-Your analysis is right, my test platform's kernel version is not the
-latest, this kernel not call freeze_kernel_threads on software_resume
-function.
-(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/power/hibernate.c?h=v5.18-rc1&id=2351f8d295ed63393190e39c2f7c1fee1a80578f)
-So pm_wq is active and can handle root hub power events.
-Update my kernel to fix the issue in the url above, system hibernation
-test was successful with our patch(not clear STS_PCD bit).
-Thanks for your clarification.
+>   Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+>   https://lore.kernel.org/lkml/CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com/
 
-Weitao Wang
+You did not provide a reason in this changelog to explain any of that :(

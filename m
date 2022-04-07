@@ -2,85 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953EB4F8785
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668C74F878A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347049AbiDGS7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S1347059AbiDGTAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbiDGS7N (ORCPT
+        with ESMTP id S1347053AbiDGS75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:59:13 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AF61F6220;
-        Thu,  7 Apr 2022 11:57:13 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id m12-20020a17090b068c00b001cabe30a98dso9719591pjz.4;
-        Thu, 07 Apr 2022 11:57:13 -0700 (PDT)
+        Thu, 7 Apr 2022 14:59:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA022AC72
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:57:56 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id n6so12710903ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=fjfMH14nLSkMDnnKtE5L1IuBOYrAsVEJHiPn3iCRihQ=;
-        b=ib+BVLZG70Qa9tNJVjW+DP7S7zG8Sz0Mu0z9Vsrm6beJZbFm2c600ddOU5xzbqi/lT
-         +hVf2Y3N4NDZ1GgEqFEoRZfQutryTDtyTyvemeIik008mZmcny2Rg3a2EG/xJJ6Gooyn
-         CuNQ8WyLiJ9kkHwRonfBiFYTOd/CrTL0Uqdq8cD98VgXfI0Bv/79NMmMYtI5+J5Zu8OO
-         7cHddsEbzFQ7Kta6im5Bqf5MSrpe6TpB2+1cupgiXO1mMiag93EBQxn8hyM+tI+5gy78
-         2IXG8fksG7aG98BqbaA1KrLWf9M5DNKrT0/7CQjah4ONAdSTb5fUs5ADOwycfrERAjOz
-         7eyg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SStO+Hy5++Lfb3g3WM6HTmeRTlehAMSfC5x1LN925d0=;
+        b=pffEq134LMK9q44k1NUZbvtMIapNh/q3WfROiHVN7L1cCwp0gRQ+TZf4GzSrwo/pLu
+         xPNdVOA64orFoZADlNoWj5XOmMg7MBio+VcQP0/mh1EDb/hC8AtZrj0HkvehddY2q8oq
+         7+IggfWRxtVuyLLHYu+xrBkJIH3lL4VrQURDL9VB12d7dpxCA5kUz0x03/VYaKp5303Y
+         x9P75BYq3A60VyyoHrmtdnKfvzizdSdDtH6YGyyMPWK6sfIjAAgkMFznRWaAhVRZAOmf
+         mo7Hihy5sVzOTOVsRpKXy6Y4kRYOC8BW5jXz8eHJI4MLJgdwD/8hcg4bPl76oK06Dqtp
+         Ilrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fjfMH14nLSkMDnnKtE5L1IuBOYrAsVEJHiPn3iCRihQ=;
-        b=PuQysnpDoFrTeHkqHwdBIR2C2hd9deiQxy/Lo+ljPb0r+AWHEfJnKuYWPdEqd5EkVq
-         MZ3sPMwgGG6h/kEWSSIzPokuPFKGBnjTqBxzJnb4lyOnmFq1TVoJAm1s16Bfuz/le+wV
-         naF+1Jbtu3YHGoqOLv4/COe/bhVGDQ8+eE0DWxPcBDzysSxq+UfkfZiBmhO4Z6RIAyK9
-         YWuUwbxyIln6m7K57P+1XaRS+gJbt6fIdRxTe7p9LQQKHI6OfLt1j+rdz2ufaFTtBnwR
-         aC/Z+6NauOugp4hjn4S3e2QE65+augP8Hge938QTqTyhRxz83lZ/e0/s6Rf+gy8inGfo
-         n31w==
-X-Gm-Message-State: AOAM533H3OlJvBck/qhAEmR14bteEAuX5+O+EQhiN2qqPiyFLgAY1YZr
-        NxFsl5kFtRwl13V3xEEgIbk=
-X-Google-Smtp-Source: ABdhPJxKiXW++JCjkgt7WZPtwFvVz0q5vSA+Rek93fe4ELbSwwkHlD5Ks3ibsfT7C03gpbp7g9h1fA==
-X-Received: by 2002:a17:90b:3b89:b0:1c6:56a2:1397 with SMTP id pc9-20020a17090b3b8900b001c656a21397mr17527719pjb.239.1649357832895;
-        Thu, 07 Apr 2022 11:57:12 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm23214944pfc.190.2022.04.07.11.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 11:57:12 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] arm64: dts: broadcom: align SPI NOR node name with dtschema
-Date:   Thu,  7 Apr 2022 11:57:10 -0700
-Message-Id: <20220407185710.2576287-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
-References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org> <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SStO+Hy5++Lfb3g3WM6HTmeRTlehAMSfC5x1LN925d0=;
+        b=cWjTS3zye7naPQKgJmFQq9trSoRSjTXxcTgSFUpFt9tLWgO2X/gsJBlbBtgWZ7Q+g4
+         VolvgfeLCXaOjtXjA8pQaZYjiEz2tobXYLKTKTBAuDkha3WRE0gn3JU+uvGalZaRw0ZW
+         xpxHSiHBNWidR3qf2Fa2Vi3omwS8EMXdxTIAmAN/+BZPKjczO4/j083yP0yyrWPwFj+O
+         620djkHOkU/rf0eJMiix0W6iLPpJPkMiYkRmLC7IvlBQuwHCrCtvDdosUVokSmU9rXL4
+         nHoYClUxfjY/7jeU1ahSHeurmfuw9N9UXc06+NugK0jlXtGl2Tia+riI9NqYL6/mIKpe
+         CfHQ==
+X-Gm-Message-State: AOAM532NmYl4rwlCruUjIspCQZrj19X4aJZp6ecsaXlIMfV3VhN668E0
+        c2fe18jtsW4+FyFWj5nFmPG0pw==
+X-Google-Smtp-Source: ABdhPJxLu1ldArMYGdKSMNZ+//fBUb3UGN+WRJC1fJrCRxdzP/spu3u2wXjkYdcG6b+VzwcYx5d1Jg==
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id rl15-20020a170907216f00b006ced85f35cfmr15416379ejb.517.1649357875010;
+        Thu, 07 Apr 2022 11:57:55 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm4692136eju.36.2022.04.07.11.57.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:57:54 -0700 (PDT)
+Message-ID: <888c0f62-7845-715e-12a1-7b16f84d2ae9@linaro.org>
+Date:   Thu, 7 Apr 2022 20:57:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-4-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406233648.21644-4-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Apr 2022 16:32:11 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
+On 07/04/2022 01:36, Brad Larson wrote:
+> Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables resulting in an additional
+> reg property resource.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Brad Larson <brad@pensando.io>
 > ---
+> Change from V3:
+> - Change from elba-emmc to elba-sd4hc to match file convention
+> - Use minItems: 1 and maxItems: 2 to pass schema check
+> 
+>  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index 4207fed62dfe..278a71b27488 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -19,10 +19,12 @@ properties:
+>        - enum:
+>            - microchip,mpfs-sd4hc
+>            - socionext,uniphier-sd4hc
+> +          - pensando,elba-sd4hc
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
---
-Florian
+Put your entry in alphabetical order.
+
+>        - const: cdns,sd4hc
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+
+This needs allOf:if:then: which sets constraint on number of items per
+different compatible.
+
+>  
+>    interrupts:
+>      maxItems: 1
+
+
+Best regards,
+Krzysztof

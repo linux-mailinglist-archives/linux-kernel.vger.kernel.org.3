@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C794F8798
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312414F879A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbiDGTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S233793AbiDGTDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244437AbiDGTCD (ORCPT
+        with ESMTP id S232358AbiDGTDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:02:03 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BC322C6E5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:00:02 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 66so5717808pga.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:00:02 -0700 (PDT)
+        Thu, 7 Apr 2022 15:03:11 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825F822C6EE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:01:06 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e22so7945306ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R0rS1xXo51qoboyEJ0NvJStWbgeggilt+SbA0oGgznw=;
-        b=cA4iLMAAfJUev1+RRTMoyCeuVe4HMvu4loKmKENKmjUy3v/bISu20aTSm5tmoyd3F6
-         XZoQ5TFphPWG6NbhyCeOJUcQXkNsq9/jJ4Id634zH5PEyHD6S2dyCkFjSBfXXePTA5qf
-         tvrsBFpMaOArmq8vXmt6LxldPyFMG/7TS+dDk=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=keVkYj4cWaI4gay87MdL0AahO7PaN4KeF2eJUm3V5FQ=;
+        b=bJx6W9C91GXHZT9WZmR5uDci7uh5rihNKWqmcZX88RTvcFDWcennu7TEZgFHORE0o5
+         Sih/OiecaC+yPBT1oUXlgYv4Thkp3gG2s1+O1pF9KogW+eHi2GYSo6vwUN0wYrwPG3Ls
+         d0JJ9Qy1LuKY4eLK/uh5sCTBRurXSZkClGXzE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=R0rS1xXo51qoboyEJ0NvJStWbgeggilt+SbA0oGgznw=;
-        b=IdGJwNbZSXKwD74ZhXKS3QPOYZEmNKTJ8rX1yRaSGJ6Y4+TZVfCV3kyVEd1XhQQzLn
-         qEB/xRAXJkW9K0IVCKJseyIyOIefgWL1upb4tcPC1c7fELtsxs+rHvFL5aV/5xTTU8Mm
-         4YUQWCsNgJ5Hk/IBsLWPpAY8JiCKcvAgRqMoGpAHV6vH3atDcLXfNt/bgnuIFwr9BA7b
-         3rmql0vWhO6u7q7gOQhYC+Qk4gRLbvqx9SpCaR2aK3WUPc2TFWCa9nsNDFsEEiQoZXEu
-         FjHsIOoE2ymjLV/7gDE85QQJ6lhoE60PUjgJQOGOs6H65CkDUMAr/ME5W534Y1NjJy7T
-         pmGg==
-X-Gm-Message-State: AOAM531e7dbA/D7JHv8tTFBII+k0LfY3+NbnflHKQc9Gi5ABiIPER9nv
-        kDha+P6WAfLZZ7uJ9cXtbyZeoQ==
-X-Google-Smtp-Source: ABdhPJxuqAAnwAy+zbA1Kz/BH+9EvV3U2dAWJAbiDGJR2FBU8anYb9iPWNjYQTvJxi6oVArphbOmwQ==
-X-Received: by 2002:a63:b555:0:b0:398:4ca1:4be0 with SMTP id u21-20020a63b555000000b003984ca14be0mr12349162pgo.294.1649358001970;
-        Thu, 07 Apr 2022 12:00:01 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([98.47.98.87])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm23218248pfc.190.2022.04.07.12.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:00:01 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rajat Jain <rajatja@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Date:   Thu,  7 Apr 2022 11:59:55 -0700
-Message-Id: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
-X-Mailer: git-send-email 2.31.0
+        bh=keVkYj4cWaI4gay87MdL0AahO7PaN4KeF2eJUm3V5FQ=;
+        b=nyvAxdxxSNtryrMac9ghBY+qLmTtcQvKgjevmgKuvdX82rz/uIcIhpwQapkXZHR+EX
+         WP0bA2F8VB++11oyrsVPUvVTBM6x0JsvucWSMrkZacOq2iHO0yfDIgb7g6u/VhPUGLXF
+         xYwiBRHTwGn2LwvaCq2jdM0m51NQUkR9RkQQjn+YAYklHTcK/U8EqqOgcCPq3RwKDzou
+         7X5z9ru1CaVPcoOunQVCKDcf/B+YAzf52Ny0Qbuuxj1Qmkq4vYnbIswl0NkeIkiudw8D
+         jqSSXVs/fsEs//4wkBBxmOqdzYNdWKmZ/L5vzBZuu2cWhg00phLMSVF5KPlh9I+dfDr4
+         QNvw==
+X-Gm-Message-State: AOAM5310ziJjMSed+K6WFNqk9X6kppZXnASG78bGWXMgetFMj/HhtrOH
+        CyhgnfSWvAyh40zpKqQYMjo9nw==
+X-Google-Smtp-Source: ABdhPJxGOZ2BJ+RHSzRcbdkCNemhvmf9CaBqWrCb2/N1joKqeDq2ON7aDkwhDmdeCC+ElIarNR2UwQ==
+X-Received: by 2002:a05:6638:d87:b0:323:c006:3650 with SMTP id l7-20020a0566380d8700b00323c0063650mr7872341jaj.64.1649358065787;
+        Thu, 07 Apr 2022 12:01:05 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id k5-20020a6bf705000000b00649a2634725sm13146036iog.17.2022.04.07.12.01.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 12:01:05 -0700 (PDT)
+Subject: Re: [PATCH V2] testing/selftests/mqueue: Fix mq_perf_tests to free
+ the allocated cpu set
+To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, disgoel@linux.vnet.ibm.com
+Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
+        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220407184008.93879-1-atrajeev@linux.vnet.ibm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e9c8a8c7-9a0d-09be-343d-038b7f791b98@linuxfoundation.org>
+Date:   Thu, 7 Apr 2022 13:01:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220407184008.93879-1-atrajeev@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,59 +76,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation for the freeze() method says that it "should quiesce
-the device so that it doesn't generate IRQs or DMA". The unspoken
-consequence of not doing this is that MSIs aimed at non-boot CPUs may
-get fully lost if they're sent during the period where the target CPU is
-offline.
+On 4/7/22 12:40 PM, Athira Rajeev wrote:
+> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
+> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
+> and by pthread_create in the code. But in current code, allocated
+> cpu set is not freed.
+> 
+> Fix this issue by adding CPU_FREE in the "shutdown" function which
+> is called in most of the error/exit path for the cleanup. Also add
+> CPU_FREE in some of the error paths where shutdown is not called.
+> 
+> Fixes: 7820b0715b6f ("tools/selftests: add mq_perf_tests")
+> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+> ---
+> Changelog:
+>  From v1 -> v2:
+>   Addressed review comment from Shuah Khan to add
+>   CPU_FREE in other exit paths where it is needed
+> 
 
-The current callbacks for USB HCD do not fully quiesce interrupts,
-specifically on XHCI. Change to use the full suspend/resume flow for
-freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-where USB devices fail to thaw during hibernation because XHCI misses
-its interrupt and fails to recover.
+Thank you. I have a couple of comments on making the error
+paths simpler. Please see below.
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
----
+>   tools/testing/selftests/mqueue/mq_perf_tests.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
+> index b019e0b8221c..182434c7898d 100644
+> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
+> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+> @@ -180,6 +180,9 @@ void shutdown(int exit_val, char *err_cause, int line_no)
+>   	if (in_shutdown++)
+>   		return;
+>   
+> +	/* Free the cpu_set allocated using CPU_ALLOC in main function */
+> +	CPU_FREE(cpu_set);
+> +
+>   	for (i = 0; i < num_cpus_to_pin; i++)
+>   		if (cpu_threads[i]) {
+>   			pthread_kill(cpu_threads[i], SIGUSR1);
+> @@ -589,6 +592,7 @@ int main(int argc, char *argv[])
+>   						cpu_set)) {
+>   					fprintf(stderr, "Any given CPU may "
+>   						"only be given once.\n");
+> +					CPU_FREE(cpu_set);
 
-You may be able to reproduce this issue on your own machine via the
-following:
-1. Disable runtime PM on your XHCI controller
-2. Aim your XHCI IRQ at a non-boot CPU (replace 174): echo 2 >
-   /proc/irq/174/smp_affinity
-3. Attempt to hibernate (no need to actually go all the way down).
+This could be done in a common error path handling.
 
-I run 2 and 3 in a loop, and can usually hit a hang or dead XHCI
-controller within 1-2 iterations. I happened to notice this on an
-Alderlake system where runtime PM is accidentally disabled for one of
-the XHCI controllers. Some more discussion and debugging can be found at
-[1].
+>   					exit(1);
+>   				} else
+>   					CPU_SET_S(cpus_to_pin[cpu],
+> @@ -607,6 +611,7 @@ int main(int argc, char *argv[])
+>   				queue_path = malloc(strlen(option) + 2);
+>   				if (!queue_path) {
+>   					perror("malloc()");
+> +					CPU_FREE(cpu_set);
 
-[1] https://lore.kernel.org/linux-pci/CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com/T/#u
+This could be done in a common error path handling.
 
----
- drivers/usb/core/hcd-pci.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>   					exit(1);
+>   				}
+>   				queue_path[0] = '/';
+> @@ -619,6 +624,7 @@ int main(int argc, char *argv[])
+>   	}
+>   
+>   	if (continuous_mode && num_cpus_to_pin == 0) {
+> +		CPU_FREE(cpu_set);
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 8176bc81a635d6..e02506807ffc6c 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
--	.freeze_noirq	= check_root_hub_suspended,
--	.thaw_noirq	= NULL,
--	.thaw		= NULL,
-+	.freeze		= hcd_pci_suspend,
-+	.freeze_noirq	= hcd_pci_suspend_noirq,
-+	.thaw_noirq	= hcd_pci_resume_noirq,
-+	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
--- 
-2.31.0
+This could be done in a common error path handling.
 
+>   		fprintf(stderr, "Must pass at least one CPU to continuous "
+>   			"mode.\n");
+>   		poptPrintUsage(popt_context, stderr, 0);
+> @@ -628,10 +634,12 @@ int main(int argc, char *argv[])
+>   		cpus_to_pin[0] = cpus_online - 1;
+>   	}
+>   
+> -	if (getuid() != 0)
+> +	if (getuid() != 0) {
+> +		CPU_FREE(cpu_set);
+>   		ksft_exit_skip("Not running as root, but almost all tests "
+>   			"require root in order to modify\nsystem settings.  "
+>   			"Exiting.\n");
+> +	}
+>   
+
+Why not move this check before CPU_ALLOC and make this the very first
+check in main()?
+
+With this change the other places where CPU_FREE is added right before
+exit(1). Something like this:
+
+err_code:
+	CPU_FREE(cpu_set);
+	exit(code)
+
+>   	max_msgs = fopen(MAX_MSGS, "r+");
+>   	max_msgsize = fopen(MAX_MSGSIZE, "r+");
+> 
+
+thanks,
+-- Shuah

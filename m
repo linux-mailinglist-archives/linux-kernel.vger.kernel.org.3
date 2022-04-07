@@ -2,151 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D1E4F7950
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDE24F795E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241309AbiDGISk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S242847AbiDGIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242795AbiDGISg (ORCPT
+        with ESMTP id S242776AbiDGIUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:18:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2097D208C03;
-        Thu,  7 Apr 2022 01:16:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C45241F85B;
-        Thu,  7 Apr 2022 08:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649319395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 7 Apr 2022 04:20:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CA4D21E503
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649319513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lDpImFu5Uivn4DfGJlYiz9vYuz2Nv72UWNvkXkuJYGg=;
-        b=oLP9PRfRRD7mxq5x7xCJN137uit6q+YNNoudexrZzYyD6+eW+cdU3RXM5iX/XE0sf4Egxi
-        fMTd+UAD0c6NXGlbpqt0l8d8ZlhW/0nICmkqzbw3SdkLBy09hjEqOXcvdPjbEm5J9EwiVs
-        fZ5hgwB5240MWjviQqGlg33RLCDgVnE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649319395;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lDpImFu5Uivn4DfGJlYiz9vYuz2Nv72UWNvkXkuJYGg=;
-        b=piEcFzuoq1oygxpi1MEykg2vUI/TY9iYqgx83RkZZRzcJNEIcqCe2t0JkJ25EeU//hq+l+
-        qEoICyqK/U13eXDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08D6613485;
-        Thu,  7 Apr 2022 08:16:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wRyrM+CdTmLMCAAAMHmgww
-        (envelope-from <colyli@suse.de>); Thu, 07 Apr 2022 08:16:32 +0000
-Message-ID: <24bb310e-6ce2-88c9-ebdc-59d49c609d77@suse.de>
-Date:   Thu, 7 Apr 2022 16:16:31 +0800
+        bh=jW/rk7FENs40EnB0uCA1bBOqTjnDJxLTwFnAX1mGka8=;
+        b=hw+2QpvcYeynyKijXuBGS4oZeUjC2PVRxAdT1LuEe17Tvbmwg2gST0YST5qWyo8KN6jB9A
+        YlP1d68XPbEnYM5Sz4Y8XKoMewjyGFsdAPkIUeMKkQByr1DeyHy5iS2kvKv/8YmboRzzME
+        1tA6bEiuKGulKRkJ8vIstfkxRWmtuZg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-1XX1et3ON6mRPYQlCJU-zg-1; Thu, 07 Apr 2022 04:18:32 -0400
+X-MC-Unique: 1XX1et3ON6mRPYQlCJU-zg-1
+Received: by mail-wm1-f72.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so2642661wmj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 01:18:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=jW/rk7FENs40EnB0uCA1bBOqTjnDJxLTwFnAX1mGka8=;
+        b=svgPz6uLZ1u7+Km8VHfA5WEcEr+b/6QQvCq1Gplixl8pO1+kmKWyvAokVeKek6/npW
+         QmQB4OY29NfbO2gxuHTDEAbhKYN39ooEYKXelaIGHPR2ARevTqwLrXT1W800nCpWx1Gq
+         H3k4ri9O6Y68SYcmAIZVa0zUepQFEh4SxFlvfaHlSgboU/Pc+9MmwSKkEx55A8O1UAKM
+         CL+L2Ppojzf9xq2dZfC/iDRvyEeMnqWNYD1oj3E72Fz+z5Eo3bIeY8OsGAfXpPWYTJJT
+         1mqST5KbZakttYh9Q4COtPeb1sl6qLxYk3G7JH+AvxR3U2MyVMv9LqPPXWYuMJcTNvo+
+         nfbg==
+X-Gm-Message-State: AOAM530ysCJd5pD39hEuiZK0jf9MIRlLc1E8BdzY5PRU28nW4Jx52FXR
+        wL/fiWVTs+ulosy2JbLgM/hN2QaKNqcWBqAZiInewh/mSth0MKIfQs3UUZYXw/EwzywiFyHXsaX
+        bZH+4EPtNMr/0wBtZ9MuBg9bT
+X-Received: by 2002:a5d:6812:0:b0:203:f854:c380 with SMTP id w18-20020a5d6812000000b00203f854c380mr9677203wru.235.1649319511259;
+        Thu, 07 Apr 2022 01:18:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxClxX14TbXWBIOJlDwZ06lVilSCrfAbdShQ6nkODxUZiE+GQP/JhL48g6k/Zr7Z+5NJx1VgQ==
+X-Received: by 2002:a5d:6812:0:b0:203:f854:c380 with SMTP id w18-20020a5d6812000000b00203f854c380mr9677191wru.235.1649319511074;
+        Thu, 07 Apr 2022 01:18:31 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-96-237.dyn.eolo.it. [146.241.96.237])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm20316538wry.53.2022.04.07.01.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 01:18:30 -0700 (PDT)
+Message-ID: <62711467c3990d38ed8a11bf1c7c2594e8e1b436.camel@redhat.com>
+Subject: Re: [PATCH 0/2] dt-bindings: net: Fix ave descriptions
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Date:   Thu, 07 Apr 2022 10:18:29 +0200
+In-Reply-To: <1649145181-30001-1-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1649145181-30001-1-git-send-email-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20220406061228.410163-1-hch@lst.de>
- <20220406061228.410163-5-hch@lst.de>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220406061228.410163-5-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 2:12 PM, Christoph Hellwig wrote:
-> Remove the magic autofree semantics and require the callers to explicitly
-> call bio_init to initialize the bio.
->
-> This allows bio_free to catch accidental bio_put calls on bio_init()ed
-> bios as well.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->   block/bio.c                        | 47 ++++++++++++------------------
->   block/blk-crypto-fallback.c        | 14 +++++----
->   block/blk-map.c                    | 42 ++++++++++++++++----------
->   drivers/block/pktcdvd.c            | 25 ++++++++--------
->   drivers/md/bcache/debug.c          | 10 ++++---
->   drivers/md/dm-bufio.c              |  9 +++---
->   drivers/md/raid1.c                 | 12 +++++---
->   drivers/md/raid10.c                | 21 ++++++++-----
->   drivers/target/target_core_pscsi.c | 10 +++----
->   fs/squashfs/block.c                | 15 +++++-----
->   include/linux/bio.h                |  2 +-
->   11 files changed, 112 insertions(+), 95 deletions(-)
-[snipped]
-> diff --git a/drivers/md/bcache/debug.c b/drivers/md/bcache/debug.c
-> index 6230dfdd9286e..7510d1c983a5e 100644
-> --- a/drivers/md/bcache/debug.c
-> +++ b/drivers/md/bcache/debug.c
-> @@ -107,15 +107,16 @@ void bch_btree_verify(struct btree *b)
->   
->   void bch_data_verify(struct cached_dev *dc, struct bio *bio)
->   {
-> +	unsigned int nr_segs = bio_segments(bio);
->   	struct bio *check;
->   	struct bio_vec bv, cbv;
->   	struct bvec_iter iter, citer = { 0 };
->   
-> -	check = bio_kmalloc(GFP_NOIO, bio_segments(bio));
-> +	check = bio_kmalloc(nr_segs, GFP_NOIO);
->   	if (!check)
->   		return;
-> -	bio_set_dev(check, bio->bi_bdev);
-> -	check->bi_opf = REQ_OP_READ;
-> +	bio_init(check, bio->bi_bdev, check->bi_inline_vecs, nr_segs,
-> +		 REQ_OP_READ);
->   	check->bi_iter.bi_sector = bio->bi_iter.bi_sector;
->   	check->bi_iter.bi_size = bio->bi_iter.bi_size;
->   
-> @@ -146,7 +147,8 @@ void bch_data_verify(struct cached_dev *dc, struct bio *bio)
->   
->   	bio_free_pages(check);
->   out_put:
-> -	bio_put(check);
-> +	bio_uninit(check);
-> +	kfree(check);
->   }
->   
->   #endif
+Hi,
 
-[snipped]
+On Tue, 2022-04-05 at 16:52 +0900, Kunihiko Hayashi wrote:
+> This series fixes dt-schema descriptions for ave4 controller.
+> 
+> Kunihiko Hayashi (2):
+>   dt-bindings: net: ave: Clean up clocks, resets, and their names using
+>     compatible string
+>   dt-bindings: net: ave: Use unevaluatedProperties
+> 
+>  .../bindings/net/socionext,uniphier-ave4.yaml | 57 +++++++++++++------
+>  1 file changed, 39 insertions(+), 18 deletions(-)
 
-For bcache part,
+@Rob: since you acked this series, I guess you prefer/except this will
+go via net net-next tree, is that correct?
 
-Acked-by: Coly Li <colyli@suse.de>
+Thanks!
 
-
-Coly Li
-
-
+Paolo
 

@@ -2,168 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B3A4F7B73
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D3E4F7B75
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237957AbiDGJVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S243740AbiDGJVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbiDGJVf (ORCPT
+        with ESMTP id S240372AbiDGJVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:21:35 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368A41DB7F5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:19:36 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id dr20so9476071ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:19:36 -0700 (PDT)
+        Thu, 7 Apr 2022 05:21:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238091DFDDA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:19:49 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l26so9568239ejx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tl9nBOnLqqP1/acS+yYHjDz2pgRvrY9cqBHbFKj8Fnc=;
-        b=CBDEbkCCAkqWcu7rwSRxHuzvDQzAI6q2gOWepIQXIDBbJj5cPNZbu6U8yOAL3lfJYR
-         xhKFp5hUopFdDtyiwJfVkQdRMsq1huLcJV7GkTRXOLg8M8+oumKCgOrVEZHJFOeZaqug
-         QaS7Fun7MTS/4JRgL7uvADTsO+5Y9rvnLTgKw=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=OhZn55oqpDXIvKLvKoNusLeA/Le7lGuQ4Qseb8DPsUQ=;
+        b=o4mWa8llyJhR0hXytKXYg8Jm7+j7FbG2XIo9m1ek+brBno+uQo2HZZWkbmW5W/9QcG
+         c9Py20S5rz3TcDCjRoQnwxvRO8Pkrhkzh4ftv0afwjRkBsyuHD5Vw70dKpJ84c8wdxnO
+         WXI4ShYaC9NoYd9QFGcYQRCek9oQ5gLfsybO/i8ECbYTP1uaaZ6ak7bZ4nXz2PPHNC5S
+         j+glrsqr34TjNHReLgx1ujxSXbR82hJgdwJbkae2lxWzi+cz8tIm+kVPdBoGMyS+mCk6
+         dUp0UjvY9vxal/bAIH62k2ihxs6F5Ge99WJ7y2gJUnump2hDZi2/9Gv6/qM72qx9usWL
+         08rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=tl9nBOnLqqP1/acS+yYHjDz2pgRvrY9cqBHbFKj8Fnc=;
-        b=GPcEZtupdnd5B1O0elNMm9j03DqIVluh6Jex9WlLob847uvvN7MErGQ3LlBf1a68gY
-         bEU1qy/v5hKDjDyNdsYr57UyDgbYnHPUS8VoprwWkPu2lYhp8Kp5C7phBe2oZwmj9NWQ
-         i/x3bu4X3qd5iCI7Zx1lTsCD8NQlgDZ6CrQXroATnbLaOaQQVjarcbs0mg2yx35FPJ+p
-         2bkRcRm0YK7IyRNzeFMragGRSF5VyuPRJ/woITuu4/v6c/fxXOz+oq2zuUjICL+pBRz2
-         78Qk1+ypsf3Ele27wFRWsa+IpFn/9ZuKNWD/t5sO0H6WBZIZNp3U8pq67ksVe0agyub8
-         OSJw==
-X-Gm-Message-State: AOAM533NBggFJGifIPsyjHN+8S6XVHxNFqrG4Lom66G1k+MAOq4lI+sN
-        ypatdlLy6F5U0dzEgHuPASud6A==
-X-Google-Smtp-Source: ABdhPJzUgJqDlmh4A5Ht8QOIfc1rzltJqxuNxKdfx/yt4VDI386e+Hs+rpvAXO7SRwNbW/OkTGfw7g==
-X-Received: by 2002:a17:907:6e16:b0:6e4:de0d:d93 with SMTP id sd22-20020a1709076e1600b006e4de0d0d93mr12253676ejc.29.1649323174807;
-        Thu, 07 Apr 2022 02:19:34 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id r19-20020a17090638d300b006d6e4fc047bsm7585498ejd.11.2022.04.07.02.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:19:34 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 11:19:32 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        intel-gfx@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/15] seqlock: drop seqcount_ww_mutex_t
-Message-ID: <Yk6spNv/zSCB2ewe@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220407085946.744568-1-christian.koenig@amd.com>
- <20220407085946.744568-16-christian.koenig@amd.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OhZn55oqpDXIvKLvKoNusLeA/Le7lGuQ4Qseb8DPsUQ=;
+        b=KQy7Xi/pRoDPa4wilpY52P6/8VAEvnDDO00BBTNTCQXZBTQbUISs7/5TDN6//LBp4o
+         I4e0hDRBvZpTw/tZ4JHU3/LUSz0XXUEVne7xrYHYSOliw8/7o/Q/LYUS0nhusT03euaH
+         WQ/fsutmCzmNCBAv8Oksq8eNZAbrNkKMMGoEXEWy8r2tAjUamMx5vbXW26y9pPegDZPW
+         5mF1i9Vd4pbWgigJw1DW99xJ/mAPzNEiiE78HDOCBq0ggR7/41eoFeeg0Sx3AKnc/wA1
+         GDXFms9M7fOR8b1YgFOMrCU6O9kzrT34Gc6HsFkmq7gQoBi7LtuF7IR050AW4jpsoIL4
+         fdoQ==
+X-Gm-Message-State: AOAM532hBtARi/OJ+BABYaF5NgN7gdMcrVPP4uzMXY+uXYYbrfhql4dE
+        kCKjNUQe8vQ0vIF6mCRc8dkaZw==
+X-Google-Smtp-Source: ABdhPJwrfOj4aHp2YqJnDOzcr0lhU3Ho+3z/I+Snr1r/9J1rjLJks+IfGB/rZ/rf9fpkMv+YT4ttzA==
+X-Received: by 2002:a17:907:608c:b0:6e7:fc15:2db9 with SMTP id ht12-20020a170907608c00b006e7fc152db9mr12144063ejc.344.1649323187671;
+        Thu, 07 Apr 2022 02:19:47 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f15-20020a50e08f000000b004134a121ed2sm9146929edl.82.2022.04.07.02.19.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 02:19:47 -0700 (PDT)
+Message-ID: <7da30fdc-cef7-879a-69ef-6993e05beda5@linaro.org>
+Date:   Thu, 7 Apr 2022 11:19:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220407085946.744568-16-christian.koenig@amd.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH 2/2] phy: samsung: exynos5250-sata: fix missing
+ device put in probe error paths
+Content-Language: en-US
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Girish K S <ks.giri@samsung.com>,
+        Yuvaraj Kumar C D <yuvaraj.cd@gmail.com>,
+        Vasanth Ananthan <vasanth.a@samsung.com>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407091857.230386-1-krzysztof.kozlowski@linaro.org>
+ <20220407091857.230386-2-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407091857.230386-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:59:46AM +0200, Christian König wrote:
-> Daniel pointed out that this series removes the last user of
-> seqcount_ww_mutex_t, so let's drop this.
+On 07/04/2022 11:18, Krzysztof Kozlowski wrote:
+> The actions of of_find_i2c_device_by_node() in probe function should be
+> reversed in error paths by putting the reference to obtained device.
 > 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: linux-kernel@vger.kernel.org
-
-Yeah I don't think we'll ever need this again, ww_mutex aren't common and
-the ww_mutex+seqlock thing wasn't the brighest idea.
-
-Peter/Ingo, assuming you agree, can you ack this for merging through
-drm-misc, or want to pick this up later on when the last user disappeared
-in Linus' tree?
-
-Cheers, Daniel
-
+> Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  include/linux/seqlock.h | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-> index 37ded6b8fee6..3926e9027947 100644
-> --- a/include/linux/seqlock.h
-> +++ b/include/linux/seqlock.h
-> @@ -17,7 +17,6 @@
->  #include <linux/kcsan-checks.h>
->  #include <linux/lockdep.h>
->  #include <linux/mutex.h>
-> -#include <linux/ww_mutex.h>
->  #include <linux/preempt.h>
->  #include <linux/spinlock.h>
->  
-> @@ -164,7 +163,7 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
->   * static initializer or init function. This enables lockdep to validate
->   * that the write side critical section is properly serialized.
->   *
-> - * LOCKNAME:	raw_spinlock, spinlock, rwlock, mutex, or ww_mutex.
-> + * LOCKNAME:	raw_spinlock, spinlock, rwlock or mutex
->   */
->  
->  /*
-> @@ -184,7 +183,6 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
->  #define seqcount_spinlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, spinlock)
->  #define seqcount_rwlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, rwlock)
->  #define seqcount_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, mutex)
-> -#define seqcount_ww_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, ww_mutex)
->  
->  /*
->   * SEQCOUNT_LOCKNAME()	- Instantiate seqcount_LOCKNAME_t and helpers
-> @@ -277,7 +275,6 @@ SEQCOUNT_LOCKNAME(raw_spinlock, raw_spinlock_t,  false,    s->lock,        raw_s
->  SEQCOUNT_LOCKNAME(spinlock,     spinlock_t,      __SEQ_RT, s->lock,        spin,     spin_lock(s->lock))
->  SEQCOUNT_LOCKNAME(rwlock,       rwlock_t,        __SEQ_RT, s->lock,        read,     read_lock(s->lock))
->  SEQCOUNT_LOCKNAME(mutex,        struct mutex,    true,     s->lock,        mutex,    mutex_lock(s->lock))
-> -SEQCOUNT_LOCKNAME(ww_mutex,     struct ww_mutex, true,     &s->lock->base, ww_mutex, ww_mutex_lock(s->lock, NULL))
->  
->  /*
->   * SEQCNT_LOCKNAME_ZERO - static initializer for seqcount_LOCKNAME_t
-> @@ -304,8 +301,7 @@ SEQCOUNT_LOCKNAME(ww_mutex,     struct ww_mutex, true,     &s->lock->base, ww_mu
->  	__seqprop_case((s),	raw_spinlock,	prop),			\
->  	__seqprop_case((s),	spinlock,	prop),			\
->  	__seqprop_case((s),	rwlock,		prop),			\
-> -	__seqprop_case((s),	mutex,		prop),			\
-> -	__seqprop_case((s),	ww_mutex,	prop))
-> +	__seqprop_case((s),	mutex,		prop))
->  
->  #define seqprop_ptr(s)			__seqprop(s, ptr)
->  #define seqprop_sequence(s)		__seqprop(s, sequence)
-> -- 
-> 2.25.1
-> 
+>  drivers/phy/samsung/phy-exynos5250-sata.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+I forgot:
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+https://lore.kernel.org/all/018501d834eb$01e62ad0$05b28070$@samsung.com/
+
+
+Best regards,
+Krzysztof

@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396534F7571
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 07:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0487C4F757E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 07:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237931AbiDGFoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 01:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S238262AbiDGFw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 01:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiDGFn5 (ORCPT
+        with ESMTP id S230486AbiDGFwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 01:43:57 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C41577F225;
-        Wed,  6 Apr 2022 22:41:58 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5830C20DFD98;
-        Wed,  6 Apr 2022 22:41:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5830C20DFD98
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649310118;
-        bh=njAIMfs922GPPSTZYstgn/XjmiDRTEg/G01+i37o7Ew=;
-        h=From:To:Subject:Date:From;
-        b=j5o50bjdJUDIA5A6qKqsW9cfwf9wepQSz6Wa+2c+S4CQkSdUzsLXA0SOgESIQ5d6h
-         vMjxbauMK8gFbJz+DqOOzhSk8W3wirQacEf//ryKU+Pg/Yg6Z+7RC49Q+yBExCuo/P
-         d6waJqGjx9CxLqCz9dvPEq2IdZic+8TveLjThcQo=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com, decui@microsoft.com
-Subject: [PATCH] drm/hyperv: Added error message for fb size greater then allocated
-Date:   Wed,  6 Apr 2022 22:41:52 -0700
-Message-Id: <1649310112-25848-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-16.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DOS_RCVD_IP_TWICE_B,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 7 Apr 2022 01:52:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936AB5F96;
+        Wed,  6 Apr 2022 22:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB9E6B826B9;
+        Thu,  7 Apr 2022 05:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E1DAC385A5;
+        Thu,  7 Apr 2022 05:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649310612;
+        bh=3YWLrpiFSvH6ZQ0daUuwV7CgfI5cVUWuqVsYagCDuEM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mh56rolN2SW5Y963J6o+m2zt0nSv9N5/ui1QuKEYGsuONE/YZYVoeRQczA0+xzJ3z
+         1EDi3IkB1Wos7IRMSmS9P6mzovTPL7CapRiJFvLT7r6QHmPnTYmh5l96k7kdovFt48
+         dBj6rBn1eXfsPGd1EIYnzdt394rj8J42OtMWaRTsVJwPIEVFwpPU64zdX3wgQMdU08
+         briKBV29XA6Itn4VuHrFyfb4uieIDEQdj4lf4daNAhCJnTi9qDrTJdHVaRsGLCFFIx
+         B9jw7ECUzTRY3oPQgc5QTEXOtuW9cc5hZsMWtbukUQ+Tcl8tppPaQmi/DlkUzzw3Iw
+         XlV0+aQkTApTA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61B64E85B8C;
+        Thu,  7 Apr 2022 05:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] ipv6: fix locking issues with loops over
+ idev->addr_list
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164931061239.16262.17688495506884085480.git-patchwork-notify@kernel.org>
+Date:   Thu, 07 Apr 2022 05:50:12 +0000
+References: <20220403231523.45843-1-dossche.niels@gmail.com>
+In-Reply-To: <20220403231523.45843-1-dossche.niels@gmail.com>
+To:     Niels Dossche <dossche.niels@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: saurabh <saurabh@localhost.localdomain>
+Hello:
 
-Added error message when the size of requested framebuffer is more then
-the allocated size by vmbus mmio region for framebuffer
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: saurabh <saurabh@localhost.localdomain>
----
- drivers/gpu/drm/hyperv/hyperv_drm_modeset.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Mon,  4 Apr 2022 01:15:24 +0200 you wrote:
+> idev->addr_list needs to be protected by idev->lock. However, it is not
+> always possible to do so while iterating and performing actions on
+> inet6_ifaddr instances. For example, multiple functions (like
+> addrconf_{join,leave}_anycast) eventually call down to other functions
+> that acquire the idev->lock. The current code temporarily unlocked the
+> idev->lock during the loops, which can cause race conditions. Moving the
+> locks up is also not an appropriate solution as the ordering of lock
+> acquisition will be inconsistent with for example mc_lock.
+> 
+> [...]
 
-diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-index e82b815f83a6..92587f0b7694 100644
---- a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-+++ b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-@@ -123,8 +123,11 @@ static int hyperv_pipe_check(struct drm_simple_display_pipe *pipe,
- 	if (fb->format->format != DRM_FORMAT_XRGB8888)
- 		return -EINVAL;
- 
--	if (fb->pitches[0] * fb->height > hv->fb_size)
-+	if (fb->pitches[0] * fb->height > hv->fb_size) {
-+		drm_err(&hv->dev, "hv->hdev, fb size requested by process %s for %d X %d (pitch %d) is greater then allocated size %ld\n",
-+		current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
- 		return -EINVAL;
-+	}
- 
- 	return 0;
- }
+Here is the summary with links:
+  - [net-next,v2] ipv6: fix locking issues with loops over idev->addr_list
+    https://git.kernel.org/netdev/net-next/c/51454ea42c1a
+
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

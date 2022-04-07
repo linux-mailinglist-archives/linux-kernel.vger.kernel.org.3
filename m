@@ -2,95 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF224F7835
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77594F783B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242338AbiDGHy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S242359AbiDGHzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242275AbiDGHyw (ORCPT
+        with ESMTP id S242332AbiDGHy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:54:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 115331C315C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649317972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQwtpv4LSJs4oYZkfG+yHqo4mCAyzu9Mqm5FcRavI60=;
-        b=UKGWP5Mm6xl+5GKUrNvM5SrSh62263TmHxReuqC8YN67uCeSQc5uX3DRUgwKl9nf3dZXnU
-        YnnhmT0ch9bLYtVeyAXO0gz5qN8Y0RXiaPOAuizFlyM2Izj0cwpDWV8RCJGx/Tm46Nunsn
-        Ost5f0HVVIoLynfGJ0ddOaJPWiyVoHw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-180-rDqrMzroPZCOxoo4cQkGGw-1; Thu, 07 Apr 2022 03:52:49 -0400
-X-MC-Unique: rDqrMzroPZCOxoo4cQkGGw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08864802819;
-        Thu,  7 Apr 2022 07:52:48 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 25F4940D2962;
-        Thu,  7 Apr 2022 07:52:45 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id E84AC1C00CD; Thu,  7 Apr 2022 09:52:43 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH v4 2/2] net: make tcp keepalive timer upper bound
-Date:   Thu,  7 Apr 2022 09:52:42 +0200
-Message-Id: <20220407075242.118253-3-asavkov@redhat.com>
-In-Reply-To: <20220407075242.118253-1-asavkov@redhat.com>
-References: <871qyb35q4.ffs@tglx>
- <20220407075242.118253-1-asavkov@redhat.com>
+        Thu, 7 Apr 2022 03:54:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B737E1C4B23
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:52:56 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KYtrp6zp8z13VdT;
+        Thu,  7 Apr 2022 15:52:26 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 15:52:47 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 15:52:54 +0800
+Subject: Re: [PATCH RESEND v5 2/5] iova: Allow rcache range upper limit to be
+ flexible
+To:     John Garry <john.garry@huawei.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <chenxiang66@hisilicon.com>, <jean-philippe@linaro.org>,
+        <linuxarm@huawei.com>
+References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+ <1649071634-188535-3-git-send-email-john.garry@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <834447a0-675a-5978-8ffe-285ce09f4213@huawei.com>
+Date:   Thu, 7 Apr 2022 15:52:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1649071634-188535-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure TCP keepalive timer does not expire late. Switching to upper
-bound timers means it can fire off early but in case of keepalive
-tcp_keepalive_timer() handler checks elapsed time and resets the timer
-if it was triggered early. This results in timer "cascading" to a
-higher precision and being just a couple of milliseconds off it's
-original mark.
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- net/ipv4/inet_connection_sock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 1e5b53c2bb267..bb2dbfb6f5b50 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -589,7 +589,7 @@ EXPORT_SYMBOL(inet_csk_delete_keepalive_timer);
- 
- void inet_csk_reset_keepalive_timer(struct sock *sk, unsigned long len)
- {
--	sk_reset_timer(sk, &sk->sk_timer, jiffies + len);
-+	sk_reset_timer(sk, &sk->sk_timer, jiffies + upper_bound_timeout(len));
- }
- EXPORT_SYMBOL(inet_csk_reset_keepalive_timer);
- 
+On 2022/4/4 19:27, John Garry wrote:
+> Some low-level drivers may request DMA mappings whose IOVA length exceeds
+> that of the current rcache upper limit.
+> 
+> This means that allocations for those IOVAs will never be cached, and
+> always must be allocated and freed from the RB tree per DMA mapping cycle.
+> This has a significant effect on performance, more so since commit
+> 4e89dce72521 ("iommu/iova: Retry from last rb tree node if iova search
+> fails"), as discussed at [0].
+> 
+> As a first step towards allowing the rcache range upper limit be
+> configured, hold this value in the IOVA rcache structure, and allocate
+> the rcaches separately.
+> 
+> Delete macro IOVA_RANGE_CACHE_MAX_SIZE in case it's reused by mistake.
+> 
+> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/iommu/iova.c | 20 ++++++++++----------
+>  include/linux/iova.h |  3 +++
+>  2 files changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index db77aa675145..5c22b9187b79 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -15,8 +15,6 @@
+>  /* The anchor node sits above the top of the usable address space */
+>  #define IOVA_ANCHOR	~0UL
+>  
+> -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
+> -
+>  static bool iova_rcache_insert(struct iova_domain *iovad,
+>  			       unsigned long pfn,
+>  			       unsigned long size);
+> @@ -443,7 +441,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
+>  	 * rounding up anything cacheable to make sure that can't happen. The
+>  	 * order of the unadjusted size will still match upon freeing.
+>  	 */
+> -	if (size < (1 << (IOVA_RANGE_CACHE_MAX_SIZE - 1)))
+> +	if (size < (1 << (iovad->rcache_max_size - 1)))
+>  		size = roundup_pow_of_two(size);
+>  
+>  	iova_pfn = iova_rcache_get(iovad, size, limit_pfn + 1);
+> @@ -713,13 +711,15 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
+>  	unsigned int cpu;
+>  	int i, ret;
+>  
+> -	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
+> +	iovad->rcache_max_size = 6; /* Arbitrarily high default */
+
+It would be better to assign this constant value to iovad->rcache_max_size in init_iova_domain().
+
+> +
+> +	iovad->rcaches = kcalloc(iovad->rcache_max_size,
+>  				 sizeof(struct iova_rcache),
+>  				 GFP_KERNEL);
+>  	if (!iovad->rcaches)
+>  		return -ENOMEM;
+>  
+> -	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+> +	for (i = 0; i < iovad->rcache_max_size; ++i) {
+>  		struct iova_cpu_rcache *cpu_rcache;
+>  		struct iova_rcache *rcache;
+>  
+> @@ -816,7 +816,7 @@ static bool iova_rcache_insert(struct iova_domain *iovad, unsigned long pfn,
+>  {
+>  	unsigned int log_size = order_base_2(size);
+>  
+> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
+> +	if (log_size >= iovad->rcache_max_size)
+>  		return false;
+>  
+>  	return __iova_rcache_insert(iovad, &iovad->rcaches[log_size], pfn);
+> @@ -872,7 +872,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>  {
+>  	unsigned int log_size = order_base_2(size);
+>  
+> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
+> +	if (log_size >= iovad->rcache_max_size || !iovad->rcaches)
+>  		return 0;
+>  
+>  	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
+> @@ -888,7 +888,7 @@ static void free_iova_rcaches(struct iova_domain *iovad)
+>  	unsigned int cpu;
+>  	int i, j;
+>  
+> -	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+> +	for (i = 0; i < iovad->rcache_max_size; ++i) {
+>  		rcache = &iovad->rcaches[i];
+>  		if (!rcache->cpu_rcaches)
+>  			break;
+> @@ -916,7 +916,7 @@ static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad)
+>  	unsigned long flags;
+>  	int i;
+>  
+> -	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+> +	for (i = 0; i < iovad->rcache_max_size; ++i) {
+>  		rcache = &iovad->rcaches[i];
+>  		cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
+>  		spin_lock_irqsave(&cpu_rcache->lock, flags);
+> @@ -935,7 +935,7 @@ static void free_global_cached_iovas(struct iova_domain *iovad)
+>  	unsigned long flags;
+>  	int i, j;
+>  
+> -	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+> +	for (i = 0; i < iovad->rcache_max_size; ++i) {
+>  		rcache = &iovad->rcaches[i];
+>  		spin_lock_irqsave(&rcache->lock, flags);
+>  		for (j = 0; j < rcache->depot_size; ++j) {
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index 320a70e40233..02f7222fa85a 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -38,6 +38,9 @@ struct iova_domain {
+>  
+>  	struct iova_rcache	*rcaches;
+>  	struct hlist_node	cpuhp_dead;
+> +
+> +	/* log of max cached IOVA range size (in pages) */
+> +	unsigned long	rcache_max_size;
+>  };
+>  
+>  static inline unsigned long iova_size(struct iova *iova)
+> 
+
 -- 
-2.34.1
-
+Regards,
+  Zhen Lei

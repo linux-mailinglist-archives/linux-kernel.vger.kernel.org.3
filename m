@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB29F4F7C92
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387814F7C84
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244183AbiDGKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S240083AbiDGKRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244171AbiDGKUH (ORCPT
+        with ESMTP id S230034AbiDGKRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:20:07 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F912BF8F;
-        Thu,  7 Apr 2022 03:18:07 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id x33so2336495lfu.1;
-        Thu, 07 Apr 2022 03:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8xc2esaPhQG5Y2aFcZ1m/q+wr6tTLexMzP50smIMSEc=;
-        b=ai/odVpwgAtW6qLKqSqRkKEuWhfCVJY8/tta5lKx4zSHyelDU82UlUu9a7wGTfIUA8
-         /tOXy4TFvNgWME3yKRJzBrPZ0wKLnQu+4hDLFMpGqgItAgCMJjO51Q0PSUpEJMR+5sAY
-         m4bnNUdUwilMoEmCBQqpYRwt2bRRx3TSj4klN+w8env+iakbb39MCkHp/Kga1y40cUlc
-         WGxtG/TPSvbNW+0MyINBgi0plDdH7FU2MTcORsDGrRQUmHMPyUaX9uu2TzmO8EwGmHc/
-         G2tLTOKa4hS4+xRNoF9LuOHoLog36EQvOMxb28UKKvGKNw3HLMDMRCDTLj5lJi1sXMYj
-         VSKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8xc2esaPhQG5Y2aFcZ1m/q+wr6tTLexMzP50smIMSEc=;
-        b=odPjFTt8EI2kDsGqhKXLB5SVjJDfPhIRTkfLX79UmIfVL3Nebbbfopxyd+/9QT8PYB
-         /vUBpVORwzwERJm1/BbfBsZze266dpZoYDuZl6G9iaSCBTlaOR+4WTL1mvQF1XjAxupO
-         4ra+tm9x/K3ic1/cxDcQJQG0FHrghRUVblnPLDq/qwVCpOFyTcgTe8bERoRNyCUgNZIO
-         uWOh7/TGvdRfP1Mo0Ucd0J0rzTOjUsFNrtXAIBqRSid3XBh6MmSZp7oshs/WLNz3QzRX
-         2navgbTl2wE6CYgE16LHMS9Jg0A4JVdyBrvpEeNfIoSKdYFY5etz8g+B/LhIbLtzG7AO
-         uuAw==
-X-Gm-Message-State: AOAM532JLRUrS/MJUh7q21qso4fYAASoDIq1oCauqK2UXmU4xkt+fiKe
-        lFQrB+NthWz5zTVot5lqtgjfHhj6m9s=
-X-Google-Smtp-Source: ABdhPJzTvOYxu4sys0zV4dc0/hwV5plnZJG/vaaIf8HAAL7JknaiUwn8P+g3GegkiMsK8sjs+Hg89Q==
-X-Received: by 2002:ac2:51ce:0:b0:44a:2b4f:82b1 with SMTP id u14-20020ac251ce000000b0044a2b4f82b1mr9221355lfm.349.1649326685582;
-        Thu, 07 Apr 2022 03:18:05 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id d2-20020a194f02000000b0044a2b77cd8dsm2121656lfb.105.2022.04.07.03.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 03:18:05 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/2] leds: ktd2692: Make aux-gpios optional
-Date:   Thu,  7 Apr 2022 13:10:06 +0300
-Message-Id: <20220407101034.13122-3-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407101034.13122-1-markuss.broks@gmail.com>
-References: <20220407101034.13122-1-markuss.broks@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 7 Apr 2022 06:17:24 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831DC5A16E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:15:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 58DA15C0231;
+        Thu,  7 Apr 2022 06:15:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 07 Apr 2022 06:15:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
+        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ZjQ0U+
+        QYU3GVU9/vZxUDNkx5L3+KNfvJqan0Hjjw7QY=; b=UT/vr5QhXuq2tSG74A46kZ
+        8tsYpygO+byeFCoVc1WvhCR09de+foGpc17LdN+kDfHT8kZ1FjkGAQy7HGVTx1SE
+        T6BtRYIQuniSQm/e4Ow1YzVC6QAKpfUkPoOPq0sFpJl+5c5C0xRUcDypd/nhc3lA
+        xFUf1/aqKXEOOT1DQRmbM3B/63i0TSg3y5yFFjUHacB4dwjZLwtIUcV0GAEBTlJG
+        kw+aKjkDBa9kzoWcoXW5gOXL/vxDvxKUHoH7Iw+pQN+OTdhKQjkq/h2DsWfMe6JZ
+        oDaFgMtmDp8Nhm+QgmDb+0Oe49AJq5V9KXiAVAjCd64JiD3IuSR6oOh7UG8+kr9A
+        ==
+X-ME-Sender: <xms:t7lOYslaS6bacDasFfwlAQlTypkrJNlPKX5pVYT42aSRceYbw3QhQw>
+    <xme:t7lOYr1Z6MjHfX5z7UqoV8r7cOrKmSPe9FaH6d2aeyeoTkV22b7lEJMKZIkfNQCyZ
+    SXdgSnISYjOZF2ItC0>
+X-ME-Received: <xmr:t7lOYqpbKuMQUk_JcjgNk9doMN-hvS5GuF_bEjEjvTtTOxA07Q-EH7nYN1pLGaXPa8VyUtjsaWtTAqWqd3aDzwR1H-CRr4kN4Xg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvffkhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
+    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
+    eptdelteekleekkedvueejheekgfdvtdehhefhteeitefhteefgefhudehveevleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
+    hnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:t7lOYokv__jw68BwjAp_Y3vzwrJ74SiobMWbKMKvsPKI-rnVW8-eJA>
+    <xmx:t7lOYq0X7CVZYji4OPXooBdewBXQLO7I_CeK8bKSV0NgQmorxjtjoA>
+    <xmx:t7lOYvseLp1AsxRZQNWE4W1PjOeZjSdOSNPXxGWKpj5bXq_MjyK9hA>
+    <xmx:uLlOYvxIHy0N4IndHwcD-FYYgp5gBsS1IPjnAY8h8KomgWowS86dQA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 7 Apr 2022 06:15:18 -0400 (EDT)
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Message-Id: <5edbe76ce68227f71e09af4614cc4c1bd61c7ec8.1649326292.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH v2] macintosh/via-pmu: Fix build failure when CONFIG_INPUT is
+ disabled
+Date:   Thu, 07 Apr 2022 20:11:32 +1000
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,86 +69,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the AUX pin optional, since it isn't a core part of functionality,
-and the device is designed to be operational with only one CTRL pin.
+drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
+via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
+via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
+via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
+via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
+drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
+via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
+via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
+via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
+make[1]: *** [Makefile:1155: vmlinux] Error 1
+make: *** [Makefile:350: __build_one_by_one] Error 2
 
-Also pick up maintainership for the LED driver and the yaml bindings.
+Don't call into the input subsystem unless CONFIG_INPUT is built-in.
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
- MAINTAINERS                       |  6 ++++++
- drivers/leds/flash/leds-ktd2692.c | 18 ++++++++++--------
- 2 files changed, 16 insertions(+), 8 deletions(-)
+Changed since v1:
+ - Adopted IS_ENABLED to avoid an ifdef as suggested by Christophe.
+ - Added the ADB_PMU_EVENT symbol as suggested by Geert, though this
+   adds a new Kconfig symbol for little gain AFAICS.
+---
+ drivers/macintosh/Kconfig   | 4 ++++
+ drivers/macintosh/Makefile  | 3 ++-
+ drivers/macintosh/via-pmu.c | 2 +-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2db49ea7ae55..8ef5667a1d98 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10479,6 +10479,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktd253.yaml
- F:	drivers/video/backlight/ktd253-backlight.c
+diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
+index 5cdc361da37c..3942db15a2b8 100644
+--- a/drivers/macintosh/Kconfig
++++ b/drivers/macintosh/Kconfig
+@@ -67,6 +67,10 @@ config ADB_PMU
+ 	  this device; you should do so if your machine is one of those
+ 	  mentioned above.
  
-+KTD2692 FLASH LED DRIVER
-+M:	Markuss Broks <markuss.broks@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktd2692.yaml
-+F:	drivers/leds/flash/leds-ktd2692.yaml
++config ADB_PMU_EVENT
++	def_bool y
++	depends on ADB_PMU && INPUT=y
 +
- KTEST
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	John Hawley <warthog9@eaglescrag.net>
-diff --git a/drivers/leds/flash/leds-ktd2692.c b/drivers/leds/flash/leds-ktd2692.c
-index f341da1503a4..f30c4b11c84b 100644
---- a/drivers/leds/flash/leds-ktd2692.c
-+++ b/drivers/leds/flash/leds-ktd2692.c
-@@ -163,7 +163,8 @@ static int ktd2692_led_brightness_set(struct led_classdev *led_cdev,
+ config ADB_PMU_LED
+ 	bool "Support for the Power/iBook front LED"
+ 	depends on PPC_PMAC && ADB_PMU
+diff --git a/drivers/macintosh/Makefile b/drivers/macintosh/Makefile
+index 49819b1b6f20..712edcb3e0b0 100644
+--- a/drivers/macintosh/Makefile
++++ b/drivers/macintosh/Makefile
+@@ -12,7 +12,8 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)	+= mac_hid.o
+ obj-$(CONFIG_INPUT_ADBHID)	+= adbhid.o
+ obj-$(CONFIG_ANSLCD)		+= ans-lcd.o
  
- 	if (brightness == LED_OFF) {
- 		led->mode = KTD2692_MODE_DISABLE;
--		gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
-+		if (led->aux_gpio)
-+			gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
- 	} else {
- 		ktd2692_expresswire_write(led, brightness |
- 					KTD2692_REG_MOVIE_CURRENT_BASE);
-@@ -191,10 +192,12 @@ static int ktd2692_led_flash_strobe_set(struct led_classdev_flash *fled_cdev,
- 				| KTD2692_REG_FLASH_TIMEOUT_BASE);
- 
- 		led->mode = KTD2692_MODE_FLASH;
--		gpiod_direction_output(led->aux_gpio, KTD2692_HIGH);
-+		if (led->aux_gpio)
-+			gpiod_direction_output(led->aux_gpio, KTD2692_HIGH);
- 	} else {
- 		led->mode = KTD2692_MODE_DISABLE;
--		gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
-+		if (led->aux_gpio)
-+			gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
- 	}
- 
- 	ktd2692_expresswire_write(led, led->mode | KTD2692_REG_MODE_BASE);
-@@ -248,7 +251,8 @@ static void ktd2692_setup(struct ktd2692_context *led)
- {
- 	led->mode = KTD2692_MODE_DISABLE;
- 	ktd2692_expresswire_reset(led);
--	gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
-+	if (led->aux_gpio)
-+		gpiod_direction_output(led->aux_gpio, KTD2692_LOW);
- 
- 	ktd2692_expresswire_write(led, (KTD2692_MM_MIN_CURR_THRESHOLD_SCALE - 1)
- 				 | KTD2692_REG_MM_MIN_CURR_THRESHOLD_BASE);
-@@ -286,10 +290,8 @@ static int ktd2692_parse_dt(struct ktd2692_context *led, struct device *dev,
- 
- 	led->aux_gpio = devm_gpiod_get(dev, "aux", GPIOD_ASIS);
- 	ret = PTR_ERR_OR_ZERO(led->aux_gpio);
--	if (ret) {
--		dev_err(dev, "cannot get aux-gpios %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		dev_info(dev, "aux-gpios not available, flash mode current might be reduced\n");
- 
- 	led->regulator = devm_regulator_get(dev, "vin");
- 	if (IS_ERR(led->regulator))
+-obj-$(CONFIG_ADB_PMU)		+= via-pmu.o via-pmu-event.o
++obj-$(CONFIG_ADB_PMU)		+= via-pmu.o
++obj-$(CONFIG_ADB_PMU_EVENT)	+= via-pmu-event.o
+ obj-$(CONFIG_ADB_PMU_LED)	+= via-pmu-led.o
+ obj-$(CONFIG_PMAC_BACKLIGHT)	+= via-pmu-backlight.o
+ obj-$(CONFIG_ADB_CUDA)		+= via-cuda.o
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 399074306a74..495fd35b11de 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -1463,7 +1463,7 @@ pmu_handle_data(unsigned char *data, int len)
+ 		pmu_pass_intr(data, len);
+ 		/* len == 6 is probably a bad check. But how do I
+ 		 * know what PMU versions send what events here? */
+-		if (len == 6) {
++		if (IS_ENABLED(CONFIG_ADB_PMU_EVENT) && len == 6) {
+ 			via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
+ 			via_pmu_event(PMU_EVT_LID, data[1]&1);
+ 		}
 -- 
-2.35.1
+2.32.0
 

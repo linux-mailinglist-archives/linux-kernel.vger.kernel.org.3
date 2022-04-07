@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1D34F868E
+	by mail.lfdr.de (Postfix) with ESMTP id EAA694F8690
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346589AbiDGRup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S1346599AbiDGRur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbiDGRum (ORCPT
+        with ESMTP id S1346585AbiDGRuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:50:42 -0400
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0971F0462
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:48:25 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id t4so5577231pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:48:25 -0700 (PDT)
+        Thu, 7 Apr 2022 13:50:44 -0400
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5701E961E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:48:37 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id h14so5806813lfl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0ylGqf4i8xaVHnuzuNWAr0rdTSo9ggN34EheyoaVllw=;
-        b=T2XNQRl+r0zIk1OVANQpnZ0kLjjeMgE3T1kBSsEGPJ/WdktFsvAc6X1DcFRBLJ7mXg
-         1Pb558/lqG3HBzLaYiOUJtl+vFvbc0IFPOfaPNP1pkXW8UwqxKmu3yHnPqHHHXDCn/Ee
-         qR5agD1tj66okNOXjq8CR9JdBjoHqbekDcnLMfdocVzpTAJtb23SiMaUGSWtSGNCdFO3
-         JdYOdYW9CBhjqgmsk/96rqmSmtHRwBmoBDOXQoyh31jggD2mHXLUIYoAk90jtAUP8/vB
-         59FDufcnLIH89VvuMJ9R5IlLMlUuujlWd4acEgEC2mWXax4J2y6zr6micuF65FeWVXvQ
-         gFvg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E6tlYhVs8F66Thqbq40p3Pn5Dg16Z81S23zARavPm7o=;
+        b=QQM0aroO8YK53f4qj9dqyDbJrUUCxfT5h704vqpHGE/8v7I6Oy5R5htpyavYKk55YN
+         GOksd/uXmEWEddGa9LSsDpL6jT6rUQJpoMZ+nDPSp8LS0+OWUhSvjhRlVIIuOcUyidDc
+         13Qt/QvvFntqxzTZEnDsf9kW5bEo8jZ2Mm1Rt/NjC26+j4mYxTcFlOFgkcxVojr9pKle
+         PEVCuAH97NAT36QW77qsk+dQfHy+kANuJ5TgkKjhujbKEZXZFzabgUlA4zhGFJqQ/B3i
+         U/mHUze90noA9E95C/feo8eb2axPkPxBkAKY29j3jmLZ6N88R5VyPDaJ8s1QcF/FBTqI
+         ca+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0ylGqf4i8xaVHnuzuNWAr0rdTSo9ggN34EheyoaVllw=;
-        b=rdm2tuz5CHuc7kipjZVnix34GBE/sGUIoYOiOFZe3DLLhsGc3mztc5X+fVr3hk38aq
-         3T7Fwb0MIHiIRIa97DQGL7q6vDvjsjLrcsRbOy1Dc7yIRnxyvVzH9qy4XMz7/QdduZTF
-         I6aPEF/7WzpDrBihC309xByWIWP/KFeejzvrvPsy+JpXqtR8m8MLtT04faaZRnv1EBRu
-         ILzYbHbTC1oQtHgbN50ElvWSl8hp778y7RLEjBCbelHwJKqN/ciVwrRUuRtK29zp6E9s
-         dNESwrTkXtQ17Nn55S5Ps4yOKJKZ0Sb1O38Iezuih5kX8yJIrja7NyCf9vEKUDPnfh3b
-         4ECA==
-X-Gm-Message-State: AOAM532e7Xb3BaCttlf2646v3mFN/twR7wCVwvoXtXQT0S1PCa30GX6o
-        wO7ZmUrdmjlZZd7SrFNK0q+8tQ==
-X-Google-Smtp-Source: ABdhPJz9gLSTqTEoNtyZG0nVnVCMWvVfvlkvkWMvPMxGQ/pln4HEy6TzKBmrC6xpjbWUw0Q91GsMzw==
-X-Received: by 2002:a05:6a00:1252:b0:4fa:afcc:7d24 with SMTP id u18-20020a056a00125200b004faafcc7d24mr15180138pfi.85.1649353643466;
-        Thu, 07 Apr 2022 10:47:23 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090a2f8600b001cb162f1f52sm2829320pjd.53.2022.04.07.10.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:47:22 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 17:47:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/31] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <Yk8jp5ZoQO6X8aTG@google.com>
-References: <20220407155645.940890-1-vkuznets@redhat.com>
- <20220407155645.940890-4-vkuznets@redhat.com>
- <Yk8gTB+x2UVE34Ds@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E6tlYhVs8F66Thqbq40p3Pn5Dg16Z81S23zARavPm7o=;
+        b=1/vcCKuouMeKB5fpk/+dnbHymHOwaboZQKk8JNqXfXdk0adUpIgWmOKO7pr1DOC68r
+         pl+zkcyjrK9iYd/dD1rDfsYKXOBuPTG58eJLJEyyPZsK90nCGulXcFoljPCQZgEWMowZ
+         KyiKoqUZUWzyAachoIVz27DsgibOr7HO7MClBtT1rjCF5Nv6tC65GWLetFMRCJbw/Oa8
+         hlyfriTe0clxy97S66XgOeGSNlPXOoko47kmh2VdQ8hk+t0iGxUtgprgT+2niJv7Mg3H
+         hK0LRsQB4Zvq2WIMzd2oj8NP5jtU4ZpNZuKEng7KlV0GqnXgTAHI1fHekp9snncWEvJl
+         011g==
+X-Gm-Message-State: AOAM533lui92p8yLwPfEP7DdF37IOQ0g4+SV3p1jJ0cf1IZJb5sfuYZu
+        QMA4BVHdD3Y+LkZ0+0yoqKFC6rbSFZR53qRK59EaMg==
+X-Google-Smtp-Source: ABdhPJxhaFUD0ynZi5lDtXOQke6xvPZ7Heh3zVXLCsNjLk96lL3cpNs8jeorjEz3Y7fdcNV+YU8FrlgxCDKOsXNWE44=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr10007744lfv.626.1649353656153; Thu, 07
+ Apr 2022 10:47:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk8gTB+x2UVE34Ds@google.com>
+References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-5-masahiroy@kernel.org>
+In-Reply-To: <20220406153023.500847-5-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 7 Apr 2022 10:47:24 -0700
+Message-ID: <CAKwvOdmT0G5b2nz-HBCXOVKaC2h5XNsoNbsAVHTo=86b5pdBDw@mail.gmail.com>
+Subject: Re: [PATCH 4/7] kbuild: split the second line of *.mod into *.usyms
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Sean Christopherson wrote:
-> > @@ -1857,12 +1940,13 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
-> >  	struct hv_tlb_flush_ex flush_ex;
-> >  	struct hv_tlb_flush flush;
-> >  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
-> > +	u64 entries[KVM_HV_TLB_FLUSH_RING_SIZE - 2];
-> 
-> What's up with the -2?  And given the multitude of things going on in this code,
-> I'd strongly prefer this be tlbflush_entries.
-> 
-> Actually, if you do:
-> 
-> 	u64 __tlbflush_entries[KVM_HV_TLB_FLUSH_RING_SIZE - 2];
-> 	u64 *tlbflush_entries;
+On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> The *.mod files have two lines; the first line lists the member objects
+> of the module, and the second line, if CONFIG_TRIM_UNUSED_KSYMS=y, lists
+> the undefined symbols.
 
-Looking at future patches, tlb_flush_entries is better for consistency (apply everywhere).
-
-> and drop all_addr, the code to get entries can be
-> 
-> 	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> 	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
-> 	    hc->rep_cnt > ARRAY_SIZE(tlbflush_entries)) {
-> 		tlbfluish_entries = NULL;
-> 	} else {
-> 		if (kvm_hv_get_tlbflush_entries(kvm, hc, __tlbflush_entries,
-> 						consumed_xmm_halves, data_offset))
-> 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> 		tlbfluish_entries = __tlbflush_entries;
-
-Heh, fluish, because TLB entries are somewhat fluid?
-
-> 	}
-> 
-> and the calls to queue flushes becomes
-> 
-> 			hv_tlb_flush_ring_enqueue(v, tlbflush_entries, hc->rep_cnt);
-> 
-> That way a bug will "just" be a NULL pointer dereference and not consumption of
-> uninitialized data (though such a bug might be caught be caught by the compiler).
+Enabling EXPERT and TRIM_UNUSED_KSYMS, I didn't find any .mod files
+containing a second line that wasn't empty. Is there an example that
+has such symbol list that I can use to verify?
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D654F8ABA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3614F8ACA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiDGWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 18:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S232021AbiDGWc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 18:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiDGWaN (ORCPT
+        with ESMTP id S230489AbiDGWcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 18:30:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C68307;
-        Thu,  7 Apr 2022 15:28:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 79D7E1F85A;
-        Thu,  7 Apr 2022 22:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649370490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=km6cLSvcevUTiMWx8bdylNikiJbG874gtpsaUOE+xKo=;
-        b=OQWeXtJtyDQCM4yM/PXITvLUzVSGb3pkrlHNB7HCBW1IUCYBcvcgcX5fZpLQofJ5y0xxHI
-        NaWZVbCb5mbYR7lf2jTuaG4s9JXMKiYF5sRqO58NQE0PR7LT1I+QoXt7+VnzXOb+AbnmKY
-        uGVfwrxZ9+t2AZVCltsN8hDV5SQ/QbI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649370490;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=km6cLSvcevUTiMWx8bdylNikiJbG874gtpsaUOE+xKo=;
-        b=QQ6ett+ZaKNSXw0mJnvlcfSPwRwWTQ7wqjNHS0CVcGJFtvV14risk0tkEMmqt6iJlcfFA4
-        oyFNRD5vx//WELDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B52913A66;
-        Thu,  7 Apr 2022 22:28:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pC4sGnplT2IGAwAAMHmgww
-        (envelope-from <bp@suse.de>); Thu, 07 Apr 2022 22:28:10 +0000
-Date:   Fri, 8 Apr 2022 00:28:09 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-tip-commits@vger.kernel.org,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Fangrui Song <maskray@google.com>, x86@kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [tip: x86/build] x86/build: Don't build CONFIG_X86_32 as
- -ffreestanding
-Message-ID: <Yk9leWxNnnuJWKcI@zn.tnic>
-References: <20200817220212.338670-5-ndesaulniers@google.com>
- <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
- <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 18:32:25 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3262BF5
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:30:23 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id k206-20020a2524d7000000b0063db1bacae1so5266762ybk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 15:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=cStI4M2iFbz1bpv2djlEn4K9jvZmqzWFBgSYSWYF+x8=;
+        b=bKVsI5vcdZPGsqrru63SQly3CBZ31oVZnBbHYZ87d93RhGVfNL5XB37zyrUDPJT3dS
+         aeqYwWoY4XkBQmdEbTxkcrR7+rk4Pqbg7T9Bn5CSlkmNyGERSCXiypCCtxHmk+o54X3P
+         hftJNXyK///uDkU7hQmRlcJPuikUW4/bzsZtcGVu/X1VWbqWL0Ju9L30N6FQrSoTFJaG
+         niS/nqfCCPKyL1zx2kiBljKQiob7iMFVqr/AyDwbq5CY1/sk71wq+IQc7rPe0YSrVhwu
+         IKngsMf5uNvgBv4E+fXDhWq0cLU58oxZWPCvNn0w7ypxKQqg9IVl37C6F9wVHQ4Wx4jp
+         yGUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=cStI4M2iFbz1bpv2djlEn4K9jvZmqzWFBgSYSWYF+x8=;
+        b=mP354NTEvnhClvW2Hpqz1V8iPEYrDI9LMevo2HznTOMxGz03USqG64G658oEPsNf3k
+         MKhhcGlj3JSawzIr8L/FL8NT9rRtr8S1bfK+RyiaKPF+yovLNcGw2TGH7i25x3A9SaCF
+         IczF1AkAmUDDS1YdAzIQy1wYNt4VZl81/lFujVwcEhjcLs/XBmp7WDzjPq1z8jpMu+qY
+         JhzhxLUst4Liw9kFkX0XukNTiQfZ+rpJ5jqExCjMeZ/mWVXv+k/SRq+gEsH1VrtxINN2
+         3y3SHYGmkaCLmC+9FP4sT83wuqdKS709fudzr7RH+1rhk6RNLQQK/8GfoBP0Yo1znbv/
+         CBgA==
+X-Gm-Message-State: AOAM5300CxZFZ+OiACEFJlpOq/oXiT3vYPCe74Qdo+mdFfKC+SGCefnj
+        vcdgeRJKnYgxnpN+EI9W4ccWnu0aXPfZTg==
+X-Google-Smtp-Source: ABdhPJz/OADY3enFbHtaaMV3WePYz5NmZ0NdIGrSWIhyWxCQcOBcH1W2Eu7hC5d9P9RZVv7HfnyHYxnhFM7/Ig==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5da8:b87d:4887:c585])
+ (user=dlatypov job=sendgmr) by 2002:a25:2d5f:0:b0:63d:b7ea:b14f with SMTP id
+ s31-20020a252d5f000000b0063db7eab14fmr12271542ybe.625.1649370623103; Thu, 07
+ Apr 2022 15:30:23 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 15:30:19 -0700
+Message-Id: <20220407223019.2066361-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH] kunit: tool: don't print out test statuses w/ 0s in summary
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:01:32AM -0700, Nick Desaulniers wrote:
-> Boris, Can I send you a patch to replace this one (with a guard for
-> clang) or a patch on top? i.e. what base would you prefer me to use.
+Before:
+> Testing complete. Passed: 137, Failed: 0, Crashed: 0, Skipped: 36, Errors: 0
 
-I don't mind much, whatever Kees wants. I can just as well drop this
-one completely and wait until you guys have fixed clang... or do the
-gcc-only thing... your call.
+After:
+> Testing complete. Passed: 137, Skipped: 36
 
-> Using mainline:
+Even with our current set of statuses, the output is a bit verbose.
+It could get worse in the future if we add more (e.g. timeout, kasan).
+Let's only print the relevant ones.
 
-The branch to use is in the tip tree and there x86/build - it is in the
-subject of the tip-bot2 message:
+I had previously been sympathetic to the argument that always
+printing out all the statuses would make it easier to parse results.
+But now we have commit acd8e8407b8f ("kunit: Print test statistics on
+failure"), there are test counts printed out in the raw output.
+We don't currently print out an overall total across all suites, but it
+would be easy to add, if we see a need for that.
 
-[tip: x86/build] ...
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_parser.py | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Thx.
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 807ed2bd6832..957907105429 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -94,11 +94,10 @@ class TestCounts:
+ 	def __str__(self) -> str:
+ 		"""Returns the string representation of a TestCounts object.
+ 		"""
+-		return ('Passed: ' + str(self.passed) +
+-			', Failed: ' + str(self.failed) +
+-			', Crashed: ' + str(self.crashed) +
+-			', Skipped: ' + str(self.skipped) +
+-			', Errors: ' + str(self.errors))
++		statuses = [('Passed', self.passed), ('Failed', self.failed),
++			('Crashed', self.crashed), ('Skipped', self.skipped),
++			('Errors', self.errors)]
++		return ', '.join('{}: {}'.format(s, n) for s, n in statuses if n > 0)
+ 
+ 	def total(self) -> int:
+ 		"""Returns the total number of test cases within a test
 
+base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
 -- 
-Regards/Gruss,
-    Boris.
+2.35.1.1178.g4f1659d476-goog
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

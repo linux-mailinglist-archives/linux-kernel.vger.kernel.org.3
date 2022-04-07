@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4524F7B85
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0988F4F7B8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbiDGJ0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S243536AbiDGJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiDGJ0j (ORCPT
+        with ESMTP id S232732AbiDGJ06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:26:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72D12CE16
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SV21BjX7P49KNLAmx5QmrX8Qf7AJrN7J0ADqi+mbeyI=; b=k97/CnGSb5mhw6lp1h+s+Z3Htc
-        mH4FivpzEF0rslNQ42eRr02aF8vOCz91eKL3ZZ3TGdTM+0UE0BF8Q1tS/t0ytWom4jYcAlbIs6vz/
-        lUc7mUtPl+b+Go9D0m//Fb1dOL4/VFuk8RhIjEsMJgtecV3pqJIt8qMAgVRPq177Oa+CsA8r88YF4
-        qXeHM09xH7KBKngPD2RvUkC8jBXWQB6KtYNL4xcdPGYJj/UJcXaEFdkqR7Ue/siR4/3rmxDgmZLEl
-        Vz1KTAh7iFwOTEqxCQlDU0y9zD9yanQUtlgrFlCBzuGKOyk4+PMthlGi9Puj77RBf4GuB0Utl0EZO
-        LjFCkdJg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ncON7-002Rk2-31; Thu, 07 Apr 2022 09:24:09 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E70F89862CF; Thu,  7 Apr 2022 11:24:05 +0200 (CEST)
-Date:   Thu, 7 Apr 2022 11:24:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>, hjl.tools@gmail.com
-Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
- __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
- vlv_allow_gt_wake.cold+0x0
-Message-ID: <20220407092405.GI2731@worktop.programming.kicks-ass.net>
-References: <202204041241.Hw855BWm-lkp@intel.com>
- <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
- <20220406000500.5hlaqy5zrdqsg5mg@treble>
- <87czhv11k1.ffs@tglx>
- <20220406053251.6dyfxrjmmgdwocfc@treble>
- <20220406074330.GD34954@worktop.programming.kicks-ass.net>
- <20220406163703.hhet4ai7ztd7g4j4@treble>
+        Thu, 7 Apr 2022 05:26:58 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794AF5007B;
+        Thu,  7 Apr 2022 02:24:58 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2375IfKD006910;
+        Thu, 7 Apr 2022 11:24:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=jjm66IhMmXssBJIGy9+tsQSPGgWrKquMgoKpEwFFvcE=;
+ b=fPZLiI2XbDepOd2MTC1IYuiTf2yNBTg9DGHWuEPllYK7cbjIrbf/5kMRR97oNKrJOpV9
+ NKduqSXlxz8zYVQdCvC8WG6CwsUYLNOC/3nx0nTDIhUZpbd7Pkj2K2s3E6xIcrdcGW39
+ kHwC0SBxXjYRFbdvJiNWxttSpd7iK1gy4PWmvyEHyhCvpIkyj4Bep9fxbEIvNPwRgZOj
+ iU2gblPzOlH49dIJCEPQ37uTxdQ7a1zM1pe8Hhed5R8P+BPuJVo2cWvd9xaHl0nx6trD
+ p4Q6ezV17XTvudMaSWnSbKsVr12TAujTfN0y/3Br39yO6/4F2QBJBQ4RVTzfCOwoDWXr MQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f8x9gjqkn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 11:24:52 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8F54810002A;
+        Thu,  7 Apr 2022 11:24:51 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7ECD2215A31;
+        Thu,  7 Apr 2022 11:24:51 +0200 (CEST)
+Received: from [10.201.22.81] (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 7 Apr
+ 2022 11:24:50 +0200
+Message-ID: <129c5d51-b645-e9eb-00ad-c660d2f16b9d@foss.st.com>
+Date:   Thu, 7 Apr 2022 11:24:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406163703.hhet4ai7ztd7g4j4@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm: sti: fix spelling mistake: rejec -> rejection
+Content-Language: en-US
+To:     Colin King <colin.king@canonical.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Vincent Abriou <vincent.abriou@st.com>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20191004082706.26478-1-colin.king@canonical.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20191004082706.26478-1-colin.king@canonical.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,33 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 09:37:03AM -0700, Josh Poimboeuf wrote:
-> On Wed, Apr 06, 2022 at 09:43:30AM +0200, Peter Zijlstra wrote:
-> > On Tue, Apr 05, 2022 at 10:32:51PM -0700, Josh Poimboeuf wrote:
-> > > More broadly, this issue could theoretically happen in some other places
-> > > throughout the kernel tree, since _THIS_IP_ is fundamentally unreliable
-> > > as currently written.
-> > > 
-> > > So we could look at making _THIS_IP_ more predictable.
-> > > 
-> > > Inline asm would work better ("lea 0(%rip), %[rip]"), but then you need
-> > > an arch-dependent implementation...
-> > 
-> > Well, there's a ton of _THIS_IP_ instances all around, and it would be
-> > unfortunate to have them grow into actual code :/
-> 
-> What do you mean by growing into actual code?  It's still just a single
-> instruction, as was the immediate load before.
 
-Aah, indeed. I was somehow thinking we'd get extra instructions.
 
-> Though, you pasted this on irc:
+On 10/4/19 10:27, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
->   #define _THIS_IP_  ({ __label__ __here; __here: asm_volatile_goto ("":::: __here); (unsigned long)&&__here; })
+> In other places of the driver the string hdmi_rejection_pll is
+> used instead of the truncated hdmi_rejec_pll, so use this string
+> instead to be consistent.
 > 
-> which seems decent to me, though less than ideal because it grows an
-> ENDBR.  But I like its arch-independence, so yeah, LGTM.
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>   drivers/gpu/drm/sti/sti_hdmi.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/sti/sti_hdmi.c b/drivers/gpu/drm/sti/sti_hdmi.c
+> index 814560ead4e1..e2018e4a3ec5 100644
+> --- a/drivers/gpu/drm/sti/sti_hdmi.c
+> +++ b/drivers/gpu/drm/sti/sti_hdmi.c
+> @@ -886,7 +886,7 @@ static void sti_hdmi_pre_enable(struct drm_bridge *bridge)
+>   	if (clk_prepare_enable(hdmi->clk_tmds))
+>   		DRM_ERROR("Failed to prepare/enable hdmi_tmds clk\n");
+>   	if (clk_prepare_enable(hdmi->clk_phy))
+> -		DRM_ERROR("Failed to prepare/enable hdmi_rejec_pll clk\n");
+> +		DRM_ERROR("Failed to prepare/enable hdmi_rejection_pll clk\n");
+>   
+>   	hdmi->enabled = true;
+>   
 
-I did send hjl an email about that extra endbr, because I really don't
-like that. And jump_label (also using asm-goto) doesn't grow those endbr
-instructions, so something is weird.
+Dear Colin,
+Many thanks for your patch,
+Applied on drm-misc-next.
+and sorry for the delay.
+Have a good day
+Philippe :-)

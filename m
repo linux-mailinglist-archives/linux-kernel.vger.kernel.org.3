@@ -2,113 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E464F8184
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C7D4F8188
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343898AbiDGO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S1343914AbiDGO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiDGO0S (ORCPT
+        with ESMTP id S229533AbiDGO1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:26:18 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC3A182AC1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:24:04 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id kl29so5070009qvb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vlSZXPc/WWB6O0Ntn/+6VGgM4mQ/P1gNa/KkL6kCL7M=;
-        b=oeGPjNgtHVvKBxNMhG8G4Q8QuOtzWGHoB4yEDz/eqEuoLw4MoKrJV0Cu3zGSYz9kKw
-         HVroEobn9e+OLjnrG12dG9ZFzIfqeETZYJZxwSrKNz7g0IG8De4hOMEkfSHY/z0Zejfj
-         H1JlCxOss9whUG21mymflAK/TnzsF6V7KXt+IyKDTNevlzVXa2wn+6I48Nh6SdUCVmjd
-         aiNXnTtKVoinWgCb2wJ7v3Qi0EOZlwzRriDJb7MKWBJ0CnXgrVJYJLMXgdiyy+v5tHHh
-         41RpzdJsqTxqfiMUA/+gw2XoYaVRuDwkFqVtwMLYuXJ4pf560ZK2xU2By+QSLoO4DrjQ
-         Ga+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vlSZXPc/WWB6O0Ntn/+6VGgM4mQ/P1gNa/KkL6kCL7M=;
-        b=3+eOtKbDoFGJUZQBUO8MvW3nYB9Ci+kxWfJRNYV+SlTiytGtcBxKhLzOXVYKWj6MqZ
-         We+FHvi+nOzaC/ZBOifRLNEaFTBRyG5oM/Hjyd2ktRo8GjA+EgGdEKhOHumU/W1xNJxq
-         sfuEWD4tRCHuVSwrm0Ju9XF1JH2bBp8RTXsq18ceUVNjEOMxHN8n839i+X8A4jqTkvYm
-         fEyWBSbMoykT2OQEyj9+2ZIyLhNFihslkPkELr+7eHxA/R0xSCpSiZL4RRQ/9WZX2qXZ
-         9sZu/QkQCVyGq8uwqEnXKslH/HSliwwG/3McaIKA+ExDtkK5uzwKS4BsTQOJp/e9PDBX
-         KA0g==
-X-Gm-Message-State: AOAM532yIKQRU+WWZq0p4vc9+0pF/EudPk16geRzo2zd96EygF+bwvbK
-        kzVqhd+9IM0hHiJyiuHPryrsmg==
-X-Google-Smtp-Source: ABdhPJwBTVSbg6sLzWrCS9NGMS5EzxPSS5wkz2ckXLOjrhXFly+LUsn4jydlD/Qq90o6V5TmAN5lHw==
-X-Received: by 2002:a0c:a942:0:b0:443:a395:cc1f with SMTP id z2-20020a0ca942000000b00443a395cc1fmr11910876qva.68.1649341438080;
-        Thu, 07 Apr 2022 07:23:58 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05620a0b0300b00699c6a9b2d1sm7135084qkg.32.2022.04.07.07.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:23:57 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ncT3D-00EF1o-Ui; Thu, 07 Apr 2022 11:23:55 -0300
-Date:   Thu, 7 Apr 2022 11:23:55 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     duoming@zju.edu.cn
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        mustafa.ismail@intel.com, shiraz.saleem@intel.com,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
-        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: Re: [PATCH 09/11] drivers: infiniband: hw: Fix deadlock in
- irdma_cleanup_cm_core()
-Message-ID: <20220407142355.GV64706@ziepe.ca>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <4069b99042d28c8e51b941d9e698b99d1656ed33.1649310812.git.duoming@zju.edu.cn>
- <20220407112455.GK3293@kadam>
- <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
+        Thu, 7 Apr 2022 10:27:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C33189A03;
+        Thu,  7 Apr 2022 07:24:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D015561C65;
+        Thu,  7 Apr 2022 14:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C17C385A4;
+        Thu,  7 Apr 2022 14:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649341455;
+        bh=w14ZPYdK01Rmbqc8luZ4J6X6VeW7r2KK5+F7YTyBwz4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TAywI+GpgGL/Hf8yI/GiNlm9V0dtjIj9Bvl5Gu4n2WRg/h7qkd/wJYaCSqlt9cqQe
+         fmNv865oCZado3Q6vyk2+lOqad6zUlSl/UsBVWG0hNDkQvL4wDTOrnXozI8fHJggof
+         rs1HdivX/eU+DNFyI7xMA/CKAls9YF/shkA24ZcFnDaOTQOtB3RLxQHyvsUNMLoq2Z
+         l5djZGerUM2bENo/OBKaLrS8agNtgFPak3QAFtgFBUHj5QJmaVTySEvpWKXKVdUwkr
+         D28tWH1kajSkzEUI+goASr/y2KNmCtXje9f+geWHPshF6yubJii+Gb9xHwC3PJ7N5Z
+         BgMvOFK3AWovA==
+Date:   Thu, 7 Apr 2022 22:24:05 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 17/20] erofs: implement fscache-based data read for
+ non-inline layout
+Message-ID: <Yk70BTzzoaOvET5c@debian>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-18-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220406075612.60298-18-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 08:54:13PM +0800, duoming@zju.edu.cn wrote:
-> > > diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
-> > > index dedb3b7edd8..019dd8bfe08 100644
-> > > +++ b/drivers/infiniband/hw/irdma/cm.c
-> > > @@ -3252,8 +3252,11 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
-> > >  		return;
-> > >  
-> > >  	spin_lock_irqsave(&cm_core->ht_lock, flags);
-> > > -	if (timer_pending(&cm_core->tcp_timer))
-> > > +	if (timer_pending(&cm_core->tcp_timer)) {
-> > > +		spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-> > >  		del_timer_sync(&cm_core->tcp_timer);
-> > > +		spin_lock_irqsave(&cm_core->ht_lock, flags);
-> > > +	}
-> > >  	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-> > 
-> > This lock doesn't seem to be protecting anything.  Also do we need to
-> > check timer_pending()?  I think the del_timer_sync() function will just
-> > return directly if there isn't a pending lock?
+On Wed, Apr 06, 2022 at 03:56:09PM +0800, Jeffle Xu wrote:
+> Implement the data plane of reading data from data blobs over fscache
+> for non-inline layout.
 > 
-> Thanks a lot for your advice, I will remove the timer_pending() and the
-> redundant lock.
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> ---
+>  fs/erofs/fscache.c  | 52 +++++++++++++++++++++++++++++++++++++++++++++
+>  fs/erofs/inode.c    |  5 +++++
+>  fs/erofs/internal.h |  2 ++
+>  3 files changed, 59 insertions(+)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index 158cc273f8fb..65de1c754e80 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -60,10 +60,62 @@ static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
+>  	return ret;
+>  }
+>  
+> +static int erofs_fscache_readpage(struct file *file, struct page *page)
+> +{
+> +	struct folio *folio = page_folio(page);
+> +	struct inode *inode = folio_file_mapping(folio)->host;
+> +	struct super_block *sb = inode->i_sb;
+> +	struct erofs_map_blocks map;
+> +	struct erofs_map_dev mdev;
+> +	erofs_off_t pos;
+> +	loff_t pstart;
+> +	int ret = 0;
+> +
+> +	DBG_BUGON(folio_size(folio) != EROFS_BLKSIZ);
+> +
+> +	pos = folio_pos(folio);
+> +	map.m_la = pos;
+> +
+> +	ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
+> +	if (ret)
+> +		goto out_unlock;
+> +
+> +	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
+> +		folio_zero_range(folio, 0, folio_size(folio));
+> +		goto out_uptodate;
+> +	}
+> +
+> +	/* no-inline readpage */
+> +	mdev = (struct erofs_map_dev) {
+> +		.m_deviceid = map.m_deviceid,
+> +		.m_pa = map.m_pa,
+> +	};
+> +
+> +	ret = erofs_map_dev(sb, &mdev);
+> +	if (ret)
+> +		goto out_unlock;
+> +
+> +	pstart = mdev.m_pa + (pos - map.m_la);
+> +	ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
+> +			folio_file_mapping(folio), folio_pos(folio),
+> +			folio_size(folio), pstart);
+> +
+> +out_uptodate:
+> +	if (!ret)
+> +		folio_mark_uptodate(folio);
+> +out_unlock:
+> +	folio_unlock(folio);
+> +	return ret;
+> +}
+> +
+>  static const struct address_space_operations erofs_fscache_meta_aops = {
+>  	.readpage = erofs_fscache_meta_readpage,
+>  };
+>  
+> +const struct address_space_operations erofs_fscache_access_aops = {
+> +	.readpage = erofs_fscache_readpage,
+> +};
+> +
+>  /*
+>   * Get the page cache of data blob at the index offset.
+>   * Return: up to date page on success, ERR_PTR() on failure.
+> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+> index e8b37ba5e9ad..88b51b5fb53f 100644
+> --- a/fs/erofs/inode.c
+> +++ b/fs/erofs/inode.c
+> @@ -296,7 +296,12 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
+>  		err = z_erofs_fill_inode(inode);
+>  		goto out_unlock;
+>  	}
+> +
 
-Does del_timer_sync work with a self-rescheduling timer like this has?
+unnecessary modification.
 
-Jason
+Otherwise looks good:
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
+>  	inode->i_mapping->a_ops = &erofs_raw_access_aops;
+> +#ifdef CONFIG_EROFS_FS_ONDEMAND
+> +	if (erofs_is_fscache_mode(inode->i_sb))
+> +		inode->i_mapping->a_ops = &erofs_fscache_access_aops;
+> +#endif
+>  
+>  out_unlock:
+>  	erofs_put_metabuf(&buf);
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index e186051f0640..336d19647c96 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -642,6 +642,8 @@ int erofs_fscache_register_cookie(struct super_block *sb,
+>  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
+>  
+>  struct folio *erofs_fscache_get_folio(struct super_block *sb, pgoff_t index);
+> +
+> +extern const struct address_space_operations erofs_fscache_access_aops;
+>  #else
+>  static inline int erofs_fscache_register_fs(struct super_block *sb) { return 0; }
+>  static inline void erofs_fscache_unregister_fs(struct super_block *sb) {}
+> -- 
+> 2.27.0
+> 

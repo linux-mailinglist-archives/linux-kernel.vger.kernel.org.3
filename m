@@ -2,109 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0988F4F7B8A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1C64F7B8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243536AbiDGJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S243741AbiDGJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiDGJ06 (ORCPT
+        with ESMTP id S241322AbiDGJ1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:26:58 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794AF5007B;
-        Thu,  7 Apr 2022 02:24:58 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2375IfKD006910;
-        Thu, 7 Apr 2022 11:24:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=jjm66IhMmXssBJIGy9+tsQSPGgWrKquMgoKpEwFFvcE=;
- b=fPZLiI2XbDepOd2MTC1IYuiTf2yNBTg9DGHWuEPllYK7cbjIrbf/5kMRR97oNKrJOpV9
- NKduqSXlxz8zYVQdCvC8WG6CwsUYLNOC/3nx0nTDIhUZpbd7Pkj2K2s3E6xIcrdcGW39
- kHwC0SBxXjYRFbdvJiNWxttSpd7iK1gy4PWmvyEHyhCvpIkyj4Bep9fxbEIvNPwRgZOj
- iU2gblPzOlH49dIJCEPQ37uTxdQ7a1zM1pe8Hhed5R8P+BPuJVo2cWvd9xaHl0nx6trD
- p4Q6ezV17XTvudMaSWnSbKsVr12TAujTfN0y/3Br39yO6/4F2QBJBQ4RVTzfCOwoDWXr MQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f8x9gjqkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 11:24:52 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8F54810002A;
-        Thu,  7 Apr 2022 11:24:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7ECD2215A31;
-        Thu,  7 Apr 2022 11:24:51 +0200 (CEST)
-Received: from [10.201.22.81] (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 7 Apr
- 2022 11:24:50 +0200
-Message-ID: <129c5d51-b645-e9eb-00ad-c660d2f16b9d@foss.st.com>
-Date:   Thu, 7 Apr 2022 11:24:40 +0200
+        Thu, 7 Apr 2022 05:27:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B21F8BE14
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:25:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 323EBCE26CD
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77837C385A0;
+        Thu,  7 Apr 2022 09:25:13 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 10:25:10 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <Yk6t9jhof9MJV6TG@arm.com>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-8-catalin.marinas@arm.com>
+ <Yk5/FpCR10sndTR1@n131-248-037.byted.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm: sti: fix spelling mistake: rejec -> rejection
-Content-Language: en-US
-To:     Colin King <colin.king@canonical.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Vincent Abriou <vincent.abriou@st.com>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20191004082706.26478-1-colin.king@canonical.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <20191004082706.26478-1-colin.king@canonical.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk5/FpCR10sndTR1@n131-248-037.byted.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/4/19 10:27, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Thu, Apr 07, 2022 at 02:14:15PM +0800, Muchun Song wrote:
+> On Tue, Apr 05, 2022 at 02:57:55PM +0100, Catalin Marinas wrote:
+> > ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
+> > operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
+> > alignment.
+> > 
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > ---
+> >  include/linux/crypto.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+> > index 2324ab6f1846..654b9c355575 100644
+> > --- a/include/linux/crypto.h
+> > +++ b/include/linux/crypto.h
+> > @@ -167,7 +167,7 @@
+> >   * maintenance for non-coherent DMA (cache invalidation in particular) does not
+> >   * affect data that may be accessed by the CPU concurrently.
+> >   */
+> > -#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
+> > +#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
 > 
-> In other places of the driver the string hdmi_rejection_pll is
-> used instead of the truncated hdmi_rejec_pll, so use this string
-> instead to be consistent.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->   drivers/gpu/drm/sti/sti_hdmi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/sti/sti_hdmi.c b/drivers/gpu/drm/sti/sti_hdmi.c
-> index 814560ead4e1..e2018e4a3ec5 100644
-> --- a/drivers/gpu/drm/sti/sti_hdmi.c
-> +++ b/drivers/gpu/drm/sti/sti_hdmi.c
-> @@ -886,7 +886,7 @@ static void sti_hdmi_pre_enable(struct drm_bridge *bridge)
->   	if (clk_prepare_enable(hdmi->clk_tmds))
->   		DRM_ERROR("Failed to prepare/enable hdmi_tmds clk\n");
->   	if (clk_prepare_enable(hdmi->clk_phy))
-> -		DRM_ERROR("Failed to prepare/enable hdmi_rejec_pll clk\n");
-> +		DRM_ERROR("Failed to prepare/enable hdmi_rejection_pll clk\n");
->   
->   	hdmi->enabled = true;
->   
+> I don't think this should be changed since ARCH_KMALLOC_MINALIGN is
+> already aligned with the size what you need.
 
-Dear Colin,
-Many thanks for your patch,
-Applied on drm-misc-next.
-and sorry for the delay.
-Have a good day
-Philippe :-)
+With this series, ARCH_KMALLOC_MINALIGN is no longer safe for
+non-coherent DMA on all arm64 SoCs, that's what ARCH_DMA_MINALIGN will
+cover.
+
+Now, looking at the comment for CRYPTO_MINALIGN, one aspect it covers is
+the minimum alignment required by C for the crypto_tfm structure access.
+So a smaller ARCH_KMALLOC_MINALIGN would do. But the other part of the
+comment mentions in-structure alignment for non-coherent DMA. Here we'd
+need the upper bound alignment, ARCH_DMA_MINALIGN.
+
+I'll follow up on Herbert's email as I think he has a good point on
+structure vs kmalloc() alignment.
+
+-- 
+Catalin

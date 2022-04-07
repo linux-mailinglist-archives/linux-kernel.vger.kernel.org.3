@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1271A4F7C39
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F034F7C40
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244057AbiDGJ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S244065AbiDGKA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiDGJ7n (ORCPT
+        with ESMTP id S242642AbiDGKA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:59:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C5164E1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:57:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C32D121118;
-        Thu,  7 Apr 2022 09:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649325462; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5nI9oyUvHFM5eGetZ+O4IuNGMmysnPBQecOrPZDio/k=;
-        b=CNJ7geQJSlcG/RhHpa1tjottVeZqYpQT0Mw42RTwmO1M5FPxDSdiO8SnH+xXhB1p8Q0BdK
-        aovdAVkYlUvQ/Uze/MDUfWR2fJAGM+2oBLs/Mm9axNiNGztzwLkho45nhuFRcuiWvbvDRb
-        bdnMPSjLgagVrzhmy9e8Za9gxf4pgA4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649325462;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5nI9oyUvHFM5eGetZ+O4IuNGMmysnPBQecOrPZDio/k=;
-        b=/V2x1NPw0ZVL6unKqEvrg10FqFRoxtfHvMrNkYMYnJc9ovOs4ozktsQub9dj0WecH/QxMI
-        eElJvePzfLtUNGBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EB3513485;
-        Thu,  7 Apr 2022 09:57:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0741Ipa1TmLtOwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 07 Apr 2022 09:57:42 +0000
-Message-ID: <d179e539-1da6-c489-b2b4-ad97367bd73a@suse.cz>
-Date:   Thu, 7 Apr 2022 11:57:42 +0200
+        Thu, 7 Apr 2022 06:00:27 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31541546B9;
+        Thu,  7 Apr 2022 02:58:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 18CC71F45CC6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649325506;
+        bh=4JhwlWRjO0CnzyWEzVO1sVOFEnHl7+kZT9rj4eGLerw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bNraVnOH9Rg8cMTjWdgj0JSpgVHxQRUECNA+C7JwxDOZVVd0Rs+ZVbOD6eCeaEUK4
+         amfTO9YV0GuLdFz5iQU1LRj6lTD/kORLNt0j/xbgUUK+DAYcw1UeWYIEwFFurSEVhO
+         j1i1gLkCk2q2rA1sQUjmeR3ODlI9uncSekbN41AqAnmfqfVFbolxRbb0H47irTI3wc
+         XdQzJ0Srp5LbqDY/5actT3/tKAK+c2CaKD9XMyjzyQ0gpM7VdaBSrSVboK5Qv6JQyF
+         QEv1uO6wjLeDoGRDLnuLFlxTBZaJt4DgjSehnVKF8PNKUBHK+7TK7nXC9lvWS7QKQh
+         zxwjFqJZp6v6w==
+Message-ID: <2fd35c28-0911-df87-c7e4-f7cbdba1f09d@collabora.com>
+Date:   Thu, 7 Apr 2022 12:58:22 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] mm, kfence: support kmem_dump_obj() for KFENCE objects
+Subject: Re: [PATCH v3 10/10] drm/msm: Add a way for userspace to allocate GPU
+ iova
 Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, kernel test robot <oliver.sang@intel.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <20220406131558.3558585-1-elver@google.com>
- <4b592848-ef06-ea8a-180a-3efc22b1bb0e@suse.cz>
- <CANpmjNP-XtRB3zTOymH_PCKbDMHoJVYx6UQd_xoM-s33bXJk2w@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CANpmjNP-XtRB3zTOymH_PCKbDMHoJVYx6UQd_xoM-s33bXJk2w@mail.gmail.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220406214636.1156978-1-robdclark@gmail.com>
+ <20220406214636.1156978-11-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220406214636.1156978-11-robdclark@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,48 +66,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 11:48, Marco Elver wrote:
-> On Thu, 7 Apr 2022 at 11:43, Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> On 4/6/22 15:15, Marco Elver wrote:
->> > Calling kmem_obj_info() via kmem_dump_obj() on KFENCE objects has been
->> > producing garbage data due to the object not actually being maintained
->> > by SLAB or SLUB.
->> >
->> > Fix this by implementing __kfence_obj_info() that copies relevant
->> > information to struct kmem_obj_info when the object was allocated by
->> > KFENCE; this is called by a common kmem_obj_info(), which also calls the
->> > slab/slub/slob specific variant now called __kmem_obj_info().
->> >
->> > For completeness, kmem_dump_obj() now displays if the object was
->> > allocated by KFENCE.
->> >
->> > Link: https://lore.kernel.org/all/20220323090520.GG16885@xsang-OptiPlex-9020/
->> > Fixes: b89fb5ef0ce6 ("mm, kfence: insert KFENCE hooks for SLUB")
->> > Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
->> > Reported-by: kernel test robot <oliver.sang@intel.com>
->> > Signed-off-by: Marco Elver <elver@google.com>
->> > Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->>
->> Thanks.
->> Given the impact on slab, and my series exposing the bug, I will add this to
->> slab tree.
+On 4/7/22 00:46, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
-> It's already in Andrew's tree:
-> https://lore.kernel.org/all/20220406192351.2E115C385A5@smtp.kernel.org/T/#u
+> The motivation at this point is mainly native userspace mesa driver in a
+> VM guest.  The one remaining synchronous "hotpath" is buffer allocation,
+> because guest needs to wait to know the bo's iova before it can start
+> emitting cmdstream/state that references the new bo.  By allocating the
+> iova in the guest userspace, we no longer need to wait for a response
+> from the host, but can just rely on the allocation request being
+> processed before the cmdstream submission.  Allocation failures (OoM,
+> etc) would just be treated as context-lost (ie. GL_GUILTY_CONTEXT_RESET)
+> or subsequent allocations (or readpix, etc) can raise GL_OUT_OF_MEMORY.
+> 
+> v2: Fix inuse check
+> v3: Change mismatched iova case to -EBUSY
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 ++++++
+>  drivers/gpu/drm/msm/msm_drv.c           | 21 +++++++++++
+>  drivers/gpu/drm/msm/msm_gem.c           | 48 +++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/msm_gem.h           |  8 +++++
+>  drivers/gpu/drm/msm/msm_gem_vma.c       |  2 ++
+>  include/uapi/drm/msm_drm.h              |  3 ++
+>  6 files changed, 92 insertions(+)
 
-Ah, missed that.
-
-> Does your series and this patch merge cleanly?
-
-Yeah the dependency is not on the code level.
-
-> If so, maybe leaving in
-> -mm is fine. Of course I don't mind either way and it's up to you and
-> Andrew.
-
-Yeah should be fine as linux-next will be safe with both trees merged. Thanks.
-
-> Thanks,
-> -- Marco
-
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>

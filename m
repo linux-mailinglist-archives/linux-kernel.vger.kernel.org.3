@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0794F8879
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9A84F886C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiDGUdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S229884AbiDGUdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiDGUdW (ORCPT
+        with ESMTP id S229939AbiDGUda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:33:22 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC3320DA1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:18:41 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id oo16-20020a17090b1c9000b001c6d21e8c04so6413392pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Ku8/xhQuY+DnaUKfaV/zzEU2U1z2wt3bXsnqQqFqkqc=;
-        b=M3ZS8Aiq4mZdEltM4TPvQxBlNDtZ5ARAyG4HJSf7KbrTU9eEooYFvgfOobSIGlllyi
-         CE02YilAIANO7ovsSumaS3UAoN/fZBTfzlEOZIaX/CXkYe74UAH5vZzcrGwRIFwwALCq
-         DZC4F6uzVaWWgV8M6b2y1Noxmjm1vFrdoNbqzkXUwV29S0QFkbL2NL4Klv0EZvKVXpAd
-         UwgqmZwO5sKsSv8HpkhpLuUG0Qi2YVssaT0issL/qLqJuYMvUb3HPtOTLXh0UxS9HdOi
-         B9OyKC3dQ9xz7PUO9RmbRRvA9WqciG8SdgAksytDfEgdDCmFhyBSrWT1uGXykoWyhlIw
-         Dp/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Ku8/xhQuY+DnaUKfaV/zzEU2U1z2wt3bXsnqQqFqkqc=;
-        b=UYvoVXIj2JJeO9I8L/FhOn8AhZ8S11d8k6tjf0GYqmFKzvwl5kniQHoSi9/JRJL8BH
-         z5E+CeceiUVoCGUFwDjCILtsPHkgkBpG3PWvWTAHfM3v+cdI7x2FUiIX4RM/LWjm69+W
-         p6RLWONP3bpf32HrHAMHb9IZjDhK2EQZb8tKu5LQu004SPK4m27JTP/a4Aw/FaCTbnIe
-         FZXubStU1BJSkHDmjCKuzgqH57xxPpekoyP0mulMfDE6lz8f7NzePp1CPYiLOZrHCxrs
-         9g5h4oCAXQkJb3sjXsp17ERx+z9q1cMjLAOKf5ej5Y7Wx9XUmm/Z7nbiIeVuqrFBCsUa
-         jS9w==
-X-Gm-Message-State: AOAM530qvueaI55MGVxJ4hCSHheqnvX0/Vzgrqp1Ko2RPeQbIlLT2YoT
-        a9KeRZa4rz4YhIZ6GodD6MfMhOvMRYU=
-X-Google-Smtp-Source: ABdhPJzMbjER7HNgCRI9nhUzY8Uo13WQPhIvuQ+NCrB4gGoHKtJ31PXyU9pKTuZK5BX9ao19iY2kTP87Lrg=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:469d:83b1:de7b:c47f])
- (user=pgonda job=sendgmr) by 2002:a17:903:1251:b0:156:9d8e:1077 with SMTP id
- u17-20020a170903125100b001569d8e1077mr15375452plh.116.1649362721388; Thu, 07
- Apr 2022 13:18:41 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 13:18:38 -0700
-Message-Id: <20220407201838.715024-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v4] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Thu, 7 Apr 2022 16:33:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120473221D4;
+        Thu,  7 Apr 2022 13:18:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAD59B82988;
+        Thu,  7 Apr 2022 20:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6271C385A0;
+        Thu,  7 Apr 2022 20:18:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649362722;
+        bh=jB0b+SlC9dwLd3Fneo0zI4vY6syokc28jlRCIf8zXA4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BViEv3Ix23CEmQyPeLPIvzPN5CfBrL0hOlw7aNMliEc1PT1E9pzPJu2fN+MaAocj0
+         XwUm0AAe3v0+kPjxq5vGB3uOBwbBFp2pP8+KY1Am3ubinpziYn3R/qgfStksHt9s0u
+         KQ/P16rA2pQz2YgnRsC8LFfe5/6YgKOmnLhtiGuhWnysN9qhCXgjCnyne38akLJl0k
+         brHc87e4U/gP7s/O/57/WIYM3/HXbVKZ7ugL2LX9Jos6SRzwP8vPxPbZJBg5sr3G73
+         0R5Gz6IYd4RZ5TA4du6R15lCPSUHRYoXojqqLkJnpj7e3RkIG8zVmKuomh7zVnkhER
+         CJUQrWreD71zA==
+Date:   Thu, 7 Apr 2022 22:18:39 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 07/10] clk: si5351: use i2c_match_id and simple i2c
+ probe
+Message-ID: <Yk9HH4CI2aIfCJpb@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220407151831.2371706-1-steve@sk2.org>
+ <20220407151831.2371706-8-steve@sk2.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V4K66V1CeXlEv5ce"
+Content-Disposition: inline
+In-Reply-To: <20220407151831.2371706-8-steve@sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEV-ES guests can request termination using the GHCB's MSR protocol. See
-AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
-struct the userspace VMM can clearly see the guest has requested a SEV-ES
-termination including the termination reason code set and reason code.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
+--V4K66V1CeXlEv5ce
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
-V4
- * Updated to Sean and Paolo's suggestion of reworking the
-   kvm_run.system_event struct to ndata and data fields to fix the
-   padding.
+On Thu, Apr 07, 2022 at 05:18:28PM +0200, Stephen Kitt wrote:
+> As part of the ongoing i2c transition to the simple probe
+> ("probe_new"), this patch uses i2c_match_id to retrieve the
+> driver_data for the probed device. The id parameter is thus no longer
+> necessary and the simple probe can be used instead.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-V3
- * Add Documentation/ update.
- * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
-   to KVM_SHUTDOWN_REQ.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-V2
- * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
 
-Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
-reason code set and reason code and then observing the codes from the
-userspace VMM in the kvm_run.shutdown.data fields.
+--V4K66V1CeXlEv5ce
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
- arch/x86/kvm/svm/sev.c   | 9 +++++++--
- include/uapi/linux/kvm.h | 5 ++++-
- 2 files changed, 11 insertions(+), 3 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 75fa6dd268f0..1a080f3f09d8 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
- 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
- 			reason_set, reason_code);
- 
--		ret = -EINVAL;
--		break;
-+		vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
-+		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM |
-+					       KVM_SYSTEM_EVENT_NDATA_VALID;
-+		vcpu->run->system_event.ndata = 1;
-+		vcpu->run->system_event.data[1] = control->ghcb_gpa;
-+
-+		return 0;
- 	}
- 	default:
- 		/* Error, keep GHCB MSR value as-is */
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 8616af85dc5d..dd1d8167e71f 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -444,8 +444,11 @@ struct kvm_run {
- #define KVM_SYSTEM_EVENT_SHUTDOWN       1
- #define KVM_SYSTEM_EVENT_RESET          2
- #define KVM_SYSTEM_EVENT_CRASH          3
-+#define KVM_SYSTEM_EVENT_SEV_TERM       4
-+#define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
- 			__u32 type;
--			__u64 flags;
-+			__u32 ndata;
-+			__u64 data[16];
- 		} system_event;
- 		/* KVM_EXIT_S390_STSI */
- 		struct {
--- 
-2.35.1.1178.g4f1659d476-goog
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJPRx8ACgkQFA3kzBSg
+KbZEFw/8C52BDRz7DaBFM9zyIZgS+vC+kx2zV80DnVNBBnEfjCATQtljjsxhjuid
+Dc4m41tVM5UlwhPnWOsT+aola6xudbfZKo8Oi6gz0HtbpMnevMWEGRCPJniNYTuv
+M/b61pISLL5OrEo8e3sWg2XFZctnr4CNiE+b5kjSm9qC9a3gNRvzLFubw834H1yF
+JeFg1acWkZG+znzCFbRvI9F405V2Ywe2E1Q0nfiEhmhbiry19fc2zRcXNaEe8R/E
+Pdk0Ez75J7y4pR9IzbO8+e/gXxtRRvtgmjAwh1ba8IUo0nF5cW53vEOskN0AxOUo
+VxzYcYt9+W1l4zAtRF2ZCFeSE+DzlK9GvKFHnQD3VixCVv6aVy+u4ykLGjgDu5Hm
+/p36VLH4VGdLmzz7qt1hsUTSr2z5XmPf9jKUCPIzJ9R5ZQhodv/qCVSd4dvAcwe1
+2KXWzJSPDo7SHjmVD4nrd6h9WFWZp4OUx7YcGXdBlUtNKFeafc7hh8XbkiHvSiET
+4Xt2oHYnJG/Qw09HgfkRncpXh0L+Tl5K2NouthL5mI5ztbqoJDDKDx8JJmhZm1QO
+t3e6aAfdcr+IoxOqqa8r8Jb6pUDzg4gg+e21wOj8Pkt7C33Ul370G1BHy2XXyIE0
+mOXovlH9HXvUNfKW98Imnz1lFy8sSWKnmLcDdRXNTmYhislNSfk=
+=FoRp
+-----END PGP SIGNATURE-----
 
+--V4K66V1CeXlEv5ce--

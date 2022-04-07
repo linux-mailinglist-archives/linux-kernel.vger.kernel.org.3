@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D8E4F8701
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4512C4F8704
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243438AbiDGSTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S1346819AbiDGSUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDGSTF (ORCPT
+        with ESMTP id S233337AbiDGSUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:19:05 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029BE398;
-        Thu,  7 Apr 2022 11:17:05 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id b17-20020a0568301df100b005ce0456a9efso4456607otj.9;
-        Thu, 07 Apr 2022 11:17:04 -0700 (PDT)
+        Thu, 7 Apr 2022 14:20:11 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C599EE4;
+        Thu,  7 Apr 2022 11:18:10 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o20so5721600pla.13;
+        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
+        b=WBsYEqJ7FltBHsC6oK/iY4SdWSX6yl+D4SwDFOBtZLxKw67+b4LuB50h908ertO7zg
+         Dcthrade36ld2as5TY3PkMw329X2qDnHvylK/N1Cm7ykcJ0GqY14WgfySksy1AbU3YEg
+         MIUV5fDNgM+qHqrcjk2DAQGR8aK8ykfQAnzRzMNSi5lB12PEpl88ZQQ+9+EYRgR0RRu2
+         h6S2Nsb+l9LAz89Ti8lc3kVHcyaGi+ODPZc3kby0R1R2bWeyY4ARzw3DPTQwAZdDDmPD
+         ZVzK3JEOi1ZtBUoP+TnwA5n6kS5WJNPYPbZJo11rKNyviTip8uEfe7fgqm5v/JQhYF1J
+         A4Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3SMplr3NIxarZcsC3NyJ/Iwr/dnvkZ+4jSSz/1c1XSw=;
-        b=gfuAA+MZXBTn/Hb98acz+OCm3dxZuX5U544tDo8i2z1xS5Z7yASJ+Fc9U19VlzY2V+
-         HDXvmAsleiv55RE+Lip7p9qzgbUBMBNTw34eDzyT4gREWX6hcng6bwuDcLSTJn7IugfN
-         /65F9XBVOyEHwiXRSg3QQkovOmLFbnYfzNWWp62iH305qCo0T1bOFnx5//OTqKlCgthY
-         JYwMiRe7AkzBUA+HcIZGDfpqDFR60hlFIhYNbxmC3PaTuEtvaYs3oonAiGRRpoC3TVEG
-         k6QlhBNr0/jBPH+3k/czFK/cgopyV4i8pO0Mi+qUgJVGYwOlT7lIMuqU2AkqtbOkj3F3
-         Qn1w==
-X-Gm-Message-State: AOAM531w57KIYAbQvaf+3DedXyutkdi0gVo3h8UGeNONt3eVTLbD8kgb
-        69tKwCrHbc5lyal1YiKPaS60HItxTQ==
-X-Google-Smtp-Source: ABdhPJyHc92fEYOo1RjpNxcvbckJZUIjQ0BYjgcTRqSjC0wHSSqbmSAtBRvdDD4KQpHA3zuefjbC/w==
-X-Received: by 2002:a05:6830:1ad9:b0:5cd:df9e:271a with SMTP id r25-20020a0568301ad900b005cddf9e271amr5356472otc.142.1649355424284;
-        Thu, 07 Apr 2022 11:17:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056870514900b000e27a6822ecsm449733oak.55.2022.04.07.11.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 11:17:03 -0700 (PDT)
-Received: (nullmailer pid 1725965 invoked by uid 1000);
-        Thu, 07 Apr 2022 18:17:03 -0000
-Date:   Thu, 7 Apr 2022 13:17:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Joel Peshkin <joel.peshkin@broadcom.com>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Tom Rini <trini@konsulko.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "u-boot@lists.denx.de" <u-boot@lists.denx.de>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH] dt-bindings: nvmem: u-boot, env: add Broadcom's variant
- binding
-Message-ID: <Yk8qnxqXK7WZvXrS@robh.at.kernel.org>
-References: <20220406152515.31316-1-zajec5@gmail.com>
- <CAN3=V2vOVLc95ZYBUDo8J7ast4UQMnZm4uYmX63LpcJdZWnmNQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
+        b=y2oMTYOY/h35qRgaP7W6tH8Pesx9+YszHj1HwcdXhQUzy3ctqxS0O32sKiKVdEu5fZ
+         4C9mJp3c09PVtcdtK+J9kBEL3xBFytKD2iLqSZzvqFQoJZrfc22vs8s5/GxfoFSdNpH0
+         W0J4s3OemM8YN/dA83HfET0OaLZTCd8ulnamJh2SBGZEnv/e2nCQmFA/y3/3U8L53AdZ
+         k5D9VKspoMeQtqyLwOdEjIGgn4whvgkbKO8/n5e8YxuWVOoeRWf2Jn6VvxMsAvOP7sfv
+         QODXvVizbNIEuNlqJLgLfcH3MalUtv/zvtnLUrrJHjAr9OfGquGRfxTzGBN1YpRE1Iek
+         mXpw==
+X-Gm-Message-State: AOAM533ZE3aTwHbv/R2TQybdHxltZdQpuQmlvOgWdi6VdhULu4vOObJK
+        Mv2QHcC8Z5wuwb3nmcAZvmvGYDCGMPU=
+X-Google-Smtp-Source: ABdhPJyXdHfHZMxDow5pG2bx+mSyl30fIzwXdgKyuiWLg9v6EURe8ej5jtVSOTdU4b4I9EDVWhfFEg==
+X-Received: by 2002:a17:903:41c3:b0:157:1e3b:ee66 with SMTP id u3-20020a17090341c300b001571e3bee66mr867050ple.41.1649355490155;
+        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm24726271pfu.202.2022.04.07.11.18.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:18:09 -0700 (PDT)
+Message-ID: <55800b61-bdb7-9e93-7d2c-b5a34c1e5cd0@gmail.com>
+Date:   Thu, 7 Apr 2022 11:18:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAN3=V2vOVLc95ZYBUDo8J7ast4UQMnZm4uYmX63LpcJdZWnmNQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 04:55:14AM -0700, Joel Peshkin wrote:
-> Hi Rafal,
+On 4/7/22 07:33, Krzysztof Kozlowski wrote:
+> The node names should be generic and SPI NOR dtschema expects "flash".
 > 
->    The first 32b value is a magic number (endian swapped mnemonic of "uEnv"
-> short for "u-boot environment").   Finding that magic number of a 4K
-> boundary followed by a length and then a u-boot environment with a valid
-> CRC permits a scan of the flash partition to locate the environment without
-> knowing a-priori where it is.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
+>   arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
+>   arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
 
-So it doesn't need to be described in DT? But how does one identify 
-whether to scan the flash or not. You wouldn't want to do that one every 
-platform. IOW, it's a sufficient discovery mechanism for a custom build, 
-but not generic OS.
+For the above:
 
-Rob
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

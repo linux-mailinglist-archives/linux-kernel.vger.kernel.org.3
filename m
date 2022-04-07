@@ -2,102 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23024F7C3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1271A4F7C39
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244072AbiDGJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244058AbiDGJ7p (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S244057AbiDGJ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 7 Apr 2022 05:59:45 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F47645C;
-        Thu,  7 Apr 2022 02:57:44 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 17so6782770lji.1;
-        Thu, 07 Apr 2022 02:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v5UAfKxsrsRPvh+meKdkGbOkhRM3tNuXSuWFqHVxSXs=;
-        b=m3YGQUepXhCvyRxD5o4/1/8dJwfSqa900VjhrgSGI09drgozJj46mc06D3MszpYN5M
-         jlYFphQm7t4z0kWI/eNluuJ2Tv3d3SQisTc4OuY+EgvXiBF85r9th6ucqr5vLN7ynuKR
-         aJ3uQspwY+wbi32vnAD7ej0+I7za05t0o6cIqFxw3byiq132kHi8X8xP3sX9iTmalokJ
-         U0HN/mcG0wC6fy83qgQrjwfIim2iiRqkvgaaHZysXmN81JYWeKUD22dMnxLJ8d2KnnvU
-         qg3Vusbb04fxIuGMBJmNrYjNMu86OQrzogTKd8WC/BHKeiniDcxI8SX7XzyDBON/+O4Q
-         dHZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v5UAfKxsrsRPvh+meKdkGbOkhRM3tNuXSuWFqHVxSXs=;
-        b=l/DMucsbhhLLabozuaNDHjrWgMdXy6CoB0/ZgRV8sESozgx4I4uMoVl5R8bLcEg59b
-         +l0gjdG7wXVMvKvaHww0FRos5TC3kiSurYcIQV43FN5YflCsFlCKJQ9/t2y+zERX7jpf
-         IY6GnwPP0R1S2bmPBcTQPCofNBzhPJI1d9Yr6zrzNRUeadZLzBdIgQDOoOvN24hmOABt
-         HnNeHaV4Ir+uX1s60NfaiSFw584Zff1tTtv+z4/5lF3Ve/7CojblsH/MSPtgbpsxnhuG
-         OV4fT3RzG2UB3oy1fjD5NrNfAuQI7a8uOF0bHD8w0GsZ0COof347NOgh5QhI1nnlQkXz
-         CbaA==
-X-Gm-Message-State: AOAM532EvQOJUrkxPP6adudsAgWhhllHKWKCUufj9j3+mxFGIgwdI3RX
-        WTEGL3j9SNxh2RLN6uraeFQEuHwxyz9XNNnf3XyY0bsVXTo=
-X-Google-Smtp-Source: ABdhPJyz9uV69vNu9Xkhp5TJC8HBxV2DDog4ohbuQHHfoDApG8f+V+4nHmjPwPczr9oZDDOIOrwnGBVRazYGtFts0ug=
-X-Received: by 2002:a2e:9c03:0:b0:24a:fe64:2c12 with SMTP id
- s3-20020a2e9c03000000b0024afe642c12mr8033891lji.101.1649325462634; Thu, 07
- Apr 2022 02:57:42 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229751AbiDGJ7n (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 7 Apr 2022 05:59:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C5164E1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:57:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C32D121118;
+        Thu,  7 Apr 2022 09:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649325462; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5nI9oyUvHFM5eGetZ+O4IuNGMmysnPBQecOrPZDio/k=;
+        b=CNJ7geQJSlcG/RhHpa1tjottVeZqYpQT0Mw42RTwmO1M5FPxDSdiO8SnH+xXhB1p8Q0BdK
+        aovdAVkYlUvQ/Uze/MDUfWR2fJAGM+2oBLs/Mm9axNiNGztzwLkho45nhuFRcuiWvbvDRb
+        bdnMPSjLgagVrzhmy9e8Za9gxf4pgA4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649325462;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5nI9oyUvHFM5eGetZ+O4IuNGMmysnPBQecOrPZDio/k=;
+        b=/V2x1NPw0ZVL6unKqEvrg10FqFRoxtfHvMrNkYMYnJc9ovOs4ozktsQub9dj0WecH/QxMI
+        eElJvePzfLtUNGBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EB3513485;
+        Thu,  7 Apr 2022 09:57:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0741Ipa1TmLtOwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 07 Apr 2022 09:57:42 +0000
+Message-ID: <d179e539-1da6-c489-b2b4-ad97367bd73a@suse.cz>
+Date:   Thu, 7 Apr 2022 11:57:42 +0200
 MIME-Version: 1.0
-References: <20220322115148.3870-1-dharamhans87@gmail.com> <CACUYsyG=RmUkX0b_0_1PmC4B_Oute5DnAf-xxFOr6h95ArPZDg@mail.gmail.com>
-In-Reply-To: <CACUYsyG=RmUkX0b_0_1PmC4B_Oute5DnAf-xxFOr6h95ArPZDg@mail.gmail.com>
-From:   Dharmendra Hans <dharamhans87@gmail.com>
-Date:   Thu, 7 Apr 2022 15:27:31 +0530
-Message-ID: <CACUYsyGkg2+wSfaZUt+B1woQRu96s1RY+b59RPoVE7QkTEsUtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] FUSE: Implement atomic lookup + open
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] mm, kfence: support kmem_dump_obj() for KFENCE objects
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kernel test robot <oliver.sang@intel.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20220406131558.3558585-1-elver@google.com>
+ <4b592848-ef06-ea8a-180a-3efc22b1bb0e@suse.cz>
+ <CANpmjNP-XtRB3zTOymH_PCKbDMHoJVYx6UQd_xoM-s33bXJk2w@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CANpmjNP-XtRB3zTOymH_PCKbDMHoJVYx6UQd_xoM-s33bXJk2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:37 PM Dharmendra Hans <dharamhans87@gmail.com> wrote:
->
-> On Tue, Mar 22, 2022 at 5:22 PM Dharmendra Singh <dharamhans87@gmail.com> wrote:
-> >
-> > In FUSE, as of now, uncached lookups are expensive over the wire.
-> > E.g additional latencies and stressing (meta data) servers from
-> > thousands of clients. These lookup calls possibly can be avoided
-> > in some cases. Incoming two patches addresses this issue.
-> >
-> > First patch handles the case where we open first time a file/dir or create
-> > a file (O_CREAT) but do a lookup first on it. After lookup is performed
-> > we make another call into libfuse to open the file. Now these two separate
-> > calls into libfuse can be combined and performed as a single call into
-> > libfuse.
-> >
-> > Second patch handles the case when we are opening an already existing file
-> > (positive dentry). Before this open call, we re-validate the inode and
-> > this re-validation does a lookup on the file and verify the inode.
-> > This separate lookup also can be avoided (for non-dir) and combined
-> > with open call into libfuse.
-> >
-> > Here is the link to the libfuse pull request which implements atomic open
-> > https://github.com/libfuse/libfuse/pull/644
-> >
-> > I am going to post performance results shortly.
-> >
-> >
-> > Dharmendra Singh (2):
-> >   FUSE: Implement atomic lookup + open
-> >   FUSE: Avoid lookup in d_revalidate()
->
-> A gentle reminder to look into the above patch set.
-Sending a gentle reminder again to look into the requested patches.
+On 4/7/22 11:48, Marco Elver wrote:
+> On Thu, 7 Apr 2022 at 11:43, Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 4/6/22 15:15, Marco Elver wrote:
+>> > Calling kmem_obj_info() via kmem_dump_obj() on KFENCE objects has been
+>> > producing garbage data due to the object not actually being maintained
+>> > by SLAB or SLUB.
+>> >
+>> > Fix this by implementing __kfence_obj_info() that copies relevant
+>> > information to struct kmem_obj_info when the object was allocated by
+>> > KFENCE; this is called by a common kmem_obj_info(), which also calls the
+>> > slab/slub/slob specific variant now called __kmem_obj_info().
+>> >
+>> > For completeness, kmem_dump_obj() now displays if the object was
+>> > allocated by KFENCE.
+>> >
+>> > Link: https://lore.kernel.org/all/20220323090520.GG16885@xsang-OptiPlex-9020/
+>> > Fixes: b89fb5ef0ce6 ("mm, kfence: insert KFENCE hooks for SLUB")
+>> > Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
+>> > Reported-by: kernel test robot <oliver.sang@intel.com>
+>> > Signed-off-by: Marco Elver <elver@google.com>
+>> > Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>>
+>> Thanks.
+>> Given the impact on slab, and my series exposing the bug, I will add this to
+>> slab tree.
+> 
+> It's already in Andrew's tree:
+> https://lore.kernel.org/all/20220406192351.2E115C385A5@smtp.kernel.org/T/#u
+
+Ah, missed that.
+
+> Does your series and this patch merge cleanly?
+
+Yeah the dependency is not on the code level.
+
+> If so, maybe leaving in
+> -mm is fine. Of course I don't mind either way and it's up to you and
+> Andrew.
+
+Yeah should be fine as linux-next will be safe with both trees merged. Thanks.
+
+> Thanks,
+> -- Marco
+

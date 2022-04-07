@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B614F7FFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF834F8004
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343617AbiDGNGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S1343611AbiDGNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343581AbiDGNFv (ORCPT
+        with ESMTP id S1343602AbiDGNFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:05:51 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B81425B910
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:03:49 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZ1jf4bLyz6823d;
-        Thu,  7 Apr 2022 21:01:42 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 15:03:46 +0200
-Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 7 Apr 2022 09:05:45 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4828C25C588
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:03:23 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KZ1l21ZWLz1HBdP;
+        Thu,  7 Apr 2022 21:02:54 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
- 2022 14:03:45 +0100
-Message-ID: <48e9e622-30b5-0aeb-2860-bf2ea9bff939@huawei.com>
-Date:   Thu, 7 Apr 2022 14:03:44 +0100
+ 2022 21:03:21 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
+CC:     <shy828301@gmail.com>, <mike.kravetz@oracle.com>,
+        <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH 0/3] A few fixup and cleanup patches for memory failure
+Date:   Thu, 7 Apr 2022 21:03:49 +0800
+Message-ID: <20220407130352.15618-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 1/2] drivers/perf: hisi: Associate PMUs in SICL with
- CPUs online
-To:     Qi Liu <liuqi115@huawei.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangshaokun@hisilicon.com>
-References: <20220407124617.54521-1-liuqi115@huawei.com>
- <20220407124617.54521-2-liuqi115@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220407124617.54521-2-liuqi115@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.80.129]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 13:46, Qi Liu wrote:
-> If a PMU is in a SICL (Super IO cluster), it is not appropriate to
-> associate this PMU with a CPU die. So we associate it with all CPUs
-> online.
-> 
-> As the firmware of Hip09 platform hasn't been published yet, change
-> of PMU driver will not influence backwards compatibility between
-> driver and firmware.
-> 
-> Signed-off-by: Qi Liu<liuqi115@huawei.com>
+Hi everyone,
+This series contains a patch to fix false-postive PageSwapCache test,
+minor cleanup for HWPoisonHandlable and try to dissolve truncated
+hugetlb page. More details can be found in the respective changelogs.
+Thanks!
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+---
+v1:
+Rebase [1] on mainline.
+Add new patch "mm/memory-failure.c: dissolve truncated hugetlb page"
+
+[1]https://lore.kernel.org/linux-mm/0d5f2c97-992b-442c-9ecf-26ba363461aa@huawei.com/T/#m310e36806a1f614a4d1c7cc1d7a5e6e6e17f663d
+---
+Miaohe Lin (3):
+  mm/memory-failure.c: avoid false-postive PageSwapCache test
+  mm/memory-failure.c: minor cleanup for HWPoisonHandlable
+  mm/memory-failure.c: dissolve truncated hugetlb page
+
+ mm/memory-failure.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
+
+-- 
+2.23.0
+

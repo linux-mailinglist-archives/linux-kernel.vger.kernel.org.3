@@ -2,179 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1654B4F816E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EE04F8173
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343862AbiDGOUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S238837AbiDGOVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiDGOUV (ORCPT
+        with ESMTP id S229970AbiDGOVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:20:21 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FBA1229A8
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:18:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WqoyEEyKsj+pEH+1yg2gOtE8srOFhY0NtpjVI4iAQFqyrcoXIJFPOimAI2LAmW+4AT/FBJIA1bG2CUzBJs75YYrUiq71us9XF4QGU6y5pa94tH8bTpBw02+e4LwzhA1otAaYgG2t1GzLmFjHby9c3e89rrSfiuMuuGGfU4BH/VoUaf2aZQ+l8i4GA99ee7vG/IN+sopShS7HKpWTDZlm1vMsjl3lzqHhjc+t+q7cKq538I69B0n2LRHou/5rKeAfHVmTdVd/8gKBRZ5tOkc/rHjyCVfYI0Ug9w5rfOmTDm68keYMiEF8L0achWi2/D+rblrMGxMiYTQS30rgviecNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nL7Zlf06HnJeYBDy43Vz9tyqp+zvNXEe7zh9nRW39g0=;
- b=Rid8CT/roo6iTZg/6FRsZLS7ltZlylCvfydbTaRx69s+FWKQmZtOhFOQz1D9kP8TKm8n0dykUBXHeLrNCKHnY00kJIRaIYov0W13ZX72GK7PdKxaYJ/JeYCifdS4Nav618nEE5E+5V0i8juL71rnb33s0JXZtUnj6cxcJ9dgjw37w/aqOKPv2Kc/79CLBTTkkI+w62RrY6BaviJBgC9GKfFUBgcKSv0PZhVdqOPcDX7dVKKuU6UKQKZ3qsK0C1//pZZv2G3TiLCSqwfxpBzQxnyBBhSNgmT4ZM4uahesgYmu6KiYgVeeVcb1qwrdw6aXh4HvDuTviUiymQ1ViTqRJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nL7Zlf06HnJeYBDy43Vz9tyqp+zvNXEe7zh9nRW39g0=;
- b=ygxZlqSMG8XkywFzu25fFWsich+ij7FzJ/hzc7B3977IOGrdH9BHCFFbRVAmY4DDVo2faD8Bu06jClfYQ5CfsG27+gpYZdF1e3mRnErHkxaiVzC69bcn7bCQZpfwAFQMOZJwLIJ87PIJ5AtnRCfuaKQ17ajZRvg1qMLHA5wMIBw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by SN1PR12MB2528.namprd12.prod.outlook.com (2603:10b6:802:28::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 14:18:19 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::61e4:a6bf:9444:31f9]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::61e4:a6bf:9444:31f9%6]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 14:18:19 +0000
-Message-ID: <bb7635cf-461e-7abd-6092-4be67099c846@amd.com>
-Date:   Thu, 7 Apr 2022 10:18:14 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm/amd/display: Fix indenting mistakes in
- dcn10_hw_sequencer.c
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <1649311250-17077-1-git-send-email-baihaowen@meizu.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <1649311250-17077-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0151.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:e::24) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Thu, 7 Apr 2022 10:21:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83D21252A9;
+        Thu,  7 Apr 2022 07:19:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C0F61C43;
+        Thu,  7 Apr 2022 14:19:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0763EC385A4;
+        Thu,  7 Apr 2022 14:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649341176;
+        bh=ItNyLV5CcuttOOB13cRLgkLSUXjOBtYIX53rNJAl6Pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QyetfJESBxDICQ0YIvZ9S698EXLSj+TlCVLw7W0CQHuYEkch3vxayfHMUWhBzo6Y4
+         YWHdV2nz7bsBR4d4CrLf8VqT5kPAuLA9FNYrHzK9CY17smmBoeP9nzlCSN20Q5NHLr
+         B4hgmPdZvxntqbPnhfsrP4+iqpIepKpzkF9/BIvR1LUcwVT/+FAFXfbeO8K71e7Urk
+         Aff12yjW1U8HZ2es06eMpjki321FaBLMfzqPiFLq4nITSZyr9g+THO23+0YUtqkIl1
+         8n76AbxVqbwbGKEvgthA+Y6K9qomF0NgVPQiqZFVcqgj2RbN4lYRq7jFm25kd8YlUA
+         +UnufuhthJoyQ==
+Date:   Thu, 7 Apr 2022 22:19:28 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 16/20] erofs: implement fscache-based metadata read
+Message-ID: <Yk7y8FuBosbtAY3l@debian>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-17-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1baf9db6-b5e1-4d80-d213-08da18a176c7
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2528:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB25284B265E7837B170BA99F98CE69@SN1PR12MB2528.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: siZJHBOlwAjSOcw3WjI3rRAtqnJ2yUBGpniLVywP+0ekc+XFsicENX+C98n1tYEMt260C2YWOmfpQ7/EKPTn257a6aVdD0F6yNeyJxnidWOWMlhXnlV51rYrbrCi48nXCG0Ug5cTUgWaug4DF7W7PdFfNbFQvdE3fUNZzugV0thJOH5a5K3S4dOng8Pl8+QlKNd1oJQ0XzCAjvwXPOryL2d+W/Debk6fAjOw44XYyAjI9r5ATXAhTL0yjpzIcrkUkQ4pC1I7YGVZLDfGlMRUSgkXRlBj4q7f0ioAT9E7JtgkHlRtRoPVC84MQdCsZ4+Ac6lwpE0JB2kTeLBJGMf+9X2j+4HJhhWM8jRglV/YuBth+LoS/oepVAXPLItbuITeCSbgMerYNMCcBLRfDOmD/SA/vG0ONTyu37ZdM3+X2TQvUyEI1CECMlYo75i8OYEqZB7SJSngIvYzC/hCQbrMWarAgRC6OSgMbT1sVpY+euAejAXYyx3lttDVaUv+Sa/FiMshU3vDjMs2OpTdq6yBsKIETElU3GhzIOc2UAUSZGHGh2rWT7ZcgGdfPpaG26GaOvZuPONgeIoNYQ4E2gPkaeJst4xRiuIgTAdkevmAIVd2x37jkdlNTKk7Jq3yv3s2C1nNS5gCP3gg/h11rH+H3VZ6a987gMik+wjKmpLqzrH5lHakN58ivSCwthLJtspqoBOoTLRcjRyV839Ae7haBduii/wXYbFecRn5rZ+6Zcwh/ZJyOJPE4DZntt05VbVW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(38100700002)(86362001)(5660300002)(6486002)(36756003)(66556008)(508600001)(316002)(8676002)(8936002)(4326008)(110136005)(66946007)(26005)(186003)(83380400001)(2616005)(31686004)(53546011)(2906002)(6666004)(6512007)(6506007)(44832011)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3hlNzBnTFhHbzdMcUdtUHZhL0hDSm9TSGxYc2I2WHZkS3JwOU9waXFaMXI3?=
- =?utf-8?B?QU40elhzenAwWWNNUXhCNXJ4eUlkeVBTYjBBeGVLS3NiUmhNZXVob1hsaW5C?=
- =?utf-8?B?NnpIT213MUI3YkJCRkZLSXhvRURrTEtRRzgzTnprNUt1UzFndWF4TTBTZlda?=
- =?utf-8?B?c1dIQW5tYzNYa1lLNGg0Z01LenY0UUFNVWdQMjQrclk0bFBvU3NpL3hGMVg5?=
- =?utf-8?B?VW1hOG1wSjBTbHM4eHRsQnI5ZXM0b1F6SHRJWk5XOFNxV2VJcnF5cWFmekND?=
- =?utf-8?B?cWxybUNIWWdFRWtXSUhPMEFkS2IwdzYrR1JEWnZVTzc2S3VLNHNyTVFOUGtr?=
- =?utf-8?B?SU5zWC9uOFpaQkhDVjJnUGNLR2FSYjNRTTFjcDhiU09jME1EdndJUmJQSTJP?=
- =?utf-8?B?czZ4enIxNHpzYTJMWDJHdlZDUWEyMDg4WktZVS9IbmczcWExM3EvUXE2ejNp?=
- =?utf-8?B?aEpGQTFjNE95Ni91emhNYlI4QVFCVkpCZGxoYUJLUzhzUGdSL092VVVjZ3lE?=
- =?utf-8?B?UEtraXF3VEV5bXhuaU1ZVTNsaW5FdUdnNUoxYVRKb3MvVDVsMGZQanJXZnA4?=
- =?utf-8?B?Ylc4U3JQSEJxUnRzRFpkSXJ2L1N6ajFiWFdwTWo5cDcxMnJGQ3U2bm1JbFJi?=
- =?utf-8?B?TEJIajBpOFVQYnR2dFNpbzFCYlVTSlVqYmV6ZEFNbDY0SzIwU296STJBT3dy?=
- =?utf-8?B?TjZOZDhuNDZ1Y2RCOStLa3Jzb0tEYXpMdFo2R0lTVEZwQWtrMHFPYWpoandS?=
- =?utf-8?B?RkNnREdGUE8wZDhsb2NWcFhDeUMrd3JodDBHOWI1QnhVaEtwVlNPSTBLL0h3?=
- =?utf-8?B?RUtHbnpZMGhSd0NieHlQMk52MHpBWm1MMlRjZFEzTmFQUzFYc280M1FFeDdI?=
- =?utf-8?B?LzZ1Nk9pbjM1TFU0aXBLTEVLb1hOV2RyWHNYdG9ZREkwanlYL3RpaVRhamtT?=
- =?utf-8?B?Z1VLV3BEWndZYi9oN2dBY0NlT1h0ZHFvMTJ2NDZ2c0NGN1VlYS9pR1kwNi9j?=
- =?utf-8?B?NGZINWgvN3FPL3RuS1ZCbjFTdS9ZTk5VV3dpUWJ0K1BaWFdkQytxOS9xWHNH?=
- =?utf-8?B?dmRCMlZEbHdqYW56cU44MXRTVVh3SUxFVVZmdGRrcGtaWXBBM3d3bjFIcUN5?=
- =?utf-8?B?elNDUC9kb1FiZTYzb3ZyeWhob1p5RWJwWWljV3Bxd2NOemRKam81U0J0VXo2?=
- =?utf-8?B?NVBWRGpyL0w5MFlmVzlwbnh6ZWxsQml5blpERnRNTVY3YkRlWTMxcmtzZ21R?=
- =?utf-8?B?RUh5NEhlb05Fd0w0Mm5qTzd4MDNtd0Y5MzNMNXpxVmJRTnN1MmZLUTBVQ1dV?=
- =?utf-8?B?MmZ0ZmJQTWhDbGh1NkZkY0Q4M0ZVUVVtNDdPUUZOUGdhMFpTRVVnTUgyRWRE?=
- =?utf-8?B?MVVGaGFmRW51eFIzU2xURnkyTmJGR29id09qLzYvWHVuRXZvTW1xZThITlpU?=
- =?utf-8?B?TzFQZDFHZDcxYVBEZFFvcWc3R3NUdnIxd1VZYUxDbVFtaFQ4SWpVSzdYenli?=
- =?utf-8?B?MHY4eDBqSFpQRzdoQWIxMWZsZzd1WE5LckVXMFRBb1VnTG00b3JLcnVOS3Nq?=
- =?utf-8?B?TUllWEZlbkVaNWF5TVdyb2FaYUdKQzJQMjFhV055L0IwWTdVcjMrWFVpQk1I?=
- =?utf-8?B?U1J6bmcyYXlFRVM1cWpYM1RtNTVTU0d5RXVwMThseDlzYkNnNTg1QktpZDZj?=
- =?utf-8?B?UnQwakdNTldyZTlnNTQrRFd6M0VKV2F2eGxMOWdoZm93RjhnT2dBWEdYS0lv?=
- =?utf-8?B?K1g5Y0hJUDVjVUxOM1kwZHpNeW1VdCt2aHhrZ2xkTk5JeHhBMGJFM0lRV1dC?=
- =?utf-8?B?dGtPbjhQY2Npc240YUpiSFBCVUszbzJ3UkFCSXdEWklZeTVvSG9md0gzVW5y?=
- =?utf-8?B?SzBxNTlhWU9BUjNwb1pPY3lmTHA3UlYydXlIZHhtNnRMTm5sdGlOSzVGRG9n?=
- =?utf-8?B?MWtCRXRMNGE2ZC9YUVQzeE5rZG9FaTdwQUpybnozei9Ocnp6MnExNitTRXVL?=
- =?utf-8?B?eGRaaFhhditoTmUrck1EdDg5S1NHWURXZTV3QWc1RjhhSkFoTGkvMTQyQ3F3?=
- =?utf-8?B?MmN0M0grSFpJVEd3VVBueHBvMHFDNEFCdEZYVjJPOUNEb1orSHE3STR1SE9o?=
- =?utf-8?B?M2cyM1EvR3lDUm83OWFjTWtRMHMyMTE1b2Qydkd0andQVHJxbHcxcndkYWx5?=
- =?utf-8?B?aDBYTkdpREdHc0lWaG1laVNvVzdUMEJ4MnN0M1YxZUx1cnl3ekkzUmhDYVNQ?=
- =?utf-8?B?NDhta1lhNThwYWM1TFFOMnE4bTMxTGVyS0ZJQUczcHA4M1dIY085cU5MWEF5?=
- =?utf-8?B?dnJMK2F0WDMza3dUNlI4U2JRN3hWSk40dU9FNFlwWHpYcHdMUG9oZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1baf9db6-b5e1-4d80-d213-08da18a176c7
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 14:18:18.9204
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CI/5WIw23ydwEpMySoMVOYtGFMvHr2S58Giqj/HXTdndtYGuMhbuEJM7HQqInt5PZOExKMMfrY1egoKiqCkGBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2528
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220406075612.60298-17-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-04-07 02:00, Haowen Bai wrote:
-> Smatch reports the following:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2174
-> dcn10_enable_vblanks_synchronization() warn: if statement not indented
+On Wed, Apr 06, 2022 at 03:56:08PM +0800, Jeffle Xu wrote:
+> Implement the data plane of reading metadata from primary data blob
+> over fscache.
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>  fs/erofs/data.c     | 20 ++++++++++++++++++--
+>  fs/erofs/fscache.c  | 38 ++++++++++++++++++++++++++++++++++++++
+>  fs/erofs/internal.h |  9 +++++++++
+>  3 files changed, 65 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> index ee22f4422d26..3c338b85040c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> @@ -2172,13 +2172,13 @@ void dcn10_enable_vblanks_synchronization(
->  	if (master >= 0) {
->  		for (i = 0; i < group_size; i++) {
->  			if (i != master && !grouped_pipes[i]->stream->has_non_synchronizable_pclk)
-> -			grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
-> -				grouped_pipes[master]->stream_res.tg,
-> -				grouped_pipes[i]->stream_res.tg,
-> -				grouped_pipes[master]->stream->timing.pix_clk_100hz,
-> -				grouped_pipes[i]->stream->timing.pix_clk_100hz,
-> -				get_clock_divider(grouped_pipes[master], false),
-> -				get_clock_divider(grouped_pipes[i], false));
-> +				grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
-> +					grouped_pipes[master]->stream_res.tg,
-> +					grouped_pipes[i]->stream_res.tg,
-> +					grouped_pipes[master]->stream->timing.pix_clk_100hz,
-> +					grouped_pipes[i]->stream->timing.pix_clk_100hz,
-> +					get_clock_divider(grouped_pipes[master], false),
-> +					get_clock_divider(grouped_pipes[i], false));
->  				grouped_pipes[i]->stream->vblank_synchronized = true;
->  		}
->  		grouped_pipes[master]->stream->vblank_synchronized = true;
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index 14b64d960541..cb8fe299ad67 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -31,15 +31,26 @@ void erofs_put_metabuf(struct erofs_buf *buf)
+>  void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+>  		  erofs_blk_t blkaddr, enum erofs_kmap_type type)
+>  {
+> -	struct address_space *const mapping = inode->i_mapping;
+>  	erofs_off_t offset = blknr_to_addr(blkaddr);
+>  	pgoff_t index = offset >> PAGE_SHIFT;
+>  	struct page *page = buf->page;
+>  
+>  	if (!page || page->index != index) {
+>  		erofs_put_metabuf(buf);
+> -		page = read_cache_page_gfp(mapping, index,
+> +		if (buf->sb) {
+> +			struct folio *folio;
+> +
+> +			folio = erofs_fscache_get_folio(buf->sb, index);
+> +			if (IS_ERR(folio))
+> +				page = ERR_CAST(folio);
+> +			else
+> +				page = folio_page(folio, 0);
+> +		} else {
+> +			struct address_space *const mapping = inode->i_mapping;
+> +
+> +			page = read_cache_page_gfp(mapping, index,
+>  				mapping_gfp_constraint(mapping, ~__GFP_FS));
+> +		}
+>  		if (IS_ERR(page))
+>  			return page;
+>  		/* should already be PageUptodate, no need to lock page */
+> @@ -63,6 +74,11 @@ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+>  void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
+>  			 erofs_blk_t blkaddr, enum erofs_kmap_type type)
+>  {
+> +	if (erofs_is_fscache_mode(sb)) {
+> +		buf->sb = sb;
+> +		return erofs_bread(buf, NULL, blkaddr, type);
+> +	}
+> +
+>  	return erofs_bread(buf, sb->s_bdev->bd_inode, blkaddr, type);
+>  }
+>  
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index d38a6efc8e50..158cc273f8fb 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -34,9 +34,47 @@ static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
+>  	return ret;
+>  }
+>  
+> +static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
+> +{
+> +	int ret;
+> +	struct super_block *sb = (struct super_block *)data;
+> +	struct folio *folio = page_folio(page);
+> +	struct erofs_map_dev mdev = {
+> +		.m_deviceid = 0,
+> +		.m_pa = folio_pos(folio),
+> +	};
+> +
+> +	ret = erofs_map_dev(sb, &mdev);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
+> +			folio_file_mapping(folio), folio_pos(folio),
+> +			folio_size(folio), mdev.m_pa);
+> +	if (ret)
+> +		goto out;
+> +
+> +	folio_mark_uptodate(folio);
+> +out:
+> +	folio_unlock(folio);
+> +	return ret;
+> +}
+> +
+>  static const struct address_space_operations erofs_fscache_meta_aops = {
+> +	.readpage = erofs_fscache_meta_readpage,
+>  };
+>  
+> +/*
+> + * Get the page cache of data blob at the index offset.
+> + * Return: up to date page on success, ERR_PTR() on failure.
+> + */
 
+Unnecessary comment and even unnecessary helper.
+
+Thanks,
+Gao Xiang
+
+> +struct folio *erofs_fscache_get_folio(struct super_block *sb, pgoff_t index)
+> +{
+> +	struct erofs_fscache *ctx = EROFS_SB(sb)->s_fscache;
+> +
+> +	return read_mapping_folio(ctx->inode->i_mapping, index, (void *)sb);
+> +}
+> +
+>  /*
+>   * Create an fscache context for data blob.
+>   * Return: 0 on success and allocated fscache context is assigned to @fscache,
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 90f7d6286a4f..e186051f0640 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -276,6 +276,7 @@ enum erofs_kmap_type {
+>  };
+>  
+>  struct erofs_buf {
+> +	struct super_block *sb;
+>  	struct page *page;
+>  	void *base;
+>  	enum erofs_kmap_type kmap_type;
+> @@ -639,6 +640,8 @@ int erofs_fscache_register_cookie(struct super_block *sb,
+>  				  struct erofs_fscache **fscache,
+>  				  char *name, bool need_inode);
+>  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
+> +
+> +struct folio *erofs_fscache_get_folio(struct super_block *sb, pgoff_t index);
+>  #else
+>  static inline int erofs_fscache_register_fs(struct super_block *sb) { return 0; }
+>  static inline void erofs_fscache_unregister_fs(struct super_block *sb) {}
+> @@ -653,6 +656,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
+>  static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>  {
+>  }
+> +
+> +static inline struct folio *erofs_fscache_get_folio(struct super_block *sb,
+> +						    pgoff_t index)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+>  #endif
+>  
+>  #define EFSCORRUPTED    EUCLEAN         /* Filesystem is corrupted */
+> -- 
+> 2.27.0
+> 

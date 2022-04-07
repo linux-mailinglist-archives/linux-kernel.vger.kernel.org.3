@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344454F8B8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF4B4F8ABD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiDGWzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 18:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S232363AbiDGXAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiDGWzR (ORCPT
+        with ESMTP id S231496AbiDGW77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 18:55:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A0B16BF51;
-        Thu,  7 Apr 2022 15:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649371996; x=1680907996;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5d1RarmXrWSkAaZMLy3cBZ62eTcBy7+tNhk8kPDmHfc=;
-  b=f8YVBDmbGnsVN2Xi+OZAtfa/aokXkwvdqvrn7VaiG5gS3EitLBzmzJIR
-   zXRfvZL38qHa16wnWxU0YfPZDDzUPDq8YGG2NXNDDvbfEOgkzcmH46nqI
-   mgdppNGO8wv4bR5I6lEOYP3yGxXYaQk5C23eW9U8GeOOxG8WbfKYKQkQZ
-   pICCufGJC+1547mVMMdKY1raCrlaNr/i7BTU+Nu4fmNWNEPIG++bI5KCX
-   JmOTNtgQizUlRUPPZY6QstZuI26Idm2qu7XNXnf1/FVAlrxs2Y1qln81V
-   02HpP9536kffLhnu3zqEuScpx9iY0XXYjUEFysN/HCT2egJB9TZHD54X9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="324621145"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="324621145"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 15:53:15 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="642672400"
-Received: from asaini1-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.28.162])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 15:53:13 -0700
-Message-ID: <05b1d51b69f14bb794024f13ef4703ad1c888717.camel@intel.com>
-Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
- struct kvm_mmu_page
-From:   Kai Huang <kai.huang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 08 Apr 2022 10:53:11 +1200
-In-Reply-To: <ec5ffd8b-acc6-a529-6241-ad96a6cf2f88@redhat.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-         <a439dc1542539340e845d177be911c065a4e8d97.camel@intel.com>
-         <ec5ffd8b-acc6-a529-6241-ad96a6cf2f88@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
+        Thu, 7 Apr 2022 18:59:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E781D08D3
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:57:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 53F50CE29E0
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 22:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC31C385AA;
+        Thu,  7 Apr 2022 22:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649372273;
+        bh=RN5h09BMy0SrcZOTMv0e9oxWP9f+jFVQ8ak4khF7YuA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=wH+dPDwBvjM0YnQ/2yhFHLCsG2BViIutMpxZxwmpr0OiltKgRl+uEb5oStc255nm6
+         OhV/xRj/1T1LKg5CsfXEsSX3RbpNDKDx13xhQusGjII6ktc24soGHxmb3LXUdwNTt6
+         J7tsSTXqajNdgqZQ0nI+Y1zk9dGRrWqQ/vTldneU=
+Date:   Thu, 7 Apr 2022 15:57:52 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     dennis@kernel.org, tj@kernel.org, cl@linux.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com,
+        songmuchun@bytedance.com, Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
+ completes
+Message-Id: <20220407155752.769632b737f79b038cf83742@linux-foundation.org>
+In-Reply-To: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
+References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 15:52 +0200, Paolo Bonzini wrote:
-> On 4/7/22 01:43, Kai Huang wrote:
-> > > +	if (kvm_gfn_stolen_mask(vcpu->kvm)) {
-> > Please get rid of kvm_gfn_stolen_mask().
-> > 
+(cc Ming Lei)
+
+On Thu,  7 Apr 2022 18:33:35 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+
+> In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
+> before calling percpu_ref_put(), which will cause the value of
+> percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
+> returns.
 > 
-> Kai, please follow the other reviews that I have posted in the last few 
-> days.
+> 	CPU0				CPU1
 > 
-> Paolo
+> percpu_ref_switch_to_atomic_sync(&ref)
+> --> percpu_ref_switch_to_atomic(&ref)
+>     --> percpu_ref_get(ref);	/* put after confirmation */
+> 	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
 > 
+> 					percpu_ref_switch_to_atomic_rcu
+> 					--> percpu_ref_call_confirm_rcu
+> 					    --> data->confirm_switch = NULL;
+> 						wake_up_all(&percpu_ref_switch_waitq);
+> 
+>     /* here waiting to wake up */
+>     wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
+> 						(A)percpu_ref_put(ref);
+> /* The value of &ref is unstable! */
+> percpu_ref_is_zero(&ref)
+> 						(B)percpu_ref_put(ref);
+> 
+> As shown above, assuming that the counts on each cpu add up to 0 before
+> calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
+> to atomic mode, percpu_ref_is_zero() can return true. But actually it will
+> return different values in the two cases of A and B, which is not what
+> we expected.
+> 
+> Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
+> just to ensure that the conversion to atomic mode is completed, but it
+> should not return with an extra reference count.
+> 
+> Calling wake_up_all() after percpu_ref_put() ensures that the value of
+> percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
+> So just do it.
 
-Do you mean below reply?
+Thanks.  I'll grab this, but shall await input from others before doing
+anything else with it.
 
-"I think use of kvm_gfn_stolen_mask() should be minimized anyway.  I 
-would rename it to to kvm_{gfn,gpa}_private_mask and not return bool."
-
-I also mean we should not use kvm_gfn_stolen_mask().  I don't have opinion on
-the new name.  Perhaps kvm_is_protected_vm() is my preference though.
-
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> +++ b/lib/percpu-refcount.c
+> @@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
+>  
+>  	data->confirm_switch(ref);
+>  	data->confirm_switch = NULL;
+> -	wake_up_all(&percpu_ref_switch_waitq);
+>  
+>  	if (!data->allow_reinit)
+>  		__percpu_ref_exit(ref);
+>  
+>  	/* drop ref from percpu_ref_switch_to_atomic() */
+>  	percpu_ref_put(ref);
+> +
+> +	wake_up_all(&percpu_ref_switch_waitq);
+>  }
+>  
+>  static void percpu_ref_switch_to_atomic_rcu(struct rcu_head *rcu)
 

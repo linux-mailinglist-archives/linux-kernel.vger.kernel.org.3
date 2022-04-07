@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9489B4F8760
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77144F8761
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244762AbiDGSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S243437AbiDGSxB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Apr 2022 14:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347007AbiDGSwf (ORCPT
+        with ESMTP id S1347003AbiDGSw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:52:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E2FE429
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:50:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id c23so5870975plo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yHTfa3Xf5bj7v/fUHWGj1N6h5CrQAHQI6sZ7eNnojW8=;
-        b=MAnnbKl3cqxlzEfW7eMtsWDL6/da8Ii/qpuq+LbMqdikPYaNNDXjvG0o4ZaJ77kIp/
-         XeiGCvoVHahcA8MJ/GVgMZLNw4fiu2ZhjM0dAXIr+A3hSmSjZOu+mObBLP8OB45Wompp
-         oVBAINJl+ZJ/yDQn/Rg1Oc2QIYNR8hSH+oftyDtkMoIkm1Q+f64f7114gxxd8PkglWbZ
-         tm5ORBtDYcBBZqwZAgno9hczmEoZKVYaPPb3nzBX0aO3/1g/u7rveNmeBkLNZ4/GDuhQ
-         OFFIm9KYH7v0iJzRM7Vp09oPbMFKtOTgYKjJbLGQ02uxW6sWMYzEDOa/huovuMYeTeO0
-         Mi4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yHTfa3Xf5bj7v/fUHWGj1N6h5CrQAHQI6sZ7eNnojW8=;
-        b=JX+bkHeMkm4KEV0fDUG+jxqh+8CMFybpLfspkkInDViB4rUoi5nC40XFSjoSM83lAa
-         JQ6PZDSVcSqgKU+aQmt87ukoNCclWGpyjkixKoKwJ3iF8acPixUCWUeEPYlS6oR1E4x9
-         qvReoWdLxDtBkiHgXQLjz/jc4K3wcLbFizDTbq+rFCKwCTod4ZSfNAou2v7C3UpYRELb
-         T6okkrP0YHGK9QTmMObpV97CjuRYfc8VTSl3uXF0fdyso7qX5xdXGC4qsJcWV5fhZE+Q
-         4h7LXSICLrImfMQiEilfCQPbNXXjWckPNWhUTX7oNrDAosZfKojyr9lGSJuEb3HjhU33
-         OH8Q==
-X-Gm-Message-State: AOAM530HgTr+vsrlavw/x3B2KTra4S7KFbp3N8yJ0/6JCXVFfGwtZolN
-        a/K8nbPq+kl57Ky+g4pPmL9slrzYcMIkjg==
-X-Google-Smtp-Source: ABdhPJwbpwlnXADYDuPZIElPaEMuJWqItAHdvKGTzpWfJgQW8OP0lTZa2kMX8zjoPNXQJ8ygePNB3A==
-X-Received: by 2002:a17:90b:1a87:b0:1c7:3d66:8cb with SMTP id ng7-20020a17090b1a8700b001c73d6608cbmr17530826pjb.142.1649357433648;
-        Thu, 07 Apr 2022 11:50:33 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056a000bd900b004faae43da95sm22338158pfu.138.2022.04.07.11.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 11:50:33 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 18:50:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 18/31] KVM: nSVM: hyper-v: Direct TLB flush
-Message-ID: <Yk8ydRqaIqLh/UjJ@google.com>
-References: <20220407155645.940890-1-vkuznets@redhat.com>
- <20220407155645.940890-19-vkuznets@redhat.com>
+        Thu, 7 Apr 2022 14:52:56 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79646A02E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:50:53 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1ncXDQ-0007Iv-1o; Thu, 07 Apr 2022 20:50:44 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christoph Hellwig <hch@lst.de>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v8 01/14] riscv: prevent null-pointer dereference with sbi_remote_fence_i
+Date:   Thu, 07 Apr 2022 20:50:42 +0200
+Message-ID: <2627651.mvXUDI8C0e@diego>
+In-Reply-To: <20220331123322.GA26378@lst.de>
+References: <20220324000710.575331-1-heiko@sntech.de> <2260961.n0HT0TaD9V@diego> <20220331123322.GA26378@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407155645.940890-19-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
-> @@ -486,6 +487,17 @@ static void nested_save_pending_event_to_vmcb12(struct vcpu_svm *svm,
->  
->  static void nested_svm_transition_tlb_flush(struct kvm_vcpu *vcpu)
->  {
-> +	/*
-> +	 * KVM_REQ_HV_TLB_FLUSH flushes entries from either L1's VPID or
+Am Donnerstag, 31. März 2022, 14:33:22 CEST schrieb Christoph Hellwig:
+> On Thu, Mar 31, 2022 at 02:28:06PM +0200, Heiko Stübner wrote:
+> > so essentially flushes the _local_ icache first and then tries to flush
+> > caches on other cores, either via an ipi or via sbi.
+> > 
+> > The remote-fence callback is set correctly during sbi_init().
+> > The other cores are only brought up after sbi-init is done.
+> > 
+> > So it's not really about error reporting but making sure that flush_icache_all()
+> > does something sane even when still running on the first core.
+> > As I assume the "all" means on all available cores (which would be the
+> > core the system booted on).
+> > 
+> > Does this make it clearer what this tries to solve?
+> 
+> A little.  Whatever code calls this early still seems broken to me
+> and just just do a local flush, though.
 
-Can you use VP_ID or some variation to avoid "VPID"?  This looks like a copy+paste
-from nVMX gone bad and will confuse the heck out of people that are more familiar
-with VMX's VPID.
+Looking at this again made me realize that we don't need this patch
+anymore at all.
 
-> +	 * L2's VPID upon request from the guest. Make sure we check for
-> +	 * pending entries for the case when the request got misplaced (e.g.
-> +	 * a transition from L2->L1 happened while processing Direct TLB flush
-> +	 * request or vice versa). kvm_hv_vcpu_flush_tlb() will not flush
-> +	 * anything if there are no requests in the corresponding buffer.
-> +	 */
-> +	if (to_hv_vcpu(vcpu))
-> +		kvm_make_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
-> +
->  	/*
->  	 * TODO: optimize unconditional TLB flush/MMU sync.  A partial list of
->  	 * things to fix before this can be conditional:
+In a previous revision the "main" alternatives apply-point was earlier,
+triggering the issue when the generic patching-functions wanted to
+flush the cache, but with the alternatives getting applied where they
+are now, the issue is not triggered anymore.
+
+And the "early" alternatives use a local flush anyway.
+
+

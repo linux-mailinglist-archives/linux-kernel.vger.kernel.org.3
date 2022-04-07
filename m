@@ -2,111 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F924F7999
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B98D4F799C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242967AbiDGI2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S242973AbiDGI30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243118AbiDGI2J (ORCPT
+        with ESMTP id S231202AbiDGI3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:28:09 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB158689B5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:26:09 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id q20so3019752wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 01:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IbaM44rkmlTT1gjmeeX72ZcY1dxEtnD4IBMb0LHC26k=;
-        b=BotwSCb/esafXxXtBOsTKs84X3EnnDPMT/i15+fH2fbwDSiwhBXqJTP869eaLt9dQ1
-         xgi/yBkHdsqcJWuN/0DARt8nyzMmrfB1Qx5QhU/fY4ObapY6Ba2Q9hscSVkx8Crx5LA4
-         AhWuAW0fA1O6Cfk7aBMwAHcy6XD7bKXqoQlt/OCi+b0cJZwJsFamIn7Nu446CM2MeQSE
-         Swg6ltwBkHySKF88rnQG66wiSLi0XIFhFN9gB8BOD1cl8KoUdqkl1YnXPeQIZITB9XgL
-         aDR252/M3vWF7OnxBrDgh7+q/SIVTa1lR/xE/d8Nuhr7bqa1jQMuHia3AZIXzMXMGB5b
-         vBTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IbaM44rkmlTT1gjmeeX72ZcY1dxEtnD4IBMb0LHC26k=;
-        b=WivZtv2ES2WoqDfG8M9CwR0Fh7DTElFf3D4DB6Hv9ghDoDl07YFUuwVz5o2Zpu7VRD
-         +WvYoAnEuOWqag3BI/JTOuMV/iPJS1DDMJifAZOuq0ZGz8s6o4JSbNsjnl6Fk3p/ocwH
-         3OXPXUL4JqxC4TEDztVOpkEuRyFRHYlVmGBEpm/8OmSJBWc2pc5nrx3AVf3zRH0/QclT
-         AtAsVpmEC3NjTY/sgsREp3N7XPxxFvu5flj9VSXet1LyIRMNWsYsiM1ofDbNduZcNWNU
-         0kazEeOz5cd6tv2A/kBfw/l/f7H7S4RVwus5a1V2VAHdl2YKlEgzuQ3ieRppcb7Sp2Ez
-         uUaA==
-X-Gm-Message-State: AOAM531bJjCP+yh9N7Isyfuyz98wuavmYGGA3cUCLT14/KY7upW6pwtp
-        R6JOwjZSbnDCrHmEoFy3NqBaSg==
-X-Google-Smtp-Source: ABdhPJwyakkoiqpojLR0mTGtjAuUfUQRR6NcmK/JEz1nk4+LucVmW6kxhPjPs/aGItlGGDqZHa7wNw==
-X-Received: by 2002:a05:600c:a03:b0:38c:f953:ae13 with SMTP id z3-20020a05600c0a0300b0038cf953ae13mr10929867wmp.99.1649319968301;
-        Thu, 07 Apr 2022 01:26:08 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:f2a2:7d81:4e67:6c1c? ([2a01:e34:ed2f:f020:f2a2:7d81:4e67:6c1c])
-        by smtp.googlemail.com with ESMTPSA id n37-20020a05600c3ba500b0038cc9d6ff5bsm7018898wms.4.2022.04.07.01.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 01:26:07 -0700 (PDT)
-Message-ID: <7f3cbdf3-401c-6c30-20fa-b5121bd3f63d@linaro.org>
-Date:   Thu, 7 Apr 2022 10:26:06 +0200
+        Thu, 7 Apr 2022 04:29:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEF87CB16
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:27:21 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYvZM5L19zFpYl;
+        Thu,  7 Apr 2022 16:24:59 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 16:27:19 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 16:27:18 +0800
+Subject: Re: [PATCH RESEND v5 5/5] iova: Add iova_len argument to
+ iova_domain_init_rcaches()
+To:     John Garry <john.garry@huawei.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <chenxiang66@hisilicon.com>, <jean-philippe@linaro.org>,
+        <linuxarm@huawei.com>
+References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+ <1649071634-188535-6-git-send-email-john.garry@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <b09aeef5-106c-b477-e16b-a537929cb7c1@huawei.com>
+Date:   Thu, 7 Apr 2022 16:27:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/4] clocksource/drivers/timer-ti-dm: Update defines for
- am6 for inline functions
+In-Reply-To: <1649071634-188535-6-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220407071006.37031-1-tony@atomide.com>
- <20220407071006.37031-2-tony@atomide.com>
- <9671f0a5-6860-8a75-d65e-345ce890cd88@linaro.org>
- <Yk6drKxwOSVdrKp+@atomide.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yk6drKxwOSVdrKp+@atomide.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 10:15, Tony Lindgren wrote:
-> * Daniel Lezcano <daniel.lezcano@linaro.org> [220407 08:01]:
->> On 07/04/2022 09:10, Tony Lindgren wrote:
->>> @@ -251,7 +251,8 @@ int omap_dm_timers_active(void);
->>>     * The below are inlined to optimize code size for system timers. Other code
->>>     * should not need these at all.
->>>     */
->>> -#if defined(CONFIG_ARCH_OMAP1) || defined(CONFIG_ARCH_OMAP2PLUS)
->>> +#if defined(CONFIG_ARCH_OMAP1) || defined(CONFIG_ARCH_OMAP2PLUS) || \
->>> +	defined(CONFIG_ARCH_K3)
->>
->> Why not replace the above by CONFIG_OMAP_DM_TIMER ?
-> 
-> Hmm that's a good question for why it was not that way earlier.
-> 
-> This series changes things for tristate "OMAP dual-mode timer driver" if
-> ARCH_K3 || COMPILE_TEST though. So the inline stubs are still needed for
-> COMPILE_TEST it seems.
 
-But if ARCH_K3 or COMPILE_TEST is set, CONFIG_DM_TIMER is also set, no?
 
+On 2022/4/4 19:27, John Garry wrote:
+> Add max opt argument to iova_domain_init_rcaches(), and use it to set the
+> rcaches range.
+> 
+> Also fix up all users to set this value (at 0, meaning use default),
+> including a wrapper for that, iova_domain_init_rcaches_default().
+> 
+> For dma-iommu.c we derive the iova_len argument from the IOMMU group
+> max opt DMA size.
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/iommu/dma-iommu.c            | 15 ++++++++++++++-
+>  drivers/iommu/iova.c                 | 19 ++++++++++++++++---
+>  drivers/vdpa/vdpa_user/iova_domain.c |  4 ++--
+>  include/linux/iova.h                 |  3 ++-
+>  4 files changed, 34 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 42ca42ff1b5d..19f35624611c 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -525,6 +525,8 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+>  	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+>  	unsigned long order, base_pfn;
+>  	struct iova_domain *iovad;
+> +	size_t max_opt_dma_size;
+> +	unsigned long iova_len = 0;
+>  	int ret;
+>  
+>  	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
+> @@ -560,7 +562,18 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+>  	}
+>  
+>  	init_iova_domain(iovad, 1UL << order, base_pfn);
+> -	ret = iova_domain_init_rcaches(iovad);
+> +
+> +	max_opt_dma_size = iommu_group_get_max_opt_dma_size(dev->iommu_group);
+> +	if (max_opt_dma_size) {
+> +		unsigned long shift = __ffs(1UL << order);
+> +
+> +		iova_len = roundup_pow_of_two(max_opt_dma_size);
+> +		iova_len >>= shift;
+> +		if (!iova_len)
+> +			iova_len = 1;
+
+How about move "iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);" here? So that,
+iova_domain_init_rcaches() can remain the same. And iova_domain_init_rcaches_default() does
+not need to be added.
+
+> +	}
+> +
+> +	ret = iova_domain_init_rcaches(iovad, iova_len);
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index 5c22b9187b79..d65e79e132ee 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -706,12 +706,20 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
+>  	mag->pfns[mag->size++] = pfn;
+>  }
+>  
+> -int iova_domain_init_rcaches(struct iova_domain *iovad)
+> +static unsigned long iova_len_to_rcache_max(unsigned long iova_len)
+> +{
+> +	return order_base_2(iova_len) + 1;
+> +}
+> +
+> +int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len)
+>  {
+>  	unsigned int cpu;
+>  	int i, ret;
+>  
+> -	iovad->rcache_max_size = 6; /* Arbitrarily high default */
+> +	if (iova_len)
+> +		iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);
+> +	else
+> +		iovad->rcache_max_size = 6; /* Arbitrarily high default */
+>  
+>  	iovad->rcaches = kcalloc(iovad->rcache_max_size,
+>  				 sizeof(struct iova_rcache),
+> @@ -755,7 +763,12 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
+>  	free_iova_rcaches(iovad);
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
+> +
+> +int iova_domain_init_rcaches_default(struct iova_domain *iovad)
+> +{
+> +	return iova_domain_init_rcaches(iovad, 0);
+> +}
+> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches_default);
+>  
+>  /*
+>   * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
+> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
+> index 6daa3978d290..3a2acef98a4a 100644
+> --- a/drivers/vdpa/vdpa_user/iova_domain.c
+> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
+> @@ -514,12 +514,12 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
+>  	spin_lock_init(&domain->iotlb_lock);
+>  	init_iova_domain(&domain->stream_iovad,
+>  			PAGE_SIZE, IOVA_START_PFN);
+> -	ret = iova_domain_init_rcaches(&domain->stream_iovad);
+> +	ret = iova_domain_init_rcaches_default(&domain->stream_iovad);
+>  	if (ret)
+>  		goto err_iovad_stream;
+>  	init_iova_domain(&domain->consistent_iovad,
+>  			PAGE_SIZE, bounce_pfns);
+> -	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
+> +	ret = iova_domain_init_rcaches_default(&domain->consistent_iovad);
+>  	if (ret)
+>  		goto err_iovad_consistent;
+>  
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index 02f7222fa85a..56281434ce0c 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -95,7 +95,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
+>  	unsigned long pfn_hi);
+>  void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>  	unsigned long start_pfn);
+> -int iova_domain_init_rcaches(struct iova_domain *iovad);
+> +int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len);
+> +int iova_domain_init_rcaches_default(struct iova_domain *iovad);
+>  struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
+>  void put_iova_domain(struct iova_domain *iovad);
+>  #else
+> 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+  Zhen Lei

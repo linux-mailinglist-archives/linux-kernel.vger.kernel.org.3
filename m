@@ -2,139 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502EF4F8648
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EB14F864A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241291AbiDGRfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S1344741AbiDGRfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbiDGRfA (ORCPT
+        with ESMTP id S243508AbiDGRfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:35:00 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF6136C0B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:32:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O66Kv8wL/RRQkrKEveaSpo+ovmqXrk/pslYuYUzSjcxtrUCllC957faytgyY1TmnyCxitubyFCGnG+6Emz5B8vHohVKp+FmS8gbfn9TbUzZpzzqfwulXko5qZx85+utYqkqD7camxhsEbc66YTaVlZOUCIqyvsDm0CmYGXTbMyAyVrnG9Arouoe6W7JROugqZ7fni4E6J/DkTSmavRAE2E4LWz6cSXmYCAObQ0HzqUl1nwmH1k4LKfyAPgUDzynu+V742Sc2PQjpbI4ffWDJOdJKBthNoQB5cX3Ei1oa4k43YXpC9gFw9tdJOWAKeH+TE6zPvS51L9zPq2I+seK3hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=psTV8UDmIIQ/dhmqIx275DEGLgzfEScYAbFFbfFUcEQ=;
- b=ltq/6gjWPtoGOpeH6E6eL0zf2BVOkmqHY4svQ9UEMYbPC/Fe0q5Vuwsy0brZjhOZ+hcximhWXqokoDTVkfDYkOpDsOeTAcgXE2SZww7QiCyN/0yNkLI89RoOeew/YR5DJLaTH+CJxZ7KTnBohqMttPppIwI2ktgwFOHkcS6XTSMLxp9xHFlySAFzIku5p4mznifxAhCG9pg04MUYmtQSbKOL1ICJ74AaLyb3HUB5lFrMwvU92aSOe6UPfdz9YVkFDMYIB5oFn9Fgzs5s2+K4i5uinZXJTJw8igL4i1VkOwXGUuF33HZnF8tPMR8MLsL7RqcHZHaGPM9TGQLNca+qwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=psTV8UDmIIQ/dhmqIx275DEGLgzfEScYAbFFbfFUcEQ=;
- b=tbp2MEWyYaq4ZCpFGQN4gUkNy3STdXeROLLzOviMaZsplSP7vGuuMZHBB3I4qphdi9yauxNyWaQYnzmnfeQnlOErDvkoP4Znjt/14yl+B4oVgHwm7Z/ZeCl+Q2qO5oUIMFVjaNkHOka5ajtT2oHQGBZDqYEJRxxLrodpEWAEqFc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BL1PR12MB5190.namprd12.prod.outlook.com (2603:10b6:208:31c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.19; Thu, 7 Apr
- 2022 17:32:43 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::61e4:a6bf:9444:31f9]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::61e4:a6bf:9444:31f9%6]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 17:32:43 +0000
-Message-ID: <aac9a178-e58c-60c7-a9b5-56ce219d051c@amd.com>
-Date:   Thu, 7 Apr 2022 13:32:39 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm/amd/display: Fix indenting mistakes in
- dcn10_hw_sequencer.c
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Haowen Bai <baihaowen@meizu.com>, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <1649311250-17077-1-git-send-email-baihaowen@meizu.com>
- <bb7635cf-461e-7abd-6092-4be67099c846@amd.com>
- <CADnq5_Ogke7XuVsQaB8pskreXam1ASTE2jna=U6iuKuuyR4r-Q@mail.gmail.com>
- <CADnq5_Phw7SvfdtX_RN7N4xEzceYpZLvRv971y3YyOdrg5Lz_w@mail.gmail.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <CADnq5_Phw7SvfdtX_RN7N4xEzceYpZLvRv971y3YyOdrg5Lz_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0140.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:83::8) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Thu, 7 Apr 2022 13:35:42 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8658139CF2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:33:37 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h5so4579406pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xGRbiac9toXXNzU0tyvyrqhQhTOIou7FyrYj+X2weCI=;
+        b=lY+aU6tRq6WsVqLG89jQ+0OCk0PZgRKRmujHlFx61XJNMTnGXk3Lpw0lnFs1WrGE2j
+         48rZT/ruRncJnqcVy9SuWwFoUq4pqZaLPlWCCZpSd2jlB71NhZ8g3vmMYh7STnpZva5O
+         szZ8T42xg0oMTgtQl158gtbc3nj5iZT7vmtu1UI/erEWI/Nr2+ReSxnehCnmuBNw9F2e
+         Ulyh1n/5zBW4DCHLVZAs41fsvgx5tf9sK8tNpMLuJNm5jGJ3YtMY1K4nOD6OGdrhPInd
+         WprHIxjba4Atj4TaryahRFSLxDi+JX72ozYnj/GruaLiXo2qEqGE+w5T7XYv0Wih7SFT
+         E6Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xGRbiac9toXXNzU0tyvyrqhQhTOIou7FyrYj+X2weCI=;
+        b=Q0VOBKcZXq/HoSCGE/mXRJZA9SjSP/bwC3+tQ0wbvjpnOiTQDe4zUmEvcHx/+W6IYd
+         1mCU5vA1NJc3WgTcFFtyhfns1ycZKa3TabvQxRvLQe/Q4t3E+Y1qtt4fEocP7JPk3Q0a
+         RErTUlfa2chAJeOfotp2uO6yD63+3W1KMUp/OPpVowJqoAq4G4MqjlbcmFrySHkWz35E
+         HNW6+zvND140ve8tzgZFzrouzjY3Swfzoa0ksLwf0zSiEQV3e60+OhenVlS6A36Iw0s6
+         xxlzeUcOLsufeIvNGNdGjlcSuBq5vME66XzHhJ12wbMtQnoJeuqWcwUKoXcU+PTSZ5X2
+         iikA==
+X-Gm-Message-State: AOAM531INhiZZGz11MFm4aa3Nqky2KbkQmMfNNEKvXO7XaGjOPeu6Tbh
+        xyKSuYJr/BKJ4RUPgrjUnhiguA==
+X-Google-Smtp-Source: ABdhPJxN6vzyurVuDzMoitz2SvsQTcINBF4WXPD8hLI12+/eQRc8uPVoGJYOL/W5pmZKlCUslM9JyA==
+X-Received: by 2002:aa7:8049:0:b0:4fd:bfde:45eb with SMTP id y9-20020aa78049000000b004fdbfde45ebmr15464085pfm.76.1649352784639;
+        Thu, 07 Apr 2022 10:33:04 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v8-20020a056a00148800b004fa9bd7ddc9sm23998007pfu.113.2022.04.07.10.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 10:33:03 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 17:33:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/31] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+Message-ID: <Yk8gTB+x2UVE34Ds@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-4-vkuznets@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6b2aa82-64b7-4ba6-a25f-08da18bc9f50
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5190:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5190AA6BDC3ADE148DF928A98CE69@BL1PR12MB5190.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lBznqBjHdBjPU/vHoFG0DfWWCMgkXkhBxgkMLMc6kUF/qjiHEIdlOIxdqxxcXCzDYzSPa1Krzrf8tiabH+/XMVmzVuU7FqErCQt9WWU6hONH7LK9x+vkYq9FpYloEzG0evcgV9RpJ//lyqUc4bjS6zQXnZFL3p9ooXL9sk4/f7akRbJMcelLJ72fehLCzUsdQYMqOJ3n9GDsEduYoUuqLPRTlttxflHtGgQHiviAQRjBOaw206p8l580M+kKt94xYL4zUdHN9QbTdxjrwVpGIrze1cAI0bpjBXSHPDOFOc5dJeE28CXq3zA5GuXr41osKAHatBDJMZM1Cvk/Cuc42OE46ChD/pBaKT8fz2o+Mlhma37u4nTVLaPY8f5q5qdWNzAlBqeOb7fnKqEDIMwf2He00hTc1VymdGnMqTCjmL6ywOWr1rmWpyJR8zgN80w3IKcZGcokPHNyOa3VLTa1pMUVbTXEuA+XKG6ubmY+/pUtawD5Po/WFMAQ5RpC0BxZzgGwfhX4F6oBCilwrp6gse0aE83xxlE/+3GK+HZBgH5kTynI3E3uActo8zEgFZvqItsx2IfqD8T9RO50A5cGXgum69B+uf2rO1E+btrlaUX7/X2iahqjnTlR3kEGBDQd2sWhZmqlfn//5jv55HNAFZ4Ee8jRGMhkmsyO/CURh868Yf6A3VjWqS1IexVPQYwSOW0r5bRm688g/PFMtib2nPUxwMiEytSX7/Wb974U1hDte68yZYGxeorJmi4ylJea
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(31696002)(2616005)(54906003)(186003)(31686004)(36756003)(6506007)(38100700002)(6916009)(44832011)(6512007)(53546011)(316002)(66476007)(66946007)(2906002)(66556008)(5660300002)(8936002)(6666004)(8676002)(83380400001)(86362001)(4326008)(508600001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SHE4MTU2S3MxSzJ2UVZVVUwrblVUQTNDUitYNGpqQUJQZFBOWmdhS0x1ZllB?=
- =?utf-8?B?c1ZPaHNORVBQdFprR3J0aHFFNW5WTE5pakt2aVN2S21WMHpJSVBXTDQxM2s1?=
- =?utf-8?B?cnpUV0VGK2dnbnhKQXZmeFJNMkNVMHBkUnNOWU81QWpuc1o0VExNZkV0eC85?=
- =?utf-8?B?K2dXL000U2Jnd3NRaXBMbm1LbHpGSk9DS2twQTZtdFBESlR2YWYyeCtMQXpy?=
- =?utf-8?B?c09ZYkJSREpqbWcvOFhwYUJlcmlkL3QvYmkxK3BDVEw1WDhrdHVEMHM0Ykd2?=
- =?utf-8?B?cG1zdGpsc0V6ODhaUm1meTZrNERMaEl3enc1SmRMM3orWFNsUzhpYS9FaUlI?=
- =?utf-8?B?cXA2eVdUVENpTUJtR3VQTERxRTc4MUhaR3RTLzVXRE5OY096aXBEdVU3Ujda?=
- =?utf-8?B?Q1pONXY0RjdXL3hoYzAyVUtWQ0JucHZTV3M0MEVBcUpBbWdUdWhaN0U3bkow?=
- =?utf-8?B?L2dReU5QM3Q5QkFnY1M4YUwwaFZ4bmdPUFdLeGk2TkkrQlNRQ0kxbW4vN2k5?=
- =?utf-8?B?M2RhMUdCbzBPSm9EL0JYU0FZS2I0MDFTVkxtbERwWi9Kd0kwMWtQMU01Q1RD?=
- =?utf-8?B?NWxGb2xRNmpWSTA1dHZwM2RQUnkrWStuaUgyOXd5QWZlaEJnRCs5WXpsYVdq?=
- =?utf-8?B?UitRK0JSNVk3ckc5TWNRNkpMaUFqajcwYkcrL0Uwdk0zY0pSMnpQUytUZFE2?=
- =?utf-8?B?aHFTcjVydkNDYUlkL2tWejNMSFNDTjd5VnJOc3V2a0FqcFIwU1MvQkU2MS8z?=
- =?utf-8?B?dVJKWkpreGovTVI1bnJIbGlWWjRVQysySkdmTS9qdktNTTI3aEVzMmVKVW83?=
- =?utf-8?B?N0VEdHpRQm44bFNKc2QzWXFWZmhyYjVGTDBCZUkxWE9qWXF3QTZXWlBwajRY?=
- =?utf-8?B?ZjBqZXF4RkFxMkJXcVppSHFSSTBTcHZhMXNDYmh1ZGZLM0RqUXBORHAyclBz?=
- =?utf-8?B?M1EwazhwL0NxWlFjZ3JCNGVFak9JNG1yM3JNL2FCUE8zZFh3MURXL0wrb1BT?=
- =?utf-8?B?bWQxUDBRa3RVZ0xjbzJqZUNzSFRxOEJjS3JhTFpDc0krSnZEZm1iZzh3UTVy?=
- =?utf-8?B?a281Vm9NMExLdmVVMXpsZGtNUEplQTBXZytKZExvOFRFUmowNFdWVktwQVF3?=
- =?utf-8?B?Tm9JT1BqdG1DdnhhekF1d2VXU2duei9MVDFJSGlsU3NWTndDcldlZXNwYjBp?=
- =?utf-8?B?VTdQY0U1VlJncGxkNVlNY25salZ6VWViTWpac20zMEZEV2I5b3dqd1hRZ1M0?=
- =?utf-8?B?clE4OFZKYml3VmxUOHhPN2NTYTFVT25GUVRGQ3I4dGo4eHEyNjh2YU1rNyt4?=
- =?utf-8?B?eXBPOG1hQm95clhIVGJjQ1BQalgrV2FMOEpzN1VqVGpOUlVCQ2dsOTVLL2Np?=
- =?utf-8?B?REdjSlN5N2Q4cmNZOGFJOTZUSDFZNkY0R202b2gySGZWcCt1amJWN3JtRkxD?=
- =?utf-8?B?cGtrTWpsb1dGd3BEQUtxbjhVdHBoR2k4Vm5RL28wUDRwTjBJMU5LT1pRUlU0?=
- =?utf-8?B?dVFaZjVVNzdQalRZc1hWR0FrZ0hKdEJkTHRMYU02VFZuQWh3RCtxVnJJd3VU?=
- =?utf-8?B?OHIwRVlSb1pDV1d3OXpqcjlUZExML2xvYTV6QjdaeXEyN29VeGhOK0Ftekhp?=
- =?utf-8?B?dVB0U2x6ZTZZYWtUSENQZEl6cWRPTG9PVUJUQ2JoRWpzT2tvU0UvdEdBOWlw?=
- =?utf-8?B?RW1vc2xmM1VsRGFNcUNnbjR0a1NnOG44Y3JyOUQxYWtxb29yNVZ4azBuU2NT?=
- =?utf-8?B?UmlTKzRSNzdYTmdkcUVWSVJBNmhzbUpYUGpISXVSaElSME1RdG1EcyszcVBZ?=
- =?utf-8?B?ckx1SDAwOEFsRnozQ1RrQjZsRk13MjB1MDFoNFlVeW13WlNGZjkwUlJ5Z2RX?=
- =?utf-8?B?bHdwUDc5ckY2TzZxUXpTb3ErcitBMTlISlZmYU5NSVN3dDI5USt1K2ZFWTJs?=
- =?utf-8?B?cjF0blR5SGRHYmUreFNhMWhkSXNMY0pMOUVUMnRwOUJTL0xEL0h2M2hVNmJr?=
- =?utf-8?B?QitXenBoRE83SHVvTEhLS0J1a3d3SzFVSTEvSjlYM20wQ3JtNWpmSGdrbzJn?=
- =?utf-8?B?eER1UUh3cGRnWVgrMDhFaSs1V0NXQ08xMjhaZSs2Z0VhRG5sQnZOVUwxdnVk?=
- =?utf-8?B?RnM2d2V0V3lFVnJLTEptM1o1OUVTYUd3YWQyQmJzejk0UGRvUFNMMVNBSHRH?=
- =?utf-8?B?SEk2WkxMVmhSekdsN004M1BvL1Y5Q3IrOVcrSGhxemh0c1JxNytJMTJBYzN2?=
- =?utf-8?B?RU5YMEltaTJnRXNWdjJuVHJNb1FLcCtXZnprRWZpVzVkUjE2Vm9tNGttM1FI?=
- =?utf-8?B?QUVKSmN1bDVnYkhvRnhEemxBbE5FMXZZQ2VDcFRxVThGTGFEMTEwUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6b2aa82-64b7-4ba6-a25f-08da18bc9f50
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 17:32:43.4782
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lt2NjT3wU4Pj7xAPuec0wpk9gdjLPUg5KKsPx1bd42GO5NdW1j8m8jerFQAltyNc3ek55cf8JtHO5mnBmqeKHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5190
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="tIecicdRcj+9Bvwz"
+Content-Disposition: inline
+In-Reply-To: <20220407155645.940890-4-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -142,70 +78,347 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--tIecicdRcj+9Bvwz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2022-04-07 12:07, Alex Deucher wrote:
-> Actually this just causes another warning.  Dropped for now.  More below.
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> Currently, HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls are handled
+> the exact same way as HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE{,EX}: by
+> flushing the whole VPID and this is sub-optimal. Switch to handling
+> these requests with 'flush_tlb_gva()' hooks instead. Use the newly
+> introduced TLB flush ring to queue the requests.
 > 
-> On Thu, Apr 7, 2022 at 11:52 AM Alex Deucher <alexdeucher@gmail.com> wrote:
->>
->> Applied.  Thanks!
->>
->> Alex
->>
->> On Thu, Apr 7, 2022 at 10:18 AM Harry Wentland <harry.wentland@amd.com> wrote:
->>>
->>>
->>>
->>> On 2022-04-07 02:00, Haowen Bai wrote:
->>>> Smatch reports the following:
->>>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2174
->>>> dcn10_enable_vblanks_synchronization() warn: if statement not indented
->>>>
->>>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
->>>
->>> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->>>
->>> Harry
->>>
->>>> ---
->>>>  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 14 +++++++-------
->>>>  1 file changed, 7 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
->>>> index ee22f4422d26..3c338b85040c 100644
->>>> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
->>>> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
->>>> @@ -2172,13 +2172,13 @@ void dcn10_enable_vblanks_synchronization(
->>>>       if (master >= 0) {
->>>>               for (i = 0; i < group_size; i++) {
->>>>                       if (i != master && !grouped_pipes[i]->stream->has_non_synchronizable_pclk)
->>>> -                     grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
->>>> -                             grouped_pipes[master]->stream_res.tg,
->>>> -                             grouped_pipes[i]->stream_res.tg,
->>>> -                             grouped_pipes[master]->stream->timing.pix_clk_100hz,
->>>> -                             grouped_pipes[i]->stream->timing.pix_clk_100hz,
->>>> -                             get_clock_divider(grouped_pipes[master], false),
->>>> -                             get_clock_divider(grouped_pipes[i], false));
->>>> +                             grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
->>>> +                                     grouped_pipes[master]->stream_res.tg,
->>>> +                                     grouped_pipes[i]->stream_res.tg,
->>>> +                                     grouped_pipes[master]->stream->timing.pix_clk_100hz,
->>>> +                                     grouped_pipes[i]->stream->timing.pix_clk_100hz,
->>>> +                                     get_clock_divider(grouped_pipes[master], false),
->>>> +                                     get_clock_divider(grouped_pipes[i], false));
->>>>                               grouped_pipes[i]->stream->vblank_synchronized = true;
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 141 ++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 121 insertions(+), 20 deletions(-)
 > 
-> @Harry Wentland should this last statement be part of the if clause or
-> the for loop?
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 81c44e0eadf9..a54d41656f30 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1792,6 +1792,35 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+>  			      var_cnt * sizeof(*sparse_banks));
+>  }
+>  
+> +static int kvm_hv_get_tlbflush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
+> +				       u32 data_offset, int consumed_xmm_halves)
+
+data_offset should be gpa_t, and the order of params should be consistent between
+this and kvm_get_sparse_vp_set().
+
+> +{
+> +	int i;
+> +
+> +	if (hc->fast) {
+> +		/*
+> +		 * Each XMM holds two entries, but do not count halves that
+> +		 * have already been consumed.
+> +		 */
+> +		if (hc->rep_cnt > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves))
+> +			return -EINVAL;
+> +
+> +		for (i = 0; i < hc->rep_cnt; i++) {
+> +			int j = i + consumed_xmm_halves;
+> +
+> +			if (j % 2)
+> +				entries[i] = sse128_hi(hc->xmm[j / 2]);
+> +			else
+> +				entries[i] = sse128_lo(hc->xmm[j / 2]);
+> +		}
+> +
+> +		return 0;
+> +	}
+> +
+> +	return kvm_read_guest(kvm, hc->ingpa + data_offset,
+> +			      entries, hc->rep_cnt * sizeof(entries[0]));
+
+This is almost verbatim copy+pasted from kvm_get_sparse_vp_set().  If you slot in
+the attached patched before this, then this function becomes:
+
+static int kvm_hv_get_tlbflush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
+				       int consumed_xmm_halves, gpa_t offset)
+{
+	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
+				  entries, consumed_xmm_halves, offset);
+}
+
+
+> +}
+
+...
+
+> @@ -1840,15 +1891,47 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
+>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> -
+> -	kvm_vcpu_flush_tlb_guest(vcpu);
+> -
+> -	if (!hv_vcpu)
+> +	struct kvm_vcpu_hv_tlbflush_entry *entry;
+> +	int read_idx, write_idx;
+> +	u64 address;
+> +	u32 count;
+> +	int i, j;
+> +
+> +	if (!tdp_enabled || !hv_vcpu) {
+> +		kvm_vcpu_flush_tlb_guest(vcpu);
+>  		return;
+> +	}
+>  
+>  	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
+> +	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
+> +
+> +	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
+> +	smp_rmb();
+>  
+> -	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+> +	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
+> +		entry = &tlb_flush_ring->entries[i];
+> +
+> +		if (entry->flush_all)
+> +			goto out_flush_all;
+> +
+> +		/*
+> +		 * Lower 12 bits of 'address' encode the number of additional
+> +		 * pages to flush.
+> +		 */
+> +		address = entry->addr & PAGE_MASK;
+> +		count = (entry->addr & ~PAGE_MASK) + 1;
+> +		for (j = 0; j < count; j++)
+> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
+> +	}
+> +	++vcpu->stat.tlb_flush;
+> +	goto out_empty_ring;
+> +
+> +out_flush_all:
+> +	kvm_vcpu_flush_tlb_guest(vcpu);
+> +
+> +out_empty_ring:
+> +	tlb_flush_ring->read_idx = write_idx;
+>  }
+>  
+>  static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+> @@ -1857,12 +1940,13 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	struct hv_tlb_flush_ex flush_ex;
+>  	struct hv_tlb_flush flush;
+>  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+> +	u64 entries[KVM_HV_TLB_FLUSH_RING_SIZE - 2];
+
+What's up with the -2?  And given the multitude of things going on in this code,
+I'd strongly prefer this be tlbflush_entries.
+
+Actually, if you do:
+
+	u64 __tlbflush_entries[KVM_HV_TLB_FLUSH_RING_SIZE - 2];
+	u64 *tlbflush_entries;
+
+and drop all_addr, the code to get entries can be
+
+	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
+	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
+	    hc->rep_cnt > ARRAY_SIZE(tlbflush_entries)) {
+		tlbfluish_entries = NULL;
+	} else {
+		if (kvm_hv_get_tlbflush_entries(kvm, hc, __tlbflush_entries,
+						consumed_xmm_halves, data_offset))
+			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+		tlbfluish_entries = __tlbflush_entries;
+	}
+
+and the calls to queue flushes becomes
+
+			hv_tlb_flush_ring_enqueue(v, tlbflush_entries, hc->rep_cnt);
+
+That way a bug will "just" be a NULL pointer dereference and not consumption of
+uninitialized data (though such a bug might be caught be caught by the compiler).
+
+>  	u64 valid_bank_mask;
+>  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>  	struct kvm_vcpu *v;
+>  	unsigned long i;
+> -	bool all_cpus;
+> -
+> +	bool all_cpus, all_addr;
+> +	int data_offset = 0, consumed_xmm_halves = 0;
+
+data_offset should be a gpa_t.
+
+>  	/*
+>  	 * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
+>  	 * valid mask is a u64.  Fail the build if KVM's max allowed number of
+
+...
+
+> +read_flush_entries:
+> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
+> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
+> +	    hc->rep_cnt > (KVM_HV_TLB_FLUSH_RING_SIZE - 2)) {
+
+Rather than duplicate the -2 magic, it's far better to do:
+
+
+> +		all_addr = true;
+> +	} else {
+> +		if (kvm_hv_get_tlbflush_entries(kvm, hc, entries,
+> +						data_offset, consumed_xmm_halves))
+
+As mentioned, the order for this call should match kvm_get_sparse_vp_set().
+
+>  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +		all_addr = false;
+>  	}
+>  
+> -do_flush:
+> +
+>  	/*
+>  	 * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
+>  	 * analyze it here, flush TLB regardless of the specified address space.
+>  	 */
+>  	if (all_cpus) {
+>  		kvm_for_each_vcpu(i, v, kvm)
+> -			hv_tlb_flush_ring_enqueue(v);
+> +			hv_tlb_flush_ring_enqueue(v, all_addr, entries, hc->rep_cnt);
+>  
+>  		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
+>  	} else {
+> @@ -1951,7 +2052,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  			v = kvm_get_vcpu(kvm, i);
+>  			if (!v)
+>  				continue;
+> -			hv_tlb_flush_ring_enqueue(v);
+> +			hv_tlb_flush_ring_enqueue(v, all_addr, entries, hc->rep_cnt);
+>  		}
+>  
+>  		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+> -- 
+> 2.35.1
 > 
 
-It should be part of the if clause.
+--tIecicdRcj+9Bvwz
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-x86-hyper-v-Add-helper-to-read-hypercall-data-fo.patch"
 
-Harry
+From ad6033048d498baba7889ae0e14788c92d4baacb Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 7 Apr 2022 09:52:46 -0700
+Subject: [PATCH] KVM: x86: hyper-v: Add helper to read hypercall data for
+ arrary
 
-> Alex
-> 
->>>>               }
->>>>               grouped_pipes[master]->stream->vblank_synchronized = true;
->>>
+Move the guts of kvm_get_sparse_vp_set() to a helper so that the code for
+reading a guest-provided array can be reused in the future, e.g. for
+getting a list of virtual addresses whose TLB entries need to be flushed.
 
+Opportunisticaly swap the order of the data and XMM adjustment so that
+the XMM/gpa offsets are bundled together.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/hyperv.c | 53 +++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 20 deletions(-)
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index e4f381b46a28..58e7aff6057a 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1782,38 +1782,51 @@ struct kvm_hv_hcall {
+ 	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
+ };
+ 
+-static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+-				 int consumed_xmm_halves,
+-				 u64 *sparse_banks, gpa_t offset)
++
++static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
++			      u16 orig_cnt, u16 cnt_cap, u64 *data,
++			      int consumed_xmm_halves, gpa_t offset)
+ {
+-	u16 var_cnt;
+-	int i;
+-
+-	if (hc->var_cnt > 64)
+-		return -EINVAL;
+-
+-	/* Ignore banks that cannot possibly contain a legal VP index. */
+-	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
++	/*
++	 * Preserve the original count when ignoring entries via a "cap", KVM
++	 * still needs to validate the guest input (though the non-XMM path
++	 * punts on the checks).
++	 */
++	u16 cnt = min(orig_cnt, cnt_cap);
++	int i, j;
+ 
+ 	if (hc->fast) {
+ 		/*
+ 		 * Each XMM holds two sparse banks, but do not count halves that
+ 		 * have already been consumed for hypercall parameters.
+ 		 */
+-		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
++		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-		for (i = 0; i < var_cnt; i++) {
+-			int j = i + consumed_xmm_halves;
++
++		for (i = 0; i < cnt; i++) {
++			j = i + consumed_xmm_halves;
+ 			if (j % 2)
+-				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
++				data[i] = sse128_hi(hc->xmm[j / 2]);
+ 			else
+-				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
++				data[i] = sse128_lo(hc->xmm[j / 2]);
+ 		}
+ 		return 0;
+ 	}
+ 
+-	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
+-			      var_cnt * sizeof(*sparse_banks));
++	return kvm_read_guest(kvm, hc->ingpa + offset, data,
++			      cnt * sizeof(*data));
++}
++
++static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
++				 u64 *sparse_banks, int consumed_xmm_halves,
++				 gpa_t offset)
++{
++	if (hc->var_cnt > 64)
++		return -EINVAL;
++
++	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
++	return kvm_hv_get_hc_data(kvm, hc, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS,
++				  sparse_banks, consumed_xmm_halves, offset);
+ }
+ 
+ static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
+@@ -1952,7 +1965,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		if (!hc->var_cnt)
+ 			goto ret_success;
+ 
+-		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
+ 					  offsetof(struct hv_tlb_flush_ex,
+ 						   hv_vp_set.bank_contents)))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+@@ -2063,7 +2076,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		if (!hc->var_cnt)
+ 			goto ret_success;
+ 
+-		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 1,
+ 					  offsetof(struct hv_send_ipi_ex,
+ 						   vp_set.bank_contents)))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+
+base-commit: 9e28f2680fd1606225ab456bb28d30598110a520
+-- 
+2.35.1.1178.g4f1659d476-goog
+
+
+--tIecicdRcj+9Bvwz--

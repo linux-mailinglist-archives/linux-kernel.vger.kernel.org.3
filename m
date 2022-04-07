@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D534F867E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037FD4F8681
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343876AbiDGRqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S241423AbiDGRsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243367AbiDGRqp (ORCPT
+        with ESMTP id S231276AbiDGRsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:46:45 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BAC22C8D7;
-        Thu,  7 Apr 2022 10:44:43 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id e189so6373661oia.8;
-        Thu, 07 Apr 2022 10:44:43 -0700 (PDT)
+        Thu, 7 Apr 2022 13:48:18 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AA271E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:46:17 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id b188so6362530oia.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iV/MD9uIbwqu4F+SXP7ZcMowP52qdXB8VskgOt6wyOQ=;
-        b=er1AUU+/TBDgn5+7BW6o/CiyuHIkeJ2btYg7pyDopQG+roc5yO5tFd/Bm7y4TavWqm
-         oGdPB1tB4DGn1FnT1594tRQM6SjEZ0NEGYiDjQ9sc1vfaho1ZzbhqMI+DtcjAWfoqUat
-         AY5E+ztoerX9Bn7Lm5qap6VjJVSfeApd4P7cVp7NBbbFUDn1ijAVi8Fh65CWs3KTRMlr
-         u4j5PVDov8HbScUx9SLqI7haUEDLOIpnjKX+JmPjX2UUNoZFZiJ48kHYQOx9VIomkS3N
-         2Ibot9bSIDGmCRn9kBfY/xqJrniKNNo5/M7Sv9ebK8eTnR4wgxPBd04j3uU7qNaJYYvf
-         Y0Eg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kckLnLuecUYcAuxBtICpKDRrQ9GlihWSL3S+Wrg2yNI=;
+        b=qz/L7HMW5FWMU9PnysBussxrdFIj6na0FNFo0tIYMWuPOv7leY+GD2TUH5fXzeyAUF
+         AfTXBfiqczCkc9Vr+oeCXg4vvcceXirEc/Y0dOf+1k2lFE9jIOUeG5Bq0HxXzKe77wif
+         9z53vYpUnA0ZNSH1NUnuhvJm3TVpZ9OFFwZvSCMTaix0QOTLALnWiz2kiw0nFk3oNwdP
+         x/dtGSPAHPtPn1bTDG/MHjH5Q7lEyIhGElvJr+gJgSl7E1VYcrryWz1jb6oKddRCDWPT
+         W/wqjGVprJ48lba3zeG39FSqvFVr79eLVekPBP2EE+M4WQjY7j5SbDDp17J73K4X/Bb+
+         ckPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=iV/MD9uIbwqu4F+SXP7ZcMowP52qdXB8VskgOt6wyOQ=;
-        b=Tj4PUN0Dl/x8+S11koJrATaoT5cpd6ddoQyQJU7Cq8Q+OnKCOs1Hjq9gqNEyWC0CDq
-         f3+KTC6otUCnnLkoVa5nrcrN9Ibz+GY4izFYlEU8gigVUjSnKZkUERD7wcvtKcVFS/A7
-         p9/qKSNm3ElGrO06ZP/ZzMHeHibM2jwIOfqgPh5gx9iwJl6UyzrlOIgxzyxq1+qhYc4Z
-         BsW8tT3eRzBf0L9jyF09h+Gt/WvaEGLJjcOWJeKq98K7/ldZ6pKx/+0D8eKqdfVkPFOj
-         LVn1WW8N1MxRog08at8+Vm0em0k2+6YTpku0ihUmhGk5xmLATMAk4wqFI4OL6kFn+0Vl
-         p11g==
-X-Gm-Message-State: AOAM530DwIV/utS8kJtqdZKcvo32rkyuK3MJYsBLed5AvrCx/yH53JFL
-        54msC72IUaVzyVMOPmIno5MdkQp5JSo=
-X-Google-Smtp-Source: ABdhPJwZsZsecesnYWSOqbz/U0tqnH0rkrTG8DgIp285MIMinXGbztBv++QCaDsGnqfnpBaxkEnB2g==
-X-Received: by 2002:aca:90e:0:b0:2ee:e8d1:5e28 with SMTP id 14-20020aca090e000000b002eee8d15e28mr6117873oij.245.1649353482908;
-        Thu, 07 Apr 2022 10:44:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056830304e00b005b246b673f2sm8167939otr.71.2022.04.07.10.44.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:44:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 7 Apr 2022 10:44:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 0000/1123] 5.17.2-rc2 review
-Message-ID: <20220407174440.GC1827081@roeck-us.net>
-References: <20220406133122.897434068@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kckLnLuecUYcAuxBtICpKDRrQ9GlihWSL3S+Wrg2yNI=;
+        b=iZ8Q5YWI1dXAMxKGMYSHSXJJM2+tNjqJzGq/yblKGxRHN8Dge3k/Eu4iEIiBdWHg3H
+         CvvJzUosDo+vraL+DNfg8rgGwcd9gYVxnIekUhsk1DN0aPPNCiqE1l0nZFcr5GNKHmok
+         +BJUZ9MM8BUOCmoPFPKI48sh9WaDReHuLQREB1nMv2lYi3npmM5uqEx1EQh4eIlFMwuo
+         ewlBLamjsPV7izJUaWc4Wz847bZjcTLuOoDPaWKL6b/b04/fegGGfIl51RcV4J9fnX0o
+         1JhKU5aRb6xGE2FDoKObyKRKmVAieprFPXu+/Czrv5RMje0eWdQIr9XNHbqAl8uosp3a
+         wqrw==
+X-Gm-Message-State: AOAM5337zmK9JWKML+/GL/uaAAD2ZplY2kloJ+DB0Pl04SsUuM0mJHoQ
+        gxGf6wc8LUa9cYhs0nC/J/WtcMdjrMGkg63Le/HKmAzKAqs=
+X-Google-Smtp-Source: ABdhPJx3mMJs6xssQJ/peuDcZMDi6IZivTlWc2wFhiBWvW2T6mN3TfUUvic2qm4/MuGOmUSaYBlzozUg+53lqkWfwNw=
+X-Received: by 2002:a05:6808:2390:b0:2f9:c718:80e0 with SMTP id
+ bp16-20020a056808239000b002f9c71880e0mr446338oib.253.1649353576369; Thu, 07
+ Apr 2022 10:46:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406133122.897434068@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+References: <20220406165057.97492-1-h0tc0d3@gmail.com> <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
+In-Reply-To: <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 7 Apr 2022 13:46:05 -0400
+Message-ID: <CADnq5_NXzEzo=6adPQzEBrAGtWfegyvi=yGHVVOsb+3r9OiNaQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Fix code with incorrect enum type
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Guchun Chen <guchun.chen@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Joseph Greathouse <Joseph.Greathouse@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:44:54PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.2 release.
-> There are 1123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
-> 
+On Thu, Apr 7, 2022 at 2:21 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 06.04.22 um 18:50 schrieb Grigory Vasilyev:
+> > Instead of the 'amdgpu_ring_priority_level' type,
+> > the 'amdgpu_gfx_pipe_priority' type was used,
+> > which is an error when setting ring priority.
+> > This is a minor error, but may cause problems in the future.
+> >
+> > Instead of AMDGPU_RING_PRIO_2 =3D 2, we can use AMDGPU_RING_PRIO_MAX =
+=3D 3,
+> > but AMDGPU_RING_PRIO_2 =3D 2 is used for compatibility with
+> > AMDGPU_GFX_PIPE_PRIO_HIGH =3D 2, and not change the behavior of the
+> > code.
+> >
+> > Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+>
+> Good catch, Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c b/drivers/gpu/drm/am=
+d/amdgpu/gfx_v8_0.c
+> > index 5554084ec1f1..9bc26395f833 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
+> > @@ -1929,7 +1929,7 @@ static int gfx_v8_0_compute_ring_init(struct amdg=
+pu_device *adev, int ring_id,
+> >               + ring->pipe;
+> >
+> >       hw_prio =3D amdgpu_gfx_is_high_priority_compute_queue(adev, ring)=
+ ?
+> > -                     AMDGPU_GFX_PIPE_PRIO_HIGH : AMDGPU_RING_PRIO_DEFA=
+ULT;
+> > +                     AMDGPU_RING_PRIO_2 : AMDGPU_RING_PRIO_DEFAULT;
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
+gfx_v8_0.c, gfx_v9_0.c, gfx_v10_0.c all do this.  Care to fix them all up?
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Alex
 
-Guenter
+> >       /* type-2 packets are deprecated on MEC, use type-3 instead */
+> >       r =3D amdgpu_ring_init(adev, ring, 1024, &adev->gfx.eop_irq, irq_=
+type,
+> >                            hw_prio, NULL);
+>

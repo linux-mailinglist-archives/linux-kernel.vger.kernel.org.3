@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1114F79CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC0B4F7936
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243103AbiDGIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S236107AbiDGIQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243091AbiDGIdh (ORCPT
+        with ESMTP id S233165AbiDGIQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:33:37 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E9C1B6959;
-        Thu,  7 Apr 2022 01:31:34 -0700 (PDT)
-Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Thu, 7 Apr 2022
- 16:15:28 +0800
-From:   Yu Tu <yu.tu@amlogic.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Tu <yu.tu@amlogic.com>
-Subject: [PATCH 3/3] tty: serial: meson: Added S4 SOC compatibility
-Date:   Thu, 7 Apr 2022 16:13:55 +0800
-Message-ID: <20220407081355.13602-4-yu.tu@amlogic.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220407081355.13602-1-yu.tu@amlogic.com>
-References: <20220407081355.13602-1-yu.tu@amlogic.com>
+        Thu, 7 Apr 2022 04:16:25 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3513C1C404D;
+        Thu,  7 Apr 2022 01:14:25 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id w4so6595916wrg.12;
+        Thu, 07 Apr 2022 01:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KFIeVKLpdxuYvgcKFLrF9+DdKD62nPLRvcmnd9NEuo4=;
+        b=YNVrDgNjIA3es9LFQ9IMl3Lo3tifGEVL5R2vM0dOgt4XLMzW892428a1genFSYqFFM
+         H2QB/04wE+AAiFFtxMx5b6PD8J6rqAbm64DgrLEWUFsXNqLmIAQnIHZmb8II528ZfgOi
+         ipziDfFUmsnI8FeAdIXWNGlUN3JBJv4cUuBavQVtZfELdIgK/wEthkP9ZrJ+hAJO8j1Q
+         8RBcQwImD1tqV2B/c2XcSmGlvh74fc20MmnNymFSrc+gVfHwUleW64Yh3mVHNTBXli5J
+         ki6BA+OPQwSltQbmqgYPkrIkH7wn9JUuypVYaunQfTXsFv+LAV2/d/HiWHWIsG3xt815
+         V52Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KFIeVKLpdxuYvgcKFLrF9+DdKD62nPLRvcmnd9NEuo4=;
+        b=Fa1nKWt2QXpwerbnd2z01JpP/d19d93b7RjmP4IUlqxmX6E41h0PsqXXzxr5/blJuk
+         +a89G8NpByn2CRBM2VaS+vzdUEKtOcxpWwnBvW///JiIzze8KPAtOxp1/8YdGzYw9jkh
+         rSUdtXW5ZuaKUe8PS7ApYMAzDcbFcaQ6fgISw3b/tEb9MRLNr3qnUQnlpIcVnhTOtt3K
+         6EnzmFm8gQ0+RJ0NL53tQxCeCTYIxJysNcRl+jett6n92NyaCVzx8m9MwC71/VdU4D5c
+         VXIZq49bKTeLFa1cAh3fOEdMTIV4OhdSaEs0eUsNTu+4ORtT0gWv8w+Za27lQMTDaL9t
+         nBaw==
+X-Gm-Message-State: AOAM531g3jiH2p4np2sQU60lQnEPZ1LwU3/yq40WF+jGY10EKKnRMATs
+        yV1mdwgtYZfUpYYfJh0Q9Xc=
+X-Google-Smtp-Source: ABdhPJwLE99vBsb5So6xKGgdj8h83b9nCEn42B6zUdz2PsCsj7Ko1BVTelzmiwCzjkcOPzIzUCjonQ==
+X-Received: by 2002:a5d:47c8:0:b0:207:8b23:bfe6 with SMTP id o8-20020a5d47c8000000b002078b23bfe6mr1043997wrc.329.1649319263613;
+        Thu, 07 Apr 2022 01:14:23 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05600c4e4d00b0038e44e316c1sm6705916wmq.6.2022.04.07.01.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 01:14:22 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 09:14:20 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/911] 5.15.33-rc2 review
+Message-ID: <Yk6dXAWiQEzr/iia@debian>
+References: <20220406133055.820319940@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.18.11.248]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406133055.820319940@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make UART driver compatible with S4 SOC UART. Meanwhile, the S4 SOC
-UART uses 12MHz as the clock source for baud rate calculations.
+Hi Greg,
 
-Signed-off-by: Yu Tu <yu.tu@amlogic.com>
----
- drivers/tty/serial/meson_uart.c | 4 ++++
- 1 file changed, 4 insertions(+)
+On Wed, Apr 06, 2022 at 03:44:09PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.33 release.
+> There are 911 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index 7e77693a1318..03c9a305d805 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -803,6 +803,10 @@ static const struct of_device_id meson_uart_dt_match[] = {
- 	{ .compatible = "amlogic,meson8-uart" },
- 	{ .compatible = "amlogic,meson8b-uart" },
- 	{ .compatible = "amlogic,meson-gx-uart" },
-+	{
-+		.compatible = "amlogic,meson-s4-uart",
-+		.data = (void *)true,
-+	},
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
--- 
-2.33.1
+Build test:
+mips (gcc version 11.2.1 20220314): 62 configs -> no failure
+arm (gcc version 11.2.1 20220314): 100 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/989
+[2]. https://openqa.qa.codethink.co.uk/tests/991
+[3]. https://openqa.qa.codethink.co.uk/tests/993
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+
 

@@ -2,100 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7664F7EDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D444F7EDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbiDGMVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S234839AbiDGMXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiDGMVh (ORCPT
+        with ESMTP id S231985AbiDGMXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:21:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC217A90
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=f4Rmugru2mhvwGQ3fXEf3//3fTpZD2XMq6oiWTDtyQc=; b=nvp9Sxez94VVk6+ArZfaBLCB3z
-        wChIaMCgO0bTTgkfQfdyCA3e8V6YL5euWDxN83j+uDmC2QCHNU+Lh8uNji3iCIBMD8YJtnKTWrzVc
-        RgBc+Rxo1Gbex78H/WFAU6wUhqUqtfsz4uTrxkHRhpHcAfEo2H3GZD9/NpF0Q0rDoxOWV7OZ7sPUp
-        Pje+BPfSQSS/+GuknG3GMU0UV3F/QmeTsLuVbCq1cs56O2kw/LkMoQYWs51rdk1iEtgHLfhopWRkn
-        H8vCuNfhk9PDndRTVXQ8XmAyfv7uSmxY26TH/Q7BBJPTHg0U6djcCCbe4Q4nbaOyWvad1HEKuODBY
-        V9eaWeKw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ncR6d-008oVb-O3; Thu, 07 Apr 2022 12:19:19 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4F7549862CF; Thu,  7 Apr 2022 14:19:19 +0200 (CEST)
-Date:   Thu, 7 Apr 2022 14:19:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jthierry@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-        mark.rutland@arm.com, ardb@kernel.org, masahiroy@kernel.org,
-        jpoimboe@redhat.com, ycote@redhat.com
-Subject: Re: [RFC PATCH v3 13/13] objtool: arm64: Enable stack validation for
- arm64
-Message-ID: <20220407121919.GK2731@worktop.programming.kicks-ass.net>
-References: <20220407120141.43801-1-chenzhongjin@huawei.com>
- <20220407120141.43801-14-chenzhongjin@huawei.com>
+        Thu, 7 Apr 2022 08:23:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C90627CDC;
+        Thu,  7 Apr 2022 05:21:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 4118E1F461B5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649334108;
+        bh=2epFI9g6RLrV5cEIaOcyg/KZ57pqbR7bwpKwv6HMCUk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Encljqt0QR4uRHtwnRazKXaXKXLSCJjAizdjOvZPZxt+TxBj7nu/O38zy5EUAT+6H
+         Igxr4tAdXwkZGEa7WAomoO3uia8/61F9HmCUhFjZUBiBmLBsZetHo7+IFYkikKzRZB
+         4cHN5SjoNzKoCkTBMdsuIP9EQCquvcMVcIkPSZ2Lki37Vh8q7lCAvrjY1+kRU3cQRa
+         d9FkWw9iKccPddUkbHrqw8LR6n9qHNJ1S8k047JTt9CeFaOcs/Q9iBxX4OkrYIm3Je
+         RoXQYu7//rv/p4VtGxjMR3l9M9B21eoVz53n2bfv5xSXXFh1kmYyRScLQ5yNezPyB2
+         ZiPbRnFAotgKg==
+Message-ID: <d0b9c0c6-0548-a170-1490-c05e043c76d4@collabora.com>
+Date:   Thu, 7 Apr 2022 14:21:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407120141.43801-14-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/1] arm64: dts: mt8192: Add mmc device nodes
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220407113703.26423-1-allen-kh.cheng@mediatek.com>
+ <20220407113703.26423-2-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220407113703.26423-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 08:01:41PM +0800, Chen Zhongjin wrote:
-> From: Raphael Gault <raphael.gault@arm.com>
+Il 07/04/22 13:37, Allen-KH Cheng ha scritto:
+> In mt8192 SoC, mmc driver dose not use the MSDC module to control
+> clock. It will read/write register to enable/disable clock. Also
+> there is no other device of mt8192 using MSDC controller.
 > 
-> Add build option to run stack validation at compile time.
+> We add mmc nodes for mt8192 SoC and remove the clock-controller in
+> dts for avoid a duplicate unit-address(11f60000) warning.
 > 
-> When requiring stack validation, jump tables are disabled as it
-> simplifies objtool analysis (without having to introduce unreliable
-> artifacs). In local testing, this does not appear to significaly
-> affect final binary size nor system performance.
-> 
-> Signed-off-by: Raphael Gault <raphael.gault@arm.com>
-> Signed-off-by: Julien Thierry <jthierry@redhat.com>
-> ---
->  arch/arm64/Kconfig  | 1 +
->  arch/arm64/Makefile | 4 ++++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 23048be0333b..119cfce4117f 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -201,6 +201,7 @@ config ARM64
->  	select MMU_GATHER_RCU_TABLE_FREE
->  	select HAVE_RSEQ
->  	select HAVE_STACKPROTECTOR
-> +	select HAVE_STACK_VALIDATION
->  	select HAVE_SYSCALL_TRACEPOINTS
->  	select HAVE_KPROBES
->  	select HAVE_KRETPROBES
-> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-> index 2f1de88651e6..ad2f4a5e8f6c 100644
-> --- a/arch/arm64/Makefile
-> +++ b/arch/arm64/Makefile
-> @@ -133,6 +133,10 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_REGS),y)
->    CC_FLAGS_FTRACE := -fpatchable-function-entry=2
->  endif
->  
-> +ifeq ($(CONFIG_STACK_VALIDATION),y)
-> +KBUILD_CFLAGS	+= -fno-jump-tables
-> +endif
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-IIRC this is a sore spot for the whole endeavour..
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

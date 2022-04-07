@@ -2,119 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3654F81F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44954F81F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344157AbiDGOlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S1344168AbiDGOlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344139AbiDGOll (ORCPT
+        with ESMTP id S244262AbiDGOlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:41:41 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352611B2156
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:38:59 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so2256810wmn.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+HrqUl2stcAnQOvkV/cLC8sh1bdsuE9uaYRM3SC8TAI=;
-        b=QC/NBWbz8s242GqiqGVCxZjqkf65n2BOMSMdySwx5OMCnmpmfgmy2Gl0mqkViPk58A
-         B0hFl228YREAAGFp1bTWTBF48v9/vcamAwhlivD7F9RoAWhkxTVUUszkElVwniFp+KSW
-         153YOYtKLxloRx116E1JbzBPjjKXbUaIisB8A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+HrqUl2stcAnQOvkV/cLC8sh1bdsuE9uaYRM3SC8TAI=;
-        b=pPMLT6wOPZWlTBe/cU2DenZLe+xblAR60lt+6vrF+BmRfguMV12LoKt9wslznlbPrR
-         HUQhONLHaFLoDM7U1J64BELR6XCLEGHMsK49E8elk/N5drjLLiLOwNkIii7H07N2HgcD
-         Y76HWd3mzfXWPTfjjlKF/ntMJzLwN1k8b7bqnoEOv2zQDVT/ruf8/MRT8gr3y2thmVYX
-         RJ3ynboQEUMPhVFxF7Davk95QUv4Qdq6b/4f3LY8gm2PfccUt1ZzS38szFVzNqryujGj
-         YsTfgmI7xqHgkt+pioY5o2xBywkTzSWTg4SG646zfKR4GOr/Q2OSYf2BO48BjGkv0mFR
-         g68Q==
-X-Gm-Message-State: AOAM533NBu2whfGyppcqfb/O5cGOX1iuG/LeYD1mhcwLo33qXuefEltE
-        oF5yPJfNpA3wItiDwlKv6DLU7A==
-X-Google-Smtp-Source: ABdhPJxSm1o4AJPWmwSiOwXUcoOrfrDDoE6QavOVO+5QTW+urJsTAfmBJCV6RwoUxCRXXNUmmjXF1A==
-X-Received: by 2002:a1c:f605:0:b0:37b:b5de:89a0 with SMTP id w5-20020a1cf605000000b0037bb5de89a0mr12345916wmc.88.1649342337820;
-        Thu, 07 Apr 2022 07:38:57 -0700 (PDT)
-Received: from google.com ([37.228.205.1])
-        by smtp.gmail.com with ESMTPSA id bg8-20020a05600c3c8800b0038e4c5967besm7983010wmb.3.2022.04.07.07.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:38:57 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 14:38:55 +0000
-From:   Fabio Baltieri <fabiobaltieri@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: update google,cros-ec-pwm
- documentation
-Message-ID: <Yk73f9yyxy5LBC+V@google.com>
-References: <20220331125818.3776912-1-fabiobaltieri@chromium.org>
- <20220331125818.3776912-4-fabiobaltieri@chromium.org>
- <Yk20uTE/Vdm2c6jI@robh.at.kernel.org>
+        Thu, 7 Apr 2022 10:41:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201D21B2156;
+        Thu,  7 Apr 2022 07:39:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4608B81E7F;
+        Thu,  7 Apr 2022 14:39:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3D1C385A4;
+        Thu,  7 Apr 2022 14:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649342386;
+        bh=D6yWTP0RRyywT+VzxCMR096V+HzvnvXzEi7Yl21vJ70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDxZZ9M34REyRgkCw35b1LbD7PVG+FaSxHQf0UavbfGmtHeXYZKylQticNd2IQwzI
+         rXaD2sSl2pJIOxeZxxrxgYShf3C4vzIDQKF7aNMoG+nTxDJDkvh6jwGGs4IAO0t/YG
+         bMGOCyo42emGXsh/x57nYvO0Jx/vzCoI6Dh29ZMuhSvXnBkYyZ+HajwxASaJe9Zlg2
+         P0bX1sPOuYzt92TaAnumMY3Qz0lbSWWxQKUwMW82qTZ8ww+PCGxLmVgcIloadbGzAe
+         QAf4TVwp3XVEt0HAEcY62a6j+inGC5xqV36UQSjlPv45hY8NjeIUK9te0xAS5B0YhH
+         4Nsuq+z9BCMTQ==
+Date:   Thu, 7 Apr 2022 22:39:36 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 20/20] erofs: add 'fsid' mount option
+Message-ID: <Yk73qB7j1tz+tJhE@debian>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-21-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yk20uTE/Vdm2c6jI@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220406075612.60298-21-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Wed, Apr 06, 2022 at 10:41:45AM -0500, Rob Herring wrote:
-> On Thu, Mar 31, 2022 at 12:58:17PM +0000, Fabio Baltieri wrote:
-> > Update google,cros-ec-pwm node documentation to mention the
-> > google,use_pwm_type property.
-> > 
-> > Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
-> > ---
-> >  .../devicetree/bindings/pwm/google,cros-ec-pwm.yaml         | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > index 4cfbffd8414a..9c895c990ed8 100644
-> > --- a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > +++ b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > @@ -19,6 +19,12 @@ description: |
-> >  properties:
-> >    compatible:
-> >      const: google,cros-ec-pwm
-> > +
-> > +  google,use-pwm-type:
-> > +    description:
-> > +      Use PWM types (CROS_EC_PWM_DT_<...>) instead of generic channels.
-> > +    type: boolean
+On Wed, Apr 06, 2022 at 03:56:12PM +0800, Jeffle Xu wrote:
+> Introduce 'fsid' mount option to enable on-demand read sementics, in
+> which case, erofs will be mounted from data blobs. Users could specify
+> the name of primary data blob by this mount option.
 > 
-> Either do a new compatible string if the cell interpretation is mutually 
-> exclusive (channel number vs. type) or split the number space for the 
-> 1st cell between type and channel number. IOW, set a bit (31?) to 
-> signify the number is a type, not a channel.
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> ---
+>  fs/erofs/super.c | 48 ++++++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 42 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index a5e4de60a0d8..292b4a70ce19 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -398,6 +398,7 @@ enum {
+>  	Opt_dax,
+>  	Opt_dax_enum,
+>  	Opt_device,
+> +	Opt_fsid,
+>  	Opt_err
+>  };
+>  
+> @@ -422,6 +423,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
+>  	fsparam_flag("dax",             Opt_dax),
+>  	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
+>  	fsparam_string("device",	Opt_device),
+> +	fsparam_string("fsid",		Opt_fsid),
+>  	{}
+>  };
+>  
+> @@ -517,6 +519,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
+>  		}
+>  		++ctx->devs->extra_devices;
+>  		break;
+> +	case Opt_fsid:
+> +#ifdef CONFIG_EROFS_FS_ONDEMAND
+> +		kfree(ctx->opt.fsid);
+> +		ctx->opt.fsid = kstrdup(param->string, GFP_KERNEL);
+> +		if (!ctx->opt.fsid)
+> +			return -ENOMEM;
+> +#else
+> +		errorfc(fc, "fsid option not supported");
+> +#endif
+> +		break;
+>  	default:
+>  		return -ENOPARAM;
+>  	}
+> @@ -597,9 +609,14 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	sb->s_maxbytes = MAX_LFS_FILESIZE;
+>  	sb->s_op = &erofs_sops;
+>  
+> -	if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
+> -		erofs_err(sb, "failed to set erofs blksize");
+> -		return -EINVAL;
+> +	if (erofs_is_fscache_mode(sb)) {
+> +		sb->s_blocksize = EROFS_BLKSIZ;
+> +		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
+> +	} else {
+> +		if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
+> +			erofs_err(sb, "failed to set erofs blksize");
+> +			return -EINVAL;
+> +		}
+>  	}
+>  
+>  	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
+> @@ -608,7 +625,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  
+>  	sb->s_fs_info = sbi;
+>  	sbi->opt = ctx->opt;
+> -	sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
+> +	ctx->opt.fsid = NULL;
+>  	sbi->devs = ctx->devs;
+>  	ctx->devs = NULL;
+>  
+> @@ -625,6 +642,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  		err = super_setup_bdi(sb);
+>  		if (err)
+>  			return err;
+> +	} else {
+> +		sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
 
-Split the number space was my first (tentative) implementation as well,
-but it turns out that the PWM subsystem really wants channels to be
-zero-based[1], so I don't think flags or bitmasks are really an option.
+It should go with the previous patch? And even over long line here.
 
-New compatible sounds good though, I'll rework a v3 with that change.
+Thanks,
+Gao Xiang
 
-Thanks!
-Fabio
-
-[1] https://elixir.bootlin.com/linux/v5.17/source/drivers/pwm/core.c#L423
-
--- 
-Fabio Baltieri
+>  	}
+>  
+>  	err = erofs_read_superblock(sb);
+> @@ -684,6 +703,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  
+>  static int erofs_fc_get_tree(struct fs_context *fc)
+>  {
+> +	struct erofs_fs_context *ctx = fc->fs_private;
+> +
+> +	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && ctx->opt.fsid)
+> +		return get_tree_nodev(fc, erofs_fc_fill_super);
+> +
+>  	return get_tree_bdev(fc, erofs_fc_fill_super);
+>  }
+>  
+> @@ -733,6 +757,7 @@ static void erofs_fc_free(struct fs_context *fc)
+>  	struct erofs_fs_context *ctx = fc->fs_private;
+>  
+>  	erofs_free_dev_context(ctx->devs);
+> +	kfree(ctx->opt.fsid);
+>  	kfree(ctx);
+>  }
+>  
+> @@ -773,7 +798,10 @@ static void erofs_kill_sb(struct super_block *sb)
+>  
+>  	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
+>  
+> -	kill_block_super(sb);
+> +	if (erofs_is_fscache_mode(sb))
+> +		generic_shutdown_super(sb);
+> +	else
+> +		kill_block_super(sb);
+>  
+>  	sbi = EROFS_SB(sb);
+>  	if (!sbi)
+> @@ -783,6 +811,7 @@ static void erofs_kill_sb(struct super_block *sb)
+>  	fs_put_dax(sbi->dax_dev);
+>  	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+>  	erofs_fscache_unregister_fs(sb);
+> +	kfree(sbi->opt.fsid);
+>  	kfree(sbi);
+>  	sb->s_fs_info = NULL;
+>  }
+> @@ -884,7 +913,10 @@ static int erofs_statfs(struct dentry *dentry, struct kstatfs *buf)
+>  {
+>  	struct super_block *sb = dentry->d_sb;
+>  	struct erofs_sb_info *sbi = EROFS_SB(sb);
+> -	u64 id = huge_encode_dev(sb->s_bdev->bd_dev);
+> +	u64 id = 0;
+> +
+> +	if (!erofs_is_fscache_mode(sb))
+> +		id = huge_encode_dev(sb->s_bdev->bd_dev);
+>  
+>  	buf->f_type = sb->s_magic;
+>  	buf->f_bsize = EROFS_BLKSIZ;
+> @@ -929,6 +961,10 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
+>  		seq_puts(seq, ",dax=always");
+>  	if (test_opt(opt, DAX_NEVER))
+>  		seq_puts(seq, ",dax=never");
+> +#ifdef CONFIG_EROFS_FS_ONDEMAND
+> +	if (opt->fsid)
+> +		seq_printf(seq, ",fsid=%s", opt->fsid);
+> +#endif
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.27.0
+> 

@@ -2,103 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B4A4F82D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1140F4F82B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344622AbiDGP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S1344566AbiDGPYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344611AbiDGP0G (ORCPT
+        with ESMTP id S1344591AbiDGPYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:26:06 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F9C2207A1D;
-        Thu,  7 Apr 2022 08:22:14 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app3 (Coremail) with SMTP id cC_KCgAHWsqPAU9iX1KVAQ--.48077S2;
-        Thu, 07 Apr 2022 23:21:55 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     dan.carpenter@oracle.com
-Cc:     jgg@ziepe.ca, mustafa.ismail@intel.com, shiraz.saleem@intel.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH V2 09/11] drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
-Date:   Thu,  7 Apr 2022 23:21:50 +0800
-Message-Id: <20220407152150.19971-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgAHWsqPAU9iX1KVAQ--.48077S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Ar15Xw1rZryxZrWrXwb_yoW8AryUpr
-        47Ww1Skryq9F42ka18Xw1kAF93Xw4kXFWqvryqv395ZFs3XFyUAFnFyr1qqFZ8JF9Fgrs3
-        GF1rZryrCasIvr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
-        6r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUOGQDUUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZE+egADsg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 7 Apr 2022 11:24:36 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB61320D80D;
+        Thu,  7 Apr 2022 08:22:35 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncTxj-0003Hy-VO; Thu, 07 Apr 2022 17:22:20 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncTxj-000Hlq-Ix; Thu, 07 Apr 2022 17:22:19 +0200
+Subject: Re: [PATCH v5 1/3] selftests: bpf: add test for bpf_skb_change_proto
+To:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org, Maciej enczykowski <maze@google.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220407084727.10241-1-lina.wang@mediatek.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
+Date:   Thu, 7 Apr 2022 17:22:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20220407084727.10241-1-lina.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26505/Thu Apr  7 10:25:37 2022)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in irdma_cleanup_cm_core(), which is shown
-below:
+Hi Lina,
 
-   (Thread 1)              |      (Thread 2)
-                           | irdma_schedule_cm_timer()
-irdma_cleanup_cm_core()    |  add_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | irdma_cm_timer_tick()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+On 4/7/22 10:47 AM, Lina Wang wrote:
+> The code is copied from the Android Open Source Project and the author(
+> Maciej Żenczykowski) has gave permission to relicense it under GPLv2.
+> 
+> The test is to change input IPv6 packets to IPv4 ones and output IPv4 to
+> IPv6 with bpf_skb_change_proto.
+> 
+> Signed-off-by: Maciej Żenczykowski <maze@google.com>
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+> ---
+>   tools/testing/selftests/bpf/progs/nat6to4.c | 293 ++++++++++++++++++++
+>   1 file changed, 293 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/progs/nat6to4.c
 
-We hold cm_core->ht_lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need cm_core->ht_lock in position (2) of thread 2.
-As a result, irdma_cleanup_cm_core() will block forever.
+Thanks for adding a selftest into your series!
 
-This patch removes the check of timer_pending(), because
-the del_timer_sync() function will just return directly
-if there isn't a pending lock. As a result, the lock is
-redundant, because there is no resource it could protect.
+Your patch 2/3 is utilizing this program out of selftests/net/udpgro_frglist.sh,
+however, this is a bit problematic given BPF CI which runs on every BPF submitted
+patch. Meaning, udpgro_frglist.sh won't be covered by CI and only needs to be run
+manually. Could you properly include this into test_progs from BPF suite (that way,
+BPF CI will also pick it up)? See also [2] for more complex netns setups.
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V2:
-  - Remove the check of timer_pending().
-  - Remove the redundant lock.
+Thanks again!
+Daniel
 
- drivers/infiniband/hw/irdma/cm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Some small comments below.
 
-diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
-index dedb3b7edd8..4b6b1065f85 100644
---- a/drivers/infiniband/hw/irdma/cm.c
-+++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -3251,10 +3251,7 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
- 	if (!cm_core)
- 		return;
- 
--	spin_lock_irqsave(&cm_core->ht_lock, flags);
--	if (timer_pending(&cm_core->tcp_timer))
--		del_timer_sync(&cm_core->tcp_timer);
--	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-+	del_timer_sync(&cm_core->tcp_timer);
- 
- 	destroy_workqueue(cm_core->event_wq);
- 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
--- 
-2.17.1
+   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20220407084727.10241-2-lina.wang@mediatek.com/
+   [1] https://github.com/kernel-patches/bpf/actions
+   [2] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
 
+> diff --git a/tools/testing/selftests/bpf/progs/nat6to4.c b/tools/testing/selftests/bpf/progs/nat6to4.c
+> new file mode 100644
+> index 000000000000..099950f7a6cc
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/nat6to4.c
+> @@ -0,0 +1,293 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * This code is taken from the Android Open Source Project and the author
+> + * (Maciej Żenczykowski) has gave permission to relicense it under the
+> + * GPLv2. Therefore this program is free software;
+> + * You can redistribute it and/or modify it under the terms of the GNU
+> + * General Public License version 2 as published by the Free Software
+> + * Foundation
+> +
+> + * The original headers, including the original license headers, are
+> + * included below for completeness.
+> + *
+> + * Copyright (C) 2019 The Android Open Source Project
+> + *
+> + * Licensed under the Apache License, Version 2.0 (the "License");
+> + * you may not use this file except in compliance with the License.
+> + * You may obtain a copy of the License at
+> + *
+> + *      http://www.apache.org/licenses/LICENSE-2.0
+> + *
+> + * Unless required by applicable law or agreed to in writing, software
+> + * distributed under the License is distributed on an "AS IS" BASIS,
+> + * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+> + * See the License for the specific language governing permissions and
+> + * limitations under the License.
+> + */
+> +#include <linux/bpf.h>
+> +#include <linux/if.h>
+> +#include <linux/if_ether.h>
+> +#include <linux/if_packet.h>
+> +#include <linux/in.h>
+> +#include <linux/in6.h>
+> +#include <linux/ip.h>
+> +#include <linux/ipv6.h>
+> +#include <linux/pkt_cls.h>
+> +#include <linux/swab.h>
+> +#include <stdbool.h>
+> +#include <stdint.h>
+> +
+> +// bionic kernel uapi linux/udp.h header is munged...
+
+nit: Throughout the file, please use C style comments as per kernel coding convention.
+
+> +#define __kernel_udphdr udphdr
+> +#include <linux/udp.h>
+> +
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#define htons(x) (__builtin_constant_p(x) ? ___constant_swab16(x) : __builtin_bswap16(x))
+> +#define htonl(x) (__builtin_constant_p(x) ? ___constant_swab32(x) : __builtin_bswap32(x))
+> +#define ntohs(x) htons(x)
+> +#define ntohl(x) htonl(x)
+
+nit: Please use libbpf's bpf_htons() and friends helpers [3].
+
+   [3] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/tools/lib/bpf/bpf_endian.h
+
+OT: In Cilium we run similar NAT46/64 translation for XDP and tc/BPF for our LB services [4] (that is,
+v4 VIP with v6 backends, and v6 VIP with v4 backends).
+
+   [4] https://github.com/cilium/cilium/blob/master/bpf/lib/nat_46x64.h
+       https://github.com/cilium/cilium/blob/master/test/nat46x64/test.sh

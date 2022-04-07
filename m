@@ -2,202 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A57C4F885C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0794F8879
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiDGUdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S229837AbiDGUdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiDGUdM (ORCPT
+        with ESMTP id S229923AbiDGUdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:33:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D96030F9CA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:18:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9509E61EE5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA2FC385A4;
-        Thu,  7 Apr 2022 20:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649362691;
-        bh=ri7xT8MCx8mwYgjZZIPM9V0zwZwR3Rdo4TKvPfNTfd0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=xBbKyofi0Z7kXY4nRilQftAnBHdLY0oC81M9HNli7qkV8OWhTGjAwIYx7MbeamNgc
-         U4hlm0L+KpoOZ+kLyp6QUxBdL1unJTB0tlcYBqjkWc2FX6Y/WE1sr08kewZSq76gy5
-         xj4iUIe4oPSivbqKNlQRaT7k3VoH5/OayM8eL/QA=
-Date:   Thu, 7 Apr 2022 13:18:09 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>
-Subject: Re: [PATCH v6] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-Id: <20220407131809.f2d256541e2c039c434c0d72@linux-foundation.org>
-In-Reply-To: <20220407184254.3612387-1-npache@redhat.com>
-References: <20220407184254.3612387-1-npache@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Thu, 7 Apr 2022 16:33:22 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC3320DA1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:18:41 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id oo16-20020a17090b1c9000b001c6d21e8c04so6413392pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Ku8/xhQuY+DnaUKfaV/zzEU2U1z2wt3bXsnqQqFqkqc=;
+        b=M3ZS8Aiq4mZdEltM4TPvQxBlNDtZ5ARAyG4HJSf7KbrTU9eEooYFvgfOobSIGlllyi
+         CE02YilAIANO7ovsSumaS3UAoN/fZBTfzlEOZIaX/CXkYe74UAH5vZzcrGwRIFwwALCq
+         DZC4F6uzVaWWgV8M6b2y1Noxmjm1vFrdoNbqzkXUwV29S0QFkbL2NL4Klv0EZvKVXpAd
+         UwgqmZwO5sKsSv8HpkhpLuUG0Qi2YVssaT0issL/qLqJuYMvUb3HPtOTLXh0UxS9HdOi
+         B9OyKC3dQ9xz7PUO9RmbRRvA9WqciG8SdgAksytDfEgdDCmFhyBSrWT1uGXykoWyhlIw
+         Dp/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Ku8/xhQuY+DnaUKfaV/zzEU2U1z2wt3bXsnqQqFqkqc=;
+        b=UYvoVXIj2JJeO9I8L/FhOn8AhZ8S11d8k6tjf0GYqmFKzvwl5kniQHoSi9/JRJL8BH
+         z5E+CeceiUVoCGUFwDjCILtsPHkgkBpG3PWvWTAHfM3v+cdI7x2FUiIX4RM/LWjm69+W
+         p6RLWONP3bpf32HrHAMHb9IZjDhK2EQZb8tKu5LQu004SPK4m27JTP/a4Aw/FaCTbnIe
+         FZXubStU1BJSkHDmjCKuzgqH57xxPpekoyP0mulMfDE6lz8f7NzePp1CPYiLOZrHCxrs
+         9g5h4oCAXQkJb3sjXsp17ERx+z9q1cMjLAOKf5ej5Y7Wx9XUmm/Z7nbiIeVuqrFBCsUa
+         jS9w==
+X-Gm-Message-State: AOAM530qvueaI55MGVxJ4hCSHheqnvX0/Vzgrqp1Ko2RPeQbIlLT2YoT
+        a9KeRZa4rz4YhIZ6GodD6MfMhOvMRYU=
+X-Google-Smtp-Source: ABdhPJzMbjER7HNgCRI9nhUzY8Uo13WQPhIvuQ+NCrB4gGoHKtJ31PXyU9pKTuZK5BX9ao19iY2kTP87Lrg=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:469d:83b1:de7b:c47f])
+ (user=pgonda job=sendgmr) by 2002:a17:903:1251:b0:156:9d8e:1077 with SMTP id
+ u17-20020a170903125100b001569d8e1077mr15375452plh.116.1649362721388; Thu, 07
+ Apr 2022 13:18:41 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 13:18:38 -0700
+Message-Id: <20220407201838.715024-1-pgonda@google.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v4] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Apr 2022 14:42:54 -0400 Nico Pache <npache@redhat.com> wrote:
+SEV-ES guests can request termination using the GHCB's MSR protocol. See
+AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
+struct the userspace VMM can clearly see the guest has requested a SEV-ES
+termination including the termination reason code set and reason code.
 
-> The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
-> be targeted by the oom reaper. This mapping is used to store the futex
-> robust list head; the kernel does not keep a copy of the robust list and
-> instead references a userspace address to maintain the robustness during
-> a process death. A race can occur between exit_mm and the oom reaper that
-> allows the oom reaper to free the memory of the futex robust list before
-> the exit path has handled the futex death:
-> 
->     CPU1                               CPU2
-> ------------------------------------------------------------------------
->     page_fault
->     do_exit "signal"
->     wake_oom_reaper
->                                         oom_reaper
->                                         oom_reap_task_mm (invalidates mm)
->     exit_mm
->     exit_mm_release
->     futex_exit_release
->     futex_cleanup
->     exit_robust_list
->     get_user (EFAULT- can't access memory)
-> 
-> If the get_user EFAULT's, the kernel will be unable to recover the
-> waiters on the robust_list, leaving userspace mutexes hung indefinitely.
-> 
-> Use the robust_list address stored in the kernel to skip the VMA that holds
-> it, allowing a successful futex_cleanup.
-> 
-> Theoretically a failure can still occur if there are locks mapped as
-> PRIVATE|ANON; however, the robust futexes are a best-effort approach.
-> This patch only strengthens that best-effort.
-> 
-> The following case can still fail:
-> robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
-> 
-> Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
 
-Should this fix be backported into -stable kernels?
+---
+V4
+ * Updated to Sean and Paolo's suggestion of reworking the
+   kvm_run.system_event struct to ndata and data fields to fix the
+   padding.
 
-> --- a/include/linux/oom.h
-> +++ b/include/linux/oom.h
-> @@ -106,7 +106,8 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
->  	return 0;
->  }
->  
-> -bool __oom_reap_task_mm(struct mm_struct *mm);
-> +bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-> +		__user *robust_list);
+V3
+ * Add Documentation/ update.
+ * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
+   to KVM_SHUTDOWN_REQ.
 
-Should explicitly include futex.h
+V2
+ * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
 
->  long oom_badness(struct task_struct *p,
->  		unsigned long totalpages);
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 3aa839f81e63..c14fe6f8e9a5 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -3126,7 +3126,8 @@ void exit_mmap(struct mm_struct *mm)
->  		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
->  		 * __oom_reap_task_mm() will not block.
->  		 */
-> -		(void)__oom_reap_task_mm(mm);
-> +		(void)__oom_reap_task_mm(mm, current->robust_list);
-> +
->  		set_bit(MMF_OOM_SKIP, &mm->flags);
->  	}
->  
-> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> index 7ec38194f8e1..727cfc3bd284 100644
-> --- a/mm/oom_kill.c
-> +++ b/mm/oom_kill.c
-> @@ -509,9 +509,11 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
->  static struct task_struct *oom_reaper_list;
->  static DEFINE_SPINLOCK(oom_reaper_lock);
->  
-> -bool __oom_reap_task_mm(struct mm_struct *mm)
-> +bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-> +		__user *robust_list)
->  {
+Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
+reason code set and reason code and then observing the codes from the
+userspace VMM in the kvm_run.shutdown.data fields.
 
-It's pretty sad to make such a low-level function aware of futex
-internals.  How about making it a more general `void *skip_area'?
+---
+ arch/x86/kvm/svm/sev.c   | 9 +++++++--
+ include/uapi/linux/kvm.h | 5 ++++-
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
->  	struct vm_area_struct *vma;
-> +	unsigned long head = (unsigned long) robust_list;
->  	bool ret = true;
->  
->  	/*
-> @@ -526,6 +528,11 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
->  		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
->  			continue;
->  
-> +		if (vma->vm_start <= head && vma->vm_end > head) {
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..1a080f3f09d8 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+ 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+ 			reason_set, reason_code);
+ 
+-		ret = -EINVAL;
+-		break;
++		vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
++		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM |
++					       KVM_SYSTEM_EVENT_NDATA_VALID;
++		vcpu->run->system_event.ndata = 1;
++		vcpu->run->system_event.data[1] = control->ghcb_gpa;
++
++		return 0;
+ 	}
+ 	default:
+ 		/* Error, keep GHCB MSR value as-is */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8616af85dc5d..dd1d8167e71f 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -444,8 +444,11 @@ struct kvm_run {
+ #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+ #define KVM_SYSTEM_EVENT_RESET          2
+ #define KVM_SYSTEM_EVENT_CRASH          3
++#define KVM_SYSTEM_EVENT_SEV_TERM       4
++#define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+ 			__u32 type;
+-			__u64 flags;
++			__u32 ndata;
++			__u64 data[16];
+ 		} system_event;
+ 		/* KVM_EXIT_S390_STSI */
+ 		struct {
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-This check as you have it is making assumptions about the length of the
-area at *robust_list and about that area's relation to the area
-represented by the vma.
-
-So if this is to be made more generic, we'd also need skip_area_len so
-we can perform a full overlap check.
-
-I dunno, maybe not worth it at this time, what do others think.
-
-But the special-casing in here is pretty painful.
-
-> +			pr_info("oom_reaper: skipping vma, contains robust_list");
-> +			continue;
-> +		}
-> +
->  		/*
->  		 * Only anonymous pages have a good chance to be dropped
->  		 * without additional steps which we cannot afford as we
-> @@ -587,7 +594,7 @@ static bool oom_reap_task_mm(struct task_struct *tsk, struct mm_struct *mm)
->  	trace_start_task_reaping(tsk->pid);
->  
->  	/* failed to reap part of the address space. Try again later */
-> -	ret = __oom_reap_task_mm(mm);
-> +	ret = __oom_reap_task_mm(mm, tsk->robust_list);
->  	if (!ret)
->  		goto out_finish;
->  
-> @@ -1190,7 +1197,8 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
->  	 * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
->  	 * possible change in exit_mmap is seen
->  	 */
-> -	if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
-> +	if (!test_bit(MMF_OOM_SKIP, &mm->flags) &&
-> +			!__oom_reap_task_mm(mm, p->robust_list))
->  		ret = -EAGAIN;
->  	mmap_read_unlock(mm);
->  
-> -- 
-> 2.35.1

@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035FC4F879F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0848F4F87A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243753AbiDGTEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S242041AbiDGTFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiDGTEM (ORCPT
+        with ESMTP id S229736AbiDGTFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:04:12 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5F722EB16;
-        Thu,  7 Apr 2022 12:02:11 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2db2add4516so72800737b3.1;
-        Thu, 07 Apr 2022 12:02:11 -0700 (PDT)
+        Thu, 7 Apr 2022 15:05:07 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55722F3E5;
+        Thu,  7 Apr 2022 12:03:05 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7376791fac.7;
+        Thu, 07 Apr 2022 12:03:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZGD1/P1eXCqhTH9MB1Py6yMHa/YFvYh5c7tHdx0u8Pk=;
-        b=av2WMsDE+fRA9olKRhATLjT5Jk7jMYeOKORh97SxOTh1so26WXzl5GII3FenxgV3Uy
-         Ootd3G2R+KrWK1CeuPFw+5CwzpHhiM6mN0IL1bbt9N4DJW1r0v35dYWbLDXKeuDyjjtg
-         2sSFVskr5dkuyumzObRxsm6UM8a8PC4odSwVkh5/Kjp1vKc34oIy50gVPN6VGRwRWy+J
-         5w/5CNTRvqiUgRt+VMDrDauNEdTHURK1Hx748MBGwCRhm0x9ywKcIpD8L3N0EDD9D+hW
-         eUIDHCOOmPZrhJ22rZUUgP5RL1Uwbf2gnYeg8lO5E1bklLQPo3dD+lF3axA5vHYt4xSd
-         BE9w==
-X-Gm-Message-State: AOAM531kTnVV+HB5JGeF0l/nYr+pbH1C4yIlCuCKnj4qnXSgNF4vsL5E
-        EkS+Z/geVXsuCHRdb8wuYG/vuCiOOUzepk/Tt04=
-X-Google-Smtp-Source: ABdhPJyPrwbHxRUQ/BZZDOo8gYVEpwEzdjyOfqe28o/yvRJgz1r6QhQB1JhX9AoyLAi7nmXy69UlHGSXkvsWBvPq4Dk=
-X-Received: by 2002:a81:1549:0:b0:2eb:3dc7:bd16 with SMTP id
- 70-20020a811549000000b002eb3dc7bd16mr12995239ywv.7.1649358130411; Thu, 07 Apr
- 2022 12:02:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NQ6NbUsNxmOVH45bPoaIurWw7GEZCEr+aG9zT4r8iZk=;
+        b=GuoRTcHc9BrU1WYY4ew0sprG/1ibx9HAkoZBtsk2EU4K2wdeBUapN8cLb0MJQ7le78
+         mjQjyVpVZ3HIt1uUPCAgZqXKXlW3MNllYpoJdi/ukqjpfGTscXalTxycvucAHG+3VBoZ
+         xxfLn6uoB4IArcowu32vYvSt1Kly0TfJqbsMjRZy16Tk7KC3lIQlFdSyWpk7CtEKMvTo
+         PvEtPJPRB9LNEdmrJo9e5N8Ixko4JH0nQg0FdwydYXO5gKiPEUHAHbZzlnCXZcnTUdFP
+         2rAaoLOXyubMGgwGs6eacdencKwbAd54BpkCKwmJ30psMpbnrZpfZJItxvnzvQ50nr3I
+         Eqzg==
+X-Gm-Message-State: AOAM533Cf3w/zo0h0dIA4MKsEkN575MSVw+pkmm/wCRrEMk1CztQ6A4P
+        COy7RkE9jkJKPjk8eXJJbM05NxX0Pw==
+X-Google-Smtp-Source: ABdhPJwjcQsN14WCT4vuJ2Ixk7iwlioV4sNsxqAdHX8vMZZKKLCQdUfhAOOFojZ3iNXQynPHiVIlJg==
+X-Received: by 2002:a05:6870:e9a7:b0:de:e59a:7376 with SMTP id r39-20020a056870e9a700b000dee59a7376mr7688592oao.194.1649358184393;
+        Thu, 07 Apr 2022 12:03:04 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r25-20020a4aea99000000b0032447305d70sm7598890ooh.23.2022.04.07.12.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 12:03:03 -0700 (PDT)
+Received: (nullmailer pid 1789446 invoked by uid 1000);
+        Thu, 07 Apr 2022 19:03:03 -0000
+Date:   Thu, 7 Apr 2022 14:03:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: align SPI NOR node name with dtschema
+Message-ID: <Yk81Z5G+2B9arV9a@robh.at.kernel.org>
+References: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
+ <Yk8AJcFRmYEryqra@sirena.org.uk>
+ <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
 MIME-Version: 1.0
-References: <4198163.ejJDZkT8p0@kreacher> <3623886.MHq7AAxBmi@kreacher> <YkwRjI0KvpmiJjvK@lahna>
-In-Reply-To: <YkwRjI0KvpmiJjvK@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 7 Apr 2022 21:01:59 +0200
-Message-ID: <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] PCI: PM: Avoid leaving devices in D0-uninitialized
- in pci_power_up()
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Mon, Apr 04, 2022 at 05:41:13PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > In theory, pci_power_up() may leave a device in D0-uninitialized
-> > during a transition from D3cold to D0.
-> >
-> > Say, a PCIe device depending on some ACPI power resources is put into
-> > D3cold, so the power resources in question are all turned off.  Then,
-> > pci_power_up() is called to put it into D0.
-> >
-> > It first calls pci_platform_power_transition() which invokes
-> > platform_pci_set_power_state() to turn on the ACPI power resources
-> > depended on by the device and, if that is successful, it calls
-> > pci_update_current_state() to update the current_state field of
-> > the PCI device object.  If the device's configuration space is
-> > accessible at this point, which is the case if
-> > platform_pci_set_power_state() leaves it in D0-uninitialized (and
-> > there's nothing to prevent it from doing so), current_state will be
-> > set to PCI_D0 and the pci_raw_set_power_state() called subsequently
-> > will notice that the device is in D0 already and do nothing.
-> > However, that is not correct, because it may be still necessary to
-> > restore the device's BARs at this point.
-> >
-> > To address this issue, set current_state temporarily to PCI_D3hot
-> > in the cases in which pci_raw_set_power_state() may need to do more
-> > than just changing the power state of the device.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Thu, Apr 07, 2022 at 05:23:40PM +0200, Krzysztof Kozlowski wrote:
+> On 07/04/2022 17:15, Mark Brown wrote:
+> > On Thu, Apr 07, 2022 at 04:34:05PM +0200, Krzysztof Kozlowski wrote:
+> >> The node names should be generic and SPI NOR dtschema expects "flash".
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> >>  Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
+> >>  Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
+> >>  Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
+> > 
+> > Acked-by: Mark Brown <broonie@kernel.org>
+> > 
+> > but it would be easier to split this into per subsystem stuff.
+> 
+> With DTS changes I had 22 patches, so splitting is a trade-off. If
+> that's preferred (actually can reduce conflicts), I'll split it and send
+> a v2.
 
-Thanks, but on second thought, I'm not sure if this is the best way to
-address the issue.
+I've applied it.
 
-Basically, pci_power_up() is called in two places, in
-pci_set_power_state() (for the transitions to D0) and in
-pci_pm_default_resume_early().  In the latter case,
-pci_restore_state() is called right after it and that covers BARs
-restoration, so nothing more needs to be done in that case.
+Really, I would have just fixed spi-pl022.yaml. In general, I'm not that 
+interested in taking fixes on the .txt bindings.
 
-This means that pci_set_power_state() is the only place needing to
-restore the BARs when going into D0 from D3hot or deeper and it is
-better to move BARs restoration directly into it.  I'll update the
-series accordingly and resend.
-
-I also think that the mandatory delay is not needed at all when
-pci_raw_set_power_state() is called for transitions D3cold -> D0,
-because in that case either the device has been powered up via
-platform_pci_set_power_state(), or via the bridge resume which takes
-the delay into account.
+Rob

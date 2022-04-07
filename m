@@ -2,135 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30A34F7DE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57BE4F7E02
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244757AbiDGLW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S244781AbiDGLZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244740AbiDGLWr (ORCPT
+        with ESMTP id S232523AbiDGLZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:22:47 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1262A1CA13E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 04:20:47 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2e5e9025c20so57628417b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 04:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=v7Jwe0VrBcAjVk91bGHnhVaDKMA+AJj1/NHbliWEizE=;
-        b=yMZ98Ijdg1QRohwPmwdFzysZvyUvsyFs6JZ/qB8PmbOmDbcELZUzICmrdBTjG5ITIg
-         rpAHebALkH3xUp8GPhmfBveIelrVhcXq8IGPcz6mkaGSqBvKPpPoQZ3fmPIow/EWBp6X
-         N/DGPka4+VwRF2w8AEFnLRzIIsbc6Zd8R0Tk2LtiCRb9gPdU95cU5KTMeaRLG4gXQ/Y3
-         9iWtZK95P4gTvNiFi74JsNQw+jJT0cXoHzCdWBlwgpTmImn3ZJMCJrlt9mkWn82/WjWl
-         pQ3STnkSihDkH6iErRRHPSQm+OuSlsf4MydRsRMUn6BV6dBRwNFc2tVrPTbnSof94/Tf
-         NLkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v7Jwe0VrBcAjVk91bGHnhVaDKMA+AJj1/NHbliWEizE=;
-        b=z7hOGtw7spsFQqzd6+kBxwyNZNQ1C+ngU8bNByyGURkt9LVAezM008pILJhGZ5aOkZ
-         ucwJcsaQEXY1B4qIiHCipUG+On1NR9WyE/+g6+pXu5UllaFUGBTF0CrkStMueYtmYj8e
-         VAI3CyrS1y6gMDBAPY7kCZLV9jHqq/8+h+bKlnoor/SmL2iQCKStGUUQ+37bEndRRJGZ
-         ebHKSrJgtQJVJ+sFwCSLh7Rai1yzCMzC+pw1+MwxNMKr9pJA9S3ywJ9HXqv1x1vog220
-         GymiYkbLZHsjG9MquxU7ztYg6+N8KA6B1oqMlSYt+rZnz7ruMG4a+yFjevdHK7ZobxAX
-         p/1g==
-X-Gm-Message-State: AOAM5333IZDNo1Eky1NuKNquhmwOr7Ya2IJEbpXgGODEmduxtyjbN7BQ
-        rZx7FWutyzb1vJN2O6/gEemDnCg7bwQShMfoN+FuRA==
-X-Google-Smtp-Source: ABdhPJwuPnrI9ju/ehvowlCK+6IK9k7uNGJPltBaYDZIbZb+JlDlJrGdYDtKGivvl7sV8hzwrkCu2y9M5ITWeDe4buI=
-X-Received: by 2002:a0d:f487:0:b0:2eb:54f5:3abf with SMTP id
- d129-20020a0df487000000b002eb54f53abfmr11246081ywf.141.1649330446172; Thu, 07
- Apr 2022 04:20:46 -0700 (PDT)
+        Thu, 7 Apr 2022 07:25:56 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD8637E;
+        Thu,  7 Apr 2022 04:23:55 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6F93022175;
+        Thu,  7 Apr 2022 13:23:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649330633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zGgRGtTK60vlO5rrtbSkRkY0I7pneiIfRmRnhVQTqiA=;
+        b=eJq/xpGUixdj2taujpeYf62eEyp0Tsxjm2RpOu01SoSj6ZQChrYPmr+NwcUKMGycjOLgQJ
+        qlwynXfDHgBa7PMLhfOxqcYEI2PZa8Httt1JeL8KbhWIX8a8iQVIBYtHNlNFJYkg5w1zeA
+        ZYsUZe1PvNp09PTgmjjEZbnSQUVFSG0=
+From:   Michael Walle <michael@walle.cc>
+To:     broonie@kernel.org
+Cc:     Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        devicetree@vger.kernel.org, kavyasree.kotagiri@microchip.com,
+        krzk+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        tudor.ambarus@microchip.com, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
+Date:   Thu,  7 Apr 2022 13:23:45 +0200
+Message-Id: <20220407112345.148316-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
+References: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
 MIME-Version: 1.0
-References: <20220406182436.675069715@linuxfoundation.org>
-In-Reply-To: <20220406182436.675069715@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 7 Apr 2022 16:50:34 +0530
-Message-ID: <CA+G9fYvAL0BUz8KuMrJyAKEWVwcuuk=_ejQksqxocB86Oq30SA@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/43] 4.9.310-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 23:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.310 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 08 Apr 2022 18:24:27 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.310-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> > @@ -19,6 +19,7 @@ properties:
+> >        - microchip,sam9x60-qspi
+> >        - microchip,sama7g5-qspi
+> >        - microchip,sama7g5-ospi
+> > +      - microchip,lan966x-qspi
+> 
+> Generally DT compatibles should be for specific SoCs rather than having
+> wildcards in them, even if that means you have to list a lot of SoCs.
+> Having used wildcards in the past doesn't mean it's a good idea to
+> continue adding them!
 
-Results from Linaro=E2=80=99s test farm.
+The subject should also be prefixed with "dt-bindings: ".
 
-As Guenter reported,
-On stable rc 4.9 arm64 build configs allnoconfig and tinyconfig failed.
+Mark, I did a git log on
+Documentation/devicetree/bindings/spi/atmel,quadspi.yaml and all the
+subjects are without "dt-bindings:" although the original patch was with
+that prefix [1]. Is that intended?
 
-## Build
-* kernel: 4.9.310-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: b5f0e9d665c30ceb3bee566518a1020e54d7bc1f
-* git describe: v4.9.309-44-gb5f0e9d665c3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y-sanity/build=
-/v4.9.309-44-gb5f0e9d665c3
+-michael
 
-## Test Regressions (compared to v4.9.309-163-geeae539a0d5c)
-* arm64, build
-  - arm64-clang-11-allnoconfig
-  - arm64-clang-11-tinyconfig
-  - arm64-clang-12-allnoconfig
-  - arm64-clang-12-tinyconfig
-  - arm64-clang-13-allnoconfig
-  - arm64-clang-13-tinyconfig
-  - arm64-clang-nightly-allnoconfig
-  - arm64-clang-nightly-tinyconfig
-  - arm64-gcc-10-allnoconfig
-  - arm64-gcc-10-tinyconfig
-  - arm64-gcc-11-allnoconfig
-  - arm64-gcc-11-tinyconfig
-  - arm64-gcc-8-allnoconfig
-  - arm64-gcc-8-tinyconfig
-  - arm64-gcc-9-allnoconfig
-  - arm64-gcc-9-tinyconfig
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
+[1] https://lore.kernel.org/linux-devicetree/163962128492.2075495.3678727080606971257.b4-ty@kernel.org/

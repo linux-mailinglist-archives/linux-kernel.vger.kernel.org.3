@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32F84F6F04
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B514F6F01
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiDGAQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 20:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S230014AbiDGAQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 20:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiDGAQK (ORCPT
+        with ESMTP id S229720AbiDGAQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 20:16:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CF630562
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649290410; x=1680826410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QFWMFmxVGJ1/fOnAcFw/w/RbOoOqQmG9B8avJ6R4lW4=;
-  b=EHkPXiZFeEn7SSHyiX4eGIuijtoWKFJD7O563BMK2UXHGxxF5hPa63IY
-   aIC84e44nu1cRFmroVHmeoc90ij+rVRJrZ0nWgnJTPkd/sVd14rHWpxmh
-   yh2mzAwQkgmbDpBw7RVGfgoeHrJ4tID5QuJ33i0mn37kmv6J6r/UA6/I+
-   RqoBmkS5Yio2vUjyFq1g69zeEyghsA74xSF9R42xYD6wUlUJMqDZwgfVF
-   It7RRXZFXaDsns9u8qzIYBtpqBYNn0keWi9VrhBapPuqroVUq+vteyqgo
-   WzmYIfnRmhnR5UKx5FEcZg53O+Ed7IEEn7qqbbMgHQAffVP2P/8yEtB+R
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="258780424"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="258780424"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 17:13:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="722731239"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2022 17:13:23 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncFm6-0004sh-RC;
-        Thu, 07 Apr 2022 00:13:22 +0000
-Date:   Thu, 7 Apr 2022 08:13:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202204070809.ucmsn4mT-lkp@intel.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFABD13E401
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:13:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3762561D68
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9A2C385A1;
+        Thu,  7 Apr 2022 00:13:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pis/TkKM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649290419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QRt2RfkSFMgjmCRXHrKL01LfdfRyGFDE5GXEHiiimtM=;
+        b=pis/TkKMyLO/wQ0vQ+Nh6ueg1paSbiy3c18R/xPYxIfE2MgWTiq8p5E19rnHKDPeAm1nQf
+        +XQJ6lstzQ/XXH0gTqyM9T2OVWGx+ElL3aNzzjldLPW3JKNpyevUsa3Y1OSrtZGd3pRVSN
+        3r0UJGYwt1N5UwqL8s9MBDUejpaodzg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d225cd6d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 7 Apr 2022 00:13:39 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH] /dev/[k]mem: make reads and writes interruptible
+Date:   Thu,  7 Apr 2022 02:13:27 +0200
+Message-Id: <20220407001327.109095-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,125 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   7 weeks ago
-config: arm64-randconfig-s032-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070809.ucmsn4mT-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/ lib/
+In 8619e5bdeee8 ("/dev/mem: Bail out upon SIGKILL."), /dev/[k]mem became
+killable, and that commit noted:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  Theoretically, reading/writing /dev/mem and /dev/kmem can become
+  "interruptible". But this patch chose "killable". Future patch will
+  make them "interruptible" so that we can revert to "killable" if
+  some program regressed.
 
+So now we take the next step in making it "interruptible", by changing
+fatal_signal_pending() into signal_pending().
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
+Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +437 drivers/remoteproc/ti_k3_r5_remoteproc.c
-
-6dedbd1d544389 Suman Anna 2020-10-02  378  
-6dedbd1d544389 Suman Anna 2020-10-02  379  /*
-6dedbd1d544389 Suman Anna 2020-10-02  380   * The R5F cores have controls for both a reset and a halt/run. The code
-6dedbd1d544389 Suman Anna 2020-10-02  381   * execution from DDR requires the initial boot-strapping code to be run
-6dedbd1d544389 Suman Anna 2020-10-02  382   * from the internal TCMs. This function is used to release the resets on
-6dedbd1d544389 Suman Anna 2020-10-02  383   * applicable cores to allow loading into the TCMs. The .prepare() ops is
-6dedbd1d544389 Suman Anna 2020-10-02  384   * invoked by remoteproc core before any firmware loading, and is followed
-6dedbd1d544389 Suman Anna 2020-10-02  385   * by the .start() ops after loading to actually let the R5 cores run.
-ee99ee7c929c3e Suman Anna 2021-03-27  386   *
-ee99ee7c929c3e Suman Anna 2021-03-27  387   * The Single-CPU mode on applicable SoCs (eg: AM64x) only uses Core0 to
-ee99ee7c929c3e Suman Anna 2021-03-27  388   * execute code, but combines the TCMs from both cores. The resets for both
-ee99ee7c929c3e Suman Anna 2021-03-27  389   * cores need to be released to make this possible, as the TCMs are in general
-ee99ee7c929c3e Suman Anna 2021-03-27  390   * private to each core. Only Core0 needs to be unhalted for running the
-ee99ee7c929c3e Suman Anna 2021-03-27  391   * cluster in this mode. The function uses the same reset logic as LockStep
-ee99ee7c929c3e Suman Anna 2021-03-27  392   * mode for this (though the behavior is agnostic of the reset release order).
-6dedbd1d544389 Suman Anna 2020-10-02  393   */
-6dedbd1d544389 Suman Anna 2020-10-02  394  static int k3_r5_rproc_prepare(struct rproc *rproc)
-6dedbd1d544389 Suman Anna 2020-10-02  395  {
-6dedbd1d544389 Suman Anna 2020-10-02  396  	struct k3_r5_rproc *kproc = rproc->priv;
-6dedbd1d544389 Suman Anna 2020-10-02  397  	struct k3_r5_cluster *cluster = kproc->cluster;
-6dedbd1d544389 Suman Anna 2020-10-02  398  	struct k3_r5_core *core = kproc->core;
-6dedbd1d544389 Suman Anna 2020-10-02  399  	struct device *dev = kproc->dev;
-7508ea19b20da8 Suman Anna 2020-11-18  400  	u32 ctrl = 0, cfg = 0, stat = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  401  	u64 boot_vec = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  402  	bool mem_init_dis;
-6dedbd1d544389 Suman Anna 2020-10-02  403  	int ret;
-6dedbd1d544389 Suman Anna 2020-10-02  404  
-7508ea19b20da8 Suman Anna 2020-11-18  405  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl, &stat);
-7508ea19b20da8 Suman Anna 2020-11-18  406  	if (ret < 0)
-7508ea19b20da8 Suman Anna 2020-11-18  407  		return ret;
-7508ea19b20da8 Suman Anna 2020-11-18  408  	mem_init_dis = !!(cfg & PROC_BOOT_CFG_FLAG_R5_MEM_INIT_DIS);
-7508ea19b20da8 Suman Anna 2020-11-18  409  
-ee99ee7c929c3e Suman Anna 2021-03-27  410  	/* Re-use LockStep-mode reset logic for Single-CPU mode */
-ee99ee7c929c3e Suman Anna 2021-03-27  411  	ret = (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-ee99ee7c929c3e Suman Anna 2021-03-27  412  	       cluster->mode == CLUSTER_MODE_SINGLECPU) ?
-6dedbd1d544389 Suman Anna 2020-10-02  413  		k3_r5_lockstep_release(cluster) : k3_r5_split_release(core);
-34f2653686fecc Suman Anna 2020-10-02  414  	if (ret) {
-6dedbd1d544389 Suman Anna 2020-10-02  415  		dev_err(dev, "unable to enable cores for TCM loading, ret = %d\n",
-6dedbd1d544389 Suman Anna 2020-10-02  416  			ret);
-6dedbd1d544389 Suman Anna 2020-10-02  417  		return ret;
-6dedbd1d544389 Suman Anna 2020-10-02  418  	}
-6dedbd1d544389 Suman Anna 2020-10-02  419  
-7508ea19b20da8 Suman Anna 2020-11-18  420  	/*
-7508ea19b20da8 Suman Anna 2020-11-18  421  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
-7508ea19b20da8 Suman Anna 2020-11-18  422  	 * of TCMs, so there is no need to perform the s/w memzero. This bit is
-7508ea19b20da8 Suman Anna 2020-11-18  423  	 * configurable through System Firmware, the default value does perform
-7508ea19b20da8 Suman Anna 2020-11-18  424  	 * auto-init, but account for it in case it is disabled
-7508ea19b20da8 Suman Anna 2020-11-18  425  	 */
-7508ea19b20da8 Suman Anna 2020-11-18  426  	if (cluster->soc_data->tcm_ecc_autoinit && !mem_init_dis) {
-7508ea19b20da8 Suman Anna 2020-11-18  427  		dev_dbg(dev, "leveraging h/w init for TCM memories\n");
-7508ea19b20da8 Suman Anna 2020-11-18  428  		return 0;
-7508ea19b20da8 Suman Anna 2020-11-18  429  	}
-7508ea19b20da8 Suman Anna 2020-11-18  430  
-34f2653686fecc Suman Anna 2020-10-02  431  	/*
-34f2653686fecc Suman Anna 2020-10-02  432  	 * Zero out both TCMs unconditionally (access from v8 Arm core is not
-34f2653686fecc Suman Anna 2020-10-02  433  	 * affected by ATCM & BTCM enable configuration values) so that ECC
-34f2653686fecc Suman Anna 2020-10-02  434  	 * can be effective on all TCM addresses.
-34f2653686fecc Suman Anna 2020-10-02  435  	 */
-34f2653686fecc Suman Anna 2020-10-02  436  	dev_dbg(dev, "zeroing out ATCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02 @437  	memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
-34f2653686fecc Suman Anna 2020-10-02  438  
-34f2653686fecc Suman Anna 2020-10-02  439  	dev_dbg(dev, "zeroing out BTCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02  440  	memset(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
-34f2653686fecc Suman Anna 2020-10-02  441  
-34f2653686fecc Suman Anna 2020-10-02  442  	return 0;
-34f2653686fecc Suman Anna 2020-10-02  443  }
-34f2653686fecc Suman Anna 2020-10-02  444  
-
-:::::: The code at line 437 was first introduced by commit
-:::::: 34f2653686fecc9bd5a4ee16724768c72953fb57 remoteproc: k3-r5: Initialize TCM memories for ECC
-
-:::::: TO: Suman Anna <s-anna@ti.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
-
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index cc296f0823bd..84ca98ed1dad 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -101,7 +101,7 @@ static inline bool should_stop_iteration(void)
+ {
+ 	if (need_resched())
+ 		cond_resched();
+-	return fatal_signal_pending(current);
++	return signal_pending(current);
+ }
+ 
+ /*
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

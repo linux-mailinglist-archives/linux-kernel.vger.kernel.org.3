@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89F94F8752
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1363C4F8754
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346954AbiDGSt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
+        id S1346965AbiDGSuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiDGStw (ORCPT
+        with ESMTP id S1346958AbiDGSuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:49:52 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0222125D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:47:52 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so4002380pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:47:51 -0700 (PDT)
+        Thu, 7 Apr 2022 14:50:00 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6295D133668
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:47:59 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id t4so5731216pgc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S46G+gKDAU34CljtUSVCQy2MOODLf1LihM7Ocrf0Vuo=;
-        b=DygKSKiCNhgVcxtq3DiAD06376sY3jECT84gmxJblZpafIYjcgwrxiOe5F10xAQ9O9
-         w1xGVUjat+QPTTl/EzVTnJeyYyJT49U2cmE5px5IwpjOJ357BPKTntm/onGZg98XxCZW
-         zgG2sGmaK2tUIAmpi/ocoDIBSmHvtWpzOePyOYMSO898QN4VAcsWhGK9EM2r4louLePn
-         otwEWUaJtVZVWL45gYTiGipL5+0qR4AfWRZFW97Be02iA+5ohDtrLiz7YzYPmeo1YU7/
-         U36MzQeRwmF9P6QmCv8E8LdVL/+0/iKzYF0b+b1IWmiOsBoNatZtDiDqzMzr05xva39i
-         8txQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2OeHEZDx64EG8oP0xt3lvxv4lipweyChyS0IcTq6KnI=;
+        b=RXi8AjBxjh6VVtl9LSNNrBkDo2V5rtsQX9fbYvncg96tdARjL8rbloMFzh2CYhbirF
+         o8CXs1dCnDL/xC27cvDXwWoOAntnZtgL7dlz7wSpJ4cU2Bfh//d2tzJpSkcxBVc9y/9R
+         xf0WFhO8motAdyNOcYiTBF1BJsTwTrQDvSmkyax6jl73/y5E/FAsWBzy4FYR1foI5p1/
+         VM/Ub831ejGzfxc65yZ7+6FvPhupwwwOM15xRWf6qfJGchIMeFQ1Uzl017Mpj5UVCivI
+         MRONizHwQAMJCgkK71Z9pS2NrwGkdGIy0J4eV/Ok64Oul31qdIkLAdQcb5WPZlGoFJe/
+         20Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S46G+gKDAU34CljtUSVCQy2MOODLf1LihM7Ocrf0Vuo=;
-        b=0BbcpcXqmdvOH2JBq6//dkWmSjGqCFEOWvRZ/UVhL9RuFEaSmupDt/+TQkZmovtkOX
-         bWfPiKHWh5Rb/9I4aZhvtGhOllRLVs/zg23vrtQn40M8X0TPtTg5+eqo1cpVxnAkW174
-         5JjyQztlAX5Erq6+XTQpewu8YS1pj2LbITe9o52awEFHq2nHf99L2rnSMOZnR16IlKpp
-         4qESJ2Idx3V98XDNChpwSn9S9uzPdZF1+1BVeY/akTCGK6AMrmBSUd1wi9L5fLkhTQ4S
-         1t8erf612H81v2ilRpr9Lvgx87cWAj9GgQ6HKhFPVE3n+rvcXvy5Vxie0JVKOmzvs2MQ
-         2Ajg==
-X-Gm-Message-State: AOAM530do8pWlP86eCE7BuIikUPS5zqEvfwB/fUENl7Cu6V/8yyagF1Y
-        vR4LBrSmgD72mo+p3nC5AH93W5ZArY+mSmlu4IGTUckNgn4=
-X-Google-Smtp-Source: ABdhPJw9/IpkKKhR6EnCIY/WXpzJgOf3e9ulD8IP32MxuddGp7gH9Gj4bh6ZS3UogK83pw5r9EpLBvN29W4qaaowgAI=
-X-Received: by 2002:a17:902:d512:b0:156:b23f:ed62 with SMTP id
- b18-20020a170902d51200b00156b23fed62mr15625969plg.147.1649357271479; Thu, 07
- Apr 2022 11:47:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2OeHEZDx64EG8oP0xt3lvxv4lipweyChyS0IcTq6KnI=;
+        b=0cVBS/BUN6WzS+6UEvqtoql0Dh22tTWuK/EUo4Tnb1CYo6zS+89LWuHXXADJzZ1TRj
+         MVPe8LOt1dJJmwRYyA1tQWIOe0nouSdu+yoDzjo9iBx2QbBpQjeUCZFPd6yQf82XLtvx
+         lIOT9fWhEJVlBplzfEj5LcfRmKjZeJU0la9S8eft3PewKWXTQEuVrjB2YSSHFKqNlhNS
+         uiPXvCuzVeYR0gn/gXGt0hBZ8OS9Sd4Wv1glwXvozzpFwK+TlWR3yahS1HRTxFFK+Q9X
+         VX+GOufUaFhN3u7jcP0XmEzH7Pyu0xUJaxJH1pD7JiPx+LGeH0U/EHGP35MreATre/po
+         1d/g==
+X-Gm-Message-State: AOAM5324nLwxqf6BVQMEBRszqz131p4Hjj3cu6EuziOcQDAe+f+m7tdm
+        gBTRfmoW6iV9FXsf3sAYW0ix0w==
+X-Google-Smtp-Source: ABdhPJz599fEIYbjkY/5HRqf5EtFxU5iWR3SXbcCPa8oI0rzDn415HElhVzRla/90uLDGV8DelsX0g==
+X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr15578775pfe.60.1649357278600;
+        Thu, 07 Apr 2022 11:47:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a9-20020a056a000c8900b004fb37ecc6bbsm24428974pfv.65.2022.04.07.11.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 11:47:57 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 18:47:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 16/31] KVM: nVMX: hyper-v: Direct TLB flush
+Message-ID: <Yk8x2rF/UkuXY/X2@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-17-vkuznets@redhat.com>
 MIME-Version: 1.0
-References: <159009507306.847224.8502634072429766747.stgit@dwillia2-desk3.amr.corp.intel.com>
- <202005211950.D56130B81@keescook> <202204061243.FB134CA4B1@keescook>
-In-Reply-To: <202204061243.FB134CA4B1@keescook>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 7 Apr 2022 11:47:40 -0700
-Message-ID: <CAPcyv4htK6Ur4-B=cfkQeOD__9s7ZfxMTo+uCCPVDLG=_WNy7A@mail.gmail.com>
-Subject: Re: [PATCH v4] /dev/mem: Revoke mappings when a driver claims the region
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407155645.940890-17-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 12:46 PM Kees Cook <keescook@chromium.org> wrote:
->
-> *thread necromancy*
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> Enable Direct TLB flush feature on nVMX when:
+> - Enlightened VMCS is in use.
+> - Direct TLB flush flag is enabled in eVMCS.
+> - Direct TLB flush is enabled in partition assist page.
 
-It's alive!
+Yeah, KVM definitely needs a different name for "Direct TLB flush".  I don't have
+any good ideas offhand, but honestly anything is better than "Direct".
 
->
-> Hi Dan,
->
-> I'm doing a KSPP bug scrub and am reviewing
-> https://github.com/KSPP/linux/issues/74 again.
->
-> Do you have a chance to look at this? I'd love a way to make mmap()
-> behave the same way as read() for the first meg of /dev/mem.
+> Perform synthetic vmexit to L1 after processing TLB flush call upon
+> request (HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH).
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
 
-You want 0-reads or SIGBUS when attempting to access the first 1MB?
+...
 
-Because it sounds like what you want is instead of loudly failing with
--EPERM in drivers/char/mem.c::mmap_mem() you want it to silently
-succeed but swap in the zero page, right? Otherwise if it's SIGBUS
-then IO_STRICT_DEVMEM=y + marking that span as IORESOURCE_BUSY will
-"Do the Right Thing (TM).".
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 8862692a4c5d..ab0949c22d2d 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -65,6 +65,8 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>  #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
+>  #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
+>  
+> +#define HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH 0x10000031
 
+LOL, I guess I have to appreciate the cleverness.  Bit 28 is cleared for all
+exits except when using an SMI transfer monitor, and then it's set only if MTF
+is pending.
 
->
-> -Kees
->
-> On Thu, May 21, 2020 at 08:01:53PM -0700, Kees Cook wrote:
-> > On Thu, May 21, 2020 at 02:06:17PM -0700, Dan Williams wrote:
-> > > The typical usage of unmap_mapping_range() is part of
-> > > truncate_pagecache() to punch a hole in a file, but in this case the
-> > > implementation is only doing the "first half" of a hole punch. Namely it
-> > > is just evacuating current established mappings of the "hole", and it
-> > > relies on the fact that /dev/mem establishes mappings in terms of
-> > > absolute physical address offsets. Once existing mmap users are
-> > > invalidated they can attempt to re-establish the mapping, or attempt to
-> > > continue issuing read(2) / write(2) to the invalidated extent, but they
-> > > will then be subject to the CONFIG_IO_STRICT_DEVMEM checking that can
-> > > block those subsequent accesses.
-> >
-> > Nice!
-> >
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> >
-> > And a thread hijack...   ;)
-> >
-> > I think this is very close to providing a way to solve another issue
-> > I've had with /dev/mem, which is to zero the view of the first 1MB of
-> > /dev/mem via mmap. I only fixed the read/write accesses:
-> > a4866aa81251 ("mm: Tighten x86 /dev/mem with zeroing reads")
-> > I.e. the low 1MB range should be considered allowed, but any reads will see
-> > zeros.
-> >
-> > > +   unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
-> >
-> > Is unmap_mapping_range() sufficient for this? Would it need to happen
-> > once during open_port() or something more special during mmap_mem()?
-> >
-> > --
-> > Kees Cook
->
-> --
-> Kees Cook
+  The remainder of the field (bits 31:28 and bits 26:16) is cleared to 0 (certain
+  SMM VM exits may set some of these bits; see Section 31.15.2.3).
+
+  If the SMM VM exit occurred in VMX non-root operation and an MTF VM exit was
+  pending, bit 28 of the exit-reason field is set; otherwise, it is cleared.
+
+So despite all appearances, Microsoft didn't actually steal a bit from Intel,
+they're just abusing a bit that (a) will never be set so long as the VMM doesn't
+use parallel SMM and (b) architecturally can't be set in conjuction with many
+exit reasons (everything that's _not_ some form of SMI).
+
+Can you add a comment note to document this?
+
+/*
+ * Note, Hyper-V isn't actually stealing bit 28 from Intel, just abusing it by
+ * pairing it with architecturally impossible exit reasons.  Bit 28 is set only
+ * on SMI exits to a SMI tranfer monitor (STM) and if and only if a MTF VM-Exit
+ * is pending.  I.e. it will never be set by hardware for non-SMI exits (there
+ * are only three), nor will it ever be set unless the VMM is an STM.
+ */
+
+>  struct evmcs_field {
+>  	u16 offset;
+>  	u16 clean_field;
+> @@ -244,6 +246,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>  			uint16_t *vmcs_version);
+>  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
+>  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
+> +bool nested_evmcs_direct_flush_enabled(struct kvm_vcpu *vcpu);

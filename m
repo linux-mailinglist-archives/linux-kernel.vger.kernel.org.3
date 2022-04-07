@@ -2,96 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB594F77F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895F34F7800
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242085AbiDGHqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S242097AbiDGHrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242071AbiDGHql (ORCPT
+        with ESMTP id S236336AbiDGHrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:46:41 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D998A56C0;
-        Thu,  7 Apr 2022 00:44:40 -0700 (PDT)
+        Thu, 7 Apr 2022 03:47:08 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505DE8AE5C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:45:08 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id s137so1571760pgs.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649317481;
-  x=1680853481;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aubwDq9tMnlBoW39EfmW7FC5ktvDw7fUudEWZrJpI4Y=;
-  b=MjpeZo21laPFd/Gt+dpIBp6NNSmRQm6vGG58NBhzagj/tP11s6XVnzOu
-   akzI+GTUk061zoobOJD3TtqnvbXnCxluG7BMvDiXoRf9cWtHGADPeUFQe
-   kTHWO92VYdghadWR005LyRM5ndKtGlHqKdAD8uIRglc+tbJLsYBTLWHGE
-   bhZB7oXhElMHF8QBMw9teWmjjp1H/KYQUtJV1PkmFuG2FeHwKSzjA7yAR
-   c4Ew+4kjlMRGFI2M38hiSVP/ZBfA7hnCVFdGUSelOmwZmOUKhIwzQY/tX
-   qGXB9zd9b2NjTKkgK1/YnC/QSjD6LW6aNmIxEQ20s7DaZ2wThYqi7VeKS
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <krzk@kernel.org>, <tglx@linutronix.de>,
-        <daniel.lezcano@linaro.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <alim.akhtar@samsung.com>,
-        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
-Subject: [PATCH v3 0/4] clocksource: Add MCT support for ARTPEC-8
-Date:   Thu, 7 Apr 2022 09:44:28 +0200
-Message-ID: <20220407074432.424578-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KzsrWt8j76/wUQw6959z+QyLT3qqPlObCP7Fz9z/YWg=;
+        b=aWZ0k12VGSGltoZCBcUscb9hH8BE31RogvBmbswhcokyKn82bGhYXOTgPtgUB3aosY
+         jEZsgKKTsgs2Dzmy8i8H7IJ1Ts0hl6P1fEAVBZTMKbSEGDYBZYecNdvGdQ5KHZ7D60nb
+         ZU04569AaAJh3qISde5BdYOInbfWVJmqeq2iZnfgaEw/rXplILhFHS9vC6gKW6cPbn0g
+         75uG2jLifZ/rDfHX9XUEAxSYBIb9KS35fVqujTmzb3LEgiW655jJ6UdnwXRJLQAK4lmN
+         Kx63PyBIcaGxoZvVChWvTBG8vyBV0YPCHFfItmu1TscpvgPfLEV4ZYS9xah4kU1OCCKL
+         vrkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KzsrWt8j76/wUQw6959z+QyLT3qqPlObCP7Fz9z/YWg=;
+        b=ij+8k/43vovQUnrkBBVL4k2hv8Ve8YP1cAStkQvuxrYqX2A1S0hGX9Mypx6Rn+QaZZ
+         OCk01jG+AcrZ0u4oNzwzzY93f2sETlzphno5/bd0YH0l11BR4GSQMlJn51FMTRJAE/Pa
+         sCqAdkAQq1D8uWlvP9aNXt1xYcXxMpNMOm2lv5oOte46IEry/NQlJUYb2zvQMdHwrIGL
+         45jpmDD+dDVv+mVeEhKqjoGwB6P8ymRvXEShaS0VGA7KXpcLVJ5jIFVHS+W2OI8LuC38
+         /j4/tWDDv5lvTxxW32gvdYtfMlvE//1brClWJEeyx3xt7G2A0f2P/8pnLyOtY4oyM2yC
+         YIfA==
+X-Gm-Message-State: AOAM531p9iuNSO0/Pi5dqweuDmxiadmVVfY0JRzNDwZZ+sp1yGpdWh7w
+        ZQLc0p4opj3y62xmg8n+0t28+A==
+X-Google-Smtp-Source: ABdhPJxPZxqzh3ftTit3YDkR8+rA6lXGJptX47km4U9G6HKIfJ1WftNq5lzv57CFUh7WgIMQHx50XQ==
+X-Received: by 2002:a63:6443:0:b0:399:54fe:5184 with SMTP id y64-20020a636443000000b0039954fe5184mr10282377pgb.511.1649317507376;
+        Thu, 07 Apr 2022 00:45:07 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.166.144])
+        by smtp.gmail.com with ESMTPSA id j18-20020a633c12000000b0038204629cc9sm17860802pga.10.2022.04.07.00.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 00:45:05 -0700 (PDT)
+From:   Arun Ajith S <aajith@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com, aajith@arista.com
+Subject: [PATCH net-next v2] net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131
+Date:   Thu,  7 Apr 2022 07:44:28 +0000
+Message-Id: <20220407074428.1623-1-aajith@arista.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series add supports for the timer block on ARTPEC-8.  The block itself is
-fully compatible with the existing exynos4210-mct driver.  The ARTPEC-8 SoC
-uses this block from two separate processors running Linux (AMP) so it needs
-some extra code to allow this sharing.
+Add a new neighbour cache entry in STALE state for routers on receiving
+an unsolicited (gratuitous) neighbour advertisement with
+target link-layer-address option specified.
+This is similar to the arp_accept configuration for IPv4.
+A new sysctl endpoint is created to turn on this behaviour:
+/proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
 
-v3:
-- Split and rename devicetree properties
-- Add vendor prefix to devicetree properties
-- Change descriptions of properties to hopefully describe hardware
-- Remove addition of more global variables to the driver
+Signed-off-by: Arun Ajith S <aajith@arista.com>
+Tested-by: Arun Ajith S <aajith@arista.com>
+---
+ Documentation/networking/ip-sysctl.rst | 23 +++++++++++++++++++++++
+ include/linux/ipv6.h                   |  1 +
+ include/uapi/linux/ipv6.h              |  1 +
+ net/ipv6/addrconf.c                    |  8 ++++++++
+ net/ipv6/ndisc.c                       | 20 +++++++++++++++++++-
+ 5 files changed, 52 insertions(+), 1 deletion(-)
 
-v2:
-- The series is now rebased on top of Krzysztof's patch "dt-bindings: timer:
-  exynos4210-mct: describe known hardware and its interrupts".
-- Combine the Kconfig change and the local timer change into one series
-- Use devicetree property rather than module parameter for the local timer handling
-- Add specific compatible with the correct number of interrupts.
-
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: alim.akhtar@samsung.com
-
-Cc: devicetree@vger.kernel.org
-Cc: robh+dt@kernel.org
-
-Vincent Whitchurch (4):
-  dt-bindings: timer: exynos4210-mct: Add ARTPEC-8 MCT support
-  clocksource/drivers/exynos_mct: Support frc-shared property
-  clocksource/drivers/exynos_mct: Support local-timers property
-  clocksource/drivers/exynos_mct: Enable building on ARTPEC
-
- .../timer/samsung,exynos4210-mct.yaml         | 26 +++++++
- drivers/clocksource/Kconfig                   |  2 +-
- drivers/clocksource/exynos_mct.c              | 72 ++++++++++++++++---
- 3 files changed, 90 insertions(+), 10 deletions(-)
-
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index b0024aa7b051..9e17efe343ac 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2467,6 +2467,29 @@ drop_unsolicited_na - BOOLEAN
+ 
+ 	By default this is turned off.
+ 
++accept_unsolicited_na - BOOLEAN
++	Add a new neighbour cache entry in STALE state for routers on receiving an
++	unsolicited neighbour advertisement with target link-layer address option
++	specified. This is as per router-side behavior documented in RFC9131.
++	This has lower precedence than drop_unsolicited_na.
++	 drop   accept  fwding                   behaviour
++	 ----   ------  ------  ----------------------------------------------
++	    1        X       X  Drop NA packet and don't pass up the stack
++	    0        0       X  Pass NA packet up the stack, don't update NC
++	    0        1       0  Pass NA packet up the stack, don't update NC
++	    0        1       1  Pass NA packet up the stack, and add a STALE
++	                          NC entry
++	This will optimize the return path for the initial off-link communication
++	that is initiated by a directly connected host, by ensuring that
++	the first-hop router which turns on this setting doesn't have to
++	buffer the initial return packets to do neighbour-solicitation.
++	The prerequisite is that the host is configured to send
++	unsolicited neighbour advertisements on interface bringup.
++	This setting should be used in conjunction with the ndisc_notify setting
++	on the host to satisfy this prerequisite.
++
++	By default this is turned off.
++
+ enhanced_dad - BOOLEAN
+ 	Include a nonce option in the IPv6 neighbor solicitation messages used for
+ 	duplicate address detection per RFC7527. A received DAD NS will only signal
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 16870f86c74d..918bfea4ef5f 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -61,6 +61,7 @@ struct ipv6_devconf {
+ 	__s32		suppress_frag_ndisc;
+ 	__s32		accept_ra_mtu;
+ 	__s32		drop_unsolicited_na;
++	__s32		accept_unsolicited_na;
+ 	struct ipv6_stable_secret {
+ 		bool initialized;
+ 		struct in6_addr secret;
+diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
+index d4178dace0bf..549ddeaf788b 100644
+--- a/include/uapi/linux/ipv6.h
++++ b/include/uapi/linux/ipv6.h
+@@ -194,6 +194,7 @@ enum {
+ 	DEVCONF_IOAM6_ID,
+ 	DEVCONF_IOAM6_ID_WIDE,
+ 	DEVCONF_NDISC_EVICT_NOCARRIER,
++	DEVCONF_ACCEPT_UNSOLICITED_NA,
+ 	DEVCONF_MAX
+ };
+ 
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 1afc4c024981..1b4d278d0454 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -5587,6 +5587,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
+ 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
+ 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
+ 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
++	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
+ }
+ 
+ static inline size_t inet6_ifla6_size(void)
+@@ -7037,6 +7038,13 @@ static const struct ctl_table addrconf_sysctl[] = {
+ 		.extra1		= (void *)SYSCTL_ZERO,
+ 		.extra2		= (void *)SYSCTL_ONE,
+ 	},
++	{
++		.procname	= "accept_unsolicited_na",
++		.data		= &ipv6_devconf.accept_unsolicited_na,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
+ 	{
+ 		/* sentinel */
+ 	}
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index fcb288b0ae13..254addad0dd3 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -979,6 +979,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	struct inet6_dev *idev = __in6_dev_get(dev);
+ 	struct inet6_ifaddr *ifp;
+ 	struct neighbour *neigh;
++	bool create_neigh;
+ 
+ 	if (skb->len < sizeof(struct nd_msg)) {
+ 		ND_PRINTK(2, warn, "NA: packet too short\n");
+@@ -999,6 +1000,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	/* For some 802.11 wireless deployments (and possibly other networks),
+ 	 * there will be a NA proxy and unsolicitd packets are attacks
+ 	 * and thus should not be accepted.
++	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
+ 	 */
+ 	if (!msg->icmph.icmp6_solicited && idev &&
+ 	    idev->cnf.drop_unsolicited_na)
+@@ -1039,7 +1041,23 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		in6_ifa_put(ifp);
+ 		return;
+ 	}
+-	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
++	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
++	 * An unsolicited NA can now create a neighbour cache entry
++	 * on routers if it has Target LL Address option.
++	 *
++	 * drop   accept  fwding                   behaviour
++	 * ----   ------  ------  ----------------------------------------------
++	 *    1        X       X  Drop NA packet and don't pass up the stack
++	 *    0        0       X  Pass NA packet up the stack, don't update NC
++	 *    0        1       0  Pass NA packet up the stack, don't update NC
++	 *    0        1       1  Pass NA packet up the stack, and add a STALE
++	 *                          NC entry
++	 * Note that we don't do a (daddr == all-routers-mcast) check.
++	 */
++	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
++		       idev && idev->cnf.forwarding &&
++		       idev->cnf.accept_unsolicited_na;
++	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
+ 
+ 	if (neigh) {
+ 		u8 old_flags = neigh->flags;
 -- 
-2.34.1
-
+2.27.0
+---
+Changes from v1:
+- Change bad documentation and commit description. (source link-layer-address option -> target link-layer-address option)
+- CCed all maintainers from .scripts/get_maintainer.pl
+- Rebased to latest origin/master

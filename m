@@ -2,243 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F1F4F77DA
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3854F77D9
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241991AbiDGHmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S242014AbiDGHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiDGHmS (ORCPT
+        with ESMTP id S242001AbiDGHm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:42:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3036437A10
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:40:17 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KYtXk6BHGzgYVj;
-        Thu,  7 Apr 2022 15:38:30 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 15:40:15 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 15:40:14 +0800
-Subject: Re: [PATCH RESEND v5 1/5] iommu: Refactor iommu_group_store_type()
-To:     John Garry <john.garry@huawei.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>
-CC:     <mst@redhat.com>, <jasowang@redhat.com>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <chenxiang66@hisilicon.com>, <jean-philippe@linaro.org>,
-        <linuxarm@huawei.com>
-References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
- <1649071634-188535-2-git-send-email-john.garry@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <e1d18bb1-db35-fe36-0212-7d6d83112e31@huawei.com>
-Date:   Thu, 7 Apr 2022 15:40:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 7 Apr 2022 03:42:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71C57E5AA;
+        Thu,  7 Apr 2022 00:40:24 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A15501F85A;
+        Thu,  7 Apr 2022 07:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649317223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7tdKrRRhBcgriuTuifhqw7ASOmfz1N4EF+9FSFvKM0E=;
+        b=r6Fua2gzlgwm1Hp5y5shaiTcDw1GVtrXgPXQb3p55UEWWygcN+jDp11/05+NYmm1vYKIPm
+        7lKd36aXjuqVnfrCXhRi1YOIr/f0RG7VdejwUm/BA3RtBxq+NH8LIxlM76mVrvdJ9L4eTi
+        qlUYyggclZvcVPbb3HDCBf6Y35i3cPo=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DF5F4A3B82;
+        Thu,  7 Apr 2022 07:40:18 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 09:40:22 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+Message-ID: <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
+References: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+ <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+ <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+ <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
+ <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
+ <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
+ <Ykrkx4JML4c81gBV@dhcp22.suse.cz>
+ <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
+ <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
+ <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1649071634-188535-2-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+On Wed 06-04-22 10:11:19, Zhaoyang Huang wrote:
+> On Tue, Apr 5, 2022 at 8:08 PM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
+> > [...]
+> > > Please be noticed that this patch DOES protect the memcg when external
+> > > pressure is 1GB as fixed low does.
+> >
+> > This is getting more and more confusing (at least to me). Could you
+> > describe the behavior of the reclaim for the following setups/situations?
+> >
+> > a) mostly reclaiming a clean page cache - via kswapd
+> > b) same as above but the direct reclaim is necessary but very
+> >    lightweight
+> > c) direct reclaim makes fwd progress but not enough to satisfy the
+> >    allocation request (so the reclaim has to be retried)
+> > d) direct reclaim not making progress and low limit protection is
+> >    ignored.
+> >
+> > Say we have several memcgs and only some have low memory protection
+> > configured. What is the user observable state of the protected group and
+> > when and how much the protection can be updated?
+> I am not sure if I understand you right. Do you have suspicions on the
+> test result as you think protected memcg has no chance to update the
+> protection or the global reclaim should have been satisfied with the
+> reclaiming(step d is hard to reach?). Let me try to answer it under my
+> understanding, please give me feedback if you need more info. The
+> protection is updated while mem_cgroup_calculate_protection is called
+> during either kswapd or direct reclaim for each round of the priority
+> reclaiming and then the memcg's lruvec will be reached in step d.
 
-On 2022/4/4 19:27, John Garry wrote:
-> Function iommu_group_store_type() supports changing the default domain
-> of an IOMMU group.
-> 
-> Many conditions need to be satisfied and steps taken for this action to be
-> successful.
-> 
-> Satisfying these conditions and steps will be required for setting other
-> IOMMU group attributes, so factor into a common part and a part specific
-> to update the IOMMU group attribute.
-> 
-> No functional change intended.
-> 
-> Some code comments are tidied up also.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->  drivers/iommu/iommu.c | 96 ++++++++++++++++++++++++++++---------------
->  1 file changed, 62 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index f2c45b85b9fc..0dd766030baf 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -3000,21 +3000,57 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
->  	return ret;
->  }
->  
-> +enum iommu_group_op {
-> +	CHANGE_GROUP_TYPE,
-> +};
-> +
-> +static int __iommu_group_store_type(const char *buf, struct iommu_group *group,
-> +				    struct device *dev)
-> +{
-> +	int type;
-> +
-> +	if (sysfs_streq(buf, "identity"))
-> +		type = IOMMU_DOMAIN_IDENTITY;
-> +	else if (sysfs_streq(buf, "DMA"))
-> +		type = IOMMU_DOMAIN_DMA;
-> +	else if (sysfs_streq(buf, "DMA-FQ"))
-> +		type = IOMMU_DOMAIN_DMA_FQ;
-> +	else if (sysfs_streq(buf, "auto"))
-> +		type = 0;
-> +	else
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Check if the only device in the group still has a driver bound or
-> +	 * we're transistioning from DMA -> DMA-FQ
-> +	 */
-> +	if (device_is_bound(dev) && !(type == IOMMU_DOMAIN_DMA_FQ &&
-> +	    group->default_domain->type == IOMMU_DOMAIN_DMA)) {
-> +		pr_err_ratelimited("Device is still bound to driver\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return iommu_change_dev_def_domain(group, dev, type);
-> +}
-> +
->  /*
->   * Changing the default domain through sysfs requires the users to unbind the
->   * drivers from the devices in the iommu group, except for a DMA -> DMA-FQ
-> - * transition. Return failure if this isn't met.
-> + * transition. Changing or any other IOMMU group attribute still requires the
-> + * user to unbind the drivers from the devices in the iommu group. Return
-> + * failure if these conditions are not met.
->   *
->   * We need to consider the race between this and the device release path.
->   * device_lock(dev) is used here to guarantee that the device release path
->   * will not be entered at the same time.
->   */
-> -static ssize_t iommu_group_store_type(struct iommu_group *group,
-> -				      const char *buf, size_t count)
-> +static ssize_t iommu_group_store_common(struct iommu_group *group,
-> +					enum iommu_group_op op,
-> +					const char *buf, size_t count)
->  {
->  	struct group_device *grp_dev;
->  	struct device *dev;
-> -	int ret, req_type;
-> +	int ret;
->  
->  	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
->  		return -EACCES;
-> @@ -3022,27 +3058,16 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
->  	if (WARN_ON(!group))
->  		return -EINVAL;
->  
-> -	if (sysfs_streq(buf, "identity"))
-> -		req_type = IOMMU_DOMAIN_IDENTITY;
-> -	else if (sysfs_streq(buf, "DMA"))
-> -		req_type = IOMMU_DOMAIN_DMA;
-> -	else if (sysfs_streq(buf, "DMA-FQ"))
-> -		req_type = IOMMU_DOMAIN_DMA_FQ;
-> -	else if (sysfs_streq(buf, "auto"))
-> -		req_type = 0;
-> -	else
-> -		return -EINVAL;
-> -
->  	/*
->  	 * Lock/Unlock the group mutex here before device lock to
-> -	 * 1. Make sure that the iommu group has only one device (this is a
-> +	 * 1. Make sure that the IOMMU group has only one device (this is a
->  	 *    prerequisite for step 2)
->  	 * 2. Get struct *dev which is needed to lock device
->  	 */
->  	mutex_lock(&group->mutex);
->  	if (iommu_group_device_count(group) != 1) {
->  		mutex_unlock(&group->mutex);
-> -		pr_err_ratelimited("Cannot change default domain: Group has more than one device\n");
-> +		pr_err_ratelimited("Cannot change IOMMU group default domain attribute: Group has more than one device\n");
->  		return -EINVAL;
->  	}
->  
-> @@ -3054,16 +3079,16 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
->  	/*
->  	 * Don't hold the group mutex because taking group mutex first and then
->  	 * the device lock could potentially cause a deadlock as below. Assume
-> -	 * two threads T1 and T2. T1 is trying to change default domain of an
-> -	 * iommu group and T2 is trying to hot unplug a device or release [1] VF
-> -	 * of a PCIe device which is in the same iommu group. T1 takes group
-> -	 * mutex and before it could take device lock assume T2 has taken device
-> -	 * lock and is yet to take group mutex. Now, both the threads will be
-> -	 * waiting for the other thread to release lock. Below, lock order was
-> -	 * suggested.
-> +	 * two threads, T1 and T2. T1 is trying to change default domain
-> +	 * attribute of an IOMMU group and T2 is trying to hot unplug a device
-> +	 * or release [1] VF of a PCIe device which is in the same IOMMU group.
-> +	 * T1 takes the group mutex and before it could take device lock T2 may
-> +	 * have taken device lock and is yet to take group mutex. Now, both the
-> +	 * threads will be waiting for the other thread to release lock. Below,
-> +	 * lock order was suggested.
->  	 * device_lock(dev);
->  	 *	mutex_lock(&group->mutex);
-> -	 *		iommu_change_dev_def_domain();
-> +	 *		cb->iommu_change_dev_def_domain(); [example cb]
->  	 *	mutex_unlock(&group->mutex);
->  	 * device_unlock(dev);
->  	 *
-> @@ -3077,21 +3102,24 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
->  	 */
->  	mutex_unlock(&group->mutex);
->  
-> -	/* Check if the device in the group still has a driver bound to it */
->  	device_lock(dev);
-> -	if (device_is_bound(dev) && !(req_type == IOMMU_DOMAIN_DMA_FQ &&
-> -	    group->default_domain->type == IOMMU_DOMAIN_DMA)) {
-> -		pr_err_ratelimited("Device is still bound to driver\n");
-> -		ret = -EBUSY;
-> -		goto out;
-> +	switch (op) {
-> +	case CHANGE_GROUP_TYPE:
-> +		ret = __iommu_group_store_type(buf, group, dev);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
->  	}
-> -
-> -	ret = iommu_change_dev_def_domain(group, dev, req_type);
->  	ret = ret ?: count;
->  
-> -out:
->  	device_unlock(dev);
->  	put_device(dev);
->  
->  	return ret;
->  }
-> +
-> +static ssize_t iommu_group_store_type(struct iommu_group *group,
-> +				      const char *buf, size_t count)
-> +{
-> +	return iommu_group_store_common(group, CHANGE_GROUP_TYPE, buf, count);
-> +}
-> 
+This means that limits are altered even if there is memory to be
+reclaimed from other memcgs. Why? How does this line up with the
+basic property of the low limit to act as a protection from the reclaim?
 
+> > I think it would be also helpful to describe the high level semantic of
+> > this feature.
+
+Please focus on this part. Without a high level semantic explained we
+will not move forward.
 -- 
-Regards,
-  Zhen Lei
+Michal Hocko
+SUSE Labs

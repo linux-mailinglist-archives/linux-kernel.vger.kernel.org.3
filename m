@@ -2,131 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5654A4F8222
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1079C4F8261
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344281AbiDGOvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S1344411AbiDGPFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241089AbiDGOvn (ORCPT
+        with ESMTP id S1344404AbiDGPFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:51:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C01C7C25
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:49:42 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZ4494wkVzgYXB;
-        Thu,  7 Apr 2022 22:47:53 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 22:49:38 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 22:49:38 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Rob Herring <robh@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH 2/2] amba: fix memory leak in amba_device_try_add()
-Date:   Thu, 7 Apr 2022 23:02:40 +0800
-Message-ID: <20220407150240.151166-2-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220407150240.151166-1-wangkefeng.wang@huawei.com>
-References: <20220407150240.151166-1-wangkefeng.wang@huawei.com>
+        Thu, 7 Apr 2022 11:05:53 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21A1903EB
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:03:52 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2eafabbc80aso64435207b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 08:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GIG8eITub5ogM33DPsV6tmuNTcczx7G73Grseyf/5Co=;
+        b=FLez84DFS+Q/p+XWcJvWc5GDQ8rqVivTZkQ3ETtGZvt5iSXcjOUnfpFnZGkIn8J8la
+         fpfOqEkZWpSguThsYcB/LPft8jiUEHkRl8IA9cCrZohWHVbzz6UMHKSv57KNbuYb1iU2
+         NttKMVjOlcrh2prhKLcJXNkPWyvA3Mo6nPrB1p1d0kZH5ZSnF1RdisGm8OVXX9NtWQUk
+         Ilc6Z6BRZQxE1QTiDh8vC4FQ94pgmcwkCZYb6wjMfSEcVjnOrc4og98vY5xx8dQK+mmQ
+         lVblTImyXA+3XMOte8xoeQdQOUWrUmpNxZtd2s+NTRb/fMxochIYuOVlewgLGPFP4A2U
+         aRPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GIG8eITub5ogM33DPsV6tmuNTcczx7G73Grseyf/5Co=;
+        b=MW8gbxF2p24vljh7vPPvgOD4Hp4grh/9ECmSdGhDj989UAQDCYf1DclmfngNAOwfp7
+         POiRdIK0Y084PwaRE8r4utLwR4AV1jErdL0Qr56z2WYb/WJN9KKLIBkMN2eAbEweXikO
+         oAzRLhoLPOCI2P+fRShseaNa4I+xf54bF5flOXFMJsoRvgf87tPAtlhSAFfnv689Vr2f
+         nRhzTmB7PIIELPDLFlHKgNEf+La6b7iDVr0nzCSZV5zzmKxCYm1RxwyanCPRLumM6nJB
+         SdizGGzbrcECP5SePveXTzS6LEEK/KjeO9iyICBQNeCrJf7+i/hkOwwGC1au4jOVnMus
+         l2bg==
+X-Gm-Message-State: AOAM531B+AdvUz7XgaX6dXLH1J8qVtdyBh/gvGLo69xRTioAvPxdh74I
+        xVofrWQyWTemFij4N28PNalekonEBHQwFdmvc/6eTF/q627KT35L
+X-Google-Smtp-Source: ABdhPJxeUEHVfts2fspg79ZAgfj8jTrrFsDIHIROyfSbclEZlOXiXVBpwsf+uE8fRplGdoUuYMdlKiNL5J3M1gT6jjg=
+X-Received: by 2002:a81:18d7:0:b0:2eb:553e:f3ee with SMTP id
+ 206-20020a8118d7000000b002eb553ef3eemr11732195ywy.393.1649343831843; Thu, 07
+ Apr 2022 08:03:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407094313.2880-1-srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220407094313.2880-1-srinivas.kandagatla@linaro.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Thu, 7 Apr 2022 20:33:15 +0530
+Message-ID: <CAMi1Hd3v3KPVP15KLriDWsQFOuToee5F7JVDpMNrY-nnnXCnYQ@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: codecs: wcd934x: do not switch off SIDO Buck when
+ codec is in use
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If amba_device_try_add() return error code (not EPROBE_DEFER),
-memory leak occurred when amba device fails to read periphid.
+On Thu, 7 Apr 2022 at 15:13, Srinivas Kandagatla
+<srinivas.kandagatla@linaro.org> wrote:
+>
+> SIDO(Single-Inductor Dual-Ouput) Buck powers up both analog and digital
+> circuits along with internal memory, powering off this is the last thing
+> that codec should do when going to very low power.
+>
+> Current code was powering off this Buck if there are no users of sysclk,
+> which is not correct. Powering off this buck will result in no register access.
+> This code path was never tested until recently after adding pm support
+> in SoundWire controller. Fix this by removing the buck poweroff when the
+> codec is active and also the code that is not used.
+>
+> Without this patch all the read/write transactions will never complete and
+> results in SLIMBus Errors like:
+>
+> qcom,slim-ngd qcom,slim-ngd.1: Tx:MT:0x0, MC:0x60, LA:0xcf failed:-110
+> wcd934x-codec wcd934x-codec.1.auto: ASoC: error at soc_component_read_no_lock
+>         on wcd934x-codec.1.auto for register: [0x00000d05] -110
+> qcom,slim-ngd-ctrl 171c0000.slim: Error Interrupt received 0x82000000
+>
 
-unreferenced object 0xc1c60800 (size 1024):
-  comm "swapper/0", pid 1, jiffies 4294937333 (age 75.200s)
-  hex dump (first 32 bytes):
-    40 40 db c1 04 08 c6 c1 04 08 c6 c1 00 00 00 00  @@..............
-    00 d9 c1 c1 84 6f 38 c1 00 00 00 00 01 00 00 00  .....o8.........
-  backtrace:
-    [<(ptrval)>] kmem_cache_alloc_trace+0x168/0x2b4
-    [<(ptrval)>] amba_device_alloc+0x38/0x7c
-    [<(ptrval)>] of_platform_bus_create+0x2f4/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_populate+0x70/0xc4
-    [<(ptrval)>] of_platform_default_populate_init+0xb4/0xcc
-    [<(ptrval)>] do_one_initcall+0x58/0x218
-    [<(ptrval)>] kernel_init_freeable+0x250/0x29c
-    [<(ptrval)>] kernel_init+0x24/0x148
-    [<(ptrval)>] ret_from_fork+0x14/0x1c
-    [<00000000>] 0x0
-unreferenced object 0xc1db4040 (size 64):
-  comm "swapper/0", pid 1, jiffies 4294937333 (age 75.200s)
-  hex dump (first 32 bytes):
-    31 63 30 66 30 30 30 30 2e 77 64 74 00 00 00 00  1c0f0000.wdt....
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<(ptrval)>] __kmalloc_track_caller+0x19c/0x2f8
-    [<(ptrval)>] kvasprintf+0x60/0xcc
-    [<(ptrval)>] kvasprintf_const+0x54/0x78
-    [<(ptrval)>] kobject_set_name_vargs+0x34/0xa8
-    [<(ptrval)>] dev_set_name+0x40/0x5c
-    [<(ptrval)>] of_device_make_bus_id+0x128/0x1f8
-    [<(ptrval)>] of_platform_bus_create+0x4dc/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_bus_create+0x380/0x4e8
-    [<(ptrval)>] of_platform_populate+0x70/0xc4
-    [<(ptrval)>] of_platform_default_populate_init+0xb4/0xcc
-    [<(ptrval)>] do_one_initcall+0x58/0x218
-    [<(ptrval)>] kernel_init_freeable+0x250/0x29c
-    [<(ptrval)>] kernel_init+0x24/0x148
-    [<(ptrval)>] ret_from_fork+0x14/0x1c
+Thanks Srinivas. It fixes the above regression I see on DB845c and
+Xiaomi Pocophone F1 running AOSP with v5.18-rc1.
 
-Fix them by adding amba_device_put() to release device name and
-amba device.
+Tested-by: Amit Pundir <amit.pundir@linaro.org>
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- drivers/amba/bus.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-index 0073d8ba0353..7e775ba6fdd9 100644
---- a/drivers/amba/bus.c
-+++ b/drivers/amba/bus.c
-@@ -478,8 +478,14 @@ static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
- 		goto skip_probe;
- 
- 	ret = amba_read_periphid(dev);
--	if (ret)
-+	if (ret) {
-+		if (ret != -EPROBE_DEFER) {
-+			amba_device_put(dev);
-+			goto err_out;
-+		}
- 		goto err_release;
-+	}
-+
- skip_probe:
- 	ret = device_add(&dev->dev);
- err_release:
--- 
-2.26.2
-
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  sound/soc/codecs/wcd934x.c | 26 +-------------------------
+>  1 file changed, 1 insertion(+), 25 deletions(-)
+>
+> diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+> index 1e75e93cf28f..6298ebe96e94 100644
+> --- a/sound/soc/codecs/wcd934x.c
+> +++ b/sound/soc/codecs/wcd934x.c
+> @@ -1274,29 +1274,7 @@ static int wcd934x_set_sido_input_src(struct wcd934x_codec *wcd, int sido_src)
+>         if (sido_src == wcd->sido_input_src)
+>                 return 0;
+>
+> -       if (sido_src == SIDO_SOURCE_INTERNAL) {
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
+> -                                  WCD934X_ANA_BUCK_HI_ACCU_EN_MASK, 0);
+> -               usleep_range(100, 110);
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
+> -                                  WCD934X_ANA_BUCK_HI_ACCU_PRE_ENX_MASK, 0x0);
+> -               usleep_range(100, 110);
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_RCO,
+> -                                  WCD934X_ANA_RCO_BG_EN_MASK, 0);
+> -               usleep_range(100, 110);
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
+> -                                  WCD934X_ANA_BUCK_PRE_EN1_MASK,
+> -                                  WCD934X_ANA_BUCK_PRE_EN1_ENABLE);
+> -               usleep_range(100, 110);
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
+> -                                  WCD934X_ANA_BUCK_PRE_EN2_MASK,
+> -                                  WCD934X_ANA_BUCK_PRE_EN2_ENABLE);
+> -               usleep_range(100, 110);
+> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
+> -                                  WCD934X_ANA_BUCK_HI_ACCU_EN_MASK,
+> -                                  WCD934X_ANA_BUCK_HI_ACCU_ENABLE);
+> -               usleep_range(100, 110);
+> -       } else if (sido_src == SIDO_SOURCE_RCO_BG) {
+> +       if (sido_src == SIDO_SOURCE_RCO_BG) {
+>                 regmap_update_bits(wcd->regmap, WCD934X_ANA_RCO,
+>                                    WCD934X_ANA_RCO_BG_EN_MASK,
+>                                    WCD934X_ANA_RCO_BG_ENABLE);
+> @@ -1382,8 +1360,6 @@ static int wcd934x_disable_ana_bias_and_syclk(struct wcd934x_codec *wcd)
+>         regmap_update_bits(wcd->regmap, WCD934X_CLK_SYS_MCLK_PRG,
+>                            WCD934X_EXT_CLK_BUF_EN_MASK |
+>                            WCD934X_MCLK_EN_MASK, 0x0);
+> -       wcd934x_set_sido_input_src(wcd, SIDO_SOURCE_INTERNAL);
+> -
+>         regmap_update_bits(wcd->regmap, WCD934X_ANA_BIAS,
+>                            WCD934X_ANA_BIAS_EN_MASK, 0);
+>         regmap_update_bits(wcd->regmap, WCD934X_ANA_BIAS,
+> --
+> 2.21.0
+>

@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA6D4F7645
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5AE4F766E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241268AbiDGGix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S241423AbiDGGlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241240AbiDGGij (ORCPT
+        with ESMTP id S241329AbiDGGkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:38:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389D88EB4A;
-        Wed,  6 Apr 2022 23:36:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F76761D5B;
-        Thu,  7 Apr 2022 06:36:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3D5C385A9;
-        Thu,  7 Apr 2022 06:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649313397;
-        bh=8uwDrdT/rAtS3qmkIgZ5IYHNiw59FST1McQcPgyt7MI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wd3Ux118X5M+RL+44A+6MKkElKcpBe4L+yqGu0Cj4p9pyVkeFxPxRVQsEVCUVLul7
-         mSySVH5wJakKTIPZzlztrkvZRIYgtOj9d63eyX5Wwsso5ciQV9KooPo5DyPqd9J7oY
-         Qb+IrgzxF6vm5U0xYAXpIAmoCzAWrnPcz5TYi5AhhW7pnqcBIYbGmaOm4D1Ps18Y8k
-         nmwWXth9G2XpHC54VKXI9KZaqqAbzv4VLDnxslKLO/dvt4KgTwQDXhGhgOJKNfulZv
-         cka9WINzFR3Ja4H9oC+iD20oxfu31HW34SG/zjQJ9Wj9u31z3fFKaki1BsiIQgkaFH
-         N0x0WMi4YYALQ==
-Date:   Thu, 7 Apr 2022 08:36:34 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Document R-Car
- H3/M3/E3 support
-Message-ID: <Yk6GcjtYcqnH6T7c@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yA7mIVcGHpaFnB3t"
-Content-Disposition: inline
-In-Reply-To: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 02:40:00 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAED6A56D2;
+        Wed,  6 Apr 2022 23:37:06 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgA3rqWAhk5iLZ7iAA--.33178S2;
+        Thu, 07 Apr 2022 14:36:52 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH 07/11] drivers: net: hippi: Fix deadlock in rr_close()
+Date:   Thu,  7 Apr 2022 14:36:48 +0800
+Message-Id: <f6ea1ae540fa95603407ac6b229865b8104e3288.1649310812.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1649310812.git.duoming@zju.edu.cn>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+X-CM-TRANSID: cS_KCgA3rqWAhk5iLZ7iAA--.33178S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrtF45CF13JFWfKFykZFW7XFb_yoW8Jry7pa
+        1UGrWSyF10vr4jq3WkJa1kXFn8uwsrGrWUGFy3Wws5Zwn5Z3WYqFn5KFWYvF4UtFsFvFZx
+        KF4UZryfCFs8Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+        AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUouWlDUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggNAVZdtZEcMgAFsC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a deadlock in rr_close(), which is shown below:
 
---yA7mIVcGHpaFnB3t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+   (Thread 1)                |      (Thread 2)
+                             | rr_open()
+rr_close()                   |  add_timer()
+ spin_lock_irqsave() //(1)   |  (wait a time)
+ ...                         | rr_timer()
+ del_timer_sync()            |  spin_lock_irqsave() //(2)
+ (wait timer to stop)        |  ...
 
-On Tue, Mar 29, 2022 at 11:38:03AM +0200, Geert Uytterhoeven wrote:
-> Document support for the SPI Multi I/O Bus Controller (RPC-IF) in the
-> R-Car H3, M3-W, M3-W+, M3-N, and E3 SoCs.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Rob Herring <robh@kernel.org>
+We hold rrpriv->lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need rrpriv->lock in position (2) of thread 2.
+As a result, rr_close() will block forever.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
 
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/net/hippi/rrunner.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---yA7mIVcGHpaFnB3t
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
+index 16105292b14..74e845fa2e0 100644
+--- a/drivers/net/hippi/rrunner.c
++++ b/drivers/net/hippi/rrunner.c
+@@ -1355,7 +1355,9 @@ static int rr_close(struct net_device *dev)
+ 
+ 	rrpriv->fw_running = 0;
+ 
++	spin_unlock_irqrestore(&rrpriv->lock, flags);
+ 	del_timer_sync(&rrpriv->timer);
++	spin_lock_irqsave(&rrpriv->lock, flags);
+ 
+ 	writel(0, &regs->TxPi);
+ 	writel(0, &regs->IpRxPi);
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJOhm4ACgkQFA3kzBSg
-KbZc5Q/8D/HrD8s7Ole+CGOFemu+BxNlEqin0mYgn67gkxzUcXcM+y4Nnvq4Rz+X
-MPktd7ovJRosDSwtbZcANiT5gn1BwoCB+dU5/vA7+2Ym5QXeuTXUPLGrK89n+llB
-9B5QFfRaXkKk83fvLQHYQcYUzx4p6RLY78h3Mxhb8kPtXebvsZs8BKQq7KiHtDyU
-Ygtmof5dZ06qRDY/4y4NtXbjCUOEy3+7aRwfnpcmGE0pjXhjRjFdgja7W42/Vv7z
-lzB7tmyZbXAiiw32jVhrlng1j8jS6v9AERm9JmxHm8uNE9OZ8GNf5FMlbapN4p5Z
-5rI9HW0pU0jbsFAFqpK8QJ1o2ll7qzuX3TZ5lyH5BkHhtNnYZ9d3AG86pC3ino3M
-fKTsJtLm4Pk/RyEWAjerMYVBlhJgwzAXjZlDYPwd43C5m0vkqGM9BSsFQf7z6z2x
-SR4S3QPQuBHWQbLgMYDC1djqxZEn6LyRonK3k64nl4Hi3wgHG13ac7FAgNNnmrqr
-GkAUP+XoGchzF0Twnlg+NOnzJTkNK4bIFOCy34vy/dH7imUpNc17HEsnZ1cIICw0
-9CMWbv+xqDIq023X4PdcKByiiMLsaQ4osYePhbo0WTclrWlV3bzB35XsbYDHmCMN
-hqgTd9GTXGCGklr8KafND8qTK4N6drWTqSq5c8buGlZBrNB6zKk=
-=x8UI
------END PGP SIGNATURE-----
-
---yA7mIVcGHpaFnB3t--

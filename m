@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2400A4F7E98
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDC34F7E8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245049AbiDGMFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S245082AbiDGMEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236880AbiDGMEk (ORCPT
+        with ESMTP id S239550AbiDGMEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:04:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0FBBF52D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:02:36 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZ0MN33yzzgYC6;
+        Thu, 7 Apr 2022 08:04:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D19CC1C83
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:02:35 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZ0MN711tzgYKj;
         Thu,  7 Apr 2022 20:00:48 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 20:02:33 +0800
+ 15.1.2308.21; Thu, 7 Apr 2022 20:02:26 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -33,9 +33,9 @@ CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
         <will@kernel.org>, <mark.rutland@arm.com>, <ardb@kernel.org>,
         <masahiroy@kernel.org>, <jpoimboe@redhat.com>,
         <peterz@infradead.org>, <ycote@redhat.com>
-Subject: [RFC PATCH v3 07/13] objtool: arm64: Decode other system instructions
-Date:   Thu, 7 Apr 2022 20:01:35 +0800
-Message-ID: <20220407120141.43801-8-chenzhongjin@huawei.com>
+Subject: [RFC PATCH v3 08/13] objtool: arm64: Decode load/store instructions
+Date:   Thu, 7 Apr 2022 20:01:36 +0800
+Message-ID: <20220407120141.43801-9-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220407120141.43801-1-chenzhongjin@huawei.com>
 References: <20220407120141.43801-1-chenzhongjin@huawei.com>
@@ -56,31 +56,195 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Julien Thierry <jthierry@redhat.com>
 
-Decode ERET, BRK and NOPs
+Decode load/store operations and create corresponding stack_ops for
+operations targeting SP or FP.
+
+Operations storing/loading multiple registers are split into separate
+stack_ops storing single registers.
+
+Operations modifying the base register get an additional stack_op
+for the register update. Since the atomic register(s) load/store + base
+register update gets split into multiple operations, to make sure
+objtool always sees a valid stack, consider store instruction to perform
+stack allocations (i.e. modifying the base pointer before the storing)
+and loads de-allocations (i.e. modifying the base pointer after the
+load).
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- tools/objtool/arch/arm64/decode.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/objtool/arch/arm64/decode.c | 144 ++++++++++++++++++++++++++++++
+ 1 file changed, 144 insertions(+)
 
 diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
-index 351f8b1bbd6d..b07e0f51637e 100644
+index b07e0f51637e..4a868945dcfb 100644
 --- a/tools/objtool/arch/arm64/decode.c
 +++ b/tools/objtool/arch/arm64/decode.c
-@@ -238,6 +238,13 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			/* Remaining branch opcodes are conditional */
- 			*type = INSN_JUMP_CONDITIONAL;
- 			*immediate = aarch64_get_branch_offset(insn);
-+		} else if (aarch64_insn_is_eret(insn)) {
-+			*type = INSN_CONTEXT_SWITCH;
-+		} else if (aarch64_insn_is_steppable_hint(insn)) {
-+			*type = INSN_NOP;
-+		} else if (aarch64_insn_is_brk(insn)) {
-+			*type = INSN_BUG;
-+			*immediate = aarch64_insn_decode_immediate(AARCH64_INSN_IMM_16, insn);
+@@ -112,6 +112,48 @@ int arch_decode_hint_reg(u8 sp_reg, int *base)
+ 	return -1;
+ }
+ 
++static struct stack_op *arm_make_store_op(enum aarch64_insn_register base,
++					  enum aarch64_insn_register reg,
++					  int offset)
++{
++	struct stack_op *op;
++
++	op = calloc(1, sizeof(*op));
++	if (!op) {
++		WARN("calloc failed");
++		return NULL;
++	}
++	op->dest.type = OP_DEST_REG_INDIRECT;
++	op->dest.reg = base;
++	op->dest.offset = offset;
++	op->src.type = OP_SRC_REG;
++	op->src.reg = reg;
++	op->src.offset = 0;
++
++	return op;
++}
++
++static struct stack_op *arm_make_load_op(enum aarch64_insn_register base,
++					 enum aarch64_insn_register reg,
++					 int offset)
++{
++	struct stack_op *op;
++
++	op = calloc(1, sizeof(*op));
++	if (!op) {
++		WARN("calloc failed");
++		return NULL;
++	}
++	op->dest.type = OP_DEST_REG;
++	op->dest.reg = reg;
++	op->dest.offset = 0;
++	op->src.type = OP_SRC_REG_INDIRECT;
++	op->src.reg = base;
++	op->src.offset = offset;
++
++	return op;
++}
++
+ static struct stack_op *arm_make_add_op(enum aarch64_insn_register dest,
+ 					enum aarch64_insn_register src,
+ 					int val)
+@@ -132,6 +174,98 @@ static struct stack_op *arm_make_add_op(enum aarch64_insn_register dest,
+ 	return op;
+ }
+ 
++static int arm_decode_load_store(u32 insn, unsigned long *immediate,
++				 struct list_head *ops_list)
++{
++	enum aarch64_insn_register base;
++	enum aarch64_insn_register rt;
++	struct stack_op *op;
++	int size;
++	int offset;
++
++	if (aarch64_insn_is_store_single(insn) ||
++	    aarch64_insn_is_load_single(insn))
++		size = 1 << ((insn & GENMASK(31, 30)) >> 30);
++	else
++		size = 4 << ((insn >> 31) & 1);
++
++	if (aarch64_insn_is_store_imm(insn) || aarch64_insn_is_load_imm(insn))
++		*immediate = size * aarch64_insn_decode_immediate(AARCH64_INSN_IMM_12,
++								  insn);
++	else if (aarch64_insn_is_store_pre(insn) ||
++		 aarch64_insn_is_load_pre(insn) ||
++		 aarch64_insn_is_store_post(insn) ||
++		 aarch64_insn_is_load_post(insn))
++		*immediate = sign_extend(aarch64_insn_decode_immediate(AARCH64_INSN_IMM_9,
++								       insn),
++					 9);
++	else if (aarch64_insn_is_stp(insn) || aarch64_insn_is_ldp(insn) ||
++		 aarch64_insn_is_stp_pre(insn) ||
++		 aarch64_insn_is_ldp_pre(insn) ||
++		 aarch64_insn_is_stp_post(insn) ||
++		 aarch64_insn_is_ldp_post(insn))
++		*immediate = size * sign_extend(aarch64_insn_decode_immediate(AARCH64_INSN_IMM_7,
++									      insn),
++						7);
++	else
++		return 1;
++
++	base = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RN, insn);
++	if (base != AARCH64_INSN_REG_FP && base != AARCH64_INSN_REG_SP)
++		return 0;
++
++	offset = *immediate;
++
++	if (aarch64_insn_is_store_pre(insn) || aarch64_insn_is_stp_pre(insn) ||
++	    aarch64_insn_is_store_post(insn) || aarch64_insn_is_stp_post(insn)) {
++		op = arm_make_add_op(base, base, *immediate);
++		list_add_tail(&op->list, ops_list);
++
++		if (aarch64_insn_is_store_post(insn) || aarch64_insn_is_stp_post(insn))
++			offset = -*immediate;
++		else
++			offset = 0;
++	} else if (aarch64_insn_is_load_post(insn) || aarch64_insn_is_ldp_post(insn)) {
++		offset = 0;
++	}
++
++	/* First register */
++	rt = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RT, insn);
++	if (aarch64_insn_is_store_single(insn) ||
++	    aarch64_insn_is_store_pair(insn))
++		op = arm_make_store_op(base, rt, offset);
++	else
++		op = arm_make_load_op(base, rt, offset);
++
++	if (!op)
++		return -1;
++	list_add_tail(&op->list, ops_list);
++
++	/* Second register (if present) */
++	if (aarch64_insn_is_store_pair(insn) ||
++	    aarch64_insn_is_load_pair(insn)) {
++		rt = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RT2,
++						  insn);
++		if (aarch64_insn_is_store_pair(insn))
++			op = arm_make_store_op(base, rt, offset + size);
++		else
++			op = arm_make_load_op(base, rt, offset + size);
++		if (!op)
++			return -1;
++		list_add_tail(&op->list, ops_list);
++	}
++
++	if (aarch64_insn_is_load_pre(insn) || aarch64_insn_is_ldp_pre(insn) ||
++	    aarch64_insn_is_load_post(insn) || aarch64_insn_is_ldp_post(insn)) {
++		op = arm_make_add_op(base, base, *immediate);
++		if (!op)
++			return -1;
++		list_add_tail(&op->list, ops_list);
++	}
++
++	return 0;
++}
++
+ static int arm_decode_add_sub_imm(u32 instr, bool set_flags,
+ 				  unsigned long *immediate,
+ 				  struct list_head *ops_list)
+@@ -247,6 +381,16 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			*immediate = aarch64_insn_decode_immediate(AARCH64_INSN_IMM_16, insn);
  		}
  		break;
++	case AARCH64_INSN_CLS_LDST:
++	{
++		int ret;
++
++		ret = arm_decode_load_store(insn, immediate, ops_list);
++		if (ret <= 0)
++			return ret;
++
++		break;
++	}
  	default:
+ 		break;
+ 	}
 -- 
 2.17.1
 

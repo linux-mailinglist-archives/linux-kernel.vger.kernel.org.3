@@ -2,43 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6504F7828
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25DE4F7838
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242325AbiDGHyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S242279AbiDGHyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242318AbiDGHyX (ORCPT
+        with ESMTP id S239320AbiDGHyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:54:23 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E21C31B84ED;
-        Thu,  7 Apr 2022 00:52:23 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id 014CC1E80D17;
-        Thu,  7 Apr 2022 15:52:06 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WxWf7QKsoZzt; Thu,  7 Apr 2022 15:52:03 +0800 (CST)
-Received: from ubuntu.localdomain (unknown [101.228.248.165])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id 3F7C61E80C8C;
-        Thu,  7 Apr 2022 15:52:02 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] NFS: remove unnecessary type castings
-Date:   Thu,  7 Apr 2022 00:52:16 -0700
-Message-Id: <20220407075216.116940-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Apr 2022 03:54:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0301C2D81;
+        Thu,  7 Apr 2022 00:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FZp9Ive/VquPf6ObnGVyJces3vL4RIyldFbr1Zsjkoo=; b=y+E42+SZua5mio9/NU+Cbghatk
+        H9Ss1en/Hvkc7LLJ2oSa7kA0GIkzq+D0c6JP1/VnkfB+psAfw71vpUnIqSL9bTzLuhHzA41YH7rO9
+        2jEcaksVcYlFuAqJvlzei2o+aTox94gmwzrTX++dRWAQanYRr/4TP6Dl8u2/XtNZBqWDsHMoTPpP+
+        /eNvBjX7LPZ7zcbYgMX4evGihYIlt3OG0+BHGKmOYv+QuSqlmaEussnUYrOTNrrKBzm5OvrSiAruu
+        cHzDr077suP8/Fzui/3ARNWb/0hoEOhTAIPPH93ys2y7WypI2AQCIFY9NfVq7zxdXjhqdqy5eN/qY
+        iAYOAqGQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncMwY-00A8KX-C6; Thu, 07 Apr 2022 07:52:38 +0000
+Date:   Thu, 7 Apr 2022 00:52:38 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Landley <rob@landley.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Rich Felker <dalias@libc.org>
+Subject: Re: [RFC PULL] remove arch/h8300
+Message-ID: <Yk6YRuFYw7ncoIHI@infradead.org>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org>
+ <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
+ <c3e7ee64-68fc-ed53-4a90-9f9296583d7c@landley.net>
+ <CAK8P3a14b6djqPw8Dea5uW2PPEABbe0pNXV5EX0529oDrW1ZAg@mail.gmail.com>
+ <04c0374f-0044-c84d-1820-d743a4061906@physik.fu-berlin.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04c0374f-0044-c84d-1820-d743a4061906@physik.fu-berlin.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,104 +72,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary casts.
+On Thu, Apr 07, 2022 at 09:47:04AM +0200, John Paul Adrian Glaubitz wrote:
+> But if it's not a lot of code, would it really accumulate a lot of cruft?
+> 
+> If the code just works as is and doesn't need much attention to keep it working
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- fs/nfs/inode.c      | 6 +++---
- fs/nfs/nfs42xattr.c | 2 +-
- fs/nfs/nfs4idmap.c  | 4 ++--
- fs/nfs/nfs4proc.c   | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index 7eb3b08d702f..c1d0f10cbc67 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -318,7 +318,7 @@ struct nfs_find_desc {
- static int
- nfs_find_actor(struct inode *inode, void *opaque)
- {
--	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
-+	struct nfs_find_desc	*desc = opaque;
- 	struct nfs_fh		*fh = desc->fh;
- 	struct nfs_fattr	*fattr = desc->fattr;
- 
-@@ -336,7 +336,7 @@ nfs_find_actor(struct inode *inode, void *opaque)
- static int
- nfs_init_locked(struct inode *inode, void *opaque)
- {
--	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
-+	struct nfs_find_desc	*desc = opaque;
- 	struct nfs_fattr	*fattr = desc->fattr;
- 
- 	set_nfs_fileid(inode, fattr->fileid);
-@@ -2271,7 +2271,7 @@ static inline void nfs4_init_once(struct nfs_inode *nfsi)
- 
- static void init_once(void *foo)
- {
--	struct nfs_inode *nfsi = (struct nfs_inode *) foo;
-+	struct nfs_inode *nfsi = foo;
- 
- 	inode_init_once(&nfsi->vfs_inode);
- 	INIT_LIST_HEAD(&nfsi->open_files);
-diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-index ad3405c64b9e..34245aa7e9de 100644
---- a/fs/nfs/nfs42xattr.c
-+++ b/fs/nfs/nfs42xattr.c
-@@ -981,7 +981,7 @@ nfs4_xattr_entry_count(struct shrinker *shrink, struct shrink_control *sc)
- 
- static void nfs4_xattr_cache_init_once(void *p)
- {
--	struct nfs4_xattr_cache *cache = (struct nfs4_xattr_cache *)p;
-+	struct nfs4_xattr_cache *cache = p;
- 
- 	spin_lock_init(&cache->listxattr_lock);
- 	atomic_long_set(&cache->nent, 0);
-diff --git a/fs/nfs/nfs4idmap.c b/fs/nfs/nfs4idmap.c
-index f331866dd418..3cba5a225f5f 100644
---- a/fs/nfs/nfs4idmap.c
-+++ b/fs/nfs/nfs4idmap.c
-@@ -585,7 +585,7 @@ static int nfs_idmap_legacy_upcall(struct key *authkey, void *aux)
- 	struct request_key_auth *rka = get_request_key_auth(authkey);
- 	struct rpc_pipe_msg *msg;
- 	struct idmap_msg *im;
--	struct idmap *idmap = (struct idmap *)aux;
-+	struct idmap *idmap = aux;
- 	struct key *key = rka->target_key;
- 	int ret = -ENOKEY;
- 
-@@ -668,7 +668,7 @@ idmap_pipe_downcall(struct file *filp, const char __user *src, size_t mlen)
- {
- 	struct request_key_auth *rka;
- 	struct rpc_inode *rpci = RPC_I(file_inode(filp));
--	struct idmap *idmap = (struct idmap *)rpci->private;
-+	struct idmap *idmap = rpci->private;
- 	struct key *authkey;
- 	struct idmap_msg im;
- 	size_t namelen_in;
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index e3f5b380cefe..4131d27c382d 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -6564,7 +6564,7 @@ static void nfs4_delegreturn_prepare(struct rpc_task *task, void *data)
- 	struct nfs4_delegreturndata *d_data;
- 	struct pnfs_layout_hdr *lo;
- 
--	d_data = (struct nfs4_delegreturndata *)data;
-+	d_data = data;
- 
- 	if (!d_data->lr.roc && nfs4_wait_on_layoutreturn(d_data->inode, task)) {
- 		nfs4_sequence_done(task, &d_data->res.seq_res);
-@@ -8808,7 +8808,7 @@ int nfs4_proc_exchange_id(struct nfs_client *clp, const struct cred *cred)
- void nfs4_test_session_trunk(struct rpc_clnt *clnt, struct rpc_xprt *xprt,
- 			    void *data)
- {
--	struct nfs4_add_xprt_data *adata = (struct nfs4_add_xprt_data *)data;
-+	struct nfs4_add_xprt_data *adata = data;
- 	struct rpc_task *task;
- 	int status;
- 
--- 
-2.25.1
-
+Because no one gives it even that little bit of attention.

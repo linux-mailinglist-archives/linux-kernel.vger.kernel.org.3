@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795704F8569
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCBD4F8571
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345915AbiDGRBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
+        id S1345977AbiDGRDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345907AbiDGRBk (ORCPT
+        with ESMTP id S1345969AbiDGRDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:01:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319161C8858;
-        Thu,  7 Apr 2022 09:59:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D40631F85E;
-        Thu,  7 Apr 2022 16:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649350777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2Bed+Unj8/31PP3+tIX1i22uICkwYo9ioyedTJiWT8=;
-        b=WlaomzRyVsIgdnjDN42Ge69qIdv4Xcv0hottLq9lRt1BUJTW7hVTkNCsx3MEEbL/5GspRM
-        oh1bjnM3PoLt055R9wRWQV3SNwGzlvjaUk4f6lrgCsYDxPEDUTgd9WAyvhV1LsSEenx8bn
-        9VW1A38KAIBSsYlYMlZEHvdkZAqtjCo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649350777;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2Bed+Unj8/31PP3+tIX1i22uICkwYo9ioyedTJiWT8=;
-        b=lx3mehWOWKnYn7pyR2cHSOOAhhjiuQQnozm1Ucy/jL1WgWceOJhu377M2mi/dlCho7cLTy
-        hIdrWBTFJnEjI/AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB8FC13485;
-        Thu,  7 Apr 2022 16:59:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IgnoJXgYT2L8GwAAMHmgww
-        (envelope-from <colyli@suse.de>); Thu, 07 Apr 2022 16:59:36 +0000
-Message-ID: <c934c457-fe8f-7937-f348-eccf46375878@suse.de>
-Date:   Fri, 8 Apr 2022 00:59:34 +0800
+        Thu, 7 Apr 2022 13:03:01 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9741C886C;
+        Thu,  7 Apr 2022 10:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
+        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=o3qoOir9WAPGzi1sWnNPLakfeNGwPLGP2JcLR4qBR0w=; b=MuioKSfFuI7blzwCV/6wb+YekZ
+        ZxFLRKdEmgFHBL5G5EjD8gQ7NqEpdI5RH75hyyi5Lx+Qpo/ZHjbVyA8sOLM81+Cf/jnhuNTEqrUMV
+        AKRzPBibxD304idWTvyCsPVM59NiEmQMfnURAJfh2CAAQpBDkCnXgKqwp0Bbiz2WY6Zs=;
+Received: from p200300daa70ef2000000000000000451.dip0.t-ipconnect.de ([2003:da:a70e:f200::451] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1ncVU3-0005oz-2F; Thu, 07 Apr 2022 18:59:47 +0200
+Message-ID: <15c8aab5-41b7-4d25-4b4c-98536bc197fc@nbd.name>
+Date:   Thu, 7 Apr 2022 18:59:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v1] bcache: Check for NULL return of kzalloc()
 Content-Language: en-US
-To:     QintaoShen <unSimple1993@163.com>
-Cc:     linux-bcache@vger.kernel.org, kent.overstreet@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <1648114074-10045-1-git-send-email-unSimple1993@163.com>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <1648114074-10045-1-git-send-email-unSimple1993@163.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-5-nbd@nbd.name>
+ <d0bffa9a-0ea6-0f59-06b2-7eef3c746de1@linaro.org>
+ <e3ea7381-87e3-99e1-2277-80835ec42f15@nbd.name>
+ <CAK8P3a1A6QYajv_HTw79HjiJ8CN6YPeKXc_X3ZFD83pdOqVTkQ@mail.gmail.com>
+ <08883cf4-27b9-30bf-bd27-9391b763417c@nbd.name>
+ <750c1f9e-6a53-16d5-390e-f9f81fa23afd@linaro.org>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH v2 04/14] dt-bindings: arm: mediatek: document WED binding
+ for MT7622
+In-Reply-To: <750c1f9e-6a53-16d5-390e-f9f81fa23afd@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 5:27 PM, QintaoShen wrote:
-> kzalloc() is a memory allocation function which may return a NULL pointer.
-> Therefore, it is better to check the return value of kzalloc() to avoid potential
-> NULL-pointer dereference.
->
-> Signed-off-by: QintaoShen <unSimple1993@163.com>
-> ---
->   drivers/md/bcache/request.c | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-> index fdd0194..232ffe3 100644
-> --- a/drivers/md/bcache/request.c
-> +++ b/drivers/md/bcache/request.c
-> @@ -1105,6 +1105,9 @@ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
->   	 * which would call closure_get(&dc->disk.cl)
->   	 */
->   	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-> +	if (!ddpp)
-> +		return ;
 
-This is wrong. If you test your patch, you may experience a system hang 
-I guess.
+On 06.04.22 10:57, Krzysztof Kozlowski wrote:
+> Thanks for clarification. I still wonder about the missing drivers as I
+> responded to your second bindings:
+> https://lore.kernel.org/all/20220405195755.10817-1-nbd@nbd.name/T/#m6d108c644f0c05cd12c05e56abe2ef75760c6cef
+> 
+> Both of these compatibles - WED and PCIe - are not actually used. Now
+> everything is done inside your Ethernet driver which pokes WED and
+> PCIe-mirror address space via regmap/syscon.
+> 
+> Separate bindings might have sense if WED/PCIe mirror were ever
+> converted to real drivers.I think in terms of hardware description it makes more sense to have 
+separate nodes, even if the implementation uses them in one driver at 
+the moment.
 
-
-Coly Li
-
-
-> +
->   	ddip->d = d;
->   	/* Count on the bcache device */
->   	ddip->orig_bdev = orig_bdev;
-
-
+- Felix

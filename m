@@ -2,92 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24584F74B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000724F74BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbiDGEdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 00:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S238421AbiDGEd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 00:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236255AbiDGEdD (ORCPT
+        with ESMTP id S238432AbiDGEdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 00:33:03 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828991B72E2;
-        Wed,  6 Apr 2022 21:31:02 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2371xqbG001195;
-        Thu, 7 Apr 2022 04:30:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=+8gXMvVjK0KxksGPAS5jiBbbQX+sYZYTJj+FXkYiBS0=;
- b=h3ZVhvTymZlsIpXeUFJjihXCSQydEAtN6ZTjnk0j8Z/b7lJoSOardNVedPqJcfP07N/7
- JLcvsh4GVpljFNVY/a2foAqJDt7BBnK4kigit5MqDVzymRBUNVdibs0CqUXmtibL7wzI
- BkXrQZXifWiEjNXelDiJV/ni6ECSdjgEe7qKcyrON7z31N8zn0jDQgY8vF/0HC9uxVgs
- kY6RS5LGG55QmAPDs/+yCT7/ZcwCrwzUp5bIZH1Cb+2HYZVyJ6kCLSX8ByfYMLl7A8mW
- ig2AGsboaNkYSAccQWdujlm9o33WyL9gm0xLraYw2z1AMGfpOd8T4ymk5eZKRbi16Qs3 Vg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f983mcf1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 04:30:49 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2374RDKj010858;
-        Thu, 7 Apr 2022 04:30:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3f6drhqdrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 04:30:47 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2374UjPO38207798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Apr 2022 04:30:45 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0522CA405C;
-        Thu,  7 Apr 2022 04:30:45 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 926AFA405B;
-        Thu,  7 Apr 2022 04:30:39 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.211.112.159])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  7 Apr 2022 04:30:39 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the
- allocated cpu set
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <ad0648a9-0252-2d1f-cc48-7e14846fc0af@linuxfoundation.org>
-Date:   Thu, 7 Apr 2022 10:00:35 +0530
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        disgoel@linux.vnet.ibm.com,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        maddy@linux.vnet.ibm.com, kajoljain <kjain@linux.ibm.com>,
-        srikar@linux.vnet.ibm.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F30C53D1-F01A-44C2-A2FB-E024FF2CAEC8@linux.vnet.ibm.com>
-References: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
- <ad0648a9-0252-2d1f-cc48-7e14846fc0af@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1_AH7w4lqQDUG9LvXf8wy8LWNlMtczef
-X-Proofpoint-GUID: 1_AH7w4lqQDUG9LvXf8wy8LWNlMtczef
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- suspectscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204070021
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 7 Apr 2022 00:33:22 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9141C5924
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 21:31:22 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1ncJnK-001Y2A-7U; Thu, 07 Apr 2022 14:30:55 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 07 Apr 2022 14:30:54 +1000
+Date:   Thu, 7 Apr 2022 14:30:54 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <Yk5o/lNTyiJWD4Ae@gondor.apana.org.au>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-8-catalin.marinas@arm.com>
+ <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
+ <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
+ <Yk1UJs6eZMoIp3Eh@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk1UJs6eZMoIp3Eh@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,48 +51,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 06, 2022 at 09:49:42AM +0100, Catalin Marinas wrote:
+>
+> Since ARCH_KMALLOC_MINALIGN on arm64 prior to this series is 128, there
+> is any change to the crypto code.
 
+But the crypto API assumes that memory returned by kmalloc is
+automatically aligned to CRYPTO_MINALIGN, would this still be
+the case if you change it to ARCH_DMA_MINALIGN?
 
-> On 07-Apr-2022, at 1:35 AM, Shuah Khan <skhan@linuxfoundation.org> =
-wrote:
->=20
-> On 4/6/22 11:57 AM, Athira Rajeev wrote:
->> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
->> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
->> and by pthread_create in the code. But in current code, allocated
->> cpu set is not freed. Fix this by adding CPU_FREE after its usage
->> is done.
->=20
-> Good find.
->=20
->> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
->> ---
->>  tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
->>  1 file changed, 1 insertion(+)
->> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c =
-b/tools/testing/selftests/mqueue/mq_perf_tests.c
->> index b019e0b8221c..17c41f216bef 100644
->> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
->> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
->> @@ -732,6 +732,7 @@ int main(int argc, char *argv[])
->>  		pthread_attr_destroy(&thread_attr);
->>  	}
->>  +	CPU_FREE(cpu_set);
->>  	if (!continuous_mode) {
->>  		pthread_join(cpu_threads[0], &retval);
->>  		shutdown((long)retval, "perf_test_thread()", __LINE__);
->=20
-> CPU_ALLOC() is called very early on in main() and there are a
-> few error paths that exit without calling CPU_FREE. This change
-> doesn't fully fix the problem.
->=20
-> Review the other exit paths where CPU_FREE is needed.
-Sure, Thanks for the review.
-I will check and post a V2
-
-thanks
-Athira
->=20
-> thanks,
-> -- Shuah
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

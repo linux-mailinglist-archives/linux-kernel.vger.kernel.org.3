@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451DE4F75C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F183C4F75C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240166AbiDGGOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S240939AbiDGGPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbiDGGOf (ORCPT
+        with ESMTP id S240378AbiDGGPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:14:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCB091C5914
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649311955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4YMZD0zaXzNbiLYIAQQ6QdI+WDXn0cZA+j7h4YBjqmQ=;
-        b=EACFAS/CuEnkh6duNKmq4PYN3Wui52oV7RpFTZ9nrMNek2vjFwoNbJA474zWOmo5mNOaKR
-        tCKsP8i2WM8iFbAW+iEAHgLPUy5W3A973ljqOLbLVfKnB+w0VYCZf+yIfoCkTCnEYfzxIe
-        Pg+k7MKqmjTuRuK/rvYDback097kSE8=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-NHgvIf4aNIeH4NKqo4WswA-1; Thu, 07 Apr 2022 02:12:34 -0400
-X-MC-Unique: NHgvIf4aNIeH4NKqo4WswA-1
-Received: by mail-pj1-f71.google.com with SMTP id m8-20020a17090aab0800b001cb1320ef6eso563262pjq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:12:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4YMZD0zaXzNbiLYIAQQ6QdI+WDXn0cZA+j7h4YBjqmQ=;
-        b=CgSvLVZ8Kxcfo3mHpHFHFs2/MlvrXGpqQJY1fkMkscpl1VwMIT1POswFm5ZWf0Rh28
-         rxybgamaXm1RdpmPvLuXspsZaIf21VWOkCE2CJ6g763kNACpQXJA9jTkovStV1E4mmaA
-         4Pig+wZt6dyicANV5UzjPTk1ZcJcM29yhdtc3xdWG5qWyo5kHLL01yihvG/wjEYJVAxV
-         2ks8DKtpbP571OLL99tIaAxfObsqSAtxbuTbRA4SEImLtx9RDpz5Co/+xIH55c/V7wrA
-         w5tEp4D492ziCtLeVcnco/hsvS+qe/YnxtoL6g8Oh+dnzH1oTGWHLERSaIVtbaMCK6Mg
-         AXuQ==
-X-Gm-Message-State: AOAM530KRAgfAN8GHPkjpwICUriot7Y/DvHXo50TDqcuY3Kd6epizkRB
-        C4Gc3DByvCA6CxI9UartFc5L6HL2zpVTMnel4y6trJWbuNOsNa8j8Y3xBSL9YXelwhBbLh2vvTi
-        RPnHBxNQGAZldkum1H1pLAeHF
-X-Received: by 2002:a05:6a00:1256:b0:4fb:1374:2f65 with SMTP id u22-20020a056a00125600b004fb13742f65mr12818679pfi.72.1649311953598;
-        Wed, 06 Apr 2022 23:12:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7rGbUuvcCunCR1UohNGot6xcJrqBbgAuS1tOEZdmzy6OiRlug1LP1U5zxK0CgvL2OVrSsvg==
-X-Received: by 2002:a05:6a00:1256:b0:4fb:1374:2f65 with SMTP id u22-20020a056a00125600b004fb13742f65mr12818667pfi.72.1649311953327;
-        Wed, 06 Apr 2022 23:12:33 -0700 (PDT)
-Received: from [10.72.13.105] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056a000b8600b004faa49add69sm21140158pfj.107.2022.04.06.23.12.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 23:12:32 -0700 (PDT)
-Message-ID: <ccb6be3f-e397-21cb-3490-637c96483fcb@redhat.com>
-Date:   Thu, 7 Apr 2022 14:12:27 +0800
+        Thu, 7 Apr 2022 02:15:03 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156851C8DB8;
+        Wed,  6 Apr 2022 23:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649311985; x=1680847985;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=C3nT1yCtjX7kKzPi6gJkoB5VNcsfCgvLH5dyegPN6I0=;
+  b=AZ7Q1KjSjGWovTeacTWtTQTzf9y+6shEcM4s5gwj0jxmzqemI/laNZVf
+   sL1Ly/2qzvJ957nto0X0fQZfCQrtocD+AAtgTMA6dJaDFJ3uckNjJtt+L
+   vGbZYQwmNhvzSGrolDfIw4FaRFNNtEQ0jspnqiI+L6TLZnkC3+M3BOYaZ
+   Ny4QixdwjEl1WT7WszXjmLYJkhY37elpv1tpbQ8Y8RT7bRMZJ/eG62wFW
+   bcdozJYypEYIooO+ixVduf6+0wFHNTJ2pXwYtLo6Odl2D6nzzubb9OqJt
+   XmG2piGTqSZVtJqWc8P9pnijgfbtHdPKnUJv3S7KwoHU3sdcGxfUORIRj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243373080"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="243373080"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:13:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="549880694"
+Received: from cqiang-mobl.ccr.corp.intel.com (HELO [10.249.174.148]) ([10.249.174.148])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:13:01 -0700
+Message-ID: <8347e6e3-5b22-c9c9-5e6b-9ea33c614d5a@intel.com>
+Date:   Thu, 7 Apr 2022 14:12:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH V2 0/5] rework on the IRQ hardening of virtio
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/3] KVM: X86: Save&restore the triple fault request
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, sgarzare@redhat.com
-References: <20220406083538.16274-1-jasowang@redhat.com>
- <20220406073500-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220406073500-mutt-send-email-mst@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318074955.22428-1-chenyi.qiang@intel.com>
+ <20220318074955.22428-2-chenyi.qiang@intel.com> <YkzRSHHDMaVBQrxd@google.com>
+ <YkzUceG4rhw15U3i@google.com> <Yk4C8gA2xVCrzgrG@google.com>
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <Yk4C8gA2xVCrzgrG@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,76 +70,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/4/6 下午7:36, Michael S. Tsirkin 写道:
-> On Wed, Apr 06, 2022 at 04:35:33PM +0800, Jason Wang wrote:
->> Hi All:
->>
->> This is a rework on the IRQ hardening for virtio which is done
->> previously by the following commits are reverted:
->>
->> 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
->> 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
->>
->> The reason is that it depends on the IRQF_NO_AUTOEN which may conflict
->> with the assumption of the affinity managed IRQ that is used by some
->> virtio drivers. And what's more, it is only done for virtio-pci but
->> not other transports.
->>
->> In this rework, I try to implement a general virtio solution which
->> borrows the idea of the INTX hardening by introducing a boolean for
->> virtqueue callback enabling and toggle it in virtio_device_ready()
->> and virtio_reset_device(). Then vring_interrupt() can simply check and
->> return early if the driver is not ready.
->
-> All of a sudden all patches are having a wrong mime type.
->
-> It is application/octet-stream; should be text/plain
->
-> Pls fix and repost, thanks!
 
-
-So the patches are generated via git-format-patch and git-send-email in 
-one run.
-
-I can see many upstream patches were converted to 
-application/octet-stream if From: tag is different from the sender.
-
-Maxime told me they've also noticed the issue and it looks like a issue 
-of mimecast.
-
-Thanks
-
-
->
->> Please review.
+On 4/7/2022 5:15 AM, Sean Christopherson wrote:
+> On Tue, Apr 05, 2022, Sean Christopherson wrote:
+>> On Tue, Apr 05, 2022, Sean Christopherson wrote:
+>>> On Fri, Mar 18, 2022, Chenyi Qiang wrote:
+>>>> @@ -4976,6 +4980,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>>>>   		}
+>>>>   	}
+>>>>   
+>>>> +	if (events->flags & KVM_VCPUEVENT_TRIPLE_FAULT)
+>>>> +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+>>>> +
+>>>>   	kvm_make_request(KVM_REQ_EVENT, vcpu);
+>>>
+>>> Looks correct, but this really needs a selftest, at least for the SET path since
+>>> the intent is to use that for the NOTIFY handling.  Doesn't need to be super fancy,
+>>> e.g. do port I/O from L2, inject a triple fault, and verify L1 sees the appropriate
+>>> exit.
+>>>
+>>> Aha!  And for the GET path, abuse KVM_X86_SET_MCE with CR4.MCE=0 to coerce KVM into
+>>> making a KVM_REQ_TRIPLE_FAULT, that way there's no need to try and hit a timing
+>>> window to intercept the request.
 >>
->> Changes since v1:
+>> Drat, I bet that MCE path means the WARN in nested_vmx_vmexit() can be triggered
+>> by userspace.  If so, this patch makes it really, really easy to hit, e.g. queue the
+>> request while L2 is active, then do KVM_SET_NESTED_STATE to force an "exit" without
+>> bouncing through kvm_check_nested_events().
 >>
->> - Use transport specific irq synchronization method when possible
->> - Drop the module parameter and enable the hardening unconditonally
->> - Tweak the barrier/ordering facilities used in the code
->> - Reanme irq_soft_enabled to driver_ready
->> - Avoid unnecssary IRQ synchornization (e.g during boot)
+>>    WARN_ON_ONCE(kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu))
 >>
->> Jason Wang (4):
->>    virtio: use virtio_reset_device() when possible
->>    virtio: introduce config op to synchronize vring callbacks
->>    virtio-pci: implement synchronize_vqs()
->>    virtio: harden vring IRQ
->>
->> Stefano Garzarella (1):
->>    virtio: use virtio_device_ready() in virtio_device_restore()
->>
->>   drivers/virtio/virtio.c            | 20 ++++++++++++++++----
->>   drivers/virtio/virtio_pci_common.c | 14 ++++++++++++++
->>   drivers/virtio/virtio_pci_common.h |  2 ++
->>   drivers/virtio/virtio_pci_legacy.c |  1 +
->>   drivers/virtio/virtio_pci_modern.c |  2 ++
->>   drivers/virtio/virtio_ring.c       |  9 ++++++++-
->>   include/linux/virtio.h             |  2 ++
->>   include/linux/virtio_config.h      | 24 ++++++++++++++++++++++++
->>   8 files changed, 69 insertions(+), 5 deletions(-)
->>
->> -- 
->> 2.25.1
+>> I don't think SVM has a user-triggerable WARN, but the request should still be
+>> dropped on forced exit from L2, e.g. I believe this is the correct fix:
+> 
+> Confirmed the WARN can be triggered by abusing this patch, I'll get a patch out
+> once I figure out why kvm/queue is broken.
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
+> index 2e0a92da8ff5..b7faeae3dcc4 100644
+> --- a/tools/testing/selftests/kvm/x86_64/state_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/state_test.c
+> @@ -210,6 +210,12 @@ int main(int argc, char *argv[])
+>                  memset(&regs1, 0, sizeof(regs1));
+>                  vcpu_regs_get(vm, VCPU_ID, &regs1);
+> 
+> +               if (stage == 6) {
+> +                       state->events.flags |= 0x20;
+> +                       vcpu_events_set(vm, VCPU_ID, &state->events);
+> +                       vcpu_nested_state_set(vm, VCPU_ID, &state->nested, false);
+> +               }
+> +
+>                  kvm_vm_release(vm);
+> 
+>                  /* Restore state in a new VM.  */
 
+Also verified the WARN with this. Then, is it still necessary to add an 
+individual selftest about the working flow of save/restore triple fault 
+event?
+
+> 

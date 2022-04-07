@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A3B4F8369
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B5C4F8365
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344948AbiDGPcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S1344865AbiDGPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344801AbiDGPb4 (ORCPT
+        with ESMTP id S1344802AbiDGPb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Apr 2022 11:31:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E57BA0;
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94655BD0;
         Thu,  7 Apr 2022 08:29:56 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4da4:8da5:b6b4:93c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 1DD9B1F467B8;
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B660A1F467B9;
         Thu,  7 Apr 2022 16:29:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649345394;
-        bh=ymIiMAJbaeF9cGl/T5jWAuzOy/P/JnwVS/fgtmDvjeI=;
+        s=mail; t=1649345395;
+        bh=L66tcVRRIZpNzfDD6Qt4u9/IPaHTBDbgBboGmjYb+3s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h2OS0AMnSoMqI/8QttgTCW8ZtQd4K3EJ+C3wUUTpli/vzpapVa+C80UOMbBfzlG36
-         m69DxCsjLJ8QhYgvozImUsZW1zJcas/ezQLufzkNlboL2Y094wfGAzEgBZXM5GjszD
-         +qU9Wgi6RXx2vUXM8dCPh9ldRV034ncx/B4cMx4i0jQxUzZKmLpO307qpHWlm1BCPA
-         y1pusJKsJwnmF5tsFPQ08eEgbh2moWJH4Z2eFyeSwwAEFLt3OC1VxIkPu+c07peTjV
-         Fo9KMXUhZ5hUy5EjUG4WwfFgCmHPde3geKYRnsXFUOXs+hIbfpzWu2n+1mwMOPyaFO
-         wFjQ9GBkYG5wg==
+        b=b9woSzybglR+ZZ/RAa8I3wqSUagtGSuIeTZkwAwpkaX8ZyKGkg2WTPEkAnny8R8vg
+         NKA/S/mfU3NIk+cbRx8T/KnRgOzqt55zubhUcXf6EFP38Txz8q/23VUedLeNimdU1u
+         ktbMOXQK9qRoYBJ2lNn4FTz0Mqmbi2VV6X9Rz/Wd0WvF0AInJM/aPrPvpYtYBz/Y2c
+         HbJoqKJ1zsRl2EISxOka64YtJnJOynVUVw739Mac/TfKk4MDifE3JAhyvt14HvRxis
+         bpfrJyrGe18H5AhZaq6pmi0T/fDdY0WdyqFiP0/h4JRTwD6LxnvCKirRmrJAOZJuX/
+         vBlk1wYji03kg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         sebastian.fricke@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 09/17] media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
-Date:   Thu,  7 Apr 2022 17:29:32 +0200
-Message-Id: <20220407152940.738159-10-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 10/17] media: uapi: Move parsed HEVC pixel format out of staging
+Date:   Thu,  7 Apr 2022 17:29:33 +0200
+Message-Id: <20220407152940.738159-11-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
 References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
@@ -61,44 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
-a dynamic array control type.
-Some drivers may be able to receive multiple slices in one control
-to improve decoding performance.
+Move HEVC pixel format since we are ready to stabilize the uAPI
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
- include/media/hevc-ctrls.h                                | 3 +++
- 2 files changed, 5 insertions(+)
+ Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
+ include/media/hevc-ctrls.h                                  | 3 ---
+ include/uapi/linux/videodev2.h                              | 1 +
+ 3 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 7fcc6c2bac4c..1aaf3b84b584 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2964,6 +2964,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     These bitstream parameters are defined according to :ref:`hevc`.
-     They are described in section 7.4.7 "General slice segment header
-     semantics" of the specification.
-+    This control is a dynamically sized 1-dimensional array,
-+    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+index 967fc803ef94..c352d91a73d8 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+@@ -215,11 +215,6 @@ Compressed Formats
+ 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
+ 	Buffers associated with this pixel format must contain the appropriate
+ 	number of macroblocks to decode a full corresponding frame.
+-
+-	.. note::
+-
+-	   This format is not yet part of the public kernel API and it
+-	   is expected to change.
+     * .. _V4L2-PIX-FMT-FWHT:
  
- .. c:type:: v4l2_ctrl_hevc_slice_params
- 
+       - ``V4L2_PIX_FMT_FWHT``
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 96a9b71d1def..28049e1a8a07 100644
+index 28049e1a8a07..00abbf930235 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -314,6 +314,9 @@ struct v4l2_hevc_pred_weight_table {
- /**
-  * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
-  *
-+ * This control is a dynamically sized 1-dimensional array,
-+ * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-+ *
-  * @bit_size: size (in bits) of the current slice data
-  * @data_bit_offset: offset (in bits) to the video data in the current slice data
-  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+@@ -13,9 +13,6 @@
+ 
+ #include <linux/videodev2.h>
+ 
+-/* The pixel format isn't stable at the moment and will likely be renamed. */
+-#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+-
+ #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
+ #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
+ #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 8df13defde75..2888fef3cff7 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -710,6 +710,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+ #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
+ #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
++#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+ 
+ /*  Vendor-specific formats   */
+ #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
 -- 
 2.32.0
 

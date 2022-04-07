@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC324F81D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B887D4F81D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343689AbiDGOgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S1344041AbiDGOgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344131AbiDGOgI (ORCPT
+        with ESMTP id S1344162AbiDGOgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:36:08 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D286C1BFDF0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:33:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bg10so11293037ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:33:31 -0700 (PDT)
+        Thu, 7 Apr 2022 10:36:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BB11E5A42
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:34:14 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id i27so11246228ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1jOfGY2aWB6ytElc3A8TYe1lFhh8rzUDtI1qb0xPNWc=;
-        b=TN89JKEfl9AxOmTFv7RkLldl9yUqbqq288C1keYFmxd40sY3RW0quDl9ywjD9PjL/Y
-         agKVab8ZUTrbszOKkNKg0lLp7N1XEENxL7mQwobdcPRQWDAUn/BMg8H6vnBLFi0zAVRM
-         LuL0f61r0sFD0A6b342d469AsYsfbXat52/eg4TVEIEPcSjUASf0RGN5MKJbvFYzx2J1
-         aKEyTSaMoRX3nd1drizcBQmdzFo1CwC94A+zx2Bqbs/TWLG4UjhZheZInK/OV2U6ITE5
-         XfeN5zBiwOD1KP8k0tbu0ZL9VnJElePg/mY7wLl6+KOiea+vcus6rH/w807vQ2D/j/a+
-         fZIQ==
+        bh=ZMc3AfG5H7Eoze1riLsoKQySy0boPTnHcGifTlbw67U=;
+        b=ACt2wLpnHluTK801WClxUNjv0T9X0tOd4oKiCIIrZ9eNjavRSu/0d5x723ScrD6OQJ
+         4ycrRvTpZwenEIWc5szrw7Xy7HZlT+y1tGmDJX1OMZr31b6onPuNIXxnElG8KwNEHG8v
+         7cO8koLd+3k74YrxsfvbF4gSaFYQmeSEhO1sAvwcmL/frMNgxZdh5zphOLrEI0Sir9er
+         DC9hAsYxXq9WhYZGMdDJ0rR2BpvJwQH5Utv5DyHXDBxGVwcgUk5UG0UAy1cblo+jn8md
+         HomLK/kqgRoT+SxkiPmU1UQqoCsxtMxO6f0uP0EAexdHFKupYpNvhem6YnmogCUO6aYv
+         /jyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1jOfGY2aWB6ytElc3A8TYe1lFhh8rzUDtI1qb0xPNWc=;
-        b=WX9dlyE7vKvzxy2YblQIOcefcdYOolEtcIq97dVp3LbmFKctoW4GuvMeacytnvV5oa
-         UDNOavZA8vqZLK7eKR6oLKVUXJaixocKfM/cnl9fWaXjO8v/TbXLuL7vseY3RiGnFUhU
-         4IxzMl+POmojgvi/dyPv5o7huaRUOdQ6psAmB70BEyg2On4aQySe9clHU9JJWSJ3GQGv
-         DCaYVT2rtOvIs9FSs54gxbY3XY+2H5eT7FwSP1QSdyIdSCnOYgirH+8/vpRcyBZ2Xd4W
-         AaXc7YDQdM1gN/ztiWObZnjPL7eB1KTZZUuaBndCpfXqSO6m+XOLekfvolcTycNqxLLe
-         Xdfw==
-X-Gm-Message-State: AOAM532FVypptAIz8cHcklE2Q+zWzlFYWMq1o6bZXOceBV1i+wMVfauE
-        3jt04F4ALf/MQstd5FVJDJ83qw==
-X-Google-Smtp-Source: ABdhPJw3RYZO7ZNQxKKRlLqoHhj3X3DBP2V/Sm5elqCPxW4lwfL1OHoBjDOdMAM81b2iiTLvHXEfmg==
-X-Received: by 2002:a17:906:7056:b0:6d6:dd99:f2a4 with SMTP id r22-20020a170906705600b006d6dd99f2a4mr13357831ejj.43.1649342010386;
-        Thu, 07 Apr 2022 07:33:30 -0700 (PDT)
+        bh=ZMc3AfG5H7Eoze1riLsoKQySy0boPTnHcGifTlbw67U=;
+        b=GGn+tQxBbo30gEuzWyqJkrQ11rVy60wqO4G6UqxXmjTvRkLb9TveykCo0mEe7jI+/S
+         7K4j3Bv9iR2kNyHX9UYgb+29GUYgMDY6go+DWj59HAUCOHdWnW+KEpjOvL3/VphJrgQH
+         xAOKIuxYtlxXMKh1FAseqYVleji4DBV+KtyZucUzbJqwH3smsQMld4EEbbNyb/r4a/9m
+         6jqAwX5/wiD65a97pP6VztWqGtV+hYI+zC9V7wW3CzYJbv4SeAO6vFZaFZuGpecm1JEe
+         52dmEivf3kwZcJ9FxIXcZK6ZFBfSqh6G/qOU5rdAVOuNfKr6O1BeN0VLvC3XT4KcQTEA
+         jFSw==
+X-Gm-Message-State: AOAM530xNtP6+4c56mamPCmzlDq/zJa/eXo9507qDuvlDCQbXmq/ZHpc
+        wxd/oO5qJg4XWATClobw8ybSnw==
+X-Google-Smtp-Source: ABdhPJwXyL4FeMCVoeo0dwl9+9FIwF5PtSlfyv2y65g/77g1GH8eFdummy9lPfT8/0+oXckSp7xQIw==
+X-Received: by 2002:a17:906:9c8e:b0:6df:f6bf:7902 with SMTP id fj14-20020a1709069c8e00b006dff6bf7902mr13552991ejc.191.1649342050635;
+        Thu, 07 Apr 2022 07:34:10 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm7624054ejc.61.2022.04.07.07.33.29
+        by smtp.gmail.com with ESMTPSA id r18-20020a05640251d200b0041d1600ab09sm107835edd.54.2022.04.07.07.34.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:33:29 -0700 (PDT)
+        Thu, 07 Apr 2022 07:34:10 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
-Date:   Thu,  7 Apr 2022 16:33:28 +0200
-Message-Id: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: align SPI NOR node name with dtschema
+Date:   Thu,  7 Apr 2022 16:34:05 +0200
+Message-Id: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,92 +80,50 @@ The node names should be generic and SPI NOR dtschema expects "flash".
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
- arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
- arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
+ Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
+ Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/boot/dts/brcm/bcm97358svmb.dts b/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-index 522f2c40d6e6..c17fc14d4899 100644
---- a/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-@@ -78,7 +78,7 @@ &nand {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/brcm/bcm97360svmb.dts b/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-index 01f215b08dba..c9b76f41e7a6 100644
---- a/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-@@ -81,7 +81,7 @@ &sdhci0 {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/brcm/bcm97425svmb.dts b/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-index f38934934349..289a57b912ef 100644
---- a/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-@@ -116,7 +116,7 @@ &sdhci1 {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 6069b33cf09f..826e91b840a3 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -129,7 +129,7 @@ &spi {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinmux_spi_spi>, <&pinmux_spi_cs1_cs>;
- 
--	m25p80@0 {
+diff --git a/Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt b/Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt
+index 74981520d6dd..a99de13c7ccd 100644
+--- a/Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt
++++ b/Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt
+@@ -17,7 +17,7 @@ spi-nor-controller@10000000 {
+ 	reg = <0x10000000 0x1000>, <0x14000000 0x1000000>;
+ 	reg-names = "control", "memory";
+ 	clocks = <&clock HI3519_FMC_CLK>;
+-	spi-nor@0 {
 +	flash@0 {
  		compatible = "jedec,spi-nor";
  		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 5892bcf71595..db961d61cfde 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -60,7 +60,7 @@ &sdhci {
- &spi0 {
- 	status = "okay";
+ 	};
+diff --git a/Documentation/devicetree/bindings/spi/spi-davinci.txt b/Documentation/devicetree/bindings/spi/spi-davinci.txt
+index 200c7fc7b089..f012888656ec 100644
+--- a/Documentation/devicetree/bindings/spi/spi-davinci.txt
++++ b/Documentation/devicetree/bindings/spi/spi-davinci.txt
+@@ -78,7 +78,7 @@ spi0:spi@20bf0000 {
+ 	interrupts			= <338>;
+ 	clocks				= <&clkspi>;
  
--	m25p80@0 {
-+	flash@0 {
+-	flash: n25q032@0 {
++	flash: flash@0 {
  		#address-cells = <1>;
  		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index a7fce8de6147..224383a30ce3 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -44,7 +44,7 @@ &sdhci {
- &spi0 {
- 	status = "okay";
+ 		compatible = "st,m25p32";
+diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+index bda45ff3d294..0e382119c64f 100644
+--- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+@@ -143,7 +143,7 @@ examples:
+         <&dma_controller 24 0>;
+       dma-names = "rx", "tx";
  
--	m25p80@0 {
-+	flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
+-      m25p80@1 {
++      flash@1 {
+         compatible = "st,m25p80";
+         reg = <1>;
+         spi-max-frequency = <12000000>;
 -- 
 2.32.0
 

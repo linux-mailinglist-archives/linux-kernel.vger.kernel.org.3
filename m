@@ -2,221 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D584F7112
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB6D4F70D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiDGBYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S239414AbiDGBWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238909AbiDGBSk (ORCPT
+        with ESMTP id S238467AbiDGBSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:18:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F121A396A;
-        Wed,  6 Apr 2022 18:13:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7B861DDC;
-        Thu,  7 Apr 2022 01:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CDBC385A1;
-        Thu,  7 Apr 2022 01:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649294025;
-        bh=uHkminpCFLODGOilaSIsj0VwbWAxm7wdZlU4aEtfu9g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n2ttaT/N+4Tx6aO4cv4s7jP+cOdsNlLlOK4J9xAgBwVEW/Dg35Vc77peHdaW3ousO
-         JS60xTW3i2ybFzzMaAvQ+hOkFh9qBclhFCxS48GTwqgwgw3dAg0gMRCcIM9IR/Jgdl
-         uF8cmYWIu3kl3CJWQxeBSDBrUJWgfAUtzcCJUZ5wb7l+oGinLNwQ7Vqe9O3iEcrjPJ
-         BnrUbPrtF7+sNRB/Vrj/jnCqh/v5WAXJ8r4CDjGGZ6K/vdI+cS532IOdxhlFMLjMme
-         HBNyTH4aCaTtcHLQqOfa1JWNJ9kkFWkrwkSK3CQp/v6kaRI5p3+SSQ9Lr3egkM3Yvj
-         saN29lNkjppaA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anton Eidelman <anton.eidelman@gmail.com>,
-        Anton Eidelman <anton@lightbitslabs.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>,
-        Sasha Levin <sashal@kernel.org>, kbusch@kernel.org,
-        axboe@fb.com, linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 19/27] nvme-multipath: fix hang when disk goes live over reconnect
-Date:   Wed,  6 Apr 2022 21:12:49 -0400
-Message-Id: <20220407011257.114287-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011257.114287-1-sashal@kernel.org>
-References: <20220407011257.114287-1-sashal@kernel.org>
+        Wed, 6 Apr 2022 21:18:20 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12419852C;
+        Wed,  6 Apr 2022 18:13:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id d10so4713542edj.0;
+        Wed, 06 Apr 2022 18:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=g8v4shd25GPDKxW8/72Sn4jdIkSgn2LhNRd6B8RvtA0=;
+        b=LjO0NIze8f21wcPliVRZEASPSuBMJxi7795FiThHlhYnCWFvy1BLzyLlMrjxjEAN5Q
+         svtqL8oicLBWHKO6XfAxPWS2uhEzCDNuLw3eKKqdQQ6ivxmq7++PicRFr4a/eB1oQrGl
+         09hAY+2i7kUDpweNjMFDGW5dVTomZTqS8UCYcFqy/4KHZ5a1KIMPNJD2+qkG6ddoohoe
+         LUOOfikm8ZsoZ9v5CWS7TkNjkKlDQO+SL3uPRaZqcKWbKXbgeihLPVFbVtGXidWLBg2g
+         Ir4N7J0o/QVusDOlmLATF/KUsVprh0R4VxT4DxwNyoowHVGdE5EYOivRMsH5ndYYTSrg
+         zg7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=g8v4shd25GPDKxW8/72Sn4jdIkSgn2LhNRd6B8RvtA0=;
+        b=cELaUdi/o6WhzbVasG1pHnhjRLG8p1OGNqOLPeeiRwTVr6Mzgl1f6EIfDoUQl8Fo1J
+         3RQyh2dDACDWzs0QnmbhQMA6ArYmfgjPZRPuRmPXEzBtlnjCQwcIuAAX2yePh7xV03cZ
+         LCIuBcNMz5yeZCrL/J4bBSstYGmHuRHaux8SnR1zNQ2+yVGAnHU84ySimd4bMm1Ew6eo
+         vuYiY4nXlx/3Bk8V2d9Dew1GBmuACD8iQs5zlOBGxLQm9VqC8fG8jEZKT8e4/J1VjSR6
+         vZKupxHGpCrurHbwpG+x7z4V5o3qeHxrUxQ0Jlc/upwy3ohYxXZPuAx8tjOe1mgZKhyw
+         5yWw==
+X-Gm-Message-State: AOAM533b8aHU3ezyZzt11mFfa99Q0oF/2WN/Tj5oVvSMVZu8Errw89Pt
+        NsYSGHTtGK4udyoXQJFFOnUJOjsIHdP48/tEWaA=
+X-Google-Smtp-Source: ABdhPJx/echMntfDFyiyVPC/gqKLWAbfPZwzsjwI+pWr4XJoT64OjDw/V+f5Mt+WFWOjjMUFwrwleMIKabyvLtVswQY=
+X-Received: by 2002:a05:6402:430d:b0:419:45cd:7ab1 with SMTP id
+ m13-20020a056402430d00b0041945cd7ab1mr11485971edc.367.1649293981787; Wed, 06
+ Apr 2022 18:13:01 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
+ <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com> <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
+ <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com> <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
+ <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
+ <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
+ <163202bd-ea51-e80a-1481-568fae25b045@collabora.com> <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
+ <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com> <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
+ <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com> <CAHCN7x+YuXFrMe6dYo_VhkG7ey1jcPTpOMCM1=qoTivZO9U2Rw@mail.gmail.com>
+ <f495aa2b-81f7-a3cd-a6dd-cc5ae5f0a81f@collabora.com> <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
+ <a1069c94-4c3c-ee4d-738a-752bb1d12dac@collabora.com> <CAHCN7x+hvYjoZFA6uaTXq-XfLMck-ht7Z-VzzvGpkh7H7BBbEQ@mail.gmail.com>
+In-Reply-To: <CAHCN7x+hvYjoZFA6uaTXq-XfLMck-ht7Z-VzzvGpkh7H7BBbEQ@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 6 Apr 2022 20:12:50 -0500
+Message-ID: <CAHCN7xJwu1VnCNLHc9RNcbZ2yT4RooacA-hpwcXE3XvLrEJPGA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        "jernej.skrabec" <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
+        knaerzche@gmail.com, jc@kynesim.co.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Eidelman <anton.eidelman@gmail.com>
+On Wed, Apr 6, 2022 at 8:34 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> On Wed, Apr 6, 2022 at 8:05 AM Benjamin Gaignard
+> <benjamin.gaignard@collabora.com> wrote:
+> >
+> >
+> > Le 06/04/2022 =C3=A0 15:02, Nicolas Dufresne a =C3=A9crit :
+> > > Le mercredi 06 avril 2022 =C3=A0 14:50 +0200, Benjamin Gaignard a =C3=
+=A9crit :
+> > >>> default=3D1 value=3D1
+> > >>> 1: Frame-Based
+> > >>>                    hevc_start_code 0x00a40a96 (menu)   : min=3D1 ma=
+x=3D1
+> > >>> default=3D1 value=3D1
+> > >>> 1: Annex B Start Code
+> > >> It is the same so that suggest the issue is coming from GStreamer pl=
+ugin.
+> > > Can you report the GStreamer commit hash you have building on ? Also =
+please
+> > > validate the creation date of the plugin (libgstv4l2codecs.so) agains=
+t your
+> > > source update date. Reminder that GStreamer is now mono-repo (just in=
+ case).
+> > >
+> > > https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HE=
+VC_aligned_with_kernel_5.15
+> > > Hash: 54b7c1f98084c85d103446cc3f2edce42ad53b0f
+> > >
+> > > Benjamin, can you confirm you have no local changes and this is the h=
+ash you are
+> > > building from ?
+> >
+> > Yes that is the hash I'm using without local changes
+>
+> I was on (gstreamer-HEVC_aligned_with_kernel_5.15) with a hash of
+> 4b78eaa48c0c924afd57f85c47396b77497e69f8
+>
+> Benjamin's hash wasn't listed before, but I did a git pull, and now it is=
+.
+>
+> I've checked out that hash, and I am rebuilding it now. I'll report my
+> findings when it's done.  It's building on the imx8mq, so it may take
+> some time.
 
-[ Upstream commit a4a6f3c8f61c3cfbda4998ad94596059ad7e4332 ]
+We're getting closer:
 
-nvme_mpath_init_identify() invoked from nvme_init_identify() fetches a
-fresh ANA log from the ctrl.  This is essential to have an up to date
-path states for both existing namespaces and for those scan_work may
-discover once the ctrl is up.
+# gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec ! fakes=
+ink
+Setting pipeline to PAUSED ...
+Pipeline is PREROLLING ...
+Pipeline is PREROLLED ...
+Setting pipeline to PLAYING ...
+Redistribute latency...
+New clock: GstSystemClock
+Got EOS from element "pipeline0".
+Execution ended after 0:00:00.000563180
+Setting pipeline to NULL ...
+Freeing pipeline ...
 
-This happens in the following cases:
-  1) A new ctrl is being connected.
-  2) An existing ctrl is successfully reconnected.
-  3) An existing ctrl is being reset.
+GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
+GStreamer 1.0... =E2=9C=94=EF=B8=8F
 
-While in (1) ctrl->namespaces is empty, (2 & 3) may have namespaces, and
-nvme_read_ana_log() may call nvme_update_ns_ana_state().
+The statemless decoder appears to show it can do h.265, but it fails
+all the fluster tests.
 
-This result in a hang when the ANA state of an existing namespace changes
-and makes the disk live: nvme_mpath_set_live() issues IO to the namespace
-through the ctrl, which does NOT have IO queues yet.
+Ran 0/147 tests successfully               in 9.376 secs
 
-See sample hang below.
+I checked other V4L2SL decoders and items that previously passed are
+failing now, so I think something is wrong or corrupted with my
+system.
 
-Solution:
-- nvme_update_ns_ana_state() to call set_live only if ctrl is live
-- nvme_read_ana_log() call from nvme_mpath_init_identify()
-  therefore only fetches and parses the ANA log;
-  any erros in this process will fail the ctrl setup as appropriate;
-- a separate function nvme_mpath_update()
-  is called in nvme_start_ctrl();
-  this parses the ANA log without fetching it.
-  At this point the ctrl is live,
-  therefore, disks can be set live normally.
+For some reason, my system seems unstable, so I might reinstall
+everything, but it will be a slow process.  I don't know if my sd card
+is wearing out, or something is wrong, but simple things like mounting
+a thumb drive are taking a very long time.
 
-Sample failure:
-    nvme nvme0: starting error recovery
-    nvme nvme0: Reconnecting in 10 seconds...
-    block nvme0n6: no usable path - requeuing I/O
-    INFO: task kworker/u8:3:312 blocked for more than 122 seconds.
-          Tainted: G            E     5.14.5-1.el7.elrepo.x86_64 #1
-    Workqueue: nvme-wq nvme_tcp_reconnect_ctrl_work [nvme_tcp]
-    Call Trace:
-     __schedule+0x2a2/0x7e0
-     schedule+0x4e/0xb0
-     io_schedule+0x16/0x40
-     wait_on_page_bit_common+0x15c/0x3e0
-     do_read_cache_page+0x1e0/0x410
-     read_cache_page+0x12/0x20
-     read_part_sector+0x46/0x100
-     read_lba+0x121/0x240
-     efi_partition+0x1d2/0x6a0
-     bdev_disk_changed.part.0+0x1df/0x430
-     bdev_disk_changed+0x18/0x20
-     blkdev_get_whole+0x77/0xe0
-     blkdev_get_by_dev+0xd2/0x3a0
-     __device_add_disk+0x1ed/0x310
-     device_add_disk+0x13/0x20
-     nvme_mpath_set_live+0x138/0x1b0 [nvme_core]
-     nvme_update_ns_ana_state+0x2b/0x30 [nvme_core]
-     nvme_update_ana_state+0xca/0xe0 [nvme_core]
-     nvme_parse_ana_log+0xac/0x170 [nvme_core]
-     nvme_read_ana_log+0x7d/0xe0 [nvme_core]
-     nvme_mpath_init_identify+0x105/0x150 [nvme_core]
-     nvme_init_identify+0x2df/0x4d0 [nvme_core]
-     nvme_init_ctrl_finish+0x8d/0x3b0 [nvme_core]
-     nvme_tcp_setup_ctrl+0x337/0x390 [nvme_tcp]
-     nvme_tcp_reconnect_ctrl_work+0x24/0x40 [nvme_tcp]
-     process_one_work+0x1bd/0x360
-     worker_thread+0x50/0x3d0
+I am not sure when I'll get back to this again, but I'll try to do a
+re-install this weekend to see if I can get my system more stable.
 
-Signed-off-by: Anton Eidelman <anton@lightbitslabs.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/nvme/host/core.c      |  1 +
- drivers/nvme/host/multipath.c | 25 +++++++++++++++++++++++--
- drivers/nvme/host/nvme.h      |  4 ++++
- 3 files changed, 28 insertions(+), 2 deletions(-)
+adam
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index d5d5d035d677..17df1c783be3 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4338,6 +4338,7 @@ void nvme_start_ctrl(struct nvme_ctrl *ctrl)
- 	if (ctrl->queue_count > 1) {
- 		nvme_queue_scan(ctrl);
- 		nvme_start_queues(ctrl);
-+		nvme_mpath_update(ctrl);
- 	}
- }
- EXPORT_SYMBOL_GPL(nvme_start_ctrl);
-diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-index 727520c39710..2105fead04aa 100644
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -573,8 +573,17 @@ static void nvme_update_ns_ana_state(struct nvme_ana_group_desc *desc,
- 	ns->ana_grpid = le32_to_cpu(desc->grpid);
- 	ns->ana_state = desc->state;
- 	clear_bit(NVME_NS_ANA_PENDING, &ns->flags);
--
--	if (nvme_state_is_live(ns->ana_state))
-+	/*
-+	 * nvme_mpath_set_live() will trigger I/O to the multipath path device
-+	 * and in turn to this path device.  However we cannot accept this I/O
-+	 * if the controller is not live.  This may deadlock if called from
-+	 * nvme_mpath_init_identify() and the ctrl will never complete
-+	 * initialization, preventing I/O from completing.  For this case we
-+	 * will reprocess the ANA log page in nvme_mpath_update() once the
-+	 * controller is ready.
-+	 */
-+	if (nvme_state_is_live(ns->ana_state) &&
-+	    ns->ctrl->state == NVME_CTRL_LIVE)
- 		nvme_mpath_set_live(ns);
- }
- 
-@@ -661,6 +670,18 @@ static void nvme_ana_work(struct work_struct *work)
- 	nvme_read_ana_log(ctrl);
- }
- 
-+void nvme_mpath_update(struct nvme_ctrl *ctrl)
-+{
-+	u32 nr_change_groups = 0;
-+
-+	if (!ctrl->ana_log_buf)
-+		return;
-+
-+	mutex_lock(&ctrl->ana_lock);
-+	nvme_parse_ana_log(ctrl, &nr_change_groups, nvme_update_ana_state);
-+	mutex_unlock(&ctrl->ana_lock);
-+}
-+
- static void nvme_anatt_timeout(struct timer_list *t)
- {
- 	struct nvme_ctrl *ctrl = from_timer(ctrl, t, anatt_timer);
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index ed79a6c7e804..c1442e6f1b87 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -752,6 +752,7 @@ void nvme_mpath_add_disk(struct nvme_ns *ns, struct nvme_id_ns *id);
- void nvme_mpath_remove_disk(struct nvme_ns_head *head);
- int nvme_mpath_init_identify(struct nvme_ctrl *ctrl, struct nvme_id_ctrl *id);
- void nvme_mpath_init_ctrl(struct nvme_ctrl *ctrl);
-+void nvme_mpath_update(struct nvme_ctrl *ctrl);
- void nvme_mpath_uninit(struct nvme_ctrl *ctrl);
- void nvme_mpath_stop(struct nvme_ctrl *ctrl);
- bool nvme_mpath_clear_current_path(struct nvme_ns *ns);
-@@ -826,6 +827,9 @@ static inline int nvme_mpath_init_identify(struct nvme_ctrl *ctrl,
- "Please enable CONFIG_NVME_MULTIPATH for full support of multi-port devices.\n");
- 	return 0;
- }
-+static inline void nvme_mpath_update(struct nvme_ctrl *ctrl)
-+{
-+}
- static inline void nvme_mpath_uninit(struct nvme_ctrl *ctrl)
- {
- }
--- 
-2.35.1
-
+>
+> adam
+>
+> >
+> > Benjamin
+> >
+> > >
+> > > regards,
+> > > Nicolas
+> > >

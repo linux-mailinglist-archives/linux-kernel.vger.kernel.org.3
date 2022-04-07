@@ -2,132 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E4A4F8916
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D63F4F8A05
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiDGVIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S230460AbiDGVJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiDGVIa (ORCPT
+        with ESMTP id S230473AbiDGVJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:08:30 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA15177D17
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:06:27 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so445529wrh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:06:27 -0700 (PDT)
+        Thu, 7 Apr 2022 17:09:54 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8F817A2E2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:07:53 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id b17so5987275qvf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VYDGD/lRh/S3APeRLxg/uVBh3CXm8UmCkYzmr6Xm0TY=;
-        b=N6uhWtFP3F3lmqbvC4tdoeq5G5+gzPYi+82xknSqaEiYQjD5S39+Z+S3+npgLuTd8p
-         sBy09OhRV9U58FqxU+iRDHKxUJjA/1YCpHWdBBa+iZf5PtXaVn2ddP/k7cLBeUdi8a4n
-         ZKMpK/VOaaeiCPcW5Y5hdNGIiL6OR3ayzJsY6bTXlUuM/ZMOomUHcKkwzKg7hLPNw9sJ
-         CUP2mOuyh3Ktc6sZVnY1fIFqSOCO+7bYpX+Eyg/zt4YkLfgKXDkZ+4wz8SUh2e1O5hN0
-         QmpO0X/QdYr0J1sZzo8gOas2C1h1fBqD4fXRq3iBGANBtGxnB1MgN1VtdCNg4UFPCjDs
-         I3ag==
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hxKxY+DBpoByF0mtjo+UB7bPjCEPBSOvES4J4XomWfw=;
+        b=jwQg9dQrHOSiG8lPloLqQ/bp8O7sK5UOZyz9D/aVa4j2kiHcO2my5h+zwWBcJxgOC0
+         z6UbFO8G2TDI4B9chEJiAFxEa79J08iPbDo3ggVSuH2+rR9uPX++uhbY28MqAULtWQvO
+         JoiusccmH4T9pSjjUbI19eDJ4crl6IHyUGXQk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VYDGD/lRh/S3APeRLxg/uVBh3CXm8UmCkYzmr6Xm0TY=;
-        b=OJNBmXXpKyYJcQaOSihlDl+cRhtUsplB7pEG9CuRuyecB/qQa7pzB9TzV5UDfDIiei
-         7dBFWs00KWqBYXHuFOQuoKIZilwrYTURDQ65C5rOcf1/5PHGkMpnOk7wPx3fz5HeOrvj
-         rokx0SSm/+pxudd3rfpFeLAXOX8aoGiffkiUfLjgN4w809N2lUYUjtjX1MZzRehspLSQ
-         fveSxXiEGprVsYfhdlEcCcQZEZrhMWBL+6KCQ2IazRCe0BWaKf8vTNYCGy9TlEGuVxQA
-         OR3g7IRbGnE2LEYiFNCTXSMv7j6RElWSfsr1ENY7182cuPNmsIQS6Q/RAUj89MIbIKmM
-         rBpQ==
-X-Gm-Message-State: AOAM533MBOH7HzC29DYy4Sy0qTt5+CsVRYvXqVn6jhX1Otu1VG2kk12U
-        9Uua11CDlXBmBODY+SBTpwYFmQ==
-X-Google-Smtp-Source: ABdhPJyQiv2+i2IpnqHJGw+2b8dO4TXqtW/XLBZB8wqTI1qe3ixmX60ZJmaCzuoWpm23qRrv0x8KeA==
-X-Received: by 2002:a5d:64e6:0:b0:204:975:acde with SMTP id g6-20020a5d64e6000000b002040975acdemr11872191wri.466.1649365586356;
-        Thu, 07 Apr 2022 14:06:26 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05600c144a00b0038ccc75a6adsm8363430wmi.37.2022.04.07.14.06.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 14:06:25 -0700 (PDT)
-Message-ID: <200a2002-8573-efaa-774a-51dcec9cc807@linaro.org>
-Date:   Thu, 7 Apr 2022 23:06:24 +0200
+        bh=hxKxY+DBpoByF0mtjo+UB7bPjCEPBSOvES4J4XomWfw=;
+        b=4btgZrOa2qJ6Gt1zeo85cjfAyYb8g9UgQ1XkQn37pW4lluNSg0cY6ufy8j44KR8pQT
+         ssWezWk9agKlDEuFWLhA/y5mJmud6Gt7lhk8vqYRFaifkRfG/ZSOK7wpVTTo3TJdegR9
+         xkrD7kbw3C11PSE9NGsH35F2HWPdWKcjxA0O8UyTDoo2jU0heLIGRQeXXksYrwYd0mb7
+         4i8F13QQL5kkIgX5/xqZ3VeOvW3R+9cO8o4+rWwXGLlqjAhVzQhCZQV1Gj1IBnjkyR8b
+         Jqvz3mywUssIGo3oUcm3MiDU/7jtRS3iJJYqTLWZPLI1bgwRAFAnikBqTkgMzeReSvcB
+         BX8w==
+X-Gm-Message-State: AOAM532l/hlO/Bko2JmkQ+t0Wy0A1j6bkfZy2rDTRlTOj//moDxsqap7
+        5ZWwuGKQv61Ur8noF6RwfRAS75oqfoQ2wA==
+X-Google-Smtp-Source: ABdhPJzwtvpZaHmk9lriKJMPmnSalngNgvvJoX3cZ2JPuR2Hll7aVpCqu3lWkR/jk381xr2DKPRpGA==
+X-Received: by 2002:a05:6214:4017:b0:443:e335:efd3 with SMTP id kd23-20020a056214401700b00443e335efd3mr14132649qvb.131.1649365672835;
+        Thu, 07 Apr 2022 14:07:52 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05622a15c300b002eb9af4c945sm18230376qty.3.2022.04.07.14.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 14:07:52 -0700 (PDT)
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
+Date:   Thu,  7 Apr 2022 21:07:33 +0000
+Message-Id: <20220407210734.2548973-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: mtd: jedec,spi-nor: remove unneeded
- properties
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220407142004.292782-1-krzysztof.kozlowski@linaro.org>
- <Yk8rpUXmfmULMVjr@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yk8rpUXmfmULMVjr@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 20:21, Rob Herring wrote:
-> On Thu, Apr 07, 2022 at 04:20:04PM +0200, Krzysztof Kozlowski wrote:
->> After conversion the jedec,spi-nor DT schema to reference other schemas
->> (SPI and MTD) and use unevaluatedProperties, several properties are
->> redundant.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../devicetree/bindings/mtd/jedec,spi-nor.yaml        | 11 -----------
->>  1 file changed, 11 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->> index 4abfb4cfc157..708e7f88fd92 100644
->> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->> @@ -50,10 +50,6 @@ properties:
->>      minItems: 1
->>      maxItems: 2
->>  
->> -  spi-max-frequency: true
->> -  spi-rx-bus-width: true
->> -  spi-tx-bus-width: true
->> -
->>    m25p,fast-read:
->>      type: boolean
->>      description:
->> @@ -74,14 +70,9 @@ properties:
->>        be used on such systems, to denote the absence of a reliable reset
->>        mechanism.
->>  
->> -  label: true
->> -
->>    partitions:
->>      type: object
->>  
->> -  '#address-cells': true
->> -  '#size-cells': true
-> 
-> These are needed for 'partition' nodes.
-> 
+On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+which ends up not offloading any CPU. This patch removes yet another
+dependency from the bootloader having to know about RCU, about how many
+CPUs the system has, and about how to provide the mask. Basically, I
+think we should stop pretending that the user knows what they are doing :).
+In other words, if NO_CB_CPU is enabled, lets make use of it.
 
-I am sure I saw them in one of referenced schemas, that's why I removed
-them. But now I cannot find it so probably I looked at wrong schema.
+My goal is to make RCU as zero-config as possible with sane defaults. If
+user wants to provide rcu_nocbs= or nohz_full= options, then those will
+take precedence and this patch will have no effect.
 
-Thanks for pointing this out, I'll fix the patch.
+I tested providing rcu_nocbs= option, ensuring that is preferred over this.
 
-Best regards,
-Krzysztof
+Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+---
+ kernel/rcu/tree_nocb.h | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index eeafb546a7a0..607fbf843467 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1165,12 +1165,25 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+ void __init rcu_init_nohz(void)
+ {
+ 	int cpu;
+-	bool need_rcu_nocb_mask = false;
++	bool need_rcu_nocb_mask = false, set_nocb_mask_all = false;
+ 	struct rcu_data *rdp;
+ 
++	/*
++	 * In case rcu_nocbs= was not passed on the kernel command line,
++	 * provide a sane default by offloading all CPUs. This provides a
++	 * sane default for rcu_nocbs and prevents users overlooking these
++	 * details.
++	 */
++	if (!rcu_nocb_is_setup) {
++		need_rcu_nocb_mask = true;
++		set_nocb_mask_all = true;
++	}
++
+ #if defined(CONFIG_NO_HZ_FULL)
+-	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
++	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
+ 		need_rcu_nocb_mask = true;
++		set_nocb_mask_all = false; /* NO_HZ_FULL provides its own mask. */
++	}
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
+ 	if (need_rcu_nocb_mask) {
+@@ -1191,6 +1204,9 @@ void __init rcu_init_nohz(void)
+ 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
++	if (set_nocb_mask_all)
++		cpumask_setall(rcu_nocb_mask);
++
+ 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+ 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+-- 
+2.35.1.1178.g4f1659d476-goog
+

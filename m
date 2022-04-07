@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAA04F89EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CAB4F8975
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiDGUvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S230196AbiDGUoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiDGUvC (ORCPT
+        with ESMTP id S230211AbiDGUol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:51:02 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7131F2BA;
-        Thu,  7 Apr 2022 13:43:51 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MulyX-1ntOth3jXf-00rq0f; Thu, 07 Apr 2022 22:38:46 +0200
-Received: by mail-wr1-f53.google.com with SMTP id a2so296936wrh.5;
-        Thu, 07 Apr 2022 13:38:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530ai52r9ufA7kTLGlcyas14gLwlkPzi/xiF1Bx/MVbPAy5/7mTX
-        mN7HScK10aw8zhSJPM6kcOobrSCmcdPlCY4RV2c=
-X-Google-Smtp-Source: ABdhPJy/SgVGQPTQl0Z9Jj7qvw3Sglc2LkZldTdO5JZKiCcu9L8Hp1QDfF0ep5w8MjBFmfVBXWNB7IIvt2RfSfgvQwI=
-X-Received: by 2002:a05:6000:154d:b0:207:9101:8f24 with SMTP id
- 13-20020a056000154d00b0020791018f24mr802419wry.317.1649363926543; Thu, 07 Apr
- 2022 13:38:46 -0700 (PDT)
+        Thu, 7 Apr 2022 16:44:41 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B673B38DE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:39:12 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id w21so9606876wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fqtKr787N6Vy1cwaYaYZc9PI8pUmju7Cz4kLVR3rNO0=;
+        b=xd/uN/+Wfa0+DJziXe7CM988LNaoE/LluwkoUHTwQ9+zH3ooZE1UWwe7s2BIb3c1My
+         +esS9mC72qFXdlzWLyQnaolMh3gfwuzHDc4OALOUZAkHKljGW/17t6SY2BefhYkzmR9j
+         s5w/ym9EyM1G11gyyb8n0f1speuoHsrdCRrMjd4uydyz+uNmsUAz2Bv2uvCsmDDbUTht
+         CMAS2VmtJcNiWBQiF3YDbR+DbtTez2CXIt3x89DCv1ZWbq5FeH4kLl8vdIT0pt/NjK/4
+         BvErXNsFnFwcldyNvMR5l37DqHw/QXSkKDJ/R0HYkjnkdQD1vH1yozKEsvj1CUz6ui5/
+         zp4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fqtKr787N6Vy1cwaYaYZc9PI8pUmju7Cz4kLVR3rNO0=;
+        b=pQ+lGmcfBSx3AIn4VDascaup9eMl4XLaCzyunh5ojy3eyxXwRE64s20JEAKwLPKdsH
+         KNJHk0WgyNvNGvkzgkRVJVUbrUUZKc5r63bJ9SORY30RNfvxQXjNSCFYjPoNTvAeWxtS
+         SycxhObeDAx2rGqAoc/zHdONAesIFIbLj4wmMgTXOzKDR3cnsCcRPo4I+YjeMLiqllWb
+         V06iV4C3G9On11bImPA2rjcbikaHCSGNxKPkMhhzdoDlKFK0p7p2QbVLI+Z2XGBp2L9B
+         SsqRenUYmIh/uIGUKVwdJzigwmjAo8X61ilURDg9G6pNWjovF/O9OnL6ni5zE2OxnQrZ
+         a6vA==
+X-Gm-Message-State: AOAM530t5WeIyg56ZDvCsAqiNYFhbQ/sYfhoeGzskpjLfWb5miFSkcU5
+        br+IVaqpDGjm7+Oirsctu1iHhNxb+8imzEEx
+X-Google-Smtp-Source: ABdhPJzFnUZMpklEvBXqWfIprKr3SeUKOVHJYtNHafYjioDtHTrl0Yu/4IrS7rpVQtAYsGOUPaDGmQ==
+X-Received: by 2002:a05:600c:28cd:b0:38e:72c5:5259 with SMTP id h13-20020a05600c28cd00b0038e72c55259mr13665875wmd.176.1649363951008;
+        Thu, 07 Apr 2022 13:39:11 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm8584615wmh.31.2022.04.07.13.39.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 13:39:10 -0700 (PDT)
+Message-ID: <8fa6212c-a914-dcc4-c852-32a3948db99f@linaro.org>
+Date:   Thu, 7 Apr 2022 22:39:09 +0200
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-10-brad@pensando.io>
- <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
- <3c8e94e1-fb8e-0d8f-4e79-b8313a1da5cb@intel.com> <CAK9rFnwsMd1+oQ8cg8Biw7HM=R6aOudfK7Ja+E+iGVgfrvC9Gg@mail.gmail.com>
-In-Reply-To: <CAK9rFnwsMd1+oQ8cg8Biw7HM=R6aOudfK7Ja+E+iGVgfrvC9Gg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Apr 2022 22:38:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
-Message-ID: <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
-Subject: Re: [PATCH 09/11] mmc: sdhci-cadence: Add Pensando Elba SoC support
-To:     Brad Larson <brad@pensando.io>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: dts: synaptics: add DT for AS370-RDK
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Cc:     SoC Team <soc@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:o+5RPQIna+gLLkibDSf2fxD5OHxRZ7cFKWDQu2hSxDFX8cL2ozw
- dBRBfnC3YHm3Sj26oGBZ9vZ5OibxClaK/qHQ8TzNau7RL6AFZ2dVJtULWNrkpGTotxJgnCE
- rw2CREtNEwogmnSw8BqH5JVuZTkgoA+ehLW3TUolhlboqj2OOExX/ogwHiHgwQSk8Hq2Cbz
- BNn3FJC1YDc91BAIJQiuw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JiwMnTpDL4E=:wO5ksrBM4sf9BGnIYfujL7
- UZK24sW+KeZc/eg41jcx+Yx5Ky5nzwChDpKySgfivmkttaQMvv2uwSK0vSwBB13NofOU6dMGI
- niIMxCgeQeeTfgJ8uQYj1J26JmDlI3zgNzhchs3eZZ0MIZkgjSTdvWaqsOmT2lQPOE3gm5zmf
- BFzO5itUAb1VEubP8TnyOEyhhZmfXX1PS8/eQfPkxw9BBsKSpZzX0Ipxu0M/pXhbft5QXXVn5
- QTRde2/fQEjYwypYdHrTHR6dElTW6YSsuZu1RNxTlC+/ZCNwcCSaldR/uvjO7vhCKcrq3eVhX
- XxKOQwpVQY5nwsrzs5out0PXZOdgY484FKqqRxmJL8VautBAyaBxKZbWFLCGa2QUHbBqics2y
- 8QNwLeTiXJthpJRObMunbojqPEB0HOmv0tVO4J0I+ewkyQXGbxNej87rQvNzT7QjFyuvS0PYP
- 4cpRCkFdyS2ZcTDFB0VhzX1Tqvhw/1SqL3BIpNJ5u8Tt32bAPw2DQ4urBS6XgBXpa3tgmPwcY
- Cwkezb13+YxjxziBHfGQWHK0xWKZYQ5WEOf+kFnw9eHQ2L6R1PKFWUxSOK90HHp3yx3lgMXVw
- mWBktMHAVWLTGC02pX6tPGexYqqCisBNevWjNC5ZseMCG8Lv10gu8CVMwTNpEh0vBJx8u7Awx
- PHWbmrH/X3ZYCAxafkapjZMa8d9hZY9CLbRLy0utvAtztmc4gkWzyzGF7wp0I3FVTVeo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DTML <devicetree@vger.kernel.org>
+References: <20210820173108.01d5c6de@xhacker.debian>
+ <29e96ece-8541-a7a2-c6a9-453be6644eed@canonical.com>
+ <20210820182708.51d13e29@xhacker.debian>
+ <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 7:06 PM Brad Larson <brad@pensando.io> wrote:
-> On Thu, Apr 7, 2022 at 12:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > What is the relationship between cadence and pensando elba?
->
-> Pensando licensed the cadence controller, its 100% cadence IP.  The
-> integration issue we ran into was with the accessors where we have the
-> workaround.  The initial patch added a separate Elba driver file but
-> the feedback was the Elba support didn't justify doing that and to add
-> to sdhci-cacence.c.
+On 20/08/2021 21:55, Arnd Bergmann wrote:
+> On Fri, Aug 20, 2021 at 12:27 PM Jisheng Zhang
+> <Jisheng.Zhang@synaptics.com> wrote:
+>> On Fri, 20 Aug 2021 11:59:30 +0200 Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+>>> On 20/08/2021 11:31, Jisheng Zhang wrote:
+>>>
+>>> There is no such binding. You need to update the bindings file (first
+>>> patch in the series).
+>>
+>> This is my plan ;) In fact, "berlin4ct" related binding is also missing.
+>> I want to convert Documentation/devicetree/bindings/arm/syna.txt
+>> to yaml, then add missing bindings. But it's too late for 5.15,
+>>
+>> If it's fine to keep as370.dtsi without board user(s), we can drop
+>> this patch. I will solve this issue in next development window.
+> 
+> Yes, doing it for the next cycle is ok.
 
-I looked back at the earlier reviews now, I think the main problem with
-versions 1 and 2 was that it had the abstraction the wrong way around,
-so you added the complexity of having multiple files, without the benefits.
+Hi Arnd and Jisheng,
 
-I still think that the cleanest approach would be to have it the way I
-suggested in my reply to v1, with an elba specific platform driver
-that calls into the generic cadence code, but the generic code knowing
-nothing about the front-end.
+This patch was discussed in Aug 2021 and since then there was no resend.
+I assume that AD370 will not get a board, so I propose to pick up my
+removal patch:
+https://lore.kernel.org/all/YRbDNInfG7caSr2r@robh.at.kernel.org/
 
-Then again, it sounds like there was already an agreement about
-the approach you took here, so let's stay with that and hope we don't
-get any other chips with the same IP block in the future.
+I will resend it.
 
-         Arnd
+Best regards,
+Krzysztof

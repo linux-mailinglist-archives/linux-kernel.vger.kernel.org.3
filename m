@@ -2,100 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7AC4F7302
+	by mail.lfdr.de (Postfix) with ESMTP id 65C634F7301
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 05:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbiDGDUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 23:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S234649AbiDGDUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 23:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240069AbiDGDSc (ORCPT
+        with ESMTP id S240173AbiDGDTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 23:18:32 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D908410FAE1
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 20:16:18 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e4-20020a056902034400b00633691534d5so3266810ybs.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 20:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=INqxOeCwPOdr678cFak6a27+vB9QK/e2l4Y4r9T0uLg=;
-        b=ODNHvhfbQNp1hGmnnOr6mN+IOozaZYCUSEL7jsCQwFfy9Y57LO+dF04JBreR5O/EAL
-         0EToC/6xhmDArCjDA2MVpEvc0q2SwZKkIj6H9qZnVGgfHQDsEI7Jkt+jOWDqY3J5opmp
-         A8HKDyQg4nPmznGUuV0t/FjiZX9wE7KrVbicBgCxC2wXyt3TWmEcHsXzAYo5jLRh2IgE
-         5MNd0Ormke1FPOcYnaIqvJMqYnhoYd8EaewOhDMazEwaMUG2ECHvR5sDIPFWpdG0sQD4
-         K1nZ7iiWr2Q/rJ0VBcdKV8I1dEsKv+t0h0aVzotL5FeW9jtdw35b/AfhN2BgTuDNsaUp
-         IuHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=INqxOeCwPOdr678cFak6a27+vB9QK/e2l4Y4r9T0uLg=;
-        b=e2JXkdW8p7z6cunnYdlsDityqNnJHMhwwP4fX6Bh3X9etumbBndbOHHSKFrHfou4PL
-         IMvPWy9lYSObYTcAbmugXcNWmYoAfq0qrN5w/7g63BHUbqmgYbi6RB9D9edeuoxeheMo
-         ZNkTUE2cmZzrFpKsNjf6xxKeMViYOLykp+dBp0LJYTZVq7OG6i49KSFF4H4e4JnypoGi
-         PH7eIaoxnZvUJhMz4SRCgmmB4PjDPtb17GY9fdqex8r5LNZqSq9XUZBlb0jXssgZxv4C
-         dBG4HaVfIGWoYrPRuUJwusRem/c6K04wR4kzCjBhU0Lm1CGq2l1EwVlfNbKuwFDkwrRM
-         4yLw==
-X-Gm-Message-State: AOAM531QLML/vS3ptK7Y8kd5MZ1ZiuQeag9LQIA8temjHSDPopses55U
-        xV70yBNd5dZa99Vd22B7bmlwvcg8nyw=
-X-Google-Smtp-Source: ABdhPJxlCSRM8gFV9U5TDCtD//P7GysdYKmbU5E8rnZZbWqCsJLalYpW9Af/O0T9cdRapsV/6ft/7YwhlGQ=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:9ea2:c755:ae22:6862])
- (user=yuzhao job=sendgmr) by 2002:a81:84:0:b0:2eb:4932:f34e with SMTP id
- 126-20020a810084000000b002eb4932f34emr9823178ywa.278.1649301377495; Wed, 06
- Apr 2022 20:16:17 -0700 (PDT)
-Date:   Wed,  6 Apr 2022 21:15:26 -0600
-In-Reply-To: <20220407031525.2368067-1-yuzhao@google.com>
-Message-Id: <20220407031525.2368067-15-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v10 14/14] mm: multi-gen LRU: design doc
-From:   Yu Zhao <yuzhao@google.com>
-To:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, page-reclaim@google.com,
-        x86@kernel.org, Yu Zhao <yuzhao@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        "=?UTF-8?q?Holger=20Hoffst=C3=A4tte?=" 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Wed, 6 Apr 2022 23:19:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F93714CD35
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 20:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=tLxlzYMHBM2oOeRyE57OoUafeLa+ku21SzsWV13PpHo=; b=gRH3I/rn8HloF2Lfm8aJ4bIBYX
+        WBeaRm4iYLsEDFQm10Jd5BGY4IHVSe7gv8keZY3W2djnyGV4zBfmTNYG3wPmw/h0AZQzh/2/Tto99
+        ivGMioN2V+QzAz5TB81l/lqx333kCqjqYHvSwwiD5KPeNxgQ61qkTYXYg/pmE+A/63+6++6Kpm+7u
+        RPc2ak9Es2LmCp9yAc6HL3g5snkledPhW/pXf+qka+fO3TAopa7unYtQGJA/ftSNSYC5/+/Bkx4Rv
+        UlkMVrlKf9QA0m6MJRTfc8pKdO8EydUhHzsgKkK8094TKBr3e+174vgJ/TKFSKu5S/KGOAoq0ZilE
+        JEkPlDnQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncIdQ-008R8g-D0; Thu, 07 Apr 2022 03:16:36 +0000
+Message-ID: <c8c2b89b-8546-8449-a27e-ef6e89186e26@infradead.org>
+Date:   Wed, 6 Apr 2022 20:16:30 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] macintosh: fix via-pmu and via-cuda build errors
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220407023700.7216-1-rdunlap@infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220407023700.7216-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,207 +61,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a design doc.
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
-Acked-by: Brian Geffon <bgeffon@google.com>
-Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Acked-by: Steven Barrett <steven@liquorix.net>
-Acked-by: Suleiman Souhlal <suleiman@google.com>
-Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-Tested-by: Donald Carr <d@chaos-reins.com>
-Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
- Documentation/vm/index.rst        |   1 +
- Documentation/vm/multigen_lru.rst | 160 ++++++++++++++++++++++++++++++
- 2 files changed, 161 insertions(+)
- create mode 100644 Documentation/vm/multigen_lru.rst
 
-diff --git a/Documentation/vm/index.rst b/Documentation/vm/index.rst
-index 44365c4574a3..b48434300226 100644
---- a/Documentation/vm/index.rst
-+++ b/Documentation/vm/index.rst
-@@ -25,6 +25,7 @@ algorithms.  If you are looking for advice on simply allo=
-cating memory, see the
-    ksm
-    memory-model
-    mmu_notifier
-+   multigen_lru
-    numa
-    overcommit-accounting
-    page_migration
-diff --git a/Documentation/vm/multigen_lru.rst b/Documentation/vm/multigen_=
-lru.rst
-new file mode 100644
-index 000000000000..9b29b87e1435
---- /dev/null
-+++ b/Documentation/vm/multigen_lru.rst
-@@ -0,0 +1,160 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Multi-Gen LRU
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+The multi-gen LRU is an alternative LRU implementation that optimizes
-+page reclaim and improves performance under memory pressure. Page
-+reclaim decides the kernel's caching policy and ability to overcommit
-+memory. It directly impacts the kswapd CPU usage and RAM efficiency.
-+
-+Design overview
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Objectives
-+----------
-+The design objectives are:
-+
-+* Good representation of access recency
-+* Try to profit from spatial locality
-+* Fast paths to make obvious choices
-+* Simple self-correcting heuristics
-+
-+The representation of access recency is at the core of all LRU
-+implementations. In the multi-gen LRU, each generation represents a
-+group of pages with similar access recency. Generations establish a
-+common frame of reference and therefore help make better choices,
-+e.g., between different memcgs on a computer or different computers in
-+a data center (for job scheduling).
-+
-+Exploiting spatial locality improves efficiency when gathering the
-+accessed bit. A rmap walk targets a single page and does not try to
-+profit from discovering a young PTE. A page table walk can sweep all
-+the young PTEs in an address space, but the address space can be too
-+large to make a profit. The key is to optimize both methods and use
-+them in combination.
-+
-+Fast paths reduce code complexity and runtime overhead. Unmapped pages
-+do not require TLB flushes; clean pages do not require writeback.
-+These facts are only helpful when other conditions, e.g., access
-+recency, are similar. With generations as a common frame of reference,
-+additional factors stand out. But obvious choices might not be good
-+choices; thus self-correction is required.
-+
-+The benefits of simple self-correcting heuristics are self-evident.
-+Again, with generations as a common frame of reference, this becomes
-+attainable. Specifically, pages in the same generation can be
-+categorized based on additional factors, and a feedback loop can
-+statistically compare the refault percentages across those categories
-+and infer which of them are better choices.
-+
-+Assumptions
-+-----------
-+The protection of hot pages and the selection of cold pages are based
-+on page access channels and patterns. There are two access channels:
-+
-+* Accesses through page tables
-+* Accesses through file descriptors
-+
-+The protection of the former channel is by design stronger because:
-+
-+1. The uncertainty in determining the access patterns of the former
-+   channel is higher due to the approximation of the accessed bit.
-+2. The cost of evicting the former channel is higher due to the TLB
-+   flushes required and the likelihood of encountering the dirty bit.
-+3. The penalty of underprotecting the former channel is higher because
-+   applications usually do not prepare themselves for major page
-+   faults like they do for blocked I/O. E.g., GUI applications
-+   commonly use dedicated I/O threads to avoid blocking the rendering
-+   threads.
-+
-+There are also two access patterns:
-+
-+* Accesses exhibiting temporal locality
-+* Accesses not exhibiting temporal locality
-+
-+For the reasons listed above, the former channel is assumed to follow
-+the former pattern unless ``VM_SEQ_READ`` or ``VM_RAND_READ`` is
-+present, and the latter channel is assumed to follow the latter
-+pattern unless outlying refaults have been observed.
-+
-+Workflow overview
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Evictable pages are divided into multiple generations for each
-+``lruvec``. The youngest generation number is stored in
-+``lrugen->max_seq`` for both anon and file types as they are aged on
-+an equal footing. The oldest generation numbers are stored in
-+``lrugen->min_seq[]`` separately for anon and file types as clean file
-+pages can be evicted regardless of swap constraints. These three
-+variables are monotonically increasing.
-+
-+Generation numbers are truncated into ``order_base_2(MAX_NR_GENS+1)``
-+bits in order to fit into the gen counter in ``folio->flags``. Each
-+truncated generation number is an index to ``lrugen->lists[]``. The
-+sliding window technique is used to track at least ``MIN_NR_GENS`` and
-+at most ``MAX_NR_GENS`` generations. The gen counter stores a value
-+within ``[1, MAX_NR_GENS]`` while a page is on one of
-+``lrugen->lists[]``; otherwise it stores zero.
-+
-+Each generation is divided into multiple tiers. Tiers represent
-+different ranges of numbers of accesses through file descriptors. A
-+page accessed ``N`` times through file descriptors is in tier
-+``order_base_2(N)``. In contrast to moving across generations, which
-+requires the LRU lock, moving across tiers only requires operations on
-+``folio->flags`` and therefore has a negligible cost. A feedback loop
-+modeled after the PID controller monitors refaults over all the tiers
-+from anon and file types and decides which tiers from which types to
-+evict or protect.
-+
-+There are two conceptually independent procedures: the aging and the
-+eviction. They form a closed-loop system, i.e., the page reclaim.
-+
-+Aging
-+-----
-+The aging produces young generations. Given an ``lruvec``, it
-+increments ``max_seq`` when ``max_seq-min_seq+1`` approaches
-+``MIN_NR_GENS``. The aging promotes hot pages to the youngest
-+generation when it finds them accessed through page tables; the
-+demotion of cold pages happens consequently when it increments
-+``max_seq``. The aging uses page table walks and rmap walks to find
-+young PTEs. For the former, it iterates ``lruvec_memcg()->mm_list``
-+and calls ``walk_page_range()`` with each ``mm_struct`` on this list
-+to scan PTEs. On finding a young PTE, it clears the accessed bit and
-+updates the gen counter of the page mapped by this PTE to
-+``(max_seq%MAX_NR_GENS)+1``. After each iteration of this list, it
-+increments ``max_seq``. For the latter, when the eviction walks the
-+rmap and finds a young PTE, the aging scans the adjacent PTEs and
-+follows the same steps just described.
-+
-+Eviction
-+--------
-+The eviction consumes old generations. Given an ``lruvec``, it
-+increments ``min_seq`` when ``lrugen->lists[]`` indexed by
-+``min_seq%MAX_NR_GENS`` becomes empty. To select a type and a tier to
-+evict from, it first compares ``min_seq[]`` to select the older type.
-+If both types are equally old, it selects the one whose first tier has
-+a lower refault percentage. The first tier contains single-use
-+unmapped clean pages, which are the best bet. The eviction sorts a
-+page according to the gen counter if the aging has found this page
-+accessed through page tables and updated the gen counter. It also
-+moves a page to the next generation, i.e., ``min_seq+1``, if this page
-+was accessed multiple times through file descriptors and the feedback
-+loop has detected outlying refaults from the tier this page is in. To
-+do this, the feedback loop uses the first tier as the baseline, for
-+the reason stated earlier.
-+
-+Summary
-+-------
-+The multi-gen LRU can be disassembled into the following parts:
-+
-+* Generations
-+* Page table walks
-+* Rmap walks
-+* Bloom filters
-+* The PID controller
-+
-+The aging and the eviction is a producer-consumer model; specifically,
-+the latter drives the former by the sliding window over generations.
-+Within the aging, rmap walks drive page table walks by inserting hot
-+densely populated page tables to the Bloom filters. Within the
-+eviction, the PID controller uses refaults as the feedback to select
-+types to evict and tiers to protect.
---=20
-2.35.1.1094.g7c7d902a7c-goog
+On 4/6/22 19:37, Randy Dunlap wrote:
+> When CONFIG_INPUT=m, the input_*() family of functions is not
+> available to builtin drivers.
+> 
+> When CONFIG_RTC_CLASS is not set, rtc_tm_to_time64() is not defined.
+> 
+> Fix multiple build errors by making these Kconfig symbols required by
+> ADB_CUDA (RTC_CLASS) and ADB_PMU (RTC_CLASS and INPUT).
 
+Ah yes, Finn has already fixed the INPUT problems here.
+
+Maybe that patch hasn't been merged anywhere yet?
+
+The RTC_CLASS problem is still present AFAICT.
+
+> m68k-linux-ld: drivers/macintosh/via-pmu.o: in function `pmu_set_rtc_time':
+> drivers/macintosh/via-pmu.c:1758: undefined reference to `rtc_tm_to_time64'
+> m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `input_report_key':
+> include/linux/input.h:425: undefined reference to `input_event'
+> m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `input_report_switch':
+> include/linux/input.h:445: undefined reference to `input_event'
+> m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `via_pmu_event_init':
+> drivers/macintosh/via-pmu-event.c:38: undefined reference to `input_allocate_device'
+> m68k-linux-ld: drivers/macintosh/via-pmu-event.c:53: undefined reference to `input_register_device'
+> m68k-linux-ld: drivers/macintosh/via-pmu-event.c:55: undefined reference to `input_free_device'
+> m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
+> drivers/macintosh/via-cuda.c:797: undefined reference to `rtc_tm_to_time64'
+> 
+> Fixes: 0792a2c8e0bb ("macintosh: Use common code to access RTC")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Finn Thain <fthain@linux-m68k.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> ---
+> This is a big hammer type of patch. We could possibly do (a) some
+> conditional code blocks for RTC_CLASS and (b) only build via-pmu-event
+> if CONFIG_INPUT=y if needed.
+> 
+>  drivers/macintosh/Kconfig |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> --- a/drivers/macintosh/Kconfig
+> +++ b/drivers/macintosh/Kconfig
+> @@ -44,6 +44,7 @@ config ADB_IOP
+>  config ADB_CUDA
+>  	bool "Support for Cuda/Egret based Macs and PowerMacs"
+>  	depends on (ADB || PPC_PMAC) && !PPC_PMAC64
+> +	depends on RTC_CLASS
+>  	help
+>  	  This provides support for Cuda/Egret based Macintosh and
+>  	  Power Macintosh systems. This includes most m68k based Macs,
+> @@ -57,6 +58,8 @@ config ADB_CUDA
+>  config ADB_PMU
+>  	bool "Support for PMU based PowerMacs and PowerBooks"
+>  	depends on PPC_PMAC || MAC
+> +	depends on INPUT=y
+> +	depends on RTC_CLASS
+>  	help
+>  	  On PowerBooks, iBooks, and recent iMacs and Power Macintoshes, the
+>  	  PMU is an embedded microprocessor whose primary function is to
+
+-- 
+~Randy

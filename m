@@ -2,178 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CF34F77E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC174F77EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242037AbiDGHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S242040AbiDGHpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242021AbiDGHog (ORCPT
+        with ESMTP id S242041AbiDGHpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:44:36 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5417D7892D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:42:36 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id c2so4272283pga.10
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mmGJug9XSvLc9UYs1snhVqbU1zFE1jKfOiCb4bT1Xyg=;
-        b=TJToiuxAPxO5gLD+PPdeYwNbEDsymoriISgGQMYm42U8IwVbKx0WrqMGHSbilyJb3S
-         Sqx8moZPwNEVW7CPcU5qbbHcrA0xQOqYjV89Wyq8q5k7yhUR3jNKvMsf49IBMStV1adY
-         0tLWB2SF/fBoQg0g7VDy3KaG1MXvzAqSBVaH8MvY5KPrr2+sxqZRxeE6HWkmfg13mQd7
-         P/B0GqanU/0MUAx2Btjd8XvipjUR9DBmUrexqTgtO3+JkCR2ICJAgzqepmSKESe4zv2d
-         3AkbJCIC7jZ6k2H/o4TIb3Iz/UOACOY2Sbl/8Qn2z/e8iLCQYt4s85+wfUXPT89oZftL
-         2htg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mmGJug9XSvLc9UYs1snhVqbU1zFE1jKfOiCb4bT1Xyg=;
-        b=4EOb0KxMrFDqfk7m2ZPeUiv8RNS5CLk8J5ip5xVPCWehK8lWqPnl4eoM5IV2s7g5Cv
-         Cq0K50BYjDIQWMsHykalJFVdDTob3a84SV6yxjb1HaEw1vw8g8LIjgHe9gRx2yZgnE9G
-         H4iVmFW0X6yceDWalZT207smDUEwiVfaCuhckkn2E7IjoSeY0/bDBziKVM2LDzQaPfve
-         0xvxHPJcwshev+LZ6Qi6VuZ4omUE0QOjZK7z8QFogWWHC1FlzRUaQu4NtziYo3YW86VY
-         JZHY6Pc+2BnFIdrizuZWG8R/yhOKypNYW3sV3K+XyvrEUeDrIsDOBy6axQX7NR2xAePu
-         T9zw==
-X-Gm-Message-State: AOAM532JS1FOP5aoG06OpmtFacT/qh9r2oSux8fBf5/mnGhcufjskDYG
-        uo7IxwwBlSDoItm1BTta4fyVlMWnW9Djyz1srZv5OA==
-X-Google-Smtp-Source: ABdhPJzL4k8cNQVWa4KDJhE14ZI813y48fsqof0zEaw00HIk2pdqyRAXsd/G22FnKYSuMAjQx3qQezRJ+iq5Yv+hb1A=
-X-Received: by 2002:a05:6a00:995:b0:4fb:607d:444c with SMTP id
- u21-20020a056a00099500b004fb607d444cmr12738497pfg.69.1649317355656; Thu, 07
- Apr 2022 00:42:35 -0700 (PDT)
+        Thu, 7 Apr 2022 03:45:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1891207E1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649317415; x=1680853415;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rEzSY+KB/Lo7kPj+KuYGT5iGJesbI2j4rtB/xVv0Ob0=;
+  b=lXCTQPQWl+XixxL3lgAuMwKRAF3EFFEfvw27EJhoN8ITK0nw9URAzq49
+   ceYpZ41KMwhI/nJIZ4m35b6JqpKqQvC58ctMUpSomwZZMejLQzAojc2zY
+   qDAj0t5B+06ialY19CKAr5ERY+CeVqvBXbkoWc5o6RHgwGTgZgKgSHebs
+   1Xhf7T3/4eUI9HYc7R+5y40oA7dgQGsePqPlWjb6kFD9H4qhHzJBrqFC1
+   WVyeRkVhCUcf4hxdaQLh28Zp3A/wZlgUAcYaFxInUTrzTMg5ryLLvcbVv
+   RQX3+TAsVmswJIuEd1OGcnhevhbSx3bGgzgG6ynf3NWRLT1wO0Brj/JNB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="260949542"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="260949542"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:43:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="658965035"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2022 00:43:34 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncMnl-0005D0-G7;
+        Thu, 07 Apr 2022 07:43:33 +0000
+Date:   Thu, 7 Apr 2022 15:43:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse: sparse:
+ incorrect type in assignment (different base types)
+Message-ID: <202204071547.7NKPu5MS-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAHUa44GDg7hAAFsmeOOkeqi8_1P1Q6jATRdnV9b6S-DhpEEQrA@mail.gmail.com>
- <20220406144028.4203-1-phil.chang@mediatek.com>
-In-Reply-To: <20220406144028.4203-1-phil.chang@mediatek.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 7 Apr 2022 09:42:24 +0200
-Message-ID: <CAHUa44GDp=GSP5D=eCowZv09Ws_j44Y7mc=dY3eFAf0uLQBsRA@mail.gmail.com>
-Subject: Re: Re: [PATCH v4] tee: make tee_shm_register_kernel_buf vmalloc supported
-To:     Phil Chang <Phil.Chang@mediatek.com>
-Cc:     sumit.garg@linaro.org, matthias.bgg@gmail.com,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: 2ce008c8b25467ceacf45bcf0e183d660edb82f2 KVM: PPC: Book3S HV: Remove unused nested HV tests in XICS emulation
+date:   10 months ago
+config: powerpc64-randconfig-s031-20220403 (https://download.01.org/0day-ci/archive/20220407/202204071547.7NKPu5MS-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2ce008c8b25467ceacf45bcf0e183d660edb82f2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2ce008c8b25467ceacf45bcf0e183d660edb82f2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-On Wed, Apr 6, 2022 at 4:40 PM Phil Chang <phil.chang@mediatek.com> wrote:
->
-> > On Fri, Feb 25, 2022 at 4:20 PM Phil Chang <phil.chang@mediatek.com>
-> > wrote:
-> >>
-> >> In some low-memory devices, it's hard to aquire large-orders pages,
-> >> this patch allowed user using scatter pages to register shm.
-> >>
-> >> Signed-off-by: Phil Chang <phil.chang@mediatek.com>
-> >> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> >> ---
-> >>  drivers/tee/optee/call.c |  2 +-
-> >>  drivers/tee/tee_shm.c    | 35 +++++++++++++++++++++++++----------
-> >>  2 files changed, 26 insertions(+), 11 deletions(-)
-> >
-> > Looks good to me. Unfortunately this is too late for the coming merge
-> > window, so it's going to be the one after that. Meanwhile it will be
-> > in linux-next.
-> >
-> > Thanks,
-> > Jens
->
->  Hi Jens
->    thanks for your review, did I push again wile merge window open ?
->    Or just wait ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Just wait. You should be able to see it in linux-next for now.
 
-Cheers,
-Jens
+sparse warnings: (new ones prefixed by >>)
+   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] *out_xirr @@     got restricted __be32 * @@
+   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse:     expected unsigned int [usertype] *out_xirr
+   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse:     got restricted __be32 *
+>> arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 [addressable] [usertype] xirr @@     got unsigned int @@
+   arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse:     expected restricted __be32 [addressable] [usertype] xirr
+   arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse:     got unsigned int
+>> arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __be32 [addressable] [usertype] xirr @@
+   arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse:     expected unsigned int [usertype] val
+   arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse:     got restricted __be32 [addressable] [usertype] xirr
+   arch/powerpc/kvm/book3s_hv_builtin.c: note: in included file:
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __le64 [usertype]
 
->
->  Thanks
->
-> >>
-> >> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> >> index bd49ec934060..2082e632adff 100644
-> >> --- a/drivers/tee/optee/call.c
-> >> +++ b/drivers/tee/optee/call.c
-> >> @@ -362,7 +362,7 @@ int optee_check_mem_type(unsigned long start,
-> >> size_t num_pages)
-> >>          * Allow kernel address to register with OP-TEE as kernel
-> >>          * pages are configured as normal memory only.
-> >>          */
-> >> -       if (virt_addr_valid(start))
-> >> +       if (virt_addr_valid(start) || is_vmalloc_addr((void *)start))
-> >>                 return 0;
-> >>
-> >>         mmap_read_lock(mm);
-> >> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> >> index f31e29e8f1ca..836872467dc6 100644
-> >> --- a/drivers/tee/tee_shm.c
-> >> +++ b/drivers/tee/tee_shm.c
-> >> @@ -23,21 +23,36 @@ static void shm_put_kernel_pages(struct page
-> >> **pages, size_t page_count)
-> >>  static int shm_get_kernel_pages(unsigned long start, size_t
-> >>  page_count,
-> >>                                 struct page **pages)
-> >>  {
-> >> -       struct kvec *kiov;
-> >>         size_t n;
-> >>         int rc;
-> >>
-> >> -       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> >> -       if (!kiov)
-> >> -               return -ENOMEM;
-> >> +       if (is_vmalloc_addr((void *)start)) {
-> >> +               struct page *page;
-> >>
-> >> -       for (n = 0; n < page_count; n++) {
-> >> -               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
-> >> -               kiov[n].iov_len = PAGE_SIZE;
-> >> -       }
-> >> +               for (n = 0; n < page_count; n++) {
-> >> +                       page = vmalloc_to_page((void *)(start +
-> >> PAGE_SIZE * n));
-> >> +                       if (!page)
-> >> +                               return -ENOMEM;
-> >> +
-> >> +                       get_page(page);
-> >> +                       pages[n] = page;
-> >> +               }
-> >> +               rc = page_count;
-> >> +       } else {
-> >> +               struct kvec *kiov;
-> >> +
-> >> +               kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> >> +               if (!kiov)
-> >> +                       return -ENOMEM;
-> >>
-> >> -       rc = get_kernel_pages(kiov, page_count, 0, pages);
-> >> -       kfree(kiov);
-> >> +               for (n = 0; n < page_count; n++) {
-> >> +                       kiov[n].iov_base = (void *)(start + n *
-> >> PAGE_SIZE);
-> >> +                       kiov[n].iov_len = PAGE_SIZE;
-> >> +               }
-> >> +
-> >> +               rc = get_kernel_pages(kiov, page_count, 0, pages);
-> >> +               kfree(kiov);
-> >> +       }
-> >>
-> >>         return rc;
-> >>  }
-> >> --
-> >> 2.25.1
+vim +419 arch/powerpc/kvm/book3s_hv_builtin.c
+
+f725758b899f11c Paul Mackerras         2016-11-18  395  
+f725758b899f11c Paul Mackerras         2016-11-18  396  static long kvmppc_read_one_intr(bool *again)
+37f55d30df2eef8 Suresh Warrier         2016-08-19  397  {
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  398  	void __iomem *xics_phys;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  399  	u32 h_xirr;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  400  	__be32 xirr;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  401  	u32 xisr;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  402  	u8 host_ipi;
+f725758b899f11c Paul Mackerras         2016-11-18  403  	int64_t rc;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  404  
+5af50993850a48b Benjamin Herrenschmidt 2017-04-05  405  	if (xive_enabled())
+5af50993850a48b Benjamin Herrenschmidt 2017-04-05  406  		return 1;
+5af50993850a48b Benjamin Herrenschmidt 2017-04-05  407  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  408  	/* see if a host IPI is pending */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  409  	host_ipi = local_paca->kvm_hstate.host_ipi;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  410  	if (host_ipi)
+37f55d30df2eef8 Suresh Warrier         2016-08-19  411  		return 1;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  412  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  413  	/* Now read the interrupt from the ICP */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  414  	xics_phys = local_paca->kvm_hstate.xics_phys;
+53af3ba2e8195f5 Paul Mackerras         2017-01-30  415  	rc = 0;
+ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  416  	if (!xics_phys)
+53af3ba2e8195f5 Paul Mackerras         2017-01-30 @417  		rc = opal_int_get_xirr(&xirr, false);
+53af3ba2e8195f5 Paul Mackerras         2017-01-30  418  	else
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05 @419  		xirr = __raw_rm_readl(xics_phys + XICS_XIRR);
+f725758b899f11c Paul Mackerras         2016-11-18  420  	if (rc < 0)
+37f55d30df2eef8 Suresh Warrier         2016-08-19  421  		return 1;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  422  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  423  	/*
+37f55d30df2eef8 Suresh Warrier         2016-08-19  424  	 * Save XIRR for later. Since we get control in reverse endian
+37f55d30df2eef8 Suresh Warrier         2016-08-19  425  	 * on LE systems, save it byte reversed and fetch it back in
+37f55d30df2eef8 Suresh Warrier         2016-08-19  426  	 * host endian. Note that xirr is the value read from the
+37f55d30df2eef8 Suresh Warrier         2016-08-19  427  	 * XIRR register, while h_xirr is the host endian version.
+37f55d30df2eef8 Suresh Warrier         2016-08-19  428  	 */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  429  	h_xirr = be32_to_cpu(xirr);
+37f55d30df2eef8 Suresh Warrier         2016-08-19  430  	local_paca->kvm_hstate.saved_xirr = h_xirr;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  431  	xisr = h_xirr & 0xffffff;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  432  	/*
+37f55d30df2eef8 Suresh Warrier         2016-08-19  433  	 * Ensure that the store/load complete to guarantee all side
+37f55d30df2eef8 Suresh Warrier         2016-08-19  434  	 * effects of loading from XIRR has completed
+37f55d30df2eef8 Suresh Warrier         2016-08-19  435  	 */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  436  	smp_mb();
+37f55d30df2eef8 Suresh Warrier         2016-08-19  437  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  438  	/* if nothing pending in the ICP */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  439  	if (!xisr)
+37f55d30df2eef8 Suresh Warrier         2016-08-19  440  		return 0;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  441  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  442  	/* We found something in the ICP...
+37f55d30df2eef8 Suresh Warrier         2016-08-19  443  	 *
+37f55d30df2eef8 Suresh Warrier         2016-08-19  444  	 * If it is an IPI, clear the MFRR and EOI it.
+37f55d30df2eef8 Suresh Warrier         2016-08-19  445  	 */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  446  	if (xisr == XICS_IPI) {
+53af3ba2e8195f5 Paul Mackerras         2017-01-30  447  		rc = 0;
+2ce008c8b25467c Nicholas Piggin        2021-05-28  448  		if (xics_phys) {
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  449  			__raw_rm_writeb(0xff, xics_phys + XICS_MFRR);
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05 @450  			__raw_rm_writel(xirr, xics_phys + XICS_XIRR);
+f725758b899f11c Paul Mackerras         2016-11-18  451  		} else {
+ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  452  			opal_int_set_mfrr(hard_smp_processor_id(), 0xff);
+ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  453  			rc = opal_int_eoi(h_xirr);
+53af3ba2e8195f5 Paul Mackerras         2017-01-30  454  		}
+f725758b899f11c Paul Mackerras         2016-11-18  455  		/* If rc > 0, there is another interrupt pending */
+f725758b899f11c Paul Mackerras         2016-11-18  456  		*again = rc > 0;
+f725758b899f11c Paul Mackerras         2016-11-18  457  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  458  		/*
+37f55d30df2eef8 Suresh Warrier         2016-08-19  459  		 * Need to ensure side effects of above stores
+37f55d30df2eef8 Suresh Warrier         2016-08-19  460  		 * complete before proceeding.
+37f55d30df2eef8 Suresh Warrier         2016-08-19  461  		 */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  462  		smp_mb();
+37f55d30df2eef8 Suresh Warrier         2016-08-19  463  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  464  		/*
+37f55d30df2eef8 Suresh Warrier         2016-08-19  465  		 * We need to re-check host IPI now in case it got set in the
+37f55d30df2eef8 Suresh Warrier         2016-08-19  466  		 * meantime. If it's clear, we bounce the interrupt to the
+37f55d30df2eef8 Suresh Warrier         2016-08-19  467  		 * guest
+37f55d30df2eef8 Suresh Warrier         2016-08-19  468  		 */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  469  		host_ipi = local_paca->kvm_hstate.host_ipi;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  470  		if (unlikely(host_ipi != 0)) {
+37f55d30df2eef8 Suresh Warrier         2016-08-19  471  			/* We raced with the host,
+37f55d30df2eef8 Suresh Warrier         2016-08-19  472  			 * we need to resend that IPI, bummer
+37f55d30df2eef8 Suresh Warrier         2016-08-19  473  			 */
+2ce008c8b25467c Nicholas Piggin        2021-05-28  474  			if (xics_phys)
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  475  				__raw_rm_writeb(IPI_PRIORITY,
+d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  476  						xics_phys + XICS_MFRR);
+f725758b899f11c Paul Mackerras         2016-11-18  477  			else
+ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  478  				opal_int_set_mfrr(hard_smp_processor_id(),
+f725758b899f11c Paul Mackerras         2016-11-18  479  						  IPI_PRIORITY);
+37f55d30df2eef8 Suresh Warrier         2016-08-19  480  			/* Let side effects complete */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  481  			smp_mb();
+37f55d30df2eef8 Suresh Warrier         2016-08-19  482  			return 1;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  483  		}
+37f55d30df2eef8 Suresh Warrier         2016-08-19  484  
+37f55d30df2eef8 Suresh Warrier         2016-08-19  485  		/* OK, it's an IPI for us */
+37f55d30df2eef8 Suresh Warrier         2016-08-19  486  		local_paca->kvm_hstate.saved_xirr = 0;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  487  		return -1;
+37f55d30df2eef8 Suresh Warrier         2016-08-19  488  	}
+37f55d30df2eef8 Suresh Warrier         2016-08-19  489  
+f725758b899f11c Paul Mackerras         2016-11-18  490  	return kvmppc_check_passthru(xisr, xirr, again);
+37f55d30df2eef8 Suresh Warrier         2016-08-19  491  }
+5af50993850a48b Benjamin Herrenschmidt 2017-04-05  492  
+
+:::::: The code at line 419 was first introduced by commit
+:::::: d381d7caf812f7aa9f05cfeb858c9004ac654412 powerpc: Consolidate variants of real-mode MMIOs
+
+:::::: TO: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

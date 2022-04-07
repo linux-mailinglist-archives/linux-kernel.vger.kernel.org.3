@@ -2,224 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEBE4F814F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE79D4F8151
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiDGOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S1343828AbiDGOLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiDGOK7 (ORCPT
+        with ESMTP id S241608AbiDGOLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:10:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB7E125595;
-        Thu,  7 Apr 2022 07:08:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 087D161BC5;
-        Thu,  7 Apr 2022 14:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC2AC385A4;
-        Thu,  7 Apr 2022 14:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649340523;
-        bh=ydP1aVikhmIIcEnQD6MgKsKQRpvuR4lwhWVulh03A8E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jCzTejPJMfBHgKkfDyk1keI3z09aoSF3nLyXyo34h5NPI/8O0YWu2YbHN9TI+V6r0
-         ByZwJxqnAWRDIN4vJledxnIbSssq/9wqvp7XiPFZy3b5hSfaQ3Yf5Xyx7n83/OQu85
-         wa/GCU7NDItOyjRArlV/+mLTnl6ekf4oirBS+d8wh3EH+gdbS0YAS8/T9atJJLwYcU
-         pD7EQka9IyHP0WPXvBIXJIy+p4oljawq6K2lFNLsTZI00FL9WlHH6zg5dw63zxlhFE
-         PGRaOt9aMVgmccMOz2+SB9hUanTqyqNyl4ybIyJ1DsE6D6XS4y6qnS6HBpQ+fvVlY7
-         rzUvHjsjT2FDA==
-Message-ID: <5dc7945ab39aea9aae9834d3f5623ecbf251c262.camel@kernel.org>
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 07 Apr 2022 10:08:41 -0400
-In-Reply-To: <aaa78c1f1bfa7b8da8d8be0f3dcf2a42c9b838fd.camel@kernel.org>
-References: <20220401133243.1075-1-lhenriques@suse.de>
-         <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
-         <878rsia391.fsf@brahms.olymp>
-         <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
-         <87zgky8n0o.fsf@brahms.olymp>
-         <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
-         <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
-         <f0ed169ed02fe810076e959e9ec5455d9de4b4ff.camel@kernel.org>
-         <7023b537-e7b6-0dd9-42bf-9d601ef69b58@redhat.com>
-         <87pmlt85w5.fsf@brahms.olymp>
-         <aaa78c1f1bfa7b8da8d8be0f3dcf2a42c9b838fd.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 7 Apr 2022 10:11:03 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D091252B9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:09:02 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id g9so9782718ybf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+EmVfi/hJj5qY2xCfktuOrsdnIsyWAZ1Xcq7QuGbQNU=;
+        b=Ex0ysAb+dbnteaKCmZ7UzEeMPi3ALwl7oqU2U5u9eYa2mlnSFM4mUMgA5+4eAYtPyP
+         vC+JnwL0zhy6DpGw5JXfCvK4xzfjxOtppDH8k1rbCF47dlkDEvwfGl+CPja0wNS7GbSn
+         /yXvqONPVbKl+RNbKMmxOjC8HRzkgQwpkv247GLGf6rsXcW2Je5SJAMJeVATgBnzV08Z
+         dzHq5JNaohuG8MmLktFBTVxjQ10O5QHzokpNukEJUKNgLnfj101mie1rX77SGShNmnn6
+         XLLko4jrbeL7eBcrzfbVOTxCTWr1xZiD7oCPRvS7mNzmNypgLQaNj7erZEeJpYz8tKKr
+         jOjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+EmVfi/hJj5qY2xCfktuOrsdnIsyWAZ1Xcq7QuGbQNU=;
+        b=cIG1YQiA8qWEKh+Yn2Ry1iZ30xLg09ND/0A+zLxaCJlKlbMlEgLlsXKNvjvl6IXNtg
+         7R+bGx/+e9p5Irp+3u6ERvmuxFEv35iMynTjUaHHNGtcjI66wtzFKSQkzLHFds5Sadu2
+         YLXsO/AlJwSuYrseJDgys6HhVd70+xN5P61jgfP4xwNTJR+LL7ZQ7xlAbCVx/13rqPr+
+         6a74Yc/nliZlW1IZ6rZNCrsc2Ks28vZYI8HuM74HzUucUtl5atQ6qnh43f1f5t97aevr
+         +TOjuBne5B40Ejm7TfTO5gLMQjwHqr7xZbKYZ+AJXIdS+KTXCVO2DdwJWIza5LTaZJRh
+         c1+A==
+X-Gm-Message-State: AOAM530PVKViFSLKSiuO7aOaPSBG+2hfaH+rP+O/ObXzqo7Y8r28q48j
+        67OKbQHVb/opg0iL8rEscfNr8TvIwy82Eyd++Sqoug==
+X-Google-Smtp-Source: ABdhPJzTvMi/3phYwR9zHtqgXBwUBV0TEXLktdu1cNKs3HjpUdrL+s6rSTIYWysxJj9pyyZwmiiVD8zXjS9/3p7Dml4=
+X-Received: by 2002:a25:3009:0:b0:63d:b1c1:e8e2 with SMTP id
+ w9-20020a253009000000b0063db1c1e8e2mr10273569ybw.387.1649340541824; Thu, 07
+ Apr 2022 07:09:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407112512.2099221-1-kongweibin2@huawei.com>
+In-Reply-To: <20220407112512.2099221-1-kongweibin2@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 7 Apr 2022 07:08:50 -0700
+Message-ID: <CANn89iLx5HRnyRShNatPveTBhdjoQTxaRn-8_gYk-6_NuSCiOQ@mail.gmail.com>
+Subject: Re: [PATCH] ipv6:fix crash when idev is NULL
+To:     kongweibin <kongweibin2@huawei.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, rose.chen@huawei.com,
+        liaichun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 09:23 -0400, Jeff Layton wrote:
-> On Thu, 2022-04-07 at 12:55 +0100, Luís Henriques wrote:
-> > Xiubo Li <xiubli@redhat.com> writes:
-> > 
-> > > On 4/6/22 9:41 PM, Jeff Layton wrote:
-> > > > On Wed, 2022-04-06 at 21:10 +0800, Xiubo Li wrote:
-> > > > > On 4/6/22 7:48 PM, Jeff Layton wrote:
-> > > > > > On Wed, 2022-04-06 at 12:33 +0100, Luís Henriques wrote:
-> > > > > > > Xiubo Li <xiubli@redhat.com> writes:
-> > > > > > > 
-> > > > > > > > On 4/6/22 6:57 PM, Luís Henriques wrote:
-> > > > > > > > > Xiubo Li <xiubli@redhat.com> writes:
-> > > > > > > > > 
-> > > > > > > > > > On 4/1/22 9:32 PM, Luís Henriques wrote:
-> > > > > > > > > > > When doing DIO on an encrypted node, we need to invalidate the page cache in
-> > > > > > > > > > > the range being written to, otherwise the cache will include invalid data.
-> > > > > > > > > > > 
-> > > > > > > > > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > > > > > > > > > > ---
-> > > > > > > > > > >      fs/ceph/file.c | 11 ++++++++++-
-> > > > > > > > > > >      1 file changed, 10 insertions(+), 1 deletion(-)
-> > > > > > > > > > > 
-> > > > > > > > > > > Changes since v1:
-> > > > > > > > > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
-> > > > > > > > > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
-> > > > > > > > > > > 
-> > > > > > > > > > > Note: I'm not really sure this last change is required, it doesn't really
-> > > > > > > > > > > affect generic/647 result, but seems to be the most correct.
-> > > > > > > > > > > 
-> > > > > > > > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> > > > > > > > > > > index 5072570c2203..b2743c342305 100644
-> > > > > > > > > > > --- a/fs/ceph/file.c
-> > > > > > > > > > > +++ b/fs/ceph/file.c
-> > > > > > > > > > > @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> > > > > > > > > > >      	if (ret < 0)
-> > > > > > > > > > >      		return ret;
-> > > > > > > > > > >      -	ceph_fscache_invalidate(inode, false);
-> > > > > > > > > > > +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
-> > > > > > > > > > >      	ret = invalidate_inode_pages2_range(inode->i_mapping,
-> > > > > > > > > > >      					    pos >> PAGE_SHIFT,
-> > > > > > > > > > >      					    (pos + count - 1) >> PAGE_SHIFT);
-> > > > > > > > > > The above has already invalidated the pages, why doesn't it work ?
-> > > > > > > > > I suspect the reason is because later on we loop through the number of
-> > > > > > > > > pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
-> > > > > > > > Checked the 'copy_page_from_iter()', it will do the kmap for the pages but will
-> > > > > > > > kunmap them again later. And they shouldn't update the i_mapping if I didn't
-> > > > > > > > miss something important.
-> > > > > > > > 
-> > > > > > > > For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context inplace,
-> > > > > > > > IMO if it needs to map the page and it should also unmap it just like in
-> > > > > > > > 'copy_page_from_iter()'.
-> > > > > > > > 
-> > > > > > > > I thought it possibly be when we need to do RMW, it may will update the
-> > > > > > > > i_mapping when reading contents, but I checked the code didn't find any
-> > > > > > > > place is doing this. So I am wondering where tha page caches come from ? If that
-> > > > > > > > page caches really from reading the contents, then we should discard it instead
-> > > > > > > > of flushing it back ?
-> > > > > > > > 
-> > > > > > > > BTW, what's the problem without this fixing ? xfstest fails ?
-> > > > > > > Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
-> > > > > > > also checked that the RMW code was never executed in this test.
-> > > > > > > 
-> > > > > > > But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
-> > > > > > > change the inode->i_mapping.
-> > > > > > > 
-> > > > > > No, kmap/unmap are all about high memory and 32-bit architectures. Those
-> > > > > > functions are usually no-ops on 64-bit arches.
-> > > > > Yeah, right.
-> > > > > 
-> > > > > So they do nothing here.
-> > > > > 
-> > > > > > > In my debugging this seemed to be the case
-> > > > > > > for the O_DIRECT path.  That's why I added this extra call here.
-> > > > > > > 
-> > > > > > I agree with Xiubo that we really shouldn't need to invalidate multiple
-> > > > > > times.
-> > > > > > 
-> > > > > > I guess in this test, we have a DIO write racing with an mmap read
-> > > > > > Probably what's happening is either that we can't invalidate the page
-> > > > > > because it needs to be cleaned, or the mmap read is racing in just after
-> > > > > > the invalidate occurs but before writeback.
-> > > > > This sounds a possible case.
-> > > > > 
-> > > > > 
-> > > > > > In any case, it might be interesting to see whether you're getting
-> > > > > > -EBUSY back from the new invalidate_inode_pages2 calls with your patch.
-> > > > > > 
-> > > > > If it's really this case maybe this should be retried some where ?
-> > > > > 
-> > > > Possibly, or we may need to implement ->launder_folio.
-> > > > 
-> > > > Either way, we need to understand what's happening first and then we can
-> > > > figure out a solution for it.
-> > > 
-> > > Yeah, make sense.
-> > > 
-> > 
-> > OK, so here's what I got so far:
-> > 
-> > When we run this test *without* test_dummy_encryption, ceph_direct_read_write()
-> > will be called and invalidate_inode_pages2_range() will do pretty much
-> > nothing because the mapping will be empty (mapping_empty(inode->i_mapping)
-> > will return 1).  If we use encryption, ceph_sync_write() will be called
-> > instead and the mapping, obviously, be will be empty as well.
-> > 
-> > The difference between in encrypted vs non-encrypted (and the reason the
-> > test passes without encryption) is that ceph_direct_read_write()
-> > (non-encrypted) will call truncate_inode_pages_range() at a stage where
-> > the mapping is not empty anymore (iter_get_bvecs_alloc will take care of
-> > that).
-> > 
-> 
-> Wait...why does iter_get_bvecs_alloc populate the mapping? The iter in
-> this case is almost certainly an iov_iter from userland so none of this
-> should have anything to do with the pagecache.
-> 
-> I suspect the faulting in occurs via the mmap reader task, and that the
-> truncate_inode_pages_range calls just happen enough to invalidate it.
-> 
-> >  In the encryption path (ceph_sync_write) the mapping will be
-> > filled with copy_page_from_iter(), which will fault and do the read.
-> > Because we don't have the truncate_inode_pages_range(), the cache will
-> > contain invalid data after the write.  And that's why the extra
-> > invalidate_inode_pages2_range (or truncate_...) fixes this.
-> > 
-> 
-> I think what we may want to do is consider adding these calls into
-> ceph_page_mkwrite:
-> 
->         if (direct_lock)
->                 ceph_start_io_direct(inode);
->         else
->                 ceph_start_io_write(inode);
-> 
-> ...and similar ones (for read) in ceph_filemap_fault, along with "end"
-> calls to end the I/Os.
-> 
-> This is how we handle races between buffered read/write and direct I/O,
-> and I suspect the mmap codepaths may just need similar treatment.
-> 
-> Thoughts?
+On Thu, Apr 7, 2022 at 4:26 AM kongweibin <kongweibin2@huawei.com> wrote:
+>
+> When the remote device uses tc command to construct exception packages,
+> and send it to the local device, which acts as a forwarding device, it
+> will crash.
+>
+> the tc cmd such as:
+> tc qdisc del dev vxlan100 root
+> tc qdisc add dev vxlan100 root netem corrupt 5%
 
-No, Luis tried this and said that it deadlocked on IRC. It seems obvious
-in retrospect...
+Probably not related to your fix.
 
-What we probably need to do is call filemap_write_and_wait_range before
-issuing a direct or sync read or write. Then for direct/sync writes, we
-also want to call invalidate_inode_pages2_range after the write returns.
+>
+> When using dev_get_by_index_rcu to get net_device struct, once the
+> package is abnormal, the corresponding net_device can't be found
+> according with error device index, then return a null value, which
+> value will be directly used in the policy check below, resulting in
+> system crash.
+>
+> Anyway, we can't directly use the idev variable. We need to ensure
+> that it is a valid value.
+>
+> kernel version is base on kernel-5.10.0, and the stack information
+> of the crash is as follows:
+>
+> [ 4484.161259] IPVS: __ip_vs_del_service: enter
+> [ 4484.162263] IPVS: __ip_vs_del_service: enter
+> [ 4686.564468] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000240
+> [ 4686.565109] Mem abort info:
+> [ 4686.565328]   ESR = 0x96000004
+> [ 4686.565564]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 4686.565948]   SET = 0, FnV = 0
+> [ 4686.566184]   EA = 0, S1PTW = 0
+> [ 4686.566427] Data abort info:
+> [ 4686.566651]   ISV = 0, ISS = 0x00000004
+> [ 4686.567024]   CM = 0, WnR = 0
+> [ 4686.567261] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000102daa000
+> [ 4686.567708] [0000000000000240] pgd=0000000000000000, p4d=0000000000000000
+> [ 4686.568182] Internal error: Oops: 96000004 [#1] SMP
+> [ 4686.568530] CPU: 1 PID: 0 Comm: swapper/1 Kdump: loaded Tainted: G        W  O      5.10.0-xxxxxx.aarch64 #1
+> [ 4686.569316] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+> [ 4686.569787] pstate: 40400005 (nZcv daif +PAN -UAO -TCO BTYPE=--)
+> [ 4686.570214] pc : ip6_forward+0xb4/0x744
+> [ 4686.570499] lr : ip6_forward+0x5c/0x744
+> [ 4686.570782] sp : ffff80008800ba00
+> [ 4686.571098] x29: ffff80008800ba00 x28: ffff0000c02e39c0
+> [ 4686.571560] x27: ffff0000f6e97000 x26: ffff800089cfa500
+> [ 4686.572021] x25: ffff80008800bc98 x24: ffff80008800bc08
+> [ 4686.572487] x23: ffff800089cfa500 x22: ffff0000cbfd6c94
+> [ 4686.572953] x21: 0000000000000000 x20: ffff80008800bb38
+> [ 4686.573416] x19: ffff0000c995fc00 x18: 0000000000000000
+> [ 4686.573882] x17: 0000000000000000 x16: ffff8000881b65c0
+> [ 4686.574350] x15: 0000000000000000 x14: 0000000000000000
+> [ 4686.574816] x13: 0000000065f01475 x12: 0000000002cc68fd
+> [ 4686.575298] x11: 00000000d44127a3 x10: b181f30000000000
+> [ 4686.575760] x9 : ffff800088d5d9cc x8 : ffff0000c02e39c0
+> [ 4686.576224] x7 : 0000000000000000 x6 : 0000000000000000
+> [ 4686.576686] x5 : ffff0000c995fc00 x4 : ffff80008800bb38
+> [ 4686.577148] x3 : 0000000000000000 x2 : ffff0000cbfd6ec0
+> [ 4686.577609] x1 : 0000000000000000 x0 : 0000000000000000
+> [ 4686.578079] Call trace:
+> [ 4686.578323]  ip6_forward+0xb4/0x744
+> [ 4686.578646]  ip6_sublist_rcv_finish+0x6c/0x90
+> [ 4686.579051]  ip6_list_rcv_finish.constprop.0+0x198/0x260
+> [ 4686.579512]  ip6_sublist_rcv+0x40/0xb0
+> [ 4686.579852]  ipv6_list_rcv+0x144/0x180
+> [ 4686.580197]  __netif_receive_skb_list_core+0x154/0x28c
+> [ 4686.580643]  __netif_receive_skb_list+0x120/0x1a0
+> [ 4686.581057]  netif_receive_skb_list_internal+0xe4/0x1f0
+> [ 4686.581508]  napi_complete_done+0x70/0x1f0
+> [ 4686.581883]  virtnet_poll+0x214/0x2b0 [virtio_net]
+> [ 4686.582309]  napi_poll+0xcc/0x264
+> [ 4686.582617]  net_rx_action+0xd4/0x21c
+> [ 4686.582969]  __do_softirq+0x130/0x358
+> [ 4686.583308]  irq_exit+0x12c/0x150
+> [ 4686.583621]  __handle_domain_irq+0x88/0xf0
+> [ 4686.583991]  gic_handle_irq+0x78/0x2c0
+> [ 4686.584332]  el1_irq+0xc8/0x180
+> [ 4686.584628]  arch_cpu_idle+0x18/0x40
+> [ 4686.584960]  default_idle_call+0x5c/0x1c0
+> [ 4686.585323]  cpuidle_idle_call+0x174/0x1b0
+> [ 4686.585690]  do_idle+0xc8/0x160
+> [ 4686.585989]  cpu_startup_entry+0x30/0x10c
+> [ 4686.586351]  secondary_start_kernel+0x158/0x1e4
+> [ 4686.586754] Code: b9401842 34002ce2 b940d021 35000281 (b94242a1)
+> [ 4686.587301] kernel fault(0x1) notification starting on CPU 1
+> [ 4686.587787] kernel fault(0x1) notification finished on CPU 1
+>
+> Signed-off-by: kongweibin <kongweibin2@huawei.com>
 
-We might consider doing an invalidation before issuing the call, but I
-think it wouldn't help this testcase. generic/647 is doing O_DIRECT
-writes to the file from a buffer that is mmapped from the same file. If
-you invalidate before the write occurs you'll just end up faulting the
-pages right back in.
--- 
-Jeff Layton <jlayton@kernel.org>
+Always provide a Fixes: tag for fixes.
+
+And CC patch author for feedback.
+
+In this case I suspect:
+
+commit ccd27f05ae7b8ebc40af5b004e94517a919aa862
+Author: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Date:   Tue Jul 6 11:13:35 2021 +0200
+
+    ipv6: fix 'disable_policy' for fwd packets
+
+
+
+> ---
+>  net/ipv6/ip6_output.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+> index 54cabf1c2..347b5600d 100644
+> --- a/net/ipv6/ip6_output.c
+> +++ b/net/ipv6/ip6_output.c
+> @@ -495,6 +495,9 @@ int ip6_forward(struct sk_buff *skb)
+>         u32 mtu;
+>
+>         idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
+> +       if (!idev)
+> +               goto drop;
+> +
+>         if (net->ipv6.devconf_all->forwarding == 0)
+>                 goto error;
+>
+> --
+> 2.23.0
+>

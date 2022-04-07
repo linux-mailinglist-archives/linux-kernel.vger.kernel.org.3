@@ -2,472 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64984F8425
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38554F8428
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345225AbiDGPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1345232AbiDGP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242882AbiDGPzw (ORCPT
+        with ESMTP id S229955AbiDGP6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:55:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E34C6CB00E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:53:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8809139F;
-        Thu,  7 Apr 2022 08:53:49 -0700 (PDT)
-Received: from [10.57.41.19] (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A67A3F73B;
-        Thu,  7 Apr 2022 08:53:47 -0700 (PDT)
-Message-ID: <debf5db0-d4b8-5fdd-f798-b7b41e316342@arm.com>
-Date:   Thu, 7 Apr 2022 16:53:41 +0100
+        Thu, 7 Apr 2022 11:58:08 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BF5186C2;
+        Thu,  7 Apr 2022 08:56:08 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id qh7so11710742ejb.11;
+        Thu, 07 Apr 2022 08:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oCLMqmvOfrGHdJ8J/9MpyAUq5T7nSt9PnJCJFfJ9Ovk=;
+        b=Jjdme6TkPQCxRndLVwSWEmXsH+5XV2u2wSD04m/9PtSYUTEIxnH8bdqjxBptswdOsp
+         oxAvvcbc7H2zLtAt21L8MuOwjYBAnen2avSBzWvPbErnOR7m+TYSW/f1cqk46bUbIDg4
+         1at3cXZOxStoj/ryZamYb7saJkKz5YcvF/CRv48rljNPKqMaRI1oxxqmupBYLxNPXaNc
+         IJuIm+Qgy+Lb5sswyGQ1lk//qot5tbLKY6/xS5ku5hIUn0gvQLLoy2BC6bjqmesnnpJ7
+         oWq90Tiq1nEeW+VFKl5p1oTmpme6j01Nrcc1TikdH5tcw9hyb0WAX3Wqmb2SwAcj3k/J
+         pEoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oCLMqmvOfrGHdJ8J/9MpyAUq5T7nSt9PnJCJFfJ9Ovk=;
+        b=qO9FuAfFWHA/VC9C7Xd7hyqI7J5P0gL54z2YIJKVMzQfVL1D+8nMOMRbMdcDlkLhOX
+         Sx0NLCcucmVJUPjxqrkatO/1JkWLCCPSxW0kjZrq5JAoZa05ZGL3H3rC0/1vkbJ5wD0A
+         As80bfVkGiV2uKYv9ejZyrDU+fEHTgCJDvQ3LnLRizQqxV1w8fTKDUY2CJwQGHD1rxV2
+         OekkWIBnfCdjdiurCRLf2AtXOc8DOxSMXvib78WxoxWTEd9WJQfMgCyMxjcTGg8qZFcW
+         0h9dDcVdaP/nR5rlkm6xyuMGZBe5hSmHvk+0uwayBsY/KTNtNGYUoMEBaYNOcC7ase5z
+         C+dA==
+X-Gm-Message-State: AOAM531iuk4Phab/Jz451uwSmkovuPe07oCSE83RAyMMClQWL2s0B7Jc
+        jP3h5eTNHSUXrEUPg2Wamlk=
+X-Google-Smtp-Source: ABdhPJwmsBMWfmYtE1epMAcbjNmECu4QuUPr2e6Y7Rp+be9nlQcvwEIUjIorCFTMM79og/wYaRSnPg==
+X-Received: by 2002:a17:906:314b:b0:6d6:da31:e545 with SMTP id e11-20020a170906314b00b006d6da31e545mr14619905eje.125.1649346966605;
+        Thu, 07 Apr 2022 08:56:06 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id er22-20020a170907739600b006e7e873ed6csm5228123ejc.53.2022.04.07.08.56.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 08:56:06 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
+Date:   Thu, 7 Apr 2022 17:56:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC PATCH -next V2 7/7] arm64: add pagecache reading to machine
- check safe
-Content-Language: en-GB
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
- <20220406091311.3354723-8-tongtiangen@huawei.com>
- <Yk15Fex1+fg6ZQrX@FVFF77S0Q05N>
- <afd5285b-9d8b-3c58-111e-095d1e5b74f8@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <afd5285b-9d8b-3c58-111e-095d1e5b74f8@huawei.com>
+Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
+ <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
+ <Yk79A4EdiZoVQMsV@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yk79A4EdiZoVQMsV@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-07 15:56, Tong Tiangen wrote:
-> 
-> 
-> 在 2022/4/6 19:27, Mark Rutland 写道:
->> On Wed, Apr 06, 2022 at 09:13:11AM +0000, Tong Tiangen wrote:
->>> When user process reading file, the data is cached in pagecache and
->>> the data belongs to the user process, When machine check error is
->>> encountered during pagecache reading, killing the user process and
->>> isolate the user page with hardware memory errors is a more reasonable
->>> choice than kernel panic.
->>>
->>> The __arch_copy_mc_to_user() in copy_to_user_mc.S is largely borrows
->>> from __arch_copy_to_user() in copy_to_user.S and the main difference
->>> is __arch_copy_mc_to_user() add the extable entry to support machine
->>> check safe.
+On 4/7/22 17:02, Sean Christopherson wrote:
+> On Thu, Apr 07, 2022, Paolo Bonzini wrote:
+>> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+>>> +	bool interrupt_disabled = tdvmcall_p1_read(vcpu);
 >>
->> As with prior patches, *why* is the distinction necessary?
+>> Where is R12 documented for TDG.VP.VMCALL<Instruction.HLT>?
 >>
->> This patch adds a bunch of conditional logic, but *structurally* it 
->> doesn't
->> alter the handling to be substantially different for the MC and non-MC 
->> cases.
+>>> +		 * Virtual interrupt can arrive after TDG.VM.VMCALL<HLT> during
+>>> +		 * the TDX module executing.  On the other hand, KVM doesn't
+>>> +		 * know if vcpu was executing in the guest TD or the TDX module.
 >>
->> This seems like pointless duplication that just makes it harder to 
->> maintain
->> this code.
->>
->> Thanks,
->> Mark.
+>> I don't understand this; why isn't it enough to check PI.ON or something
+>> like that as part of HLT emulation?
 > 
-> Agreed, The implementation here looks a little ugly and harder to maintain.
+> Ooh, I think I remember what this is.  This is for the case where the virtual
+> interrupt is recognized, i.e. set in vmcs.RVI, between the STI and "HLT".  KVM
+> doesn't have access to RVI and the interrupt is no longer in the PID (because it
+> was "recognized".  It doesn't get delivered in the guest because the TDCALL
+> completes before interrupts are enabled.
 > 
-> The purpose of my doing this is not all copy_to_user can be recovered.
-> 
-> A memory error is consumed when reading pagecache using copy_to_user.
-> I think in this scenario, only the process is affected because it can't 
-> read
-> pagecache data correctly. Just kill the process and don't need the whole
-> kernel panic.
-> 
-> So I need two different copy_to_user implementation, one is existing 
-> __arch_copy_to_user,
-> this function will panic when consuming memory errors. The other one is 
-> this new helper
-> __arch_copy_mc_to_user, this interface is used when reading pagecache. 
-> It can recover from
-> consume memory error.
+> I lobbied to get this fixed in the TDX module by immediately resuming the guest
+> in this case, but obviously that was unsuccessful.
 
-OK, but do we really need two almost-identical implementations of every 
-function where the only difference is how the exception table entries 
-are annotated? Could the exception handler itself just figure out who 
-owns the page where the fault occurred and decide what action to take as 
-appropriate?
+So the TDX module sets RVI while in an STI interrupt shadow.  So far so 
+good.  Then:
 
-Robin.
+- it receives the HLT TDCALL from the guest.  The interrupt shadow at 
+this point is gone.
 
-> 
-> In future, if find a scenario use copy_to_user can also be recovered, we 
-> can also use this mc
-> safe helper instead it.
-> 
-> Thanks,
-> Tong.
-> 
+- it knows that there is an interrupt that can be delivered (RVI > PPR 
+&& EFLAGS.IF=1, the other conditions of 29.2.2 don't matter)
+
+- it forwards the HLT TDCALL nevertheless, to a clueless hypervisor that 
+has no way to glean either RVI or PPR?
+
+It's absurd that this be treated as anything but a bug.
+
+
+Until that is fixed, KVM needs to do something like:
+
+- every time a bit is set in PID.PIR, set tdx->buggy_hlt_workaround = 1
+
+- every time TDG.VP.VMCALL<HLT> is received, 
+xchg(&tdx->buggy_hlt_workaround, 0) and return immediately to the guest 
+if it is 1.
+
+Basically an internal version of PID.ON.
+
+>>> +		details.full = td_state_non_arch_read64(
+>>> +			to_tdx(vcpu), TD_VCPU_STATE_DETAILS_NON_ARCH);
 >>
->>> In _copy_page_to_iter(), machine check safe only considered ITER_IOVEC
->>> which is used by pagecache reading.
->>>
->>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->>> ---
->>>   arch/arm64/include/asm/uaccess.h | 15 ++++++
->>>   arch/arm64/lib/Makefile          |  2 +-
->>>   arch/arm64/lib/copy_to_user_mc.S | 78 +++++++++++++++++++++++++++++
->>>   include/linux/uio.h              |  9 +++-
->>>   lib/iov_iter.c                   | 85 +++++++++++++++++++++++++-------
->>>   5 files changed, 170 insertions(+), 19 deletions(-)
->>>   create mode 100644 arch/arm64/lib/copy_to_user_mc.S
->>>
->>> diff --git a/arch/arm64/include/asm/uaccess.h 
->>> b/arch/arm64/include/asm/uaccess.h
->>> index 24b662407fbd..f0d5e811165a 100644
->>> --- a/arch/arm64/include/asm/uaccess.h
->>> +++ b/arch/arm64/include/asm/uaccess.h
->>> @@ -448,6 +448,21 @@ extern long strncpy_from_user(char *dest, const 
->>> char __user *src, long count);
->>>   extern __must_check long strnlen_user(const char __user *str, long n);
->>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>> +extern unsigned long __must_check __arch_copy_mc_to_user(void __user 
->>> *to,
->>> +                             const void *from, unsigned long n);
->>> +static inline unsigned long __must_check
->>> +copy_mc_to_user(void __user *to, const void *from, unsigned long n)
->>> +{
->>> +    uaccess_ttbr0_enable();
->>> +    n = __arch_copy_mc_to_user(__uaccess_mask_ptr(to), from, n);
->>> +    uaccess_ttbr0_disable();
->>> +
->>> +    return n;
->>> +}
->>> +#define copy_mc_to_user copy_mc_to_user
->>> +#endif
->>> +
->>>   #ifdef CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE
->>>   struct page;
->>>   void memcpy_page_flushcache(char *to, struct page *page, size_t 
->>> offset, size_t len);
->>> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
->>> index 29c578414b12..9b3571227fb4 100644
->>> --- a/arch/arm64/lib/Makefile
->>> +++ b/arch/arm64/lib/Makefile
->>> @@ -23,4 +23,4 @@ obj-$(CONFIG_ARM64_MTE) += mte.o
->>>   obj-$(CONFIG_KASAN_SW_TAGS) += kasan_sw_tags.o
->>> -obj-$(CONFIG_ARCH_HAS_CPY_MC) += copy_page_mc.o
->>> +obj-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o copy_to_user_mc.o
->>> diff --git a/arch/arm64/lib/copy_to_user_mc.S 
->>> b/arch/arm64/lib/copy_to_user_mc.S
->>> new file mode 100644
->>> index 000000000000..9d228ff15446
->>> --- /dev/null
->>> +++ b/arch/arm64/lib/copy_to_user_mc.S
->>> @@ -0,0 +1,78 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>> +/*
->>> + * Copyright (C) 2012 ARM Ltd.
->>> + */
->>> +
->>> +#include <linux/linkage.h>
->>> +
->>> +#include <asm/asm-uaccess.h>
->>> +#include <asm/assembler.h>
->>> +#include <asm/cache.h>
->>> +
->>> +/*
->>> + * Copy to user space from a kernel buffer (alignment handled by the 
->>> hardware)
->>> + *
->>> + * Parameters:
->>> + *    x0 - to
->>> + *    x1 - from
->>> + *    x2 - n
->>> + * Returns:
->>> + *    x0 - bytes not copied
->>> + */
->>> +    .macro ldrb1 reg, ptr, val
->>> +    1000: ldrb  \reg, [\ptr], \val;
->>> +    _asm_extable_mc 1000b, 9998f;
->>> +    .endm
->>> +
->>> +    .macro strb1 reg, ptr, val
->>> +    user_ldst_mc 9998f, sttrb, \reg, \ptr, \val
->>> +    .endm
->>> +
->>> +    .macro ldrh1 reg, ptr, val
->>> +    1001: ldrh  \reg, [\ptr], \val;
->>> +    _asm_extable_mc 1001b, 9998f;
->>> +    .endm
->>> +
->>> +    .macro strh1 reg, ptr, val
->>> +    user_ldst_mc 9997f, sttrh, \reg, \ptr, \val
->>> +    .endm
->>> +
->>> +    .macro ldr1 reg, ptr, val
->>> +    1002: ldr \reg, [\ptr], \val;
->>> +    _asm_extable_mc 1002b, 9998f;
->>> +    .endm
->>> +
->>> +    .macro str1 reg, ptr, val
->>> +    user_ldst_mc 9997f, sttr, \reg, \ptr, \val
->>> +    .endm
->>> +
->>> +    .macro ldp1 reg1, reg2, ptr, val
->>> +    1003: ldp \reg1, \reg2, [\ptr], \val;
->>> +    _asm_extable_mc 1003b, 9998f;
->>> +    .endm
->>> +
->>> +    .macro stp1 reg1, reg2, ptr, val
->>> +    user_stp 9997f, \reg1, \reg2, \ptr, \val
->>> +    .endm
->>> +
->>> +end    .req    x5
->>> +srcin    .req    x15
->>> +SYM_FUNC_START(__arch_copy_mc_to_user)
->>> +    add    end, x0, x2
->>> +    mov    srcin, x1
->>> +#include "copy_template.S"
->>> +    mov    x0, #0
->>> +    ret
->>> +
->>> +    // Exception fixups
->>> +9997:    cbz    x0, 9998f            // Check machine check exception
->>> +    cmp    dst, dstin
->>> +    b.ne    9998f
->>> +    // Before being absolutely sure we couldn't copy anything, try 
->>> harder
->>> +    ldrb    tmp1w, [srcin]
->>> +USER(9998f, sttrb tmp1w, [dst])
->>> +    add    dst, dst, #1
->>> +9998:    sub    x0, end, dst            // bytes not copied
->>> +    ret
->>> +SYM_FUNC_END(__arch_copy_mc_to_user)
->>> +EXPORT_SYMBOL(__arch_copy_mc_to_user)
->>> diff --git a/include/linux/uio.h b/include/linux/uio.h
->>> index 739285fe5a2f..539d9ee9b032 100644
->>> --- a/include/linux/uio.h
->>> +++ b/include/linux/uio.h
->>> @@ -147,10 +147,17 @@ size_t _copy_to_iter(const void *addr, size_t 
->>> bytes, struct iov_iter *i);
->>>   size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i);
->>>   size_t _copy_from_iter_nocache(void *addr, size_t bytes, struct 
->>> iov_iter *i);
->>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, size_t 
->>> bytes,
->>> +                struct iov_iter *i);
->>> +#else
->>> +#define copy_mc_page_to_iter copy_page_to_iter
->>> +#endif
->>> +
->>>   static inline size_t copy_folio_to_iter(struct folio *folio, size_t 
->>> offset,
->>>           size_t bytes, struct iov_iter *i)
->>>   {
->>> -    return copy_page_to_iter(&folio->page, offset, bytes, i);
->>> +    return copy_mc_page_to_iter(&folio->page, offset, bytes, i);
->>>   }
->>>   static __always_inline __must_check
->>> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
->>> index 6dd5330f7a99..2c5f3bb6391d 100644
->>> --- a/lib/iov_iter.c
->>> +++ b/lib/iov_iter.c
->>> @@ -157,6 +157,19 @@ static int copyout(void __user *to, const void 
->>> *from, size_t n)
->>>       return n;
->>>   }
->>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>> +static int copyout_mc(void __user *to, const void *from, size_t n)
->>> +{
->>> +    if (access_ok(to, n)) {
->>> +        instrument_copy_to_user(to, from, n);
->>> +        n = copy_mc_to_user((__force void *) to, from, n);
->>> +    }
->>> +    return n;
->>> +}
->>> +#else
->>> +#define copyout_mc copyout
->>> +#endif
->>> +
->>>   static int copyin(void *to, const void __user *from, size_t n)
->>>   {
->>>       if (should_fail_usercopy())
->>> @@ -169,7 +182,7 @@ static int copyin(void *to, const void __user 
->>> *from, size_t n)
->>>   }
->>>   static size_t copy_page_to_iter_iovec(struct page *page, size_t 
->>> offset, size_t bytes,
->>> -             struct iov_iter *i)
->>> +             struct iov_iter *i, bool mc_safe)
->>>   {
->>>       size_t skip, copy, left, wanted;
->>>       const struct iovec *iov;
->>> @@ -194,7 +207,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>> page *page, size_t offset, size_t b
->>>           from = kaddr + offset;
->>>           /* first chunk, usually the only one */
->>> -        left = copyout(buf, from, copy);
->>> +        if (mc_safe)
->>> +            left = copyout_mc(buf, from, copy);
->>> +        else
->>> +            left = copyout(buf, from, copy);
->>>           copy -= left;
->>>           skip += copy;
->>>           from += copy;
->>> @@ -204,7 +220,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>> page *page, size_t offset, size_t b
->>>               iov++;
->>>               buf = iov->iov_base;
->>>               copy = min(bytes, iov->iov_len);
->>> -            left = copyout(buf, from, copy);
->>> +            if (mc_safe)
->>> +                left = copyout_mc(buf, from, copy);
->>> +            else
->>> +                left = copyout(buf, from, copy);
->>>               copy -= left;
->>>               skip = copy;
->>>               from += copy;
->>> @@ -223,7 +242,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>> page *page, size_t offset, size_t b
->>>       kaddr = kmap(page);
->>>       from = kaddr + offset;
->>> -    left = copyout(buf, from, copy);
->>> +    if (mc_safe)
->>> +        left = copyout_mc(buf, from, copy);
->>> +    else
->>> +        left = copyout(buf, from, copy);
->>>       copy -= left;
->>>       skip += copy;
->>>       from += copy;
->>> @@ -232,7 +254,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>> page *page, size_t offset, size_t b
->>>           iov++;
->>>           buf = iov->iov_base;
->>>           copy = min(bytes, iov->iov_len);
->>> -        left = copyout(buf, from, copy);
->>> +        if (mc_safe)
->>> +            left = copyout_mc(buf, from, copy);
->>> +        else
->>> +            left = copyout(buf, from, copy);
->>>           copy -= left;
->>>           skip = copy;
->>>           from += copy;
->>> @@ -674,15 +699,6 @@ size_t _copy_to_iter(const void *addr, size_t 
->>> bytes, struct iov_iter *i)
->>>   EXPORT_SYMBOL(_copy_to_iter);
->>>   #ifdef CONFIG_ARCH_HAS_COPY_MC
->>> -static int copyout_mc(void __user *to, const void *from, size_t n)
->>> -{
->>> -    if (access_ok(to, n)) {
->>> -        instrument_copy_to_user(to, from, n);
->>> -        n = copy_mc_to_user((__force void *) to, from, n);
->>> -    }
->>> -    return n;
->>> -}
->>> -
->>>   static size_t copy_mc_pipe_to_iter(const void *addr, size_t bytes,
->>>                   struct iov_iter *i)
->>>   {
->>> @@ -846,10 +862,10 @@ static inline bool page_copy_sane(struct page 
->>> *page, size_t offset, size_t n)
->>>   }
->>>   static size_t __copy_page_to_iter(struct page *page, size_t offset, 
->>> size_t bytes,
->>> -             struct iov_iter *i)
->>> +             struct iov_iter *i, bool mc_safe)
->>>   {
->>>       if (likely(iter_is_iovec(i)))
->>> -        return copy_page_to_iter_iovec(page, offset, bytes, i);
->>> +        return copy_page_to_iter_iovec(page, offset, bytes, i, 
->>> mc_safe);
->>>       if (iov_iter_is_bvec(i) || iov_iter_is_kvec(i) || 
->>> iov_iter_is_xarray(i)) {
->>>           void *kaddr = kmap_local_page(page);
->>>           size_t wanted = _copy_to_iter(kaddr + offset, bytes, i);
->>> @@ -878,7 +894,7 @@ size_t copy_page_to_iter(struct page *page, 
->>> size_t offset, size_t bytes,
->>>       offset %= PAGE_SIZE;
->>>       while (1) {
->>>           size_t n = __copy_page_to_iter(page, offset,
->>> -                min(bytes, (size_t)PAGE_SIZE - offset), i);
->>> +                min(bytes, (size_t)PAGE_SIZE - offset), i, false);
->>>           res += n;
->>>           bytes -= n;
->>>           if (!bytes || !n)
->>> @@ -893,6 +909,41 @@ size_t copy_page_to_iter(struct page *page, 
->>> size_t offset, size_t bytes,
->>>   }
->>>   EXPORT_SYMBOL(copy_page_to_iter);
->>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>> +/**
->>> + * copy_mc_page_to_iter - copy page to iter with source memory error 
->>> exception handling.
->>> + *
->>> + * The filemap_read deploys this for pagecache reading and the main 
->>> differences between
->>> + * this and typical copy_page_to_iter() is call __copy_page_to_iter 
->>> with mc_safe true.
->>> + *
->>> + * Return: number of bytes copied (may be %0)
->>> + */
->>> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, size_t 
->>> bytes,
->>> +             struct iov_iter *i)
->>> +{
->>> +    size_t res = 0;
->>> +
->>> +    if (unlikely(!page_copy_sane(page, offset, bytes)))
->>> +        return 0;
->>> +    page += offset / PAGE_SIZE; // first subpage
->>> +    offset %= PAGE_SIZE;
->>> +    while (1) {
->>> +        size_t n = __copy_page_to_iter(page, offset,
->>> +                min(bytes, (size_t)PAGE_SIZE - offset), i, true);
->>> +        res += n;
->>> +        bytes -= n;
->>> +        if (!bytes || !n)
->>> +            break;
->>> +        offset += n;
->>> +        if (offset == PAGE_SIZE) {
->>> +            page++;
->>> +            offset = 0;
->>> +        }
->>> +    }
->>> +    return res;
->>> +}
->>> +#endif
->>> +
->>>   size_t copy_page_from_iter(struct page *page, size_t offset, size_t 
->>> bytes,
->>>                struct iov_iter *i)
->>>   {
->>> -- 
->>> 2.18.0.huawei.25
->>>
->>>
->>> _______________________________________________
->>> linux-arm-kernel mailing list
->>> linux-arm-kernel@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->> .
+>> TDX documentation says "the meaning of the field may change with Intel TDX
+>> module version", where is this field documented?  I cannot find any "other
+>> guest state" fields in the TDX documentation.
 > 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> IMO we should put a stake in the ground and refuse to accept code that consumes
+> "non-architectural" state.  It's all software, having non-architectural APIs is
+> completely ridiculous.
+
+Having them is fine, *using* them to work around undocumented bugs is 
+the ridiculous part.
+
+You didn't answer the other question, which is "Where is R12 documented 
+for TDG.VP.VMCALL<Instruction.HLT>?" though...  Should I be worried? :)
+
+
+Paolo

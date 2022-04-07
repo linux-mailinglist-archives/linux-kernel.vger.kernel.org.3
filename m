@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827D64F7156
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6014F713E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239603AbiDGB2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S241587AbiDGBbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240441AbiDGBUA (ORCPT
+        with ESMTP id S240433AbiDGBUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 21:20:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C51864BE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:16:21 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id x3-20020a17090a6c0300b001cab7230b41so2580392pjj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 18:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=sXF/n8xvBk0FaoqPxko9Blx99fwDwCfccorRyyHCGmI=;
-        b=Ku987wK6rt+m7eJsyZLO6atNDPGpbqe4iAXnvp/z+wT4OAEoeg5o3OAlVCchPx2L90
-         102SSaR5cOkN6fP9KK1z++y2/yupbiYjbDvWjD2Qece4MWsVopP3FCXHX4y/zHjbpWC1
-         gPOj/Frc3z6/rMyZik2wcjHitIQ4/twgDnejS7ftwlIb7sbfGEUikTJBplt2AK2+GVaZ
-         07sKnoPUR6sFzjL+MzpauXdv8UdFJexw9xi8RG6979lRl0UQdLY95bXFxQyCZdMoIbFU
-         0VtliYgcNZH8l/+6VtdO2QrethSXUAVc7WRMaO/7ps9olTMrNkeZKKeVqELA9bxuRt6C
-         2ERA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=sXF/n8xvBk0FaoqPxko9Blx99fwDwCfccorRyyHCGmI=;
-        b=clB213SGUMLm5wLi0e1ccGoJKTnTYPS5m5P8uKIfS8juTUnsqiGBxKKDl8mf+64UiR
-         SehVS19Hy1sIPlUWQdsAHHNDOUNI5+y5Hfr7vHWvvg8fAEjFtBgh0owiflVGXFfguNGK
-         KluTMcefPXPX1nvBWVW5J132h+FDXvs5x0SeTf/eVslI0eRTYXemxgWDNKWuf3n8pgf1
-         Slzrce51O2T35VLUC3ecbkUX30kHkCZfgPGswW47oMLjgK1B2OgXRxZrrKU/ah6OErwx
-         XiW+n/f9fiVxQYULbZZ9S/T1g2x27CkWFn7tk92W8bFzpdUeW61nrELp1uNXGuYTLltU
-         EEug==
-X-Gm-Message-State: AOAM53044A1ZW4HOe6ilgVig5D/KIIfhb45gmLGpp4hX82JqW4iNJNNl
-        7nT1ghsxqtAy99izMDQoKL0Qx9FyjAlF
-X-Google-Smtp-Source: ABdhPJw2dezSQVSintcsyWAePk4VuF7JuHzdsneJX2UxM+MFRSiIefC4mvBoj4uqrdxw8cb/zhGbCkzWilbb
-X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
- (user=rananta job=sendgmr) by 2002:a05:6a00:440c:b0:4fa:da3f:251c with SMTP
- id br12-20020a056a00440c00b004fada3f251cmr11599625pfb.73.1649294181092; Wed,
- 06 Apr 2022 18:16:21 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 01:16:00 +0000
-In-Reply-To: <20220407011605.1966778-1-rananta@google.com>
-Message-Id: <20220407011605.1966778-6-rananta@google.com>
-Mime-Version: 1.0
-References: <20220407011605.1966778-1-rananta@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v5 05/10] Docs: KVM: Rename psci.rst to hypercalls.rst
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64D418649A;
+        Wed,  6 Apr 2022 18:16:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72DD561DEA;
+        Thu,  7 Apr 2022 01:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5EDC385A7;
+        Thu,  7 Apr 2022 01:16:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649294178;
+        bh=o3GpRpC76NWR3J6t4H4CjoQ2OFisugaAToagBe6t9Vg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VrwMyAXt1AQLolDjKbAn+dywqofvu08PaEHX0PTbCRDGspFAYsblL9f7pUvqcB/uJ
+         hCh9MJs/GZ3/pWxkVKpAao00XSGimaZBAeFsvKwO0hDKkFM++EtL6jOCGZjLASHlGe
+         7nPpT9+DyrU5X797AbM+Qp1cvqn4scOSO3BzJyCEmMrYYPGtLMVfaYfYGM24ZaFQtu
+         Vo+ZN0UqThsI++YEvPFebdY4HIQGxXEYXtXLzwJvCYXXX9htlln1dl9oIRaFJ6cMIN
+         aroVnVogzt4hlHAY+VPG3yC2I2LMjHtJVBv8tph1PZcXnwSUdqVw8/oyUqcdujc7iD
+         87gZsKb5mEbVQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Glenn Washburn <development@efficientek.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linux-um@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 03/11] um: port_user: Improve error handling when port-helper is not found
+Date:   Wed,  6 Apr 2022 21:16:00 -0400
+Message-Id: <20220407011609.115258-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
+References: <20220407011609.115258-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the doc also covers general hypercalls' details,
-rather than just PSCI, and the fact that the bitmap firmware
-registers' details will be added to this doc, rename the file
-to a more appropriate name- hypercalls.rst.
+From: Glenn Washburn <development@efficientek.com>
 
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-Reviewed-by: Oliver Upton <oupton@google.com>
+[ Upstream commit 3cb5a7f167c620a8b0e38b0446df2e024d2243dc ]
+
+Check if port-helper exists and is executable. If not, write an error
+message to the kernel log with information to help the user diagnose the
+issue and exit with an error. If UML_PORT_HELPER was not set, write a
+message suggesting that the user set it. This makes it easier to understand
+why telneting to the UML instance is failing and what can be done to fix it.
+
+Signed-off-by: Glenn Washburn <development@efficientek.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/virt/kvm/arm/{psci.rst => hypercalls.rst} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename Documentation/virt/kvm/arm/{psci.rst => hypercalls.rst} (100%)
+ arch/um/drivers/port_user.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/virt/kvm/arm/psci.rst b/Documentation/virt/kvm/arm/hypercalls.rst
-similarity index 100%
-rename from Documentation/virt/kvm/arm/psci.rst
-rename to Documentation/virt/kvm/arm/hypercalls.rst
+diff --git a/arch/um/drivers/port_user.c b/arch/um/drivers/port_user.c
+index 5f56d11b886f..f66dc4efc64e 100644
+--- a/arch/um/drivers/port_user.c
++++ b/arch/um/drivers/port_user.c
+@@ -5,6 +5,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <errno.h>
+ #include <termios.h>
+ #include <unistd.h>
+@@ -175,6 +176,17 @@ int port_connection(int fd, int *socket, int *pid_out)
+ 	if (new < 0)
+ 		return -errno;
+ 
++	err = os_access(argv[2], X_OK);
++	if (err < 0) {
++		printk(UM_KERN_ERR "port_connection : error accessing port-helper "
++		       "executable at %s: %s\n", argv[2], strerror(-err));
++		if (env == NULL)
++			printk(UM_KERN_ERR "Set UML_PORT_HELPER environment "
++				"variable to path to uml-utilities port-helper "
++				"binary\n");
++		goto out_close;
++	}
++
+ 	err = os_pipe(socket, 0, 0);
+ 	if (err < 0)
+ 		goto out_close;
 -- 
-2.35.1.1094.g7c7d902a7c-goog
+2.35.1
 

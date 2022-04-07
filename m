@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0B34F7B83
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4524F7B85
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237694AbiDGJZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S234141AbiDGJ0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiDGJZq (ORCPT
+        with ESMTP id S232732AbiDGJ0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:25:46 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF86130C30;
-        Thu,  7 Apr 2022 02:23:46 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-de3ca1efbaso5710770fac.9;
-        Thu, 07 Apr 2022 02:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L1w6g0t9FF80meM/9r7z+LlSCIy7b2uDRiP07nJn9L0=;
-        b=J6p8c79vkyK244uIiZ/IBFH4dh2YZ5jsqsA8b1VUzQuKxDDC2yfDFAAuqFls+g7wAS
-         PJttXpW0nCmBj6MFi6MUfxkRNFpx+jxE01M5uAlZ05uPAdxxj2ylXp0gNztaPyFd8Vc1
-         uGHfaTo7G/pfJcjc/G/xQe9crjLpJl4VNdMg+HaTbILFGIDplqA3TLr8KA2jDxcACy4n
-         BvZBmXrewlin9ebJmDpXqDIvETvlnH884Lcogvg2gHcE8NyhC6a+Qu/LVsxUU1erPEhj
-         X9O2Y15C+axDopkbBJD819NChgSbITcwQteJZJL8tw9rkPkqF4weB6oVXJrnuif5q7L3
-         jg0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L1w6g0t9FF80meM/9r7z+LlSCIy7b2uDRiP07nJn9L0=;
-        b=evDga7ZSeoYhYxAPpKXuQS8TBd9+C6Z53Y90xB5fRhx2zGT69mG6JFj1eVf7VKoDMo
-         bf3pjB2pzuu3DChK0Tbm2SDGeEZZwr/ls0co8HNwvT2rMHkVsPO4wMHsvznP6s5Njoix
-         N7uJkN32GfOtmvEEjyOCXSECRk3lV4Uu58qo846ZNd019CnlHrgnJSij2taFLWP/NZI4
-         nLAm7WmqruZr8MqwXFiVGkt0cfA3n3FvbpIgkVoVVR487h76U2vHurbgR+GS3X5b8Pgl
-         I8wrzqahnO9EK2f1wKgp/YM4YWt9pEBgQeh5vpYdqSTA8wt3gg9yZ+8byO4+bYzDJra+
-         BVlA==
-X-Gm-Message-State: AOAM531lZNiCf/x6pA1yYXNVLGBsRdv3i4W4pyLUvxDYFhaUIZMNWcXS
-        JBSs7/3BEBee1G1Gbj7tOn0=
-X-Google-Smtp-Source: ABdhPJwrmKKcltCph41MdlupwYebDSCmSwCE2jQhwB8toShtovejm4ezDZKUJI4sngvRzFaiJLPKIg==
-X-Received: by 2002:a05:6870:232a:b0:db:360c:7f5a with SMTP id w42-20020a056870232a00b000db360c7f5amr5576580oao.230.1649323425082;
-        Thu, 07 Apr 2022 02:23:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1-20020a05687015c100b000e210c5170fsm3741232oad.6.2022.04.07.02.23.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 02:23:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0202486d-cf86-c9d3-04bb-8b1e596462f7@roeck-us.net>
-Date:   Thu, 7 Apr 2022 02:23:42 -0700
+        Thu, 7 Apr 2022 05:26:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72D12CE16
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SV21BjX7P49KNLAmx5QmrX8Qf7AJrN7J0ADqi+mbeyI=; b=k97/CnGSb5mhw6lp1h+s+Z3Htc
+        mH4FivpzEF0rslNQ42eRr02aF8vOCz91eKL3ZZ3TGdTM+0UE0BF8Q1tS/t0ytWom4jYcAlbIs6vz/
+        lUc7mUtPl+b+Go9D0m//Fb1dOL4/VFuk8RhIjEsMJgtecV3pqJIt8qMAgVRPq177Oa+CsA8r88YF4
+        qXeHM09xH7KBKngPD2RvUkC8jBXWQB6KtYNL4xcdPGYJj/UJcXaEFdkqR7Ue/siR4/3rmxDgmZLEl
+        Vz1KTAh7iFwOTEqxCQlDU0y9zD9yanQUtlgrFlCBzuGKOyk4+PMthlGi9Puj77RBf4GuB0Utl0EZO
+        LjFCkdJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncON7-002Rk2-31; Thu, 07 Apr 2022 09:24:09 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E70F89862CF; Thu,  7 Apr 2022 11:24:05 +0200 (CEST)
+Date:   Thu, 7 Apr 2022 11:24:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, mbenes@suse.cz, x86@kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, hjl.tools@gmail.com
+Subject: Re: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
+ __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
+ vlv_allow_gt_wake.cold+0x0
+Message-ID: <20220407092405.GI2731@worktop.programming.kicks-ass.net>
+References: <202204041241.Hw855BWm-lkp@intel.com>
+ <YkxLqznOz0ldTz5a@hirez.programming.kicks-ass.net>
+ <20220406000500.5hlaqy5zrdqsg5mg@treble>
+ <87czhv11k1.ffs@tglx>
+ <20220406053251.6dyfxrjmmgdwocfc@treble>
+ <20220406074330.GD34954@worktop.programming.kicks-ass.net>
+ <20220406163703.hhet4ai7ztd7g4j4@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [BUG] hwmon: (adt7470) warning when removing the module
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, Zheyu Ma <zheyuma97@gmail.com>,
-        jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAMhUBjmTObCwaF=enLNkRSzxqSzK6KdkHf+4cWo5fqOO7B40iw@mail.gmail.com>
- <5f3a3672-6b99-7e24-9003-443c571f2dcc@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <5f3a3672-6b99-7e24-9003-443c571f2dcc@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406163703.hhet4ai7ztd7g4j4@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/22 22:01, Armin Wolf wrote:
-> Am 07.04.22 um 05:17 schrieb Zheyu Ma:
+On Wed, Apr 06, 2022 at 09:37:03AM -0700, Josh Poimboeuf wrote:
+> On Wed, Apr 06, 2022 at 09:43:30AM +0200, Peter Zijlstra wrote:
+> > On Tue, Apr 05, 2022 at 10:32:51PM -0700, Josh Poimboeuf wrote:
+> > > More broadly, this issue could theoretically happen in some other places
+> > > throughout the kernel tree, since _THIS_IP_ is fundamentally unreliable
+> > > as currently written.
+> > > 
+> > > So we could look at making _THIS_IP_ more predictable.
+> > > 
+> > > Inline asm would work better ("lea 0(%rip), %[rip]"), but then you need
+> > > an arch-dependent implementation...
+> > 
+> > Well, there's a ton of _THIS_IP_ instances all around, and it would be
+> > unfortunate to have them grow into actual code :/
 > 
->> I found a bug when removing the adt7470 module.
->>
->> The following log can reveal it:
->>
->> [   18.459479] ------------[ cut here ]------------
->> [   18.459852] do not call blocking ops when !TASK_RUNNING; state=1
->> set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
->> [   18.460857] WARNING: CPU: 7 PID: 365 at kernel/sched/core.c:9660
->> __might_sleep+0x96/0xb0
->> [   18.461523] Modules linked in: adt7470(-)
->> [   18.464568] RIP: 0010:__might_sleep+0x96/0xb0
->> [   18.472577] Call Trace:
->> [   18.472778]  <TASK>
->> [   18.472957]  exit_signals+0x2f/0x3b0
->> [   18.473251]  do_exit+0xcd/0x18c0
->> [   18.473534]  ? __mutex_unlock_slowpath+0x1b8/0x740
->> [   18.473927]  kthread_exit+0x42/0x60
->> [   18.474212]  ? adt7470_detect+0x140/0x140 [adt7470]
->> [   18.474622]  kthread+0x272/0x2e0
->> [   18.474885]  ? adt7470_detect+0x140/0x140 [adt7470]
->> [   18.475277]  ? kthread_blkcg+0xa0/0xa0
->> [   18.475601]  ret_from_fork+0x22/0x30
->> [   18.475901]  </TASK>
->>
->> Regards,
->> Zheyu Ma
-> 
-> Please correct me if i am wrong, but i think the issue lies in adt7470_update_thread()
-> leaving the kthread in TASK_INTERRUPTIBLE state when the second check for kthread_should_stop()
-> returns true and causes the kthread to exit. Since kthread_exit() might sleep in exit_signals(),
-> we get this warning.
-> Maybe moving set_current_state(TASK_INTERRUPTIBLE) below the second check for kthread_should_stop()
-> would fix the issue?
-> 
+> What do you mean by growing into actual code?  It's still just a single
+> instruction, as was the immediate load before.
 
-Agreed. Care to send a patch ?
+Aah, indeed. I was somehow thinking we'd get extra instructions.
 
-Thanks,
-Guenter
+> Though, you pasted this on irc:
+> 
+>   #define _THIS_IP_  ({ __label__ __here; __here: asm_volatile_goto ("":::: __here); (unsigned long)&&__here; })
+> 
+> which seems decent to me, though less than ideal because it grows an
+> ENDBR.  But I like its arch-independence, so yeah, LGTM.
+
+I did send hjl an email about that extra endbr, because I really don't
+like that. And jump_label (also using asm-goto) doesn't grow those endbr
+instructions, so something is weird.

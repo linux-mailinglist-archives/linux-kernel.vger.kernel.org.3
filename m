@@ -2,175 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EAB4F8B2E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D823C4F8AB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiDGWeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 18:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
+        id S232069AbiDGWe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 18:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbiDGWeH (ORCPT
+        with ESMTP id S231794AbiDGWeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 18:34:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAEFFC8B0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:32:04 -0700 (PDT)
+        Thu, 7 Apr 2022 18:34:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298B113E88;
+        Thu,  7 Apr 2022 15:32:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E7E762007
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 22:32:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DEFC385A4;
-        Thu,  7 Apr 2022 22:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649370722;
-        bh=fQt1MnSysX/EHNJtZXA6Yk6KIqVhFKrn01VGpcgiLqg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j+bQv2bTZlMfLeJRhLqw0Aa3Rrwh0Zp/ijpEFh5imqLNVymbm+DyPCuJhA5tiJ/2e
-         /9PJ9r1+QBKVRr6k6F5rvvTi1m3zt0uK+i5/KCg15fK4hkMGVE0OgpY76wxQ1cTLYz
-         NuTVvf+kIYzHVu54niX2Rdihf0S44LRv0vpH4JJ8=
-Date:   Thu, 7 Apr 2022 15:32:01 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>
-Subject: Re: [PATCH v6] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-Id: <20220407153201.cdcab0a2d4a58ce358fb7c47@linux-foundation.org>
-In-Reply-To: <eaa082c8-a583-4606-4ec4-1d43c4d48b97@redhat.com>
-References: <20220407184254.3612387-1-npache@redhat.com>
-        <20220407131809.f2d256541e2c039c434c0d72@linux-foundation.org>
-        <eaa082c8-a583-4606-4ec4-1d43c4d48b97@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2130B829A7;
+        Thu,  7 Apr 2022 22:32:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E89C385A4;
+        Thu,  7 Apr 2022 22:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649370737;
+        bh=dLO/D3nL1f64UtF+spus0K/GKQhrE9Nu7Ou/L3Uy3Og=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sp2hT5KYp7bW4QdGUrzkGf9SF8LKBQzemdv3dG17BeeB22Gnh5mcP+N63zIS3e7RZ
+         oKgpzP1R1M1qhREYzqttHyuQcwC2FtahaqOThIckfBvDTHAFTfyyNl/B4f39VhB6OM
+         A0yvh36KkV/qDROrWFB47X7jUWwnmP7TkrZQE32vuDZM2uwUdNssAzC0TkY1q255nH
+         hmSRnLcZ2mB/g2WKn8s1ewap2863WH47CmFEbJDbULXIfBOnTRSQCNQE0x3Gs4uO23
+         PiaUcM5MhJ3H+3K/7GIsw+2A56lL9DUkjTiTu7+DG6txE5ROn2Tq69Ih5IlJzlv00o
+         /AUuItqOwm6zQ==
+Date:   Thu, 7 Apr 2022 17:32:15 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shlomo Pongratz <shlomopongratz@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew.maier@eideticom.com, logang@deltatee.com,
+        bhelgaas@google.com, jgg@nvidia.com,
+        Shlomo Pongratz <shlomop@pliops.com>
+Subject: Re: [PATCH V6 1/1] Intel Sky Lake-E host root ports check.
+Message-ID: <20220407223215.GA265412@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220403102008.7122-2-shlomop@pliops.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 17:52:31 -0400 Nico Pache <npache@redhat.com> wrote:
-
-> >>
-> >> The following case can still fail:
-> >> robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
-> >>
-> >> Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
-> > 
-> > Should this fix be backported into -stable kernels?
+On Sun, Apr 03, 2022 at 01:20:08PM +0300, Shlomo Pongratz wrote:
+> In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C,
+>  D to the whitelist")
+> Andrew Maier added the Sky Lake-E additional devices
+> 2031, 2032 and 2033 root ports to the already existing 2030 device.
 > 
-> Yes I believe so. This is caused by the commit marked under 'Fixes:' which is in
-> stable branch.
+> The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C
+> and D, respectively and if all exist they will occupy slots 0 till 3 in
+> that order.
+> 
+> The original code handled only the case where the devices in the whitelist
+> are host bridges and assumed that they will be found on slot 0.
+> 
+> Since this assumption doesn't hold for root ports, add a test to cover this
+> case.
+> 
+> Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
+> ---
+>  drivers/pci/p2pdma.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+> index 30b1df3c9d2f..c281bf5b304a 100644
+> --- a/drivers/pci/p2pdma.c
+> +++ b/drivers/pci/p2pdma.c
+> @@ -327,15 +327,19 @@ static const struct pci_p2pdma_whitelist_entry {
+>  
+>  /*
+>   * This lookup function tries to find the PCI device corresponding to a given
+> - * host bridge.
+> + * host bridge or a root port.
+>   *
+>   * It assumes the host bridge device is the first PCI device in the
+> - * bus->devices list and that the devfn is 00.0. These assumptions should hold
+> - * for all the devices in the whitelist above.
+> + * bus->devices list and that the devfn is 00.0. The first assumption should
+> + * hold for all the devices in the whitelist above, however the second
+> + * assumption doesn't always hold for root ports.
+> + * For example for Intel Skylake devices 2030, 2031, 2032 and 2033,
+> + * which are root ports (A, B, C and D respectively).
+> + * So the function checks explicitly that the device is a root port.
+>   *
 
-OK.  The MM team don't like the promiscuous backporting of things which
-we didn't ask to be backported.  So -stable maintainers have been
-trained (we hope) to only backport things which we explicitly marked
-cc:stable.
+> - * This function is equivalent to pci_get_slot(host->bus, 0), however it does
+> - * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
+> - * sleep.
+> + * This function is equivalent to pci_get_slot(host->bus, 0) (except for
+> + * the root port test), however it does not take the pci_bus_sem lock seeing
+> + * __host_bridge_whitelist() must not sleep.
+>   *
+>   * For this to be safe, the caller should hold a reference to a device on the
+>   * bridge, which should ensure the host_bridge device will not be freed
+> @@ -350,7 +354,14 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
+>  
+>  	if (!root)
+>  		return NULL;
+> -	if (root->devfn != PCI_DEVFN(0, 0))
+> +
+> +	/* Verify that the device is a host bridge or a root port
+> +	 * It is assumed that host bridges have a 0 devfn, (common practice)
+> +	 * but some of the entries in the whitelist are root ports that can
+> +	 * have any devfn
+> +	 */
+> +	if (root->devfn != PCI_DEVFN(0, 0) &&
+> +	    pci_pcie_type(root) != PCI_EXP_TYPE_ROOT_PORT)
+>  		return NULL;
+>  
+>  	return root;
 
-> >> --- a/include/linux/oom.h
-> >> +++ b/include/linux/oom.h
-> >> @@ -106,7 +106,8 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
-> >>  	return 0;
-> >>  }
-> >>  
-> >> -bool __oom_reap_task_mm(struct mm_struct *mm);
-> >> +bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-> >> +		__user *robust_list);
-> > 
-> > Should explicitly include futex.h
-> Good point. On second thought I think we also need to surround some of the
-> changes with a ifdef CONFIG_FUTEX. current->robust_list is undefined if we turn
-> that config option off.
+The negative logic here makes this hard to read.  The previous code
+was the same as:
 
-Ah.
+  if (root->devfn == PCI_DEVFN(0, 0))
+    return root;
 
-> > 
-> >>  long oom_badness(struct task_struct *p,
-> >>  		unsigned long totalpages);
-> >> diff --git a/mm/mmap.c b/mm/mmap.c
-> >> index 3aa839f81e63..c14fe6f8e9a5 100644
-> >> --- a/mm/mmap.c
-> >> +++ b/mm/mmap.c
-> >> @@ -3126,7 +3126,8 @@ void exit_mmap(struct mm_struct *mm)
-> >>  		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-> >>  		 * __oom_reap_task_mm() will not block.
-> >>  		 */
-> >> -		(void)__oom_reap_task_mm(mm);
-> >> +		(void)__oom_reap_task_mm(mm, current->robust_list);
-> >> +
-> >>  		set_bit(MMF_OOM_SKIP, &mm->flags);
-> >>  	}
-> >>  
-> >> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> >> index 7ec38194f8e1..727cfc3bd284 100644
-> >> --- a/mm/oom_kill.c
-> >> +++ b/mm/oom_kill.c
-> >> @@ -509,9 +509,11 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
-> >>  static struct task_struct *oom_reaper_list;
-> >>  static DEFINE_SPINLOCK(oom_reaper_lock);
-> >>  
-> >> -bool __oom_reap_task_mm(struct mm_struct *mm)
-> >> +bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-> >> +		__user *robust_list)
-> >>  {
-> > 
-> > It's pretty sad to make such a low-level function aware of futex
-> > internals.  How about making it a more general `void *skip_area'?
-> Yes we can make this change. My concern is that the caller may now have to cast
-> the type: __oom_reap_task_mm(mm_struct, (void*) current->robust_list). But I
-> doubt that is a big concern.
+  return NULL;
 
-No cast needed - the compiler will happily cast an anything* to a void*.
+I think this patch would be easier to read if you made it:
 
-> > 
-> >>  	struct vm_area_struct *vma;
-> >> +	unsigned long head = (unsigned long) robust_list;
-> >>  	bool ret = true;
-> >>  
-> >>  	/*
-> >> @@ -526,6 +528,11 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
-> >>  		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
-> >>  			continue;
-> >>  
-> >> +		if (vma->vm_start <= head && vma->vm_end > head) {
-> > 
-> > This check as you have it is making assumptions about the length of the
-> > area at *robust_list and about that area's relation to the area
-> > represented by the vma.
-> > 
-> > So if this is to be made more generic, we'd also need skip_area_len so
-> > we can perform a full overlap check.
-> Im not sure I follow here. Can a single MMAP call span multiple VMAs? The
-> address would be part of the pthread_t struct which is mmapped by the userspace
-> code. We are simply looking for that VMA and skipping the oom of it. It does not
-> try to find the individual locks (allocated separately and represented on a
-> LinkedList), it just prevents the reaping of the robust_list_head (part of
-> pthread_t) which stores the start of this LL. If some of the locks are private
-> (shared locks are not reaped) we may run into a case where this still fails;
-> however, we haven't been able to reproduce this.
+  if (root->devfn == PCI_DEVFN(0, 0))
+    return root;
 
-Well I was thinking that if it were to become a generic "ignore this
-region" then the code would need to be taught to skip any vma which had
-any form of overlap with that region.  Which sounds like way overdesign
-until there's a demonstrated need.
+  if (pci_pcie_type(root) == PCI_EXP_TYPE_ROOT_PORT)
+    return root;
 
+  return NULL;
 
+IIUC, this patch tweaks it so we take the first device on the bus and
+if it is either 00.0 or a Root Port, we search pci_p2pdma_whitelist[]
+for it.

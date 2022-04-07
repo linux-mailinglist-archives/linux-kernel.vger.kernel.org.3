@@ -2,183 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862344F777D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7694F7782
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiDGHb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S241816AbiDGHcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiDGHb4 (ORCPT
+        with ESMTP id S241808AbiDGHcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:31:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA04ECF2;
-        Thu,  7 Apr 2022 00:29:55 -0700 (PDT)
-Received: from kwepemi500025.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYtJl1dzNzgYWg;
-        Thu,  7 Apr 2022 15:28:07 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- kwepemi500025.china.huawei.com (7.221.188.170) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 15:29:52 +0800
-Received: from linux_suse_sp4_work.huawei.com (10.67.133.232) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 15:29:51 +0800
-From:   Liao Hua <liaohua4@huawei.com>
-To:     <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>,
-        <nixiaoming@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <wangfangpeng1@huawei.com>
-Subject: [PATCH sysctl-next v3] latencytop: move sysctl to its own file
-Date:   Thu, 7 Apr 2022 15:29:48 +0800
-Message-ID: <20220407072948.55820-1-liaohua4@huawei.com>
-X-Mailer: git-send-email 2.12.3
+        Thu, 7 Apr 2022 03:32:47 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB67541BF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:30:47 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l26so9027378ejx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vzjb8OyiiJYotEV8kvXDCXjnvHrz6uwgs9bvhbzeeU8=;
+        b=yIFq6xd4Us4NfmlSY+xqeSRHONBiPyZLWbCarpHyPpReRoGd6kSu06rKWHp1jpqdoa
+         zoGYlLLNT7zerPP9VWMVmqpxagQULEn7bTQs2EKcn5Wi0IExnueM52SIxDVTqTktUZAv
+         AZQeKuRYrd/6m53+D2CQw3aOLWbMMMxfIh/Dd4+pbvcF8BSEk4h9pQZTAtpG1/5EubLf
+         u/5dDUQOsdlqiFKhxH9o3qGMLCUIZkUgmsOkYlzLCbNQOI2BaV30HrWV2lMPE/8t69ZG
+         wQPsn31BXGDT9t3DN/F3u0F9/5o1TPP1giyGa04SlfHT+Cre5agB3rkctxDP3ieizILF
+         9CRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vzjb8OyiiJYotEV8kvXDCXjnvHrz6uwgs9bvhbzeeU8=;
+        b=lrh/i2nOBwqzB9P4qf3FAxkttZP90qwRFCdVK1FnzrsxylARZtippVAxBb0JFpQ/6l
+         yArhYOiEo1KHqqNCvQ+QcoqqazBFoIZ5r3ufTzOmLGxWDNFJDzua8Kh5/ZhVZDgpJ4mN
+         zqi8PJhGVUVNYmtX52ytfrTo9IK0YrYaaFiHc++Udamc1A6ySaRI+s/h633+3u2H0nDy
+         ++ZEltR2Jy2Tv5T2NytGqEx0nx7XfegqTEFEGhoyyln9lGbsvX6DIkcZ8VfU0x+uvQBv
+         Gi+otZJpSduWRBqHsYTuhDcvANIBdQHNpIfvodL1/oAlpRLcmGNfV3xvCkq97K5u6qMG
+         sTqg==
+X-Gm-Message-State: AOAM530SsaEnlPCztHHzvzip2F9HlfU9viOy8Szilj8gbvHWdq0wWCv5
+        /8NmKpXkzoMU0MSUwkY7vyMv5w==
+X-Google-Smtp-Source: ABdhPJwIqsvcbUoRf0jzTstI6QI8oC/35Ywl3gLGRtqyMNt7EWPp/vRrxhy1pCRr0jaF/uXfo7s0qQ==
+X-Received: by 2002:a17:907:2d89:b0:6df:b7d1:a365 with SMTP id gt9-20020a1709072d8900b006dfb7d1a365mr12892115ejc.386.1649316645845;
+        Thu, 07 Apr 2022 00:30:45 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id t1-20020a170906178100b006e7edb2c0bdsm4704390eje.15.2022.04.07.00.30.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 00:30:45 -0700 (PDT)
+Message-ID: <ad6605e5-a8e4-1906-43cf-eb2d4420dab8@linaro.org>
+Date:   Thu, 7 Apr 2022 09:30:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.133.232]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 09/12] ARM: s3c: enable s3c24xx multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220405091750.3076973-1-arnd@kernel.org>
+ <20220405091750.3076973-10-arnd@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220405091750.3076973-10-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liaohua <liaohua4@huawei.com>
+On 05/04/2022 11:17, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With the custom ISA I/O and the missing sparse-irq support
+> out of the way, s3c24xx can now be built into the same
+> kernel as all other ARM9 based platforms.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/Kconfig                  | 18 ------------------
+>  arch/arm/mach-s3c/Kconfig.s3c24xx | 23 ++++++++++++++++++++++-
+>  2 files changed, 22 insertions(+), 19 deletions(-)
+> 
 
-This moves latencytop sysctl to kernel/latencytop.c
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: liaohua <liaohua4@huawei.com>
-
-------
-v3:
-  Base the patch on the latest sysctl-next and resubmit.
-
-v2: https://lore.kernel.org/lkml/20220223094710.103378-1-liaohua4@huawei.com/
-  Move latencytop sysctl to its own file base based on sysctl-next.
-
-v1: https://lore.kernel.org/lkml/20220219072433.86983-1-liaohua4@huawei.com/
-  Move latencytop sysctl to its own file base based on linux master.
----
- include/linux/latencytop.h |  3 ---
- kernel/latencytop.c        | 41 +++++++++++++++++++++++++++++------------
- kernel/sysctl.c            | 10 ----------
- 3 files changed, 29 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/latencytop.h b/include/linux/latencytop.h
-index abe3d95f795b..84f1053cf2a8 100644
---- a/include/linux/latencytop.h
-+++ b/include/linux/latencytop.h
-@@ -38,9 +38,6 @@ account_scheduler_latency(struct task_struct *task, int usecs, int inter)
- 
- void clear_tsk_latency_tracing(struct task_struct *p);
- 
--int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
--		size_t *lenp, loff_t *ppos);
--
- #else
- 
- static inline void
-diff --git a/kernel/latencytop.c b/kernel/latencytop.c
-index 166d7bf49666..76166df011a4 100644
---- a/kernel/latencytop.c
-+++ b/kernel/latencytop.c
-@@ -55,6 +55,7 @@
- #include <linux/sched/stat.h>
- #include <linux/list.h>
- #include <linux/stacktrace.h>
-+#include <linux/sysctl.h>
- 
- static DEFINE_RAW_SPINLOCK(latency_lock);
- 
-@@ -63,6 +64,31 @@ static struct latency_record latency_record[MAXLR];
- 
- int latencytop_enabled;
- 
-+#ifdef CONFIG_SYSCTL
-+static int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
-+		size_t *lenp, loff_t *ppos)
-+{
-+	int err;
-+
-+	err = proc_dointvec(table, write, buffer, lenp, ppos);
-+	if (latencytop_enabled)
-+		force_schedstat_enabled();
-+
-+	return err;
-+}
-+
-+static struct ctl_table latencytop_sysctl[] = {
-+	{
-+		.procname   = "latencytop",
-+		.data       = &latencytop_enabled,
-+		.maxlen     = sizeof(int),
-+		.mode       = 0644,
-+		.proc_handler   = sysctl_latencytop,
-+	},
-+	{}
-+};
-+#endif
-+
- void clear_tsk_latency_tracing(struct task_struct *p)
- {
- 	unsigned long flags;
-@@ -266,18 +292,9 @@ static const struct proc_ops lstats_proc_ops = {
- static int __init init_lstats_procfs(void)
- {
- 	proc_create("latency_stats", 0644, NULL, &lstats_proc_ops);
-+#ifdef CONFIG_SYSCTL
-+	register_sysctl_init("kernel", latencytop_sysctl);
-+#endif
- 	return 0;
- }
--
--int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
--		size_t *lenp, loff_t *ppos)
--{
--	int err;
--
--	err = proc_dointvec(table, write, buffer, lenp, ppos);
--	if (latencytop_enabled)
--		force_schedstat_enabled();
--
--	return err;
--}
- device_initcall(init_lstats_procfs);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 21172d3dad6e..2db637ca91c9 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -65,7 +65,6 @@
- #include <linux/bpf.h>
- #include <linux/mount.h>
- #include <linux/userfaultfd_k.h>
--#include <linux/latencytop.h>
- #include <linux/pid.h>
- 
- #include "../lib/kstrtox.h"
-@@ -1685,15 +1684,6 @@ static struct ctl_table kern_table[] = {
- 		.extra2		= SYSCTL_ONE,
- 	},
- #endif
--#ifdef CONFIG_LATENCYTOP
--	{
--		.procname	= "latencytop",
--		.data		= &latencytop_enabled,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= sysctl_latencytop,
--	},
--#endif
- 	{
- 		.procname	= "print-fatal-signals",
- 		.data		= &print_fatal_signals,
--- 
-2.12.3
-
+Best regards,
+Krzysztof

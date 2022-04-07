@@ -2,143 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416F74F7616
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C3B4F7623
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241131AbiDGGdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S241190AbiDGGgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbiDGGde (ORCPT
+        with ESMTP id S232836AbiDGGgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:33:34 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEC2972DB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649313094; x=1680849094;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YF/qhkPruKLjlOv9A4/gotWe1O62iB8RRrGaPFCBqQo=;
-  b=X/M1X7KDIhEWF6CBXMKMp9q915BkVglO0zqvNZr44nd4TLvGXmBUDsSC
-   SF/Ex2IyL512+53TOkpb4fQmrx+R3ItryYKFjZwg/cDJbfLFUNnxsjYdD
-   f3OZseu5c+jNqNk7R3afTsrzJ6ASyrANui28IVF2M6fta1shHQC9/3LcD
-   RfyyC6hIf2vXBUbPylsi49RnK36O7YMQ4u+vomklU1Z2qZ4KRh8jttlVT
-   PZu0KD8YIaLYyQKtiDS2WI6f3hbeRh2vRYzS3yKZCAuq73Rc+Gcj/BY6Y
-   D4XVyTdPh0nwm4k2NrVNE+qCsgf6V/qa+l7XsdHbignoFhQIeEdM7eZIU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241173141"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="241173141"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="524797342"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 23:31:31 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncLg2-00059L-No;
-        Thu, 07 Apr 2022 06:31:30 +0000
-Date:   Thu, 7 Apr 2022 14:31:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kas:lam 9/10] arch/x86/kernel/process.c:1035:37: error:
- 'mm_context_t' has no member named 'lam'
-Message-ID: <202204071441.Xq1KTIgi-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 02:36:24 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDA3A8B6DE;
+        Wed,  6 Apr 2022 23:34:22 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnKRC7hU5imJbiAA--.58581S2;
+        Thu, 07 Apr 2022 14:33:35 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH 00/11] Fix deadlocks caused by del_timer_sync()
+Date:   Thu,  7 Apr 2022 14:33:16 +0800
+Message-Id: <cover.1649310812.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnKRC7hU5imJbiAA--.58581S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWkWw1rJF47KF45KFyUJrb_yoW8GF4DpF
+        45u390kr1jvF4xu3W8tw1kZFy3Gw4xJrWrK39Fq3s5Xa4rZF43XF17GFy8WrZ5JryxGa4a
+        yF1qyw4rGF4avrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZEbDgAOs8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-head:   73447e771c55e18598a6fbf6adee1002aee18ea0
-commit: d4e785c333c5cfacdc663cb05ea375238393027e [9/10] x86/mm: Add userspace API to enable Linear Address Masking
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220407/202204071441.Xq1KTIgi-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=d4e785c333c5cfacdc663cb05ea375238393027e
-        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
-        git fetch --no-tags kas lam
-        git checkout d4e785c333c5cfacdc663cb05ea375238393027e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+If the timer handlers need a lock owned by the thread calling 
+del_timer_sync(), then, the caller thread will block forever.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Duoming Zhou (11):
+  drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+  drivers: usb: host: Fix deadlock in oxu_bus_suspend()
+  drivers: staging: rtl8192u: Fix deadlock in ieee80211_beacons_stop()
+  drivers: staging: rtl8723bs: Fix deadlock in
+    rtw_surveydone_event_callback()
+  drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+  drivers: staging: rtl8192e: Fix deadlock in
+    rtw_joinbss_event_prehandle()
+  drivers: net: hippi: Fix deadlock in rr_close()
+  drivers: net: can: Fix deadlock in grcan_close()
+  drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
+  arch: xtensa: platforms: Fix deadlock in iss_net_close()
+  arch: xtensa: platforms: Fix deadlock in rs_close()
 
-All errors (new ones prefixed by >>):
-
-   arch/x86/kernel/process.c:896:13: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     896 | void __init arch_post_acpi_subsys_init(void)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/process.c: In function 'enable_lam':
->> arch/x86/kernel/process.c:1035:37: error: 'mm_context_t' has no member named 'lam'
-    1035 |                 current->mm->context.lam = LAM_U48;
-         |                                     ^
-   arch/x86/kernel/process.c:1036:38: error: 'mm_context_t' has no member named 'lam'
-    1036 |         else if (current->mm->context.lam == LAM_NONE)
-         |                                      ^
-   arch/x86/kernel/process.c:1037:37: error: 'mm_context_t' has no member named 'lam'
-    1037 |                 current->mm->context.lam = LAM_U57;
-         |                                     ^
-
-
-vim +1035 arch/x86/kernel/process.c
-
-  1003	
-  1004	static long enable_lam(struct task_struct *task, unsigned long features)
-  1005	{
-  1006		features |= task->thread.features;
-  1007	
-  1008		/* LAM_U48 and LAM_U57 are mutually exclusive */
-  1009		if ((features & X86_THREAD_LAM_U48) && (features & X86_THREAD_LAM_U57))
-  1010			return -EINVAL;
-  1011	
-  1012		if (in_32bit_syscall())
-  1013			return -EINVAL;
-  1014	
-  1015		if (!cpu_feature_enabled(X86_FEATURE_LAM))
-  1016			return -ENXIO;
-  1017	
-  1018		if (mmap_write_lock_killable(task->mm))
-  1019			return -EINTR;
-  1020	
-  1021		if ((features & X86_THREAD_LAM_U48) && !lam_u48_allowed()) {
-  1022			mmap_write_unlock(task->mm);
-  1023			return -EINVAL;
-  1024		}
-  1025	
-  1026		/*
-  1027		 * Record the most permissive (allowing the widest tags) LAM
-  1028		 * mode to the mm context. It determinates if a mappings above
-  1029		 * 47 bit is allowed for the process.
-  1030		 *
-  1031		 * The mode is also used by a kernel thread when it does work
-  1032		 * on behalf of the process (like async I/O, io_uring, etc.)
-  1033		 */
-  1034		if (features & X86_THREAD_LAM_U48)
-> 1035			current->mm->context.lam = LAM_U48;
-  1036		else if (current->mm->context.lam == LAM_NONE)
-  1037			current->mm->context.lam = LAM_U57;
-  1038	
-  1039		mmap_write_unlock(task->mm);
-  1040		return 0;
-  1041	}
-  1042	
+ arch/xtensa/platforms/iss/console.c                    | 4 +++-
+ arch/xtensa/platforms/iss/network.c                    | 2 ++
+ drivers/infiniband/hw/irdma/cm.c                       | 5 ++++-
+ drivers/net/can/grcan.c                                | 2 ++
+ drivers/net/hippi/rrunner.c                            | 2 ++
+ drivers/staging/rtl8192e/rtllib_softmac.c              | 2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c | 2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c              | 4 ++++
+ drivers/tty/serial/sa1100.c                            | 2 ++
+ drivers/usb/host/oxu210hp-hcd.c                        | 2 ++
+ 10 files changed, 23 insertions(+), 4 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

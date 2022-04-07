@@ -2,120 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904CA4F7C62
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCD04F7C91
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiDGKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S244152AbiDGKUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238176AbiDGKKr (ORCPT
+        with ESMTP id S242823AbiDGKUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:10:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F372E19;
-        Thu,  7 Apr 2022 03:08:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29B0561CCE;
-        Thu,  7 Apr 2022 10:08:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7E3C385AB;
-        Thu,  7 Apr 2022 10:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649326126;
-        bh=QtPSjuN1gj7rdOkimjbPZkc/Aldl/EZom3gZ7Sd17MM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pShqcGFc+XX+casrLsS9Pc5fcSX4XMOIkk4P4pLkhyM8jTRxeJZfiasrMXWAwImnf
-         Bqbz/asxHXItGos7jFADu2czBEM8tUYmL2cAcNpMk/jXqy397YC1B5qkX92K0++lyN
-         rLra2pZokwakZsU50KbRvVxSjpG0wQFnRX5n/Oa1K73HbQyUz99P46rhVzIuR5wmyI
-         JHehnb3eiVO/3VclE+WBwm1wjn6xErleg6+xYLJOMLDAgTiYwn7RBF+9vt7NmqIdo8
-         wXgIb91p3YzOoRYaZfMTbsYlE2sNeDbGHKT/CvM/dIvDgtj0cDO5vtzGLryQJb9WyW
-         7L6PR4O++JYuQ==
-Received: by mail-wr1-f54.google.com with SMTP id b19so7058516wrh.11;
-        Thu, 07 Apr 2022 03:08:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530SVnbW3tLLMt/uarSlB0kzoQ/PYzrY+dS4KmBALUhgFBJpW7IJ
-        YBAO2ldxSSLoMrKnxdc62DCItM5wXznY90B0nzs=
-X-Google-Smtp-Source: ABdhPJzSiM0ws1XTQm0G+eX4lsdVE4jGZb8+YbyMPsKOEjJCLJ6qychiaP8KpFPTHWHrqGypGZ4tXi8XkZuFYEjHU4I=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr9491841wru.317.1649326124617; Thu, 07
- Apr 2022 03:08:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405091750.3076973-1-arnd@kernel.org> <39e8b64cefd8e2b4e4d91a5e6cfc98db88be7449.camel@gmail.com>
-In-Reply-To: <39e8b64cefd8e2b4e4d91a5e6cfc98db88be7449.camel@gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 7 Apr 2022 12:08:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a22dR276SRVh5WRZWDEGQaf9KUUz61tQaCySHZrrgnh9g@mail.gmail.com>
-Message-ID: <CAK8P3a22dR276SRVh5WRZWDEGQaf9KUUz61tQaCySHZrrgnh9g@mail.gmail.com>
-Subject: Re: [PATCH 00/12] ARM: ARMv5 multiplatform conversions
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Hubert Feurstein <hubert.feurstein@contec.at>,
-        Lukasz Majewski <lukma@denx.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thu, 7 Apr 2022 06:20:00 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045191275BD;
+        Thu,  7 Apr 2022 03:17:59 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id p15so8775187lfk.8;
+        Thu, 07 Apr 2022 03:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R23eSOYeKnVIkjdK9W7sc64FQ0WoMp1PYcNJNNlM9q8=;
+        b=LCCY2AGWZ59w4m8u4Zq3C46NPZiwUhM/BQyPVysOwHWpHwQWzUooRR7sEFOE0MXoRh
+         H96HxipCICxV3kBucZhdutpHg2sj6grvReAAkY448TOB+yx9qRqqTr/7p/GeaTeFkFbE
+         OOYznV/0UmyISeUOfskgi8RS62Qjmn5UDC/nFgCAbwc9uMM4j3kNTWLHway8iY/Nf5oN
+         HGxLQGlEh/o9VBp58LdMbkJ0TS7YuOaTdVrnr5J+Oxgu7o/NNnYf1YJZIq0xxSIrwu34
+         jH4pbMNnK0E+cr0o/X5sL2/lY0cnZ2a3VQg3/Aar4uWcogQRcmRAVCG99bK+KKp+ZglG
+         b4Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R23eSOYeKnVIkjdK9W7sc64FQ0WoMp1PYcNJNNlM9q8=;
+        b=LdnBNx6S70iNeneAhLcH731X57vqzxs2sr4m8CaMca6+r6lSvN7mLJbutwa/KgyclG
+         Sq6TqR1xgKiEKOTCcr19op9U3tJeRGBYRDxBJXCPwFVWbZ0mzwheTuVBOIpKN4xfYYOh
+         RDt5vUca8WID1E6w2TrDVAYXLiOEpXHexcJndofLbZ4jK8jimLXshEazEMPCSgc+wl5H
+         T4HHY0kEqZtrjf0C6rarDw/Fd4JI1VP+wpISDr+hl4ngHnJFbRRLgBCppR0cjYjK8RHG
+         5Yc3AOzlFYuxu6AtmlgjBIwMJPj0SThcazKHZBtEPF71Hdr719KzbdfRZXnDy02G+QC6
+         OTKg==
+X-Gm-Message-State: AOAM532L9cX2mxtYCi76ByeyZ3sShD/2JD3nxckmHU2ZDu61kuOEJaRE
+        NToREEmbePF+SmvUOBGkb3XB7km8AgE=
+X-Google-Smtp-Source: ABdhPJxg3ZbrgiCbN+q3qlkjV//3PevfiKjzGQeO4D4J2bBOvaV9lASYgS5QozSakWrKYPqRoX6/dQ==
+X-Received: by 2002:a05:6512:10c9:b0:44a:fea7:50ac with SMTP id k9-20020a05651210c900b0044afea750acmr8775459lfg.680.1649326676971;
+        Thu, 07 Apr 2022 03:17:56 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id d2-20020a194f02000000b0044a2b77cd8dsm2121656lfb.105.2022.04.07.03.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 03:17:56 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/2] Make AUX gpio pin optional for ktd2692
+Date:   Thu,  7 Apr 2022 13:10:04 +0300
+Message-Id: <20220407101034.13122-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 11:23 AM Alexander Sverdlin
-<alexander.sverdlin@gmail.com> wrote:
->
-> Hello Arnd,
->
-> On Tue, 2022-04-05 at 11:17 +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > I revisited some patches from a few years back, to see what
-> > is needed forsome of the remaining platforms to become part of
-> > CONFIG_ARCH_MULTIPLATFORM.
-> >
-> > A few things happened since I last looked at this, which helps to make
-> > this easier:
-> >
-> >  - The ixp4xx platform saw a large scale cleanup
-> >
-> >  - The ep93xx platform lost support for MaverickCrunch FPUs and
-> >    gained support for the common clock subsystem
->
-> would you like to consider a couple of fixups from the common clock
-> rework of ep93xx?
->
-> https://lore.kernel.org/linux-arm-kernel/20220120133739.4170298-2-alexander.sverdlin@gmail.com/
-> https://lore.kernel.org/lkml/20220130152502.236531-1-alexander.sverdlin@gmail.com/t/
+Some appliances of ktd2692 don't have the AUX pin connected to
+a GPIO. Specifically, Samsung Galaxy J5 (2015), which uses ktd2692
+for driving the front flash LED, has the pin not connected anywhere on
+schematics. Make specifying the AUX pin optional, since it is additional
+functionality and only affects amount of current going through the LED.
 
-Sure, both look like obvious bugfixes. Shall I apply them to the
-fixes branch for 5.18, or as part of the multiplatform series?
+Also convert the txt device-tree bindings to yaml and pick up maintainership
+over the yaml binding and the driver itself.
 
-Either way, if you have any obvious bugfixes for code you maintain,
-and you'd like
-to get merged through the soc tree, please send them to soc@kernel.org, which
-puts them into the patchwork tracker.
+Markuss Broks (2):
+  dt-bindings: leds: convert ktd2692 bindings to yaml
+  leds: ktd2692: Make aux-gpios optional
 
-       Arnd
+ .../bindings/leds/kinetic,ktd2692.yaml        | 87 +++++++++++++++++++
+ .../devicetree/bindings/leds/leds-ktd2692.txt | 50 -----------
+ MAINTAINERS                                   |  6 ++
+ drivers/leds/flash/leds-ktd2692.c             | 18 ++--
+ 4 files changed, 103 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
+
+-- 
+2.35.1
+

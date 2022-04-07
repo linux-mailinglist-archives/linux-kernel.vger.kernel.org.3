@@ -2,85 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A437A4F84FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468174F84FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiDGQaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S1345480AbiDGQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiDGQas (ORCPT
+        with ESMTP id S230077AbiDGQaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:30:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F55824951
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:28:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF68B60B4D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5421C385A0;
-        Thu,  7 Apr 2022 16:28:14 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 17:28:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yk8RGvF6ik34C6BO@arm.com>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-8-catalin.marinas@arm.com>
- <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
- <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
- <Yk1UJs6eZMoIp3Eh@arm.com>
- <Yk5o/lNTyiJWD4Ae@gondor.apana.org.au>
- <Yk7EbvYhwnQy+pAf@arm.com>
- <Yk7Ny/iFi0NrMXTg@gondor.apana.org.au>
+        Thu, 7 Apr 2022 12:30:55 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34FB2654B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:28:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bh17so11959051ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Vv5wRMLm7eAUwbieA9P9R0i+n/Nx3ujFLOcNigvPcM=;
+        b=Nh9bB1KB4S3CAncBLCOeNhoQBW4BpFg7ZxBEKFPIdrPjYLLIXTykS08+eEDZhFWyZ8
+         Thpi+P0aSF7sVwTnCRHfToCT9gHhhfKUTdrju+t5E7uyVVjlUwgssiadvrQKU9v4qNGE
+         UGaJC8AOLzUArHajp1eLxKaJ3Si9FAGFRr300FrLTKdRBLX62d7XQVrFh69vwxlKtd2C
+         WxnNkYIZtoWVODJra1ZHi7tF1gH3RYCAfr02mNt988D5DFXmHfcUd4rFetFQle6MGTMj
+         Ci6AYLRrWkvEwU37AQ9XJIDCkWAEFa0AQGz/XDUlpe355EzgRwDt0SJo0W1IsGoPS7Kn
+         a4Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Vv5wRMLm7eAUwbieA9P9R0i+n/Nx3ujFLOcNigvPcM=;
+        b=5oQ4MKzFFrHtfOEkTTZXOT0fy4IHn8WVyMjWEesJlvnLcp3ZsLMRXj+8gQ/dvimtif
+         ZqHQfDS8PX7MUhKVObE5NFDvbMzghauAP1yw9VWooso/z8uTGtIgzlbukVFvOlPF0ZfA
+         EJtAC/exZDRbTpz8xE97xeM/xJBv2bOi5LB8MdmI+iCCNkSQGU2dkBTdFYGfpIUh8wQf
+         stmxvlIcDmcZi56hAyW95kwPZQGP7t/xKi18zRbsq+tc6TXtGNhXd6CmcJibeslcszPv
+         LA/pQvboHigGRY1+vl8D9XlHD36rwo/0ns+J7T0xj8uetdxkzVp+1a5maFjWsx1r6B69
+         WAXg==
+X-Gm-Message-State: AOAM530XMtLXw9gDxXxI6F3UyXtdVi5N/vFJLb1DF8PerPZd5paymZFW
+        UpaJKkh/cw1CVg83VhAbilQ6B5QrnfeiqZOzidEafQ==
+X-Google-Smtp-Source: ABdhPJySuUD0Vc5Fggv3BJDcImC7/nHme84hjtmjDS8hx74rIZfA/aVAQ1ZlYO8FDlK29GQs74zzLvfuZR+3cWp4Nvs=
+X-Received: by 2002:a17:906:300f:b0:6e0:b38d:777d with SMTP id
+ 15-20020a170906300f00b006e0b38d777dmr14328595ejz.189.1649348933215; Thu, 07
+ Apr 2022 09:28:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk7Ny/iFi0NrMXTg@gondor.apana.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
+ <Yk4DGZfpYbK8dofL@chromium.org> <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
+ <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
+In-Reply-To: <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 7 Apr 2022 09:28:41 -0700
+Message-ID: <CABXOdTet5ynSXf94qMimobJF4LLzHc89cVbwJ5NuAz8G6jmVdQ@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
+To:     Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 07:40:59PM +0800, Herbert Xu wrote:
-> On Thu, Apr 07, 2022 at 12:01:02PM +0100, Catalin Marinas wrote:
-> > The only issue is whether the compiler gets confused by a pointer to a
-> > structure with a smaller alignment than alignof(struct ...). I don't see
-> > a performance or correctness issue on arm64 here. It would be a problem
-> > if instead of 16 we went down to 8 or 4 due to unaligned accesses but
-> > from 128 to 64 (or even 16), I don't think it matters.
-> 
-> The issue is that there's code in the Crypto API which assumes
-> that all pointers returned by kmalloc are aligned to CRYPTO_MINALIGN,
-> if you break that then all that code would need to be modified.
+On Wed, Apr 6, 2022 at 6:16 PM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+[ ... ]
+> >>>        ec_dev = dev_get_drvdata(&typec->ec->ec->dev);
 
-I'm not familiar with the crypto API, trying to make sense of it now ;).
+I completely missed the part that this is not on the parent.
 
-I can see in many cases that the kmalloc() caller aligns the requested
-size to something like crypto_tfm_ctx_alignment(). So this would
-guarantee a kmalloc() object aligned to CRYPTO_MINALIGN.
+> >>> +     if (!ec_dev)
+> >>> +             return -EPROBE_DEFER;
+[ ... ]
+>
+> 1. The parent exists and dev_get_drvdata(pdev->dev.parent) returns
+> non-NULL value. However, dev_get_drvdata(&typec->ec->ec->dev) returns
+> NULL. (Yes, that is confusing.) I'm wondering
 
-> However, I think it's better to change the code that assumes
-> CRYPTO_MINALIGN guarantees DMA alignment.
+I am actually surprised that typec->ec->ec is not NULL. Underlying
+problem (or, one underlying problem) is that it is set in
+cros_ec_register():
 
-I saw Ard already started to refactor some of these. But in the meantime
-are there cases where the crypto code does a kmalloc() of less than
-CRYPTO_MINALIGN and expects it to be CRYPTO_MINALIGN aligned?
+        /* Register a platform device for the main EC instance */
+        ec_dev->ec = platform_device_register_data(ec_dev->dev, "cros-ec-dev",
+                                        PLATFORM_DEVID_AUTO, &ec_p,
+                                        sizeof(struct cros_ec_platform));
 
--- 
-Catalin
+"cros-ec-dev" is the mfd device which instantiates the character
+device. On devicetree (arm64) systems, the typec device is registered
+as child of google,cros-ec-spi and thus should be instantiated only
+after the spi device has been instantiated. The same should happen on
+ACPI systems, but I don't know if that is really correct.
+
+I don't know what exactly is happening, but apparently typec
+registration happens in parallel with cros-ec-dev registration, which
+is delayed because the character device is not loaded. As mentioned, I
+don't understand why typec->ec->ec is not NULL. Can you check what it
+points to ?
+
+Thanks,
+Guenter
+
+> dev_get_drvdata(pdev->dev.parent) returned NULL in the following crash
+> log but it would be a problem distinct from what is handled with my patch:
+> https://lore.kernel.org/lkml/CABXOdTe9u_DW=NZM1-J120Gu1gibDy8SsgHP3bJwwLsE_iuLAQ@mail.gmail.com/
+>
+> 2. My patch returns -EPROBE_DEFER instead of -ENODEV and I confirmed it
+> will eventually be instantiated.
+>
+> Regards,
+> Akihiko Odaki
+>
+> >
+> > Guenter
+> >
+> >> Thanks,
+> >>
+> >> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/platform/chrome?id=ffebd90532728086007038986900426544e3df4e
+>

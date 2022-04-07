@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0D24F7AD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35C14F7ACD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243581AbiDGJCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S243532AbiDGJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243533AbiDGJCS (ORCPT
+        with ESMTP id S243527AbiDGJCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:02:18 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70A11F519B;
-        Thu,  7 Apr 2022 02:00:18 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id s11so7597589qtc.3;
-        Thu, 07 Apr 2022 02:00:18 -0700 (PDT)
+        Thu, 7 Apr 2022 05:02:06 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056091C16DC;
+        Thu,  7 Apr 2022 02:00:06 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id b33so1639597qkp.13;
+        Thu, 07 Apr 2022 02:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OH445ysdzmR/6X4//W4FphZ3nFgmJO7HaScUHltGfzw=;
-        b=A2BZMU75Gg9tMr3xOhA9ZXdTsJVp+kREzAIB13tKhOdgL+04uX1xdkg9fVTnFs674p
-         /fHfbxKgZ61ztlad8Ira/55MLMfPEcdrjUEE5foKxKd8fmuMGv8bdE3QVx7o8ia3fDlR
-         s8/yOt1GIWAXGX2d3zLoV2l1EuKXIJXClGdFtfd+EGgaGkka6eXuqe7LtBX4QpAnE/tf
-         LkjpH4Cno05i1FFICzv8oLxTiK6aYn7Xu4ZccRb4eN645Hfl6W/0Jg+zAuq5zYt9fyvz
-         qQE0t/lDgkJ0J8wk4cyswe0HONJxKNy0t3ElEdvrf6f08wIiu/rOVMVZ5ylHcH6kGFER
-         3bfQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aN5mT5XseTWatVt6bcoD7NMS4LCdVfX/RptWXKAKrc0=;
+        b=mjoxyh9PZQCMkXRODxS+PxWgXjsdqxNe2k2AN5KmOdIO23yaKL9DVwQMPWJAU3RjAq
+         uHxtahIMFBRZVDsQ9uST4zpdlMD7fToCXeeYyHx2Swg8w2ODthjwsQs7fxM9KCLLM7DG
+         a7a8A/GWuUrjqNfXHWTZbI6PPOrQlXsfi4fKOE/XtY2DEVfG31t77tED+xEpKlolAECs
+         VRpL5j1Dcctai9NhIG8H8PeEgP0alA0FCxq71csFsYp7CU+AlZyY0CDnqvDwk/0easu1
+         AnU0SvkgLANK+kwW+NIavdi1xzfannMx9MMNDMDSMB29O7BJfggSdvoe4nWRCNoJ3pOH
+         5rBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OH445ysdzmR/6X4//W4FphZ3nFgmJO7HaScUHltGfzw=;
-        b=xbxaqUVcuWbshDXo8i3fdmNzx7Qccsu92bcYCjNBIsbR/ARqzrbQkkpuoMgKSia6gm
-         zsXTBal7V5qSdBKhWNX6Hs8/ND1dXjPcW7L3STj+XI6EAaJYWRlxL5c1tfjYBDgpjO1j
-         FD2g6tSkmWlRbKJ4qwrHTdM8wp0/WwycsbkZYIBsG1xH/GADrWNtcJNOja0RTxMi65eJ
-         /A7B4d8LZ9hTxeWmBnSlR0uzb25JvFWfxFQPwnAZNryjO/XAEywU7du9MsT95k4xUj7S
-         S6zuXi9fsSchqhAdAEt0GZis4lolJUkdoh6aNhAoqjIFEuG6f8sgp4vqiS4vAIwIVF88
-         bgdQ==
-X-Gm-Message-State: AOAM532hUIISSdbC6p0Hjv2NgB43XKa/vvVpt23afs6UWEDw7Hrw9QQ0
-        XTrVskHMB5AcbU+1HWtFTvIG4TFkBiLO9yEKzzo=
-X-Google-Smtp-Source: ABdhPJxkJcaz/OQCc+qvAyLt1HwRQ64uhkf6n9dqvP50oc4eIHNr8Q3rR3052T537/f3WHSshWmFYgHuaFNt7O3iipA=
-X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id
- d19-20020a05622a101300b002e1c9c09831mr10806922qte.245.1649322017903; Thu, 07
- Apr 2022 02:00:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aN5mT5XseTWatVt6bcoD7NMS4LCdVfX/RptWXKAKrc0=;
+        b=epRUl1grlvtnq0ZtijSnsSWcNZhUghK/Pu4iPiNskS2CF0FdV9cpu5FxTsD9LRQj3k
+         AVRj40LIwxEq8TSPuh95hg1LxFaHK5FFIvyPOASvGKEMyva6bh3vGVW5hHv18+Ctls0I
+         kLReysKeG7yHvNzvxEYBW3043VLyDWWgqTSgF44iHJbQj1ErevqaoJRjQ6VjzZbm+nXG
+         mnati1kiOiW5zMmXq7CKyUsKxt8olOFHf01RFJNthGKE5nSjznc/NXhJhe5ZspbJyXzS
+         uBBaGlVZ+jL+SC05hc8pRTqOpeUIUO6Dw4ZW+AqTqBqeYVfKb+TeXoFhMZPR3P8woIPd
+         01YQ==
+X-Gm-Message-State: AOAM531uYjvDFpRthw7oOPp/xA1kFUcvfqEC5uObVV39M5zyc33qs7mm
+        UyT3loS8kjCPQBEG4onhLu0=
+X-Google-Smtp-Source: ABdhPJxqgFtzM+fnzFFy+amc+0Yve7WLUJ2aiCFsq7jk9FKpT9bpqOFs2IvxrX2BataVLBGpo+jkUg==
+X-Received: by 2002:a37:98c4:0:b0:69a:e14:16a2 with SMTP id a187-20020a3798c4000000b0069a0e1416a2mr255460qke.610.1649322005048;
+        Thu, 07 Apr 2022 02:00:05 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a23-20020a05620a103700b00699d49c511dsm4689750qkk.104.2022.04.07.02.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 02:00:04 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     kishon@ti.com, vkoul@kernel.org
+Cc:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        lv.ruyi@zte.com.cn, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] phy: samsung: fix missing of_node_put()
+Date:   Thu,  7 Apr 2022 08:59:58 +0000
+Message-Id: <20220407085958.2491783-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
- <YkqxpEW4m6iU3zMq@dhcp22.suse.cz> <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
- <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
- <Ykq7KUleuAg5QnNU@dhcp22.suse.cz> <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
- <Ykrkx4JML4c81gBV@dhcp22.suse.cz> <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
- <YkwxNaJIg6ptJOYT@dhcp22.suse.cz> <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
- <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
-In-Reply-To: <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 7 Apr 2022 16:59:50 +0800
-Message-ID: <CAGWkznG+V88f_DjtJAe4_Nr=32Q7Z4b1CaBCB0FVqhAAsuNsWA@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,69 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 3:40 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 06-04-22 10:11:19, Zhaoyang Huang wrote:
-> > On Tue, Apr 5, 2022 at 8:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
-> > > [...]
-> > > > Please be noticed that this patch DOES protect the memcg when external
-> > > > pressure is 1GB as fixed low does.
-> > >
-> > > This is getting more and more confusing (at least to me). Could you
-> > > describe the behavior of the reclaim for the following setups/situations?
-> > >
-> > > a) mostly reclaiming a clean page cache - via kswapd
-> > > b) same as above but the direct reclaim is necessary but very
-> > >    lightweight
-> > > c) direct reclaim makes fwd progress but not enough to satisfy the
-> > >    allocation request (so the reclaim has to be retried)
-> > > d) direct reclaim not making progress and low limit protection is
-> > >    ignored.
-> > >
-> > > Say we have several memcgs and only some have low memory protection
-> > > configured. What is the user observable state of the protected group and
-> > > when and how much the protection can be updated?
-> > I am not sure if I understand you right. Do you have suspicions on the
-> > test result as you think protected memcg has no chance to update the
-> > protection or the global reclaim should have been satisfied with the
-> > reclaiming(step d is hard to reach?). Let me try to answer it under my
-> > understanding, please give me feedback if you need more info. The
-> > protection is updated while mem_cgroup_calculate_protection is called
-> > during either kswapd or direct reclaim for each round of the priority
-> > reclaiming and then the memcg's lruvec will be reached in step d.
->
-> This means that limits are altered even if there is memory to be
-> reclaimed from other memcgs. Why? How does this line up with the
-> basic property of the low limit to act as a protection from the reclaim?
-ok, partially understand. I would like to say that low's original
-definition under this patch has changed, says the calculated low just
-provide protection when the psi value is lower than the setting and
-will introduce reclaiming if it exceed. It also can be seen from the
-bellowing latest test result(same as previous test but without mlock),
-which says that the memcg with fixed low will push back the reclaim to
-global LRU while keeping psi to be high. Please be noticed that the
-low will be updated when usage raise up over it which means resume the
-protection again when the memcg become active.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-                          psi(global=1GB)        max      stable
-  psi(global=2GB)     max      stable
-Low=400MB      some=18 full=11       700MB 600MB       some=20 full=16
-    400MB 400MB
-Low=500MB      some=18 full=13       680MB 540MB       some=27 full=17
-    500MB 500MB
-patch setting1    some=19 full=13       863MB 740MB       some=15
-full=10     500MB 500MB
-patch setting1    some=14 full=11       640MB 470MB       some=20
-full=12     360MB 320MB
+of_parse_phandle returns node pointer with refcount incremented,
+use of_node_put() on it when done.
 
->
-> > > I think it would be also helpful to describe the high level semantic of
-> > > this feature.
->
-> Please focus on this part. Without a high level semantic explained we
-> will not move forward.
-> --
-> Michal Hocko
-> SUSE Labs
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/phy/samsung/phy-exynos5250-sata.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
+index 9ec234243f7c..6c305a3fe187 100644
+--- a/drivers/phy/samsung/phy-exynos5250-sata.c
++++ b/drivers/phy/samsung/phy-exynos5250-sata.c
+@@ -187,6 +187,7 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 
+ 	sata_phy->client = of_find_i2c_device_by_node(node);
++	of_node_put(node);
+ 	if (!sata_phy->client)
+ 		return -EPROBE_DEFER;
+ 
+-- 
+2.25.1
+

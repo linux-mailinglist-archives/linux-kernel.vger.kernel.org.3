@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9378B4F7EB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533D84F7EB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbiDGMIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S232363AbiDGMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245095AbiDGMHh (ORCPT
+        with ESMTP id S234578AbiDGMH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:07:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B172C31D7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:05:28 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ncQt6-0002Hk-5U; Thu, 07 Apr 2022 14:05:20 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ncQt3-0006v5-3a; Thu, 07 Apr 2022 14:05:17 +0200
-Date:   Thu, 7 Apr 2022 14:05:17 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     alexandru.tachici@analog.com, andrew@lunn.ch, davem@davemloft.net,
-        devicetree@vger.kernel.org, hkallweit1@gmail.com,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, robh+dt@kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v5 0/7] net: phy: adin1100: Add initial support for
- ADIN1100 industrial PHY
-Message-ID: <20220407120347.GA25348@pengutronix.de>
-References: <20220324112620.46963-1-alexandru.tachici@analog.com>
- <20220324160041.0d775df8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Thu, 7 Apr 2022 08:07:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D30C4E13
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:05:23 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id n6so10294192ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bwsyQ5Vu4W5RWwfy6VtuRb8dpLJkggv+g3kZE12CFcQ=;
+        b=Tgo1TI51TajsJx0sXfbOwR5Gyu9coBohhsu8zhdZpA5kKuZTg8NJboDw/1NK+7+giS
+         63z3ioCQc/KKpkCRyUx1Kql1U0zHvzD2P+/4t1emulGnKynZOlcd40K5G4UbsZaCWuAG
+         WcJcqH+2My0E/GLm6+1ysAUPqpBiuwkB/Vk/BtyU67L3p+ibRJGDzA3J23HKmFE22/PQ
+         /2Hr4TZpBJx3jL0uIwyDjYIP5eg7tNEawLpH78UFM6f39HNe6u0bIaJ8TCnEt/hqXxel
+         +/k51tILeOrMFz8JeqTe5wa2qG3pKBEqqoYZl9ekM9Y3LMDG+wBH/HuFSwQgX+hGf/sn
+         b0Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bwsyQ5Vu4W5RWwfy6VtuRb8dpLJkggv+g3kZE12CFcQ=;
+        b=SYR1DBKkwL4d7fcatoluilDOIMgiXCxIqRyOUVyeutiiO9PzuqF7xPcYVl5HI7/Eeb
+         qWrUwZ8mcKaIHx+SbgUzti+PPBB7Qy51ttW2IdOcKnyZboEtNYO90p5geOgG7fsCuydL
+         BAs33Oq3E6PN+l5MmNG4lRIfjwFOnZmTXmrU8GDJPsbm35sMCW25Cu+LqCVMMIVO88Kl
+         pWH0iqBFkgK7vAjNEbH+w0RWmYFF8GXLGYf7sJd1Ca4AovR5EdjPLpJ4W7bpZ2fVZVue
+         MKU6WD4I3z9uNvHi61mdx+IdCSCqNSFi0YMaGesUloj8pcdiBHriwKmB3h89tb7wiG1Z
+         tgWw==
+X-Gm-Message-State: AOAM531BLdqXDdgatZtWMpX1z9Qf+zSd2x/skgO9Xxe0SkX3IU65b5Bk
+        bL5rh3xVyM/j6QUSybpHMVSsXg==
+X-Google-Smtp-Source: ABdhPJw306Xv8hi4MiEDFStVaE0H2lWBzMserAaLf5q9MTAVjR/RGdsOIDq6FnIZCvCQRrdAPOBNOA==
+X-Received: by 2002:a17:907:6ea4:b0:6e1:260e:a232 with SMTP id sh36-20020a1709076ea400b006e1260ea232mr13324944ejc.15.1649333121669;
+        Thu, 07 Apr 2022 05:05:21 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b0041934547989sm9247017edp.55.2022.04.07.05.05.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 05:05:21 -0700 (PDT)
+Message-ID: <bc71266a-50c9-ef0f-6bc1-20df79782d32@linaro.org>
+Date:   Thu, 7 Apr 2022 14:05:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220324160041.0d775df8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:02:55 up 8 days, 32 min, 75 users,  load average: 0.70, 0.46,
- 0.32
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, Manohar.Puri@microchip.com
+References: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,30 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:00:41PM -0700, Jakub Kicinski wrote:
-> On Thu, 24 Mar 2022 13:26:13 +0200 alexandru.tachici@analog.com wrote:
-> > The ADIN1100 is a low power single port 10BASE-T1L transceiver designed for
-> > industrial Ethernet applications and is compliant with the IEEE 802.3cg
-> > Ethernet standard for long reach 10 Mb/s Single Pair Ethernet.
+On 07/04/2022 12:54, Kavyasree Kotagiri wrote:
+> LAN966x SoC supports 3 QSPI controllers. Each of them support
+> data and clock frequency upto 100Mhz DDR and QUAD protocol.
 > 
-> # Form letter - net-next is closed
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/spi/atmel,quadspi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> We have already sent the networking pull request for 5.18
-> and therefore net-next is closed for new drivers, features,
-> code refactoring and optimizations. We are currently accepting
-> bug fixes only.
-> 
-> Please repost when net-next reopens after 5.18-rc1 is cut.
-> 
-> RFC patches sent for review only are obviously welcome at any time.
+> diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+> index 1d493add4053..100d6e7f2748 100644
+> --- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+> @@ -19,6 +19,7 @@ properties:
+>        - microchip,sam9x60-qspi
+>        - microchip,sama7g5-qspi
+>        - microchip,sama7g5-ospi
+> +      - microchip,lan966x-qspi
 
-Hi Alexandru net-next is open now, you can rebase and resend this
-patches.
+Expect the comment you got about wildcard, please also put it in
+alphabetical order. As you can check, the other entries are ordered.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Best regards,
+Krzysztof

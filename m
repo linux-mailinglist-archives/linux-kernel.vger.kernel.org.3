@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EDC4F85BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459EF4F85C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345995AbiDGRWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S1346064AbiDGRW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDGRWq (ORCPT
+        with ESMTP id S229437AbiDGRW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:22:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BF2EE90;
-        Thu,  7 Apr 2022 10:20:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D34912FC;
-        Thu,  7 Apr 2022 10:20:39 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F6CA3F718;
-        Thu,  7 Apr 2022 10:20:33 -0700 (PDT)
-Subject: Re: [PATCH 4.9 00/43] 4.9.310-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220406182436.675069715@linuxfoundation.org>
- <20220407093238.GA3041848@roeck-us.net> <Yk67rfu4XQSl5j6c@kroah.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <c87bb36b-ed87-58d8-0276-b06771fd41d2@arm.com>
-Date:   Thu, 7 Apr 2022 18:20:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 7 Apr 2022 13:22:57 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C303E22;
+        Thu,  7 Apr 2022 10:20:57 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-de3ca1efbaso7069557fac.9;
+        Thu, 07 Apr 2022 10:20:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rwhEiY9odJROCRAy+Ndxe/cp+ZV49XR/EL4wYOpAE08=;
+        b=IIUUip01Dqt5QiwJ/erRQUjGGkM6va0LGj10SXbl1yeuvdrUag2BL9+ZE6FIYVXigL
+         SSHewX4d9bFiJtKezNgpdA9uArp7uu1Yme51d/4VsXJc0OQpmT8e/LVGpfkHwcU05Dxv
+         R0sZ42oUn466RSwjOipkaJjAw8gY7QFYNTgKBEqATDpvgSdgCoWFvpeRGytESUDHaIVc
+         JZzmGJrCyFlk8bz4uIt3JvuQ2TaTRaQQ2jGRRp9cxO0jTjO8o3zW9MFAdTbKdPIlzOX9
+         o15Q9HD+lz/JKeBZ12niMjd4/loko+sp7P8ftYoLb1zbDgQv+htegkEOsSX0RmVGXRuO
+         gaNg==
+X-Gm-Message-State: AOAM5326JifmjyuVw3Y5MjKjQUBnnff6hTd7L0fhPbkPY321Tbhr7HP5
+        5NPCUs9JTbxpg9kb7z/bIg==
+X-Google-Smtp-Source: ABdhPJzOkKryYuGQU1yXI/kalRRJK9WAgKPBFsBxb61733YyUlHX5uXdCZkO25oICRI+DQ0DnHBrxQ==
+X-Received: by 2002:a05:6870:d1c8:b0:e2:b03:1d44 with SMTP id b8-20020a056870d1c800b000e20b031d44mr6489525oac.162.1649352056351;
+        Thu, 07 Apr 2022 10:20:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 65-20020aca0544000000b002f980b50140sm3707530oif.18.2022.04.07.10.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 10:20:56 -0700 (PDT)
+Received: (nullmailer pid 1485057 invoked by uid 1000);
+        Thu, 07 Apr 2022 17:20:55 -0000
+Date:   Thu, 7 Apr 2022 12:20:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 01/14] dt-bindings: net: mediatek: add optional
+ properties for the SoC ethernet core
+Message-ID: <Yk8ddwmSiFg3pslA@robh.at.kernel.org>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-2-nbd@nbd.name>
 MIME-Version: 1.0
-In-Reply-To: <Yk67rfu4XQSl5j6c@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405195755.10817-2-nbd@nbd.name>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 07/04/2022 11:23, Greg Kroah-Hartman wrote:
-> On Thu, Apr 07, 2022 at 02:32:38AM -0700, Guenter Roeck wrote:
->> On Wed, Apr 06, 2022 at 08:26:09PM +0200, Greg Kroah-Hartman wrote:
->>> This is the start of the stable review cycle for the 4.9.310 release.
->>> There are 43 patches in this series, all will be posted as a response
->>> to this one.  If anyone has any issues with these being applied, please
->>> let me know.
->>>
->>> Responses should be made by Fri, 08 Apr 2022 18:24:27 +0000.
->>> Anything received after that time might be too late.
->>>
->>
->> Build results:
->> 	total: 163 pass: 161 fail: 2
->> Failed builds:
->> 	arm64:allnoconfig
->> 	arm64:tinyconfig
->> Qemu test results:
->> 	total: 397 pass: 397 fail: 0
->>
->> arch/arm64/kernel/cpu_errata.c: In function 'is_spectrev2_safe':
->> arch/arm64/kernel/cpu_errata.c:829:39: error: 'arm64_bp_harden_smccc_cpus' undeclared 
->>
->> arch/arm64/kernel/cpu_errata.c: In function 'spectre_bhb_enable_mitigation':
->> arch/arm64/kernel/cpu_errata.c:839:39: error: '__hardenbp_enab' undeclared
->>
->> arch/arm64/kernel/cpu_errata.c:879:42: error: 'bp_hardening_data' undeclared
+On Tue, Apr 05, 2022 at 09:57:42PM +0200, Felix Fietkau wrote:
+> From: Lorenzo Bianconi <lorenzo@kernel.org>
 > 
-> Ick, odds are James did not build with those two configs :(
+> Introduce dma-coherent, cci-control and hifsys optional properties to
+> the mediatek ethernet controller bindings
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> ---
+>  Documentation/devicetree/bindings/net/mediatek-net.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mediatek-net.txt b/Documentation/devicetree/bindings/net/mediatek-net.txt
+> index 72d03e07cf7c..13cb12ee4ed6 100644
+> --- a/Documentation/devicetree/bindings/net/mediatek-net.txt
+> +++ b/Documentation/devicetree/bindings/net/mediatek-net.txt
+> @@ -41,6 +41,12 @@ Required properties:
+>  - mediatek,pctl: phandle to the syscon node that handles the ports slew rate
+>  	and driver current: only for MT2701 and MT7623 SoC
+>  
+> +Optional properties:
+> +- dma-coherent: present if dma operations are coherent
+> +- mediatek,cci-control: phandle to the cache coherent interconnect node
 
-I'm sure I tried allnoconfig - but evidently messed something up.
+There's a common property for this already. See CCI-400 binding.
 
+> +- mediatek,hifsys: phandle to the mediatek hifsys controller used to provide
+> +	various clocks and reset to the system.
+> +
 
-> James, any chance you can look into this and see what needs to be added
-> or changed with your patch series?
+This series is adding a handful of new properties. Please convert the 
+binding to DT schema first.
 
-Will do,...
-
-
-Thanks,
-
-James
+Rob

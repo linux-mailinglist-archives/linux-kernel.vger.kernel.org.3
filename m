@@ -2,57 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE444F7AEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0E54F7AED
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243566AbiDGJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S243574AbiDGJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243762AbiDGJDZ (ORCPT
+        with ESMTP id S243770AbiDGJDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:03:25 -0400
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141F252E78;
-        Thu,  7 Apr 2022 02:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1649322080;
-        bh=Z9pMcqz9PcDTm7oWvk9GqY4NaqgI4eR0toGt5vtlbW4=;
-        h=From:To:Cc:Subject:Date;
-        b=haIP9U+GA29bAgfGUyTWqmPbnOF9FxzvVPxJnuRs1gbBwCzrcF4inxO3IZOFeP29I
-         p2S/iXORSgM/woOB+3QA4B5wHQ6lSN+S0sBJhJjAXAESEoLOXd85bNPgfp+QkQlL4u
-         pOFGGFsEGtCL/ZjsVuDfhuAY8prm0WZY6z4xRjq0=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id 50B1A45; Thu, 07 Apr 2022 17:01:16 +0800
-X-QQ-mid: xmsmtpt1649322076tfjkopifx
-Message-ID: <tencent_BD8B1CF914FDE1104AFDFFEA200DCC0EB908@qq.com>
-X-QQ-XMAILINFO: MOwr6TNsEdeBxNTJKWZPE4J5SMyu2l167fUiO/OWz+5vIbAc87uSegMPpk0cbb
-         7iIF/BI5MZ5Dj9Uu01oqG/6M0XIq8HPTYij1IcuIdlArPBN41hUzcj5V6D1pVjl0LhmZvjVQMev1
-         1tOSe8qT0ruG7t+WScxEXrfGDujvpbCqhcTrK3mGg1UQw9gq6Zpn6bcMzDJyc90t5Sr+jKau0yq7
-         Q2T/p6sr7jw8A86xlaQxjwV1Vrhmv6ZUd9Te0i9h5BM3pWZxX1r0EEEPC8D+yiTkCXwMA4O4lHOG
-         Pq5J0hm/r3fKGDbZV0U9tlMBcisEmeEhs0yr/K7asDwphayN0mIawe/5WUfLqIr8gyqfeI+67SQK
-         vBbA7/YwkWkjzJRJqgUUIQOypSu3nMibAv1pq0vGQjMVrr37RvlJPGRQ3Z61h5BjSBDjQ+/ygsUG
-         98lgqHsjLFEpoHRos6Z8oAJGU5Vj4eXmM7Vdcv/OQyIerVlo6VAYFx42tPQR3JKzE0ZM0gHAnNoH
-         HPOOt30/qCFSwOE5hAF3r3F57IAhDVxJSOyfa+Cap2cYo0IZ6p6dgATlCLCx0mgPfVWX4tfbwpCN
-         SX8fRlsNzOzecg8vSpgpBLPXb3/t9Jcr4/HrG10W51k7Fp6sXyhA6MYM6Mqg2x6ap19JljxMy0SI
-         wDkb9xiI3JMOxB0tK6FxODYEUjhgbQ3wPc7CaG/BJWp69RhDCFbdCBY1SR9TaKP2ttj1TBIc2tZC
-         r1ESZ5bB7c4A4yGXQBFFgFThJUecqQPHEgrfDVvapvCgCJlpa6Oc0b8+LFdYN6qc/xzeXTFY67dp
-         aiF1FZuEb5XCtNt2PF9Nhv+Ito1RJT/4PEoFR9xRazUqqLNZyrFUma7tKndCjRna4XX0ok1amIZX
-         DvpoLRiOdUYXGpLBZbv8h4ugRwmm/qmVKTFmO98jhnyAmd6wWKF5z+LWWQY8JbtgxEns1dch35
-From:   xkernel.wang@foxmail.com
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] clk: mmp: pxa168: fix potential memory leaks in pxa168_clk_init()
-Date:   Thu,  7 Apr 2022 17:01:05 +0800
-X-OQ-MSGID: <20220407090105.14361-1-xkernel.wang@foxmail.com>
+        Thu, 7 Apr 2022 05:03:32 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4913205A;
+        Thu,  7 Apr 2022 02:01:31 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23743g5e001248;
+        Thu, 7 Apr 2022 11:01:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=1ezUATS7YucgATnJzZ/8KE0ypMPsbEqbkpxpFXJwO8U=;
+ b=3Ll0G2zY4iXhpM85f2y+tpuAkUiZ6MD+ymFHIxX5IdzbfmP9Rv2LnfP+hejpS+l/tsGx
+ 0t8+fixaS+WItL/S+j7XXa0Yt+K/U7T+iBrUb2rz51bPN3vkg0IFzodk8NFSgdnKyE+e
+ +rxyiWuAJh8OZ2+1p+5cgd9EB6gm6QrdTtuPL0a0z+k07TWVAvM8S+cyG6GLxoMv0Nc4
+ uEJmSTd3vkoDxAXOKJtKpfmOePhh+b1NTtDjobiwX190HbtdLnBzeXE9a7APjqgxLY/5
+ IUgldEdtq/qcdBNeiicTIZduR6tKo/Cw25+ODeHmxY+89tj9NGu8DPYtD28IUexIr9jY Kg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du13hsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 11:01:21 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9A3B10002A;
+        Thu,  7 Apr 2022 11:01:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9EE16215159;
+        Thu,  7 Apr 2022 11:01:20 +0200 (CEST)
+Received: from [10.201.22.81] (10.75.127.51) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 7 Apr
+ 2022 11:01:19 +0200
+Message-ID: <f2d9d0e9-aecf-6436-6ff5-56b4ccb98f6c@foss.st.com>
+Date:   Thu, 7 Apr 2022 11:01:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] stm: ltdc: fix two incorrect NULL checks on list iterator
+Content-Language: en-US
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        <yannick.fertre@foss.st.com>
+CC:     <airlied@linux.ie>, <daniel@ffwll.ch>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <marex@denx.de>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20220327055355.3808-1-xiam0nd.tong@gmail.com>
+ <be2042d2-e315-223d-5454-ebfb934f9d2d@foss.st.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <be2042d2-e315-223d-5454-ebfb934f9d2d@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,61 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-In pxa168_clk_init(), except for the first error path, the other error
-paths directly return without releasing the allocated resources, which
-can lead to memory leaks.
 
-This patch unifies the error handling code and each error will jump to
-the corresponding tag to release the resources.
+On 3/28/22 14:37, Raphael Gallais-Pou wrote:
+> Hello Xiaomeng
+> 
+> On 3/27/22 07:53, Xiaomeng Tong wrote:
+>> The two bugs are here:
+>> 	if (encoder) {
+>> 	if (bridge && bridge->timings)
+>>
+>> The list iterator value 'encoder/bridge' will *always* be set and
+>> non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
+>> incorrect to assume that the iterator value will be NULL if the
+>> list is empty or no element is found.
+>>
+>> To fix the bug, use a new variable '*_iter' as the list iterator,
+>> while use the old variable 'encoder/bridge' as a dedicated pointer
+>> to point to the found element.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
+>> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+>> ---
+>>   drivers/gpu/drm/stm/ltdc.c | 16 ++++++++++------
+>>   1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> 
+> Thanks for your fix
+> 
+> Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> 
+> 
+> Raphaël Gallais-Pou
+> 
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/clk/mmp/clk-of-pxa168.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/clk/mmp/clk-of-pxa168.c b/drivers/clk/mmp/clk-of-pxa168.c
-index f110c02..05b96cf 100644
---- a/drivers/clk/mmp/clk-of-pxa168.c
-+++ b/drivers/clk/mmp/clk-of-pxa168.c
-@@ -258,19 +258,19 @@ static void __init pxa168_clk_init(struct device_node *np)
- 	pxa_unit->mpmu_base = of_iomap(np, 0);
- 	if (!pxa_unit->mpmu_base) {
- 		pr_err("failed to map mpmu registers\n");
--		return;
-+		goto free_memory;
- 	}
- 
- 	pxa_unit->apmu_base = of_iomap(np, 1);
- 	if (!pxa_unit->apmu_base) {
- 		pr_err("failed to map apmu registers\n");
--		return;
-+		goto unmap_mpmu_region;
- 	}
- 
- 	pxa_unit->apbc_base = of_iomap(np, 2);
- 	if (!pxa_unit->apbc_base) {
- 		pr_err("failed to map apbc registers\n");
--		return;
-+		goto unmap_apmu_region;
- 	}
- 
- 	mmp_clk_init(np, &pxa_unit->unit, PXA168_NR_CLKS);
-@@ -282,6 +282,15 @@ static void __init pxa168_clk_init(struct device_node *np)
- 	pxa168_axi_periph_clk_init(pxa_unit);
- 
- 	pxa168_clk_reset_init(np, pxa_unit);
-+
-+	return;
-+
-+unmap_apmu_region:
-+	iounmap(pxa_unit->apmu_base);
-+unmap_mpmu_region:
-+	iounmap(pxa_unit->mpmu_base);
-+free_memory:
-+	kfree(pxa_unit);
- }
- 
- CLK_OF_DECLARE(pxa168_clk, "marvell,pxa168-clock", pxa168_clk_init);
--- 
+Applied on drm-misc-next.
+Many thanks for your patch,
+Philippe :-)

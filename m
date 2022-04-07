@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BDA4F7C28
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48744F7C27
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244032AbiDGJuQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Apr 2022 05:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S244029AbiDGJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244027AbiDGJuM (ORCPT
+        with ESMTP id S244023AbiDGJuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:50:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190D1205BC6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:48:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOk7-0007qa-3m; Thu, 07 Apr 2022 11:47:55 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOk7-001aNQ-Ph; Thu, 07 Apr 2022 11:47:54 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOk5-0004HR-NQ; Thu, 07 Apr 2022 11:47:53 +0200
-Message-ID: <e60722e4faf2b1a949431fad107eed08fdc695d9.camel@pengutronix.de>
-Subject: Re: [PATCH v2 04/10] dt-bindings: reset: add sama7g5 definitions
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux@armlinux.org.uk, sre@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org
-Date:   Thu, 07 Apr 2022 11:47:53 +0200
-In-Reply-To: <20220407071708.3848812-5-claudiu.beznea@microchip.com>
-References: <20220407071708.3848812-1-claudiu.beznea@microchip.com>
-         <20220407071708.3848812-5-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Thu, 7 Apr 2022 05:50:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AD61E3E2F;
+        Thu,  7 Apr 2022 02:48:02 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B32251F45DE5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649324881;
+        bh=XSzyXGkALxerACJYYB2yjt0W7j5ycyiFDYbsQJ735ew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mE8LT3p4imnNh/A8NJ5o64WyIINExF1JPvlxYOpJ1kwAn2eTsr/hpeyuXb3wRs8Bp
+         sAyDwEJGmP2db306Xp5XBCwEWFuwN29C6KeufSF8szvj4PfuRfxq7PFFVnihCumM71
+         DiY3hk3yI4POZaW9durBSoMacUaAIIy7qkefrVcjWtP5fMyKfv/jKLDOFg7SySsi1p
+         20DaP2vuSs7zYbkHHMnT7d0GR7fCnDb3EpXfJ7Rj0MOowWggM13qpiflNsI3edKQkA
+         VQ2JT8LOAJPk3AtnmJ6qqbUJvJw5dtDVdW2U+B5Mr4E83RVQLlm4l8ClIdTqtu16JV
+         8CJOTKjDEQf2w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robh+dt@kernel.org
+Cc:     krzk+dt@kernel.org, matthias.bgg@gmail.com, qii.wang@mediatek.com,
+        wsa@kernel.org, kewei.xu@mediatek.com,
+        angelogioacchino.delregno@collabora.com, hsinyi@chromium.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        miles.chen@mediatek.com
+Subject: [PATCH v2] dt-bindings: i2c: convert i2c-mt65xx to json-schema
+Date:   Thu,  7 Apr 2022 11:47:53 +0200
+Message-Id: <20220407094753.13282-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,15 +54,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Do, 2022-04-07 at 10:17 +0300, Claudiu Beznea wrote:
-> Add reset bindings for SAMA7G5. At the moment only USB PHYs are
-> included.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Convert I2C binding for MediaTek SoCs to Devicetree schema.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
 
-to be merged with this series.
+v2: Changed minItems for clocks, clock-names to 2 (main, dma clks are mandatory)
 
-regards
-Philipp
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  53 --------
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml   | 118 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 119 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+deleted file mode 100644
+index 026985b8f61a..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* MediaTek's I2C controller
+-
+-The MediaTek's I2C controller is used to interface with I2C devices.
+-
+-Required properties:
+-  - compatible: value should be either of the following.
+-      "mediatek,mt2701-i2c", "mediatek,mt6577-i2c": for MediaTek MT2701
+-      "mediatek,mt2712-i2c": for MediaTek MT2712
+-      "mediatek,mt6577-i2c": for MediaTek MT6577
+-      "mediatek,mt6589-i2c": for MediaTek MT6589
+-      "mediatek,mt6797-i2c", "mediatek,mt6577-i2c": for MediaTek MT6797
+-      "mediatek,mt7622-i2c": for MediaTek MT7622
+-      "mediatek,mt7623-i2c", "mediatek,mt6577-i2c": for MediaTek MT7623
+-      "mediatek,mt7629-i2c", "mediatek,mt2712-i2c": for MediaTek MT7629
+-      "mediatek,mt8168-i2c": for MediaTek MT8168
+-      "mediatek,mt8173-i2c": for MediaTek MT8173
+-      "mediatek,mt8183-i2c": for MediaTek MT8183
+-      "mediatek,mt8186-i2c": for MediaTek MT8186
+-      "mediatek,mt8192-i2c": for MediaTek MT8192
+-      "mediatek,mt8195-i2c", "mediatek,mt8192-i2c": for MediaTek MT8195
+-      "mediatek,mt8516-i2c", "mediatek,mt2712-i2c": for MediaTek MT8516
+-  - reg: physical base address of the controller and dma base, length of memory
+-    mapped region.
+-  - interrupts: interrupt number to the cpu.
+-  - clock-div: the fixed value for frequency divider of clock source in i2c
+-    module. Each IC may be different.
+-  - clocks: clock name from clock manager
+-  - clock-names: Must include "main" and "dma", "arb" is for multi-master that
+-    one bus has more than two i2c controllers, if enable have-pmic need include
+-    "pmic" extra.
+-
+-Optional properties:
+-  - clock-frequency: Frequency in Hz of the bus when transfer, the default value
+-    is 100000.
+-  - mediatek,have-pmic: platform can control i2c form special pmic side.
+-    Only mt6589 and mt8135 support this feature.
+-  - mediatek,use-push-pull: IO config use push-pull mode.
+-  - vbus-supply: phandle to the regulator that provides power to SCL/SDA.
+-
+-Example:
+-
+-	i2c0: i2c@1100d000 {
+-			compatible = "mediatek,mt6577-i2c";
+-			reg = <0x1100d000 0x70>,
+-			      <0x11000300 0x80>;
+-			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
+-			clock-frequency = <400000>;
+-			mediatek,have-pmic;
+-			clock-div = <16>;
+-			clocks = <&i2c0_ck>, <&ap_dma_ck>;
+-			clock-names = "main", "dma";
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+new file mode 100644
+index 000000000000..16a1a3118204
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+@@ -0,0 +1,118 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/i2c-mt65xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek I2C controller
++
++description:
++  This driver interfaces with the native I2C controller present in
++  various MediaTek SoCs.
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++maintainers:
++  - Qii Wang <qii.wang@mediatek.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: mediatek,mt2712-i2c
++      - const: mediatek,mt6577-i2c
++      - const: mediatek,mt6589-i2c
++      - const: mediatek,mt7622-i2c
++      - const: mediatek,mt8168-i2c
++      - const: mediatek,mt8173-i2c
++      - const: mediatek,mt8183-i2c
++      - const: mediatek,mt8186-i2c
++      - const: mediatek,mt8192-i2c
++      - items:
++          - enum:
++              - mediatek,mt7629-i2c
++              - mediatek,mt8516-i2c
++          - const: mediatek,mt2712-i2c
++      - items:
++          - enum:
++              - mediatek,mt2701-i2c
++              - mediatek,mt6797-i2c
++              - mediatek,mt7623-i2c
++          - const: mediatek,mt6577-i2c
++      - items:
++          - enum:
++              - mediatek,mt8195-i2c
++          - const: mediatek,mt8192-i2c
++
++  reg:
++    items:
++      - description: Physical base address
++      - description: DMA base address
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 2
++    items:
++      - description: Main clock for I2C bus
++      - description: Clock for I2C via DMA
++      - description: Bus arbitrator clock
++      - description: Clock for I2C from PMIC
++
++  clock-names:
++    minItems: 2
++    items:
++      - const: main
++      - const: dma
++      - const: arb
++      - const: pmic
++
++  clock-div:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Frequency divider of clock source in I2C module
++
++  clock-frequency:
++    default: 100000
++    description:
++      SCL frequency to use (in Hz). If omitted, 100kHz is used.
++
++  mediatek,have-pmic:
++    description: Platform controls I2C from PMIC side
++    type: boolean
++
++  mediatek,use-push-pull:
++    description: Use push-pull mode I/O config
++    type: boolean
++
++  vbus-supply:
++    description: Phandle to the regulator providing power to SCL/SDA
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - clock-div
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c0: i2c@1100d000 {
++      compatible = "mediatek,mt6577-i2c";
++      reg = <0x1100d000 0x70>, <0x11000300 0x80>;
++      interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
++      clocks = <&i2c0_ck>, <&ap_dma_ck>;
++      clock-names = "main", "dma";
++      clock-div = <16>;
++      clock-frequency = <400000>;
++      mediatek,have-pmic;
++
++      #address-cells = <1>;
++      #size-cells = <0>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ee0b5a70aff1..28a17d4c8d12 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12361,7 +12361,7 @@ MEDIATEK I2C CONTROLLER DRIVER
+ M:	Qii Wang <qii.wang@mediatek.com>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
++F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+ F:	drivers/i2c/busses/i2c-mt65xx.c
+ 
+ MEDIATEK IOMMU DRIVER
+-- 
+2.35.1
+

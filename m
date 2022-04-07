@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27FE4F896B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8CD4F8978
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiDGUmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S230284AbiDGUoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiDGUln (ORCPT
+        with ESMTP id S230227AbiDGUoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:41:43 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5773A35FB55;
-        Thu,  7 Apr 2022 13:27:40 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n9so6055019plc.4;
-        Thu, 07 Apr 2022 13:27:40 -0700 (PDT)
+        Thu, 7 Apr 2022 16:44:11 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF25394A32
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:34:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bh17so13231505ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kJceoc9W0NY6WQcLWDMIjUqaSV6YiSwG7eotLlprMMg=;
-        b=QJu7DvN0eWTomcuK6UZ/vOM3RvOr+ZoXAeWbsasj4HCWNICOkIgYYpSkqlbswtVm1z
-         Acy1HWO3rk9a983uxCW0/xcfkEMMp8FFtfk79qp5tMrrmH9JsBsy9n4c6fEVVnFw+K3/
-         n1JFF8CE6pHhcISKrcAohYImmD3QcJSmYFRQRHje790xtHkylQiO8spF6Pgdl48Ve7aN
-         psUslbw8LIksxjefWNb3VVI23vM0UpeObvySgkOFDDRBbnGq5zrH72S1PBN6L1xpg3Vl
-         jtYEkc9P6l1InTcglroX/L7LL24Fpsxw6KQzm8sRSl3QYGOOmbhosKRWgQtuyy8i6BSD
-         eogw==
+        bh=w4demkHQ8Fg0Aca60O/7JU7pagAyPbUQlML8jEugCG4=;
+        b=faF6ayajtjqODf8i8x4Ee4sgq1q3Fe8w5GIBNd6EUxYhTh8lRr3ScB1O2+f/eFZVB7
+         WBZuT4ZezncXpe3w3YfCgXtmZ9ME1HUKZCh7SMj18BdBBLX61EI2U6s/TlRJ2XnOnROK
+         CBSmDDp2XF77fg+vfg4nylz11gURLu/w9p9t9U7ins3Z5+XVdzzfmyQi/UDZohlf/hSl
+         6zfP7PMuZ7D/yis5OyxXt6AirCAXefP5nyXCPBWGl367EWAh1GzSdImNZbK4X1i7HBSa
+         voE2I93cGhnsbCRAHteqmmHiYjHWMuzbqRTyegl56f5fMmWddGdye9mBnm7QBXCU5N8b
+         IShw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kJceoc9W0NY6WQcLWDMIjUqaSV6YiSwG7eotLlprMMg=;
-        b=RQYTgNbL7b8lArSE5+dBT61ESMfJ6Z+3vNCTPiTOtnROXGnLUROeFODdEvpPVK/f0b
-         BqxJA+Ne54GVpbAcrhM/NFexFllJioicMvpljXGIuWSg0V3SKLmweo6jnrjYPI3U2Ij/
-         Xuj59rGHDH5gkC5oLQlsEZgAXEpf8RlH8/YeNWwoMDYNPLiewA5Smrt3unugdmFKCNlG
-         0uhV5yshXUKVbTSYkYbeOsNWqw8/sWGGjemAQ7sH7F3fNUlWKe/D6JE4tRg6g2Br8eyB
-         BR5WtI9eBZfyziZAIoIlg6u+SMX7M0FenTODEEKGsRppi6wrq897XPGX5piWEvTEkk5O
-         OkJw==
-X-Gm-Message-State: AOAM530IRODXjMSSqa3r4W0XlkI+vqZrBWzkkhc6A7Xqglny11+xpTyB
-        yvB19Inct+EqiWgSLbBqIss=
-X-Google-Smtp-Source: ABdhPJxZXljtWG1ZL15O/6dRhB5QKE8O289YejrO4KoHkde3SlpynJRKXjvUmXAJbl+CD0L7QvChaQ==
-X-Received: by 2002:a17:902:8b88:b0:156:2b14:cb6e with SMTP id ay8-20020a1709028b8800b001562b14cb6emr15911211plb.14.1649363259814;
-        Thu, 07 Apr 2022 13:27:39 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id ng17-20020a17090b1a9100b001c9f79927bfsm10251800pjb.25.2022.04.07.13.27.38
+        bh=w4demkHQ8Fg0Aca60O/7JU7pagAyPbUQlML8jEugCG4=;
+        b=xa2ahuVedCqbgWUxiYwYC2QuhIFPlR4rtBDiVkEzrVx5ocoUEVyet3K1Gde4qFRzbP
+         xx3RDz6PfTM5rvbdXr3JoGVj7yXPiLbjLp8uLK7dlR6XNeo+5tEMlDPuQsh3C4o51uxJ
+         LY61AL6IIkSjTwhhrYVtdrXxmMpVREdbzU1kL+5bz+tqZvV0bHySgkbaqmYqSxAySa//
+         EwnW5r6X5m7Dv4HP0Q/vdzr0yoveN9GROQjOrF+PN5HoDgXb43RAwQs4pQyZrsGjO+oV
+         8eFTlsUhMfYe/48Acob5At/ayuSBLB/qJMuwJdgWkpPjbTwxbHaf/MsQrn42oHaLBB/8
+         RRyg==
+X-Gm-Message-State: AOAM531GeSqKXz6nm7w5YzptW6dWwpGWY36F5dJ948F7i50pNJ7QKylc
+        L4JRWPZpvtwLMdsG92I/tfZpzw==
+X-Google-Smtp-Source: ABdhPJxEDGr4Jf8tpwen4hc/gkUEJCBUHaMs6G9kK5gOiZYqgWgJpng5I7H46vgQYhy+G8VXg0Ns5g==
+X-Received: by 2002:a17:906:1ec3:b0:6cf:d118:59e2 with SMTP id m3-20020a1709061ec300b006cfd11859e2mr15195488ejj.767.1649363647213;
+        Thu, 07 Apr 2022 13:34:07 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id p13-20020a50d88d000000b0041cd1a083f7sm6134799edj.1.2022.04.07.13.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 13:27:38 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Fix range size vs end confusion
-Date:   Thu,  7 Apr 2022 13:28:33 -0700
-Message-Id: <20220407202836.1211268-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 07 Apr 2022 13:34:06 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: mediatek: align operating-points table name with dtschema
+Date:   Thu,  7 Apr 2022 22:34:01 +0200
+Message-Id: <20220407203402.33356-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,33 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Align the name of operating-points node to dtschema to fix warnings like:
 
-The fourth param is size, rather than range_end.
+  arch/arm64/boot/dts/mediatek/mt8173-elm.dt.yaml:
+    opp_table0: $nodename:0: 'opp_table0' does not match '^opp-table(-[a-z0-9]+)?$'
 
-Note that we could increase the address space size if we had a way to
-prevent buffers from spanning a 4G split, mostly just to avoid fw bugs
-with 64b math.
-
-Fixes: 84c31ee16f90 ("drm/msm/a6xx: Add support for per-instance pagetables")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 4 ++--
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi  | 4 ++--
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi  | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 17de46fc4bf2..80d57608b34a 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1742,7 +1742,7 @@ a6xx_create_private_address_space(struct msm_gpu *gpu)
- 		return ERR_CAST(mmu);
+diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+index a27b7628c5f7..16905596316d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+@@ -19,7 +19,7 @@ / {
+ 	#address-cells = <2>;
+ 	#size-cells = <2>;
  
- 	return msm_gem_address_space_create(mmu,
--		"gpu", 0x100000000ULL, 0x1ffffffffULL);
-+		"gpu", 0x100000000ULL, SZ_4G);
- }
+-	cluster0_opp: opp_table0 {
++	cluster0_opp: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 		opp00 {
+@@ -36,7 +36,7 @@ opp02 {
+ 		};
+ 	};
  
- static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+-	cluster1_opp: opp_table1 {
++	cluster1_opp: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 		opp00 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index 2b7d331a4588..acb775ca682e 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -57,7 +57,7 @@ aliases {
+ 		serial3 = &uart3;
+ 	};
+ 
+-	cluster0_opp: opp_table0 {
++	cluster0_opp: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 		opp-507000000 {
+@@ -94,7 +94,7 @@ opp-1703000000 {
+ 		};
+ 	};
+ 
+-	cluster1_opp: opp_table1 {
++	cluster1_opp: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 		opp-507000000 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 4b08691ed39e..3129e7783902 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -197,7 +197,7 @@ CLUSTER_SLEEP1: cluster-sleep-1 {
+ 		};
+ 	};
+ 
+-	gpu_opp_table: opp_table0 {
++	gpu_opp_table: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
 -- 
-2.35.1
+2.32.0
 

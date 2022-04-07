@@ -2,287 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4FF4F7FF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826704F7FE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343574AbiDGNFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S245731AbiDGNDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245742AbiDGNCo (ORCPT
+        with ESMTP id S245694AbiDGNCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:02:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8FF1BB7A7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649336444; x=1680872444;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HxcK3Y9CYtajuNDTLIHEUDdKJgVEo2P2iuRGDnGLJJM=;
-  b=TWlVtJqW3FHP5VKZPF6/tZvHlSHQHbgStR2/8w6OjpyxhEIum6rZ4Hyp
-   ZnmTzb407whxvERqUk7D+sWXhtSmm6tnaoZao+zT0llTUjKeuG3eFSWXe
-   qhZH08xC2rtYl0uNt0Md7pULpXOs8IXT6Fk+dvmAGLDreeHwL4VgG9X7j
-   L0O7OhRGdtvKgeQSEqVlU4xdJLfwHADKGG5+z0GFhjGmOZY5bakuQ06G4
-   GSCLaE5VUKNak3sMDIKRXJzdOYMlUM7jdD/LFM5YtQ/jJDw7Tt6ShOuLl
-   EhItbTlMJsFA5xh95iyiBvslwp69iSHkyhytetdNwsx/pyVMFYt5exlN8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10309"; a="286293752"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="286293752"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 06:00:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="571041388"
-Received: from sannilnx.jer.intel.com ([10.12.231.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 06:00:40 -0700
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>
-Subject: [PATCH 20/20] drm/i915/gsc: allocate extended operational memory in LMEM
-Date:   Thu,  7 Apr 2022 15:58:39 +0300
-Message-Id: <20220407125839.1479249-21-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220407125839.1479249-1-alexander.usyskin@intel.com>
-References: <20220407125839.1479249-1-alexander.usyskin@intel.com>
+        Thu, 7 Apr 2022 09:02:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685341AF535;
+        Thu,  7 Apr 2022 06:00:16 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZ1dx5XW8zgYVb;
+        Thu,  7 Apr 2022 20:58:29 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Apr 2022 21:00:14 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <john.garry@huawei.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <robin.murphy@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
+        <yangyicong@hisilicon.com>
+Subject: [PATCH v7 6/7] docs: Add HiSilicon PTT device driver documentation
+Date:   Thu, 7 Apr 2022 20:58:40 +0800
+Message-ID: <20220407125841.3678-7-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220407125841.3678-1-yangyicong@hisilicon.com>
+References: <20220407125841.3678-1-yangyicong@hisilicon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomas Winkler <tomas.winkler@intel.com>
+Document the introduction and usage of HiSilicon PTT device driver.
 
-GSC requires more operational memory than available on chip.
-Reserve 4M of LMEM for GSC operation. The memory is provided to the
-GSC as struct resource to the auxiliary data of the child device.
-
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/gpu/drm/i915/gt/intel_gsc.c | 92 ++++++++++++++++++++++++++---
- drivers/gpu/drm/i915/gt/intel_gsc.h |  3 +
- 2 files changed, 88 insertions(+), 7 deletions(-)
+ Documentation/trace/hisi-ptt.rst | 303 +++++++++++++++++++++++++++++++
+ 1 file changed, 303 insertions(+)
+ create mode 100644 Documentation/trace/hisi-ptt.rst
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index bfc307e49bf9..4d87519d5773 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -7,6 +7,7 @@
- #include <linux/mei_aux.h>
- #include "i915_drv.h"
- #include "i915_reg.h"
-+#include "gem/i915_gem_region.h"
- #include "gt/intel_gsc.h"
- #include "gt/intel_gt.h"
- 
-@@ -36,12 +37,68 @@ static int gsc_irq_init(int irq)
- 	return irq_set_chip_data(irq, NULL);
- }
- 
-+static int
-+gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size)
-+{
-+	struct intel_gt *gt = gsc_to_gt(gsc);
-+	struct drm_i915_gem_object *obj;
-+	void *vaddr;
-+	int err;
+diff --git a/Documentation/trace/hisi-ptt.rst b/Documentation/trace/hisi-ptt.rst
+new file mode 100644
+index 000000000000..13677705ee1f
+--- /dev/null
++++ b/Documentation/trace/hisi-ptt.rst
+@@ -0,0 +1,303 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	obj = i915_gem_object_create_lmem(gt->i915, size, I915_BO_ALLOC_CONTIGUOUS);
-+	if (IS_ERR(obj)) {
-+		drm_err(&gt->i915->drm, "Failed to allocate gsc memory\n");
-+		return PTR_ERR(obj);
-+	}
++======================================
++HiSilicon PCIe Tune and Trace device
++======================================
 +
-+	err = i915_gem_object_pin_pages_unlocked(obj);
-+	if (err) {
-+		drm_err(&gt->i915->drm, "Failed to pin pages for gsc memory\n");
-+		goto out_put;
-+	}
++Introduction
++============
 +
-+	vaddr = i915_gem_object_pin_map_unlocked(obj, i915_coherent_map_type(gt->i915, obj, true));
-+	if (IS_ERR(vaddr)) {
-+		err = PTR_ERR(vaddr);
-+		drm_err(&gt->i915->drm, "Failed to map gsc memory\n");
-+		goto out_unpin;
-+	}
++HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex
++integrated Endpoint (RCiEP) device, providing the capability
++to dynamically monitor and tune the PCIe link's events (tune),
++and trace the TLP headers (trace). The two functions are independent,
++but is recommended to use them together to analyze and enhance the
++PCIe link's performance.
 +
-+	memset(vaddr, 0, obj->base.size);
++On Kunpeng 930 SoC, the PCIe Root Complex is composed of several
++PCIe cores. Each PCIe core includes several Root Ports and a PTT
++RCiEP, like below. The PTT device is capable of tuning and
++tracing the links of the PCIe core.
++::
++          +--------------Core 0-------+
++          |       |       [   PTT   ] |
++          |       |       [Root Port]---[Endpoint]
++          |       |       [Root Port]---[Endpoint]
++          |       |       [Root Port]---[Endpoint]
++    Root Complex  |------Core 1-------+
++          |       |       [   PTT   ] |
++          |       |       [Root Port]---[ Switch ]---[Endpoint]
++          |       |       [Root Port]---[Endpoint] `-[Endpoint]
++          |       |       [Root Port]---[Endpoint]
++          +---------------------------+
 +
-+	i915_gem_object_unpin_map(obj);
++The PTT device driver registers one PMU device for each PTT device.
++The name of each PTT device is composed of 'hisi_ptt' prefix with
++the id of the SICL and the Core where it locates. The Kunpeng 930
++SoC encapsulates multiple CPU dies (SCCL, Super CPU Cluster) and
++IO dies (SICL, Super I/O Cluster), where there's one PCIe Root
++Complex for each SICL.
++::
++    /sys/devices/hisi_ptt<sicl_id>_<core_id>
 +
-+	intf->gem_obj = obj;
++Tune
++====
 +
-+	return 0;
++PTT tune is designed for monitoring and adjusting PCIe link parameters (events).
++Currently we support events in 4 classes. The scope of the events
++covers the PCIe core to which the PTT device belongs.
 +
-+out_unpin:
-+	i915_gem_object_unpin_pages(obj);
-+out_put:
-+	i915_gem_object_put(obj);
-+	return err;
-+}
++Each event is presented as a file under $(PTT PMU dir)/tune, and
++a simple open/read/write/close cycle will be used to tune the event.
++::
++    $ cd /sys/devices/hisi_ptt<sicl_id>_<core_id>/tune
++    $ ls
++    qos_tx_cpl    qos_tx_np    qos_tx_p
++    tx_path_rx_req_alloc_buf_level
++    tx_path_tx_req_alloc_buf_level
++    $ cat qos_tx_dp
++    1
++    $ echo 2 > qos_tx_dp
++    $ cat qos_tx_dp
++    2
 +
-+static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)
-+{
-+	struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
++Current value (numerical value) of the event can be simply read
++from the file, and the desired value written to the file to tune.
 +
-+	if (!obj)
-+		return;
++1. Tx path QoS control
++------------------------
 +
-+	if (i915_gem_object_has_pinned_pages(obj))
-+		i915_gem_object_unpin_pages(obj);
++The following files are provided to tune the QoS of the tx path of
++the PCIe core.
 +
-+	i915_gem_object_put(obj);
-+}
++- qos_tx_cpl: weight of Tx completion TLPs
++- qos_tx_np: weight of Tx non-posted TLPs
++- qos_tx_p: weight of Tx posted TLPs
 +
- struct gsc_def {
- 	const char *name;
- 	unsigned long bar;
- 	size_t bar_size;
- 	bool use_polling;
- 	bool slow_fw;
-+	size_t lmem_size;
- };
- 
- /* gsc resources and definitions (HECI1 and HECI2) */
-@@ -74,6 +131,7 @@ static const struct gsc_def gsc_def_dg2[] = {
- 		.name = "mei-gsc",
- 		.bar = DG2_GSC_HECI1_BASE,
- 		.bar_size = GSC_BAR_LENGTH,
-+		.lmem_size = SZ_4M,
- 	},
- 	{
- 		.name = "mei-gscfi",
-@@ -90,26 +148,33 @@ static void gsc_release_dev(struct device *dev)
- 	kfree(adev);
- }
- 
--static void gsc_destroy_one(struct intel_gsc_intf *intf)
-+static void gsc_destroy_one(struct drm_i915_private *i915,
-+				  struct intel_gsc *gsc, unsigned int intf_id)
- {
-+	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
++The weight influences the proportion of certain packets on the PCIe link.
++For example, for the storage scenario, increase the proportion
++of the completion packets on the link to enhance the performance as
++more completions are consumed.
 +
- 	if (intf->adev) {
- 		auxiliary_device_delete(&intf->adev->aux_dev);
- 		auxiliary_device_uninit(&intf->adev->aux_dev);
- 		intf->adev = NULL;
- 	}
++The available tune data of these events is [0, 1, 2].
++Writing a negative value will return an error, and out of range
++values will be converted to 2. Note that the event value just
++indicates a probable level, but is not precise.
 +
- 	if (intf->irq >= 0)
- 		irq_free_desc(intf->irq);
- 	intf->irq = -1;
++2. Tx path buffer control
++-------------------------
 +
-+	gsc_ext_om_destroy(intf);
- }
- 
- static void gsc_init_one(struct drm_i915_private *i915,
--			 struct intel_gsc_intf *intf,
--			 unsigned int intf_id)
-+			       struct intel_gsc *gsc,
-+			       unsigned int intf_id)
- {
- 	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
- 	struct mei_aux_device *adev;
- 	struct auxiliary_device *aux_dev;
- 	const struct gsc_def *def;
-+	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
- 	int ret;
- 
- 	intf->irq = -1;
-@@ -141,7 +206,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 	intf->irq = irq_alloc_desc(0);
- 	if (intf->irq < 0) {
- 		drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
--		return;
-+		goto fail;
- 	}
- 
- 	ret = gsc_irq_init(intf->irq);
-@@ -155,6 +220,19 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 	if (!adev)
- 		goto fail;
- 
-+	if (def->lmem_size) {
-+		dev_dbg(&pdev->dev, "setting up GSC lmem\n");
++Following files are provided to tune the buffer of tx path of the PCIe core.
 +
-+		if (gsc_ext_om_alloc(gsc, intf, def->lmem_size)) {
-+			dev_err(&pdev->dev, "setting up gsc extended operational memory failed\n");
-+			kfree(adev);
-+			goto fail;
-+		}
++- tx_path_rx_req_alloc_buf_level: watermark of Rx requested
++- tx_path_tx_req_alloc_buf_level: watermark of Tx requested
 +
-+		adev->ext_op_mem.start = i915_gem_object_get_dma_address(intf->gem_obj, 0);
-+		adev->ext_op_mem.end = adev->ext_op_mem.start + def->lmem_size;
-+	}
++These events influence the watermark of the buffer allocated for each
++type. Rx means the inbound while Tx means outbound. The packets will
++be stored in the buffer first and then transmitted either when the
++watermark reached or when timed out. For a busy direction, you should
++increase the related buffer watermark to avoid frequently posting and
++thus enhance the performance. In most cases just keep the default value.
 +
- 	adev->irq = intf->irq;
- 	adev->bar.parent = &pdev->resource[0];
- 	adev->bar.start = def->bar + pdev->resource[0].start;
-@@ -188,7 +266,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 
- 	return;
- fail:
--	gsc_destroy_one(intf);
-+	gsc_destroy_one(i915, gsc, intf->id);
- }
- 
- static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
-@@ -229,7 +307,7 @@ void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *i915)
- 		return;
- 
- 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
--		gsc_init_one(i915, &gsc->intf[i], i);
-+		gsc_init_one(i915, gsc, i);
- }
- 
- void intel_gsc_fini(struct intel_gsc *gsc)
-@@ -241,5 +319,5 @@ void intel_gsc_fini(struct intel_gsc *gsc)
- 		return;
- 
- 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
--		gsc_destroy_one(&gsc->intf[i]);
-+		gsc_destroy_one(gt->i915, gsc, i);
- }
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.h b/drivers/gpu/drm/i915/gt/intel_gsc.h
-index 68582f912b21..fcac1775e9c3 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.h
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.h
-@@ -20,11 +20,14 @@ struct mei_aux_device;
- 
- /**
-  * struct intel_gsc - graphics security controller
-+ *
-+ * @gem_obj: scratch memory GSC operations
-  * @intf : gsc interface
-  */
- struct intel_gsc {
- 	struct intel_gsc_intf {
- 		struct mei_aux_device *adev;
-+		struct drm_i915_gem_object *gem_obj;
- 		int irq;
- 		unsigned int id;
- 	} intf[INTEL_GSC_NUM_INTERFACES];
++The available tune data of above events is [0, 1, 2].
++Writing a negative value will return an error, and out of range
++values will be converted to 2. Note that the event value just
++indicates a probable level, but is not precise.
++
++Trace
++=====
++
++PTT trace is designed for dumping the TLP headers to the memory, which
++can be used to analyze the transactions and usage condition of the PCIe
++Link. You can choose to filter the traced headers by either requester ID,
++or those downstream of a set of Root Ports on the same core of the PTT
++device. It's also supported to trace the headers of certain type and of
++certain direction.
++
++You can use the perf command `perf record` to set the parameters, start
++trace and get the data. It's also supported to decode the trace
++data with `perf report`. The control parameters for trace is inputted
++as event code for each events, which will be further illustrated later.
++An example usage is like
++::
++    $ perf record -e hisi_ptt0_2/filter=0x80001,type=1,direction=1,
++      format=1/ -- sleep 5
++
++This will trace the TLP headers downstream root port 0000:00:10.1 (event
++code for event 'filter' is 0x80001) with type of posted TLP requests,
++direction of inbound and traced data format of 8DW.
++
++1. filter
++---------
++
++The TLP headers to trace can be filtered by the Root Ports or the requester
++ID of the endpoints, which are located on the same core of the PTT device.
++You can set the filter by specifying the `filter` parameter which is required
++to start the trace. The parameter value is 20 bit. The supported filters and
++related values are outputted through `available_root_port_filters` and
++`available_requester_filters` sysfs attributes for Root Ports and Requesters
++respectively.
++::
++    $ cat available_root_port_filters
++    0000:00:10.0	0x80001
++    0000:00:11.0	0x80004
++    $ cat available_requester_filters
++    0000:01:00.0	0x00100
++    0000:01:00.1	0x00101
++
++Note that multiple Root Ports can be specified at one time, but only
++one Endpoint function can be specified in one trace. Specifying both
++Root Port and function at the same time is not supported.
++
++If no filter is available, reading the related filter sysfs attribute
++will get an empty string.
++::
++    $ cat available_root_port_filters
++
++    $ cat available_requester_filters
++
++The available filters can be dynamically updated, which means you can always
++get correct filter information when hotplug events happen, or when you manually
++remove/rescan the devices.
++
++2. type
++-------
++
++You can trace the TLP headers of certain types by specifying the `type`
++parameter, which is required to start the trace. The parameter value is
++8 bit. Current supported types and related values are shown below:
++
++8'b00000001: posted requests (P)
++8'b00000010: non-posted requests (NP)
++8'b00000100: completions (CPL)
++
++You can specify multiple types when tracing inbound TLP headers, but can only
++specify one when tracing outbound TLP headers.
++
++3. direction
++------------
++
++You can trace the TLP headers from certain direction, which is relative
++to the Root Port or the PCIe core, by specifying the `direction` parameter.
++This is optional and the default parameter is inbound. The parameter value
++is 4 bit. When the desired format is 4DW, directions and related values
++supported are shown below:
++
++4'b0000: inbound TLPs (P, NP, CPL)
++4'b0001: outbound TLPs (P, NP, CPL)
++4'b0010: outbound TLPs (P, NP, CPL) and inbound TLPs (P, NP, CPL B)
++4'b0011: outbound TLPs (P, NP, CPL) and inbound TLPs (CPL A)
++
++When the desired format is 8DW, directions and related values supported are
++shown below:
++
++4'b0000: reserved
++4'b0001: outbound TLPs (P, NP, CPL)
++4'b0010: inbound TLPs (P, NP, CPL B)
++4'b0011: inbound TLPs (CPL A)
++
++Inbound completions are classified into two types:
++
++completion A (CPL A): completion of CHI/DMA/Native non-posted requests, except for CPL B
++completion B (CPL B): completion of DMA remote2local and P2P non-posted requests
++
++4. format
++--------------
++
++You can change the format of the traced TLP headers by specifying the
++`format` parameter. The default format is 4DW. The parameter value is 4 bit.
++Current supported formats and related values are shown below:
++
++4'b0000: 4DW length per TLP header
++4'b0001: 8DW length per TLP header
++
++The traced TLP header format is different from the PCIe standard.
++
++When using the 8DW data format, the entire TLP header is logged
++(Header DW0-3 shown below). For example, the TLP header for Memory
++Reads with 64-bit addresses is shown in PCIe r5.0, Figure 2-17;
++the header for Configuration Requests is shown in Figure 2.20, etc.
++
++In addition, 8DW trace buffer entries contain a timestamp and
++possibly a prefix for a PASID TLP prefix (see Figure 6-20, PCIe r5.0).
++Otherwise this field will be all 0.
++
++The bit[31:11] of DW0 is always 0x1fffff, which can be
++used to distinguish the data format. 8DW format is like
++::
++    bits [                 31:11                 ][       10:0       ]
++         |---------------------------------------|-------------------|
++     DW0 [                0x1fffff               ][ Reserved (0x7ff) ]
++     DW1 [                       Prefix                              ]
++     DW2 [                     Header DW0                            ]
++     DW3 [                     Header DW1                            ]
++     DW4 [                     Header DW2                            ]
++     DW5 [                     Header DW3                            ]
++     DW6 [                   Reserved (0x0)                          ]
++     DW7 [                        Time                               ]
++
++When using the 4DW data format, DW0 of the trace buffer entry
++contains selected fields of DW0 of the TLP, together with a
++timestamp.  DW1-DW3 of the trace buffer entry contain DW1-DW3
++directly from the TLP header.
++
++4DW format is like
++::
++    bits [31:30] [ 29:25 ][24][23][22][21][    20:11   ][    10:0    ]
++         |-----|---------|---|---|---|---|-------------|-------------|
++     DW0 [ Fmt ][  Type  ][T9][T8][TH][SO][   Length   ][    Time    ]
++     DW1 [                     Header DW1                            ]
++     DW2 [                     Header DW2                            ]
++     DW3 [                     Header DW3                            ]
++
++5. memory management
++--------------------
++
++The traced TLP headers will be written to the memory allocated
++by the driver. The hardware accepts 4 DMA address with same size,
++and writes the buffer sequentially like below. If DMA addr 3 is
++finished and the trace is still on, it will return to addr 0.
++::
++    +->[DMA addr 0]->[DMA addr 1]->[DMA addr 2]->[DMA addr 3]-+
++    +---------------------------------------------------------+
++
++Driver will allocate each DMA buffer of 4MiB. The finished buffer
++will be copied to the perf AUX buffer allocated by the perf core.
++Once the AUX buffer is full while the trace is still on, driver
++will commit the AUX buffer first and then apply for a new one with
++the same size. The size of AUX buffer is default to 16MiB. User can
++adjust the size by specifying the `-m` parameter of the perf command.
++
++Note that there is a gap between committing the old AUX buffer and
++applying a new one, which means the trace is stopped during the
++moment and TLPs transferred in the moment cannot be traced. To avoid
++this situation, you should begin the trace with large AUX buffer
++enough to avoid this gap.
++
++6. decoding
++-----------
++
++You can decode the traced data with `perf report -D` command (currently
++only support to dump the raw trace data). The traced data will be decoded
++according to the format described previously (take 8DW as an example):
++::
++    [...perf headers and other information]
++    . ... HISI PTT data: size 4194304 bytes
++    .  00000000: 00 00 00 00                                 Prefix
++    .  00000004: 01 00 00 60                                 Header DW0
++    .  00000008: 0f 1e 00 01                                 Header DW1
++    .  0000000c: 04 00 00 00                                 Header DW2
++    .  00000010: 40 00 81 02                                 Header DW3
++    .  00000014: 33 c0 04 00                                 Time
++    .  00000020: 00 00 00 00                                 Prefix
++    .  00000024: 01 00 00 60                                 Header DW0
++    .  00000028: 0f 1e 00 01                                 Header DW1
++    .  0000002c: 04 00 00 00                                 Header DW2
++    .  00000030: 40 00 81 02                                 Header DW3
++    .  00000034: 02 00 00 00                                 Time
++    .  00000040: 00 00 00 00                                 Prefix
++    .  00000044: 01 00 00 60                                 Header DW0
++    .  00000048: 0f 1e 00 01                                 Header DW1
++    .  0000004c: 04 00 00 00                                 Header DW2
++    .  00000050: 40 00 81 02                                 Header DW3
++    [...]
 -- 
-2.32.0
+2.24.0
 

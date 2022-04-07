@@ -2,254 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B104F84E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44824F84F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345712AbiDGQYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S242601AbiDGQ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiDGQX7 (ORCPT
+        with ESMTP id S230077AbiDGQ2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:23:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAF21EF9C6;
-        Thu,  7 Apr 2022 09:21:48 -0700 (PDT)
-X-UUID: 0c4fcde325ee40d1ac7a75fc58780397-20220408
-X-UUID: 0c4fcde325ee40d1ac7a75fc58780397-20220408
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2021688543; Fri, 08 Apr 2022 00:21:44 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Apr 2022 00:21:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 00:21:43 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <pmladek@suse.com>
-CC:     <acme@kernel.org>, <akpm@linux-foundation.org>,
-        <alexander.shishkin@linux.intel.com>, <catalin.marinas@arm.com>,
-        <davem@davemloft.net>, <jolsa@redhat.com>, <jthierry@redhat.com>,
-        <keescook@chromium.org>, <kernelfans@gmail.com>,
-        <lecopzer.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>, <mark.rutland@arm.com>,
-        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>, <maz@kernel.org>,
-        <mcgrof@kernel.org>, <mingo@redhat.com>, <namhyung@kernel.org>,
-        <nixiaoming@huawei.com>, <peterz@infradead.org>,
-        <sparclinux@vger.kernel.org>, <sumit.garg@linaro.org>,
-        <wangqing@vivo.com>, <will@kernel.org>, <yj.chiang@mediatek.com>
-Subject: Re: [PATCH v3 4/5] kernel/watchdog: Adapt the watchdog_hld interface for async model
-Date:   Fri, 8 Apr 2022 00:21:43 +0800
-Message-ID: <20220407162143.1127-1-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <YkxeAM+SwYHAnJE1@alley>
-References: <YkxeAM+SwYHAnJE1@alley>
+        Thu, 7 Apr 2022 12:28:12 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608CD83
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:26:12 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id e22so7372008ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=v3QsCIzdisYUuLiLnQmDzSoYwLmc15gSRevZBaOPZZs=;
+        b=CXYJO/5mj7iipjwJ/N7st49ebCvCj+NbvMTUFpbolabKTZ+BG4gMngfN/VdrxrGE+S
+         A/dFI5lB8cza04pEgNFVmVZTnkKoi4POAmbaGpjCsXlwbzYKr8ZwvaB5SgMCoT6zkIeF
+         FhITGYUYGgOvQFi/8upbolv8SgJHATOV5pzm6T2Vh3Yk3Drc33dRuCFOjVOg5Q+lDcpg
+         G9sSt+jWhiX59K3KIXBqa7QgmWqjCaYAGaGqWrUYzB7iKS+0bcovdKWY09mnHponESOV
+         bDI136WAZrty3agvghO8cAEOY4+Z2rUQx2nDQcMDe9DtSUK8HeSV2MfDnETqWe+nNT7M
+         PLNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=v3QsCIzdisYUuLiLnQmDzSoYwLmc15gSRevZBaOPZZs=;
+        b=wf8/u2zyNAlLI0pur8S9A+ERJosiNZ0q5MwVxd4NJg5V+UgjC+v3YQcH43FfWJkE8Z
+         ZuFYPYQykZKmmX0C52bY7bwfd2dW3VRKThpFPfRTx5VwdrPsvzBhau1nry09ZXjhiXHy
+         cnQf5SZDFP6RJ9xs+GjuU9/Y7q/u/dQvlNjIzqdaiM6jBEYXB6L57j+6ePyeZPGtA6fM
+         ZGZLQrKBR4o55dXR/X20GKfprOhrQshA4ygcPfOj8Aec6IrYswqoMc1FhC0ymIk4qaZc
+         ol5tTAFr8mIY5Ik9PqRgqd60cCzCCAglT/3Q6WzK0IkTjj8LOk/X3CTDWHHmEcLWMzlr
+         Hl0Q==
+X-Gm-Message-State: AOAM5310XAe7NuuetlkGL+CDOE/9WVZOgcsjshR/F30wBjciQioKQm2v
+        7Kk8MwZmg90ksyzzoVpJAwzzDOOdf5RtYZw3f4w=
+X-Google-Smtp-Source: ABdhPJzXMsD34UdYEy5KJKevqn0s4bXbSEYwgN1DxgwdC6GgdwraJiU2auVkxFOY7XmDNEcGLIUaT28dUisjWaUHwik=
+X-Received: by 2002:a6b:8f15:0:b0:645:dfdb:7a35 with SMTP id
+ r21-20020a6b8f15000000b00645dfdb7a35mr6224956iod.36.1649348765897; Thu, 07
+ Apr 2022 09:26:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <YktYX2OnLtyobRYD@kernel.org> <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
+ <CA+icZUVKgLLJvNF6ZU1e7Hjr_FsJO7x0gsGL6Jje1nv2ukhueA@mail.gmail.com> <Yk79WQQjvMyCddiO@dev-arch.thelio-3990X>
+In-Reply-To: <Yk79WQQjvMyCddiO@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 7 Apr 2022 18:25:29 +0200
+Message-ID: <CA+icZUXwF+qs0KxSeD8AF7ufrT6PodQa0iVi1w=qvdT0WWhkrA@mail.gmail.com>
+Subject: Re: Build perf with clang, failure with libperf
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Tue 2022-04-05 21:35:03, Lecopzer Chen wrote:
-> > > On Thu 2022-03-24 22:14:04, Lecopzer Chen wrote:
-> > > > When lockup_detector_init()->watchdog_nmi_probe(), PMU may be not ready
-> > > > yet. E.g. on arm64, PMU is not ready until
-> > > > device_initcall(armv8_pmu_driver_init).  And it is deeply integrated
-> > > > with the driver model and cpuhp. Hence it is hard to push this
-> > > > initialization before smp_init().
-> > > > 
-> > > > But it is easy to take an opposite approach and try to initialize
-> > > > the watchdog once again later.
-> > > > The delayed probe is called using workqueues. It need to allocate
-> > > > memory and must be proceed in a normal context.
-> > > > The delayed probe is queued only when the early one returns -EBUSY.
-> > > > It is the return code returned when PMU is not ready yet.
-> > > > 
-> > > > Provide an API - retry_lockup_detector_init() for anyone who needs
-> > > > to delayed init lockup detector.
-> > > > 
-> > > > The original assumption is: nobody should use delayed probe after
-> > > > lockup_detector_check() which has __init attribute.
-> > > > That is, anyone uses this API must call between lockup_detector_init()
-> > > > and lockup_detector_check(), and the caller must have __init attribute
-> > > > 
-> > > > --- a/kernel/watchdog.c
-> > > > +++ b/kernel/watchdog.c
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * retry_lockup_detector_init - retry init lockup detector if possible.
-> > > > + *
-> > > > + * Only take effect when allow_lockup_detector_init_retry is true, which
-> > > > + * means it must call between lockup_detector_init() and lockup_detector_check().
-> > > > + * Be aware that caller must have __init attribute, relative functions
-> > > > + * will be freed after kernel initialization.
-> > > > + */
-> > > > +void __init retry_lockup_detector_init(void)
-> > > > +{
-> > > > +	if (!allow_lockup_detector_init_retry)
-> > > > +		return;
-> > > > +
-> > > > +	queue_work_on(__smp_processor_id(), system_wq, &detector_work);
-> > > > +}
-> > > > +
-> > > > +/* Ensure the check is called after the initialization of driver */
-> > > > +static int __init lockup_detector_check(void)
-> > > > +{
-> > > > +	/* Make sure no work is pending. */
-> > > > +	flush_work(&detector_work);
-> > > 
-> > > This is racy. We should first disable
-> > > "allow_lockup_detector_init_retry" to make sure
-> > > that retry_lockup_detector_init() will not queue
-> > > the work any longer.
-> > 
-> > But disable before flush_work will make the 
-> >     lockup_detector_delay_init() ->
-> >     watchdog_nmi_probe ->
-> >     +	if (!allow_lockup_detector_init_retry)
-> >     +		return -EBUSY;
-> 
-> I see. It is exactly the reason why I suggest to remove the
-> optimization and keep the code simple.
-> 
-> > how about:
-> > ...
-> > static bool __init delayed_init_allowed = true;
-> > ...
-> > /*
-> >  * retry_lockup_detector_init - retry init lockup detector if possible.
-> >  *
-> >  * Only take effect when allow_lockup_detector_init_retry is true, which
-> >  * means it must call between lockup_detector_init() and lockup_detector_check().
-> >  * Be aware that caller must have __init attribute, relative functions
-> >  * will be freed after kernel initialization.
-> >  */
-> > void __init retry_lockup_detector_init(void)
-> > {
-> > 	if (!allow_lockup_detector_init_retry || !delayed_init_allowed)
-> > 		return;
-> > 
-> > 	/* 
-> > 	 * we shouldn't queue any delayed init work twice to avoid
-> > 	 * any unwanted racy.
-> > 	 */
-> > 	delayed_init_allowed = false;
-> 
-> Grrr, this is so complicated and confusing. It might be because of
-> badly selected variable names or comments. But I think that it is
-> simply a bad approach.
-> 
-> OK, you suggest two variables. If I get it correctly:
-> 
->     + The variable "delayed_init_allowed"
->      tries to prevent the race in lockup_detector_check().
-> 
->      It will make sure that the work could not be queued after
->      flush_work() finishes.
-> 
->      Is this obvious from the comment?
->      Is this obvious from the variable name?
-> 
->      I am sorry. But it is not obvious to me. I understand it only
->      because I see it together in this mail. It will be pretty
->      hard to get it from the code when I see it one year later.
-> 
-> 
->    + The variable "allow_lockup_detector_init_retry" has an unclear
->      meaning. It might mean:
-> 
-> 	+ watchdog_nmi_probe() ended with -EBUSY in
-> 	  lockup_detector_init() and we can try the delayed init.
-> 
-> 	+ but it also means that watchdog_nmi_probe() succeeded in
-> 	  lockup_detector_delay_init() and there is no need to
-> 	  try the delayed init any longer.
-> 
->        Is this obvious from the variable name?
->        Is it explained anywhere?
->        Is it easy to understand?
-> 
->        No, from my POV. It is really bad idea to have a single
->        variable with so many meanings.
-> 
-> 
-> And this is my problem with this approach. There was one variable with
-> unclear meanting. And you are trying to fix it by two variables
-> with unclear meaning.
-> 
+On Thu, Apr 7, 2022 at 5:03 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, Apr 07, 2022 at 12:27:14PM +0200, Sedat Dilek wrote:
+> > On Mon, Apr 4, 2022 at 11:53 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Hi Arnaldo,
+> > >
+> > > On Mon, Apr 04, 2022 at 05:43:11PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > Hi,
+> > > >
+> > > >       Trying to apply Sedat's patch something changed in my system,
+> > > > and that patch wasn't enough, so I had to first apply this one:
+> > > >
+> > > > commit 173b552663419f40bcd3cf9df4f68285cac72727
+> > > > Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > > Date:   Mon Apr 4 17:28:48 2022 -0300
+> > > >
+> > > >     tools build: Use $(shell ) instead of `` to get embedded libperl's ccopts
+> > > >
+> > > >     Just like its done for ldopts and for both in tools/perf/Makefile.config.
+> > > >
+> > > >     Using `` to initialize PERL_EMBED_CCOPTS somehow precludes using:
+> > > >
+> > > >       $(filter-out SOMETHING_TO_FILTER,$(PERL_EMBED_CCOPTS))
+> > > >
+> > > >     And we need to do it to allow for building with versions of clang where
+> > > >     some gcc options selected by distros are not available.
+> > > >
+> > > >     Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > > >     Cc: Fangrui Song <maskray@google.com>
+> > > >     Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > > >     Cc: Ian Rogers <irogers@google.com>
+> > > >     Cc: Jiri Olsa <jolsa@kernel.org>
+> > > >     Cc: John Keeping <john@metanate.com>
+> > > >     Cc: Leo Yan <leo.yan@linaro.org>
+> > > >     Cc: Michael Petlan <mpetlan@redhat.com>
+> > > >     Cc: Namhyung Kim <namhyung@kernel.org>
+> > > >     Cc: Nathan Chancellor <nathan@kernel.org>
+> > > >     Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > >     Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > >
+> > > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > > index 1480910c792e2cb3..90774b60d31b2b8e 100644
+> > > > --- a/tools/build/feature/Makefile
+> > > > +++ b/tools/build/feature/Makefile
+> > > > @@ -217,7 +217,7 @@ strip-libs = $(filter-out -l%,$(1))
+> > > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> > > > +PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > > >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > > >
+> > > >  $(OUTPUT)test-libperl.bin:
+> > > >
+> > > > ----------------------------------------------------- 8< -------------------
+> > > >
+> > > > After this I go on filtering out some of the gcc options that clang
+> > > > doesn't grok:
+> > > >
+> > > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > > index 90774b60d31b2b8e..bbc5e263e02385ed 100644
+> > > > --- a/tools/build/feature/Makefile
+> > > > +++ b/tools/build/feature/Makefile
+> > > > @@ -215,9 +215,12 @@ grep-libs  = $(filter -l%,$(1))
+> > > >  strip-libs = $(filter-out -l%,$(1))
+> > > >
+> > > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > > > +PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > > > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > > > +PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+> > > >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > > >
+> > > >  $(OUTPUT)test-libperl.bin:
+> > > >
+> > > > ----------------------------------------------------- 8< -------------------
+> > > >
+> > > > And then get to the problems at the end of this message, which seem
+> > > > similar to the problem described here:
+> > > >
+> > > > From  Nathan Chancellor <>
+> > > > Subject       [PATCH] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+> > > >
+> > > > https://lkml.org/lkml/2020/9/1/135
+> > > >
+> > > > So perhaps in this case its better to disable that
+> > > > -Werror,-Wcompound-token-split-by-macro when building with clang?
+> > >
+> > > Yes, I think that is probably the best solution. As far as I can tell,
+> > > at least in this file and context, the warning appears harmless, as the
+> > > "create a GNU C statement expression from two different macros" is very
+> > > much intentional, based on the presence of PERL_USE_GCC_BRACE_GROUPS.
+> > > The warning is fixed in upstream Perl by just avoiding creating GNU C
+> > > statement expressions using STMT_START and STMT_END:
+> > >
+> > > https://github.com/Perl/perl5/issues/18780
+> > > https://github.com/Perl/perl5/pull/18984
+> > >
+> > > If I am reading the source code correctly, an alternative to disabling
+> > > the warning would be specifying -DPERL_GCC_BRACE_GROUPS_FORBIDDEN but it
+> > > seems like that might end up impacting more than just this site,
+> > > according to the issue discussion above.
+> > >
+> >
+> > Thanks for the pointer Nathan.
+> >
+> > As said I hit the problem with Debian's perl v5.34.
+> >
+> > Checking perl5 Git reveals:
+> >
+> > "skip using gcc brace groups for STMT_START/END"
+> > https://github.com/Perl/perl5/commit/7169efc77525df70484a824bff4ceebd1fafc760
+>
+> GitHub says this is in 5.35.2, so it would make sense that 5.34 still
+> shows the issue.
+>
+> > "Partially Revert "skip using gcc brace groups for STMT_START/END""
+> > https://github.com/Perl/perl5/commit/e08ee3cb66f362c4901846a46014cfdfcd60326c
+> >
+> > Perl v5.34.x seems not to have these changes:
+> > https://github.com/Perl/perl5/compare/v5.34.0...v5.34.1
+> >
+> > Unsure if there exists a real fix for perl5.
+>
+> Perhaps those two changes could be cherry-picked into Debian's 5.34. I
+> have no idea if that is possible though.
+>
 
-I really apreciate for your reply, many thanks for it.
+What perl5 version has Arch Linux?
+Do you see the issue and need -Wno-compound-token-split-by-macro?
 
-For my point of view, the naming for "delayed_init_allowed" is the
-whole system state now is able to(allowed) do delayed init.
-The "allow_lockup_detector_init_retry" is that delayed init is ready
-to retry register NMI watchdog.
-
-Thus the meaning of delayed_init_"allowed" is, we are allowed to
-do delayed init including
-    1. initialization of delayed init
-    2. the retry of delayed init
-
-I'm sorry for that I didn't express the meaning clearly.
-I'll have definition in detail in the later version patch not only
-a brief comment and I hope you can review much easier.
-This only explain the thought how I made decision for the naming.
-
-So let me back to the discussion below.
-
-
-
-> > 	queue_work_on(__smp_processor_id(), system_wq, &detector_work);
-> > }
-> > 
-> > 
-> > /*
-> >  * Ensure the check is called after the initialization of driver
-> >  * and before removing init code.
-> >  */
-> > static int __init lockup_detector_check(void)
-> > {
-> > 	delayed_init_allowed = false;
-> > 	flush_work(&detector_work);
-> > 	allow_lockup_detector_init_retry = false;
-> > 
-> > 	return 0;
-> > }
-> 
-> No, please keep it simple. Just have one variable that will say
-> whether we are allowed to queue the work:
-> 
->   + It will be allowed when watchdog_nmi_probe() ended
->     with -EBUSY in lockup_detector_init()
-> 
->   + It will not longer be allowed when watchdog_nmi_probe()
->     succeeded or when lockup_detector_check() flushes
->     the pending works.
-> 
-
-Okay, let me think about it. I'll try to find a better solution that
-only uses one variable.
-And it's strongly about how users use it in 5th patch, I'll give further
-reply in 5th patch
-
-
-thanks
-BRs,
-Lecopzer
-
-
-
-
+- Sedat -

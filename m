@@ -2,100 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F094F75E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A39D4F75EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbiDGGYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S241030AbiDGG0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiDGGYd (ORCPT
+        with ESMTP id S235849AbiDGG0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:24:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6625CCB037;
-        Wed,  6 Apr 2022 23:22:28 -0700 (PDT)
-X-UUID: 634795d8d3e34ebd85765f82cca8dd7e-20220407
-X-UUID: 634795d8d3e34ebd85765f82cca8dd7e-20220407
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1335707426; Thu, 07 Apr 2022 14:22:24 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 7 Apr 2022 14:22:22 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 7 Apr 2022 14:22:22 +0800
-Message-ID: <c9a54f1c9350d63489a0f85443f5623fe5d7fe1d.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: Correct disp_aal
- binding for MT8183
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <chunkuang.hu@kernel.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <yongqiang.niu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <nancy.lin@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 7 Apr 2022 14:22:22 +0800
-In-Reply-To: <397e30c2-18c3-93d6-16f5-b113be77f51a@linaro.org>
-References: <20220406094654.29722-1-rex-bc.chen@mediatek.com>
-         <20220406094654.29722-2-rex-bc.chen@mediatek.com>
-         <397e30c2-18c3-93d6-16f5-b113be77f51a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 02:26:22 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BA1F6361;
+        Wed,  6 Apr 2022 23:24:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V9PYJ2X_1649312652;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V9PYJ2X_1649312652)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 07 Apr 2022 14:24:20 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] usb: gadget: u_audio: clean up some inconsistent indenting
+Date:   Thu,  7 Apr 2022 14:24:10 +0800
+Message-Id: <20220407062410.89214-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 16:44 +0200, Krzysztof Kozlowski wrote:
-> On 06/04/2022 11:46, Rex-BC Chen wrote:
-> > The driver data of MT8183 and MT8173 are different.
-> > The value of has_gamma for MT8173 is true while the value of MT8183
-> > is
-> > false. Therefore, the compatible of disp_aal for MT8183 is not
-> > suitable
-> > for the compatible for MT8173.
-> 
-> Just because one feature is not supported, it does not mean they are
-> incompatible, which you claim in the patch below. Are you sure they
-> are
-> really incompatible and MT8173 fallback cannot be used?
-> 
-> 
-> Best regards,
-> Krzysztof
+Eliminate the follow smatch warning:
 
-Hello Krzysztof,
+drivers/usb/gadget/function/u_audio.c:1182 g_audio_setup() warn:
+inconsistent indenting.
 
-Thanks for your review.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/usb/gadget/function/u_audio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The difference of disp_aal for each MediaTek SoCs is "has_gamma".
-And we only control this variable for different MediaTek SoCs.
-
-The value of has_gamma for MT8173 is true.
-The value of has_gamma for MT8183 is false. (Moreover, the driver data
-is null for MT8183)
-
-From this situation, I think it's not compatible between MT8173 and
-MT8183.
-
-reference: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/mediatek/mtk_disp_aal.c?h=v5.18-rc1#n153
-
-BRs,
-Rex
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 2bb569895a90..c1f62e91b012 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1179,8 +1179,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 	if (c_chmask) {
+ 		struct uac_rtd_params *prm = &uac->c_prm;
+ 
+-    spin_lock_init(&prm->lock);
+-    uac->c_prm.uac = uac;
++		spin_lock_init(&prm->lock);
++		uac->c_prm.uac = uac;
+ 		prm->max_psize = g_audio->out_ep_maxpsize;
+ 		prm->srate = params->c_srates[0];
+ 
+-- 
+2.20.1.7.g153144c
 

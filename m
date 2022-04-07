@@ -2,141 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EC44F8723
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C3B4F872C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346865AbiDGSiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S234090AbiDGSlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiDGSiL (ORCPT
+        with ESMTP id S232900AbiDGSlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:38:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69040559D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:36:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id dr20so12608185ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:36:08 -0700 (PDT)
+        Thu, 7 Apr 2022 14:41:44 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217A99C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:39:43 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id x21so11114720ybd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=efsOEK74uxQH0g4CA1QrPFjgXzWZd0T4aU7euJISdQs=;
-        b=qHBU2iY1gdx/BaLr7O+TicPwlIUJq0P588uTeJuPqy+p4jbqR3GT1rpakWQ1FwYg6H
-         9vCwzfhEX0k156qWY/2XNSeYGmSd+MeAcVfgmpSZkWEEDrVAlSYDO1bJf4GsKoiTaRjf
-         Fa6uMjaxFuznkMDuOwUBW9mfx0E4B415zukgiJ+u43lIQ1HG073zu3bRGzQNn8jh3/xu
-         BacDAA/ttzHu3krCFUSLk7uV7HDep2eeb1v4hh9429ZgHcZioQUz/CXJMUrpgF/V/bPz
-         GF9VD56SR/TnQU6QN1TXCBYbCC+grCuIO7qj6fgtCqnT+705f9ajUuS6Zy6AG4OIQpWZ
-         UBnQ==
+         :cc;
+        bh=UAeh1ndb0Eg7crGtnJw58Z18iLuAWHcKGHUFeHgg7EU=;
+        b=iAGglqeFMyEMYEbXVVJz2ahPPQGXs05Lu40ZiS45GElujDVJbJUy9Efi4NNnHKc3SG
+         vauY2UtrCTtXZiMkbtBUVZ4BbybaOWNabqExTPkDE+ApFK41H5n3EtY+BY7X95Ujks2/
+         2HuKA6ppec7EC29v7VtlAGMs1EapnORaIfA0/Ep0eNojwKwUTZtHyP6lOXC/OdzeFyat
+         ReHyDFc007uF1OBxM5KUwgVdqyr0HKD/wpwrU5qw3J/bbgnayP9rdseycOONPBDwjXO7
+         APJNhwxI4aZYdSU7fl/998zIlhLafQ2kaDNLHYzt7Z4LxDMuW3rvwGm1OvHcpYggTx0H
+         mT+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=efsOEK74uxQH0g4CA1QrPFjgXzWZd0T4aU7euJISdQs=;
-        b=4bJY4i3VSH6AXZIPS1aNnEmF+ZHjRztwsRQrXYoTd0zBeAvV++1gm6WC1+IghMJNVO
-         FiztAqWv6l4d4ydguE8un6URomIPkfH0zbajYLF6A1mbnhHEKe7+EBXw1jiQTAvQbrLe
-         8Pd8EdAqOGx32orFYw5+waazioIUdGXdXYk/bLMlUOuB523MI3B6x7U6MFapfUPjEfmg
-         cbqrm+M+yWrD3XPzDNx/u+nvtVhkD61ABMdKBCXEIZN9gHEiZitAJLAjCnbMFLuAD3/H
-         ZTIQSsBoh50zqfOTfo3Ut8lpiT8k4RFeXt0z7WpOa4wwO/WtRy0S3jrrMR2mnYu/lzdr
-         cR0g==
-X-Gm-Message-State: AOAM533i+Z6EQdyP/uy7l0KC9oW6nRGQ9K2UC5BGwkKLoa+Yi+PI+VtH
-        RxRrFkJ0v+s/avgiXT74NzsOkaD225SEL2YB/ms=
-X-Google-Smtp-Source: ABdhPJxy1jWI5CERHD0x1aaFsei6BQ4Qn3oXT1cfmvk0+B0UJyjaV5LYpzZPw2p9s5subhfYioZotT1XZiWr7wT7vpI=
-X-Received: by 2002:a17:906:7947:b0:6da:892f:2503 with SMTP id
- l7-20020a170906794700b006da892f2503mr14421854ejo.710.1649356566868; Thu, 07
- Apr 2022 11:36:06 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=UAeh1ndb0Eg7crGtnJw58Z18iLuAWHcKGHUFeHgg7EU=;
+        b=Xo0rQUkMGagRQX1oicIKU5N9ec3LaqStXvNFyCnFP9fV5yViiybhfM20RjwRp1P/pY
+         gBLOn2VqhJvj+KbJH3TdaFD8CZ5O7ExbMwrKiB5AVJMswZ15xyRS1QlvSO3GzbbAnugD
+         kL5FcWnh6ibNlrSGbSeifbhaWQPlcAaDhXrmi6EMPhsSv2zXRymyWqN5IU4t/wKwKlk+
+         eKsDF8ilGVW8O/6OPDsCc3MaJ2e7hNkIvfSZ9xjQ3njolOk79poWLEAFwtJONwLkm82m
+         XUkzkQ6rDH83GDjmv2/pmNFQzirp1T46DtwuSUf8bkZSn7ZU6lEYQf+yGnDiT+Cdeag9
+         CuFA==
+X-Gm-Message-State: AOAM533qhy7PYT6xXtFQrLR2t7j4pCwUt8/MdkJPIdeKqXWVcGvMSkwl
+        5uO0ltBPOKv1nXUzCP0/w5hihgpdl2okkQexdRx6+A==
+X-Google-Smtp-Source: ABdhPJw6fUkBOot/5tKJVB/SZ4xNUe+ZQDw7nGdUNTRn7ju/pEMnTWpQL3KjGTxKq5iRZ15sy8GNE95wxOek3GcEHuU=
+X-Received: by 2002:a25:94a:0:b0:615:7cf4:e2cd with SMTP id
+ u10-20020a25094a000000b006157cf4e2cdmr11831622ybm.227.1649356782119; Thu, 07
+ Apr 2022 11:39:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406165057.97492-1-h0tc0d3@gmail.com> <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
- <CADnq5_NXzEzo=6adPQzEBrAGtWfegyvi=yGHVVOsb+3r9OiNaQ@mail.gmail.com>
-In-Reply-To: <CADnq5_NXzEzo=6adPQzEBrAGtWfegyvi=yGHVVOsb+3r9OiNaQ@mail.gmail.com>
-From:   =?UTF-8?B?0JPRgNC40LPQvtGA0LjQuQ==?= <h0tc0d3@gmail.com>
-Date:   Thu, 7 Apr 2022 21:36:05 +0300
-Message-ID: <CAD5ugGDe1SnjEKfoJp0yS8BM-PPc=dOJ+7u-eEkMH0pSOTyFZg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Fix code with incorrect enum type
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Guchun Chen <guchun.chen@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Joseph Greathouse <Joseph.Greathouse@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+References: <20220330174621.1567317-1-bgardon@google.com> <20220330174621.1567317-12-bgardon@google.com>
+ <YkzI2CL13ZMnPOb2@google.com> <CANgfPd9b90NTM5CS19KU187-mFD3Kx_0FYX1cZ1YEonhbYqL0A@mail.gmail.com>
+In-Reply-To: <CANgfPd9b90NTM5CS19KU187-mFD3Kx_0FYX1cZ1YEonhbYqL0A@mail.gmail.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 7 Apr 2022 11:39:31 -0700
+Message-ID: <CANgfPd9zbKx655-m=jkN4kC4v8LBr5DY+5=wa1L=fAftkjmp_A@mail.gmail.com>
+Subject: Re: [PATCH v3 11/11] selftests: KVM: Test disabling NX hugepages on a VM
+To:     David Matlack <dmatlack@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alex Deucher I will do it. Initially, I came across an error that
-different enum types are used.
-Now I looked at the files, and indeed AMDGPU_GFX_PIPE_PRIO_* is used
-instead of AMDGPU_RING_PRIO_*.
-The question remains whether it is worth increasing the priority to
-AMDGPU_RING_PRIO_MAX=3D3 ?
-
-Regards, Grigory.
-
-=D1=87=D1=82, 7 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 20:46, Alex Deucher=
- <alexdeucher@gmail.com>:
+On Thu, Apr 7, 2022 at 11:26 AM Ben Gardon <bgardon@google.com> wrote:
 >
-> On Thu, Apr 7, 2022 at 2:21 AM Christian K=C3=B6nig
-> <ckoenig.leichtzumerken@gmail.com> wrote:
+> On Tue, Apr 5, 2022 at 3:55 PM David Matlack <dmatlack@google.com> wrote:
 > >
-> > Am 06.04.22 um 18:50 schrieb Grigory Vasilyev:
-> > > Instead of the 'amdgpu_ring_priority_level' type,
-> > > the 'amdgpu_gfx_pipe_priority' type was used,
-> > > which is an error when setting ring priority.
-> > > This is a minor error, but may cause problems in the future.
+> > On Wed, Mar 30, 2022 at 10:46:21AM -0700, Ben Gardon wrote:
+> > > Add an argument to the NX huge pages test to test disabling the feature
+> > > on a VM using the new capability.
 > > >
-> > > Instead of AMDGPU_RING_PRIO_2 =3D 2, we can use AMDGPU_RING_PRIO_MAX =
-=3D 3,
-> > > but AMDGPU_RING_PRIO_2 =3D 2 is used for compatibility with
-> > > AMDGPU_GFX_PIPE_PRIO_HIGH =3D 2, and not change the behavior of the
-> > > code.
-> > >
-> > > Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-> >
-> > Good catch, Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> >
+> > > Signed-off-by: Ben Gardon <bgardon@google.com>
 > > > ---
-> > >   drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >  .../selftests/kvm/include/kvm_util_base.h     |  2 +
+> > >  tools/testing/selftests/kvm/lib/kvm_util.c    |  7 ++
+> > >  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 67 ++++++++++++++++---
+> > >  .../kvm/x86_64/nx_huge_pages_test.sh          |  2 +-
+> > >  4 files changed, 66 insertions(+), 12 deletions(-)
 > > >
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c b/drivers/gpu/drm/=
-amd/amdgpu/gfx_v8_0.c
-> > > index 5554084ec1f1..9bc26395f833 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> > > @@ -1929,7 +1929,7 @@ static int gfx_v8_0_compute_ring_init(struct am=
-dgpu_device *adev, int ring_id,
-> > >               + ring->pipe;
+> > > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > > index 72163ba2f878..4db8251c3ce5 100644
+> > > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > > @@ -411,4 +411,6 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
 > > >
-> > >       hw_prio =3D amdgpu_gfx_is_high_priority_compute_queue(adev, rin=
-g) ?
-> > > -                     AMDGPU_GFX_PIPE_PRIO_HIGH : AMDGPU_RING_PRIO_DE=
-FAULT;
-> > > +                     AMDGPU_RING_PRIO_2 : AMDGPU_RING_PRIO_DEFAULT;
->
-> gfx_v8_0.c, gfx_v9_0.c, gfx_v10_0.c all do this.  Care to fix them all up=
-?
->
-> Alex
->
-> > >       /* type-2 packets are deprecated on MEC, use type-3 instead */
-> > >       r =3D amdgpu_ring_init(adev, ring, 1024, &adev->gfx.eop_irq, ir=
-q_type,
-> > >                            hw_prio, NULL);
+> > >  uint32_t guest_get_vcpuid(void);
+> > >
+> > > +void vm_disable_nx_huge_pages(struct kvm_vm *vm);
+> > > +
+> > >  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> > > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > index 9d72d1bb34fa..46a7fa08d3e0 100644
+> > > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > @@ -2765,3 +2765,10 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
+> > >       return value;
+> > >  }
+> > >
+> > > +void vm_disable_nx_huge_pages(struct kvm_vm *vm)
+> > > +{
+> > > +     struct kvm_enable_cap cap = { 0 };
+> > > +
+> > > +     cap.cap = KVM_CAP_VM_DISABLE_NX_HUGE_PAGES;
+> > > +     vm_enable_cap(vm, &cap);
+> > > +}
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > > index 2bcbe4efdc6a..a0c79f6ddc08 100644
+> > > --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > > @@ -13,6 +13,8 @@
+> > >  #include <fcntl.h>
+> > >  #include <stdint.h>
+> > >  #include <time.h>
+> > > +#include <linux/reboot.h>
+> > > +#include <sys/syscall.h>
+> > >
+> > >  #include <test_util.h>
+> > >  #include "kvm_util.h"
+> > > @@ -57,13 +59,56 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
+> > >                   expected_splits, actual_splits);
+> > >  }
+> > >
+> > > +static void help(void)
+> > > +{
+> > > +     puts("");
+> > > +     printf("usage: nx_huge_pages_test.sh [-x]\n");
+> > > +     puts("");
+> > > +     printf(" -x: Allow executable huge pages on the VM.\n");
 > >
+> > Making it a flag means we won't exercise it by default. Is there are
+> > reason to avoid exercising KVM_CAP_VM_DISABLE_NX_HUGE_PAGES by default?
+> >
+> > Assuming no, I would recommend factoring out the test to a helper
+> > function that takes a parameter that tells it if nx_huge_pages is
+> > enabled or disabled. Then run this helper function multiple times. E.g.
+> > once with nx_huge_pages enabled, once with nx_huge_pages disabled via
+> > KVM_CAP_VM_DISABLE_NX_HUGE_PAGES. This would also then let you test that
+> > disabling via module param also works.
+> >
+> > By the way, that brings up another issue. What if NX HugePages is not
+> > enabled on this host? e.g. we're running on AMD, or we're running on a
+> > non-affected Intel host, or we're running on a machine where nx huge
+> > pages has been disabled by the admin? The test should probably return
+> > KSFT_SKIP in those cases.
+
+The wrapper script just always turns nx_huge_pages on, which I think
+is a better solution, but perhaps it should check for permission
+errors when doing that.
+
+>
+> That's all a good idea. Will do.
+>
+> >
+> > > +     puts("");
+> > > +     exit(0);
+> > > +}
+> > > +
+> > >  int main(int argc, char **argv)
+> > >  {
+> > >       struct kvm_vm *vm;
+> > >       struct timespec ts;
+> > > +     bool disable_nx = false;
+> > > +     int opt;
+> > > +     int r;
+> > > +
+> > > +     while ((opt = getopt(argc, argv, "x")) != -1) {
+> > > +             switch (opt) {
+> > > +             case 'x':
+> > > +                     disable_nx = true;
+> > > +                     break;
+> > > +             case 'h':
+> > > +             default:
+> > > +                     help();
+> > > +                     break;
+> > > +             }
+> > > +     }
+> > >
+> > >       vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+> > >
+> > > +     if (disable_nx) {
+> > > +             /*
+> > > +              * Check if this process has the reboot permissions needed to
+> > > +              * disable NX huge pages on a VM.
+> > > +              *
+> > > +              * The reboot call below will never have any effect because
+> > > +              * the magic values are not set correctly, however the
+> > > +              * permission check is done before the magic value check.
+> > > +              */
+> > > +             r = syscall(SYS_reboot, 0, 0, 0, NULL);
+> > > +             if (r == -EPERM)
+> > > +                     return KSFT_SKIP;
+> > > +             TEST_ASSERT(r == -EINVAL,
+> > > +                         "Reboot syscall should fail with -EINVAL");
+> >
+> > Just check if KVM_CAP_VM_DISABLE_NX_HUGE_PAGES returns -EPERM?
+
+We could do that but then we wouldn't be checking that the permission
+checks work as expected.
+
+> >
+> > > +
+> > > +             vm_disable_nx_huge_pages(vm);
+> > > +     }
+> > > +
+> > >       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> > >                                   HPAGE_PADDR_START, HPAGE_SLOT,
+> > >                                   HPAGE_SLOT_NPAGES, 0);
+> > > @@ -83,21 +128,21 @@ int main(int argc, char **argv)
+> > >        * at 2M.
+> > >        */
+> > >       run_guest_code(vm, guest_code0);
+> > > -     check_2m_page_count(vm, 2);
+> > > -     check_split_count(vm, 2);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 2);
+> > > +     check_split_count(vm, disable_nx ? 0 : 2);
+> > >
+> > >       /*
+> > >        * guest_code1 is in the same huge page as data1, so it will cause
+> > >        * that huge page to be remapped at 4k.
+> > >        */
+> > >       run_guest_code(vm, guest_code1);
+> > > -     check_2m_page_count(vm, 1);
+> > > -     check_split_count(vm, 3);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 1);
+> > > +     check_split_count(vm, disable_nx ? 0 : 3);
+> > >
+> > >       /* Run guest_code0 again to check that is has no effect. */
+> > >       run_guest_code(vm, guest_code0);
+> > > -     check_2m_page_count(vm, 1);
+> > > -     check_split_count(vm, 3);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 1);
+> > > +     check_split_count(vm, disable_nx ? 0 : 3);
+> > >
+> > >       /*
+> > >        * Give recovery thread time to run. The wrapper script sets
+> > > @@ -110,7 +155,7 @@ int main(int argc, char **argv)
+> > >       /*
+> > >        * Now that the reclaimer has run, all the split pages should be gone.
+> > >        */
+> > > -     check_2m_page_count(vm, 1);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 1);
+> > >       check_split_count(vm, 0);
+> > >
+> > >       /*
+> > > @@ -118,13 +163,13 @@ int main(int argc, char **argv)
+> > >        * again to check that pages are mapped at 2M again.
+> > >        */
+> > >       run_guest_code(vm, guest_code0);
+> > > -     check_2m_page_count(vm, 2);
+> > > -     check_split_count(vm, 2);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 2);
+> > > +     check_split_count(vm, disable_nx ? 0 : 2);
+> > >
+> > >       /* Pages are once again split from running guest_code1. */
+> > >       run_guest_code(vm, guest_code1);
+> > > -     check_2m_page_count(vm, 1);
+> > > -     check_split_count(vm, 3);
+> > > +     check_2m_page_count(vm, disable_nx ? 4 : 1);
+> > > +     check_split_count(vm, disable_nx ? 0 : 3);
+> > >
+> > >       kvm_vm_free(vm);
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > > index 19fc95723fcb..29f999f48848 100755
+> > > --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > > @@ -14,7 +14,7 @@ echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > >  echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > >  echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > >
+> > > -./nx_huge_pages_test
+> > > +./nx_huge_pages_test "${@}"
+> > >  RET=$?
+> > >
+> > >  echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
+> > > --
+> > > 2.35.1.1021.g381101b075-goog
+> > >

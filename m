@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329314F8237
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1DB4F823D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344318AbiDGO4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S1344341AbiDGO5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344324AbiDGO4D (ORCPT
+        with ESMTP id S232665AbiDGO5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:56:03 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA941EC616;
-        Thu,  7 Apr 2022 07:54:02 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id q20so3732750wmq.1;
-        Thu, 07 Apr 2022 07:54:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=2quiVS5lI5pGNZBTe6ox280MwNH8HDfpHT/u6CqkRgw=;
-        b=gAnBl+rvIlAkU9wTLEnNidVtiZobjTRlf9wimgDNjjMSZwlqQU9joua7Wf57vPV2Ip
-         jvTS534nNCaNprQjMDIXuk86UWOD6X1HWplVQUhns8n206klFAE69lketsdWfsKglKMf
-         6ZLixFZF5aJQ4Tf9kDxHgC13jq30Ayv+3uyljTpEbEzjws2pFHXhj3WAhjJRetmr0IAY
-         IZ6adGpneXOjqqlJ3DunHiix1VEMSFZiuZ4AfWDvtJhA5dvrHVT/RG8QKxM276y1AM0+
-         xNUoKdKZQH2HOfcX/BoJb4bzmzX9eor+3rMgsybtU+NE2VHnyR9RA4X9mjhIrWjJb3j/
-         m00Q==
-X-Gm-Message-State: AOAM531GccRLzCStfuQDorY4De2PMHKjzX/NC8/PDQeCedO2Z13ykm3s
-        ulG0SEg8KcuavmSLYJZNpxS8+QcDUvw=
-X-Google-Smtp-Source: ABdhPJxDy17/TTh6YO6BE6Y3WkyWgxgVz/eJY3iQUSot3fbp2xBJvmrxpW+mu86675CUHKgw4Q5FVQ==
-X-Received: by 2002:a1c:46c5:0:b0:38e:6a96:1aa0 with SMTP id t188-20020a1c46c5000000b0038e6a961aa0mr12777360wma.186.1649343233891;
-        Thu, 07 Apr 2022 07:53:53 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm7732264wmn.46.2022.04.07.07.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:53:53 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 14:53:51 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V fixes for 5.18-rc2
-Message-ID: <20220407145351.n5nnpcp4rqusrqnh@liuwe-devbox-debian-v2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 10:57:04 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5766A1EE9ED;
+        Thu,  7 Apr 2022 07:54:53 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnKRAy+05iuezlAA--.612S2;
+        Thu, 07 Apr 2022 22:54:46 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        gregkh@linuxfoundation.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2 01/11] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+Date:   Thu,  7 Apr 2022 22:54:41 +0800
+Message-Id: <20220407145441.16253-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnKRAy+05iuezlAA--.612S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3AFW3Jr17Jr17ZFy8uFg_yoW8WF1rpF
+        4qyr9xtFWkZr4293WDtw4DZF4ruwsrurW7CFWxG39Y9Fn5JryqgFn7K3s0vFW2vFsrXr9F
+        vF1Fq3y3AF48A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
+        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq38nUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZE+eQAAsg
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-The following changes since commit f443e374ae131c168a065ea1748feac6b2e76613:
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-  Linux 5.17 (2022-03-20 13:14:17 -0700)
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
 
-are available in the Git repository at:
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20220407
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V2:
+  - Move del_timer_sync() before spin_lock_irqsave().
 
-for you to fetch changes up to eaa03d34535872d29004cb5cf77dc9dec1ba9a25:
+ drivers/tty/serial/sa1100.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-  Drivers: hv: vmbus: Replace smp_store_mb() with virt_store_mb() (2022-04-06 13:31:58 +0000)
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index 5fe6cccfc1a..041e6bca0dc 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -445,7 +445,7 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	 */
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
+-
++	del_timer_sync(&sport->timer);
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -476,8 +476,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
+-- 
+2.17.1
 
-----------------------------------------------------------------
-hyperv-fixes for 5.18-rc2
-  - Correctly propagate coherence information for VMbus devices (Michael
-    Kelley)
-  - Disable balloon and memory hot-add on ARM64 temporarily (Boqun Feng)
-  - Use barrier to prevent reording when reading ring buffer (Michael
-    Kelley)
-  - Use virt_store_mb in favour of smp_store_mb (Andrea Parri)
-  - Fix VMbus device object initialization (Andrea Parri)
-  - Deactivate sysctl_record_panic_msg on isolated guest (Andrea Parri)
-  - Fix a crash when unloading VMbus module (Guilherme G. Piccoli)
-----------------------------------------------------------------
-Andrea Parri (Microsoft) (3):
-      Drivers: hv: vmbus: Deactivate sysctl_record_panic_msg by default in isolated guests
-      Drivers: hv: vmbus: Fix initialization of device object in vmbus_device_register()
-      Drivers: hv: vmbus: Replace smp_store_mb() with virt_store_mb()
-
-Boqun Feng (2):
-      Drivers: hv: balloon: Support status report for larger page sizes
-      Drivers: hv: balloon: Disable balloon and hot-add accordingly
-
-Guilherme G. Piccoli (1):
-      Drivers: hv: vmbus: Fix potential crash on module unload
-
-Michael Kelley (3):
-      Drivers: hv: vmbus: Propagate VMbus coherence to each VMbus device
-      PCI: hv: Propagate coherence from VMbus device to PCI device
-      Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
-
- drivers/hv/channel_mgmt.c           |  6 ++--
- drivers/hv/hv_balloon.c             | 49 +++++++++++++++++++++++++---
- drivers/hv/hv_common.c              | 11 +++++++
- drivers/hv/ring_buffer.c            | 11 ++++++-
- drivers/hv/vmbus_drv.c              | 65 ++++++++++++++++++++++++++++++-------
- drivers/pci/controller/pci-hyperv.c |  9 +++++
- include/asm-generic/mshyperv.h      |  1 +
- 7 files changed, 132 insertions(+), 20 deletions(-)

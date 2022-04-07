@@ -2,182 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F48D4F815C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7874F815A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343839AbiDGOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S241449AbiDGOPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343827AbiDGOPr (ORCPT
+        with ESMTP id S229500AbiDGOPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:15:47 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (unknown [IPv6:2a01:111:f400:7e1a::60b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750C181D9F;
-        Thu,  7 Apr 2022 07:13:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f/xXwS4CgFQgvdYUYadAQ1SnNz1kgVCnuEYFJdasiTyx7PxVBDpS23a1CYe3N/lcqEq0laJvNiz9iXdNq0j3m2bymxdBxsDLRwhCyD/h5Cz1jcYqL9owQ6Bg2/L79VgxE8h2m25/l5fUghmM5Mm1BUG0w+sflpocX5Y2y2vwa8PgM8V4bPJ0DF/iT0A7kzBmmCuv4b85YF2Ee+ZiC2hRmLQSvuRxKQ8uEGs5PhtDUrsgiYesnN0uH+rFW9X4fajXSCc3tbKgtb9Bfh5s55aooKnpnXcfSEoTWK6VaDSGr1xWgcWrE+dXa4FH5BQP4ucgG3yW11vRhep6wH/kcRU3lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d5AuSybM7lqpfDgIJvc2PnVUIt5WOR0RSMdtM/o6/5E=;
- b=F3zGThmn+xbqv+wtdJrFzFn3QfulRfzs5g/WPST8oh3Pr8DXRzNxZ63KlUsPRIarrOcGAgQOmz/tcq9lwJJfIGOtJZo8RPfQhScP0g/pSQVnHkhyolPctArijRiMK7KXdClfxh6HiqwnuSJTjvezxLFfFVrCCZoohMDFpVCXEVOhiAlvvhPC4MekjTeoF0Z4rK1g1Lk+PQpBx6WELko6rfHtmcHeHNKPdB1J3RwTGMKNsvyU+by/QQmZMwJ3vkRaCJUjtKwUf9XYsYjkFevsI+7B5MyqVibg6sFzlW+ACVKGoOO6hdJUeWwyXxt0ALvRyEjm6qmM+dStOmsKT7dNwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d5AuSybM7lqpfDgIJvc2PnVUIt5WOR0RSMdtM/o6/5E=;
- b=jWwK2UJaurqYN3Va0tuHSQxYe1ciiZW6nFSuzR3vQQA4Mpij3raXvHZKxBPFUtjpCMw/Ya9JeyBdSk5RiLwEfM4gQp4nOhjxZcWJ0x/KynZTuY0pRVJQ1HDotoP+OJ7ZMBfinFt21ynz300l2kHm0Wps2C8KJThZDwiDSnI8EAI=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VE1PR04MB6542.eurprd04.prod.outlook.com (2603:10a6:803:123::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 14:12:55 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::8ed:49e7:d2e7:c55e]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::8ed:49e7:d2e7:c55e%3]) with mapi id 15.20.5123.031; Thu, 7 Apr 2022
- 14:12:55 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: dsa: felix: suppress -EPROBE_DEFER errors
-Thread-Topic: [PATCH net-next] net: dsa: felix: suppress -EPROBE_DEFER errors
-Thread-Index: AQHYSoBPV1WtqVE8g0+FLgf3++d+o6zkeXuAgAACRQCAAAJkAA==
-Date:   Thu, 7 Apr 2022 14:12:55 +0000
-Message-ID: <20220407141254.3kpg75l4byytwfye@skbuf>
-References: <20220407130625.190078-1-michael@walle.cc>
- <20220407135613.rlblrckb2h633bps@skbuf>
- <cd433399998c2f58884f08b4fc0fd66a@walle.cc>
-In-Reply-To: <cd433399998c2f58884f08b4fc0fd66a@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5b4c9078-aa35-486d-4c45-08da18a0b60c
-x-ms-traffictypediagnostic: VE1PR04MB6542:EE_
-x-microsoft-antispam-prvs: <VE1PR04MB6542279A127656A8ECC0A527E0E69@VE1PR04MB6542.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WaENyO3fDwqPMz+vp6BHmSfR2TeveRa0XPqTNF+bMKZ92Ety4fhQGFrAmkCIsbkVrc3L25QPZ5BYvSDQ8Wqk8/vJTBcxFUsGygG67r3mEqGcbBmIF4rZSVo4XLZ7fzc62uB/y1u/gO5dmSDWz9aS65AVR1RlVLHjy66V5dqWp2N7yLswrWYmuRZaGYrLa1seY1Gjyn0h2fNL5KXinxXn2dWMCYRcgsbJA853AmY+BtKkZf9a3liNNxCQWGGcb0duoWLcETQYwzJLRIm1vS8GUgIloPEI+evPLcCHs34jMKqZuhYcyWP4x9h4fH68BEl5AOZ4aXxKMWYs+WlOBA8J3f0CuIG3omWZZvosBCDI2gp87K0UIiUf27iagj0y6Ied6+2kr/ujlQeeyloTrilRgBtR2hDaSMHjraDhsO4Yle/UUfVAnOsJqvBE/34jYxsZCEEW456XNDStp7CUMrKVSwhCz53mKnCJ2q1MLg816bD7tdwV51HM1eHyQtn8sWzCg8acYMlDsw/Jcyw6hbt+2xysdXIXDjfgCH3M62m5sqrIblBQLnMH7yfmY8bSNOvpT82tpnw5eOoMZ9FOLVV0uyX8lGbDVk5vE+6OYJcGnc6oGlqL7l7/hGTEWP/7yE9If5IZfOIenp7hNAgBqZ03Z1AZopPNmbw3nfHJwDJ4L8o7baHCgvZ5m5qJgX70e3TQKPMdpKVdZ5KE7vZ63tjGew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(1076003)(26005)(316002)(6506007)(186003)(508600001)(9686003)(6512007)(33716001)(54906003)(6486002)(6916009)(71200400001)(66556008)(7416002)(8676002)(38100700002)(66476007)(4326008)(8936002)(86362001)(76116006)(66446008)(64756008)(66946007)(83380400001)(122000001)(2906002)(5660300002)(38070700005)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RvQ1GMLHTMy7YxW7f4w0VCeW2Y506dx2Qx6KZqizPJawHviboX8USZDugw4K?=
- =?us-ascii?Q?FdTIE9Cr+q3dqPNrZ3aepaE0mL/lGxyS2FI1wecl3waFp8e7+OT9aGoepo50?=
- =?us-ascii?Q?2NyckDW0+r9un+j/PY+kE0Z+pboFgTzZNXBylMfYsrhJTwbd2npfH/aZEsZu?=
- =?us-ascii?Q?ZhSDzzktJNJ9sgfGL5DEOOJvwIS/aInQwHBhyPvipAk4adk742fXCRw0AuEw?=
- =?us-ascii?Q?UMLKiQshwjstuS2KVNnmRaZRM5eq9yDfwN8ffo9OLmC5Hje3oBPrvGssVGPU?=
- =?us-ascii?Q?O7rj0mEhwMjPgRyMCZLW2Kc4BG3+qTJRN/gIXC2QjxCWBx+Ni7g2wPUzmSPs?=
- =?us-ascii?Q?GMxYFUgYkB5PKIV6TTODBquBpfbyjhXAjm/mjcaRj2Q+xYqw7OqKJsSPuGcr?=
- =?us-ascii?Q?EShtcMSMvcjeh+wqX40Dh5cxgcBAcK3TJs6M/YG/jqakm1Nmt/eGs+OktbnJ?=
- =?us-ascii?Q?xMkGz2BM+27TztIkQCsJC4vBNTH8NRJM7UZRB0fBydH2fhmvSW4J6DGeOsyj?=
- =?us-ascii?Q?kPuhAtYd0KykSrcPHwhqRo4B+8v+giqG9ssWSZHgvKM1Mh3c6ZkN2AS/QlMv?=
- =?us-ascii?Q?7UsHHsD8VyFJFxejLYDa/eljqp+XBNd3net681QlmuSwZW5+vL1hlsWUBIdL?=
- =?us-ascii?Q?ZzCghKJm2fgwn/f9ZY646X3RRVdSKfHqNX0QhCr6gpueWqEgp/IN6TP+opF7?=
- =?us-ascii?Q?k1Th/3BzML4Ri1hJEHUJObenW/7vR4n7KmvA8sR9/rQIT61SHW8wFl9dJjN3?=
- =?us-ascii?Q?1ycmIKpMqrU8KlcoxYniEaJZFNTI7bhLdZQxjXDqVydRESkvn8/XEfUDI3iV?=
- =?us-ascii?Q?41wnXPLgzHbUKfjAAZfXFOCfOP2ThioCcUTSGrDXhEbKxDI0lfTISZp8E1UA?=
- =?us-ascii?Q?seneBlXLRVXnz7UiwWweqzLUTKOJd8iErxMbYMvBzExHucYzkRbbslx+ghwe?=
- =?us-ascii?Q?WI+rNC5K0fFCJunB2kyNP4LgVydv2eePfDBlhUW/h74KJ1Z8V8DAcfGeuNaO?=
- =?us-ascii?Q?Nx8VpJT1v6AvVDg+UJC5ClF3DzxhiqA+30b3JhT7Fjp+8gnE+6syNZI48X8a?=
- =?us-ascii?Q?qi46Z8baWJrSLPEWIAWssXJYA4YeddGtBlWPOLBU9JmWLt5pdXgKaRY4Gpk7?=
- =?us-ascii?Q?VDGrZzfohr389ItCvm/C5WpBgLAqG3Q2iSbp5TMcjUlLjuplzAYXSNJFia3y?=
- =?us-ascii?Q?7nLMmOTYJGTjOF7koFxXy+H8SgJMN474DZBOdhQtTENjAZKvHOhJS8ay4AvD?=
- =?us-ascii?Q?XCrBiH3cF+tfRfpV7PBS1UZh/hAx+fih3yyAGZ59MNFYjZHspVOePVgb7aAU?=
- =?us-ascii?Q?JvVXlB7uElKMa/EIEmNd9zR/l9jCNkw9gOEcvMUmiAP2wKS3k49RuzQidtgO?=
- =?us-ascii?Q?V8Gg4fiRYCacie0jR/O7OA8EqpdiGOvCuTwiT/NAYvS4/kbfbHMZA0zyBbWI?=
- =?us-ascii?Q?t6C1SQtlweUco0Fu01VWwleNFIYhLlYOt7DeGvXpxfMRYMiM26pFZj6QHbNk?=
- =?us-ascii?Q?6To0P6+CmgRp6OPi8PxrQN+nPKfMIu7ANjaqxULx17xsUrTDqFcbChQ76pBW?=
- =?us-ascii?Q?Mn4gJ7jpNaoaei32NkvISIiZmsndDGTtxiSzt0psK62iHMNf/0udWhKksjuM?=
- =?us-ascii?Q?5OWH40aMuztPtRHln1/LCp/16qSqTRLyDcGA+8ktHGq5u7oI85Wnb3NLZgJg?=
- =?us-ascii?Q?BrGqK9zG4QxQt+GA1/do+ada7IkxPGC3drv0Kq08dtxfTDV62V7F+I6iht1c?=
- =?us-ascii?Q?EkXfzJx8K746nhZL2vOsy6JYi9P1YbY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F5262546C3ECA743B18F16727668AD5F@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 7 Apr 2022 10:15:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603AC17F3DC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:13:37 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so6347491pjk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mR1YeWMU9tOSnx680BK1SzX5cCKeKB4fg1ibUdrnHdE=;
+        b=qxQqqf9dbh1s4SOObcF+A7r6654kIcBnfemh5JwgpwDw9OjGdqjXErU8mqdijeekSC
+         loz5BCCusyTbjFg3wiHAgRiJBdc948kp8LH+LZio0/SZIWfoj0voECmUcLpqjb06iL7L
+         I+PBrKBpMj/URRb4cFfYAd+qKWdaOIwVdeVyH00i2ANa3rV84pBy48BUVqvLg9sDYhYu
+         0t+6DhJYApEMDvKs5C4xHem9+56dSvMihbXiRfgIlTFUB3DRvMa7W5tOuZU4pVpHAQif
+         gx9V4lJDwmSTgZBAnGlpnNvIUqnMKReCqkTDr2u1eniwFjTPrS8cYnIhW0haXndr/ACZ
+         bpIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mR1YeWMU9tOSnx680BK1SzX5cCKeKB4fg1ibUdrnHdE=;
+        b=rUW98IqNmBUEH1lMJWdSF+eUJ6rzG4ADc/Ct8lRa9vPkIghEefdsPxPNNTXpOEzjjk
+         eecLyBcAzrcvbQeN8egQpEKZN86Qf933UQPg+ECWhzEfaPA2/+r/+C45v4oNuYEOXE2R
+         YQODTF83K6qRHXdb73fTDjAv5n8dhTwDA7U42EXLT2Z7r4U6yiHs0KU4qQ98iGQECorH
+         b+AM4hkcxKfYnJh1SJD7VfoXWTVUuVqZK17x6iM1P3p+naAxadapnpSWAk1BaJHUBlf8
+         QK6+JJU8+Y17c/E9oa7E1hAedyKBAVvRTSzIlsEZWSYOIcUzvlR8TgtP8QWyjHpnvrqk
+         rNUQ==
+X-Gm-Message-State: AOAM530sWmHm828NXv6T2l9TdWonMf9++fxAfrdI9J2HACyJ36Zg+Oos
+        fjBLoZiA1lifedx7i78bu8s=
+X-Google-Smtp-Source: ABdhPJzE8uGA9C15x77lzGAz2d8S8eq63Rm8lnGX6kNwkdDAlDbhC9zDlQ0/mAFkm+ODMIrfRM8ySQ==
+X-Received: by 2002:a17:90b:4a0b:b0:1c7:221a:a600 with SMTP id kk11-20020a17090b4a0b00b001c7221aa600mr16063589pjb.112.1649340809591;
+        Thu, 07 Apr 2022 07:13:29 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id ne4-20020a17090b374400b001cb142237a8sm2311614pjb.4.2022.04.07.07.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 07:13:28 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>
+Subject: [PATCH] ASoC: rt5682: Add jack kcontrol
+Date:   Thu,  7 Apr 2022 23:13:16 +0900
+Message-Id: <20220407141316.5099-1-akihiko.odaki@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b4c9078-aa35-486d-4c45-08da18a0b60c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 14:12:55.2721
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yWU7W+qLbnfXjEHir3PKXqnV0/e2QLQNPLgSBmBjd08LYv9POXxcGpgmdHPP/ts6XrNeSl3CCU735h2XKdP/LA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6542
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 04:04:20PM +0200, Michael Walle wrote:
-> Am 2022-04-07 15:56, schrieb Vladimir Oltean:
-> > On Thu, Apr 07, 2022 at 03:06:25PM +0200, Michael Walle wrote:
-> > > Due to missing prerequisites the probe of the felix switch might be
-> > > deferred:
-> > > [    4.435305] mscc_felix 0000:00:00.5: Failed to register DSA
-> > > switch: -517
-> > >=20
-> > > It's not an error. Use dev_err_probe() to demote the error to a debug
-> > > message. While at it, replace all the dev_err()'s in the probe with
-> > > dev_err_probe().
-> > >=20
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > ---
-> >=20
-> > Please limit the dev_err_probe() to dsa_register_switch(). The resource
-> > that is missing is the DSA master, see of_find_net_device_by_node().
-> > The others cannot possibly return -EPROBE_DEFER.
->=20
-> This was my rationale (from the function doc):
->=20
->  * Note that it is deemed acceptable to use this function for error
->  * prints during probe even if the @err is known to never be -EPROBE_DEFE=
-R.
->  * The benefit compared to a normal dev_err() is the standardized format
->  * of the error code and the fact that the error code is returned.
->=20
-> In any case I don't have a strong opinion.
+Create a jack kcontrol manually as rt5682 does not use DAPM pins
+for jack and will not have kcontrols for them.
 
-Take this case:
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+---
+ include/sound/jack.h      | 2 +-
+ sound/core/jack.c         | 3 +--
+ sound/soc/codecs/rt5682.c | 5 +++++
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
- 		err =3D -ENOMEM;
--		dev_err(&pdev->dev, "Failed to allocate driver memory\n");
-+		dev_err_probe(&pdev->dev, err, "Failed to allocate driver memory\n");
+diff --git a/include/sound/jack.h b/include/sound/jack.h
+index 1181f536557e..bb5fcbd70d7c 100644
+--- a/include/sound/jack.h
++++ b/include/sound/jack.h
+@@ -60,10 +60,10 @@ struct snd_jack {
+ 	struct list_head kctl_list;
+ 	struct snd_card *card;
+ 	const char *id;
++	int type;
+ #ifdef CONFIG_SND_JACK_INPUT_DEV
+ 	struct input_dev *input_dev;
+ 	int registered;
+-	int type;
+ 	char name[100];
+ 	unsigned int key[6];   /* Keep in sync with definitions above */
+ #endif /* CONFIG_SND_JACK_INPUT_DEV */
+diff --git a/sound/core/jack.c b/sound/core/jack.c
+index d1e3055f2b6a..967a9769ea24 100644
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -530,8 +530,6 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
+ 
+ 		jack->input_dev->phys = "ALSA";
+ 
+-		jack->type = type;
+-
+ 		for (i = 0; i < SND_JACK_SWITCH_TYPES; i++)
+ 			if (type & (1 << i))
+ 				input_set_capability(jack->input_dev, EV_SW,
+@@ -545,6 +543,7 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
+ 		goto fail_input;
+ 
+ 	jack->card = card;
++	jack->type = type;
+ 	INIT_LIST_HEAD(&jack->kctl_list);
+ 
+ 	if (initial_kctl)
+diff --git a/sound/soc/codecs/rt5682.c b/sound/soc/codecs/rt5682.c
+index be68d573a490..583dc80f08d0 100644
+--- a/sound/soc/codecs/rt5682.c
++++ b/sound/soc/codecs/rt5682.c
+@@ -1012,6 +1012,7 @@ static int rt5682_set_jack_detect(struct snd_soc_component *component,
+ 		struct snd_soc_jack *hs_jack, void *data)
+ {
+ 	struct rt5682_priv *rt5682 = snd_soc_component_get_drvdata(component);
++	int ret;
+ 
+ 	rt5682->hs_jack = hs_jack;
+ 
+@@ -1025,6 +1026,10 @@ static int rt5682_set_jack_detect(struct snd_soc_component *component,
+ 		return 0;
+ 	}
+ 
++	ret = snd_jack_add_new_kctl(hs_jack->jack, hs_jack->jack->id, hs_jack->jack->type);
++	if (ret)
++		dev_warn(component->dev, "Failed to create jack kcontrol - %d\n", ret);
++
+ 	if (!rt5682->is_sdw) {
+ 		switch (rt5682->pdata.jd_src) {
+ 		case RT5682_JD1:
+-- 
+2.35.1
 
-(1) there is no need to print ENOMEM if we say "failed to allocate memory"
-(2) we don't use the return value of dev_err_probe() anyway, we have
-    actual teardown to do (pci_disable_device).
-(3) we _surely_ know that -ENOMEM !=3D -EPROBE_DEFER
-
->=20
-> > >=20
-> > > Should this be a patch with a Fixes tag?
-> >=20
-> > Whichever way you wish, no preference.
->=20
-> I'll limit it to just the one dev_err() and add a Fixes,
-> there might be scripts out there who greps dmesg for errors.
-
-Ok.=

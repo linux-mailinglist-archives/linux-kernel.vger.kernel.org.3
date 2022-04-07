@@ -1,20 +1,20 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797804F8208
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:44:51 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 04CCE4F820E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344216AbiDGOqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S1344302AbiDGOr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiDGOqg (ORCPT
+        with ESMTP id S1344225AbiDGOr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:46:36 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDF813FB2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:44:07 -0700 (PDT)
+        Thu, 7 Apr 2022 10:47:57 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2068.outbound.protection.outlook.com [40.107.93.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E49B6C1DA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:45:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=UzfS3CoJqsAB6lWYp8IELL56P65PDCy28X8C+JoE6c4GRzZZU2DBmisRClrCLa4ZOpZmVbZ/E9KdvFdeundkVbw7K8K2OQWz6NN7g2BlttdsRWt8gbukpHeKSL59iBc6+s3+9BCk7/FuYwxK+D6qtXPO/5OQxe9QmGEz6PId8N8h1LbDHniM3OWQtu2dwcnrGI/YSkr6lqYn2GjPLq797YLRvnqpvcqhuuC5RsRHd/8W2D9tff41AnTVE7u8w2t6mx7s2K31+jVqlqmYQpfCtcmNrY7HxgOeslLAadgAZ8Q9FSUWlxeaRjNE1BAkxnsW8z8tia236vezlHkBhbj9Tw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -128,11 +128,10 @@ X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
 X-MS-Exchange-CrossTenant-UserPrincipalName: Fzv340sGSKOfwcoGizzfZ8oWxTU1rklkva7ulKv6nEvIfnb26Ien9QlXfFoLCXduuK71Cdu+QYtj0oJnpov02w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4857
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

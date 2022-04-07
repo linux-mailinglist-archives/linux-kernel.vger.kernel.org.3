@@ -2,147 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AA14F87E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1378D4F87EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241795AbiDGTR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S235351AbiDGTSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347115AbiDGTQ3 (ORCPT
+        with ESMTP id S233268AbiDGTSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:16:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5988B23F9CB;
-        Thu,  7 Apr 2022 12:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649358868; x=1680894868;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=EpuU9FnJFmOX+BA1Irm1YxgXVJdK5TXoe/7lCiqp/zk=;
-  b=fzDXd6sZNwydbYFLaIluNQIXkc3fT1qQ3RuZNsgIh13Sm43Uw+3srB8C
-   TIXRzvOhWGSAsqfePpelCftAQqGaT3s8Z7ySu4/65V58zHyVv8PRHY3bT
-   3qsQDtEDl474zmkbXHcFgmMQ1l3LAYA5MKvG4uzLSwtg0t/fFc0HOqPg+
-   iY2FIB0o/z9taV/B3t8UcIpDKQQA3mKdJaCmHeo/u5tRQ5tJZWIFWJfOH
-   U+rWbflyLiuzQRqe/DW04VdEWH24BTuHQ6L6UTyvc1+Fwe5bFQifO1oG5
-   knn4o9jhZ3m2xZll6/rRBtf9GMxtSV6LnB5DfrzNviuL7oEOrdSICSski
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260255390"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="260255390"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 12:14:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="571193735"
-Received: from coffy.sc.intel.com ([10.3.79.166])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 12:14:19 -0700
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
-        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com
-Subject: [PATCH v2 10/10] trace: platform/x86/intel/ifs: Add trace point to track Intel IFS operations
-Date:   Thu,  7 Apr 2022 12:13:47 -0700
-Message-Id: <20220407191347.9681-11-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220407191347.9681-1-jithu.joseph@intel.com>
-References: <20220407191347.9681-1-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 15:18:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D7313F5F;
+        Thu,  7 Apr 2022 12:16:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18D2361E24;
+        Thu,  7 Apr 2022 19:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5521C385A6;
+        Thu,  7 Apr 2022 19:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649358965;
+        bh=f00Btqo5DlYfrezMEow0LHeltiwKLZP1dw5RpNj8PqU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pmV6UORIfcoZ35qmnWfNUmbsgdEf6q+0/d3cbYHdOrPBecDHPOzFSZ++wVLcdeeg7
+         4feOXerToNzwVYBQcs9s55GVMo5o8bGJQxOV1Oln/zYbOf0bprZpaod8JR8Q+zwtkH
+         pbQ5p3OsnJqVlS5O+t3BO6Mzi1vRSRQMFL+zb98amlDxIbY2zDXfjyXgHavFDxUmgx
+         XngXE3QqZkyYv+iSae8+b/JrJublzOcnRWGFsDILbtmVoF7zj1o7PBgJbPwkV3c0RL
+         5zIZRJIl90va2X5MhCAdU+UoGldEstst38KJkOtqkJevrgM3pvobbmkVfM6LiAFg1v
+         Hws4fdNOKvMfg==
+Message-ID: <66740f5e59d52b600d5033a07b794b78dfaf3c18.camel@kernel.org>
+Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiubo Li <xiubli@redhat.com>,
+        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 15:16:03 -0400
+In-Reply-To: <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
+References: <20220407151521.7968-1-lhenriques@suse.de>
+         <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+On Fri, 2022-04-08 at 03:03 +0800, Xiubo Li wrote:
+> On 4/7/22 11:15 PM, Luís Henriques wrote:
+> > When doing a direct/sync write, we need to invalidate the page cache in
+> > the range being written to.  If we don't do this, the cache will include
+> > invalid data as we just did a write that avoided the page cache.
+> > 
+> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > ---
+> >   fs/ceph/file.c | 19 ++++++++++++++-----
+> >   1 file changed, 14 insertions(+), 5 deletions(-)
+> > 
+> > Changes since v3:
+> > - Dropped initial call to invalidate_inode_pages2_range()
+> > - Added extra comment to document invalidation
+> > 
+> > Changes since v2:
+> > - Invalidation needs to be done after a write
+> > 
+> > Changes since v1:
+> > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+> > 
+> > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > index 5072570c2203..97f764b2fbdd 100644
+> > --- a/fs/ceph/file.c
+> > +++ b/fs/ceph/file.c
+> > @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+> >   		return ret;
+> >   
+> >   	ceph_fscache_invalidate(inode, false);
+> > -	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> > -					    pos >> PAGE_SHIFT,
+> > -					    (pos + count - 1) >> PAGE_SHIFT);
+> > -	if (ret < 0)
+> > -		dout("invalidate_inode_pages2_range returned %d\n", ret);
+> >   
+> >   	while ((len = iov_iter_count(from)) > 0) {
+> >   		size_t left;
+> > @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+> >   			break;
+> >   		}
+> >   		ceph_clear_error_write(ci);
+> > +
+> > +		/*
+> > +		 * we need to invalidate the page cache here, otherwise the
+> > +		 * cache will include invalid data in direct/sync writes.
+> > +		 */
+> > +		ret = invalidate_inode_pages2_range(
+> 
+> IMO we'd better use truncate_inode_pages_range() after write. The above 
+> means it's possibly will write the dirty pagecache back, which will 
+> overwrite and corrupt the disk data just wrote.
+> 
 
-Add tracing support which may be useful for debugging systems that fail to complete
-In Field Scan tests.
+I disagree. We call filemap_write_and_wait_range at the start of this,
+so any data that was dirty when we called write() will be written back
+before the sync write.
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
----
- drivers/platform/x86/intel/ifs/runtest.c |  5 ++++
- include/trace/events/intel_ifs.h         | 38 ++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 include/trace/events/intel_ifs.h
+If we truncate the range, then we'll potentially lose writes that came
+in after write was issued but before truncate_inode_pages_range. I think
+we'd rather let what we just wrote be clobbered in this situation than
+lose a write altogether.
 
-diff --git a/drivers/platform/x86/intel/ifs/runtest.c b/drivers/platform/x86/intel/ifs/runtest.c
-index f9c98d84183f..b9fac2ac7107 100644
---- a/drivers/platform/x86/intel/ifs/runtest.c
-+++ b/drivers/platform/x86/intel/ifs/runtest.c
-@@ -10,6 +10,9 @@
- 
- #include "ifs.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/intel_ifs.h>
-+
- bool ifs_disabled;
- 
- static int ifs_retry_set(const char *val, const struct kernel_param *kp);
-@@ -204,6 +207,8 @@ static void ifs_work_func(struct work_struct *work)
- 
- 		rdmsrl(MSR_SCAN_STATUS, status.data);
- 
-+		trace_ifs_status(activate, status);
-+
- 		/* Some cases can be retried, give up for others */
- 		if (!can_restart(status))
- 			break;
-diff --git a/include/trace/events/intel_ifs.h b/include/trace/events/intel_ifs.h
-new file mode 100644
-index 000000000000..0611f370cb37
---- /dev/null
-+++ b/include/trace/events/intel_ifs.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM intel_ifs
-+
-+#if !defined(_TRACE_IFS_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_IFS_H
-+
-+#include <linux/ktime.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(ifs_status,
-+
-+	TP_PROTO(union ifs_scan activate, union ifs_status status),
-+
-+	TP_ARGS(activate, status),
-+
-+	TP_STRUCT__entry(
-+		__field(	u64,	status	)
-+		__field(	u8,	start	)
-+		__field(	u8,	stop	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->start	= activate.start;
-+		__entry->stop	= activate.stop;
-+		__entry->status	= status.data;
-+	),
-+
-+	TP_printk("start: %.2x, stop: %.2x, status: %llx",
-+		__entry->start,
-+		__entry->stop,
-+		__entry->status)
-+);
-+
-+#endif /* _TRACE_IFS_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+All of this is somewhat academic though. If you're mixing buffered and
+direct writes like this without some sort of locking, then you're just
+asking for trouble. The aim here is "sane behavior to the best of our
+ability", but we can't expect it to always be sane when people do insane
+things. ;)
+
+> Though it seems impossible that these pagecaches will be marked dirty, 
+> but this call is misleading ?
+> 
+
+Not impossible at all. You can open a file O_DIRECT and then mmap the fd
+for PROT_WRITE (or just open the file a second time and do it).
+
+We definitely recommend against mixing buffered and direct I/O, but
+nothing really prevents someone from doing it. If the user is properly
+using file locking, then there's really no reason it shouldn't work.
+
+> 
+> > +				inode->i_mapping,
+> > +				pos >> PAGE_SHIFT,
+> > +				(pos + len - 1) >> PAGE_SHIFT);
+> > +		if (ret < 0) {
+> > +			dout("invalidate_inode_pages2_range returned %d\n",
+> > +			     ret);
+> > +			ret = 0;
+> > +		}
+> >   		pos += len;
+> >   		written += len;
+> >   		dout("sync_write written %d\n", written);
+> > 
+> 
+
 -- 
-2.17.1
-
+Jeff Layton <jlayton@kernel.org>

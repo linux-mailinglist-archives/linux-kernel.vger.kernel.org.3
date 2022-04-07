@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9C64F7A28
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D214F7A38
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243377AbiDGIsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S243409AbiDGIsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243317AbiDGIrl (ORCPT
+        with ESMTP id S243330AbiDGIrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:47:41 -0400
+        Thu, 7 Apr 2022 04:47:46 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826A91925BE;
-        Thu,  7 Apr 2022 01:45:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9585194787;
+        Thu,  7 Apr 2022 01:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649321141; x=1680857141;
+  t=1649321147; x=1680857147;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=wk85P/Va31o9qzS6/lj0BoC5eFOyfop6d/XOvNpS/dI=;
-  b=hwBK8OP2JGd4GRfrPjW8lcSBD8C/eXBpnrpBmqkduVanQx+Lrx4oo/9Z
-   WSAbHzriPw6ksZiQij8f1+jzjjVaP1U7iNDsaoP0NCaAZkkTXAedvANyZ
-   2T8q4P9Tjvob7XbWEJBMQeG49rd39+l8FUDVkWEgZKtQIEb04NCq6Sdgz
-   8=;
+  bh=ve2qRgYReSbfCaf4GJfgFbpxlrNt8Qjh7vSqdkLzY8A=;
+  b=uaL+Z4RKusRxY68uXTxkBocKIUBdt6KHOyZW5F7T2FK9hhEp6HTp3vaP
+   P4IWycj+277KwpYBmigCkNMfpPqfLPClu3o+oew4bojMYNpsihSrUVo3s
+   tpM2jP+fBtvNpbRNze0BssBCeU5ZxgzLlP5cbcH5UA+AuX7qGiCzERkJn
+   A=;
 Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 07 Apr 2022 01:45:41 -0700
+  by alexa-out.qualcomm.com with ESMTP; 07 Apr 2022 01:45:46 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:45:40 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:45:46 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Apr 2022 01:45:40 -0700
+ 15.2.986.22; Thu, 7 Apr 2022 01:45:46 -0700
 Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Apr 2022 01:45:34 -0700
+ 15.2.986.22; Thu, 7 Apr 2022 01:45:40 -0700
 From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         "Bjorn Andersson" <bjorn.andersson@linaro.org>,
@@ -53,9 +53,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
         <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v12 3/6] usb: dwc3: qcom: Configure wakeup interrupts during suspend
-Date:   Thu, 7 Apr 2022 14:15:01 +0530
-Message-ID: <1649321104-31322-4-git-send-email-quic_c_sanm@quicinc.com>
+Subject: [PATCH v12 4/6] usb: dwc3: qcom: Keep power domain on to retain controller status
+Date:   Thu, 7 Apr 2022 14:15:02 +0530
+Message-ID: <1649321104-31322-5-git-send-email-quic_c_sanm@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
 References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
@@ -74,64 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure DP/DM interrupts to detect line state changes based on
-hs_phy_mode. Enable the triggers opposite of what the current
-DP, DM levels. For HS/FS mode enable DM interrupt and for LS enable DP
-interrupt.
+Keep the power domain on in order to retain controller status and
+to support wakeup from devices.
 
 Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 7352124..9804a19 100644
+index 9804a19..35087cf 100644
 --- a/drivers/usb/dwc3/dwc3-qcom.c
 +++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -316,22 +316,36 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
+@@ -17,6 +17,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/phy/phy.h>
++#include <linux/pm_domain.h>
+ #include <linux/usb/of.h>
+ #include <linux/reset.h>
+ #include <linux/iopoll.h>
+@@ -724,6 +725,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	struct resource		*res, *parent_res = NULL;
+ 	int			ret, i;
+ 	bool			ignore_pipe_clk;
++	struct generic_pm_domain *genpd;
  
- static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
- {
--	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+ 	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+ 	if (!qcom)
+@@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, qcom);
+ 	qcom->dev = &pdev->dev;
  
--	dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-+	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
++	genpd = pd_to_genpd(qcom->dev->pm_domain);
++
+ 	if (has_acpi_companion(dev)) {
+ 		qcom->acpi_pdata = acpi_device_get_match_data(dev);
+ 		if (!qcom->acpi_pdata) {
+@@ -839,6 +843,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto interconnect_exit;
  
--	dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS) {
-+		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-+	} else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS) {
-+		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	} else {
-+		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-+		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	}
- 
- 	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
- }
- 
- static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
- {
--	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
- 
--	dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-+	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
- 
--	dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS) {
-+		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-+	} else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS) {
-+		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	} else {
-+		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-+		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-+	}
- 
- 	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
- }
++	genpd->flags |= GENPD_FLAG_ALWAYS_ON;
++
+ 	device_init_wakeup(&pdev->dev, 1);
+ 	qcom->is_suspended = false;
+ 	pm_runtime_set_active(dev);
 -- 
 2.7.4
 

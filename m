@@ -2,152 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A814F7715
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285354F772E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbiDGHRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S241653AbiDGHSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241533AbiDGHQi (ORCPT
+        with ESMTP id S241686AbiDGHR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:16:38 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120042.outbound.protection.outlook.com [40.107.12.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730E5F1E99
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:14:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kbdsk6xda9rI2/InwJ3r3g2LleHZdnbQIEAmp6/lFSnHOFbxzaQhfdh+gEHS71sEsnhF6VnJUNx+cA1DuHMVZobdIOu2Aq4kx7xV6SEH2RxQwEc8EVV1yHKlVeE8HK3GL4ryx4swmL08hlHcNz+qTQ+TGAdrVB51gzwuUp9oqF0dPWkKErFG090Q74l1hKC5eT5qm6uZhtUmcpUzZbCxeEkaAUJk2/WqFuhhs3mVxdgGObzt3EhudMTpzck/Cl1Md3enwWdsttqo3Cq1qHpi1fagZ9jJ7gSpdGDk2ZUuq5tX69XwPyEICT+5elUBg3MgAZlL8mNwnkCFbGV97umleA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f34FjguZN2FaIrQblvcaVpSOy9ShMfOdtUQtNzCfbbg=;
- b=m2fPFyH0hqVAAPYJfYMt9wYpyrygr9s63LukplSBmripisb+/fd/qtc/Ig1hXSiGlFGUjrilfy4oYtZBlUERMIGNkO10Y6064SfsJR1A7O6FPlRANsE1cluHBxpUAcEAgIXZ4IvUgwJfd4FaL58sMyo/lN251MN6qF2fFdtDmaWJ1t3CAKpAK/OLrFs3NMdL2XSqceXu7ngVDG+l2nJsTm4MMtqHxKa6P9izSxoToyx/mmgT+c7kUkPcr0qZ/Y0YCgCgzhMlMKXQmJRq1G26k7Yy3bAkD7mJ9XSBZC62ZmT/twhq2pTGpRLa/yHgwcj/LvdLFLe3MckjfTkWI1yr6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB3629.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:121::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 07:14:36 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c%9]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 07:14:36 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     kernel test robot <lkp@intel.com>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] macintosh: fix via-pmu and via-cuda build errors
-Thread-Topic: [PATCH] macintosh: fix via-pmu and via-cuda build errors
-Thread-Index: AQHYSih99qU/OqN7XUaQvD1dT4ef1Kzjx28AgABCgoA=
-Date:   Thu, 7 Apr 2022 07:14:35 +0000
-Message-ID: <e0d0b771-2459-1050-03f8-1bd1f70d7569@csgroup.eu>
-References: <20220407023700.7216-1-rdunlap@infradead.org>
- <c8c2b89b-8546-8449-a27e-ef6e89186e26@infradead.org>
-In-Reply-To: <c8c2b89b-8546-8449-a27e-ef6e89186e26@infradead.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ac5f14b6-d537-4ff8-bfe8-08da186645a6
-x-ms-traffictypediagnostic: PAZP264MB3629:EE_
-x-microsoft-antispam-prvs: <PAZP264MB3629A9CD7C7A6382C5358A33EDE69@PAZP264MB3629.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PyXFCk2tvLswV/yAAhp+xJNblxwUh15sRnuao5ieXdZlS5/sx+g2Y38s+yfM1Wos3YnaKKzo6ETO+1bBYoZe0Ed0/zPFM/RMUP/Wg1hO5yt9UHdIHb0XVajzV9wcyCvW56PTGObB49jR55diYJQ6/v4F0zF4my+FQeOAqmMpAJp0Od3oSd1WF/n9jdO8FkiAuciY4topggxtQ17c5O8nKO5n4RxtvQfrfZESHoAqJ53rtyl/V54uF0PV9fPZwAzlntAIKYCJ7Cuxl0FS6oLHUHk8gorJ9BI42ByBnk8l/BgV/YekopY2Gc0RsbtDPL2osJhsmv9QTBPUPcZkYOAqhTpLkJoqw6dWuu9+cMLWZsGT1Cc1CxZBJMbqr+liUtL/jvF8hhQ11nGUMvV5hEte5jcRx4t0agCgUlIoCJxpUk1M9PRkGL050iQH92e9ryaZLRvR8WF05pjQdx0HFbkShKp2du05ndokQHIyTreiCRELK35CIs63NPnZVbYxuOWKuvhsluYAuxlWjyKczXMwEsuA6FvKl1MDunnGDoAUXRZzrG/xL75xHbs49FL94INEIdY0eeDTuHXeSjfGDm7nt228UET0uMEEtmMxVsQmTbqgB7GKUoq+Bsy9qO2P1qdtAyMlYFv/AMh09kB6/JM61IErLiCuSqpqjT4eG3e1r4mfVbXsUiuXD7QMgO+ZS36cAt261p+3F6MsSFeusCIdNE/ye3Ma+Rv/vFYPxJFN7eTJnaa+Mdya2ixwcuwfaaZJGq0gxEyKbCxhsKtIpCrZCofzJ/9wzjCofE4gNLL8AgYxVsSseOHQ82eTJXKLd1InaLoZ4sK03GW90q1XKsABOwDCuiB9Ugq3mOFEbkj5DOU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(508600001)(5660300002)(8676002)(4326008)(38070700005)(38100700002)(8936002)(66446008)(66556008)(64756008)(66946007)(76116006)(66476007)(6486002)(966005)(2906002)(122000001)(86362001)(91956017)(2616005)(6512007)(54906003)(36756003)(31696002)(4744005)(44832011)(53546011)(110136005)(6506007)(7416002)(31686004)(26005)(316002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QkdrN3FTdWM4MzJMeXpSSW1yOUdIYzZIdDJDbXFBZG1MSzY0cFNaN3RvMWpB?=
- =?utf-8?B?KzNvYWpiRXlZUlRZdXBXT3RhcU9zUEpyc0R3UzI5TmJ6U05PQVdnK2tKbWNX?=
- =?utf-8?B?MzV3M3NobW9iVDQwVkRRcDJ0aEYwT0YvZEtoQUZwcGJCZjJtQjlZMkhwSUJa?=
- =?utf-8?B?Q2REYytrOUZDQlFBWk5jU3VRUml6Z0VJQ2ljOWQ2STFOVk9aamZQUXN2cVZp?=
- =?utf-8?B?dmNUbE1UL0VOK1VVTjF0cng2eUVwMm9VKzRsemsvVDZIRlF6M0hOTXJScm11?=
- =?utf-8?B?K0RVR1RpcFBsS25TQjVDWEJzK01WSUkrMnNEdmdRM1NuQTFnQ3E5ZG9oWDcw?=
- =?utf-8?B?TXJ3eHZSNmZWRHZlRzQ2SFZhVStWcUo2Vko3Wjk5cTE2NEU5dGl2Y21xMXVQ?=
- =?utf-8?B?d21xbm1ZVXhCQ2pVVE9wcVBmNDRaN0RUNjUrc1UrSVpyckVrdDVNSExKbHQ2?=
- =?utf-8?B?ZXlsWHZ2L2Q0cGkzbWRuZVlLTlY4R2Q2T0dUNklLNnNRRy9ML3o0S2RLZlh6?=
- =?utf-8?B?a0lPOVFjNGRXNk11SVZyWmkxMnhzSUMrTUVDaHN5bUNFUU8wMTNSc2tISjhp?=
- =?utf-8?B?WHJidU1TSWRydXBGSjF6dGM4MnRneStwRTNTSnk0YnZJZHZQa0NNU2xlZ2xK?=
- =?utf-8?B?SEV4aE15TXJlTEJ5SXQ1OGNHV1BmdUl3OXQzUEF4Z2N4NjcyemdFVUhMQkQ3?=
- =?utf-8?B?ODRHdm12SVM3LytqaWpBSXhsdWVTQjBoeGx1am5KdEJEWEdqbEhndnBwQWEv?=
- =?utf-8?B?RXl4QlV2bzdOMnBoVWVHNitNK0VCRkZheWQvZjBoNGYzM1RoVDU1UFhnYmFw?=
- =?utf-8?B?cTV4bDkrQTIrYkdaanBqRXM0bkx2ZUZ5V1laYWZVdFZjNWZ1am1uUThrUFJR?=
- =?utf-8?B?RkhuNGphOC9Gclo3Q1d1OHN0c2I0TmJQSHFOOENVaytxYmoxMWRFd1kwWDhD?=
- =?utf-8?B?dW0wTTIxclE1M2FDYVhOSEJHT0MxWGNlbzdGbmNqWVRCNlMwcUhGcEUwNXVP?=
- =?utf-8?B?OUpDS0ljOXhxeWRRQ2NNOWg1NHI0Tm9qRGpDT2x3NTZZVXg0QTZESWM5ckJm?=
- =?utf-8?B?Smx5dE8zYUJEQ1JrZExLQ05LaUFUYzlOVWtKOUxmQXlNYlpuYkpvQUlyZVV4?=
- =?utf-8?B?ZmZyeHhRSWxQcEE4Z0NTa2hOeXhGVStNcjFnQWRTT3EyMldaRFdOWVc2MFIr?=
- =?utf-8?B?MStIRTVnbU1nS1gxZGI0eGNOdFdOODZsd2hGekNydkFCQm1SSzduZk1Eb1hX?=
- =?utf-8?B?TFcvNW1XM2FQQWZmUk9FYkhaVVpvS2ZuV1BpOTBlWmF2UFk1bGJYcnFZTzNG?=
- =?utf-8?B?NkV2cFJhTXFFUFRNSkxxbTN4ZlN6V1lQT3cxazdzM0l2bUV5WlNaOVg4Y25Z?=
- =?utf-8?B?bmNXS1NEM0hpV094WWVjeGNkODRBV09rd0RKblpFSnorY1dNa1BjdndIY21i?=
- =?utf-8?B?VkpHNlNvWndpUXVuT29JeHlLNjdjR3JkRVgrNXVBVjlFUkJvem4ydWVnNHFq?=
- =?utf-8?B?TkJISFpjTnAvRDA1TGNFazhaTmJjQ3hJbU1HYkdZKzlVUXhpVEE5RThoRUdX?=
- =?utf-8?B?ZEd5L3h3NUgrcVpsRzRta05aM1QwbzNPYXpXSzdLSzVNQUFOZEM3cFZjeVJo?=
- =?utf-8?B?cXkycThtZkplMGFqWUdHUjFzZGhtZldsa3czYzdOdjI1aGZIRENwcU13RUdL?=
- =?utf-8?B?dlNpNHVxTW1oK21veDlNTkd5SG5lc1lLRGkxQjhkaHRpYU1OTmF1dWNscXdp?=
- =?utf-8?B?aUZycWFRVVIyK3ZRQjY5Y0c1NFhCVHNtTFNxTHc2WmV4WForL3pWWGU2bEZ1?=
- =?utf-8?B?VThEY3p6MU5vMERHWkNzRGd4UTRTSHRScHdRc201SnBxaHdvQUFEaXA1UFhZ?=
- =?utf-8?B?YW9URFN6TEwxVEZMWDZsUHpnalVXSXp4b1UxOGF0bGlhL05NcytiMDZ4RVJS?=
- =?utf-8?B?ejhCWUxMeVlqMnN1d056akpaR0dmVlR3WWoxcmRjSzJMZTJEM0VHZ3RMbnN5?=
- =?utf-8?B?VUx2a3VrMWhzc05tcWJHRzYxdy9CMFA3ekRMY3lYNGJyTDZ2WVdBV1doUjVH?=
- =?utf-8?B?eVB0Mjk3ZVM0OGFoblZjTVUxZGFabytjYXQwdlRONHdhZ04wQ2pJeWZhNHFK?=
- =?utf-8?B?RWxwM3Z2cG1GN3VMK0thb1JEYksyYjE3SlJaVnFFMW4vSUtvVmRZdkRraVBy?=
- =?utf-8?B?MkZUVXZPZzNvQXpMb2pwUWtkUzlNcTNHdUVYNGtIY3QrN2R4cXY3VWl4SXJn?=
- =?utf-8?B?Um1mQXRNZEN6cDVMb1RoMWVHcmJQTzlrZVV2cnFFamc2S0UxempoajdES2xi?=
- =?utf-8?B?NkFPZFg4bitYZ2w1Qlg2VXFRVkRrclltSmIrYS8xZ3ZUdnNKK2JEY05qKytW?=
- =?utf-8?Q?/x7YRbXvL6lM6B3n9et9tF0b5jErYgqS0/lqx?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D9ED132362980543A91E5348874FCBB3@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 7 Apr 2022 03:17:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941C51107ED;
+        Thu,  7 Apr 2022 00:15:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D1E61DCE;
+        Thu,  7 Apr 2022 07:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7FB9C385A0;
+        Thu,  7 Apr 2022 07:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649315725;
+        bh=9/pSQxZKSCCWBCzwEN5pmuogYawG56/M6P8na1rHLYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mIw6a9MKBB0tYMm6O1XK0svoSqZWLx5wNXDG/G4yLfdr4qVuaALQXCj1++qvmEcez
+         KGzd9NPQo7eynh+CNiyOIthPUfrI0MLRvcfxE1v4sUQNFU3FUHKIED1ERVPo+LlvQr
+         XsMI+ad/xrevLWPXNwMfgFbHo1yf6kr0x03u3sfY=
+Date:   Thu, 7 Apr 2022 09:15:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, usama.anjum@collabora.com,
+        Collabora Kernel ML <kernel@collabora.com>,
+        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
+        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v5] platform: x86: Add ChromeOS ACPI device driver
+Message-ID: <Yk6Pip7f3iUsIHTr@kroah.com>
+References: <Yk6ODSxQTiGOrTj/@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac5f14b6-d537-4ff8-bfe8-08da186645a6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 07:14:35.9852
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xG2JwSQlqagQo047jNfTU+hrBPfHtEcCqV8LijtUi5dboitC8Ve3E0UAVXm4rkqZA4Eto23zgrPVtPoJDqTVWmBwZZO5ZfZiLuIu3xn/A5w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3629
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk6ODSxQTiGOrTj/@debian-BULLSEYE-live-builder-AMD64>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA3LzA0LzIwMjIgw6AgMDU6MTYsIFJhbmR5IER1bmxhcCBhIMOpY3JpdMKgOg0KPiAN
-Cj4gDQo+IE9uIDQvNi8yMiAxOTozNywgUmFuZHkgRHVubGFwIHdyb3RlOg0KPj4gV2hlbiBDT05G
-SUdfSU5QVVQ9bSwgdGhlIGlucHV0XyooKSBmYW1pbHkgb2YgZnVuY3Rpb25zIGlzIG5vdA0KPj4g
-YXZhaWxhYmxlIHRvIGJ1aWx0aW4gZHJpdmVycy4NCj4+DQo+PiBXaGVuIENPTkZJR19SVENfQ0xB
-U1MgaXMgbm90IHNldCwgcnRjX3RtX3RvX3RpbWU2NCgpIGlzIG5vdCBkZWZpbmVkLg0KPj4NCj4+
-IEZpeCBtdWx0aXBsZSBidWlsZCBlcnJvcnMgYnkgbWFraW5nIHRoZXNlIEtjb25maWcgc3ltYm9s
-cyByZXF1aXJlZCBieQ0KPj4gQURCX0NVREEgKFJUQ19DTEFTUykgYW5kIEFEQl9QTVUgKFJUQ19D
-TEFTUyBhbmQgSU5QVVQpLg0KPiANCj4gQWggeWVzLCBGaW5uIGhhcyBhbHJlYWR5IGZpeGVkIHRo
-ZSBJTlBVVCBwcm9ibGVtcyBoZXJlLg0KDQpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3By
-b2plY3QvbGludXhwcGMtZGV2L3BhdGNoL2Q5ODc2NjNiYmVkMThkN2RiZjEwNmRiNjA2NmE3NTkw
-NDBiNGU1N2EuMTY0NzgzNzAyOC5naXQuZnRoYWluQGxpbnV4LW02OGsub3JnLw0KDQo+IA0KPiBN
-YXliZSB0aGF0IHBhdGNoIGhhc24ndCBiZWVuIG1lcmdlZCBhbnl3aGVyZSB5ZXQ/DQoNClRoZSBw
-YXRjaCBoYXMgY29tbWVudHMsIEkgZ3Vlc3Mgd2UgYXJlIHdhaXRpbmcgZm9yIGEgbmV3IHZlcnNp
-b24gPw0KDQoNCg0KPiANCj4gVGhlIFJUQ19DTEFTUyBwcm9ibGVtIGlzIHN0aWxsIHByZXNlbnQg
-QUZBSUNULg0KPiANCg0KDQpDaHJpc3RvcGhl
+On Thu, Apr 07, 2022 at 12:09:01PM +0500, Enric Balletbo i Serra wrote:
+> --- /dev/null
+> +++ b/drivers/platform/x86/chromeos_acpi.c
+> @@ -0,0 +1,515 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * ChromeOS specific ACPI extensions
+> + *
+> + * Copyright 2011 Google, Inc.
+> + * Copyright 2020 Google LLC
+
+You haven't touched this file in 2 years?
+

@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFE64F7613
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416F74F7616
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241284AbiDGGdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S241131AbiDGGdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241237AbiDGGdD (ORCPT
+        with ESMTP id S239287AbiDGGde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:33:03 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C41B57;
-        Wed,  6 Apr 2022 23:31:01 -0700 (PDT)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7JvO-1ndTCa0PRk-007inq; Thu, 07 Apr 2022 08:31:00 +0200
-Received: by mail-wr1-f42.google.com with SMTP id d3so6293631wrb.7;
-        Wed, 06 Apr 2022 23:30:59 -0700 (PDT)
-X-Gm-Message-State: AOAM531mvRP+YU0Ma1WSLPxsQoAwx+cMBs5z+r9nbD38NqjP8feQ/rj5
-        e5qQLgdq3mc4ISiC77+AmUFK9RnkQLtEiRaiSE8=
-X-Google-Smtp-Source: ABdhPJyKRyRW3k/cQmPVF80spQCMRGb5SVS98DqNmPx2g8IW88njX3uUl4iA4i0AVSL8t67eZnNZkGCEOKSOf5l4kho=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr8803769wru.317.1649313059590; Wed, 06
- Apr 2022 23:30:59 -0700 (PDT)
+        Thu, 7 Apr 2022 02:33:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEC2972DB
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649313094; x=1680849094;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YF/qhkPruKLjlOv9A4/gotWe1O62iB8RRrGaPFCBqQo=;
+  b=X/M1X7KDIhEWF6CBXMKMp9q915BkVglO0zqvNZr44nd4TLvGXmBUDsSC
+   SF/Ex2IyL512+53TOkpb4fQmrx+R3ItryYKFjZwg/cDJbfLFUNnxsjYdD
+   f3OZseu5c+jNqNk7R3afTsrzJ6ASyrANui28IVF2M6fta1shHQC9/3LcD
+   RfyyC6hIf2vXBUbPylsi49RnK36O7YMQ4u+vomklU1Z2qZ4KRh8jttlVT
+   PZu0KD8YIaLYyQKtiDS2WI6f3hbeRh2vRYzS3yKZCAuq73Rc+Gcj/BY6Y
+   D4XVyTdPh0nwm4k2NrVNE+qCsgf6V/qa+l7XsdHbignoFhQIeEdM7eZIU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241173141"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="241173141"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:31:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="524797342"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 23:31:31 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncLg2-00059L-No;
+        Thu, 07 Apr 2022 06:31:30 +0000
+Date:   Thu, 7 Apr 2022 14:31:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kas:lam 9/10] arch/x86/kernel/process.c:1035:37: error:
+ 'mm_context_t' has no member named 'lam'
+Message-ID: <202204071441.Xq1KTIgi-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-4-brad@pensando.io>
-In-Reply-To: <20220406233648.21644-4-brad@pensando.io>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Apr 2022 08:30:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-Message-ID: <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-Subject: Re: [PATCH 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
-To:     Brad Larson <brad@pensando.io>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>, dac2@pensando.io,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:L1k9lwuF84IUYFFiRBIy1y9YRO/zDLweXc/0M4LdGijxfIFw9tc
- uhWCJ5iCNpeSZY5AKy4xxUeM4Wong5Tg7ALVzPdKQPCUMJJAcJtcpStGanwP1SUr0Bt4OUF
- zuTEsc/MN1WkvfT9lVoeshnnoUV7pC6yTjLkFyLC2SYctOWFZ/CZh6Y9d1ihtZIDHUtVTXH
- YqTqVULdun1tWZ8WAFiRQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L92u0FhEV/M=:4ckcr4vHSN8nZ/BuLXu0U0
- VgEajCa4He4/5g6iP1UDFWjIyNYOlCij2e1hvTyaJ32aE3Lg93MVMnDn1bJmiSHU3xBaQbHsf
- pkHg5HoLJ1iIwKS0SRrDx67MgqM67aB0dm8Oshuupr4ZMqZFG14FHqkU0yOkcV3RlM1HxIdpk
- mEXOJVh5ZDH06xbV1wBI6D14w1i4eppXJnGlUsHkwIltJ0F+hOe6sJD6y5HsjKuU5wvH5u0/K
- kYMY9cF8c/41FarVV1i/ffZgGqa+OW2m7q3GOWs4pl10iH8P8FkQlu8QqPOzF9YKgfhMOvzM9
- mxYvq09vFBrk0I/j6suvN2B4Z4jJ7l1hdHpr4cT8mFKINst5cVR+bDb9KipMGWaVP8kg+Jupp
- XnVEFeeWXhxj4LuJcVZv7t2TgiVgbKsdRrjOzjjj+G3VO0RgxT3Msbd8KAOJUA0jq3bWquFZC
- HdSZpb07ltwRlOyguEzGLRePMPFaSaO8u+YwLnag9UZ0wnnfCR9ldag4YtJ8gauu3d0oNfhSF
- Z6Vg3CNFY9P5E+s5Z6ONiD04y21Vz4fh2cggNCZmF1iCONu6X9HxoLN6vFT9bRd0KiNWVG7K9
- K/qrStWZqBhhe8h8k0Lv95GMQqCIp1UYq0KvO0+fU+YHhwpAH1y56TMZ3r6VrQQ5P55UW3Buu
- v/YGKwXlMQGXoWxjBdq7TYtcB27df5zlbdh0U7ZtIRbus8A3PFVgTJ3oKtEFXjTxdL8lyBbk2
- 1uIxG0ra8by+fDj+0zORF8eU/aLGQENdGpZV8FxzSBQw41ESfHRh7oHGtTyts/Z4LN7bIwfxE
- 4SP5DBUZ4qs5lVeA5qZBcJa9Et54IG3LTbDgbC230KzJIndKL8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 1:36 AM Brad Larson <brad@pensando.io> wrote:
->
-> Pensando Elba ARM 64-bit SoC is integrated with this IP and
-> explicitly controls byte-lane enables resulting in an additional
-> reg property resource.
->
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
-> Change from V3:
-> - Change from elba-emmc to elba-sd4hc to match file convention
-> - Use minItems: 1 and maxItems: 2 to pass schema check
->
->  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index 4207fed62dfe..278a71b27488 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -19,10 +19,12 @@ properties:
->        - enum:
->            - microchip,mpfs-sd4hc
->            - socionext,uniphier-sd4hc
-> +          - pensando,elba-sd4hc
->        - const: cdns,sd4hc
->
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+head:   73447e771c55e18598a6fbf6adee1002aee18ea0
+commit: d4e785c333c5cfacdc663cb05ea375238393027e [9/10] x86/mm: Add userspace API to enable Linear Address Masking
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220407/202204071441.Xq1KTIgi-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=d4e785c333c5cfacdc663cb05ea375238393027e
+        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
+        git fetch --no-tags kas lam
+        git checkout d4e785c333c5cfacdc663cb05ea375238393027e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
 
-Shouldn't the binding describe what the register areas are? If there
-is only one of them, it is fairly clear, but when you have the choice
-between one and two, it gets ambiguous, and there is a risk that
-another SoC might have a different register area in the second entry,
-making it incompatible.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-        Arnd
+All errors (new ones prefixed by >>):
+
+   arch/x86/kernel/process.c:896:13: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+     896 | void __init arch_post_acpi_subsys_init(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/process.c: In function 'enable_lam':
+>> arch/x86/kernel/process.c:1035:37: error: 'mm_context_t' has no member named 'lam'
+    1035 |                 current->mm->context.lam = LAM_U48;
+         |                                     ^
+   arch/x86/kernel/process.c:1036:38: error: 'mm_context_t' has no member named 'lam'
+    1036 |         else if (current->mm->context.lam == LAM_NONE)
+         |                                      ^
+   arch/x86/kernel/process.c:1037:37: error: 'mm_context_t' has no member named 'lam'
+    1037 |                 current->mm->context.lam = LAM_U57;
+         |                                     ^
+
+
+vim +1035 arch/x86/kernel/process.c
+
+  1003	
+  1004	static long enable_lam(struct task_struct *task, unsigned long features)
+  1005	{
+  1006		features |= task->thread.features;
+  1007	
+  1008		/* LAM_U48 and LAM_U57 are mutually exclusive */
+  1009		if ((features & X86_THREAD_LAM_U48) && (features & X86_THREAD_LAM_U57))
+  1010			return -EINVAL;
+  1011	
+  1012		if (in_32bit_syscall())
+  1013			return -EINVAL;
+  1014	
+  1015		if (!cpu_feature_enabled(X86_FEATURE_LAM))
+  1016			return -ENXIO;
+  1017	
+  1018		if (mmap_write_lock_killable(task->mm))
+  1019			return -EINTR;
+  1020	
+  1021		if ((features & X86_THREAD_LAM_U48) && !lam_u48_allowed()) {
+  1022			mmap_write_unlock(task->mm);
+  1023			return -EINVAL;
+  1024		}
+  1025	
+  1026		/*
+  1027		 * Record the most permissive (allowing the widest tags) LAM
+  1028		 * mode to the mm context. It determinates if a mappings above
+  1029		 * 47 bit is allowed for the process.
+  1030		 *
+  1031		 * The mode is also used by a kernel thread when it does work
+  1032		 * on behalf of the process (like async I/O, io_uring, etc.)
+  1033		 */
+  1034		if (features & X86_THREAD_LAM_U48)
+> 1035			current->mm->context.lam = LAM_U48;
+  1036		else if (current->mm->context.lam == LAM_NONE)
+  1037			current->mm->context.lam = LAM_U57;
+  1038	
+  1039		mmap_write_unlock(task->mm);
+  1040		return 0;
+  1041	}
+  1042	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

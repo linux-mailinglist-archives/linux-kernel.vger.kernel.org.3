@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582BC4F7225
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF974F722A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiDGCjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S239300AbiDGCkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239239AbiDGCjH (ORCPT
+        with ESMTP id S233222AbiDGCkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:39:07 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D822ADF;
-        Wed,  6 Apr 2022 19:37:08 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q19so3786953pgm.6;
-        Wed, 06 Apr 2022 19:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=YY4xm0Ao2hFqDf4Z8dPBnmSK82yFlxFIuMj1IZ+m9lA=;
-        b=P4cFrrMSdA21LaxqYCgENK9leFvpEhtQxTtS3vUL702ONItdn/YdVLU7xJkF5mfSkb
-         diKVsicn58moUarbr+gMsqfz0UAjiNfDi7x/ddGrMbHMl8p+nyUovfZdIUHGPG36gn64
-         TYMvQ9RXRjrtJJ58cQLOGfAK+1Xri53yxgIW1Zj6iGySCsBEFWFD48U1c6F69SGxkD7V
-         05a6rObG7eQg4+VoraBmkbbFi1s5MxBLsQNtthbnd+o75QPHgYUJ7KQzD4EzEbrT06ej
-         +9vc7dOFh5Mbxx/Vmekbc8JDY8NZT3AgqVwtJH+XQDwHBnwpjNE2to4mKsuTkBLrewnE
-         xSQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=YY4xm0Ao2hFqDf4Z8dPBnmSK82yFlxFIuMj1IZ+m9lA=;
-        b=U8jTAnU71LQ2uKgsXWmXyJpjmqcjNqVdJ8PFB6lN2/jZeNQf3G8HSjKpdL3FKA+Gnh
-         vIohG6C/S4xRpAORSnx+uZbXlJhJqH4lSopmORdA76AisOdF7upgLHaAvWwa6oKyTmAO
-         SaPuPSbHw5P2yOYRcIZJRve/vbdLLQ9weKb30f7ktLnidpipYZOJbAWod0rhFCth7grQ
-         mJ06S07Ju/h6U60PymPhydXDnMm0Wm7XzZ0OdXww0sqGNuOqQma/AyuHbqTqPIhmSYHw
-         vlAWWIOwJwSzE3wdRv4zsfYczatW9FNffqBjras3J3ai8FfDAWvIDx4HcwwGW1fI974L
-         IZCg==
-X-Gm-Message-State: AOAM533HHf3X31QfJU8ny41dCEC6iTfLJEyJ6Gt/J6AWy0tPqSsY7iLQ
-        7QhihsSrZiVC/qCKevuLVfdZaIHBcZicSYLkOvA=
-X-Google-Smtp-Source: ABdhPJzMrt+kkgp2S6Kt2D+Gby1fNQ789xRPcVSZaN3s+5BJTGpYw2XWL9SnNUVuUfs5Uky6vJFSKQ==
-X-Received: by 2002:a05:6a00:22d1:b0:4fa:e87c:9424 with SMTP id f17-20020a056a0022d100b004fae87c9424mr11904767pfj.51.1649299027752;
-        Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm862467pff.142.2022.04.06.19.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
-Message-ID: <624e4e53.1c69fb81.43bdc.41e1@mx.google.com>
-Date:   Wed, 06 Apr 2022 19:37:07 -0700 (PDT)
-X-Google-Original-Date: Thu, 07 Apr 2022 02:37:05 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220406133055.820319940@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 000/911] 5.15.33-rc2 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 22:40:21 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5218ADE903;
+        Wed,  6 Apr 2022 19:38:21 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 7 Apr
+ 2022 10:38:20 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 7 Apr
+ 2022 10:38:19 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] libbpf: potential NULL dereference in usdt_manager_attach_usdt()
+Date:   Thu, 7 Apr 2022 10:38:17 +0800
+Message-ID: <1649299098-2069-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Apr 2022 15:44:09 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.33 release.
-> There are 911 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.33-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+link could be null but still dereference bpf_link__destroy(&link->link)
+and it will lead to a null pointer access.
 
-5.15.33-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ tools/lib/bpf/usdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 1bce2eab5e89..b02ebc4ba57c 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -996,7 +996,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	link = calloc(1, sizeof(*link));
+ 	if (!link) {
+ 		err = -ENOMEM;
+-		goto err_out;
++		goto link_err;
+ 	}
+ 
+ 	link->usdt_man = man;
+@@ -1072,7 +1072,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 
+ err_out:
+ 	bpf_link__destroy(&link->link);
+-
++link_err:
+ 	free(targets);
+ 	hashmap__free(specs_hash);
+ 	if (elf)
+-- 
+2.7.4
 

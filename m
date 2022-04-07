@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67874F7BD6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA3D4F7BDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243871AbiDGJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
+        id S229982AbiDGJk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243866AbiDGJk2 (ORCPT
+        with ESMTP id S243882AbiDGJkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:40:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8771B254B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:25 -0700 (PDT)
+        Thu, 7 Apr 2022 05:40:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427A1B3F5A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 129E361B6F
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6E2C385A4;
-        Thu,  7 Apr 2022 09:38:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E66FDB826EC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1C8C385A8;
+        Thu,  7 Apr 2022 09:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649324304;
-        bh=6NDuvD6dPDfYjOIGxLFIfAC4asHc6YIvrkxa0F3AB24=;
+        s=k20201202; t=1649324307;
+        bh=q6HaN3d0Wc4BX8ScAWKhh8emcIaugeEwIsXTjJpawCQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=T6K/Z7/63n8z1zZ7tG46DGyv0IWdHOIrwHY8ujy8K+SBHeTQ+aJxcwizdRmu65QtL
-         3ypLlDretmm24XpdArE8IOgJdOYVkJgcWgFhxE9a1l4r+BgvZQ3ZMF2nhvhbs7qRc+
-         E4YHwbMnfkUm+uyoDabV6Hz2WEkVbs3MvWzpxCcE6Ysv1KIGccfrSmoDK2MFaDqoId
-         gWKUMUkCJ93eMbZ0U3OCdx3H/KsNZUbYBZa93VdYRAz8KHrcmRqw13UCyovCNrrooF
-         lu5VpX3ROl/Ith/A2NvLOum8QRXUNA4KcU/Geh/PGWqLLaKCpnPdf9Yjm6pYNmqg3y
-         aeD8cDgnFsS6g==
+        b=jDs25bbn3/0QsT4YpXsLyKfbVWolN6z7t2NW5wae9Xx7AbvyoCskY4Gki2pAChFJh
+         fxrPJTgP2NS2nU1lm9L+pHXj39Qf4lOZ9N7ohio9BBUbZpE7fInyEkJGOGbp/7L88v
+         F9dRCwftYPgfY5XFZGfNOLUaV0ZJ9ACI1+3s6uTvEqnt3ld5/xMbmhvbRIuyVH+vnC
+         ocUdo9UYJztl6mtBhYhhLtxSgNiKRjC+JSpDz/i8AalrcdBH2Nge4JvGcZqzeZzRUt
+         3CVTb/XNaOEUrj1OHBDXgYaxVyw/ZiWzIP3bOsTvqJookhEHQwYE9bJictLCSj2Heg
+         VN2Be9RiddtWg==
 From:   Mark Brown <broonie@kernel.org>
-To:     steve@sk2.org, lgirdwood@gmail.com, festevam@gmail.com
-Cc:     wsa@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220405164031.2160888-1-steve@sk2.org>
-References: <20220405164031.2160888-1-steve@sk2.org>
-Subject: Re: [PATCH] ASoC: sgtl5000: use simple i2c probe function
-Message-Id: <164932430303.3844153.10602976471070924458.b4-ty@kernel.org>
-Date:   Thu, 07 Apr 2022 10:38:23 +0100
+To:     viorel.suman@nxp.com, shengjiu.wang@gmail.com,
+        nicoleotsuka@gmail.com, lgirdwood@gmail.com,
+        Sascha Hauer <s.hauer@pengutronix.de>, a.fatoum@pengutronix.de,
+        Xiubo.Lee@gmail.com, festevam@gmail.com
+Cc:     kernel@pengutronix.de, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <20220405155731.745413-1-a.fatoum@pengutronix.de>
+References: <20220405155731.745413-1-a.fatoum@pengutronix.de>
+Subject: Re: [PATCH] ASoC: fsl_sai: fix 1:1 bclk:mclk ratio support
+Message-Id: <164932430460.3844153.13561902931852849107.b4-ty@kernel.org>
+Date:   Thu, 07 Apr 2022 10:38:24 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,13 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 18:40:31 +0200, Stephen Kitt wrote:
-> The i2c probe functions here don't use the id information provided in
-> their second argument, so the single-parameter i2c probe function
-> ("probe_new") can be used instead.
+On Tue, 5 Apr 2022 17:57:31 +0200, Ahmad Fatoum wrote:
+> Refactoring in commit a50b7926d015 ("ASoC: fsl_sai: implement 1:1
+> bclk:mclk ratio support") led to the bypass never happening
+> as (ratio = 1) was caught in the existing if (ratio & 1) continue;
+> check. The correct check sequence instead is:
 > 
-> This avoids scanning the identifier tables during probes.
-> 
+>  - skip all ratios lower than one and higher than 512
+>  - skip all odd ratios except for 1:1
+>  - skip 1:1 ratio if and only if !support_1_1_ratio
 > 
 > [...]
 
@@ -69,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: sgtl5000: use simple i2c probe function
-      commit: 67f51bfecf9e72511419ded0e4148e2b7a7a30b1
+[1/1] ASoC: fsl_sai: fix 1:1 bclk:mclk ratio support
+      commit: d00887c106dac47b9af6ed70e8d5c45b69c4bd52
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

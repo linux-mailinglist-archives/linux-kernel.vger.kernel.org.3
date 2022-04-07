@@ -2,281 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AAB4F855C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63DB4F85DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345887AbiDGQ6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S1346190AbiDGRY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbiDGQ6l (ORCPT
+        with ESMTP id S1346083AbiDGRX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:58:41 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0F6FFF4F;
-        Thu,  7 Apr 2022 09:56:41 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so6970561fac.11;
-        Thu, 07 Apr 2022 09:56:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=57Q8OXO7BdqRA4VCo1CnfvOYS04YZnH8X3yf4O0sei8=;
-        b=HbwLDVLCkdE5eAyxGrVglRpyqdWGEnTr5Kl0SG279EM/UNWBv0hHGR30+2sBGVBLY6
-         9TwSp+NayucW637R3PEbYoDne4mPoQvllwyyDfdbn0oI/kDqu+3Mvx0RVpo7qwTMe5zY
-         5RRhk1bneQt/E9HbrqglwYrsXau99Dy5EYVvc0wtWA74Z7SU24T3IX5vK/2qgT4tSuiz
-         NHy7i0VWm7dftwZfzPfUFVDxKwZylv2N8anTPLOBPKBVlGzR8vOT3GzYfOpQRWoVfrr2
-         4QHVbgWo0vGOxff2uPW0ju+QSGGCIZ6ucVUh0a7sTThNtJmnHzNtBo4B4liK/T5EUZ/7
-         Vt7A==
-X-Gm-Message-State: AOAM532jxP58PEHpLuWyuRCM2eh703iAbjGMbaQgcxOpu4hLt6b6xgdt
-        PKfk/yVJtaDyfwHWi4iWPw==
-X-Google-Smtp-Source: ABdhPJxo1TIbRV2YwAwg/aLoxDI2UrimsMpXZ3Jxi+c84xJ+nsYVYYXxG1PmravHzw8SMpWwncDKHg==
-X-Received: by 2002:a05:6870:9712:b0:e1:f96c:f62a with SMTP id n18-20020a056870971200b000e1f96cf62amr6984741oaq.58.1649350600428;
-        Thu, 07 Apr 2022 09:56:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056870d59700b000de821ba7cbsm7809576oao.15.2022.04.07.09.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 09:56:40 -0700 (PDT)
-Received: (nullmailer pid 1397105 invoked by uid 1000);
-        Thu, 07 Apr 2022 16:56:39 -0000
-Date:   Thu, 7 Apr 2022 11:56:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Puranjay Mohan <p-mohan@ti.com>
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org, vigneshr@ti.com,
-        kishon@ti.com
-Subject: Re: [RFC 12/13] dt-bindings: net: Add ICSSG Ethernet Driver bindings
-Message-ID: <Yk8Xx4IRPHkPz+Fn@robh.at.kernel.org>
-References: <20220406094358.7895-1-p-mohan@ti.com>
- <20220406094358.7895-13-p-mohan@ti.com>
+        Thu, 7 Apr 2022 13:23:58 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8106864F4;
+        Thu,  7 Apr 2022 10:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=lUq08cdcUVP7geqUMO4Ev+0ju/xC3/Dyu2GujITehKs=; b=PYyrJt7ewqHOGWsi3qiAGmkBH3
+        kfZnUZVWFOZkih3iCNvFDuyt8k4UgmY4gnUljez5mnh1LJrjJVrMUbkKnTsRKcskR3pJCsjf1YN7v
+        FUX3AFBU3i/6jUyACSHWwTuJjsCH45O/NuetVOcgAfIhPFMFlGVRpi2G07A6KcKiE+B9UDenB1Rgj
+        /qODeNf94xzKtPQkQ/Rh8JSYTNkGyJDcQKJZDsZ5lWoNdeSA/W/H4qxNDP0BKOWfKkwXIyhX6iEEz
+        TSwJSmQ+Zjd8WOV/Lk0rytSx3AVDQRSVTtmy+TAzmk0FHUAC8Fg94+BCBVjANwmMFVPQIdmgtxC8t
+        Do7rkeBQ==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1ncVRf-002CRe-HG; Thu, 07 Apr 2022 10:57:20 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1ncVRe-0002Pz-O1; Thu, 07 Apr 2022 10:57:18 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Logan Gunthorpe <logang@deltatee.com>
+Date:   Thu,  7 Apr 2022 10:57:06 -0600
+Message-Id: <20220407165713.9243-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406094358.7895-13-p-mohan@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, guoqing.jiang@linux.dev, logang@deltatee.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH v1 0/7] Minor Raid5 Fixes and Cleanup
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:13:57PM +0530, Puranjay Mohan wrote:
-> Add a YAML binding document for the ICSSG Programmable real time unit
-> based Ethernet driver. This driver uses the PRU and PRUSS consumer APIs
-> to interface the PRUs and load/run the firmware for supporting ethernet
-> functionality.
-> 
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> ---
->  .../bindings/net/ti,icssg-prueth.yaml         | 172 ++++++++++++++++++
->  1 file changed, 172 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
-> new file mode 100644
-> index 000000000000..8b8acb69e43e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
-> @@ -0,0 +1,172 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: |+
-> +  Texas Instruments ICSSG PRUSS Ethernet
-> +
-> +maintainers:
-> +  - Puranjay Mohan <p-mohan@ti.com>
-> +
-> +description: |+
-> +  Ethernet based on the Programmable Real-Time Unit and Industrial Communication Subsystem.
-> +
-> +allOf:
-> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,am654-icssg-prueth  # for AM65x SoC family
-> +
-> +  sram:
-> +    description: |
-> +      phandle to MSMC SRAM node
-> +
-> +  dmas:
-> +    description: |
-> +      list of phandles and specifiers to UDMA as specified in bindings/dma/ti/k3-udma.txt.
+Hi,
 
-How many?
+This series contains a few cleanup and minor fixes to the raid5 code
+to make it a bit easier to hack on.
 
-> +
-> +  dma-names:
-> +    items:
-> +      - const: tx0-0
-> +      - const: tx0-1
-> +      - const: tx0-2
-> +      - const: tx0-3
-> +      - const: tx1-0
-> +      - const: tx1-1
-> +      - const: tx1-2
-> +      - const: tx1-3
-> +      - const: rx0
-> +      - const: rx1
+Patch 1 cleans up the error returns in setup_conf() (I had an
+abandonded patch that added another error out and needed this clean
+more sensible).
 
-Is there a minimum and maximum number? Is it really so variable?
+Patch 2 fixes a sparse warning with the raid5_percpu structure.
 
-> +
-> +  ethernet-ports:
-> +    type: object
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +      '#size-cells':
-> +        const: 0
-> +
-> +    patternProperties:
-> +      port@[0-1]:
+Patch 3 through 6 fixes sparse warnings related to missing __rcu
+annotations when using the RCU calls.
 
-fooport@0bar would be valid here.
+Patch 7 just adds some basic __must_hold annotations for the device_lock
+to any function that is called while holding the lock. Sparse doesn't
+really check this, but the annotation makes the locks a little easier
+to analyze.
 
-'^port@[0-1]$'
+Thanks,
+
+Logan
+
+--
+
+Logan Gunthorpe (7):
+  md/raid5: Cleanup setup_conf() error returns
+  md/raid5: Un-nest struct raid5_percpu definition
+  md/raid5: Add __rcu annotation to struct disk_info
+  md/raid5: Annotate rdev/replacement accesses when nr_pending is
+    elevated
+  md/raid5: Annotate rdev/replacement access when mddev_lock is held
+  md/raid5-ppl: Annotate with rcu_dereference_protected()
+  md/raid5: Annotate functions that hold device_lock with __must_hold
+
+ drivers/md/raid5-ppl.c |  13 ++-
+ drivers/md/raid5.c     | 179 ++++++++++++++++++++++++++---------------
+ drivers/md/raid5.h     |  23 +++---
+ 3 files changed, 139 insertions(+), 76 deletions(-)
 
 
-> +        type: object
-> +        description: ICSSG PRUETH external ports
-> +
-> +        $ref: ethernet-controller.yaml#
-
-           unevaluatedProperties: false
-
-> +
-> +        properties:
-> +          reg:
-> +            items:
-> +              - enum: [0, 1]
-> +            description: ICSSG PRUETH port number
-> +
-> +          ti,syscon-rgmii-delay:
-> +            $ref: /schemas/types.yaml#/definitions/phandle-array
-> +            description:
-> +              phandle to system controller node and register offset
-> +              to ICSSG control register for RGMII transmit delay
-> +
-> +        required:
-> +          - reg
-> +
-> +    additionalProperties: false
-> +
-> +  ti,mii-g-rt:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      phandle to MII_G_RT module's syscon regmap.
-> +
-> +  ti,mii-rt:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      phandle to MII_RT module's syscon regmap
-> +
-> +  interrupts:
-> +    description: |
-> +      Interrupt specifiers to TX timestamp IRQ.
-
-How many?
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: tx_ts0
-> +      - const: tx_ts1
-> +
-> +required:
-> +  - compatible
-> +  - sram
-> +  - ti,mii-g-rt
-> +  - dmas
-> +  - dma-names
-> +  - ethernet-ports
-> +  - interrupts
-> +  - interrupt-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    /* Example k3-am654 base board SR2.0, dual-emac */
-> +        pruss2_eth: pruss2_eth {
-> +                compatible = "ti,am654-icssg-prueth";
-> +                pinctrl-names = "default";
-> +                pinctrl-0 = <&icssg2_rgmii_pins_default>;
-> +                sram = <&msmc_ram>;
-> +
-> +                ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>, <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
-> +                firmware-name = "ti-pruss/am65x-pru0-prueth-fw.elf",
-> +                                "ti-pruss/am65x-rtu0-prueth-fw.elf",
-> +                                "ti-pruss/am65x-txpru0-prueth-fw.elf",
-> +                                "ti-pruss/am65x-pru1-prueth-fw.elf",
-> +                                "ti-pruss/am65x-rtu1-prueth-fw.elf",
-> +                                "ti-pruss/am65x-txpru1-prueth-fw.elf";
-> +                ti,pruss-gp-mux-sel = <2>,      /* MII mode */
-> +                                      <2>,
-> +                                      <2>,
-> +                                      <2>,      /* MII mode */
-> +                                      <2>,
-> +                                      <2>;
-> +                ti,mii-g-rt = <&icssg2_mii_g_rt>;
-> +                dmas = <&main_udmap 0xc300>, /* egress slice 0 */
-> +                       <&main_udmap 0xc301>, /* egress slice 0 */
-> +                       <&main_udmap 0xc302>, /* egress slice 0 */
-> +                       <&main_udmap 0xc303>, /* egress slice 0 */
-> +                       <&main_udmap 0xc304>, /* egress slice 1 */
-> +                       <&main_udmap 0xc305>, /* egress slice 1 */
-> +                       <&main_udmap 0xc306>, /* egress slice 1 */
-> +                       <&main_udmap 0xc307>, /* egress slice 1 */
-> +                       <&main_udmap 0x4300>, /* ingress slice 0 */
-> +                       <&main_udmap 0x4301>, /* ingress slice 1 */
-> +                       <&main_udmap 0x4302>, /* mgmnt rsp slice 0 */
-> +                       <&main_udmap 0x4303>; /* mgmnt rsp slice 1 */
-> +                dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
-> +                            "tx1-0", "tx1-1", "tx1-2", "tx1-3",
-> +                            "rx0", "rx1";
-> +                interrupts = <24 0 2>, <25 1 3>;
-> +                interrupt-names = "tx_ts0", "tx_ts1";
-> +                ethernet-ports {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +                        pruss2_emac0: port@0 {
-> +                                reg = <0>;
-> +                                phy-handle = <&pruss2_eth0_phy>;
-> +                                phy-mode = "rgmii-rxid";
-> +                                interrupts-extended = <&icssg2_intc 24>;
-> +                                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
-> +                                /* Filled in by bootloader */
-> +                                local-mac-address = [00 00 00 00 00 00];
-> +                        };
-> +
-> +                        pruss2_emac1: port@1 {
-> +                                reg = <1>;
-> +                                phy-handle = <&pruss2_eth1_phy>;
-> +                                phy-mode = "rgmii-rxid";
-> +                                interrupts-extended = <&icssg2_intc 25>;
-> +                                ti,syscon-rgmii-delay = <&scm_conf 0x4124>;
-> +                                /* Filled in by bootloader */
-> +                                local-mac-address = [00 00 00 00 00 00];
-> +                        };
-> +                };
-> +        };
-> -- 
-> 2.17.1
-> 
-> 
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+--
+2.30.2

@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10004F7CA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63714F7CA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbiDGKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S244202AbiDGKX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244186AbiDGKXn (ORCPT
+        with ESMTP id S244189AbiDGKXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:23:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187941AB9FE;
-        Thu,  7 Apr 2022 03:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649326902; x=1680862902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=14uR+X8D1hFafUVEmn6fSTwQ5pea2ecTUrj5n9ZrzLQ=;
-  b=lSVOjOVSyIDMpxpVb+NikGKkdpG14vXVIfX4V47zzxc/kBUU5Wcdhclo
-   HSkg8qNaoGvKy1L5rqgHhETS9JMPxyyTLIpkuIKuAYv0VeZJ7q4sBD57D
-   CHsxB5odDR8Y1aD8mljOzV3UKT6FxoocWmnn26mWSclkbeUkTwlBEVDgm
-   usqXlO90hwXJdlCXVZ9vxgO0kAyHGlOCVhbQNbbY6oFN09Z/lHghiPbtl
-   t+MDrg2h2RYZZk4FQbilPmkv4QeYWt6mVVZ8+sgiNvulivCeed2YB0KIM
-   qK1IMAkqOHbV4ct4LZSNwP1GOc77198KEVCBkhl8MqNC4xcKGqNA2NjGi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248809078"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="248809078"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 03:21:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="722903528"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 03:21:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ncPEu-000KjM-I7;
-        Thu, 07 Apr 2022 13:19:44 +0300
-Date:   Thu, 7 Apr 2022 13:19:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH v5 1/4] device property: Allow error pointer to be passed
- to fwnode APIs
-Message-ID: <Yk66wHWlMg3QLy6u@smile.fi.intel.com>
-References: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
- <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
+        Thu, 7 Apr 2022 06:23:50 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E032ADE;
+        Thu,  7 Apr 2022 03:21:49 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aef77.dynamic.kabel-deutschland.de [95.90.239.119])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 540FF61EA1928;
+        Thu,  7 Apr 2022 12:21:45 +0200 (CEST)
+Message-ID: <6528eec1-0ab1-a5ff-3e30-2e06256dfd04@molgen.mpg.de>
+Date:   Thu, 7 Apr 2022 12:21:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] tpm: cr50: Add new device/vendor ID 0x504a6666
+Content-Language: en-US
+To:     "Jes B. Klinke" <jbk@chromium.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
+References: <20220405173741.4023216-1-jbk@chromium.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220405173741.4023216-1-jbk@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 08:05:23PM +0200, Michael Walle wrote:
+Dear Jes,
 
-...
 
-> > +	if (IS_ERR_OR_NULL(fwnode))
-> > +		return -ENOENT;
-> > +
-> >  	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
-> >  				 nargs, index, args);
-> > +	if (ret == 0)
-> > +		return ret;
-> > 
-> > -	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
-> > -	    !IS_ERR_OR_NULL(fwnode->secondary))
-> > -		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
-> > -					 prop, nargs_prop, nargs, index, args);
-> > +	if (IS_ERR_OR_NULL(fwnode->secondary))
-> > +		return -ENOENT;
+Thank you for your patch.
+
+Am 05.04.22 um 19:37 schrieb Jes B. Klinke:
+> Accept one additional numerical value of DID:VID for next generation
+> Google TPM, to be used in future Chromebooks.
+
+Maybe extend:
+
+… Google TPM with new firmware …
+
+The TPM with the new firmware has the code name TI50, and going to use 
+the same interfaces.
+
+> This patch touches more lines than may seem necessary, as a result of
+> the need to move the error case to sit after the two recognized cases.
 > 
-> Doesn't this mean you overwrite any return code != 0 with -ENOENT?
-> Is this intended?
+> Signed-off-by: Jes B. Klinke <jbk@chromium.org>
+> ---
+> 
+>   drivers/char/tpm/tpm_tis_i2c_cr50.c | 21 +++++++++++++--------
+>   1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> index f6c0affbb4567..bf54ebd6724b0 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> @@ -31,6 +31,7 @@
+>   #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
+>   #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
+>   #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
+> +#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
+>   #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
+>   #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
+>   #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
+> @@ -742,16 +743,20 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+>   	}
+>   
+>   	vendor = le32_to_cpup((__le32 *)buf);
+> -	if (vendor != TPM_CR50_I2C_DID_VID) {
+> -		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+> -		tpm_cr50_release_locality(chip, true);
+> -		return -ENODEV;
+> +	if (vendor == TPM_CR50_I2C_DID_VID) {
+> +		dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +			 client->addr, client->irq, vendor >> 16);
+> +		return tpm_chip_register(chip);
+> +	}
+> +	if (vendor == TPM_TI50_I2C_DID_VID) {
+> +		dev_info(dev, "ti50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +			 client->addr, client->irq, vendor >> 16);
+> +		return tpm_chip_register(chip);
+>   	}
 
-Indeed, it would shadow the error code.
-So, it should go with
+Both branches are quite similar. Can a ternary operator be used?
 
-	if (IS_ERR_OR_NULL(fwnode->secondary))
-		return ret;
+     dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+     	 (vendor == TPM_CR50_I2C_DID_VID) ? "cr50" : "ti50", client->addr, 
+client->irq, vendor >> 16);
+     return tpm_chip_register(chip);
 
-then.
+and the original flow be left? (A separate variable can also be added.)
 
-> In any case:
-> Tested-by: Michael Walle <michael@walle.cc>
+>   
+> -	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> -		 client->addr, client->irq, vendor >> 16);
+> -
+> -	return tpm_chip_register(chip);
+> +	dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+> +	tpm_cr50_release_locality(chip, true);
+> +	return -ENODEV;
+>   }
+>   
+>   /**
 
-Thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
+Kind regards,
 
-
+Paul

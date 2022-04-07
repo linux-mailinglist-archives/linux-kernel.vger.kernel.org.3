@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4194F881B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A7B4F881C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiDGTbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S230252AbiDGTbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiDGTar (ORCPT
+        with ESMTP id S229505AbiDGTa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:30:47 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE144299F0A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:28:39 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b24so7569757edu.10
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:28:39 -0700 (PDT)
+        Thu, 7 Apr 2022 15:30:56 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5546529AD1A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:28:41 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bq8so12917047ejb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+0bJLwilh7WH2dJze8SpTafU8NcKHXjFenPKKfg6dz0=;
-        b=dnl4yaFuJmzRJC1dsaooha0LilBinNwtGkCoaNEJhxbia6EkFOwbDMQLmz053BoCZM
-         8mk/PkRWyc25WSQYa/2LGIPgHq+ANdc3PNw9ywtwNp3puDiAle5l9Ti19+NSHNS6h+9s
-         I2OXARH9wZrMHvzQFCSKKd2YnJByv9LE7wafacsQQXZMHfgCCj6LNEJ4sOkfuVXE73q/
-         DsLE5Ose7jz0ClePmdd1EJyycSgby8ALw6GCRRwfqGTMlIc7P1XCqSssNBrn4W6s9u5W
-         BomzNtPs/LKVp0NUCNExJRe10BAf4Mfu7QUAX2X5/oy/VE282vfMLF+NGRBD3mhEYZkd
-         Kg+g==
+        bh=86bWkUU1DWtqExQIpuhgVcDC/r0eepfnI3UV3du+ILA=;
+        b=ZF2eIv9ThBCqKphf5UMqpw+cNVjGX1YXmq3VIN2ZG93OmjFxooJ63vFD/WayYDMhSz
+         4kR1GsaWyTnu7Ah8tJuLyNGvAY/FKomCHoki9gT/ELaTi0J1CZfnOWUwEQ33gHjP9wU0
+         shH417CVQUtfVxRtAOe1MxfAg05a6HN304tCV1HjhQG1HWSmPTQAZTJz1SLe/opBo/oT
+         mKLDAu3fqxTqCWdT8sQjsOhHLLNkkocVPi9bmZQ1WBo/TzrtTbwNs/Tm+cIhGV+mV8xU
+         giAuMOTgDOskKbuTMBrNU540HXV9jdmgSSBPYy01eJOWt6UAXaz5bhN0HoOeng6b3J/B
+         rP0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+0bJLwilh7WH2dJze8SpTafU8NcKHXjFenPKKfg6dz0=;
-        b=KA2M6JsIwA7RKiA2q/gQ34lcKqARn+WkOcSBt11YPszUjEYmXVdcsBwEog96iK0l7d
-         feAQXp9T8vdj+A8+XEzWCSJLfLUPEZ5mpFnip6b4S/dhs6ZHLDDyJX6zHyjLppcJHDGi
-         xepjxb6YAivfs7B3prkiYLUl14a7QfPJ4d/9oVhl77c9acg1pMfCmb4sAu1QpOGH0X9u
-         ULdzBkzlK9U3OPl8y7Mjt88NF/D1uqonAwKpzagZ2+PEbKQFJIjViH2lozrTJak6dbqr
-         959wOPszPN2mDMTULy7flOJQhgfa8iIKvQ9SkG87LMM7zvNETLcmTaAIX3jQi93hms9A
-         OsLg==
-X-Gm-Message-State: AOAM530y4rklHn4XK7wgo+ifqMEwQDjnBmt+Flun+vrM6BXiX55i1Pw0
-        5BXGipEaDYOqGoyjYjBtfoM=
-X-Google-Smtp-Source: ABdhPJyyQYuQXxG644w9SUnoQFO/aKp53IZJZzJXHr158yoRDweK+HSZIsQB7ggegFWEDrPbpl1BBw==
-X-Received: by 2002:a05:6402:d0a:b0:418:ec3b:2242 with SMTP id eb10-20020a0564020d0a00b00418ec3b2242mr16149692edb.229.1649359706885;
-        Thu, 07 Apr 2022 12:28:26 -0700 (PDT)
+        bh=86bWkUU1DWtqExQIpuhgVcDC/r0eepfnI3UV3du+ILA=;
+        b=l+0H/D8xegrBD2Bu5tLpLxL70fFL6qp2NEcMPJSrTqB3U3yRoKrIMYgeYo/EU+YdSx
+         muJk00xB8CDnxFe0cMCdDezm51FA+jYE3IhtZCmpiAwuZrQlGwLxJah7xo4KtqJVSnAe
+         Fwl+MLFEMC72DsoIuEOXLyVt8jvnUVjKv6gtLxVOIs6gm6vzSDJQqrESsnThfP1ZCRJA
+         thw1YLz8EaRdcb6JrOQsh+iHlZXVb8XnSfIe/wP/hFcHODIU3XhZ02IOpDBOJYIGvoGj
+         +M+89RBlT5GASzE1PZZOEXvwdtP83vWg3Lb7+FRFIQYfZwqXS0D/U0Be2xvkNebiH1VA
+         ZLHg==
+X-Gm-Message-State: AOAM531hTaeQhBoIxjsPeuMfejVCSKuI3WUKuJkrto2iamydm6mknAzg
+        xCXf2wQxxNCoXy9R1TIySHw=
+X-Google-Smtp-Source: ABdhPJzaDeHLK//UqDlGr1gZKqD0RXONg04r9gqQGNsD312Pou1R2vAcj3+LLuu11D1pIy3u8bUNEA==
+X-Received: by 2002:a17:907:3fa8:b0:6d3:477a:efe with SMTP id hr40-20020a1709073fa800b006d3477a0efemr15353946ejc.401.1649359707559;
+        Thu, 07 Apr 2022 12:28:27 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
         by smtp.gmail.com with ESMTPSA id k14-20020a50e18e000000b0041b6f23f7f6sm9652798edl.22.2022.04.07.12.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:28:26 -0700 (PDT)
+        Thu, 07 Apr 2022 12:28:27 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 5/8] staging: r8188eu: remove unused enums from odm.h
-Date:   Thu,  7 Apr 2022 21:28:16 +0200
-Message-Id: <20220407192819.10661-6-straube.linux@gmail.com>
+Subject: [PATCH 6/8] staging: r8188eu: remove unused prototype usbvendorrequest()
+Date:   Thu,  7 Apr 2022 21:28:17 +0200
+Message-Id: <20220407192819.10661-7-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220407192819.10661-1-straube.linux@gmail.com>
 References: <20220407192819.10661-1-straube.linux@gmail.com>
@@ -71,60 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused enums from odm.h.
+Remove unused prototype usbvendorrequest().
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/include/odm.h | 29 ---------------------------
- 1 file changed, 29 deletions(-)
+ drivers/staging/r8188eu/include/usb_osintf.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/include/odm.h b/drivers/staging/r8188eu/include/odm.h
-index 1902aa48a255..f131e17167bf 100644
---- a/drivers/staging/r8188eu/include/odm.h
-+++ b/drivers/staging/r8188eu/include/odm.h
-@@ -98,22 +98,6 @@ struct odm_per_pkt_info {
- 	bool	bPacketBeacon;
- };
+diff --git a/drivers/staging/r8188eu/include/usb_osintf.h b/drivers/staging/r8188eu/include/usb_osintf.h
+index 3e777ca52745..32ca8ef95b23 100644
+--- a/drivers/staging/r8188eu/include/usb_osintf.h
++++ b/drivers/staging/r8188eu/include/usb_osintf.h
+@@ -13,9 +13,6 @@ extern int rtw_mc2u_disable;
  
--enum odm_ability {
--	/*  BB Team */
--	ODM_DIG			= 0x00000001,
--	ODM_HIGH_POWER		= 0x00000002,
--	ODM_CCK_CCA_TH		= 0x00000004,
--	ODM_FA_STATISTICS	= 0x00000008,
--	ODM_RAMASK		= 0x00000010,
--	ODM_RSSI_MONITOR	= 0x00000020,
--	ODM_SW_ANTDIV		= 0x00000040,
--	ODM_HW_ANTDIV		= 0x00000080,
--	ODM_BB_PWRSV		= 0x00000100,
--	ODM_2TPATHDIV		= 0x00000200,
--	ODM_1TPATHDIV		= 0x00000400,
--	ODM_PSD2AFH		= 0x00000800
--};
--
- /*  2011/10/20 MH Define Common info enum for all team. */
+ #define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
  
- enum odm_common_info_def {
-@@ -137,19 +121,6 @@ enum odm_ability_def {
- 
- # define ODM_ITRF_USB 0x2
- 
--/*  ODM_CMNINFO_OP_MODE */
--enum odm_operation_mode {
--	ODM_NO_LINK		= BIT(0),
--	ODM_LINK		= BIT(1),
--	ODM_SCAN		= BIT(2),
--	ODM_POWERSAVE		= BIT(3),
--	ODM_AP_MODE		= BIT(4),
--	ODM_CLIENT_MODE		= BIT(5),
--	ODM_AD_HOC		= BIT(6),
--	ODM_WIFI_DIRECT		= BIT(7),
--	ODM_WIFI_DISPLAY	= BIT(8),
--};
--
- /*  ODM_CMNINFO_WM_MODE */
- enum odm_wireless_mode {
- 	ODM_WM_UNKNOW	= 0x0,
+-u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, enum bt_usb_request brequest,
+-		    enum rt_usb_wvalue wvalue, u8 windex, void *data,
+-		    u8 datalen, u8 isdirectionin);
+ void netdev_br_init(struct net_device *netdev);
+ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb);
+ void *scdb_findEntry(struct adapter *priv, unsigned char *ipAddr);
 -- 
 2.35.1
 

@@ -2,150 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800F94F7747
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4085B4F775E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241698AbiDGHWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S241687AbiDGHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238823AbiDGHVx (ORCPT
+        with ESMTP id S229591AbiDGHYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:21:53 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99417523C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:19:53 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id h14so2919926lfl.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:19:53 -0700 (PDT)
+        Thu, 7 Apr 2022 03:24:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033A4DBB;
+        Thu,  7 Apr 2022 00:22:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l7so3531039ejn.2;
+        Thu, 07 Apr 2022 00:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
-        b=hhGxeURLZ59DftusEYx1alpsXXNNYNVJ3p1q1D0s6eQ/fu51CqONFsgoyfeGdvMXGF
-         /OsB7LG0gRdd6jT9knDXO/EbLHOO2FKeEJssE3HwTtBOiNUiRvkc432598qs54rdjiee
-         udXd/UNdwKvjIzS7J6pNXlgnmjX7ZJFdrL5dO3XvVwhjItWfhMk0dD7FztHxgSC0V8c5
-         /FxBcnAIfnxuWGU34V9fUgtLvowhNdefZv5RvCQ8gSlC8U7Fc3ROKMqGhIDZNqrnJhf/
-         YSO9hAZfKxldkMxdGW82diCIMz60F3m32k1moJI5ddboeS2oi0hbFPFId0ErJTQBeoTM
-         eQGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vwGQPeLGONcDmqJfPIeESPpipQ500aFLCZgIRy5zqZ0=;
+        b=cGpUq0EaSPKZUmC5xLx1Jzohz8q2BA0SCfgkM8wrethxxkDt/+g2N32fYAJT3XYV7c
+         gQbz6QMaUUd43OLUA3Qr9ybm972y3GG09XSDuFu30DSIEbHhMHSFAgUidWPsz8GrgGeW
+         s7tbaW4vOsf45FRd0naJvDCrCyKtKsWV4L7c0X8uFXIFfWJcIPONICfRuDmKWStRxSCw
+         O51niQQXIBWe/kqVxIekXIQ/hHMRE3f0A3lQ3oU7dB+SGmXs9PVY3nPhJ24PTFgfotQd
+         B8VGD/Fzr7+dIrGtF2FRhhrKgQ9sbMeozCRly8MMFIdcZp6QMqHRMmi7EmTJnuHLjSxB
+         q5fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
-        b=yZ8l/GeNsaRLMHirNtjiv4h6oUbs5jpA8Gmnr99IVjFh4wReNQHOA8J+jvmSLW9zjw
-         IroIcVgkRb+9BsbSUq90LkYYeeDAYNhHPBsGi4SBygPbiG/o/TRWC4mOhJPIp+jF3OlV
-         nes97Kz+u4zA7Is3RnAcvuoEasxXcJNnRAWUCJ+nF2g/2OISY2kfnU7MMseDv2+UzaaW
-         2SbPWd2jwbTGddfcNi+anjxU9a4bycAOl+XqHhOwFvBi2aOCzmq7oKV+lvubig4dE4zr
-         2ZQpmDXMkJpZgfyBiJbs4YNEfxV6exJPPPRXNchHtvYY1xcYVBzfHvq+G2DQHFyLar1G
-         ltxA==
-X-Gm-Message-State: AOAM533OoNxFQKvXxyB2z5J4r0Ylt9hY7Zn+lj6NMoX73LY9F7CwtHj5
-        deeKqsO8Few+oRqYgyVBdcM=
-X-Google-Smtp-Source: ABdhPJyU6i8B6QzGlf/AR+FLn6olOfRUr++T8sQ2rwwiTalavs8/pFf99Ti8hVcfMxbfaEod78epMA==
-X-Received: by 2002:a05:6512:3f96:b0:44a:f504:597f with SMTP id x22-20020a0565123f9600b0044af504597fmr8507756lfa.621.1649315991992;
-        Thu, 07 Apr 2022 00:19:51 -0700 (PDT)
-Received: from inno-pc.lan (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id h10-20020a056512220a00b0044a308dad8csm2081465lfu.149.2022.04.07.00.19.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 00:19:51 -0700 (PDT)
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-X-Google-Original-From: Zhi Wang <zhi.a.wang@intel.com>
-To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org
-Cc:     Zhi Wang <zhi.a.wang@intel.com>, Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: [PATCH v9 3/3] i915/gvt: Use the initial HW state snapshot saved in i915
-Date:   Thu,  7 Apr 2022 03:19:45 -0400
-Message-Id: <20220407071945.72148-4-zhi.a.wang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407071945.72148-1-zhi.a.wang@intel.com>
-References: <20220407071945.72148-1-zhi.a.wang@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vwGQPeLGONcDmqJfPIeESPpipQ500aFLCZgIRy5zqZ0=;
+        b=eSHnZOiNGhZwGg8k5lAaG1nZZs4y1xnXp4A6nZNaNTohPEfwBw8onMMr/DLnQ0Ls1L
+         0wUXekcsyykhAqCxj/qwUMFSoKYTxpBWMlVWU/XCS83HM/cSKk7zT9F0KhAcV9K48mBN
+         7dxoBJUbIejmY4LL5k+f4Bzavi9vWA7GWO2Wex711nf6p1anzQrSxNIJyHtFxnzuugnJ
+         bEMXe1V46OWh3zJfWm8z6mauFG+4jKf7+fMZPNclNcUwUYeHEoVKuMe7y5+DQ6U8kmcN
+         vC3fllTzwm9daE9AVQOVuSW6uG3tFNj97Et1I6ir0csQh9YGjo+eFIFdHHhoCXsPogAU
+         dT1Q==
+X-Gm-Message-State: AOAM532PCUE5LW8a8rvdvhLWKz2RBemkwgSllZGY6IIxXzJ8v/6QK6iV
+        7/WW/qjbHKE0qN/jj80nJvNR9dfusThSxiRjhHE=
+X-Google-Smtp-Source: ABdhPJzQRq8/eIccgTS4Y7+Q3Go4ejR4ddyxfTtgPRrDE8QiY00n90m58Se3srjqqXXHUSIg52T71GhZZnCQSkeWe4o=
+X-Received: by 2002:a17:907:8a26:b0:6e1:2646:ef23 with SMTP id
+ sc38-20020a1709078a2600b006e12646ef23mr12386094ejc.109.1649316129522; Thu, 07
+ Apr 2022 00:22:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <cover.1649310812.git.duoming@zju.edu.cn> <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
+In-Reply-To: <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Thu, 7 Apr 2022 00:21:58 -0700
+Message-ID: <CAMo8BfLG_u2z2HwY9Qo6cFgNoSrrz2mS2iD+rtj-uyrKhZYmLw@mail.gmail.com>
+Subject: Re: [PATCH 11/11] arch: xtensa: platforms: Fix deadlock in rs_close()
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
+        mkl@pengutronix.de, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        jes@trained-monkey.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, alexander.deucher@amd.com,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, linux-rdma@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code of saving initial HW state snapshot has been moved into i915.
-Let the GVT-g core logic use that snapshot.
+Hi Duoming,
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Vivi Rodrigo <rodrigo.vivi@intel.com>
-Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc: Zhi Wang <zhi.a.wang@intel.com>
-Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
----
- drivers/gpu/drm/i915/gvt/firmware.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+On Wed, Apr 6, 2022 at 11:38 PM Duoming Zhou <duoming@zju.edu.cn> wrote:
+>
+> There is a deadlock in rs_close(), which is shown
+> below:
+>
+>    (Thread 1)              |      (Thread 2)
+>                            | rs_open()
+> rs_close()                 |  mod_timer()
+>  spin_lock_bh() //(1)      |  (wait a time)
+>  ...                       | rs_poll()
+>  del_timer_sync()          |  spin_lock() //(2)
+>  (wait timer to stop)      |  ...
+>
+> We hold timer_lock in position (1) of thread 1 and
+> use del_timer_sync() to wait timer to stop, but timer handler
+> also need timer_lock in position (2) of thread 2.
+> As a result, rs_close() will block forever.
 
-diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
-index 1a8274a3f4b1..54fe442238c6 100644
---- a/drivers/gpu/drm/i915/gvt/firmware.c
-+++ b/drivers/gpu/drm/i915/gvt/firmware.c
-@@ -66,22 +66,16 @@ static struct bin_attribute firmware_attr = {
- 	.mmap = NULL,
- };
- 
--static int mmio_snapshot_handler(struct intel_gvt *gvt, u32 offset, void *data)
--{
--	*(u32 *)(data + offset) = intel_uncore_read_notrace(gvt->gt->uncore,
--							    _MMIO(offset));
--	return 0;
--}
--
- static int expose_firmware_sysfs(struct intel_gvt *gvt)
- {
- 	struct intel_gvt_device_info *info = &gvt->device_info;
--	struct pci_dev *pdev = to_pci_dev(gvt->gt->i915->drm.dev);
-+	struct drm_i915_private *i915 = gvt->gt->i915;
-+	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
- 	struct gvt_firmware_header *h;
- 	void *firmware;
- 	void *p;
- 	unsigned long size, crc32_start;
--	int i, ret;
-+	int ret;
- 
- 	size = sizeof(*h) + info->mmio_size + info->cfg_space_size;
- 	firmware = vzalloc(size);
-@@ -99,17 +93,16 @@ static int expose_firmware_sysfs(struct intel_gvt *gvt)
- 
- 	p = firmware + h->cfg_space_offset;
- 
--	for (i = 0; i < h->cfg_space_size; i += 4)
--		pci_read_config_dword(pdev, i, p + i);
--
--	memcpy(gvt->firmware.cfg_space, p, info->cfg_space_size);
-+	memcpy(gvt->firmware.cfg_space, i915->vgpu.initial_cfg_space,
-+	       info->cfg_space_size);
-+	memcpy(p, gvt->firmware.cfg_space, info->cfg_space_size);
- 
- 	p = firmware + h->mmio_offset;
- 
--	/* Take a snapshot of hw mmio registers. */
--	intel_gvt_for_each_tracked_mmio(gvt, mmio_snapshot_handler, p);
-+	memcpy(gvt->firmware.mmio, i915->vgpu.initial_mmio,
-+	       info->mmio_size);
- 
--	memcpy(gvt->firmware.mmio, p, info->mmio_size);
-+	memcpy(p, gvt->firmware.mmio, info->mmio_size);
- 
- 	crc32_start = offsetof(struct gvt_firmware_header, crc32) + 4;
- 	h->crc32 = crc32_le(0, firmware + crc32_start, size - crc32_start);
+I agree with this.
+
+> This patch extracts del_timer_sync() from the protection of
+> spin_lock_bh(), which could let timer handler to obtain
+> the needed lock.
+
+Looking at the timer_lock I don't really understand what it protects.
+It looks like it is not needed at all.
+
+Also, I see that rs_poll rewinds the timer regardless of whether del_timer_sync
+was called or not, which violates del_timer_sync requirements.
+
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+>  arch/xtensa/platforms/iss/console.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/xtensa/platforms/iss/console.c b/arch/xtensa/platforms/iss/console.c
+> index 81d7c7e8f7e..d431b61ae3c 100644
+> --- a/arch/xtensa/platforms/iss/console.c
+> +++ b/arch/xtensa/platforms/iss/console.c
+> @@ -51,8 +51,10 @@ static int rs_open(struct tty_struct *tty, struct file * filp)
+>  static void rs_close(struct tty_struct *tty, struct file * filp)
+>  {
+>         spin_lock_bh(&timer_lock);
+> -       if (tty->count == 1)
+> +       if (tty->count == 1) {
+> +               spin_unlock_bh(&timer_lock);
+>                 del_timer_sync(&serial_timer);
+> +       }
+>         spin_unlock_bh(&timer_lock);
+
+Now in case tty->count == 1 the timer_lock would be unlocked twice.
+
 -- 
-2.25.1
-
+Thanks.
+-- Max

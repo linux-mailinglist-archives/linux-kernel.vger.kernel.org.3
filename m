@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DCE4F8160
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7EA4F816C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343843AbiDGORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S1343864AbiDGOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343879AbiDGORs (ORCPT
+        with ESMTP id S240863AbiDGOUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:17:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5891162A6;
-        Thu,  7 Apr 2022 07:15:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DE58B82776;
-        Thu,  7 Apr 2022 14:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984C2C385A0;
-        Thu,  7 Apr 2022 14:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649340945;
-        bh=GOzsGxLSkBQqhIXrfCngzZGevBYoeZtJmUwSO2v+asA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dWM0OU/2Eup7bAXKcIadgArZ3JejnCml0I3OwlKXzMbr+/R0fMI7JBjE0pxNiy0UV
-         Mbh5zU1FOxlrtJnx4lYUWlHWv6TPvdzYFoeWBXgfdOdk5zlCQxrIpGxsF7/DCJRkdJ
-         +jkK+3UerSHxYp/9xLF/itnP94a0Vf1q449k8ruToThDqjVvGRDq+FtwlDPDIIK1Ry
-         pcHpvMXAf/l1nCkS+JBqNQlDBaPfGPyAudheytXPENJIkyajbjSpQc9yP8aLt69Ndu
-         Zhg6shjlUBmDh3J5Zf4k5JXaFUyTZxomEjsG8KjSUC22fJJOeuRxsPJjD4Bl29yh+Z
-         JouYtEfQ2hA7Q==
-Date:   Thu, 7 Apr 2022 22:15:38 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-Subject: Re: [PATCH v8 15/20] erofs: register fscache context for extra data
- blobs
-Message-ID: <Yk7yCp2fwnbXeyuI@debian>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
- <20220406075612.60298-16-jefflexu@linux.alibaba.com>
+        Thu, 7 Apr 2022 10:20:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9365156204
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iveGK1/Yuor96D4y10ufJ6G2Pghx6MVtRSQWDI/71jg=; b=Lau3m21l6fe80P7yOEfaJmxZIM
+        Woq6nDA/hd61xO6MJxvkRU+zcJo2Ms/KlRHAaYEGaB1bf4t10T8POdWQxLt1TnCjyvBhtDs9YHKbJ
+        cqZwDKgZHWLGfCkUSkwers4k8vzmUsLl7+HJnZ6mLI/Xm8q26rG2kj9+68OAAnhdrijztYaWk+0mm
+        Lv+32woMRaSAwAzPaD/bHBFbuuMtcd4hWjOwaqxnRhubGdwvunbnXXIz0CywFvQmBT+ywTc9nnKGk
+        KY7/gXQ1SfzNlA52cae4Yb35ywZdAlh/jr3jEY6oSL4PVJayJgHYrrePRS+GE1G6umuxmbw3DKe/4
+        QjEOJAbQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncSwx-008uHX-3R; Thu, 07 Apr 2022 14:17:27 +0000
+Date:   Thu, 7 Apr 2022 15:17:27 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: fix kernel NULL pointer dereference in
+ page_vma_mapped_walk
+Message-ID: <Yk7yd5ho2a7jWNfS@casper.infradead.org>
+References: <20220407064008.71869-1-pizhenwei@bytedance.com>
+ <Yk7tIi4UKjiqQyoF@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406075612.60298-16-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yk7tIi4UKjiqQyoF@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,120 +51,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:56:07PM +0800, Jeffle Xu wrote:
-> Similar to the multi device mode, erofs could be mounted from one
-> primary data blob (mandatory) and multiple extra data blobs (optional).
+On Thu, Apr 07, 2022 at 02:54:42PM +0100, Matthew Wilcox wrote:
+> On Thu, Apr 07, 2022 at 02:40:08PM +0800, zhenwei pi wrote:
+> > size_to_hstate(4K) returns NULL pointer, this leads kernel BUG in
+> > function page_vma_mapped_walk.
 > 
-> Register fscache context for each extra data blob.
+> Yes, I think this is the right fix.  It's not immediately obvious from
+> the bug and the patch, but what's going on is:
 > 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/erofs/data.c     |  3 +++
->  fs/erofs/internal.h |  2 ++
->  fs/erofs/super.c    | 25 +++++++++++++++++--------
->  3 files changed, 22 insertions(+), 8 deletions(-)
+> page_mapped_in_vma() sets nr_pages to 1.  This is correct because we
+> usually only want to know about the precise page, and not about the
+> folio containing it.  But hugetlbfs is special (... in so many ways ...)
+> and actually wants to work on the entire folio.  We could set nr_pages
+> specially for hugetlb pages, but it's better to ignore it in
+> page_vma_mapped_walk() for the hugetlb case.
 > 
-> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-> index bc22642358ec..14b64d960541 100644
-> --- a/fs/erofs/data.c
-> +++ b/fs/erofs/data.c
-> @@ -199,6 +199,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
->  	map->m_bdev = sb->s_bdev;
->  	map->m_daxdev = EROFS_SB(sb)->dax_dev;
->  	map->m_dax_part_off = EROFS_SB(sb)->dax_part_off;
-> +	map->m_fscache = EROFS_SB(sb)->s_fscache;
->  
->  	if (map->m_deviceid) {
->  		down_read(&devs->rwsem);
-> @@ -210,6 +211,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
->  		map->m_bdev = dif->bdev;
->  		map->m_daxdev = dif->dax_dev;
->  		map->m_dax_part_off = dif->dax_part_off;
-> +		map->m_fscache = dif->fscache;
->  		up_read(&devs->rwsem);
->  	} else if (devs->extra_devices) {
->  		down_read(&devs->rwsem);
-> @@ -227,6 +229,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
->  				map->m_bdev = dif->bdev;
->  				map->m_daxdev = dif->dax_dev;
->  				map->m_dax_part_off = dif->dax_part_off;
-> +				map->m_fscache = dif->fscache;
->  				break;
->  			}
->  		}
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index eb37b33bce37..90f7d6286a4f 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -49,6 +49,7 @@ typedef u32 erofs_blk_t;
->  
->  struct erofs_device_info {
->  	char *path;
-> +	struct erofs_fscache *fscache;
->  	struct block_device *bdev;
->  	struct dax_device *dax_dev;
->  	u64 dax_part_off;
-> @@ -482,6 +483,7 @@ static inline int z_erofs_map_blocks_iter(struct inode *inode,
->  #endif	/* !CONFIG_EROFS_FS_ZIP */
->  
->  struct erofs_map_dev {
-> +	struct erofs_fscache *m_fscache;
->  	struct block_device *m_bdev;
->  	struct dax_device *m_daxdev;
->  	u64 m_dax_part_off;
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 9498b899b73b..8c7181cd37e6 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -259,15 +259,23 @@ static int erofs_init_devices(struct super_block *sb,
->  		}
->  		dis = ptr + erofs_blkoff(pos);
->  
-> -		bdev = blkdev_get_by_path(dif->path,
-> -					  FMODE_READ | FMODE_EXCL,
-> -					  sb->s_type);
-> -		if (IS_ERR(bdev)) {
-> -			err = PTR_ERR(bdev);
-> -			break;
-> +		if (erofs_is_fscache_mode(sb)) {
-> +			err = erofs_fscache_register_cookie(sb, &dif->fscache,
-> +							    dif->path, false);
-> +			if (err)
-> +				break;
-> +		} else {
-> +			bdev = blkdev_get_by_path(dif->path,
-> +						  FMODE_READ | FMODE_EXCL,
-> +						  sb->s_type);
-> +			if (IS_ERR(bdev)) {
-> +				err = PTR_ERR(bdev);
-> +				break;
-> +			}
-> +			dif->bdev = bdev;
-> +			dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
+> I'll fix up the changelog and add it to my pile of fixes that I'm
+> sending tomorrow.
+> https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
 
-Overly long line, please help split into 2 lines if possible.
+I looked over the patch in context, and realised we now don't need to
+call size_to_hstate since we're getting the hstate from the VMA.
 
-Otherwise looks good,
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+https://git.infradead.org/users/willy/pagecache.git/commitdiff/98ea02597b9967c0817d29fee2f96d21b9e59ca5
 
-Thanks,
-Gao Xiang
-
->  		}
-> -		dif->bdev = bdev;
-> -		dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
-> +
->  		dif->blocks = le32_to_cpu(dis->blocks);
->  		dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
->  		sbi->total_blocks += dif->blocks;
-> @@ -701,6 +709,7 @@ static int erofs_release_device_info(int id, void *ptr, void *data)
->  	fs_put_dax(dif->dax_dev);
->  	if (dif->bdev)
->  		blkdev_put(dif->bdev, FMODE_READ | FMODE_EXCL);
-> +	erofs_fscache_unregister_cookie(&dif->fscache);
->  	kfree(dif->path);
->  	kfree(dif);
->  	return 0;
-> -- 
-> 2.27.0
-> 

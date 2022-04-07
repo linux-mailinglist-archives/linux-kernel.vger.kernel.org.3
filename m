@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BD74F7C8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDA24F7C98
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244123AbiDGKTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S244171AbiDGKVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242823AbiDGKTG (ORCPT
+        with ESMTP id S237328AbiDGKVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:19:06 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AA210077C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:17:06 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2eb43ad7909so56376657b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 03:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=wohRNTw8lNqqmdn+Vx53fJpkpUwTxDNz3jWT8qdpbZE=;
-        b=z4+AvWUUynitY8XdyVWSO43Rqy5TxhiJ9B29h/N0ous91xSah+pwksNJmafiFkxnoZ
-         7aLl2eQNfanOZQKGMg682fGB7BjNsobvB8wRwSbMOVxAoNR+u1Ncqmcl9dP7Xt44TL66
-         LVkvysPfS7+JFbgUCiW0fCeoQhdfjBaQH+pJO5t+nNAtG5C/CI8ihItQHIE2CbGfMCMx
-         Xh/c659LIOiDN91dCcNfJes/TVv4KWYivbpxBQWH3HXUt9UysIIaLoz0rZTBXeNpXTOV
-         a58FFgJcnZVykeVpigC+2RMV1CiNa0u5mxq30TzI5qEEBTwEKuKKp3WdlNNqAtkiK9Q1
-         HWgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=wohRNTw8lNqqmdn+Vx53fJpkpUwTxDNz3jWT8qdpbZE=;
-        b=AkbYmlBmYN/xZxBoX8ZeWCF6ciB49WVbckSqnKWA1+LStj2dmn9Bhpoi7fIy6IDGpg
-         TsLYdcRoX2qN0J9sj8J6ZonuokVwczrjbHSR86CBHZ4l+R3a0yoqz9RkMQk68MEXlDtO
-         CjwNqIzDTa/lXvqrxbJ1eIxipVoQLKKG2EYcPP+/Av60KPbGyYAvahyI2vPJ+n4th438
-         utISEmkmnXZbjs/r3ldgjc3FfQmh3mHrVzn94JuIpDXKlzUugCjq8D8buRYPAFd2t9DC
-         +W7Zt4kSGBgVQQKilVj5zC8U+zu+mn3tcWhjLj+bfUnDPNCXi0amAMh+3VPFQ0Eb943Y
-         ikGw==
-X-Gm-Message-State: AOAM5301YehDHEm5Mi5v4AyZ0bcTHwR82C8UOVj9B1HbpaHUJc+aQaNH
-        96cEoq+yXR2uK+NNzqRENdAqlx7TPOHoslUTPxxTrQ==
-X-Google-Smtp-Source: ABdhPJyT8CGlRssb8AxHOFbKTjM7VrHXbd2+eo+HzGgTQmjA947rwLuTLUExeBPcpzMLnVgI/UlinU+75hXA4GYxBlE=
-X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
- p186-20020a0dffc3000000b002eb23273361mr10687139ywf.36.1649326625926; Thu, 07
- Apr 2022 03:17:05 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 7 Apr 2022 15:46:53 +0530
-Message-ID: <CA+G9fYvdH87k2sSy6g3ehkqE8W94wdg-ww9-wS_t9w48Sp55PQ@mail.gmail.com>
-Subject: [next] perf build failures: libbpf.c:10946:50: error: format '%li'
- expects argument of type 'long int *', but argument 4 has type 'size_t *'
- {aka 'unsigned int *'} [-Werror=format=]
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        perf-users <perf-users@linaro.org>, lkft-triage@lists.linaro.org
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        NeilBrown <neilb@suse.de>, tanu235m@gmail.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        mgorman@techsingularity.net,
-        Andrew Morton <akpm@linux-foundation.org>
+        Thu, 7 Apr 2022 06:21:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EA523E3FF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:19:10 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1ncPEA-0004DC-QT; Thu, 07 Apr 2022 12:18:58 +0200
+Message-ID: <0316d3b81dda8f1de97238483758566becbbb9fc.camel@pengutronix.de>
+Subject: Re: [PATCH] dmaengine: imx-sdma: fix regression with uart scripts
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
+        Vinod Koul <vkoul@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robin Gong <yibin.gong@nxp.com>, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 12:18:57 +0200
+In-Reply-To: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
+References: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf build errors on i386 [1] on Linux next-20220407 [2]
+Am Mittwoch, dem 06.04.2022 um 18:48 -0400 schrieb Kevin Groeneveld:
+> Commit b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script") broke
+> uart rx on imx5 when using sdma firmware from older Freescale 2.6.35
+> kernel. In this case reading addr->uartXX_2_mcu_addr was going out of
+> bounds of the firmware memory and corrupting the uart script addresses.
+> 
+> Simply adding a bounds check before accessing addr->uartXX_2_mcu_addr
+> does not work as the uartXX_2_mcu_addr members are now beyond the size
+> of the older firmware and the uart addresses would never be populated
+> in that case. There are other ways to fix this but overall the logic
+> seems clearer to me to revert the uartXX_2_mcu_ram_addr structure
+> entries back to uartXX_2_mcu_addr, change the newer entries to
+> uartXX_2_mcu_rom_addr and update the logic accordingly.
+> 
+> Fixes: b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script")
+> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
 
-usdt.c:1181:5: error: "__x86_64__" is not defined, evaluates to 0
-[-Werror=undef]
- 1181 | #if __x86_64__
-      |     ^~~~~~~~~~
-usdt.c:1196:5: error: "__x86_64__" is not defined, evaluates to 0
-[-Werror=undef]
- 1196 | #if __x86_64__
-      |     ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[4]: *** [/builds/linux/tools/build/Makefile.build:97:
-/home/tuxbuild/.cache/tuxmake/builds/1/build/libbpf/staticobjs/usdt.o]
-Error 1
-make[4]: *** Waiting for unfinished jobs....
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/values.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/backward-ring-buffer.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/sdt.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/is_printable_array.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/debug.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/fncache.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/bitmap.o
-  CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/machine.o
-libbpf.c: In function 'attach_uprobe':
-libbpf.c:10946:50: error: format '%li' expects argument of type 'long
-int *', but argument 4 has type 'size_t *' {aka 'unsigned int *'}
-[-Werror=format=]
-10946 |         n = sscanf(func_name, "%m[a-zA-Z0-9_.]+%li", &func, &offset);
-      |                                                ~~^          ~~~~~~~
-      |                                                  |          |
-      |                                                  long int *
-size_t * {aka unsigned int *}
-      |                                                %i
-cc1: all warnings being treated as errors
-make[4]: *** [/builds/linux/tools/build/Makefile.build:96:
-/home/tuxbuild/.cache/tuxmake/builds/1/build/libbpf/staticobjs/libbpf.o]
-Error 1
+I clearly didn't think about this case when reviewing the breaking
+change. The solution in this patch looks fine to me.
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 2e9a9857569ec27e64d2ddd01294bbe3c736acb1
-  git_describe: next-20220407
-  kernel-config: https://builds.tuxbuild.com/27SL0lCnWoPP04Jn8zKQ5nEEX7i/config
-  target_arch: i386
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> ---
+>  drivers/dma/imx-sdma.c | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index 70c0aa931ddf..b708d029b6e9 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -198,12 +198,12 @@ struct sdma_script_start_addrs {
+>  	s32 per_2_firi_addr;
+>  	s32 mcu_2_firi_addr;
+>  	s32 uart_2_per_addr;
+> -	s32 uart_2_mcu_ram_addr;
+> +	s32 uart_2_mcu_addr;
+>  	s32 per_2_app_addr;
+>  	s32 mcu_2_app_addr;
+>  	s32 per_2_per_addr;
+>  	s32 uartsh_2_per_addr;
+> -	s32 uartsh_2_mcu_ram_addr;
+> +	s32 uartsh_2_mcu_addr;
+>  	s32 per_2_shp_addr;
+>  	s32 mcu_2_shp_addr;
+>  	s32 ata_2_mcu_addr;
+> @@ -232,8 +232,8 @@ struct sdma_script_start_addrs {
+>  	s32 mcu_2_ecspi_addr;
+>  	s32 mcu_2_sai_addr;
+>  	s32 sai_2_mcu_addr;
+> -	s32 uart_2_mcu_addr;
+> -	s32 uartsh_2_mcu_addr;
+> +	s32 uart_2_mcu_rom_addr;
+> +	s32 uartsh_2_mcu_rom_addr;
+>  	/* End of v3 array */
+>  	s32 mcu_2_zqspi_addr;
+>  	/* End of v4 array */
+> @@ -1796,17 +1796,17 @@ static void sdma_add_scripts(struct sdma_engine *sdma,
+>  			saddr_arr[i] = addr_arr[i];
+>  
+>  	/*
+> -	 * get uart_2_mcu_addr/uartsh_2_mcu_addr rom script specially because
+> -	 * they are now replaced by uart_2_mcu_ram_addr/uartsh_2_mcu_ram_addr
+> -	 * to be compatible with legacy freescale/nxp sdma firmware, and they
+> -	 * are located in the bottom part of sdma_script_start_addrs which are
+> -	 * beyond the SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1.
+> +	 * For compatibility with NXP internal legacy kernel before 4.19 which
+> +	 * is based on uart ram script and mainline kernel based on uart rom
+> +	 * script, both uart ram/rom scripts are present in newer sdma
+> +	 * firmware. Use the rom versions if they are present (V3 or newer).
+>  	 */
+> -	if (addr->uart_2_mcu_addr)
+> -		sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_addr;
+> -	if (addr->uartsh_2_mcu_addr)
+> -		sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_addr;
+> -
+> +	if (sdma->script_number >= SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3) {
+> +		if (addr->uart_2_mcu_rom_addr)
+> +			sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_rom_addr;
+> +		if (addr->uartsh_2_mcu_rom_addr)
+> +			sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_rom_addr;
+> +	}
+>  }
+>  
+>  static void sdma_load_firmware(const struct firmware *fw, void *context)
 
---
-Linaro LKFT
-https://lkft.linaro.org
 
-
-[1] https://builds.tuxbuild.com/27SL0lCnWoPP04Jn8zKQ5nEEX7i/
-[2] https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/2302706510

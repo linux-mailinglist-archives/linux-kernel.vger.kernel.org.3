@@ -2,182 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB6D4F70D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EFC4F711F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239414AbiDGBWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S238254AbiDGBYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbiDGBSU (ORCPT
+        with ESMTP id S238999AbiDGBSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:18:20 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12419852C;
-        Wed,  6 Apr 2022 18:13:03 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id d10so4713542edj.0;
-        Wed, 06 Apr 2022 18:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=g8v4shd25GPDKxW8/72Sn4jdIkSgn2LhNRd6B8RvtA0=;
-        b=LjO0NIze8f21wcPliVRZEASPSuBMJxi7795FiThHlhYnCWFvy1BLzyLlMrjxjEAN5Q
-         svtqL8oicLBWHKO6XfAxPWS2uhEzCDNuLw3eKKqdQQ6ivxmq7++PicRFr4a/eB1oQrGl
-         09hAY+2i7kUDpweNjMFDGW5dVTomZTqS8UCYcFqy/4KHZ5a1KIMPNJD2+qkG6ddoohoe
-         LUOOfikm8ZsoZ9v5CWS7TkNjkKlDQO+SL3uPRaZqcKWbKXbgeihLPVFbVtGXidWLBg2g
-         Ir4N7J0o/QVusDOlmLATF/KUsVprh0R4VxT4DxwNyoowHVGdE5EYOivRMsH5ndYYTSrg
-         zg7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g8v4shd25GPDKxW8/72Sn4jdIkSgn2LhNRd6B8RvtA0=;
-        b=cELaUdi/o6WhzbVasG1pHnhjRLG8p1OGNqOLPeeiRwTVr6Mzgl1f6EIfDoUQl8Fo1J
-         3RQyh2dDACDWzs0QnmbhQMA6ArYmfgjPZRPuRmPXEzBtlnjCQwcIuAAX2yePh7xV03cZ
-         LCIuBcNMz5yeZCrL/J4bBSstYGmHuRHaux8SnR1zNQ2+yVGAnHU84ySimd4bMm1Ew6eo
-         vuYiY4nXlx/3Bk8V2d9Dew1GBmuACD8iQs5zlOBGxLQm9VqC8fG8jEZKT8e4/J1VjSR6
-         vZKupxHGpCrurHbwpG+x7z4V5o3qeHxrUxQ0Jlc/upwy3ohYxXZPuAx8tjOe1mgZKhyw
-         5yWw==
-X-Gm-Message-State: AOAM533b8aHU3ezyZzt11mFfa99Q0oF/2WN/Tj5oVvSMVZu8Errw89Pt
-        NsYSGHTtGK4udyoXQJFFOnUJOjsIHdP48/tEWaA=
-X-Google-Smtp-Source: ABdhPJx/echMntfDFyiyVPC/gqKLWAbfPZwzsjwI+pWr4XJoT64OjDw/V+f5Mt+WFWOjjMUFwrwleMIKabyvLtVswQY=
-X-Received: by 2002:a05:6402:430d:b0:419:45cd:7ab1 with SMTP id
- m13-20020a056402430d00b0041945cd7ab1mr11485971edc.367.1649293981787; Wed, 06
- Apr 2022 18:13:01 -0700 (PDT)
+        Wed, 6 Apr 2022 21:18:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E13518B796;
+        Wed,  6 Apr 2022 18:13:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4F44B8268A;
+        Thu,  7 Apr 2022 01:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528E3C385A1;
+        Thu,  7 Apr 2022 01:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649294029;
+        bh=711AYm5X3wmpxWNIDrA7dGgX9CzomVjiSB0DnvFs3vY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B9JM9LiHoptOfwBGYxD/2HWiOjkKB2klmP8YKDRyQmOfkDc5IJRDh2Hur1kVPiM2m
+         ++zphioujq21mjAXt4I5yPnBpl7C8ZthRYDHO7Ix5h3M7EFO6XCxtYX30hSGAqXcd9
+         Tw0sh/Y8jm4Ug4RdT6izramgXKiCoG45QeADMkIEJ22HDsOlFe5kKSNHFqVqQN2cmb
+         kkmRIklQ7GwHOQ+FAyPgNdEfKZh1SBFLjhx9gZQ6Q2g3AIYJpPlR1JkPAA2UOLEcRn
+         /D0xQpb+jXqTZNx+W9QCW8nu4XnsjqLm6OEij0Vhu6O/IP/ZR4I1Bvjt8xWrvuWoAn
+         N4VizD0c8p//w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jinke Fan <fanjinke@hygon.cn>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
+        mat.jonczyk@o2.pl, dan.carpenter@oracle.com,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 20/27] rtc: mc146818-lib: Fix the AltCentury for AMD platforms
+Date:   Wed,  6 Apr 2022 21:12:50 -0400
+Message-Id: <20220407011257.114287-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220407011257.114287-1-sashal@kernel.org>
+References: <20220407011257.114287-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
- <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com> <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
- <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com> <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
- <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
- <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
- <163202bd-ea51-e80a-1481-568fae25b045@collabora.com> <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
- <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com> <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
- <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com> <CAHCN7x+YuXFrMe6dYo_VhkG7ey1jcPTpOMCM1=qoTivZO9U2Rw@mail.gmail.com>
- <f495aa2b-81f7-a3cd-a6dd-cc5ae5f0a81f@collabora.com> <439e5c67e66dfff8f44f63787e2cdb8379f87446.camel@ndufresne.ca>
- <a1069c94-4c3c-ee4d-738a-752bb1d12dac@collabora.com> <CAHCN7x+hvYjoZFA6uaTXq-XfLMck-ht7Z-VzzvGpkh7H7BBbEQ@mail.gmail.com>
-In-Reply-To: <CAHCN7x+hvYjoZFA6uaTXq-XfLMck-ht7Z-VzzvGpkh7H7BBbEQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 6 Apr 2022 20:12:50 -0500
-Message-ID: <CAHCN7xJwu1VnCNLHc9RNcbZ2yT4RooacA-hpwcXE3XvLrEJPGA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 8:34 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Wed, Apr 6, 2022 at 8:05 AM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
-> >
-> >
-> > Le 06/04/2022 =C3=A0 15:02, Nicolas Dufresne a =C3=A9crit :
-> > > Le mercredi 06 avril 2022 =C3=A0 14:50 +0200, Benjamin Gaignard a =C3=
-=A9crit :
-> > >>> default=3D1 value=3D1
-> > >>> 1: Frame-Based
-> > >>>                    hevc_start_code 0x00a40a96 (menu)   : min=3D1 ma=
-x=3D1
-> > >>> default=3D1 value=3D1
-> > >>> 1: Annex B Start Code
-> > >> It is the same so that suggest the issue is coming from GStreamer pl=
-ugin.
-> > > Can you report the GStreamer commit hash you have building on ? Also =
-please
-> > > validate the creation date of the plugin (libgstv4l2codecs.so) agains=
-t your
-> > > source update date. Reminder that GStreamer is now mono-repo (just in=
- case).
-> > >
-> > > https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HE=
-VC_aligned_with_kernel_5.15
-> > > Hash: 54b7c1f98084c85d103446cc3f2edce42ad53b0f
-> > >
-> > > Benjamin, can you confirm you have no local changes and this is the h=
-ash you are
-> > > building from ?
-> >
-> > Yes that is the hash I'm using without local changes
->
-> I was on (gstreamer-HEVC_aligned_with_kernel_5.15) with a hash of
-> 4b78eaa48c0c924afd57f85c47396b77497e69f8
->
-> Benjamin's hash wasn't listed before, but I did a git pull, and now it is=
-.
->
-> I've checked out that hash, and I am rebuilding it now. I'll report my
-> findings when it's done.  It's building on the imx8mq, so it may take
-> some time.
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-We're getting closer:
+[ Upstream commit 3ae8fd41573af4fb3a490c9ed947fc936ba87190 ]
 
-# gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec ! fakes=
-ink
-Setting pipeline to PAUSED ...
-Pipeline is PREROLLING ...
-Pipeline is PREROLLED ...
-Setting pipeline to PLAYING ...
-Redistribute latency...
-New clock: GstSystemClock
-Got EOS from element "pipeline0".
-Execution ended after 0:00:00.000563180
-Setting pipeline to NULL ...
-Freeing pipeline ...
+Setting the century forward has been failing on AMD platforms.
+There was a previous attempt at fixing this for family 0x17 as part of
+commit 7ad295d5196a ("rtc: Fix the AltCentury value on AMD/Hygon
+platform") but this was later reverted due to some problems reported
+that appeared to stem from an FW bug on a family 0x17 desktop system.
 
-GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
-GStreamer 1.0... =E2=9C=94=EF=B8=8F
+The same comments mentioned in the previous commit continue to apply
+to the newer platforms as well.
 
-The statemless decoder appears to show it can do h.265, but it fails
-all the fluster tests.
+```
+MC146818 driver use function mc146818_set_time() to set register
+RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
+reset value on Intel platform to 0x7.
 
-Ran 0/147 tests successfully               in 9.376 secs
+While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
+DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
+as reserved.
 
-I checked other V4L2SL decoders and items that previously passed are
-failing now, so I think something is wrong or corrupted with my
-system.
+DV0 is set to 1, it will select Bank 1, which will disable AltCentury
+register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
+(AltCentury), the CMOS write will be failed on code:
+CMOS_WRITE(century, acpi_gbl_FADT.century).
 
-For some reason, my system seems unstable, so I might reinstall
-everything, but it will be a slow process.  I don't know if my sd card
-is wearing out, or something is wrong, but simple things like mounting
-a thumb drive are taking a very long time.
+Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
+enable AltCentury(0x32) register writing and finally setup century as
+expected.
+```
 
-I am not sure when I'll get back to this again, but I'll try to do a
-re-install this weekend to see if I can get my system more stable.
+However in closer examination the change previously submitted was also
+modifying bits 5 & 6 which are declared reserved in the AMD documentation.
+So instead modify just the DV0 bank selection bit.
 
-adam
+Being cognizant that there was a failure reported before, split the code
+change out to a static function that can also be used for exclusions if
+any regressions such as Mikhail's pop up again.
 
->
-> adam
->
-> >
-> > Benjamin
-> >
-> > >
-> > > regards,
-> > > Nicolas
-> > >
+Cc: Jinke Fan <fanjinke@hygon.cn>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Link: https://lore.kernel.org/all/CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com/
+Link: https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
+Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220111225750.1699-1-mario.limonciello@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/rtc/rtc-mc146818-lib.c | 16 +++++++++++++++-
+ include/linux/mc146818rtc.h    |  2 ++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index 2065842f775d..e9c6691e1fb0 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -120,6 +120,17 @@ unsigned int mc146818_get_time(struct rtc_time *time)
+ }
+ EXPORT_SYMBOL_GPL(mc146818_get_time);
+ 
++/* AMD systems don't allow access to AltCentury with DV1 */
++static bool apply_amd_register_a_behavior(void)
++{
++#ifdef CONFIG_X86
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++		return true;
++#endif
++	return false;
++}
++
+ /* Set the current date and time in the real time clock. */
+ int mc146818_set_time(struct rtc_time *time)
+ {
+@@ -191,7 +202,10 @@ int mc146818_set_time(struct rtc_time *time)
+ 	save_control = CMOS_READ(RTC_CONTROL);
+ 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+ 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
+-	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
++	if (apply_amd_register_a_behavior())
++		CMOS_WRITE((save_freq_select & ~RTC_AMD_BANK_SELECT), RTC_FREQ_SELECT);
++	else
++		CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
+ 
+ #ifdef CONFIG_MACH_DECSTATION
+ 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
+diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+index 0661af17a758..1e0205811394 100644
+--- a/include/linux/mc146818rtc.h
++++ b/include/linux/mc146818rtc.h
+@@ -86,6 +86,8 @@ struct cmos_rtc_board_info {
+    /* 2 values for divider stage reset, others for "testing purposes only" */
+ #  define RTC_DIV_RESET1	0x60
+ #  define RTC_DIV_RESET2	0x70
++   /* In AMD BKDG bit 5 and 6 are reserved, bit 4 is for select dv0 bank */
++#  define RTC_AMD_BANK_SELECT	0x10
+   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
+ # define RTC_RATE_SELECT 	0x0F
+ 
+-- 
+2.35.1
+

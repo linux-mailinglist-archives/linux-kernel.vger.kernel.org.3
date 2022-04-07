@@ -2,109 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508104F8897
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BD04F887E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 22:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiDGUb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S229866AbiDGUdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiDGUbP (ORCPT
+        with ESMTP id S229800AbiDGUdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:31:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815582E933C;
-        Thu,  7 Apr 2022 13:15:28 -0700 (PDT)
+        Thu, 7 Apr 2022 16:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F54148F707
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DE1E61EDF;
-        Thu,  7 Apr 2022 20:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67A2C385A4;
-        Thu,  7 Apr 2022 20:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649362527;
-        bh=YcLjImFP4RaQwQQLM+DUBkeXsMZ0ABelfYLt5rl8ZJo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LxDS4vSJbwyGtlTWwUEa9MZHPxat/S9yBdUFdRmlQdzVNh229fNGLLRkMpbI+WyAn
-         KdUSvA2B7If3Eah5orDFv7LgjXho5M8PIK8CZfjo6GkF6JPXrXkKOp6RWBVa1eZsTf
-         ssVTuZg9kumoezcEKhEX8RjAAZeZAoi+YGasnurvvrJg8wP6nzzFDrsT5e8jlzX0he
-         Tg5+o1LmDdQrCUvVHmgtccvCT52X8hasgqI270M3290WPiViofNTMkmDU8diau3vOg
-         gHLoNV4YhURTK5ApJ8O4ox2/UxviiRh6b2Z0cvP5ElYsDECnKF8M6pbjHJbh8Lj4vM
-         zEnQVSuItl/ag==
-Date:   Thu, 7 Apr 2022 22:15:24 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] clk: cdce706: use simple i2c probe function
-Message-ID: <Yk9GXDF5MOF574CG@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stephen Kitt <steve@sk2.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37F41B82988
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601C1C385A4;
+        Thu,  7 Apr 2022 20:17:47 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 16:17:45 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, jstultz@google.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [RFC][PATCH] timers: Add del_time_free() to be called before
+ freeing timers
+Message-ID: <20220407161745.7d6754b3@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T6soNZcCxtM6oc+D"
-Content-Disposition: inline
-In-Reply-To: <20220407151831.2371706-11-steve@sk2.org>
- <20220407151831.2371706-10-steve@sk2.org>
- <20220407151831.2371706-9-steve@sk2.org>
- <20220407151831.2371706-8-steve@sk2.org>
- <20220407151831.2371706-7-steve@sk2.org>
- <20220407151831.2371706-6-steve@sk2.org>
- <20220407151831.2371706-5-steve@sk2.org>
- <20220407151831.2371706-4-steve@sk2.org>
- <20220407151831.2371706-3-steve@sk2.org>
- <20220407151831.2371706-2-steve@sk2.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[
+  This is an RFC patch. As we hit a few bugs were del_timer() is called
+  instead of del_timer_sync() before the timer is freed, and there could
+  be bugs where even del_timer_sync() is used, but the timer gets rearmed,
+  I decided to introduce a "del_timer_free()" function that can be used
+  instead. This will at least educate developers on what to call before they
+  free a structure that holds a timer.
 
---T6soNZcCxtM6oc+D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  In this RFC, I modified hci_qca.c as a use case, even though that change
+  needs some work, because the workqueue could still rearm it (I'm looking
+  to see if I can trigger the warning).
 
-On Thu, Apr 07, 2022 at 05:18:22PM +0200, Stephen Kitt wrote:
-> The i2c probe function here doesn't use the id information provided in
-> its second argument, so the single-parameter i2c probe function
-> ("probe_new") can be used instead.
->=20
-> This avoids scanning the identifier tables during probes.
->=20
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+  If this approach is acceptable, then I will remove the hci_qca.c portion
+  from this patch, and create a series of patches to use the
+  del_timer_free() in all the locations in the kernel that remove the timer
+  before freeing.
+]
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
+We are hitting a common bug were a timer is being triggered after it is
+freed. This causes a corruption in the timer link list and crashes the
+kernel. Unfortunately it is not easy to know what timer it was that was
+freed. Looking at the code, it appears that there are several cases that
+del_timer() is used when del_timer_sync() should have been.
 
---T6soNZcCxtM6oc+D
-Content-Type: application/pgp-signature; name="signature.asc"
+Add a del_timer_free() that not only does a del_timer_sync() but will mark
+the timer as freed in case it gets rearmed, it will trigger a WARN_ON. The
+del_timer_free() is more likely to be used by developers that are about to
+free a timer, then using del_timer_sync() as the latter is not as obvious
+to being needed for freeing. Having the word "free" in the name of the
+function will hopefully help developers know that that function needs to
+be called before freeing.
 
------BEGIN PGP SIGNATURE-----
+The added bonus is the marking of the timer as being freed such that it
+will trigger a warning if it gets rearmed. At least that way if the system
+crashes on a freed timer, at least we may see which timer it was that was
+freed.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJPRlwACgkQFA3kzBSg
-KbYrUQ/+JSPUvf5QADstvq1hDha/ZuwVQmf9RTz5K1BNOgS2w8qnDr6zqe+ve6GK
-WGIv0iC3l9PJPs6bXgf2mnjVPd/JaXPTAtsU7q72J4k+Qiqv/vVoUJEQtxZDBjps
-fhFAXEy0a6YiSKIwsg7LnJ7IqqnBRkju6pp0LWpZ2z73tOhrFXtNwz6IlwSK4lN3
-oEDOgrNRYZh1/KmotDVuWcBrhCI5KvkaamRaEH5u3ZoDR6tannXSVDmowkQ6uYYv
-NDqo1Qj5EzpuggzJYZ34/iwMSaSsO7RMh/7IzE5o62+IeBp0x59L88Ncs9rRuntd
-d5/IEiEkKEKZU3GgBMN0P3k9Xa360WEuvKcRdKJhDBcL/56ACG+uarKzEcrBN3wH
-4OvVBYk3hXdhTiQa8TtyVMNtpvnSQCVGQUpe9Lw4BaYtyM4IAYbKnR4fc39WVtCA
-qLgHYnGkibKn26jYEKLX6AqHTIcd3G/2gfxCo9Hps8ff3uN6sqgwqg66biNcXrZE
-ZHRnTZ7gWKpuyK29AJ4bhLIZiMllcfr7sIr6YrMRIh8Cf6+kjHMM813RlNYLUxOp
-mOhrOqe8L5QSeAJAwuyVxcw5WFWYc5AXi3yBUYACMHPF2BDGk239Ygj56dFldJvP
-DjFrviBmAZu3qWnQyKt/aFMW3YM5D1YiIKMTBApUZhBv5Lk/ZhQ=
-=1TtR
------END PGP SIGNATURE-----
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ drivers/bluetooth/hci_qca.c |  4 ++--
+ include/linux/timer.h       |  8 ++++---
+ kernel/time/timer.c         | 42 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 5 deletions(-)
 
---T6soNZcCxtM6oc+D--
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index f6e91fb432a3..8b3e57fd0f9f 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -696,8 +696,8 @@ static int qca_close(struct hci_uart *hu)
+ 	skb_queue_purge(&qca->tx_wait_q);
+ 	skb_queue_purge(&qca->txq);
+ 	skb_queue_purge(&qca->rx_memdump_q);
+-	del_timer(&qca->tx_idle_timer);
+-	del_timer(&qca->wake_retrans_timer);
++	del_timer_free(&qca->tx_idle_timer);
++	del_timer_free(&qca->wake_retrans_timer);
+ 	destroy_workqueue(qca->workqueue);
+ 	qca->hu = NULL;
+ 
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..cc76ab0659f3 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -67,11 +67,12 @@ struct timer_list {
+ #define TIMER_DEFERRABLE	0x00080000
+ #define TIMER_PINNED		0x00100000
+ #define TIMER_IRQSAFE		0x00200000
++#define TIMER_FREED		0x00400000
+ #define TIMER_INIT_FLAGS	(TIMER_DEFERRABLE | TIMER_PINNED | TIMER_IRQSAFE)
+-#define TIMER_ARRAYSHIFT	22
+-#define TIMER_ARRAYMASK		0xFFC00000
++#define TIMER_ARRAYSHIFT	23
++#define TIMER_ARRAYMASK		0xFF800000
+ 
+-#define TIMER_TRACE_FLAGMASK	(TIMER_MIGRATING | TIMER_DEFERRABLE | TIMER_PINNED | TIMER_IRQSAFE)
++#define TIMER_TRACE_FLAGMASK	(TIMER_MIGRATING | TIMER_DEFERRABLE | TIMER_PINNED | TIMER_IRQSAFE | TIMER_FREED)
+ 
+ #define __TIMER_INITIALIZER(_function, _flags) {		\
+ 		.entry = { .next = TIMER_ENTRY_STATIC },	\
+@@ -170,6 +171,7 @@ static inline int timer_pending(const struct timer_list * timer)
+ 
+ extern void add_timer_on(struct timer_list *timer, int cpu);
+ extern int del_timer(struct timer_list * timer);
++extern int del_timer_free(struct timer_list *timer);
+ extern int mod_timer(struct timer_list *timer, unsigned long expires);
+ extern int mod_timer_pending(struct timer_list *timer, unsigned long expires);
+ extern int timer_reduce(struct timer_list *timer, unsigned long expires);
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..0477e8237a0a 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -966,6 +966,8 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
+ 
+ 	BUG_ON(!timer->function);
+ 
++	WARN_ON(timer->flags & TIMER_FREED);
++
+ 	/*
+ 	 * This is a common optimization triggered by the networking code - if
+ 	 * the timer is re-modified to have the same timeout or ends up in the
+@@ -1392,6 +1394,46 @@ int del_timer_sync(struct timer_list *timer)
+ EXPORT_SYMBOL(del_timer_sync);
+ #endif
+ 
++/**
++ * del_timer_free - Release the timer for freeing
++ * @timer: the timer to be deactivated for freeing
++ *
++ * This is the same as del_timer_sync() but should be called
++ * instead if the timer is to be freed afterward. If the
++ * timer gets rearmed before freeing, it will trigger a WARN_ON().
++ *
++ * The function returns whether it has deactivated a pending timer or not.
++ */
++int del_timer_free(struct timer_list *timer)
++{
++	struct timer_base *base;
++	unsigned long flags;
++	int ret;
++
++	debug_assert_init(timer);
++
++	for (;;) {
++		ret = -1;
++		base = lock_timer_base(timer, &flags);
++
++		if (base->running_timer != timer)
++			ret = detach_if_pending(timer, base, true);
++
++		if (ret >= 0) {
++			timer->flags |= TIMER_FREED;
++			raw_spin_unlock_irqrestore(&base->lock, flags);
++			break;
++		}
++
++		raw_spin_unlock_irqrestore(&base->lock, flags);
++
++		del_timer_wait_running(timer);
++		cpu_relax();
++	}
++
++	return ret;
++}
++
+ static void call_timer_fn(struct timer_list *timer,
+ 			  void (*fn)(struct timer_list *),
+ 			  unsigned long baseclk)
+-- 
+2.35.1
+

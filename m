@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A994F8796
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C794F8798
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347077AbiDGTBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S238815AbiDGTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiDGTB0 (ORCPT
+        with ESMTP id S244437AbiDGTCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:01:26 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5422C6E5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:59:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id r13so12824002ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:59:25 -0700 (PDT)
+        Thu, 7 Apr 2022 15:02:03 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BC322C6E5
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:00:02 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 66so5717808pga.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sTr0gBmLvMOTcBTMuv173ZMChpC1v8ipaGPwhgHz+JQ=;
-        b=oWGYd1JLkOJ9QEVCWJKDcZP9ehCv+WtvoGnx7u5pd/2u9PIan5YFtZkJ4CXdAVzhFz
-         04fuvoyhVzm1l41hIxYib/5yZ8DxwQzfpJ1CV4Csuz4ea2HNE2esYYy8N4JoHogSBXrL
-         3wOnnUlq/pX7PtlrEXpfqCIqffp/SZpWAStOTaZTjpNou92lGilXPkQfknoPijg3fZ1u
-         m8SuFxCjPVvDqVrUJdGoo2MRwwhpjmzzUU6Jd+W+DycWXVKEHFrvBEwULOPhOW/YQlpE
-         H4u9zKFKcwRqLDIzxIIfUlhAptwVgO6fXrJRfqR7VZfnd7kx3OS0mc/g/LciTKSZ8xin
-         x16g==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0rS1xXo51qoboyEJ0NvJStWbgeggilt+SbA0oGgznw=;
+        b=cA4iLMAAfJUev1+RRTMoyCeuVe4HMvu4loKmKENKmjUy3v/bISu20aTSm5tmoyd3F6
+         XZoQ5TFphPWG6NbhyCeOJUcQXkNsq9/jJ4Id634zH5PEyHD6S2dyCkFjSBfXXePTA5qf
+         tvrsBFpMaOArmq8vXmt6LxldPyFMG/7TS+dDk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sTr0gBmLvMOTcBTMuv173ZMChpC1v8ipaGPwhgHz+JQ=;
-        b=xKp3/ZKsrPsi7HMUvfewHrN7451EYu0kKfJt1fe3p0Y8+dp+ogKZL5jfF4L5YUuplm
-         4oxfnzttTydOB0qWwcv94ImfsvDmf/trXzeCQdWx+L2MnWwtTm7O2QLsDC3f/93UEmKz
-         /2jc+/5QjEYRYtEWJUkHGlN0Hi6dSpIKFpZpOseUJrGJZ8ngXg0Kc2hBPfdI6CtMlYyX
-         pBPFSh8HiSAL2IgkbGcRDLUQjqoQY9c/I+Z/UoOzo/YiO1gyRC8CsVevma044DthoRcQ
-         8kelgHe1WU+HWzI2DhvSgTiD9Ox38312U+ol95KS9NuyCiVZ3dWSkpM4eKg5SINMeqny
-         8pgw==
-X-Gm-Message-State: AOAM5312OWvEJZ97K5mlqmssdPCXK9C79RA918Wvs3xeIKhx18V5lHlD
-        SOzrfSd9efcEzCXt2UDE5k8eJQ==
-X-Google-Smtp-Source: ABdhPJwhTbizX6MeC2DcKhsowU47cwwjFzCXCG/Vhy17jPGD4JK/qkPHNjvEBuou3RE3FYrN2qj2Pw==
-X-Received: by 2002:a17:907:3e1d:b0:6d7:1031:7e0 with SMTP id hp29-20020a1709073e1d00b006d7103107e0mr14393976ejc.580.1649357964303;
-        Thu, 07 Apr 2022 11:59:24 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id gt17-20020a170906f21100b006e6f9ab4830sm6169002ejb.186.2022.04.07.11.59.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:59:23 -0700 (PDT)
-Message-ID: <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
-Date:   Thu, 7 Apr 2022 20:59:22 +0200
+        bh=R0rS1xXo51qoboyEJ0NvJStWbgeggilt+SbA0oGgznw=;
+        b=IdGJwNbZSXKwD74ZhXKS3QPOYZEmNKTJ8rX1yRaSGJ6Y4+TZVfCV3kyVEd1XhQQzLn
+         qEB/xRAXJkW9K0IVCKJseyIyOIefgWL1upb4tcPC1c7fELtsxs+rHvFL5aV/5xTTU8Mm
+         4YUQWCsNgJ5Hk/IBsLWPpAY8JiCKcvAgRqMoGpAHV6vH3atDcLXfNt/bgnuIFwr9BA7b
+         3rmql0vWhO6u7q7gOQhYC+Qk4gRLbvqx9SpCaR2aK3WUPc2TFWCa9nsNDFsEEiQoZXEu
+         FjHsIOoE2ymjLV/7gDE85QQJ6lhoE60PUjgJQOGOs6H65CkDUMAr/ME5W534Y1NjJy7T
+         pmGg==
+X-Gm-Message-State: AOAM531e7dbA/D7JHv8tTFBII+k0LfY3+NbnflHKQc9Gi5ABiIPER9nv
+        kDha+P6WAfLZZ7uJ9cXtbyZeoQ==
+X-Google-Smtp-Source: ABdhPJxuqAAnwAy+zbA1Kz/BH+9EvV3U2dAWJAbiDGJR2FBU8anYb9iPWNjYQTvJxi6oVArphbOmwQ==
+X-Received: by 2002:a63:b555:0:b0:398:4ca1:4be0 with SMTP id u21-20020a63b555000000b003984ca14be0mr12349162pgo.294.1649358001970;
+        Thu, 07 Apr 2022 12:00:01 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.47.98.87])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm23218248pfc.190.2022.04.07.12.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 12:00:01 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Evan Green <evgreen@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+Date:   Thu,  7 Apr 2022 11:59:55 -0700
+Message-Id: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba
- SoC
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        dac2@pensando.io, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-5-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-5-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,36 +70,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 01:36, Brad Larson wrote:
-> Document the cadence qspi controller compatible for Pensando Elba SoC
-> boards.  The Elba qspi fifo size is 1024.
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index 0a537fa3a641..bc298e413842 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -30,6 +30,7 @@ properties:
->                - intel,lgm-qspi
->                - xlnx,versal-ospi-1.0
->                - intel,socfpga-qspi
-> +              - pensando,elba-qspi
->            - const: cdns,qspi-nor
->        - const: cdns,qspi-nor
->  
-> @@ -48,7 +49,7 @@ properties:
->      description:
->        Size of the data FIFO in words.
->      $ref: "/schemas/types.yaml#/definitions/uint32"
-> -    enum: [ 128, 256 ]
-> +    enum: [ 128, 256, 1024 ]
+The documentation for the freeze() method says that it "should quiesce
+the device so that it doesn't generate IRQs or DMA". The unspoken
+consequence of not doing this is that MSIs aimed at non-boot CPUs may
+get fully lost if they're sent during the period where the target CPU is
+offline.
 
-Is 1024 valid for other controllers? If not, then probably this should
-be further constraint in allOf:if:then...
+The current callbacks for USB HCD do not fully quiesce interrupts,
+specifically on XHCI. Change to use the full suspend/resume flow for
+freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+where USB devices fail to thaw during hibernation because XHCI misses
+its interrupt and fails to recover.
 
-Best regards,
-Krzysztof
+Signed-off-by: Evan Green <evgreen@chromium.org>
+---
+
+You may be able to reproduce this issue on your own machine via the
+following:
+1. Disable runtime PM on your XHCI controller
+2. Aim your XHCI IRQ at a non-boot CPU (replace 174): echo 2 >
+   /proc/irq/174/smp_affinity
+3. Attempt to hibernate (no need to actually go all the way down).
+
+I run 2 and 3 in a loop, and can usually hit a hang or dead XHCI
+controller within 1-2 iterations. I happened to notice this on an
+Alderlake system where runtime PM is accidentally disabled for one of
+the XHCI controllers. Some more discussion and debugging can be found at
+[1].
+
+[1] https://lore.kernel.org/linux-pci/CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com/T/#u
+
+---
+ drivers/usb/core/hcd-pci.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 8176bc81a635d6..e02506807ffc6c 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= check_root_hub_suspended,
+-	.freeze_noirq	= check_root_hub_suspended,
+-	.thaw_noirq	= NULL,
+-	.thaw		= NULL,
++	.freeze		= hcd_pci_suspend,
++	.freeze_noirq	= hcd_pci_suspend_noirq,
++	.thaw_noirq	= hcd_pci_resume_noirq,
++	.thaw		= hcd_pci_resume,
+ 	.poweroff	= hcd_pci_suspend,
+ 	.poweroff_noirq	= hcd_pci_suspend_noirq,
+ 	.restore_noirq	= hcd_pci_resume_noirq,
+-- 
+2.31.0
+

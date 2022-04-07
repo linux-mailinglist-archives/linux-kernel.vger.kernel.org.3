@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220224F7D77
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BDA4F7D80
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiDGLEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S233430AbiDGLIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiDGLEk (ORCPT
+        with ESMTP id S234265AbiDGLHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:04:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F7E3EB87;
-        Thu,  7 Apr 2022 04:02:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E866B82723;
-        Thu,  7 Apr 2022 11:02:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE78C385A4;
-        Thu,  7 Apr 2022 11:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649329358;
-        bh=ORFRCbWj/EjWk7E0RjZgO03e0x3on7bow6Av33bkjT8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uddIV8PLjQHuNS3bEbtmBzYq7XWxueW2ZlUmcSI+VdZw+SJRjnL1Krj/ofUQ0ovrc
-         dfQRQOB3gEV5WKkUlwla/LhPC0S/Lv80fMe+MjrOAV34VbB2tmzwk8VxOD3GWCrNSr
-         qNLdsvRfXzoMeGHFmFbfTkDBaM8lhlt45NaTrpI1cpGODDvsCzduHUZi7XS6GLkqFs
-         seW5uXM4uc1CbZ3FJ/4xN59iyfVgZ2tQtFISKwJAkcYRww40QQ3L5nJtuuin2zPCKf
-         Paw7lCd8xjK9glYz6xgfaU7BDopLEutsmCIQf+vbhrqA8o5uJGZ2eJq/qVyz4mFOcQ
-         nomzEyCaNl4tw==
-Date:   Thu, 7 Apr 2022 12:02:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
-Message-ID: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
-References: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
+        Thu, 7 Apr 2022 07:07:34 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8AA1A392
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 04:05:33 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id g9so8918625ybf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 04:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Wnce8ncyatyb4gXkJdV081qkC28xHzM2e5a5lY4yi8=;
+        b=ytIEiIg3QiP013POiEG2apVS1RqXz3qs+vCRF3uUMKhCGQxRAslFraHUvrNhC94XLs
+         1087O6VSv22VakIPvOQE4OpNoz9RyAbLohuvdrC8G/OLNMpELKzlkG8eGkpHWL9oBZY4
+         Y+cTGKKfJKumQxF6hQxSHwNZ7Ve9lFYQPOEce1u+HeQ1DIsGjUDUAkasl4isUKoUmJvb
+         UmkY67z7j2UCR9uQ7PxlWiEHMZpnBWRDympcyoAuikNMox+Lk8l3rduFFYODex2JOXFJ
+         NFSGpJiqzyhkyHaKC8o/zADs8YAJehAdOyXux1FxgOjsf9O+VeinGEM1TGWOhCgn6ADU
+         faDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Wnce8ncyatyb4gXkJdV081qkC28xHzM2e5a5lY4yi8=;
+        b=Vi5H5mUs47zOZXonnDlwxkN3GqFnI4w0F1fTddGv6nSlPcG6v0UjBPhNANmJiBY6PF
+         7uICjkUgLMUExkuKLqLnkU5SFY8FNGEMrxJ1Wl90YRnOoVFdyPQYzWpMVkjJQ3VcmstZ
+         6fZ2WLl2MAy7aKJ/T1mhXbfE4ulThvE7gwUNMB0PNLQ8G1vRTCALIZTXlp3T+PtF8Aiq
+         gAlQnksUzUsn6+FyfEtfsp7ATUDhQPnmajVULTjAL5qtsJ/nmF8oug9dvqx0De3/AxVO
+         NKF7YCx6bzSveSwlrGoRtSRQBJ3ZiTCswsSlEKCrmEqVCR7rc1J5jVb5N3qZxVCwSMBr
+         akHA==
+X-Gm-Message-State: AOAM533B3Zu1j5yNHbEx4jywQqcatg6mULTmJvYh1PZLfmsFJphkaHuL
+        6D4zTrly9rbM74QvcxjQw1pL2YNzTz/wJsChAPnRbA==
+X-Google-Smtp-Source: ABdhPJzzGKIMIRVH84s2AytE2sGYA9B4IzNEPjC3vRlzS+EcJoWlDXej5CaUimsSTSINkFmBjimra7tAENYAvcQZ7vI=
+X-Received: by 2002:a25:344e:0:b0:63d:b9af:4dce with SMTP id
+ b75-20020a25344e000000b0063db9af4dcemr10320468yba.123.1649329532622; Thu, 07
+ Apr 2022 04:05:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sl+D9xSOnfbnTo44"
-Content-Disposition: inline
-In-Reply-To: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
-X-Cookie: Look ere ye leap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404174159.571-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220404174159.571-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 7 Apr 2022 13:04:56 +0200
+Message-ID: <CAPDyKFp9KdBRes7Ks2m=qpmrmX0J6ZFVqt1+CuCDM-wGXxOPVg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add linux-renesas-soc@vger.kernel.org list
+ for Renesas TMIO/SDHI driver
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 4 Apr 2022 at 23:39, Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Add linux-renesas-soc@vger.kernel.org list entry for Renesas TMIO/SDHI
+> driver.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
---sl+D9xSOnfbnTo44
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied for next, thanks!
 
-On Thu, Apr 07, 2022 at 04:24:20PM +0530, Kavyasree Kotagiri wrote:
+Kind regards
+Uffe
 
-> @@ -19,6 +19,7 @@ properties:
->        - microchip,sam9x60-qspi
->        - microchip,sama7g5-qspi
->        - microchip,sama7g5-ospi
-> +      - microchip,lan966x-qspi
 
-Generally DT compatibles should be for specific SoCs rather than having
-wildcards in them, even if that means you have to list a lot of SoCs.
-Having used wildcards in the past doesn't mean it's a good idea to
-continue adding them!
-
---sl+D9xSOnfbnTo44
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJOxMcACgkQJNaLcl1U
-h9D9FggAgc5pFn36W0ydx/B1WZBx3FF3Ku7q2SH56VgVypwvh1h6vvhFkLNiDRee
-MwBh7/AZmQhxK9frdGJhVWJ4UWtcPFA71G8qWLEAPCnK3t/EDX675CtOo5zg63Sl
-vAnlpHS2MN1TeV/ys48hVR383PQ/pqICHZ3x+Ul7n8lPJKgMom2e7AOpM4QSbOON
-0RURSFVSctdeSKs/k5uAapS9kK5JsyOk+65MKtMCVHiRnu0PJCkr3ZxuelZntgbS
-188yvdtjBylm/4qGsPncB0/VEh1JOhN0yPiZaWJ6Wb5vDxDvwrwwhsVuzfzeXkTH
-ae4jeAjWZkfIXs1ixYoNw4Nh5pUAGw==
-=1tb3
------END PGP SIGNATURE-----
-
---sl+D9xSOnfbnTo44--
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1e98278418d1..64529590a659 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19858,6 +19858,7 @@ F:      drivers/media/usb/tm6000/
+>  TMIO/SDHI MMC DRIVER
+>  M:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+>  L:     linux-mmc@vger.kernel.org
+> +L:     linux-renesas-soc@vger.kernel.org
+>  S:     Supported
+>  F:     drivers/mmc/host/renesas_sdhi*
+>  F:     drivers/mmc/host/tmio_mmc*
+> --
+> 2.17.1
+>

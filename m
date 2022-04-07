@@ -2,115 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861624F85B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532E54F85B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346039AbiDGRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S1346052AbiDGRUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241991AbiDGRT2 (ORCPT
+        with ESMTP id S1346077AbiDGRUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:19:28 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7891B12B75B;
-        Thu,  7 Apr 2022 10:17:03 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-d6ca46da48so7020656fac.12;
-        Thu, 07 Apr 2022 10:17:03 -0700 (PDT)
+        Thu, 7 Apr 2022 13:20:33 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA1A1403C9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:18:30 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id r2so7567349iod.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=KH5PVhUf3St+PVWuuXxWv3bUswUGFaayVqUv+jlnQ5I=;
+        b=o0MEVFN2DI5ySYUZQvXOB6ZGueGTtWl7IhUJh543EFF9fACYPGDzNTZ+Lc5JgMHpWi
+         cQw3n5gS8HuG2oM4vKaXuGu8CtUE5L6EqqEHJEGoXpb68jv9bxWGi2QggrdMp5kCqqRA
+         U6YJyi1TRdURJQevPY06wPY59bAjhEoEF5vCFBxaFj4HrKGqLxR0p7JG9+RAxMiGtYP7
+         QdjWUY1L2iQZptNmwj9egcMAtnSVmWoD5qnW4SGCKOKkN470vEkOt18bn5TMd0NuT8hF
+         cyhu3E4GN1fPusdpyVcphrIcGMlm+D4q1dOs7wDYWSu28g5rFaT1NdYj8yx/5o66LeDN
+         1fyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5EG0rJLTD+MbvhnF4oQMsvQXhv9+LU3aJVkGQ/n7roQ=;
-        b=4b6UcrOrQdEUlTZtFQ6iU0ip8n9gBe+v687a1udsFePLy8TOoYPFg7/3IfiwzkiO+d
-         ksa7pauJSQcpd7lInAdfv+kWnzZ1vL3Q1TWdzE34v/AGQsWNZonkoRIbtpL0w2aGz4n+
-         SyfQnRIAZfJHiUxcEsEUjrHzSuduj66aRd1Dmu4tCnCYGxkUdMXiyL+DUHgyRyOrX1Uy
-         alZ81CFUCKR0KnS91fv3mTRNGNTG2xS34tbrXv3i257w7f91hjBno7lX+wSMrCFStlXa
-         XDJVNyWY5qywNELRmnsQI4Xg9WVVucYC+3fD60vLjQpeweSR92X0WC8nbuH/x1GyWQpF
-         1obQ==
-X-Gm-Message-State: AOAM530bqNf9/8g4kInyu6sesUqlvbRdVnnsBQuTm+Uv/KoX/hzVOBiB
-        E3vHc2k5dGJ7LdCZA4Rf+A==
-X-Google-Smtp-Source: ABdhPJwAwF992HhuCgRfD4AbhjABaBZXkoVS6JYTmRcVMCykjLHu4LCaNf8nJMk6mYL3QdIrniYUkA==
-X-Received: by 2002:a05:6870:d14d:b0:e1:e253:99e8 with SMTP id f13-20020a056870d14d00b000e1e25399e8mr6484169oac.23.1649351816358;
-        Thu, 07 Apr 2022 10:16:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id pn22-20020a0568704d1600b000e27271d76fsm531821oab.58.2022.04.07.10.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:16:55 -0700 (PDT)
-Received: (nullmailer pid 1462273 invoked by uid 1000);
-        Thu, 07 Apr 2022 17:16:55 -0000
-Date:   Thu, 7 Apr 2022 12:16:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
- mirror node on MT7622
-Message-ID: <Yk8chzNBsRZR8e1q@robh.at.kernel.org>
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-6-nbd@nbd.name>
- <4bafe244-6a3d-d0ec-59d3-3f3f00e71caf@linaro.org>
- <318163cb-c771-c7eb-73ba-35c66f7d0e68@nbd.name>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=KH5PVhUf3St+PVWuuXxWv3bUswUGFaayVqUv+jlnQ5I=;
+        b=RxvVY6CpdSo40YSpIcyZPXvYqrcEf/PzGaT1fvAdiczBP0h7mCypapxNhI9Tq8QKJu
+         U+lB7VFSOwPySBfpbeybC1s3FGjkakl+bElUHqBQIWahOxaX5NUylyOuUznUrPfkIREc
+         fwXM4NXqDE7AqHIQPiYaYKROWKag6nqq2ME45WuwatldwRZrdhtXmERH7UOL5QVVq7lv
+         KXoGsHedLzpn/UFJVNCVodDUhrjVxzZwcZC1/xCs1oB/Cm0yFjQtSUcEbabzshk5M45J
+         qgwh3lc0GkMLQNBRm43gKJnSZPVKTKo9xMMAUXetjer161Lxm1TvqQKGLASQsp8pwr+h
+         uCHQ==
+X-Gm-Message-State: AOAM533n8tms2daX8XmZJiIhZp/Qd4ePOhgAbtJe19ZkvQbqNSIg0yFz
+        giWtKfDw3UkLYvHSSseYderveGW4nyB6Mw5ejlo=
+X-Google-Smtp-Source: ABdhPJw6JiLSNOULkHElEr39EhvWk8yT8SEWbzQ5Y2S9x4fTB+bIVMA6CqVbhDN+YO8/EXFFMPBeu5Ivx7KO29Naot4=
+X-Received: by 2002:a05:6602:3ca:b0:63d:dfc8:fa66 with SMTP id
+ g10-20020a05660203ca00b0063ddfc8fa66mr6617430iov.128.1649351909565; Thu, 07
+ Apr 2022 10:18:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <318163cb-c771-c7eb-73ba-35c66f7d0e68@nbd.name>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <YktYX2OnLtyobRYD@kernel.org> <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
+ <CA+icZUVKgLLJvNF6ZU1e7Hjr_FsJO7x0gsGL6Jje1nv2ukhueA@mail.gmail.com>
+ <Yk79WQQjvMyCddiO@dev-arch.thelio-3990X> <CA+icZUXwF+qs0KxSeD8AF7ufrT6PodQa0iVi1w=qvdT0WWhkrA@mail.gmail.com>
+ <Yk8b9xF9OrKj4pH7@dev-arch.thelio-3990X>
+In-Reply-To: <Yk8b9xF9OrKj4pH7@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 7 Apr 2022 19:17:53 +0200
+Message-ID: <CA+icZUUogXm7bfCMvHGuCPU+Z50E1aUA6kaOx6SPp3-+HXhfPA@mail.gmail.com>
+Subject: Re: Build perf with clang, failure with libperf
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 01:01:06PM +0200, Felix Fietkau wrote:
-> 
-> On 06.04.22 10:20, Krzysztof Kozlowski wrote:
-> > On 05/04/2022 21:57, Felix Fietkau wrote:
-> > > From: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > 
-> > > This patch adds the pcie mirror document bindings for MT7622 SoC.
-> > > The feature is used for intercepting PCIe MMIO access for the WED core
-> > > Add related info in mediatek-net bindings.
-> > > 
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> > > ---
-> > >  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
-> > 
-> > Eh, I wanted to ask to not put it inside arm/, but judging by your usage
-> > - you did not create drivers for both of these (WED and PCIe mirror).
-> > 
-> > You only need them to expose address spaces via syscon.
-> > 
-> > This actually looks hacky. Either WED and PCIe mirror are part of
-> > network driver, then add the address spaces via "reg". If they are not,
-> > but instead they are separate blocks, why you don't have drivers for them?
-> The code that uses the WED block is built into the Ethernet driver, but not
-> all SoCs that use this ethernet core have it. Also, there are two WED
-> blocks, and I'm not sure if future SoCs might have a different number of
-> them at some point.
-> The WED code also needs to access registers of the ethernet MAC.
-> One reason for having a separate device is this:
-> As long as WED is not in use, ethernet supports coherent DMA for increased
-> performance. When the first wireless device attaches to WED, IO coherency
-> gets disabled and the ethernet DMA rings are cleaned up and allocated again,
-> this time with the struct device of WED (which doesn't have the dma-coherent
-> property).
+On Thu, Apr 7, 2022 at 7:14 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, Apr 07, 2022 at 06:25:29PM +0200, Sedat Dilek wrote:
+> > On Thu, Apr 7, 2022 at 5:03 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Thu, Apr 07, 2022 at 12:27:14PM +0200, Sedat Dilek wrote:
+> > > > On Mon, Apr 4, 2022 at 11:53 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > >
+> > > > > Hi Arnaldo,
+> > > > >
+> > > > > On Mon, Apr 04, 2022 at 05:43:11PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > > > Hi,
+> > > > > >
+> > > > > >       Trying to apply Sedat's patch something changed in my system,
+> > > > > > and that patch wasn't enough, so I had to first apply this one:
+> > > > > >
+> > > > > > commit 173b552663419f40bcd3cf9df4f68285cac72727
+> > > > > > Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > > > > Date:   Mon Apr 4 17:28:48 2022 -0300
+> > > > > >
+> > > > > >     tools build: Use $(shell ) instead of `` to get embedded libperl's ccopts
+> > > > > >
+> > > > > >     Just like its done for ldopts and for both in tools/perf/Makefile.config.
+> > > > > >
+> > > > > >     Using `` to initialize PERL_EMBED_CCOPTS somehow precludes using:
+> > > > > >
+> > > > > >       $(filter-out SOMETHING_TO_FILTER,$(PERL_EMBED_CCOPTS))
+> > > > > >
+> > > > > >     And we need to do it to allow for building with versions of clang where
+> > > > > >     some gcc options selected by distros are not available.
+> > > > > >
+> > > > > >     Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > > > > >     Cc: Fangrui Song <maskray@google.com>
+> > > > > >     Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > > > > >     Cc: Ian Rogers <irogers@google.com>
+> > > > > >     Cc: Jiri Olsa <jolsa@kernel.org>
+> > > > > >     Cc: John Keeping <john@metanate.com>
+> > > > > >     Cc: Leo Yan <leo.yan@linaro.org>
+> > > > > >     Cc: Michael Petlan <mpetlan@redhat.com>
+> > > > > >     Cc: Namhyung Kim <namhyung@kernel.org>
+> > > > > >     Cc: Nathan Chancellor <nathan@kernel.org>
+> > > > > >     Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > > > >     Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > > > > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > > > >
+> > > > > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > > > > index 1480910c792e2cb3..90774b60d31b2b8e 100644
+> > > > > > --- a/tools/build/feature/Makefile
+> > > > > > +++ b/tools/build/feature/Makefile
+> > > > > > @@ -217,7 +217,7 @@ strip-libs = $(filter-out -l%,$(1))
+> > > > > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > > > > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > > > > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > > > > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> > > > > > +PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > > > > >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > > > > >
+> > > > > >  $(OUTPUT)test-libperl.bin:
+> > > > > >
+> > > > > > ----------------------------------------------------- 8< -------------------
+> > > > > >
+> > > > > > After this I go on filtering out some of the gcc options that clang
+> > > > > > doesn't grok:
+> > > > > >
+> > > > > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > > > > index 90774b60d31b2b8e..bbc5e263e02385ed 100644
+> > > > > > --- a/tools/build/feature/Makefile
+> > > > > > +++ b/tools/build/feature/Makefile
+> > > > > > @@ -215,9 +215,12 @@ grep-libs  = $(filter -l%,$(1))
+> > > > > >  strip-libs = $(filter-out -l%,$(1))
+> > > > > >
+> > > > > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > > > > > +PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+> > > > > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > > > > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > > > >  PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > > > > > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > > > > > +PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+> > > > > >  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > > > > >
+> > > > > >  $(OUTPUT)test-libperl.bin:
+> > > > > >
+> > > > > > ----------------------------------------------------- 8< -------------------
+> > > > > >
+> > > > > > And then get to the problems at the end of this message, which seem
+> > > > > > similar to the problem described here:
+> > > > > >
+> > > > > > From  Nathan Chancellor <>
+> > > > > > Subject       [PATCH] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+> > > > > >
+> > > > > > https://lkml.org/lkml/2020/9/1/135
+> > > > > >
+> > > > > > So perhaps in this case its better to disable that
+> > > > > > -Werror,-Wcompound-token-split-by-macro when building with clang?
+> > > > >
+> > > > > Yes, I think that is probably the best solution. As far as I can tell,
+> > > > > at least in this file and context, the warning appears harmless, as the
+> > > > > "create a GNU C statement expression from two different macros" is very
+> > > > > much intentional, based on the presence of PERL_USE_GCC_BRACE_GROUPS.
+> > > > > The warning is fixed in upstream Perl by just avoiding creating GNU C
+> > > > > statement expressions using STMT_START and STMT_END:
+> > > > >
+> > > > > https://github.com/Perl/perl5/issues/18780
+> > > > > https://github.com/Perl/perl5/pull/18984
+> > > > >
+> > > > > If I am reading the source code correctly, an alternative to disabling
+> > > > > the warning would be specifying -DPERL_GCC_BRACE_GROUPS_FORBIDDEN but it
+> > > > > seems like that might end up impacting more than just this site,
+> > > > > according to the issue discussion above.
+> > > > >
+> > > >
+> > > > Thanks for the pointer Nathan.
+> > > >
+> > > > As said I hit the problem with Debian's perl v5.34.
+> > > >
+> > > > Checking perl5 Git reveals:
+> > > >
+> > > > "skip using gcc brace groups for STMT_START/END"
+> > > > https://github.com/Perl/perl5/commit/7169efc77525df70484a824bff4ceebd1fafc760
+> > >
+> > > GitHub says this is in 5.35.2, so it would make sense that 5.34 still
+> > > shows the issue.
+> > >
+> > > > "Partially Revert "skip using gcc brace groups for STMT_START/END""
+> > > > https://github.com/Perl/perl5/commit/e08ee3cb66f362c4901846a46014cfdfcd60326c
+> > > >
+> > > > Perl v5.34.x seems not to have these changes:
+> > > > https://github.com/Perl/perl5/compare/v5.34.0...v5.34.1
+> > > >
+> > > > Unsure if there exists a real fix for perl5.
+> > >
+> > > Perhaps those two changes could be cherry-picked into Debian's 5.34. I
+> > > have no idea if that is possible though.
+> > >
+> >
+> > What perl5 version has Arch Linux?
+>
+> $ pacman -Q perl
+> perl 5.34.1-1
+>
+> It appears that 5.35 is the development version, which I suppose means
+> we won't see this fix widely available for some time:
+>
+> https://www.nntp.perl.org/group/perl.perl5.porters/2022/03/msg263388.html
+>
+> > Do you see the issue and need -Wno-compound-token-split-by-macro?
+>
+> I don't build perf but given the above information, I suspect I would
+> need that flag as well.
+>
 
-I'm pretty sure there are assumptions in the driver core that coherency 
-is not changing on the fly. In any case, if it is, using 'dma-coherent' 
-is not appropriate. You obviously have another method to determine 
-whether you are coherent or not.
+Can you be so kind and apply my 2 diffs to perl.h and acme patchset
+(or Git tree) and test?
 
-Rob
+- Sedat -
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=tmp.perf/urgent

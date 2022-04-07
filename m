@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0848F4F87A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2062E4F87A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242041AbiDGTFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S244608AbiDGTFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiDGTFH (ORCPT
+        with ESMTP id S229736AbiDGTF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:05:07 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55722F3E5;
-        Thu,  7 Apr 2022 12:03:05 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7376791fac.7;
-        Thu, 07 Apr 2022 12:03:05 -0700 (PDT)
+        Thu, 7 Apr 2022 15:05:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2F0823009F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649358203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pon5Ck2XRRCFnZm9wVEec+ZiDBI1n0xXQ/6Hgy8EXoM=;
+        b=gR2/KMeMnw7VtWhP/0dpR4+aMHXcBci+RHnQJTs8CS6AE0ZHBOQIJxO/9IF++vMo17UVW0
+        p61OiCtFsqFmTqkbzYRlj5FUbUM/DnTxcWHWOTRt8Tt8KDKt7MFC5AbaMXZj3TdMcYqlpl
+        oRWVw8rQhG/5NPUC79q5Dz9m1OTa1ws=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-N5ew9Ys-PMqZECacKm3pTw-1; Thu, 07 Apr 2022 15:03:18 -0400
+X-MC-Unique: N5ew9Ys-PMqZECacKm3pTw-1
+Received: by mail-pf1-f200.google.com with SMTP id t4-20020a628104000000b005056f132662so874860pfd.21
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:03:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NQ6NbUsNxmOVH45bPoaIurWw7GEZCEr+aG9zT4r8iZk=;
-        b=GuoRTcHc9BrU1WYY4ew0sprG/1ibx9HAkoZBtsk2EU4K2wdeBUapN8cLb0MJQ7le78
-         mjQjyVpVZ3HIt1uUPCAgZqXKXlW3MNllYpoJdi/ukqjpfGTscXalTxycvucAHG+3VBoZ
-         xxfLn6uoB4IArcowu32vYvSt1Kly0TfJqbsMjRZy16Tk7KC3lIQlFdSyWpk7CtEKMvTo
-         PvEtPJPRB9LNEdmrJo9e5N8Ixko4JH0nQg0FdwydYXO5gKiPEUHAHbZzlnCXZcnTUdFP
-         2rAaoLOXyubMGgwGs6eacdencKwbAd54BpkCKwmJ30psMpbnrZpfZJItxvnzvQ50nr3I
-         Eqzg==
-X-Gm-Message-State: AOAM533Cf3w/zo0h0dIA4MKsEkN575MSVw+pkmm/wCRrEMk1CztQ6A4P
-        COy7RkE9jkJKPjk8eXJJbM05NxX0Pw==
-X-Google-Smtp-Source: ABdhPJwjcQsN14WCT4vuJ2Ixk7iwlioV4sNsxqAdHX8vMZZKKLCQdUfhAOOFojZ3iNXQynPHiVIlJg==
-X-Received: by 2002:a05:6870:e9a7:b0:de:e59a:7376 with SMTP id r39-20020a056870e9a700b000dee59a7376mr7688592oao.194.1649358184393;
-        Thu, 07 Apr 2022 12:03:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r25-20020a4aea99000000b0032447305d70sm7598890ooh.23.2022.04.07.12.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:03:03 -0700 (PDT)
-Received: (nullmailer pid 1789446 invoked by uid 1000);
-        Thu, 07 Apr 2022 19:03:03 -0000
-Date:   Thu, 7 Apr 2022 14:03:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: align SPI NOR node name with dtschema
-Message-ID: <Yk81Z5G+2B9arV9a@robh.at.kernel.org>
-References: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
- <Yk8AJcFRmYEryqra@sirena.org.uk>
- <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pon5Ck2XRRCFnZm9wVEec+ZiDBI1n0xXQ/6Hgy8EXoM=;
+        b=Zyvb2mMebqRo0r6eDFbRWq2Y8N3DtRM8Rk1VMH7UtYxAP0XGGHkqsfKAX8BI8A6/kO
+         iJr85cjrVywdMzXI8JfswwaDfRdTKeXElHEvhgN5gMiykk3PnOqHsGI02iVX2iENhXdY
+         OQNXqRToXh/KmAf9laDcFpRSiEXk+59A3eArrivela9U+KtYcaaNkJ+u35mraqkIC5Xi
+         qrv6UQxxzrr4fIc4um3Qlg6mgByNAmMa/5BhtQ3mCrujRUh8MrJge7Nt3jJY0kSUCUPV
+         eC8mlqZM6HbcT4xlxe0JH65CwP0bNKLd6GcOP49cTeWNzC2xYI1mirr2RS+kGaVEC+r9
+         DVbg==
+X-Gm-Message-State: AOAM530ZqZSYdVxf2+avK12fPMbU5Nd+8qXcxMSGxfwvdXFkCT4mztMq
+        sdjoyFvwKF64gXGpRT5akKFD+5JA4WsSXjlCOPysk/b1vGW3GfNgI7SzwS+pxUWhvQjfpA+uyRi
+        mQcaSxT3gOjAK4n3e6IZP57RRH8gF2y2AqsLsDnoq48h3ZxPNbAEF/HElkcUvFseB5Pza6iQ3Vw
+        ==
+X-Received: by 2002:a17:90a:d0c5:b0:1c9:ec78:18e5 with SMTP id y5-20020a17090ad0c500b001c9ec7818e5mr17533278pjw.53.1649358197685;
+        Thu, 07 Apr 2022 12:03:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJylnAgooOiWm/xSsqvqv4wdUxkJJGLLkqcAUyb8cQzjPAYjuA6jtOkqXKk4Z5O9DTdmxReeoA==
+X-Received: by 2002:a17:90a:d0c5:b0:1c9:ec78:18e5 with SMTP id y5-20020a17090ad0c500b001c9ec7818e5mr17533238pjw.53.1649358197272;
+        Thu, 07 Apr 2022 12:03:17 -0700 (PDT)
+Received: from [10.72.12.194] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm24024855pfw.188.2022.04.07.12.03.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 12:03:16 -0700 (PDT)
+Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407151521.7968-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
+Date:   Fri, 8 Apr 2022 03:03:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220407151521.7968-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:23:40PM +0200, Krzysztof Kozlowski wrote:
-> On 07/04/2022 17:15, Mark Brown wrote:
-> > On Thu, Apr 07, 2022 at 04:34:05PM +0200, Krzysztof Kozlowski wrote:
-> >> The node names should be generic and SPI NOR dtschema expects "flash".
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
-> >>  Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
-> >>  Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
-> > 
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > 
-> > but it would be easier to split this into per subsystem stuff.
-> 
-> With DTS changes I had 22 patches, so splitting is a trade-off. If
-> that's preferred (actually can reduce conflicts), I'll split it and send
-> a v2.
 
-I've applied it.
+On 4/7/22 11:15 PM, Luís Henriques wrote:
+> When doing a direct/sync write, we need to invalidate the page cache in
+> the range being written to.  If we don't do this, the cache will include
+> invalid data as we just did a write that avoided the page cache.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/file.c | 19 ++++++++++++++-----
+>   1 file changed, 14 insertions(+), 5 deletions(-)
+>
+> Changes since v3:
+> - Dropped initial call to invalidate_inode_pages2_range()
+> - Added extra comment to document invalidation
+>
+> Changes since v2:
+> - Invalidation needs to be done after a write
+>
+> Changes since v1:
+> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 5072570c2203..97f764b2fbdd 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   		return ret;
+>   
+>   	ceph_fscache_invalidate(inode, false);
+> -	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> -					    pos >> PAGE_SHIFT,
+> -					    (pos + count - 1) >> PAGE_SHIFT);
+> -	if (ret < 0)
+> -		dout("invalidate_inode_pages2_range returned %d\n", ret);
+>   
+>   	while ((len = iov_iter_count(from)) > 0) {
+>   		size_t left;
+> @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   			break;
+>   		}
+>   		ceph_clear_error_write(ci);
+> +
+> +		/*
+> +		 * we need to invalidate the page cache here, otherwise the
+> +		 * cache will include invalid data in direct/sync writes.
+> +		 */
+> +		ret = invalidate_inode_pages2_range(
 
-Really, I would have just fixed spi-pl022.yaml. In general, I'm not that 
-interested in taking fixes on the .txt bindings.
+IMO we'd better use truncate_inode_pages_range() after write. The above 
+means it's possibly will write the dirty pagecache back, which will 
+overwrite and corrupt the disk data just wrote.
 
-Rob
+Though it seems impossible that these pagecaches will be marked dirty, 
+but this call is misleading ?
+
+-- Xiubo
+
+> +				inode->i_mapping,
+> +				pos >> PAGE_SHIFT,
+> +				(pos + len - 1) >> PAGE_SHIFT);
+> +		if (ret < 0) {
+> +			dout("invalidate_inode_pages2_range returned %d\n",
+> +			     ret);
+> +			ret = 0;
+> +		}
+>   		pos += len;
+>   		written += len;
+>   		dout("sync_write written %d\n", written);
+>
+

@@ -2,221 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6144F7252
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255684F7253
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239585AbiDGCw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S239583AbiDGCxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239540AbiDGCwX (ORCPT
+        with ESMTP id S239540AbiDGCw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:52:23 -0400
-Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D1611DD35;
-        Wed,  6 Apr 2022 19:50:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V9Onnyg_1649299816;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V9Onnyg_1649299816)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 07 Apr 2022 10:50:18 +0800
-Date:   Thu, 7 Apr 2022 10:50:16 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-Subject: Re: [PATCH v8 10/20] erofs: register fscache volume
-Message-ID: <Yk5RaIdjg8fd3YQR@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
- <20220406075612.60298-11-jefflexu@linux.alibaba.com>
+        Wed, 6 Apr 2022 22:52:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87990121533
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 19:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649299860; x=1680835860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EQhB3Ed1HUXRyli1pVL01JInLFg6L9jOCRO5DJGl7WQ=;
+  b=eeqWuSKCwh/ODc8do+eWnChwgOT5PzHKSDUFdraaSPCrTECfY+xLID3Z
+   9a+SkhXjY5DSwZgV9uQ2GQF+mS+ryNV8o50lqurbtlHXh61ACP9toWGY2
+   NQDv4I9c0Tq3U9NgYZTIbpNgSKT2siRkhL3mP0PdBZoOlbb4Ao3Ht76No
+   R1ZAfckQWTP6J5bN74cSYMaBdgdvJLFZPCyqThnruTHH2ig4M8CoRA7KO
+   wfcnlVJeyNtWxpVCY4wzRuruQ+ZaRxOBVQLnlT3Q5jTm4pphLQAz3MX5l
+   abtsZ6S+bWALC2dTDUMqXVgJK1+Nwfpj+Z82VtKEEEiJ/ISUIYItDXMpy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243347941"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="243347941"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:51:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="588627300"
+Received: from pgbarran-mobl.amr.corp.intel.com (HELO localhost) ([10.212.127.188])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:50:59 -0700
+Date:   Wed, 6 Apr 2022 19:50:59 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V9 24/45] entry: Split up irqentry_exit_cond_resched()
+Message-ID: <Yk5Rk4JALK0hsYym@iweiny-desk3>
+References: <20220310172019.850939-1-ira.weiny@intel.com>
+ <20220310172019.850939-25-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406075612.60298-11-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220310172019.850939-25-ira.weiny@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:56:02PM +0800, Jeffle Xu wrote:
-> A new fscache based mode is going to be introduced for erofs, in which
-> case on-demand read semantics is implemented through fscache.
+On Thu, Mar 10, 2022 at 09:19:58AM -0800, Ira wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> As the first step, register fscache volume for each erofs filesystem.
-> That means, data blobs can not be shared among erofs filesystems. In the
-> following iteration, we are going to introduce the domain semantics, in
-> which case several erofs filesystems can belong to one domain, and data
-> blobs can be shared among these erofs filesystems of one domain.
+> Auxiliary pt_regs space needs to be manipulated by the generic
+> entry/exit code.
+
+Because of fix to the irqentry_exit_cond_resched() code[1] this patch needed
+rework upon rebasing to 5.18-rc1
+
+This basic design of this patch remains but the code is different.  The
+irqentry_exit_cond_resched() still needs to have pt_regs passed into it.
+
+However, this could be safely ignored for this review cycle as well.
+
+As soon as I have a series based on 5.18 I'll resend the full series.
+
+Thanks for understanding,
+Ira
+
+[1] 4624a14f4daa ("sched/preempt: Simplify irqentry_exit_cond_resched()
+callers") 
+
 > 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Thanks,
-Gao Xiang
-
+> Normally irqentry_exit() would take care of handling any auxiliary
+> pt_regs on exit.  Unfortunately, the call to
+> irqentry_exit_cond_resched() from xen_pv_evtchn_do_upcall() bypasses the
+> normal irqentry_exit() call.  Because of this bypass
+> irqentry_exit_cond_resched() will be required to handle any auxiliary
+> pt_regs exit handling.  However, this prevents irqentry_exit() from
+> being able to call irqentry_exit_cond_resched() and while maintaining
+> control of the auxiliary pt_regs.
+> 
+> Separate out the common functionality of irqentry_exit_cond_resched() so
+> that functionality can be used by irqentry_exit().  Add a pt_regs
+> parameter in anticipation of having irqentry_exit_cond_resched() handle
+> the auxiliary pt_regs separately from irqentry_exit().
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
 > ---
->  fs/erofs/Kconfig    | 10 ++++++++++
->  fs/erofs/Makefile   |  1 +
->  fs/erofs/fscache.c  | 37 +++++++++++++++++++++++++++++++++++++
->  fs/erofs/internal.h | 13 +++++++++++++
->  fs/erofs/super.c    |  7 +++++++
->  5 files changed, 68 insertions(+)
->  create mode 100644 fs/erofs/fscache.c
+> Changes for V9
+> 	Update commit message
 > 
-> diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
-> index f57255ab88ed..3d05265e3e8e 100644
-> --- a/fs/erofs/Kconfig
-> +++ b/fs/erofs/Kconfig
-> @@ -98,3 +98,13 @@ config EROFS_FS_ZIP_LZMA
->  	  systems will be readable without selecting this option.
+> Changes for V8
+> 	New Patch
+> ---
+>  arch/x86/entry/common.c      | 2 +-
+>  include/linux/entry-common.h | 3 ++-
+>  kernel/entry/common.c        | 9 +++++++--
+>  3 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
+> index 6c2826417b33..f1ba770d035d 100644
+> --- a/arch/x86/entry/common.c
+> +++ b/arch/x86/entry/common.c
+> @@ -309,7 +309,7 @@ __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
 >  
->  	  If unsure, say N.
-> +
-> +config EROFS_FS_ONDEMAND
-> +	bool "EROFS fscache-based ondemand-read"
-> +	depends on CACHEFILES_ONDEMAND && (EROFS_FS=m && FSCACHE || EROFS_FS=y && FSCACHE=y)
-> +	default n
-> +	help
-> +	  EROFS is mounted from data blobs and on-demand read semantics is
-> +	  implemented through fscache.
-> +
-> +	  If unsure, say N.
-> diff --git a/fs/erofs/Makefile b/fs/erofs/Makefile
-> index 8a3317e38e5a..99bbc597a3e9 100644
-> --- a/fs/erofs/Makefile
-> +++ b/fs/erofs/Makefile
-> @@ -5,3 +5,4 @@ erofs-objs := super.o inode.o data.o namei.o dir.o utils.o pcpubuf.o sysfs.o
->  erofs-$(CONFIG_EROFS_FS_XATTR) += xattr.o
->  erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o
->  erofs-$(CONFIG_EROFS_FS_ZIP_LZMA) += decompressor_lzma.o
-> +erofs-$(CONFIG_EROFS_FS_ONDEMAND) += fscache.o
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> new file mode 100644
-> index 000000000000..7a6d0239ebb1
-> --- /dev/null
-> +++ b/fs/erofs/fscache.c
-> @@ -0,0 +1,37 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2022, Alibaba Cloud
-> + */
-> +#include <linux/fscache.h>
-> +#include "internal.h"
-> +
-> +int erofs_fscache_register_fs(struct super_block *sb)
-> +{
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	struct fscache_volume *volume;
-> +	char *name;
-> +	int ret = 0;
-> +
-> +	name = kasprintf(GFP_KERNEL, "erofs,%s", sbi->opt.fsid);
-> +	if (!name)
-> +		return -ENOMEM;
-> +
-> +	volume = fscache_acquire_volume(name, NULL, NULL, 0);
-> +	if (IS_ERR_OR_NULL(volume)) {
-> +		erofs_err(sb, "failed to register volume for %s", name);
-> +		ret = volume ? PTR_ERR(volume) : -EOPNOTSUPP;
-> +		volume = NULL;
-> +	}
-> +
-> +	sbi->volume = volume;
-> +	kfree(name);
-> +	return ret;
-> +}
-> +
-> +void erofs_fscache_unregister_fs(struct super_block *sb)
-> +{
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +
-> +	fscache_relinquish_volume(sbi->volume, NULL, false);
-> +	sbi->volume = NULL;
-> +}
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 05a97533b1e9..952a2f483f94 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -74,6 +74,7 @@ struct erofs_mount_opts {
->  	unsigned int max_sync_decompress_pages;
+>  	inhcall = get_and_clear_inhcall();
+>  	if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
+> -		irqentry_exit_cond_resched();
+> +		irqentry_exit_cond_resched(regs);
+>  		instrumentation_end();
+>  		restore_inhcall(inhcall);
+>  	} else {
+> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+> index ddaffc983e62..14fd329847e7 100644
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -451,10 +451,11 @@ irqentry_state_t noinstr irqentry_enter(struct pt_regs *regs);
+>  
+>  /**
+>   * irqentry_exit_cond_resched - Conditionally reschedule on return from interrupt
+> + * @regs:	Pointer to pt_regs of interrupted context
+>   *
+>   * Conditional reschedule with additional sanity checks.
+>   */
+> -void irqentry_exit_cond_resched(void);
+> +void irqentry_exit_cond_resched(struct pt_regs *regs);
+>  
+>  void __irqentry_exit_cond_resched(void);
+>  #ifdef CONFIG_PREEMPT_DYNAMIC
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index 490442a48332..f4210a7fc84d 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -395,7 +395,7 @@ void __irqentry_exit_cond_resched(void)
+>  DEFINE_STATIC_CALL(__irqentry_exit_cond_resched, __irqentry_exit_cond_resched);
 >  #endif
->  	unsigned int mount_opt;
-> +	char *fsid;
->  };
 >  
->  struct erofs_dev_context {
-> @@ -146,6 +147,9 @@ struct erofs_sb_info {
->  	/* sysfs support */
->  	struct kobject s_kobj;		/* /sys/fs/erofs/<devname> */
->  	struct completion s_kobj_unregister;
-> +
-> +	/* fscache support */
-> +	struct fscache_volume *volume;
->  };
->  
->  #define EROFS_SB(sb) ((struct erofs_sb_info *)(sb)->s_fs_info)
-> @@ -618,6 +622,15 @@ static inline int z_erofs_load_lzma_config(struct super_block *sb,
+> -void irqentry_exit_cond_resched(void)
+> +static void exit_cond_resched(void)
+>  {
+>  	if (IS_ENABLED(CONFIG_PREEMPTION)) {
+>  #ifdef CONFIG_PREEMPT_DYNAMIC
+> @@ -406,6 +406,11 @@ void irqentry_exit_cond_resched(void)
+>  	}
 >  }
->  #endif	/* !CONFIG_EROFS_FS_ZIP */
 >  
-> +/* fscache.c */
-> +#ifdef CONFIG_EROFS_FS_ONDEMAND
-> +int erofs_fscache_register_fs(struct super_block *sb);
-> +void erofs_fscache_unregister_fs(struct super_block *sb);
-> +#else
-> +static inline int erofs_fscache_register_fs(struct super_block *sb) { return 0; }
-> +static inline void erofs_fscache_unregister_fs(struct super_block *sb) {}
-> +#endif
+> +void irqentry_exit_cond_resched(struct pt_regs *regs)
+> +{
+> +	exit_cond_resched();
+> +}
 > +
->  #define EFSCORRUPTED    EUCLEAN         /* Filesystem is corrupted */
+>  noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+>  {
+>  	lockdep_assert_irqs_disabled();
+> @@ -431,7 +436,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+>  		}
 >  
->  #endif	/* __EROFS_INTERNAL_H */
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 0c4b41130c2f..6590ed1b7d3b 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -601,6 +601,12 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->  	sbi->devs = ctx->devs;
->  	ctx->devs = NULL;
->  
-> +	if (erofs_is_fscache_mode(sb)) {
-> +		err = erofs_fscache_register_fs(sb);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	err = erofs_read_superblock(sb);
->  	if (err)
->  		return err;
-> @@ -757,6 +763,7 @@ static void erofs_kill_sb(struct super_block *sb)
->  
->  	erofs_free_dev_context(sbi->devs);
->  	fs_put_dax(sbi->dax_dev);
-> +	erofs_fscache_unregister_fs(sb);
->  	kfree(sbi);
->  	sb->s_fs_info = NULL;
->  }
+>  		instrumentation_begin();
+> -		irqentry_exit_cond_resched();
+> +		exit_cond_resched();
+>  		/* Covers both tracing and lockdep */
+>  		trace_hardirqs_on();
+>  		instrumentation_end();
 > -- 
-> 2.27.0
+> 2.35.1
+> 

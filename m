@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15914F7581
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 07:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6644F758D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiDGFyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 01:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S238520AbiDGGCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbiDGFyQ (ORCPT
+        with ESMTP id S238644AbiDGGCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 01:54:16 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682F85FDC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 22:52:15 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 7 Apr 2022
- 22:02:41 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 7 Apr
- 2022 13:52:13 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Haowen Bai <baihaowen@meizu.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: Fix pointer dereferenced before checking
-Date:   Thu, 7 Apr 2022 13:52:11 +0800
-Message-ID: <1649310731-15934-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 7 Apr 2022 02:02:38 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D742FFDB;
+        Wed,  6 Apr 2022 23:00:36 -0700 (PDT)
+Received: from [192.168.100.1] ([82.142.17.26]) by mrelayeu.kundenserver.de
+ (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1M6DSi-1neVz01lE0-006grO; Thu, 07 Apr 2022 08:00:10 +0200
+Message-ID: <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu>
+Date:   Thu, 7 Apr 2022 08:00:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v16 1/4] tty: goldfish: introduce
+ gf_ioread32()/gf_iowrite32()
+Content-Language: fr
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alessandro Zummo <a.zummo@towertech.it>, stable@vger.kernel.org
+References: <20220406201523.243733-1-laurent@vivier.eu>
+ <20220406201523.243733-2-laurent@vivier.eu> <Yk5tNOPE4b2QbHLG@kroah.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <Yk5tNOPE4b2QbHLG@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:5cWmnnYDJufcUa3X22Vbqh4rcKN+LFRmgKjDgc/0+672+P3hWzN
+ ARqb/oWIb+/kWgoDr7YcEmrPb/SGD84dgrexGNAQ1Q0hI9qRXue86iqHi4Cq9GTo6rO9JUK
+ 3gn41cqduSgCqcmo+xr1awqnQj+XsU9vsMZJMnAUC0CR1OBPE1JZYT8iuZfJ8/GtOQFhRq3
+ 86yW4PM8v6RJXH/03xaQQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ATlYoBjlPYI=:m3bzbW28a0/UV1CUXxl/8l
+ r26uwHgSlt3Scb0rDufdtShxvKamu9CxmaiURzhu8Pxxyvf4+fdr2uvVESZ+dPWGMr0VGN8hK
+ 4cog7eSfoSf21BYBto+Kej4yPuJi7mSGDwQF1ncoBUOJyJzEG4j3TxNUzyDfCktKfMqAE2UCB
+ pHgOCU607t9inU1U23+nS3y13b7L8j+dRmfd4iXJ3Ani/H7BCDpnFCqOP0258Om9bQVDFloKd
+ /VyOe75oyseVYxxQtWURFRDLw4b3LfZJt9CyOWFl2Zuxcft6iWUS9p8ybxmjjnmcXtEDzhQlF
+ V/xLoza5swZkKAqCWBXtzBfYz71+ow108Iz6GdME7ktRtUwO9TrnkMqOW9HUrCf0+NWjkJN+P
+ aL6PffLIFrs0sZ2uLr8f9MS84UvKPCq54DtapWykRbdzWgo9NsFWbGg/2qRgUh+tXf058mHaw
+ rPhN9I8ZcdU23dtHoo5AabTXqYmY5QLiivL6XO46GsnTP/JWB20DSeSBdqSGfM1/+HjGb+7wX
+ 4i3qeQtqhRp1X1+EmC0sgm3i39Gds2Kzuk5h3WThzvAauYSfTJ4rZ+XjCn0uR6CqrFc+czdzu
+ 4FvKqAT5jk7rSGvRAbIV9wCf5Ew47WGgZYwxcUiqwu60fErYGfJm7O70USGX373y1OdcuhQgc
+ 5SoOliC8Nkuqaw/UWWLnQyiet/mhj/Gszs9zVaThYs93M5cpWuRXj/QCQt19vYw1VEl8=
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,28 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer dc is dereferencing pointer plane_state before plane_state
-is being null checked. Fix this by assigning plane_state->ctx->dc to
-dc only if plane_state is not NULL, otherwise just NULL.
+Le 07/04/2022 à 06:48, Greg KH a écrit :
+> On Wed, Apr 06, 2022 at 10:15:20PM +0200, Laurent Vivier wrote:
+>> Revert
+>> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+>>
+>> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+>> defined by the architecture.
+>>
+>> Cc: stable@vger.kernel.org # v5.11+
+>> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>> ---
+>>   drivers/tty/goldfish.c   | 20 ++++++++++----------
+>>   include/linux/goldfish.h | 15 +++++++++++----
+>>   2 files changed, 21 insertions(+), 14 deletions(-)
+>>
+> 
+> Why is this a commit for the stable trees?  What bug does it fix?  You
+> did not describe the problem in the changelog text at all, this looks
+> like a housekeeping change only.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Arnd asked for that in:
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-index 50820e79d3c4..ee22f4422d26 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-@@ -3211,7 +3211,7 @@ void dcn10_update_pending_status(struct pipe_ctx *pipe_ctx)
- 	struct dc_plane_state *plane_state = pipe_ctx->plane_state;
- 	struct timing_generator *tg = pipe_ctx->stream_res.tg;
- 	bool flip_pending;
--	struct dc *dc = plane_state->ctx->dc;
-+	struct dc *dc = plane_state ? plane_state->ctx->dc : NULL;
- 
- 	if (plane_state == NULL)
- 		return;
--- 
-2.7.4
+   Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+   https://lore.kernel.org/lkml/CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com/
 
+Thanks,
+Laurent

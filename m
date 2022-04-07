@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874744F7F60
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A21C4F7F67
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245379AbiDGMpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S245385AbiDGMsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245371AbiDGMpI (ORCPT
+        with ESMTP id S237014AbiDGMsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:45:08 -0400
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B98AD13D;
-        Thu,  7 Apr 2022 05:43:07 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id q12so1704447pla.9;
-        Thu, 07 Apr 2022 05:43:07 -0700 (PDT)
+        Thu, 7 Apr 2022 08:48:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDAEC7DE37
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649335561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9/Us2cruhioCbl6RqJqudnxQAOhVEhkUDGtI39MXnNI=;
+        b=M6p7sicFM3xDGLQF7R+hn+Njj6DxM/8nBwAX4jPYW54e+5yQJsFWt5teyRTbhrSkGY6rrx
+        p6puSVgsk0S7IBLZdG8+3wRYaMgC7lnTp4L4xqTBKXFJ78iRocmiB2bNdnMNZjB+njcgYW
+        FLITsR2PPkikm5K1H3xqPD9XBaRtBPg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-poEOq9QlOGKVjZRuoFlBng-1; Thu, 07 Apr 2022 08:46:00 -0400
+X-MC-Unique: poEOq9QlOGKVjZRuoFlBng-1
+Received: by mail-wm1-f72.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so2942581wmj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:46:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=djDttX67eYTaV+Ltmm65GSmGkKnWz/VB8DEpNLaANO4=;
-        b=Ya6tvFKwsIKPcEszlbAyvRiZMuZCAJgeEuKpY+BK0UIWW8vNRAALW6NI4Kw5TPzSlP
-         nF0Z99LvAwC5EsB78hCebEYL+BBZWW7hVN0mixi6MbSb2ztZ2uXW7NL6Aj2j9hew4Kqz
-         iCRbq0sJ/DT9HoOOt+ZV3THKOyzko/gMlK8aaEL4N/IV4TkFEwF1WOpL9uQPh+BqMOPi
-         Ua00e/uD0Lv2hNC145b+aCur7j2f2TmeWavmO3cfw+JWTlDD7SgushZ5WpT7Cpg1HpFx
-         u3IUkrujfaOMaEK8A8+kVTJQM2Rzbi4Om2KPkPfAhe0/WJZK946pNpv8CSDkv6IVTpYn
-         J3AQ==
-X-Gm-Message-State: AOAM533GNqtChafq7IqyS/WgddGfF7CCvLilAc06xHdc1LXuDpzlVRh5
-        CmTq5Fb9wrIn8/mJh8ZvK1A=
-X-Google-Smtp-Source: ABdhPJzu2hVm+E8WdgrMkf4gu1dT/NXXL5NpK9h7OQ7uwd3BcRp7NMDbPV4w3EmrimUPZwyH3vLQOg==
-X-Received: by 2002:a17:902:ea11:b0:157:514:2239 with SMTP id s17-20020a170902ea1100b0015705142239mr3419961plg.95.1649335386608;
-        Thu, 07 Apr 2022 05:43:06 -0700 (PDT)
-Received: from lunar.aeonazure.com.www.tendawifi.com ([182.0.134.124])
-        by smtp.gmail.com with ESMTPSA id bx22-20020a056a00429600b004fa936a64b0sm20938572pfb.196.2022.04.07.05.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 05:43:05 -0700 (PDT)
-From:   Shaun Tancheff <shaun.tancheff@hpe.com>
-To:     shaun@tancheff.com, "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org (open list:EXT4 FILE SYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>
-Subject: [PATCH] Shrink fast commit buffer when not used
-Date:   Thu,  7 Apr 2022 19:42:44 +0700
-Message-Id: <20220407124244.2014497-1-shaun.tancheff@hpe.com>
-X-Mailer: git-send-email 2.32.0
+        bh=9/Us2cruhioCbl6RqJqudnxQAOhVEhkUDGtI39MXnNI=;
+        b=POym5rQiCFAp6R6Gct4jx2mrtBnQKk+BRjHYgqyK54ew+qIXNB1K+vzK6exEJjnwrl
+         EuM3AlbkWxy1zHrtp2fDTBoYndulv1Mlb81QkR8rI9GU30yer7ISfiXQOtA3iHsOUif7
+         Id+y03+XY04wFghL8OqlmX1w9IcbixwtLcmewoNJLuAclWR4OHUx1qzzGGwZoWqDzwdn
+         CN0pnfZY7tfvU8zmfG30rgY3uT+8EwZwWM28/VjwSRRjMmcxBD/z3HRll8w+8lP9wYsQ
+         Nl1R3okNNXLarQIZ2DLiKn6g+pmymXh3L0n+Bj4Y9ia76+lnRPUf5mJ5eRv1WV7ieIO5
+         Gq/A==
+X-Gm-Message-State: AOAM533U9yqvGvRje0tFh5EAIRNr18hk7xbOtrUwy3dOJPFECzFTir8O
+        j2uWazrmXYC7fSRfkIfj0Rdf45sNuKHozagAFzZA+R3olXK1c0ba3C7k+vB4kgWCwYwxRYa1563
+        yDrjH7rKtNYWgLoAGMlued94L
+X-Received: by 2002:adf:f6c4:0:b0:206:1581:dabc with SMTP id y4-20020adff6c4000000b002061581dabcmr10825218wrp.375.1649335559573;
+        Thu, 07 Apr 2022 05:45:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyM1kHX4+XtYoFq61dk62qQKc+KfdCBkhZ/B4Cy+Xlwxk5a3SuVrXH/rmpX3u/AmPLQfe4l7w==
+X-Received: by 2002:adf:f6c4:0:b0:206:1581:dabc with SMTP id y4-20020adff6c4000000b002061581dabcmr10825196wrp.375.1649335559301;
+        Thu, 07 Apr 2022 05:45:59 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id p5-20020adff205000000b0020614a499fbsm13364584wro.90.2022.04.07.05.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 05:45:58 -0700 (PDT)
+Message-ID: <42046fe0-d4da-625d-6412-b5459b80ee11@redhat.com>
+Date:   Thu, 7 Apr 2022 14:45:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] mm, page_alloc: fix build_zonerefs_node()
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>, stable@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>, Michal Hocko <mhocko@suse.com>
+References: <20220407120637.9035-1-jgross@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220407120637.9035-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,51 +85,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shrink the fast-commit buffer when the feature is not
-enabled. By default the fast-commit buffer will allocate 256
-blocks if s_num_fc_blks is 0. Set s_num_fc_blks to a smaller
-value (> 0) to avoid allocating a large unused buffer, this
-also makes more journal credits available when fast commit
-is not used.
+On 07.04.22 14:06, Juergen Gross wrote:
+> Since commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim from
+> zones with pages managed by the buddy allocator") only zones with free
+> memory are included in a built zonelist. This is problematic when e.g.
+> all memory of a zone has been ballooned out when zonelists are being
+> rebuilt.
+> 
+> The decision whether to rebuild the zonelists when onlining new memory
+> is done based on populated_zone() returning 0 for the zone the memory
+> will be added to. The new zone is added to the zonelists only, if it
+> has free memory pages (managed_zone() returns a non-zero value) after
+> the memory has been onlined. This implies, that onlining memory will
+> always free the added pages to the allocator immediately, but this is
+> not true in all cases: when e.g. running as a Xen guest the onlined
+> new memory will be added only to the ballooned memory list, it will be
+> freed only when the guest is being ballooned up afterwards.
+> 
+> Another problem with using managed_zone() for the decision whether a
+> zone is being added to the zonelists is, that a zone with all memory
+> used will in fact be removed from all zonelists in case the zonelists
+> happen to be rebuilt.
+> 
+> Use populated_zone() when building a zonelist as it has been done
+> before that commit.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
+> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> ---
+> V2:
+> - updated commit message (Michal Hocko)
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index bdc8f60ae462..3d0662af3289 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6128,7 +6128,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
+>  	do {
+>  		zone_type--;
+>  		zone = pgdat->node_zones + zone_type;
+> -		if (managed_zone(zone)) {
+> +		if (populated_zone(zone)) {
+>  			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+>  			check_highest_zone(zone_type);
+>  		}
 
-Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
----
- fs/ext4/super.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Did you drop my Ack?
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 81749eaddf4c..d2df10dc7cc3 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4222,6 +4222,14 @@ static int count_overhead(struct super_block *sb, ext4_group_t grp,
- 		ext4_count_free(buf, EXT4_CLUSTERS_PER_GROUP(sb) / 8);
- }
- 
-+static void strink_journal_fc_buffer(struct super_block *ext4_sb)
-+{
-+	journal_t *journal = EXT4_SB(ext4_sb)->s_journal;
-+	journal_superblock_t *sb = journal->j_superblock;
-+
-+	sb->s_num_fc_blks = cpu_to_be32(8);
-+}
-+
- /*
-  * Compute the overhead and stash it in sbi->s_overhead
-  */
-@@ -5189,6 +5197,13 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 		goto failed_mount_wq;
- 	}
- 
-+	/* Since fast-commit is disabled, shrink it's dedicated memory
-+	 * and it's share of the journal space so we can use the extra
-+	 * credits
-+	 */
-+	if (!test_opt2(sb, JOURNAL_FAST_COMMIT))
-+		strink_journal_fc_buffer(sb);
-+
- 	if (!set_journal_csum_feature_set(sb)) {
- 		ext4_msg(sb, KERN_ERR, "Failed to set journal checksum "
- 			 "feature set");
+Also, I'd appreciate getting CCed on patches where I commented.
+
 -- 
-2.32.0
+Thanks,
+
+David / dhildenb
 

@@ -2,108 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0214F825B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFE14F8223
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344399AbiDGPEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S1344275AbiDGOvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344385AbiDGPEc (ORCPT
+        with ESMTP id S1344270AbiDGOvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:04:32 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13BEB07
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:02:31 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g15-20020a17090adb0f00b001caa9a230c7so9098695pjv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 08:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xEawbGCu7y1vIILENYYhWZ3wFJRgV8eFUGqPfSyynR8=;
-        b=kT7UcNQE86YbVV1ncLaMb3kTbBan1KlOCH/D3jXUD7/D0gtfwONcVekSrOn56tAvwY
-         NzoNtHDIcwJnSaSR8hcCkG5et9Ikuwekgq65+M8l4hNJMUFb2v3lQn8N9GvVvg3GOnXO
-         EqBKpyWvDn10RTyGuD5hl/4pmjBSIq3jsij3qiing91l9We7zb4r+3ig2ekGsiU9yee9
-         A80NB+vH+JkfN4VObloBwtVrPR47ap2pWplyKBdaDrs8r9vmjqXjJtNc7hco+YBo7X4H
-         oKFqFqF7WudSWyFQr/7gIFKufOD6vG479hHGkt1RsKpm18fQQ24ahiQ3t36iSf9Kh4VR
-         itiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xEawbGCu7y1vIILENYYhWZ3wFJRgV8eFUGqPfSyynR8=;
-        b=jOiYpIOKC8gfu1FQLN9ODBZwqK5z31YNc1VOnxygsr2zUMcBTZlXBJjAL1VVnhzyss
-         4Pr/TZdz5MvdK7xU7pmokF0xOnUxuLMAgtsCE+zLlEOx93evNcG0sz7v1ICJCiQ+5fnn
-         n85w7GRYsJ7993qtt9BsRl58K06PlMhnFMvzc8ZAGESDleyLplaKxi7RIFMfMyoNtL+y
-         1eTEUThCfBdI8Zbm64tMcTIQqpsiegblb4oxgJduJH23k8+zhi0UKd/S9UATCXnGeZjO
-         FkfJX3TH5XUH/5rhbUiTkYUvQ9Vii6UbR7FcKIZ4S8jFocUdHkoQaKopl9MXHhc9BPXd
-         A39w==
-X-Gm-Message-State: AOAM533aGQ/RTn1I0ownaCUBUkNqGGnoQZlJk/ssCR1y4BFCKal0dDKJ
-        q2Y/3I28NFlqFVFUv+BSOKlOovJwYOHOuA==
-X-Google-Smtp-Source: ABdhPJzJZHFRpw8bMz2zn7BwPC+I8W1kHd9t1Rfoz7b07w+qNdKYe2LnPWVa/5+7vDGC/sUg3lSRnA==
-X-Received: by 2002:a17:90b:250f:b0:1ca:b9fa:efcd with SMTP id ns15-20020a17090b250f00b001cab9faefcdmr16486299pjb.123.1649343750979;
-        Thu, 07 Apr 2022 08:02:30 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm9487387pjj.56.2022.04.07.08.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 08:02:30 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 15:02:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
-Message-ID: <Yk79A4EdiZoVQMsV@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
- <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
+        Thu, 7 Apr 2022 10:51:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CF51C7E97
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:49:42 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZ43V1YqLzFpZj;
+        Thu,  7 Apr 2022 22:47:18 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 22:49:38 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 7 Apr 2022 22:49:37 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Rob Herring <robh@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH 1/2] amba: Add amba_read_periphid() helper
+Date:   Thu, 7 Apr 2022 23:02:39 +0800
+Message-ID: <20220407150240.151166-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Paolo Bonzini wrote:
-> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> > +	bool interrupt_disabled = tdvmcall_p1_read(vcpu);
-> 
-> Where is R12 documented for TDG.VP.VMCALL<Instruction.HLT>?
-> 
-> > +		 * Virtual interrupt can arrive after TDG.VM.VMCALL<HLT> during
-> > +		 * the TDX module executing.  On the other hand, KVM doesn't
-> > +		 * know if vcpu was executing in the guest TD or the TDX module.
-> 
-> I don't understand this; why isn't it enough to check PI.ON or something
-> like that as part of HLT emulation?
+Add new amba_read_periphid() helper to simplify error handling.
 
-Ooh, I think I remember what this is.  This is for the case where the virtual
-interrupt is recognized, i.e. set in vmcs.RVI, between the STI and "HLT".  KVM
-doesn't have access to RVI and the interrupt is no longer in the PID (because it
-was "recognized".  It doesn't get delivered in the guest because the TDCALL
-completes before interrupts are enabled.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/amba/bus.c | 133 +++++++++++++++++++++------------------------
+ 1 file changed, 62 insertions(+), 71 deletions(-)
 
-I lobbied to get this fixed in the TDX module by immediately resuming the guest
-in this case, but obviously that was unsuccessful.
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index d3bd14aaabf6..0073d8ba0353 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -395,107 +395,98 @@ static void amba_device_release(struct device *dev)
+ 	kfree(d);
+ }
  
-> > +		details.full = td_state_non_arch_read64(
-> > +			to_tdx(vcpu), TD_VCPU_STATE_DETAILS_NON_ARCH);
-> 
-> TDX documentation says "the meaning of the field may change with Intel TDX
-> module version", where is this field documented?  I cannot find any "other
-> guest state" fields in the TDX documentation.
+-static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
++static int amba_read_periphid(struct amba_device *dev)
+ {
+-	u32 size;
++	struct reset_control *rstc;
++	u32 size, pid, cid;
+ 	void __iomem *tmp;
+ 	int i, ret;
+ 
+-	ret = request_resource(parent, &dev->res);
++	ret = dev_pm_domain_attach(&dev->dev, true);
+ 	if (ret)
+ 		goto err_out;
+ 
+-	/* Hard-coded primecell ID instead of plug-n-play */
+-	if (dev->periphid != 0)
+-		goto skip_probe;
++	ret = amba_get_enable_pclk(dev);
++	if (ret)
++		goto err_pm;
+ 
+ 	/*
+-	 * Dynamically calculate the size of the resource
+-	 * and use this for iomap
++	 * Find reset control(s) of the amba bus and de-assert them.
+ 	 */
++	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
++	if (IS_ERR(rstc)) {
++		ret = PTR_ERR(rstc);
++		if (ret != -EPROBE_DEFER)
++			dev_err(&dev->dev, "can't get reset: %d\n", ret);
++		goto err_clk;
++	}
++	reset_control_deassert(rstc);
++	reset_control_put(rstc);
++
+ 	size = resource_size(&dev->res);
+ 	tmp = ioremap(dev->res.start, size);
+ 	if (!tmp) {
+ 		ret = -ENOMEM;
+-		goto err_release;
++		goto err_clk;
+ 	}
+ 
+-	ret = dev_pm_domain_attach(&dev->dev, true);
+-	if (ret) {
+-		iounmap(tmp);
+-		goto err_release;
+-	}
+-
+-	ret = amba_get_enable_pclk(dev);
+-	if (ret == 0) {
+-		u32 pid, cid;
+-		struct reset_control *rstc;
+-
+-		/*
+-		 * Find reset control(s) of the amba bus and de-assert them.
+-		 */
+-		rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
+-		if (IS_ERR(rstc)) {
+-			ret = PTR_ERR(rstc);
+-			if (ret != -EPROBE_DEFER)
+-				dev_err(&dev->dev, "can't get reset: %d\n",
+-					ret);
+-			goto err_reset;
+-		}
+-		reset_control_deassert(rstc);
+-		reset_control_put(rstc);
+-
+-		/*
+-		 * Read pid and cid based on size of resource
+-		 * they are located at end of region
+-		 */
+-		for (pid = 0, i = 0; i < 4; i++)
+-			pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) <<
+-				(i * 8);
+-		for (cid = 0, i = 0; i < 4; i++)
+-			cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) <<
+-				(i * 8);
+-
+-		if (cid == CORESIGHT_CID) {
+-			/* set the base to the start of the last 4k block */
+-			void __iomem *csbase = tmp + size - 4096;
+-
+-			dev->uci.devarch =
+-				readl(csbase + UCI_REG_DEVARCH_OFFSET);
+-			dev->uci.devtype =
+-				readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
+-		}
++	/*
++	 * Read pid and cid based on size of resource
++	 * they are located at end of region
++	 */
++	for (pid = 0, i = 0; i < 4; i++)
++		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
++	for (cid = 0, i = 0; i < 4; i++)
++		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
+ 
+-		amba_put_disable_pclk(dev);
++	if (cid == CORESIGHT_CID) {
++		/* set the base to the start of the last 4k block */
++		void __iomem *csbase = tmp + size - 4096;
+ 
+-		if (cid == AMBA_CID || cid == CORESIGHT_CID) {
+-			dev->periphid = pid;
+-			dev->cid = cid;
+-		}
++		dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
++		dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
++	}
+ 
+-		if (!dev->periphid)
+-			ret = -ENODEV;
++	if (cid == AMBA_CID || cid == CORESIGHT_CID) {
++		dev->periphid = pid;
++		dev->cid = cid;
+ 	}
+ 
++	if (!dev->periphid)
++		ret = -ENODEV;
++
+ 	iounmap(tmp);
++
++err_clk:
++	amba_put_disable_pclk(dev);
++err_pm:
+ 	dev_pm_domain_detach(&dev->dev, true);
++err_out:
++	return ret;
++}
+ 
++static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
++{
++	int ret;
++
++	ret = request_resource(parent, &dev->res);
+ 	if (ret)
+-		goto err_release;
++		goto err_out;
++
++	/* Hard-coded primecell ID instead of plug-n-play */
++	if (dev->periphid != 0)
++		goto skip_probe;
+ 
+- skip_probe:
++	ret = amba_read_periphid(dev);
++	if (ret)
++		goto err_release;
++skip_probe:
+ 	ret = device_add(&dev->dev);
+- err_release:
++err_release:
+ 	if (ret)
+ 		release_resource(&dev->res);
+- err_out:
++err_out:
+ 	return ret;
+-
+- err_reset:
+-	amba_put_disable_pclk(dev);
+-	iounmap(tmp);
+-	dev_pm_domain_detach(&dev->dev, true);
+-	goto err_release;
+ }
+ 
+ /*
+-- 
+2.26.2
 
-IMO we should put a stake in the ground and refuse to accept code that consumes
-"non-architectural" state.  It's all software, having non-architectural APIs is
-completely ridiculous.

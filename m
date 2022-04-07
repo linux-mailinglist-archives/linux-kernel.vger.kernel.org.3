@@ -2,216 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237E04F873E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7954F8743
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346917AbiDGSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S1346932AbiDGSpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbiDGSpR (ORCPT
+        with ESMTP id S1346924AbiDGSph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:45:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C85311C71C0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649356996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gGh/iM6e6CHwEnjIl2Ke5DGcT+ij0WjuoxQf3hSUZQk=;
-        b=NgbL6N5N+bITciwIjvygokNAy1zGBZNSn1scjtbRuehaOPD5gVBM9sguxa8Qq840IrqX3c
-        kycXxKs8S6UbrapjX0CsCbjsQ76DZK0QgxWSkY5u2Hj36AntnvvA+kh+ubEs/8nowj9l9n
-        qhDgwe4XfrjLkee9MW58mJtYY4kCrhc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-J-mnCU6sNxuTWOZL5Y-9Tg-1; Thu, 07 Apr 2022 14:43:14 -0400
-X-MC-Unique: J-mnCU6sNxuTWOZL5Y-9Tg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BFC2899EC4;
-        Thu,  7 Apr 2022 18:43:13 +0000 (UTC)
-Received: from localhost.localdomain.com (unknown [10.22.19.176])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3624840D2848;
-        Thu,  7 Apr 2022 18:43:12 +0000 (UTC)
-From:   Nico Pache <npache@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>
-Subject: [PATCH v6] oom_kill.c: futex: Don't OOM reap the VMA containing the robust_list_head
-Date:   Thu,  7 Apr 2022 14:42:54 -0400
-Message-Id: <20220407184254.3612387-1-npache@redhat.com>
+        Thu, 7 Apr 2022 14:45:37 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627E01C7B91
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:43:36 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bh17so12694736ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:43:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2Nl6hqkoPoQrOR55oB17M+hylrpKvmLoP9toR4HUSJU=;
+        b=bbO0uqVxvu4ahlRD+g2cdHo7WJKW7tDEfYzPOI2X4aUdCI53arspD0JLeRyfKRhdAF
+         lEVB+MtiaPNzrWttOzPgByFl3TbMKOdVPx7ot+p3X1IaPqm7Fbz7HfuZmBMmdvF3mYAq
+         VJh0xAglXs7iCBspZbv8wGaJ1MqlEa4AptNWbiTNUk7/X+/dvP+464kRZXWzYLX7kC1H
+         iR37dbzZL81EcgJGdDU9L060LXK/5BAXW45eQyDu6x9FB6rTqolkZBzIh/bP01eOXub3
+         7Tg/nliyuYyL53sfhKfgzyBwFh+JsjHJ4kY/fOGHDX6PfhRoTc50K9U5bCseIRBfVboJ
+         LTPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2Nl6hqkoPoQrOR55oB17M+hylrpKvmLoP9toR4HUSJU=;
+        b=FuvSczoV5It9tT4e+QcY+cCCx/gRCoHjicj9NdSFigTcoWGJYyVTWmkVNfd3Rl4OX+
+         k2v9xXRHo12sYdW68Clkb/ybuhtQalBr1H3V91oVrBR7hJtNMcHzZ3eSjwv7t8Aw8+FO
+         qCLNZ5WRe7eBjSkBpeobrISv/aHCtuRMBrsCpzgZwEZsN4bAU7RHnrrDQsXxUBNYVZGs
+         YRbhN8TtA59NA6+xzHt8oRXDYKnNlPtc7PhGe7vS9Qqwj8CRTFydChJd+IdeXQtKnZbP
+         O2PQ9366ejAUE/OAgY0UzhMCbM+ACmOZHX8sKvA774jnMizt4dUDtrUWP5VIR7ydF7ZZ
+         yHtQ==
+X-Gm-Message-State: AOAM531DYsH10xXSA/KAP3/Xcjeu5DDpe9J4jNq94SgDN1umnxSqDeQq
+        Ys9emDO7EDubRfUu9T/c/OxbvQ==
+X-Google-Smtp-Source: ABdhPJzI2pLtk/+ra64hfNt7igXY34wMScIybI18g7cZPToFglQAPuG4Sn7Rp+yrNpe7ze5hxQmfDQ==
+X-Received: by 2002:a17:907:9725:b0:6e8:454e:e16e with SMTP id jg37-20020a170907972500b006e8454ee16emr1192313ejc.721.1649357014881;
+        Thu, 07 Apr 2022 11:43:34 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709063e4e00b006e73392e592sm5967136eji.209.2022.04.07.11.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:43:34 -0700 (PDT)
+Message-ID: <b51086d6-00d4-cc8e-8f11-64c01afb8b3a@linaro.org>
+Date:   Thu, 7 Apr 2022 20:43:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 02/11] dt-bindings: Add vendor prefix for Pensando Systems
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-3-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406233648.21644-3-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
-be targeted by the oom reaper. This mapping is used to store the futex
-robust list head; the kernel does not keep a copy of the robust list and
-instead references a userspace address to maintain the robustness during
-a process death. A race can occur between exit_mm and the oom reaper that
-allows the oom reaper to free the memory of the futex robust list before
-the exit path has handled the futex death:
+On 07/04/2022 01:36, Brad Larson wrote:
+> Add vendor prefix for Pensando Systems: https://pensando.io
+> 
+> Signed-off-by: Brad Larson <brad@pensando.io>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 01430973ecec..0ce8f94eab08 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -936,6 +936,8 @@ patternProperties:
+>      description: Parade Technologies Inc.
+>    "^parallax,.*":
+>      description: Parallax Inc.
+> +  "^pensando,.*":
+> +    description: Pensando Systems Inc.
 
-    CPU1                               CPU2
-------------------------------------------------------------------------
-    page_fault
-    do_exit "signal"
-    wake_oom_reaper
-                                        oom_reaper
-                                        oom_reap_task_mm (invalidates mm)
-    exit_mm
-    exit_mm_release
-    futex_exit_release
-    futex_cleanup
-    exit_robust_list
-    get_user (EFAULT- can't access memory)
+List is ordered alphabetically, so this goes one further.
 
-If the get_user EFAULT's, the kernel will be unable to recover the
-waiters on the robust_list, leaving userspace mutexes hung indefinitely.
+>    "^pda,.*":
+>      description: Precision Design Associates, Inc.
+>    "^pericom,.*":
 
-Use the robust_list address stored in the kernel to skip the VMA that holds
-it, allowing a successful futex_cleanup.
 
-Theoretically a failure can still occur if there are locks mapped as
-PRIVATE|ANON; however, the robust futexes are a best-effort approach.
-This patch only strengthens that best-effort.
-
-The following case can still fail:
-robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
-
-Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
-
-[1] https://elixir.bootlin.com/glibc/latest/source/nptl/allocatestack.c#L370
-
-Fixes: 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-Cc: Rafael Aquini <aquini@redhat.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Baoquan He <bhe@redhat.com>
-Cc: Christoph von Recklinghausen <crecklin@redhat.com>
-Cc: Don Dutile <ddutile@redhat.com>
-Cc: Herton R. Krzesinski <herton@redhat.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Joel Savitz <jsavitz@redhat.com>
-Cc: Darren Hart <dvhart@infradead.org>
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
----
- include/linux/oom.h |  3 ++-
- mm/mmap.c           |  3 ++-
- mm/oom_kill.c       | 14 +++++++++++---
- 3 files changed, 15 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/oom.h b/include/linux/oom.h
-index 2db9a1432511..580c95a0541d 100644
---- a/include/linux/oom.h
-+++ b/include/linux/oom.h
-@@ -106,7 +106,8 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
- 	return 0;
- }
- 
--bool __oom_reap_task_mm(struct mm_struct *mm);
-+bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-+		__user *robust_list);
- 
- long oom_badness(struct task_struct *p,
- 		unsigned long totalpages);
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 3aa839f81e63..c14fe6f8e9a5 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3126,7 +3126,8 @@ void exit_mmap(struct mm_struct *mm)
- 		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
- 		 * __oom_reap_task_mm() will not block.
- 		 */
--		(void)__oom_reap_task_mm(mm);
-+		(void)__oom_reap_task_mm(mm, current->robust_list);
-+
- 		set_bit(MMF_OOM_SKIP, &mm->flags);
- 	}
- 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 7ec38194f8e1..727cfc3bd284 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -509,9 +509,11 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
- static struct task_struct *oom_reaper_list;
- static DEFINE_SPINLOCK(oom_reaper_lock);
- 
--bool __oom_reap_task_mm(struct mm_struct *mm)
-+bool __oom_reap_task_mm(struct mm_struct *mm, struct robust_list_head
-+		__user *robust_list)
- {
- 	struct vm_area_struct *vma;
-+	unsigned long head = (unsigned long) robust_list;
- 	bool ret = true;
- 
- 	/*
-@@ -526,6 +528,11 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
- 		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
- 			continue;
- 
-+		if (vma->vm_start <= head && vma->vm_end > head) {
-+			pr_info("oom_reaper: skipping vma, contains robust_list");
-+			continue;
-+		}
-+
- 		/*
- 		 * Only anonymous pages have a good chance to be dropped
- 		 * without additional steps which we cannot afford as we
-@@ -587,7 +594,7 @@ static bool oom_reap_task_mm(struct task_struct *tsk, struct mm_struct *mm)
- 	trace_start_task_reaping(tsk->pid);
- 
- 	/* failed to reap part of the address space. Try again later */
--	ret = __oom_reap_task_mm(mm);
-+	ret = __oom_reap_task_mm(mm, tsk->robust_list);
- 	if (!ret)
- 		goto out_finish;
- 
-@@ -1190,7 +1197,8 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
- 	 * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
- 	 * possible change in exit_mmap is seen
- 	 */
--	if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
-+	if (!test_bit(MMF_OOM_SKIP, &mm->flags) &&
-+			!__oom_reap_task_mm(mm, p->robust_list))
- 		ret = -EAGAIN;
- 	mmap_read_unlock(mm);
- 
--- 
-2.35.1
-
+Best regards,
+Krzysztof

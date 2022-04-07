@@ -2,92 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3A94F7818
+	by mail.lfdr.de (Postfix) with ESMTP id 932B44F7817
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242177AbiDGHue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S242169AbiDGHu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiDGHua (ORCPT
+        with ESMTP id S242192AbiDGHux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:50:30 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023B346141;
-        Thu,  7 Apr 2022 00:48:30 -0700 (PDT)
+        Thu, 7 Apr 2022 03:50:53 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BE88EB5F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:48:52 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id q26so5386191edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649317712;
-  x=1680853712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=65cq+04D2t91MgXQs2FV1LSZ91INmcsG6pr3WgD2E7M=;
-  b=bQzducTedCmQckTwZX1IlWeB9H+3fnDxErNGSv0UqoYECY1mAV0iLDGj
-   ccIXbqu4qZpJamltH5XlBMFaBgOjaIjISpDPtXghLFWvWE1wJ/2RdTKvG
-   kVnFMjDt8I0SAP5JyX+ZRRm0c+JhqbehKve6bUmbooP1ClbKrYhT/52B1
-   F8vQVcI0SShLOuvc38+4KwKI1r0Yy216y0N915mP7He93wyjx8V8yojdA
-   mJTrcykmve5LG4kvX/BIvvNIRF3dRjdjTpw8sVjJxbcgDSHYuf1MM8Hss
-   JxEilDw+OCQ7uYCBwLiJj1kN7AB9JOkE7aFZtNBAuoisfJCGRq1tqvwEL
-   Q==;
-Date:   Thu, 7 Apr 2022 09:48:29 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        kernel <kernel@axis.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, <krzk@kernel.org>
-Subject: Re: [PATCH v2 3/4] clocksource/drivers/exynos_mct: Support
- local-timer-index property
-Message-ID: <20220407074829.GA31389@axis.com>
-References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
- <20220308142410.3193729-4-vincent.whitchurch@axis.com>
- <226dcb1b-d141-f0d3-68c4-11d2466ca571@canonical.com>
- <20220311113543.GA17877@axis.com>
- <CGME20220311125154eucas1p180cf38fcfe33e52757c2442bbd9c2ab3@eucas1p1.samsung.com>
- <69be9f88-b69b-c149-4387-c5002219bf0a@canonical.com>
- <e8b58fc4-fdc2-7fca-f8f5-c45f0891b53b@samsung.com>
- <20220330082137.GA21079@axis.com>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7eOOLrAKkfSspaBOmVeWY/1P1p3w24BPhUI3ADFJBCI=;
+        b=sogAdtsAFC5HCuOZDlP9hCKRUcFarSAAFtArxcpakHbjtI+H6rlxyAdZEWFLiv3Ew0
+         ZiX/ecvjddUhTtCRabR7BgUoqBDDKxzxu5kKlGDuxPv1RYCalrkCJ7aDGWwQ0oKQG+H+
+         wWrk8gsx7JZHJSziIF4YYk+huAMheAeS92FXTkdOAdHYrU1ZfJCa41bjAIpJY8/gBI5x
+         Z13miNyaXnegSrvQi6qzse8DCg5Q1LotTJtkFOgzarqJI5gapKutHVVGlw2tnrrBMbrE
+         rQnYTR14EEKGq61ygs7BSzBZejgH0+DC+46oXgFRHZQWkpr53Q08n05BcMKaE7MQPMb6
+         HtQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7eOOLrAKkfSspaBOmVeWY/1P1p3w24BPhUI3ADFJBCI=;
+        b=yviRpHOFIPI6X1puHZ6/Wd0a2mwEu0ayKWKmfTRJzfFFpO6NHEis/CaqrvE/G3mWBG
+         4cPLVeOKWLre+cJ5ewR+F2eiTDD+wgI8atr03DLq951IVtQe9u5GKKX0u3tHPi//FzNi
+         4Si2XZMy5HwvN/MVe5C69yYSx4EjNu/BzokVjuVGftPVtUuwe4ejs66aBvOTeZ+crH5r
+         335yLIUEImWbuElDoq2erodne/knNoDGVG4nsSrL40EgZCyK91LADcZv93Ysl7Zttgab
+         7/tpOY1wi4S82r2TzTFR3/8vHCcNTOeg3KnSe6icmN31Xxyxjq6KrcShNT6HHCD1m1lm
+         8Vlw==
+X-Gm-Message-State: AOAM531F0qbSyeFa7wpTe9OFixatZwUeiWxq660E77tOMBWAaVlfP8X1
+        a7i2KJOrZqccvkyQwZivttV9dg==
+X-Google-Smtp-Source: ABdhPJzKpXrgUntAlAYZkvnH4zfUSRM5PQ4E+Cc2yBNkZba/USPxqi82SB3TMQkqjHPHvGE7GCEhtg==
+X-Received: by 2002:a05:6402:26d0:b0:419:75eb:b3a with SMTP id x16-20020a05640226d000b0041975eb0b3amr13084176edd.0.1649317731392;
+        Thu, 07 Apr 2022 00:48:51 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id n25-20020aa7db59000000b00415965e9727sm8747258edt.18.2022.04.07.00.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 00:48:50 -0700 (PDT)
+Message-ID: <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
+Date:   Thu, 7 Apr 2022 09:48:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220330082137.GA21079@axis.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for
+ Sercomm parser
+Content-Language: en-US
+To:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220406195557.1956-1-csharper2005@gmail.com>
+ <20220406195946.2019-1-csharper2005@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406195946.2019-1-csharper2005@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:21:37AM +0200, Vincent Whitchurch wrote:
-> On Mon, Mar 21, 2022 at 09:00:08AM +0100, Marek Szyprowski wrote:
-> > Right, I've played a bit with MCT on some older Exynos SoCs (ARM 32bit 
-> > based and even Exynos5433) and it looked that none of it enabled MCT FRC 
-> > timer in their proprietary firmware. I've even proposed a patch for this 
-> > once ([1]), but such approach has been rejected. I think that calling 
-> > exynos4_mct_frc_start() unconditionally won't hurt.
+On 06/04/2022 21:59, Mikhail Zhilkin wrote:
+> Add YAML binding for Sercomm partition parser.
 > 
-> Thank you for looking into this.  The proposal was however not to avoid
-> changing when exynos4_mct_frc_start() is called, but to instead skip the
-> write to the Timer Enable bit of the G_TCON register if it is already
-> set, like in the below patch.  (This is needed to avoid races when the
-> FRC is shared between CPUs in an AMP configuration, since TCON can be
-> modified for other reasons from the CPU which is using the global
-> comparator.)
+> Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
+> ---
+>  .../mtd/partitions/sercomm,sc-partitions.yaml | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/sercomm,sc-partitions.yaml
 > 
-> If I understand your comment correctly, such a change should not cause
-> any difference at least on the platforms you looked at since there
-> MCT_G_TCON_START will not have been set at startup.
 
-I needed the frc-shared property anyway to prevent registration of the
-clock events so I followed Krzysztof's suggestion of doing this
-conditionally and also clearing the resume callback.
+(...)
+
+
+> +
+> +properties:
+> +  compatible:
+> +    const: sercomm,sc-partitions
+> +
+> +  scpart-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Partition id in Sercomm partition map
+
+Do you really need it? The reg should define the order, unless you
+expect some incomplete partition list?
+
+In any case this requires vendor prefix.
+
+> +
+> +required:
+> +  - compatible
+
+Missing reg.
+
+> +  - scpart-id
+> +
+> +additionalProperties: false
+
+Are you sure that you tested your bindings? You miss here address/size
+cells and children, so you should have big fat warning.
+
+Plus your DTS example has error and does not compile...
+
+Best regards,
+Krzysztof

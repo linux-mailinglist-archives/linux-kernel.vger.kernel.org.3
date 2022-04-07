@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC624F815D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DCE4F8160
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343840AbiDGORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S1343843AbiDGORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiDGORT (ORCPT
+        with ESMTP id S1343879AbiDGORs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:17:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF428E33;
-        Thu,  7 Apr 2022 07:15:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0EEFE1F85E;
-        Thu,  7 Apr 2022 14:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649340899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dKwrr1idTmWArX2lqn5YORjBOhR4BKEAOp87gdFGmAs=;
-        b=JJOWpMh04HvpMRV9OHslNnYorECxh2BD2x5KOqtVFuXhlvMJYVYdpOespQ8gzdXuS+vIbr
-        xcez1y5fivmjExddn6mXf7iZ7mev5ZvAdim89+c+9N8W2INFFncr1rhx9538zF0O2NhH+2
-        neOak+Z7R28zFIrQW/wC8IqrTMRVydg=
-Received: from suse.cz (unknown [10.100.201.86])
+        Thu, 7 Apr 2022 10:17:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5891162A6;
+        Thu,  7 Apr 2022 07:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 75EEAA3B87;
-        Thu,  7 Apr 2022 14:14:58 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 16:14:57 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-Message-ID: <Yk7x4U5gTvS4/ijR@dhcp22.suse.cz>
-References: <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
- <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
- <Ykrkx4JML4c81gBV@dhcp22.suse.cz>
- <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
- <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
- <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
- <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
- <CAGWkznG+V88f_DjtJAe4_Nr=32Q7Z4b1CaBCB0FVqhAAsuNsWA@mail.gmail.com>
- <Yk6ya5Ks0H6rHPx4@dhcp22.suse.cz>
- <CAGWkznH1NhfDXy94cOs0YWnw_uOOVbcbrygT5X6CAZ44CTf78Q@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DE58B82776;
+        Thu,  7 Apr 2022 14:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984C2C385A0;
+        Thu,  7 Apr 2022 14:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649340945;
+        bh=GOzsGxLSkBQqhIXrfCngzZGevBYoeZtJmUwSO2v+asA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dWM0OU/2Eup7bAXKcIadgArZ3JejnCml0I3OwlKXzMbr+/R0fMI7JBjE0pxNiy0UV
+         Mbh5zU1FOxlrtJnx4lYUWlHWv6TPvdzYFoeWBXgfdOdk5zlCQxrIpGxsF7/DCJRkdJ
+         +jkK+3UerSHxYp/9xLF/itnP94a0Vf1q449k8ruToThDqjVvGRDq+FtwlDPDIIK1Ry
+         pcHpvMXAf/l1nCkS+JBqNQlDBaPfGPyAudheytXPENJIkyajbjSpQc9yP8aLt69Ndu
+         Zhg6shjlUBmDh3J5Zf4k5JXaFUyTZxomEjsG8KjSUC22fJJOeuRxsPJjD4Bl29yh+Z
+         JouYtEfQ2hA7Q==
+Date:   Thu, 7 Apr 2022 22:15:38 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 15/20] erofs: register fscache context for extra data
+ blobs
+Message-ID: <Yk7yCp2fwnbXeyuI@debian>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-16-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAGWkznH1NhfDXy94cOs0YWnw_uOOVbcbrygT5X6CAZ44CTf78Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20220406075612.60298-16-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,50 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 07-04-22 20:36:51, Zhaoyang Huang wrote:
-> On Thu, Apr 7, 2022 at 5:44 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > [...]
-> > On Thu 07-04-22 16:59:50, Zhaoyang Huang wrote:
-> > > > This means that limits are altered even if there is memory to be
-> > > > reclaimed from other memcgs. Why? How does this line up with the
-> > > > basic property of the low limit to act as a protection from the reclaim?
-> > > ok, partially understand. I would like to say that low's original
-> > > definition under this patch has changed, says the calculated low just
-> > > provide protection when the psi value is lower than the setting and
-> > > will introduce reclaiming if it exceed.
-> >
-> > OK, I guess I finally get to understand what you are trying to say. So
-> > effectivelly your new semantic defines the low limit as an initial
-> > protection that is very soft and only preserved under a light global
-> > memory pressure[1]. If the reclaim pressure is higher the user provided
-> > protection is decreased. The new semantic is planned to be a global
-> > opt-in.
-> >
-> > Correct?
-> right. But I don't think the original protection is soft which could
-> be proved by the test result that the memcg is protected in a certain
-> range of pressure and could also help to release the system by
-> breaking low limit.
+On Wed, Apr 06, 2022 at 03:56:07PM +0800, Jeffle Xu wrote:
+> Similar to the multi device mode, erofs could be mounted from one
+> primary data blob (mandatory) and multiple extra data blobs (optional).
+> 
+> Register fscache context for each extra data blob.
+> 
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> ---
+>  fs/erofs/data.c     |  3 +++
+>  fs/erofs/internal.h |  2 ++
+>  fs/erofs/super.c    | 25 +++++++++++++++++--------
+>  3 files changed, 22 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index bc22642358ec..14b64d960541 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -199,6 +199,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
+>  	map->m_bdev = sb->s_bdev;
+>  	map->m_daxdev = EROFS_SB(sb)->dax_dev;
+>  	map->m_dax_part_off = EROFS_SB(sb)->dax_part_off;
+> +	map->m_fscache = EROFS_SB(sb)->s_fscache;
+>  
+>  	if (map->m_deviceid) {
+>  		down_read(&devs->rwsem);
+> @@ -210,6 +211,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
+>  		map->m_bdev = dif->bdev;
+>  		map->m_daxdev = dif->dax_dev;
+>  		map->m_dax_part_off = dif->dax_part_off;
+> +		map->m_fscache = dif->fscache;
+>  		up_read(&devs->rwsem);
+>  	} else if (devs->extra_devices) {
+>  		down_read(&devs->rwsem);
+> @@ -227,6 +229,7 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
+>  				map->m_bdev = dif->bdev;
+>  				map->m_daxdev = dif->dax_dev;
+>  				map->m_dax_part_off = dif->dax_part_off;
+> +				map->m_fscache = dif->fscache;
+>  				break;
+>  			}
+>  		}
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index eb37b33bce37..90f7d6286a4f 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -49,6 +49,7 @@ typedef u32 erofs_blk_t;
+>  
+>  struct erofs_device_info {
+>  	char *path;
+> +	struct erofs_fscache *fscache;
+>  	struct block_device *bdev;
+>  	struct dax_device *dax_dev;
+>  	u64 dax_part_off;
+> @@ -482,6 +483,7 @@ static inline int z_erofs_map_blocks_iter(struct inode *inode,
+>  #endif	/* !CONFIG_EROFS_FS_ZIP */
+>  
+>  struct erofs_map_dev {
+> +	struct erofs_fscache *m_fscache;
+>  	struct block_device *m_bdev;
+>  	struct dax_device *m_daxdev;
+>  	u64 m_dax_part_off;
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 9498b899b73b..8c7181cd37e6 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -259,15 +259,23 @@ static int erofs_init_devices(struct super_block *sb,
+>  		}
+>  		dis = ptr + erofs_blkoff(pos);
+>  
+> -		bdev = blkdev_get_by_path(dif->path,
+> -					  FMODE_READ | FMODE_EXCL,
+> -					  sb->s_type);
+> -		if (IS_ERR(bdev)) {
+> -			err = PTR_ERR(bdev);
+> -			break;
+> +		if (erofs_is_fscache_mode(sb)) {
+> +			err = erofs_fscache_register_cookie(sb, &dif->fscache,
+> +							    dif->path, false);
+> +			if (err)
+> +				break;
+> +		} else {
+> +			bdev = blkdev_get_by_path(dif->path,
+> +						  FMODE_READ | FMODE_EXCL,
+> +						  sb->s_type);
+> +			if (IS_ERR(bdev)) {
+> +				err = PTR_ERR(bdev);
+> +				break;
+> +			}
+> +			dif->bdev = bdev;
+> +			dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
 
-Low limit protection is considered soft because it doesn't provide any
-guarantee. I will be ignored (and that will be reported to the userspace
-via LOW event) if there is nothing reclaimable in the scope of the
-reclaimed hierarchy. An alternative would be OOM actually.
+Overly long line, please help split into 2 lines if possible.
 
-> > Now, that I (believe) to have a slightly better understanding I have to
-> > say I really dislike the idea.
-> > First of all the new semantic would have to be memcg reclaim aware. That
-> > means that the scaling logic would need to be aware where the memory
-> > pressure comes from.
-> I don't follow. Does it mean that the protected should distinguish the
-> pressure from global and other memcgs? I don't know why.
+Otherwise looks good,
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-No, it should behave consistently for any external memory pressure.
-A reclaimed memcg can apply different constraint depending on the root
-of the reclaim. Your solution is considering root to be root_memcg.
+Thanks,
+Gao Xiang
 
-[...]
--- 
-Michal Hocko
-SUSE Labs
+>  		}
+> -		dif->bdev = bdev;
+> -		dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
+> +
+>  		dif->blocks = le32_to_cpu(dis->blocks);
+>  		dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
+>  		sbi->total_blocks += dif->blocks;
+> @@ -701,6 +709,7 @@ static int erofs_release_device_info(int id, void *ptr, void *data)
+>  	fs_put_dax(dif->dax_dev);
+>  	if (dif->bdev)
+>  		blkdev_put(dif->bdev, FMODE_READ | FMODE_EXCL);
+> +	erofs_fscache_unregister_cookie(&dif->fscache);
+>  	kfree(dif->path);
+>  	kfree(dif);
+>  	return 0;
+> -- 
+> 2.27.0
+> 

@@ -2,163 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016234F726C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 05:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5D94F7278
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 05:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbiDGDEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 23:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S234035AbiDGDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 23:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDGDEf (ORCPT
+        with ESMTP id S238425AbiDGDGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 23:04:35 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D221B4EDFE;
-        Wed,  6 Apr 2022 20:02:35 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236LH0MC004957;
-        Thu, 7 Apr 2022 03:02:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=WhsEfYGTOMtcIuzSBgbS9U41MVFZI0pzwnl86vsfrnA=;
- b=WgvZ5A4KjFlSnccU2stlzizpelznEl8gb/ne+L9bw0GfurSYzeYczIbBSf4UibI9ra2a
- O8rpAb7kJZZA523ymwlyIa5QqDYs95+y1WzIJi1nTBbkWLmmMOKi18iXVe+PuroH7/zk
- vNTR5w6j5iYaP5U4NnVl10XObqb9RWDx/FSGW9sn0e8EUu0zeMoiMlivUz+YWTgpTLFf
- k1nLQbjTaj+7ESXFnNASnfO6VNCGyMlxYUFGfHluQq2LaM58C7nWENLM6C2vKcee2bta
- 6yfL5LLlXwgYIxPAKkpWsNINVDyyRuylrM6N6MOvTVJrPDinoczxY7/k8mgHIVayibPD uA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d932m2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 07 Apr 2022 03:02:33 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23730Wwu013143;
-        Thu, 7 Apr 2022 03:02:32 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f9803h067-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 07 Apr 2022 03:02:32 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dRKd6PoIyEAx1zslyVg+YEMi0n3DisauQQvA7d3/TstZWK/ylqqw2sv4JvC7oCWDvm3KKfNW8Bvgcg5/nQL6sDJZp7bHwkFe8FUjUGwZg+FdQ3Jm4JqmkIS3u5lhpG8hxilO+QhY09shqcX9VQy5G9TLHm4MiYZ0esVauVaUtJ3Sr+4RwiHGC03+WVmZfnHzNctp0S0GRkxDuIbRTk/nAwPcBiLteIroZJMA1B3DV1EeQUFbfD0ZbxyMGs/TBQ56Sc4B5hZ9ytGIJo7PwbNz+bAkq4oLQ0vYXd3qcH3P6ogTG/HdVtv3GskISXluqrocezE0LvvpMs0Jq5xAsfg1sA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WhsEfYGTOMtcIuzSBgbS9U41MVFZI0pzwnl86vsfrnA=;
- b=BLdxa9RQS/LQVlTJZfSuc+mqR5irDAdm6KKr+LpCek8Tzs5ctASwUTxKXMC4CxdQs2XxyWzViI4sMXLjmd6FFqzctlrICphr5/qdYmYBZEaKP3bz8c2DirX0p8GIHROzRGjmfxlqqt9WjeWeuBdlRNGvpT6gRbUFpm+kHfLbum+F3vXajKybstXBeAhJKYcTsGjQ1GnJkCFMlKT644upJZOP39LFyCI8kGJwzDo93UtBs/JbxpJ0I9WtqInUSbgAqwkKxh/vZwvkkqp+BRSQEtvu2xE9cx//tziGOv+HOPXpxrWJAF3nCeWR6QDUedwiC9rQPz2Bdk8EcP3Q6J/4yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 6 Apr 2022 23:06:38 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A4B14DFFC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 20:04:39 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id a127so2412865vsa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 20:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WhsEfYGTOMtcIuzSBgbS9U41MVFZI0pzwnl86vsfrnA=;
- b=rQhO9y1RLRAQ7EvLuLxSi86ZpGbf22hFkF1piP0K/hpte4pNtWgJGOS9O+cN/RHM8bbvfyalLRRV2FF4LCmX2l4rpJla775VG2nlqKcZZ2dWeCqXDKGcGgK5kMoG1SAu46AqeS3Wr9dyG2pdgvqt2Ii0hUiD8PO1d1rjBwwz4Vo=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by CH0PR10MB5148.namprd10.prod.outlook.com (2603:10b6:610:de::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 03:02:26 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed%4]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 03:02:26 +0000
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Vishal Bhakta <vbhakta@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: vmw_pvscsi: No need to clear memory after a
- dma_alloc_coherent() call
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq135iplhon.fsf@ca-mkp.ca.oracle.com>
-References: <cd1220c628c89465dcfcbf4aa9bd53110898a529.1648067518.git.christophe.jaillet@wanadoo.fr>
-Date:   Wed, 06 Apr 2022 23:02:24 -0400
-In-Reply-To: <cd1220c628c89465dcfcbf4aa9bd53110898a529.1648067518.git.christophe.jaillet@wanadoo.fr>
-        (Christophe JAILLET's message of "Wed, 23 Mar 2022 21:32:22 +0100")
-Content-Type: text/plain
-X-ClientProxiedBy: SN4PR0501CA0050.namprd05.prod.outlook.com
- (2603:10b6:803:41::27) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JlG6HVFbiriXMTJdqZSQqniMpGFV8xnAyrnEzIlMNOY=;
+        b=g3dD8HMIW9o4XOj5/F4RYCZnbEq63R4EFyiRBbXsQlUUpD8109X/uRO1gnNIi0+9Pi
+         lM1gQs/hacv3X7DHc77AbOsPgGGj22DYZPNeVsSVPpo97gzaVorDV1FW/tOTqx+DYT/P
+         jBJwysHsCHMQOUC3rMpl0RAjgDGuNdLmjaqRyAgu6yjOnfQwLgp70zPEKn1m4byVx+Gn
+         oaQ4TwpPmIJlhF6DGjFJDaCj+IZModFF71wQbWOneko1mH8M9Gnp2X+nPDvv8I+bcUjq
+         1KXKi2GF347JNly/H9fpusZvX9svfQ6yBM2A9CFZJRzmHwYsiNuDABJBRzlGNgaeCuWI
+         BRNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JlG6HVFbiriXMTJdqZSQqniMpGFV8xnAyrnEzIlMNOY=;
+        b=Ptj8wT/XxS9nQHQpLERL9OxdPee3AsDzXeUtHyuJFEt715wfSUvBJenr/gPK0XiXwh
+         HOZeB0xZVaG0yhUt717vlcRnLoCB8MIirIZAIjOy0uHMqWRb8bsTeDZVCxGVzA+bB7Vq
+         AR7wEEzXVR1OpJ13BtA4ktlJOeLun8PU1GE6kzSmjeA4UMpBHL+qfuHaLOupy4L7nW0L
+         yefX7mc7uj5K6tMX0VcfSCFHx38B9+pmuD2qCdM+F6GfzIywyUu7sKW7Mrx8vYcu1od/
+         GbNTTvGDBbZgAjj5V5/J/IMMJETrGCMHRlDPpADyaEaA3G+WOZrk4v3m915voZmJG0ie
+         ZTyQ==
+X-Gm-Message-State: AOAM533m5WEw7LyMi4VtxtxuArL1rtJzrEfaZuJYNlGNxC0zWzmwrwoe
+        73e246f0TNOXNJiKp3FBvLKZ45P2uKNavta/9NvLXA==
+X-Google-Smtp-Source: ABdhPJyuYJMGr6LXPgy65MMvs9O/WDf8CYTQgrUNNgYQ5HIVVErldv2mOXJVQnNH++zy/vxigLt2YykfDAtVJj3qS2Q=
+X-Received: by 2002:a05:6102:2922:b0:325:7818:8669 with SMTP id
+ cz34-20020a056102292200b0032578188669mr4104348vsb.41.1649300678575; Wed, 06
+ Apr 2022 20:04:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 789e752c-8d4f-49a4-78ab-08da18430b84
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5148:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR10MB5148296BF226E66BAC6F69658EE69@CH0PR10MB5148.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: In2WaigrqTfyZ22gPtoy1jFMKiAMthELIMgMfYPObhNCUNMvPjhGqiYuG2tXlaLG8BBvmog8uhqExa2ZxK79IwBa4LnyN5tM765RrkLi8LeWSBqa0a8NSif32U1s1YTWgRmHbhDQg7aIrtXhrSs9LKZ13GqGkhOxjqSz0V//43vJkrIxjQK3QqLyYMhsHDvmOVHJu1Y/xdaTFe0qd4Xtig3/8/V+9VIEFGH2KSYqhmAwX8unctcdZjxIrfKI5DaCBUN+La5JBcfff+1J3zQLmidhyNKRMCVYe6x096UUOhIy39GPzgtNGkdrHR42LYlZzrR1LS/vrP9fxK7rsB0SrPnTcP+hzMQV5+EzTBcUf2g8Vas2gyvhg75Cfxl0ufYvhb9jJmdEOu7UOAIy62UId/LZVXFO/JYtyMYh2UA4C2c+JfOgT9P1NFoffYB3tp9hie9n2GBHAoHw9yT4286QJKpY8raCRxvgUKgwRqqKwJMNE8ZF3/uw3/+x26USwOsoQ+Gu6jodi22hYx1RmVqky3WYN+905LzTRvslXiVIKgMBQSHk7ZWKEsgt1fyF5OQG0tj7ZGFRTnXGo3iDeLKLrdoFLEYYIcGJXQJRz38ijYScfe+3O+tz3QOrEtZb0Fi/ygQdvTwKDU8CimYdRShhVneeF/vVkY+1btd2h22vtPx4wMouOl/7JgDHJGqlBTEpIYxRuPOZZGBqP3HrNSmniQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(38350700002)(38100700002)(8676002)(4326008)(66476007)(66556008)(558084003)(508600001)(66946007)(26005)(6486002)(186003)(36916002)(2906002)(52116002)(6506007)(316002)(6916009)(5660300002)(6512007)(54906003)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dSj8AlWVS03W6lAIAiU6ctYuqx0/KLQA3M9fIvO7fsvnyDN2G1610wlJYEP2?=
- =?us-ascii?Q?S6GCZu8SP2aOUT+wI9RmEoyrrr5wQUekmG44+FR56wZXiZVbImiwCFesKg1m?=
- =?us-ascii?Q?3/eHo0x0fY9/pfEttMQwUjZz0AAgllK1nC1rs3ZJV6d5WGMn4+jFksAPcTBm?=
- =?us-ascii?Q?UNNfr80oOLbglaHQZHigKNRDitSfuQsjvBEtCDRdVyHWvJ0iSSc89gYaY4C9?=
- =?us-ascii?Q?VUADnzWmwx13YxW+AIk2YYOEQyn4faPZeiaAiREi/mdmxAOKtJ7Ht99CPyCr?=
- =?us-ascii?Q?hwPPV2YCIeEPgI1R/o/3HdPaNwSX4ptVjOjYup4bUibRpEnLukXgvxiW4j60?=
- =?us-ascii?Q?qbMY2+wQbvoop1ecaa33Uz/qGJ/a0RklQpVOfBcVdIWqr+wjLx4JoM6sd6lQ?=
- =?us-ascii?Q?e40+MJSuqTeep7gr7hBqKC8W6YyGIiKFP8WAqXSP5hrwRqzStGvJB9NedlYc?=
- =?us-ascii?Q?AuUnaVc7HeokcDYTBeF59+t/5Yp9wtZR4LUCXLnmw4OCTjgILie3xX+PaIeq?=
- =?us-ascii?Q?x3trL1TsSm8ZGBEHCxkr/uHpqP3WpEVyFTTsSlr4qkZTEPA4UplU75jPgbXI?=
- =?us-ascii?Q?X91/5YS0EV9ZHA8VsTV7noVwWOU/qDEq2ueeBaXnPoa3KXEsF67ogSPqOF6E?=
- =?us-ascii?Q?dE62FD5lK4XN2Ojuizi3675K70gaGJgAwkSkvGIPvMvX376HE6tiEroX1GOM?=
- =?us-ascii?Q?TTakt1gvXIX3YBs9hjzM3hZ8igVAXCQXRwJbACqeK+HdOLbKBowQEAzlfzoF?=
- =?us-ascii?Q?OTj5ikz+J2TpFMmNy4cb4DcVzmIwvMkWMaV01ZV6SiKEdWs4CunnFCjPGCdY?=
- =?us-ascii?Q?4vRORO+pYpJ1YrGWlJYQNRpUXhG89q/JTLD7bmMINljB+iEEm3KpBpvAls1a?=
- =?us-ascii?Q?QQ0EaD632SHwOg7kSrowQBUW1Yjraq4FhklgHxdmPSaGA8DyLICFWzwltMF1?=
- =?us-ascii?Q?FnF9TeZQSP6VxORrRQI8TmwQSklJ+LZEv3vjFKvQxA94DYuNolkNdV0W9FnC?=
- =?us-ascii?Q?jS68ldjUj+eZwqdd6x6KFEC4PpNnbDUeM0grcLYjOyZSL8EoJrDvXeSPEFIl?=
- =?us-ascii?Q?KgAuUtQ9lkTuYbGFgK6T7hcQWSkx/J1TEVf7GdkCpwBqs9J5E2xpEAivlfFG?=
- =?us-ascii?Q?26uBXWDwNg0phUF6hJj6unzloVTND+2oTCQvaun7OHvrISvuuZuGHVHDSGlY?=
- =?us-ascii?Q?AOXAArzaP3wSEbjbWd6pjqRN2WmWZNC+tPiLXcWw4c3B3IXRrZAGSe+Iltxf?=
- =?us-ascii?Q?Vt0RLbQc4CHFRRK125zP/M9JzQn8YhzU/P2RDJRjUgodmHKUeYBkRZ9Qb1vj?=
- =?us-ascii?Q?Atl+vJDwi7zyXc4vYGaRo1AaJAj3qdYM1rV72hDk/pZyXsFLU2juKsMFDxUb?=
- =?us-ascii?Q?HvoFhNBeC6DyA0f2STpHDcbZhS/8WQX1of+WaKPR6lmzTnL5PYx5y4XM0J4b?=
- =?us-ascii?Q?J2qkb0PwyOTaZ2f/pfRUWfwXuZAfgnFBu728OIdo3n//dJtGXcl3U86D+fb/?=
- =?us-ascii?Q?c/FNlhxCrYsPtP0Tk4Aj7q0/tirUJxPb8n1S0ln2ZG+0cBB38InKD9hh62gR?=
- =?us-ascii?Q?ykq/p5lCbSbHOcd66kmPdMHF7xnzSHic05RH4BLF0YcbOECHZ6A1UH/I8aGG?=
- =?us-ascii?Q?yjOItlaKlQHSHClR1JzEkb8snMo55PGHvsV/rs3STv90P0XPM/NPm9dZR8Tt?=
- =?us-ascii?Q?VUxxZsfo7xH3B+6tZHzEyB4PApOxVOwi2lnmcGkHO1Hculv7oPYIZsREeXbf?=
- =?us-ascii?Q?rt8C7IrYIAqNaI6lP3PQQLc6adZZKHw=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 789e752c-8d4f-49a4-78ab-08da18430b84
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 03:02:26.2546
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SKxNB55I8t3aDi6OhK712+71TCjzes44QhJDt8NOJHolj+vai4bjcj23M7cTEko9vRvjK0y9jaYeMsBAx56ylYQ42mSe8IBHT6kxy/z1+j8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5148
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
- definitions=2022-04-06_13:2022-04-06,2022-04-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
- suspectscore=0 spamscore=0 mlxlogscore=597 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204070015
-X-Proofpoint-ORIG-GUID: SDtwGOIEJtP13FPGZhLcmJ4_1Fn_c8ZG
-X-Proofpoint-GUID: SDtwGOIEJtP13FPGZhLcmJ4_1Fn_c8ZG
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-8-yuzhao@google.com>
+ <CAGsJ_4wVA6G42y4Oj7ToaCoroZTRbS-tU606ELwra3_Sfrgo7w@mail.gmail.com>
+In-Reply-To: <CAGsJ_4wVA6G42y4Oj7ToaCoroZTRbS-tU606ELwra3_Sfrgo7w@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 6 Apr 2022 21:04:27 -0600
+Message-ID: <CAOUHufbUdoWiBF5x2ZeK104jT39zAuuU0xXKZ51eaU6P8SNUyg@mail.gmail.com>
+Subject: Re: [PATCH v9 07/14] mm: multi-gen LRU: exploit locality in rmap
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 6, 2022 at 8:29 PM Barry Song <21cnbao@gmail.com> wrote:
+>
+> On Wed, Mar 9, 2022 at 3:48 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > Searching the rmap for PTEs mapping each page on an LRU list (to test
+> > and clear the accessed bit) can be expensive because pages from
+> > different VMAs (PA space) are not cache friendly to the rmap (VA
+> > space). For workloads mostly using mapped pages, the rmap has a high
+> > CPU cost in the reclaim path.
+> >
+> > This patch exploits spatial locality to reduce the trips into the
+> > rmap. When shrink_page_list() walks the rmap and finds a young PTE, a
+> > new function lru_gen_look_around() scans at most BITS_PER_LONG-1
+> > adjacent PTEs. On finding another young PTE, it clears the accessed
+> > bit and updates the gen counter of the page mapped by this PTE to
+> > (max_seq%MAX_NR_GENS)+1.
+>
+> Hi Yu,
+> It seems an interesting feature to save the cost of rmap. but will it lead to
+> possible judging of cold pages as hot pages?
+> In case a page is mapped by 20 processes,  and it has been accessed
+> by 5 of them, when we look around one of the 5 processes, the page
+> will be young and this pte is cleared. but we still have 4 ptes which are not
+> cleared. then we don't access the page for a long time, but the 4 uncleared
+> PTEs will still make the page "hot" since they are not cleared, we will find
+> the page is hot either due to look-arounding the 4 processes or rmapping
+> the page later?
 
-Christophe,
+Why are the remaining 4 accessed PTEs skipped? The rmap should check
+all the 20 PTEs.
 
-> dma_alloc_coherent() already clear the allocated memory, there is no
-> need to explicitly call memset().
-
-Applied to 5.19/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Even if they were skipped, it doesn't matter. The same argument could
+be made for the rest of 1 millions minus 1 pages that have been timely
+scanned, on a 4GB laptop. The fundamental principle (assumption) of
+MGLRU is never about making the best choices. Nothing can because it's
+impossible to predict the future that well, given the complexity of
+today's workloads, not on a phone, definitely not on a server that
+runs mixed types of workloads. The primary goal is to avoid the worst
+choices at a minimum (scanning) cost. The second goal is to pick good
+ones at an acceptable cost, which probably are a half of all possible
+choices.

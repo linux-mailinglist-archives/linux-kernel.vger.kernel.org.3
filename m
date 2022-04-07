@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE3D4F6EF0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F434F6EF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiDGAFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 20:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S229964AbiDGANj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 20:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiDGAF3 (ORCPT
+        with ESMTP id S229762AbiDGANN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 20:05:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C81C7C0F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649289810; x=1680825810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hu/qduD1GZxLWWXHqubllafoqMw931EVunCvJKzuasg=;
-  b=oF5QpweP4bYHZdwSzMGZo3r4ZEQde7V9vu6YB4S24KipsVXJ7NgaR8zE
-   bzeYhWsmzSS3M0ubzn76fws3e52n7LeFc0FUFEJ6VGwgpU6tx/FSKOhly
-   aot36XatZmUGGIDMbcESiEMdYiq0Ulxqoa78s2aiPsLtf7kgZkYt/omkc
-   vzuZQUvy24BdyO68ZaYFgoApweVMxYohrj5v2na4mQRsEA8Eq/7zFQvFE
-   L9SkBnj0Lkh7+OTu526v09i3M+RScQYKkcg7nS0Dt8fJXIgnYeXWMFb5U
-   xKz7kNk7PAaLB3dFOtPlABJNB/Wvww/EBlDSE/8LDScDiQcWVFImw4b0Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="258779275"
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="258779275"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 17:03:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="549778978"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 06 Apr 2022 17:03:22 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncFcP-0004sE-Et;
-        Thu, 07 Apr 2022 00:03:21 +0000
-Date:   Thu, 7 Apr 2022 08:02:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matteo Croce <mcroce@microsoft.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 2/55] arch/riscv/lib/string.c:89:7: error:
- expected identifier or '('
-Message-ID: <202204070737.6a0DKGta-lkp@intel.com>
+        Wed, 6 Apr 2022 20:13:13 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B75202152
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 17:09:49 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id t21so4066919oie.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 17:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IEK8wyACKyDwOMDDA6E3A9ixG1cmyZI8rYlASptfokU=;
+        b=GmjX/EEEx8mtOIvA9NUHKz3CGPhXRYwt1Z4pVXu2aWdEmCcK3GPhaCfPohdyINvCoG
+         KKcCWC3oB84wrGODn8+WPZTDwE41k5pDRIfr5LUuRtMqpcEbBwh/epsgN4U27ArA+ENe
+         HZvt8UfzRVIDsQD6F2g0d40k1FIgzyXYlDWh73egrWo8Ci9qVmUdO0DymjBcjYLPKzC1
+         fUCTvLGR9yhXtl2+xPQfyQ4hL4AER07qbO2zrzMKjbridnlvlEqgrxl6ZgDJUppcKNL0
+         P3Y0NnsFnPCKlsyRCT3nABe4PAWExLIrTm04iZChnmbdJdFroB4GjTrbfeZ/KTBvIdRP
+         RuaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IEK8wyACKyDwOMDDA6E3A9ixG1cmyZI8rYlASptfokU=;
+        b=zwmNU0UBWyJITQCiI+JLRI6yjyEAfaxEElA468vSp1HKp0381XqNdNSCesc9ckmR7J
+         bxNXp7Ya/+wSxIYiCfia5dOtOLxxzX2eakCZnToCo3wE409uBNJSeDTnkqqvW4/BwQyv
+         9UvtLfAVlk7a3NMb/H0FNxbJaRR+nKJaMiWmVT7yVEtu+ZbFoR0Vy8yRWWRCcG5C9jAD
+         RE1jl/cHgIVlFrg1Gew7YXdivEp01p57Y7K8IawmmTEcFqhsAsSduKVTOWebyArghhEI
+         DXuf+HGLEj1/4C0JtXYvXmaaHcuMS8rb0erzPT18V0TWA0BT12QGLeDoJbqF37T812q+
+         LFPQ==
+X-Gm-Message-State: AOAM530xKMNQKaUKQbVGQT/v9R1cSSN6tXJkASDqVfmIZkDLQ+/Tx9Hx
+        LxgRbKBVrpmG5bd42edka1k=
+X-Google-Smtp-Source: ABdhPJzY5a75RLfA5Jfn6b3d09YWBzWfIbEu+jApvVeNqhDGhi5wuMSZ1OvHr0KsPva0GXsqQx+wXQ==
+X-Received: by 2002:aca:ad11:0:b0:2f7:23cd:b156 with SMTP id w17-20020acaad11000000b002f723cdb156mr4463428oie.171.1649290188266;
+        Wed, 06 Apr 2022 17:09:48 -0700 (PDT)
+Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
+        by smtp.gmail.com with ESMTPSA id q13-20020a4ab3cd000000b0032830efe365sm6630582ooo.43.2022.04.06.17.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 17:09:47 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH 0/2] staging: rtl8192u: use min/max macros
+Date:   Wed,  6 Apr 2022 19:09:42 -0500
+Message-Id: <cover.1649288226.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   7ff84520cb688edd6028a4ac3de3ed684eb22794
-commit: b058f14336c3f0efc9156b44d9b4f8357e5c7a56 [2/55] riscv: optimized memcpy
-config: riscv-randconfig-r003-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070737.6a0DKGta-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/b058f14336c3f0efc9156b44d9b4f8357e5c7a56
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout b058f14336c3f0efc9156b44d9b4f8357e5c7a56
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+These patches replace ternary and if else statements with an
+equivalent min/max macro. Found with minmax coccinelle script.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+---
+I noticed that ieee80211.h includes linux/kernel.h and linux/jiffies.h,
+which both include linux/minmax.h. Would it be a good idea to add
+#include <linux/minmax.h>
+in ieee80211.h in case the content of linux/kernel.h or linux/jiffies.h
+changes?
+---
 
-All errors (new ones prefixed by >>):
+Rebecca Mckeever (2):
+  staging: rtl8192u: use max macro instead of ternary operator
+  staging: rtl8192u: use min_t/max_t macros instead of if else
 
->> arch/riscv/lib/string.c:89:7: error: expected identifier or '('
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-         ^
-   include/linux/fortify-string.h:369:26: note: expanded from macro 'memcpy'
-   #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-                            ^
-   include/linux/fortify-string.h:358:42: note: expanded from macro '__fortify_memcpy_chk'
-                                p_size_field, q_size_field, op) ({         \
-                                                                 ^
->> arch/riscv/lib/string.c:89:7: error: expected ')'
-   include/linux/fortify-string.h:369:26: note: expanded from macro 'memcpy'
-   #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-                            ^
-   include/linux/fortify-string.h:358:42: note: expanded from macro '__fortify_memcpy_chk'
-                                p_size_field, q_size_field, op) ({         \
-                                                                 ^
-   arch/riscv/lib/string.c:89:7: note: to match this '('
-   include/linux/fortify-string.h:369:26: note: expanded from macro 'memcpy'
-   #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-                            ^
-   include/linux/fortify-string.h:358:41: note: expanded from macro '__fortify_memcpy_chk'
-                                p_size_field, q_size_field, op) ({         \
-                                                                ^
-   2 errors generated.
-
-
-vim +89 arch/riscv/lib/string.c
-
-    88	
-  > 89	void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+ drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c   |  2 +-
+ drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c | 13 +++++--------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

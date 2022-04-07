@@ -2,110 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438874F6F71
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682274F6F73
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbiDGBLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S233479AbiDGBLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiDGBLG (ORCPT
+        with ESMTP id S231176AbiDGBLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:11:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75269BADE;
-        Wed,  6 Apr 2022 18:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649293747; x=1680829747;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZGVU3ALt+E9ZDKDB1nnL7gAFrYx8O5DiBDhZ/hjTw+M=;
-  b=hPKbCzA7Wh3O33TevW5r1SytAQS4UJCw1RUB3Hr30VmaRHry31XuWfgJ
-   RqJw3yVtAjhJcWxxNMjIecPx6V57kX91IhpZjxdWwddgIHhVL2GbCRfy4
-   X8f045DrKMWcrDqqs+MepqdfgjYVdRoZc08wx4xpHD56WFLY7zcm3V1TM
-   kg6WDcTSdp5pqfrcgeSuatvsHBZK5c1OaY9jBBHhP/v67N7J08VuMbYDP
-   oSsTDx8EDGNe1YkynW38E2whhn948wlZX8e8j2993DvL9A5zjsrIp683e
-   8LPR52wW18FuahLhZebEioo6jJLRBFB/Q76QcImHi7psCjNHPTj7orWv5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="324361315"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="324361315"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:09:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="722743532"
-Received: from zitianwa-mobl.ccr.corp.intel.com (HELO [10.255.28.125]) ([10.255.28.125])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:09:04 -0700
-Message-ID: <a6e31fb0-02af-676d-10d5-8afcf73d098d@intel.com>
-Date:   Thu, 7 Apr 2022 09:09:02 +0800
+        Wed, 6 Apr 2022 21:11:35 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5290C17A82
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:09:36 -0700 (PDT)
+X-UUID: af5dd61db108415185c4fae63894b6b3-20220407
+X-UUID: af5dd61db108415185c4fae63894b6b3-20220407
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1937445679; Thu, 07 Apr 2022 09:09:30 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 7 Apr 2022 09:09:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Apr 2022 09:09:29 +0800
+Message-ID: <fc73b7f102ba6451e16ab55af091748405bcc5de.camel@mediatek.com>
+Subject: Re: [PATCH V2] drm/mediatek: Add vblank register/unregister
+ callback functions
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>
+CC:     <airlied@linux.ie>, <jason-jh.lin@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <nancy.lin@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <yongqiang.niu@mediatek.com>, <hsinyi@google.com>,
+        <matthias.bgg@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 7 Apr 2022 09:09:29 +0800
+In-Reply-To: <20220321072320.15019-1-rex-bc.chen@mediatek.com>
+References: <20220321072320.15019-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 086/104] KVM: TDX: handle ept violation/misconfig
- exit
-Content-Language: en-US
-To:     Sagi Shahar <sagis@google.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <1df5271baa641d9d189edb86f9ee0921ea3a83e0.1646422845.git.isaku.yamahata@intel.com>
- <CAAhR5DEb+jRfGxK0nv4A_XEEnY4yrw1CzCcXU8HNw=CnHW27Gw@mail.gmail.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <CAAhR5DEb+jRfGxK0nv4A_XEEnY4yrw1CzCcXU8HNw=CnHW27Gw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/2022 4:50 AM, Sagi Shahar wrote:
-> On Fri, Mar 4, 2022 at 12:23 PM <isaku.yamahata@intel.com> wrote:
->>
->> From: Isaku Yamahata <isaku.yamahata@intel.com>
->>
->> On EPT violation, call a common function, __vmx_handle_ept_violation() to
->> trigger x86 MMU code.  On EPT misconfiguration, exit to ring 3 with
->> KVM_EXIT_UNKNOWN.  because EPT misconfiguration can't happen as MMIO is
->> trigged by TDG.VP.VMCALL. No point to set a misconfiguration value for the
->> fast path.
->>
->> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
->> ---
->>   arch/x86/kvm/vmx/tdx.c | 40 ++++++++++++++++++++++++++++++++++++++--
->>   1 file changed, 38 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
->> index 6fbe89bcfe1e..2c35dcad077e 100644
->> --- a/arch/x86/kvm/vmx/tdx.c
->> +++ b/arch/x86/kvm/vmx/tdx.c
->> @@ -1081,6 +1081,40 @@ void tdx_deliver_interrupt(struct kvm_lapic *apic, int delivery_mode,
->>          __vmx_deliver_posted_interrupt(vcpu, &tdx->pi_desc, vector);
->>   }
->>
->> +#define TDX_SEPT_PFERR (PFERR_WRITE_MASK | PFERR_USER_MASK)
+Hi, Rex:
+
+On Mon, 2022-03-21 at 15:23 +0800, Rex-BC Chen wrote:
+> We encountered a kernel panic issue that callback data will be NULL
+> when
+> it's using in ovl irq handler. There is a timing issue between
+> mtk_disp_ovl_irq_handler() and mtk_ovl_disable_vblank().
 > 
-> TDX_SEPT_PFERR is defined using PFERR_.* bitmask but
-> __vmx_handle_ept_violation is accepting an EPT_VIOLATION_.* bitmask.
-> so (PFERR_WRITE_MASK | PFERR_USER_MASK) will get interpreted as
-> (EPT_VIOLATION_ACC_WRITE | EPT_VIOLATION_ACC_INSTR) which will get
-> translated to (PFERR_WRITE_MASK | PFERR_FETCH_MASK). Was that the
-> intention of this code?
+> To resolve this issue, we use the flow to register/unregister vblank
+> cb:
+> - Register callback function and callback data when crtc creates.
+> - Unregister callback function and callback data when crtc destroies.
+> 
+> With this solution, we can assure callback data will not be NULL when
+> vblank is disable.
 
-No. It's a mistake. We have corrected internally you can find corrected 
-code in github repo or see it in next version.
+Applied to mediatek-drm-next [1], thanks.
 
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
+Regards,
+CK
+
+> 
+> Fixes: 9b0704988b15 ("drm/mediatek: Register vblank callback
+> function")
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> 
+> ----
+> V2:
+> 1. Change title to "Add vblank register/unregister callback
+> functions".
+> ----
+> 
+> ---
+>  drivers/gpu/drm/mediatek/mtk_disp_drv.h     | 16 +++++++-----
+>  drivers/gpu/drm/mediatek/mtk_disp_ovl.c     | 22 ++++++++++++----
+>  drivers/gpu/drm/mediatek/mtk_disp_rdma.c    | 20 +++++++++-----
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 14 +++++++++-
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  4 +++
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h | 29 ++++++++++++++++---
+> --
+>  6 files changed, 80 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> index 86c3068894b1..974462831133 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> @@ -76,9 +76,11 @@ void mtk_ovl_layer_off(struct device *dev,
+> unsigned int idx,
+>  void mtk_ovl_start(struct device *dev);
+>  void mtk_ovl_stop(struct device *dev);
+>  unsigned int mtk_ovl_supported_rotations(struct device *dev);
+> -void mtk_ovl_enable_vblank(struct device *dev,
+> -			   void (*vblank_cb)(void *),
+> -			   void *vblank_cb_data);
+> +void mtk_ovl_register_vblank_cb(struct device *dev,
+> +				void (*vblank_cb)(void *),
+> +				void *vblank_cb_data);
+> +void mtk_ovl_unregister_vblank_cb(struct device *dev);
+> +void mtk_ovl_enable_vblank(struct device *dev);
+>  void mtk_ovl_disable_vblank(struct device *dev);
+>  
+>  void mtk_rdma_bypass_shadow(struct device *dev);
+> @@ -93,9 +95,11 @@ void mtk_rdma_layer_config(struct device *dev,
+> unsigned int idx,
+>  			   struct cmdq_pkt *cmdq_pkt);
+>  void mtk_rdma_start(struct device *dev);
+>  void mtk_rdma_stop(struct device *dev);
+> -void mtk_rdma_enable_vblank(struct device *dev,
+> -			    void (*vblank_cb)(void *),
+> -			    void *vblank_cb_data);
+> +void mtk_rdma_register_vblank_cb(struct device *dev,
+> +				 void (*vblank_cb)(void *),
+> +				 void *vblank_cb_data);
+> +void mtk_rdma_unregister_vblank_cb(struct device *dev);
+> +void mtk_rdma_enable_vblank(struct device *dev);
+>  void mtk_rdma_disable_vblank(struct device *dev);
+>  
+>  #endif
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> index 2146299e5f52..1fa1bbac9f9c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> @@ -96,14 +96,28 @@ static irqreturn_t mtk_disp_ovl_irq_handler(int
+> irq, void *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -void mtk_ovl_enable_vblank(struct device *dev,
+> -			   void (*vblank_cb)(void *),
+> -			   void *vblank_cb_data)
+> +void mtk_ovl_register_vblank_cb(struct device *dev,
+> +				void (*vblank_cb)(void *),
+> +				void *vblank_cb_data)
+>  {
+>  	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+>  
+>  	ovl->vblank_cb = vblank_cb;
+>  	ovl->vblank_cb_data = vblank_cb_data;
+> +}
+> +
+> +void mtk_ovl_unregister_vblank_cb(struct device *dev)
+> +{
+> +	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+> +
+> +	ovl->vblank_cb = NULL;
+> +	ovl->vblank_cb_data = NULL;
+> +}
+> +
+> +void mtk_ovl_enable_vblank(struct device *dev)
+> +{
+> +	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+> +
+>  	writel(0x0, ovl->regs + DISP_REG_OVL_INTSTA);
+>  	writel_relaxed(OVL_FME_CPL_INT, ovl->regs +
+> DISP_REG_OVL_INTEN);
+>  }
+> @@ -112,8 +126,6 @@ void mtk_ovl_disable_vblank(struct device *dev)
+>  {
+>  	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+>  
+> -	ovl->vblank_cb = NULL;
+> -	ovl->vblank_cb_data = NULL;
+>  	writel_relaxed(0x0, ovl->regs + DISP_REG_OVL_INTEN);
+>  }
+>  
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+> index d41a3970b944..943780fc7bf6 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+> @@ -94,24 +94,32 @@ static void rdma_update_bits(struct device *dev,
+> unsigned int reg,
+>  	writel(tmp, rdma->regs + reg);
+>  }
+>  
+> -void mtk_rdma_enable_vblank(struct device *dev,
+> -			    void (*vblank_cb)(void *),
+> -			    void *vblank_cb_data)
+> +void mtk_rdma_register_vblank_cb(struct device *dev,
+> +				 void (*vblank_cb)(void *),
+> +				 void *vblank_cb_data)
+>  {
+>  	struct mtk_disp_rdma *rdma = dev_get_drvdata(dev);
+>  
+>  	rdma->vblank_cb = vblank_cb;
+>  	rdma->vblank_cb_data = vblank_cb_data;
+> -	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE,
+> RDMA_FRAME_END_INT,
+> -			 RDMA_FRAME_END_INT);
+>  }
+>  
+> -void mtk_rdma_disable_vblank(struct device *dev)
+> +void mtk_rdma_unregister_vblank_cb(struct device *dev)
+>  {
+>  	struct mtk_disp_rdma *rdma = dev_get_drvdata(dev);
+>  
+>  	rdma->vblank_cb = NULL;
+>  	rdma->vblank_cb_data = NULL;
+> +}
+> +
+> +void mtk_rdma_enable_vblank(struct device *dev)
+> +{
+> +	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE,
+> RDMA_FRAME_END_INT,
+> +			 RDMA_FRAME_END_INT);
+> +}
+> +
+> +void mtk_rdma_disable_vblank(struct device *dev)
+> +{
+>  	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE,
+> RDMA_FRAME_END_INT, 0);
+>  }
+>  
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> index d661edf7e0fe..e42a9bfa0ecb 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> @@ -152,6 +152,7 @@ static void mtk_drm_cmdq_pkt_destroy(struct
+> cmdq_pkt *pkt)
+>  static void mtk_drm_crtc_destroy(struct drm_crtc *crtc)
+>  {
+>  	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+> +	int i;
+>  
+>  	mtk_mutex_put(mtk_crtc->mutex);
+>  #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+> @@ -162,6 +163,14 @@ static void mtk_drm_crtc_destroy(struct drm_crtc
+> *crtc)
+>  		mtk_crtc->cmdq_client.chan = NULL;
+>  	}
+>  #endif
+> +
+> +	for (i = 0; i < mtk_crtc->ddp_comp_nr; i++) {
+> +		struct mtk_ddp_comp *comp;
+> +
+> +		comp = mtk_crtc->ddp_comp[i];
+> +		mtk_ddp_comp_unregister_vblank_cb(comp);
+> +	}
+> +
+>  	drm_crtc_cleanup(crtc);
+>  }
+>  
+> @@ -616,7 +625,7 @@ static int mtk_drm_crtc_enable_vblank(struct
+> drm_crtc *crtc)
+>  	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+>  	struct mtk_ddp_comp *comp = mtk_crtc->ddp_comp[0];
+>  
+> -	mtk_ddp_comp_enable_vblank(comp, mtk_crtc_ddp_irq, &mtk_crtc-
+> >base);
+> +	mtk_ddp_comp_enable_vblank(comp);
+>  
+>  	return 0;
+>  }
+> @@ -916,6 +925,9 @@ int mtk_drm_crtc_create(struct drm_device
+> *drm_dev,
+>  			if (comp->funcs->ctm_set)
+>  				has_ctm = true;
+>  		}
+> +
+> +		mtk_ddp_comp_register_vblank_cb(comp, mtk_crtc_ddp_irq,
+> +						&mtk_crtc->base);
+>  	}
+>  
+>  	for (i = 0; i < mtk_crtc->ddp_comp_nr; i++)
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> index b4b682bc1991..028cf76b9531 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> @@ -297,6 +297,8 @@ static const struct mtk_ddp_comp_funcs ddp_ovl =
+> {
+>  	.config = mtk_ovl_config,
+>  	.start = mtk_ovl_start,
+>  	.stop = mtk_ovl_stop,
+> +	.register_vblank_cb = mtk_ovl_register_vblank_cb,
+> +	.unregister_vblank_cb = mtk_ovl_unregister_vblank_cb,
+>  	.enable_vblank = mtk_ovl_enable_vblank,
+>  	.disable_vblank = mtk_ovl_disable_vblank,
+>  	.supported_rotations = mtk_ovl_supported_rotations,
+> @@ -321,6 +323,8 @@ static const struct mtk_ddp_comp_funcs ddp_rdma =
+> {
+>  	.config = mtk_rdma_config,
+>  	.start = mtk_rdma_start,
+>  	.stop = mtk_rdma_stop,
+> +	.register_vblank_cb = mtk_rdma_register_vblank_cb,
+> +	.unregister_vblank_cb = mtk_rdma_unregister_vblank_cb,
+>  	.enable_vblank = mtk_rdma_enable_vblank,
+>  	.disable_vblank = mtk_rdma_disable_vblank,
+>  	.layer_nr = mtk_rdma_layer_nr,
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> index 4c6a98662305..b83f24cb045f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> @@ -48,9 +48,11 @@ struct mtk_ddp_comp_funcs {
+>  		       unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+>  	void (*start)(struct device *dev);
+>  	void (*stop)(struct device *dev);
+> -	void (*enable_vblank)(struct device *dev,
+> -			      void (*vblank_cb)(void *),
+> -			      void *vblank_cb_data);
+> +	void (*register_vblank_cb)(struct device *dev,
+> +				   void (*vblank_cb)(void *),
+> +				   void *vblank_cb_data);
+> +	void (*unregister_vblank_cb)(struct device *dev);
+> +	void (*enable_vblank)(struct device *dev);
+>  	void (*disable_vblank)(struct device *dev);
+>  	unsigned int (*supported_rotations)(struct device *dev);
+>  	unsigned int (*layer_nr)(struct device *dev);
+> @@ -111,12 +113,25 @@ static inline void mtk_ddp_comp_stop(struct
+> mtk_ddp_comp *comp)
+>  		comp->funcs->stop(comp->dev);
+>  }
+>  
+> -static inline void mtk_ddp_comp_enable_vblank(struct mtk_ddp_comp
+> *comp,
+> -					      void (*vblank_cb)(void
+> *),
+> -					      void *vblank_cb_data)
+> +static inline void mtk_ddp_comp_register_vblank_cb(struct
+> mtk_ddp_comp *comp,
+> +						   void
+> (*vblank_cb)(void *),
+> +						   void
+> *vblank_cb_data)
+> +{
+> +	if (comp->funcs && comp->funcs->register_vblank_cb)
+> +		comp->funcs->register_vblank_cb(comp->dev, vblank_cb,
+> +						vblank_cb_data);
+> +}
+> +
+> +static inline void mtk_ddp_comp_unregister_vblank_cb(struct
+> mtk_ddp_comp *comp)
+> +{
+> +	if (comp->funcs && comp->funcs->unregister_vblank_cb)
+> +		comp->funcs->unregister_vblank_cb(comp->dev);
+> +}
+> +
+> +static inline void mtk_ddp_comp_enable_vblank(struct mtk_ddp_comp
+> *comp)
+>  {
+>  	if (comp->funcs && comp->funcs->enable_vblank)
+> -		comp->funcs->enable_vblank(comp->dev, vblank_cb,
+> vblank_cb_data);
+> +		comp->funcs->enable_vblank(comp->dev);
+>  }
+>  
+>  static inline void mtk_ddp_comp_disable_vblank(struct mtk_ddp_comp
+> *comp)
 

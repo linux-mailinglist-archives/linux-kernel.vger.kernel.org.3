@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292EB4F7EA9
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0F94F7EAA
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245099AbiDGMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S240178AbiDGMGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245105AbiDGMF5 (ORCPT
+        with ESMTP id S245130AbiDGMGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:05:57 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5D46CA0E9;
-        Thu,  7 Apr 2022 05:03:26 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 20:02:58
- +0800 (GMT+08:00)
-X-Originating-IP: [10.181.226.201]
-Date:   Thu, 7 Apr 2022 20:02:58 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Oliver Neukum" <oneukum@suse.com>
-Cc:     linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        mustafa.ismail@intel.com, shiraz.saleem@intel.com, jgg@ziepe.ca,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
-        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linma@zju.edu.cn
-Subject: Re: Re: [PATCH 02/11] drivers: usb: host: Fix deadlock in
- oxu_bus_suspend()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <8ed7760a-471d-19a2-0a3b-1e0fc3a27281@suse.com>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <8b1201dc7554a2ab3ca555a2b6e2747761603d19.1649310812.git.duoming@zju.edu.cn>
- <8ed7760a-471d-19a2-0a3b-1e0fc3a27281@suse.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 7 Apr 2022 08:06:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968E0C31DE;
+        Thu,  7 Apr 2022 05:04:02 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 50D771F85A;
+        Thu,  7 Apr 2022 12:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649333041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yD6Hv0Qev4TUL19bY/g1Sx375Qm9AbFeZHHdH3oY4hs=;
+        b=nyUXqwYZBdRJ+l/n+nNGbkZWDe7Bqq+oy/9xD+GmBS6dBr+gvMlU+jcSshfTcrFJFz1eKf
+        WOdzx1NwqOpGiWVEPbEodpWKamYAO+1G6nea8neoVBEI9wnICynBWROc1V3VeqRcWfHsxN
+        oH6daT+1azkNl7uvjrk1FB4sy6VhfOs=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0887EA3B96;
+        Thu,  7 Apr 2022 12:04:00 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 14:04:00 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
+        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+Message-ID: <Yk7TMKBAkuSVZRLT@dhcp22.suse.cz>
+References: <20220407093221.1090-1-jgross@suse.com>
+ <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
+ <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
+ <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
+ <5e97a7f5-1fc9-d0b4-006e-6894d5653c06@suse.com>
+ <Yk7NqTlw7lmFzpKb@dhcp22.suse.cz>
+ <770d8283-4315-3d83-4f8b-723308fffe5c@redhat.com>
 MIME-Version: 1.0
-Message-ID: <4170b816.3f4a8.18003e801f8.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgAXj2Ly0k5i+UeSAQ--.26944W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQNAVZdtZE08wABsj
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <770d8283-4315-3d83-4f8b-723308fffe5c@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTA6MDE6NDMgKzAyMDAgT2xpdmVyIE5ldWt1bSB3
-cm90ZToKCj4gT24gMDcuMDQuMjIgMDg6MzMsIER1b21pbmcgWmhvdSB3cm90ZToKPiA+IFRoZXJl
-IGlzIGEgZGVhZGxvY2sgaW4gb3h1X2J1c19zdXNwZW5kKCksIHdoaWNoIGlzIHNob3duIGJlbG93
-Ogo+ID4KPiA+ICAgIChUaHJlYWQgMSkgICAgICAgICAgICAgIHwgICAgICAoVGhyZWFkIDIpCj4g
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IHRpbWVyX2FjdGlvbigpCj4gPiBveHVfYnVz
-X3N1c3BlbmQoKSAgICAgICAgICB8ICBtb2RfdGltZXIoKQo+ID4gIHNwaW5fbG9ja19pcnEoKSAv
-LygxKSAgICAgfCAgKHdhaXQgYSB0aW1lKQo+ID4gIC4uLiAgICAgICAgICAgICAgICAgICAgICAg
-fCBveHVfd2F0Y2hkb2coKQo+ID4gIGRlbF90aW1lcl9zeW5jKCkgICAgICAgICAgfCAgc3Bpbl9s
-b2NrX2lycSgpIC8vKDIpCj4gPiAgKHdhaXQgdGltZXIgdG8gc3RvcCkgICAgICB8ICAuLi4KPiA+
-Cj4gPiBXZSBob2xkIG94dS0+bG9jayBpbiBwb3NpdGlvbiAoMSkgb2YgdGhyZWFkIDEsIGFuZCB1
-c2UKPiA+IGRlbF90aW1lcl9zeW5jKCkgdG8gd2FpdCB0aW1lciB0byBzdG9wLCBidXQgdGltZXIg
-aGFuZGxlcgo+ID4gYWxzbyBuZWVkIG94dS0+bG9jayBpbiBwb3NpdGlvbiAoMikgb2YgdGhyZWFk
-IDIuIEFzIGEgcmVzdWx0LAo+ID4gb3h1X2J1c19zdXNwZW5kKCkgd2lsbCBibG9jayBmb3JldmVy
-Lgo+ID4KPiA+IFRoaXMgcGF0Y2ggZXh0cmFjdHMgZGVsX3RpbWVyX3N5bmMoKSBmcm9tIHRoZSBw
-cm90ZWN0aW9uIG9mCj4gPiBzcGluX2xvY2tfaXJxKCksIHdoaWNoIGNvdWxkIGxldCB0aW1lciBo
-YW5kbGVyIHRvIG9idGFpbgo+ID4gdGhlIG5lZWRlZCBsb2NrLgo+IEdvb2QgY2F0Y2guCj4gPiBT
-aWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0tLQo+
-ID4gIGRyaXZlcnMvdXNiL2hvc3Qvb3h1MjEwaHAtaGNkLmMgfCAyICsrCj4gPiAgMSBmaWxlIGNo
-YW5nZWQsIDIgaW5zZXJ0aW9ucygrKQo+ID4KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9o
-b3N0L294dTIxMGhwLWhjZC5jIGIvZHJpdmVycy91c2IvaG9zdC9veHUyMTBocC1oY2QuYwo+ID4g
-aW5kZXggYjc0MTY3MDUyNWUuLmVlNDAzZGYzMzA5IDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy91
-c2IvaG9zdC9veHUyMTBocC1oY2QuYwo+ID4gKysrIGIvZHJpdmVycy91c2IvaG9zdC9veHUyMTBo
-cC1oY2QuYwo+ID4gQEAgLTM5MDksOCArMzkwOSwxMCBAQCBzdGF0aWMgaW50IG94dV9idXNfc3Vz
-cGVuZChzdHJ1Y3QgdXNiX2hjZCAqaGNkKQo+ID4gIAkJfQo+ID4gIAl9Cj4gPiAgCj4gPiArCXNw
-aW5fdW5sb2NrX2lycSgmb3h1LT5sb2NrKTsKPiA+ICAJLyogdHVybiBvZmYgbm93LWlkbGUgSEMg
-Ki8KPiA+ICAJZGVsX3RpbWVyX3N5bmMoJm94dS0+d2F0Y2hkb2cpOwo+ID4gKwlzcGluX2xvY2tf
-aXJxKCZveHUtPmxvY2spOwo+ID4gIAllaGNpX2hhbHQob3h1KTsKPiA+ICAJaGNkLT5zdGF0ZSA9
-IEhDX1NUQVRFX1NVU1BFTkRFRDsKPiA+ICAKPiAKPiBXaGF0IGlzIHRoZSBsb2NrIHByb3RlY3Rp
-bmcgYXQgdGhhdCBzdGFnZT8gV2h5IG5vdCBqdXN0IGRyb3AgaXQgZWFybGllci4KCkkgdGhpbmsg
-dGhlcmUgaXMgYSByYWNlIGNvbmRpdGlvbiBiZXR3ZWVuIG94dV9idXNfc3VzcGVuZCgpIGFuZCBv
-eHVfc3RvcCgpLApzbyBJIHRoaW5rIHdlIGNvdWxkIG5vdCBkcm9wIHRoZSBveHUtPmxvY2sgZWFy
-bGllci4KCiAgICAgICAgICAgICAgIChUaHJlYWQgMSkgICAgICAgICAgICAgICB8ICAgICAgICAg
-KFRocmVhZCAyKQogb3h1X2J1c19zdXNwZW5kKCkgICAgICAgICAgICAgICAgICAgICAgfCBveHVf
-c3RvcCgpCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IAogaGNkLT5z
-dGF0ZSA9IEhDX1NUQVRFX1NVU1BFTkRFRDsgICAgICAgfCAgc3Bpbl9sb2NrX2lycSgmb3h1LT5s
-b2NrKTsKIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgCiB3cml0ZWwo
-bWFzaywgJm94dS0+cmVncy0+aW50cl9lbmFibGUpOyB8ICAuLi4KICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgIHdyaXRlbCgwLCAmb3h1LT5yZWdzLT5pbnRyX2VuYWJs
-ZSk7CiByZWFkbCgmb3h1LT5yZWdzLT5pbnRyX2VuYWJsZSk7ICAgICAgICB8CgpUaGUgb3h1LT5y
-ZWdzLT5pbnRyX2VuYWJsZSBpcyBzZXQgdG8gMCBpbiBveHVfc3RvcCgpLCBhbmQgdGhlIHJlYWRs
-KCkgaW4Kb3h1X2J1c19zdXNwZW5kKCkgd2lsbCByZWFkIHRoZSB3cm9uZyB2YWx1ZS4KClRoYW5r
-cyBhIGxvdCBmb3IgeW91ciB0aW1lIGFuZCBhZHZpY2UuIElmIHlvdSBoYXZlIHF1ZXN0aW9ucywg
-d2VsY29tZSB0byBhc2sgbWUuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQo=
+On Thu 07-04-22 13:58:44, David Hildenbrand wrote:
+[...]
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 3589febc6d31..130a2feceddc 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -6112,10 +6112,8 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
+> >  	do {
+> >  		zone_type--;
+> >  		zone = pgdat->node_zones + zone_type;
+> > -		if (managed_zone(zone)) {
+> > -			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+> > -			check_highest_zone(zone_type);
+> > -		}
+> > +		zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+> > +		check_highest_zone(zone_type);
+> >  	} while (zone_type);
+> >  
+> >  	return nr_zones;
+> 
+> I don't think having !populated zones in the zonelist is a particularly
+> good idea. Populated vs !populated changes only during page
+> onlininge/offlining.
+> 
+> If I'm not wrong, with your patch we'd even include ZONE_DEVICE here ...
+
+What kind of problem that would cause? The allocator wouldn't see any
+pages at all so it would fallback to the next one. Maybe kswapd would
+need some tweak to have a bail out condition but as mentioned in the
+thread already. !populated or !managed for that matter are not all that
+much different from completely depleted zones. The fact that we are
+making that distinction has led to some bugs and I suspect it makes the
+code more complex without a very good reason.
+
+> I'd vote for going with the simple fix first, which should be good
+> enough AFAIKT.
+
+yes, see the other reply
+
+-- 
+Michal Hocko
+SUSE Labs

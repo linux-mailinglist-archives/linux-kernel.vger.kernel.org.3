@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321484F8AC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55B64F8B2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiDGXGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        id S231496AbiDGXHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiDGXGH (ORCPT
+        with ESMTP id S232369AbiDGXHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:06:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16E236A003
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649372645;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jIQi3qGVfQZT8qJz4yv5EPG7fg0JFIcEyArufaTfdyo=;
-        b=bpN+i2IH/utSX7hMCCEE4xB2MgwZz8BR2Z9Rd3JpQY5SXbEeuqlKjUt26kM5oq/lVLgSdJ
-        kSjUNLzvZysnY2mHRAFU1Umjh5TD1Vlj2Cx/DPT7fbH0m751GNbHC05d3k0lIXfv3sTelb
-        NbqLybXhrS98xzNFpF4xwBP8/DRrsWo=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-4esry8yZPfWGz2mRLTXNJw-1; Thu, 07 Apr 2022 19:04:04 -0400
-X-MC-Unique: 4esry8yZPfWGz2mRLTXNJw-1
-Received: by mail-ed1-f71.google.com with SMTP id d19-20020aa7d5d3000000b0041cd772fb03so3648539eds.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:04:03 -0700 (PDT)
+        Thu, 7 Apr 2022 19:07:01 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4225F9B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:04:59 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id be5so393521plb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LQwT+/mAGUqM3bKuuBQMYn0uTeyRqxSYD1X0xo7/rPE=;
+        b=Te8C7q8zW+qLm4J/emex42n1YOTNTgYioZ6aL6jd2MEBaCBiG1MonTEaVigQYrxCnX
+         lc2a1Zp9F/CS9bGuKEKpu93mdMYLs+lQfsbi5mhteuVgcuoJm0wqWfraYddXR8D2bRg6
+         g80ZitZ42SJag/feMLrn8DX95l13h9byUhXsltGRKCs9KWV88T/Q6QdZkDXhfdleSkQe
+         ryLxvSOK7GWWj6jsOpKFb2APmR0DtW+cvDsI5vs30igZtouAhcFKm2Hq3Ic2zZxJev/e
+         Hyk2ptU132DXhvbF7YzTGVCDK2FzEn2yYfELqe296BiWwOwU5IvauV2Zbzna4r5BI7u0
+         VEvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jIQi3qGVfQZT8qJz4yv5EPG7fg0JFIcEyArufaTfdyo=;
-        b=rWSyDtL5Ay5F/vUu459jV6GEM6HzsfbUUeVSxVccgl6KELTQPJgi3oDdh+SrQYly/x
-         eyapDZ/dfeFBRMs7o0md72uoPCi360TPXQtMTmGmnwVcO56nn9y9SQLsaGiTPkai+DYS
-         aiOqqkpCnHVVFRU7hQrHrOIeZFFgMgYqonMN3RYRu84ROsaSxnmwQpPhEaib02/BetpB
-         rxf+8gftDMVcAnXnG/k10pknW34m2ukC5RTLOFw3XGiOTLw8Ew/u6xEuXyrbLDLeTBzg
-         HGyzl7Qc6V4Yhd+AsvAdYUyeDN+LNEr3xgfldDaUSKqeaEp+bqsRlyef6Ku9Kwl907de
-         AIuQ==
-X-Gm-Message-State: AOAM533iFOX8ywfg8HmVTSV4e0V3fVH60nn6PwD1HdSYM7t6RUixa62J
-        QZCLOMsZpHsKGGnLhNhWc8Hc0os5/rxgLa+bBqKfUCuKDUXcdgemYsK5IUJ8okUmZY5tVJ78Z+a
-        AHk/GhXvvFFZxhB9aBucZ1a8j
-X-Received: by 2002:a17:907:6d1f:b0:6e8:318d:1df0 with SMTP id sa31-20020a1709076d1f00b006e8318d1df0mr5920268ejc.192.1649372642813;
-        Thu, 07 Apr 2022 16:04:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJynH3xr2my/HvzM33HT8/Ct2tHFRQYa9aOTLzc/bGsvVYht/6hLmeB6I2/KNGe6lZX4BClLpQ==
-X-Received: by 2002:a17:907:6d1f:b0:6e8:318d:1df0 with SMTP id sa31-20020a1709076d1f00b006e8318d1df0mr5920246ejc.192.1649372642581;
-        Thu, 07 Apr 2022 16:04:02 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:e3ec:5559:7c5c:1928? ([2001:b07:6468:f312:e3ec:5559:7c5c:1928])
-        by smtp.googlemail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm8147133ejb.179.2022.04.07.16.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 16:04:01 -0700 (PDT)
-Message-ID: <7dabd2a6-bc48-6ada-f2f1-f9e30370be2f@redhat.com>
-Date:   Fri, 8 Apr 2022 01:03:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LQwT+/mAGUqM3bKuuBQMYn0uTeyRqxSYD1X0xo7/rPE=;
+        b=B2AHwRes0OSVLOgJNy4EU0i849jKsNZ/57AVgKMXHbK95iHRBwtOgYI/hUKKr2oAv+
+         oDTwNT4fBTcxtnJLenqEGx0n/nWKtONDrJgWh8DrhIS2t+xRTl8qYToShkDyZPTd55UR
+         yjjeaCD34AJnzAkeYISqqOeSSZMnCDDHrlkYOKsinliXYKOsOt/WtcBaTsNp+U20xkkh
+         dyNhJMTZkb+nn8mui5vaxvsA6JaYRS5a6axXsSUD01YMDgL6A1ohXebY+wr9e+KHqXZA
+         vVMBbZHkTxfaAz65zIQ8q6i9T+Ad3MKfOmYkBICFNuiwnVKhjk6aZZIT1r7RvQbInJks
+         08eA==
+X-Gm-Message-State: AOAM530u9zn00g3tbPcx+XCuM2bJ8UsDKJImu2fgSPST7Rbd5khKhN9u
+        ezAasj+yUm2rNyAe1T37Hbyu25BA8kcNBfwStk/oKA==
+X-Google-Smtp-Source: ABdhPJwyhCRn0iVyHg2CNrALoCcH3RqdRakJthXzqTS4zMpJZcTUNX/0eDdWvG2pEr2k9AtFzvO+MIBVwETlcC1KafM=
+X-Received: by 2002:a17:90a:c791:b0:1c7:26eb:88dd with SMTP id
+ gn17-20020a17090ac79100b001c726eb88ddmr18367740pjb.218.1649372698677; Thu, 07
+ Apr 2022 16:04:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
- struct kvm_mmu_page
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
- <a439dc1542539340e845d177be911c065a4e8d97.camel@intel.com>
- <ec5ffd8b-acc6-a529-6241-ad96a6cf2f88@redhat.com>
- <05b1d51b69f14bb794024f13ef4703ad1c888717.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <05b1d51b69f14bb794024f13ef4703ad1c888717.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220407224244.1374102-1-yosryahmed@google.com> <20220407224244.1374102-4-yosryahmed@google.com>
+In-Reply-To: <20220407224244.1374102-4-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 7 Apr 2022 16:04:22 -0700
+Message-ID: <CAJD7tkaPaXQ4M_w-YxJizD2DG8co-3Q2bVDfd7_FaG2ivgT6UA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] selftests: cgroup: fix alloc_anon_noexit()
+ instantly freeing memory
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, Huang@google.com,
+        Ying <ying.huang@intel.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/22 00:53, Kai Huang wrote:
->>
-> Do you mean below reply?
-> 
-> "I think use of kvm_gfn_stolen_mask() should be minimized anyway.  I
-> would rename it to to kvm_{gfn,gpa}_private_mask and not return bool."
-> 
-> I also mean we should not use kvm_gfn_stolen_mask().  I don't have opinion on
-> the new name.  Perhaps kvm_is_protected_vm() is my preference though.
+On Thu, Apr 7, 2022 at 3:43 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
+> the allocated memory. alloc_anon_noexit() is usually used with
+> cg_run_nowait() to run a process in the background that allocates
+> memory. It makes sense for the background process to keep the memory
+> allocated and not instantly free it (otherwise there is no point of
+> running it in the background).
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  tools/testing/selftests/cgroup/test_memcontrol.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index 36ccf2322e21..c1ec71d83af7 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -211,13 +211,18 @@ static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
+>  static int alloc_anon_noexit(const char *cgroup, void *arg)
+>  {
+>         int ppid = getppid();
+> +       size_t size = (unsigned long)arg;
+> +       char *buf, *ptr;
+>
+> -       if (alloc_anon(cgroup, arg))
+> -               return -1;
+> +       buf = malloc(size);
+> +       for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+> +               *ptr = 0;
+>
+>         while (getppid() == ppid)
+>                 sleep(1);
+>
+> +       printf("Freeing buffer");
 
-But this is one of the case where it would survive, even with the 
-changed name.
+Hey Andew,
 
-Paolo
+I am very sorry but I left a debugging printf there by mistake. If
+it's no hassle, do you mind removing it from the patch (assuming I
+won't need to send a v3 anyway)?
 
+Thanks!
+
+> +       free(buf);
+>         return 0;
+>  }
+>
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

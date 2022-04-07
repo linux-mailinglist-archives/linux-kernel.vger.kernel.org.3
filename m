@@ -2,225 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFF54F8B9A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8064F4F8AF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiDGXrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S232651AbiDGXsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbiDGXrF (ORCPT
+        with ESMTP id S232642AbiDGXs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:47:05 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2118.outbound.protection.outlook.com [40.107.96.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20124DFD3;
-        Thu,  7 Apr 2022 16:45:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e9QJxa4/6UQNm2k6rYVI02COlyruk6uRS7EZZROBtbDi4fQBwnBCXAJ+nPATO4v8L1FKQjfF+D2934pGV0QVgtsN4lxbkb2I7Psdam/3deLo8WVHcNIC3WqxwwdLoDeH6x37Imp8msPcNXDHJawSjXWcZ+k8pDuAYUHuJH+wtpuit3jQ1kXkxD9e+zyjmbT2yec7SvgCwjvjAxjAoVe0aQUkOA980R1Oc1MJsYmetx/k9JzVPNHcuhTXBFRXI8OK7vwu3iw8/8b1J/tRPrIoSODWFmcsbOc8pM/DAGWY7Uar7XVcYOYHHsi4DXsjt/BX9z7P8JEvs9u7rxUQUiIXuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pz1tzj1vsD4+6d7yX8fmFrISodQlY0yq8bCcOafp3w4=;
- b=NJymR8GkPTpX2JItLnX8QBrX0BOqsOxmur4ltHmwyRFUw9544m1wZ7ePqDrICzPPpLKPCprJGNMyj79+Dcp7s0I9B9570z/0F0kqOY38JdouLQhzA2FPvwoBTP7HFQUpWJoah440uCiudxVf5KcKnESJsolLxfz0IsK4B5VEHf0sbjN77pZ5CYtkDu1AhVVWjEQFGRf12Q2I3AOoJ2YcDu0M3p51rkkWSrI7/0QlToegU89L5Fw5jgqJmlSzNWOLF3W65BSn7CEyY5uzo54b0mQNIpl+fk1e+fUt28L/tRV2tSZeFz7jYwq9tw8ec5j0DQ63nI3ykY99yUswtkvDhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Thu, 7 Apr 2022 19:48:28 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047021544A1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:46:26 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id t19so9468199qtc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pz1tzj1vsD4+6d7yX8fmFrISodQlY0yq8bCcOafp3w4=;
- b=ODcy/mn/RfRXMHWFRDPyIejJjVdB9mZxpyUsb8lUwXXz1Qn5QRwccz1JC+ljaNdWF2ttqFcqdv7j+8lNL8YxNiSQYymqvyM8nfKieUN48dVZJW1Qknldcb8UnmwGn+UO1QpqIaXsOiGwIHeuinmDdFBswLbs3VhZsiNVOJE5uvg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BN6PR10MB1233.namprd10.prod.outlook.com
- (2603:10b6:405:f::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 23:45:00 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::4581:787c:1a7a:873e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::4581:787c:1a7a:873e%3]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 23:45:00 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH v2 net-next 1/1] net: mdio: mscc-miim: add local dev variable to cleanup probe function
-Date:   Thu,  7 Apr 2022 16:44:45 -0700
-Message-Id: <20220407234445.114585-2-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407234445.114585-1-colin.foster@in-advantage.com>
-References: <20220407234445.114585-1-colin.foster@in-advantage.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR08CA0047.namprd08.prod.outlook.com
- (2603:10b6:a03:117::24) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MpHTh04rYBwjjTZFAAAByBk97DSNs2GInrUq+lnOv2U=;
+        b=t6TgPFV7nl2Ld7CZKPvMj3/YieaF5IpyvSK7/zJbJsjONfqw8SpTOg0+vhHhuHUGIY
+         A5nIC/iTCgXnf1nuBziDjuSPd+k8tuHxgFb3f5R+Ub9qU5xzJwSnHsMXjNu752fH0GnX
+         4aVNP6dy7fiAwt/VlzoHLRSWvPvk38NkMdGaEO2fWnfnYnyQLiI+KqSvSSVgrY1srJpv
+         Z0xczrsBRD2mU7P6fU8yd6ZvutfdCYOp8qMt9V9wn+TwlAerWVd2958PFpHHkeiO0eIi
+         TzcJZ7ssXbjOUdgFTDFpnmkJNl5yL0xEUbU/SIl7aRT1nz3Ueyi/vQTwL1iq2MgCGE1w
+         ogJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MpHTh04rYBwjjTZFAAAByBk97DSNs2GInrUq+lnOv2U=;
+        b=lLkOtLi+KpquOhkd+C08ksR7ycC6l90Peev7qAkH+yi3CKesVbPyVzLkKqZCXZUlI7
+         PvyNWW15M2omqjoYGqVke6a4rjTCiZKs+y4WCy460JqUR7GGw4kcxqHxhl2k+0jkO+2J
+         BhJMECXbZBsy3suGVXaR+O620WDlbh9gbH0yB+of4WS1JLrIx4yF0ErKfZP6IappKpMr
+         qHFTMtD5IuCh+6d4xcSAN57D0TqBHzzAxERk9CCKlavjW9KN5nEiijvOSiw1eAzyO2X+
+         7Kyd3cI/sba/ccArXPq7Gt3vsF/uJ2zhm6X6B3a2snbXvyz32pliqkYwIxJ5rCKZKaxh
+         0YBw==
+X-Gm-Message-State: AOAM530golsyNaw3Bvn1HbEHLQYO60vVT63PmLOYzTgKaEBpMjMuO6Vv
+        2iZybLgA5fV+SDbn1J0U6JO7bPhTGLFFW0UCtbt/fg==
+X-Google-Smtp-Source: ABdhPJzrpa0HTbjgN12dKTJWpgn/QhqrktGsVOt/kJaOnP5/chw8A0IQErROmcv1a6QYCmDVybLZjs+HfF+DkncJGUM=
+X-Received: by 2002:ac8:4e52:0:b0:2e1:dad8:5141 with SMTP id
+ e18-20020ac84e52000000b002e1dad85141mr13800277qtw.62.1649375185033; Thu, 07
+ Apr 2022 16:46:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5f16f4ab-57fe-4504-bcd1-08da18f0a0eb
-X-MS-TrafficTypeDiagnostic: BN6PR10MB1233:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB12333B1410A7F4FD1F5ACE1CA4E69@BN6PR10MB1233.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KaHAujG82Ikza3e2q62ePkdWr5N+iiS1/KmJ9mL35MPmk7qq+Ezwgew+xma7Q9jaXa4qMRsGeX+P1jC+u7zvT6BhGKLqThgiB7UktPWx3KYbeKMXxhbKp3DDJtU3WM3oAZy1whGJvuqjGY9aEWDhNRou3HpPlCrJ26Xo3BbtEVkFHUiAraiJYFl5GdxRC7p5jqmAgd5BW8YQ6YW1PcwFZ7Q6jIf1Mt042f7aSFEjAZKExt2KrQUs/flBM8rd/kaeADF2I64jt47K2GhiKLiOoxgxDBt/B725bg40WL2sWzCVYoN+RCrG64ekRvOGxJqcE/u7wHGXTuOiyMaobyTjF7DoS3vAXg07cd+yY8keBhCEuOpkiulkHCkQ/7ibKtrbimhLpA2WXogTHfHH26qdLnL47OTit8UAzHklHmO9ulvOKNTN5eMiaDkDizYCdBjBGvnGlODlm5lYIuZMNrHBaDQkXckkfWMNBS48ZWEgwomDlZOBs5dgrjCBit+gejxmSE8Uo1rDEdgCBbhkp1TyqlYyqUtvrOjssZbuxD8v8Xh4+kjTVXtledy8VE08MaPs/6Cp1aGtwNCDDvr7TwxxDyM6wW5cCq7OOdimnpj7W10AcccrkQgoQWtWMfpbuCgWoNdLPuVHzEnyljP7stkVNYju022zhnxBEQCwPnLsm4kT4AyrrPVsRRUTQVblRxq8Da1Y2Fs1TIzZEoj/oXNaXg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(396003)(366004)(376002)(39830400003)(346002)(136003)(5660300002)(6512007)(52116002)(8676002)(66476007)(26005)(66946007)(6666004)(66556008)(8936002)(2906002)(83380400001)(186003)(44832011)(2616005)(1076003)(7416002)(86362001)(4326008)(54906003)(6506007)(38350700002)(508600001)(38100700002)(6486002)(36756003)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PuAs6Jva14eCUq6h1s5cVlctS90qTDA8kgw9TQ1CNS+AZKNZvoLXhz/WU4wK?=
- =?us-ascii?Q?8qzC0tAhJD0jjQrwP9hfsQJNfCIEJiFRjRZT5YWrgcM0II6l/XW5xB1b2scP?=
- =?us-ascii?Q?w8OYx1hw4haBO8TtWaSFFx560daJlQqBWuvWFVq5L9yXkuiHBCQN25VTDfdi?=
- =?us-ascii?Q?0XVf3BYFRw1RwxK8H93jp2p8jtWw4IOsMarGmPnLLDCPzpoODo5bdLddEq5F?=
- =?us-ascii?Q?wkgf7N59WZg+YHJzSVYvGLxL4uKLL8L9mWhhDE9bT8ioMp4DLaq3glcx3bTl?=
- =?us-ascii?Q?/E94l0ceA1y3wkGfgZ7kcVl6TTAuw1wP66xVC+PnNN1hGzzbGWkTXE0otAYP?=
- =?us-ascii?Q?mPJ07sivrmzHpQx9RjtYPYF8bFIge7BkEife7w3xvDVTe0kpiXqdvA1mefL9?=
- =?us-ascii?Q?umjGBQ9B4JiHqBaQoLPuJhvaioULXjMdogi4AchmPFBTXBCRONwUS4yPxuAJ?=
- =?us-ascii?Q?/wFcYDu8AXe+icx//UCCTvZOZgtru9HIoaI9GZX4bJwy6t4iVr00pzihD15c?=
- =?us-ascii?Q?YNn9GrNTiTUqtprpkoQ95gdj+Hq5V2cLjWr+6Q/4ZOJwcVXPOT6jhCnRgPaH?=
- =?us-ascii?Q?67A7kVoApoaLdrbkjYElV32qmb0PzR/mliu4wHpJb97WV8HgQezfEurLuMWu?=
- =?us-ascii?Q?9Swck9f0hKepuLrNJhfvD/78p5G7zDMORdPVEHwBRP50ubUUfPHfSG4kyCzg?=
- =?us-ascii?Q?POqmmdTnrrslxdqpGBfb9xrIR3UXRN6aLF2yVtg/l58w0rssiGPrczd8qXU+?=
- =?us-ascii?Q?0zV34rMiXzgPkiTIgsdQjQhIBeo1VnWTZLUTKw7CVFfTVpFmg/wuBxwDVB6O?=
- =?us-ascii?Q?fPJm2KYG8PUdSUceoC6Y99n5BWunAe11s+dTZSKZDmho9i8rqbWpfmQDXjiI?=
- =?us-ascii?Q?UBZuMXjTea0lzMjBrLVlSFu54JIhN5DLVCBH7WLAhH7l/QR6LvIcyyGq2/hf?=
- =?us-ascii?Q?NHvou+ymlx7Y/whfRBWDE/SD+oZ8wc/YnvZfTpmAP/wEQNXKnAo+H9ujNHYC?=
- =?us-ascii?Q?431KGd6sso/n2imUdIMx9IsvtaXiicDImX49xP9YiLAhDdsGiedS35kgLsiM?=
- =?us-ascii?Q?8v1Wq4sUlW2FXAFWQT/IXgMT+m5+Y30d5V9NmiR5o4oXRRC4SNESN2zA+Lpx?=
- =?us-ascii?Q?Gur4uepEx6rTAbPEKOOqrAKz+BEkX5MxrgDZAOghrOXTyLLowKlNZiZeBZJr?=
- =?us-ascii?Q?krPQyTjjSt6YBKodGQNzq/l6D7I5HezjheYR0Puf48xX/e8+zIfsgijIoiKj?=
- =?us-ascii?Q?8Jmho+JmYzHT9KHCM+A6lo1IIxvBoyw5Ws8gP1dAxv9W7yTQtP50i5OxofzK?=
- =?us-ascii?Q?AZCv53lEOI8MOaTlyWO9GHm83IXSsw6BehcBsGRdL32RwutTQJkJUWAdsXjq?=
- =?us-ascii?Q?soJZmmLUwbUT3iVb8XeNWlylfA0bykh6iQFPq5eKyyMOAjvLrlK+42RacsY7?=
- =?us-ascii?Q?lAzWr4fuhiYyRQi+6jgQZ6bgUhETLfbAvD6Jh7daHY5w8bQmUDuAouhByZk+?=
- =?us-ascii?Q?w0lz3aBlCIzcARjE4T2q8ZhTT9tb4dOaWnhgysKDPiSRxYBh2sLmQaNJXmuq?=
- =?us-ascii?Q?+QKyK20Z3ALN4a/6aYc2vAR3ZwKQsrn2yqtsW1/ihkPfMuhHsPEueJA5vrMc?=
- =?us-ascii?Q?JdmyctSRsE9lE3mbbVTL/JWE7BJqU8kcqvD4kbC4MJoaePD7s0MslkB/xRef?=
- =?us-ascii?Q?kgFpKyihEvg8egJaZOWNToX3tR9xxFhu6sZ0vw5m0VJlcZg47b3HQEbRQn2B?=
- =?us-ascii?Q?H7BcMjQgrsiNobhBGnMn08xOJ+Bk14gjNGQhTsNSSuVk1GomrxFz?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f16f4ab-57fe-4504-bcd1-08da18f0a0eb
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 23:44:59.9711
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UnT/AgAyx/58PPHUcofTzQBqk326b+RIldAs3OB3vfIlLL8WpsY0lRBGwO9GNYOgvsBJuNkFJ4YW32a4ofTy2ORtBIOJG5Kvo66oCkSLT1M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1233
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
+ <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
+ <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
+ <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com>
+ <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
+ <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
+ <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org> <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
+ <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
+ <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
+ <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com> <CAD=FV=UmU_BVUaL_X75yOEvQPtGUBTR5-jiVWBHq7uSRt6HM4Q@mail.gmail.com>
+ <225d2c0a-42ec-28ad-688c-e7e9e2035ee1@quicinc.com> <CAD=FV=W=WjSACHvRDFBnkLUp-LU2c4XMu3=FTzTx=zexNF5PAw@mail.gmail.com>
+In-Reply-To: <CAD=FV=W=WjSACHvRDFBnkLUp-LU2c4XMu3=FTzTx=zexNF5PAw@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 8 Apr 2022 02:46:13 +0300
+Message-ID: <CAA8EJpqLZ9up4euGEbhf5QyBqm4tJuLcHi7D+0Si7ak9Jej52w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a local device *dev in order to not dereference the platform_device
-several times throughout the probe function.
+On Fri, 8 Apr 2022 at 02:35, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Thu, Apr 7, 2022 at 3:03 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> >
+> > Hi Doug
+> >
+> > Thanks for the response, some comments below.
+> >
+> > Abhinav
+> > On 4/7/2022 1:47 PM, Doug Anderson wrote:
+> > > Hi,
+> > >
+> > > On Thu, Apr 7, 2022 at 1:11 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> > >>
+> > >> Hi Doug and Dmitry
+> > >>
+> > >> Sorry, but I caught up on this email just now.
+> > >>
+> > >> Some comments below.
+> > >>
+> > >> Thanks
+> > >>
+> > >> Abhinav
+> > >> On 4/7/2022 10:07 AM, Doug Anderson wrote:
+> > >>> Hi,
+> > >>>
+> > >>> On Thu, Apr 7, 2022 at 7:19 AM Sankeerth Billakanti (QUIC)
+> > >>> <quic_sbillaka@quicinc.com> wrote:
+> > >>>>
+> > >>>> Hi Dmitry and Doug,
+> > >>>>
+> > >>>>> Hi,
+> > >>>>>
+> > >>>>> On Tue, Apr 5, 2022 at 10:36 AM Dmitry Baryshkov
+> > >>>>> <dmitry.baryshkov@linaro.org> wrote:
+> > >>>>>>
+> > >>>>>> On 05/04/2022 20:02, Doug Anderson wrote:
+> > >>>>>>> Hi,
+> > >>>>>>>
+> > >>>>>>> On Tue, Apr 5, 2022 at 5:54 AM Dmitry Baryshkov
+> > >>>>>>> <dmitry.baryshkov@linaro.org> wrote:
+> > >>>>>>>>> 3. For DP and eDP HPD means something a little different.
+> > >>>>>>>>> Essentially there are two concepts: a) is a display physically
+> > >>>>>>>>> connected and b) is the display powered up and ready. For DP, the
+> > >>>>>>>>> two are really tied together. From the kernel's point of view you
+> > >>>>>>>>> never "power down" a DP display and you can't detect that it's
+> > >>>>>>>>> physically connected until it's ready. Said another way, on you
+> > >>>>>>>>> tie "is a display there" to the HPD line and the moment a display
+> > >>>>>>>>> is there it's ready for you to do AUX transfers. For eDP, in the
+> > >>>>>>>>> lowest power state of a display it _won't_ assert its "HPD"
+> > >>>>>>>>> signal. However, it's still physically present. For eDP you simply
+> > >>>>>>>>> have to _assume_ it's present without any actual proof since you
+> > >>>>>>>>> can't get proof until you power it up. Thus for eDP, you report
+> > >>>>>>>>> that the display is there as soon as we're asked. We can't _talk_
+> > >>>>>>>>> to the display yet, though. So in get_modes() we need to be able
+> > >>>>>>>>> to power the display on enough to talk over the AUX channel to it.
+> > >>>>>>>>> As part of this, we wait for the signal named "HPD" which really means
+> > >>>>> "panel finished powering on" in this context.
+> > >>>>>>>>>
+> > >>>>>>>>> NOTE: for aux transfer, we don't have the _display_ pipe and
+> > >>>>>>>>> clocks running. We only have enough stuff running to do the AUX
+> > >>>>> transfer.
+> > >>>>>>>>> We're not clocking out pixels. We haven't fully powered on the
+> > >>>>>>>>> display. The AUX transfer is designed to be something that can be
+> > >>>>>>>>> done early _before_ you turn on the display.
+> > >>>>>>>>>
+> > >>>>>>>>>
+> > >>>>>>>>> OK, so basically that was a longwinded way of saying: yes, we
+> > >>>>>>>>> could avoid the AUX transfer in probe, but we can't wait all the
+> > >>>>>>>>> way to enable. We have to be able to transfer in get_modes(). If
+> > >>>>>>>>> you think that's helpful I think it'd be a pretty easy patch to
+> > >>>>>>>>> write even if it would look a tad bit awkward IMO. Let me know if
+> > >>>>>>>>> you want me to post it up.
+> > >>>>>>>>
+> > >>>>>>>> I think it would be a good idea. At least it will allow us to
+> > >>>>>>>> judge, which is the more correct way.
+> > >>>>>>>
+> > >>>>>>> I'm still happy to prototype this, but the more I think about it the
+> > >>>>>>> more it feels like a workaround for the Qualcomm driver. The eDP
+> > >>>>>>> panel driver is actually given a pointer to the AUX bus at probe
+> > >>>>>>> time. It's really weird to say that we can't do a transfer on it
+> > >>>>>>> yet... As you said, this is a little sideband bus. It should be able
+> > >>>>>>> to be used without all the full blown infra of the rest of the driver.
+> > >>>>>>
+> > >>>>>> Yes, I have that feeling too. However I also have a feeling that just
+> > >>>>>> powering up the PHY before the bus probe is ... a hack. There are no
+> > >>>>>> obvious stopgaps for the driver not to power it down later.
+> > >>>>>
+> > >>
+> > >> Lets go back to why we need to power up the PHY before the bus probe.
+> > >>
+> > >> We need to power up PHY before bus probe because panel-eDP tries to read
+> > >> the EDID in probe() for the panel_id. Not get_modes().
+> > >>
+> > >> So doug, I didnt follow your comment that panel-eDP only does EDID read
+> > >> in get_modes()
+> > >>
+> > >>          panel_id = drm_edid_get_panel_id(panel->ddc);
+> > >>          if (!panel_id) {
+> > >>                  dev_err(dev, "Couldn't identify panel via EDID\n");
+> > >>                  ret = -EIO;
+> > >>                  goto exit;
+> > >>          }
+> > >>
+> > >> If we do not need this part, we really dont need to power up the PHY
+> > >> before the probe(). The hack which dmitry was referring to.
+> > >
+> > > Right. ...so we _could_ remove the above from the panel-edp probe and
+> > > defer it to get_modes() and it wouldn't be that hard. ...but:
+> > >
+> > > 1. It feels like a hack to work around the Qualcomm driver. The way
+> > > the AUX bus is designed is that a pointer to the AUX bus is passed to
+> > > the panel-edp probe. It seems kinda strange to say that the panel
+> > > isn't allowed to do transfers with the pointer that's passed in.
+> > >
+> >
+> > And thats why to satisfy the requirements of passing an initialized AUX,
+> > sankeerth is delaying devm_of_dp_aux_populate_ep_devices() till PHY is
+> > initialized which seems reasonable to satisfy the probe() time requirements.
+> >
+> > Even if we move to pm_runtime(), yes I agree it will club all the
+> > resources needed to control AUX in one place but you will still have to
+> > initialize PHY before probe() under the hood of pm_runtime().
+> >
+> > So how will it help this cause?
+> >
+> > We just have to accept that initializing PHY is a requirement to use AUX
+> > and before calling panel-eDP's probe(), we have to have an initialized AUX.
+> >
+> > So we are not working around the driver but just satisfying the hardware
+> > requirements to be able to satisfy panel-edp's and
+> > drm_panel_dp_aux_backlight()'s aux bus requirements.
+>
+> The way I'm arguing it should work is that:
+>
+> 1. A whole bunch of the DP init code should move to the DP driver's
+> probe function. This includes parsing the DT, acquiring clocks,
+> getting a handle to our PHY, and IO mapping registers. As far as I
+> know, there's no reason to wait on all the components being probed in
+> order to do this stuff.
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
- drivers/net/mdio/mdio-mscc-miim.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+Yes. And that's one of the reasons I tried to stay away from the DP
+driver. Each time I open the source code, my hands itch to start
+refactoring the code.
 
-diff --git a/drivers/net/mdio/mdio-mscc-miim.c b/drivers/net/mdio/mdio-mscc-miim.c
-index c3d1a7eaec41..8bfa81123e30 100644
---- a/drivers/net/mdio/mdio-mscc-miim.c
-+++ b/drivers/net/mdio/mdio-mscc-miim.c
-@@ -266,6 +266,7 @@ static int mscc_miim_probe(struct platform_device *pdev)
- {
- 	struct regmap *mii_regmap, *phy_regmap = NULL;
- 	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
- 	void __iomem *regs, *phy_regs;
- 	struct mscc_miim_dev *miim;
- 	struct resource *res;
-@@ -274,57 +275,55 @@ static int mscc_miim_probe(struct platform_device *pdev)
- 
- 	regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(regs)) {
--		dev_err(&pdev->dev, "Unable to map MIIM registers\n");
-+		dev_err(dev, "Unable to map MIIM registers\n");
- 		return PTR_ERR(regs);
- 	}
- 
--	mii_regmap = devm_regmap_init_mmio(&pdev->dev, regs,
--					   &mscc_miim_regmap_config);
-+	mii_regmap = devm_regmap_init_mmio(dev, regs, &mscc_miim_regmap_config);
- 
- 	if (IS_ERR(mii_regmap)) {
--		dev_err(&pdev->dev, "Unable to create MIIM regmap\n");
-+		dev_err(dev, "Unable to create MIIM regmap\n");
- 		return PTR_ERR(mii_regmap);
- 	}
- 
- 	/* This resource is optional */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
- 	if (res) {
--		phy_regs = devm_ioremap_resource(&pdev->dev, res);
-+		phy_regs = devm_ioremap_resource(dev, res);
- 		if (IS_ERR(phy_regs)) {
--			dev_err(&pdev->dev, "Unable to map internal phy registers\n");
-+			dev_err(dev, "Unable to map internal phy registers\n");
- 			return PTR_ERR(phy_regs);
- 		}
- 
--		phy_regmap = devm_regmap_init_mmio(&pdev->dev, phy_regs,
-+		phy_regmap = devm_regmap_init_mmio(dev, phy_regs,
- 						   &mscc_miim_phy_regmap_config);
- 		if (IS_ERR(phy_regmap)) {
--			dev_err(&pdev->dev, "Unable to create phy register regmap\n");
-+			dev_err(dev, "Unable to create phy register regmap\n");
- 			return PTR_ERR(phy_regmap);
- 		}
- 	}
- 
--	ret = mscc_miim_setup(&pdev->dev, &bus, "mscc_miim", mii_regmap, 0);
-+	ret = mscc_miim_setup(dev, &bus, "mscc_miim", mii_regmap, 0);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "Unable to setup the MDIO bus\n");
-+		dev_err(dev, "Unable to setup the MDIO bus\n");
- 		return ret;
- 	}
- 
- 	miim = bus->priv;
- 	miim->phy_regs = phy_regmap;
- 
--	miim->info = device_get_match_data(&pdev->dev);
-+	miim->info = device_get_match_data(dev);
- 	if (!miim->info)
- 		return -EINVAL;
- 
--	miim->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	miim->clk = devm_clk_get_optional(dev, NULL);
- 	if (IS_ERR(miim->clk))
- 		return PTR_ERR(miim->clk);
- 
- 	of_property_read_u32(np, "clock-frequency", &miim->bus_freq);
- 
- 	if (miim->bus_freq && !miim->clk) {
--		dev_err(&pdev->dev,
--			"cannot use clock-frequency without a clock\n");
-+		dev_err(dev, "cannot use clock-frequency without a clock\n");
- 		return -EINVAL;
- 	}
- 
-@@ -338,7 +337,7 @@ static int mscc_miim_probe(struct platform_device *pdev)
- 
- 	ret = of_mdiobus_register(bus, np);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "Cannot register MDIO bus (%d)\n", ret);
-+		dev_err(dev, "Cannot register MDIO bus (%d)\n", ret);
- 		goto out_disable_clk;
- 	}
- 
+>
+> 2. Once we have done the above things, it should be possible to do AUX
+> transfers, correct? ...and then we can populate the AUX bus from the
+> probe function too.
+
+No. In the DP case the AUX bus is inaccessible until the dongle is
+plugged (see all the HPD handling, phy_init()/phy_power_on() is hidden
+somewhere in that path)
+
+eDP needs to be a special case in the probe() function.
+
+>
+> 3. Any other init (setting up pixel clocks) can continue to happen
+> where it is today.
+
+Yes.
+
+>
+>
+> > > 2. There's a second place where we might do an AUX transfer at probe
+> > > time which is when we're using the DP AUX backlight. There we call
+> > > drm_panel_dp_aux_backlight(). Conceivably this too could be deferred
+> > > until the get_modes(), but now it feels even more like a hack. We're
+> > > going to be registering the backlight in the first call to
+> > > get_modes()? That's, ummm, unexpected. We could look at perhaps
+> > > breaking the "DP AUX backlight" in two parts also, but that gets
+> > > involved. I think we're supposed to know the number of backlight
+> > > levels at device init time for backlight devices and we need an AUX
+> > > transfer to that.
+> > >
+> >
+> >
+> > >
+> > > So the answer is that we could probably make it work, but it seems
+> > > like an uglier solution than just making the Qualcomm driver able to
+> > > do AUX transfers when it should be able to.
+> >
+> > Correct and by delaying the panel-edp's probe(), we are doing exactly that?
+>
+> Right. Where you put the probe now makes it work OK from an AUX
+> transfer point of view and it's probably OK for the short term, but
+> I'm not 100% convinced it would handle the -EPROBE_DEFER case, though
+> I haven't actually tested it.
+>
+> Imagine this case:
+>
+> 1. 100% of your code is built-in to the kernel except for your PWM
+> driver, which is a module.
+>
+> 2. You start booting up. All the DRM components for MSM are finished
+> and eventually modeset_init() gets called.
+>
+> 3. We try to probe the panel. When the panel tries to acquire the PWM
+> backlight, it finds that the PWM driver hasn't been loaded yet. It
+> gets back -EPROBE_DEFER which prevents the panel driver from probing.
+>
+> The question is: does modeset_init() handle that -EPROBE_DEFER
+> elegantly? Normally that's something that would only be returned by
+> probe functions. Maybe this is all handled, though? I definitely
+> haven't followed enough of the code and haven't tested it myself.
+
+It would be handled up to some point. The error would propagate to the
+msm_drm_init() = msm_drm_bind(), failing the mdss probe() (and putting
+it to the defer list).
+However in the dp's error path the driver would destroy the EP device.
+The kernel would notice this and retry devices from the defer list. We
+have just sorted this out for the DSI (thank you Maxime, Rob and
+Angelo for doing this).
+
+>
+> The above is probably not a giant deal, but I think long term it would
+> be better to be acquiring resources earlier.
+
+
 -- 
-2.25.1
-
+With best wishes
+Dmitry

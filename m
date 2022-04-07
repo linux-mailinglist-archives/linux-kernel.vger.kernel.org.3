@@ -2,129 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62494F76CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC68D4F76D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiDGHJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S240330AbiDGHKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237431AbiDGHJs (ORCPT
+        with ESMTP id S240393AbiDGHKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:09:48 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB0112AEA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:07:49 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bg10so8907475ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Jghw2OkvXVrUbJnBfiyQHEku1OBPfvahy/rHA2CJnXo=;
-        b=beTc5UmQxUa0QhUYEOTj6ZiwqlMhoA6vkgWaiSqAgHkvaPdGZyhPa3GM6mgoyP0veL
-         dSvylu67XwSxmgHdHtvv+qHNgOM+9tEoM0uhCAb6PS7yPpbKdSxoJRWynyKV50rykOAZ
-         IJnOnNuZ1/rOakrcZliMhIzNM2Jx2huBGUJLal1rdOYR+7ezZKAWFXwq7WrBSwzy1JHd
-         YGKUY3ucVseaBYnOOjvjJUYVbm/wlKoGpZLdUOBHrXScQVfjAfidZvM2Xa7LuvMBCwbk
-         ENQfU54CODmx7rq5FgDanrd6TxVyKjFPZHI40jtbnfSrv1kgSbUeYZNrKWcdLP07/S4n
-         dGUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jghw2OkvXVrUbJnBfiyQHEku1OBPfvahy/rHA2CJnXo=;
-        b=E/8TJDfeeHEMvUPZXbJyMSufA0wv7ZVCfzKa4tJSwb9EGMVf5rxDHNgucJnG0QalVH
-         SevUErovIT47Chmp5CvjbciwBHxitTxaqO8MtWmRRqFBn/QpWX+kcEaoOAhoyKOGD2QF
-         W6k8CDy7YtZRbE4cTi9Bht50wb3Sr+I2ZbU3XlrjZc5lGN0S9bcpSiEPySb4mG0Ueja1
-         Dt/BwoIiRRaM9DDUCyNgYfHoLZLgK0kFXkkbvS+/01h1lg1dMW0dGMZSOar+D9uRqVJb
-         +QfhPM6NH/oKoTtsGjX+h04IWAv/uvvnL1FQmqlbW7v/IRFiQcAxq0ELwXN1su1pWigy
-         aRDw==
-X-Gm-Message-State: AOAM530MXTLfOy10K4/0LgwBAyfe40SGVqE5QiQckmIOHNtMNqUtkkj2
-        VALYVq2ptIGLJhJ7qCM0Qhfpbg==
-X-Google-Smtp-Source: ABdhPJyftBnN/glesDxR41fcaJIB30rH7Lgr8q5QGLP0KBuJcKdwSTpIKpmTuG8T90UOeauLD5Wvug==
-X-Received: by 2002:a17:907:3fa6:b0:6e0:dac6:79d8 with SMTP id hr38-20020a1709073fa600b006e0dac679d8mr11736041ejc.86.1649315267817;
-        Thu, 07 Apr 2022 00:07:47 -0700 (PDT)
-Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1709060e8300b006d0e8ada804sm7312529ejf.127.2022.04.07.00.07.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 00:07:47 -0700 (PDT)
-Message-ID: <e39d4d71-6ef3-b2b4-3697-1babbadab2ab@linaro.org>
-Date:   Thu, 7 Apr 2022 09:07:45 +0200
+        Thu, 7 Apr 2022 03:10:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCE321836;
+        Thu,  7 Apr 2022 00:08:09 -0700 (PDT)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KYss60v2WzdZhQ;
+        Thu,  7 Apr 2022 15:07:38 +0800 (CST)
+Received: from linux-suse12sp5.huawei.com (10.67.133.175) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Apr 2022 15:08:05 +0800
+From:   Yan Zhu <zhuyan34@huawei.com>
+To:     <mcgrof@kernel.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <keescook@chromium.org>, <kpsingh@kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liucheng32@huawei.com>, <netdev@vger.kernel.org>,
+        <nixiaoming@huawei.com>, <songliubraving@fb.com>,
+        <xiechengliang1@huawei.com>, <yhs@fb.com>, <yzaikin@google.com>,
+        <zengweilin@huawei.com>, <zhuyan34@huawei.com>,
+        <leeyou.li@huawei.com>, <laiyuanyuan.lai@huawei.com>
+Subject: [PATCH v4 sysctl-next] bpf: move bpf sysctls from kernel/sysctl.c to bpf module
+Date:   Thu, 7 Apr 2022 15:07:59 +0800
+Message-ID: <20220407070759.29506-1-zhuyan34@huawei.com>
+X-Mailer: git-send-email 2.12.3
+In-Reply-To: <Yk4XE/hKGOQs5oq0@bombadil.infradead.org>
+References: <Yk4XE/hKGOQs5oq0@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/12] ARM: ARMv5 multiplatform conversions
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Hubert Feurstein <hubert.feurstein@contec.at>,
-        Lukasz Majewski <lukma@denx.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
-References: <20220405091750.3076973-1-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220405091750.3076973-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.133.175]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500017.china.huawei.com (7.221.188.110)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 11:17, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> I revisited some patches from a few years back, to see what
-> is needed forsome of the remaining platforms to become part of
-> CONFIG_ARCH_MULTIPLATFORM.
-> 
-> A few things happened since I last looked at this, which helps to make
-> this easier:
-> 
->  - The ixp4xx platform saw a large scale cleanup
-> 
->  - The ep93xx platform lost support for MaverickCrunch FPUs and
->    gained support for the common clock subsystem
-> 
->  - The OMAP1 platform has a proposed patch for the common
->    clock subsystem.
-> 
->  - The generic IRQ entry code is now used everywhere, including
->    on IOP32x.
-> 
->  - The s3c24xx platform is scheduled for removal next year
+We're moving sysctls out of kernel/sysctl.c as its a mess. We
+already moved all filesystem sysctls out. And with time the goal is
+to move all sysctls out to their own subsystem/actual user.
 
-Discussion [1] actually did not end with conclusion, but through all the
-time there were no other votes for the platform to stay.
+kernel/sysctl.c has grown to an insane mess and its easy to run
+into conflicts with it. The effort to move them out is part of this.
 
-I will resend my above [1] patch to mention the coming removal.
+Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
 
-[1]
-https://lore.kernel.org/linux-samsung-soc/CAK8P3a2Pg8CkXgN8YNhp2U5Kgwf08kQGpLeTsyWKgNpGChC4uQ@mail.gmail.com/
+---
+v1->v2:
+  1.Added patch branch identifier sysctl-next.
+  2.Re-describe the reason for the patch submission.
 
+v2->v3:
+  Re-describe the reason for the patch submission.
 
-Best regards,
-Krzysztof
+v3->v4:
+  1.Remove '#include <linux/bpf.h>' in kernel/sysctl.c
+  2.re-adaptive the patch
+---
+ kernel/bpf/syscall.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ kernel/sysctl.c      | 79 -----------------------------------------------
+ 2 files changed, 87 insertions(+), 79 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cdaa1152436a..e9621cfa09f2 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4908,3 +4908,90 @@ const struct bpf_verifier_ops bpf_syscall_verifier_ops = {
+ const struct bpf_prog_ops bpf_syscall_prog_ops = {
+ 	.test_run = bpf_prog_test_run_syscall,
+ };
++
++#ifdef CONFIG_SYSCTL
++static int bpf_stats_handler(struct ctl_table *table, int write,
++			     void *buffer, size_t *lenp, loff_t *ppos)
++{
++	struct static_key *key = (struct static_key *)table->data;
++	static int saved_val;
++	int val, ret;
++	struct ctl_table tmp = {
++		.data   = &val,
++		.maxlen = sizeof(val),
++		.mode   = table->mode,
++		.extra1 = SYSCTL_ZERO,
++		.extra2 = SYSCTL_ONE,
++	};
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	mutex_lock(&bpf_stats_enabled_mutex);
++	val = saved_val;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret && val != saved_val) {
++		if (val)
++			static_key_slow_inc(key);
++		else
++			static_key_slow_dec(key);
++		saved_val = val;
++	}
++	mutex_unlock(&bpf_stats_enabled_mutex);
++	return ret;
++}
++
++void __weak unpriv_ebpf_notify(int new_state)
++{
++}
++
++static int bpf_unpriv_handler(struct ctl_table *table, int write,
++			      void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, unpriv_enable = *(int *)table->data;
++	bool locked_state = unpriv_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &unpriv_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && unpriv_enable != 1)
++			return -EPERM;
++		*(int *)table->data = unpriv_enable;
++	}
++
++	unpriv_ebpf_notify(unpriv_enable);
++
++	return ret;
++}
++
++static struct ctl_table bpf_syscall_table[] = {
++	{
++		.procname	= "unprivileged_bpf_disabled",
++		.data		= &sysctl_unprivileged_bpf_disabled,
++		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
++		.mode		= 0644,
++		.proc_handler	= bpf_unpriv_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_TWO,
++	},
++	{
++		.procname	= "bpf_stats_enabled",
++		.data		= &bpf_stats_enabled_key.key,
++		.maxlen		= sizeof(bpf_stats_enabled_key),
++		.mode		= 0644,
++		.proc_handler	= bpf_stats_handler,
++	},
++	{ }
++};
++
++static int __init bpf_syscall_sysctl_init(void)
++{
++	register_sysctl_init("kernel", bpf_syscall_table);
++	return 0;
++}
++late_initcall(bpf_syscall_sysctl_init);
++#endif /* CONFIG_SYSCTL */
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 21172d3dad6e..c0fdf465a93d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -62,7 +62,6 @@
+ #include <linux/binfmts.h>
+ #include <linux/sched/sysctl.h>
+ #include <linux/kexec.h>
+-#include <linux/bpf.h>
+ #include <linux/mount.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/latencytop.h>
+@@ -139,66 +138,6 @@ static const int max_extfrag_threshold = 1000;
+ 
+ #endif /* CONFIG_SYSCTL */
+ 
+-#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_SYSCTL)
+-static int bpf_stats_handler(struct ctl_table *table, int write,
+-			     void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	struct static_key *key = (struct static_key *)table->data;
+-	static int saved_val;
+-	int val, ret;
+-	struct ctl_table tmp = {
+-		.data   = &val,
+-		.maxlen = sizeof(val),
+-		.mode   = table->mode,
+-		.extra1 = SYSCTL_ZERO,
+-		.extra2 = SYSCTL_ONE,
+-	};
+-
+-	if (write && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+-	mutex_lock(&bpf_stats_enabled_mutex);
+-	val = saved_val;
+-	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+-	if (write && !ret && val != saved_val) {
+-		if (val)
+-			static_key_slow_inc(key);
+-		else
+-			static_key_slow_dec(key);
+-		saved_val = val;
+-	}
+-	mutex_unlock(&bpf_stats_enabled_mutex);
+-	return ret;
+-}
+-
+-void __weak unpriv_ebpf_notify(int new_state)
+-{
+-}
+-
+-static int bpf_unpriv_handler(struct ctl_table *table, int write,
+-			      void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret, unpriv_enable = *(int *)table->data;
+-	bool locked_state = unpriv_enable == 1;
+-	struct ctl_table tmp = *table;
+-
+-	if (write && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+-	tmp.data = &unpriv_enable;
+-	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+-	if (write && !ret) {
+-		if (locked_state && unpriv_enable != 1)
+-			return -EPERM;
+-		*(int *)table->data = unpriv_enable;
+-	}
+-
+-	unpriv_ebpf_notify(unpriv_enable);
+-
+-	return ret;
+-}
+-#endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
+-
+ /*
+  * /proc/sys support
+  */
+@@ -2112,24 +2051,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+ #endif
+-#ifdef CONFIG_BPF_SYSCALL
+-	{
+-		.procname	= "unprivileged_bpf_disabled",
+-		.data		= &sysctl_unprivileged_bpf_disabled,
+-		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
+-		.mode		= 0644,
+-		.proc_handler	= bpf_unpriv_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_TWO,
+-	},
+-	{
+-		.procname	= "bpf_stats_enabled",
+-		.data		= &bpf_stats_enabled_key.key,
+-		.maxlen		= sizeof(bpf_stats_enabled_key),
+-		.mode		= 0644,
+-		.proc_handler	= bpf_stats_handler,
+-	},
+-#endif
+ #if defined(CONFIG_TREE_RCU)
+ 	{
+ 		.procname	= "panic_on_rcu_stall",
+-- 
+2.12.3
+

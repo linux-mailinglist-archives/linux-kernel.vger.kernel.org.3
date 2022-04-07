@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08994F765C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCF14F7667
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241400AbiDGGkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S241444AbiDGGk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241375AbiDGGkL (ORCPT
+        with ESMTP id S241425AbiDGGkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:40:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFA07487F;
-        Wed,  6 Apr 2022 23:38:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D87C8B826C8;
-        Thu,  7 Apr 2022 06:38:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C414C385A4;
-        Thu,  7 Apr 2022 06:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649313488;
-        bh=Gux6lWZnh1FCuzmez/42YXdKcrwefRFpEz+LdkFz5x4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aiyIuSfpcG1qz6EGNC86MrI3RdvIauFp9sq1Oqv7W+J6KKvsLjM6HG/PRX/xGG01g
-         7g7fm0z6o/qfCGrKUeRbTZn6zoeK7yZdqSSus0pMCD+e3l/uT+JXhBVhAkfro/AAmO
-         YPtdbfnazds93BKkX57L7BCql1I4ds/n231CFFjKXNLpNr9iG4npZaQSrpTgQawtM/
-         yC3U+px6Ua/tNEuGE/3z1x4b+tMEp7RIzGJjsU/PRmVQBtROFinwCNYYCDzkWhGoSK
-         LVet4cYqS5CEtpVnvmCfA5/3AoFImoPOHeoi/GowBuWWRK3hBFad7qgjVwPT1XDDCw
-         qRWovNhiPVi/Q==
-Received: by mail-vs1-f54.google.com with SMTP id i186so2711793vsc.9;
-        Wed, 06 Apr 2022 23:38:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531W20gciLl3dFssKC9peA0ruBujGNzJd4Q1zd+15cjieZZOLv+b
-        89b6kQ8zWl8FN3URu5vFI2oJPX+IUbIbPVCa0a0=
-X-Google-Smtp-Source: ABdhPJylGTAuJqUgFINt36UMdY4cxe8//+64nyYwPKu/po3UjzHUT7TwO3ZZR2flKLlmn1dbTBE+65LpjyZAsdhtZdU=
-X-Received: by 2002:a05:6102:dd1:b0:325:80a9:b5d7 with SMTP id
- e17-20020a0561020dd100b0032580a9b5d7mr3705620vst.51.1649313487469; Wed, 06
- Apr 2022 23:38:07 -0700 (PDT)
+        Thu, 7 Apr 2022 02:40:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EC06BB92E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649313524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jTfYg7LEaBj5/S/22hrPYrBqzaTarRrfht4+k3OtluQ=;
+        b=O62Qcxg3MkTBlxVHZxzQV9M2tNn9gXx1/SjmR3w8bS9Ev3fGDiq3Rv9cwZIYomru0KdY0L
+        /sfEAwMwQt7JSWLWTabKJEBAiO9aD/33NcOXGQcq3zHDCGZxlKmbJmiex7bVNF+Cj7E0yS
+        ab6UFI/DT59qDoZR42/SEZI0nXcS3m8=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-p860NfOnNXiJXfEbslDNAQ-1; Thu, 07 Apr 2022 02:38:40 -0400
+X-MC-Unique: p860NfOnNXiJXfEbslDNAQ-1
+Received: by mail-pg1-f197.google.com with SMTP id h9-20020a631209000000b0039cc31b22aeso984115pgl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:38:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jTfYg7LEaBj5/S/22hrPYrBqzaTarRrfht4+k3OtluQ=;
+        b=toqg/ATF0Hw78KGvH6wNVMnfinKBU4FD7Syuvf+HL4fuVBPqKVIoe3IGlETgaQYYvK
+         EBYrLDqpWswljwqk6mySVnY5lY0+Ata+MXmPJxNMx3xvMAKY69Z/PzVC/pJmSZ50zomh
+         9sN/XqK6iywhUNL+Hj+hDPnFLVJbQqmr9HV0excWEQ4Xxp+K9VC3cPZVVMCMGi/pJYg4
+         MqXesSFXKCFE68A+73e/ItJv2ZN412FeuR+I88suSTGyrJo8tIIXDDixLYlKzsB45TQm
+         pgfw2CL9xjSmZlLGcJV5qX+JB5YSDYGm0lP0J2h3bXD7+l1Drc4HKcWw+PMYi1kUgUGY
+         T50Q==
+X-Gm-Message-State: AOAM531mnMqS4RKExQoSC2UFHFnhD5kav4nFlU2n7Lc+mnBdu+peXo/d
+        IwACW4onmMRujeqt/I98NjsOdLnp593qN+XqRxAzJWTVLTL3pOQsmWB/6j4PvgbPxdc2RV0X3/U
+        De5r6Y70OCBT4B1RDh12Se0Z8
+X-Received: by 2002:a63:9711:0:b0:398:5cf2:20bc with SMTP id n17-20020a639711000000b003985cf220bcmr10087297pge.480.1649313519911;
+        Wed, 06 Apr 2022 23:38:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyybYdCM1oR5OU+iW4g0AIFWnE/HZaYWWpa91mlmNGr0JeNBLBQ2wKoCRb9OSR1VOXXK+2DZQ==
+X-Received: by 2002:a63:9711:0:b0:398:5cf2:20bc with SMTP id n17-20020a639711000000b003985cf220bcmr10087277pge.480.1649313519510;
+        Wed, 06 Apr 2022 23:38:39 -0700 (PDT)
+Received: from [10.72.13.105] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id p34-20020a056a000a2200b004cd49fc15e5sm22753099pfh.59.2022.04.06.23.38.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 23:38:39 -0700 (PDT)
+Message-ID: <7e99abbf-f68d-4aa5-71b6-9d1d71b2d25b@redhat.com>
+Date:   Thu, 7 Apr 2022 14:38:34 +0800
 MIME-Version: 1.0
-References: <20220406142819.730238-1-guoren@kernel.org> <CAMo8BfK6uo5fPCbo8Wp3oRYOUXoz0jv_zJMHuVHhFgh3DSSqNQ@mail.gmail.com>
-In-Reply-To: <CAMo8BfK6uo5fPCbo8Wp3oRYOUXoz0jv_zJMHuVHhFgh3DSSqNQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 7 Apr 2022 14:37:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ5zPrEtaxowmQOj5gBMtinB1NbuVUG9qvuDfB9vNvG5A@mail.gmail.com>
-Message-ID: <CAJF2gTQ5zPrEtaxowmQOj5gBMtinB1NbuVUG9qvuDfB9vNvG5A@mail.gmail.com>
-Subject: Re: [PATCH V3] xtensa: patch_text: Fixup last cpu should be master
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chris Zankel <chris@zankel.net>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH V2 4/5] virtio-pci: implement synchronize_vqs()
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, peterz@infradead.org,
+        maz@kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, tglx@linutronix.de,
+        Halil Pasic <pasic@linux.ibm.com>
+References: <20220406083538.16274-1-jasowang@redhat.com>
+ <20220406083538.16274-5-jasowang@redhat.com>
+ <20220406075952-mutt-send-email-mst@kernel.org> <87wng2e527.fsf@redhat.com>
+ <20220406112858-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220406112858-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 11:35 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
+
+在 2022/4/6 下午11:31, Michael S. Tsirkin 写道:
+> On Wed, Apr 06, 2022 at 03:04:32PM +0200, Cornelia Huck wrote:
+>> On Wed, Apr 06 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+>>
+>>> On Wed, Apr 06, 2022 at 04:35:37PM +0800, Jason Wang wrote:
+>>>> This patch implements PCI version of synchronize_vqs().
+>>>>
+>>>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>>>> Cc: Peter Zijlstra <peterz@infradead.org>
+>>>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>>>> Cc: Marc Zyngier <maz@kernel.org>
+>>>> Signed-off-by: Jason Wang <jasowang@redhat.com>
+>>> Please add implementations at least for ccw and mmio.
+>> I'm not sure what (if anything) can/should be done for ccw...
+>>
+>>>> ---
+>>>>   drivers/virtio/virtio_pci_common.c | 14 ++++++++++++++
+>>>>   drivers/virtio/virtio_pci_common.h |  2 ++
+>>>>   drivers/virtio/virtio_pci_legacy.c |  1 +
+>>>>   drivers/virtio/virtio_pci_modern.c |  2 ++
+>>>>   4 files changed, 19 insertions(+)
+>>>>
+>>>> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+>>>> index d724f676608b..b78c8bc93a97 100644
+>>>> --- a/drivers/virtio/virtio_pci_common.c
+>>>> +++ b/drivers/virtio/virtio_pci_common.c
+>>>> @@ -37,6 +37,20 @@ void vp_synchronize_vectors(struct virtio_device *vdev)
+>>>>   		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+>>>>   }
+>>>>   
+>>>> +void vp_synchronize_vqs(struct virtio_device *vdev)
+>>>> +{
+>>>> +	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+>>>> +	int i;
+>>>> +
+>>>> +	if (vp_dev->intx_enabled) {
+>>>> +		synchronize_irq(vp_dev->pci_dev->irq);
+>>>> +		return;
+>>>> +	}
+>>>> +
+>>>> +	for (i = 0; i < vp_dev->msix_vectors; ++i)
+>>>> +		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+>>>> +}
+>>>> +
+>> ...given that this seems to synchronize threaded interrupt handlers?
+> No, any handlers at all. The point is to make sure any memory changes
+> made prior to this op are visible to callbacks.
 >
-> On Wed, Apr 6, 2022 at 7:28 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > These patch_text implementations are using stop_machine_cpuslocked
-> > infrastructure with atomic cpu_count. The original idea: When the
-> > master CPU patch_text, the others should wait for it. But current
-> > implementation is using the first CPU as master, which couldn't
-> > guarantee the remaining CPUs are waiting. This patch changes the
-> > last CPU as the master to solve the potential risk.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-> > Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: <stable@vger.kernel.org>
-> > ---
-> >  arch/xtensa/kernel/jump_label.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Thanks. Applied to my xtensa tree.
-I've missed the "Fixes:" for stable@vger.kernel.org, so I would update
-v3 to fix it.
+> Jason, maybe add that to the documentation?
+
+
+Sure.
+
 
 >
-> -- Max
+>> Halil, do you think ccw needs to do anything? (AFAICS, we only have one
+>> 'irq' for channel devices anyway, and the handler just calls the
+>> relevant callbacks directly.)
+> Then you need to synchronize with that.
 
 
+Have a quick glance at the codes, it looks to me we can synchronize with 
+the IO_INTERRUPT. (Assuming all callbacks are triggered via 
+ccw_device_irq()).
 
--- 
-Best Regards
- Guo Ren
+Thanks
 
-ML: https://lore.kernel.org/linux-csky/
+
+>
+>>>>   /* the notify function used when creating a virt queue */
+>>>>   bool vp_notify(struct virtqueue *vq)
+>>>>   {
+

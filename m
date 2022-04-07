@@ -2,151 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C184F8B22
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397404F8B36
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiDGXyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S232641AbiDGXyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbiDGXyE (ORCPT
+        with ESMTP id S232661AbiDGXyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:54:04 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C76B1E6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:52:02 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id w67so1441589vkw.6
+        Thu, 7 Apr 2022 19:54:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4B11FD01
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649375523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aT+8Onnd/n07pHnEWWUWTn2vpI0YJYxs4oYEJhHP/Ac=;
+        b=dRCRbhu+dcRnepMPrmuMdxab3uSz9CXNZd7t5a693bR6WE2UKMSrjUGcKUd6MPEJhVu1Sp
+        22ShgPC6Ymbyf9PAWVMQR0Nub513Q/ZPobi8nQBGTUnWW8g2pgqPgFIwAN71vX3aRwz7fM
+        uAs0zDg6CT7qW+lVm29Hxg5jRVXZdPA=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-7_EgAzKEO4-NzBxeSQZF4A-1; Thu, 07 Apr 2022 19:52:02 -0400
+X-MC-Unique: 7_EgAzKEO4-NzBxeSQZF4A-1
+Received: by mail-pj1-f72.google.com with SMTP id mw8-20020a17090b4d0800b001c717bb058eso6681461pjb.0
         for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V2o8XyYQ0xmNcxKBL4HU7d9kJ83bRGbyiA4C3lqn/Jg=;
-        b=pHa9t1vY4G3g2veZzfNaljZ/ODjXhV2qKJlnku7tStXx/0bNUioBEP3vV3f0BDiuK6
-         hH94GBax6Xp/sQJXPDobV4hjMyHFpCJOJaggMaEnDIAAW4ogVzp/3xpwWmhnl/FmXBHo
-         f9FIDTu1gAk8+OOMPOS4KCSGJkzTxlwjzsTeW2yWq86SPpiyjw0UvzuGv2S6NxLXZIKJ
-         +/Oe9syDdzEZuz/BrOKZT0KJEH6QF4YyK93gFRcaGmj715NClbnKJHCwJOqcw4s5H8SC
-         VNHBGY74iMRpwF+Afqjt3G9ynR6r7jacBDvoE93qsSq7iW+qGFGJVpn6Sshd0TVf8skQ
-         QRIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V2o8XyYQ0xmNcxKBL4HU7d9kJ83bRGbyiA4C3lqn/Jg=;
-        b=eoWmiB9fnVKZty4RFc0/bQtZmUVvtlkuhxQEA3UPD9u/4E5ZtGsYVrQv1BaXRI76Mf
-         MX89mG8kfrcHU2rSwV3YN/47yfRcVO1iTrqq0VTdUlkIRrNTYhQm5GPtJ1+r77pUv2RC
-         VX+l9mgt1aR76ZM9z33E/T9NfW+ZjR7E/9zOmvvwWqCntnO3dVeheNNzQcvzE2R/n0ZJ
-         9mNvnwmiT7u9os4j+OmOzs3PlYDNtJWnksFzq1HQ+V6J7TrnjC38wMs97IaglITgcaQC
-         LJco/oAb8MLz7n4T+Dt2A3+ofCGXAu3c5JWWgxR07RYhnaE1/KJib9ThNsvu+LhBxfZc
-         RNnA==
-X-Gm-Message-State: AOAM531fUif3TWXiq5xz32AA+VDNt2xxIYtQsG3NjGRpQYd1kxxhmE1x
-        xPEGQutjAuoXhm1/sypZYJo06rpNPU5xt/cKE1JDsQ==
-X-Google-Smtp-Source: ABdhPJw/ZEsQZOlZeReph1+ASuuLZlJIuOVM82pvmZCPJ8cvFd3dbcfY3do0xiB4PlkDl4vZ7xT9XS2v6fqp8nCNOS4=
-X-Received: by 2002:a1f:a9cb:0:b0:33e:d145:85f0 with SMTP id
- s194-20020a1fa9cb000000b0033ed14585f0mr6025223vke.7.1649375521681; Thu, 07
- Apr 2022 16:52:01 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=aT+8Onnd/n07pHnEWWUWTn2vpI0YJYxs4oYEJhHP/Ac=;
+        b=lh8AwHy60BBm0e/KkdHSXJ01Hh407BGcEX98Gw0l/5V6q4Tj7llgn6eMmQPkN01q/T
+         Hk0RC3tu134vUOaEZsKKTuKKhpqMO83M2OgKalotuz9y5JAP9XZrQU+9QBlbXPPtYIqu
+         nI0oETo/0EvljN/N3BU4l7yKXYj6VTmnkx/Dz7QAH/XqybCR3a3xxu4gcGI9EkodvefP
+         I5DFtI0GkH72sK9BcgQsHJdWMSTLpj1wr6tUeO9kIRUlR7MHYeZ5m1Z6TrJUTE4zHNV6
+         UYI3yxBzBxeCxhW2GVCDo8wdvJ/WDWb0ApBqdNt48+tnRqH+oZycx4N8t3c5Pmcfhfry
+         WCkg==
+X-Gm-Message-State: AOAM533MOQ7oOEEWzfNDJ8GoT7Y7ZzoupkqzzIqhxCBrEptvQ3R1TXYO
+        ybbVw/YykGPFA9g98In8ZoZD1yBIGg4sfGXMTsGl0AFB4o0PhfKw5HSXOUlssa16r37CKLzRuIl
+        RaliePsNuiigySKYKcewKpbd1w7r9VL3YdJvGAGYNZS7w7M0W6l9UEcvWPp0Ak03goJZZv7jOdA
+        ==
+X-Received: by 2002:a17:90b:1a87:b0:1c7:3d66:8cb with SMTP id ng7-20020a17090b1a8700b001c73d6608cbmr18726955pjb.142.1649375521537;
+        Thu, 07 Apr 2022 16:52:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfKMgguqkFdrUbAYwtF3FRFFuvOLctyEkl2YPYCfxTGPFDI1PivMs0Y3AhBkjVOIT6pep6lg==
+X-Received: by 2002:a17:90b:1a87:b0:1c7:3d66:8cb with SMTP id ng7-20020a17090b1a8700b001c73d6608cbmr18726925pjb.142.1649375521062;
+        Thu, 07 Apr 2022 16:52:01 -0700 (PDT)
+Received: from [10.72.12.194] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k6-20020a056a00134600b004faba67f9d4sm24513239pfu.197.2022.04.07.16.51.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 16:52:00 -0700 (PDT)
+Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
+To:     Jeff Layton <jlayton@kernel.org>,
+        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407151521.7968-1-lhenriques@suse.de>
+ <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
+ <66740f5e59d52b600d5033a07b794b78dfaf3c18.camel@kernel.org>
+ <822cca41-f700-3cba-e2c8-d1fbe5a934b1@redhat.com>
+ <c211631e19e8ed9c57cdb65a540ca3a38180016a.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <3cd264d0-bcb6-204b-7997-4f1d000c9dab@redhat.com>
+Date:   Fri, 8 Apr 2022 07:51:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-8-yuzhao@google.com>
- <CAGsJ_4wVA6G42y4Oj7ToaCoroZTRbS-tU606ELwra3_Sfrgo7w@mail.gmail.com>
- <CAOUHufbUdoWiBF5x2ZeK104jT39zAuuU0xXKZ51eaU6P8SNUyg@mail.gmail.com> <CAGsJ_4z=vkub4e5J5ggsTN=YN4qsqmXSOpf_gu993oOGreLjPg@mail.gmail.com>
-In-Reply-To: <CAGsJ_4z=vkub4e5J5ggsTN=YN4qsqmXSOpf_gu993oOGreLjPg@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 7 Apr 2022 17:51:50 -0600
-Message-ID: <CAOUHufbU=Uov54da8u9AqEuP0Y-1T2Khgd5Br-AhTfP=jbM1mA@mail.gmail.com>
-Subject: Re: [PATCH v9 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c211631e19e8ed9c57cdb65a540ca3a38180016a.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 9:46 PM Barry Song <21cnbao@gmail.com> wrote:
->
-> On Thu, Apr 7, 2022 at 3:04 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > On Wed, Apr 6, 2022 at 8:29 PM Barry Song <21cnbao@gmail.com> wrote:
-> > >
-> > > On Wed, Mar 9, 2022 at 3:48 PM Yu Zhao <yuzhao@google.com> wrote:
-> > > >
-> > > > Searching the rmap for PTEs mapping each page on an LRU list (to test
-> > > > and clear the accessed bit) can be expensive because pages from
-> > > > different VMAs (PA space) are not cache friendly to the rmap (VA
-> > > > space). For workloads mostly using mapped pages, the rmap has a high
-> > > > CPU cost in the reclaim path.
-> > > >
-> > > > This patch exploits spatial locality to reduce the trips into the
-> > > > rmap. When shrink_page_list() walks the rmap and finds a young PTE, a
-> > > > new function lru_gen_look_around() scans at most BITS_PER_LONG-1
-> > > > adjacent PTEs. On finding another young PTE, it clears the accessed
-> > > > bit and updates the gen counter of the page mapped by this PTE to
-> > > > (max_seq%MAX_NR_GENS)+1.
-> > >
-> > > Hi Yu,
-> > > It seems an interesting feature to save the cost of rmap. but will it lead to
-> > > possible judging of cold pages as hot pages?
-> > > In case a page is mapped by 20 processes,  and it has been accessed
-> > > by 5 of them, when we look around one of the 5 processes, the page
-> > > will be young and this pte is cleared. but we still have 4 ptes which are not
-> > > cleared. then we don't access the page for a long time, but the 4 uncleared
-> > > PTEs will still make the page "hot" since they are not cleared, we will find
-> > > the page is hot either due to look-arounding the 4 processes or rmapping
-> > > the page later?
-> >
-> > Why are the remaining 4 accessed PTEs skipped? The rmap should check
-> > all the 20 PTEs.
->
-> for example page A is the neighbour of page B in process 1, when we do rmap
-> for B, we look-around and clear A's pte in process 1. but A's ptes are
-> still set in
-> process 2,3,4,5.
 
-It makes no difference because it's too insignificant. The goal is not
-to give several million pages unique timestamps and sort them; it's to
-partition pages on the orders one tenth to a few seconds and quickly
-find some reasonable candidates. Temporal locality gets weaker
-exponentially over time. Even on small systems, the difference is not
-measurable if several thousand pages used in the last few seconds are
-chosen over another several thousand pages used in the last minute.
+On 4/8/22 4:21 AM, Jeff Layton wrote:
+> On Fri, 2022-04-08 at 03:24 +0800, Xiubo Li wrote:
+>> On 4/8/22 3:16 AM, Jeff Layton wrote:
+>>> On Fri, 2022-04-08 at 03:03 +0800, Xiubo Li wrote:
+>>>> On 4/7/22 11:15 PM, Luís Henriques wrote:
+>>>>> When doing a direct/sync write, we need to invalidate the page cache in
+>>>>> the range being written to.  If we don't do this, the cache will include
+>>>>> invalid data as we just did a write that avoided the page cache.
+>>>>>
+>>>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+>>>>> ---
+>>>>>     fs/ceph/file.c | 19 ++++++++++++++-----
+>>>>>     1 file changed, 14 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> Changes since v3:
+>>>>> - Dropped initial call to invalidate_inode_pages2_range()
+>>>>> - Added extra comment to document invalidation
+>>>>>
+>>>>> Changes since v2:
+>>>>> - Invalidation needs to be done after a write
+>>>>>
+>>>>> Changes since v1:
+>>>>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+>>>>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>>>>>
+>>>>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+>>>>> index 5072570c2203..97f764b2fbdd 100644
+>>>>> --- a/fs/ceph/file.c
+>>>>> +++ b/fs/ceph/file.c
+>>>>> @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>>>>>     		return ret;
+>>>>>     
+>>>>>     	ceph_fscache_invalidate(inode, false);
+>>>>> -	ret = invalidate_inode_pages2_range(inode->i_mapping,
+>>>>> -					    pos >> PAGE_SHIFT,
+>>>>> -					    (pos + count - 1) >> PAGE_SHIFT);
+>>>>> -	if (ret < 0)
+>>>>> -		dout("invalidate_inode_pages2_range returned %d\n", ret);
+>>>>>     
+>>>>>     	while ((len = iov_iter_count(from)) > 0) {
+>>>>>     		size_t left;
+>>>>> @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>>>>>     			break;
+>>>>>     		}
+>>>>>     		ceph_clear_error_write(ci);
+>>>>> +
+>>>>> +		/*
+>>>>> +		 * we need to invalidate the page cache here, otherwise the
+>>>>> +		 * cache will include invalid data in direct/sync writes.
+>>>>> +		 */
+>>>>> +		ret = invalidate_inode_pages2_range(
+>>>> IMO we'd better use truncate_inode_pages_range() after write. The above
+>>>> means it's possibly will write the dirty pagecache back, which will
+>>>> overwrite and corrupt the disk data just wrote.
+>>>>
+>>> I disagree. We call filemap_write_and_wait_range at the start of this,
+>>> so any data that was dirty when we called write() will be written back
+>>> before the sync write.
+>>>
+>>> If we truncate the range, then we'll potentially lose writes that came
+>>> in after write was issued but before truncate_inode_pages_range. I think
+>>> we'd rather let what we just wrote be clobbered in this situation than
+>>> lose a write altogether.
+>>>
+>>> All of this is somewhat academic though. If you're mixing buffered and
+>>> direct writes like this without some sort of locking, then you're just
+>>> asking for trouble. The aim here is "sane behavior to the best of our
+>>> ability", but we can't expect it to always be sane when people do insane
+>>> things. ;)
+>> Just in the case Luis hit. Before writing the new data the mapping
+>> happen when reading the src in copy_from_usr(). So once the writing done
+>> the pagecache is caching the stale contents.
+>>
+> Not just in that case.
+>
+> You could have 2 unrelated processes, one doing DIO writes and one doing
+> mmap writes. You're likely to end up with a mess unless you're very
+> careful with what you're doing, but there should be some expectation
+> that it will work if you serialize things correctly and/or have them
+> writing to their own areas of the file, etc.
+
+For this case I checked the other use cases, they are seems will do:
+
+
+filemap_invalidate_lock(inode->i_mapping);
+
+write pagecache back;
+
+invalidate the mapping and drop the pages;
+
+do the IOs;
+
+filemap_invalidate_unlock(inode->i_mapping);
+
+
+The filemap_invalidate_lock could prevent the page fault to map them 
+again during this.
+
+
+
+> In any case, we'll never get perfect cache coherency, and I figure that
+> until the write returns, what's in the pagecache ought to be considered
+> valid.
+
+Okay, I am okay with this.
+
+As my understanding is that we should make sure that the pagecache is 
+always valid during the sync write, or if the pagecache will be 
+revalidated it should just block the other processes to read from the mmap.
+
+-- Xiubo
+>>>> Though it seems impossible that these pagecaches will be marked dirty,
+>>>> but this call is misleading ?
+>>>>
+>>> Not impossible at all. You can open a file O_DIRECT and then mmap the fd
+>>> for PROT_WRITE (or just open the file a second time and do it).
+>>>
+>>> We definitely recommend against mixing buffered and direct I/O, but
+>>> nothing really prevents someone from doing it. If the user is properly
+>>> using file locking, then there's really no reason it shouldn't work.
+>>>
+>>>>> +				inode->i_mapping,
+>>>>> +				pos >> PAGE_SHIFT,
+>>>>> +				(pos + len - 1) >> PAGE_SHIFT);
+>>>>> +		if (ret < 0) {
+>>>>> +			dout("invalidate_inode_pages2_range returned %d\n",
+>>>>> +			     ret);
+>>>>> +			ret = 0;
+>>>>> +		}
+>>>>>     		pos += len;
+>>>>>     		written += len;
+>>>>>     		dout("sync_write written %d\n", written);
+>>>>>
+

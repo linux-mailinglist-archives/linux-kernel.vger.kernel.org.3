@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0E54F7AED
+	by mail.lfdr.de (Postfix) with ESMTP id 1403A4F7AEC
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243574AbiDGJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S243561AbiDGJEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243770AbiDGJDc (ORCPT
+        with ESMTP id S243765AbiDGJD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:03:32 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4913205A;
-        Thu,  7 Apr 2022 02:01:31 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23743g5e001248;
-        Thu, 7 Apr 2022 11:01:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=1ezUATS7YucgATnJzZ/8KE0ypMPsbEqbkpxpFXJwO8U=;
- b=3Ll0G2zY4iXhpM85f2y+tpuAkUiZ6MD+ymFHIxX5IdzbfmP9Rv2LnfP+hejpS+l/tsGx
- 0t8+fixaS+WItL/S+j7XXa0Yt+K/U7T+iBrUb2rz51bPN3vkg0IFzodk8NFSgdnKyE+e
- +rxyiWuAJh8OZ2+1p+5cgd9EB6gm6QrdTtuPL0a0z+k07TWVAvM8S+cyG6GLxoMv0Nc4
- uEJmSTd3vkoDxAXOKJtKpfmOePhh+b1NTtDjobiwX190HbtdLnBzeXE9a7APjqgxLY/5
- IUgldEdtq/qcdBNeiicTIZduR6tKo/Cw25+ODeHmxY+89tj9NGu8DPYtD28IUexIr9jY Kg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du13hsv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 11:01:21 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9A3B10002A;
-        Thu,  7 Apr 2022 11:01:20 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9EE16215159;
-        Thu,  7 Apr 2022 11:01:20 +0200 (CEST)
-Received: from [10.201.22.81] (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 7 Apr
- 2022 11:01:19 +0200
-Message-ID: <f2d9d0e9-aecf-6436-6ff5-56b4ccb98f6c@foss.st.com>
-Date:   Thu, 7 Apr 2022 11:01:19 +0200
+        Thu, 7 Apr 2022 05:03:29 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AA68164F;
+        Thu,  7 Apr 2022 02:01:30 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id t19so7580710qtc.4;
+        Thu, 07 Apr 2022 02:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7k9wHjGCmirLGQtDNZunWvATfCdcYy0H3Z1yCUnVVgo=;
+        b=eoSQ6dFjX7ebCs11Jl1ZGRgtLmSxbNl8ge+CP32X1ALfHiAP2IqJsNz2PI1FytMYUG
+         wUlrBhsUyB8iWdbxQvx7SEou0vURFav0N5dpZmkhWn1epeWwsbtahWixJ+DvtrgxM7O1
+         cAyCa3JpyK47O59pZ7QhhwWLIWuO1h3ttFuePmUQSOpK4UesJik8t17h7x/b1PySd85y
+         W1hb6lPqoW6xpJx88rax1kgFmWI8v/12R9K4AU+Y8W6Vs3STD1QjVe0nB0w5ZedFy8Ql
+         94sSm72kvl24tKaaqoNkeiKR56ArK91gf6jWl5bv1YLhOjabEm6zcLamLIAsZFavr8sQ
+         VyMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7k9wHjGCmirLGQtDNZunWvATfCdcYy0H3Z1yCUnVVgo=;
+        b=JaBvADIcdcoid7PhhANHYlwxuU77kIVTbGnYp+Qvky8E43hwY2s25PLc9xXdLFPJDN
+         vWL7N/1wO1urQLv7tasFJP6ChgWKfaGpTJDXVQ9TdqgXk2dpOS7nzllmC3aJsuBhStg/
+         8nV80SSzGHxnLVhm65IT28qK/hCrNLKDycxnxMFWBNF8vsM9GK41wKMC5wGnDmvpgU2U
+         sDjjkKsMdasciL88jOJoLv8zjcRA1bEImbj60QSVOST6K6AYKYA5yvkeasP+/LEhvFFK
+         pRn29dnaJjqH+gRJdy8WCnL4gVIUGZ+r8EXjkfMFy860JMu0hp7G9AKqds5y5aoMzXm6
+         Yudw==
+X-Gm-Message-State: AOAM532Jb60/tJ5HrCdCHJRdR13FdNNYW6ouB13tT0Rt1MY+JrjVQWGM
+        QHSxUcgisi3aMiWAXV8DV9U=
+X-Google-Smtp-Source: ABdhPJyt6Mnnqh0FTkOo1W8dKin7q9bCtIm4dDnlr76kyfZvugnPP3KPcRcXj0jwBM7EhC3Ss1VxKQ==
+X-Received: by 2002:a05:622a:653:b0:2e1:c046:4825 with SMTP id a19-20020a05622a065300b002e1c0464825mr11178669qtb.430.1649322089296;
+        Thu, 07 Apr 2022 02:01:29 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o21-20020ac85a55000000b002e16389b501sm15031194qta.96.2022.04.07.02.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 02:01:29 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     s.hauer@pengutronix.de, kernel@pengutronix.de
+Cc:     deller@gmx.de, shawnguo@kernel.org, festevam@gmail.com,
+        linux-imx@nxp.com, linux-fbdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] video: fbdev:  Fix missing of_node_put in imxfb_probe
+Date:   Thu,  7 Apr 2022 09:01:22 +0000
+Message-Id: <20220407090122.2491922-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] stm: ltdc: fix two incorrect NULL checks on list iterator
-Content-Language: en-US
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        <yannick.fertre@foss.st.com>
-CC:     <airlied@linux.ie>, <daniel@ffwll.ch>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <marex@denx.de>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20220327055355.3808-1-xiam0nd.tong@gmail.com>
- <be2042d2-e315-223d-5454-ebfb934f9d2d@foss.st.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <be2042d2-e315-223d-5454-ebfb934f9d2d@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
+of_parse_phandle returns node pointer with refcount incremented,
+use of_node_put() on it when done.
 
-On 3/28/22 14:37, Raphael Gallais-Pou wrote:
-> Hello Xiaomeng
-> 
-> On 3/27/22 07:53, Xiaomeng Tong wrote:
->> The two bugs are here:
->> 	if (encoder) {
->> 	if (bridge && bridge->timings)
->>
->> The list iterator value 'encoder/bridge' will *always* be set and
->> non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
->> incorrect to assume that the iterator value will be NULL if the
->> list is empty or no element is found.
->>
->> To fix the bug, use a new variable '*_iter' as the list iterator,
->> while use the old variable 'encoder/bridge' as a dedicated pointer
->> to point to the found element.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
->> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
->> ---
->>   drivers/gpu/drm/stm/ltdc.c | 16 ++++++++++------
->>   1 file changed, 10 insertions(+), 6 deletions(-)
-> 
-> 
-> Thanks for your fix
-> 
-> Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-> 
-> 
-> Raphaël Gallais-Pou
-> 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/video/fbdev/imxfb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied on drm-misc-next.
-Many thanks for your patch,
-Philippe :-)
+diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
+index 68288756ffff..a2f644c97f28 100644
+--- a/drivers/video/fbdev/imxfb.c
++++ b/drivers/video/fbdev/imxfb.c
+@@ -925,10 +925,12 @@ static int imxfb_probe(struct platform_device *pdev)
+ 				sizeof(struct imx_fb_videomode), GFP_KERNEL);
+ 		if (!fbi->mode) {
+ 			ret = -ENOMEM;
++			of_node_put(display_np);
+ 			goto failed_of_parse;
+ 		}
+ 
+ 		ret = imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
++		of_node_put(display_np);
+ 		if (ret)
+ 			goto failed_of_parse;
+ 	}
+-- 
+2.25.1
+

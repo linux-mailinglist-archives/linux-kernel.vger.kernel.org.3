@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD3F4F78F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E14F7901
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbiDGIDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S242746AbiDGID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiDGIDE (ORCPT
+        with ESMTP id S242633AbiDGIDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:03:04 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EF954BFE;
-        Thu,  7 Apr 2022 01:01:03 -0700 (PDT)
-X-UUID: 33597582ba6b4bdf91999d760c71f4f8-20220407
-X-UUID: 33597582ba6b4bdf91999d760c71f4f8-20220407
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        Thu, 7 Apr 2022 04:03:11 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F5C7C7BA;
+        Thu,  7 Apr 2022 01:01:08 -0700 (PDT)
+X-UUID: 321758b3355c487cb927951f4f931ded-20220407
+X-UUID: 321758b3355c487cb927951f4f931ded-20220407
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1709323023; Thu, 07 Apr 2022 16:00:58 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 919556055; Thu, 07 Apr 2022 16:01:05 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 7 Apr 2022 16:00:56 +0800
+ Thu, 7 Apr 2022 16:01:03 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 7 Apr 2022 16:00:55 +0800
+ Transport; Thu, 7 Apr 2022 16:01:01 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
         "Matthias Brugger" <matthias.bgg@gmail.com>,
@@ -47,9 +47,9 @@ CC:     Robin Murphy <robin.murphy@arm.com>,
         <angelogioacchino.delregno@collabora.com>,
         <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
         <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Subject: [PATCH v6 22/34] iommu/mediatek: Add mt8195 support
-Date:   Thu, 7 Apr 2022 15:57:14 +0800
-Message-ID: <20220407075726.17771-23-yong.wu@mediatek.com>
+Subject: [PATCH v6 23/34] iommu/mediatek: Only adjust code about register base
+Date:   Thu, 7 Apr 2022 15:57:15 +0800
+Message-ID: <20220407075726.17771-24-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220407075726.17771-1-yong.wu@mediatek.com>
 References: <20220407075726.17771-1-yong.wu@mediatek.com>
@@ -65,89 +65,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mt8195 has 3 IOMMU, containing 2 MM IOMMUs, one is for vdo, the other
-is for vpp. and 1 INFRA IOMMU.
+No functional change. Use "base" instead of the data->base. This is
+avoid to touch too many lines in the next patches.
 
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 43 +++++++++++++++++++++++++++++++++++++++
- drivers/iommu/mtk_iommu.h |  1 +
- 2 files changed, 44 insertions(+)
+ drivers/iommu/mtk_iommu.c | 51 +++++++++++++++++++++------------------
+ 1 file changed, 27 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 763e912d0a67..7a8d9dda7361 100644
+index 7a8d9dda7361..cb99c1d01f28 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -1234,6 +1234,46 @@ static const struct mtk_iommu_plat_data mt8192_data = {
- 			   {0, 14, 16}, {0, 13, 18, 17}},
- };
+@@ -227,12 +227,12 @@ static struct mtk_iommu_domain *to_mtk_domain(struct iommu_domain *dom)
  
-+static const struct mtk_iommu_plat_data mt8195_data_infra = {
-+	.m4u_plat	  = M4U_MT8195,
-+	.flags            = WR_THROT_EN | DCM_DISABLE | PM_CLK_AO |
-+			    MTK_IOMMU_TYPE_INFRA | IFA_IOMMU_PCIE_SUPPORT,
-+	.pericfg_comp_str = "mediatek,mt8195-pericfg_ao",
-+	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
-+	.iova_region      = single_domain,
-+	.iova_region_nr   = ARRAY_SIZE(single_domain),
-+};
-+
-+static const struct mtk_iommu_plat_data mt8195_data_vdo = {
-+	.m4u_plat	= M4U_MT8195,
-+	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS | OUT_ORDER_WR_EN |
-+			  WR_THROT_EN | NOT_STD_AXI_MODE | IOVA_34_EN |
-+			  SHARE_PGTABLE | MTK_IOMMU_TYPE_MM,
-+	.hw_list        = &m4ulist,
-+	.inv_sel_reg    = REG_MMU_INV_SEL_GEN2,
-+	.iova_region	= mt8192_multi_dom,
-+	.iova_region_nr	= ARRAY_SIZE(mt8192_multi_dom),
-+	.larbid_remap   = {{2, 0}, {21}, {24}, {7}, {19}, {9, 10, 11},
-+			   {13, 17, 15/* 17b */, 25}, {5}},
-+};
-+
-+static const struct mtk_iommu_plat_data mt8195_data_vpp = {
-+	.m4u_plat	= M4U_MT8195,
-+	.flags          = HAS_BCLK | HAS_SUB_COMM_3BITS | OUT_ORDER_WR_EN |
-+			  WR_THROT_EN | NOT_STD_AXI_MODE | IOVA_34_EN |
-+			  SHARE_PGTABLE | MTK_IOMMU_TYPE_MM,
-+	.hw_list        = &m4ulist,
-+	.inv_sel_reg    = REG_MMU_INV_SEL_GEN2,
-+	.iova_region	= mt8192_multi_dom,
-+	.iova_region_nr	= ARRAY_SIZE(mt8192_multi_dom),
-+	.larbid_remap   = {{1}, {3},
-+			   {22, MTK_INVALID_LARBID, MTK_INVALID_LARBID, MTK_INVALID_LARBID, 23},
-+			   {8}, {20}, {12},
-+			   /* 16: 16a; 29: 16b; 30: CCUtop0; 31: CCUtop1 */
-+			   {14, 16, 29, 26, 30, 31, 18},
-+			   {4, MTK_INVALID_LARBID, MTK_INVALID_LARBID, MTK_INVALID_LARBID, 6}},
-+};
-+
- static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt2712-m4u", .data = &mt2712_data},
- 	{ .compatible = "mediatek,mt6779-m4u", .data = &mt6779_data},
-@@ -1241,6 +1281,9 @@ static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
- 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
- 	{ .compatible = "mediatek,mt8192-m4u", .data = &mt8192_data},
-+	{ .compatible = "mediatek,mt8195-iommu-infra", .data = &mt8195_data_infra},
-+	{ .compatible = "mediatek,mt8195-iommu-vdo",   .data = &mt8195_data_vdo},
-+	{ .compatible = "mediatek,mt8195-iommu-vpp",   .data = &mt8195_data_vpp},
- 	{}
- };
+ static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
+ {
++	void __iomem *base = data->base;
+ 	unsigned long flags;
  
-diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-index 56838fad8c73..f2ee11cd254a 100644
---- a/drivers/iommu/mtk_iommu.h
-+++ b/drivers/iommu/mtk_iommu.h
-@@ -46,6 +46,7 @@ enum mtk_iommu_plat {
- 	M4U_MT8173,
- 	M4U_MT8183,
- 	M4U_MT8192,
-+	M4U_MT8195,
- };
+ 	spin_lock_irqsave(&data->tlb_lock, flags);
+-	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+-		       data->base + data->plat_data->inv_sel_reg);
+-	writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
++	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0, base + data->plat_data->inv_sel_reg);
++	writel_relaxed(F_ALL_INVLD, base + REG_MMU_INVALIDATE);
+ 	wmb(); /* Make sure the tlb flush all done */
+ 	spin_unlock_irqrestore(&data->tlb_lock, flags);
+ }
+@@ -243,6 +243,7 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
+ 	struct list_head *head = data->hw_list;
+ 	bool check_pm_status;
+ 	unsigned long flags;
++	void __iomem *base;
+ 	int ret;
+ 	u32 tmp;
  
- struct mtk_iommu_iova_region;
+@@ -269,23 +270,23 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
+ 				continue;
+ 		}
+ 
++		base = data->base;
++
+ 		spin_lock_irqsave(&data->tlb_lock, flags);
+ 		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+-			       data->base + data->plat_data->inv_sel_reg);
++			       base + data->plat_data->inv_sel_reg);
+ 
+-		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova),
+-			       data->base + REG_MMU_INVLD_START_A);
++		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova), base + REG_MMU_INVLD_START_A);
+ 		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova + size - 1),
+-			       data->base + REG_MMU_INVLD_END_A);
+-		writel_relaxed(F_MMU_INV_RANGE,
+-			       data->base + REG_MMU_INVALIDATE);
++			       base + REG_MMU_INVLD_END_A);
++		writel_relaxed(F_MMU_INV_RANGE, base + REG_MMU_INVALIDATE);
+ 
+ 		/* tlb sync */
+-		ret = readl_poll_timeout_atomic(data->base + REG_MMU_CPE_DONE,
++		ret = readl_poll_timeout_atomic(base + REG_MMU_CPE_DONE,
+ 						tmp, tmp != 0, 10, 1000);
+ 
+ 		/* Clear the CPE status */
+-		writel_relaxed(0, data->base + REG_MMU_CPE_DONE);
++		writel_relaxed(0, base + REG_MMU_CPE_DONE);
+ 		spin_unlock_irqrestore(&data->tlb_lock, flags);
+ 
+ 		if (ret) {
+@@ -305,23 +306,25 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
+ 	struct mtk_iommu_domain *dom = data->m4u_dom;
+ 	unsigned int fault_larb = MTK_INVALID_LARBID, fault_port = 0, sub_comm = 0;
+ 	u32 int_state, regval, va34_32, pa34_32;
++	const struct mtk_iommu_plat_data *plat_data = data->plat_data;
++	void __iomem *base = data->base;
+ 	u64 fault_iova, fault_pa;
+ 	bool layer, write;
+ 
+ 	/* Read error info from registers */
+-	int_state = readl_relaxed(data->base + REG_MMU_FAULT_ST1);
++	int_state = readl_relaxed(base + REG_MMU_FAULT_ST1);
+ 	if (int_state & F_REG_MMU0_FAULT_MASK) {
+-		regval = readl_relaxed(data->base + REG_MMU0_INT_ID);
+-		fault_iova = readl_relaxed(data->base + REG_MMU0_FAULT_VA);
+-		fault_pa = readl_relaxed(data->base + REG_MMU0_INVLD_PA);
++		regval = readl_relaxed(base + REG_MMU0_INT_ID);
++		fault_iova = readl_relaxed(base + REG_MMU0_FAULT_VA);
++		fault_pa = readl_relaxed(base + REG_MMU0_INVLD_PA);
+ 	} else {
+-		regval = readl_relaxed(data->base + REG_MMU1_INT_ID);
+-		fault_iova = readl_relaxed(data->base + REG_MMU1_FAULT_VA);
+-		fault_pa = readl_relaxed(data->base + REG_MMU1_INVLD_PA);
++		regval = readl_relaxed(base + REG_MMU1_INT_ID);
++		fault_iova = readl_relaxed(base + REG_MMU1_FAULT_VA);
++		fault_pa = readl_relaxed(base + REG_MMU1_INVLD_PA);
+ 	}
+ 	layer = fault_iova & F_MMU_FAULT_VA_LAYER_BIT;
+ 	write = fault_iova & F_MMU_FAULT_VA_WRITE_BIT;
+-	if (MTK_IOMMU_HAS_FLAG(data->plat_data, IOVA_34_EN)) {
++	if (MTK_IOMMU_HAS_FLAG(plat_data, IOVA_34_EN)) {
+ 		va34_32 = FIELD_GET(F_MMU_INVAL_VA_34_32_MASK, fault_iova);
+ 		fault_iova = fault_iova & F_MMU_INVAL_VA_31_12_MASK;
+ 		fault_iova |= (u64)va34_32 << 32;
+@@ -329,12 +332,12 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
+ 	pa34_32 = FIELD_GET(F_MMU_INVAL_PA_34_32_MASK, fault_iova);
+ 	fault_pa |= (u64)pa34_32 << 32;
+ 
+-	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
++	if (MTK_IOMMU_IS_TYPE(plat_data, MTK_IOMMU_TYPE_MM)) {
+ 		fault_port = F_MMU_INT_ID_PORT_ID(regval);
+-		if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM_2BITS)) {
++		if (MTK_IOMMU_HAS_FLAG(plat_data, HAS_SUB_COMM_2BITS)) {
+ 			fault_larb = F_MMU_INT_ID_COMM_ID(regval);
+ 			sub_comm = F_MMU_INT_ID_SUB_COMM_ID(regval);
+-		} else if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM_3BITS)) {
++		} else if (MTK_IOMMU_HAS_FLAG(plat_data, HAS_SUB_COMM_3BITS)) {
+ 			fault_larb = F_MMU_INT_ID_COMM_ID_EXT(regval);
+ 			sub_comm = F_MMU_INT_ID_SUB_COMM_ID_EXT(regval);
+ 		} else {
+@@ -353,9 +356,9 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
+ 	}
+ 
+ 	/* Interrupt clear */
+-	regval = readl_relaxed(data->base + REG_MMU_INT_CONTROL0);
++	regval = readl_relaxed(base + REG_MMU_INT_CONTROL0);
+ 	regval |= F_INT_CLR_BIT;
+-	writel_relaxed(regval, data->base + REG_MMU_INT_CONTROL0);
++	writel_relaxed(regval, base + REG_MMU_INT_CONTROL0);
+ 
+ 	mtk_iommu_tlb_flush_all(data);
+ 
 -- 
 2.18.0
 

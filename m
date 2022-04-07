@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A8E4F7FC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548DF4F7FF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245673AbiDGNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S242714AbiDGNFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241951AbiDGNBz (ORCPT
+        with ESMTP id S243358AbiDGNDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:01:55 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F261A2A23
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:59:55 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id r13so7723489wrr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kVP0DeosChaP4vnFzIKGWwoOlpAbwuSOyH45+/mZoL0=;
-        b=EKN2hIRsBqehxl1LPwDXn+MG5SyKoqhVpkpyr2FlER8hbxE9Ay7WNPPw4ChApC65YQ
-         J30V9zKdRjJj8mCycqBYe6r/yZbYQ0Syua9qMK/XX+36rrCYQsATeqXHCoUQ9wc9vX4Q
-         FSlomHsQTEMFxVm7f4qT2/pO9mm/xpdt0tgcZlCsItIrg93Wb/3T2aD77sBXVXPboyt3
-         LXBikbAHA50KRnYq74MsZDjdGerLMWIh4JIhh2PbGZJJDz/TUc1izmizbOFwGvt7GfZ1
-         smc9IZOkpFiM1D4yqyI865GU7OL7PJcOQzjADzTNCkCAPlwgZwdDXZ0OpgG9OVqBzL4i
-         BO7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kVP0DeosChaP4vnFzIKGWwoOlpAbwuSOyH45+/mZoL0=;
-        b=GUQcGxtBjHvCiVqfKrYDhCx2aotp95GN8A58b2a9TObt9Ma4XohH1yO3M8RrqlGHdr
-         XI/8rjMnvuUbmIPEfRt3oNeDgL0TYCcsoJCv/el+S0Hx5YjBD2k6azfo0Ao5cu+n3Fu5
-         FWk9lmkc7t2hKZo8h+xjxtnlOsJp9YUC3Q9mW+MdIcbxNcQL9YEzCu+MKcQ3/kQBwlj/
-         ECiXLXwCxKjJPm5+frshBttQ+0ijc1pbaSpKT/Y9drrOm89qjbrsdHvICy5b6yntWV77
-         UQkvZ37JooKiBmUsNFtKTTQc+x84fQOZ7ZFJSkxfaYt7d7gitx4Ifp8/jKmCNGIn0uEx
-         OuPQ==
-X-Gm-Message-State: AOAM531Ik01Br0MbWDDzKdEUTQDntP4nnCDkrkoT/CYq0/1a5V6zAXRL
-        NbL3netnYooMmca+Sidg+uk=
-X-Google-Smtp-Source: ABdhPJxshfU1NOlOOLmqcrimT11cLGwoDeMBpIbUyzbLG9YPscs+Pk4CihETUqSB0wB9UMgpKC6DVg==
-X-Received: by 2002:adf:ee08:0:b0:206:1b1e:bc20 with SMTP id y8-20020adfee08000000b002061b1ebc20mr10973407wrn.541.1649336393481;
-        Thu, 07 Apr 2022 05:59:53 -0700 (PDT)
-Received: from alaa-emad ([197.57.231.245])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05600c1d1400b0038cba2f88c0sm10704711wms.26.2022.04.07.05.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 05:59:52 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH v4] staging: rtl8712: remove unnecessary parentheses
-Date:   Thu,  7 Apr 2022 14:59:47 +0200
-Message-Id: <20220407125947.8525-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 7 Apr 2022 09:03:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A830322F3E6
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:01:29 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ncRlI-0002Av-JA; Thu, 07 Apr 2022 15:01:20 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-b17e-6ba8-60fd-ca2d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:b17e:6ba8:60fd:ca2d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AAA2B5D40C;
+        Thu,  7 Apr 2022 13:01:18 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 15:01:18 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Brian Silverman <bsilver16384@gmail.com>,
+        Brian Silverman <brian.silverman@bluerivertech.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Dan Murphy <dmurphy@ti.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
+ devices
+Message-ID: <20220407130118.hp5szzhg4v6szmbq@pengutronix.de>
+References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
+ <Yk2vOj8wKi4FdPg2@orome>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n7sqxwpygc2d6wn2"
+Content-Disposition: inline
+In-Reply-To: <Yk2vOj8wKi4FdPg2@orome>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,110 +65,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reported by checkpatch:
 
-Remove unnecessary parentheses around structure field references
+--n7sqxwpygc2d6wn2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-Changes in v2:
-	- Edit commit subject
-	- Edit commit message
-	- Fix the same check in more lines
-	- Remove space before '.skey' in
-"memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
----
-Changes in v3:
-	return the space before '.skey' in
-"memcpy(psta->tkiptxmickey.skey," in lines 84 and 86
----
-Changes in v4:
-	edit commit message to be clearer.
----
- drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 20 +++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+On 06.04.2022 17:18:18, Thierry Reding wrote:
+> On Wed, Jan 05, 2022 at 04:25:09PM -0800, Brian Silverman wrote:
+> > It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
+> > existing m_can driver works with it after handling the glue logic.
+> >=20
+> > The code is a combination of pieces from m_can_platform and NVIDIA's
+> > driver [1].
+> >=20
+> > [1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvi=
+dia/drivers/net/can/mttcan/hal/m_ttcan.c
+> >=20
+> > Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+> > ---
+> > I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
+> > switched to m_can which has been much better. I'm looking for feedback
+> > on whether I should ensure rebasing hasn't broken anything, write up DT
+> > documentation, and submit this patch for real. The driver works great,
+> > but I've got some questions about submitting it.
+> >=20
+> > question: This has liberal copying of GPL code from NVIDIA's
+> > non-upstreamed m_ttcan driver. Is that OK?
+> >=20
+> > corollary: I don't know what any of this glue logic does. I do know the
+> > device doesn't work without it. I can't find any documentation of what
+> > these addresses do.
+> >=20
+> > question: There is some duplication between this and m_can_platform. It
+> > doesn't seem too bad to me, but is this the preferred way to do it or is
+> > there another alternative?
+> >=20
+> > question: Do new DT bindings need to be in the YAML format, or is the
+> > .txt one OK?
+> >=20
+> >  drivers/net/can/m_can/Kconfig       |  10 +
+> >  drivers/net/can/m_can/Makefile      |   1 +
+> >  drivers/net/can/m_can/m_can_tegra.c | 362 ++++++++++++++++++++++++++++
+> >  3 files changed, 373 insertions(+)
+> >  create mode 100644 drivers/net/can/m_can/m_can_tegra.c
+>=20
+> Sorry for the late reply, I completely missed this.
 
-diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-index 3b6926613257..f1e352b7f83e 100644
---- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-+++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-@@ -82,9 +82,9 @@ static inline void handle_pairwise_key(struct sta_info *psta,
- 	       (param->u.crypt. key_len > 16 ? 16 : param->u.crypt.key_len));
- 	if (strcmp(param->u.crypt.alg, "TKIP") == 0) { /* set mic key */
- 		memcpy(psta->tkiptxmickey. skey,
--		       &(param->u.crypt.key[16]), 8);
-+		       &param->u.crypt.key[16], 8);
- 		memcpy(psta->tkiprxmickey. skey,
--		       &(param->u.crypt.key[24]), 8);
-+		       &param->u.crypt.key[24], 8);
- 		padapter->securitypriv. busetkipkey = false;
- 		mod_timer(&padapter->securitypriv.tkip_timer,
- 			  jiffies + msecs_to_jiffies(50));
-@@ -600,7 +600,7 @@ static int r8711_wx_get_name(struct net_device *dev,
- 	u32 ht_ielen = 0;
- 	char *p;
- 	u8 ht_cap = false;
--	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-+	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
- 	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
- 	u8 *prates;
- 
-@@ -1494,7 +1494,7 @@ static int r8711_wx_set_enc(struct net_device *dev,
- 	u32 keyindex_provided;
- 	struct NDIS_802_11_WEP	 wep;
- 	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
--	struct iw_point *erq = &(wrqu->encoding);
-+	struct iw_point *erq = &wrqu->encoding;
- 	struct _adapter *padapter = netdev_priv(dev);
- 
- 	key = erq->flags & IW_ENCODE_INDEX;
-@@ -1589,8 +1589,8 @@ static int r8711_wx_get_enc(struct net_device *dev,
- {
- 	uint key;
- 	struct _adapter *padapter = netdev_priv(dev);
--	struct iw_point *erq = &(wrqu->encoding);
--	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-+	struct iw_point *erq = &wrqu->encoding;
-+	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
- 	union Keytype *dk = padapter->securitypriv.DefKey;
- 
- 	if (!check_fwstate(pmlmepriv, _FW_LINKED)) {
-@@ -1670,7 +1670,7 @@ static int r871x_wx_set_auth(struct net_device *dev,
- 				union iwreq_data *wrqu, char *extra)
- {
- 	struct _adapter *padapter = netdev_priv(dev);
--	struct iw_param *param = (struct iw_param *)&(wrqu->param);
-+	struct iw_param *param = (struct iw_param *)&wrqu->param;
- 	int paramid;
- 	int paramval;
- 	int ret = 0;
-@@ -1964,7 +1964,7 @@ static int r871x_get_ap_info(struct net_device *dev,
- 		return -EINVAL;
- 	data[32] = 0;
- 
--	spin_lock_irqsave(&(pmlmepriv->scanned_queue.lock), irqL);
-+	spin_lock_irqsave(&pmlmepriv->scanned_queue.lock, irqL);
- 	phead = &queue->queue;
- 	plist = phead->next;
- 	while (1) {
-@@ -1974,7 +1974,7 @@ static int r871x_get_ap_info(struct net_device *dev,
- 		if (!mac_pton(data, bssid)) {
- 			netdev_info(dev, "r8712u: Invalid BSSID '%s'.\n",
- 				    (u8 *)data);
--			spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock),
-+			spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock,
- 					       irqL);
- 			return -EINVAL;
- 		}
-@@ -1996,7 +1996,7 @@ static int r871x_get_ap_info(struct net_device *dev,
- 		}
- 		plist = plist->next;
- 	}
--	spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock), irqL);
-+	spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock, irqL);
- 	if (pdata->length >= 34) {
- 		if (copy_to_user((u8 __user *)pdata->pointer + 32,
- 		    (u8 *)&pdata->flags, 1))
--- 
-2.35.1
+Brian Silverman left the company bluerivertech, I think there'll be no
+progress on the tegra glue code. :/
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--n7sqxwpygc2d6wn2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJO4JsACgkQrX5LkNig
+0118nQf/R+gaw3X7zD28Ee0fb5e4rcIIsxL2d1wmxWL6jkgQ/kbNmDx+nKY12dBx
+pBsA69d5mP9I1RfXVOTaH6XFZd+iD2lcCrglXNaNyoo8O+p5y+nTKrVJr3yMEcHr
+8asGp052fHln6FPSNTV8mvQYadWVYxBjEQVBrHJNp8nl5dZAn6uvW/V9AzWKMLWf
+JOHv/Wu6229FlBnIcjHinPPHQFId5QaPS8sCZzGNefGZg3x1s9872bgvmBhqsQI+
+/HxHDGtSCbrYcpKT7ykpcW5hkuYO+0+kqJZ7gMAzznxnDuKZ40hVXY9x+EVudwMn
+dlYpGqn4jnFxYzDWJOr/tc1lKQF4JQ==
+=wQkw
+-----END PGP SIGNATURE-----
+
+--n7sqxwpygc2d6wn2--

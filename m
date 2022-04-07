@@ -2,76 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037FD4F8681
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4464F8682
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241423AbiDGRsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S1346570AbiDGRs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiDGRsS (ORCPT
+        with ESMTP id S231276AbiDGRs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:48:18 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AA271E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:46:17 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id b188so6362530oia.13
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kckLnLuecUYcAuxBtICpKDRrQ9GlihWSL3S+Wrg2yNI=;
-        b=qz/L7HMW5FWMU9PnysBussxrdFIj6na0FNFo0tIYMWuPOv7leY+GD2TUH5fXzeyAUF
-         AfTXBfiqczCkc9Vr+oeCXg4vvcceXirEc/Y0dOf+1k2lFE9jIOUeG5Bq0HxXzKe77wif
-         9z53vYpUnA0ZNSH1NUnuhvJm3TVpZ9OFFwZvSCMTaix0QOTLALnWiz2kiw0nFk3oNwdP
-         x/dtGSPAHPtPn1bTDG/MHjH5Q7lEyIhGElvJr+gJgSl7E1VYcrryWz1jb6oKddRCDWPT
-         W/wqjGVprJ48lba3zeG39FSqvFVr79eLVekPBP2EE+M4WQjY7j5SbDDp17J73K4X/Bb+
-         ckPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kckLnLuecUYcAuxBtICpKDRrQ9GlihWSL3S+Wrg2yNI=;
-        b=iZ8Q5YWI1dXAMxKGMYSHSXJJM2+tNjqJzGq/yblKGxRHN8Dge3k/Eu4iEIiBdWHg3H
-         CvvJzUosDo+vraL+DNfg8rgGwcd9gYVxnIekUhsk1DN0aPPNCiqE1l0nZFcr5GNKHmok
-         +BJUZ9MM8BUOCmoPFPKI48sh9WaDReHuLQREB1nMv2lYi3npmM5uqEx1EQh4eIlFMwuo
-         ewlBLamjsPV7izJUaWc4Wz847bZjcTLuOoDPaWKL6b/b04/fegGGfIl51RcV4J9fnX0o
-         1JhKU5aRb6xGE2FDoKObyKRKmVAieprFPXu+/Czrv5RMje0eWdQIr9XNHbqAl8uosp3a
-         wqrw==
-X-Gm-Message-State: AOAM5337zmK9JWKML+/GL/uaAAD2ZplY2kloJ+DB0Pl04SsUuM0mJHoQ
-        gxGf6wc8LUa9cYhs0nC/J/WtcMdjrMGkg63Le/HKmAzKAqs=
-X-Google-Smtp-Source: ABdhPJx3mMJs6xssQJ/peuDcZMDi6IZivTlWc2wFhiBWvW2T6mN3TfUUvic2qm4/MuGOmUSaYBlzozUg+53lqkWfwNw=
-X-Received: by 2002:a05:6808:2390:b0:2f9:c718:80e0 with SMTP id
- bp16-20020a056808239000b002f9c71880e0mr446338oib.253.1649353576369; Thu, 07
- Apr 2022 10:46:16 -0700 (PDT)
+        Thu, 7 Apr 2022 13:48:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44911271E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:46:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFDCE61976
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 17:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B19C385A0;
+        Thu,  7 Apr 2022 17:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649353584;
+        bh=Jkvw4HbUD+BJnLkGElMbJBIW0lO8m3RLntyqyhk1X6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dnvq4cgiesiEk+CxUkH5lrwhvijZrGWqmipS+cWYZvnVo/Y5obLg9uWlLpO9garDW
+         fQUzdePrQCXQ2o1uh+FN7JU7S0Nu3lIfF3n3IdRlTwnoU0DgxkPBJQWVqjWhc0YzgB
+         s1bwgCOckxYLVk+zyMDQXxyCGYvS1zC7tGPL7aJE=
+Date:   Thu, 7 Apr 2022 19:46:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        florian.c.schilhabel@googlemail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] staging: rtl8712: remove unnecessary parentheses
+Message-ID: <Yk8jbTSjvsHXpX2U@kroah.com>
+References: <20220407125947.8525-1-eng.alaamohamedsoliman.am@gmail.com>
 MIME-Version: 1.0
-References: <20220406165057.97492-1-h0tc0d3@gmail.com> <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
-In-Reply-To: <26951c45-f742-2f0e-f4a6-281a031c3471@gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 7 Apr 2022 13:46:05 -0400
-Message-ID: <CADnq5_NXzEzo=6adPQzEBrAGtWfegyvi=yGHVVOsb+3r9OiNaQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Fix code with incorrect enum type
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Guchun Chen <guchun.chen@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Joseph Greathouse <Joseph.Greathouse@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407125947.8525-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,50 +52,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 2:21 AM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 06.04.22 um 18:50 schrieb Grigory Vasilyev:
-> > Instead of the 'amdgpu_ring_priority_level' type,
-> > the 'amdgpu_gfx_pipe_priority' type was used,
-> > which is an error when setting ring priority.
-> > This is a minor error, but may cause problems in the future.
-> >
-> > Instead of AMDGPU_RING_PRIO_2 =3D 2, we can use AMDGPU_RING_PRIO_MAX =
-=3D 3,
-> > but AMDGPU_RING_PRIO_2 =3D 2 is used for compatibility with
-> > AMDGPU_GFX_PIPE_PRIO_HIGH =3D 2, and not change the behavior of the
-> > code.
-> >
-> > Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
->
-> Good catch, Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
->
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c b/drivers/gpu/drm/am=
-d/amdgpu/gfx_v8_0.c
-> > index 5554084ec1f1..9bc26395f833 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> > @@ -1929,7 +1929,7 @@ static int gfx_v8_0_compute_ring_init(struct amdg=
-pu_device *adev, int ring_id,
-> >               + ring->pipe;
-> >
-> >       hw_prio =3D amdgpu_gfx_is_high_priority_compute_queue(adev, ring)=
- ?
-> > -                     AMDGPU_GFX_PIPE_PRIO_HIGH : AMDGPU_RING_PRIO_DEFA=
-ULT;
-> > +                     AMDGPU_RING_PRIO_2 : AMDGPU_RING_PRIO_DEFAULT;
+On Thu, Apr 07, 2022 at 02:59:47PM +0200, Alaa Mohamed wrote:
+> Reported by checkpatch:
+> 
+> Remove unnecessary parentheses around structure field references
+> 
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+> Changes in v2:
+> 	- Edit commit subject
+> 	- Edit commit message
+> 	- Fix the same check in more lines
+> 	- Remove space before '.skey' in
+> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
+> ---
+> Changes in v3:
+> 	return the space before '.skey' in
+> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86
+> ---
+> Changes in v4:
+> 	edit commit message to be clearer.
+> ---
 
-gfx_v8_0.c, gfx_v9_0.c, gfx_v10_0.c all do this.  Care to fix them all up?
+Why did you send this patch twice?
 
-Alex
-
-> >       /* type-2 packets are deprecated on MEC, use type-3 instead */
-> >       r =3D amdgpu_ring_init(adev, ring, 1024, &adev->gfx.eop_irq, irq_=
-type,
-> >                            hw_prio, NULL);
->

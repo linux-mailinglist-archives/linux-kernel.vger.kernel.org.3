@@ -2,80 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717EE4F71CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E763F4F71CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236273AbiDGB7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S237230AbiDGCAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiDGB7F (ORCPT
+        with ESMTP id S231974AbiDGCAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:59:05 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C0E5676B;
-        Wed,  6 Apr 2022 18:57:07 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id hu11so3942884qvb.7;
-        Wed, 06 Apr 2022 18:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tZB4vW+6/PaCerTEYxK+hZgmxatRHftRvaeDxqdEI1A=;
-        b=ZhZZWQj0upGYS1dHLLp3XvzIBw2TzyAcGaUEikU9nYMaVSKRQBUlub8c4HTjZ0s+rr
-         8aBlZAEGVsmvh2MEPlxxazZNfvaCBPo7aVZdn9Y7iZsIpR63BvVyLkH1SJfSDr1j3PNx
-         pqwPavguKArR3C79nazHK2UscAsmiPVhP+DaPc+Am+R4VOi129x6ODuKUNLQDBpBktm+
-         A1HWZcvrbAQLeVNES35lsYrsOQckRoNjAj8SNmSOi1v+7vq+05Boh8H9C2tLi8Xumhpz
-         03fESpb6Cl7AX877Lyq6M+FIVF7cJ51UvK4fQZfw0cYc0BgIuBI6mxrfOOleklTRPjV6
-         O/Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tZB4vW+6/PaCerTEYxK+hZgmxatRHftRvaeDxqdEI1A=;
-        b=n14SBdCIgP1cZVbNfd3Z5bD4E5KsA3Czvhnu0uTTvDwa1DjjuXyfECWDzfW6/VZuHa
-         o7plJh8inWUp6JTFbSPG5fZvewY+w69/AfleHHyZK+X1gigZ179mgIujoSxV+3x56kEU
-         xe+rNLmTNNS/N+x6a0jNf/MiQB4sk5JyiExBuzIic8r/28QC28QLx6JY8X1hOHzmKqBn
-         FiCwIVPaMAaI3VxmGNyGF1rk3Qcutrbj51dTX1KsmcNoB7hEjR2pM5ASYd1Qi+o1JApa
-         7bTA0uNwBMSWj99eQO+WyX51PxV3ipcUXZH8srgWbClTvTIQwYgWIly9glqrCrtjN+AG
-         Vs+Q==
-X-Gm-Message-State: AOAM530HLY4EvbHb9rgm6mYzgimUMi/t5z3GVuhSajAOOe7kXRId+evb
-        8/7RH3Q8noRgieFRYaZI+hsHvNKK60Q=
-X-Google-Smtp-Source: ABdhPJxK8Hcky2RxCBuGxuto0Ya8lf3h/vk2diaHDDtRjYS/FiFip0kewta1f/Df5pu1lFrYUeCMrQ==
-X-Received: by 2002:ad4:4eac:0:b0:443:cfa6:ab90 with SMTP id ed12-20020ad44eac000000b00443cfa6ab90mr9560731qvb.36.1649296627003;
-        Wed, 06 Apr 2022 18:57:07 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05622a199600b002eb841fcb6dsm14536367qtc.73.2022.04.06.18.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 18:57:06 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     dsterba@suse.cz
-Cc:     cgel.zte@gmail.com, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lv.ruyi@zte.com.cn
-Subject: Re: [PATCH] Btrfs: remove redundant judgment
-Date:   Thu,  7 Apr 2022 01:57:00 +0000
-Message-Id: <20220407015700.2489671-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220406130453.GB15609@suse.cz>
-References: <20220406130453.GB15609@suse.cz>
+        Wed, 6 Apr 2022 22:00:11 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A5F5F8F5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:58:13 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220407015811epoutp039c02dee4a8d4915060388fe6820cb094~jepo3yKlI0418304183epoutp03a
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:58:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220407015811epoutp039c02dee4a8d4915060388fe6820cb094~jepo3yKlI0418304183epoutp03a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649296691;
+        bh=HATTJavYX0NaR1Ru6uSU0WfORlW5BDFsbjrG7uyQkOo=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=NI0SUe/wBCeW/Wfb8QMwfIl94kGmNU4v87bLBkts9fw3DZh8gsW3nbTJxGmZIjPTz
+         3iWGdn38EmHH0YC68xqiHc3GIhe86GaS5a5Xh5GuyBjxNw5ogN2VSAOTCC2M7E+3Js
+         SHv8hp6YSjvVaAfd6ZEuLEgjeeo4E1NOjCR2Bw+A=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220407015811epcas1p4a8108b8c9a7cb8d03fadc9276e785f49~jepor_pj53027330273epcas1p4k;
+        Thu,  7 Apr 2022 01:58:11 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.222]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KYl012vqkz4x9Q2; Thu,  7 Apr
+        2022 01:58:09 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B5.86.21932.1354E426; Thu,  7 Apr 2022 10:58:09 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220407015809epcas1p24ec163ab4cb0533c2145a4e546e96dea~jepmuPQr02195521955epcas1p2q;
+        Thu,  7 Apr 2022 01:58:09 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220407015809epsmtrp1b83b12d3585db4f50abbdd52ecb6d75f~jepmtPkqE3173431734epsmtrp1W;
+        Thu,  7 Apr 2022 01:58:08 +0000 (GMT)
+X-AuditID: b6c32a38-929ff700000255ac-5d-624e4531ac97
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        61.36.03370.0354E426; Thu,  7 Apr 2022 10:58:08 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220407015808epsmtip1b9a53c7dfe9f0aef7302dac6270cb392~jepmkrL371345013450epsmtip1-;
+        Thu,  7 Apr 2022 01:58:08 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'Namjae Jeon'" <linkinjeon@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <axboe@kernel.dk>, "'Christoph  Hellwig'" <hch@infradead.org>
+In-Reply-To: <HK2PR04MB38916A5D693D52FF1C2FD24781E39@HK2PR04MB3891.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 0/2] exfat: reduce block requests when zeroing a
+ cluster
+Date:   Thu, 7 Apr 2022 10:58:08 +0900
+Message-ID: <190101d84a22$ede7e210$c9b7a630$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQHKvq7lmZVFrYJbCLZOIHnfj8b5SAFc+dS+rPPgFGA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplk+LIzCtJLcpLzFFi42LZdlhTV9fQ1S/J4NIDUYvVd/vZLE5PWMRk
+        MXHaUmaLPXtPslhc3jWHzYHVY/MKLY/LZ0s9Nq3qZPP4vEkugCUq2yYjNTEltUghNS85PyUz
+        L91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMHaKuSQlliTilQKCCxuFhJ386mKL+0
+        JFUhI7+4xFYptSAlp8CsQK84Mbe4NC9dLy+1xMrQwMDIFKgwITuj+/ws1oLLLBVTZ61hbmA8
+        y9zFyMEhIWAicf+xVxcjF4eQwA5GifNXnrBBOJ8YJX5t/scC4XxmlPj7ZwFrFyMnWMeKbR1M
+        EIldjBKv9u+EqnrJKNHUfJQNpIpNQFfiyY2fYDtEBLQl7r9IB6lhFmhmlFj5fSYTSA2nQKzE
+        7yPTwKYKCwRKzHuziwXEZhFQkTjzG+Q+Tg5eAUuJo9uPs0HYghInZz4Bq2EWkJfY/nYOM8RF
+        ChK7Px0FmyMiYCXx/yPEfGYBEYnZnW3MIIslBP6yS/Q8mQL1govExP4/UM3CEq+Ob2GHsKUk
+        Xva3QdlAlzY3GkHYHYwSTzfKQgLMXuL9JQsQk1lAU2L9Ln2ICkWJnb/nMkKs5ZN497WHFaKa
+        V6KjTQiiREXi+4edLDCLrvy4yjSBUWkWksdmIXlsFpIHZiEsW8DIsopRLLWgODc9tdiwwAQe
+        18n5uZsYwelRy2IH49y3H/QOMTJxMB5ilOBgVhLhrcr1SRLiTUmsrEotyo8vKs1JLT7EaAoM
+        6onMUqLJ+cAEnVcSb2hiaWBiZmRiYWxpbKYkzts79XSikEB6YklqdmpqQWoRTB8TB6dUA1PJ
+        +b0uZswc54+X/rs9+c1VFRM5Y7sF6Uo9fwUnzdH2XGm/b2Ekk7DviyvO21c3debn3Jr7UKZv
+        asBsta0x6+fPfy2fvGvSPwa2yba97ptzNL7p7YsSfcq/ocn/GOO2U0mHlnQldP31PbzKcGvA
+        ym5dSw5/rgvWWRwLzM2cGHV2qXo/P9LQ/Pj3X4Pb61oi+iYvrIkwElxWFOC2nCHHNabK+szj
+        8Pjw0j73U+ejzur2ryi3O2j55T+3jrLejN43W65/tJicU6cusTPYvZXX6FqQy9ynqYFcwW4M
+        K/kYzmzZ5LGS7ybHToVbIlqxn74yyjXd7Xi3OGfR6z4536xlbO++pz9I8fXMYd0j/orbSoml
+        OCPRUIu5qDgRANrjV44YBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsWy7bCSnK6Bq1+SQftqS4vVd/vZLE5PWMRk
+        MXHaUmaLPXtPslhc3jWHzYHVY/MKLY/LZ0s9Nq3qZPP4vEkugCWKyyYlNSezLLVI3y6BK6P7
+        /CzWgsssFVNnrWFuYDzL3MXIySEhYCKxYlsHUxcjF4eQwA5Gid2nH7B1MXIAJaQkDu7ThDCF
+        JQ4fLoYoec4o8eJvAztIL5uArsSTGz+ZQWpEBLQl7r9IB6lhFmhnlNgy6TcrRMM6RolP056D
+        NXAKxEr8PjKNFcQWFvCXuHvsDCOIzSKgInHmN8RBvAKWEke3H2eDsAUlTs58wgJiMwMt6H3Y
+        yghhy0tsfzsH6gEFid2fjoLNFBGwkvj/cSYTRI2IxOzONuYJjMKzkIyahWTULCSjZiFpWcDI
+        sopRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzhWtLR2MO5Z9UHvECMTB+MhRgkOZiUR
+        3qpcnyQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamC7U
+        tlnt+HHvBP+OjPwNKopcTdMddns8T7rYZXqrfd+BU+9sVJXSPXL1fXZtVT5RojJBZ2KzjE1K
+        yokqPsOnh+bmmii4LxLdxXooJONg15KXx+clxHQ5LK30//zPS1K/+FfJ9NlPdc5vCvHam9V5
+        SHLy7tzLrWXnrHhPZRTYXapazDTF36Prdg7r3ZiJHMFLGaXv8C9nZ70SkyRskN/HsKD9g2qp
+        d+ZOd11NsYOyXt+ab874v5K3sWTGX+V9USK3ZdqZFqzrXrH9dFHb0VuXptas/3xd4L3lF/7H
+        ujqKuTd/ljXwf2z0fDrj/k9nlXn184Ov65ZFJdyTmKyZFu10mXtNe+rU6LaSa93xTbe5lViK
+        MxINtZiLihMBEMsoEQQDAAA=
+X-CMS-MailID: 20220407015809epcas1p24ec163ab4cb0533c2145a4e546e96dea
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220402032958epcas1p30a336a9b4f54e6972bdc196217ac1133
+References: <CGME20220402032958epcas1p30a336a9b4f54e6972bdc196217ac1133@epcas1p3.samsung.com>
+        <HK2PR04MB38916A5D693D52FF1C2FD24781E39@HK2PR04MB3891.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-< Ok, we can drop the check, have you looked if there are more similar
-< places to update?
-I found six by coccinelle, but they are in different paths.Should I
-send one patch or six?
+> Changes since v1:
+> - Added helper to block level instead of manual accessing bd_inode
+>   from the filesystem as suggested by Christoph Hellwig
+> 
+> Yuezhang Mo (2):
+>   block: add sync_blockdev_range()
+>   exfat: reduce block requests when zeroing a cluster
+> 
+>  block/bdev.c           | 10 ++++++++++
+>  fs/exfat/fatent.c      | 41 +++++++++++++++++------------------------
+>  include/linux/blkdev.h |  6 ++++++
+>  3 files changed, 33 insertions(+), 24 deletions(-)
+> 
 
-Thanks
-Lv Ruyi
+Looks good, thanks for your patch!
+Acked-by: Sungjong Seo <sj1557.seo@samsung.com>
+
+> --
+> 2.25.1
+

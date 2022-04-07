@@ -2,120 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE53D4F7736
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944D74F7750
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiDGHUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S236081AbiDGHVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiDGHUr (ORCPT
+        with ESMTP id S229526AbiDGHVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:20:47 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCAD188A00
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:18:48 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so5454484fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:18:48 -0700 (PDT)
+        Thu, 7 Apr 2022 03:21:50 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D7C8878E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:19:51 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id c15so6277133ljr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
-        b=oQ1HJeQCQC5n4qCBU2DXCCVkwUX12Rt3xib0qn1D9v+Vr4OJP2gxh2o4gm5R/pGj9f
-         YNvt9HlCxHLgYJLh/EHM6+KGaIBk6MSYamfbSBtIHhzh2goqMEiWIOyyw4DfkwJce0Hf
-         vHhrQk1/hob+b4mYT2BFF+mA5rlDRFuTgF7hB1R7osvQcJpe73AVVzQcFY775BWaLB5Q
-         nknirBp+4Wbc4rtxd9qahyM0e16+x4spXyVW7tKFpn99qWo3K+PS2yb9Y6f0VSnwZW6X
-         hcjv3snZVrQHECdvtqQNfSq1ePlGzIh+xixdGXmaMB4KDihEZhy4A7qyH7i9TOlPMRE/
-         kFzw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=spWrYcKOdFPkx7V/bTw1Vt2s30IOz+mRUF4zmksu6mQ=;
+        b=FyqWdb6gIKxeVrVuAeWCf3FvBqLaOhrR/SjYm0KsyGakK5ERgmZ5Q1v/I4ntkwgobn
+         hlYthisEch6PMC+myPJYKddxKfQ3BY8XT0IvHzQHz2oTxYrzXMmxIrlES5MiYPu6C+IC
+         apRU8g2a6aaRjRJoWfIJqRgblGYmQXjJ8s57Ue5o2vNTYlsDE4DaomqJN9zeGVNDYYd9
+         XHPk5n6eHeF2kERDafquqlfKN1oFDnYuHOccx2cjr10305FRmb7VsKXKsn+3XOAmVIvC
+         bjTT+R1ONZYnskGzKTcWqkaweLj9swhAXWdZp+IaSwmFqS2w54zhHKUVKOL2NT35M0W5
+         WsNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
-        b=5ZcTEzdAmdixueQB5HU9vYP8qAf9FtJN0C1998SMXUqw+tgMCn5IqERprnDnlXYGtS
-         yALD54OLb27geFchwyZux4RASJADDaMvShvuNVJARVp3jMs6OmsqL2Ng5mpFqUdKGP5u
-         FFFgVKj+e78PzvtqSoUrJffbaV6t0omQrAICNRbwi7k7QaHOEj1QaXWtF8dEQwQug+2N
-         HWI7tBEmDwqXD5XaUFsZ0qf3QrkITRqc7zZdHq83ZKFLL83D60F7A2+M8O/i214D2AW6
-         knlJIT2/92Tim9YYC1rcESM+PA0s45cNERybi/kdpjuSySF4A573vkHyPTmPxRfBegXv
-         sqgA==
-X-Gm-Message-State: AOAM532R9FNrNtIamzKo8saAdRD+HL2jkTMOizvOupt5XCMoxBAFnc6w
-        5cUDTUzr5cLHYyj2MNXhw4Yidc1+ZQCaWAAQosvmsQ==
-X-Google-Smtp-Source: ABdhPJwE5SJa9B0V0BpKDtoeMPTYGxl+ueDIC4EtAGMY2EXeynZBq31t3MsHu4SvzUk6ntBQp+9uCDgpxvmtJSdAuE8=
-X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
- h20-20020a056870d25400b000db12b50da3mr5773981oac.211.1649315927305; Thu, 07
- Apr 2022 00:18:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=spWrYcKOdFPkx7V/bTw1Vt2s30IOz+mRUF4zmksu6mQ=;
+        b=vmu3uWWwMSNPoeAawIay2Jmsd1Er2o6zWgOneOhjQeREZuCdM0ohX9JYxZdYZRKYp9
+         rJkgTNyU3r8SLnmYQFygXuAbn7Fe/zuN9QfKZ2m2BL7m48/AP0QwHL4OA8W3uwLAR09b
+         d+hZQz+g/kGSbJkTmcZg9hrraEhHMngURhGkRx05qpcIkqql39AGr8e8l9F+v6BYvCzI
+         rgjIMwvn7lf2DwxqLjwtfqGabGes4uPAetlMiTgAFAgnu9BvtsqX4/7jAi/xP1pPUr32
+         7TMCpV68kMmalHu+i1JgnzR81iU28wF3Mdaz6PO82A/SfsLq9TUVOsVnhO9a7tmynO9g
+         aAfA==
+X-Gm-Message-State: AOAM532A7Cp4rXyHypRy4RhEE2rS+Q/dYQNwkUFICKjMiR14z11SaAbY
+        vChs3s/R/9p3aXARbR/2Z0Y=
+X-Google-Smtp-Source: ABdhPJwJUzDEU28pZhfXC85eJi/upEh1gZjgy0Gwl5L5LOhJ2xO7R7mU4yWj/MRZ1U86ick83PUMAw==
+X-Received: by 2002:a2e:3615:0:b0:24a:fc28:f0b3 with SMTP id d21-20020a2e3615000000b0024afc28f0b3mr7894757lja.4.1649315989563;
+        Thu, 07 Apr 2022 00:19:49 -0700 (PDT)
+Received: from inno-pc.lan (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id h10-20020a056512220a00b0044a308dad8csm2081465lfu.149.2022.04.07.00.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 00:19:48 -0700 (PDT)
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+X-Google-Original-From: Zhi Wang <zhi.a.wang@intel.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org
+Cc:     Zhi Wang <zhi.a.wang@intel.com>
+Subject: [PATCH v9 0/3] Refactor GVT-g MMIO tracking table and handlers
+Date:   Thu,  7 Apr 2022 03:19:42 -0400
+Message-Id: <20220407071945.72148-1-zhi.a.wang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <000000000000008dae05dbfebd85@google.com> <7108f263-5cda-d91d-792b-d3f18b63c6d7@redhat.com>
- <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
-In-Reply-To: <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 7 Apr 2022 09:18:36 +0200
-Message-ID: <CACT4Y+ZB4oBVks7hF5shnW8FDH2c6O6UWoLVtyZ1ccp8AJhmcw@mail.gmail.com>
-Subject: Re: [syzbot] upstream build error (17)
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        syzbot <syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com>,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        mingo@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 20:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Wed, Apr 6, 2022 at 10:33 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > On 4/6/22 18:20, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    3e732ebf7316 Merge tag 'for_linus' of git://git.kernel.org..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10ca0687700000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=eba855fbe3373b4f
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6b36bab98e240873fd5a
-> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com
-> > >
-> > > arch/x86/kvm/emulate.c:3332:5: error: stack frame size (2552) exceeds limit (2048) in function 'emulator_task_switch' [-Werror,-Wframe-larger-than]
-> > > drivers/block/loop.c:1524:12: error: stack frame size (2648) exceeds limit (2048) in function 'lo_ioctl' [-Werror,-Wframe-larger-than]
-> >
-> > I spot-checked these two and the stack frame is just 144 and 320 bytes
-> > respectively on a normal compile.  This is probably just the effect of
-> > some of the sanitizer options.
->
-> Yep.
-> $ wget -q https://syzkaller.appspot.com/x/.config\?x\=eba855fbe3373b4f
-> -O - | grep CONFIG_KASAN=y
-> CONFIG_KASAN=y
-> https://github.com/ClangBuiltLinux/linux/issues/39 (our oldest still-open issue)
+To support the new mdev interfaces and the re-factor patches from
+Christoph, which moves the GVT-g code into a dedicated module, the GVT-g
+initialization path has to be separated into two phases:
+
+a) Early initialization.
+
+The early initialization of GVT requires to be done when loading i915.
+Mostly it's because the initial clean HW state needs to be saved before
+i915 touches the HW.
+
+b) Late initalization.
+
+This phases of initalization will setup the rest components of GVT-g,
+which can be done later when the dedicated module is being loaded.
+
+To initialize the GVT-g MMIO tracking table in the early initalization
+stage, which will be done in i915, the GVT-g MMIO tracking table needs
+to be sperated accordingly and moved into i915.
+
+v9:
+- Fix a problem might casue kernel panic.
+
+v8:
+- Use SPDX header in the intel_gvt_mmio_table.c
+- Reference the gvt.h with path. (Jani)
+- Add a missing fix on mmio emulation path during my debug.
+- Fix a building problem on refreshed gvt-staging branch. (Christoph)
 
 
-The issue is due to:
+v7:
+- Keep the marcos of device generation in GVT-g. (Christoph, Jani)
 
-commit b9080ba4a6ec56447f263082825a4fddb873316b
-Date:   Wed Mar 23 12:21:10 2022 +0100
-    x86/defconfig: Enable WERROR
+v6:
+- Move the mmio_table.c into i915. (Christoph)
+- Keep init_device_info and related structures in GVT-g. (Christoph)
+- Refine the callbacks of the iterator. (Christoph)
+- Move the flags of MMIO register defination to GVT-g. (Chrsitoph)
+- Move the mmio block handling to GVT-g.
 
-Marco has disabled it in syzbot configs:
-https://github.com/google/syzkaller/commit/53c67432e69b0df4ff64448b944cbffaecec20f4
+v5:
+- Re-design the mmio table framework. (Christoph)
 
-#syz invalid
+v4:
+- Fix the errors of patch checking scripts.
+
+v3:
+- Fix the errors when CONFIG_DRM_I915_WERROR is turned on. (Jani)
+
+v2:
+- Implement a mmio table instead of generating it by marco in i915. (Jani)
+
+Zhi Wang (3):
+  i915/gvt: Separate the MMIO tracking table from GVT-g
+  i915/gvt: Save the initial HW state snapshot in i915
+  i915/gvt: Use the initial HW state snapshot saved in i915
+
+ drivers/gpu/drm/i915/Makefile               |    2 +-
+ drivers/gpu/drm/i915/gvt/firmware.c         |   25 +-
+ drivers/gpu/drm/i915/gvt/gvt.h              |    3 +-
+ drivers/gpu/drm/i915/gvt/handlers.c         | 1033 ++-------------
+ drivers/gpu/drm/i915/gvt/mmio.h             |    1 -
+ drivers/gpu/drm/i915/gvt/reg.h              |    9 +-
+ drivers/gpu/drm/i915/i915_drv.h             |    2 +
+ drivers/gpu/drm/i915/intel_gvt.c            |   92 +-
+ drivers/gpu/drm/i915/intel_gvt.h            |   21 +
+ drivers/gpu/drm/i915/intel_gvt_mmio_table.c | 1290 +++++++++++++++++++
+ 10 files changed, 1561 insertions(+), 917 deletions(-)
+ create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+
+-- 
+2.25.1
+

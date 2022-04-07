@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799C74F7650
+	by mail.lfdr.de (Postfix) with ESMTP id 3194E4F764F
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbiDGGj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S241286AbiDGGi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241306AbiDGGjL (ORCPT
+        with ESMTP id S241258AbiDGGit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:39:11 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70D481E6;
-        Wed,  6 Apr 2022 23:36:48 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBnKRBqhk5i8JziAA--.58637S2;
-        Thu, 07 Apr 2022 14:36:30 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
-        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
-        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH 06/11] drivers: staging: rtl8192e: Fix deadlock in rtw_joinbss_event_prehandle()
-Date:   Thu,  7 Apr 2022 14:36:25 +0800
-Message-Id: <b2c4acc1802ce879cfc4b57efa7dbc1619a0a009.1649310812.git.duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1649310812.git.duoming@zju.edu.cn>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
-X-CM-TRANSID: cS_KCgBnKRBqhk5i8JziAA--.58637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF15Zr48uF17JFyxAr4UCFg_yoW8XrW3pF
-        WjgF1fuF1vyFsFvF1kt3WDX34xZa18Wr1DCay3t395Zr95ZF1fXFW5trWaqF43tFn2q39I
-        9r1kW3s8uF4UC3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-        AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUouWlDUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZEbDgAcsu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 7 Apr 2022 02:38:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE43592D3D;
+        Wed,  6 Apr 2022 23:36:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6D2D61D67;
+        Thu,  7 Apr 2022 06:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE4FC385AC;
+        Thu,  7 Apr 2022 06:36:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649313398;
+        bh=y8Hzh6X4ov/pWCwdyVdXH8J0X9JbXxB31XioMauX8I0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gSRWIyM3zCcHxW0KEvgIQOePA23ryzGrMJh6y33avUH9lLcLrtTQbZxSylSSYUeVE
+         gQWdDTSap7/UqEXOOufd5NcOPqgdymPNRdXk7dKn8L5FGrktzXbDwNt0VF0+dN7z9L
+         cy6o+LnitEiQm+05Itm9yK6HOOVzirB+SWsPD1QS4g02xD2fvLXJu6pnJNznL8w4y8
+         G3AF5EPP8SW3SMZKuGyFOeWEFraKTJM3h/U92wkO8GNTwwoQMlMp/s4kAinGXaLlIY
+         wK//amQjSkVwz786YWzyA9xQ9hlxTrjPKBCMSRBXe36441jcNImZXJVN4bNTQOg2v/
+         j5lylyQFMb16g==
+Received: by mail-ua1-f54.google.com with SMTP id n9so3146534uaj.5;
+        Wed, 06 Apr 2022 23:36:38 -0700 (PDT)
+X-Gm-Message-State: AOAM530dwVMx2aG/KAjAacOPQ+9ER65ETKyRCENsr9XQP+N8PxCevCGh
+        a6H1yKCsJKHhIqtMQWA1KhonxXPEbhatWklbwnc=
+X-Google-Smtp-Source: ABdhPJydzCgTxScgqH3neRJgDnYZjHcS9lgL73MhlBIqhRB6tjH5OZPFpm4siyD9r6yxEwjcjdMCGPb4oXGfY4egEzI=
+X-Received: by 2002:a9f:2048:0:b0:352:9b4f:ac98 with SMTP id
+ 66-20020a9f2048000000b003529b4fac98mr3551530uam.12.1649313397262; Wed, 06 Apr
+ 2022 23:36:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <Yk3YUFfvEszb+cXT@kroah.com> <mhng-492e449b-ad90-4725-86a0-d5d84e4c35be@palmer-mbp2014>
+In-Reply-To: <mhng-492e449b-ad90-4725-86a0-d5d84e4c35be@palmer-mbp2014>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 7 Apr 2022 14:36:26 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS_W6NyA4mhHm4fsCsbAGaEb8XN-k=Aq=SCdOEP-kuy9g@mail.gmail.com>
+Message-ID: <CAJF2gTS_W6NyA4mhHm4fsCsbAGaEb8XN-k=Aq=SCdOEP-kuy9g@mail.gmail.com>
+Subject: Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in rtw_joinbss_event_prehandle(), which is shown
-below:
+On Thu, Apr 7, 2022 at 3:06 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>
+> On Wed, 06 Apr 2022 11:13:36 PDT (-0700), Greg KH wrote:
+> > On Wed, Apr 06, 2022 at 10:16:49PM +0800, guoren@kernel.org wrote:
+> >> From: Guo Ren <guoren@linux.alibaba.com>
+> >>
+> >> These patch_text implementations are using stop_machine_cpuslocked
+> >> infrastructure with atomic cpu_count. The original idea: When the
+> >> master CPU patch_text, the others should wait for it. But current
+> >> implementation is using the first CPU as master, which couldn't
+> >> guarantee the remaining CPUs are waiting. This patch changes the
+> >> last CPU as the master to solve the potential risk.
+> >>
+> >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >> Signed-off-by: Guo Ren <guoren@kernel.org>
+> >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> >> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> >> Cc: <stable@vger.kernel.org>
+> >> ---
+> >>  arch/riscv/kernel/patch.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > What commit id does this change fix?
+>
+> I think it's been there since the beginning of our text patching, so
+>
+> Fixes: 043cb41a85de ("riscv: introduce interfaces to patch kernel code")
+Yes, it the riscv origin.
 
-   (Thread 1)                |      (Thread 2)
-                             | _set_timer()
-rtw_joinbss_event_prehandle()|  mod_timer()
- spin_lock_bh() //(1)        |  (wait a time)
- ...                         | _rtw_join_timeout_handler()
- del_timer_sync()            |  spin_lock_bh() //(2)
- (wait timer to stop)        |  ...
+>
+> seems like the best bet, but I'll go take another look before merging
+> it.  That's confusing here, as I acked it, but that was for an earlier
+> version that touched more than one arch so it was more ambiguous as to
+> which tree it was going through (IIRC I said one of those "LMK if you
+> want it through my tree, but here's an Ack in case someone else wants to
+> take it" sort of things, as I usually do when it's ambiguous).
+Thx for the clarification, I would remove the acked in the next version.
 
-We hold pmlmepriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need pmlmepriv->lock in position (2) of thread 2.
-As a result, rtw_joinbss_event_prehandle() will block forever.
+>
+> Without a changelog, cover letter, or the other patches in the set it's
+> kind of hard to tell, though ;)
+Okay, I should add a changelog for the patch with cover letter.
 
-This patch extracts del_timer_sync() from the protection of
-spin_lock_bh(), which could let timer handler to obtain
-the needed lock.
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/staging/rtl8723bs/core/rtw_mlme.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-index d559eefe633..5030556929d 100644
---- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-@@ -1240,8 +1240,10 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
- 
- 			spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
- 
-+			spin_unlock_bh(&pmlmepriv->lock);
- 			/* s5. Cancel assoc_timer */
- 			del_timer_sync(&pmlmepriv->assoc_timer);
-+			spin_lock_bh(&pmlmepriv->lock);
- 		} else {
- 			spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
- 		}
 -- 
-2.17.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

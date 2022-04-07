@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55B64F8B2A
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2AD4F8B29
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiDGXHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S232060AbiDGXHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiDGXHB (ORCPT
+        with ESMTP id S232394AbiDGXHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:07:01 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4225F9B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:04:59 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id be5so393521plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:04:59 -0700 (PDT)
+        Thu, 7 Apr 2022 19:07:14 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB2ABCB5B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:05:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id p15-20020a25818f000000b0063daf5f7957so5326692ybk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:05:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LQwT+/mAGUqM3bKuuBQMYn0uTeyRqxSYD1X0xo7/rPE=;
-        b=Te8C7q8zW+qLm4J/emex42n1YOTNTgYioZ6aL6jd2MEBaCBiG1MonTEaVigQYrxCnX
-         lc2a1Zp9F/CS9bGuKEKpu93mdMYLs+lQfsbi5mhteuVgcuoJm0wqWfraYddXR8D2bRg6
-         g80ZitZ42SJag/feMLrn8DX95l13h9byUhXsltGRKCs9KWV88T/Q6QdZkDXhfdleSkQe
-         ryLxvSOK7GWWj6jsOpKFb2APmR0DtW+cvDsI5vs30igZtouAhcFKm2Hq3Ic2zZxJev/e
-         Hyk2ptU132DXhvbF7YzTGVCDK2FzEn2yYfELqe296BiWwOwU5IvauV2Zbzna4r5BI7u0
-         VEvQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3CKrl89DJ1eArw5yXg6yQJm2IzsI3jJzLx/oCvEr+S8=;
+        b=BrjbOvi97KBq0KuSeXgzYX1tREisnvDljjjcM8IUk4AN53vhK1IvuAn3yRruMRrqYy
+         3g8tROUFXw9m0hTNvLJgzpFLCUBAAclCy6ML8mp2d4I3f2V3AkAKvIrivoX00+2ccvQ4
+         NheSFFgmOa9YkswoPimT0npsnm69YRnvSitFxxI3b87Bgc6cjDJXSIeeDqcTlpAJiCXM
+         4QNjCI923pPwOOSmLgwM5PoDvfz0glZLUfsCI6mGrPb+03igLIrtnlPgu/s79iH3uUrD
+         ikA6M5hHtPnWc9IU+8E2hvIk8kWHeKU7xJ/39JkP077VMCe1sfdxRgHGYBdWa0bYXiTh
+         Mptw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LQwT+/mAGUqM3bKuuBQMYn0uTeyRqxSYD1X0xo7/rPE=;
-        b=B2AHwRes0OSVLOgJNy4EU0i849jKsNZ/57AVgKMXHbK95iHRBwtOgYI/hUKKr2oAv+
-         oDTwNT4fBTcxtnJLenqEGx0n/nWKtONDrJgWh8DrhIS2t+xRTl8qYToShkDyZPTd55UR
-         yjjeaCD34AJnzAkeYISqqOeSSZMnCDDHrlkYOKsinliXYKOsOt/WtcBaTsNp+U20xkkh
-         dyNhJMTZkb+nn8mui5vaxvsA6JaYRS5a6axXsSUD01YMDgL6A1ohXebY+wr9e+KHqXZA
-         vVMBbZHkTxfaAz65zIQ8q6i9T+Ad3MKfOmYkBICFNuiwnVKhjk6aZZIT1r7RvQbInJks
-         08eA==
-X-Gm-Message-State: AOAM530u9zn00g3tbPcx+XCuM2bJ8UsDKJImu2fgSPST7Rbd5khKhN9u
-        ezAasj+yUm2rNyAe1T37Hbyu25BA8kcNBfwStk/oKA==
-X-Google-Smtp-Source: ABdhPJwyhCRn0iVyHg2CNrALoCcH3RqdRakJthXzqTS4zMpJZcTUNX/0eDdWvG2pEr2k9AtFzvO+MIBVwETlcC1KafM=
-X-Received: by 2002:a17:90a:c791:b0:1c7:26eb:88dd with SMTP id
- gn17-20020a17090ac79100b001c726eb88ddmr18367740pjb.218.1649372698677; Thu, 07
- Apr 2022 16:04:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407224244.1374102-1-yosryahmed@google.com> <20220407224244.1374102-4-yosryahmed@google.com>
-In-Reply-To: <20220407224244.1374102-4-yosryahmed@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 7 Apr 2022 16:04:22 -0700
-Message-ID: <CAJD7tkaPaXQ4M_w-YxJizD2DG8co-3Q2bVDfd7_FaG2ivgT6UA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] selftests: cgroup: fix alloc_anon_noexit()
- instantly freeing memory
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, Huang@google.com,
-        Ying <ying.huang@intel.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3CKrl89DJ1eArw5yXg6yQJm2IzsI3jJzLx/oCvEr+S8=;
+        b=cV2hLi7+Q6bxzhmQMrOAqDmFDV0UlQ9iC21D1udEa+CnicsVNruJX3qIGTGR+p1RUu
+         MlrGiCOfgc14mf57llyYp2pY+BdBvIUcjm/ge5mSyg6RPF1T4a/8xqvLKyTIXj3O+wxM
+         5uybQ6PbiFSYb34JPGVw6+EcyIY3oeKvmHYnSYtByzrpHFlkBCFz4Z6TXx6l//5rzuZc
+         hfkgk6KU9Ou5xUvLW2trz47XkUhtBBjI+V9uNGHvWqOGJbAaBK/IDQWFRDGZRxB0EhcD
+         Q6aQ54X6THvqLIzc8m3Dzvv4ckOldLf7UUIKvMux6/KK9TERjVeddSx+KyeS9NNkLbS7
+         nQ1Q==
+X-Gm-Message-State: AOAM532rCxzWa7rIgFOmDu8L7kcs7IYKiojRY34tnZPvTLkP5QBJLxKt
+        uBonPNbGGLAwWi3OdlGSbxUNbVe2Q9Ex
+X-Google-Smtp-Source: ABdhPJwy48FFOFhpFYLNupwB82gwpEN1VzGfu5MwTQeS3yqZlG6h0C+aNVT5PctDKFdcGIY5pViLbIEd3Eer
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:560:aa27:649e:a07d])
+ (user=irogers job=sendgmr) by 2002:a05:6902:1107:b0:63d:e354:c541 with SMTP
+ id o7-20020a056902110700b0063de354c541mr13119837ybu.346.1649372711827; Thu,
+ 07 Apr 2022 16:05:11 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 16:04:58 -0700
+Message-Id: <20220407230503.1265036-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH 0/5] Tidy up symbol end fixup
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>,
+        William Cohen <wcohen@redhat.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Denis Nikitin <denik@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 3:43 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
-> the allocated memory. alloc_anon_noexit() is usually used with
-> cg_run_nowait() to run a process in the background that allocates
-> memory. It makes sense for the background process to keep the memory
-> allocated and not instantly free it (otherwise there is no point of
-> running it in the background).
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  tools/testing/selftests/cgroup/test_memcontrol.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 36ccf2322e21..c1ec71d83af7 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -211,13 +211,18 @@ static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
->  static int alloc_anon_noexit(const char *cgroup, void *arg)
->  {
->         int ppid = getppid();
-> +       size_t size = (unsigned long)arg;
-> +       char *buf, *ptr;
->
-> -       if (alloc_anon(cgroup, arg))
-> -               return -1;
-> +       buf = malloc(size);
-> +       for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
-> +               *ptr = 0;
->
->         while (getppid() == ppid)
->                 sleep(1);
->
-> +       printf("Freeing buffer");
+Fixing up more symbol ends as introduced in:
+https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
+caused perf annotate to run into memory limits - every symbol holds
+all the disassembled code in the annotation, and so making symbols
+ends further away dramatically increased memory usage (40MB to
+ >1GB). Modify the symbol end logic so that special kernel cases aren't
+applied in the common case.
 
-Hey Andew,
+Minor fix to perf annotate to not stall when stderr is full.
 
-I am very sorry but I left a debugging printf there by mistake. If
-it's no hassle, do you mind removing it from the patch (assuming I
-won't need to send a v3 anyway)?
+Ian Rogers (5):
+  perf annotate: Drop objdump stderr
+  perf symbols: Always do architecture specific fixups
+  perf symbols: Add is_kernel argument to fixup end
+  perf symbol: By default only fix zero length symbols
+  perf symbols: More specific architecture end fixing
 
-Thanks!
+ tools/perf/arch/arm64/util/machine.c   | 14 +++++++++-----
+ tools/perf/arch/powerpc/util/machine.c | 10 +++++++---
+ tools/perf/arch/s390/util/machine.c    | 12 ++++++++----
+ tools/perf/util/annotate.c             |  1 +
+ tools/perf/util/symbol-elf.c           |  2 +-
+ tools/perf/util/symbol.c               | 14 ++++++++------
+ tools/perf/util/symbol.h               |  4 ++--
+ 7 files changed, 36 insertions(+), 21 deletions(-)
 
-> +       free(buf);
->         return 0;
->  }
->
-> --
-> 2.35.1.1178.g4f1659d476-goog
->
+-- 
+2.35.1.1178.g4f1659d476-goog
+

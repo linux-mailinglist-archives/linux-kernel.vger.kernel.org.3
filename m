@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FD84F7681
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7654F7677
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241306AbiDGGpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S241296AbiDGGoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235680AbiDGGpr (ORCPT
+        with ESMTP id S236430AbiDGGoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:45:47 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCBC1AD38B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:43:47 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso8042170pju.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7q8TGy5f43FTrj99wrpepfbD//4/Ebrzp2Wb+EBF4pE=;
-        b=MSE6Q/0ubEsaHr6jwYRQap58B7b7N6TZOESug/T0yNVOIt59Fjg4bMqGZ4jaewFdAT
-         j8FnnkwR1+cQkLBatr7mmBFIcK1IJstqTQuLoz74y/sd9LY3dYRHRLV+jiUomFknyd3i
-         d6V6XKVZdNIiej9R3oWnvEcGQTTU8R380BygFAOOEsJU6NbD35CQY8tv0Khn6kZRe2of
-         W/rvAyQ2gHDau3kYcLcc+6ms53X/I+1VW25XlmIKyCMgke3/qNs5LFkgyq0v4mFE6GQL
-         Wt1X7Hn07nGKovfk8W2h5Whudl4obTXRy4RbRWLTQrbHFl+cVUwtxIDe2n5TvopnIIIk
-         v+Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7q8TGy5f43FTrj99wrpepfbD//4/Ebrzp2Wb+EBF4pE=;
-        b=FSq45IWRA+kBA+ilr3rGGULAWNhMjX1hvJEjVPhdy0oxFV2KJtoGcIbZD6Yy41AZpm
-         xK3eZMLg7cQ6QE1uyQ19gGa59T3xzvxV3+/juK/GtlPduYiCQXnuO/eotS45n6hIunS8
-         jxS8DqWD2bJ3G7Dguwd8e9dZaTLVG5RU9OWiYH1pOiswi2m12DoBK5cnReXcQsEeYXiO
-         F621aaLARxp33w3ckxf1R7/RwMdjBbYFNKsDWFke0fwJNL/JY7A4+L0AF2nYt7QWevXS
-         CxKCDhWLRIGhIRsK7ytLWSVNHjCMCb3o9iFYsLS5rY6Ap+Ftmc0qDyUlu4O6o6svo5hd
-         L4og==
-X-Gm-Message-State: AOAM532+ikfZ0+SWfCUxtZgl8gU68YSrX216H7Y74Wf2kXokwr0E6tiW
-        UDLcZIiyqQOGeaOvHDBKuHLVEw==
-X-Google-Smtp-Source: ABdhPJxAV3D1sK4BdA/DnNxGKAXtTwm6KCkV1Tkn8/XG4+HBbjvlt+ndb/Uv6O1IFrAADm2mCme7PQ==
-X-Received: by 2002:a17:90b:e0d:b0:1ca:b15b:7d4b with SMTP id ge13-20020a17090b0e0d00b001cab15b7d4bmr14082269pjb.91.1649313827197;
-        Wed, 06 Apr 2022 23:43:47 -0700 (PDT)
-Received: from always-x1.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id a11-20020a63cd4b000000b00378b9167493sm18393709pgj.52.2022.04.06.23.43.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 23:43:46 -0700 (PDT)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        willy@infradead.org, zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH] mm: fix kernel NULL pointer dereference in page_vma_mapped_walk
-Date:   Thu,  7 Apr 2022 14:40:08 +0800
-Message-Id: <20220407064008.71869-1-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Apr 2022 02:44:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B53A11BE4D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649313725;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ghX0s+qnM0zTWcdVKam262S3A8knYr1UnlFhPf0e+YY=;
+        b=H+mw47uJ+hqBffm/n0apuB6CUrDEgyYnmHVMCXA2J3h/VdPMKicGGvjoQ1BClxkn2D/Vih
+        bTOHxb+lMDEWbL+LUtf2r/bcXQE6IxsFeJ0GzkqMrMkYVvd+YaR5DtG8bN+1lZh4iO5TT3
+        jNzzL2Jtq620NFZZEImZ3kbEpFM3hBk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-79-HESEfiTVOlu5reogbnkCLQ-1; Thu, 07 Apr 2022 02:42:01 -0400
+X-MC-Unique: HESEfiTVOlu5reogbnkCLQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B4DA811E80;
+        Thu,  7 Apr 2022 06:41:54 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E753D401E2B;
+        Thu,  7 Apr 2022 06:41:48 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Yk5W6zvvftOB+80D@casper.infradead.org>
+References: <Yk5W6zvvftOB+80D@casper.infradead.org> <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk> <164928630577.457102.8519251179327601178.stgit@warthog.procyon.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs@vger.kernel.org, Jeff Layton <jlayton@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 14/14] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <469868.1649313707.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 07 Apr 2022 07:41:47 +0100
+Message-ID: <469869.1649313707@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,69 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-size_to_hstate(4K) returns NULL pointer, this leads kernel BUG in
-function page_vma_mapped_walk.
+Matthew Wilcox <willy@infradead.org> wrote:
 
- BUG: kernel NULL pointer dereference, address: 0000000000000028
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 102a8b067 P4D 102a8b067 PUD 102a88067 PMD 0
- Oops: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 0 PID: 16 Comm: kworker/0:1 Kdump: loaded Tainted: G   M        E     5.18.0-rc1.bm.1-amd64 #3
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
- Workqueue: events mce_gen_pool_process
- RIP: 0010:page_vma_mapped_walk+0x4aa/0x850
- Code: 8b 77 20 48 89 c2 4c 89 ef e8 b2 c4 02 00 49 89 c4 48 89 43 30 48 85 c0 0f 84 a7 fd ff ff 48 89 ef e8 fa 9c 02 00 49 8d 7d 74 <83> 78 28 09 0f 84 1e 03 00 00 48 89 7b 38 e8 a3 cc 60 00 48 89 df
- RSP: 0018:ffffc9000008bc58 EFLAGS: 00010246
- RAX: 0000000000000000 RBX: ffffc9000008bca0 RCX: 0000000000000009
- RDX: 0000000000200000 RSI: ffffffff82b4a460 RDI: ffff88810ac5c3f4
- RBP: 0000000000001000 R08: 0000000000001000 R09: 0000000000000000
- R10: 0000000000000000 R11: 0000000000000007 R12: ffff888072cafd10
- R13: ffff88810ac5c380 R14: ffff888101afc440 R15: 0000000000000000
- FS:  0000000000000000(0000) GS:ffff88823fc00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000028 CR3: 0000000106ca2002 CR4: 0000000000772ef0
- PKRU: 55555554
- Call Trace:
-  <TASK>
-  ? preempt_count_add+0x68/0xa0
-  page_mapped_in_vma+0xb4/0x230
-  collect_procs.part.35+0x11b/0x440
-  hwpoison_user_mappings+0x165/0x5b0
-  ? zone_pcp_enable+0x16/0x30
-  memory_failure+0xbea/0xd90
-  ? _printk+0x58/0x6f
-  uc_decode_notifier+0x4b/0xd0
-  blocking_notifier_call_chain+0x60/0x90
-  mce_gen_pool_process+0x3c/0x60
-  process_one_work+0x1c2/0x390
-  ? process_one_work+0x390/0x390
-  worker_thread+0x30/0x360
-  ? process_one_work+0x390/0x390
-  kthread+0xe6/0x110
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x1f/0x30
-  </TASK>
+> On Thu, Apr 07, 2022 at 12:05:05AM +0100, David Howells wrote:
+> > Fix this by adding an extra address_space operation, ->removing folio(=
+),
+> > and flag, AS_NOTIFY_REMOVING_FOLIO.  The operation is called if the fl=
+ag is
+> > set when a folio is removed from the pagecache.  The flag should be se=
+t if
+> > a non-NULL cookie is obtained from fscache and cleared in ->evict_inod=
+e()
+> > before truncate_inode_pages_final() is called.
+> =
 
-Fixes: 2aff7a4755bed ("mm: Convert page_vma_mapped_walk to work on PFNs")
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
----
- mm/page_vma_mapped.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> What's wrong with ->freepage?
 
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index 1187f9c1ec5b..a39ec23581c9 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -163,7 +163,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		return not_found(pvmw);
- 
- 	if (unlikely(is_vm_hugetlb_page(vma))) {
--		unsigned long size = pvmw->nr_pages * PAGE_SIZE;
-+		unsigned long size = huge_page_size(hstate_vma(vma));
- 		/* The only possible mapping was handled on last iteration */
- 		if (pvmw->pte)
- 			return not_found(pvmw);
--- 
-2.25.1
+It's too late.  The optimisation must be cancelled before there's a chance
+that a new page can be allocated and attached to the pagecache - but
+->freepage() is called after the folio has been removed.  Doing it in
+->freepage() would allow ->readahead(), ->readpage() or ->write_begin() to
+jump in and start a new read (which gets skipped because the optimisation =
+is
+still in play).
+
+Another possibility could be that the FSCACHE_COOKIE_HAVE_DATA and
+FSCACHE_COOKIE_NO_DATA_TO_READ flags could be moved from cookie->flags to
+mapping->flags and the VM could do the twiddling itself (no aop required) =
+-
+except that fscache can't currently then find them (maybe use an aop for
+that?).
+
+David
 

@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1174F7D21
+	by mail.lfdr.de (Postfix) with ESMTP id DF8464F7D23
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244526AbiDGKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S244512AbiDGKkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244614AbiDGKjs (ORCPT
+        with ESMTP id S244571AbiDGKjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:39:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6DF44BBBF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649327864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OiNxFjZsmsvUmZcyzfwdmxD4iCK54gZ12CfFIhQmEvM=;
-        b=fCVIxflT2wi4hsYW0W7HF6zthZsrOjrXkrrVmf0/SBq5abe/v/zzNk1pmDeCqHEHBkPaye
-        KrtBx98SUkRR3ORBBEcWngZG7uePUGA3IfUnNWeI0N4iq8IIWHbXfiJOPWd/cD9jzAjoHD
-        9cnscxq6qlPyWsyT7JTtWzN1HOAW1Jk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-lxF3ruGvN4Cog91D9aXOqw-1; Thu, 07 Apr 2022 06:37:39 -0400
-X-MC-Unique: lxF3ruGvN4Cog91D9aXOqw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DF38100BAA7;
-        Thu,  7 Apr 2022 10:37:27 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 170671121314;
-        Thu,  7 Apr 2022 10:37:20 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id C3BBB18000B3; Thu,  7 Apr 2022 12:37:17 +0200 (CEST)
-Date:   Thu, 7 Apr 2022 12:37:17 +0200
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thu, 7 Apr 2022 06:39:51 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E1919613F;
+        Thu,  7 Apr 2022 03:37:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so9898294ejd.9;
+        Thu, 07 Apr 2022 03:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=S629+q8OmpzUfpI5xcIxyUuaxIHs7guC/HibFDTI34s=;
+        b=XghNR0vByvtRKbEcnuM8MxYvAH3+32pXisaRKi84IjTpKV9BKN8u9mJmKtFzYwXMM5
+         DYF2pfN7txHOl6VWLlVGkjddHKq2hWdFsRUIV8/jzSRm7rFbqn+VfNXVtHFwElMC9pdD
+         +v7MIENHhf9fnfeeEM0Cvjzcw5mNl7/lcAej0dWXF6HLXNqcXt9PBbIfA7S4F/vOHkRu
+         VpV23MyXMMB+7nVTMoD34siQXuS4HQT4PWeI3nvWCA2hsbWot+YW8h1dDtxnQp0dCmSw
+         1ufBr3KWT3qYhA+OjzeKE3onJSQoUHWaGLcNp/AL+lxaFcuCUpesJbB/YED9vQ/8TvTm
+         bvQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=S629+q8OmpzUfpI5xcIxyUuaxIHs7guC/HibFDTI34s=;
+        b=buoqm2DGremyqLhyLWv56HJ5I8ujfl32sdjlbTOQZyYVT/HfwgM4/GxQPbC54LmMLn
+         8sWyldHbQZzTFGzzYnjkh5wf/lW5uhTAHEk1XklBfG+/jE9TCwwK8P9VrWolMil23OBD
+         aDcvHGYF4TrylbUCXmDbGxaY4d+Yy6rI+4AliDED3ptrBKp6KZT/wWvcCQwn+Zpg7gWF
+         bY0sXNb/oKlmYNzau8QMRN9JbrJZkpF2NJ8Hq7hfLFUHcWvaBZKk96/nrdlL2tjS6jI6
+         6kdKOE3hpAnxKMhmnMhDeToYGBDhqJgBktz7pFjs9P08UqY4jIIG4iooY5FFUnXdDzwz
+         Phag==
+X-Gm-Message-State: AOAM5305DZBSA4IaxGwfYHf9WJR1ZyN1uF2BntMF4/+1rIlLll0GJg0D
+        qtqlX9pNct96s/ddsq5RlcY=
+X-Google-Smtp-Source: ABdhPJy6OMMnQdMyR0O6MxEv3ovYJ6UqRsX9MIkIrFAMGakLTfIm38eCbhyJwCXJT5PYsUUYM299HA==
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id cr21-20020a170906d55500b006db148e05ccmr12271053ejc.63.1649327870366;
+        Thu, 07 Apr 2022 03:37:50 -0700 (PDT)
+Received: from giga-mm.localdomain ([195.245.23.54])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm9026814eds.21.2022.04.07.03.37.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 03:37:49 -0700 (PDT)
+Message-ID: <731673954bbf9e0970f0567350f81f184e076265.camel@gmail.com>
+Subject: Re: [PATCH 00/12] ARM: ARMv5 multiplatform conversions
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/4] efi: Register efi_secret platform device if EFI
- secret area is declared
-Message-ID: <20220407103717.s2t72bzv2th6k6f2@sirius.home.kraxel.org>
-References: <20220331215607.3182232-1-dovmurik@linux.ibm.com>
- <20220331215607.3182232-4-dovmurik@linux.ibm.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>, patches@opensource.cirrus.com
+Date:   Thu, 07 Apr 2022 12:37:47 +0200
+In-Reply-To: <CAK8P3a22dR276SRVh5WRZWDEGQaf9KUUz61tQaCySHZrrgnh9g@mail.gmail.com>
+References: <20220405091750.3076973-1-arnd@kernel.org>
+         <39e8b64cefd8e2b4e4d91a5e6cfc98db88be7449.camel@gmail.com>
+         <CAK8P3a22dR276SRVh5WRZWDEGQaf9KUUz61tQaCySHZrrgnh9g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331215607.3182232-4-dovmurik@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:56:06PM +0000, Dov Murik wrote:
-> During efi initialization, check if coco_secret is defined in the EFI
-> configuration table; in such case, register platform device
-> "efi_secret".  This allows udev to automatically load the efi_secret
-> module (platform driver), which in turn will populate the
-> <securityfs>/secrets/coco directory in guests into which secrets were
-> injected.
-> 
-> Note that a declared address of an EFI secret area doesn't mean that
-> secrets where indeed injected to that area; if the secret area is not
-> populated, the driver will not load (but the platform device will still
-> be registered).
-> 
-> Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
+Thanks Arnd!
 
-Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
+On Thu, 2022-04-07 at 12:08 +0200, Arnd Bergmann wrote:
+> Sure, both look like obvious bugfixes. Shall I apply them to the
+> fixes branch for 5.18, or as part of the multiplatform series?
+
+I'm fine with either option if they land not in the recycled bin ;)
+
+> Either way, if you have any obvious bugfixes for code you maintain,
+> and you'd like
+> to get merged through the soc tree, please send them to soc@kernel.org, which
+> puts them into the patchwork tracker.
+
+Sounds great, thanks, I'll note this!
+
+-- 
+Alexander Sverdlin.
 

@@ -2,124 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9444F780C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85094F781A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242271AbiDGHs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S233716AbiDGHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241974AbiDGHsv (ORCPT
+        with ESMTP id S242212AbiDGHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:48:51 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F903E5E20;
-        Thu,  7 Apr 2022 00:46:50 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a6so9168997ejk.0;
-        Thu, 07 Apr 2022 00:46:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n9ByRjCgN7UyNGlvzfT7jWJ7BAn1HisGnqSo99JqgB8=;
-        b=XJs4dPrHM6T6XT+3sAWKgHKTdRlIHtB1qbtbBQbeCeYm2lgKMG1ROFoYXmGcw/WejB
-         Ysl+qdc70+4y+QbaesP5knS1DOhJrJOlt+V6wlPCPaWZ6UruMvUZX/ybUkGu7MbAH9gO
-         RUJHkCyULKRhhC02oe4s+yqFZY6OosBNEKVyNcm4q3DAxdPde5wCrPz9X6MU8LeHqMaM
-         UVzLa5pFwnQEggEFLBwmWUBPDncgKGIi3hUF/o/yXc7b5ezYPBjmN379uUZYjTLwmf8i
-         SBSisOQvvZYjrmu2ozpGHYwwN/8WhvvyxknnQyozQ7kNrZw97z4XPUtApT6eVofj3QMt
-         eq8g==
-X-Gm-Message-State: AOAM533eL05j4KpO3Fc80HI6yQjxaJv0Nl2s/iqwfRO0Kf4OWxR26Zdt
-        rdiuOG7EKNSgl82UN6eUrXk=
-X-Google-Smtp-Source: ABdhPJzv09r1vMw4Ze8r90GmCwPXjqCMtbVGmOmg1d166H3EkJmoklQuCS2wRak5XhZI0Cgz8VQy4g==
-X-Received: by 2002:a17:906:37cd:b0:6e0:bdb6:f309 with SMTP id o13-20020a17090637cd00b006e0bdb6f309mr12180762ejc.394.1649317608706;
-        Thu, 07 Apr 2022 00:46:48 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id lj20-20020a170906f9d400b006e7f1e1f4a0sm4232922ejb.60.2022.04.07.00.46.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 00:46:47 -0700 (PDT)
-Message-ID: <b53be23f-7935-dae3-9dc8-f850493a5fa9@kernel.org>
-Date:   Thu, 7 Apr 2022 09:46:46 +0200
+        Thu, 7 Apr 2022 03:49:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB301B60AA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:47:32 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYthQ4WdzzFpWm;
+        Thu,  7 Apr 2022 15:45:10 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
+ 2022 15:47:30 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <mcgrof@kernel.org>, <nizhen@uniontech.com>
+CC:     <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] sched: Fix build warning without CONFIG_SYSCTL
+Date:   Thu, 7 Apr 2022 15:47:01 +0800
+Message-ID: <20220407074701.35040-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/1] tty: serial: samsung: add spin_lock for interrupt
- and console_write
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20220407071619.102249-1-jaewon02.kim@samsung.com>
- <CGME20220407071223epcas2p16bb11821a0894a3375e84d17c4ff0844@epcas2p1.samsung.com>
- <20220407071619.102249-2-jaewon02.kim@samsung.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220407071619.102249-2-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 04. 22, 9:16, Jaewon Kim wrote:
-> The console_write and IRQ handler can run concurrently.
-> Problems may occurs console_write is continuously executed while
-> the IRQ handler is running.
+IF CONFIG_SYSCTL is n, build warn:
 
- From the patch POV:
+kernel/sched/core.c:1782:12: warning: ‘sysctl_sched_uclamp_handler’ defined but not used [-Wunused-function]
+ static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+sysctl_sched_uclamp_handler() is used while CONFIG_SYSCTL enabled,
+wrap all related code with CONFIG_SYSCTL to fix this.
 
-But given this is a v3 with no version changelog below "---", you've 
-just kicked the Greg's bot to wake up :P.
+Fixes: ef2637285297 ("sched: Move uclamp_util sysctls to core.c")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ kernel/sched/core.c | 65 +++++++++++++++++++++++++--------------------
+ 1 file changed, 36 insertions(+), 29 deletions(-)
 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> ---
->   drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index e1585fbae909..8af5aceb9f4e 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -2480,12 +2480,24 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
->   			     unsigned int count)
->   {
->   	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
-> +	unsigned long flags;
-> +	bool locked = true;
->   
->   	/* not possible to xmit on unconfigured port */
->   	if (!s3c24xx_port_configured(ucon))
->   		return;
->   
-> +	if (cons_uart->sysrq)
-> +		locked = false;
-> +	else if (oops_in_progress)
-> +		locked = spin_trylock_irqsave(&cons_uart->lock, flags);
-> +	else
-> +		spin_lock_irqsave(&cons_uart->lock, flags);
-> +
->   	uart_console_write(cons_uart, s, count, s3c24xx_serial_console_putchar);
-> +
-> +	if (locked)
-> +		spin_unlock_irqrestore(&cons_uart->lock, flags);
->   }
->   
->   /* Shouldn't be __init, as it can be instantiated from other module */
-
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d50d4ddc7ddc..3f862a455402 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1306,10 +1306,10 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+ static DEFINE_MUTEX(uclamp_mutex);
+ 
+ /* Max allowed minimum utilization */
+-static unsigned int sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
++static unsigned int __maybe_unused sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
+ 
+ /* Max allowed maximum utilization */
+-static unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
++static unsigned int __maybe_unused sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
+ 
+ /*
+  * By default RT tasks run at the maximum performance point/capacity of the
+@@ -1456,33 +1456,6 @@ static void uclamp_update_util_min_rt_default(struct task_struct *p)
+ 	task_rq_unlock(rq, p, &rf);
+ }
+ 
+-static void uclamp_sync_util_min_rt_default(void)
+-{
+-	struct task_struct *g, *p;
+-
+-	/*
+-	 * copy_process()			sysctl_uclamp
+-	 *					  uclamp_min_rt = X;
+-	 *   write_lock(&tasklist_lock)		  read_lock(&tasklist_lock)
+-	 *   // link thread			  smp_mb__after_spinlock()
+-	 *   write_unlock(&tasklist_lock)	  read_unlock(&tasklist_lock);
+-	 *   sched_post_fork()			  for_each_process_thread()
+-	 *     __uclamp_sync_rt()		    __uclamp_sync_rt()
+-	 *
+-	 * Ensures that either sched_post_fork() will observe the new
+-	 * uclamp_min_rt or for_each_process_thread() will observe the new
+-	 * task.
+-	 */
+-	read_lock(&tasklist_lock);
+-	smp_mb__after_spinlock();
+-	read_unlock(&tasklist_lock);
+-
+-	rcu_read_lock();
+-	for_each_process_thread(g, p)
+-		uclamp_update_util_min_rt_default(p);
+-	rcu_read_unlock();
+-}
+-
+ static inline struct uclamp_se
+ uclamp_tg_restrict(struct task_struct *p, enum uclamp_id clamp_id)
+ {
+@@ -1762,6 +1735,11 @@ uclamp_update_active_tasks(struct cgroup_subsys_state *css)
+ }
+ 
+ static void cpu_util_update_eff(struct cgroup_subsys_state *css);
++#endif
++
++#ifdef CONFIG_SYSCTL
++#ifdef CONFIG_UCLAMP_TASK
++#ifdef CONFIG_UCLAMP_TASK_GROUP
+ static void uclamp_update_root_tg(void)
+ {
+ 	struct task_group *tg = &root_task_group;
+@@ -1779,6 +1757,33 @@ static void uclamp_update_root_tg(void)
+ static void uclamp_update_root_tg(void) { }
+ #endif
+ 
++static void uclamp_sync_util_min_rt_default(void)
++{
++	struct task_struct *g, *p;
++
++	/*
++	 * copy_process()			sysctl_uclamp
++	 *					  uclamp_min_rt = X;
++	 *   write_lock(&tasklist_lock)		  read_lock(&tasklist_lock)
++	 *   // link thread			  smp_mb__after_spinlock()
++	 *   write_unlock(&tasklist_lock)	  read_unlock(&tasklist_lock);
++	 *   sched_post_fork()			  for_each_process_thread()
++	 *     __uclamp_sync_rt()		    __uclamp_sync_rt()
++	 *
++	 * Ensures that either sched_post_fork() will observe the new
++	 * uclamp_min_rt or for_each_process_thread() will observe the new
++	 * task.
++	 */
++	read_lock(&tasklist_lock);
++	smp_mb__after_spinlock();
++	read_unlock(&tasklist_lock);
++
++	rcu_read_lock();
++	for_each_process_thread(g, p)
++		uclamp_update_util_min_rt_default(p);
++	rcu_read_unlock();
++}
++
+ static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+ 				void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -1843,6 +1848,8 @@ static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+ 
+ 	return result;
+ }
++#endif
++#endif
+ 
+ static int uclamp_validate(struct task_struct *p,
+ 			   const struct sched_attr *attr)
 -- 
-js
-suse labs
+2.17.1
+

@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4512C4F8704
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023054F8706
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346819AbiDGSUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S1346820AbiDGSXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDGSUL (ORCPT
+        with ESMTP id S232921AbiDGSX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:20:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C599EE4;
-        Thu,  7 Apr 2022 11:18:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o20so5721600pla.13;
-        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
-        b=WBsYEqJ7FltBHsC6oK/iY4SdWSX6yl+D4SwDFOBtZLxKw67+b4LuB50h908ertO7zg
-         Dcthrade36ld2as5TY3PkMw329X2qDnHvylK/N1Cm7ykcJ0GqY14WgfySksy1AbU3YEg
-         MIUV5fDNgM+qHqrcjk2DAQGR8aK8ykfQAnzRzMNSi5lB12PEpl88ZQQ+9+EYRgR0RRu2
-         h6S2Nsb+l9LAz89Ti8lc3kVHcyaGi+ODPZc3kby0R1R2bWeyY4ARzw3DPTQwAZdDDmPD
-         ZVzK3JEOi1ZtBUoP+TnwA5n6kS5WJNPYPbZJo11rKNyviTip8uEfe7fgqm5v/JQhYF1J
-         A4Iw==
+        Thu, 7 Apr 2022 14:23:28 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6B014FB92;
+        Thu,  7 Apr 2022 11:21:27 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id e189so6482999oia.8;
+        Thu, 07 Apr 2022 11:21:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
-        b=y2oMTYOY/h35qRgaP7W6tH8Pesx9+YszHj1HwcdXhQUzy3ctqxS0O32sKiKVdEu5fZ
-         4C9mJp3c09PVtcdtK+J9kBEL3xBFytKD2iLqSZzvqFQoJZrfc22vs8s5/GxfoFSdNpH0
-         W0J4s3OemM8YN/dA83HfET0OaLZTCd8ulnamJh2SBGZEnv/e2nCQmFA/y3/3U8L53AdZ
-         k5D9VKspoMeQtqyLwOdEjIGgn4whvgkbKO8/n5e8YxuWVOoeRWf2Jn6VvxMsAvOP7sfv
-         QODXvVizbNIEuNlqJLgLfcH3MalUtv/zvtnLUrrJHjAr9OfGquGRfxTzGBN1YpRE1Iek
-         mXpw==
-X-Gm-Message-State: AOAM533ZE3aTwHbv/R2TQybdHxltZdQpuQmlvOgWdi6VdhULu4vOObJK
-        Mv2QHcC8Z5wuwb3nmcAZvmvGYDCGMPU=
-X-Google-Smtp-Source: ABdhPJyXdHfHZMxDow5pG2bx+mSyl30fIzwXdgKyuiWLg9v6EURe8ej5jtVSOTdU4b4I9EDVWhfFEg==
-X-Received: by 2002:a17:903:41c3:b0:157:1e3b:ee66 with SMTP id u3-20020a17090341c300b001571e3bee66mr867050ple.41.1649355490155;
-        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm24726271pfu.202.2022.04.07.11.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:18:09 -0700 (PDT)
-Message-ID: <55800b61-bdb7-9e93-7d2c-b5a34c1e5cd0@gmail.com>
-Date:   Thu, 7 Apr 2022 11:18:06 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZUuPSTjprXcNKfHzz7Qs6snhyaATcmWPUoU1Mkt9TqE=;
+        b=PSpFrJdTKG6d76MSNzRPeUe7Sde17JDZyVWanVuhOVK6G3PPu3nwD0pFBlhdYtJbao
+         Vk1917gZ9ue7U9xQmu1MmGOxazvDawUsFO2AOUYUvV8MZrysyiR2xDToL7aNBjVyF4Lx
+         Ts/vzThIS7W/9baI4LoosSuUx9PVDLJqEmApGQ3X//y7zf85miQdIiKasclbkqYpkTre
+         1DH8f22Vk45abq4+ynz20u730NGHHHQ4a4o/eKoXRRaRG53Lh14GYhTRFp49eaiklnSQ
+         nzBRmg+FTjbbyV5Xz692tlcBZYcW4IyGds3Fh9yYwHqYzP8P0BlVZiJyMNrs+RcKHKnA
+         ZCxA==
+X-Gm-Message-State: AOAM533CECPaBelGBGgD3TTa5jt5koHSlVfsxsfJHaJMGEylxpuK5q05
+        4jF2VYb536Y1GirDhWCMMw==
+X-Google-Smtp-Source: ABdhPJzQ3QKekxOUT9F9yPRhqnVy0KNHkDXdjNZeiEbzCTGOSGHeI4SuJc+WaERnqIJopniAaB0DrA==
+X-Received: by 2002:a05:6808:1202:b0:2f9:c7b4:fd56 with SMTP id a2-20020a056808120200b002f9c7b4fd56mr351609oil.55.1649355686314;
+        Thu, 07 Apr 2022 11:21:26 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u22-20020a4ae696000000b0032158ab4ce9sm7507715oot.26.2022.04.07.11.21.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 11:21:26 -0700 (PDT)
+Received: (nullmailer pid 1732024 invoked by uid 1000);
+        Thu, 07 Apr 2022 18:21:25 -0000
+Date:   Thu, 7 Apr 2022 13:21:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: jedec,spi-nor: remove unneeded
+ properties
+Message-ID: <Yk8rpUXmfmULMVjr@robh.at.kernel.org>
+References: <20220407142004.292782-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407142004.292782-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 07:33, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
+On Thu, Apr 07, 2022 at 04:20:04PM +0200, Krzysztof Kozlowski wrote:
+> After conversion the jedec,spi-nor DT schema to reference other schemas
+> (SPI and MTD) and use unevaluatedProperties, several properties are
+> redundant.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
->   arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
->   arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
+>  .../devicetree/bindings/mtd/jedec,spi-nor.yaml        | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> index 4abfb4cfc157..708e7f88fd92 100644
+> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> @@ -50,10 +50,6 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> -  spi-max-frequency: true
+> -  spi-rx-bus-width: true
+> -  spi-tx-bus-width: true
+> -
+>    m25p,fast-read:
+>      type: boolean
+>      description:
+> @@ -74,14 +70,9 @@ properties:
+>        be used on such systems, to denote the absence of a reliable reset
+>        mechanism.
+>  
+> -  label: true
+> -
+>    partitions:
+>      type: object
+>  
+> -  '#address-cells': true
+> -  '#size-cells': true
 
-For the above:
+These are needed for 'partition' nodes.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> -
+>  patternProperties:
+>    # Note: use 'partitions' node for new users
+>    '^partition@':
+> @@ -99,8 +90,6 @@ examples:
+>          #size-cells = <0>;
+>  
+>          flash@0 {
+> -            #address-cells = <1>;
+> -            #size-cells = <1>;
+>              compatible = "spansion,m25p80", "jedec,spi-nor";
+>              reg = <0>;
+>              spi-max-frequency = <40000000>;
+> -- 
+> 2.32.0
+> 
+> 

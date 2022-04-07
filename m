@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90424F745C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616144F745E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbiDGEIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 00:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S234698AbiDGEIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 00:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiDGEIf (ORCPT
+        with ESMTP id S234597AbiDGEIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 00:08:35 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649B958E67
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 21:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=uEn8UB6EoN5i4tOmH0BcPmL+HvFT8NPS6yteEp9T7Zg=;
-  b=HJv7rWR5JCTiUN/EfuoKq8HRPPC8lHW7KH03xjUP86pBHGYDqNKHB7CV
-   vAALmDgW/ySknC/Hp1yJTDBr+LU5qJxfs1QdLPfRlRabqvXDsEpmuLsP/
-   Uq2bh0yGLvDBnGp0Z3ekDmnVP6ruAGXX6OI+NXJervE4tffBVeBq0Vf0V
-   E=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,241,1643670000"; 
-   d="scan'208";a="10799962"
-Received: from lputeaux-656-1-153-249.w217-128.abo.wanadoo.fr (HELO hadrien) ([217.128.47.249])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 06:06:35 +0200
-Date:   Thu, 7 Apr 2022 06:06:33 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: rtl8712: remove unnecessary parentheses
-In-Reply-To: <20220406224057.5260-1-eng.alaamohamedsoliman.am@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204070606000.2191@hadrien>
-References: <20220406224057.5260-1-eng.alaamohamedsoliman.am@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 7 Apr 2022 00:08:41 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1678CDBC;
+        Wed,  6 Apr 2022 21:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649304401; x=1680840401;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uS0Bsv6++R0cDnlCQKfE9t30lBvjKmujGYMrxXE7dlA=;
+  b=O1ezjtgwMXhAQJzzel5iqFZe6rahl2nAlxWOPf6aT0cU4UAF73mfqc1U
+   iX5jxTU+R8kV20PnOsP+/3eRRFhtYqziBP2yf9itxPRRVC+KL72GN2NvP
+   62eISS6Vt5dIXHD/4xr16CYBDhnNclQuQu+41o0EKvsSyHj4m3fwGzYN5
+   Pbrb8klB1LP2bCa1v/vS4Wg1IxYnf2e7OwMwKdyKLnEOK7lIglg4t9JZj
+   8jeHr+pBnyWDh+X/07c4BqkO3xxoNsNjuFj/xYUB/Q2EFuqCyivV2CVCt
+   gS7QCq4eY4saGBVKtLqJCtAl/aEVO/k2nmIgcfsFKU3drA3rINWW1Z4/s
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286201095"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="286201095"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 21:06:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="642323740"
+Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 21:06:39 -0700
+Message-ID: <5bc95c6394a98ddfcdd5c8d333dc06e45c0e40af.camel@intel.com>
+Subject: Re: [RFC PATCH v5 088/104] KVM: TDX: Add TDG.VP.VMCALL accessors to
+ access guest vcpu registers
+From:   Kai Huang <kai.huang@intel.com>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Thu, 07 Apr 2022 16:06:37 +1200
+In-Reply-To: <e490d6b5d26bc431684110dcca068a8b759b97aa.1646422845.git.isaku.yamahata@intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <e490d6b5d26bc431684110dcca068a8b759b97aa.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,129 +66,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, 7 Apr 2022, Alaa Mohamed wrote:
-
-> Reported by checkpatch:
->
-> CHECK: Unnecessary parentheses around param->u.crypt.key[16]: 85
-> CHECK: Unnecessary parentheses around param->u.crypt.key[24]: 87
-> CHECK: Unnecessary parentheses around padapter->mlmepriv: 603
-> CHECK: Unnecessary parentheses around wrqu->encoding: 1497
-> CHECK: Unnecessary parentheses around wrqu->encoding: 1592
-> CHECK: Unnecessary parentheses around padapter->mlmepriv: 1593
-> CHECK: Unnecessary parentheses around wrqu->param: 1673
-> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1967
-> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1977
-> CHECK: Unnecessary parentheses around pmlmepriv->scanned_queue.lock: 1999
-
-This still needs to be improved.
-
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> TDX defines ABI for the TDX guest to call hypercall with TDG.VP.VMCALL API.
+> To get hypercall arguments and to set return values, add accessors to guest
+> vcpu registers.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
-> Changes in v2:
-> 	- Edit commit subject
-> 	- Edit commit message
-> 	- Fix the same check in more lines
-> 	- Remove space before '.skey' in
-> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
-> ---
-> Changes in v3:
-> 	return the space before '.skey' in
-> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86
+>  arch/x86/kvm/vmx/tdx.c | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index dc83414cb72a..8695836ce796 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -88,6 +88,41 @@ static __always_inline unsigned long tdexit_intr_info(struct kvm_vcpu *vcpu)
+>  	return kvm_r9_read(vcpu);
+>  }
+>  
+> +#define BUILD_TDVMCALL_ACCESSORS(param, gpr)					\
+> +static __always_inline								\
+> +unsigned long tdvmcall_##param##_read(struct kvm_vcpu *vcpu)			\
+> +{										\
+> +	return kvm_##gpr##_read(vcpu);						\
+> +}										\
+> +static __always_inline void tdvmcall_##param##_write(struct kvm_vcpu *vcpu,	\
+> +						     unsigned long val)		\
+> +{										\
+> +	kvm_##gpr##_write(vcpu, val);						\
+> +}
+> +BUILD_TDVMCALL_ACCESSORS(p1, r12);
+> +BUILD_TDVMCALL_ACCESSORS(p2, r13);
+> +BUILD_TDVMCALL_ACCESSORS(p3, r14);
+> +BUILD_TDVMCALL_ACCESSORS(p4, r15);
 
-Thanks for taking care of this part.
+Are they needed? Do those helpers provide more information than just using
+kvm_{reg}_read/write()?
 
-julia
-
-> ---
->  drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 20 +++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> index 3b6926613257..f1e352b7f83e 100644
-> --- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> +++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> @@ -82,9 +82,9 @@ static inline void handle_pairwise_key(struct sta_info *psta,
->  	       (param->u.crypt. key_len > 16 ? 16 : param->u.crypt.key_len));
->  	if (strcmp(param->u.crypt.alg, "TKIP") == 0) { /* set mic key */
->  		memcpy(psta->tkiptxmickey. skey,
-> -		       &(param->u.crypt.key[16]), 8);
-> +		       &param->u.crypt.key[16], 8);
->  		memcpy(psta->tkiprxmickey. skey,
-> -		       &(param->u.crypt.key[24]), 8);
-> +		       &param->u.crypt.key[24], 8);
->  		padapter->securitypriv. busetkipkey = false;
->  		mod_timer(&padapter->securitypriv.tkip_timer,
->  			  jiffies + msecs_to_jiffies(50));
-> @@ -600,7 +600,7 @@ static int r8711_wx_get_name(struct net_device *dev,
->  	u32 ht_ielen = 0;
->  	char *p;
->  	u8 ht_cap = false;
-> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
->  	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
->  	u8 *prates;
->
-> @@ -1494,7 +1494,7 @@ static int r8711_wx_set_enc(struct net_device *dev,
->  	u32 keyindex_provided;
->  	struct NDIS_802_11_WEP	 wep;
->  	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
-> -	struct iw_point *erq = &(wrqu->encoding);
-> +	struct iw_point *erq = &wrqu->encoding;
->  	struct _adapter *padapter = netdev_priv(dev);
->
->  	key = erq->flags & IW_ENCODE_INDEX;
-> @@ -1589,8 +1589,8 @@ static int r8711_wx_get_enc(struct net_device *dev,
+> +
+> +static __always_inline unsigned long tdvmcall_exit_type(struct kvm_vcpu *vcpu)
+> +{
+> +	return kvm_r10_read(vcpu);
+> +}
+> +static __always_inline unsigned long tdvmcall_exit_reason(struct kvm_vcpu *vcpu)
+> +{
+> +	return kvm_r11_read(vcpu);
+> +}
+> +static __always_inline void tdvmcall_set_return_code(struct kvm_vcpu *vcpu,
+> +						     long val)
+> +{
+> +	kvm_r10_write(vcpu, val);
+> +}
+> +static __always_inline void tdvmcall_set_return_val(struct kvm_vcpu *vcpu,
+> +						    unsigned long val)
+> +{
+> +	kvm_r11_write(vcpu, val);
+> +}
+> +
+>  static inline bool is_td_vcpu_created(struct vcpu_tdx *tdx)
 >  {
->  	uint key;
->  	struct _adapter *padapter = netdev_priv(dev);
-> -	struct iw_point *erq = &(wrqu->encoding);
-> -	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-> +	struct iw_point *erq = &wrqu->encoding;
-> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
->  	union Keytype *dk = padapter->securitypriv.DefKey;
->
->  	if (!check_fwstate(pmlmepriv, _FW_LINKED)) {
-> @@ -1670,7 +1670,7 @@ static int r871x_wx_set_auth(struct net_device *dev,
->  				union iwreq_data *wrqu, char *extra)
->  {
->  	struct _adapter *padapter = netdev_priv(dev);
-> -	struct iw_param *param = (struct iw_param *)&(wrqu->param);
-> +	struct iw_param *param = (struct iw_param *)&wrqu->param;
->  	int paramid;
->  	int paramval;
->  	int ret = 0;
-> @@ -1964,7 +1964,7 @@ static int r871x_get_ap_info(struct net_device *dev,
->  		return -EINVAL;
->  	data[32] = 0;
->
-> -	spin_lock_irqsave(&(pmlmepriv->scanned_queue.lock), irqL);
-> +	spin_lock_irqsave(&pmlmepriv->scanned_queue.lock, irqL);
->  	phead = &queue->queue;
->  	plist = phead->next;
->  	while (1) {
-> @@ -1974,7 +1974,7 @@ static int r871x_get_ap_info(struct net_device *dev,
->  		if (!mac_pton(data, bssid)) {
->  			netdev_info(dev, "r8712u: Invalid BSSID '%s'.\n",
->  				    (u8 *)data);
-> -			spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock),
-> +			spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock,
->  					       irqL);
->  			return -EINVAL;
->  		}
-> @@ -1996,7 +1996,7 @@ static int r871x_get_ap_info(struct net_device *dev,
->  		}
->  		plist = plist->next;
->  	}
-> -	spin_unlock_irqrestore(&(pmlmepriv->scanned_queue.lock), irqL);
-> +	spin_unlock_irqrestore(&pmlmepriv->scanned_queue.lock, irqL);
->  	if (pdata->length >= 34) {
->  		if (copy_to_user((u8 __user *)pdata->pointer + 32,
->  		    (u8 *)&pdata->flags, 1))
-> --
-> 2.35.1
->
->
->
+>  	return tdx->tdvpr.added;
+
+

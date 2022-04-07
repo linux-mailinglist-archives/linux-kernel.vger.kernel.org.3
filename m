@@ -2,86 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF614F7194
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4464F7198
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238864AbiDGBeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S230472AbiDGBef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240353AbiDGB37 (ORCPT
+        with ESMTP id S240671AbiDGBaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:29:59 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC81A590A;
-        Wed,  6 Apr 2022 18:22:26 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id kw18so4156872pjb.5;
-        Wed, 06 Apr 2022 18:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NgQfrEiHvY0rj5bc8G96bBHD3fUTUsFrxi+7ks+aDZs=;
-        b=NV5tFDPkfdZQe29Eg0I3Kzg8Xl7j/aLXgeBNe/8tJHlG1t2vU5gltbuZXdTqhKNFVq
-         hu29WB/Oc8wZt6aBV7ShihlNxasT5emfz0esy4jcTSDYFT+tnLebthmgV9xpOLlJ9Ctn
-         VySi/Iww4lvjOEnXRICOK8UAJDXpJ8Phi39Dl8hy4jUDXbPPiFPczLjNU2Zyd6xwnQux
-         lj5TtCTGj/h7GtGHy5BKxGnXYNwNpKDTJF9nxzYC9ZPfFEtR3MTyoMchMRc2FVsyuwbf
-         hVssd4O/kAws0q/WoQciKRUKA++Tls2Z+x6scGpY1LWk2wFsqhpBtzkw5ZOWYzvH8maW
-         AXhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=NgQfrEiHvY0rj5bc8G96bBHD3fUTUsFrxi+7ks+aDZs=;
-        b=Qvq0fBISrGXGMKk0IhND/y/PbDops2sjUyMtdrJjL9/12HdkzwDv9udRgZXcFDL4s/
-         1Dw2E61uxOaGQf67P72M3vGyXEKs4MJKqKFNFPgYG+V3V0GpvQhrd1JPHk9AttKQa9LI
-         bNzTyTQ2MgOSZvi1OObsOYcfQmHuiS+2htCEf3f9hjl9U1ej6Rh6wqBXJmZ0DuFXGqmo
-         EvK9PTzYMtsjlslAy5uEysQAhTI/wTOx+2NQ+Hf2SpQsLZ49hOKsynU2sap9ZS561BP/
-         paQNG6C8p9rk0N0gP70P3ukC5miW/vZBWwUCEq2T/b5UytJyZOxWkQ6eXA+FILXMLB/n
-         6R4A==
-X-Gm-Message-State: AOAM532hXcfntd+dYET2nz4iPC3wU1jOO4DVOvy97zIdgTY+SLnR8hdt
-        puAWqD1axRPaPzaJzeONTTg/mZ97U/NV4A==
-X-Google-Smtp-Source: ABdhPJxEDnQ+Tly+aqkALKcBREuDaPyhDPJaGLOSEmmM4+wJSwoG5LeQ6N7eSwmj/RiW+kiS+IxEDg==
-X-Received: by 2002:a17:902:e74d:b0:156:9d3c:4271 with SMTP id p13-20020a170902e74d00b001569d3c4271mr11427623plf.79.1649294545595;
-        Wed, 06 Apr 2022 18:22:25 -0700 (PDT)
-Received: from localhost.localdomain ([119.3.119.18])
-        by smtp.gmail.com with ESMTPSA id s20-20020a17090aad9400b001ca8fcfd1e9sm6848166pjq.26.2022.04.06.18.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 18:22:25 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     kuba@kernel.org
-Cc:     aelior@marvell.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, manishc@marvell.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH] qed: remove an unneed NULL check on list iterator
-Date:   Thu,  7 Apr 2022 09:22:07 +0800
-Message-Id: <20220407012207.14442-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220405182641.08cd18ff@kernel.org>
-References: <20220405182641.08cd18ff@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Apr 2022 21:30:12 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9C2E18A7A6;
+        Wed,  6 Apr 2022 18:22:46 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 07 Apr 2022 10:22:46 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 262652058B50;
+        Thu,  7 Apr 2022 10:22:46 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 7 Apr 2022 10:22:46 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id A10E7B62B7;
+        Thu,  7 Apr 2022 10:22:45 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 0/3] dt-bindings: PCI: uniphier: Fix endpoint descriptions
+Date:   Thu,  7 Apr 2022 10:22:30 +0900
+Message-Id: <1649294553-17310-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 18:26:41 -0700, Jakub Kicinski wrote:
-> On Tue,  5 Apr 2022 08:22:56 +0800 Xiaomeng Tong wrote:
-> >  struct pci_dev *qed_validate_ndev(struct net_device *ndev)
-> >  {
-> > -	struct pci_dev *pdev = NULL;
-> > +	struct pci_dev *pdev;
-> >  	struct net_device *upper;
-> 
-> Please keep the longest-to-shortest ordering of variable declaration
-> lines.
+This series fixes dt-schema descriptions for PCI endpoint controller
+implemented in UniPhier SoCs.
 
-I have fix it in v2 patch [1], as you suggested. Please check it.
-Thank you very much.
+Changes since v1:
+- Fix "config" in the Patch 1 commit message to "addr_space"
 
-[1] https://lore.kernel.org/lkml/20220406015921.29267-1-xiam0nd.tong@gmail.com/
---
-Xiaomeng Tong
+Kunihiko Hayashi (3):
+  dt-bindings: PCI: designware-ep: Increase maxItems of reg and
+    reg-names
+  dt-bindings: PCI: uniphier-ep: Clean up reg, clocks, resets, and their
+    names using compatible string
+  ARM: dts: uniphier: Remove compatible "snps,dw-pcie-ep" from Pro5
+    pcie-ep node
+
+ .../bindings/pci/snps,dw-pcie-ep.yaml         |  4 +-
+ .../pci/socionext,uniphier-pcie-ep.yaml       | 84 ++++++++++++-------
+ arch/arm/boot/dts/uniphier-pro5.dtsi          |  3 +-
+ 3 files changed, 59 insertions(+), 32 deletions(-)
+
+-- 
+2.25.1
+

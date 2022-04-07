@@ -2,107 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C5D4F8048
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39F04F8054
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 15:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241995AbiDGNRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 09:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S1343618AbiDGNTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 09:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239126AbiDGNRF (ORCPT
+        with ESMTP id S241658AbiDGNTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 09:17:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0E001B5380
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 06:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649337302;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=udxygKvlwgxmrvFQRGMm3xyqxn601rj4KdSJI9OKca0=;
-        b=DgW8qTVVQekRGx7ztAoqJcHClkbRZp88ee83qbUi6KaRQjK9/rD7Vs7B1YOToanS+6DtAM
-        yLZnudggnRcb6K1VOWKPIX6QI6qpCaYA7kkIqzgBQOuNOgPVGFyTLYjnIL9Km8yC3JJZPU
-        JoDAMAhFrcErxEzAWFjSksZu8qwXvIM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-DksiJ0tUO2CheWfRVyV7XQ-1; Thu, 07 Apr 2022 09:15:01 -0400
-X-MC-Unique: DksiJ0tUO2CheWfRVyV7XQ-1
-Received: by mail-ej1-f71.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so3055767eje.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 06:15:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=udxygKvlwgxmrvFQRGMm3xyqxn601rj4KdSJI9OKca0=;
-        b=1QiqDzrzhjqJ3EtGJYwvH2/SIprwcK+xfZ/K8zeEI7HUx5afanRbbMZZWtjraLo5Vy
-         2iBlr1RVXczH/ot8ftdOOll1mLYnrxXZThBYsNuqKJxbXnpyt1X+BEXFXxfdIqAyyXIu
-         IXUB6NJajnHR1QUvYYOxJBZDhlY3CIWfqJOo+qX/YRUH4zA6MkH8topsHHFRpGyXqqwS
-         T01a0Q4jPAxPhPpJHW7FIKoMovt5zujC9+guZGGQqyA7L4vcdWgePALYiAeSOs6DyQOL
-         hkONJLhjK2d/DKPJlYtmWKR5WKRz9MeRVyA9z7qEvLLxMIP4JFkSxpFYZBNlAxK/1KQv
-         p8EA==
-X-Gm-Message-State: AOAM532QKdGA97QAFkXPTMSt3l7j+U3Ss5iTm1dRnJMlAo+gsLbdwrFS
-        JI841s4xnHgZkrB5V9+zY+AiTQnM2MsdePp8t5n1Hm1NzKirAxXMEfpFvOOM5eQcZkLEAdmSE11
-        xYlhHlRcER0x0iDre01BucelN
-X-Received: by 2002:a17:907:1c20:b0:6e4:b753:93fc with SMTP id nc32-20020a1709071c2000b006e4b75393fcmr13277230ejc.363.1649337299503;
-        Thu, 07 Apr 2022 06:14:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzmZYQ3ay23HA1zsX8EaoXjDU6Mev9H0qIxUfrwm2VhF2YVOmFSt7Z/m1lFcvcz8wEQHikrsw==
-X-Received: by 2002:a17:907:1c20:b0:6e4:b753:93fc with SMTP id nc32-20020a1709071c2000b006e4b75393fcmr13277200ejc.363.1649337299226;
-        Thu, 07 Apr 2022 06:14:59 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id d12-20020a50cf4c000000b0041cc12dc1f3sm6542752edk.71.2022.04.07.06.14.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 06:14:58 -0700 (PDT)
-Message-ID: <23189be4-4410-d47e-820c-a3645d5b9e6d@redhat.com>
-Date:   Thu, 7 Apr 2022 15:14:57 +0200
+        Thu, 7 Apr 2022 09:19:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2751CABFD;
+        Thu,  7 Apr 2022 06:17:34 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZ21w02ShzgYFr;
+        Thu,  7 Apr 2022 21:15:48 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Apr 2022 21:17:33 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <bhelgaas@google.com>, <rafael@kernel.org>, <lenb@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yangyicong@hisilicon.com>,
+        <linuxarm@huawei.com>
+Subject: [PATCH] PCI/ACPI: Decouple the negotiation of ASPM and other PCIe services
+Date:   Thu, 7 Apr 2022 21:16:02 +0800
+Message-ID: <20220407131602.14727-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 089/104] KVM: TDX: Add a placeholder for handler of
- TDX hypercalls (TDG.VP.VMCALL)
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b84fcd9927e49716de913b0fe910018788aaba46.1646422845.git.isaku.yamahata@intel.com>
- <3042130fce467c30f07e58581da966fc405a4c6c.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <3042130fce467c30f07e58581da966fc405a4c6c.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 06:15, Kai Huang wrote:
->>   
->> +static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->> +{
->> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
->> +
->> +	if (unlikely(tdx->tdvmcall.xmm_mask))
->> +		goto unsupported;
-> Put a comment explaining this logic?
-> 
+Currently we regard ASPM as a necessary PCIe service and if it's disabled
+by pcie_aspm=off we cannot enable other services like AER and hotplug.
+However the ASPM is just one of the PCIe services and other services
+mentioned no dependency on this. So this patch decouples the negotiation
+of ASPM and other PCIe services, then we can make use of other services
+in the absence of ASPM.
 
-This only seems to be necessary for Hyper-V hypercalls, which however 
-are not supported by this series in TDX guests (because the 
-kvm_hv_hypercall still calls kvm_*_read, likewise for Xen).
+Aaron Sierra tried to fix this originally:
+https://lore.kernel.org/linux-pci/20190702201318.GC128603@google.com/
 
-So for now this conditional can be dropped.
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+ drivers/acpi/pci_root.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Since
+diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+index 6f9e75d14808..16fa7c5a11ad 100644
+--- a/drivers/acpi/pci_root.c
++++ b/drivers/acpi/pci_root.c
+@@ -37,8 +37,6 @@ static int acpi_pci_root_scan_dependent(struct acpi_device *adev)
+ }
+ 
+ #define ACPI_PCIE_REQ_SUPPORT (OSC_PCI_EXT_CONFIG_SUPPORT \
+-				| OSC_PCI_ASPM_SUPPORT \
+-				| OSC_PCI_CLOCK_PM_SUPPORT \
+ 				| OSC_PCI_MSI_SUPPORT)
+ 
+ static const struct acpi_device_id root_device_ids[] = {
+-- 
+2.24.0
 

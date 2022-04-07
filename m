@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A484F86FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61424F86FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346807AbiDGSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S233248AbiDGSST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiDGSOZ (ORCPT
+        with ESMTP id S232970AbiDGSSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:14:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6BB82128EF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649355143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=YuAxLAgmvKMBQBwK85qk9slVwH48ebauOcjJTTF6T00=;
-        b=c5N5i7Uz7NWztcsOG4GwNvRpfr1hT7FA0Ugwk41r+8zCaW11oCjxDSNqAJEsOHoHndJqDZ
-        i6nRbE921YZhdMtdGVYuSfmc/Nmyqo2JTib+6Do9cPnbPpPgV9dj0+6LEvYSr447zGIqsc
-        NJZN56OX3UEfUq8QAUqCzMt5CmvW9fc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-MBXjcZLcNGeg6b9Rrjdtzg-1; Thu, 07 Apr 2022 14:12:19 -0400
-X-MC-Unique: MBXjcZLcNGeg6b9Rrjdtzg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0088B3C01DB2;
-        Thu,  7 Apr 2022 18:12:19 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-51.bos.redhat.com [10.18.17.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BF009C27E86;
-        Thu,  7 Apr 2022 18:12:18 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [PATCH] sched/headers: fix redundant include of autogroup.h
-Date:   Thu,  7 Apr 2022 14:12:17 -0400
-Message-Id: <20220407181217.20487-1-pauld@redhat.com>
+        Thu, 7 Apr 2022 14:18:11 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93AB22C1C1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:16:10 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id t21so6447152oie.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=XVxlM+817FJT8H5/eqfV4sWLJEZR2m3rmCdfP3oay/E=;
+        b=PEWjTExje4yOFoYkMCrvWFzabQQ92bC6+VE85If+xFzo5BTgyvE3rOzNo9S/7ZQwzw
+         UMa/sVntgHsH3hl/uMMswllsEbJKO1EuMWWP3ocVij7fnewQ4j7+pMCW9CYl9ByGBSy8
+         gE2RqOly+Ze/uPNpVkb/CV4pVHjFGH5H5M2JE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=XVxlM+817FJT8H5/eqfV4sWLJEZR2m3rmCdfP3oay/E=;
+        b=2pEbBDMZoLM6xhuqUh9rcmWro2T2YTd53VXZAasInmEzJILMnoSeMupeMOLQNbrUni
+         nZRnoKfWFBymVS+6RXgw7KV3K31/rZ+aWqBnoQhyMmGGyD820A5IVXBOhVhPwB8+4Lqz
+         nCoHiLF19u1FVi5UK3WjMNg4xzCFOXgGjr3aj8rZtgc9iCzf9GoIigI16bXJ3Zy6OYFn
+         RrjVf+LF3AZLYH57ZWrqqeLvvfgyNqpb4Gyv/tuoCnZpd4XAsERKOplNw8JwNEAUBClS
+         KVFgEevWPX9SsP2g70sGmH9AYco5yF+Jc/JT4lNff1E1F+rzPN731JNuyzuAyh4Ojjax
+         ectQ==
+X-Gm-Message-State: AOAM531p2aI7F7jgO0auJe3N8AzvAtN7VGPiQTM8nzc96XpQGy3w3DCV
+        kAIYvse0onqniZcszgHmiPzxVKVlelsm5Sj2MK0XIg==
+X-Google-Smtp-Source: ABdhPJwuAuhdX0hEySqeCo3+X9rbYlLqdOPDPqFH6dFaZe2W7uWs32pWCAifwoqvygyfqx9dlJdbFUtM5ngGNZ/aFdc=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr6042316oie.193.1649355370278; Thu, 07
+ Apr 2022 11:16:10 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 7 Apr 2022 11:16:09 -0700
 MIME-Version: 1.0
-Content-type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5c87d5d9-66d0-41d9-4adb-53b3ec7cadeb@quicinc.com>
+References: <20220406111101.27412-1-quic_mpubbise@quicinc.com>
+ <CAE-0n51vq_V85SKh+hN1Ueas9t1dV7ZFaFyQsG9vukRBAHUc5A@mail.gmail.com> <5c87d5d9-66d0-41d9-4adb-53b3ec7cadeb@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 7 Apr 2022 11:16:09 -0700
+Message-ID: <CAE-0n51PheX1poksttyYVEOVe2amWbWwZSQMwguTUxajSHm6bQ@mail.gmail.com>
+Subject: Re: [PATCH v11] arm64: dts: qcom: sc7280: Add WPSS remoteproc node
+To:     Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_sibis@quicinc.com,
+        kuabhs@chromium.org, quic_pillair@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kernel/sched/core.c there are two #include "autogroup.h" lines
-in a row. Remove one.
+Quoting Manikanta Pubbisetty (2022-04-06 23:11:50)
+>
+>
+> On 4/6/2022 8:47 PM, Stephen Boyd wrote:
+> > Quoting Manikanta Pubbisetty (2022-04-06 04:11:01)
+> >> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> >> index ecbf2b89d896..f61a3e15fa8b 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> >> @@ -547,3 +547,6 @@ sw_ctrl: sw-ctrl {
+> >>          };
+> >>   };
+> >>
+> >> +&remoteproc_wpss {
+> >> +       status = "okay";
+> >> +};
+> >
+> > This should be before the PINCTRL section in this file. I believe after
+> > the uart node.
+>
+> I have not understood your concern, any specific reason as why
+> remoteproc_wpss node has to be before PINCTRL section?
+> There is no problem in moving, just wanted to understand the reason.
+>
 
-Fixes: e66f6481a8c7 ("Reorganize, clean up and optimize kernel/sched/core.c dependencies")
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
- kernel/sched/core.c | 2 --
- 1 file changed, 2 deletions(-)
+It's a style that this file is following. The end of the file is for
+pinctrl configurations. Before that section is where soc nodes are
+modified. There are different sections of the file with comments
+delineating them.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d575b4914925..45447fa386e4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -80,8 +80,6 @@
- 
- #include "sched.h"
- #include "stats.h"
--#include "autogroup.h"
--
- #include "autogroup.h"
- #include "pelt.h"
- #include "smp.h"
--- 
-2.18.0
-
+Furthermore, adding things to the end of the file is a recipe for
+conflicts when applying patches as a maintainer. This is another reason
+why we sort the nodes. I suspect having different sections helps here so
+that we don't sort everything alphabetically and have pinctrl settings
+scattered throughout the file.

@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094294F875C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9489B4F8760
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346992AbiDGSwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S244762AbiDGSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346972AbiDGSwG (ORCPT
+        with ESMTP id S1347007AbiDGSwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:52:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC891066C6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:50:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38C58B8260C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C185EC385AE;
-        Thu,  7 Apr 2022 18:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649357402;
-        bh=IzAnxhKtrFFJ8vCMp+1utrg5TgDF5B4BYIS5/xgk0Es=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XYPfaO1ZldtHyrOG0XA0KqWNH9KXVUMXQa8zNepOteTeXlEOSfiIUlMXruxUeSnNf
-         AkqPi6MPT4EOdZKSbexaPlFuNYof6v8LveVa5EZcwDeHVkjHiWgZfA0Fk0NEyYWK74
-         Bt4J3fW7hYXVAakIIHY7MWExyEtBWyRY9cTmqFSotpRsgSQ2taQ2ti7cvqLd8s/yQd
-         lFBsQziGlPqU/EO9G8E5dgfAU3aNbM4IlTbZ324JfIQ2hPHnxbct30VXpyqa0S2/oe
-         j0nwSwmywxWS1g7w5Kq58pBjL2D8CbcO6tNdAQgaBnrVpS3IENw1Sh4ltCHYFp0Z3/
-         RQTyiBbHD1VnQ==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1ncXCi-000Rux-CG; Thu, 07 Apr 2022 20:50:00 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     alsa-devel@alsa-project.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        Thu, 7 Apr 2022 14:52:35 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E2FE429
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:50:34 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c23so5870975plo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yHTfa3Xf5bj7v/fUHWGj1N6h5CrQAHQI6sZ7eNnojW8=;
+        b=MAnnbKl3cqxlzEfW7eMtsWDL6/da8Ii/qpuq+LbMqdikPYaNNDXjvG0o4ZaJ77kIp/
+         XeiGCvoVHahcA8MJ/GVgMZLNw4fiu2ZhjM0dAXIr+A3hSmSjZOu+mObBLP8OB45Wompp
+         oVBAINJl+ZJ/yDQn/Rg1Oc2QIYNR8hSH+oftyDtkMoIkm1Q+f64f7114gxxd8PkglWbZ
+         tm5ORBtDYcBBZqwZAgno9hczmEoZKVYaPPb3nzBX0aO3/1g/u7rveNmeBkLNZ4/GDuhQ
+         OFFIm9KYH7v0iJzRM7Vp09oPbMFKtOTgYKjJbLGQ02uxW6sWMYzEDOa/huovuMYeTeO0
+         Mi4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yHTfa3Xf5bj7v/fUHWGj1N6h5CrQAHQI6sZ7eNnojW8=;
+        b=JX+bkHeMkm4KEV0fDUG+jxqh+8CMFybpLfspkkInDViB4rUoi5nC40XFSjoSM83lAa
+         JQ6PZDSVcSqgKU+aQmt87ukoNCclWGpyjkixKoKwJ3iF8acPixUCWUeEPYlS6oR1E4x9
+         qvReoWdLxDtBkiHgXQLjz/jc4K3wcLbFizDTbq+rFCKwCTod4ZSfNAou2v7C3UpYRELb
+         T6okkrP0YHGK9QTmMObpV97CjuRYfc8VTSl3uXF0fdyso7qX5xdXGC4qsJcWV5fhZE+Q
+         4h7LXSICLrImfMQiEilfCQPbNXXjWckPNWhUTX7oNrDAosZfKojyr9lGSJuEb3HjhU33
+         OH8Q==
+X-Gm-Message-State: AOAM530HgTr+vsrlavw/x3B2KTra4S7KFbp3N8yJ0/6JCXVFfGwtZolN
+        a/K8nbPq+kl57Ky+g4pPmL9slrzYcMIkjg==
+X-Google-Smtp-Source: ABdhPJwbpwlnXADYDuPZIElPaEMuJWqItAHdvKGTzpWfJgQW8OP0lTZa2kMX8zjoPNXQJ8ygePNB3A==
+X-Received: by 2002:a17:90b:1a87:b0:1c7:3d66:8cb with SMTP id ng7-20020a17090b1a8700b001c73d6608cbmr17530826pjb.142.1649357433648;
+        Thu, 07 Apr 2022 11:50:33 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x25-20020a056a000bd900b004faae43da95sm22338158pfu.138.2022.04.07.11.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 11:50:33 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 18:50:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] ASoC: Intel: sof_es8336: Add a quirk for Huawei Matebook D15
-Date:   Thu,  7 Apr 2022 20:49:59 +0200
-Message-Id: <d678aef9fc9a07aced611aa7cb8c9b800c649e5a.1649357263.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1649357263.git.mchehab@kernel.org>
-References: <cover.1649357263.git.mchehab@kernel.org>
+Subject: Re: [PATCH v2 18/31] KVM: nSVM: hyper-v: Direct TLB flush
+Message-ID: <Yk8ydRqaIqLh/UjJ@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-19-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407155645.940890-19-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on experimental tests, Huawei Matebook D15 actually uses
-both gpio0 and gpio1: the first one controls the speaker, while
-the other one controls the headphone.
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> @@ -486,6 +487,17 @@ static void nested_save_pending_event_to_vmcb12(struct vcpu_svm *svm,
+>  
+>  static void nested_svm_transition_tlb_flush(struct kvm_vcpu *vcpu)
+>  {
+> +	/*
+> +	 * KVM_REQ_HV_TLB_FLUSH flushes entries from either L1's VPID or
 
-Also, the headset is mapped as MIC1, instead of MIC2.
+Can you use VP_ID or some variation to avoid "VPID"?  This looks like a copy+paste
+from nVMX gone bad and will confuse the heck out of people that are more familiar
+with VMX's VPID.
 
-So, add a quirk for it.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-See [PATCH v5 0/4] at: https://lore.kernel.org/all/cover.1649357263.git.mchehab@kernel.org/
-
- sound/soc/intel/boards/sof_es8336.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index c71842be9d59..9d617831dd20 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -304,6 +304,15 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
- 		},
- 		.driver_data = (void *)(SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
- 	},
-+	{
-+		.callback = sof_es8336_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
-+			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
-+		},
-+		.driver_data = (void *)(SOF_ES8336_HEADPHONE_GPIO |
-+					SOC_ES8336_HEADSET_MIC1)
-+	},
- 	{}
- };
- 
--- 
-2.35.1
-
+> +	 * L2's VPID upon request from the guest. Make sure we check for
+> +	 * pending entries for the case when the request got misplaced (e.g.
+> +	 * a transition from L2->L1 happened while processing Direct TLB flush
+> +	 * request or vice versa). kvm_hv_vcpu_flush_tlb() will not flush
+> +	 * anything if there are no requests in the corresponding buffer.
+> +	 */
+> +	if (to_hv_vcpu(vcpu))
+> +		kvm_make_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +
+>  	/*
+>  	 * TODO: optimize unconditional TLB flush/MMU sync.  A partial list of
+>  	 * things to fix before this can be conditional:

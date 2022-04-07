@@ -2,183 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255684F7253
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7BD4F7255
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239583AbiDGCxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S233242AbiDGCzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239540AbiDGCw6 (ORCPT
+        with ESMTP id S229445AbiDGCzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:52:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87990121533
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 19:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649299860; x=1680835860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EQhB3Ed1HUXRyli1pVL01JInLFg6L9jOCRO5DJGl7WQ=;
-  b=eeqWuSKCwh/ODc8do+eWnChwgOT5PzHKSDUFdraaSPCrTECfY+xLID3Z
-   9a+SkhXjY5DSwZgV9uQ2GQF+mS+ryNV8o50lqurbtlHXh61ACP9toWGY2
-   NQDv4I9c0Tq3U9NgYZTIbpNgSKT2siRkhL3mP0PdBZoOlbb4Ao3Ht76No
-   R1ZAfckQWTP6J5bN74cSYMaBdgdvJLFZPCyqThnruTHH2ig4M8CoRA7KO
-   wfcnlVJeyNtWxpVCY4wzRuruQ+ZaRxOBVQLnlT3Q5jTm4pphLQAz3MX5l
-   abtsZ6S+bWALC2dTDUMqXVgJK1+Nwfpj+Z82VtKEEEiJ/ISUIYItDXMpy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243347941"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="243347941"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:51:00 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="588627300"
-Received: from pgbarran-mobl.amr.corp.intel.com (HELO localhost) ([10.212.127.188])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:50:59 -0700
-Date:   Wed, 6 Apr 2022 19:50:59 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V9 24/45] entry: Split up irqentry_exit_cond_resched()
-Message-ID: <Yk5Rk4JALK0hsYym@iweiny-desk3>
-References: <20220310172019.850939-1-ira.weiny@intel.com>
- <20220310172019.850939-25-ira.weiny@intel.com>
+        Wed, 6 Apr 2022 22:55:10 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D83B022;
+        Wed,  6 Apr 2022 19:53:12 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id f38so7346958ybi.3;
+        Wed, 06 Apr 2022 19:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hOqVy6gRmDIPKGJRDzX2KezvYez3k9c+5+AVEHVzz40=;
+        b=P+y3+ScFd24nfq3pBIZYA+8O6FxPw+aM0oWT3No1p4/eJWXp4tSN7e7pplFy2odInW
+         k+Y2CG87GauHiaQn82wzVPVzC8JhMnCTn/Rhwfyf1Eu2E3i91TOlHB75JZw3Gho3aGRI
+         FWFTneC/EN+zh2FWeG2rXGRHUvg+rKk11H+iThCnjEvk24X/tPXdpimt3x3qRQgGVeEZ
+         WwF9R/lV3Fkn1DkohWLc6zI9S9LjiK3uaZvwsL9GhdSQ0QlZMRDemK/kfDSiABkldMGm
+         FnIFehGAF/fwgBt2JjT+Yu8pJ/KXBS4aGrD9nYE5s4xU+70XAEnUq2RzN3XPfKNyhcO1
+         rcMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hOqVy6gRmDIPKGJRDzX2KezvYez3k9c+5+AVEHVzz40=;
+        b=d+2Dn3JFyblJRaZ2RGp+mCetmulz/+5QyMypcbL0MncLpRJAV7NZA6CGjL56jNX73W
+         MbE3JNRLtv1wKLdFBMBhF7woQH3/WI9IBxhtdFERav6C3uQ1qdnZX02d1jF/HdFxg3y9
+         0A3Tc0PO94WOKLqBh2dr38pViAyHTziFkI5XRVF5QD+SSOBVan+hWJiUE3PG7r63AKf+
+         LxiG7zoVlYH2ZUeIEP2b39xdVh56vpccNXI/fyH7I1hS98qGOPNpjU6exwWj9GuAv9Q9
+         nxSs/PNXQps+YF5c1RaQxzvOGgaChEr2o6X9ZyR0iHVYPg1h74dPE6uzkerFWV0AJgS3
+         S3CA==
+X-Gm-Message-State: AOAM533bEJriNnZ33s1bmGhR/eYJduPYUvSIKGlOnsdo+XbdRN8sDgcP
+        TdCQiSz0xaDZ4iLlxUPpbbliDQjOWs21BBWzIpI=
+X-Google-Smtp-Source: ABdhPJyfmfZEIsyG6RM9aPwpCdyCsqYhqtBZg/XU9g0EImsIbaZJa4T9PtaA/s6KvzGLSkuXzN89+rCyWiE2pyGr4Fo=
+X-Received: by 2002:a25:e0d3:0:b0:63d:c615:afb8 with SMTP id
+ x202-20020a25e0d3000000b0063dc615afb8mr8436525ybg.182.1649299991734; Wed, 06
+ Apr 2022 19:53:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310172019.850939-25-ira.weiny@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404155557.27316-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220404155557.27316-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 7 Apr 2022 03:52:45 +0100
+Message-ID: <CA+V-a8tM3EiZkNSCG+CtrOnfGBc5WSaac__FBsRn72zrsjQ2ew@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] dmaengine: Use platform_get_irq*() variants to
+ fetch IRQ's
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:19:58AM -0800, Ira wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Auxiliary pt_regs space needs to be manipulated by the generic
-> entry/exit code.
+Hi Vinod,
 
-Because of fix to the irqentry_exit_cond_resched() code[1] this patch needed
-rework upon rebasing to 5.18-rc1
+On Mon, Apr 4, 2022 at 4:56 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Hi All,
+>
+> This patch series aims to drop using platform_get_resource() for IRQ types
+> in preparation for removal of static setup of IRQ resource from DT core
+> code.
+>
+Fyi.. the OF core changes have landed into -next [0].
 
-This basic design of this patch remains but the code is different.  The
-irqentry_exit_cond_resched() still needs to have pt_regs passed into it.
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220406&id=a1a2b7125e1079cfcc13a116aa3af3df2f9e002b
 
-However, this could be safely ignored for this review cycle as well.
+Cheers,
+Prabhakar
 
-As soon as I have a series based on 5.18 I'll resend the full series.
-
-Thanks for understanding,
-Ira
-
-[1] 4624a14f4daa ("sched/preempt: Simplify irqentry_exit_cond_resched()
-callers") 
-
-> 
-> Normally irqentry_exit() would take care of handling any auxiliary
-> pt_regs on exit.  Unfortunately, the call to
-> irqentry_exit_cond_resched() from xen_pv_evtchn_do_upcall() bypasses the
-> normal irqentry_exit() call.  Because of this bypass
-> irqentry_exit_cond_resched() will be required to handle any auxiliary
-> pt_regs exit handling.  However, this prevents irqentry_exit() from
-> being able to call irqentry_exit_cond_resched() and while maintaining
-> control of the auxiliary pt_regs.
-> 
-> Separate out the common functionality of irqentry_exit_cond_resched() so
-> that functionality can be used by irqentry_exit().  Add a pt_regs
-> parameter in anticipation of having irqentry_exit_cond_resched() handle
-> the auxiliary pt_regs separately from irqentry_exit().
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes for V9
-> 	Update commit message
-> 
-> Changes for V8
-> 	New Patch
-> ---
->  arch/x86/entry/common.c      | 2 +-
->  include/linux/entry-common.h | 3 ++-
->  kernel/entry/common.c        | 9 +++++++--
->  3 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
-> index 6c2826417b33..f1ba770d035d 100644
-> --- a/arch/x86/entry/common.c
-> +++ b/arch/x86/entry/common.c
-> @@ -309,7 +309,7 @@ __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
->  
->  	inhcall = get_and_clear_inhcall();
->  	if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
-> -		irqentry_exit_cond_resched();
-> +		irqentry_exit_cond_resched(regs);
->  		instrumentation_end();
->  		restore_inhcall(inhcall);
->  	} else {
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index ddaffc983e62..14fd329847e7 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -451,10 +451,11 @@ irqentry_state_t noinstr irqentry_enter(struct pt_regs *regs);
->  
->  /**
->   * irqentry_exit_cond_resched - Conditionally reschedule on return from interrupt
-> + * @regs:	Pointer to pt_regs of interrupted context
->   *
->   * Conditional reschedule with additional sanity checks.
->   */
-> -void irqentry_exit_cond_resched(void);
-> +void irqentry_exit_cond_resched(struct pt_regs *regs);
->  
->  void __irqentry_exit_cond_resched(void);
->  #ifdef CONFIG_PREEMPT_DYNAMIC
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index 490442a48332..f4210a7fc84d 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -395,7 +395,7 @@ void __irqentry_exit_cond_resched(void)
->  DEFINE_STATIC_CALL(__irqentry_exit_cond_resched, __irqentry_exit_cond_resched);
->  #endif
->  
-> -void irqentry_exit_cond_resched(void)
-> +static void exit_cond_resched(void)
->  {
->  	if (IS_ENABLED(CONFIG_PREEMPTION)) {
->  #ifdef CONFIG_PREEMPT_DYNAMIC
-> @@ -406,6 +406,11 @@ void irqentry_exit_cond_resched(void)
->  	}
->  }
->  
-> +void irqentry_exit_cond_resched(struct pt_regs *regs)
-> +{
-> +	exit_cond_resched();
-> +}
-> +
->  noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
->  {
->  	lockdep_assert_irqs_disabled();
-> @@ -431,7 +436,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
->  		}
->  
->  		instrumentation_begin();
-> -		irqentry_exit_cond_resched();
-> +		exit_cond_resched();
->  		/* Covers both tracing and lockdep */
->  		trace_hardirqs_on();
->  		instrumentation_end();
-> -- 
-> 2.35.1
-> 
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+>
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>
+> Changes for v3:
+> * Included Ack from Andy.
+>
+> Cheers,
+> Prabhakar
+>
+> Lad Prabhakar (3):
+>   dmaengine: nbpfaxi: Use platform_get_irq_optional() to get the
+>     interrupt
+>   dmaengine: mediatek: mtk-hsdma: Use platform_get_irq() to get the
+>     interrupt
+>   dmaengine: mediatek-cqdma: Use platform_get_irq() to get the interrupt
+>
+>  drivers/dma/mediatek/mtk-cqdma.c | 12 ++++--------
+>  drivers/dma/mediatek/mtk-hsdma.c | 11 ++++-------
+>  drivers/dma/nbpfaxi.c            | 14 ++++++--------
+>  3 files changed, 14 insertions(+), 23 deletions(-)
+>
+> --
+> 2.17.1
+>

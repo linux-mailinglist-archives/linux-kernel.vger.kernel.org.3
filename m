@@ -2,75 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0262E4F7E4D
+	by mail.lfdr.de (Postfix) with ESMTP id DA8F54F7E50
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244985AbiDGLsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S244968AbiDGLsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiDGLsM (ORCPT
+        with ESMTP id S238583AbiDGLsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:48:12 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E51E1B0BEF;
-        Thu,  7 Apr 2022 04:46:12 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id q12so1579327pla.9;
-        Thu, 07 Apr 2022 04:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I2g0qTv/eeZWtDti+ATHGItbAOEFAIAEnNZj9ujHAJ0=;
-        b=hh52FeZEkwuY3mp18JtJBNxWKrHokEWyg6IbVNqp09c/kZh+V1ZWfO5AL/cfZPrtSf
-         w0kTyJJbIapKC47lOxdRZFyBqaTx3pHbgXMr/xl4BCMt2FApj3B13qyu/kqAm+3LLmtC
-         spn23QsbH+6bO9XpZJqCwtSNTua2LZcjLx+B6uiKzKOjQLN19BEwIn8jlfSkxqbiV4Py
-         kL6opsVSX0EugpI+R10o8Mb2xmmxuUhfgTo16mlF2HA0DjtUScaja8vbj99rrr3mNBSk
-         JhAZ0XtLYnu2dFzYWualQykLeyah+rFqTxB6DvBoRdj9AvgB/gC9F+KoXATaqoJEgRpD
-         aKlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I2g0qTv/eeZWtDti+ATHGItbAOEFAIAEnNZj9ujHAJ0=;
-        b=amcMoCmQZE1DdMw6ei4lQkQ68YSDhlmgeNzkdFLwftO14jPg5FwCKjyq5guWPdyiGY
-         DzFjLP4dRa6Ze4kjSup4VbYWx7DSFnEiB+1OKMccoh/qaCPx7QX0ZfH3oeQmDTApZtcA
-         PUeP+V+w2FeQ81gXPyY6TkO4c3OQSf2GDNQ7T8Ofk8uZiJklb2azIIz7aH/39JOutRRA
-         RGj/wBvOVufJKgTXX51AhNY9zweu5YtXq6md7FCPA8urpI0Xr2ov387J1DEZ06BmFW+M
-         UpZIMXS+BTKGDbYf22u49PeSg0b0AxzAZ6SbchAmzP7/Bs3u31K0VhpoAg6ESpZCNPDF
-         p1hA==
-X-Gm-Message-State: AOAM531WUs1qJxE7Qg8MUmonG/VbXT4nPsQWrIKoGT66tFfo1wisbuiQ
-        pr+zQ2PngNMC1PKvZS6M1dM=
-X-Google-Smtp-Source: ABdhPJwdQZOsGeUjJOJMpg1cffe6bfcFYBXRXcPARtfFwLh5oiwUslQhR3M65KXNb8ZoAUmp51LJ5A==
-X-Received: by 2002:a17:90b:3e8c:b0:1c7:3001:f359 with SMTP id rj12-20020a17090b3e8c00b001c73001f359mr15397926pjb.179.1649331971609;
-        Thu, 07 Apr 2022 04:46:11 -0700 (PDT)
-Received: from localhost.localdomain ([2001:288:7001:2708:31cc:1965:3110:2d22])
-        by smtp.gmail.com with ESMTPSA id z23-20020aa79497000000b004fdc6ecd157sm24460626pfk.99.2022.04.07.04.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 04:46:10 -0700 (PDT)
-From:   Jui-Tse Huang <juitse.huang@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Chun-Hung Tseng <henrybear327@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        Brendan Gregg <bgregg@netflix.com>,
-        Yiwei Lin <s921975628@gmail.com>
-Subject: [PATCH v5] docs/scheduler: Introduce the docs of load average
-Date:   Thu,  7 Apr 2022 19:45:57 +0800
-Message-Id: <20220407114557.39417-1-juitse.huang@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Apr 2022 07:48:11 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60078.outbound.protection.outlook.com [40.107.6.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31911AF7F0
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 04:46:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IozaLGt2mRhKN3c6+IiILpGSOu0HHDhSxR+Km/NALuLXEb9nU+wjvFWyVfwGBxx292mjKAJIIhnHiKlBydkcNkU5xdlBv6XOGUqZcb5BV0SQqcJe/tRxtL7J/iFbHbQgilzjjiFCapOExbpoecDiVA7E31GXTGKKW/zZ+TjePyNVtvxvvpOcxEBb5SAR5jvMpE3v1eaKWDUJ0FvPOOjvyH/5rLHbJdu4t+lvcP6cSuTtZZYXucqBc1LyvOqpP7xxWPFkunL//Ak82y0o12q8HVF8Ylhvw4i+iEO/W2tTVRpyhfTD3UuTwMD2PAg7l3l3MfTFpI9VapjignY+HCTjNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GFgMfaEsMdqmNWF69fA5pgy20GSOgNATc9HqRwDKuPw=;
+ b=AAIxStUs+8DEPrFn9/Uupw9SFhnzPYAOCov7fAWvynfRkNon9eWF+ncS+QrtI6EWNk8RB8XXOLi1+dRBxmKDdUvLEWp57VNQ7mkAaLtihegotso4Dwv3xa5UwiJm2WvizpcyyLcdqqqY3VcgnnAdlnh0vUlJTMpi/scJf5Eqw3Nh6bIXKp0tYwfE/OfsydL3gIfLPTclaPgqOnIskgQ05UG86FEFKCfUSC7wjQDJ/hLuiYUJf4etLicMzeoK8DsO1DenImgKbNnss1+0CN6Dj8K6b6nV5HcG4jTPGg1btxgLF1w0DCigq7yiQqK6RcWZmn5QhlyY9BSTZG2UJbiDDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GFgMfaEsMdqmNWF69fA5pgy20GSOgNATc9HqRwDKuPw=;
+ b=HrfcalQf8rnd3A0p3bcM7M3/XbAip4uCIIbyp3Gm1vuVePQwDLFBdg/nFLgEEDGv/yhkne2gopuGMWFsLNNM0aDwjEQExycc3Nco8LCq1tXEKi3WnO9p/HTTBFQZFH3Y+p2fjAzGf4rnj8cPES+9T2KW4iqOQlEUB5bvwjy1geE=
+Received: from DB7PR04MB5450.eurprd04.prod.outlook.com (2603:10a6:10:86::11)
+ by VI1PR0402MB3440.eurprd04.prod.outlook.com (2603:10a6:803:6::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.19; Thu, 7 Apr
+ 2022 11:46:07 +0000
+Received: from DB7PR04MB5450.eurprd04.prod.outlook.com
+ ([fe80::dcb:d345:1503:d921]) by DB7PR04MB5450.eurprd04.prod.outlook.com
+ ([fe80::dcb:d345:1503:d921%7]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
+ 11:46:07 +0000
+From:   Sandor Yu <sandor.yu@nxp.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
+        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
+        "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
+CC:     "S.J. Wang" <shengjiu.wang@nxp.com>,
+        "amuel@sholland.org" <amuel@sholland.org>,
+        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
+        "maxime@cerno.tech" <maxime@cerno.tech>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Subject: RE: [EXT] Re: [PATCH v1 0/5] DRM: Bridge: DW_HDMI: Add new features
+ and bug fix
+Thread-Topic: [EXT] Re: [PATCH v1 0/5] DRM: Bridge: DW_HDMI: Add new features
+ and bug fix
+Thread-Index: AQHYSluHtrzw5i0FmECiQU3EzqgTs6zkUB2A
+Date:   Thu, 7 Apr 2022 11:46:07 +0000
+Message-ID: <DB7PR04MB5450D399E3E039F10B1BE9ABF4E69@DB7PR04MB5450.eurprd04.prod.outlook.com>
+References: <cover.1649230434.git.Sandor.yu@nxp.com>
+ <cb1e7e1c5527e531a9c864a337aabde1c20b9940.camel@pengutronix.de>
+In-Reply-To: <cb1e7e1c5527e531a9c864a337aabde1c20b9940.camel@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ab839e6e-b5e5-48bc-6228-08da188c3424
+x-ms-traffictypediagnostic: VI1PR0402MB3440:EE_
+x-microsoft-antispam-prvs: <VI1PR0402MB344043A2196F0F74F1C26577F4E69@VI1PR0402MB3440.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fBGFS3r9QQJgPwc1F9KikFCQQlAVkRgBHBkF5lniShhYEP4Y7PYb8Ce4chrV4XyqUg7p0Sy1slKsNXfXAKk+OK7P391TW9dpeI6MF/0c7HR2aVZS78PUpZKavihRenIOIWtynHrlTAPRSQCUVrl1gyH0TpUuNxBcaYvY5EaD+D/QRRHdNujvsh3UARVW3IH/UI1P8cXTGl4btmHaL7Fd0zUr53Z8yB0Z6j4eDNlBwiqJUQXeBN2MP3mRHvmivVIlYpJ2VNRpVUtuuESoUDCWhkfOoNVNfcWAY7FDdbdAxPqfJsIyEUmUuvNSmJpxQGj/sCM1MmoRsZxjT2kkgDXSR4A4Gp78DLWDIfflNsXt2goCJdnBDBYQzRpyipY0/0SrBwtYKMkqBMkDb6884742thj+1ztCF451uDeu3ebF+J+5dRSx3vdNmrRw1EmUYmL79AkyVHKJES7tpnxgHU0Kg/TUOeVPxsb7Zuks9StADVJlsUi+lMgp+6VPUQxupZv2b7ED8pGAbJMhE5ZVha+J6pAn2d3VxXdb9nMAZ8ek5ENvGD/n9VY6bQeRpd+gGnYQTtebFG2JYKDkmGwVDvhXuErTxxw/za8fJ50uYX7YrdM32f52wyTGNrxRjltQX7eCKF3LjTLjLavL6L0RadcbW1UbzXz/JUSMyIxT8BMIKQQO9sxphzDZPt0h08NUZTollwcuB0crCpxUVxhCHN9gHA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5450.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(71200400001)(53546011)(9686003)(38100700002)(6506007)(7696005)(186003)(83380400001)(8936002)(4326008)(7416002)(26005)(66476007)(8676002)(2906002)(110136005)(76116006)(38070700005)(64756008)(55016003)(316002)(44832011)(508600001)(66946007)(52536014)(5660300002)(122000001)(54906003)(66556008)(86362001)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ejBqZkZyc0VERWtHTHFldU9DNE5TYStVQURQbmUzZ0VPQTJFN08rT2hwZDI4?=
+ =?utf-8?B?ZXpnb0IweU5wcUowb2k3K0kxcXByKzNuTUdSWnA5dURBN3F1SSt2QmU4aGJr?=
+ =?utf-8?B?cEgyN3JQZEsvd3ZXb3hSbVd2dGYyQU95SkI0elVXTkVxMGtpeXduREJMekdt?=
+ =?utf-8?B?dE11SFhieGtTZFd6RVY1TEQ0OFZUZ1RnMEFZWktuMjFFNlY0UHRGZ01qTDV5?=
+ =?utf-8?B?bEpKS1ZnTXlHM0NGSDJ0eGJvWjY0ZWFadmo0WjBLVitSc25VaUMwOWwyVWMx?=
+ =?utf-8?B?QjM3dE8xenA1MUdpOHlJRmF0MGt4MitXTllJcUFacTBHVnJQN2VJbFFCK0wr?=
+ =?utf-8?B?ZTlRMHpKREltNHNTVnJreXA0QXZicnBWa1pPWGZ0bGEyZDQ3NHR6RnFSTHZ3?=
+ =?utf-8?B?d3hVcVZKc2N4SXJDRml1ZEVVNE5GTUVaMnNCdmwwUUtXVWtMMU1wRGdYWVcr?=
+ =?utf-8?B?NDM3bW5aMnczbmdRSmc0bVhkaTJmaUdja3E4ZkNHSGJFYUVwSFl0UWpKdHpP?=
+ =?utf-8?B?MDZFUmQ3WnZQdW5FWlh0WjcrT0g3YkdZdEkvOWtwSENWeXF6QUZGdWs4Qjhn?=
+ =?utf-8?B?MjYzSmZNSFA1L21iSGRNNjR2dDRQaGY4N0w2eG1zdlBGenNEZktYWXk5S0N6?=
+ =?utf-8?B?dW1mU2xzL2lJV0ZoTnlUdU5jalZzd1RkaVBqUE16SFZSb3FMYzU3K0xPRXlp?=
+ =?utf-8?B?QjlPbFZ0ZEQ0YnV6MnFPZ0VpMm0yTGQrTkVEVUE1UGF5QkF0V3FvQ09yaVRK?=
+ =?utf-8?B?MmduaHdwRFlaUVBrb2UyVDQ0QUxsYWY0LzQrWXcyeW5aVkFQUTRSQTBmak4r?=
+ =?utf-8?B?WWJpVjJjYWw5Z3dOendzZ3I0OGh3bDRyWVNsZFJ3OVpIM2x2R2tjaTFJbno4?=
+ =?utf-8?B?UWMrc2IzdDZiMzFZSTZtM2luOEVUSmpLYStCREdMWmZoZTYwK05RVVQ5eXYw?=
+ =?utf-8?B?T3dRZEJ5K2FFV1UyVjVlcWw1R2hKNW5CMS9hWk5zd01ZajZnQ1dycjJnS2JV?=
+ =?utf-8?B?Mnk4ZVVZdnJMKzk5dzdVUE1MRmE3ckRkSG9sSm9qSU1pOUtFZGdDREJrdDlG?=
+ =?utf-8?B?VWYxd1gwWVh1R3Vva2pZUnRNYVN4bnpZU21HYWZBUHBzTlNqelFwaTltQi9w?=
+ =?utf-8?B?NWUxYTgweTgwRTZSUnVDTmdTSlZJQXF5Y2VNc1llR080c1NWdVRjTVpyMkFW?=
+ =?utf-8?B?ZGpyWHo5Z3J2bVYyei8rQ3dKKzBzaDBBZmRyWjkrWWpmMmgwdEFjQWNZL3c0?=
+ =?utf-8?B?V2oraTk1YTBQc3hwUGxnaFpmM1V2alJSZkVhN0ZmNThDV3kzRkJFV3QxNXpz?=
+ =?utf-8?B?VWRBSzNhcUQ1R2ZCaHVQdy9JNW5kMmJQTGdDUmx2K3ljV09iWDJnaEFYWXY4?=
+ =?utf-8?B?T29xTUtLVGNMMnVHQ1p2OVIzOTJHZjROQXpFbmFKOXRPOCtGeUdlemdVQWpt?=
+ =?utf-8?B?WUx6akV5SEVuZzh2WFhVL05UNzl5VW8yMFJVclYvUW9LQVdGNnM1elA4dVhl?=
+ =?utf-8?B?Ykp6NWVqMjdDZzNPcFJNNDBkajhxbW14YmVFbEhsdEZVaDJyMENETE5IMUtZ?=
+ =?utf-8?B?aStqWDhacENvQkxIUGRHNUhxRlRDSDQzTktXMEhsdjZ5aTh1U2tGNlN0Sjhr?=
+ =?utf-8?B?UGZBVlBnVlVmWk1VZkc3L0dlRndOdlZ1MCs2UjZyOTlWejZ0ZzgyRzA3RzdU?=
+ =?utf-8?B?M2hxNit6b1J4OVowSXdiM2ZnQ2hqWWV3MGhHODdUdFhBZUNjL3BXZW8rNmgy?=
+ =?utf-8?B?djFIbjFLemFwazZodEV5WE1QcjdsZFlCYVRQRVhpdjVBMGVUSVkxMzc1QW9l?=
+ =?utf-8?B?dTB1Y1dSVXJDUHhnUzBXbkJPTDcvemkwbVJ4N3dybFhpOEQ5YW9EUnUvMXFm?=
+ =?utf-8?B?cXFabm1rM2Q0T3lIRklJMkV5N3lWSFQ4SElvU0ZCQit6OXhRSGdMdm4ycVB6?=
+ =?utf-8?B?eHVoMzFWekJHTlBGVm5MdStXcGdQbitxUUQ2aU5zSUpSelkrZDVIc0tiWkln?=
+ =?utf-8?B?cDA2OTRoRHhmMFc4RjNYR3c4ajZmMTJCS0Examhrb0NXeTRlVlpzMSt5Slpu?=
+ =?utf-8?B?SHZZWE1RQmc1L3hDSDQ2dU9aZHNJbDlFek5IcjJkZk9SbFFFc3FDWFRraEV2?=
+ =?utf-8?B?UXYrcTJlT2lOTkF5TWJBRXNYVXlwN2dWSHIxd0NPd0o2WWZmaVRSK1JTSFN4?=
+ =?utf-8?B?UUN5aXN2bi9SY1lGK3R5YjkrS3M2L1V4M01WUzgwdVpJWDBJblIyNk9IS2xB?=
+ =?utf-8?B?VWZaeTRWRmJoNU1lRHhwQ2U5cGI4a3hFeHBDMlBRR1Npa2ZodmxXbHFWbDdG?=
+ =?utf-8?B?OVVwNGpHdFdyS2xKRmMyNEM2eXBKa2FPeEdxYXVxQmZEN2Q4dWtCdz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5450.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab839e6e-b5e5-48bc-6228-08da188c3424
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 11:46:07.2978
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /lDYAIB0HvfW1bPOYLpUpCvSFOuv6V4Pbc1DA6ZLdpt6sUBjAwlAvpexJuy6FPrh+Nf3fQ3nBcg9dAlmzXP3Pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3440
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,180 +143,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The load average is one of a common as well as easy observed statistic
-provied by Linux, but still not well documented, which makes the numbers
-that users observes from the output of top, htop or other system
-monitoring application are only numbers. This patch gives a discussion
-on how Linux calculates the load average as well as what metrics are
-concerned while calculating the load average.
-
-Topics covered in this documentation:
-1. The physical meaning of load average
-2. How to peek at load average as well as what values could be fetched
-   from /proc/loadavg interface.
-3. Run through the implementation of the updating process of load
-   average.
-
-Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
-Signed-off-by: Yiwei Lin <s921975628@gmail.com>
-Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
-Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
-
----
-
-Notes:
-    Notes:
-        v5:
-          - Reorgnize the content (Peter Zijlstra)
-    
-        v4:
-          - Fix typo and grammar error (Randy Dunlap)
-    
-        v3:
-          - Fix typo (Randy Dunlap)
-          - Add further reading that links to Brendan Gregg's blog
-    
-        v2:
-          - Fix typo (Chun-Hung Tseng)
-
- Documentation/scheduler/index.rst        |   1 +
- Documentation/scheduler/load-average.rst | 115 +++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 Documentation/scheduler/load-average.rst
-
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 88900aabdbf7..bdc779b4190f 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -17,6 +17,7 @@ Linux Scheduler
-     sched-nice-design
-     sched-rt-group
-     sched-stats
-+    load-average
- 
-     text_files
- 
-diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
-new file mode 100644
-index 000000000000..a8dfcd66b20e
---- /dev/null
-+++ b/Documentation/scheduler/load-average.rst
-@@ -0,0 +1,115 @@
-+============
-+Load Average
-+============
-+The Load average, provided by common operating systems, indicates the average
-+number of system loads over a period of time. In Linux, it shows the average
-+number of tasks running and waiting for CPU time.
-+
-+The Physical Meaning
-+--------------------
-+A task is considered consuming hardware resources once it is in the TASK_RUNNING
-+state as well as the TASK_UNINTERRUPTIBLE state but without being frozen (flag
-+PF_FROZEN is not set) and is not marked as an idle task (TASK_NOLOAD). The
-+former (TASK_RUNNING) indicates the task is consuming CPU or waiting for CPU,
-+and the latter usually means a task is waiting for an I/O operation being
-+completed, both of them will be covered in the load average.
-+
-+Two variables are covered while calculating the load average, one is the number
-+of previously mentioned tasks (*active*), the other one is the load average of
-+the previous time slot (*load_{t - 1}*). The weighted average of these two
-+variables will then be calculated to provide the current load average of the
-+system. Applying different weights to these variables controls how *active*
-+affects the resulting load average (load_t). A higher weight applied to *active*
-+makes *load_t* increase or decrease easily when facing a burst load or when the
-+heavy tasks are complete, while a lower weight applied to *active* requires
-+tasks to keep using hardware resources for a long time to affect *load_t*.
-+
-+Peeking at Load Average
-+-----------------------
-+The load average is provided in three different timescales (by applying
-+different weights) and could be observed via system monitoring applications such
-+as top or htop, or with the following command::
-+
-+  $cat /proc/loadavg
-+
-+The output of the command shown above has the format::
-+
-+  AVG_1 AVG_5 AVG_15 RUNNING/THREADS PID
-+
-+The first three fields are load averages:
-+
-+- AVG_{i}: The system load average over the last i minutes.
-+
-+Next field contains two numbers describing the task counts:
-+
-+- RUNNING: # of runable tasks on the system.
-+- THREADS: # of not idle tasks on the system.
-+
-+The last field shows overall PID allocation:
-+
-+- PID: The last allocated PID.
-+
-+Implementation
-+--------------
-+The period of updating cycle is predefined as 5 seconds, which relies on the
-+scheduler tick of each CPU. The scheduler tick of CPUs may be disabled with
-+NO_HZ configuration (see `NO_HZ: Reducing Scheduling-Clock Ticks
-+<https://www.kernel.org/doc/html/latest/timers/no_hz.html>`_ for detail), which
-+may cause miss counting the *active* of those CPUs (a CPU may disable its
-+scheduler tick even it is not idle) as well as miss the updating cycle of load
-+average (the scheduler tick of all  CPUs is disabled), thus, the situation
-+should be dealt explicitly.
-+
-+At the beginning of each iteration, a 10-tick sample window is given to avoid
-+synchronization costs between CPUs. While in the sample window, CPUs will upload
-+the *active* of their run queue to a global variable `calc_load_tasks`, and the
-+job is done in the function `calc_global_load_tick()`. And the *active* of the
-+scheduler tick disabled CPUs is collected with the following steps:
-+
-+#. Before a CPU disables its scheduler tick, the function
-+   `calc_load_nohz_start()` is invoked to upload its *active* even if the sample
-+   window is not met yet.
-+#. The *active* of the scheduler tick disabled CPU is uploaded by other CPU via
-+   the function `calc_load_nohz_remote()`.
-+#. The uploaded *active* is merged with *active* held by `calc_load_tasks` in
-+   the function `calc_global_load()`.
-+#. Once the scheduler tick of a CPU is restarted, the missed updating period is
-+   synchronized in the function `calc_load_nohz_stop()`.
-+
-+Two counters, elements of array `calc_load_nohz[2]`, aim to hold the pending
-+*active* of the scheduler tick disabled CPUs and will be swapped between cycles.
-+Functions `calc_load_read_idx()` and `calc_load_write_idx()` will provide
-+correct index into the array. Worth to notice that the index for writing is
-+renewed once steps into a new updating cycle, which makes the uploaded *active*
-+will be considered in the next cycle, while the index for reading is renewed
-+after the sample window.
-+
-+Once the sample window ends, the function `calc_global_load()` will invoke the
-+function `calc_load()` which calculates the load average base on the following
-+formula::
-+
-+  load_{t + 1} = load_{t} * exp + active * (1 - exp)
-+
-+And if we expend the formula recursively, we will have following expression::
-+
-+  load_{t + 2} = load_{t + 1} * exp + active * (1 - exp)
-+               = (load_{t} * exp + active * (1 - exp)) * exp + active * (1 - exp)
-+               = load_{t} * exp^2 + active * (exp - exp^2 + 1 - exp)
-+               = load_{t} * exp^2 + active * (1 - exp^2)
-+  ...
-+  load_{t + n} = load_{t} * exp^n + active * (1 - exp^n)
-+
-+Thus, if there is any updating cycle missed, the weights taken to get the load
-+average should be modified as the weight to the power of n, where n is the
-+number of missed cycles. The function `calc_global_nohz()`, invoked at the end
-+of the function `calc_global_load()`, takes the responsibility to calculate the
-+number of missed cycles, and with the function `calc_load_n()`, the modified
-+weights are applied to get the result.
-+
-+See `kernel/sched/loadavg.c` for detail.
-+
-+Further Reading
-+---------------
-+Brendan Gregg has explained the history of load average as well as analysis over
-+it in his blog post:
-+https://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html
--- 
-2.25.1
-
+SGkgUGhpbGlwcA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBoaWxp
+cHAgWmFiZWwgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IDIwMjLlubQ05pyIN+aX
+pSAxNjo0Mw0KPiBUbzogU2FuZG9yIFl1IDxzYW5kb3IueXVAbnhwLmNvbT47IGRyaS1kZXZlbEBs
+aXN0cy5mcmVlZGVza3RvcC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGFu
+ZHJ6ZWouaGFqZGFAaW50ZWwuY29tOw0KPiBuYXJtc3Ryb25nQGJheWxpYnJlLmNvbTsgcm9iZXJ0
+LmZvc3NAbGluYXJvLm9yZzsNCj4gTGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tOyBq
+b25hc0Brd2lib28uc2U7DQo+IGplcm5lai5za3JhYmVjQGdtYWlsLmNvbQ0KPiBDYzogUy5KLiBX
+YW5nIDxzaGVuZ2ppdS53YW5nQG54cC5jb20+OyBhbXVlbEBzaG9sbGFuZC5vcmc7DQo+IGNhaS5o
+dW9xaW5nQGxpbnV4LmRldjsgbWF4aW1lQGNlcm5vLnRlY2g7IGh2ZXJrdWlsLWNpc2NvQHhzNGFs
+bC5ubA0KPiBTdWJqZWN0OiBbRVhUXSBSZTogW1BBVENIIHYxIDAvNV0gRFJNOiBCcmlkZ2U6IERX
+X0hETUk6IEFkZCBuZXcgZmVhdHVyZXMNCj4gYW5kIGJ1ZyBmaXgNCj4gDQo+IENhdXRpb246IEVY
+VCBFbWFpbA0KPiANCj4gSGkgU2FuZG9yLA0KPiANCj4gT24gTWksIDIwMjItMDQtMDYgYXQgMTY6
+NDggKzA4MDAsIFNhbmRvci55dUBueHAuY29tIHdyb3RlOg0KPiA+IEZyb206IFNhbmRvciBZdSA8
+U2FuZG9yLnl1QG54cC5jb20+DQo+ID4NCj4gPiBJdCBpcyBuZXcgZmVhdHVyZXMgYW5kIGJ1ZyBm
+aXggcGF0Y2ggc2V0IGZvciBEV19IRE1JIERSTSBicmlkZ2UgZHJpdmVyDQo+ID4gdGhhdCBoYXMg
+dmVyaWZpZWQgYnkgTlhQIGlNWDg2NS4NCj4gDQo+IElzIHRoYXQgaU1YODY1IG9yIGkuTVg4NjU/
+IEJvdGggYXJlIHVzZWQgaW4gZGlmZmVyZW50IHBsYWNlcyBvZiB0aGlzIHBhdGNoc2V0LA0KPiBJ
+J2QgcGljayB0aGUgb2ZmaWNpYWwgc3BlbGxpbmcgYW5kIHVzZSBpdCBldmVyeXdoZXJlLg0KPiAN
+CkNoZWNrIGl0IGluIE5YUCBpbnRlcm5hbCwgdGhlIGkuTVg4NjUgb2ZmaWNpYWwgbmFtZSBpbiBj
+b21tdW5pdHkgc2hvdWxkIGJlIGkuTVggOE0gUGx1cyBvciBpLk1YOE1QbHVzDQpJIHdpbGwgdXNl
+IGkuTVg4TVBsdXMgaW4gdGhlIHBhdGNoIHNldCBsYXRlci4NClRoYW5rcyBmb3IgeW91ciBjb21t
+ZW50cy4NCg0KPiByZWdhcmRzDQo+IFBoaWxpcHANCg0KQi5SDQpTYW5kb3INCg==

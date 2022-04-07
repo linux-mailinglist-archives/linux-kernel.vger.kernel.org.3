@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D914F4F848A
+	by mail.lfdr.de (Postfix) with ESMTP id 09EAE4F848B
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345592AbiDGQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S1345584AbiDGQI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiDGQHV (ORCPT
+        with ESMTP id S1345662AbiDGQHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:07:21 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26671114DE4;
-        Thu,  7 Apr 2022 09:05:21 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w4so8493602wrg.12;
-        Thu, 07 Apr 2022 09:05:21 -0700 (PDT)
+        Thu, 7 Apr 2022 12:07:42 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F54318F21B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:05:41 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso9294558pju.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RwGnOv9tuCS4Glh/q7Oki8zffnkUd/Q0fjECuAqwO7c=;
-        b=gmV3yEoVNk48jcao6xPblrNPo2DepjB/cLhPBrWrEehQVu9A8va2bBHzlDCfzHi5sm
-         GMGDkHH6ugea546NIYx/mw+RooJuDb2MQNzC9pBuoFhkqem4NjIjUbsVCRPkqusvtGA6
-         dVISATNeHRq6Pd2MEN/MqxDOQ+nJCDF/HOzwyZpbPbahgsWgkXaSfp10+g3BndlncXnp
-         fKf+wkkD+pzzWTAoJGgzOPdI17YByZWb3bC6+tDxp2qzjzgqJuZgDwnr20OdJZb5HX4M
-         +n0afAhNsqjK7zxZ6pc3seudiFD8Q2CqvlqKS4dEKu1H8GAlzeI5qwrvzeAFIYfCyJHt
-         WdPA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oJxIZVkcUncMUZQfQzkdJ+zb+DZalywUloW4568yYn0=;
+        b=kfqHsKdfw89Dwd7QGak9HdKv00acSQig8ZHOqKWrcgwuHdvnnaELMDCR55SPQFtBnS
+         TCxq7MWV9AQn4Hy0EhgxCx0TPpiUCpQgwy7H23Vwal4SDaAw8HvwrqITWyGFNK4sQzhH
+         JFlGRWNfuLUz6qBVdSmZZ4kfxxkJBk87qruGPkjprjbLBVVAK37/Q8fsRcuV33Xw/HVj
+         B8h8cqJw82ZLbYL11sh4DuKcy3QGnH0AAQvp3PE979fT3HkEwRHAW82vgfR+KkL2QJN5
+         KSj7BU6Ix6FVP1cRvsNGtSRLODq/C8E5+MMo0e8vGjCEj/PqSsvyu1EMlSFPMgRzy1o2
+         ak7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RwGnOv9tuCS4Glh/q7Oki8zffnkUd/Q0fjECuAqwO7c=;
-        b=ypZ1G50AsQN/UYnlSFjnhpJ9eaQnAPRmPTxgLW+O87Ra7qkeFCt38WS7f6fZR94boT
-         vvOzz28Y0f3L2KhITlOTLtUVpR7SPIFO/evPpNx4nlfij/NrxGxDkc/4GoAzBZo/p4Ba
-         gSkoFECtkiHFO1LRyQpR4Ora5f6g8j7Lmh6ofS3SdLaHgNNA31OHpCpGShPYD/Q6JJ9z
-         8w8w2WR5+J+lRx8uuQbx5akid1/JPPbkzcSA0xYeFwUSWHoZONYA5CAa8Ukup2XNsalY
-         vk6cKDJRdPRx5S0Q7jrsVlY6uSQxzZ0SaWU58+gkxR7mfaqeDSy0xKadO7FEXEotPIQb
-         lyJw==
-X-Gm-Message-State: AOAM531RLgYtzgKOAAUPkwtZiLJrdyZ92smIMgrCAnX4mEqtiSf99lBx
-        /0h5Oy/kyb7nq/aHR8tfeBpZFajUeEvNCA==
-X-Google-Smtp-Source: ABdhPJw5LXgWJ0+mFqcCsIxYkYvOGUsbpwr0rk1MnX3hYB9nf98fHqjiWFS+OJN2YQaf4rPa8l7aAQ==
-X-Received: by 2002:adf:b745:0:b0:205:b8e2:f470 with SMTP id n5-20020adfb745000000b00205b8e2f470mr11089350wre.91.1649347519726;
-        Thu, 07 Apr 2022 09:05:19 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05600c198600b0038cafe3d47dsm8725698wmq.42.2022.04.07.09.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 09:05:19 -0700 (PDT)
-Subject: Re: [PATCH net-next] sfc: Stop using iommu_present()
-To:     Robin Murphy <robin.murphy@arm.com>, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <7350f957944ecfce6cce90f422e3992a1f428775.1649166055.git.robin.murphy@arm.com>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <296fa369-723f-f9b7-773f-7695b12c9971@gmail.com>
-Date:   Thu, 7 Apr 2022 17:05:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oJxIZVkcUncMUZQfQzkdJ+zb+DZalywUloW4568yYn0=;
+        b=NyaJn+W5nW0vLmz158q9RBy3tkWeDTrmovHbKPKCHYB7rbdSs/44eTuxzBrRdWM+ih
+         KFx7KJLe9QmWD54VSlS6VmBtj2UNaJ2V6xiis8DQ9ZS+r2KHmOVklfPpprc0rGOHusYO
+         AaBf06t1Bz38uqGUL/VkbYtAk23nRnaeEzhK0+uMBUBqfCRnAFHw4hsQHspk5MF3U/w1
+         X64At+G9b5q36elz3vJScAXEAp4djFvf6oDGMYBrryP4AUSz6dfxVWunz1EYrC3kMnUt
+         QLCaQrqjfKIdptsNHDyFgBfhWSsKwGhBuZswChocWCmH5oBqU8EKJ5x0+3vcEBONrTcH
+         PZxA==
+X-Gm-Message-State: AOAM533RqFqE7szv8xuzsjPUCdn9n8UHVCWcAeb8MCcRz0kkQ3LLZDTE
+        rFROqyrUZyVrFv2C83VSElUQRA==
+X-Google-Smtp-Source: ABdhPJxwrn5jcOCrefa44ifJu+1yvC1mRdMBBIerz3MlZcxhkTZR+e25OlxT/CA5AXmZeG4/pzPIww==
+X-Received: by 2002:a17:90b:4a84:b0:1cb:29bd:db3e with SMTP id lp4-20020a17090b4a8400b001cb29bddb3emr1947695pjb.112.1649347540416;
+        Thu, 07 Apr 2022 09:05:40 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q17-20020aa79831000000b0050566040330sm3561920pfl.126.2022.04.07.09.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 09:05:39 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 16:05:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
+ against RLIMIT_MEMLOCK
+Message-ID: <Yk8L0CwKpTrv3Rg3@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-5-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <7350f957944ecfce6cce90f422e3992a1f428775.1649166055.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-5-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,12 +96,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 14:40, Robin Murphy wrote:
-> Even if an IOMMU might be present for some PCI segment in the system,
-> that doesn't necessarily mean it provides translation for the device
-> we care about. It appears that what we care about here is specifically
-> whether DMA mapping ops involve any IOMMU overhead or not, so check for
-> translation actually being active for our device.
+On Thu, Mar 10, 2022, Chao Peng wrote:
+> Since page migration / swapping is not supported yet, MFD_INACCESSIBLE
+> memory behave like longterm pinned pages and thus should be accounted to
+> mm->pinned_vm and be restricted by RLIMIT_MEMLOCK.
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  mm/shmem.c | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 7b43e274c9a2..ae46fb96494b 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -915,14 +915,17 @@ static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+>  static void notify_invalidate_page(struct inode *inode, struct folio *folio,
+>  				   pgoff_t start, pgoff_t end)
+>  {
+> -#ifdef CONFIG_MEMFILE_NOTIFIER
+>  	struct shmem_inode_info *info = SHMEM_I(inode);
+>  
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+>  	start = max(start, folio->index);
+>  	end = min(end, folio->index + folio_nr_pages(folio));
+>  
+>  	memfile_notifier_invalidate(&info->memfile_notifiers, start, end);
+>  #endif
+> +
+> +	if (info->xflags & SHM_F_INACCESSIBLE)
+> +		atomic64_sub(end - start, &current->mm->pinned_vm);
+
+As Vishal's to-be-posted selftest discovered, this is broken as current->mm may
+be NULL.  Or it may be a completely different mm, e.g. AFAICT there's nothing that
+prevents a different process from punching hole in the shmem backing.
+
+I don't see a sane way of tracking this in the backing store unless the inode is
+associated with a single mm when it's created, and that opens up a giant can of
+worms, e.g. what happens with the accounting if the creating process goes away?
+
+I think the correct approach is to not do the locking automatically for SHM_F_INACCESSIBLE,
+and instead require userspace to do shmctl(.., SHM_LOCK, ...) if userspace knows the
+consumers don't support migrate/swap.  That'd require wrapping migrate_page() and then
+wiring up notifier hooks for migrate/swap, but IMO that's a good thing to get sorted
+out sooner than later.  KVM isn't planning on support migrate/swap for TDX or SNP,
+but supporting at least migrate for a software-only implementation a la pKVM should
+be relatively straightforward.  On the notifiee side, KVM can terminate the VM if it
+gets an unexpected migrate/swap, e.g. so that TDX/SEV VMs don't die later with
+exceptions and/or data corruption (pre-SNP SEV guests) in the guest.
+
+Hmm, shmem_writepage() already handles SHM_F_INACCESSIBLE by rejecting the swap, so
+maybe it's just the page migration path that needs to be updated?

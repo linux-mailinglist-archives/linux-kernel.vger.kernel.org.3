@@ -2,224 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC174F77EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E0C4F77FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242040AbiDGHpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S242052AbiDGHqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242041AbiDGHpg (ORCPT
+        with ESMTP id S231560AbiDGHqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:45:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1891207E1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649317415; x=1680853415;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rEzSY+KB/Lo7kPj+KuYGT5iGJesbI2j4rtB/xVv0Ob0=;
-  b=lXCTQPQWl+XixxL3lgAuMwKRAF3EFFEfvw27EJhoN8ITK0nw9URAzq49
-   ceYpZ41KMwhI/nJIZ4m35b6JqpKqQvC58ctMUpSomwZZMejLQzAojc2zY
-   qDAj0t5B+06ialY19CKAr5ERY+CeVqvBXbkoWc5o6RHgwGTgZgKgSHebs
-   1Xhf7T3/4eUI9HYc7R+5y40oA7dgQGsePqPlWjb6kFD9H4qhHzJBrqFC1
-   WVyeRkVhCUcf4hxdaQLh28Zp3A/wZlgUAcYaFxInUTrzTMg5ryLLvcbVv
-   RQX3+TAsVmswJIuEd1OGcnhevhbSx3bGgzgG6ynf3NWRLT1wO0Brj/JNB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="260949542"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="260949542"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:43:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="658965035"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2022 00:43:34 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncMnl-0005D0-G7;
-        Thu, 07 Apr 2022 07:43:33 +0000
-Date:   Thu, 7 Apr 2022 15:43:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse: sparse:
- incorrect type in assignment (different base types)
-Message-ID: <202204071547.7NKPu5MS-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 03:46:16 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15CDB13D41;
+        Thu,  7 Apr 2022 00:44:15 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 07 Apr 2022 16:44:15 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 48D242058443;
+        Thu,  7 Apr 2022 16:44:15 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 7 Apr 2022 16:44:15 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id C0DBCB62B7;
+        Thu,  7 Apr 2022 16:44:14 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH] dt-bindings: dma: uniphier: Use unevaluatedProperties
+Date:   Thu,  7 Apr 2022 16:44:07 +0900
+Message-Id: <1649317447-20996-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 2ce008c8b25467ceacf45bcf0e183d660edb82f2 KVM: PPC: Book3S HV: Remove unused nested HV tests in XICS emulation
-date:   10 months ago
-config: powerpc64-randconfig-s031-20220403 (https://download.01.org/0day-ci/archive/20220407/202204071547.7NKPu5MS-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2ce008c8b25467ceacf45bcf0e183d660edb82f2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2ce008c8b25467ceacf45bcf0e183d660edb82f2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
+This refers common bindings, so this is preferred for
+unevaluatedProperties instead of additionalProperties.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ .../devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml    | 2 +-
+ .../devicetree/bindings/dma/socionext,uniphier-xdmac.yaml       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] *out_xirr @@     got restricted __be32 * @@
-   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse:     expected unsigned int [usertype] *out_xirr
-   arch/powerpc/kvm/book3s_hv_builtin.c:417:41: sparse:     got restricted __be32 *
->> arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 [addressable] [usertype] xirr @@     got unsigned int @@
-   arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse:     expected restricted __be32 [addressable] [usertype] xirr
-   arch/powerpc/kvm/book3s_hv_builtin.c:419:22: sparse:     got unsigned int
->> arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __be32 [addressable] [usertype] xirr @@
-   arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse:     expected unsigned int [usertype] val
-   arch/powerpc/kvm/book3s_hv_builtin.c:450:41: sparse:     got restricted __be32 [addressable] [usertype] xirr
-   arch/powerpc/kvm/book3s_hv_builtin.c: note: in included file:
-   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
-   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __be64 [usertype] @@
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __be64 [usertype]
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __le64 [usertype] @@
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
-   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __le64 [usertype]
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __be64 [usertype] @@
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __be64 [usertype]
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __le64 [usertype] @@
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
-   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __le64 [usertype]
-
-vim +419 arch/powerpc/kvm/book3s_hv_builtin.c
-
-f725758b899f11c Paul Mackerras         2016-11-18  395  
-f725758b899f11c Paul Mackerras         2016-11-18  396  static long kvmppc_read_one_intr(bool *again)
-37f55d30df2eef8 Suresh Warrier         2016-08-19  397  {
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  398  	void __iomem *xics_phys;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  399  	u32 h_xirr;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  400  	__be32 xirr;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  401  	u32 xisr;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  402  	u8 host_ipi;
-f725758b899f11c Paul Mackerras         2016-11-18  403  	int64_t rc;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  404  
-5af50993850a48b Benjamin Herrenschmidt 2017-04-05  405  	if (xive_enabled())
-5af50993850a48b Benjamin Herrenschmidt 2017-04-05  406  		return 1;
-5af50993850a48b Benjamin Herrenschmidt 2017-04-05  407  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  408  	/* see if a host IPI is pending */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  409  	host_ipi = local_paca->kvm_hstate.host_ipi;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  410  	if (host_ipi)
-37f55d30df2eef8 Suresh Warrier         2016-08-19  411  		return 1;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  412  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  413  	/* Now read the interrupt from the ICP */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  414  	xics_phys = local_paca->kvm_hstate.xics_phys;
-53af3ba2e8195f5 Paul Mackerras         2017-01-30  415  	rc = 0;
-ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  416  	if (!xics_phys)
-53af3ba2e8195f5 Paul Mackerras         2017-01-30 @417  		rc = opal_int_get_xirr(&xirr, false);
-53af3ba2e8195f5 Paul Mackerras         2017-01-30  418  	else
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05 @419  		xirr = __raw_rm_readl(xics_phys + XICS_XIRR);
-f725758b899f11c Paul Mackerras         2016-11-18  420  	if (rc < 0)
-37f55d30df2eef8 Suresh Warrier         2016-08-19  421  		return 1;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  422  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  423  	/*
-37f55d30df2eef8 Suresh Warrier         2016-08-19  424  	 * Save XIRR for later. Since we get control in reverse endian
-37f55d30df2eef8 Suresh Warrier         2016-08-19  425  	 * on LE systems, save it byte reversed and fetch it back in
-37f55d30df2eef8 Suresh Warrier         2016-08-19  426  	 * host endian. Note that xirr is the value read from the
-37f55d30df2eef8 Suresh Warrier         2016-08-19  427  	 * XIRR register, while h_xirr is the host endian version.
-37f55d30df2eef8 Suresh Warrier         2016-08-19  428  	 */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  429  	h_xirr = be32_to_cpu(xirr);
-37f55d30df2eef8 Suresh Warrier         2016-08-19  430  	local_paca->kvm_hstate.saved_xirr = h_xirr;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  431  	xisr = h_xirr & 0xffffff;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  432  	/*
-37f55d30df2eef8 Suresh Warrier         2016-08-19  433  	 * Ensure that the store/load complete to guarantee all side
-37f55d30df2eef8 Suresh Warrier         2016-08-19  434  	 * effects of loading from XIRR has completed
-37f55d30df2eef8 Suresh Warrier         2016-08-19  435  	 */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  436  	smp_mb();
-37f55d30df2eef8 Suresh Warrier         2016-08-19  437  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  438  	/* if nothing pending in the ICP */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  439  	if (!xisr)
-37f55d30df2eef8 Suresh Warrier         2016-08-19  440  		return 0;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  441  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  442  	/* We found something in the ICP...
-37f55d30df2eef8 Suresh Warrier         2016-08-19  443  	 *
-37f55d30df2eef8 Suresh Warrier         2016-08-19  444  	 * If it is an IPI, clear the MFRR and EOI it.
-37f55d30df2eef8 Suresh Warrier         2016-08-19  445  	 */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  446  	if (xisr == XICS_IPI) {
-53af3ba2e8195f5 Paul Mackerras         2017-01-30  447  		rc = 0;
-2ce008c8b25467c Nicholas Piggin        2021-05-28  448  		if (xics_phys) {
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  449  			__raw_rm_writeb(0xff, xics_phys + XICS_MFRR);
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05 @450  			__raw_rm_writel(xirr, xics_phys + XICS_XIRR);
-f725758b899f11c Paul Mackerras         2016-11-18  451  		} else {
-ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  452  			opal_int_set_mfrr(hard_smp_processor_id(), 0xff);
-ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  453  			rc = opal_int_eoi(h_xirr);
-53af3ba2e8195f5 Paul Mackerras         2017-01-30  454  		}
-f725758b899f11c Paul Mackerras         2016-11-18  455  		/* If rc > 0, there is another interrupt pending */
-f725758b899f11c Paul Mackerras         2016-11-18  456  		*again = rc > 0;
-f725758b899f11c Paul Mackerras         2016-11-18  457  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  458  		/*
-37f55d30df2eef8 Suresh Warrier         2016-08-19  459  		 * Need to ensure side effects of above stores
-37f55d30df2eef8 Suresh Warrier         2016-08-19  460  		 * complete before proceeding.
-37f55d30df2eef8 Suresh Warrier         2016-08-19  461  		 */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  462  		smp_mb();
-37f55d30df2eef8 Suresh Warrier         2016-08-19  463  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  464  		/*
-37f55d30df2eef8 Suresh Warrier         2016-08-19  465  		 * We need to re-check host IPI now in case it got set in the
-37f55d30df2eef8 Suresh Warrier         2016-08-19  466  		 * meantime. If it's clear, we bounce the interrupt to the
-37f55d30df2eef8 Suresh Warrier         2016-08-19  467  		 * guest
-37f55d30df2eef8 Suresh Warrier         2016-08-19  468  		 */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  469  		host_ipi = local_paca->kvm_hstate.host_ipi;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  470  		if (unlikely(host_ipi != 0)) {
-37f55d30df2eef8 Suresh Warrier         2016-08-19  471  			/* We raced with the host,
-37f55d30df2eef8 Suresh Warrier         2016-08-19  472  			 * we need to resend that IPI, bummer
-37f55d30df2eef8 Suresh Warrier         2016-08-19  473  			 */
-2ce008c8b25467c Nicholas Piggin        2021-05-28  474  			if (xics_phys)
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  475  				__raw_rm_writeb(IPI_PRIORITY,
-d381d7caf812f7a Benjamin Herrenschmidt 2017-04-05  476  						xics_phys + XICS_MFRR);
-f725758b899f11c Paul Mackerras         2016-11-18  477  			else
-ab9bad0ead9ab17 Benjamin Herrenschmidt 2017-02-07  478  				opal_int_set_mfrr(hard_smp_processor_id(),
-f725758b899f11c Paul Mackerras         2016-11-18  479  						  IPI_PRIORITY);
-37f55d30df2eef8 Suresh Warrier         2016-08-19  480  			/* Let side effects complete */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  481  			smp_mb();
-37f55d30df2eef8 Suresh Warrier         2016-08-19  482  			return 1;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  483  		}
-37f55d30df2eef8 Suresh Warrier         2016-08-19  484  
-37f55d30df2eef8 Suresh Warrier         2016-08-19  485  		/* OK, it's an IPI for us */
-37f55d30df2eef8 Suresh Warrier         2016-08-19  486  		local_paca->kvm_hstate.saved_xirr = 0;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  487  		return -1;
-37f55d30df2eef8 Suresh Warrier         2016-08-19  488  	}
-37f55d30df2eef8 Suresh Warrier         2016-08-19  489  
-f725758b899f11c Paul Mackerras         2016-11-18  490  	return kvmppc_check_passthru(xisr, xirr, again);
-37f55d30df2eef8 Suresh Warrier         2016-08-19  491  }
-5af50993850a48b Benjamin Herrenschmidt 2017-04-05  492  
-
-:::::: The code at line 419 was first introduced by commit
-:::::: d381d7caf812f7aa9f05cfeb858c9004ac654412 powerpc: Consolidate variants of real-mode MMIOs
-
-:::::: TO: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
+diff --git a/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml b/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
+index e7bf6dd7da29..b40f247e07be 100644
+--- a/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
++++ b/Documentation/devicetree/bindings/dma/socionext,uniphier-mio-dmac.yaml
+@@ -45,7 +45,7 @@ required:
+   - clocks
+   - '#dma-cells'
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml b/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
+index 371f18773198..b2bd21cbeb7f 100644
+--- a/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
++++ b/Documentation/devicetree/bindings/dma/socionext,uniphier-xdmac.yaml
+@@ -40,7 +40,7 @@ properties:
+     minimum: 1
+     maximum: 16
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ required:
+   - compatible
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

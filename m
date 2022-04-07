@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207224F8B7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3684F8B75
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232598AbiDGXNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
+        id S232537AbiDGXWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbiDGXNJ (ORCPT
+        with ESMTP id S232494AbiDGXW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:13:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB1B1CFDF;
-        Thu,  7 Apr 2022 16:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649373068; x=1680909068;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dUrof2VxTLYM9v29u7hGUQzQzbvw3951Xsun8u5eDL4=;
-  b=mJMpwghtkg8+RC4t+uTG7hFap8ZZ10816fv++IhnmoVAGLcnKqEWFCcI
-   BHbk3g8rh2f4VnqHDjecymjkeKE5RZFozo6IBDSwp8FdQSUVXhVpPzvLf
-   LpCXQ1OcOAOrGAL30xp29Fs5pOQbIhIRRZIRyoT1WY5cwOsyC6GuFGNRN
-   U3At7u5n3YQKtumTArnRKTc6vtWtjHVmLiz4riAoxla05TMCkAfWSeUnX
-   n4lEgNv/8hrXujKlVE8SQUXeigU0pyKWiMvqZXopb4FCqSEkRmTFVer1x
-   FlnBBX4PohqSKJ1MaSCNnCV/PE0pIf3R0TM1tYzI92awE7azS2JN6sHa2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="347901177"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="347901177"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:11:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="550276535"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.71.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:11:07 -0700
-Message-ID: <df6110a09cacc80ee1cbe905a71273a5f3953e16.camel@linux.intel.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Wei Xu <weixugc@google.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Cgroups <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
-Date:   Thu, 07 Apr 2022 16:11:06 -0700
-In-Reply-To: <CAAPL-u_aAbDOmATSA8ZvjnfBk_7EoXvLoh0etM0fB0aY1845VQ@mail.gmail.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
-         <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
-         <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
-         <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
-         <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
-         <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <215bd7332aee0ed1092bad4d826a42854ebfd04a.camel@linux.intel.com>
-         <CAAPL-u_aAbDOmATSA8ZvjnfBk_7EoXvLoh0etM0fB0aY1845VQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-MIME-Version: 1.0
+        Thu, 7 Apr 2022 19:22:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1639630B;
+        Thu,  7 Apr 2022 16:20:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE2860F26;
+        Thu,  7 Apr 2022 23:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64848C385A0;
+        Thu,  7 Apr 2022 23:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649373625;
+        bh=3fTd4/oB9ZoXEdf+K+L8T8ud1sgeiHXYri5q9XU2dws=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZSvawR2SP4z25+5v05hEzD/SNY3BquUg00da51rb2XpIhfun/uRj9F50//O4lmLVK
+         mMLQ0SBSzdnOSHOJqeZeyVk3ZlzylTqp4UUO/tQPLTSgSiMH0RDrND71V5dVeKi6ET
+         qbMbsgu4SDWZr0njwS/0ZGtXu6KbiDlG0yFJTssU=
+Date:   Thu, 7 Apr 2022 16:20:24 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 0/7] mm/mmap: Drop arch_vm_get_page_prot() and
+ arch_filter_pgprot()
+Message-Id: <20220407162024.7747ee14092d04082f13aa9d@linux-foundation.org>
+In-Reply-To: <20220407103251.1209606-1-anshuman.khandual@arm.com>
+References: <20220407103251.1209606-1-anshuman.khandual@arm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 15:12 -0700, Wei Xu wrote:
+On Thu,  7 Apr 2022 16:02:44 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 
+> protection_map[] is an array based construct that translates given vm_flags
+> combination. This array contains page protection map, which is populated by
+> the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+> Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+> to determine page protection value for a given vm_flags. vm_get_page_prot()
+> implementation, could again call platform overrides arch_vm_get_page_prot()
+> and arch_filter_pgprot(). Some platforms override protection_map[] that was
+> originally built with __SXXX/__PXXX with different runtime values.
 > 
-> (resending in plain-text, sorry).
+> Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+> , protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+> between the platform and generic MM, finally defining vm_get_page_prot().
 > 
-> memory.demote can work with any level of memory tiers if a nodemask
-> argument (or a tier argument if there is a more-explicitly defined,
-> userspace visible tiering representation) is provided.  The semantics
-> can be to demote X bytes from these nodes to their next tier.
+> Hence this series proposes to drop later two abstraction levels and instead
+> just move the responsibility of defining vm_get_page_prot() to the platform
+> (still utilizing generic protection_map[] array) itself making it clean and
+> simple.
 > 
-
-We do need some kind of userspace visible tiering representation.
-Will be nice if I can tell the memory type, nodemask of nodes in tier Y with
-
-cat memory.tier_Y
-
-
-> memory_dram/memory_pmem assumes the hardware for a particular memory
-> tier, which is undesirable.  For example, it is entirely possible that
-> a slow memory tier is implemented by a lower-cost/lower-performance
-> DDR device connected via CXL.mem, not by PMEM.  It is better for this
-> interface to speak in either the NUMA node abstraction or a new tier
-> abstraction.
-
-Just from the perspective of memory.reclaim and memory.demote, I think
-they could work with nodemask.  For ease of management,
-some kind of abstraction of tier information like nodemask, memory type
-and expected performance should be readily accessible by user space.  
-
-Tim
-
+> This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+> to define custom vm_get_page_prot(). This starts converting platforms that
+> define the overrides arch_filter_pgprot() or arch_vm_get_page_prot() which
+> enables for those constructs to be dropped off completely.
 > 
-> It is also desirable to make this interface stateless, i.e. not to
-> require the setting of memory_dram.reclaim_policy.  Any policy can be
-> specified as arguments to the request itself and should only affect
-> that particular request.
+> The series has been inspired from an earlier discuss with Christoph Hellwig
 > 
-> Wei
+> https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> This series applies on 5.18-rc1 after the following patch.
+> 
+> https://lore.kernel.org/all/1643004823-16441-1-git-send-email-anshuman.khandual@arm.com/
+
+Confusing.  That patch is already in 5.18-rc1.
+
+But the version which was merged (24e988c7fd1ee701e) lacked the change
+to arch/arm64/Kconfig.  I seem to recall that this patch went through a
+few issues and perhaps the arm64 change was dropped.  Can you please
+check?
+
+(It would be easier for me to track all this down if the original patch
+had had cc:linux-mm.  Please cc linux-mm!)
 

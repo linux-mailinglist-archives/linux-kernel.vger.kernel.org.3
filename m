@@ -2,105 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A6C4F78A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D044C4F7895
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242523AbiDGIAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S242549AbiDGIBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242499AbiDGIAT (ORCPT
+        with ESMTP id S242554AbiDGIBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:00:19 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7686A062
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:58:19 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dr20so9067095ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fC6I6LDKsU1dL3jt1bsaP5phqIETRSXO+VpMuWduiYY=;
-        b=NAZwd9Y1aI51SSrlItLOHf6v0nHWXaJbmoEqV+YhgRAyLkkoxOa5cltHyIpiWq+udo
-         Q7pm4lK8hOLsOzBI6fZ0h3sFvUw9+YHii8xE/FsSNofSfHQ0dhfETHfTTpNZrIBuHNm0
-         yb4bXva/J1xsiIbj0hXVpqs3MtfaN7MMDHTWFU+eXCSvteTggFOx9vHS5qOr5XWeaBVe
-         Xjvlp205sGeqb7kZvudhePFw89bLO1AguIPSd1gmuTNIx3oo1TWn7WQK+f7fe536o33s
-         HdCOo1Nz8dyW9L/ITGsOQANC/UxkLUA78xsEx/0lgLvFej2PU3pKfrd32YCqcTuLuWTw
-         rxCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fC6I6LDKsU1dL3jt1bsaP5phqIETRSXO+VpMuWduiYY=;
-        b=wsiJ81fJABHHdqBhRsxsleysUBeSjzIk3i+13samKq62KcBwbuVmUYIcIRDwR0xGkr
-         0OskSHEteBdq/oxX6xVlplhkyzEVsKeqfTsRg8MI/QcjipVdyeUp33QFr3PTaN6IXbWe
-         it9k8pYQGh6HUsDyD+onwVj+dWNNBBYvUsxeOmAyOxB3YU96y442rd/q/hgzvoZKJolx
-         lxeDry9EpffjkDTCS0T/OFZYW9hAzHUu4keEXAXGtXPOSuWNdZiAaQu59sn/3oI/kSwG
-         r2FMs2hNDOtSB+Z3Rtu43WvP3tKYEdPxanYutBzxvQFStFd6aiWP3Y55eA0+V8fb9Ph+
-         vubw==
-X-Gm-Message-State: AOAM531kg+KcxCWOSMkMiuVKDchq4W3ZTfw1lS2lYCAOvUUj/2CeVrhl
-        KOr7eGsWgwcYOP1HSSnUWnJ4XT3EQo68oHCy
-X-Google-Smtp-Source: ABdhPJwwBAjsNMwOIy95cYsA0aUV86ZNq+qMhjorORQ1aYLZQYgUC+I4uFf/XjF04nHEADZmXCtm2g==
-X-Received: by 2002:a17:907:7f04:b0:6e1:39b8:d1a5 with SMTP id qf4-20020a1709077f0400b006e139b8d1a5mr12393193ejc.83.1649318298136;
-        Thu, 07 Apr 2022 00:58:18 -0700 (PDT)
-Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170906604a00b006e07c76f3d7sm7390612ejj.210.2022.04.07.00.58.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 00:58:17 -0700 (PDT)
-Message-ID: <6dcddc8a-7ca2-b424-fc8f-7000be3f9116@linaro.org>
-Date:   Thu, 7 Apr 2022 09:58:16 +0200
+        Thu, 7 Apr 2022 04:01:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDF011CF68
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fBAouhGMrAo4DR21FYAu/hvO6g8bk7dvXwun6YXeuSE=; b=Smgn4MBYQqPfCENKlpEWrjQHKW
+        gfvj1P3sx4Vmhf2Fzh+x3284suy6km700wOok3jPpwxks7KLHgPB0G98v/T9P2OGObvDNL7yhJSDg
+        K9v7vfqJnGH5VwuprEkGR4tdW7aNbWqOJhrIcnez3erz7etFn31uBEgPl3J3QTcFmSssf68wkzmkE
+        rHLUB17PgGec6f1gzgHv5FMuBkCh+rAT4raH/a97uGj7gWG1YZPPNi0euyxFWOSs2ldCoRebdnqZ2
+        pvr+DLyThl5MHFgE7YW3DwZxb1NqO2dlWQwCnmtng1Tv1eLWc+qz6XK235F7NhVPvdfdAyH47AjTE
+        YjbDYTiQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncN2d-00AB66-8g; Thu, 07 Apr 2022 07:58:55 +0000
+Date:   Thu, 7 Apr 2022 00:58:55 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        "Suthikulpanit, Suravee" <Suravee.Suthikulpanit@amd.com>,
+        "Hegde, Vasant" <Vasant.Hegde@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] iommu/amd: Enable swiotlb in all cases
+Message-ID: <Yk6Zv8ubRmQMPPcX@infradead.org>
+References: <20220404204723.9767-1-mario.limonciello@amd.com>
+ <20220404204723.9767-2-mario.limonciello@amd.com>
+ <YkvGwMlrv8JKjHJQ@infradead.org>
+ <BL1PR12MB5157E55F2F469E66B46157CDE2E79@BL1PR12MB5157.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/1] tty: serial: samsung: add spin_lock for interrupt
- and console_write
-Content-Language: en-US
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20220407071619.102249-1-jaewon02.kim@samsung.com>
- <CGME20220407071223epcas2p16bb11821a0894a3375e84d17c4ff0844@epcas2p1.samsung.com>
- <20220407071619.102249-2-jaewon02.kim@samsung.com>
- <b53be23f-7935-dae3-9dc8-f850493a5fa9@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b53be23f-7935-dae3-9dc8-f850493a5fa9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BL1PR12MB5157E55F2F469E66B46157CDE2E79@BL1PR12MB5157.namprd12.prod.outlook.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 09:46, Jiri Slaby wrote:
-> On 07. 04. 22, 9:16, Jaewon Kim wrote:
->> The console_write and IRQ handler can run concurrently.
->> Problems may occurs console_write is continuously executed while
->> the IRQ handler is running.
+On Wed, Apr 06, 2022 at 05:04:52PM +0000, Limonciello, Mario wrote:
+> Considering before this fix effectively swiotlb was turned off on most AMD
+> systems, when this is picked up I think y'all should consider to add a:
 > 
->  From the patch POV:
-> 
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-> 
-> But given this is a v3 with no version changelog below "---", you've 
-> just kicked the Greg's bot to wake up :P.
-> 
+> Cc: stable@vger.kernel.org # 5.11+
 
-There was a cover letter with such changelog:
-https://lore.kernel.org/all/20220407071619.102249-1-jaewon02.kim@samsung.com/
+Agreed.  I think this is for Joerg to pick up, and I'd love to see it
+picked up soon as I'll have to rebase my
 
-It's indeed easy to miss...
-
-Best regards,
-Krzysztof
+"cleanup swiotlb initialization" series on top of it.

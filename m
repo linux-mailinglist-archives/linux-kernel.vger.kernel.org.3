@@ -2,97 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8876B4F7732
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1AB4F7706
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbiDGHTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S241534AbiDGHQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241678AbiDGHTe (ORCPT
+        with ESMTP id S241528AbiDGHQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:19:34 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2708519609E;
-        Thu,  7 Apr 2022 00:17:34 -0700 (PDT)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mq1GE-1oO5ct1Jxa-00nDWp; Thu, 07 Apr 2022 09:17:33 +0200
-Received: by mail-wr1-f42.google.com with SMTP id b19so6412450wrh.11;
-        Thu, 07 Apr 2022 00:17:33 -0700 (PDT)
-X-Gm-Message-State: AOAM5302p6FooesM2MlclI+GR3UKP8YLM4PiD8K9/EY4x0cnFds+tfdi
-        p7uJEKY9J+7LBF9tAX1pf1acn89KFq3c2ivWQ2w=
-X-Google-Smtp-Source: ABdhPJwmNfPDNFMCTxQF72bGloQ9R7ixTS1WuENFc4sxAk/2DHt8y1oYiTEoK7GHAg/mvQl2A58Tcb9T0D1qJhBrXSI=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr8948149wru.317.1649315852910; Thu, 07
- Apr 2022 00:17:32 -0700 (PDT)
+        Thu, 7 Apr 2022 03:16:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739D4EBACA;
+        Thu,  7 Apr 2022 00:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649315677; x=1680851677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bAC8aL9e/0LILDQFClOv/cegcCjwM75fiVQah+k2yEQ=;
+  b=Xan8vT5ozby/qaykeJc0rLt7IQpeJSqZJlesNegamvSxpPxzEuGN6sQU
+   6JD58MhfEnVSRMtpDNmLqLWQkDdl1GP6VJNFxINd8RLDV8SMb7O/7TLt8
+   CNablCmuCyM3wQM7E+uMRsWRN1evSvSNh1Q+fAuceU0EPp1yWBi5ap0O6
+   0hPv2/fS0aZZnOD/SOmyim+hr1rdnskCpHUD545/vUVDJX/JLGuaBC5Rj
+   9MHCzOsz7KjhsZulxdRNJbPopNGGDD82APHJgRFXJ2W85hLaRBs5/4KsZ
+   0DZme4yJB8Cd738Zk8Pq2yeg/ZhlyFCptw8zEpUQnag/v2P/gfHaQ41jv
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
+   d="scan'208";a="151841252"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2022 00:14:36 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 7 Apr 2022 00:14:35 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 7 Apr 2022 00:14:34 -0700
+Date:   Thu, 7 Apr 2022 09:17:43 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <pabeni@redhat.com>, <michael@walle.cc>
+Subject: Re: [PATCH net-next v3 3/4] net: lan966x: Add FDMA functionality
+Message-ID: <20220407071743.rsipmaq6xnucrlcw@soft-dev3-1.localhost>
+References: <20220404130655.4004204-1-horatiu.vultur@microchip.com>
+ <20220404130655.4004204-4-horatiu.vultur@microchip.com>
+ <20220405211230.4a1a868d@kernel.org>
+ <20220406112115.6kira24azizz6z2b@soft-dev3-1.localhost>
+ <20220406103738.42a37033@kernel.org>
 MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com> <c3e7ee64-68fc-ed53-4a90-9f9296583d7c@landley.net>
-In-Reply-To: <c3e7ee64-68fc-ed53-4a90-9f9296583d7c@landley.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Apr 2022 09:17:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a14b6djqPw8Dea5uW2PPEABbe0pNXV5EX0529oDrW1ZAg@mail.gmail.com>
-Message-ID: <CAK8P3a14b6djqPw8Dea5uW2PPEABbe0pNXV5EX0529oDrW1ZAg@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Rob Landley <rob@landley.net>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Yo2hm0QgwdDiZWgQYLhkXYPauJG70GP755RV1AWo8wIVvD/MUvj
- YEfgbQBnSdVWploJP6kdu8d4cBq4C8p1jGw1W7Fdul3S6ddMi9QvPqQh3QTEARECDATDf6s
- Uk+JVdrBs80xnRnP+6SSZv3MWP3fIPf/ygCsX8Zmk3idXRktBukUmTBWtDlaSbjkvlNcElz
- wO6jjxfljNlmw/yZRGF5w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7npattaJtsU=:Ap0U6VUR0inRdjgkys9djw
- 3Z7Z0OGP8FdcSfCguG8yi26yaxTmUHHLyF5W6Kz/EJjpBfX2McXJOBk2h0ocBU0Swqi/XY/zr
- C/Q9fx86UTr9BYeA5YkyB9TBIAmoX0Bd1WL5izun3YcshAj3JupG3afv8SgxPlAJiIpmp5MZP
- q1CJ5TyArE3GB124uu455f8hwXOmlu3EawdlXlg9AZ8qWfOP5vpnX8ge2h12pYXQuFGilXSfc
- 4/RtNbxI1xhhYet1Dh3MP08k0xdlUoofGAgQd/I0ssTH7b6WXEnyBiWgbKlP0CoJ/XTqLUlPk
- CeGMKQB93rE0Pm+xAd3zVLZzqystdWQ4gx9u+z0J+95KewqQ0jGV7jhFsG1QnDfrNjR8LeaJC
- ovLeyI/HoiNw2QmUCAsB6TMWHpDd9JMQrvRA4iE51wFeY69pNRVHfzca6thW0fh290yp/tMKj
- 7FCmej6Uj9aBQuLvnP8g9lAl822aSCrbBYCofeqGCSAfqoSWw7IChm3/ZCQresGSJ1BG0PowW
- T6rEMF0HBJYuiLGwIb3Q4L7arnox3z/ogFKdHQ83ZDosVzxwNEgN+B18E41g60uNy6JXK3965
- kJq3R8CnaJG5KQm+l82D7s8z3kbXs7BLM0x3X+JdRiVjiDdkJF6IajG5QOI6KwCGM9cyFjRWv
- o5ksJ9K/7Mcoxuk5x1NER9lQU4475HkQcX/VjPyE8hj+r4JLwCrWe0RabAQtsPAeDoaWwLIRE
- keQgOWwHRQjkVPHH+dvCto0vjagZZsYggSoAhHjhytM+o99GR/tQM9gPgtHax2tc9M/eizazU
- OzMUBYGnZwZT5gogz8G/52L640SiTMftGg4a5m7Ie7I6d1MbGU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220406103738.42a37033@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 11:25 PM Rob Landley <rob@landley.net> wrote:
+The 04/06/2022 10:37, Jakub Kicinski wrote:
+> 
+> On Wed, 6 Apr 2022 13:21:15 +0200 Horatiu Vultur wrote:
+> > > > +static int lan966x_fdma_tx_alloc(struct lan966x_tx *tx)
+> > > > +{
+> > > > +     struct lan966x *lan966x = tx->lan966x;
+> > > > +     struct lan966x_tx_dcb *dcb;
+> > > > +     struct lan966x_db *db;
+> > > > +     int size;
+> > > > +     int i, j;
+> > > > +
+> > > > +     tx->dcbs_buf = kcalloc(FDMA_DCB_MAX, sizeof(struct lan966x_tx_dcb_buf),
+> > > > +                            GFP_ATOMIC);
+> > > > +     if (!tx->dcbs_buf)
+> > > > +             return -ENOMEM;
+> > > > +
+> > > > +     /* calculate how many pages are needed to allocate the dcbs */
+> > > > +     size = sizeof(struct lan966x_tx_dcb) * FDMA_DCB_MAX;
+> > > > +     size = ALIGN(size, PAGE_SIZE);
+> > > > +     tx->dcbs = dma_alloc_coherent(lan966x->dev, size, &tx->dma, GFP_ATOMIC);
+> > >
+> > > This functions seems to only be called from probe, so GFP_KERNEL
+> > > is better.
+> >
+> > But in the next patch of this series will be called while holding
+> > the lan966x->tx_lock. Should I still change it to GFP_KERNEL and then
+> > in the next one will change to GFP_ATOMIC?
+> 
+> Ah, I missed that. You can keep the GFP_ATOMIC then.
+> 
+> But I think the reconfig path may be racy. You disable Rx, but don't
+> disable napi. NAPI may still be running and doing Rx while you're
+> trying to free the rx skbs, no?
 
-> I'm interested in H8300 because it's a tiny architecture (under 6k lines total,
-> in 93 files) and thus a good way to see what a minimal Linux port looks like. If
-> somebody would like to suggest a different one for that...
+Yes, it is possible to have race conditions there. Even though I disable
+the HW and make sure the RX FDMA is disabled. It could be that a frame
+is received and then we get an interrupt and we just call napi_schedule.
+At this point we change the MTU, and once we disable the HW and the RX
+FDMA, then the napi_poll is called.
+So I will make sure call napi_synchronize and napi_disable.
 
-Anything that is maintained is usually a better example, and it helps when the
-code is not old enough to have accumulated a lot of historic baggage.
+> 
+> Once napi is disabled you can disable Tx and then you have full
+> ownership of the Tx side, no need to hold the lock during
+> lan966x_fdma_tx_alloc(), I'd think.
 
-The arch/riscv/ code is generally a good example base for others to copy.
-It's not nearly as small, but that is mostly because it implements optional
-features that could be left out. csky is a smaller example that is also
-fairly clean and new, but less featureful.
+I can do that. The only thing is that I need to disable the Tx for all
+the ports. Because the FDMA is shared by all the ports.
 
-         Arnd
+> 
+> > > > +int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+> > > > +{
+> > > > +     struct lan966x_port *port = netdev_priv(dev);
+> > > > +     struct lan966x *lan966x = port->lan966x;
+> > > > +     struct lan966x_tx_dcb_buf *next_dcb_buf;
+> > > > +     struct lan966x_tx_dcb *next_dcb, *dcb;
+> > > > +     struct lan966x_tx *tx = &lan966x->tx;
+> > > > +     struct lan966x_db *next_db;
+> > > > +     int needed_headroom;
+> > > > +     int needed_tailroom;
+> > > > +     dma_addr_t dma_addr;
+> > > > +     int next_to_use;
+> > > > +     int err;
+> > > > +
+> > > > +     /* Get next index */
+> > > > +     next_to_use = lan966x_fdma_get_next_dcb(tx);
+> > > > +     if (next_to_use < 0) {
+> > > > +             netif_stop_queue(dev);
+> > > > +             return NETDEV_TX_BUSY;
+> > > > +     }
+> > > > +
+> > > > +     if (skb_put_padto(skb, ETH_ZLEN)) {
+> > > > +             dev->stats.tx_dropped++;
+> > > > +             return NETDEV_TX_OK;
+> > > > +     }
+> > > > +
+> > > > +     /* skb processing */
+> > > > +     needed_headroom = max_t(int, IFH_LEN * sizeof(u32) - skb_headroom(skb), 0);
+> > > > +     needed_tailroom = max_t(int, ETH_FCS_LEN - skb_tailroom(skb), 0);
+> > > > +     if (needed_headroom || needed_tailroom || skb_header_cloned(skb)) {
+> > > > +             err = pskb_expand_head(skb, needed_headroom, needed_tailroom,
+> > > > +                                    GFP_ATOMIC);
+> > > > +             if (unlikely(err)) {
+> > > > +                     dev->stats.tx_dropped++;
+> > > > +                     err = NETDEV_TX_OK;
+> > > > +                     goto release;
+> > > > +             }
+> > > > +     }
+> > > > +
+> > > > +     skb_tx_timestamp(skb);
+> > >
+> > > This could move down after the dma mapping, so it's closer to when
+> > > the devices gets ownership.
+> >
+> > The problem is that, if I move this lower, then the SKB is changed
+> > because the IFH is added to the frame. So now if we do timestamping in
+> > the PHY then when we call classify inside 'skb_clone_tx_timestamp'
+> > will always return PTP_CLASS_NONE so the PHY will never get the frame.
+> > That is the reason why I have move it back.
+> 
+> Oh, I see, makes sense!
+
+-- 
+/Horatiu

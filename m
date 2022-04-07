@@ -2,92 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964934F6F61
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0530D4F6F67
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiDGBCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S233119AbiDGBHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiDGBCs (ORCPT
+        with ESMTP id S230047AbiDGBHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:02:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65BEAC99;
-        Wed,  6 Apr 2022 18:00:50 -0700 (PDT)
+        Wed, 6 Apr 2022 21:07:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC23CBE1A;
+        Wed,  6 Apr 2022 18:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649293250; x=1680829250;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9Xr/aMM/aBRiUNqncfjg8FGIVBvzbGhbRBKe75kPJqs=;
-  b=Sl3LZQN7tAFTHLEdcw/ZK9zvcYKihmVqMOft5DdlxKhXJckJruLIl18+
-   ReD4kfMIaI0bdkv5ksG+gD9znjTRhjm1teRAWHbQ+A9yfQSgwfwsXERmA
-   ZrNN+XRbUkD/H5GuhTKJLG7G4r/+3clefQvIpfwFsubVMYm4C+YPwEPjF
-   CEosn58eBTIsjSLYHWIpp5Y0PYUKV5pa1oACsqeVsnZZ+IECaVewc/iKX
-   fysG4TJRFN4lL+5O/Pf30givkpceR6hWezxljZuQNu4BVuHZgeuR4hswW
-   V4evBWAOb6lm3Ok5xLzsqUKiXKgeVXo353XxNRx3iGk+f+VrguwRkitLV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241788577"
+  t=1649293507; x=1680829507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=myer2bVBJAzVTcO8FK/Itx5etIcCeXikEzZUTZdKYyQ=;
+  b=CRTGINvpegqE3Ct4eATioeXgEOoVjVJ/SiNTNo7WZNxYuIBo20K4WiLN
+   B3hN51N6MQrB51lHpSK3EnWDVlHQxCM+xHvN7bY2ezStPZkj92VOJjyK5
+   DKjQaWZFIRHMb+OCBrLkSLMuL4zAqpwYK69p5PxH7qHjfepzFy8nSuLgP
+   cR0rKvkNhTVmxTGl/Fsr1Qeuhoa+QNHN+YG+HwX7FDQoFLCmx4QVZyupD
+   AqtRwO+UBAjDsbzs5a9heCZ3HmbV+eG7PNeaxOViv73EJshe0yghbz+J4
+   DPf8+CW98RMXb+v6aF8cQmGBFJ7AXcYYTWuWnUsAyCPz+w1TOS4pOueG8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="243330976"
 X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="241788577"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:00:49 -0700
+   d="scan'208";a="243330976"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:05:07 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="570818409"
-Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:00:46 -0700
-Message-ID: <0a717d253785b3b6ea5f889d7399ad06ca465896.camel@intel.com>
-Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
- allocate/free MKTME keyid
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 07 Apr 2022 13:00:44 +1200
-In-Reply-To: <cec13fb656f05d8c9d231c225587072076448d71.camel@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
-         <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
-         <20220331201550.GC2084469@ls.amr.corp.intel.com>
-         <cec13fb656f05d8c9d231c225587072076448d71.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+   d="scan'208";a="609119120"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 18:05:02 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncGa6-0004ur-5a;
+        Thu, 07 Apr 2022 01:05:02 +0000
+Date:   Thu, 7 Apr 2022 09:04:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, jarkko@kernel.org, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com,
+        nramas@linux.microsoft.com, eric.snowberg@oracle.com,
+        pvorel@suse.cz, tiwai@suse.de, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 6/7] KEYS: X.509: Flag Intermediate CA certs as built in
+Message-ID: <202204070929.nFQNU3B8-lkp@intel.com>
+References: <20220406015337.4000739-7-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406015337.4000739-7-eric.snowberg@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> > 
-> > Also export the global TDX private host key id that is used to encrypt TDX
-> > module, its memory and some dynamic data (e.g. TDR).  
-> > 
+Hi Eric,
 
-Sorry I was replying too quick.
+Thank you for the patch! Perhaps something to improve:
 
-This sentence is not correct.  Hardware doesn't use global KeyID to encrypt TDX
-module itself.  In current generation of TDX, global KeyID is used to encrypt
-TDX memory metadata (PAMTs) and TDRs.
+[auto build test WARNING on 3123109284176b1532874591f7c81f3837bbdc17]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Snowberg/Add-CA-enforcement-keyring-restrictions/20220407-003209
+base:   3123109284176b1532874591f7c81f3837bbdc17
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220407/202204070929.nFQNU3B8-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b0858df3dd6d627f8fa75cc973f55516372a5c98
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eric-Snowberg/Add-CA-enforcement-keyring-restrictions/20220407-003209
+        git checkout b0858df3dd6d627f8fa75cc973f55516372a5c98
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/file_table.c:28:
+>> include/linux/ima.h:189:56: warning: 'union key_payload' declared inside parameter list will not be visible outside of this definition or declaration
+     189 |                                            const union key_payload *payload,
+         |                                                        ^~~~~~~~~~~
+>> include/linux/ima.h:188:57: warning: 'struct key_type' declared inside parameter list will not be visible outside of this definition or declaration
+     188 |                                            const struct key_type *type,
+         |                                                         ^~~~~~~~
 
 
-> > When VMM releasing
-> > encrypted page to reuse it, the page needs to be flushed with the used host
-> > key id.  VMM needs the global TDX private host key id to flush such pages
-> > TDX module accesses with the global TDX private host key id.
-> > 
-> > 
-> 
-> Find to me.
-> 
+vim +189 include/linux/ima.h
 
+   179	
+   180	#ifdef CONFIG_ASYMMETRIC_KEY_TYPE
+   181	#ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+   182	#define ima_validate_builtin_rot restrict_link_by_rot_builtin_and_secondary_trusted
+   183	#else
+   184	#define ima_validate_builtin_rot restrict_link_by_rot_builtin_trusted
+   185	#endif
+   186	#else
+   187	static inline int ima_validate_builtin_rot(struct key *dest_keyring,
+ > 188						   const struct key_type *type,
+ > 189						   const union key_payload *payload,
+   190						   struct key *unused){
+   191		return -EPERM;
+   192	}
+   193	#endif
+   194	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

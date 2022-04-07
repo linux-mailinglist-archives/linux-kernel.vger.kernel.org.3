@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66DF4F81D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753DE4F81CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344045AbiDGOfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S1344074AbiDGOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344082AbiDGOfe (ORCPT
+        with ESMTP id S1344058AbiDGOfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:35:34 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815E01B7572
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:33:19 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id bq8so11225827ejb.10
+        Thu, 7 Apr 2022 10:35:19 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65B91AE3FD
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:33:18 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id ot30so11173491ejb.12
         for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZhILZayX6pXffknKnd7HfQgbBKm0wpl0VHuQYrvMsZ0=;
-        b=oW2QY6FhGdQmhBgp/MADoYPdud7e2/D0LNs/qdWYbhbNaEcAPcVX5b3hhAJY3VQ5b2
-         7gC62rgwdrtW0dN34ZqnDI949PTioIaYWOmD8g9DRjeJOFGDNtUkU/2K+DkcBusmwsHh
-         qgNCoe8enlFYxi3NEz+kwrxqVILx9Ub4fvDS3bmFlkjWL8vnmVpp069M6FBYtVW5xyrE
-         HZjS6fs5ZQEKL5sl4QfpEkSJ6vRUmOJhHjbOOO/pm+eRDIIpCcBvIsH/6KT27ZMUg4Ee
-         2y+5/E5s2YMnRNLGT8OS6ZwKzo3/BQIwG8BulPimXxSeVP3UoSNxqEA6Kbr4TzFqlNZg
-         4/OA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=deYcd73u1EhKyJcYQ9j7yr80yzbyfraQrPNmCBZemxk=;
+        b=FygBkBxumA/U2oeWmN2ccLIHZdubNyHkGVwevnFSh/a73mrmBM2pduFBlWnCIFHJYi
+         G4FbWCaq5m3/hgtFLwHPlHww3iYZibnxWrjUS/MQ8vNUQVKPy4JEI16M8FwACRTW0WnN
+         EOvkQYe4Aujn9dE9p6XMbQ4t2FdFU6j985XaybxcKNPKHs2puMWbDPEZNFKvYOtvdAAf
+         VAjfymFxn9jnzHaSYP6B3T2zpVtcC7Qf4tBeFS88zu4in6RtvB6mYvqsp2PkdqYOh9++
+         U4lNtFHrWvgE8EOfmNQrDr0csuhHf9orFaxAIRwF+VQN1x0A//xdO6YgtUDtNXbPIWem
+         Wm2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZhILZayX6pXffknKnd7HfQgbBKm0wpl0VHuQYrvMsZ0=;
-        b=U6QKoM0NzyKrpk6fFoS5pDlDsnEguj6SKdnUJ25plenwCLyPKBqSvsHN4qjn0eu5PZ
-         Ai4IW93IXGXohRTA9loKxDYpsvKjAWGlTjzrkvfUBlXgyhdFMInX0dROvsXD966LkYnA
-         VuQOm9HfTRIkkj3spO/jBpJVGHduAIW6LCqDa7edY5vtIWD3fU8qnOCgtJmX4gF4b+Uv
-         3khXagAVDVRljnkb2dNTb2FIwT2QgPC0HynibZL8cfk6KeRPZdGBbz0hVX+f9xrVfDLP
-         ayuhC/AyMIKMGGW4yQI+jtpWNhPysSBQqUg743BV3trnjcu4h+uhVKJdY4ymqDKPnenu
-         uSFw==
-X-Gm-Message-State: AOAM531bxEVyxx/mOSkIcziycuhWV+5GKGOT3gcAatih4i9WFqCkQHVh
-        Tx9eGc62vgpFXAqY2x7TbwZGEw==
-X-Google-Smtp-Source: ABdhPJzuh9XHvvGbe8ZPu/7duVfCJ0rW8LwjHVbbAzHzQRh2mnP/nQ+KvF7KNjIa4gr2QrU8GxcQVw==
-X-Received: by 2002:a17:907:3f92:b0:6e7:2ad3:a92b with SMTP id hr18-20020a1709073f9200b006e72ad3a92bmr14282064ejc.239.1649341936092;
-        Thu, 07 Apr 2022 07:32:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=deYcd73u1EhKyJcYQ9j7yr80yzbyfraQrPNmCBZemxk=;
+        b=64AQSJgWG6yFLMf02Jg7KP0rCMOUr6MDvlIIubW/jAyCp8DB0nVd9dv8a/xJTnsVhr
+         Sl+j8K481yOEF0e2O4YpdQTFo9fgbtX6BxyaN9HtSNx7dmTvUThStirSMJcobC6no6nK
+         0rJDJ3+BDYkfifal/iiH9JddeCsNUEP8JMCTMEw/b4R6FQFoysLkvNixskzYp9XnJ0l8
+         D/6c87qc7tEFpxmCF5s08JQQDYK9XCK/7jjtPgVDvrXkT/4KLewF0bRYGZ13y9W4xMsS
+         BYzpPHWD+32i3U7I9y25h0Gh1p+94dCXn74pvV9t2hl1LTPQIJJ8Ns4hjOEvkYMWjh8t
+         7LCQ==
+X-Gm-Message-State: AOAM532Mtp5sKXXsEiM+FMUVlnn8G/vjv7n713UgjAb2iXNiXk/AoMDc
+        9Djh3wvRk3cIvdDPHzopUgw9yg==
+X-Google-Smtp-Source: ABdhPJyRvvMBgSDzdUUw5OErNuL/yMlO6NqgfK6Q3GDBpllbDVGKJlEH2/OOhCnyFMnWsCy65QTF2Q==
+X-Received: by 2002:a17:907:7f0f:b0:6e4:c15e:7751 with SMTP id qf15-20020a1709077f0f00b006e4c15e7751mr13830915ejc.266.1649341937047;
+        Thu, 07 Apr 2022 07:32:17 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm9602135edx.97.2022.04.07.07.32.15
+        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm9602135edx.97.2022.04.07.07.32.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:32:15 -0700 (PDT)
+        Thu, 07 Apr 2022 07:32:16 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -56,16 +56,19 @@ To:     Rob Herring <robh+dt@kernel.org>,
         bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] ARM: dts: broadcom: align SPI NOR node name with dtschema
-Date:   Thu,  7 Apr 2022 16:32:10 +0200
-Message-Id: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] arm64: dts: broadcom: align SPI NOR node name with dtschema
+Date:   Thu,  7 Apr 2022 16:32:11 +0200
+Message-Id: <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
+References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,134 +79,59 @@ The node names should be generic and SPI NOR dtschema expects "flash".
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts | 2 +-
- arch/arm/boot/dts/bcm958522er.dts                 | 2 +-
- arch/arm/boot/dts/bcm958525er.dts                 | 2 +-
- arch/arm/boot/dts/bcm958525xmc.dts                | 2 +-
- arch/arm/boot/dts/bcm958622hr.dts                 | 2 +-
- arch/arm/boot/dts/bcm958623hr.dts                 | 2 +-
- arch/arm/boot/dts/bcm958625hr.dts                 | 2 +-
- arch/arm/boot/dts/bcm958625k.dts                  | 2 +-
- arch/arm/boot/dts/bcm988312hr.dts                 | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts  | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts  | 2 +-
+ arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts b/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
-index 2e7fda9b998c..975f854f652f 100644
---- a/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
-+++ b/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
-@@ -34,7 +34,7 @@ &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+index 12a4b1c03390..e34172e3117e 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+@@ -203,7 +203,7 @@ nand_sel: nand_sel {
  
+ &qspi {
+ 	bspi-sel = <0>;
 -	flash: m25p80@0 {
 +	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
  		compatible = "m25p80";
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
+index f00c21e0767e..7bf26f3e36bf 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
+@@ -146,7 +146,7 @@ &sata {
+ };
+ 
+ &qspi {
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts b/arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts
+index 77efa28c4dd5..dfac910a45d6 100644
+--- a/arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts
++++ b/arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts
+@@ -61,7 +61,7 @@ &ssp0 {
+ 	cs-gpios = <&gpio_hsls 34 0>;
+ 	status = "okay";
+ 
+-	spi-flash@0 {
++	flash@0 {
+ 		compatible = "jedec,spi-nor";
  		reg = <0>;
- 		#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/bcm958522er.dts b/arch/arm/boot/dts/bcm958522er.dts
-index 60376b62cd5f..15f023656df0 100644
---- a/arch/arm/boot/dts/bcm958522er.dts
-+++ b/arch/arm/boot/dts/bcm958522er.dts
-@@ -136,7 +136,7 @@ nand_sel: nand_sel {
- &qspi {
+ 		spi-max-frequency = <20000000>;
+@@ -76,7 +76,7 @@ &ssp1 {
+ 	cs-gpios = <&gpio_hsls 96 0>;
  	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958525er.dts b/arch/arm/boot/dts/bcm958525er.dts
-index 8eeb319f5b54..9b9c225a1fb3 100644
---- a/arch/arm/boot/dts/bcm958525er.dts
-+++ b/arch/arm/boot/dts/bcm958525er.dts
-@@ -136,7 +136,7 @@ nand_sel: nand_sel {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958525xmc.dts b/arch/arm/boot/dts/bcm958525xmc.dts
-index dc86d5a91292..ca9311452739 100644
---- a/arch/arm/boot/dts/bcm958525xmc.dts
-+++ b/arch/arm/boot/dts/bcm958525xmc.dts
-@@ -152,7 +152,7 @@ nand_sel: nand_sel {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958622hr.dts b/arch/arm/boot/dts/bcm958622hr.dts
-index c457e53d886e..9db3c851451a 100644
---- a/arch/arm/boot/dts/bcm958622hr.dts
-+++ b/arch/arm/boot/dts/bcm958622hr.dts
-@@ -140,7 +140,7 @@ nand_sel: nand_sel {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958623hr.dts b/arch/arm/boot/dts/bcm958623hr.dts
-index c06871915a1c..32786e7c4e12 100644
---- a/arch/arm/boot/dts/bcm958623hr.dts
-+++ b/arch/arm/boot/dts/bcm958623hr.dts
-@@ -144,7 +144,7 @@ &sata_phy0 {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958625hr.dts b/arch/arm/boot/dts/bcm958625hr.dts
-index b22fc6624ae4..74263d98de73 100644
---- a/arch/arm/boot/dts/bcm958625hr.dts
-+++ b/arch/arm/boot/dts/bcm958625hr.dts
-@@ -151,7 +151,7 @@ nand_sel: nand_sel {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm958625k.dts b/arch/arm/boot/dts/bcm958625k.dts
-index 0183f8965a74..69ebc7a913a7 100644
---- a/arch/arm/boot/dts/bcm958625k.dts
-+++ b/arch/arm/boot/dts/bcm958625k.dts
-@@ -155,7 +155,7 @@ &pwm {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
-diff --git a/arch/arm/boot/dts/bcm988312hr.dts b/arch/arm/boot/dts/bcm988312hr.dts
-index 007e34715956..e96bc3f2d5cf 100644
---- a/arch/arm/boot/dts/bcm988312hr.dts
-+++ b/arch/arm/boot/dts/bcm988312hr.dts
-@@ -140,7 +140,7 @@ nand_sel: nand_sel {
- &qspi {
- 	status = "okay";
- 	bspi-sel = <0>;
--	flash: m25p80@0 {
-+	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "m25p80";
+ 
+-	spi-flash@0 {
++	flash@0 {
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <20000000>;
 -- 
 2.32.0
 

@@ -2,173 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376D64F75EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE824F7592
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241043AbiDGG1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S234330AbiDGGEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiDGG1b (ORCPT
+        with ESMTP id S230055AbiDGGEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:27:31 -0400
-X-Greylist: delayed 7369 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 23:25:31 PDT
-Received: from se1d-lax1.servconfig.com (se1d-lax1.servconfig.com [173.231.224.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7CF39161
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:25:29 -0700 (PDT)
-Received: from ecld309.inmotionhosting.com ([198.46.81.21])
-        by se1-lax1.servconfig.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <broker2@muneshwers.com>)
-        id 1ncJfJ-0005W8-Rn; Thu, 07 Apr 2022 00:22:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=muneshwers.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:References:In-Reply-To:Reply-To:Subject:To:From:Date:MIME-Version:
-        Sender:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9/QrxG4h2nwiHwigMh27+L84D0ydURc2mLUXe98JDXo=; b=pc7EL2d/gp/QGNR2D3noud37El
-        dOksSiW2k2eCVRUkj4C5/5vLy/RQRDtCX6SOCqEwPUg1Q6HC1WAwtUiN2Km9fyrwqdqIG9qhHS7N5
-        mt36Sc4ynsElQ4Y7QTAOjKhoQ2ghIsDqMRHXPMeQE1EFgyyArueRFsDCZA+5v109Y97ODnLvKen7T
-        VNy0xbcsgYzPz0Ra20t4h5vtIgPQo/AIbcuDzO/0Gmt0dfCUP74wTdq7ZiVSXI1ncxC6CDvz5208J
-        h9tKarLJEdr2DvLKPdowmmfInAKwnZ11hCR+eQHS0mINJhw0ArWKBvWZvOUIAbxT/8qgtB+gTZhDb
-        1X/PIoaA==;
-Received: from [::1] (port=47714 helo=ecld309.inmotionhosting.com)
-        by ecld309.inmotionhosting.com with esmtpa (Exim 4.94.2)
-        (envelope-from <broker2@muneshwers.com>)
-        id 1ncJXo-002OuS-BB; Thu, 07 Apr 2022 00:14:52 -0400
-MIME-Version: 1.0
-Date:   Thu, 07 Apr 2022 00:12:56 -0400
-From:   Ukraine Needs Help <broker2@muneshwers.com>
-To:     undisclosed-recipients:;
-Subject: Support the people of Ukraine
-Reply-To: Oleksandra-Iryna@activist.com
-In-Reply-To: <6c59d1855bb504e98f7ca74cfaa8584e@muneshwers.com>
-References: mid:4290 <44d7ccd6bede2798824d66b1bd6c7daa@chanofan.com>
- <5fc829c999fe4b45c878540b04fdf071@presidency.com>
- <944a7a1c7f978d3cc2c9da318a675ad6@totalhospital.com>
- <0fa73b5f7f95bb3a31aea07a8f4b1784@ukrainehelps.gov>
- <749444c4ffb0114b7e5a4149a7b00399@presidency.com>
- <4af43a9298dbfa4d09a5849d71b5e58a@ukrainehelps.org>
- <d7decf33455ce2a66e1b922ee175fd0e@muneshwers.com>
- <08311dac5fd8a00db75df782f8148cc6@muneshwers.com>
- <6a061002f988daf9cc5e12a93de36bc4@muneshwers.com>
- <53523f5e9aef4b2febd2d4accadff0c9@muneshwers.com>
- <bf25947bd30ae37f0b9392f4dec38f6b@muneshwers.com>
- <8060c3b3d18e19ea4ef15cd2de108864@muneshwers.com>
- <f7a13c914b5a5257a3a6dd0eddcdc26d@muneshwers.com>
- <6bf79a4425a6c2f1fac8ef34fff9fd04@muneshwers.com>
- <aaf96c71fabd2e2e531a83d4c3ba9ed6@muneshwers.com>
- <fa01c4166db07c7493fa72c77a27b87d@muneshwers.com>
- <acdced663001f9c5bf2772134aad8778@muneshwers.com>
- <e27db0e21bd76199ccdd9c82d8f7f72b@muneshwers.com>
- <4fe4e6b1f35057b7dbec178ec383aaff@muneshwers.com>
- <c33ab59d079b40c88138ef3f9c7fa313@muneshwers.com>
- <1c7b341c472134a651216631d02a73cd@muneshwers.com>
- <b34e0aab26b1f1206bbf2e795fcdc774@muneshwers.com>
- <28d74c19e433dec67b34af5320675ecc@muneshwers.com>
- <07e1a2f8ef15775823ad97f19b752298@muneshwers.com>
- <c7139fa76dea378d50d5bc428e9a23d1@muneshwers.com>
- <ce2726e868d8fcf17cc383ad3ac8d9b3@muneshwers.com>
- <6c59d1855bb504e98f7ca74cfaa8584e@muneshwers.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <ef9f78f7bd93b2c209f3d08b9da4ea19@muneshwers.com>
-X-Sender: broker2@muneshwers.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Get-Message-Sender-Via: ecld309.inmotionhosting.com: authenticated_id: broker2@muneshwers.com
-X-Authenticated-Sender: ecld309.inmotionhosting.com: broker2@muneshwers.com
-X-Originating-IP: 198.46.81.21
-X-SpamExperts-Domain: ecld309.inmotionhosting.com
-X-SpamExperts-Username: 198.46.81.21
-Authentication-Results: servconfig.com; auth=pass smtp.auth=198.46.81.21@ecld309.inmotionhosting.com
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.87)
-X-Recommended-Action: accept
-X-Filter-ID: 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
- dTQ=
-X-Report-Abuse-To: spam@se1-lax1.servconfig.com
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,BITCOIN_SPAM_04,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FORGED_REPLYTO,PDS_BTC_ID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        Thu, 7 Apr 2022 02:04:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D717586E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:02:12 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 29BA221117;
+        Thu,  7 Apr 2022 06:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649311331; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zcVA2leKEHZCBy0L6O+DAKg05GvJhbtAx6yj2EYofvk=;
+        b=vZ2m/aITGXDAq6n8nhnsUrvPRMPIkKnWD/KRTTGFB0nr+ykHFGw/AEtWdF/ElB9rJTby5g
+        zNbcBPB8Y50/7gHSfWJ/iEOpR6naCLf3Oe41SYm5L+Xa4ekwfdom+aUoi51z0/gBcsjLOt
+        y8X0HtBS9VZ9cc/hc78ohGsHPsQxwd8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649311331;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zcVA2leKEHZCBy0L6O+DAKg05GvJhbtAx6yj2EYofvk=;
+        b=6z+z7H4qA0BPXVQG32Ue9gbbgIcmW0u3QrAwQSja86P/ki0wj6NwbYCk//jpel7RvfXrjt
+        INS2E3TFJ5EGqoBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 1F97FA3B82;
+        Thu,  7 Apr 2022 06:02:10 +0000 (UTC)
+Date:   Thu, 07 Apr 2022 08:02:10 +0200
+Message-ID: <s5htub52zz1.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     clemens@ladisch.de, alsa-devel@alsa-project.org,
+        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] firewire: assist unit driver to compute packet time stamp
+In-Reply-To: <Yk4r7VcotHz0iMOU@workstation>
+References: <20220405072221.226217-1-o-takashi@sakamocchi.jp>
+        <s5hczhv5wjc.wl-tiwai@suse.de>
+        <Yk4r7VcotHz0iMOU@workstation>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Thu, 07 Apr 2022 02:10:21 +0200,
+Takashi Sakamoto wrote:
+> 
+> On Tue, Apr 05, 2022 at 06:23:35PM +0200, Takashi Iwai wrote:
+> > On Tue, 05 Apr 2022 09:22:18 +0200,
+> > Takashi Sakamoto wrote:
+> > > 
+> > > Hi,
+> > > 
+> > > Current implementation of Linux FireWire subsystem doesn't allow unit
+> > > driver to operate content of packet in IR context according to
+> > > time stamp. Additionally it doesn't allow unit driver to read current value
+> > > of CYCLE_TIME register in OHCI 1394 controller. It brings disadvantages to
+> > > drivers in Linux sound subsystem in regards of handling time for sampled
+> > > data such as PCM frames and MIDI messages.
+> > > 
+> > > This rerolled patchset is first step to improve the situation.
+> > > 
+> > > Changes in v3:
+> > >  * Rebase v2 patchset to v5.18-rc1
+> > > Changes in v2:
+> > >  * Rebase v1 patchset to v5.16 release
+> > >  * https://lore.kernel.org/lkml/20220212022131.199855-1-o-takashi@sakamocchi.jp/
+> > > V1:
+> > >  * https://lore.kernel.org/lkml/20211202113457.24011-1-o-takashi@sakamocchi.jp/
+> > > 
+> > > Hector Martin (1):
+> > >   firewire: Add dummy read_csr/write_csr functions
+> > > 
+> > > Takashi Sakamoto (2):
+> > >   firewire: add kernel API to access CYCLE_TIME register
+> > >   firewire: add kernel API to access packet structure in request
+> > >     structure for AR context
+> > 
+> > Thanks, applied all three patches now to for-next branch.
+> 
+> Although thanks for your applying them into your tree, I apologize to
+> trouble you if you overlook that the included changes is just for Linux
+> FireWire subsystem. It's my fault to send them only to Linux sound
+> subsystem, but the changes are required to my work in sound drivers... 
+> 
+> If you are willing to include patches to Linux FireWire subsystem for
+> your pull-request to Linus, I can prepare respined patches for it since
+> I have the list of patches posted to LKML as bug fixes for Linux FireWire
+> subsystem.
+> 
+> I need any help to solve current situation of Linux FireWire subsystem
+> that bug fixes and new changes are hardly merged. Of course, IEEE 1394 bus
+> is already outdated and legacy, but I know that some users still work
+> with it. If your path is available for it, it's the easiest and the most
+> convenient way for upstreaming, I think.
 
-Trust you are well my friend.
+Ah OK, it's fine for me in either way.  I can keep up those changes in
+my tree, or go through others.  I leave the decision Firewire
+subsystem people.  Just let me know.
 
-We are soliciting support for the people of Ukraine as they witness the 
-horrors of war and an increased displacement from their ancestral home.
 
-We understand these are difficult and uncertain times, however as one of 
-our compony principles to never leave anyone behind, we like to kindly 
-solicit for your donation support to the women and children in Refugee 
-war camp in Kyiv, Ukraine. I know it's hard to trust these days but you 
-can do it out of love, kindness and support for humanitarian assistance 
-in impacted communities in Ukraine and surrounding regions where 
-Ukrainian refugees have fled.
+thanks,
 
-Getting donations to people on ground in Ukraine is quite difficult due 
-to the ongoing war and we have been advised that all donation should be 
-done via Crypto Currency according to the Ukrainian ministry of defense.
-
-Here are different wallet monitored for donation by verified Ukrainians 
-on ground.
-
-BTC: bc1q370ydpdk6euc4qfwntd34uvccyvl6myza059gu
-
-Eth.: 0x9E7bB55e87AFfD04d5f5680430fF2098aBacFF36
-
-USDT: B9QCqmfYhfbfQ5hkFJ815pLEFrD45MW78vX9KoNonaB6
-
-PerfectMoney Name: Support Ukraine, ID: U33367369
-
-We have team all over the world incase you want to donate via bank 
-international or local transfer, also if you want to send via MoneyGram 
-or Western Union, you can contact us via email to request for payment 
-details.
-
-Thank you.
-
-Mrs Oleksandra Iryna (Muneshwers Kyiv)
-Coordinator for humanitarian affair
-Kharkov, Ukraine.
-
-Contact: Oleksandra-Iryna@activist.com
+Takashi

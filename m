@@ -2,200 +2,613 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4C74F7990
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D624F7991
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242958AbiDGI0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S242970AbiDGI0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiDGI0V (ORCPT
+        with ESMTP id S231472AbiDGI0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:26:21 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C9A6D3BA;
-        Thu,  7 Apr 2022 01:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649319862; x=1680855862;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=3QWBHvzLf62YeCPn7xVhBkocDxg2S7c5WEBaqx1kM64=;
-  b=fSpJfmCW+JaxrnH+JJnCy0ZGdvgMIOJf+ZcqWaCptOOwqFcz/3XEQGVh
-   aPGyV4Lg6KgfGtQK4LgePlmt9oIaQPt28YYT+Tn3DG40GpNF0uvZetRh9
-   0lhyUz2ikb8/fNChUWOrpjP/Cc4A+PePmDIHhcJ/Vh5qWAq5dpkxeCm/A
-   4vLN1jB6HpxB81cESD2J5KLS3Uowz3/W501L5xQLOmeqhmz5ZiXHWKMIe
-   mR1vI8hA+SGRnB3HPdVXd41psvm8ft4xQRnwit77GKEmjk7zE+NQTab/5
-   3v5NizLzj2eMfV5qUOpIycGfHwCCunnZQ3eq3NILWmCbDndRCCy0PJR6J
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
-   d="scan'208";a="154740648"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2022 01:24:21 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Apr 2022 01:24:21 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Thu, 7 Apr 2022 01:24:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h6ltwtP/qKV4eHhxfmY8kol5/415tCHr/nGhS3Lq10rRI6qtwo+UZBmlUd5WraxE5sm7B8VILMZX1fpt+0gyCTt3yYUF29C2qxSBIA1oPRV9h0mCi2Snr+s9+6A+4dzXAGdl7EuSICGya/pZPXUbwD5dPw+mva5P7g6DaFGDmModbzKK6pnMI01pypcrIzSpKPC+zx3EUPzcCvtgoUMHhOjuC5WgcpAfbvnn9yGGQNZWkNe2lYfFVVR4TbkbieALfkcjHMWbVaCXqUWLJi9LYUYUjArjiVYlVug53vnmRpN2JxW2e28SjyyXiqSp6WnSzPGhCO/VD269HGfjzri6Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3QWBHvzLf62YeCPn7xVhBkocDxg2S7c5WEBaqx1kM64=;
- b=X0cETLkrougFd9xweoK/eF98kd850oc6r0MMn3vsGfu0rh4qQmhlzeuiS66VQiac0haxkvlXfYVZgwbb2CqLi3NoUJOuL1oZS6TQILgb4Vx0m2ib4tX4jOoj9TbyISQqOLLToNW5VxrSg2KKRVXzC0QhaB9sxR17k4nb3bXEHrSKyGl/AhUW3ECw4kbuNr+Y5Qemz6wh0CNcboRd2ihYeLieTCXuVkokNyILQwN6PuXDSy1OmYLVu9PWK1NF1cg/tMA72GhEutAyN7G2clxdHL3EbjAjA2KmR8Wv4wnuRmwO57DXuw+7DXTtvd2gKHPzr3gT4jYMwqVwor6UqBQn1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3QWBHvzLf62YeCPn7xVhBkocDxg2S7c5WEBaqx1kM64=;
- b=CbI0v+qk0/ghW3lw5BtK2q9A9cL8F6nxoFP9Ysof2AkrDmMcQkbeOzgoIxIE+5YRGXq4F/23hBFZXyylbxEZb6HpHrr7SLCDyMLoLNc3mtCTWxtr7pqGHFeyN2SzgTQmjfo31rUGsFPknevbjLUA3SyAbVGWIK69p4OmbJU0Pw4=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
- by BY5PR11MB4069.namprd11.prod.outlook.com (2603:10b6:a03:191::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
- 2022 08:24:19 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b%7]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 08:24:19 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>, <Nicolas.Ferre@microchip.com>
-CC:     <alexandre.belloni@bootlin.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Mihai.Sain@microchip.com>
-Subject: Re: [PATCH] ARM: dts: at91: sama7g5ek: Align the impedance of the
- QSPI0's HSIO and PCB lines
-Thread-Topic: [PATCH] ARM: dts: at91: sama7g5ek: Align the impedance of the
- QSPI0's HSIO and PCB lines
-Thread-Index: AQHYSkhvqPPZ9iBRZEaUnnDvnC7rzQ==
-Date:   Thu, 7 Apr 2022 08:24:18 +0000
-Message-ID: <f14a0b1d-d144-edaf-93ee-5b5bea1ccc48@microchip.com>
-References: <20220406130505.422042-1-tudor.ambarus@microchip.com>
- <8f778b95-d68e-6575-ff8b-f1dd8d4d8777@microchip.com>
- <515d14f2-1a3f-1bfe-93e7-2baafc45ce4f@microchip.com>
-In-Reply-To: <515d14f2-1a3f-1bfe-93e7-2baafc45ce4f@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f69eb40f-fb4f-4862-acf8-08da187002f6
-x-ms-traffictypediagnostic: BY5PR11MB4069:EE_
-x-microsoft-antispam-prvs: <BY5PR11MB4069DCDD50F741218200515387E69@BY5PR11MB4069.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hLib6lKH+psO05QXCJ75amlQHLHnGMcg7nO609p87Y8pQHA82r2891n71VQajGkT5g/aPomNb8j6+aI5+DPEDlhuj7+hkL/SV5HvBoSg5Gfznm1bAr9JQbqd2laQLo9d0IAZPmuQLc5fP9zRJimF12aB8oCKLRMQtQs6VJw5cLJQ5tqPzODIwAewKW14kEcHet4aeSKPXQQniKLLLXbmDHo0Z2a034olbYJDDVJvsATLfvzYihazHvlrMuQgVZxqJYVD7X1T8Gu436nJrue+PuR/nqmo5XC8FnclJfDihL/tvhsMVpuFFzn2Y/MGT65ek5sXf3dzY2dsYHuniDYUJpxFb22DmcR0KFu11QMuHbhL41sr2zpxI70hv5eVfQNdLz/Y4kfK1HeaDZX668QddQXZcF3Y/SEav3EG95Bg8vwr+VI9DXw1yF3t/wg+G4tOvyGXJ9KHPpgICfz8hbOAvAvSVlZw/cDTiRGWkkwi+UXIMWG4pC3wky8gzdQxZIDUrjgZb4VKn0gQT0/ANgyAVTk3KqJ2gxnO3uIiKMX3v+h2XSQlWG+m21bjp8rhUd6gjh9ZZhIlPvrIh8N61ScSAKHH/8ZGo+8EPxQkB6GxrWpqKiYZ1FkTa0xWHWBOeajBUt5OTjaLGx5NeghDQGpugfgFSI6UXLe28NEcNGTdnCiCqSDX2923JlFSo+kF3zuaUS7i4lsWrzoRzL8vMi8z8Vx3Saw5KUzLaU0E2ZP9ff5zKASNvD6NWEJCOGO0Kt4X40uEvFYSURYxNU6gnEHVjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(36756003)(38100700002)(38070700005)(6506007)(122000001)(71200400001)(6512007)(53546011)(6486002)(54906003)(110136005)(508600001)(6636002)(31686004)(2906002)(107886003)(5660300002)(31696002)(2616005)(26005)(186003)(86362001)(8676002)(66946007)(8936002)(64756008)(66446008)(66476007)(66556008)(4326008)(83380400001)(76116006)(91956017)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K3RWak9TcW9VcWY0SldUTlhsdmpuUktVVUVmVlB2YmlZb2xFQUJ5M1RUSTgr?=
- =?utf-8?B?TWlSVGZLQlBFSTljSlNHL3RXRFBVS3kxZkV0OFY3cUJtM0pVL2FBemlGVmV6?=
- =?utf-8?B?S05LNE1zWW9NTTNmYkNUK1Bnc2FMK3FKcmE4RzRhUVorTXNRbm9rVkhpelA0?=
- =?utf-8?B?aU5vY2tGU2NTWTU2cUJTYkdhb0l3Z1hKRUk4ayt3TDFmQ3FXbVNjQ09jQ1Uy?=
- =?utf-8?B?cEYzOGh1eGZsMFcvOGV6QUh5ZXJzcE5KYzRkVXJ6TmI4VkdwTVZzeTQ2V0RC?=
- =?utf-8?B?ZTEzd2JEYTBpa0I0ZkFiWEJXdEkzdWo1T3Zwem9yaVl4TnJSNXFzSEVGdktI?=
- =?utf-8?B?eHltNXJFVGN1WStuZnFvQ25oN0JPL3VWUXFzMGU2bG5XWXdFSVpqRlhrVURL?=
- =?utf-8?B?a3B0cVdXd2xTNmkwZmF4WW1KdkFTU295aEMvZWxBWnlxV3E3cEpTQjY5K0NX?=
- =?utf-8?B?UFBTY2R4eU9wUHdXeVBGaHc4djMybTZ2YVlndW9EdmJ4allQRTJRVGRxUTNs?=
- =?utf-8?B?Slg4MHBmR0NlTkE4Z3QxN0dsQ3oydkd3Nk9jbndWWVA2R2paNVRodkYzQnhn?=
- =?utf-8?B?NUMxUTFvVlpVN0R0YjdsNnMzcFg2cUZOZ1FqMFV0bGgrK1MvU0FaZ1pRbmpa?=
- =?utf-8?B?Y3dyM0pxV1ZGOTc2Y3hiUWZPV0xJS00rU1ozUWQwaFJVNXhNZFp0bHErbFc2?=
- =?utf-8?B?YXFsZXJCVENINmFockxtYzlTc3dsWnZibXYveHJxbnN0SDY4UHVIRHB5TFN1?=
- =?utf-8?B?MGRsYjlabGFJTzhuVng2Qlh2SE1LbURHZTJnMWdrZnRMaWNybUR2ZVRVM2Uw?=
- =?utf-8?B?N3lHV1FPdi9sRU41d2k4V29xUnUwZ211Q1NCNkU1VVQwOUxTa0tlNXZMSjlp?=
- =?utf-8?B?RlZQaVZ3d1RheG1qNEM0Y3lrSFA4cmIxa0oyU0ZmU0xUWXN6QWVGRG16UC9T?=
- =?utf-8?B?WVNJQWRsL3N6aENTODhPSTJEWXU3bmJVeko0cXBLQ2hqcWtTajFoaWFYUjdn?=
- =?utf-8?B?aFdNVmtxYVhaQVdQblM4Z1lmVnZVY0FsZnNMRnk0SThhUzJIdkNWSEl0MVNI?=
- =?utf-8?B?a2MwRGFKbHFyS1JjclNydG1NdXM1aldzV25wOFB4dnZWbXJTQWpzdmNSaGJY?=
- =?utf-8?B?Mk5iZUl2WldsbGxKNXNHa3RYWkxkRUhsQ2F1NThSZTArUFRRT05oZzU1cUVi?=
- =?utf-8?B?VkRjTERDOEVyOVZNTzV4OFBKTnM1bmlpd040UlFReTYzL2FaOVA5UC8ySndi?=
- =?utf-8?B?M3p5SXpDVWpvME53bTlKbkVBTTlkTkpRcFFBWnpyRHpDZkJZTjRYVGhOK0RN?=
- =?utf-8?B?aUVibmp0bER5a3dlR050WGxrRytyUVVESUNVaGtITlpBczZsa3VmOVlyak9U?=
- =?utf-8?B?OVRzNU9rcXZpeHM4K1Z4S1JpWEs5VUI0L0pJTklDSzd0UTZhYkc1TUlXTmc4?=
- =?utf-8?B?MjJqaXg5TnZQcWhqMWFEVkJQSFBrMkRjZG5FV0RFN05TMUZIYXV0UFhrbjE5?=
- =?utf-8?B?eDVYMVJVbDNMNW5qWDVTc2NhcWg3bU1xQ1hnbnZZcUhmWFd1dk5mdGs2MjhM?=
- =?utf-8?B?VGF6NU1iQXNqMWxsS3RUbURnTkpXN3RsYk9laHNGV0oxdVA5LzNQQzk4K3dj?=
- =?utf-8?B?ZStlZ3VuZXk1bC9RTzExTUw0Zk9ZVWM0b2tNZzBKTTJ5Ukd3ZENMa3M3SkVx?=
- =?utf-8?B?VGxhb2FnbXNKZkw2SVFVeUV5cm9tVk9ObnJ3S2NLa0xQbWxPSVluY1hJcDNE?=
- =?utf-8?B?QUJFU21TbnI3dWNwc3hDbEtqSURQRVlHdXk3NVZ5TjBCNWpNN2dJRkJHbmVT?=
- =?utf-8?B?a2ZjTHB1MGZoM2p3U0VrUHB5Q20yZmlMcklBeG4wVWlWRCtTeWJPN25PekpB?=
- =?utf-8?B?azN4RkZlM250aFZ1aDU1MVBrNUs3NEpPempZNjRWbDRJYXRsMmFhbU9MamFH?=
- =?utf-8?B?QlNhcXkyVWRkV1psWGpIN0NWL1NiSlRXMWphZ2F4NjRoenNMakpXRFdGVkZt?=
- =?utf-8?B?TG42Y2k1MHVCejJDeFNzdzlTamN2a1BLby82dk1BbTZmcjJqV3J0UDlZMnFP?=
- =?utf-8?B?WHhObG5yRFowS1VuR0hTa1A3bHEyUExCOHVSbXhnd1lsaVFuZjcwTktXd1JW?=
- =?utf-8?B?cEpKZXNwZkQ1WDd6UUh6dEd0bVlEV3paVTVIUVZqK0owSmxLeC9MZE4rK2g1?=
- =?utf-8?B?cysxNXF0SXFrNTJYemhnZEEwQ2hxcWh2QVh4a0RPeTd1dnB1cHB2VklBQkIw?=
- =?utf-8?B?SVAyaFJOQzQ3RWhMTEZ1QkhzRllJQmlrSHVrZW1sY1ljYmdSNEZlVENPWWJu?=
- =?utf-8?B?M3N3QmN3dHRWOFBDRGVqbG9vcjlISFM2NVIwQThkL0xGYkFHanV3MzJUQXRL?=
- =?utf-8?Q?Z+sNvahxStSFxUIU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <63489E1E31C73945A2E352B7FF070083@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 7 Apr 2022 04:26:41 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138D06D84F;
+        Thu,  7 Apr 2022 01:24:41 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2378ObmA080494;
+        Thu, 7 Apr 2022 03:24:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649319877;
+        bh=2DBlPzwLUq3Lwb2+iEkSKNZY/glab/gN1ctc5jkCYEk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qzBJ2gGejNLk5CZ/YtLw6hn1ycVWS8Yk4suWf1s7EkeXh/LXtgsLr8AQTmq+2ZgA3
+         7bf3ofmPRLsSZAUCKcC8ttDlRSAwCIfPZ+CVs1rNLCHBBI3kKqQaLsR5ek1cSN2iFj
+         MzvRJFRdaZzUo2Upyr9MdiPIsp/WfDRdb27rHDkY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2378ObhV023994
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 7 Apr 2022 03:24:37 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
+ Apr 2022 03:24:37 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 7 Apr 2022 03:24:37 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2378OXvL065555;
+        Thu, 7 Apr 2022 03:24:34 -0500
+Message-ID: <8bdf5f21-0783-a474-1630-46d87d66fb6f@ti.com>
+Date:   Thu, 7 Apr 2022 13:54:33 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f69eb40f-fb4f-4862-acf8-08da187002f6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 08:24:19.0221
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Sws0Yz2q0WoruvMMg1jNUMRtsNTAIo9v3bo1AfOCcf4K8bfbWCT1w8s9+wHvkSyc79s3TXP2P35nXRE39jwY1rxubzgMzIuxcT+JGP34cSw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4069
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/2] drivers: usb: dwc3: Add AM62 USB wrapper driver
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220406135214.6989-1-a-govindraju@ti.com>
+ <20220406135214.6989-3-a-govindraju@ti.com>
+ <d41d51ff-1c61-6694-4598-d55034e8210d@kernel.org>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <d41d51ff-1c61-6694-4598-d55034e8210d@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDcuMDQuMjAyMiAxMDo1MSwgVHVkb3IgQW1iYXJ1cyAtIE0xODA2NCB3cm90ZToNCj4gT24g
-NC83LzIyIDA5OjI2LCBDbGF1ZGl1IEJlem5lYSAtIE0xODA2MyB3cm90ZToNCj4+IEhpLCBUdWRv
-ciwNCj4+DQo+PiBPbiAwNi4wNC4yMDIyIDE2OjA1LCBUdWRvciBBbWJhcnVzIHdyb3RlOg0KPj4+
-IFRoZSBpbXBlZGFuY2Ugb2YgdGhlIFFTUEkgUENCIGxpbmVzIG9uIHRoZSBzYW1hN2c1ZWsgaXMg
-NTAgT2htcy4NCj4+PiBBbGlnbiB0aGUgb3V0cHV0IGltcGVkYW5jZSBvZiB0aGUgUVNQSTAgSFNJ
-T3MgYnkgc2V0dGluZyBhIG1lZGl1bSBkcml2ZQ0KPj4+IHN0cmVuZ3RoIHdoaWNoIGNvcnJlc3Bv
-bmRzIHRvIGFuIGltcGVkYW5jZSBvZiA1NiBPaG1zIHdoZW4gVkREIGlzIGluIHRoZQ0KPj4+IDMu
-MFYgLSAzLjZWIHJhbmdlLiBUaGUgaGlnaCBkcml2ZSBzdHJlbmd0aCBzZXR0aW5nIGNvcnJlc3Bv
-bmRzIHRvIGFuDQo+Pj4gb3V0cHV0IGltcGVkYW5jZSBvZiA0MiBPaG1zIG9uIHRoZSBRU1BJMCBI
-U0lPcy4NCj4+Pg0KPj4+IFN1Z2dlc3RlZC1ieTogTWloYWkgU2FpbiA8bWloYWkuc2FpbkBtaWNy
-b2NoaXAuY29tPg0KPj4+IFNpZ25lZC1vZmYtYnk6IFR1ZG9yIEFtYmFydXMgPHR1ZG9yLmFtYmFy
-dXNAbWljcm9jaGlwLmNvbT4NCj4+DQo+PiBJcyBpdCBuZWNlc3NhcnkgYSBmaXhlcyB0YWcgaGVy
-ZT8NCj4+DQo+IA0KPiBJdCdzIG5vdCBhIGZpeCBwZXIgc2UsIGl0J3MganVzdCBhIGZpbmUgdHVu
-aW5nIHRoYXQncyB3aHkgSSBjaG9zZSB0byBkb24ndCBhZGQNCj4gdGhlIGZpeGVzIHRhZy4gVGhl
-IG1lbW9yeSB0aGF0IHdlIGhhdmUgcG9wdWxhdGVkIG9uIHNhbWE3ZzVlayB3b3JrcyBmaW5lIGV2
-ZW4NCj4gd2l0aCBoaWdoIGRyaXZlIHN0cmVuZ3RoLCBidXQgaXQncyBiZXR0ZXIgdG8gYWRqdXN0
-IGl0IGFuZCB1c2UgbWVkaXVtIGluc3RlYWQsDQo+IGluIGNhc2Ugc29tZSBvdGhlciBmbGFzaGVz
-IHdpdGggaGlnaGVyIGZyZXF1ZW5jaWVzIGFyZSB0ZXN0ZWQuIElmIHlvdSB0aGluayBhDQo+IGZp
-eGVzIHRhZyBpcyBuZWVkZWQsIGdpdmUgbWUgYSBzaWduIGFuZCBJJ2xsIHJlc3VibWl0Lg0KDQpJ
-dHMgZ29vZCBmb3IgbWUgYXMgaXMuIEp1c3Qgd2FudGVkIHRvIGJlIHN1cmUgaXQgaGFzbid0IGJl
-ZW4gZm9yZ290dGVuLg0KVGhhbmsgeW91IQ0KDQpSZXZpZXdlZC1ieTogQ2xhdWRpdSBCZXpuZWEg
-PGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5jb20+DQoNCj4gDQo+Pg0KPj4+IC0tLQ0KPj4+ICBh
-cmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE3ZzVlay5kdHMgfCAyICstDQo+Pj4gIDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdp
-dCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0cyBiL2FyY2gvYXJtL2Jvb3Qv
-ZHRzL2F0OTEtc2FtYTdnNWVrLmR0cw0KPj4+IGluZGV4IDA4Njg1YTEwZWRhMS4uOGY5NjQzMTcw
-YmEzIDEwMDY0NA0KPj4+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0
-cw0KPj4+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0cw0KPj4+IEBA
-IC02NTUsNyArNjU1LDcgQEAgcGluY3RybF9xc3BpOiBxc3BpIHsNCj4+PiAgCQkJIDxQSU5fUEIy
-MV9fUVNQSTBfSU5UPjsNCj4+PiAgCQliaWFzLWRpc2FibGU7DQo+Pj4gIAkJc2xldy1yYXRlID0g
-PDA+Ow0KPj4+IC0JCWF0bWVsLGRyaXZlLXN0cmVuZ3RoID0gPEFUTUVMX1BJT19EUlZTVFJfSEk+
-Ow0KPj4+ICsJCWF0bWVsLGRyaXZlLXN0cmVuZ3RoID0gPEFUTUVMX1BJT19EUlZTVFJfTUU+Ow0K
-Pj4+ICAJfTsNCj4+PiAgDQo+Pj4gIAlwaW5jdHJsX3NkbW1jMF9kZWZhdWx0OiBzZG1tYzBfZGVm
-YXVsdCB7DQo+Pg0KPiANCg0K
+Hi Roger,
+
+On 07/04/22 13:50, Roger Quadros wrote:
+> Hi Aswath,
+> 
+> On 06/04/2022 16:52, Aswath Govindraju wrote:
+>> In AM62 SoC, the Designware Core USB3 IP is progammed to operate in USB2.0
+>> only mode. Add driver for AM62 USB DWC3 Wrapper.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>
+>> changes since v2:
+>> - Removed the implementation of detecting the role from the wrapper
+>>   driver and moved the implementation to using linux,extcon-usb-gpio
+>>   driver for role detection.
+> 
+> I'm a bit puzzled. So ID is managed by extcon-usb-gpio driver and
+> VBUS is managed by this driver.
+> 
+> So who decides the USB ports state based on the below truth table?
+> 
+> +	/*
+> +	 * ID | VBUS | STATE
+> +	 * -----------------
+> +	 * 0  | 0    | HOST
+> +	 * 0  | 1    | HOST
+> +	 * 1  | 0    | Disconnected (set mode valid to 0)
+> +	 * 1  | 1    | Device
+> +	 *
+> +	 */
+> 
+> If only ID signal is available to extcon-usb-gpio driver it cannot detect
+> the Disconnected state. We need to set mode valid to 0 for disconnected state.
+> 
+
+Yes that is correct, the mode valid signal needs to be set when there is
+no cable connected. I am slightly confused on why 0-0 state is not
+considered disconnected? So, whenever VBUS is not high it should be
+disconnected right?
+
+Thanks,
+Aswath
+
+> cheers,
+> -roger
+> 
+> 
+>> - Updated the binding documentation and example to reflect the same.
+>>
+>>
+>>  drivers/usb/dwc3/Kconfig     |   9 +
+>>  drivers/usb/dwc3/Makefile    |   1 +
+>>  drivers/usb/dwc3/dwc3-am62.c | 446 +++++++++++++++++++++++++++++++++++
+>>  3 files changed, 456 insertions(+)
+>>  create mode 100644 drivers/usb/dwc3/dwc3-am62.c
+>>
+>> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+>> index c483f28b695d..cd9a734522a7 100644
+>> --- a/drivers/usb/dwc3/Kconfig
+>> +++ b/drivers/usb/dwc3/Kconfig
+>> @@ -159,4 +159,13 @@ config USB_DWC3_XILINX
+>>  	  This driver handles both ZynqMP and Versal SoC operations.
+>>  	  Say 'Y' or 'M' if you have one such device.
+>>  
+>> +config USB_DWC3_AM62
+>> +	tristate "Texas Instruments AM62 Platforms"
+>> +	depends on ARCH_K3 || COMPILE_TEST
+>> +	default USB_DWC3
+>> +	help
+>> +	  Support TI's AM62 platforms with DesignWare Core USB3 IP.
+>> +	  The Designware Core USB3 IP is progammed to operate in
+>> +	  in USB 2.0 mode only.
+>> +	  Say 'Y' or 'M' here if you have one such device
+>>  endif
+>> diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+>> index 2d499de6f66a..9f66bd82b639 100644
+>> --- a/drivers/usb/dwc3/Makefile
+>> +++ b/drivers/usb/dwc3/Makefile
+>> @@ -42,6 +42,7 @@ endif
+>>  # and allyesconfig builds.
+>>  ##
+>>  
+>> +obj-$(CONFIG_USB_DWC3_AM62)		+= dwc3-am62.o
+>>  obj-$(CONFIG_USB_DWC3_OMAP)		+= dwc3-omap.o
+>>  obj-$(CONFIG_USB_DWC3_EXYNOS)		+= dwc3-exynos.o
+>>  obj-$(CONFIG_USB_DWC3_PCI)		+= dwc3-pci.o
+>> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+>> new file mode 100644
+>> index 000000000000..5700258c8deb
+>> --- /dev/null
+>> +++ b/drivers/usb/dwc3/dwc3-am62.c
+>> @@ -0,0 +1,446 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * dwc3-am62.c - TI specific Glue layer for AM62 DWC3 USB Controller
+>> + *
+>> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com
+>> + */
+>> +
+>> +#include <linux/init.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/irq.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/workqueue.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/devm-helpers.h>
+>> +#include <linux/pinctrl/consumer.h>
+>> +
+>> +/* USB WRAPPER register offsets */
+>> +#define USBSS_PID			0x0
+>> +#define USBSS_OVERCURRENT_CTRL		0x4
+>> +#define USBSS_PHY_CONFIG		0x8
+>> +#define USBSS_PHY_TEST			0xc
+>> +#define USBSS_CORE_STAT			0x14
+>> +#define USBSS_HOST_VBUS_CTRL		0x18
+>> +#define USBSS_MODE_CONTROL		0x1c
+>> +#define USBSS_WAKEUP_CONFIG		0x30
+>> +#define USBSS_WAKEUP_STAT		0x34
+>> +#define USBSS_OVERRIDE_CONFIG		0x38
+>> +#define USBSS_IRQ_MISC_STATUS_RAW	0x430
+>> +#define USBSS_IRQ_MISC_STATUS		0x434
+>> +#define USBSS_IRQ_MISC_ENABLE_SET	0x438
+>> +#define USBSS_IRQ_MISC_ENABLE_CLR	0x43c
+>> +#define USBSS_IRQ_MISC_EOI		0x440
+>> +#define USBSS_INTR_TEST			0x490
+>> +#define USBSS_VBUS_FILTER		0x614
+>> +#define USBSS_VBUS_STAT			0x618
+>> +#define USBSS_DEBUG_CFG			0x708
+>> +#define USBSS_DEBUG_DATA		0x70c
+>> +#define USBSS_HOST_HUB_CTRL		0x714
+>> +
+>> +/* PHY CONFIG register bits */
+>> +#define USBSS_PHY_VBUS_SEL_MASK		GENMASK(2, 1)
+>> +#define USBSS_PHY_VBUS_SEL_SHIFT	1
+>> +#define USBSS_PHY_LANE_REVERSE		BIT(0)
+>> +
+>> +/* MODE CONTROL register bits */
+>> +#define USBSS_MODE_VALID	BIT(0)
+>> +
+>> +/* WAKEUP CONFIG register bits */
+>> +#define USBSS_WAKEUP_CFG_OVERCURRENT_EN	BIT(3)
+>> +#define USBSS_WAKEUP_CFG_LINESTATE_EN	BIT(2)
+>> +#define USBSS_WAKEUP_CFG_SESSVALID_EN	BIT(1)
+>> +#define USBSS_WAKEUP_CFG_VBUSVALID_EN	BIT(0)
+>> +
+>> +/* WAKEUP STAT register bits */
+>> +#define USBSS_WAKEUP_STAT_OVERCURRENT	BIT(4)
+>> +#define USBSS_WAKEUP_STAT_LINESTATE	BIT(3)
+>> +#define USBSS_WAKEUP_STAT_SESSVALID	BIT(2)
+>> +#define USBSS_WAKEUP_STAT_VBUSVALID	BIT(1)
+>> +#define USBSS_WAKEUP_STAT_CLR		BIT(0)
+>> +
+>> +/* IRQ_MISC_STATUS_RAW register bits */
+>> +#define USBSS_IRQ_MISC_RAW_VBUSVALID	BIT(22)
+>> +#define USBSS_IRQ_MISC_RAW_SESSVALID	BIT(20)
+>> +
+>> +/* IRQ_MISC_STATUS register bits */
+>> +#define USBSS_IRQ_MISC_VBUSVALID	BIT(22)
+>> +#define USBSS_IRQ_MISC_SESSVALID	BIT(20)
+>> +
+>> +/* IRQ_MISC_ENABLE_SET register bits */
+>> +#define USBSS_IRQ_MISC_ENABLE_SET_VBUSVALID	BIT(22)
+>> +#define USBSS_IRQ_MISC_ENABLE_SET_SESSVALID	BIT(20)
+>> +
+>> +/* IRQ_MISC_ENABLE_CLR register bits */
+>> +#define USBSS_IRQ_MISC_ENABLE_CLR_VBUSVALID	BIT(22)
+>> +#define USBSS_IRQ_MISC_ENABLE_CLR_SESSVALID	BIT(20)
+>> +
+>> +/* IRQ_MISC_EOI register bits */
+>> +#define USBSS_IRQ_MISC_EOI_VECTOR	BIT(0)
+>> +
+>> +/* VBUS_STAT register bits */
+>> +#define USBSS_VBUS_STAT_SESSVALID	BIT(2)
+>> +#define USBSS_VBUS_STAT_VBUSVALID	BIT(0)
+>> +
+>> +/* Mask for PHY PLL REFCLK */
+>> +#define PHY_PLL_REFCLK_MASK	GENMASK(3, 0)
+>> +
+>> +#define DWC3_AM62_AUTOSUSPEND_DELAY	100
+>> +
+>> +struct dwc3_data {
+>> +	struct device *dev;
+>> +	void __iomem *usbss;
+>> +	struct clk *usb2_refclk;
+>> +	struct work_struct work;
+>> +	int vbus_irq;
+>> +	int rate_code;
+>> +	int connect;
+>> +	struct regmap *syscon;
+>> +	unsigned int offset;
+>> +	unsigned int vbus_divider;
+>> +};
+>> +
+>> +static const int dwc3_ti_rate_table[] = {	/* in KHZ */
+>> +	9600,
+>> +	10000,
+>> +	12000,
+>> +	19200,
+>> +	20000,
+>> +	24000,
+>> +	25000,
+>> +	26000,
+>> +	38400,
+>> +	40000,
+>> +	58000,
+>> +	50000,
+>> +	52000,
+>> +};
+>> +
+>> +static inline u32 dwc3_ti_readl(struct dwc3_data *data, u32 offset)
+>> +{
+>> +	return readl((data->usbss) + offset);
+>> +}
+>> +
+>> +static inline void dwc3_ti_writel(struct dwc3_data *data, u32 offset, u32 value)
+>> +{
+>> +	writel(value, (data->usbss) + offset);
+>> +}
+>> +
+>> +static void connect_detect_work(struct work_struct *work)
+>> +{
+>> +	struct dwc3_data *data =
+>> +		container_of(work, struct dwc3_data, work);
+>> +	u32 vbus_state, reg;
+>> +	int connect = 0;
+>> +
+>> +	/* Read the status for VBUS valid register */
+>> +	vbus_state = dwc3_ti_readl(data, USBSS_VBUS_STAT);
+>> +	vbus_state &= USBSS_VBUS_STAT_VBUSVALID;
+>> +
+>> +	if (vbus_state)
+>> +		connect = 1;
+>> +
+>> +	/* Set or clear mode valid bit based on connect or disconnect event */
+>> +	if (data->connect != connect) {
+>> +		reg = dwc3_ti_readl(data, USBSS_MODE_CONTROL);
+>> +		if (connect)
+>> +			reg |= USBSS_MODE_VALID;
+>> +		else
+>> +			reg &= ~USBSS_MODE_VALID;
+>> +
+>> +		dwc3_ti_writel(data, USBSS_MODE_CONTROL, reg);
+>> +		data->connect = connect;
+>> +	}
+>> +}
+>> +
+>> +static irqreturn_t connect_detect_irq_handler(int irq, void *dev_id)
+>> +{
+>> +	struct dwc3_data *data = dev_id;
+>> +	u32 reg;
+>> +
+>> +	/* Clear VBUS interrupt always to aviod queuing up redundant work items */
+>> +	reg = dwc3_ti_readl(data, USBSS_IRQ_MISC_STATUS);
+>> +	reg |= USBSS_IRQ_MISC_VBUSVALID;
+>> +	dwc3_ti_writel(data, USBSS_IRQ_MISC_STATUS, reg);
+>> +
+>> +	queue_work(system_power_efficient_wq, &data->work);
+>> +
+>> +	reg = dwc3_ti_readl(data, USBSS_IRQ_MISC_EOI);
+>> +	reg &= ~USBSS_IRQ_MISC_EOI_VECTOR;
+>> +	dwc3_ti_writel(data, USBSS_IRQ_MISC_EOI, reg);
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+>> +static int dwc3_ti_vbus_irq_setup(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct dwc3_data *data = platform_get_drvdata(pdev);
+>> +	int irq, ret;
+>> +
+>> +	/* Get the misc interrupt */
+>> +	irq = platform_get_irq(pdev, 0);
+>> +	if (irq < 0)
+>> +		return irq;
+>> +
+>> +	ret = devm_request_irq(dev, irq, connect_detect_irq_handler, IRQF_SHARED,
+>> +			       dev_name(dev), data);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to required IRQ #%d-->%d\n",
+>> +			irq, ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	data->vbus_irq = irq;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int phy_syscon_pll_refclk(struct dwc3_data *data)
+>> +{
+>> +	struct device *dev = data->dev;
+>> +	struct device_node *node = dev->of_node;
+>> +	struct of_phandle_args args;
+>> +	struct regmap *syscon;
+>> +	int ret;
+>> +
+>> +	syscon = syscon_regmap_lookup_by_phandle(node, "ti,syscon-phy-pll-refclk");
+>> +	if (IS_ERR(syscon)) {
+>> +		dev_err(dev, "unable to get ti,syscon-phy-pll-refclk regmap\n");
+>> +		return PTR_ERR(syscon);
+>> +	}
+>> +
+>> +	data->syscon = syscon;
+>> +
+>> +	ret = of_parse_phandle_with_fixed_args(node, "ti,syscon-phy-pll-refclk", 1,
+>> +					       0, &args);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	data->offset = args.args[0];
+>> +
+>> +	ret = regmap_update_bits(data->syscon, data->offset, PHY_PLL_REFCLK_MASK, data->rate_code);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to set phy pll reference clock rate\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void dwc3_ti_enable_irqs(struct dwc3_data *data)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	/* enable VBUSVALID interrupt */
+>> +	reg = dwc3_ti_readl(data, USBSS_IRQ_MISC_ENABLE_SET);
+>> +	reg |= USBSS_IRQ_MISC_ENABLE_SET_VBUSVALID;
+>> +	dwc3_ti_writel(data, USBSS_IRQ_MISC_ENABLE_SET, reg);
+>> +}
+>> +
+>> +static void dwc3_ti_disable_irqs(struct dwc3_data *data)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	/* disable VBUSVALID interrupt */
+>> +	reg = dwc3_ti_readl(data, USBSS_IRQ_MISC_ENABLE_CLR);
+>> +	reg |= USBSS_IRQ_MISC_ENABLE_CLR_VBUSVALID;
+>> +	dwc3_ti_writel(data, USBSS_IRQ_MISC_ENABLE_CLR, reg);
+>> +}
+>> +
+>> +static int dwc3_ti_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct device_node *node = pdev->dev.of_node;
+>> +	struct dwc3_data *data;
+>> +	int i, ret;
+>> +	unsigned long rate;
+>> +	u32 reg;
+>> +
+>> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	data->dev = dev;
+>> +	platform_set_drvdata(pdev, data);
+>> +
+>> +	data->usbss = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(data->usbss)) {
+>> +		dev_err(dev, "can't map IOMEM resource\n");
+>> +		return PTR_ERR(data->usbss);
+>> +	}
+>> +
+>> +	data->usb2_refclk = devm_clk_get(dev, "ref");
+>> +	if (IS_ERR(data->usb2_refclk)) {
+>> +		dev_err(dev, "can't get usb2_refclk\n");
+>> +		return PTR_ERR(data->usb2_refclk);
+>> +	}
+>> +
+>> +	/* Calculate the rate code */
+>> +	rate = clk_get_rate(data->usb2_refclk);
+>> +	rate /= 1000;	// To KHz
+>> +	for (i = 0; i < ARRAY_SIZE(dwc3_ti_rate_table); i++) {
+>> +		if (dwc3_ti_rate_table[i] == rate)
+>> +			break;
+>> +	}
+>> +
+>> +	if (i == ARRAY_SIZE(dwc3_ti_rate_table)) {
+>> +		dev_err(dev, "unsupported usb2_refclk rate: %lu KHz\n", rate);
+>> +		ret = -EINVAL;
+>> +		goto err_clk_disable;
+>> +	}
+>> +
+>> +	data->rate_code = i;
+>> +
+>> +	/* Read the syscon property and set the rate code */
+>> +	ret = phy_syscon_pll_refclk(data);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	/* VBUS divider select */
+>> +	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+>> +	reg = dwc3_ti_readl(data, USBSS_PHY_CONFIG);
+>> +	if (data->vbus_divider)
+>> +		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
+>> +
+>> +	dwc3_ti_writel(data, USBSS_PHY_CONFIG, reg);
+>> +
+>> +	/* Initialize a work queue */
+>> +	ret = devm_work_autocancel(dev, &data->work, connect_detect_work);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	/* Read and set VBUS IRQ */
+>> +	ret = dwc3_ti_vbus_irq_setup(pdev);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	pm_runtime_set_active(dev);
+>> +	pm_runtime_enable(dev);
+>> +	/*
+>> +	 * Don't ignore its dependencies with its children
+>> +	 */
+>> +	pm_suspend_ignore_children(dev, false);
+>> +	clk_prepare_enable(data->usb2_refclk);
+>> +	pm_runtime_get_noresume(dev);
+>> +
+>> +	ret = of_platform_populate(node, NULL, NULL, dev);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to create dwc3 core: %d\n", ret);
+>> +		goto err_pm_disable;
+>> +	}
+>> +
+>> +	/* Enable vbus irq */
+>> +	dwc3_ti_enable_irqs(data);
+>> +
+>> +	connect_detect_work(&data->work);
+>> +
+>> +	/* Setting up autosuspend */
+>> +	pm_runtime_set_autosuspend_delay(dev, DWC3_AM62_AUTOSUSPEND_DELAY);
+>> +	pm_runtime_use_autosuspend(dev);
+>> +	pm_runtime_mark_last_busy(dev);
+>> +	pm_runtime_put_autosuspend(dev);
+>> +	return 0;
+>> +
+>> +err_pm_disable:
+>> +	clk_disable_unprepare(data->usb2_refclk);
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_set_suspended(dev);
+>> +err_clk_disable:
+>> +	clk_put(data->usb2_refclk);
+>> +	return ret;
+>> +}
+>> +
+>> +static int dwc3_ti_remove_core(struct device *dev, void *c)
+>> +{
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +
+>> +	platform_device_unregister(pdev);
+>> +	return 0;
+>> +}
+>> +
+>> +static int dwc3_ti_remove(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct dwc3_data *data = platform_get_drvdata(pdev);
+>> +	u32 reg;
+>> +
+>> +	dwc3_ti_disable_irqs(data);
+>> +
+>> +	device_for_each_child(dev, NULL, dwc3_ti_remove_core);
+>> +
+>> +	/* Clear mode valid bit */
+>> +	reg = dwc3_ti_readl(data, USBSS_MODE_CONTROL);
+>> +	reg &= ~USBSS_MODE_VALID;
+>> +	dwc3_ti_writel(data, USBSS_MODE_CONTROL, reg);
+>> +
+>> +	pm_runtime_put_sync(dev);
+>> +	clk_disable_unprepare(data->usb2_refclk);
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_set_suspended(dev);
+>> +
+>> +	clk_put(data->usb2_refclk);
+>> +	platform_set_drvdata(pdev, NULL);
+>> +	return 0;
+>> +}
+>> +
+>> +#ifdef CONFIG_PM
+>> +static int dwc3_ti_suspend_common(struct device *dev)
+>> +{
+>> +	struct dwc3_data *data = dev_get_drvdata(dev);
+>> +
+>> +	/* disable irqs */
+>> +	dwc3_ti_disable_irqs(data);
+>> +
+>> +	clk_disable_unprepare(data->usb2_refclk);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dwc3_ti_resume_common(struct device *dev)
+>> +{
+>> +	struct dwc3_data *data = dev_get_drvdata(dev);
+>> +
+>> +	clk_prepare_enable(data->usb2_refclk);
+>> +
+>> +	/* Enable irqs */
+>> +	dwc3_ti_enable_irqs(data);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static UNIVERSAL_DEV_PM_OPS(dwc3_ti_pm_ops, dwc3_ti_suspend_common,
+>> +			    dwc3_ti_resume_common, NULL);
+>> +
+>> +#define DEV_PM_OPS	(&dwc3_ti_pm_ops)
+>> +#else
+>> +#define DEV_PM_OPS	NULL
+>> +#endif /* CONFIG_PM */
+>> +
+>> +static const struct of_device_id dwc3_ti_of_match[] = {
+>> +	{ .compatible = "ti,am62-usb"},
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, dwc3_ti_of_match);
+>> +
+>> +static struct platform_driver dwc3_ti_driver = {
+>> +	.probe		= dwc3_ti_probe,
+>> +	.remove		= dwc3_ti_remove,
+>> +	.driver		= {
+>> +		.name	= "dwc3-am62",
+>> +		.pm	= DEV_PM_OPS,
+>> +		.of_match_table = dwc3_ti_of_match,
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(dwc3_ti_driver);
+>> +
+>> +MODULE_ALIAS("platform:dwc3-am62");
+>> +MODULE_AUTHOR("Aswath Govindraju <a-govindraju@ti.com>");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("DesignWare USB3 TI Glue Layer")

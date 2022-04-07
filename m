@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183724F7165
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7734F7148
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240432AbiDGBaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S240649AbiDGBaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240486AbiDGBUC (ORCPT
+        with ESMTP id S240490AbiDGBUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 21:20:02 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B09B3685
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:16:40 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s137so942682pgs.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 18:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XEH2/iJSIuFDfccdM1u0P17EAr+Um5R1hy9qLgtDR4M=;
-        b=OA772vpHfAHBIugPh/XQtfpHmDsxqkQi1/UBaoCG494fupS3OiR5177KLxWxK+Anul
-         kVBwCein30GC1DSn9oNgOdwt/4xuUnFmA83pb9Oy1XlrpC7mrRwculkEPmkgorr7Nvw3
-         FxUpTqtK+QFzZ7EwGcFWcBL+vJ9AZiCQyYyPRqYOXlqVLzp2Xz0w8OJWK2Tnd84fpF4b
-         eVYFEZGYjNCZ/TWfirUGtKstsDJ1e8mtg1Y1LInzT9rNq5LxsXEsLlTBXEIykz6I1BMS
-         hH8z9FSKXAEWAIwM5IamgQQ3kd3OZhSm6JhdSg6ppXJDixVNwrOInkzAexuVe6NuE0QY
-         P4Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XEH2/iJSIuFDfccdM1u0P17EAr+Um5R1hy9qLgtDR4M=;
-        b=2o/yOul19rh1p4NKP5cTHrTYcvY1SqWSsGoSDE/i0VqdEDrcLTEYueeNGpSBk9ndRp
-         aDsa0QxBZ3cf4tqS+8k8JWmMVTRax1rcmTqXf4sxZ3ToYkiMatV8LRazpSX+xgEQTPtd
-         ZkaCw5RzPZ+dbyM/PPJ3DG2oDLPnLqNtJpt/hzuCnIj+zUetJbYCVc0MOE1SlxGoWpOX
-         rro7MbWaKITdmnPRYuMSJfOh1/xYgS1fpbmy76vCN+Y2a/M6M5ut2as2Zfc1sLKgVAY2
-         BPDwtxN6zjJaYrNEZ7dLDBosuoBWuejHOjFbYhnBwdjmA7lwKezq6+pW1fkDtgj1rwyc
-         GDlg==
-X-Gm-Message-State: AOAM532o/CL9FVqLOE04TowF38BDafnQCSSkhImBVZxkPQ0QbDuiML8z
-        Pl0TJIjny3eELc+HyNXV0xQ=
-X-Google-Smtp-Source: ABdhPJxeut6cNaSvd6pF6Lvv5nTN8xCifWxFyWzc6LiaKMmh7lwfZfm9eAReqpDY1PNuJQjaIqoOHw==
-X-Received: by 2002:a05:6a00:1488:b0:4fa:ac61:8b11 with SMTP id v8-20020a056a00148800b004faac618b11mr12031950pfu.58.1649294199390;
-        Wed, 06 Apr 2022 18:16:39 -0700 (PDT)
-Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
-        by smtp.gmail.com with ESMTPSA id i187-20020a62c1c4000000b004faafada2ffsm21107363pfg.204.2022.04.06.18.16.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 18:16:38 -0700 (PDT)
-Message-ID: <033c1ec4-4bee-a689-140c-9694dfee435b@gmail.com>
-Date:   Thu, 7 Apr 2022 10:16:34 +0900
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3ADDF4B;
+        Wed,  6 Apr 2022 18:17:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C859B8268C;
+        Thu,  7 Apr 2022 01:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FA8C385A3;
+        Thu,  7 Apr 2022 01:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649294232;
+        bh=la7OIYEUZAoTuKS3yEKA6YdEJUFbwEQFU3ZRbD0HH4I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g+ivO+qhSy/VgZrhLUuqNj+oxfn7kLNk28Fj8beUPxWXEC4KsIt5EcwjfciQviXLV
+         CW1fYYxk6ZiQwn1QaXG4bv/DzXA8QxXnDgYuG6X16PUNRAUhzHf5IBHTuEUwyaBsvI
+         a4+kyC75OjmlczxGsJF+vwbN/lb3UZMtZq1dzkWIrSEr6O98zK/27Y3pGWN2m8vOyl
+         GVPOTqUoaWRJ/66vfeXSXC5RUsYcb3GDAqL09WhDiJQZNE5MUeLV3NNAA6XtFBxI9T
+         yonKJX66Hib+jNzqRVsX0FFqAQgFbiHV6vnDYWlRaDBycAEMqburftdttJt3XhISlG
+         yt7/OttAwez5A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bob Peterson <rpeterso@redhat.com>,
+        syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
+Subject: [PATCH AUTOSEL 4.14 1/8] gfs2: assign rgrp glock before compute_bitstructs
+Date:   Wed,  6 Apr 2022 21:16:38 -0400
+Message-Id: <20220407011645.115412-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
-Content-Language: en-US
-To:     Guenter Roeck <groeck@google.com>,
-        Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
- <Yk4DGZfpYbK8dofL@chromium.org>
- <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
-From:   Akihiko Odaki <akihiko.odaki@gmail.com>
-In-Reply-To: <CABXOdTcY3w56hc7kWsDLxKU-c6fCLYt_jigK13tKjjm9OHi2+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/04/07 6:32, Guenter Roeck wrote:
-> On Wed, Apr 6, 2022 at 2:16 PM Prashant Malani <pmalani@chromium.org> wrote:
->>
->> Hi Akihiko,
->>
->> Thanks for the patch.
->>
->> On Apr 04 13:11, Akihiko Odaki wrote:
->>> The EC driver may not be initialized when cros_typec_probe is called,
->>> particulary when CONFIG_CROS_EC_CHARDEV=m.
->>>
->>> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
->>> ---
->>>   drivers/platform/chrome/cros_ec_typec.c | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
->>> index 4bd2752c0823..7cb2e35c4ded 100644
->>> --- a/drivers/platform/chrome/cros_ec_typec.c
->>> +++ b/drivers/platform/chrome/cros_ec_typec.c
->>> @@ -1084,6 +1084,9 @@ static int cros_typec_probe(struct platform_device *pdev)
->>>        }
->>>
->>>        ec_dev = dev_get_drvdata(&typec->ec->ec->dev);
->>> +     if (!ec_dev)
->>> +             return -EPROBE_DEFER;
->>> +
->>
->> Just a quick check: are you still seeing this issue with 5.18-rc1, which
->> contains a null check for the parent EC device [1] ?
+From: Bob Peterson <rpeterso@redhat.com>
 
-Yes, I'm seeing this problem with the check.
+[ Upstream commit 428f651cb80b227af47fc302e4931791f2fb4741 ]
 
->>
-> 
-> I may be missing something, but from the context I suspect this may
-> make the problem worse. My understanding was that the problem was seen
-> specifically if CONFIG_CROS_EC_CHARDEV=m. In that situation, it
-> appears that the parent EC device does _not yet_ exist. If the driver
-> returns -ENODEV in that situation, it will never be instantiated. The
-> big question for me is why the type C device is instantiated in the
-> first place if the parent EC device does not [yet] exist. I have not
-> been able to identify the code path where this happens. >
-> There is a similar problem with other EC child devices which are also
-> sometimes instantiated even though the parent EC device does not exist
-> (ie dev_get_drvdata(pdev->dev.parent) returns NULL). That can happen
-> if the parent EC device instantiation fails because of EC
-> communication errors (see https://b.corp.google.com/issues/228118385
-> for examples [sorry, internal only, I can't make it public]). I think
-> we need to track down why that happens and prevent child devices from
-> being instantiated in the first place instead of trying to work around
-> the problem in the child drivers.
+Before this patch, function read_rindex_entry called compute_bitstructs
+before it allocated a glock for the rgrp. But if compute_bitstructs found
+a problem with the rgrp, it called gfs2_consist_rgrpd, and that called
+gfs2_dump_glock for rgd->rd_gl which had not yet been assigned.
 
-Well, I think you have two misunderstanding.
+read_rindex_entry
+   compute_bitstructs
+      gfs2_consist_rgrpd
+         gfs2_dump_glock <---------rgd->rd_gl was not set.
 
-1. The parent exists and dev_get_drvdata(pdev->dev.parent) returns 
-non-NULL value. However, dev_get_drvdata(&typec->ec->ec->dev) returns 
-NULL. (Yes, that is confusing.) I'm wondering 
-dev_get_drvdata(pdev->dev.parent) returned NULL in the following crash 
-log but it would be a problem distinct from what is handled with my patch:
-https://lore.kernel.org/lkml/CABXOdTe9u_DW=NZM1-J120Gu1gibDy8SsgHP3bJwwLsE_iuLAQ@mail.gmail.com/
+This patch changes read_rindex_entry so it assigns an rgrp glock before
+calling compute_bitstructs so gfs2_dump_glock does not reference an
+unassigned pointer. If an error is discovered, the glock must also be
+put, so a new goto and label were added.
 
-2. My patch returns -EPROBE_DEFER instead of -ENODEV and I confirmed it 
-will eventually be instantiated.
+Reported-by: syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/gfs2/rgrp.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Regards,
-Akihiko Odaki
-
-> 
-> Guenter
-> 
->> Thanks,
->>
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/platform/chrome?id=ffebd90532728086007038986900426544e3df4e
+diff --git a/fs/gfs2/rgrp.c b/fs/gfs2/rgrp.c
+index 87656030ec7d..1e49f1e0cddf 100644
+--- a/fs/gfs2/rgrp.c
++++ b/fs/gfs2/rgrp.c
+@@ -907,15 +907,15 @@ static int read_rindex_entry(struct gfs2_inode *ip)
+ 	rgd->rd_bitbytes = be32_to_cpu(buf.ri_bitbytes);
+ 	spin_lock_init(&rgd->rd_rsspin);
+ 
+-	error = compute_bitstructs(rgd);
+-	if (error)
+-		goto fail;
+-
+ 	error = gfs2_glock_get(sdp, rgd->rd_addr,
+ 			       &gfs2_rgrp_glops, CREATE, &rgd->rd_gl);
+ 	if (error)
+ 		goto fail;
+ 
++	error = compute_bitstructs(rgd);
++	if (error)
++		goto fail_glock;
++
+ 	rgd->rd_rgl = (struct gfs2_rgrp_lvb *)rgd->rd_gl->gl_lksb.sb_lvbptr;
+ 	rgd->rd_flags &= ~(GFS2_RDF_UPTODATE | GFS2_RDF_PREFERRED);
+ 	if (rgd->rd_data > sdp->sd_max_rg_data)
+@@ -932,6 +932,7 @@ static int read_rindex_entry(struct gfs2_inode *ip)
+ 	}
+ 
+ 	error = 0; /* someone else read in the rgrp; free it and ignore it */
++fail_glock:
+ 	gfs2_glock_put(rgd->rd_gl);
+ 
+ fail:
+-- 
+2.35.1
 

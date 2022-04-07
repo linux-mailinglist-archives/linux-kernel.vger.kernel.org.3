@@ -2,333 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165B24F8B21
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B464F8B1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiDGXiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S232555AbiDGXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiDGXiF (ORCPT
+        with ESMTP id S230292AbiDGXib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:38:05 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D631403C9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:36:01 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id t207so2153997qke.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 16:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pz4KD/PvVy3aJckPQcstiGf/5cgrKhrIQB+LQ40VK1U=;
-        b=sgePQ8APzlEcl6PlCk+UG7uIxcsN3bWYyVD+F76a6KY6next7JnstlIa8To6cHlw4I
-         ToMpcYUMhFb3y9dHSUXyg63k/k21n1/AYmeV82yduMrUoG9U2Dm7f9ZGWyP9Irrrs6kN
-         OgOFOC3gdOmAfG0MTeVIrd//szrfX8UbwA2o5mMCZULJY8/OAKSXyJKJOrBmUN+k85Zh
-         J8P6RNAFZb81mag9unPFiDkjwFoBDGPkziWKLfh6h97O5+5sKlZgZg38NgEHgv5dxo71
-         IQICoC03Qy6fIHXyJs8lKPWRfptnC4goay/mIMv9snhUtwpFEoSVItVvy05WCPByzVQG
-         0Qrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pz4KD/PvVy3aJckPQcstiGf/5cgrKhrIQB+LQ40VK1U=;
-        b=QupLRy8/AmtP7DPxwNxtbB+ryj1HNkEWbvfZ97z/wRgOcrF7Ko/YYEFzh2C1hLc8Ca
-         uKjIDG/sj+5pgEi7jV5AanuUqgCRH5Vx1HoR2hPpbHF/6lBV7GlgC09Tm8/KW8wk006C
-         yYXiF0LWM7UPW1l4JZsZkzKVudyptIM7txjnUkXa+wEmUriA7yCBV6p58r387T/Zw3Ez
-         Teb+L5mZkG3Q10SBxCPMLiP/4quIf0LdwV/81EYv4uFxajhf/USc+NHjQqp50sAlZwrI
-         Y9Mf8UapWFrucJC2Sr2X+HKGPXTkKgsnPK2JaDzXafS6eGmYM5N2oJlBzSLEKAEZgq++
-         UBhA==
-X-Gm-Message-State: AOAM53167AaNAarYWHmsxPzVq1j4hpTc11NavADMcC4/nX6DPkTJtB9f
-        6emDbuCmw2iYH/WOV5uGUSOqgGguBLiUGSMi6nEp3A==
-X-Google-Smtp-Source: ABdhPJy1MIEzz+id1KPgG+Zq+PpDAIDu7bwNovX/mQihYOPTwSAk3P9UVdVYoda5Kx/PuodDgxQAgby8bdz0la5jxz0=
-X-Received: by 2002:a05:620a:170a:b0:67d:be5c:204a with SMTP id
- az10-20020a05620a170a00b0067dbe5c204amr11278835qkb.593.1649374560237; Thu, 07
- Apr 2022 16:36:00 -0700 (PDT)
+        Thu, 7 Apr 2022 19:38:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3806114B873
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 16:36:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 389ACB829AE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:36:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C49C385A0;
+        Thu,  7 Apr 2022 23:36:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oPAyUYdx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649374582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/oJ/z2jjF9yKf+0yz98/oEb//RMsOp8WmTEy4bbiSGc=;
+        b=oPAyUYdxkI6FJnYItYHUWQAXW6HSgNTYQfMmcgp27ZkPxdxQ9GSj0H9X8zmTKwRtsjFceJ
+        1oIXhytwD2CHyEt5q//ZXkhZ3WNVAkssJ02sbu6ZmPfZCY3lXQetOnk1oBj/qZ5ltaYcez
+        pUHodnXYFkbMQ7H5DXNV0StJQcrd/vI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4d99eea8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 7 Apr 2022 23:36:22 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
+Cc:     tytso@mit.edu, sultan@kerneltoast.com,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH v2] random: allow partial reads if later user copies fail
+Date:   Fri,  8 Apr 2022 01:35:58 +0200
+Message-Id: <20220407233558.3369-1-Jason@zx2c4.com>
+In-Reply-To: <20220407193433.523299-1-Jason@zx2c4.com>
+References: <20220407193433.523299-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
- <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
- <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
- <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com>
- <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
- <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
- <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org> <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
- <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com> <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com>
-In-Reply-To: <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 8 Apr 2022 02:35:48 +0300
-Message-ID: <CAA8EJprdV64jOexEF-XqbkwsNDWBNRRndOAas-QqMHaL=zp9rw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 at 23:11, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
-> Hi Doug and Dmitry
->
-> Sorry, but I caught up on this email just now.
->
-> Some comments below.
->
-> Thanks
->
-> Abhinav
-> On 4/7/2022 10:07 AM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Thu, Apr 7, 2022 at 7:19 AM Sankeerth Billakanti (QUIC)
-> > <quic_sbillaka@quicinc.com> wrote:
-> >>
-> >> Hi Dmitry and Doug,
-> >>
-> >>> Hi,
-> >>>
-> >>> On Tue, Apr 5, 2022 at 10:36 AM Dmitry Baryshkov
-> >>> <dmitry.baryshkov@linaro.org> wrote:
-> >>>>
-> >>>> On 05/04/2022 20:02, Doug Anderson wrote:
-> >>>>> Hi,
-> >>>>>
-> >>>>> On Tue, Apr 5, 2022 at 5:54 AM Dmitry Baryshkov
-> >>>>> <dmitry.baryshkov@linaro.org> wrote:
-> >>>>>>> 3. For DP and eDP HPD means something a little different.
-> >>>>>>> Essentially there are two concepts: a) is a display physically
-> >>>>>>> connected and b) is the display powered up and ready. For DP, the
-> >>>>>>> two are really tied together. From the kernel's point of view you
-> >>>>>>> never "power down" a DP display and you can't detect that it's
-> >>>>>>> physically connected until it's ready. Said another way, on you
-> >>>>>>> tie "is a display there" to the HPD line and the moment a display
-> >>>>>>> is there it's ready for you to do AUX transfers. For eDP, in the
-> >>>>>>> lowest power state of a display it _won't_ assert its "HPD"
-> >>>>>>> signal. However, it's still physically present. For eDP you simply
-> >>>>>>> have to _assume_ it's present without any actual proof since you
-> >>>>>>> can't get proof until you power it up. Thus for eDP, you report
-> >>>>>>> that the display is there as soon as we're asked. We can't _talk_
-> >>>>>>> to the display yet, though. So in get_modes() we need to be able
-> >>>>>>> to power the display on enough to talk over the AUX channel to it.
-> >>>>>>> As part of this, we wait for the signal named "HPD" which really means
-> >>> "panel finished powering on" in this context.
-> >>>>>>>
-> >>>>>>> NOTE: for aux transfer, we don't have the _display_ pipe and
-> >>>>>>> clocks running. We only have enough stuff running to do the AUX
-> >>> transfer.
-> >>>>>>> We're not clocking out pixels. We haven't fully powered on the
-> >>>>>>> display. The AUX transfer is designed to be something that can be
-> >>>>>>> done early _before_ you turn on the display.
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> OK, so basically that was a longwinded way of saying: yes, we
-> >>>>>>> could avoid the AUX transfer in probe, but we can't wait all the
-> >>>>>>> way to enable. We have to be able to transfer in get_modes(). If
-> >>>>>>> you think that's helpful I think it'd be a pretty easy patch to
-> >>>>>>> write even if it would look a tad bit awkward IMO. Let me know if
-> >>>>>>> you want me to post it up.
-> >>>>>>
-> >>>>>> I think it would be a good idea. At least it will allow us to
-> >>>>>> judge, which is the more correct way.
-> >>>>>
-> >>>>> I'm still happy to prototype this, but the more I think about it the
-> >>>>> more it feels like a workaround for the Qualcomm driver. The eDP
-> >>>>> panel driver is actually given a pointer to the AUX bus at probe
-> >>>>> time. It's really weird to say that we can't do a transfer on it
-> >>>>> yet... As you said, this is a little sideband bus. It should be able
-> >>>>> to be used without all the full blown infra of the rest of the driver.
-> >>>>
-> >>>> Yes, I have that feeling too. However I also have a feeling that just
-> >>>> powering up the PHY before the bus probe is ... a hack. There are no
-> >>>> obvious stopgaps for the driver not to power it down later.
-> >>>
->
-> Lets go back to why we need to power up the PHY before the bus probe.
->
-> We need to power up PHY before bus probe because panel-eDP tries to read
-> the EDID in probe() for the panel_id. Not get_modes().
->
-> So doug, I didnt follow your comment that panel-eDP only does EDID read
-> in get_modes()
->
->         panel_id = drm_edid_get_panel_id(panel->ddc);
->         if (!panel_id) {
->                 dev_err(dev, "Couldn't identify panel via EDID\n");
->                 ret = -EIO;
->                 goto exit;
->         }
->
-> If we do not need this part, we really dont need to power up the PHY
-> before the probe(). The hack which dmitry was referring to.
->
-> So this is boiling down to why or how panel-eDP was originally designed.
+Rather than failing entirely if a copy_to_user() fails at some point,
+instead we should return a partial read for the amount that succeeded
+prior, unless none succeeded at all, in which case we return -EFAULT as
+before.
 
-Well, it's not just panel-edp. It boils down to the DP-AUX bus design
-vs DRM design. However in Doug's defense I should admit that I can not
-come up with a significantly cleaner solution.
+This makes it consistent with other reader interfaces. For example, the
+following snippet for /dev/zero outputs "4" followed by "1":
 
-Just to emphasise (or to repeat): for all other display
-panels/bridges, we either do not use a sidechannel bus or the
-sidechannel bus (i2c, spi, platform) is managed outside of the DRM
-framework. Thus it's possible to create the source in the drm's driver
-probe path and then in the component's bind() path check (and return
-an error) if the sink device wasn't yet probed successfully. The
-source can then either communicate with the sink using the sidechannel
-bus provided elsewhere or (e.g. in case of purely DSI panel), defer
-communication till the moment the display path is fully available
-(after encoder enablement).
+  int fd;
+  void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+  assert(x != MAP_FAILED);
+  fd = open("/dev/zero", O_RDONLY);
+  assert(fd >= 0);
+  printf("%zd\n", read(fd, x, 4));
+  printf("%zd\n", read(fd, x + 4095, 4));
+  close(fd);
 
-For the DP/eDP the sidechannel (DP AUX) bus is closer to the display
-path. It can not be used separately. For DP we can defer all
-communication till the moment we know (through the DP/USB-C/etc
-hotplug mechanism) that the sink is really available and running.
+This brings that same standard behavior to the various RNG reader
+interfaces.
 
-The eDP is being caught in between these two approaches:
+While we're at it, we can streamline the loop logic a little bit.
 
-For example sn65dsi86 and tegra have separate dpaux and separate
-bridge/output devices. Thus dpaux'es probe() methos populates DP AUX
-bus, then a separate device checks whether the panel/bridge has become
-available in its own probe() method.
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jann Horn <jannh@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v1->v2:
+- Do partial copies within individual blocks, not just per-block, also
+  following how /dev/zero and ordinary filesystem files work.
 
-The ps8640 driver looks 'working by coincidence'. It calls
-dp_aux_populate, then immediately after the function returns it checks
-for the panel. If panel-edp is built as a module, the probe might fail
-easily.
-The anx7625 driver has the same kind of issue. The DP AUX bus is
-populated from the probe() and after some additional work the panel is
-being checked.
-This design is fragile and from my quick glance it can break (or be
-broken) too easy. It reminds me of our drm msm 'probe' loops
-preventing the device to boot completely if the dsi bridge/panel could
-not be probed in time.
+ drivers/char/random.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-If we talk about DP AUX bus EP drivers, both panel-edp and
-panel-samsung-atna33xc20 (the only EP drivers present in Linux master)
-expect that they can access DPCD from the probe method.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index e15063d61460..df43c5060f00 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -523,8 +523,7 @@ EXPORT_SYMBOL(get_random_bytes);
+ 
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ {
+-	ssize_t ret = 0;
+-	size_t len;
++	size_t len, left, ret = 0;
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 output[CHACHA_BLOCK_SIZE];
+ 
+@@ -543,37 +542,40 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ 	 * the user directly.
+ 	 */
+ 	if (nbytes <= CHACHA_KEY_SIZE) {
+-		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
++		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
+ 		goto out_zero_chacha;
+ 	}
+ 
+-	do {
++	for (;;) {
+ 		chacha20_block(chacha_state, output);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+ 		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+-		if (copy_to_user(buf, output, len)) {
+-			ret = -EFAULT;
++		left = copy_to_user(buf, output, len);
++		if (left) {
++			ret += len - left;
+ 			break;
+ 		}
+ 
+-		nbytes -= len;
+ 		buf += len;
+ 		ret += len;
++		nbytes -= len;
++		if (!nbytes)
++			break;
+ 
+ 		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
+-		if (!(ret % PAGE_SIZE) && nbytes) {
++		if (ret % PAGE_SIZE == 0) {
+ 			if (signal_pending(current))
+ 				break;
+ 			cond_resched();
+ 		}
+-	} while (nbytes);
++	}
+ 
+ 	memzero_explicit(output, sizeof(output));
+ out_zero_chacha:
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+-	return ret;
++	return ret ? ret : -EFAULT;
+ }
+ 
+ /*
+-- 
+2.35.1
 
-Now back to Qualcomm DP driver. We do not have a separate dpaux
-entity. If leave aside the idea of adding a separate 'bus available'
-callback, I see two possible solutions:
-
-- Implement separate lightweight eDP driver sharing source with the DP
-driver. Make it skip all the DP HPD craziness, init PHY and call
-devm_of_dp_aux_ep_populate_ep_devices() from the probe method, check
-in the bind method that the next bridge is available. However this can
-potentially break ports which can be used either in the DP or in eDP
-mode.
-
-or
-
-- Modify existing Qualcomm DP driver to return -EPROBE_DEFER from
-dp_aux_transfer() if the AUX bus is not available. Make the driver
-init PHY from probe() if it is running in the eDP mode. Populate DP
-AUX bus from probe(). Check for the next bridge in dp_bind().
-
-There might be potentially other possibilities, but I think you have
-my main idea. Create the bus in probe(), check for the bridge in
-bind().
-
-or
-
-- Create a bus at some point in bind. Forbid (and document that) AUX
-access from EP probe(). Access it only from get_modes().
-
-
->
-> >>> This is why I think we need to move to Runtime PM to manage this. Basically:
-> >>>
-> >>> 1. When an AUX transfer happens, you grab a PM runtime reference that
-> >>> _that_ powers up the PHY.
->
-> This will not be trivial and needs to be scoped out as sankeerth said
-> but if the above is the only concern, why do we need to do this? There
-> seems to be an explanation why we are doing this and its not a hack.
->
-> How would Dmitry's rework address this? We need some RFC to conclude on
-> that first.
-
-Just to put things clear: I do not have plans to work on either of my
-suggestions at least in the next few months. I do not have eDP hardware at hand.
-
-
-
-
->
-> >>>
-> >>> 2. At the end of the AUX transfer function, you do a "put_autosuspend".
-> >>>
-> >>> Then it becomes not a hack, right?
-> >>>
-> >>>
-> >>
-> >> pm runtime ops needs to be implemented for both eDP and DP. This change
-> >> take good amount of planning and code changes as it affects DP also.
-> >>
-> >> Because this patch series consist of basic eDP changes for SC7280 bootup,
-> >> shall we take this pm_runtime implementation in subsequent patch series?
-> >
-> > Dmitry is the real decision maker here, but in my opinion it would be
-> > OK to get something landed first that worked OK and wasn't taking us
-> > too far in the wrong direction and then we could get a follow up patch
-> > to move to pm_runtime.
->
-> I would say the discussion changed into a direction of implementing
-> pm-runtime because the current patch series does what it takes to adhere
-> to panel-eDP's design along with aux bus requirements of PHY needing to
-> be on.
->
-> So doug, to answer your questions here:
->
-> "So I guess the net result is maybe we should just keep it where it is.
-> Long term I'd be interested in knowing if there's a reason why we
-> can't structure the driver so that AUX transfers can happen with less
-> intertwining with the rest of the code, but that can happen later. I
-> would expect that you'd basically just need clocks and regulators on
-> and maybe your PHY on."
->
-> Yes PHY needs to be absolutely on and configured before aux transfers.
->
-> If we want to change that up to stop reading the panel_id in the panel
-> probe() and do it later, perhaps some of the changes done here are not
-> needed.
->
-> It only seems reasonable that we first prototype that in a separate
-> patch even a RFC perhaps and take this further as these set of changes
-> are needed for basic display functionality on sc7280 chromebooks.
->
-> Let us know what are the concerns with doing it in a follow up change.
->
-> Thanks
->
-> Abhinav
-
-
-
---
-With best wishes
-Dmitry

@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3134F7138
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A7B4F718D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239958AbiDGB3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S237854AbiDGBdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240481AbiDGBUB (ORCPT
+        with ESMTP id S240465AbiDGBUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 21:20:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF111834D0;
-        Wed,  6 Apr 2022 18:16:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B87A6B81E7F;
-        Thu,  7 Apr 2022 01:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59023C385AB;
-        Thu,  7 Apr 2022 01:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649294196;
-        bh=lHiWW5REvsGzwImfar+7okrV0/z47MbErYMvXscxuWY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AmQN0cB0fg/31EjO3mLZDct3bLzHST+8rcpcMCuT/Gw+tIV+t2M/fzmlEG3QeuVyV
-         YHKopcL8B8Iga3/rnLBH6EiHIwZfGECzpE2KMwFdajYxbPVz4DoJ7WoZ82cA3GXYlp
-         YOltAARBS7yoD+odh4F5JB/mBSeiDC0eQYrepkAiL5WE1dghKJC7TjVXzUQbx+08zN
-         8CuzYneoc8FsILo19yyQ+PCQcsUmHu8g8Yk3W7balfkQrW9vmpA/LYSR5hj4GVQrub
-         JRRiLjAL3uws6FuPJ7ew7jsBw8J5ld6GY4pVDaX/nPL05zcYb00QFLQx5IHqM8h77C
-         ZSAlQYSzw9ZOA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 08/11] drbd: remove usage of list iterator variable after loop
-Date:   Wed,  6 Apr 2022 21:16:05 -0400
-Message-Id: <20220407011609.115258-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
-References: <20220407011609.115258-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA46181D89
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:16:30 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id u8-20020a170903124800b0015195a5826cso1967779plh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 18:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=bNkFmzFNlQeAcnvu9GC9OTshsJeI+rH6kiFRlwb3YBU=;
+        b=K8Gs9++5sAjjhKmOk+cuBZV91Fgx1F2Mc9/ihaqPTpvvoSDaAbLdCPmuZPTlG68if4
+         P+L4S4dZumJgdSzNaEYVh+GredXixyyYlIw20G4uFBWxPVYkE4B4SKiO/claX7T8fsqZ
+         973YmBn98DfC32Jfkfmhgw6w0dQlXY+5zJIAo0HS7siO1awykxEQcHKvmgE2C7Wulzf+
+         yCe+cXmw+ol7FZCVBquExv//U+Raiq+r8EeVZnh/Gvh67wftRg0AnrEFREcqmr/YtDAx
+         MWqy6tOmw/VyRjst4kEyYRT0NdHa9vj5NDXg6tBeIW1fR0zgikI1q556ZrgXu7cgVb66
+         SJCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=bNkFmzFNlQeAcnvu9GC9OTshsJeI+rH6kiFRlwb3YBU=;
+        b=kmbAhDVGFbekpJFBU0ZfwL7J+TDMMdYDRy3k6YS1o3DrMBE9jyrhXLeHFt3KwHOm1P
+         i257D8C2oCUyLT2oF9GYR5+UJT0A5oCZnwr26eEfPV2fgmQeIJ2Fi+WCZrIPzDTA1U4n
+         cgm3OY+9UlIReH0shpuz9SuvSte7xAMurtoaq4ajZE1aYsJ3o86KGupmKi11pvg2BjOS
+         ismT6tdLGJAb08+R1dbHRSS5lgQDXsITPapMVyr/XPpT8Zj3cS+MhYH+Vm78aaBI++AN
+         0b4mgjhXf3vZ/bTCA6j4qU8cvdBb85F17kgIQgGr0y9+4bAmT9U9gyxZ3Gv3sTbYu3th
+         y/nA==
+X-Gm-Message-State: AOAM53377pn1F9o2ZXEhawkt2ZTBN2RPyr5NLl0+fYRyPUQEdjQqsyZI
+        7DjrZ82gQMPXlGdvUHxJA+oTxpNFrrWZ
+X-Google-Smtp-Source: ABdhPJw3H13JfmsLMr/v01PnuQI5IQ6Tom5pq0QlYE+3A76jaQsbAEjlYFdMr4kCXy4hfGM3I3np0WoSyb7z
+X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
+ (user=rananta job=sendgmr) by 2002:a17:902:7088:b0:156:1aa9:79eb with SMTP id
+ z8-20020a170902708800b001561aa979ebmr11197910plk.71.1649294189989; Wed, 06
+ Apr 2022 18:16:29 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 01:16:05 +0000
+In-Reply-To: <20220407011605.1966778-1-rananta@google.com>
+Message-Id: <20220407011605.1966778-11-rananta@google.com>
+Mime-Version: 1.0
+References: <20220407011605.1966778-1-rananta@google.com>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v5 10/10] selftests: KVM: aarch64: Add KVM_REG_ARM_FW_REG(3)
+ to get-reg-list
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+Add the register KVM_REG_ARM_FW_REG(3)
+(KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3) to the base_regs[] of
+get-reg-list.
 
-[ Upstream commit 901aeda62efa21f2eae937bccb71b49ae531be06 ]
-
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to iterate through the list [1].
-
-Since that variable should not be used past the loop iteration, a
-separate variable is used to 'remember the current location within the
-loop'.
-
-To either continue iterating from that position or skip the iteration
-(if the previous iteration was complete) list_prepare_entry() is used.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Link: https://lore.kernel.org/r/20220331220349.885126-1-jakobkoschel@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 ---
- drivers/block/drbd/drbd_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index 5e3885f5729b..c3e4f9d83b29 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -195,7 +195,7 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
- 		unsigned int set_size)
- {
- 	struct drbd_request *r;
--	struct drbd_request *req = NULL;
-+	struct drbd_request *req = NULL, *tmp = NULL;
- 	int expect_epoch = 0;
- 	int expect_size = 0;
- 
-@@ -249,8 +249,11 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
- 	 * to catch requests being barrier-acked "unexpectedly".
- 	 * It usually should find the same req again, or some READ preceding it. */
- 	list_for_each_entry(req, &connection->transfer_log, tl_requests)
--		if (req->epoch == expect_epoch)
-+		if (req->epoch == expect_epoch) {
-+			tmp = req;
- 			break;
-+		}
-+	req = list_prepare_entry(tmp, &connection->transfer_log, tl_requests);
- 	list_for_each_entry_safe_from(req, r, &connection->transfer_log, tl_requests) {
- 		if (req->epoch != expect_epoch)
- 			break;
+diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+index 281c08b3fdd2..7049c31aa443 100644
+--- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+@@ -691,6 +691,7 @@ static __u64 base_regs[] = {
+ 	KVM_REG_ARM_FW_REG(0),
+ 	KVM_REG_ARM_FW_REG(1),
+ 	KVM_REG_ARM_FW_REG(2),
++	KVM_REG_ARM_FW_REG(3),
+ 	KVM_REG_ARM_FW_FEAT_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
+ 	KVM_REG_ARM_FW_FEAT_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
+ 	KVM_REG_ARM_FW_FEAT_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
 -- 
-2.35.1
+2.35.1.1094.g7c7d902a7c-goog
 

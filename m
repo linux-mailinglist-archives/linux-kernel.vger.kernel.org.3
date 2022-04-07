@@ -2,154 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF064F7448
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 05:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5AB4F7449
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 05:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239008AbiDGDsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 23:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S240661AbiDGDsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 23:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiDGDsl (ORCPT
+        with ESMTP id S235391AbiDGDsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 23:48:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB5BEE;
-        Wed,  6 Apr 2022 20:46:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id p15so8161263ejc.7;
-        Wed, 06 Apr 2022 20:46:41 -0700 (PDT)
+        Wed, 6 Apr 2022 23:48:43 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052F9A1A1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 20:46:45 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w7so4286906pfu.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 20:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2osYizLMrar7QqOz8LD8setUutp7c0I8CuIlWyU0pBg=;
-        b=cKZ6do/t2L9vKakesKtxffn9PtC9S2qbMr1610jgtP28xQz6M/jTZXicOp3+64uVHX
-         qijM4rThv3VpwivwHnyedSzyRpf3vh4n1k0TQAAJPm/h8Bz9d85Jpr49IYQeUIVlM+cD
-         ZmTFDpFRzm4xJyYGwYoOJ5+X2mqr09Y7sRAuxURsQ/icMKA7Wu8S7D+O6hq1eDEY8BDA
-         VC8YgH7lGf+Yey31F5KelHmIX5na8552lGQkasonqsXOqDgLwPKyDx4wi/yPs6zzQhcB
-         MZZWYzVqqtyDwlF3O6Ax60y95AqQ2heZZg3yOdHV9oD/k0Powk68JmG7cbwav6DWN2zp
-         M2VQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=afe3P8RqNChPkxC3rOsgiNHx8HENBTi8Jfkw7G43ebM=;
+        b=d1JMhD/H3yQw+VDKVizT9O7dnKTJtEGUjWxAsZVvSWWX88idfpSfbtGxnDr/P4LgeU
+         MSaR4wx92K/Dwt151SdmS8ARTGgEIlyYD8Uti2RpEAQmvmkQp5uRr3s/u03Xmi+JCPdR
+         fDaD9L4rD9sPoUyRVE4MHIh5879MW7Uwr8pNOiSAz/yliO/91jmGIC755eKO835uEpTm
+         E/EMRQ5wSWbaRQqXB2NFaKojrDBedxO1WFc7MuspaimbZVksUrzrJ4X8Rk1tVNh2dU0W
+         VWMCXcCHs2SXBgBmoEePa/ZgzI8swxUYboPY0wpg+wD9DF6z7UAS6xiGvv55cZSi2OdW
+         Cwtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2osYizLMrar7QqOz8LD8setUutp7c0I8CuIlWyU0pBg=;
-        b=jZ2QtuS1dYRnxBH0eMk0c70d1/CsfnGSRsVsQztg+PxLQSeBJEFiq9Y8fFGzjGJ5D8
-         7aWTnLbCSojG2sJKYV1GfLCAOyqBI0MOd4KKmU1cNGVCH5hhzVmb5VGk1K0zttSUIOFd
-         WnmpYEqNHjcRYybQKCGJ9M9Ubz7liSJ+uT8KjnMO8vSpqrG4rGZo7n6VeUpHXEPVYZlD
-         O+eAS7R2OAMEpA3VUR3/k52a+PdQrbp8R8J+NRLlePejGvNeMneJjWwD3sOeiBjJClIp
-         kWWq85cfLSk0DGOospaYARzjfaWClnHZ8buQfb5/i2VQzTQmglpM+HIrzJUZ2J0pXjOF
-         Qskg==
-X-Gm-Message-State: AOAM530EIhLPxoBvNWiuvnNdGD+FDsMvtpkykZY30z9zQF09AKwK3uBD
-        ZD7rrCxar/xmXoirdgP8U+Ce0VnNIyslxRtRzcQ=
-X-Google-Smtp-Source: ABdhPJx0JJX3YOy4xz1wSArtme702dUMio1P+UzX3qxTFY7xH4BfET9qWERzTi+yH9291LSd38MyTL22akuCDuMuecM=
-X-Received: by 2002:a17:906:39da:b0:6cf:7f09:a7bc with SMTP id
- i26-20020a17090639da00b006cf7f09a7bcmr11870481eje.457.1649303200136; Wed, 06
- Apr 2022 20:46:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-8-yuzhao@google.com>
- <CAGsJ_4wVA6G42y4Oj7ToaCoroZTRbS-tU606ELwra3_Sfrgo7w@mail.gmail.com> <CAOUHufbUdoWiBF5x2ZeK104jT39zAuuU0xXKZ51eaU6P8SNUyg@mail.gmail.com>
-In-Reply-To: <CAOUHufbUdoWiBF5x2ZeK104jT39zAuuU0xXKZ51eaU6P8SNUyg@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 7 Apr 2022 15:46:29 +1200
-Message-ID: <CAGsJ_4z=vkub4e5J5ggsTN=YN4qsqmXSOpf_gu993oOGreLjPg@mail.gmail.com>
-Subject: Re: [PATCH v9 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=afe3P8RqNChPkxC3rOsgiNHx8HENBTi8Jfkw7G43ebM=;
+        b=ln8U7Dphyh7io50cfw2nBx4pX1nQ6q/vRs/Cujj8bPUVm1kKInueJ7wwoOcP4ZKAZI
+         ewR1hneVJ0MghskrLS4HBzMDYrcpCw8FfJHnlghm5LBdmhOR09urgbLoCQdiqz+9e3v9
+         V/M3P5jeC+5UqYKoL1hc/ySxOecO0lcLelgOGfIp4ufdkIKSqnUIaZ22+h45tQBDeotk
+         el2o3bTRkzVJgbKvNuac+/yexuKUTTOq+E/kRD1uGRljEXDGRzdJMSzwCLgr3IDF2PCS
+         FobcApRU4GHB9Z0bj5jKF03yyOztaoKbxkjdacn2hMAO93YqoCdoFQRdWVID2jd0/3qn
+         he3g==
+X-Gm-Message-State: AOAM532lTNM47y9lR5LBAKoKgun/Zvj+SgR8pGm7soOYHt3IWNDSl2YA
+        cGzbmNy4lXwwE6VcwuUb4qQ=
+X-Google-Smtp-Source: ABdhPJyAPXTXgV2oaMugw/XVi258KT6BhPySFoGDVPM27Hjv6I1XE4AM7kPPITDYhuOowocmGQ1WhA==
+X-Received: by 2002:a63:214c:0:b0:381:1a27:fe1 with SMTP id s12-20020a63214c000000b003811a270fe1mr9516290pgm.328.1649303204413;
+        Wed, 06 Apr 2022 20:46:44 -0700 (PDT)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id mn22-20020a17090b189600b001ca86a1e41dsm6782727pjb.52.2022.04.06.20.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 20:46:42 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 03:46:37 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/10] mm/slab: Allow dynamic kmalloc() minimum alignment
+Message-ID: <Yk5endPQFHc/pB1W@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-9-catalin.marinas@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405135758.774016-9-catalin.marinas@arm.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 3:04 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Wed, Apr 6, 2022 at 8:29 PM Barry Song <21cnbao@gmail.com> wrote:
-> >
-> > On Wed, Mar 9, 2022 at 3:48 PM Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > Searching the rmap for PTEs mapping each page on an LRU list (to test
-> > > and clear the accessed bit) can be expensive because pages from
-> > > different VMAs (PA space) are not cache friendly to the rmap (VA
-> > > space). For workloads mostly using mapped pages, the rmap has a high
-> > > CPU cost in the reclaim path.
-> > >
-> > > This patch exploits spatial locality to reduce the trips into the
-> > > rmap. When shrink_page_list() walks the rmap and finds a young PTE, a
-> > > new function lru_gen_look_around() scans at most BITS_PER_LONG-1
-> > > adjacent PTEs. On finding another young PTE, it clears the accessed
-> > > bit and updates the gen counter of the page mapped by this PTE to
-> > > (max_seq%MAX_NR_GENS)+1.
-> >
-> > Hi Yu,
-> > It seems an interesting feature to save the cost of rmap. but will it lead to
-> > possible judging of cold pages as hot pages?
-> > In case a page is mapped by 20 processes,  and it has been accessed
-> > by 5 of them, when we look around one of the 5 processes, the page
-> > will be young and this pte is cleared. but we still have 4 ptes which are not
-> > cleared. then we don't access the page for a long time, but the 4 uncleared
-> > PTEs will still make the page "hot" since they are not cleared, we will find
-> > the page is hot either due to look-arounding the 4 processes or rmapping
-> > the page later?
->
-> Why are the remaining 4 accessed PTEs skipped? The rmap should check
-> all the 20 PTEs.
+On Tue, Apr 05, 2022 at 02:57:56PM +0100, Catalin Marinas wrote:
+> ARCH_KMALLOC_MINALIGN represents the minimum guaranteed kmalloc()
+> alignment but an architecture may require a larger run-time alignment.
+> Do not create kmalloc caches smaller than arch_kmalloc_minalign().
+> 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  include/linux/slab.h |  2 ++
+>  mm/slab.c            |  6 +-----
+>  mm/slab.h            |  2 ++
+>  mm/slab_common.c     | 33 +++++++++++++++++++++++----------
+>  4 files changed, 28 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index d58211bdeceb..2137dba85691 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -332,6 +332,8 @@ enum kmalloc_cache_type {
+>  extern struct kmem_cache *
+>  kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1];
+>  
+> +unsigned int arch_kmalloc_minalign(void);
+> +
+>  /*
+>   * Define gfp bits that should not be set for KMALLOC_NORMAL.
+>   */
+> diff --git a/mm/slab.c b/mm/slab.c
+> index b04e40078bdf..4aaeeb9c994d 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1256,11 +1256,7 @@ void __init kmem_cache_init(void)
+>  	 * Initialize the caches that provide memory for the  kmem_cache_node
+>  	 * structures first.  Without this, further allocations will bug.
+>  	 */
+> -	kmalloc_caches[KMALLOC_NORMAL][INDEX_NODE] = create_kmalloc_cache(
+> -				kmalloc_info[INDEX_NODE].name[KMALLOC_NORMAL],
+> -				kmalloc_info[INDEX_NODE].size,
+> -				ARCH_KMALLOC_FLAGS, 0,
+> -				kmalloc_info[INDEX_NODE].size);
+> +	new_kmalloc_cache(INDEX_NODE, KMALLOC_NORMAL, ARCH_KMALLOC_FLAGS);
+>  	slab_state = PARTIAL_NODE;
+>  	setup_kmalloc_cache_index_table();
+>  
+> diff --git a/mm/slab.h b/mm/slab.h
+> index fd7ae2024897..e9238406602a 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -283,6 +283,8 @@ int __kmem_cache_create(struct kmem_cache *, slab_flags_t flags);
+>  struct kmem_cache *create_kmalloc_cache(const char *name, unsigned int size,
+>  			slab_flags_t flags, unsigned int useroffset,
+>  			unsigned int usersize);
+> +void __init new_kmalloc_cache(int idx, enum kmalloc_cache_type type,
+> +			      slab_flags_t flags);
+>  extern void create_boot_cache(struct kmem_cache *, const char *name,
+>  			unsigned int size, slab_flags_t flags,
+>  			unsigned int useroffset, unsigned int usersize);
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 6ee64d6208b3..594d8a8a68d0 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -838,9 +838,18 @@ void __init setup_kmalloc_cache_index_table(void)
+>  	}
+>  }
+>  
+> -static void __init
+> +unsigned int __weak arch_kmalloc_minalign(void)
+> +{
+> +	return ARCH_KMALLOC_MINALIGN;
+> +}
+> +
 
-for example page A is the neighbour of page B in process 1, when we do rmap
-for B, we look-around and clear A's pte in process 1. but A's ptes are
-still set in
-process 2,3,4,5.
+As ARCH_KMALLOC_ALIGN and arch_kmalloc_minalign() may not be same after
+patch 10, I think s/ARCH_KMALLOC_ALIGN/arch_kmalloc_minalign/g
+for every user of it would be more correct?
 
->
-> Even if they were skipped, it doesn't matter. The same argument could
-> be made for the rest of 1 millions minus 1 pages that have been timely
-> scanned, on a 4GB laptop. The fundamental principle (assumption) of
-> MGLRU is never about making the best choices. Nothing can because it's
-> impossible to predict the future that well, given the complexity of
-> today's workloads, not on a phone, definitely not on a server that
-> runs mixed types of workloads. The primary goal is to avoid the worst
-> choices at a minimum (scanning) cost. The second goal is to pick good
-> ones at an acceptable cost, which probably are a half of all possible
-> choices.
+> +void __init
+>  new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+>  {
+> +	unsigned int minalign = arch_kmalloc_minalign();
+> +	unsigned int aligned_size = kmalloc_info[idx].size;
+> +	int aligned_idx = idx;
+> +
+>  	if (type == KMALLOC_RECLAIM) {
+>  		flags |= SLAB_RECLAIM_ACCOUNT;
+>  	} else if (IS_ENABLED(CONFIG_MEMCG_KMEM) && (type == KMALLOC_CGROUP)) {
+> @@ -851,10 +860,17 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+>  		flags |= SLAB_ACCOUNT;
+>  	}
+>  
+> -	kmalloc_caches[type][idx] = create_kmalloc_cache(
+> -					kmalloc_info[idx].name[type],
+> -					kmalloc_info[idx].size, flags, 0,
+> -					kmalloc_info[idx].size);
+> +	if (minalign > ARCH_KMALLOC_MINALIGN) {
+> +		aligned_size = ALIGN(aligned_size, minalign);
+> +		aligned_idx = __kmalloc_index(aligned_size, false);
+> +	}
+> +
+> +	if (!kmalloc_caches[type][aligned_idx])
+> +		kmalloc_caches[type][aligned_idx] = create_kmalloc_cache(
+> +					kmalloc_info[aligned_idx].name[type],
+> +					aligned_size, flags, 0, aligned_size);
+> +	if (idx != aligned_idx)
+> +		kmalloc_caches[type][idx] = kmalloc_caches[type][aligned_idx];
 
-thanks
-barry
+I would prefer detecting minimum kmalloc size in create_kmalloc_caches()
+in runtime instead of changing behavior of new_kmalloc_cache().
+
+>  	/*
+>  	 * If CONFIG_MEMCG_KMEM is enabled, disable cache merging for
+> @@ -904,11 +920,8 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+>  		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
+>  
+>  		if (s) {
+> -			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+> -				kmalloc_info[i].name[KMALLOC_DMA],
+> -				kmalloc_info[i].size,
+> -				SLAB_CACHE_DMA | flags, 0,
+> -				kmalloc_info[i].size);
+> +			new_kmalloc_cache(i, KMALLOC_DMA,
+> +					  SLAB_CACHE_DMA | flags);
+>  		}
+>  	}
+>  #endif
+
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

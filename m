@@ -2,251 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B094F7600
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA914F7605
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241084AbiDGG3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S241097AbiDGG31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240254AbiDGG3G (ORCPT
+        with ESMTP id S241087AbiDGG3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:29:06 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB99813D35
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:27:06 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id w134so7850881ybe.10
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5mKuLfEu/XgxaX2jy+hBrSqJETshC2bp0HB62gqa9as=;
-        b=ijWyXBIU2gTvhFS1E8a8eFBl4dLddumMhFj95hUgEpPnrsAdxvDOez3JKjfVLmCDC8
-         pT5X4PU16JZNf1Xwn8+1qSFdC/anxn+LfFM/2SAb9FV1OKsWDT5C1qJYNGu3U+H9ZbXh
-         pRzSN5chWjRGaG+91pr+97QccPnWzoGd1/GdcaeRTIT3LmKGnzaZNgmwE4Ub3gqFLJ6/
-         VtJ4UQID0YojRhupDZ9D2ryu9KP16I43NCK+obhrag6lWUfUR87hyvRz/OCVa+YZUxXQ
-         ZGTKdlkgVx7ZEmgEOyV5bX/FMrms9wD2hol7mbseJ84CoLvQZKsEYjCasGQbYTYpEpmR
-         3+jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5mKuLfEu/XgxaX2jy+hBrSqJETshC2bp0HB62gqa9as=;
-        b=D8gj8n2DSk7Xbyp062bx7d1QZiKWGosyTuoLglMJdQVPPWWw9TArXzSZLRCV8TstpM
-         yGAX4g5ZM+fY6ywfnbPtSzyyMopy8meBwp3ZOdMW4x6BjOA++2g1lQ0HU2NvrGKTMDD6
-         uImmrpdxfnlJh6fVev4Z1EprGczTjUo/DPyTa++FRG6eHtOyLrLxyOIo3DLc5ltDN5B1
-         tq4hclBTqieITLyJuSyh+Ce9TUfM83vyFE7wjoemrPRshp+uHlPOOTLG1PxPJTCMrzch
-         x1K/b2BrowQeIKvFAnPM4UoPuiQP2bseHmUpu6BchEVvTHfLrB4lMyVPX9ix/Bs2J+G7
-         lO4A==
-X-Gm-Message-State: AOAM533D6FLoI8gn905dK3vBehqvJ9yXVbgEfV5p5H19c6wuAKAu+ENs
-        ZWBDIKamqFjbcYGJiBQCBU4SbtKFAiJheWu3Y8FTrA==
-X-Google-Smtp-Source: ABdhPJyROADdkMq9pW7+A1qoOWOj6ZUsJeKyNaQKPXuuR9mtzSUEzntyZ/5alX+/W3USXgYeX9zTgHL2suqfY9ixmtw=
-X-Received: by 2002:a25:dfc4:0:b0:63d:b28e:93ec with SMTP id
- w187-20020a25dfc4000000b0063db28e93ecmr9426015ybg.474.1649312826038; Wed, 06
- Apr 2022 23:27:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406133109.570377390@linuxfoundation.org>
-In-Reply-To: <20220406133109.570377390@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 7 Apr 2022 11:56:54 +0530
-Message-ID: <CA+G9fYv+-ZGGkX288PzupW9c5CnWTK8d_=2j=0zJNd3=A5oy4g@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0000/1014] 5.16.19-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 02:29:15 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8F51F6879;
+        Wed,  6 Apr 2022 23:27:16 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 06DFD20DFD9E;
+        Wed,  6 Apr 2022 23:27:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 06DFD20DFD9E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1649312836;
+        bh=+Pnzj39Opt9yrx6cP1jUMpJnfuLDJgNSePHcqtwwDY8=;
+        h=From:To:Subject:Date:From;
+        b=bfBTwX2cJDZnXkN6fE8iivJWmkTXZ97SKxT7RSl8439jhgpzbi8q4OUOHjIFya9jO
+         O9VulIr3MzonZaX32ngeo+gt2fUxSoqKc5gTtgEmWgAHbCSeBF3IK58sSLL1jV7Za8
+         v1w3zVYlWDBmOf1EtH+oqNG3Ak6ZeESe0G4HyLWk=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, decui@microsoft.com
+Subject: [PATCH v2] drm/hyperv: Added error message for fb size greater then allocated
+Date:   Wed,  6 Apr 2022 23:27:07 -0700
+Message-Id: <1649312827-728-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-16.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DOS_RCVD_IP_TWICE_B,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 19:14, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.19 release.
-> There are 1014 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.19-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Added error message when the size of requested framebuffer is more then
+the allocated size by vmbus mmio region for framebuffer
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+v1 -> v2 : Corrected Sign-off
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-## Build
-* kernel: 5.16.19-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: 18299e64680a0cbdf745fd73c5345d9a029928b9
-* git describe: v5.16.18-1015-g18299e64680a
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.18-1015-g18299e64680a
+diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
+index e82b815..92587f0 100644
+--- a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
++++ b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
+@@ -123,8 +123,11 @@ static int hyperv_pipe_check(struct drm_simple_display_pipe *pipe,
+ 	if (fb->format->format != DRM_FORMAT_XRGB8888)
+ 		return -EINVAL;
+ 
+-	if (fb->pitches[0] * fb->height > hv->fb_size)
++	if (fb->pitches[0] * fb->height > hv->fb_size) {
++		drm_err(&hv->dev, "hv->hdev, fb size requested by process %s for %d X %d (pitch %d) is greater then allocated size %ld\n",
++		current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
+ 		return -EINVAL;
++	}
+ 
+ 	return 0;
+ }
+-- 
+1.8.3.1
 
-## Test Regressions (compared to v5.16.18-959-gef4d007f65de)
-No test regressions found.
-
-## Metric Regressions (compared to v5.16.18-959-gef4d007f65de)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16.18-959-gef4d007f65de)
-No test regressions found.
-
-## Metric Fixes (compared to v5.16.18-959-gef4d007f65de)
-No metric fixes found.
-
-## Test result summary
-total: 104242, pass: 87607, fail: 1089, skip: 14348, xfail: 1198
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kself[
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

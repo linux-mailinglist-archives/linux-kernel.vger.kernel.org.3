@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3974F7A8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E254F7A9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243356AbiDGI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S243465AbiDGJAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234575AbiDGI5G (ORCPT
+        with ESMTP id S234260AbiDGJAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:57:06 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04DE1C7F26;
-        Thu,  7 Apr 2022 01:55:05 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso6035448pjb.0;
-        Thu, 07 Apr 2022 01:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=e/SRJZVa+pnGFAQo/DwKcWQpRPq+V+tMl7YCYye8ky8=;
-        b=Za5XoHpE3z6/fpXB3ca8tbDAq9xX0zhpil4PKZb0dvl/rgE7sgQg/bkx4mHJY/IH6P
-         cxjXlZrvDwbZsfqacuCmxrQTj/qqlcy0c7kC9y7DUMM7hER+FC6zVmEghCMBeQo1s9uG
-         U3FLUTf0zpoFMszLWUbyisyJzur9Z/1hWs9jg6yYjkWVNcxYJZRyO8YptFBnwLPM0YNb
-         Nc3MEaFgzw6zKKzbbcU0ghuGBbxJYjMxb34t16Alh+BkliXaf088ALOrs+vuWYh8mMpa
-         i8a92U9ExfWjLS+/1QSgKbjwNxdnZZs288jgwSFDt+WF0iwMmV8ye4lQBiYuvsHUYZWz
-         6sXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e/SRJZVa+pnGFAQo/DwKcWQpRPq+V+tMl7YCYye8ky8=;
-        b=HbCig1hR2hMG33ps6PxVk5vNDuC/IW2A8L9yNNu/hvcir36CgrdD4fh/DKzqDu6HyD
-         YtmzbyFutirf1CBMQyRwrMXseM08lMzlrSXUp6I65XFsGyXV3L3/xZUeA2EjZPfkvOV+
-         0HpIThUJVD2ocY1a5scqdq1yCY/CYswpmJu+Hv7ZCj6GJGlqR/2DP7aZmg6vLS0Y0z7T
-         v388i9Vdll3q9WplcKwhRVWVdMH3H1J9Wof+nSKl15oUih1Su0EkyK4XNvqeEOvF/v7H
-         +BXbI0ArZh3v0Cmi5q7CvmjIn0NkHyEkuaigWlOwXvOnSqFwJATB8PvZdIPpSoEtJC+S
-         KKlw==
-X-Gm-Message-State: AOAM531EWXuGSB1pw7gHF5JSGgazxcH8iAJvfdAqSepGkcAUZBnOxD0s
-        fOdChWDwet8SxbR7BgIl68U=
-X-Google-Smtp-Source: ABdhPJzq6mIJdzeGR7PpscKazLC0a0+GeljWRO9npUDAFsvbjAAsjD2jwiPFr4UEIWuK3k51pQoe7A==
-X-Received: by 2002:a17:90a:7f94:b0:1cb:1853:da1b with SMTP id m20-20020a17090a7f9400b001cb1853da1bmr1334040pjl.14.1649321705066;
-        Thu, 07 Apr 2022 01:55:05 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-43.three.co.id. [116.206.28.43])
-        by smtp.gmail.com with ESMTPSA id t38-20020a634626000000b0039cc30b7c93sm1672908pga.82.2022.04.07.01.55.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 01:55:04 -0700 (PDT)
-Message-ID: <7a7fbb50-2f6f-ad99-2bf5-68b2b4028acc@gmail.com>
-Date:   Thu, 7 Apr 2022 15:54:58 +0700
+        Thu, 7 Apr 2022 05:00:25 -0400
+Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487E862101
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:58:20 -0700 (PDT)
+Received: (qmail 17833 invoked by uid 989); 7 Apr 2022 08:58:18 -0000
+Authentication-Results: euporie.uberspace.de;
+        auth=pass (plain)
+From:   Florian Fischer <florian.fischer@muhq.space>
+To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Florian Schmaus <flow@cs.fau.de>
+Subject: [RFC v3] perf stat: add rusage utime and stime events
+Date:   Thu,  7 Apr 2022 10:57:18 +0200
+Message-Id: <20220407085721.3289414-1-florian.fischer@muhq.space>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <69656438-8b9a-000b-0702-02dc480639f9@linux.intel.com>
+References: <69656438-8b9a-000b-0702-02dc480639f9@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.16 0000/1014] 5.16.19-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220406133109.570377390@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220406133109.570377390@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: +
+X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-0.001856)
+X-Rspamd-Score: 1.398143
+Received: from unknown (HELO unkown) (::1)
+        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Thu, 07 Apr 2022 10:58:18 +0200
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/22 20.44, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.19 release.
-> There are 1014 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+This patch series adds new internal events to perf stat exposing the utime and
+stime in nanoseconds reported by rusage.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
-powerpc (ps3_defconfig, gcc 11.2.0).
+During some benchmarking using perf it bothered me that I could not easily
+retrieve the times spent in user or kernel mode from perf stat when using the
+machine readable output.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+But perf definitely knows about those values because in the human readable output
+they are present.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Therefore I exposed the times reported by rusage via the new tool events:
+rusage_user_time, rusage_system_time and their aliases ru_utime and ru_stime.
+
+This allows to retrieved them in machine-readable output:
+
+$ ./perf stat -x, -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time tools/perf
+72134524,ns,duration_time:u,72134524,100.00,,
+65225000,ns,ru_utime:u,65225000,100.00,,
+6865000,ns,ru_stime:u,6865000,100.00,,
+38705,,cache-misses:u,71189328,100.00,,
+
+The changes are mostly inspired by the code for the only other available
+tool event: 'duration_time'.
+
+For now rusage_* events are not usable with metrics (as far as I understand).
+
+The patch applies cleanly on linux-next/next-20220405.
+
+[PATCH v3 1/3] perf stat: introduce stats for the user and system
+[PATCH v3 2/3] perf stat: add rusage utime and stime events
+[PATCH v3 3/3] perf list: print all available tool events
+
+[v2]: Split up the changes into separate commits.
+
+[v3]: * Use nanoseconds as suggested by Xing Zhengjun.
+      * Squash [PATCH v2 2/4] and [PATCH v2 4/4], because it only adds the unit string 
+
+Florian Fischer
+

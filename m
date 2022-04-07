@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A6D4F7AD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0D24F7AD4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243547AbiDGJCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S243581AbiDGJCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243529AbiDGJCH (ORCPT
+        with ESMTP id S243533AbiDGJCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:02:07 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F1911DD18;
-        Thu,  7 Apr 2022 02:00:08 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dr20so9375209ejc.6;
-        Thu, 07 Apr 2022 02:00:08 -0700 (PDT)
+        Thu, 7 Apr 2022 05:02:18 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70A11F519B;
+        Thu,  7 Apr 2022 02:00:18 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id s11so7597589qtc.3;
+        Thu, 07 Apr 2022 02:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VbFDVmTFBsd/3PPMbLnd0zhFg5hlSy27/q7PHNvEkAU=;
-        b=L4OO6eb7ni5fxfWYjcoc1AJlIPg5JcpoXNN12PfSY9eA57qm2EUg5RVLIHGBK3VNbf
-         RFHNi0kNwvI9iT+7c0Hb6apznk/SvQ1WsHaKj+i/wYdVG1Hr/cCgFNJHFECCiAcgaIWG
-         5kXJmsWr7eM5aFIGc/eV/NlPLgi/riHhwoVbHHqZCFube8OUfza+H5hFgVG3O7CwytrA
-         RgunR52+1F2wDi8pSJnOFn0PIJKgJMUxzOHFYYRZKZXjn51LrxUfkcYZjcl+4s7OFvON
-         6TSv1XA0xJ9KyafbipSjeswu6Wvq1C64YEh1/5T9Ayq4BH9auU/fHwIO1+1Q2lfPFIo1
-         RuVQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OH445ysdzmR/6X4//W4FphZ3nFgmJO7HaScUHltGfzw=;
+        b=A2BZMU75Gg9tMr3xOhA9ZXdTsJVp+kREzAIB13tKhOdgL+04uX1xdkg9fVTnFs674p
+         /fHfbxKgZ61ztlad8Ira/55MLMfPEcdrjUEE5foKxKd8fmuMGv8bdE3QVx7o8ia3fDlR
+         s8/yOt1GIWAXGX2d3zLoV2l1EuKXIJXClGdFtfd+EGgaGkka6eXuqe7LtBX4QpAnE/tf
+         LkjpH4Cno05i1FFICzv8oLxTiK6aYn7Xu4ZccRb4eN645Hfl6W/0Jg+zAuq5zYt9fyvz
+         qQE0t/lDgkJ0J8wk4cyswe0HONJxKNy0t3ElEdvrf6f08wIiu/rOVMVZ5ylHcH6kGFER
+         3bfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VbFDVmTFBsd/3PPMbLnd0zhFg5hlSy27/q7PHNvEkAU=;
-        b=D++dPA/mSTeSCWj1NiCvyq83mkoXhSeK49GhJurWUrTI6RqWD7bCB/RyvONgbM8OP/
-         DE3B1sCJOusjqlNXui8bLl8KibIeNYzGPQQg85V9GSxGJ70J6qApCDf0Y9QQZUirwKzY
-         K+DktevV7qGGuREYGzMn+FHWyS3VqhpGSATLvcGfkJc7cQxRz9hvQ8h2d7s0LsUj89KI
-         cRKYZSdy9xqYp+sCV5HEkp4sbM+3WNiX0l9tROsYkU1RpmdSK+z/Lolaff84+/bm8HG9
-         xagSTOu+R1QuJ4qZlsln0ArDW+64bzUP9g9vPxhpIVVASpTVRxzd4eAWB2nX6GzwWfB+
-         cnAQ==
-X-Gm-Message-State: AOAM531hZ5wMmO3vYtSiCsm1w26B2DhhFVvKhpTB0lmCY7R3lxfJJP+7
-        dq+IGeIkK+3ucCP6+yF8SHo=
-X-Google-Smtp-Source: ABdhPJwcwlCuBQZ5LEDFL+WbGTxNe8cavosIh6OlGUwJxIjCDdIzBgTE+UAYL0o8qUk83C1jHYYuYw==
-X-Received: by 2002:a17:906:9397:b0:6e7:eb3a:ec2d with SMTP id l23-20020a170906939700b006e7eb3aec2dmr12172316ejx.257.1649322006685;
-        Thu, 07 Apr 2022 02:00:06 -0700 (PDT)
-Received: from able.fritz.box (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
-        by smtp.gmail.com with ESMTPSA id h26-20020a170906111a00b006e778bd4fc8sm5186563eja.38.2022.04.07.02.00.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:00:06 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        intel-gfx@lists.freedesktop.org
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 15/15] seqlock: drop seqcount_ww_mutex_t
-Date:   Thu,  7 Apr 2022 10:59:46 +0200
-Message-Id: <20220407085946.744568-16-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407085946.744568-1-christian.koenig@amd.com>
-References: <20220407085946.744568-1-christian.koenig@amd.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OH445ysdzmR/6X4//W4FphZ3nFgmJO7HaScUHltGfzw=;
+        b=xbxaqUVcuWbshDXo8i3fdmNzx7Qccsu92bcYCjNBIsbR/ARqzrbQkkpuoMgKSia6gm
+         zsXTBal7V5qSdBKhWNX6Hs8/ND1dXjPcW7L3STj+XI6EAaJYWRlxL5c1tfjYBDgpjO1j
+         FD2g6tSkmWlRbKJ4qwrHTdM8wp0/WwycsbkZYIBsG1xH/GADrWNtcJNOja0RTxMi65eJ
+         /A7B4d8LZ9hTxeWmBnSlR0uzb25JvFWfxFQPwnAZNryjO/XAEywU7du9MsT95k4xUj7S
+         S6zuXi9fsSchqhAdAEt0GZis4lolJUkdoh6aNhAoqjIFEuG6f8sgp4vqiS4vAIwIVF88
+         bgdQ==
+X-Gm-Message-State: AOAM532hUIISSdbC6p0Hjv2NgB43XKa/vvVpt23afs6UWEDw7Hrw9QQ0
+        XTrVskHMB5AcbU+1HWtFTvIG4TFkBiLO9yEKzzo=
+X-Google-Smtp-Source: ABdhPJxkJcaz/OQCc+qvAyLt1HwRQ64uhkf6n9dqvP50oc4eIHNr8Q3rR3052T537/f3WHSshWmFYgHuaFNt7O3iipA=
+X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id
+ d19-20020a05622a101300b002e1c9c09831mr10806922qte.245.1649322017903; Thu, 07
+ Apr 2022 02:00:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+ <YkqxpEW4m6iU3zMq@dhcp22.suse.cz> <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+ <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
+ <Ykq7KUleuAg5QnNU@dhcp22.suse.cz> <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
+ <Ykrkx4JML4c81gBV@dhcp22.suse.cz> <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
+ <YkwxNaJIg6ptJOYT@dhcp22.suse.cz> <CAGWkznG=QH3HRSzgum0sQBkyQAahqgiWf8nXCv1qXstxrn7e8w@mail.gmail.com>
+ <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
+In-Reply-To: <Yk6VZlGnB48RqnYW@dhcp22.suse.cz>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 7 Apr 2022 16:59:50 +0800
+Message-ID: <CAGWkznG+V88f_DjtJAe4_Nr=32Q7Z4b1CaBCB0FVqhAAsuNsWA@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,67 +79,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel pointed out that this series removes the last user of
-seqcount_ww_mutex_t, so let's drop this.
+On Thu, Apr 7, 2022 at 3:40 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 06-04-22 10:11:19, Zhaoyang Huang wrote:
+> > On Tue, Apr 5, 2022 at 8:08 PM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
+> > > [...]
+> > > > Please be noticed that this patch DOES protect the memcg when external
+> > > > pressure is 1GB as fixed low does.
+> > >
+> > > This is getting more and more confusing (at least to me). Could you
+> > > describe the behavior of the reclaim for the following setups/situations?
+> > >
+> > > a) mostly reclaiming a clean page cache - via kswapd
+> > > b) same as above but the direct reclaim is necessary but very
+> > >    lightweight
+> > > c) direct reclaim makes fwd progress but not enough to satisfy the
+> > >    allocation request (so the reclaim has to be retried)
+> > > d) direct reclaim not making progress and low limit protection is
+> > >    ignored.
+> > >
+> > > Say we have several memcgs and only some have low memory protection
+> > > configured. What is the user observable state of the protected group and
+> > > when and how much the protection can be updated?
+> > I am not sure if I understand you right. Do you have suspicions on the
+> > test result as you think protected memcg has no chance to update the
+> > protection or the global reclaim should have been satisfied with the
+> > reclaiming(step d is hard to reach?). Let me try to answer it under my
+> > understanding, please give me feedback if you need more info. The
+> > protection is updated while mem_cgroup_calculate_protection is called
+> > during either kswapd or direct reclaim for each round of the priority
+> > reclaiming and then the memcg's lruvec will be reached in step d.
+>
+> This means that limits are altered even if there is memory to be
+> reclaimed from other memcgs. Why? How does this line up with the
+> basic property of the low limit to act as a protection from the reclaim?
+ok, partially understand. I would like to say that low's original
+definition under this patch has changed, says the calculated low just
+provide protection when the psi value is lower than the setting and
+will introduce reclaiming if it exceed. It also can be seen from the
+bellowing latest test result(same as previous test but without mlock),
+which says that the memcg with fixed low will push back the reclaim to
+global LRU while keeping psi to be high. Please be noticed that the
+low will be updated when usage raise up over it which means resume the
+protection again when the memcg become active.
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: linux-kernel@vger.kernel.org
----
- include/linux/seqlock.h | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+                          psi(global=1GB)        max      stable
+  psi(global=2GB)     max      stable
+Low=400MB      some=18 full=11       700MB 600MB       some=20 full=16
+    400MB 400MB
+Low=500MB      some=18 full=13       680MB 540MB       some=27 full=17
+    500MB 500MB
+patch setting1    some=19 full=13       863MB 740MB       some=15
+full=10     500MB 500MB
+patch setting1    some=14 full=11       640MB 470MB       some=20
+full=12     360MB 320MB
 
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 37ded6b8fee6..3926e9027947 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -17,7 +17,6 @@
- #include <linux/kcsan-checks.h>
- #include <linux/lockdep.h>
- #include <linux/mutex.h>
--#include <linux/ww_mutex.h>
- #include <linux/preempt.h>
- #include <linux/spinlock.h>
- 
-@@ -164,7 +163,7 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
-  * static initializer or init function. This enables lockdep to validate
-  * that the write side critical section is properly serialized.
-  *
-- * LOCKNAME:	raw_spinlock, spinlock, rwlock, mutex, or ww_mutex.
-+ * LOCKNAME:	raw_spinlock, spinlock, rwlock or mutex
-  */
- 
- /*
-@@ -184,7 +183,6 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
- #define seqcount_spinlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, spinlock)
- #define seqcount_rwlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, rwlock)
- #define seqcount_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, mutex)
--#define seqcount_ww_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, ww_mutex)
- 
- /*
-  * SEQCOUNT_LOCKNAME()	- Instantiate seqcount_LOCKNAME_t and helpers
-@@ -277,7 +275,6 @@ SEQCOUNT_LOCKNAME(raw_spinlock, raw_spinlock_t,  false,    s->lock,        raw_s
- SEQCOUNT_LOCKNAME(spinlock,     spinlock_t,      __SEQ_RT, s->lock,        spin,     spin_lock(s->lock))
- SEQCOUNT_LOCKNAME(rwlock,       rwlock_t,        __SEQ_RT, s->lock,        read,     read_lock(s->lock))
- SEQCOUNT_LOCKNAME(mutex,        struct mutex,    true,     s->lock,        mutex,    mutex_lock(s->lock))
--SEQCOUNT_LOCKNAME(ww_mutex,     struct ww_mutex, true,     &s->lock->base, ww_mutex, ww_mutex_lock(s->lock, NULL))
- 
- /*
-  * SEQCNT_LOCKNAME_ZERO - static initializer for seqcount_LOCKNAME_t
-@@ -304,8 +301,7 @@ SEQCOUNT_LOCKNAME(ww_mutex,     struct ww_mutex, true,     &s->lock->base, ww_mu
- 	__seqprop_case((s),	raw_spinlock,	prop),			\
- 	__seqprop_case((s),	spinlock,	prop),			\
- 	__seqprop_case((s),	rwlock,		prop),			\
--	__seqprop_case((s),	mutex,		prop),			\
--	__seqprop_case((s),	ww_mutex,	prop))
-+	__seqprop_case((s),	mutex,		prop))
- 
- #define seqprop_ptr(s)			__seqprop(s, ptr)
- #define seqprop_sequence(s)		__seqprop(s, sequence)
--- 
-2.25.1
-
+>
+> > > I think it would be also helpful to describe the high level semantic of
+> > > this feature.
+>
+> Please focus on this part. Without a high level semantic explained we
+> will not move forward.
+> --
+> Michal Hocko
+> SUSE Labs

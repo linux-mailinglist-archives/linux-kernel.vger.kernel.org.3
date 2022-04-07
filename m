@@ -2,182 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3104F8593
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398534F8596
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiDGRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S1345952AbiDGRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239064AbiDGRJy (ORCPT
+        with ESMTP id S239064AbiDGRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:09:54 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239B52CE03
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:07:54 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w18so7128288edi.13
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:07:54 -0700 (PDT)
+        Thu, 7 Apr 2022 13:10:19 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1A82CE03
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:08:18 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id z8so6294247oix.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=m2s4PG1XXBPY+xZ/g2KKtsmSmzO1vbLqhx1OJRbwqHk=;
-        b=VFenbI8vl9C3SVgHSCx12w6Hk5Qy6qGRxJMtZkd2lfhRJFgJjv3Do/knpuu+OWtSMY
-         5b2c+eLOqhqoJks1M7BXl4sXkKZN5YZgLU58Vm7j8JcNmrZlNpaJ8SjKyiX/GO4QvbYC
-         sZXP/gmxVZ1n4Wq7vE1X70J6/KrrTVlQB0LFg=
+        bh=JqDkTinK10x3zeolGbydLx/yEZJP4ImSGKmYcvP6lVQ=;
+        b=Cy0VXhmnAEqP0lRJ0KQuwUy715TtVttVKnb19XsHu+WELC6cFz4o3We4LkuxtsJYIR
+         Di3N1+8prGyIRhYxREa/bbeMsylUltqSC4+WRA7TqQv1qm8UCzeUwGYDYmw8YKHJEf9Z
+         04x1BYmO7f/FAI3j/O9jTgK0tyiQxdbUurLzX3Ymyxm03m1bvBllSiZgGdEfD0Ryrsyp
+         MJHwx0eF5rHTH+brtzbUTyGdYEzq6lvEIZFtsiFGfXDAxewiOFiWrlfPMkot2B56Cw90
+         VaHAdRR1AQW3Qw4Ny+MBKI+761GiyxeWIsLhSVsmJLnE+7ZA6n4Q1XYWaV6p6NxlA8jp
+         e2kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m2s4PG1XXBPY+xZ/g2KKtsmSmzO1vbLqhx1OJRbwqHk=;
-        b=2idrjD2ixxA3D6Q8H5+sX+EHrDniv/5dlU1441m24+aN72utbKGT3OK803FJdDGZ5K
-         nki1XdiK6ZAwcsDinnLG88jJa9UnGzZIQVCCfuX1MAxjNVUTQDwe+1gqFGQPFeG64WoB
-         x+asqGeNXk5G1Ya9lhAlfJ5wcqrINjHboZk5unpgNOkBHWBvG1WglTwEJ9EhAvsPnhve
-         KgoxhipGwVwNmw4KdvS4fcodOOdPuhoIHLBZ5fTWO3xk8QKv2TjIkcBqRql4mvYTTFHh
-         K5mGLbDZ3JK4NSrYRSl1t4j2LcCq8p6L68MecuOMgdMaMpUgAttXXOnUfqMzVMifwVME
-         zGFg==
-X-Gm-Message-State: AOAM530fq3VPLmtjYn/Vv1wVCk8H4oYfbsQCtflpO9BujKhoKOSaZ+GP
-        U79ABPFNQHCcq/GERqSgB4iA9Bmm3LA2kg==
-X-Google-Smtp-Source: ABdhPJwzQ6ScgKqB2eEFOnGuf1ILaQ8VUDxri07S6SZ9vaQsZ0OcTsz+aCkBSdtNHVhvSMUdWfvxgw==
-X-Received: by 2002:a05:6402:27d4:b0:419:5105:f7e7 with SMTP id c20-20020a05640227d400b004195105f7e7mr15319446ede.356.1649351272446;
-        Thu, 07 Apr 2022 10:07:52 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id jr16-20020a170906a99000b006e4c05e8919sm7749973ejb.35.2022.04.07.10.07.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 10:07:51 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id q20so3998119wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:07:50 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e10:b0:38e:6a6a:c06a with SMTP id
- b16-20020a05600c4e1000b0038e6a6ac06amr13253896wmq.15.1649351270179; Thu, 07
- Apr 2022 10:07:50 -0700 (PDT)
+        bh=JqDkTinK10x3zeolGbydLx/yEZJP4ImSGKmYcvP6lVQ=;
+        b=bXfcXmAHz9oGEhBa1keApm9gofymwqsTg+QLEfq7lzdrPhHmdqcUkMvObRU5IfAX+x
+         e+H7ZI+cnzSnmXVqZsuOpJaKKhF1XnsDO7kUHHAa0CeWUMCS2YFWZnHzr7oQKknmORma
+         LRGcmm34HUWDbPKZwxWcbC8zkyOl1jn/cBDKoltu1Bh1+o1bL64uIxJwwzuE+bVU1cHQ
+         6rHWdvrIoWyppZCIorjfY3SyMPgEXzdDYI0Rq+4J7C25vZ3VTgMsJ4mVs2tSdtkOioop
+         +iKACDqFWtqUTKF0y7tZuinasqX1ESvAPAgRYun2ppNqOh+DTH8vNaL7uqnV4EYzWEKd
+         1qlQ==
+X-Gm-Message-State: AOAM533C47rnP/HZNiVbT2e5dyPGk24YQU9zu/h5cwA4F6CkaDHV4hOL
+        67HZKHYRYyO4kxauOYSlqDDUoGH9abmN8USIYEZIsDM/FNw=
+X-Google-Smtp-Source: ABdhPJxylZ9P0pQvwI6USl2YGwdfB/0/fgO3ea3ZdU5f2ipIyl5F1+aUvZ2K86YyCnVCnX962vuWjCpdcgbpRakh+Vw=
+X-Received: by 2002:aca:6006:0:b0:2f9:c685:f4e2 with SMTP id
+ u6-20020aca6006000000b002f9c685f4e2mr446739oib.200.1649351298327; Thu, 07 Apr
+ 2022 10:08:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
- <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
- <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
- <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com>
- <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
- <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
- <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org> <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
- <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
-In-Reply-To: <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 7 Apr 2022 10:07:36 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
-Message-ID: <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
-To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Cc:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
+References: <20220407121230.132627-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220407121230.132627-1-kai.heng.feng@canonical.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 7 Apr 2022 13:08:07 -0400
+Message-ID: <CADnq5_Oq4nS1A8MxosTn=0EztBCDeURmGq9WBW9886E9y-sO7Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Ensure HDA function is suspended before ASIC reset
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
         David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>, Sean Paul <seanpaul@chromium.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Solomon Chiu <solomon.chiu@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Apr 7, 2022 at 8:21 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> DP/HDMI audio on AMD PRO VII stops working after S3:
+> [  149.450391] amdgpu 0000:63:00.0: amdgpu: MODE1 reset
+> [  149.450395] amdgpu 0000:63:00.0: amdgpu: GPU mode1 reset
+> [  149.450494] amdgpu 0000:63:00.0: amdgpu: GPU psp mode1 reset
+> [  149.983693] snd_hda_intel 0000:63:00.1: refused to change power state from D0 to D3hot
+> [  150.003439] amdgpu 0000:63:00.0: refused to change power state from D0 to D3hot
+> ...
+> [  155.432975] snd_hda_intel 0000:63:00.1: CORB reset timeout#2, CORBRP = 65535
 
-On Thu, Apr 7, 2022 at 7:19 AM Sankeerth Billakanti (QUIC)
-<quic_sbillaka@quicinc.com> wrote:
->
-> Hi Dmitry and Doug,
->
-> > Hi,
-> >
-> > On Tue, Apr 5, 2022 at 10:36 AM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On 05/04/2022 20:02, Doug Anderson wrote:
-> > > > Hi,
-> > > >
-> > > > On Tue, Apr 5, 2022 at 5:54 AM Dmitry Baryshkov
-> > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >>> 3. For DP and eDP HPD means something a little different.
-> > > >>> Essentially there are two concepts: a) is a display physically
-> > > >>> connected and b) is the display powered up and ready. For DP, the
-> > > >>> two are really tied together. From the kernel's point of view you
-> > > >>> never "power down" a DP display and you can't detect that it's
-> > > >>> physically connected until it's ready. Said another way, on you
-> > > >>> tie "is a display there" to the HPD line and the moment a display
-> > > >>> is there it's ready for you to do AUX transfers. For eDP, in the
-> > > >>> lowest power state of a display it _won't_ assert its "HPD"
-> > > >>> signal. However, it's still physically present. For eDP you simply
-> > > >>> have to _assume_ it's present without any actual proof since you
-> > > >>> can't get proof until you power it up. Thus for eDP, you report
-> > > >>> that the display is there as soon as we're asked. We can't _talk_
-> > > >>> to the display yet, though. So in get_modes() we need to be able
-> > > >>> to power the display on enough to talk over the AUX channel to it.
-> > > >>> As part of this, we wait for the signal named "HPD" which really means
-> > "panel finished powering on" in this context.
-> > > >>>
-> > > >>> NOTE: for aux transfer, we don't have the _display_ pipe and
-> > > >>> clocks running. We only have enough stuff running to do the AUX
-> > transfer.
-> > > >>> We're not clocking out pixels. We haven't fully powered on the
-> > > >>> display. The AUX transfer is designed to be something that can be
-> > > >>> done early _before_ you turn on the display.
-> > > >>>
-> > > >>>
-> > > >>> OK, so basically that was a longwinded way of saying: yes, we
-> > > >>> could avoid the AUX transfer in probe, but we can't wait all the
-> > > >>> way to enable. We have to be able to transfer in get_modes(). If
-> > > >>> you think that's helpful I think it'd be a pretty easy patch to
-> > > >>> write even if it would look a tad bit awkward IMO. Let me know if
-> > > >>> you want me to post it up.
-> > > >>
-> > > >> I think it would be a good idea. At least it will allow us to
-> > > >> judge, which is the more correct way.
-> > > >
-> > > > I'm still happy to prototype this, but the more I think about it the
-> > > > more it feels like a workaround for the Qualcomm driver. The eDP
-> > > > panel driver is actually given a pointer to the AUX bus at probe
-> > > > time. It's really weird to say that we can't do a transfer on it
-> > > > yet... As you said, this is a little sideband bus. It should be able
-> > > > to be used without all the full blown infra of the rest of the driver.
-> > >
-> > > Yes, I have that feeling too. However I also have a feeling that just
-> > > powering up the PHY before the bus probe is ... a hack. There are no
-> > > obvious stopgaps for the driver not to power it down later.
-> >
-> > This is why I think we need to move to Runtime PM to manage this. Basically:
-> >
-> > 1. When an AUX transfer happens, you grab a PM runtime reference that
-> > _that_ powers up the PHY.
-> >
-> > 2. At the end of the AUX transfer function, you do a "put_autosuspend".
-> >
-> > Then it becomes not a hack, right?
-> >
-> >
->
-> pm runtime ops needs to be implemented for both eDP and DP. This change
-> take good amount of planning and code changes as it affects DP also.
->
-> Because this patch series consist of basic eDP changes for SC7280 bootup,
-> shall we take this pm_runtime implementation in subsequent patch series?
+As an aside, shouldn't device links order this properly already?  I
+thought that was the whole point of them.  We have quirks in PCI
+quirks.c to create device links for all GPU integrated peripherals
+(audio, usb, ucsi).
 
-Dmitry is the real decision maker here, but in my opinion it would be
-OK to get something landed first that worked OK and wasn't taking us
-too far in the wrong direction and then we could get a follow up patch
-to move to pm_runtime.
+Alex
+
+>
+> The offending commit is daf8de0874ab5b ("drm/amdgpu: always reset the asic in
+> suspend (v2)"). Commit 34452ac3038a7 ("drm/amdgpu: don't use BACO for
+> reset in S3 ") doesn't help, so the issue is something different.
+>
+> Assuming that to make HDA resume to D0 fully realized, it needs to be
+> successfully put to D3 first. And this guesswork proves working, by
+> moving amdgpu_asic_reset() to noirq callback, so it's called after HDA
+> function is in D3.
+>
+> Fixes: daf8de0874ab5b ("drm/amdgpu: always reset the asic in suspend (v2)")
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> index bb1c025d90019..31f7229e7ea89 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> @@ -2323,18 +2323,23 @@ static int amdgpu_pmops_suspend(struct device *dev)
+>  {
+>         struct drm_device *drm_dev = dev_get_drvdata(dev);
+>         struct amdgpu_device *adev = drm_to_adev(drm_dev);
+> -       int r;
+>
+>         if (amdgpu_acpi_is_s0ix_active(adev))
+>                 adev->in_s0ix = true;
+>         else
+>                 adev->in_s3 = true;
+> -       r = amdgpu_device_suspend(drm_dev, true);
+> -       if (r)
+> -               return r;
+> +       return amdgpu_device_suspend(drm_dev, true);
+> +}
+> +
+> +static int amdgpu_pmops_suspend_noirq(struct device *dev)
+> +{
+> +       struct drm_device *drm_dev = dev_get_drvdata(dev);
+> +       struct amdgpu_device *adev = drm_to_adev(drm_dev);
+> +
+>         if (!adev->in_s0ix)
+> -               r = amdgpu_asic_reset(adev);
+> -       return r;
+> +               return amdgpu_asic_reset(adev);
+> +
+> +       return 0;
+>  }
+>
+>  static int amdgpu_pmops_resume(struct device *dev)
+> @@ -2575,6 +2580,7 @@ static const struct dev_pm_ops amdgpu_pm_ops = {
+>         .prepare = amdgpu_pmops_prepare,
+>         .complete = amdgpu_pmops_complete,
+>         .suspend = amdgpu_pmops_suspend,
+> +       .suspend_noirq = amdgpu_pmops_suspend_noirq,
+>         .resume = amdgpu_pmops_resume,
+>         .freeze = amdgpu_pmops_freeze,
+>         .thaw = amdgpu_pmops_thaw,
+> --
+> 2.34.1
+>

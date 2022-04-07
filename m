@@ -2,160 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D734F814B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEBE4F814F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbiDGOID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S238162AbiDGOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343837AbiDGOHl (ORCPT
+        with ESMTP id S229945AbiDGOK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:07:41 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40797E0AEF;
-        Thu,  7 Apr 2022 07:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1649340341; x=1649945141;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VvEHrHCsBkj7wJ/Vs+2zdcaCkI7RGH2IpYDiURV9KXY=;
-  b=xFN/AFs6bm2lBf7iDpRc47lVjLYaCY5W7HBlmYmqSiPrLVBl1JvEO7wY
-   Ct+qyXZuwOIrMYpDGXBPQGY4vaCdjVQOJF8fo3RsjpYo3zqYAaVQxxyTw
-   l6glEV6cycKEu9DuW2egjYyHr5jxHDvcA1DZyldJIcEcrHo55DpZaOsq7
-   M=;
-Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 14:05:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rxe70s+WTpNSrFRSgg593cPnRv3M30LW0H/ioT9vIxg7JHGKOM3UclTw8orsVtxEbOdMiUdEJY2DMpQBqa9nIFP850VD9Y3SuELf8KFg+VpK28z45LPnYCnKqYItJOOFwJJSDZyb/fm7XkyIuR68tx6Hgj7WND2Tc4p15CeOxgguSPqsWBobG2rR60ZTEXL/n4UMDYJt5PxDwdBLdVZRG5l6TfUopyoRcNuzYYoJY8bZivxjT/pcTGTW0bX3fP/1X5boRRYtHikEbPDraxMnnatFocjmBAs9oUB3Uay/FeEKZg06O1w+JmSGt7Md4ebRmDtS07AHaUTur+u6ArlsqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VvEHrHCsBkj7wJ/Vs+2zdcaCkI7RGH2IpYDiURV9KXY=;
- b=h/vr57Tws5dKX6WgcyW4l5MKG0V4Ha0infDfGYys2S5gZc/at7zifT4AaOQVh7H79FVB0kTeMh81b9URo7z5KtTcQrpqC8yasEHrOx2Dj/8zYb4UYLAoBLNTjzQRkoi2f4QKLcduIb3F5fCxTlLrmji2h37hCeIwb1qKq1iQv+hgg6XS+l/S3Own1gbND9IEcW0XRz5E9dvxYhAwd7IJK7ZG4MJhZ2Qiqp+Lx4xbZeF3V81VrFZpeX+jlgB4EDAdZtMLeAEWiLCKJGFgJvtX13HzHrBGH5H8XJqX0hq67F5N3JpBLMDlPt+cfQZ/8ov/06BM6wjjthlWO8OvqW/6gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
- by BN6PR02MB2178.namprd02.prod.outlook.com (2603:10b6:404:31::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21; Thu, 7 Apr
- 2022 14:05:36 +0000
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492]) by MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492%7]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 14:05:36 +0000
-From:   "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-CC:     Doug Anderson <dianders@chromium.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "sean@poorly.run" <sean@poorly.run>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
-Subject: RE: [PATCH v6 8/8] drm/msm/dp: Handle eDP mode_valid differently from
- dp
-Thread-Topic: [PATCH v6 8/8] drm/msm/dp: Handle eDP mode_valid differently
- from dp
-Thread-Index: AQHYRE/UsJWR5XLNukW2wMYYKa9U06zYfJ8AgACEi0CAASMMgIAF9JqAgAA0tICABDr0AA==
-Date:   Thu, 7 Apr 2022 14:05:36 +0000
-Message-ID: <MW4PR02MB71868617E96D59D659EFD87EE1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-9-git-send-email-quic_sbillaka@quicinc.com>
- <CAA8EJprvE31ex3fCQHZ-=x+EWHK4UZ0qqHRh+rH4dk5TPhmVyw@mail.gmail.com>
- <MW4PR02MB71867220A90FCFED295830D0E1E19@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAD=FV=VK0D_GzYBv+u+o6-ks-UAsw97__0mWsSn9OycX72LJFg@mail.gmail.com>
- <MW4PR02MB71865B8E17F3D194B05013EDE1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAA8EJpqFh7c9ohDbR_0kG5t106-djE7TYfaoAbiT-W4-294jTw@mail.gmail.com>
-In-Reply-To: <CAA8EJpqFh7c9ohDbR_0kG5t106-djE7TYfaoAbiT-W4-294jTw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 11efe1dc-e2ff-47fd-87b6-08da189fb051
-x-ms-traffictypediagnostic: BN6PR02MB2178:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <BN6PR02MB217835375B347A56261F46D19DE69@BN6PR02MB2178.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pLwlXWDWmOpCROiTDhJpXegWPwD79auMSWL5B/yriGZSCIVkvNURiLKC4SYC2VUtNIWgtUcouyanhRAaj/mkb4vTVOvrY4TYNbU7KuPodU5t6YrD5GHbyfCaoFhfvh/3pU/oMV9xhOiYb1lRpFeFK57lIzLCRbypwhTBp2lVrShH5WrBtPX5qPs1/GRshNhZ5mfrEPDFoAn5Uk5Zh0XWbdyRJEdk6YGgK/SnaccJQd/gFagTP88uL3VAgJs3UpSQzjjF5EfCakcDNxWm1P/LiLCyDQd+KVtAQCNz3meHwqotOk7cAEKHheGRogcfoVZS+W8hqOgPitYrJ75oaFgSERY3pWyY4vehvVEaajPevqR+Egn0NAwaDGtFbN8I+0tre+eLC11wNnTCX+45JjOj3PuEkPDyJVaKYPWakLaKtU9PNUJn93tavCay7m4LI9jeYrGY145bF3JSaKuUU44vJgSK4uFJA752xPju4XenyZ6pZirVtSYskYQzr0Z+VUFc8tlw5C5wL2+eh+L7QEp/0fs0aks/ARu7oZxSQtTRrYfizGc3g50Wmlz4rI+CmLOt9rEju2qWhY5sNHe+kAHA5ZRslagqUrWBnfNd+tjhtlGLkXrtKLuxVlR20x/V7usxloEeZwN8lyjRskwm21o/OT5ZpaZP0Cs7QK0BzOfS9UK8W/VTsU+98RvC2ZA9IqoAXRb6ER7zeaosuKTffArY6Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(33656002)(64756008)(38100700002)(83380400001)(55016003)(66946007)(7416002)(66556008)(5660300002)(76116006)(52536014)(122000001)(66446008)(66476007)(966005)(8936002)(316002)(110136005)(4326008)(54906003)(107886003)(186003)(26005)(86362001)(6506007)(71200400001)(7696005)(9686003)(2906002)(38070700005)(508600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TkI5QnEwR3JQYXB4MWQ5Z1dITkpMaUlWNTFMOHl4aVdJOUxwNWVHeW4yZG5I?=
- =?utf-8?B?RW9TWEgzQUxITC9oL1EveFBDNGpueEtkanFOSGJUUTVFSG1mVVZmU0xHamxL?=
- =?utf-8?B?ZWdPdGNZaHZRVUJQaVdRNHdxS3hXMFpHWnJVelRweVZPRnpqaGg5eHBTM2l5?=
- =?utf-8?B?L0JqdCtlQXM4OUx5cUExaTJ2dEo0VC83dVBNYkVCOXg4bzgwZ3N0eUZ2V0J5?=
- =?utf-8?B?NkgycURLYnZaTWFnUms3dTV4S0FhSy80TndJMnBWOTYrb0VDR21HSGxwM2RJ?=
- =?utf-8?B?VHMyYjBhR1JSZFBaWWVlSWRWdGVkeHFyYmRPQlA0cW1kMVJ6SnlHSmx4cjJj?=
- =?utf-8?B?SlkvY09QZUdrRHVHM3p6UStkR01WYUNTc1F3ZnM1ZHpwTGh0K2NZbzJsbmlx?=
- =?utf-8?B?ZDIxaTZ0WVl1OUdoOGt1b2pNazlxUjQ0Zyt1V24wN3ZuTWhjOUNLS2tLY2ln?=
- =?utf-8?B?eThBSDNPcHRhYXFtdi9hTkpoMTJFeDZVeURkdTNaMTJ1MndxbFc4dDIycUJp?=
- =?utf-8?B?Q2ZUSm5CVHd4U1JWUy8rWGJ2VFpaR21GZExlWllRdFJKdCt3T043QWdEZk5n?=
- =?utf-8?B?RTlBRk9GRmtIVitPWFc4L0U2di9kTTZ4SHk2a3BLUzRqd2gwWGM0OXN6ay9D?=
- =?utf-8?B?RVN3YzAzNk5MY2g3VGxKdlNwb3NhRUxvMmVnV2J3d2dsb2V5U2lGSFdUVlc3?=
- =?utf-8?B?alhpWUZqaG4wUmpJSzRBR2V6cnBJQ1Vnc0RidDNaNlZESldBbEx1aHZWRThP?=
- =?utf-8?B?ZEtMSTlhSnVoVFlGVXphcTlKOFptOHh2T05hWDN0VmN4S0pGYlN5WEdqazNS?=
- =?utf-8?B?RlJIWGNKeC9JczFwYzY4K1E3U2RZS1E4bTlxTE1HY0p2Ti9uYVp4WTE2NnRB?=
- =?utf-8?B?em9nSU9EMkdvcDBMOFI4Q0FYUTVKVUl1dkFmeGRFeDdZaDhXRkZiNzZCYzVy?=
- =?utf-8?B?VTM3UE5memMyVDNVMkVOUHpoT0RkVlpPekJzeWhPU3AydS9zdStqemtsWEhY?=
- =?utf-8?B?N2FsOTFLTVNmQ29sWjVnQXpUcXJPL3lwTFhNTmtSMCsrSmE2SWUrNHdwNzN0?=
- =?utf-8?B?a01yOXc3UjFCTHFYUkxoNzBOaDNUdUlma3lCWlJKdlNKK1lMeTJCRWFuZjJz?=
- =?utf-8?B?d2pBM3d5MlpmbHhrR2o3S3piQU9BZHNFOHJDcHlhWHY4M2dIMyswWWt3dXF6?=
- =?utf-8?B?S0lxV2lDRHp3TUdVQ3h4ZmhyaFl1V3Z6Ykp0QkloNjF4VVF0VjJFUHZHR1lH?=
- =?utf-8?B?V3VQdE1WaTZzM0I1SkkwR0lqVmVvdVRlTjZubU9mOXdyajNweEVOS1ZVRms0?=
- =?utf-8?B?QTRLWHdHWHllYWRIcVJBb0c2VUlJeUFFYkl1NUZoYXpxeU9mRnk1R3J2Zmc1?=
- =?utf-8?B?R2FPa1V4TGFmNyt5Q1M5c2lkc2Qwd3ExWnR2RzRlYkxwVm1CWElxTC9kaE83?=
- =?utf-8?B?TFBQRThIRTZNNm1wY2hnMFVpazhPMityWFY2YWNHK2hqZkFhdWxyZjNXS05l?=
- =?utf-8?B?SUtxa09lRTNJUFpaZ05kRUxiVURqbzIrYkRmb2g1UmtIeXI1UXdCb2xVQ0Rx?=
- =?utf-8?B?aTM0Z1hCNkFxQlN2ZzJOOWlkeEU0Tk4xSTNFSkZ1WWR4cUZrYUhRSzBBQndM?=
- =?utf-8?B?amY3VHk5R0UrdE1FT0hrUXJBMUMvc2ZjQ0pEak1ZMU5xV1VtaktpR0RHc3ow?=
- =?utf-8?B?WEtVdmtWNzJwUkVWNzB5U29iUlpib0tnUHRPWFF4OUpmaU5ObmQvTlhBVG9Y?=
- =?utf-8?B?bHBoZmE2bWUyeDFGamFtNm9DTTFOZ29nb291OWpGYmI3S0hUK1E0VU9POTZT?=
- =?utf-8?B?WksveVg0d2RmRkE4N2Q1S0J1T2w2QldxcXNXT2FEMk9wUTRHL2dLODBPOUlj?=
- =?utf-8?B?ajhqNFBKaGRTWXpmRHNjTTFyRmV4c0lRTFVUVjZoYXRmTXRFMk5BblFiZ3dO?=
- =?utf-8?B?OXV1VGx3eFdnSUI3eW1qTEhYblhWZFNEdHJTdjJoYWxSWWE3NlgzMG5BMmZp?=
- =?utf-8?B?cU1xa2xMYjFneGR1SXU3cHk3U01FOGUzVlppMTd6VUE5Tm5aYVRPV0ExQ2Rh?=
- =?utf-8?B?SmpFSEl3UW5sQUowU2FocWFtQW5YcURmaVIxVmlIeTJVY2xqMWFmdXB3c0dP?=
- =?utf-8?B?QTJXUjVLNG9WWElRaGFFaGVJSW9MYnk1SXFaSm9lWnZUNXRzeXlIQkdWdmJj?=
- =?utf-8?B?eDNHOEZUOTY3Ym5rTWQzYTA0WjVqMkhXRVRHdXJ3THJ5OThrM1d6WFh1THRZ?=
- =?utf-8?B?KzEwRE95bjlSUXAzZm85TER1UmRvU01lVXgzeHhWTFErVVllVklkREphd1ZV?=
- =?utf-8?B?V0hnVHpMWktyV3lMenJkTTh3M3dwR0Y4QURLNWRNV0tJUkZ4OHhzZz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 7 Apr 2022 10:10:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB7E125595;
+        Thu,  7 Apr 2022 07:08:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 087D161BC5;
+        Thu,  7 Apr 2022 14:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC2AC385A4;
+        Thu,  7 Apr 2022 14:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649340523;
+        bh=ydP1aVikhmIIcEnQD6MgKsKQRpvuR4lwhWVulh03A8E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=jCzTejPJMfBHgKkfDyk1keI3z09aoSF3nLyXyo34h5NPI/8O0YWu2YbHN9TI+V6r0
+         ByZwJxqnAWRDIN4vJledxnIbSssq/9wqvp7XiPFZy3b5hSfaQ3Yf5Xyx7n83/OQu85
+         wa/GCU7NDItOyjRArlV/+mLTnl6ekf4oirBS+d8wh3EH+gdbS0YAS8/T9atJJLwYcU
+         pD7EQka9IyHP0WPXvBIXJIy+p4oljawq6K2lFNLsTZI00FL9WlHH6zg5dw63zxlhFE
+         PGRaOt9aMVgmccMOz2+SB9hUanTqyqNyl4ybIyJ1DsE6D6XS4y6qnS6HBpQ+fvVlY7
+         rzUvHjsjT2FDA==
+Message-ID: <5dc7945ab39aea9aae9834d3f5623ecbf251c262.camel@kernel.org>
+Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
+ inodes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 10:08:41 -0400
+In-Reply-To: <aaa78c1f1bfa7b8da8d8be0f3dcf2a42c9b838fd.camel@kernel.org>
+References: <20220401133243.1075-1-lhenriques@suse.de>
+         <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
+         <878rsia391.fsf@brahms.olymp>
+         <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
+         <87zgky8n0o.fsf@brahms.olymp>
+         <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
+         <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
+         <f0ed169ed02fe810076e959e9ec5455d9de4b4ff.camel@kernel.org>
+         <7023b537-e7b6-0dd9-42bf-9d601ef69b58@redhat.com>
+         <87pmlt85w5.fsf@brahms.olymp>
+         <aaa78c1f1bfa7b8da8d8be0f3dcf2a42c9b838fd.camel@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11efe1dc-e2ff-47fd-87b6-08da189fb051
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 14:05:36.1315
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SZSsSzWTHDgW0XIBhmDnr4eJ/y8sZaZspUXmH7Ruv531zx/Wz1guLQLQESijlPeDzHYYd8xaP9i2cW6YTaSWFZPa96sUnDps4oz17D9EqQ8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2178
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,74 +67,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRG1pdHJ5LA0KDQo+ID4gPiA+ID4gT24gV2VkLCAzMCBNYXIgMjAyMiBhdCAxOTowNCwgU2Fu
-a2VlcnRoIEJpbGxha2FudGkNCj4gPiA+ID4gPiA8cXVpY19zYmlsbGFrYUBxdWljaW5jLmNvbT4g
-d3JvdGU6DQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gVGhlIHBhbmVsLWVkcCBkcml2ZXIgbW9k
-ZXMgbmVlZHMgdG8gYmUgdmFsaWRhdGVkIGRpZmZlcmVudGx5DQo+ID4gPiA+ID4gPiBmcm9tIERQ
-IGJlY2F1c2UgdGhlIGxpbmsgY2FwYWJpbGl0aWVzIGFyZSBub3QgYXZhaWxhYmxlIGZvciBFRFAg
-YnkNCj4gdGhhdCB0aW1lLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IFNpZ25lZC1vZmYtYnk6
-IFNhbmtlZXJ0aCBCaWxsYWthbnRpDQo+ID4gPiA+ID4gPiA8cXVpY19zYmlsbGFrYUBxdWljaW5j
-LmNvbT4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IFRoaXMgc2hvdWxkIG5vdCBiZSBuZWNlc3Nhcnkg
-YWZ0ZXINCj4gPiA+ID4gPg0KPiA+ID4NCj4gaHR0cHM6Ly9wYXRjaHdvcmsuZnJlZWRlc2t0b3Au
-b3JnL3BhdGNoLzQ3OTI2MS8/c2VyaWVzPTEwMTY4MiZyZXY9MS4NCj4gPiA+ID4gPiBDb3VsZCB5
-b3UgcGxlYXNlIGNoZWNrPw0KPiA+ID4gPiA+DQo+ID4gPiA+DQo+ID4gPiA+IFRoZSBjaGVjayBm
-b3IgRFBfTUFYX1BJWEVMX0NMS19LSFogaXMgbm90IG5lY2Vzc2FyeSBhbnltb3JlIGJ1dA0KPiB3
-ZQ0KPiA+ID4gPiBuZWVkIHRvIHJldHVybiBlYXJseSBmb3IgZURQIGJlY2F1c2UgdW5saWtlIERQ
-LCBlRFAgY29udGV4dCB3aWxsDQo+ID4gPiA+IG5vdCBoYXZlIHRoZSBpbmZvcm1hdGlvbiBhYm91
-dCB0aGUgbnVtYmVyIG9mIGxhbmVzIGFuZCBsaW5rIGNsb2NrLg0KPiA+ID4gPg0KPiA+ID4gPiBT
-bywgSSB3aWxsIG1vZGlmeSB0aGUgcGF0Y2ggdG8gcmV0dXJuIGFmdGVyIHRoZQ0KPiA+ID4gPiBE
-UF9NQVhfUElYRUxfQ0xLX0tIWg0KPiA+ID4gY2hlY2sgaWYgaXNfZURQIGlzIHNldC4NCj4gPiA+
-DQo+ID4gPiBJIGhhdmVuJ3Qgd2Fsa2VkIHRocm91Z2ggYWxsIHRoZSByZWxldmFudCBjb2RlIGJ1
-dCBzb21ldGhpbmcgeW91DQo+ID4gPiBzYWlkIGFib3ZlIHNvdW5kcyBzdHJhbmdlLiBZb3Ugc2F5
-IHRoYXQgZm9yIGVEUCB3ZSBkb24ndCBoYXZlIGluZm8NCj4gPiA+IGFib3V0IHRoZSBudW1iZXIg
-b2YgbGFuZXM/IFdlIF9zaG91bGRfLg0KPiA+ID4NCj4gPiA+IEl0J3MgY2VydGFpbmx5IHBvc3Np
-YmxlIHRvIGhhdmUgYSBwYW5lbCB0aGF0IHN1cHBvcnRzIF9laXRoZXJfIDEgb3INCj4gPiA+IDIg
-bGFuZXMgYnV0IHRoZW4gb25seSBwaHlzaWNhbGx5IGNvbm5lY3QgMSBsYW5lIHRvIGl0LiAuLi5v
-ciB5b3UNCj4gPiA+IGNvdWxkIGhhdmUgYSBwYW5lbCB0aGF0IHN1cHBvcnRzIDIgb3IgNCBsYW5l
-cyBhbmQgeW91IG9ubHkgY29ubmVjdCAxIGxhbmUuDQo+ID4gPiBTZWUsIGZvciBpbnN0YW5jZSwg
-dGlfc25fYnJpZGdlX3BhcnNlX2xhbmVzLiBUaGVyZSB3ZSBhc3N1bWUgNCBsYW5lcw0KPiA+ID4g
-YnV0IGlmIGEgImRhdGEtbGFuZXMiIHByb3BlcnR5IGlzIHByZXNlbnQgdGhlbiB3ZSBjYW4gdXNl
-IHRoYXQgdG8NCj4gPiA+IGtub3cgdGhhdCBmZXdlciBsYW5lcyBhcmUgcGh5c2ljYWxseSBjb25u
-ZWN0ZWQuDQo+ID4gPg0KPiA+ID4gSXQncyBhbHNvIHBvc3NpYmxlIHRvIGNvbm5lY3QgbW9yZSBs
-YW5lcyB0byBhIHBhbmVsIHRoYW4gaXQgc3VwcG9ydHMuDQo+ID4gPiBZb3UgY291bGQgY29ubmVj
-dCAyIGxhbmVzIHRvIGl0IGJ1dCB0aGVuIGl0IG9ubHkgc3VwcG9ydHMgMS4gVGhpcw0KPiA+ID4g
-Y2FzZSBuZWVkcyB0byBiZSBoYW5kbGVkIGFzIHdlbGwuLi4NCj4gPiA+DQo+ID4NCj4gPiBJIHdh
-cyByZWZlcnJpbmcgdG8gdGhlIGNoZWNrcyB3ZSBkbyBmb3IgRFAgaW4gZHBfYnJpZGdlX21vZGVf
-dmFsaWQuIFdlDQo+ID4gY2hlY2sgaWYgdGhlIExpbmsgYmFuZHdpZHRoIGNhbiBzdXBwb3J0IHRo
-ZSBwaXhlbCBiYW5kd2lkdGguIEZvciBhbg0KPiA+IGV4dGVybmFsIERQIGNvbm5lY3Rpb24sIHRo
-ZSBJbml0aWFsIERQQ0QvRURJRCByZWFkIGFmdGVyIGNhYmxlDQo+ID4gY29ubmVjdGlvbiB3aWxs
-IHJldHVybiB0aGUgc2luayBjYXBhYmlsaXRpZXMgbGlrZSBsaW5rIHJhdGUsIGxhbmUNCj4gPiBj
-b3VudCBhbmQgYnBwIGluZm9ybWF0aW9uIHRoYXQgYXJlIHVzZWQgdG8gd2UgZmlsdGVyIG91dCB0
-aGUgdW5zdXBwb3J0ZWQNCj4gbW9kZXMgZnJvbSB0aGUgbGlzdCBvZiBtb2RlcyBmcm9tIEVESUQu
-DQo+ID4NCj4gPiBGb3IgZURQIGNhc2UsIHRoZSBkcCBkcml2ZXIgcGVyZm9ybXMgdGhlIGZpcnN0
-IGRwY2QgcmVhZCBkdXJpbmcNCj4gPiBicmlkZ2VfZW5hYmxlLiBUaGUgZHBfYnJpZGdlX21vZGVf
-dmFsaWQgZnVuY3Rpb24gaXMgZXhlY3V0ZWQgYmVmb3JlDQo+ID4gYnJpZGdlX2VuYWJsZSBhbmQg
-aGVuY2UgZG9lcyBub3QgaGF2ZSB0aGUgZnVsbCBsaW5rIG9yIHRoZSBzaW5rDQo+ID4gY2FwYWJp
-bGl0aWVzIGluZm9ybWF0aW9uIGxpa2UgZXh0ZXJuYWwgRFAgY29ubmVjdGlvbiwgYnkgdGhlbi4N
-Cj4gDQo+IEl0IHNvdW5kcyB0byBtZSBsaWtlIHdlIHNob3VsZCBlbXVsYXRlIHRoZSBIUEQgZXZl
-bnQgZm9yIGVEUCB0byBiZSBoYW5kbGVkDQo+IGVhcmxpZXIgdGhhbiB0aGUgZ2V0X21vZGVzKCkv
-cHJlcGFyZSgpIGNhbGxzIGFyZSBhdHRlbXB0ZWQuDQo+IEhvd2V2ZXIgdGhpcyBtaWdodCBvcGVu
-IGFub3RoZXIgY2FuIG9mIHdvcm1zLg0KPiANCg0KRm9yIERQLCB0aGUgSFBEIGhhbmRsZXIgbWFp
-bmx5IGluaXRpYXRlcyBsaW5rIHRyYWluaW5nIGFuZCBnZXRzIHRoZSBFRElELg0KDQpCZWZvcmUg
-YWRkaW5nIHN1cHBvcnQgZm9yIGEgc2VwYXJhdGUgZURQIHBhbmVsLCB3ZSBoYWQgZGlzY3Vzc2Vk
-IGFib3V0DQp0aGlzIGludGVybmFsbHkgYW5kIGRlY2lkZWQgdG8gZW11bGF0ZSBlRFAgSFBEIGR1
-cmluZyBlbmFibGUoKS4gTWFpbiByZWFzb24NCmJlaW5nLCBlRFAgcG93ZXIgaXMgZ3VhcmFudGVl
-ZCB0byBiZSBvbiBvbmx5IGFmdGVyIGJyaWRnZV9lbmFibGUoKS4NClNvLCBlRFAgbGluayB0cmFp
-bmluZyBjYW4gaGFwcGVuIGFuZCBzdXN0YWluIG9ubHkgYWZ0ZXIgYnJpZGdlX2VuYWJsZSgpLg0K
-DQpFbXVsYXRpbmcgSFBEIGJlZm9yZS9kdXJpbmcgZ2V0X21vZGVzIHdpbGwgbm90IGhhdmUgYW55
-IGVmZmVjdCBiZWNhdXNlOg0KDQoxLiBnZXRfbW9kZXMoKSB3aWxsIGdvIHRvIHBhbmVsJ3MgZ2V0
-X21vZGVzKCkgZnVuY3Rpb24gdG8gcG93ZXIgb24gcmVhZCBFRElEDQoNCjIuIHBhbmVsIHBvd2Vy
-IHdpbGwgYmUgdHVybmVkIG9mZiBhZnRlciBnZXRfbW9kZXMoKS4gUGFuZWwgcG93ZXIgb2ZmIHdp
-bGwNCnJlc2V0IGV2ZXJ5IHdyaXRlIHRyYW5zYWN0aW9uIGluIERQQ0QuIGFueXdheSBpbnZhbGlk
-YXRpbmcgbGluayB0cmFpbmluZw0KDQozLiBtb2RlX3ZhbGlkIHdpbGwgbGFuZCBpbiBkcCBkcml2
-ZXIgYnV0IHBhbmVsIHdpbGwgbm90IGJlIHBvd2VyZWQgb24gYXQgdGhhdA0KdGltZSBhbmQgd2Ug
-Y2Fubm90IGRvIGF1eCB0cmFuc2ZlcnMgb3IgRFBDRCByZWFkIHdyaXRlcy4NCg0KPiA+IFNvLCB3
-ZSBuZWVkIHRvIHByb2NlZWQgd2l0aCB0aGUgcmVwb3J0ZWQgbW9kZSBmb3IgZURQLg0KPiANCj4g
-V2VsbC4uLiBFdmVuIGlmIGR1cmluZyB0aGUgZmlyc3QgY2FsbCB0byBnZXRfbW9kZXMoKSB0aGUg
-RFBDRCBpcyBub3QgcmVhZCwNCj4gZHVyaW5nIHN1YnNlcXVlbnQgY2FsbHMgdGhlIGRyaXZlciBo
-YXMgbmVjZXNzYXJ5IGluZm9ybWF0aW9uLCBzbyBpdCBjYW4NCj4gcHJvY2VlZCB3aXRoIGFsbCB0
-aGUgY2hlY2tzLCBjYW4ndCBpdD8NCj4gDQoNCmdldF9tb2RlcygpIGN1cnJlbnRseSBkb2VzIG5v
-dCBsYW5kIGluIERQIGRyaXZlci4gSXQgZ2V0cyBleGVjdXRlZCBpbiBwYW5lbA0KYnJpZGdlLiBC
-dXQgdGhlIG1vZGVfdmFsaWQoKSBjb21lcyB0byBEUCBkcml2ZXIgdG8gY2hlY2sgdGhlIGNvbnRy
-b2xsZXINCmNvbXBhdGliaWxpdHkuDQoNCj4gLS0NCj4gV2l0aCBiZXN0IHdpc2hlcw0KPiBEbWl0
-cnkNCg0KVGhhbmsgeW91LA0KU2Fua2VlcnRoDQo=
+On Thu, 2022-04-07 at 09:23 -0400, Jeff Layton wrote:
+> On Thu, 2022-04-07 at 12:55 +0100, Luís Henriques wrote:
+> > Xiubo Li <xiubli@redhat.com> writes:
+> > 
+> > > On 4/6/22 9:41 PM, Jeff Layton wrote:
+> > > > On Wed, 2022-04-06 at 21:10 +0800, Xiubo Li wrote:
+> > > > > On 4/6/22 7:48 PM, Jeff Layton wrote:
+> > > > > > On Wed, 2022-04-06 at 12:33 +0100, Luís Henriques wrote:
+> > > > > > > Xiubo Li <xiubli@redhat.com> writes:
+> > > > > > > 
+> > > > > > > > On 4/6/22 6:57 PM, Luís Henriques wrote:
+> > > > > > > > > Xiubo Li <xiubli@redhat.com> writes:
+> > > > > > > > > 
+> > > > > > > > > > On 4/1/22 9:32 PM, Luís Henriques wrote:
+> > > > > > > > > > > When doing DIO on an encrypted node, we need to invalidate the page cache in
+> > > > > > > > > > > the range being written to, otherwise the cache will include invalid data.
+> > > > > > > > > > > 
+> > > > > > > > > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > > > > > > > > > > ---
+> > > > > > > > > > >      fs/ceph/file.c | 11 ++++++++++-
+> > > > > > > > > > >      1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > > > > > > > > 
+> > > > > > > > > > > Changes since v1:
+> > > > > > > > > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> > > > > > > > > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+> > > > > > > > > > > 
+> > > > > > > > > > > Note: I'm not really sure this last change is required, it doesn't really
+> > > > > > > > > > > affect generic/647 result, but seems to be the most correct.
+> > > > > > > > > > > 
+> > > > > > > > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > > > > > > > > > > index 5072570c2203..b2743c342305 100644
+> > > > > > > > > > > --- a/fs/ceph/file.c
+> > > > > > > > > > > +++ b/fs/ceph/file.c
+> > > > > > > > > > > @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+> > > > > > > > > > >      	if (ret < 0)
+> > > > > > > > > > >      		return ret;
+> > > > > > > > > > >      -	ceph_fscache_invalidate(inode, false);
+> > > > > > > > > > > +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+> > > > > > > > > > >      	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> > > > > > > > > > >      					    pos >> PAGE_SHIFT,
+> > > > > > > > > > >      					    (pos + count - 1) >> PAGE_SHIFT);
+> > > > > > > > > > The above has already invalidated the pages, why doesn't it work ?
+> > > > > > > > > I suspect the reason is because later on we loop through the number of
+> > > > > > > > > pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pages().
+> > > > > > > > Checked the 'copy_page_from_iter()', it will do the kmap for the pages but will
+> > > > > > > > kunmap them again later. And they shouldn't update the i_mapping if I didn't
+> > > > > > > > miss something important.
+> > > > > > > > 
+> > > > > > > > For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the context inplace,
+> > > > > > > > IMO if it needs to map the page and it should also unmap it just like in
+> > > > > > > > 'copy_page_from_iter()'.
+> > > > > > > > 
+> > > > > > > > I thought it possibly be when we need to do RMW, it may will update the
+> > > > > > > > i_mapping when reading contents, but I checked the code didn't find any
+> > > > > > > > place is doing this. So I am wondering where tha page caches come from ? If that
+> > > > > > > > page caches really from reading the contents, then we should discard it instead
+> > > > > > > > of flushing it back ?
+> > > > > > > > 
+> > > > > > > > BTW, what's the problem without this fixing ? xfstest fails ?
+> > > > > > > Yes, generic/647 fails if you run it with test_dummy_encryption.  And I've
+> > > > > > > also checked that the RMW code was never executed in this test.
+> > > > > > > 
+> > > > > > > But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
+> > > > > > > change the inode->i_mapping.
+> > > > > > > 
+> > > > > > No, kmap/unmap are all about high memory and 32-bit architectures. Those
+> > > > > > functions are usually no-ops on 64-bit arches.
+> > > > > Yeah, right.
+> > > > > 
+> > > > > So they do nothing here.
+> > > > > 
+> > > > > > > In my debugging this seemed to be the case
+> > > > > > > for the O_DIRECT path.  That's why I added this extra call here.
+> > > > > > > 
+> > > > > > I agree with Xiubo that we really shouldn't need to invalidate multiple
+> > > > > > times.
+> > > > > > 
+> > > > > > I guess in this test, we have a DIO write racing with an mmap read
+> > > > > > Probably what's happening is either that we can't invalidate the page
+> > > > > > because it needs to be cleaned, or the mmap read is racing in just after
+> > > > > > the invalidate occurs but before writeback.
+> > > > > This sounds a possible case.
+> > > > > 
+> > > > > 
+> > > > > > In any case, it might be interesting to see whether you're getting
+> > > > > > -EBUSY back from the new invalidate_inode_pages2 calls with your patch.
+> > > > > > 
+> > > > > If it's really this case maybe this should be retried some where ?
+> > > > > 
+> > > > Possibly, or we may need to implement ->launder_folio.
+> > > > 
+> > > > Either way, we need to understand what's happening first and then we can
+> > > > figure out a solution for it.
+> > > 
+> > > Yeah, make sense.
+> > > 
+> > 
+> > OK, so here's what I got so far:
+> > 
+> > When we run this test *without* test_dummy_encryption, ceph_direct_read_write()
+> > will be called and invalidate_inode_pages2_range() will do pretty much
+> > nothing because the mapping will be empty (mapping_empty(inode->i_mapping)
+> > will return 1).  If we use encryption, ceph_sync_write() will be called
+> > instead and the mapping, obviously, be will be empty as well.
+> > 
+> > The difference between in encrypted vs non-encrypted (and the reason the
+> > test passes without encryption) is that ceph_direct_read_write()
+> > (non-encrypted) will call truncate_inode_pages_range() at a stage where
+> > the mapping is not empty anymore (iter_get_bvecs_alloc will take care of
+> > that).
+> > 
+> 
+> Wait...why does iter_get_bvecs_alloc populate the mapping? The iter in
+> this case is almost certainly an iov_iter from userland so none of this
+> should have anything to do with the pagecache.
+> 
+> I suspect the faulting in occurs via the mmap reader task, and that the
+> truncate_inode_pages_range calls just happen enough to invalidate it.
+> 
+> >  In the encryption path (ceph_sync_write) the mapping will be
+> > filled with copy_page_from_iter(), which will fault and do the read.
+> > Because we don't have the truncate_inode_pages_range(), the cache will
+> > contain invalid data after the write.  And that's why the extra
+> > invalidate_inode_pages2_range (or truncate_...) fixes this.
+> > 
+> 
+> I think what we may want to do is consider adding these calls into
+> ceph_page_mkwrite:
+> 
+>         if (direct_lock)
+>                 ceph_start_io_direct(inode);
+>         else
+>                 ceph_start_io_write(inode);
+> 
+> ...and similar ones (for read) in ceph_filemap_fault, along with "end"
+> calls to end the I/Os.
+> 
+> This is how we handle races between buffered read/write and direct I/O,
+> and I suspect the mmap codepaths may just need similar treatment.
+> 
+> Thoughts?
+
+No, Luis tried this and said that it deadlocked on IRC. It seems obvious
+in retrospect...
+
+What we probably need to do is call filemap_write_and_wait_range before
+issuing a direct or sync read or write. Then for direct/sync writes, we
+also want to call invalidate_inode_pages2_range after the write returns.
+
+We might consider doing an invalidation before issuing the call, but I
+think it wouldn't help this testcase. generic/647 is doing O_DIRECT
+writes to the file from a buffer that is mmapped from the same file. If
+you invalidate before the write occurs you'll just end up faulting the
+pages right back in.
+-- 
+Jeff Layton <jlayton@kernel.org>

@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7BD4F7255
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990AC4F7258
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 04:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbiDGCzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 22:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
+        id S233561AbiDGC4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 22:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDGCzK (ORCPT
+        with ESMTP id S229445AbiDGC4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:55:10 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D83B022;
-        Wed,  6 Apr 2022 19:53:12 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id f38so7346958ybi.3;
-        Wed, 06 Apr 2022 19:53:12 -0700 (PDT)
+        Wed, 6 Apr 2022 22:56:33 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AA1114FC0;
+        Wed,  6 Apr 2022 19:54:34 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dr20so7985805ejc.6;
+        Wed, 06 Apr 2022 19:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hOqVy6gRmDIPKGJRDzX2KezvYez3k9c+5+AVEHVzz40=;
-        b=P+y3+ScFd24nfq3pBIZYA+8O6FxPw+aM0oWT3No1p4/eJWXp4tSN7e7pplFy2odInW
-         k+Y2CG87GauHiaQn82wzVPVzC8JhMnCTn/Rhwfyf1Eu2E3i91TOlHB75JZw3Gho3aGRI
-         FWFTneC/EN+zh2FWeG2rXGRHUvg+rKk11H+iThCnjEvk24X/tPXdpimt3x3qRQgGVeEZ
-         WwF9R/lV3Fkn1DkohWLc6zI9S9LjiK3uaZvwsL9GhdSQ0QlZMRDemK/kfDSiABkldMGm
-         FnIFehGAF/fwgBt2JjT+Yu8pJ/KXBS4aGrD9nYE5s4xU+70XAEnUq2RzN3XPfKNyhcO1
-         rcMw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M7QuqGXibgOQy0pEz/HDPB8sGsU+FPSqjY3hnu+QJvQ=;
+        b=cJFr7C/2zw4qQ/ZJ/S2oEtd79Lcy2POVWiMDtiRaMp127fHQ0OCoLy+Vt38uAjTlIL
+         ihktq7YDKs5Bc0pn2w867AUjFkkV79Mwa0iSIoeRS/4GOyKppugMW85KUL8BEQfoSSAg
+         jgmE6pYABo4IwQfwWJpaOUXUyWMAwnC0xOo50LHLNDKFQesP/WQw8XHfrsMd2QzgNkjd
+         x+sv3gkIxJHURPKST4XwjPkLuXfgRq5ZzPxpAwPmAHgjZRQ13+4tCCjA/bd1vAbJhdvU
+         5zB+8T6h4cx9UpXf5eguvdUUkgOFSqroxs9Q+x2otFDH6VwH/lg4bUz5tXoxsnJVB6cL
+         K6qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hOqVy6gRmDIPKGJRDzX2KezvYez3k9c+5+AVEHVzz40=;
-        b=d+2Dn3JFyblJRaZ2RGp+mCetmulz/+5QyMypcbL0MncLpRJAV7NZA6CGjL56jNX73W
-         MbE3JNRLtv1wKLdFBMBhF7woQH3/WI9IBxhtdFERav6C3uQ1qdnZX02d1jF/HdFxg3y9
-         0A3Tc0PO94WOKLqBh2dr38pViAyHTziFkI5XRVF5QD+SSOBVan+hWJiUE3PG7r63AKf+
-         LxiG7zoVlYH2ZUeIEP2b39xdVh56vpccNXI/fyH7I1hS98qGOPNpjU6exwWj9GuAv9Q9
-         nxSs/PNXQps+YF5c1RaQxzvOGgaChEr2o6X9ZyR0iHVYPg1h74dPE6uzkerFWV0AJgS3
-         S3CA==
-X-Gm-Message-State: AOAM533bEJriNnZ33s1bmGhR/eYJduPYUvSIKGlOnsdo+XbdRN8sDgcP
-        TdCQiSz0xaDZ4iLlxUPpbbliDQjOWs21BBWzIpI=
-X-Google-Smtp-Source: ABdhPJyfmfZEIsyG6RM9aPwpCdyCsqYhqtBZg/XU9g0EImsIbaZJa4T9PtaA/s6KvzGLSkuXzN89+rCyWiE2pyGr4Fo=
-X-Received: by 2002:a25:e0d3:0:b0:63d:c615:afb8 with SMTP id
- x202-20020a25e0d3000000b0063dc615afb8mr8436525ybg.182.1649299991734; Wed, 06
- Apr 2022 19:53:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M7QuqGXibgOQy0pEz/HDPB8sGsU+FPSqjY3hnu+QJvQ=;
+        b=ez18im5gNOWamp+pPz55hQLTA6wrATBzjNnSsaga6p0GDswz5W2DuGZJc1a6cPpT4O
+         spi3oY7MRA6sTrNT5xFJVp4NMQ4eisGu2WNj8DymJY0d+UJNZlz7K0Fq1zd91RULTaFb
+         QLrlMuf0euRLTulOnjGgbdNR5zl2rcozXzGYgVwoNKYAYeH2RYzT56Oms2C3FOTlcmOH
+         taWLCxDoyJJprNeS59SR+fTBfd7vYVS1VSKxySzhQruHd640jZOyLOr+ZOviZWTNZxr5
+         5dP7CZpTATJoxvRD3z2KQoKWBasNF5KTSEofHyFBrtc/lV5zKg2XIdnQxPumj6IeyNlC
+         iWUQ==
+X-Gm-Message-State: AOAM530jTCWW5+aSS5cyLCPjiX953olkGG2B/TZX4HvNjvYKYfespnIo
+        4Jupiz1D+fyLOb3vh/64d1bUskgzhLo=
+X-Google-Smtp-Source: ABdhPJyMneW8CmB/Y7VLqcqrpNOq+Sj2iQlxd7q/+ro1SXTmN3yptfKqg8/lskBjKh65YWmv0toRyw==
+X-Received: by 2002:a17:906:b157:b0:6d0:9f3b:a6aa with SMTP id bt23-20020a170906b15700b006d09f3ba6aamr11135532ejb.365.1649300073244;
+        Wed, 06 Apr 2022 19:54:33 -0700 (PDT)
+Received: from anparri (host-87-11-75-174.retail.telecomitalia.it. [87.11.75.174])
+        by smtp.gmail.com with ESMTPSA id qp27-20020a170907207b00b006e66a4e924bsm5707995ejb.201.2022.04.06.19.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 19:54:32 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 04:54:25 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] Drivers: hv: vmbus: Remove special code for
+ unsolicited messages
+Message-ID: <20220407025425.GA32474@anparri>
+References: <20220328144244.100228-1-parri.andrea@gmail.com>
+ <20220328144244.100228-2-parri.andrea@gmail.com>
 MIME-Version: 1.0
-References: <20220404155557.27316-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220404155557.27316-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 7 Apr 2022 03:52:45 +0100
-Message-ID: <CA+V-a8tM3EiZkNSCG+CtrOnfGBc5WSaac__FBsRn72zrsjQ2ew@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] dmaengine: Use platform_get_irq*() variants to
- fetch IRQ's
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220328144244.100228-2-parri.andrea@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,48 +81,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+On Mon, Mar 28, 2022 at 04:42:41PM +0200, Andrea Parri (Microsoft) wrote:
+> vmbus_requestor has included code for handling unsolicited messages
+> since its introduction with commit e8b7db38449ac ("Drivers: hv: vmbus:
+> Add vmbus_requestor data structure for VMBus hardening"); such code was
+> motivated by the early use of vmbus_requestor from storvsc.  Since
+> storvsc moved to a tag-based mechanism to generate/retrieve request IDs
+> with commit bf5fd8cae3c8f ("scsi: storvsc: Use blk_mq_unique_tag() to
+> generate requestIDs"), the special handling of unsolicited messages in
+> vmbus_requestor is not useful and can be removed.
 
-On Mon, Apr 4, 2022 at 4:56 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Hi All,
->
-> This patch series aims to drop using platform_get_resource() for IRQ types
-> in preparation for removal of static setup of IRQ resource from DT core
-> code.
->
-Fyi.. the OF core changes have landed into -next [0].
+As it turns out, this is not quite right.  In particular...
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220406&id=a1a2b7125e1079cfcc13a116aa3af3df2f9e002b
 
-Cheers,
-Prabhakar
+> @@ -1243,11 +1243,7 @@ u64 vmbus_next_request_id(struct vmbus_channel *channel, u64 rqst_addr)
+>  
+>  	spin_unlock_irqrestore(&rqstor->req_lock, flags);
+>  
+> -	/*
+> -	 * Cannot return an ID of 0, which is reserved for an unsolicited
+> -	 * message from Hyper-V.
+> -	 */
+> -	return current_id + 1;
+> +	return current_id;
 
-> Dropping usage of platform_get_resource() was agreed based on
-> the discussion [0].
->
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
-> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> Changes for v3:
-> * Included Ack from Andy.
->
-> Cheers,
-> Prabhakar
->
-> Lad Prabhakar (3):
->   dmaengine: nbpfaxi: Use platform_get_irq_optional() to get the
->     interrupt
->   dmaengine: mediatek: mtk-hsdma: Use platform_get_irq() to get the
->     interrupt
->   dmaengine: mediatek-cqdma: Use platform_get_irq() to get the interrupt
->
->  drivers/dma/mediatek/mtk-cqdma.c | 12 ++++--------
->  drivers/dma/mediatek/mtk-hsdma.c | 11 ++++-------
->  drivers/dma/nbpfaxi.c            | 14 ++++++--------
->  3 files changed, 14 insertions(+), 23 deletions(-)
->
-> --
-> 2.17.1
->
+Hyper-V treats requests with ID of 0 as "non-transactional" and it does
+not respond to such requests.
+
+
+> @@ -1268,15 +1264,8 @@ u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id)
+>  	if (!channel->rqstor_size)
+>  		return VMBUS_NO_RQSTOR;
+>  
+> -	/* Hyper-V can send an unsolicited message with ID of 0 */
+> -	if (!trans_id)
+> -		return trans_id;
+
+This remains problematic: I will elaborate and propose some solution in
+the next iteration (to be sent shortly).
+
+Thanks,
+  Andrea
+
+> -
+>  	spin_lock_irqsave(&rqstor->req_lock, flags);
+>  
+> -	/* Data corresponding to trans_id is stored at trans_id - 1 */
+> -	trans_id--;
+> -
+>  	/* Invalid trans_id */
+>  	if (trans_id >= rqstor->size || !test_bit(trans_id, rqstor->req_bitmap)) {
+>  		spin_unlock_irqrestore(&rqstor->req_lock, flags);

@@ -2,168 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882894F7EEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013DD4F7EF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241377AbiDGM3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S245106AbiDGM3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240927AbiDGM3E (ORCPT
+        with ESMTP id S245095AbiDGM3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:29:04 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD49527C0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:27:02 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id h19so5316802pfv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:27:02 -0700 (PDT)
+        Thu, 7 Apr 2022 08:29:41 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC57872459
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:27:38 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b15so6222708edn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:27:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e4vDhMzvy3YOkQ9zBYte/XQ0KAaKC9sgRay0l4XcsQ4=;
-        b=Bqewqm4sEfX65AFnOPS0H7hoOh025r+5pYa8XlINcT2djuUhGa6YdGxA9fbeqTDjyg
-         KNtHn/NyR4r8d1UtL+8HCu4ZpWyiP9m8nMNO03pun9+9VycNNhbAm+kV+OdaSmYBIG/2
-         hUS/5hyIarlKQ8/ItJ8HSwmZvo+skzd3cQqErxhDDrFnII7RLenCkb+HhEO7SUE8qZy7
-         a/KoPg3mdOYv/v1mngtLvR7tSu5EKLzMuaNP+yUg78pVzp8wra7ZbIL5ZZAhfuPOnJd9
-         n09rOzspRyLAXyB4z8aS6blEAkmGjgvVil66LuisUz6u+DUJA8sR4XtiZgfvc5dGa4KV
-         Q5oA==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=VRuoAIQ8VM7Z7lkjnKl30FJLKecdPI+AAj9EpsNSn2k=;
+        b=pjuzAXsmGUfimoqYqkuIDhQezqaFwxIutqB489Dv2Wm6p+bqikvsuLx0pRh5WRfKF0
+         xzqz+Rxa2d6UoA9YV2hYUMqzJ3rJ3BwpR5d10EhpJI7rMd0X3yRCj9H/XCPV26VohZyT
+         gXLwdemo1hExYlfRek+blr/0B9Sg02n87v+A/EtvANbahRzFqYdBVw3WLOFmLpMSh9ku
+         xczB7aP7A4m4WsvgbrY8y3z7yNpHX0ZNy4F/g5zZDmop9kvZF3DJkWtf8MLEFSzyLeWt
+         eKDpMnjYliQRoEEeNy0Xqzuv3TEAiYUXm3wORsCQynvBP1duaALpucL9HXfP7CSTIXLH
+         tFvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e4vDhMzvy3YOkQ9zBYte/XQ0KAaKC9sgRay0l4XcsQ4=;
-        b=jmsLhe015ofVkBJAI0//TWVO1/Pzy1C69sjpPVXPLOSuYOUOFtYhW2PULUARmVsAZQ
-         vd0YW274R8QGHAPMPJzcIkzm1PK4YH8sgxWVn73RclUD+/vAYkGneBKfVFOFnDBX1Zqw
-         m4gP3dGO1PK9eGVhgyYA+xcjsb3P+h5RJD2XEaQWrLaKUlEtzWh20/6s+yqlDkQ7PUDR
-         2Ewt75SFAxnFyUfiOqpOimNs5BAlci+5oU64Mx2bHQUJM0e8ZcR5B/Qh3/CDEUkznYfN
-         GZNgG/tbndjtHEQUljYqVjbj+4cqJ6yP60wl1SGWf9tBQzA0hWNXhG7LvB6ZkQoheTTX
-         k3Cg==
-X-Gm-Message-State: AOAM5330vV+iTN2AREy+EY7jZpx2LDhe05UNh6BYRd1crLfw6wgvumbp
-        c7CyPh8puFyhMGHVMiqFCKo=
-X-Google-Smtp-Source: ABdhPJwOlATfxqxS2ks4E6hH4T/LM8RgkhDLs8dUgp/0TaEV149xG1yRI4wgWT+SoUXPa+Z/j0poHw==
-X-Received: by 2002:a63:5317:0:b0:399:58e9:882b with SMTP id h23-20020a635317000000b0039958e9882bmr11120930pgb.306.1649334422001;
-        Thu, 07 Apr 2022 05:27:02 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id ay9-20020a056a00300900b004fae1346aa1sm20786357pfb.122.2022.04.07.05.26.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 05:27:00 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 21:26:53 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] mm/slab: Allow dynamic kmalloc() minimum alignment
-Message-ID: <Yk7YjeXDYRJwt7zb@hyeyoo>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-9-catalin.marinas@arm.com>
- <Yk5endPQFHc/pB1W@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <Yk6lz0UYyKIv5ibI@arm.com>
- <Yk6sWNBSwNRbLdfZ@hyeyoo>
- <Yk6wSNz38Bv1lrmB@arm.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=VRuoAIQ8VM7Z7lkjnKl30FJLKecdPI+AAj9EpsNSn2k=;
+        b=aGbvBduQYA8Vef+Pj/4D22SnISWjA/Puy1kmAHMxQ9L5OfC/1UGWUOMwF0Yv2CZqbg
+         zTIxaRRCcPKlqxwjq+5v3Tp2Srh/g+MGyAwEiMX3CLVTrSK8tj40Fcgv1+L5Sca3QC5V
+         y6Csxeay+U8afmlw0IcbiHJaJ9i28Dk63+c7vRpIxPlFUStPr1N6Jea2wNl9g1SmOijD
+         KlePMAky6vhRBdJAfu+AbeD71EpzHyxBdopKyvnsUL/2iHTRvR5ygAzSjt1KjJlBljW8
+         anNLI+WukrDfkRd3G1U3MEiHr1i2caPj+Lc4B4befP6B5ZZTEbpY4DR4YxaIP3Q1jPP0
+         Z/uQ==
+X-Gm-Message-State: AOAM532AudHAUWora9F8mZWB5TcilfGJEp64NKyqU5B47gDPN40ZG0lA
+        SZRh3ikcPnRf3Khj/qGznipYfksMKtp9xgub1aM=
+X-Google-Smtp-Source: ABdhPJw0Jqrrh7/d2QZPdCy+X/ZgkW51U3q/hqh4YEClrBeDkimwT6OirRgRyVtwDUG2wV87fTl/0HtTj+00K+kH6d4=
+X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
+ el4-20020a056402360400b0041cc4e62988mr13852621edb.157.1649334457045; Thu, 07
+ Apr 2022 05:27:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk6wSNz38Bv1lrmB@arm.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Thu, 7 Apr 2022 13:27:25 +0100
+Message-ID: <CAHpNFcM-uqvy7kTzdNjt9ipt4XVGKC4xyWbvxqGDYsxKORSsDQ@mail.gmail.com>
+Subject: Frame Buffer - Personally QFT  is a much more pleasurable experience
+ than VRR at 2xFPS+ Stable FPS & X-OR Partial Frame Retention saving on compression.
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:35:04AM +0100, Catalin Marinas wrote:
-> On Thu, Apr 07, 2022 at 06:18:16PM +0900, Hyeonggon Yoo wrote:
-> > On Thu, Apr 07, 2022 at 09:50:23AM +0100, Catalin Marinas wrote:
-> > > On Thu, Apr 07, 2022 at 03:46:37AM +0000, Hyeonggon Yoo wrote:
-> > > > On Tue, Apr 05, 2022 at 02:57:56PM +0100, Catalin Marinas wrote:
-> > > > > --- a/mm/slab_common.c
-> > > > > +++ b/mm/slab_common.c
-> > > > > @@ -838,9 +838,18 @@ void __init setup_kmalloc_cache_index_table(void)
-> > > > >  	}
-> > > > >  }
-> > > > >  
-> > > > > -static void __init
-> > > > > +unsigned int __weak arch_kmalloc_minalign(void)
-> > > > > +{
-> > > > > +	return ARCH_KMALLOC_MINALIGN;
-> > > > > +}
-> > > > > +
-> > > > 
-> > > > As ARCH_KMALLOC_ALIGN and arch_kmalloc_minalign() may not be same after
-> > > > patch 10, I think s/ARCH_KMALLOC_ALIGN/arch_kmalloc_minalign/g
-> > > > for every user of it would be more correct?
-> > > 
-> > > Not if the code currently using ARCH_KMALLOC_MINALIGN needs a constant.
-> > > Yes, there probably are a few places where the code can cope with a
-> > > dynamic arch_kmalloc_minalign() but there are two other cases where a
-> > > constant is needed:
-> > > 
-> > > 1. As a BUILD_BUG check because the code is storing some flags in the
-> > >    bottom bits of a pointer. A smaller ARCH_KMALLOC_MINALIGN works just
-> > >    fine here.
-> > > 
-> > > 2. As a static alignment for DMA requirements. That's where the newly
-> > >    exposed ARCH_DMA_MINALIGN should be used.
-> > > 
-> > > Note that this series doesn't make the situation any worse than before
-> > > since ARCH_DMA_MINALIGN stays at 128 bytes for arm64. Current users can
-> > > evolve to use a dynamic alignment in future patches. My main aim with
-> > > this series is to be able to create kmalloc-64 caches on arm64.
-> > 
-> > AFAIK there are bunch of drivers that directly calls kmalloc().
-> 
-> Well, lots of drivers call kmalloc() ;).
-> 
-> > It becomes tricky when e.g.) a driver allocates just 32 bytes,
-> > but architecture requires it to be 128-byte aligned.
-> 
-> That's the current behaviour, a 32 byte allocation would return an
-> object from kmalloc-128. I want to reduce this to at least kmalloc-64
-> (or smaller) if the CPU/SoC allows it.
+VecSR - Vector Standard Render
 
-Yeah I agree the change is worth :) Thanks for the work.
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
 
-> > That's why everything allocated from kmalloc() need to be aligned in
-> > ARCH_DMA_MINALIGN.
-> 
-> I don't get your conclusion here. Would you mind explaining?
+Vector Compression VESA Standard Display protocol 3 : RS
 
-What I wanted to say was that, why ARCH_DMA_MINALIGN should be
-different from ARCH_KMALLOC_MINALIGN.
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
 
-I thought the two were basically same thing. Instead of
-decoupling them, I thought just decreasing them in runtime makes more sense.
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
 
-> > So I'm yet skeptical on decoupling ARCH_DMA/KMALLOC_MINALIGN. Instead
-> > of decoupling it, I'm more into dynamically decreasing it.
-> 
-> The reason for decoupling is mostly that there are some static uses of
-> ARCH_KMALLOC_MINALIGN as per point 1 above. The other is the
-> __assume_kmalloc_alignment attribute. We shouldn't have such assumed
-> alignment larger than what a dynamic kmalloc() would return. To me it
-> makes a lot more sense for ARCH_KMALLOC_MINALIGN to be the minimum
-> guaranteed in a kernel build but kmalloc() returning a larger alignment
-> at run-time than the other way around.
+Improve Console & TV & BIOS & General Animated Render
 
-But yeah, considering the problems you mentioned, it seems unavoidable
-to decouple them.
+*
+Vector Compression VESA Standard Display protocol 3 +
+DSC : Zero compression or low level compression version of DSC
+1.2bc
 
-Thank you for explanation and I will review slab part soon.
+Frame by Frame compression with vector prediction.
 
-> Thanks.
-> 
-> -- 
-> Catalin
+Personally QFT  is a much more pleasurable experience than VRR at 2xFPS+
+Stable FPS & X-OR Partial Frame Retention saving on compression.
 
--- 
-Thanks,
-Hyeonggon
+X-OR Frame Buffer Compression & Blank Space Compression:
+
+X-OR X=3D1 New Data & X=3D0 being not sent,
+Therefore Masking the frame buffer,
+
+A Frame buffer needs a cleared aria; A curve or ellipsoid for example,
+Draw the ellipsoid; This is the mask & can be in 3 levels:
+
+X-OR : Draw or not Draw Aria : Blitter XOR
+AND : Draw 1 Value & The other : Blitter Additive
+Variable Value Resistor : Draw 1 Value +- The other : Blitter + or - Modifi=
+er
+*
+
+Vector Compression VESA Standard Display protocol 3 : RS
+
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+Personally QFT  is a much more pleasurable experience than VRR at 2xFPS+
+Stable FPS & X-OR Partial Frame Retention saving on compression.
+
+"QFT a Zero compression or low level compression version of DSC
+1.2bc
+
+X-OR Frame Buffer Compression & Blank Space Compression:
+Vector Compression VESA Standard Display protocol 3"
+
+"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
+latency=E2=80=9D, which is the amount of time between a frame being ready f=
+or
+transport in the GPU and that frame being completely displayed. This
+latency is the sum of the transport time through the source=E2=80=99s outpu=
+t
+circuits, the transport time across the interface, the processing of
+the video data in the display, and the painting of the screen with the
+new data. This overall latency affects the responsiveness of games:
+how long it appears between a button is pressed to the time at which
+the resultant action is observed on the screen.
+
+
+While there are a lot of variables in this equation, not many are
+adjustable from an HDMI specification perspective. QFT operates on the
+transport portion of this equation by reducing the time it takes to
+send only the active video across the cable. This results in reduced
+display latency and increased responsiveness."
+*
+
+(c)Rupert S
+
+Include vector today *important* RS
+https://vesa.org/vesa-display-compression-codecs/
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
+ml
+
+https://bit.ly/VESA_BT
+*
+
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
+
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential=
+.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+*
+
+VecSR is really good for secondary loading of sprites & text; In these
+terms very good for pre loading on for example the X86, RISC, AMIGA &
+Famicon type devices,
+With appropriate loading into Sprite buffers or Emulated Secondaries
+(Special Animations) or Font Buffers.
+
+Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
+with Integer & Emulated Float (Library); Traditional BitMap fonts work
+well in a Set Size & can resize well if cached!
+
+The full process leads upto the terminal & how to optimise CON,
+We can & will need to exceed capacities of any system & To improve them!
+
+presenting: Dev-Con-VectorE=C2=B2
+Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
+Class VESA Console +
+
+With Console in VecSR you can 3DText & Audio,
+
+VecSR Firmware update 2022 For immediate implementation in all
+operating systems & ROM's
+
+Potential is fast & useful.
+
+*
+
+https://science.n-helix.com/2022/04/vecsr.html

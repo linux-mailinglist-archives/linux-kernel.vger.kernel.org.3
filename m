@@ -2,184 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927144F7A9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B78D4F7AA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243475AbiDGJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S243483AbiDGJAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243372AbiDGJA0 (ORCPT
+        with ESMTP id S243477AbiDGJAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:00:26 -0400
-Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F151C90E2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:58:24 -0700 (PDT)
-Received: (qmail 18008 invoked by uid 989); 7 Apr 2022 08:58:21 -0000
-Authentication-Results: euporie.uberspace.de;
-        auth=pass (plain)
-From:   Florian Fischer <florian.fischer@muhq.space>
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Florian Schmaus <flow@cs.fau.de>,
-        Florian Fischer <florian.fischer@muhq.space>
-Subject: [PATCH v3 3/3] perf list: print all available tool events
-Date:   Thu,  7 Apr 2022 10:57:21 +0200
-Message-Id: <20220407085721.3289414-4-florian.fischer@muhq.space>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407085721.3289414-1-florian.fischer@muhq.space>
-References: <69656438-8b9a-000b-0702-02dc480639f9@linux.intel.com>
- <20220407085721.3289414-1-florian.fischer@muhq.space>
+        Thu, 7 Apr 2022 05:00:37 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E22229E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:58:37 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id i15so4520317qvh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 01:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5q8e6XxMP1O+ZGeFqgGhcMctHwiGO0fBPY6X3hC/BVg=;
+        b=hmbvr9DWzT6zlFqxQW8VVfwhnQoRbIWMczAwEsFo7jkYdziGIr4AJnnBn+xK5czmsW
+         h2qMfABv8pEZrISXIOPxW70Cj1Dqw/gj17iByJ0DgbVlxw05W5/umNzgYkEtp8XLQKAD
+         3+kMwes3WgOP0ndyudMXNACpP6u9jT/vY8Ng2AJJKl2KjhOFrXEeAtCr0yJxpB6DAo1E
+         kMJ38GMUrF9JWd21N6yJ9o2BcJnLKi5vPp0oCRe3ZS9tyWenjVhVVfejfHZCJD9Fy7E6
+         ePr1w7yH8VD7xxxbK7EOwvIJ1gR6M1y9BoyGKXKdyspnyC2lHnE//MiwYNAdGutD/yPz
+         ub9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5q8e6XxMP1O+ZGeFqgGhcMctHwiGO0fBPY6X3hC/BVg=;
+        b=pHAd17snG6ixRycyjadDRILiDvRjaaR+RkE0sDvosBbvVV7mVkiEplfuVWFatoLYmn
+         o9BvKCPmtEvvc8p3sp0i9SvTFWaRKvyk1bNy+X1jFb0OOGHCqncjmMEJkSPpdbuoq1pl
+         zmPjRgOSHhdZaFX/P6omHb5f3HOjlwb/HyPwyaDVBd4u5HCtTIu662XrrNPpqru6rKO8
+         lPAqm+7bCGOXLHm1elZ40tnPKD7XU5/Xouv48jsIFanmE3WW+sUuR1uZBlOqjXsoSvAn
+         bj6kZQnbX+broJYxcb1v0D6SVJYHTj05TTV8RJEe1vjD/a9dtwdjMAHE/SZJdxilZAAl
+         rxqQ==
+X-Gm-Message-State: AOAM533H1wQSL7SJqKgtCkq1HaskG/ajdgXDpSFVv/xE2vra9/JjHUxj
+        EWXqFmsMxAEu0ozaF3yTxAiPuo9fmSc=
+X-Google-Smtp-Source: ABdhPJwjJIS1cgmsxd1nt3tv416VuFqE22d1BwQDlq2EBl7KnCUyX7xM89R++RLf/vhRbK5r3pFs/Q==
+X-Received: by 2002:a05:6214:1bcb:b0:441:759e:84b9 with SMTP id m11-20020a0562141bcb00b00441759e84b9mr10815383qvc.19.1649321916264;
+        Thu, 07 Apr 2022 01:58:36 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 22-20020ac85756000000b002e1cabad999sm15878977qtx.89.2022.04.07.01.58.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 01:58:35 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] clocksource/drivers/timer-ti-dm: fix missing of_node_put
+Date:   Thu,  7 Apr 2022 08:58:29 +0000
+Message-Id: <20220407085829.2491655-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: -----
-X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) REPLY(-4) MID_CONTAINS_FROM(1) BAYES_HAM(-2.852212)
-X-Rspamd-Score: -5.452212
-Received: from unknown (HELO unkown) (::1)
-        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Thu, 07 Apr 2022 10:58:21 +0200
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce names and aliases for the new tool events 'rusage_user_time'
-and 'rusage_system_time'.
----
- tools/perf/util/evsel.c        | 19 ++++++++++------
- tools/perf/util/evsel.h        |  1 +
- tools/perf/util/parse-events.c | 40 +++++++++++++++++++++++++++++-----
- 3 files changed, 47 insertions(+), 13 deletions(-)
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 2a1729e7aee4..26cf7e76698b 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -597,6 +597,17 @@ static int evsel__sw_name(struct evsel *evsel, char *bf, size_t size)
- 	return r + evsel__add_modifiers(evsel, bf + r, size - r);
- }
+of_find_compatible_node returns node pointer with refcount incremented,
+use of_node_put() on it when done.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/clocksource/timer-ti-dm-systimer.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
+index 2737407ff069..a58df7749db3 100644
+--- a/drivers/clocksource/timer-ti-dm-systimer.c
++++ b/drivers/clocksource/timer-ti-dm-systimer.c
+@@ -691,9 +691,11 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
+ 	arm_timer = of_find_compatible_node(NULL, NULL, "arm,armv7-timer");
+ 	if (of_device_is_available(arm_timer)) {
+ 		pr_warn_once("ARM architected timer wrap issue i940 detected\n");
++		of_node_put(arm_timer);
+ 		return 0;
+ 	}
  
-+const char *evsel__tool_names[PERF_TOOL_LAST] = {
-+	"duration_time",
-+	"rusage_user_time",
-+	"rusage_system_time",
-+};
-+
-+static int evsel__tool_name(enum perf_tool_event ev, char *bf, size_t size)
-+{
-+	return scnprintf(bf, size, "%s", evsel__tool_names[ev]);
-+}
-+
- static int __evsel__bp_name(char *bf, size_t size, u64 addr, u64 type)
- {
- 	int r;
-@@ -723,12 +734,6 @@ static int evsel__raw_name(struct evsel *evsel, char *bf, size_t size)
- 	return ret + evsel__add_modifiers(evsel, bf + ret, size - ret);
- }
- 
--static int evsel__tool_name(char *bf, size_t size)
--{
--	int ret = scnprintf(bf, size, "duration_time");
--	return ret;
--}
--
- const char *evsel__name(struct evsel *evsel)
- {
- 	char bf[128];
-@@ -754,7 +759,7 @@ const char *evsel__name(struct evsel *evsel)
- 
- 	case PERF_TYPE_SOFTWARE:
- 		if (evsel->tool_event)
--			evsel__tool_name(bf, sizeof(bf));
-+			evsel__tool_name(evsel->tool_event, bf, sizeof(bf));
- 		else
- 			evsel__sw_name(evsel, bf, sizeof(bf));
- 		break;
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index e89b1224ae61..2adb97383952 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -261,6 +261,7 @@ extern const char *evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALI
- extern const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES];
- extern const char *evsel__hw_names[PERF_COUNT_HW_MAX];
- extern const char *evsel__sw_names[PERF_COUNT_SW_MAX];
-+extern const char *evsel__tool_names[PERF_TOOL_LAST];
- extern char *evsel__bpf_counter_events;
- bool evsel__match_bpf_counter_events(const char *name);
- 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index e9d3d4404ea6..c232ab79d434 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -154,6 +154,21 @@ struct event_symbol event_symbols_sw[PERF_COUNT_SW_MAX] = {
- 	},
- };
- 
-+struct event_symbol event_symbols_tool[PERF_TOOL_LAST] = {
-+	[PERF_TOOL_DURATION_TIME] = {
-+		.symbol = "duration_time",
-+		.alias  = "",
-+	},
-+	[PERF_TOOL_RU_UTIME] = {
-+		.symbol = "rusage_user_time",
-+		.alias  = "ru_utime",
-+	},
-+	[PERF_TOOL_RU_STIME] = {
-+		.symbol = "rusage_system_time",
-+		.alias  = "ru_stime",
-+	},
-+};
-+
- #define __PERF_EVENT_FIELD(config, name) \
- 	((config & PERF_EVENT_##name##_MASK) >> PERF_EVENT_##name##_SHIFT)
- 
-@@ -3057,21 +3072,34 @@ int print_hwcache_events(const char *event_glob, bool name_only)
- 	return evt_num;
- }
- 
--static void print_tool_event(const char *name, const char *event_glob,
-+static void print_tool_event(const struct event_symbol *syms, const char *event_glob,
- 			     bool name_only)
- {
--	if (event_glob && !strglobmatch(name, event_glob))
-+	if (syms->symbol == NULL)
-+		return;
-+
-+	if (event_glob && !(strglobmatch(syms->symbol, event_glob) ||
-+	      (syms->alias && strglobmatch(syms->alias, event_glob))))
- 		return;
-+
- 	if (name_only)
--		printf("%s ", name);
--	else
-+		printf("%s ", syms->symbol);
-+	else {
-+		char name[MAX_NAME_LEN];
-+		if (syms->alias)
-+			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
-+		else
-+			strlcpy(name, syms->symbol, MAX_NAME_LEN);
- 		printf("  %-50s [%s]\n", name, "Tool event");
--
-+	}
- }
- 
- void print_tool_events(const char *event_glob, bool name_only)
- {
--	print_tool_event("duration_time", event_glob, name_only);
-+	// Start at 1 because the first enum entry symbols no tool event
-+	for (int i = 0; i < PERF_TOOL_LAST; ++i) {
-+		print_tool_event(event_symbols_tool + i, event_glob, name_only);
-+	}
- 	if (pager_in_use())
- 		printf("\n");
- }
++	of_node_put(arm_timer);
+ 	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
+ 		return dmtimer_percpu_timer_init(np, 0);
+ 	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
 -- 
-2.35.1
+2.25.1
 

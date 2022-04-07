@@ -2,222 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C47F4F7E7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F164F7E80
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243580AbiDGL5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S239155AbiDGL6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbiDGL5D (ORCPT
+        with ESMTP id S235022AbiDGL6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:57:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCAF1C60CA;
-        Thu,  7 Apr 2022 04:55:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DFBB0210DF;
-        Thu,  7 Apr 2022 11:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649332499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TmJu1bnEAMh5pbHkvMLNhGJCq6uUbOv6A+Hs8FTA6Yc=;
-        b=QVWCoPQuwb1k6e0tUsR7Ai53R5YG2BOaLDZGWn6n/F6y+vLXUorF39TAQoNl9zyfUfF/aF
-        NIFhd5lG+hlB5J07/9dEAe+yFWViXNmxQdZSMZDALJnxiroMYhomiLwHmdMN+uCWaVZ8wB
-        ze3mYBkGwmLO32SEC7je+bMin80cR9M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649332499;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TmJu1bnEAMh5pbHkvMLNhGJCq6uUbOv6A+Hs8FTA6Yc=;
-        b=UfAU6GOIAHWUsULz1IyM5Sns/azTmnLVjUYktdI9vv2TGVwHmHeYEm0v+J53GpNFz9qjiP
-        Tr4hvmSo+lGsI/BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8848513A66;
-        Thu,  7 Apr 2022 11:54:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZlhdHhPRTmI8ewAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 07 Apr 2022 11:54:59 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id b8590e82;
-        Thu, 7 Apr 2022 11:55:22 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted
- inodes
-References: <20220401133243.1075-1-lhenriques@suse.de>
-        <d6407dd1-b6df-4de4-fe37-71b765b2088a@redhat.com>
-        <878rsia391.fsf@brahms.olymp>
-        <6ba91390-83e8-8702-2729-dc432abd3cc5@redhat.com>
-        <87zgky8n0o.fsf@brahms.olymp>
-        <6306fba71325483a1ea22fa73250c8777ea647d7.camel@kernel.org>
-        <321104e6-36db-c143-a7ba-58f9199e6fb7@redhat.com>
-        <f0ed169ed02fe810076e959e9ec5455d9de4b4ff.camel@kernel.org>
-        <7023b537-e7b6-0dd9-42bf-9d601ef69b58@redhat.com>
-Date:   Thu, 07 Apr 2022 12:55:22 +0100
-In-Reply-To: <7023b537-e7b6-0dd9-42bf-9d601ef69b58@redhat.com> (Xiubo Li's
-        message of "Thu, 7 Apr 2022 09:17:40 +0800")
-Message-ID: <87pmlt85w5.fsf@brahms.olymp>
+        Thu, 7 Apr 2022 07:58:34 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD6147ACD
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 04:56:30 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e1dcc0a327so6093285fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 04:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LoNJyQ9i7p9EmUWA3T7gto6j9HpcpbaFgL9mxYK2vi0=;
+        b=c59uRjC89onHqXp7pfqBNuJzt16ZqqwD3qw108yHuG0zwUe7z+kEyAQ6kAKT/sANRk
+         8B5R6JpfKscpAlwdIqvR8mmLmj5KoRQDwwtZ0ZcTVd1wNNhbpBprPL0PqThG1qRONVK4
+         DFlMiIJME/azHjdAPBtMo6tc3UVzXnKcInPQwOSYGW030sbFLze4PcIbmaH3tSrbPbqD
+         7grKCWsOdEc862M7yxsL6AlOtreITnSnCfWFl20LUMJH9puWt/2drEUDrhkLwJ0m47Rj
+         OoaGT2loAeV8ESZjCKo6f+MEO2s1hQCFSp6wBwSgH0xnc6HugFOTsmFW6mnEiMYleizR
+         hv8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LoNJyQ9i7p9EmUWA3T7gto6j9HpcpbaFgL9mxYK2vi0=;
+        b=N2Lj/nh8QesV9EyDGwBRTOAXQSCYI1K6SpzHVVjzQVumHnUymh+472vOhUTpvQE6lB
+         wtly+lhyiq5H9GpZIdHFNbQPxQwSTD9h6NpseKd5UTy3k9V4ykAVgfIx6h2qFoZ0XgYb
+         xuYoTKLoGhYIHQ0btSzeV+TqlvHEBVZlrPZIFBWuwD7PoPl5YXcQk2ULu+MwCkX7k+Dc
+         D0iNNdtwKI9WQ4CLsgX5+kSZJ5fsqbqWPDlbH4Z6su9xLcLCCtwnoR8MeyOSbmmR8d5w
+         fCdM6C9iFn4Y/XwAzpekkpHSv35yUajtQF7YmSd/lzxQvDdSAKUSD3iOFOxWnrdRxTkI
+         X23w==
+X-Gm-Message-State: AOAM532byvllwg3vVWxebW/ZbQQHygMXRTQr/7tHNUAO2Dywbzxtq2+k
+        r14qKzv3OdtsKq5eAufTy8XySMmli3+eEaKp
+X-Google-Smtp-Source: ABdhPJzzS0lc63FgTUKSt/2ZASb12eQDkWyoVdMJsqKvtCIJHsNLKrKxpg8TERXrzzOC7j5iRBZ1bw==
+X-Received: by 2002:a05:6870:6192:b0:e1:dcc4:e0e8 with SMTP id a18-20020a056870619200b000e1dcc4e0e8mr6298605oah.58.1649332589872;
+        Thu, 07 Apr 2022 04:56:29 -0700 (PDT)
+Received: from fedora.. ([2804:14d:8084:84c6:2e13:8e30:84f7:1597])
+        by smtp.gmail.com with ESMTPSA id m2-20020a9d4002000000b005e6b6ed9001sm151420ote.60.2022.04.07.04.56.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 04:56:29 -0700 (PDT)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+To:     lars@metafoo.de, michael.hennerich@analog.com, jic23@kernel.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
+Subject: [PATCH v2] iio: ad7266: convert probe to full device-managed
+Date:   Thu,  7 Apr 2022 08:56:21 -0300
+Message-Id: <20220407115621.10781-1-maira.canal@usp.br>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+Convert probe functions to device-managed variants, with exception of
+the regulator, which required a devm_add_action_or_reset() hook
+registration.
 
-> On 4/6/22 9:41 PM, Jeff Layton wrote:
->> On Wed, 2022-04-06 at 21:10 +0800, Xiubo Li wrote:
->>> On 4/6/22 7:48 PM, Jeff Layton wrote:
->>>> On Wed, 2022-04-06 at 12:33 +0100, Lu=C3=ADs Henriques wrote:
->>>>> Xiubo Li <xiubli@redhat.com> writes:
->>>>>
->>>>>> On 4/6/22 6:57 PM, Lu=C3=ADs Henriques wrote:
->>>>>>> Xiubo Li <xiubli@redhat.com> writes:
->>>>>>>
->>>>>>>> On 4/1/22 9:32 PM, Lu=C3=ADs Henriques wrote:
->>>>>>>>> When doing DIO on an encrypted node, we need to invalidate the pa=
-ge cache in
->>>>>>>>> the range being written to, otherwise the cache will include inva=
-lid data.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->>>>>>>>> ---
->>>>>>>>>      fs/ceph/file.c | 11 ++++++++++-
->>>>>>>>>      1 file changed, 10 insertions(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> Changes since v1:
->>>>>>>>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages=
-2_range
->>>>>>>>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're d=
-oing DIO
->>>>>>>>>
->>>>>>>>> Note: I'm not really sure this last change is required, it doesn'=
-t really
->>>>>>>>> affect generic/647 result, but seems to be the most correct.
->>>>>>>>>
->>>>>>>>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->>>>>>>>> index 5072570c2203..b2743c342305 100644
->>>>>>>>> --- a/fs/ceph/file.c
->>>>>>>>> +++ b/fs/ceph/file.c
->>>>>>>>> @@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct =
-iov_iter *from, loff_t pos,
->>>>>>>>>      	if (ret < 0)
->>>>>>>>>      		return ret;
->>>>>>>>>      -	ceph_fscache_invalidate(inode, false);
->>>>>>>>> +	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
->>>>>>>>>      	ret =3D invalidate_inode_pages2_range(inode->i_mapping,
->>>>>>>>>      					    pos >> PAGE_SHIFT,
->>>>>>>>>      					    (pos + count - 1) >> PAGE_SHIFT);
->>>>>>>> The above has already invalidated the pages, why doesn't it work ?
->>>>>>> I suspect the reason is because later on we loop through the number=
- of
->>>>>>> pages, call copy_page_from_iter() and then ceph_fscrypt_encrypt_pag=
-es().
->>>>>> Checked the 'copy_page_from_iter()', it will do the kmap for the pag=
-es but will
->>>>>> kunmap them again later. And they shouldn't update the i_mapping if =
-I didn't
->>>>>> miss something important.
->>>>>>
->>>>>> For 'ceph_fscrypt_encrypt_pages()' it will encrypt/dencrypt the cont=
-ext inplace,
->>>>>> IMO if it needs to map the page and it should also unmap it just lik=
-e in
->>>>>> 'copy_page_from_iter()'.
->>>>>>
->>>>>> I thought it possibly be when we need to do RMW, it may will update =
-the
->>>>>> i_mapping when reading contents, but I checked the code didn't find =
-any
->>>>>> place is doing this. So I am wondering where tha page caches come fr=
-om ? If that
->>>>>> page caches really from reading the contents, then we should discard=
- it instead
->>>>>> of flushing it back ?
->>>>>>
->>>>>> BTW, what's the problem without this fixing ? xfstest fails ?
->>>>> Yes, generic/647 fails if you run it with test_dummy_encryption.  And=
- I've
->>>>> also checked that the RMW code was never executed in this test.
->>>>>
->>>>> But yeah I have assumed (perhaps wrongly) that the kmap/kunmap could
->>>>> change the inode->i_mapping.
->>>>>
->>>> No, kmap/unmap are all about high memory and 32-bit architectures. Tho=
-se
->>>> functions are usually no-ops on 64-bit arches.
->>> Yeah, right.
->>>
->>> So they do nothing here.
->>>
->>>>> In my debugging this seemed to be the case
->>>>> for the O_DIRECT path.  That's why I added this extra call here.
->>>>>
->>>> I agree with Xiubo that we really shouldn't need to invalidate multiple
->>>> times.
->>>>
->>>> I guess in this test, we have a DIO write racing with an mmap read
->>>> Probably what's happening is either that we can't invalidate the page
->>>> because it needs to be cleaned, or the mmap read is racing in just aft=
-er
->>>> the invalidate occurs but before writeback.
->>> This sounds a possible case.
->>>
->>>
->>>> In any case, it might be interesting to see whether you're getting
->>>> -EBUSY back from the new invalidate_inode_pages2 calls with your patch.
->>>>
->>> If it's really this case maybe this should be retried some where ?
->>>
->> Possibly, or we may need to implement ->launder_folio.
->>
->> Either way, we need to understand what's happening first and then we can
->> figure out a solution for it.
->
-> Yeah, make sense.
->
+Reviewed-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+Signed-off-by: Maíra Canal <maira.canal@usp.br>
+---
+ drivers/iio/adc/ad7266.c | 44 +++++++++++++---------------------------
+ 1 file changed, 14 insertions(+), 30 deletions(-)
 
-OK, so here's what I got so far:
+diff --git a/drivers/iio/adc/ad7266.c b/drivers/iio/adc/ad7266.c
+index c17d9b5fbaf6..f20d39f0bc01 100644
+--- a/drivers/iio/adc/ad7266.c
++++ b/drivers/iio/adc/ad7266.c
+@@ -378,6 +378,11 @@ static const char * const ad7266_gpio_labels[] = {
+ 	"ad0", "ad1", "ad2",
+ };
+ 
++static void ad7266_reg_disable(void *reg)
++{
++	regulator_disable(reg);
++}
++
+ static int ad7266_probe(struct spi_device *spi)
+ {
+ 	struct ad7266_platform_data *pdata = spi->dev.platform_data;
+@@ -398,9 +403,13 @@ static int ad7266_probe(struct spi_device *spi)
+ 		if (ret)
+ 			return ret;
+ 
++		ret = devm_add_action_or_reset(&spi->dev, ad7266_reg_disable, st->reg);
++		if (ret)
++			return ret;
++
+ 		ret = regulator_get_voltage(st->reg);
+ 		if (ret < 0)
+-			goto error_disable_reg;
++			return ret;
+ 
+ 		st->vref_mv = ret / 1000;
+ 	} else {
+@@ -423,7 +432,7 @@ static int ad7266_probe(struct spi_device *spi)
+ 						      GPIOD_OUT_LOW);
+ 				if (IS_ERR(st->gpios[i])) {
+ 					ret = PTR_ERR(st->gpios[i]);
+-					goto error_disable_reg;
++					return ret;
+ 				}
+ 			}
+ 		}
+@@ -433,7 +442,6 @@ static int ad7266_probe(struct spi_device *spi)
+ 		st->mode = AD7266_MODE_DIFF;
+ 	}
+ 
+-	spi_set_drvdata(spi, indio_dev);
+ 	st->spi = spi;
+ 
+ 	indio_dev->name = spi_get_device_id(spi)->name;
+@@ -459,35 +467,12 @@ static int ad7266_probe(struct spi_device *spi)
+ 	spi_message_add_tail(&st->single_xfer[1], &st->single_msg);
+ 	spi_message_add_tail(&st->single_xfer[2], &st->single_msg);
+ 
+-	ret = iio_triggered_buffer_setup(indio_dev, &iio_pollfunc_store_time,
++	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev, &iio_pollfunc_store_time,
+ 		&ad7266_trigger_handler, &iio_triggered_buffer_setup_ops);
+ 	if (ret)
+-		goto error_disable_reg;
+-
+-	ret = iio_device_register(indio_dev);
+-	if (ret)
+-		goto error_buffer_cleanup;
+-
+-	return 0;
+-
+-error_buffer_cleanup:
+-	iio_triggered_buffer_cleanup(indio_dev);
+-error_disable_reg:
+-	if (!IS_ERR(st->reg))
+-		regulator_disable(st->reg);
+-
+-	return ret;
+-}
+-
+-static void ad7266_remove(struct spi_device *spi)
+-{
+-	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+-	struct ad7266_state *st = iio_priv(indio_dev);
++		return ret;
+ 
+-	iio_device_unregister(indio_dev);
+-	iio_triggered_buffer_cleanup(indio_dev);
+-	if (!IS_ERR(st->reg))
+-		regulator_disable(st->reg);
++	return devm_iio_device_register(&spi->dev, indio_dev);
+ }
+ 
+ static const struct spi_device_id ad7266_id[] = {
+@@ -502,7 +487,6 @@ static struct spi_driver ad7266_driver = {
+ 		.name	= "ad7266",
+ 	},
+ 	.probe		= ad7266_probe,
+-	.remove		= ad7266_remove,
+ 	.id_table	= ad7266_id,
+ };
+ module_spi_driver(ad7266_driver);
+-- 
+2.35.1
 
-When we run this test *without* test_dummy_encryption, ceph_direct_read_wri=
-te()
-will be called and invalidate_inode_pages2_range() will do pretty much
-nothing because the mapping will be empty (mapping_empty(inode->i_mapping)
-will return 1).  If we use encryption, ceph_sync_write() will be called
-instead and the mapping, obviously, be will be empty as well.
-
-The difference between in encrypted vs non-encrypted (and the reason the
-test passes without encryption) is that ceph_direct_read_write()
-(non-encrypted) will call truncate_inode_pages_range() at a stage where
-the mapping is not empty anymore (iter_get_bvecs_alloc will take care of
-that).  In the encryption path (ceph_sync_write) the mapping will be
-filled with copy_page_from_iter(), which will fault and do the read.
-Because we don't have the truncate_inode_pages_range(), the cache will
-contain invalid data after the write.  And that's why the extra
-invalidate_inode_pages2_range (or truncate_...) fixes this.
-
-Cheers,
---=20
-Lu=C3=ADs

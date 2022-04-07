@@ -2,172 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590A24F8A3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803BC4F8907
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiDGUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S230109AbiDGUif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 16:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiDGUgA (ORCPT
+        with ESMTP id S231467AbiDGUiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:36:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F09E33B014;
-        Thu,  7 Apr 2022 13:21:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40D4FB82919;
-        Thu,  7 Apr 2022 20:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9CAC385A0;
-        Thu,  7 Apr 2022 20:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649362904;
-        bh=aAhrXQxBRj4WNugGHY+9GVMQX5hwFeJidtueUCnQTWY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=S21Jjxx4Id4duGdsHAGpiBp6xSthobM0Z655f8ZcV8TV+g4EbBjXUanFbjlQXIAJE
-         ZRMq34Gjr7sHaSC0gZoN05RjbNTVs3NdWSxFgZAFHYzvRGhaL2e7Vg22YUvcjQwpEB
-         1gUkxUXgDmWR+0+RAYiBowrsKvztQCJW8THXnQm5oVJKXO2CYd6dXSfdjkgbrpasXc
-         rThRWF0jDfVzdvZHwLpAepiiEnggjv7TxDPgL2R9c0yxAnRPbOXDTpumXH1oFZ6//I
-         tqznmo6A3za+asTGahH988ut4Ow8NhbZPrRAZhIuRG5H3G8ha1VfGQOGv64LVw+C/o
-         1CYiPa1Gk/hiQ==
-Message-ID: <c211631e19e8ed9c57cdb65a540ca3a38180016a.camel@kernel.org>
-Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Xiubo Li <xiubli@redhat.com>,
-        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 07 Apr 2022 16:21:42 -0400
-In-Reply-To: <822cca41-f700-3cba-e2c8-d1fbe5a934b1@redhat.com>
-References: <20220407151521.7968-1-lhenriques@suse.de>
-         <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
-         <66740f5e59d52b600d5033a07b794b78dfaf3c18.camel@kernel.org>
-         <822cca41-f700-3cba-e2c8-d1fbe5a934b1@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 7 Apr 2022 16:38:01 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F36D34DDFE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ZmhjGD4Gf+IUqcQgcceHzoQg2ebz
+        QxX4zv7YKh1hyrQ=; b=adP7AhzdfYkfR+8nzw2XgKUxL7b7W7xmaIlQS2dOMPxx
+        /3EF2fWkk/0lVMrQWz2a3AILhGDEdM5Yge/c1uvZVvzQXTJrxIdutlx7SdXTRV3o
+        YJP/UCaJHzwK/ja018ZQWyJm7802llwOsx/PMLozlqFAT58A0N+iFfPWfg0N7Bk=
+Received: (qmail 3330740 invoked from network); 7 Apr 2022 22:24:42 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Apr 2022 22:24:42 +0200
+X-UD-Smtp-Session: l3s3148p1@7/eaRBbcCNAgAQnoAEUrAF1rv4rSPqUC
+Date:   Thu, 7 Apr 2022 22:24:41 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 01/10] mmc: core: improve API to make clear
+ mmc_hw_reset is for cards
+Message-ID: <Yk9IiQYpVBYfQPtT@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
+ <20220321115059.21803-2-wsa+renesas@sang-engineering.com>
+ <CAPDyKFqt8UUfGVHvpSX5ciP7qJReTYed=sffCGWPP9psS3vC_w@mail.gmail.com>
+ <Yk1INkxW/i5p8yxf@ninjato>
+ <CAPDyKFo5aO-s13sP4MyjZgP-w+1Bmd59a-o+t3pVA+NgKoCHGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QSTKF3Skeos30Uyc"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFo5aO-s13sP4MyjZgP-w+1Bmd59a-o+t3pVA+NgKoCHGg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 03:24 +0800, Xiubo Li wrote:
-> On 4/8/22 3:16 AM, Jeff Layton wrote:
-> > On Fri, 2022-04-08 at 03:03 +0800, Xiubo Li wrote:
-> > > On 4/7/22 11:15 PM, Luís Henriques wrote:
-> > > > When doing a direct/sync write, we need to invalidate the page cache in
-> > > > the range being written to.  If we don't do this, the cache will include
-> > > > invalid data as we just did a write that avoided the page cache.
-> > > > 
-> > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > > > ---
-> > > >    fs/ceph/file.c | 19 ++++++++++++++-----
-> > > >    1 file changed, 14 insertions(+), 5 deletions(-)
-> > > > 
-> > > > Changes since v3:
-> > > > - Dropped initial call to invalidate_inode_pages2_range()
-> > > > - Added extra comment to document invalidation
-> > > > 
-> > > > Changes since v2:
-> > > > - Invalidation needs to be done after a write
-> > > > 
-> > > > Changes since v1:
-> > > > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
-> > > > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
-> > > > 
-> > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> > > > index 5072570c2203..97f764b2fbdd 100644
-> > > > --- a/fs/ceph/file.c
-> > > > +++ b/fs/ceph/file.c
-> > > > @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> > > >    		return ret;
-> > > >    
-> > > >    	ceph_fscache_invalidate(inode, false);
-> > > > -	ret = invalidate_inode_pages2_range(inode->i_mapping,
-> > > > -					    pos >> PAGE_SHIFT,
-> > > > -					    (pos + count - 1) >> PAGE_SHIFT);
-> > > > -	if (ret < 0)
-> > > > -		dout("invalidate_inode_pages2_range returned %d\n", ret);
-> > > >    
-> > > >    	while ((len = iov_iter_count(from)) > 0) {
-> > > >    		size_t left;
-> > > > @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> > > >    			break;
-> > > >    		}
-> > > >    		ceph_clear_error_write(ci);
-> > > > +
-> > > > +		/*
-> > > > +		 * we need to invalidate the page cache here, otherwise the
-> > > > +		 * cache will include invalid data in direct/sync writes.
-> > > > +		 */
-> > > > +		ret = invalidate_inode_pages2_range(
-> > > IMO we'd better use truncate_inode_pages_range() after write. The above
-> > > means it's possibly will write the dirty pagecache back, which will
-> > > overwrite and corrupt the disk data just wrote.
-> > > 
-> > I disagree. We call filemap_write_and_wait_range at the start of this,
-> > so any data that was dirty when we called write() will be written back
-> > before the sync write.
-> > 
-> > If we truncate the range, then we'll potentially lose writes that came
-> > in after write was issued but before truncate_inode_pages_range. I think
-> > we'd rather let what we just wrote be clobbered in this situation than
-> > lose a write altogether.
-> > 
-> > All of this is somewhat academic though. If you're mixing buffered and
-> > direct writes like this without some sort of locking, then you're just
-> > asking for trouble. The aim here is "sane behavior to the best of our
-> > ability", but we can't expect it to always be sane when people do insane
-> > things. ;)
-> 
-> Just in the case Luis hit. Before writing the new data the mapping 
-> happen when reading the src in copy_from_usr(). So once the writing done 
-> the pagecache is caching the stale contents.
-> 
 
-Not just in that case.
+--QSTKF3Skeos30Uyc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-You could have 2 unrelated processes, one doing DIO writes and one doing
-mmap writes. You're likely to end up with a mess unless you're very
-careful with what you're doing, but there should be some expectation
-that it will work if you serialize things correctly and/or have them
-writing to their own areas of the file, etc.
 
-In any case, we'll never get perfect cache coherency, and I figure that
-until the write returns, what's in the pagecache ought to be considered
-valid.
+> I understand your point, however I don't think it makes much sense to
+> try to clarify the names on mmc_hw|sw_reset() alone. There are simply
+> lots of other functions that then would need to be changed too.
+> Otherwise we would just end up with having even more in-consistency in
+> function namings. To me, that's even worse.
 
-> > > Though it seems impossible that these pagecaches will be marked dirty,
-> > > but this call is misleading ?
-> > > 
-> > Not impossible at all. You can open a file O_DIRECT and then mmap the fd
-> > for PROT_WRITE (or just open the file a second time and do it).
-> > 
-> > We definitely recommend against mixing buffered and direct I/O, but
-> > nothing really prevents someone from doing it. If the user is properly
-> > using file locking, then there's really no reason it shouldn't work.
-> > 
-> > > > +				inode->i_mapping,
-> > > > +				pos >> PAGE_SHIFT,
-> > > > +				(pos + len - 1) >> PAGE_SHIFT);
-> > > > +		if (ret < 0) {
-> > > > +			dout("invalidate_inode_pages2_range returned %d\n",
-> > > > +			     ret);
-> > > > +			ret = 0;
-> > > > +		}
-> > > >    		pos += len;
-> > > >    		written += len;
-> > > >    		dout("sync_write written %d\n", written);
-> > > > 
-> 
+OK, I will follow your suggestions.
 
--- 
-Jeff Layton <jlayton@kernel.org>
+
+--QSTKF3Skeos30Uyc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJPSIkACgkQFA3kzBSg
+KbaUwg/+POQE5BHRJVEdPSepuOFKkMbaCMSnwj5L4B/3ZnSmiA5rNe4eDxk/uNMj
+QLJ1jRBRJO2AK0auAStNV8JljiTFaXMLtfmLUWo/ByX92fRJHWn8xz+0XAl6I4Ep
+d6gQnaA7Zzz1CRYAcIX4rHRJYOET4QQapw3nBCvfKrlZ26IhuquyXP331T3p+DSC
+j5l9Y1MHvOs2YCbHpYmCy27NV25EEkq4FRLFtZR/aIQn3mNm1A+TEZR86709BmTJ
+fPgxQv3z7X9DpXeE3ZSsB3nUD3NEsUeDBFuiuEOANjj6iM3jzn9i6ogEfFaIL7UL
+pcJtPk+LGd3Qm6cyDXeg3P3f5XixCHe8lN/O3wmZM0l5blbQkxRfu2snzo7zv66I
+iecynTqwJwZdZm0Mqha2M2HskQqRfR3GS7I6n29j1G3S8eO9lvIw2kbQyTHodymu
+Jh87Gt7UInB9n4BHK7SqkD8OySM0cEWGHzXJJd3ZEGLEpztEjXcMIQFw7A5jYWVB
+jyyI6RqavJjwi1/6vzW7ntfIXhGcoLd1rKP+SuNVYjZMcPA003wBMlU20QDCQxs5
+x+ZrtJsFLkikvtipYHd2B0c4tzhwtooUkSlBVIr+QVsn2FwR1viwZlSSEIlNobQ0
+MDhnekx411gxzRrGczdgXeVFEDE8HwkT2IUagYofAtU0NJBttdw=
+=Lsnd
+-----END PGP SIGNATURE-----
+
+--QSTKF3Skeos30Uyc--

@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1C74F8495
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4631C4F849D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbiDGQKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S1345614AbiDGQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345797AbiDGQKf (ORCPT
+        with ESMTP id S232236AbiDGQMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:10:35 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C710A56F6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:08:30 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id z16so5869888pfh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:08:30 -0700 (PDT)
+        Thu, 7 Apr 2022 12:12:53 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA0885950
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:10:52 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w21so8596884wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:10:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hZYvN1HtpiMWFnNuQjMBXb03gZgQM/PZsPG90Kr0xZ4=;
-        b=G5m5k4vQXUwL1k+L0eJSqU5MDgQfzgDVie8hMWVBvOwKPK0MPeq3Uw7smawUjYYmXZ
-         C5VyAER0920ta43X8fpVnjeRGq5sHWMfWXgZrtQJKGED38+6CAnXw8jBo/5p2G/76qoO
-         GD7j1kN3/HbBq9/VBZufLoXfI7gHFNN0iGxQeSERHEtWYsmiWdQOQfqrx79jV3ByWVId
-         58glwc+Myxl4sngQ6KXGcu9rMDrS3QDFmeK+zT3/xZakxZvFc0RT8prt99hyN0nCp5LT
-         FJjYJ9uFnCbHmlOkhbIGkbXmLl6pAKGxpCV2+L6ECJ8cx/v9i2iWZR+XMworgwKI9dCG
-         r7XQ==
+        d=6wind.com; s=google;
+        h=message-id:date:mime-version:user-agent:reply-to:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=x3pmqaNa0PtoIU8gER1caXrBLSF1ODzqLerDmxXVK74=;
+        b=MgRcFKvzVOm0BRJ319dcP8h1WJEwcpMeVvWHzlMWQr0kErX58XxhIu7uM1vZ0ppypR
+         LZhIW2MhkAeb1lep7tKBBvc/Bx1daATg6H0d8iJcak05ID3LNkRl1I21jJDE8tnwdywY
+         5x8nJQHS4JNm8I7KCMbjnWQOx2ji0VycJiunDlt9/CVHtp6Q9JdkK41obWdoNhMd68cX
+         OwUXm0x/HcMIAcTbwhZsxI3dNpA2/9q1teuEl9daUDS0hPYh/+n/ksmmi+K92PMhUH9b
+         4jVWenunsBgb7yAwVgMqQotVzS0oouIz+ZuEXQFXB3cXWxJ/oPdgElH9k8HCXeaA997o
+         Aq9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hZYvN1HtpiMWFnNuQjMBXb03gZgQM/PZsPG90Kr0xZ4=;
-        b=xI/F5Vo8LqsS/QB+8cp+nFeLsRVrU7c3B751qxV0wKpQEt9qhZCPj9uw9YtIHoaFK4
-         OiDpeDVEIm1ug4GZsMS5PXMhuyDyHQvhL3lYsrOlPxvDHOowB5R0pWSFRHc1wt5pSnZI
-         HEyWpL8dA6QhCCKEfzg+F8u9kMhAYd7+oG5gVzAcNo6U7Y8lqfAqr0GNVthHptL209vx
-         qwKm93nbcPif3VB2DpmBqhONjkraUyJ7MX+NaHTQZhERY7KpcfWziPIF7TvgFM9TdEev
-         JqAF62+YLxMLksti+7LiTanAYzFM/pUKoHp3mhgBtnQTAn2QeiY0hjJKYRCkDJ+VmMyi
-         3MEQ==
-X-Gm-Message-State: AOAM532L1YzR9BY3hdTG7pRTh8z7zUeOGJUj6xncaad9E/EwR+AbGoIH
-        PUQM8kcnxRAlBAFnSn4Qs87tRw==
-X-Google-Smtp-Source: ABdhPJzDMgA0eAdeiuBlSIjIz5dT4QwAPRd0qqCxgTtRtMrnGJI9OhKCqbXfxGtGb/pO3q7COLjQTw==
-X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr14947659pft.14.1649347709341;
-        Thu, 07 Apr 2022 09:08:29 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 83-20020a621556000000b004fe5d8c5cf3sm5054446pfv.156.2022.04.07.09.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 09:08:28 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 16:08:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
-Message-ID: <Yk8MeSuKuiNJHTgI@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
- <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
- <Yk79A4EdiZoVQMsV@google.com>
- <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:organization
+         :in-reply-to:content-transfer-encoding;
+        bh=x3pmqaNa0PtoIU8gER1caXrBLSF1ODzqLerDmxXVK74=;
+        b=gEwMH/SXtEAQS17oZDtpsDz4ESOj+Y7rcChLYkoPCK6ft5EEnNe5movqe8my1KFM6o
+         BlkCytPZqQVogO6NJx1ybRb3e+++0xfLJnH6GlfsaU87JpcH8uhtVC+oTGTmNd+74nAb
+         ntmsJaD1GM4D+Gu3Vzo7MFqWTaflGyHsoso+p7OZH8SZ8oIDT29rCMU22aBuAnkuB4LD
+         Pz49vN1cP9XNrMZIA69TjoNFnVIR6RqP3Q/AO2gqI7wSSBnLqhSScGTRi0DMNO1RKcZy
+         GmotXinn/d/fy/b14+1kP33rqK1N2+ZWvno/gv6v8VNxlDHFaz2u/Px6fANtbf29peRu
+         TROA==
+X-Gm-Message-State: AOAM530iMT8bwZvwxm3ATaJCrtU7UsTlcpbIIyTBtD4TWzKVz3EFEW2z
+        qYTxOhUw9rzxe7LrlW+NjJX4sQ==
+X-Google-Smtp-Source: ABdhPJw3v3eQrWyaBWPZCs/0STYwsAh4zpwNJHkq77RkY9jCBCfXuw86xtXgxD9aX1BYf7EwzrEKNg==
+X-Received: by 2002:adf:f90e:0:b0:203:e0fd:e9af with SMTP id b14-20020adff90e000000b00203e0fde9afmr11446956wrr.154.1649347850954;
+        Thu, 07 Apr 2022 09:10:50 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:6115:f172:4f40:31e9? ([2a01:e0a:b41:c160:6115:f172:4f40:31e9])
+        by smtp.gmail.com with ESMTPSA id f9-20020adff589000000b002060fcd92e9sm11380422wro.14.2022.04.07.09.10.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 09:10:50 -0700 (PDT)
+Message-ID: <59150cd5-9950-2479-a992-94dcdaa5e63c@6wind.com>
+Date:   Thu, 7 Apr 2022 18:10:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH] ipv6:fix crash when idev is NULL
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>,
+        kongweibin <kongweibin2@huawei.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, rose.chen@huawei.com,
+        liaichun@huawei.com
+References: <20220407112512.2099221-1-kongweibin2@huawei.com>
+ <CANn89iLx5HRnyRShNatPveTBhdjoQTxaRn-8_gYk-6_NuSCiOQ@mail.gmail.com>
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <CANn89iLx5HRnyRShNatPveTBhdjoQTxaRn-8_gYk-6_NuSCiOQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,42 +87,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Paolo Bonzini wrote:
-> On 4/7/22 17:02, Sean Christopherson wrote:
-> > On Thu, Apr 07, 2022, Paolo Bonzini wrote:
-> > > On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> > > > +	bool interrupt_disabled = tdvmcall_p1_read(vcpu);
-> > > 
-> > > Where is R12 documented for TDG.VP.VMCALL<Instruction.HLT>?
-> > > 
-> > > > +		 * Virtual interrupt can arrive after TDG.VM.VMCALL<HLT> during
-> > > > +		 * the TDX module executing.  On the other hand, KVM doesn't
-> > > > +		 * know if vcpu was executing in the guest TD or the TDX module.
-> > > 
-> > > I don't understand this; why isn't it enough to check PI.ON or something
-> > > like that as part of HLT emulation?
-> > 
-> > Ooh, I think I remember what this is.  This is for the case where the virtual
-> > interrupt is recognized, i.e. set in vmcs.RVI, between the STI and "HLT".  KVM
-> > doesn't have access to RVI and the interrupt is no longer in the PID (because it
-> > was "recognized".  It doesn't get delivered in the guest because the TDCALL
-> > completes before interrupts are enabled.
-> > 
-> > I lobbied to get this fixed in the TDX module by immediately resuming the guest
-> > in this case, but obviously that was unsuccessful.
-> 
-> So the TDX module sets RVI while in an STI interrupt shadow.  So far so
-> good.  Then:
-> 
-> - it receives the HLT TDCALL from the guest.  The interrupt shadow at this
-> point is gone.
-> 
-> - it knows that there is an interrupt that can be delivered (RVI > PPR &&
-> EFLAGS.IF=1, the other conditions of 29.2.2 don't matter)
-> 
-> - it forwards the HLT TDCALL nevertheless, to a clueless hypervisor that has
-> no way to glean either RVI or PPR?
-> 
-> It's absurd that this be treated as anything but a bug.
 
-That's what I said!  :-)
+Le 07/04/2022 à 16:08, Eric Dumazet a écrit :
+[snip]
+> 
+> And CC patch author for feedback.
+Thanks Eric.
+
+> 
+> In this case I suspect:
+> 
+> commit ccd27f05ae7b8ebc40af5b004e94517a919aa862
+> Author: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+> Date:   Tue Jul 6 11:13:35 2021 +0200
+> 
+>     ipv6: fix 'disable_policy' for fwd packets
+I agree.
+
+> 
+> 
+> 
+>> ---
+>>  net/ipv6/ip6_output.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+>> index 54cabf1c2..347b5600d 100644
+>> --- a/net/ipv6/ip6_output.c
+>> +++ b/net/ipv6/ip6_output.c
+>> @@ -495,6 +495,9 @@ int ip6_forward(struct sk_buff *skb)
+>>         u32 mtu;
+>>
+>>         idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
+>> +       if (!idev)
+>> +               goto drop;
+>> +
+>>         if (net->ipv6.devconf_all->forwarding == 0)
+>>                 goto error;
+
+Dropping packet in this case may introduce another regression, because there was
+no drop before commit ccd27f05ae7b ("ipv6: fix 'disable_policy' for fwd packets").
+
+Maybe something like this:
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -485,7 +485,7 @@ int ip6_forward(struct sk_buff *skb)
+                goto drop;
+
+        if (!net->ipv6.devconf_all->disable_policy &&
+-           !idev->cnf.disable_policy &&
++           (!idev || !idev->cnf.disable_policy) &&
+            !xfrm6_policy_check(NULL, XFRM_POLICY_FWD, skb)) {
+                __IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
+                goto drop;
+
+I could submit it formally tomorrow.
+
+
+Regards,
+Nicolas

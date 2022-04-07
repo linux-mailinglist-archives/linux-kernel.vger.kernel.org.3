@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AE54F7B9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2C64F7BA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243773AbiDGJ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S243790AbiDGJaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243765AbiDGJ3u (ORCPT
+        with ESMTP id S233212AbiDGJan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:29:50 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EADCD66A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:27:51 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id qh7so9492863ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4XD1rP9un2hmsqq0b2Cm9MfuJFrWq4hgmVGB9CsvK7E=;
-        b=iABlEFG8GrPja1/jzRRcIfR9Dvt7wl8LU7VmVR1w/91XfwsCvReILJid/u6X1Yk6MO
-         F4azg/k9gk/gF0Q6NJInkJ7WFIv/uCmUbM4ZdWvwThQxwmWsM3eIdFEs+qf4z9ABKTKM
-         tNcn+FIhp5c0szBe+pZ7vE6HhdLbTg28wJPl8ZTlQwta0EiAVYKkna6LITVh/BGkcURP
-         Q8HGMNo3oAjb89leKAaNK2MSHh1x0HGFBmlx7yXkxInfl5Y3rBRxP7mhrvltIZRt+94p
-         J8JEjPjOKzLWXJ9TXJXA8rszr+6LbYyisWRJcxZ58cR0dyfYSkVcyLaNExXe7hPIm3hQ
-         2+gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4XD1rP9un2hmsqq0b2Cm9MfuJFrWq4hgmVGB9CsvK7E=;
-        b=npHI4T3aqSZKgQXTsV7RY5yY/aR5A2QFfccclgNjp32/50ji0fj66Eibtg8sod+qNU
-         Wh/Tp2Xj9jS0XZnhc9TNNZlQitXMopTbwgle9HO/DOagMAFUZoHo0AZAbHCkvWX/1o2W
-         x1bVs80UZ1IVTQF0ZmiBLJCAa2X0dQCykxQkw4tjFBK4+JuGolyCGUBZuziZtNRBQJcu
-         TDJdYVRjGl1MTpXSGe1gxFh9CzmN/zvSMCNIDILAcf/SXv14rOMpt1WbPxOMOckAqG0G
-         l86C26yoNFbBHMIyKugmtt3EF+0plQ81mHd7jKxkjSnFumcK2XykmEng6o0XJKRl3gLI
-         Wkgw==
-X-Gm-Message-State: AOAM530njEDMH4o4smOt7488zTyKiXQvVaKpM3/15IJ4+7jENjkrT0tM
-        Gy6e/2ZVVAQ4BP2B5iSBx0QYcYsSWn/dFckg
-X-Google-Smtp-Source: ABdhPJwup3iMLbpJBGlTFYCEdADs+iBSFW7bU8p/YDdJmXjEEl1BV7FIj7iEMfgXcywtB85A2JTw9Q==
-X-Received: by 2002:a17:907:6e10:b0:6e7:f672:f39b with SMTP id sd16-20020a1709076e1000b006e7f672f39bmr12533217ejc.451.1649323669689;
-        Thu, 07 Apr 2022 02:27:49 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id b20-20020a1709063f9400b006e12836e07fsm7454790ejj.154.2022.04.07.02.27.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:27:49 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wei Xu <xuwei5@hisilicon.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH v3] arm64: dts: hisilicon: align 'freq-table-hz' with dtschema in UFS
-Date:   Thu,  7 Apr 2022 11:27:46 +0200
-Message-Id: <20220407092746.232547-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 7 Apr 2022 05:30:43 -0400
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7144A06
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1649323718;
+        bh=qrEk1KaQqHvx86BvGZbTrk+9iRUH0cmWZPEc61qHsBI=;
+        h=From:To:Cc:Subject:Date;
+        b=LDd5Jay6Ua4M7Rk3quFdJb8SgDPSuZjtqWrWwqliBIg5ntSUNjqp/XacMdFtX7jJp
+         /X/fkzdKAMvVmFPEWFBR5+U+YOHa9IUv2mpP35DLCjkdZ6mH4VgDyKFE3QoEKTYe/d
+         ap5kgwwuIo7p3ExFZYpafOI6djHPnxvewqi5BfBA=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
+        id 720A506C; Thu, 07 Apr 2022 17:28:32 +0800
+X-QQ-mid: xmsmtpt1649323712txu21a4wf
+Message-ID: <tencent_FE734C50BC851F2AB5FE1380F833A7E67A0A@qq.com>
+X-QQ-XMAILINFO: N7h1OCCDntuj7gXE9EPckixmarPTNotNuv+oSnMoBzpUK/sMEAhv3nREl6ig4F
+         WQJ6nhIBxe2K/G1fr9R9+gtZonkh3jygJuZ11VbRvBqkl5ltFnuySv/Ab/xXcSbXLs/I26jTHjYw
+         Ue94j8EPgpcxzvysMVwld7y8MEbEIOq/E4BOaBeW8/kMyxhPwSTTiPQ3MOX7MDNLUB+lfky6+oMd
+         uSxl0GUqHlZdpZPfN0KYKeI8Knxijp76AVpKZfEmmnom/CEKwg9NwiOzjILt4ZottQlcuA4isZI1
+         jxGg2MFn2Mb6PNfTfBKhlDvxASNCfpkOwvK/HyWYTaivYPstV4gqChWxWclJgOXtuqQ1e3rHDwhR
+         E5WFqZGKDFfXkByYRoqsN/qnitiIgXsAuSTKAgWxS8NCPyD1b0LuUYzoKuXImaZc9TchccBLE4tA
+         AGZkm9AmCXPumw1p1FNP6y0N7vmQlAub0vil0WaN4TbWDQQuYFtKSMoDx7TLX+uXuhWYdIltiR2/
+         m8okaFJ+Kqz6N/xt4eEy4Ejv2Qpa0E+yaT/LoU4xn4K9r6wbSd5PqfXbWty57ne8XcmBEQRArlAo
+         tvk9rp2HNOnTwphtSaeWOHph0juckClHzUyvvcvC21s/1MCH6bM/EviXSKH0kfqUXbuJREFF0NA0
+         K06MIYPG929N93yoTBdhpN9yLFKOqjkF8VuSm0p5ewxQZ9A23FBUtAl+Q9VBfugEZs8Y8dEtzglv
+         59qZsx+fsWyxH1kfRDDeEPLQqZgkc7B5nUr8sxvZ9QjjXK6nq2/hh3kOxBzwz0oJLrdLP0lYNzEi
+         O6gTz8WCRcBZXshOfUfT90itR1do5p+lKNawaEIIkv155skoaya19lO4/5+nSKYFti2oNGuFtpQ8
+         dnp9yrsJiXTwC73mMqm8VB9ggIKxe9oaUuRGmwP+W6fQrZFg+LgM9XTS8FcnYFgHCn+hiihv4tru
+         6p8ph7Pu7QCPHt1RcbTWBImgJyEfXKKucZRq8W7nEeBuH89iORSw==
+From:   xkernel.wang@foxmail.com
+To:     narmstrong@baylibre.com, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, khilman@baylibre.com
+Cc:     martin.blumenstingl@googlemail.com, p.zabel@pengutronix.de,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] clk: meson: meson8b: fix a memory leak in meson8b_clkc_init_common()
+Date:   Thu,  7 Apr 2022 17:28:23 +0800
+X-OQ-MSGID: <20220407092823.14526-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT schema expects 'freq-table-hz' property to be an uint32-matrix,
-which is also easier to read.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+`rstc` is allocated by kzalloc() for resetting the controller register,
+however, if reset_controller_register() fails, `rstc` is not properly
+released before returning, which can lead to memory leak.
+Therefore, this patch adds kfree(rstc) on the above error path.
+
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi | 4 ++--
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/clk/meson/meson8b.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-index 8bd6d7e8a474..6b3057a09251 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-@@ -1045,8 +1045,8 @@ ufs: ufs@ff3b0000 {
- 			clocks = <&crg_ctrl HI3660_CLK_GATE_UFSIO_REF>,
- 				<&crg_ctrl HI3660_CLK_GATE_UFSPHY_CFG>;
- 			clock-names = "ref_clk", "phy_clk";
--			freq-table-hz = <0 0
--					 0 0>;
-+			freq-table-hz = <0 0>,
-+					<0 0>;
- 			/* offset: 0x84; bit: 12 */
- 			resets = <&crg_rst 0x84 12>;
- 			reset-names = "rst";
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-index 636c8817df7e..3125c3869c69 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-@@ -671,8 +671,8 @@ ufs: ufs@ff3c0000 {
- 			clocks = <&crg_ctrl HI3670_CLK_GATE_UFSIO_REF>,
- 				 <&crg_ctrl HI3670_CLK_GATE_UFS_SUBSYS>;
- 			clock-names = "ref_clk", "phy_clk";
--			freq-table-hz = <0 0
--					 0 0>;
-+			freq-table-hz = <0 0>,
-+					<0 0>;
- 			/* offset: 0x84; bit: 12 */
- 			resets = <&crg_rst 0x84 12>;
- 			reset-names = "rst";
+diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
+index a844d35..823eacc 100644
+--- a/drivers/clk/meson/meson8b.c
++++ b/drivers/clk/meson/meson8b.c
+@@ -3741,6 +3741,7 @@ static void __init meson8b_clkc_init_common(struct device_node *np,
+ 	if (ret) {
+ 		pr_err("%s: Failed to register clkc reset controller: %d\n",
+ 		       __func__, ret);
++		kfree(rstc);
+ 		return;
+ 	}
+ 
 -- 
-2.32.0
-

@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7694F88FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79814F8922
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiDGVDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S230382AbiDGVEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiDGVC7 (ORCPT
+        with ESMTP id S230442AbiDGVEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:02:59 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AEE1689DA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:00:58 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 2so6776790pjw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:00:58 -0700 (PDT)
+        Thu, 7 Apr 2022 17:04:37 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8939916DB7F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:02:36 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id x68-20020a623147000000b004fd8d1ed04cso3924585pfx.23
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=T89PGJOFZzxYWMDwvjRB/Z88pam+GDQn5BMEWkthb7M=;
-        b=PYkmmEq+wWwbgsDjy2r0zLqZdWnZzr9RPm3tsi9QgmKZ55ZFGOBL7ismmtci8NnOqA
-         QwjzsxsfQZowVyVKLdGzYlep6EtNAIuCCciw4T1gmRbAzgOm1VuluJCQoa2U0r8bhiDw
-         7rApu70mhjU/bZ50dve7YTbQxOq+FyCzMq2wSqLE2wBJgRHH1awi+N60bTVDBsrYN0ez
-         wvS+BBU41hr2sUr5GY6M2dpTvM9pqlnbw2ZTNIuOHnOQXP4I7CsrM+B9U0sWAfQZyJVt
-         3wOxdAEqBsGPYdthDTtIhzxUT4JoIp1GPSbW7f6vv6o8Lmaf4OYyyifXFB7aXsHZxTvA
-         lOrA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4QE36tLivJMOr8j5gSWfIuNJsPy+ywKzgj6NE2BrPcs=;
+        b=Vg1IZkAU7wouNoj01H35jjVuZKodtI9CgCVnOlD9/W9/NmOS39Dx7B1M4flvPDdDhF
+         nwYJZYQxf/9zjy0PvRkkonQlAFzixVnAmSTnaumBsjn+5NBdUQxN2qM5h83dmQycxaGA
+         rke08AspJx9Uvhp7fxRGNncz5IHB/DsFvwM9gYyFsD+qlDr/oeyyEYNcKG2HO3tSc0YP
+         Ps4pDdzLDBlsSCtuAt0gUt/Fdy/vmCgcNEdFfjU6Jc0ZQkpsxiCE/IrHc+IDF/MAVW6R
+         LKyhsF5z/Q6RLXQcGWEN4LrKDcxvhRENuLGh5x9V3/2/mSK4bgjQd8lxzjF94cGOFvOI
+         yGSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=T89PGJOFZzxYWMDwvjRB/Z88pam+GDQn5BMEWkthb7M=;
-        b=S6svlIkBCN7nXaHThZVWjvJRm6GS3kS35/aGEQKebqsTtYKqiP5iVdeq44FQg8s41d
-         36blvlq6cHmGMEpP5t8/+WfGdX/TSFjc9s+9p2mbKwx3al2TvabJD4+KuTwPG/Bvs/Ud
-         Z1VOrqs5VfSNTTiKpK3Pjb9v5Iz0C9JWg0BlYTg00xDqkzooNlGGYck1Y4o/uLdtsW4U
-         /IV4w5Xf8Rw0Wj4sEG46/8/NUw+OedfLWfFZKgqauObxXNUc6slTyFfQCVAIwzxe96HF
-         UXsiZGDuQ4O87rXellXE9AjjiBOTXdw4LMmWz8+RcmIec2tg1iZSgUTlEAILGuP9eR85
-         DhaA==
-X-Gm-Message-State: AOAM5306Pw8sZwcuqyINx93biMPHV/wacNEgRT3PP2N1wfsRWD+WTtox
-        69lSEr5OxXlETMbVblTmkPE0Tg==
-X-Google-Smtp-Source: ABdhPJxHXJI8ZwUsmQLqz+S7V7nFeavAxKmMZFLLTRBKs1+kp6SUn6toVb+DF/8xo0UvOhDHuAuXmA==
-X-Received: by 2002:a17:902:cf08:b0:151:9d28:f46f with SMTP id i8-20020a170902cf0800b001519d28f46fmr15519474plg.53.1649365257397;
-        Thu, 07 Apr 2022 14:00:57 -0700 (PDT)
-Received: from bsegall-linux.svl.corp.google.com.localhost ([2620:15c:2cd:202:ca7d:71e3:d0a7:79b7])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056a001a0c00b004e1307b249csm24027695pfv.69.2022.04.07.14.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 14:00:56 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com
-Subject: Re: [PATCH 2/2] sched/fair: Delete useless condition in
- tg_unthrottle_up()
-References: <20220407021729.16655-1-zhouchengming@bytedance.com>
-        <20220407021729.16655-2-zhouchengming@bytedance.com>
-Date:   Thu, 07 Apr 2022 14:00:54 -0700
-In-Reply-To: <20220407021729.16655-2-zhouchengming@bytedance.com> (Chengming
-        Zhou's message of "Thu, 7 Apr 2022 10:17:29 +0800")
-Message-ID: <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4QE36tLivJMOr8j5gSWfIuNJsPy+ywKzgj6NE2BrPcs=;
+        b=KbpR7TAi1yB3MYMrxpGxM0hiIN5XGpjwMruh3kw6WEtc+yP1xqlw2qP9lrj3EmeM+l
+         zxIOga01H34Fqudr1yLYCTlhD7sDbBYFQ/51Obc/KN84yCNgvlBmZ4V7eIQH8N7EVzek
+         pnecHmEo0y4mgBxAe/I9aY3p2rmb3u4X3UO2z0hDu72+qMgTXNfLcRuK1gs1shNydmev
+         I6jtCgwIKnPIzhYl+8XtLDKyrnGbedLF1QNSfEh0K8kBtD1DszGZaMjGydO31ooaCdWp
+         rScgcjkQPsssD6rdFNYAZv0J+HzJD1D3z7XGUwqfRcD2bus7VPHnAG6ugBadIFCsX2is
+         ekyA==
+X-Gm-Message-State: AOAM532FUgYH/HCK8C9D+hNt861C5dM7RxPv4OcExMjYvOkOlopApRnE
+        5gy0RopvZFjDARM9SWIqEp+E5SQUgyA=
+X-Google-Smtp-Source: ABdhPJyS28Mfl84I0wegy2xkdJkSJ0asjZ2OpVkxkk6x7dHGZ3IXpzzZLKYftBYDgB1E1rRhUzd42g29W+E=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:469d:83b1:de7b:c47f])
+ (user=pgonda job=sendgmr) by 2002:a63:8f45:0:b0:398:d78:142f with SMTP id
+ r5-20020a638f45000000b003980d78142fmr12931225pgn.162.1649365355882; Thu, 07
+ Apr 2022 14:02:35 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 14:02:33 -0700
+Message-Id: <20220407210233.782250-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chengming Zhou <zhouchengming@bytedance.com> writes:
+If an SEV-ES guest requests termination, exit to userspace with
+KVM_EXIT_SYSTEM_EVENT and a dedicated SEV_TERM type instead of -EINVAL
+so that userspace can take appropriate action.
 
-> Fully decayed cfs_rq is impossible to have queued entities,
-> the first condition "!cfs_rq_is_decayed(cfs_rq)" is enough
-> to cover.
+See AMD's GHCB spec section '4.1.13 Termination Request' for more details.
 
-In particular, cfs_rq->load.weight is part of cfs_rq_is_decayed.
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
 
-Reviewed-by: Ben Segall <bsegall@google.com>
+---
+V4
+ * Updated to Sean and Paolo's suggestion of reworking the
+   kvm_run.system_event struct to ndata and data fields to fix the
+   padding.
+ * 4.1 Updated commit description
 
->
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index e6fa5d1141b4..17c13c38b1c2 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4850,7 +4850,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
->  					     cfs_rq->throttled_clock_task;
->  
->  		/* Add cfs_rq with load or one or more already running entities to the list */
-> -		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
-> +		if (!cfs_rq_is_decayed(cfs_rq))
->  			list_add_leaf_cfs_rq(cfs_rq);
->  	}
+V3
+ * Add Documentation/ update.
+ * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
+   to KVM_SHUTDOWN_REQ.
+
+V2
+ * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
+
+Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
+reason code set and reason code and then observing the codes from the
+userspace VMM in the kvm_run.shutdown.data fields.
+
+---
+ arch/x86/kvm/svm/sev.c   | 9 +++++++--
+ include/uapi/linux/kvm.h | 5 ++++-
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..1a080f3f09d8 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+ 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+ 			reason_set, reason_code);
+ 
+-		ret = -EINVAL;
+-		break;
++		vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
++		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM |
++					       KVM_SYSTEM_EVENT_NDATA_VALID;
++		vcpu->run->system_event.ndata = 1;
++		vcpu->run->system_event.data[1] = control->ghcb_gpa;
++
++		return 0;
+ 	}
+ 	default:
+ 		/* Error, keep GHCB MSR value as-is */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8616af85dc5d..dd1d8167e71f 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -444,8 +444,11 @@ struct kvm_run {
+ #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+ #define KVM_SYSTEM_EVENT_RESET          2
+ #define KVM_SYSTEM_EVENT_CRASH          3
++#define KVM_SYSTEM_EVENT_SEV_TERM       4
++#define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+ 			__u32 type;
+-			__u64 flags;
++			__u32 ndata;
++			__u64 data[16];
+ 		} system_event;
+ 		/* KVM_EXIT_S390_STSI */
+ 		struct {
+-- 
+2.35.1.1178.g4f1659d476-goog
+

@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D455F4F7815
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3A94F7818
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242187AbiDGHu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S242177AbiDGHue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242269AbiDGHuT (ORCPT
+        with ESMTP id S232646AbiDGHua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:50:19 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD030E9CBF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:48:12 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KYtg30z7mzBs1D;
-        Thu,  7 Apr 2022 15:43:59 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
- 2022 15:48:10 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <yuehaibing@huawei.com>, <mcgrof@kernel.org>,
-        <tangmeng@uniontech.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] reboot: Fix build warning without CONFIG_SYSFS
-Date:   Thu, 7 Apr 2022 15:48:07 +0800
-Message-ID: <20220407074807.1580-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Thu, 7 Apr 2022 03:50:30 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023B346141;
+        Thu,  7 Apr 2022 00:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649317712;
+  x=1680853712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=65cq+04D2t91MgXQs2FV1LSZ91INmcsG6pr3WgD2E7M=;
+  b=bQzducTedCmQckTwZX1IlWeB9H+3fnDxErNGSv0UqoYECY1mAV0iLDGj
+   ccIXbqu4qZpJamltH5XlBMFaBgOjaIjISpDPtXghLFWvWE1wJ/2RdTKvG
+   kVnFMjDt8I0SAP5JyX+ZRRm0c+JhqbehKve6bUmbooP1ClbKrYhT/52B1
+   F8vQVcI0SShLOuvc38+4KwKI1r0Yy216y0N915mP7He93wyjx8V8yojdA
+   mJTrcykmve5LG4kvX/BIvvNIRF3dRjdjTpw8sVjJxbcgDSHYuf1MM8Hss
+   JxEilDw+OCQ7uYCBwLiJj1kN7AB9JOkE7aFZtNBAuoisfJCGRq1tqvwEL
+   Q==;
+Date:   Thu, 7 Apr 2022 09:48:29 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        kernel <kernel@axis.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, <krzk@kernel.org>
+Subject: Re: [PATCH v2 3/4] clocksource/drivers/exynos_mct: Support
+ local-timer-index property
+Message-ID: <20220407074829.GA31389@axis.com>
+References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+ <20220308142410.3193729-4-vincent.whitchurch@axis.com>
+ <226dcb1b-d141-f0d3-68c4-11d2466ca571@canonical.com>
+ <20220311113543.GA17877@axis.com>
+ <CGME20220311125154eucas1p180cf38fcfe33e52757c2442bbd9c2ab3@eucas1p1.samsung.com>
+ <69be9f88-b69b-c149-4387-c5002219bf0a@canonical.com>
+ <e8b58fc4-fdc2-7fca-f8f5-c45f0891b53b@samsung.com>
+ <20220330082137.GA21079@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220330082137.GA21079@axis.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_SYSFS is n, build warn:
+On Wed, Mar 30, 2022 at 10:21:37AM +0200, Vincent Whitchurch wrote:
+> On Mon, Mar 21, 2022 at 09:00:08AM +0100, Marek Szyprowski wrote:
+> > Right, I've played a bit with MCT on some older Exynos SoCs (ARM 32bit 
+> > based and even Exynos5433) and it looked that none of it enabled MCT FRC 
+> > timer in their proprietary firmware. I've even proposed a patch for this 
+> > once ([1]), but such approach has been rejected. I think that calling 
+> > exynos4_mct_frc_start() unconditionally won't hurt.
+> 
+> Thank you for looking into this.  The proposal was however not to avoid
+> changing when exynos4_mct_frc_start() is called, but to instead skip the
+> write to the Timer Enable bit of the G_TCON register if it is already
+> set, like in the below patch.  (This is needed to avoid races when the
+> FRC is shared between CPUs in an AMP configuration, since TCON can be
+> modified for other reasons from the CPU which is using the global
+> comparator.)
+> 
+> If I understand your comment correctly, such a change should not cause
+> any difference at least on the platforms you looked at since there
+> MCT_G_TCON_START will not have been set at startup.
 
-kernel/reboot.c:443:20: error: ‘kernel_reboot_sysctls_init’ defined but not used [-Werror=unused-function]
- static void __init kernel_reboot_sysctls_init(void)
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Move kernel_reboot_sysctls_init() to #ifdef block to fix this.
-
-Fixes: 6e73c8344931 ("kernel/reboot: move reboot sysctls to its own file")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- kernel/reboot.c | 54 ++++++++++++++++++++++++-------------------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
-
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index ed4e6dfb7d44..ecbf09ea03c5 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -421,33 +421,6 @@ void ctrl_alt_del(void)
- static char poweroff_cmd[POWEROFF_CMD_PATH_LEN] = "/sbin/poweroff";
- static const char reboot_cmd[] = "/sbin/reboot";
- 
--#ifdef CONFIG_SYSCTL
--static struct ctl_table kern_reboot_table[] = {
--	{
--		.procname       = "poweroff_cmd",
--		.data           = &poweroff_cmd,
--		.maxlen         = POWEROFF_CMD_PATH_LEN,
--		.mode           = 0644,
--		.proc_handler   = proc_dostring,
--	},
--	{
--		.procname       = "ctrl-alt-del",
--		.data           = &C_A_D,
--		.maxlen         = sizeof(int),
--		.mode           = 0644,
--		.proc_handler   = proc_dointvec,
--	},
--	{ }
--};
--
--static void __init kernel_reboot_sysctls_init(void)
--{
--	register_sysctl_init("kernel", kern_reboot_table);
--}
--#else
--#define kernel_reboot_sysctls_init() do { } while (0)
--#endif /* CONFIG_SYSCTL */
--
- static int run_cmd(const char *cmd)
- {
- 	char **argv;
-@@ -895,6 +868,33 @@ static struct attribute *reboot_attrs[] = {
- 	NULL,
- };
- 
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table kern_reboot_table[] = {
-+	{
-+		.procname       = "poweroff_cmd",
-+		.data           = &poweroff_cmd,
-+		.maxlen         = POWEROFF_CMD_PATH_LEN,
-+		.mode           = 0644,
-+		.proc_handler   = proc_dostring,
-+	},
-+	{
-+		.procname       = "ctrl-alt-del",
-+		.data           = &C_A_D,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = proc_dointvec,
-+	},
-+	{ }
-+};
-+
-+static void __init kernel_reboot_sysctls_init(void)
-+{
-+	register_sysctl_init("kernel", kern_reboot_table);
-+}
-+#else
-+#define kernel_reboot_sysctls_init() do { } while (0)
-+#endif /* CONFIG_SYSCTL */
-+
- static const struct attribute_group reboot_attr_group = {
- 	.attrs = reboot_attrs,
- };
--- 
-2.17.1
-
+I needed the frc-shared property anyway to prevent registration of the
+clock events so I followed Krzysztof's suggestion of doing this
+conditionally and also clearing the resume callback.

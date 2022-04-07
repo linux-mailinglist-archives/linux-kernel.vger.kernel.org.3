@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AF64F76F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC194F7702
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiDGHPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S241525AbiDGHPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240441AbiDGHPU (ORCPT
+        with ESMTP id S241507AbiDGHPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:15:20 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A872B338A5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=KYVIiPsHXkPVttQVbnB4gKCdS6tz
-        CKwJJNpKki0Y3II=; b=KBoMUmGflb76llgWx2YOmjleJvRd6bMYtnkEU86tT+MS
-        g02jsfBeif5eGYpVZBrhtY5yoXT1v3gyscuF+ld8czn5ZyH1Jy5neA+QJ+ZNNs/z
-        VTn06iY58b/SPXhKCDR+iy33yL+UFqNMVmouoz6Uwhqe0wT0LVrsM4vjyIiyHFU=
-Received: (qmail 3054826 invoked from network); 7 Apr 2022 09:13:19 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Apr 2022 09:13:19 +0200
-X-UD-Smtp-Session: l3s3148p1@e/NoNgvcsKIgAQnoAEUrAEwALhsXf+iu
-Date:   Thu, 7 Apr 2022 09:13:19 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mmc: renesas_sdhi: Jump to error path instead of
- returning directly
-Message-ID: <Yk6PD/aHJMfTlcjv@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220404172322.32578-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922182F6302386EFF2ED66B86E59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8tdkw8-dUfrFG9kZizok8OQdcGHitAdb4E2tsBW3Xrh-g@mail.gmail.com>
- <OS0PR01MB5922C35E8C5259C3DA2A951A86E59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        Thu, 7 Apr 2022 03:15:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C6D3BF9A;
+        Thu,  7 Apr 2022 00:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649315615; x=1680851615;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BkzCxsE5hBRJs6P4NUF4QW7/C/WzYFq9gmdY1yy7Lls=;
+  b=XXiMgoxPMT5meEsfgeHmVGQbKAU3EzKFZ01QMxfa2/Ef3Oodxiom1ixm
+   ACdwWfX0m6lZLbAstKAjxOEN/EDCF6q9DpXc0y9Ql70lnLzXQn/KNib/Z
+   D4UeHowKuA7yqtPrbe4MSS2rlmbQmR7JeYrkkwgqne5hHW1H1OGWCtViJ
+   wOiEzpIJznT7FLOftCurmPSHej/t5Wne/UaKbbkNGUPVSFGGOVM+o2oJi
+   mL0fGVRbXZDihLd7nNYUc89VN10615PvPXgwDdKLW+DJCPcTL4n1yqk7b
+   H3jaFd0i5TfioeBbCRoq/ctvklqIqYeZ+tgPiQEcyKTt9HIPV6rfmZ9rW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261241901"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="261241901"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:13:34 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="549897306"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.40.48])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:13:26 -0700
+Message-ID: <3c8e94e1-fb8e-0d8f-4e79-b8313a1da5cb@intel.com>
+Date:   Thu, 7 Apr 2022 10:13:21 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KlpHw6Ilg+eDooaV"
-Content-Disposition: inline
-In-Reply-To: <OS0PR01MB5922C35E8C5259C3DA2A951A86E59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH 09/11] mmc: sdhci-cadence: Add Pensando Elba SoC support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Brad Larson <brad@pensando.io>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>, dac2@pensando.io,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-10-brad@pensando.io>
+ <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/04/2022 9.45, Arnd Bergmann wrote:
+> On Thu, Apr 7, 2022 at 1:36 AM Brad Larson <brad@pensando.io> wrote:
+>> @@ -350,7 +461,7 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+>>  static int sdhci_cdns_probe(struct platform_device *pdev)
+>>  {
+>>         struct sdhci_host *host;
+>> -       const struct sdhci_pltfm_data *data;
+>> +       const struct sdhci_cdns_drv_data *data;
+>>         struct sdhci_pltfm_host *pltfm_host;
+>>         struct sdhci_cdns_priv *priv;
+>>         struct clk *clk;
+>> @@ -369,10 +480,10 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>>
+>>         data = of_device_get_match_data(dev);
+>>         if (!data)
+>> -               data = &sdhci_cdns_pltfm_data;
+>> +               data = &sdhci_cdns_drv_data;
+>>
+>>         nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+>> -       host = sdhci_pltfm_init(pdev, data,
+>> +       host = sdhci_pltfm_init(pdev, &data->pltfm_data,
+>>                                 struct_size(priv, phy_params, nr_phy_params));
+>>         if (IS_ERR(host)) {
+>>                 ret = PTR_ERR(host);
+>> @@ -389,6 +500,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>>         host->ioaddr += SDHCI_CDNS_SRS_BASE;
+>>         host->mmc_host_ops.hs400_enhanced_strobe =
+>>                                 sdhci_cdns_hs400_enhanced_strobe;
+>> +       if (data->init) {
+>> +               ret = data->init(pdev);
+>> +               if (ret)
+>> +                       goto free;
+>> +       }
+>>         sdhci_enable_v4_mode(host);
+>>         __sdhci_read_caps(host, &version, NULL, NULL);
+> 
+> I'm not sure about the abstraction here. The approach of having a single
+> driver with some platform specific quirks like you do here works fine if the
+> differences between hardware implementations are fairly minor, but if there
+> are a larger number of variants, or the differences become too big, the
+> better approach is to have separate top-level driver instances that call
+> into a more generic driver, continuing the call chain
+> 
+> elba_drv_init()
+>  -> sdhci_cdns_probe()
+>      -> sdhci_pltfm_init()
+>          -> sdhci_add_host()
+>              -> mmc_add_host()
+> 
+> with each one being a more specific version of the one below it.
+> At the moment, it doesn't quite require having a custom driver,
+> but I fear that it it would get hard to rework if it continues to grow
+> other front-ends. It may be better to do the abstraction right away,
+> even if the elba driver becomes rather trivial.
+> 
+> Ulf, any preferences?
+> 
 
---KlpHw6Ilg+eDooaV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> I guess it has to move up, first get reset handle and clock handle and re=
-turn error
-> directly in case of error, Then do clk/reset ops.=20
->=20
-> >=20
-> > Wolfram, what is your preference on the above?
-
-Yes, moving up makes sense. First check all the handles before we
-actually initialize the hardware.
-
-Thanks for pointing all this out.
-
-
---KlpHw6Ilg+eDooaV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJOjw4ACgkQFA3kzBSg
-KbbgRA//Yc9LB9Ne9jCn3411sIjDRaF53/Sg3d1Fvuhv1t0bBfKkuqYRWKuBhSNP
-yDEkPAxQmP8wgbhY2PHjZPyGchfT02OC/PFPzE9hXp99DrhwRkb3Em2c6a6Jsbqp
-LPP9x/lzhuMpRJ2K0jFAmPO7p01eIJKHrBLek49z5kgpE7tZktd4uB96E0K1wIxB
-8duH4nZZi9x67cSPS2q/JW6J6fz/+yrTiLqLzeLvE9q2ZaTxzga1SOCraW1yJGwx
-oHtO/Vznmix+zlQ2hTfD1yBUaFwVZQe8pNt94ujOVH3qWMqbzbPrFXp0YvziwN/t
-YFVDu9lGWtDqz8BM0xwd+/0HeHuwcXw42uQihnoONjbl9giteCrVnyxaL4UfZP7x
-JKm0+10hEy0VGluMS0eHh4RkE8lLTK++e4pzaRMhy71xBu/FNR+YR2KVZLMi+Y7s
-IDdvyJZ4kGlZ9KismDR41laKB+xm6QUL89MY+lbOuDKlzGdd7HSnUBJXGbNKHL4v
-cKtoYHPqa3SrSqnpj/So1dVEuoHWledG4IUoYgCytmhDjxEZz1bu10jBtvwcwmHh
-SXHyCs5g4vz7oZvdx1QpJL1SB+IwY6yIJfBfvfTu8dJ6bMQ65FWAsATdlkdxRRGP
-4fJkmISLnig5fcWz88CGLS/0WhAoNe4qz8dSNKMZEhRqfjk+Ir8=
-=nuoX
------END PGP SIGNATURE-----
-
---KlpHw6Ilg+eDooaV--
+What is the relationship between cadence and pensando elba?

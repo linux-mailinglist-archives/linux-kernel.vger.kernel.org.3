@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C60A4F880F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B625F4F8816
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiDGT2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S230384AbiDGTam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiDGT2b (ORCPT
+        with ESMTP id S229511AbiDGTak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:28:31 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F92856BC
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:26:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id r13so12961253ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:26:19 -0700 (PDT)
+        Thu, 7 Apr 2022 15:30:40 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6204529A57A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 12:28:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bg10so12976730ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 12:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pt10RsrkjtTqI7tRKxXhfbCG7SYw1TyGobgP4LoidEQ=;
-        b=B0LYDf2Y+Y8ci2+SnKIs+kKAslu81N6UlsJtaXn3wPUwtuhkw11odPm7pEs+3JoEZV
-         J4BBre+1VgUUzLmQ7lIF6XShZ2WlE//1gseL5lb5YuulRM7WfdCOgrOs2Ir50Oxu51kM
-         nxmXFIjTyxTunUCyye9Zmt5eP/5svJiPZMm6TzWRzF5Dn25kkup4s67fUDvqTQV8kIUT
-         OuRhtAPqLySb3n48UneZbAYAD5I2ZXyVdP4gZeeFH4XyTLzbW9dk2Un/F/PgZn9wIKDb
-         sTbo6SUT6NoP1L35BmcxVs8hK5XqIqsjiPBIwoI5SdYi3xUWNeefQ0TYvTBEYxiY7t38
-         H9Nw==
+        bh=Iryodbly7hWSxF2KcHp9s3S3xjPavYjEFSYWyJwJex0=;
+        b=KKcV/Buz4A73ob6dE9LrdOVhfmWRWjTzVhH1UcRUQ/DxhvWpgE8iDdVVFglekx+DJ3
+         8ze6MXC/PlPWRLN51JXqgSwYcg0vHH3xKBrFcLgvk4CoN0kYN/Q5qTWf3JMZq6PuYOhZ
+         VprNKGGt3OIdHTBykMUe/6vgGBoq2JC6BvQfn9s4I22tAOPHvrVFOZQrPyCOzZ4x7K+V
+         iMUf6pkuP2I3z7309POjmkj4ZAxyffAxHeIEHXRH8mGgPoKbhGPjzYsYmYN9mTBCcFtu
+         wMbuHqyX8ho+lpZdwQO5Vx6au7xe0fBELFZ/h2ngWo7MEHo1oZ1XdP/RJe2T4Muk4lci
+         OUyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pt10RsrkjtTqI7tRKxXhfbCG7SYw1TyGobgP4LoidEQ=;
-        b=qfWIRD7UjuLptvCMMzbPSZZqMEasECEW0gZPWsWtLWqOkCOIXG+7rU5qe3/g6w1iwS
-         WyNryF0bHaCFXDgbwHHMer5sNw3XEFG5KxDyduvKqInmoDPofQFv0Yv38AGeiYVezS7M
-         hCxEyas0lm2nfKvWEilQG1mcNQmlqy8mga+ViYZT6yL6F798K7JZgcTij4DwnvVeScpM
-         IG970vwB1YHuwQbKT17j5YmwfSdyzdA96ERccvWLBgSd6Tfm6WgkKjy9gpMqYzIR/ueL
-         EedP+4AoEBquwGZdiuiLdvBMCGz3/Q3SKm5U7Hv/8mgY2U7InTRdf1xtY13dUKaAIcZV
-         Y/gA==
-X-Gm-Message-State: AOAM533RUYhDSG/api8x52hXgKf+kkpQFx6B+5ifp62/DkKRFvwFtV/5
-        qA4UqFpL+fyNa8tGnkk3JXVGsw==
-X-Google-Smtp-Source: ABdhPJwlZTR88OKvwkQEMzYCa334/1l2hJQ0quuyoq+NOf+z4h6Uqn6Xj7nBtcwnLLb8Dg8e0PylUA==
-X-Received: by 2002:a17:907:2d90:b0:6d8:9fc9:ac36 with SMTP id gt16-20020a1709072d9000b006d89fc9ac36mr15114337ejc.28.1649359578493;
-        Thu, 07 Apr 2022 12:26:18 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090655c900b006e83ffe41f3sm637893ejp.150.2022.04.07.12.26.17
+        bh=Iryodbly7hWSxF2KcHp9s3S3xjPavYjEFSYWyJwJex0=;
+        b=oQrjSDsSJX4mApQvUeT+j10W3ustOQbfBSqBe4LWegpe+O03ElOBN2ZrDrRhrrJ+UF
+         IfTLFIhcQzG7CvRXpVwJ88TBenKwbV+s4FW7WuxzDOtVRyZ1X/JeFkylZW/xHMeHeoMl
+         k4WjwlNuO5dNMFaNK5G7IqreAMhzdCxiYbMaGizqOK1tImTJH4axHOnOaV15S73Ev61O
+         2DURM6AkoNIOEOvfqsgYrbI99CUffIXuO1oW9RMMlEU0atphyaHxCE+aESkLroXZHB1S
+         8zPCuZuikaPPYP1raAJ7/mFvypaaW6nEu3VX646SfNXe5lnYVxg8Zmo37Sc9d2xzHz5G
+         +WCA==
+X-Gm-Message-State: AOAM530sXKrmhMAofYTHQWnee1XZ5fXX2CQ9muMRZBFVDiGEPb2FWn7+
+        CXBF0p3DDJrifZaQth5gkx8=
+X-Google-Smtp-Source: ABdhPJyHaNrp1jjFDEs1meOdh9ln+yMcVNcVUC+B3c9ThrEOAVW+Mf4cnMYxjO+irnJhXPZN5+3a7A==
+X-Received: by 2002:a17:907:8693:b0:6e7:f5f4:c4d5 with SMTP id qa19-20020a170907869300b006e7f5f4c4d5mr14423085ejc.640.1649359703188;
+        Thu, 07 Apr 2022 12:28:23 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id k14-20020a50e18e000000b0041b6f23f7f6sm9652798edl.22.2022.04.07.12.28.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:26:18 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCH] dt-bindings: usb: samsung,exynos-usb2: include usb-hcd schema
-Date:   Thu,  7 Apr 2022 21:26:11 +0200
-Message-Id: <20220407192611.15353-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 07 Apr 2022 12:28:22 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/8] staging: r8188eu: some simple cleanups
+Date:   Thu,  7 Apr 2022 21:28:11 +0200
+Message-Id: <20220407192819.10661-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove parts duplicated with usb-hcd.yaml DT schema and include it
-directly.
+Some simple cleanups. Most of them are removing unused macros,
+structures, etc. from header files.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/usb/samsung,exynos-usb2.yaml         | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+Michael Straube (8):
+  staging: r8188eu: remove unused macros from basic_types.h
+  staging: r8188eu: move struct rt_firmware to rtw_fw.h
+  staging: r8188eu: ROMVer is always zero
+  staging: r8188eu: remove unused fields from struct eeprom_priv
+  staging: r8188eu: remove unused enums from odm.h
+  staging: r8188eu: remove unused prototype usbvendorrequest()
+  staging: r8188eu: remove header usb_vendor_req.h
+  staging: r8188eu: clean up rtw_ioctl.h
 
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-index 340dff8d19c3..d51f91d1139f 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-@@ -15,9 +15,6 @@ properties:
-       - samsung,exynos4210-ehci
-       - samsung,exynos4210-ohci
- 
--  '#address-cells':
--    const: 1
--
-   clocks:
-     maxItems: 1
- 
-@@ -46,15 +43,6 @@ properties:
-       Only for controller in EHCI mode, if present, specifies the GPIO that
-       needs to be pulled up for the bus to be powered.
- 
--  '#size-cells':
--    const: 0
--
--patternProperties:
--  "^.*@[0-9a-f]{1,2}$":
--    description: The hard wired USB devices
--    type: object
--    $ref: /usb/usb-device.yaml
--
- required:
-   - compatible
-   - clocks
-@@ -64,6 +52,7 @@ required:
-   - phy-names
- 
- allOf:
-+  - $ref: usb-hcd.yaml#
-   - if:
-       properties:
-         compatible:
-@@ -73,7 +62,7 @@ allOf:
-       properties:
-         samsung,vbus-gpio: false
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
+ drivers/staging/r8188eu/hal/hal_com.c         |  2 +-
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   |  1 -
+ drivers/staging/r8188eu/include/HalVerDef.h   |  1 -
+ drivers/staging/r8188eu/include/basic_types.h | 73 +----------------
+ drivers/staging/r8188eu/include/drv_types.h   |  6 +-
+ drivers/staging/r8188eu/include/odm.h         | 29 -------
+ drivers/staging/r8188eu/include/rtw_eeprom.h  |  3 -
+ drivers/staging/r8188eu/include/rtw_fw.h      |  5 ++
+ drivers/staging/r8188eu/include/rtw_ioctl.h   | 79 -------------------
+ drivers/staging/r8188eu/include/usb_osintf.h  |  4 -
+ .../staging/r8188eu/include/usb_vendor_req.h  | 35 --------
+ drivers/staging/r8188eu/os_dep/usb_intf.c     |  1 -
+ 12 files changed, 8 insertions(+), 231 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/include/usb_vendor_req.h
+
 -- 
-2.32.0
+2.35.1
 

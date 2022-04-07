@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF85F4F79F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A892D4F79F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243185AbiDGIlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S243189AbiDGIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiDGIk6 (ORCPT
+        with ESMTP id S236861AbiDGIlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:40:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C011A545;
-        Thu,  7 Apr 2022 01:38:55 -0700 (PDT)
-X-UUID: 9a1d0fb835094fb4a348b1ab21a58e9b-20220407
-X-UUID: 9a1d0fb835094fb4a348b1ab21a58e9b-20220407
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1173894335; Thu, 07 Apr 2022 16:38:51 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 7 Apr 2022 16:38:50 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 7 Apr 2022 16:38:50 +0800
-Message-ID: <e8f85610ab27403aa2b0689ecb70714c5a33e479.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: Correct disp_aal
- binding for MT8183
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <chunkuang.hu@kernel.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <yongqiang.niu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <nancy.lin@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 7 Apr 2022 16:38:50 +0800
-In-Reply-To: <594c124d-403f-56f1-b9fb-f48042d7056b@linaro.org>
-References: <20220406094654.29722-1-rex-bc.chen@mediatek.com>
-         <20220406094654.29722-2-rex-bc.chen@mediatek.com>
-         <397e30c2-18c3-93d6-16f5-b113be77f51a@linaro.org>
-         <c9a54f1c9350d63489a0f85443f5623fe5d7fe1d.camel@mediatek.com>
-         <594c124d-403f-56f1-b9fb-f48042d7056b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 04:41:44 -0400
+Received: from out203-205-221-191.mail.qq.com (out203-205-221-191.mail.qq.com [203.205.221.191])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2259120BE;
+        Thu,  7 Apr 2022 01:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1649320776;
+        bh=Cy/4caoQyRfSCeYZUmuheRRJi79wq1ci+HMqsv+5X4Y=;
+        h=From:To:Cc:Subject:Date;
+        b=ZKVrD0eAyTGHxUBLwWfhjaIqop/5mz8noJqbmXyl9MmEao6UtVR+rZSbXVJaQ59Z5
+         PeLLdTXyjxPuoCBp6hWNO6rc2wps9GEpgFwwmInLS7SnDZG/6MQ+tHHDqwqTANhzUj
+         L8ldc3PiXc0uFCioUbsmQCOwdS1418o7ODjICME0=
+Received: from localhost.localdomain ([43.227.136.188])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id 9E1B10FB; Thu, 07 Apr 2022 16:39:33 +0800
+X-QQ-mid: xmsmtpt1649320773tiw9d97zn
+Message-ID: <tencent_9E7070526485FB289DFDDB81903167E73E0A@qq.com>
+X-QQ-XMAILINFO: NnA3IMNPwBd+OiSGe/aAItQ8doPtOvQ04QX/EdbrUyPBoq5N58AazA8iDPQVsl
+         lbnUfwQJyLcpjtoaJDwv4SGPOM6Yg7lCmtgU2eerkswfV8yFmq4SSVPSPXx5gi5bFSFzzSftpK/c
+         y8k36KuC4/a8o6pmlYSx7EvgMIwHT6pYd8WDPKGg1lAiLZSctPbqKkqgfd9nCPgQg5sspAPu07nu
+         xMY2pEo9xOBiCfePyI3Sk3A9ykHBWHhZ4jcS+Qm8xjZRwap6+n02ix4K/4sEeIP2XxaOfxuyf10M
+         U1X1z6mJqYxwR64aRX7d7qyDc1Bd+eWI4mp+HtNgbuvYg3j78/1sMo5QqFF10Q+APGVIiM0nqAoZ
+         3h0dUnIojZvb78J9D9D6xK72pACKMR9pM0du9jcEI4QfBhIxI8SM4fAyF4MLLtgOJscQw/dTd2kt
+         klRAGml0ZP4wxeSS+cRdXz9e8q6H2714yW9deECZRHGmLytSRo79oAH6fNkns/cFxVxIy4WCdHYT
+         aloewsbEjaNbPWZyBn8kbVIfEyTwgIQzb2+550LrP8SsD6S3O0uSlslyiN1QLe+I4A3odk4JHhLI
+         1ugH7WvZm/Uf5y8cnlJNthNf2LKtUUFNd0vf+S62fP8kZTEv0urzKbGhqOk0BC1kyV5KsDAHhhaM
+         A9AA6vbrF3mGS1xoTK+Jyz0tABH/RvWOvH32KjyLiEApkNyO/ndQH5Faat8sKIyTkSXKXURl5GHa
+         hCejsnNNvKkVFjxyJ1+Z2QIJnIm7bT8d7Zs0rorJm4c/8da5TaybIO63llYzuTwn/D28ZV1YJelo
+         Hhrk0MugV0jmOoatSiv37UsXprLb47hKCLduicc+Zf/VHxpn/xsSWIrZCIAxnlp90920avA3cD9P
+         X2De+YbOeKjOt0ZoW5arHmEguN48Jn6Lncfq9LoW9qxFXtF28Mm5anS+HWQh9JZYEZ306NYBajwd
+         Fn4MBh+2ZXoD3O7lMBdQ==
+From:   xkernel.wang@foxmail.com
+To:     mturquette@baylibre.com, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] clk: hi3620: fix potential memory leak in hi3620_mmc_clk_init()
+Date:   Thu,  7 Apr 2022 16:39:24 +0800
+X-OQ-MSGID: <20220407083924.14190-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,69 +61,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 08:49 +0200, Krzysztof Kozlowski wrote:
-> On 07/04/2022 08:22, Rex-BC Chen wrote:
-> > On Wed, 2022-04-06 at 16:44 +0200, Krzysztof Kozlowski wrote:
-> > > On 06/04/2022 11:46, Rex-BC Chen wrote:
-> > > > The driver data of MT8183 and MT8173 are different.
-> > > > The value of has_gamma for MT8173 is true while the value of
-> > > > MT8183
-> > > > is
-> > > > false. Therefore, the compatible of disp_aal for MT8183 is not
-> > > > suitable
-> > > > for the compatible for MT8173.
-> > > 
-> > > Just because one feature is not supported, it does not mean they
-> > > are
-> > > incompatible, which you claim in the patch below. Are you sure
-> > > they
-> > > are
-> > > really incompatible and MT8173 fallback cannot be used?
-> > > 
-> > > 
-> > > Best regards,
-> > > Krzysztof
-> > 
-> > Hello Krzysztof,
-> > 
-> > Thanks for your review.
-> > 
-> > The difference of disp_aal for each MediaTek SoCs is "has_gamma".
-> > And we only control this variable for different MediaTek SoCs.
-> > 
-> > The value of has_gamma for MT8173 is true.
-> > The value of has_gamma for MT8183 is false. (Moreover, the driver
-> > data
-> > is null for MT8183)
-> > 
-> > From this situation, I think it's not compatible between MT8173 and
-> > MT8183.
-> 
-> You repeated the commit msg without bringing any new information...
-> but
-> let it be, I assume setting gamma on MTT8183 is incorrect or produces
-> wrong results.
-> 
-> 
-> Best regards,
-> Krzysztof
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Hello Krzysztof,
+In hi3620_mmc_clk_init(), if `clk_data->clks` which is allocated by
+kcalloc() fails, it will directly return without releasing `clk_data`
+that is allocated by kzalloc(), which may lead to memory leak.
+So this patch added kfree(clk_data) to the above error path before
+returning.
 
-Sorry for this.
-I can explain more detailed.
+Besides, `base` is mapped by of_iomap(). However, two error paths ignore
+to unmap it. Therefore, this patch also added iounmap(map) to these two
+error paths.
 
-For MT8173, the gamma module is inside disp_aal. When we need to adjust
-gamma value, we need to use "has_gamma" to control gamma function
-inside disp_aal to adjust gamma value.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/clk/hisilicon/clk-hi3620.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Since MT8183 (MT8192/MT8195/MT8186), display gamma is seperated from
-disp_aal. We just need to control disp_gamma directly and we don't need
-to control gamma function inside disp_aal.
-
-I will add these comments to commit message in next version to explain
-it.
-
-BRs,
-Rex
-
+diff --git a/drivers/clk/hisilicon/clk-hi3620.c b/drivers/clk/hisilicon/clk-hi3620.c
+index a3d04c7..bdd36eb 100644
+--- a/drivers/clk/hisilicon/clk-hi3620.c
++++ b/drivers/clk/hisilicon/clk-hi3620.c
+@@ -464,11 +464,11 @@ static void __init hi3620_mmc_clk_init(struct device_node *node)
+ 
+ 	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+ 	if (WARN_ON(!clk_data))
+-		return;
++		goto unmap_base;
+ 
+ 	clk_data->clks = kcalloc(num, sizeof(*clk_data->clks), GFP_KERNEL);
+ 	if (!clk_data->clks)
+-		return;
++		goto free_clk_data;
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct hisi_mmc_clock *mmc_clk = &hi3620_mmc_clks[i];
+@@ -478,6 +478,12 @@ static void __init hi3620_mmc_clk_init(struct device_node *node)
+ 
+ 	clk_data->clk_num = num;
+ 	of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	return;
++
++free_clk_data:
++	kfree(clk_data);
++unmap_base:
++	iounmap(base);
+ }
+ 
+ CLK_OF_DECLARE(hi3620_mmc_clk, "hisilicon,hi3620-mmc-clock", hi3620_mmc_clk_init);
+-- 

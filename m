@@ -2,135 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFED4F8A37
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8411D4F8935
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiDGV2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S231650AbiDGVfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiDGV2L (ORCPT
+        with ESMTP id S231734AbiDGVfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:28:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BDB1965CF;
-        Thu,  7 Apr 2022 14:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649366769; x=1680902769;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mIX/4V9ZQLO5IL2OJQlDG9+qFrwjCz3AEf+UgwstfB4=;
-  b=efig7LUJ6sEx58XIFO74VFlE8OEWGX/u5wiEAkXaeVykR93D06CXkXFH
-   4mj78yMKAUoDgzgqyQfCV48bycHlHu26ReYGzOv9CgJQszbmI4HQHbwaA
-   dITWjIcDVgHe26w/gzrPk+1NkM34CO8tCRzRQ/joCUJPztenP66KjSyj+
-   Ie1MlpuAYCijGt63CZ767xmygi4AWHoAJQ21NcmiXNnbUxgziKfG/wf0/
-   pI2clGUSB3XpK1tzUoZebin12TN0hGmi6/BS4mdjNcmN8Q2blvh4/yZHW
-   Kcp3FJlyt2f/vhC50FF9SR1Z99/s7FBEEVJFPTyPlkJ7sfLL2gPR4hPQJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="324606428"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="324606428"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 14:26:01 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="525096736"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.71.23])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 14:26:01 -0700
-Message-ID: <215bd7332aee0ed1092bad4d826a42854ebfd04a.camel@linux.intel.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     "Huang, Ying" <ying.huang@intel.com>, Wei Xu <weixugc@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Cgroups <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
-Date:   Thu, 07 Apr 2022 14:26:01 -0700
-In-Reply-To: <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
-         <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
-         <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
-         <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
-         <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
-         <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Thu, 7 Apr 2022 17:35:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ADA1AFE82;
+        Thu,  7 Apr 2022 14:33:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 1897E1F40E5E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649367188;
+        bh=8GlPAfGYieXFDHwj1kt1VOOH/7K8TRIq3Qg/GHUoxL8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eXzCjkyebsDGZC5jw5o2VqSrkIcfotEzXyaJCHcVoCGm6aDc0rqbcBeP4iC4zg1/m
+         wbUx23L7T2YosToMSLzQgzClQ+mXQg+W+JLPDH7mPSMgN/P4qJCFIthSChXS4wnP4s
+         D4+1x90dWcwtI6ORq3fxvMaM9IExI521e5gY4OKJg25pDlPVzS3kkM1J/9VC4bMaiP
+         4LulHZB/vFJZgfD3l/Ec6wty6zzmWN+Tr5xPeiIBU2UeRM40DMdGtsZNnIGIczQofL
+         IFI4+OKOhF6pRIn53GMM0Lulrx7nsQTJE5vTgdFizl9dubBZKWFPWqbqRN+qznSJA/
+         dFD97YB0WAKHg==
+Date:   Thu, 7 Apr 2022 17:33:01 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, tzungbi@google.com,
+        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: Re: [v9 3/4] ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI
+ links of headset
+Message-ID: <20220407213301.wsm5qvtxgtkehj27@notapiano>
+References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
+ <20220406100514.11269-4-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220406100514.11269-4-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 10:49 +0800, Huang, Ying wrote:
+Hi Jiaxin,
+
+On Wed, Apr 06, 2022 at 06:05:13PM +0800, Jiaxin Yu wrote:
+> MT8192 platform use rt5682 codec, so through the snd_soc_of_get_dai_link_codecs()
+> to complete the configuration of I2S8/I2S9 dai_link's codecs.
+
+Likewise, suggestion for the commit message:
+
+As part of the refactoring to allow the same machine driver to be used for the
+rt1015(p) and rt5682(s) codecs on the MT8192 platform, parse the rt5682(s) codec
+from the headset-codec property in the devicetree and wire it to the I2S8 and
+I2S9 backends.
+
 > 
-> > > If so,
-> > > 
-> > > # echo A > memory.reclaim
-> > > 
-> > > means
-> > > 
-> > > a) "A" bytes memory are freed from the memcg, regardless demoting is
-> > >    used or not.
-> > > 
-> > > or
-> > > 
-> > > b) "A" bytes memory are reclaimed from the memcg, some of them may be
-> > >    freed, some of them may be just demoted from DRAM to PMEM.  The total
-> > >    number is "A".
-> > > 
-> > > For me, a) looks more reasonable.
-> > > 
-> > 
-> > We can use a DEMOTE flag to control the demotion behavior for
-> > memory.reclaim.  If the flag is not set (the default), then
-> > no_demotion of scan_control can be set to 1, similar to
-> > reclaim_pages().
-> 
-> If we have to use a flag to control the behavior, I think it's better to
-> have a separate interface (e.g. memory.demote).  But do we really need b)?
-> 
-> > The question is then whether we want to rename memory.reclaim to
-> > something more general.  I think this name is fine if reclaim-based
-> > demotion is an accepted concept.
-> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-memory.demote will work for 2 level of memory tiers.  But when we have 3 level
-of memory (e.g. high bandwidth memory, DRAM and PMEM), 
-it gets ambiguous again of wheter we sould demote from high bandwidth memory
-or DRAM.
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Will something like this be more general?
-
-echo X > memory_[dram,pmem,hbm].reclaim
-
-So echo X > memory_dram.reclaim
-means that we want to free up X bytes from DRAM for the mem cgroup.
-
-echo demote > memory_dram.reclaim_policy
-
-This means that we prefer demotion for reclaim instead
-of swapping to disk.
-
-
-Tim
-
-
+Thanks,
+Nícolas

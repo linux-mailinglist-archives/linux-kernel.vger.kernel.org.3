@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0D74F7D8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C632F4F7DA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiDGLJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S244668AbiDGLMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiDGLJG (ORCPT
+        with ESMTP id S244680AbiDGLMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:09:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C2681494;
-        Thu,  7 Apr 2022 04:07:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 340A621118;
-        Thu,  7 Apr 2022 11:07:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649329625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LE2tVt6E1/57kcFgpWdjdBQU6aDSlbFwP46O5S44+90=;
-        b=Tp5lGLf1ElWVIcInGlUGAoJ1sx0YdUjQTq9tC8LzRgATKZFC9iS34ryFP2GTDsBD0Mirv1
-        vRg/4eIJkZ5rGRuZIS6FxwFEhz62Vaik76t94HU2LQ2QePTUL26rXUg85lWH0KUDm4GPrG
-        NFM/0kDfL93OeH1mpzliJJGkaQkmwQk=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E1E68A3B82;
-        Thu,  7 Apr 2022 11:07:04 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 13:07:04 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
-Message-ID: <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
-References: <20220407093221.1090-1-jgross@suse.com>
- <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
- <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
+        Thu, 7 Apr 2022 07:12:01 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C390D64E8;
+        Thu,  7 Apr 2022 04:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649329793; x=1680865793;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EQGzKLPkMKM4S+AjnO1qx/YQtzyW0JHeQb2G2zJJxgA=;
+  b=DAUufCwV31fU6M1MrDQHZzhX3+UYl+kKkdv+2OPhTRycEJydlRA9wN7o
+   ziarUu7ao2t06Pyf5+HEzNZKnPzygeqlw7wBKmQxnGTL7LCramO1wVHu5
+   uWUlffYwTkH8LZn5krzQJCehKL0oKsR5agDWwdpWDQ3e+pKBUk2U8K8ji
+   cedfnFS/4EvbWWln4fcqsvAf9oKNJySgjN3lBKA2JI4gqzEJD1DJRYM3P
+   k7pRae0XHnqjCPxKpUMqwoOrcjr5cZOyAeGTUpVnQffMIpS2WtxIZYOF6
+   3bk8SKa4qfk1gWnC5w8PEs0hCdUfNHs7LoXsWrQMiVq81bGdx1MULnzQz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="324455542"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="324455542"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 04:09:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="722919033"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.125]) ([10.255.28.125])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 04:09:38 -0700
+Message-ID: <48ab3a81-a353-e6ee-7718-69c260c9ea17@intel.com>
+Date:   Thu, 7 Apr 2022 19:09:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 101/104] KVM: TDX: Silently ignore INIT/SIPI
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <d0eb8fa53e782a244397168df856f9f904e4d1cd.1646422845.git.isaku.yamahata@intel.com>
+ <efbe06a7-3624-2a5a-c1c4-be86f63951e3@redhat.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <efbe06a7-3624-2a5a-c1c4-be86f63951e3@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 07-04-22 12:45:41, Juergen Gross wrote:
-> On 07.04.22 12:34, Michal Hocko wrote:
-> > Ccing Mel
-> > 
-> > On Thu 07-04-22 11:32:21, Juergen Gross wrote:
-> > > Since commit 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist
-> > > initialization") only zones with free memory are included in a built
-> > > zonelist. This is problematic when e.g. all memory of a zone has been
-> > > ballooned out.
-> > 
-> > What is the actual problem there?
+On 4/5/2022 11:48 PM, Paolo Bonzini wrote:
+> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+>> +        if (kvm_init_sipi_unsupported(vcpu->kvm))
+>> +            /*
+>> +             * TDX doesn't support INIT.  Ignore INIT event.  In the
+>> +             * case of SIPI, the callback of
+>> +             * vcpu_deliver_sipi_vector ignores it.
+>> +             */
+>>               vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+>> -        else
+>> -            vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+>> +        else {
+>> +            kvm_vcpu_reset(vcpu, true);
+>> +            if (kvm_vcpu_is_bsp(apic->vcpu))
+>> +                vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+>> +            else
+>> +                vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+>> +        }
 > 
-> When running as Xen guest new hotplugged memory will not be onlined
-> automatically, but only on special request. This is done in order to
-> support adding e.g. the possibility to use another GB of memory, while
-> adding only a part of that memory initially.
+> Should you check vcpu->arch.guest_state_protected instead of 
+> special-casing TDX? 
+
+We cannot use vcpu->arch.guest_state_protected because TDX supports 
+debug TD, of which the states are not protected.
+
+At least we need another flag, I think.
+
+> KVM_APIC_INIT is not valid for SEV-ES either, if I 
+> remember correctly.
 > 
-> In case adding that memory is populating a new zone, the page allocator
-> won't be able to use this memory when it is onlined, as the zone wasn't
-> added to the zonelist, due to managed_zone() returning 0.
+> Paolo
 
-How is that memory onlined? Because "regular" onlining (online_pages())
-does rebuild zonelists if their zone hasn't been populated before.
-
--- 
-Michal Hocko
-SUSE Labs

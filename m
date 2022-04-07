@@ -2,182 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001774F8A3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957C24F8A33
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiDGVhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S231772AbiDGVl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiDGVhA (ORCPT
+        with ESMTP id S231731AbiDGVlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:37:00 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5AB19FF7E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:34:59 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id x131so11834692ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=yaGos3SERrC2jdiQiJ/85vABo3kZeiwvqRtqI7sWR/o=;
-        b=UnoHu1EK+12NpKKA6uHxlvH9RUZbPSgYKriZSpsoZk125w5ipGaiJ7sTtSTGJbeMdp
-         Di350AKk06PeKhYE+MJWSKTJDYk4A7TfEFWKJ92lqYXLXG0/bkkDCtMSY4ru7ns8Cs30
-         0NIEgnHab0r5/k/hTOZPAKpTGMTGQGQyTK33Uukp8gs2IzZlnPz6LrjMGmCnCqLwUZ25
-         18itwsp3ELXHwK29xjTTLEMg8uzfg7NH4o8JLk0FisLvmB12XKsQ7g2lpr3Ncu5s+INw
-         N+bbiivMFNquAbOtNEkdbNn0yw4WP/NnDLWLnUCQIm4OAwysRaQ56esx+QbJW1tI3C1l
-         7+hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=yaGos3SERrC2jdiQiJ/85vABo3kZeiwvqRtqI7sWR/o=;
-        b=ntjt7vzjFNjVxX7xMxLl5Lj5F0hAdHLHO+JQdNKcaP1G3AxhZboEcrzQyn4Dw+WIbr
-         CLmmUeyVjGDdsk7z/3UFwmZyKnduKmAcZobZk45Xs0MC9zYqSN4uyaOEAu6NPwOeKtEv
-         oY4391Sqx8bgoU9tjQIjUaYPQ3Bg7iQhgdz6xvxXlFneV3hE1hMLE/NmM2CZ+1v0g1xb
-         pg529Rorpc2uSRuIInbdM6AyCObM/xhkUjlxHIFpv64hMtp5q6DWgIzU/MyQZbd8xNW/
-         +t7SgxUUBJF2OBo3p4HtJztj/Utsb5g9XK7AELEvU5f4OHZ2RYMiVNb29czQt7lXf2d5
-         YZXw==
-X-Gm-Message-State: AOAM532B1VKh1gg2rJT05euS7Aq74X0gUYxnmIl5WTjV+ssp6fKk7ibG
-        xin0bcWpUmO86nyKd3jLCx80iBBHEzPXyDNfE6/w2Q==
-X-Google-Smtp-Source: ABdhPJwJEywGIqQdg8hh0sUZXnA5G8Sb7DVlb0w1/35HRGGNTC17jceSOFtlb3SQWN4PMoqW6FMkZ+50oK/6iZFFy60=
-X-Received: by 2002:a25:e689:0:b0:63e:4f58:d27 with SMTP id
- d131-20020a25e689000000b0063e4f580d27mr4753250ybh.341.1649367298317; Thu, 07
- Apr 2022 14:34:58 -0700 (PDT)
+        Thu, 7 Apr 2022 17:41:23 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 578ECFD6E9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:39:21 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-320-WR3U6Ba6MeKh1xc75li2gw-1; Thu, 07 Apr 2022 22:39:18 +0100
+X-MC-Unique: WR3U6Ba6MeKh1xc75li2gw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 7 Apr 2022 22:39:17 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 7 Apr 2022 22:39:17 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Nick Desaulniers' <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+CC:     "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Subject: RE: [PATCH 6/7] kbuild: make *.mod not depend on *.o
+Thread-Topic: [PATCH 6/7] kbuild: make *.mod not depend on *.o
+Thread-Index: AQHYSqlwlFlZ8XvVlkmR3e+Fu9qwr6zk+UXQ
+Date:   Thu, 7 Apr 2022 21:39:16 +0000
+Message-ID: <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
+References: <20220406153023.500847-1-masahiroy@kernel.org>
+ <20220406153023.500847-7-masahiroy@kernel.org>
+ <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com>
+In-Reply-To: <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:a81:10a:0:0:0:0:0 with HTTP; Thu, 7 Apr 2022 14:34:57 -0700 (PDT)
-In-Reply-To: <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
-References: <20220311072859.2174624-1-brendanhiggins@google.com>
- <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org> <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Thu, 7 Apr 2022 18:34:57 -0300
-Message-ID: <CAKgze5bCf+v4PoS92XCDV2cD7d0iUvCvxHbPqAnLoW8pwoKbtQ@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
- init code
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        davidgow@google.com, dlatypov@google.com,
-        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, jk@codeconstruct.com.au
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22, Brendan Higgins <brendanhiggins@google.com> wrote:
-> On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org>
-> wrote:
->>
->> Hi Brendan,
->>
->> On 3/11/22 12:28 AM, Brendan Higgins wrote:
->> > Add support for a new kind of kunit_suite registration macro called
->> > kunit_test_init_suite(); this new registration macro allows the
->> > registration of kunit_suites that reference functions marked __init and
->> > data marked __initdata.
->> >
->> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
->> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
->> > Reviewed-by: Kees Cook <keescook@chromium.org>
->> > Reviewed-by: David Gow <davidgow@google.com>
->> > ---
->> >
->>
->> I almost applied it ...
->>
->> > This is a follow-up to the RFC here[1].
->> >
->> > This patch is in response to a KUnit user issue[2] in which the user
->> > was
->> > attempting to test some init functions; although this is a functional
->> > solution as long as KUnit tests only run during the init phase, we will
->> > need to do more work if we ever allow tests to run after the init phase
->> > is over; it is for this reason that this patch adds a new registration
->> > macro rather than simply modifying the existing macros.
->> >
->> > Changes since last version:
->> >   - I added more to the kunit_test_init_suites() kernel-doc comment
->> >     detailing "how" the modpost warnings are suppressed in addition to
->> >     the existing information regarding "why" it is OK for the modpost
->> >     warnings to be suppressed.
->> >
->> > [1]
->> > https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
->> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
->> >
->> > ---
->> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
->> >   1 file changed, 26 insertions(+)
->> >
->> > diff --git a/include/kunit/test.h b/include/kunit/test.h
->> > index b26400731c02..7f303a06bc97 100644
->> > --- a/include/kunit/test.h
->> > +++ b/include/kunit/test.h
->> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
->> >
->> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
->> >
->> > +/**
->> > + * kunit_test_init_suites() - used to register one or more &struct
->> > kunit_suite
->> > + *                         containing init functions or init data.
->> > + *
->> > + * @__suites: a statically allocated list of &struct kunit_suite.
->> > + *
->> > + * This functions identically as &kunit_test_suites() except that it
->> > suppresses
->> > + * modpost warnings for referencing functions marked __init or data
->> > marked
->> > + * __initdata; this is OK because currently KUnit only runs tests upon
->> > boot
->> > + * during the init phase or upon loading a module during the init
->> > phase.
->> > + *
->> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after
->> > boot, these
->> > + * tests must be excluded.
->> > + *
->> > + * The only thing this macro does that's different from
->> > kunit_test_suites is
->> > + * that it suffixes the array and suite declarations it makes with
->> > _probe;
->> > + * modpost suppresses warnings about referencing init data for symbols
->> > named in
->> > + * this manner.
->> > + */
->> > +#define kunit_test_init_suites(__suites...)                          \
->> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
->> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
->> > +                         ##__suites)
->> > +
->> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
->> > +
->> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
->> >       for (test_case = suite->test_cases; test_case->run_case;
->> > test_case++)
->> >
->> >
->>
->> The naming of the function and macro are rather confusing and can become
->> error prone. Let's find better naming scheme.
->
-> Yeah, I wasn't sure about the name. I didn't have any better ideas
-> initially though. Any suggestions?
->
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwNyBBcHJpbCAyMDIyIDE4OjU5DQo+IA0K
+PiBPbiBXZWQsIEFwciA2LCAyMDIyIGF0IDg6MzEgQU0gTWFzYWhpcm8gWWFtYWRhIDxtYXNhaGly
+b3lAa2VybmVsLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiBUaGUgZGVwZW5kZW5jeQ0KPiA+DQo+ID4g
+ICAgICQob2JqKS8lLm1vZDogJChvYmopLyUkKG1vZC1wcmVsaW5rLWV4dCkubw0KPiA+DQo+ID4g
+Li4uIGV4aXN0cyBiZWNhdXNlICoubW9kIGZpbGVzIHByZXZpb3VzbHkgY29udGFpbmVkIHVuZGVm
+aW5lZCBzeW1ib2xzLA0KPiA+IHdoaWNoIGFyZSBjb21wdXRlZCBmcm9tICoubyBmaWxlcyB3aGVu
+IENPTkZJR19UUklNX1VOVVNFRF9LU1lNUz15Lg0KPiA+DQo+ID4gTm93IHRoYXQgdGhlIHVuZGVm
+aW5lZCBzeW1ib2xzIGFyZSBwdXQgaW50byBzZXBhcmF0ZSAqLnVzeW1zIGZpbGVzLA0KPiA+IHRo
+ZXJlIGlzIG5vIHJlYXNvbiB0byBtYWtlICoubW9kIGRlcGVuZCBvbiAqLm8gZmlsZXMuDQo+ID4N
+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3Jn
+Pg0KPiA+IC0tLQ0KPiA+DQo+ID4gIE1ha2VmaWxlICAgICAgICAgICAgICAgfCAzICsrLQ0KPiA+
+ICBzY3JpcHRzL01ha2VmaWxlLmJ1aWxkIHwgNSArKy0tLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQs
+IDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9N
+YWtlZmlsZSBiL01ha2VmaWxlDQo+ID4gaW5kZXggODJlZTg5MzkwOWU5Li5lOTE1YWFjZDAyYjAg
+MTAwNjQ0DQo+ID4gLS0tIGEvTWFrZWZpbGUNCj4gPiArKysgYi9NYWtlZmlsZQ0KPiA+IEBAIC0x
+NzkyLDcgKzE3OTIsOCBAQCBpZmRlZiBzaW5nbGUtYnVpbGQNCj4gPg0KPiA+ICAjIC5rbyBpcyBz
+cGVjaWFsIGJlY2F1c2UgbW9kcG9zdCBpcyBuZWVkZWQNCj4gPiAgc2luZ2xlLWtvIDo9ICQoc29y
+dCAkKGZpbHRlciAlLmtvLCAkKE1BS0VDTURHT0FMUykpKQ0KPiA+IC1zaW5nbGUtbm8ta28gOj0g
+JChzb3J0ICQocGF0c3Vic3QgJS5rbywlLm1vZCwgJChNQUtFQ01ER09BTFMpKSkNCj4gPiArc2lu
+Z2xlLW5vLWtvIDo9ICQoZmlsdGVyLW91dCAkKHNpbmdsZS1rbyksICQoTUFLRUNNREdPQUxTKSkg
+XA0KPiA+ICsgICAgICAgICAgICAgICAkKGZvcmVhY2ggeCwgbyBtb2QsICQocGF0c3Vic3QgJS5r
+bywgJS4keCwgJChzaW5nbGUta28pKSkNCj4gDQo+IEknbSBvbiBib2FyZCB3aXRoIHRoaXMgcGF0
+Y2gsIGFuZCB0aGUgb3ZlcmFsbCBnb2FsIHdpdGggdGhlIHNlcmllcy4gTXkNCj4gYnJhaW4gaXMg
+aGF2aW5nIGEgaGFyZCB0aW1lIHBhcnNpbmcgYG8gbW9kYCB0aG91Z2guIENhbiB5b3Ugd2FsayBt
+ZQ0KPiB0aHJvdWdoIHRoYXQ/IEFyZSB0aG9zZSB0YXJnZXRzIGZvciAubyBhbmQgLm1vZCBmaWxl
+cywgcmVzcGVjdGl2ZWx5Pw0KDQpJIHRoaW5rIEknZCBkbzoNCnNpbmdsZS1uby1rbyA6PSAkKGZp
+bHRlci1vdXQgJChzaW5nbGUta28pLCAkKE1BS0VDTURHT0FMUykpDQpzaW5nbGUtbm8ta28gKz0g
+JChwYXRzdWJzdCAlLmtvLCAlLm8sICQoc2luZ2xlLWtvKSkNCnNpbmdsZS1uby1rbyArPSAkKHBh
+dHN1YnN0ICUua28sICUubW9kLCAkKHNpbmdsZS1rbykpDQoNCkFsdGhvdWdoIHlvdSBjYW4gdXNl
+IHRoZSBzaW1wbGVyIFNZU1YgbWFrZSBzdWZmaXggc3Vic3RpdHV0aW9uIHN5bnRheDoNCnNpbmds
+ZS1uby1rbyArPSAkKHNpbmdsZS1rbzoua289Lm8pICQoc2luZ2xlLWtvOi5rbz0ubW9kKQ0KDQoJ
+RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
+dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
+OTczODYgKFdhbGVzKQ0K
 
-What about kunit_test_init_section_suite?
-
->> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
->> >
->>
->> thanks,
->> -- Shuah
->

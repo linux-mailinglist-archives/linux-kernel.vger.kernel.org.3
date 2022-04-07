@@ -2,110 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5C34F7BEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFCC4F7BEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236564AbiDGJn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S237027AbiDGJno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243954AbiDGJmm (ORCPT
+        with ESMTP id S234890AbiDGJn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:42:42 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2BABE9D0;
-        Thu,  7 Apr 2022 02:40:42 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id a19so582870oie.7;
-        Thu, 07 Apr 2022 02:40:42 -0700 (PDT)
+        Thu, 7 Apr 2022 05:43:27 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3AE9978
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:41:27 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id i186so3071471vsc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FcHUUuQouyt/oY/Z43CP8YAaehl/b4UABsbX648Cgqw=;
-        b=kBXvEADXYwY9BuAhBBmGchud4VtpU+9Lx9yTtwSP8/g3Hec0qg42N61sBeBSCYW8jC
-         ux0tIR1TwlGJLD+RFvHbuaBYNmqKECfoqoLfaZm6QhtXezxd6dDMX5hVN3dxX0FQ2ffF
-         MoujfsLpP6CVygYGjFkN5vxvsNVwhz+tdcvDQW+3l/mmeCcCDnaOFrTUOEVPzGcWhTXL
-         I7tTEM0Iv05tnvclQxPvffVRZPviEGlpx0SD25bn8JiQO8w/U/cDwlgmn0nkJrNhzgIF
-         3fFAd1m4sxb5UzRKdnQ27vl7uMrRsjFkJVN3NfsJh+RwrsDjwCCvWCV6nOcUo4qBD88r
-         IrtQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z7zJJ3dVoUtJLqxQIGYbqRajy422RRa0RyqoMndHc4s=;
+        b=JkMq8F+3HtqO81NBb1mkbEohTJ6kSw94E2HbJldlJImgri78wn/U3VLQp5g3pt4vwu
+         Oe3axNLegualBV2dfsFabBMvpDHS11gaY2Qw29J7JTL8Oa104iEKUtNyybRoQJ2sZ65U
+         HyDQybd4LaFvI+CJyrfhdiDxb7yqzjdImxYove6PUfT25p/HG9P3Pmf5Evcb0ODwU+jS
+         V/WwpuTXm4hM1VYORFumSwU3lEzCPKr+NA2oGfAc0U7FiEiP7MgWSFP9EzlHssjpgL+P
+         pm+hgBbIrLJFdgk1fC7jOMsY4OnDdgy+B2/j8ina8ycxYobiXaeWtaw0biULRtVwzBDw
+         3WKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FcHUUuQouyt/oY/Z43CP8YAaehl/b4UABsbX648Cgqw=;
-        b=G38HdHlp7TNZsIGKVupaGpnsK6R6aRBh66wFb5qRbWArfB5NSAmnC5+gsr0JBHVnRl
-         vIBUujWY4Bq6t2yGD7cxMXbKNIlmRRMHJGDjSdE/0iOhjXebJLMr+Fv/cpoetu5lTAk0
-         oGimRnsE9VGu4nZw0EYZV5nJsGV+h8rAdP24o7kz/ZBzmK03QzVb4ElsNc6HrPyt9hjI
-         DSf6FrFatnS+/eNghFzARDT3U03qiWTDkft2WWClKO0Vri8SQCi6/z292csp+Enf9ReA
-         A53CbWL+yTr3kj72QlQaXpQP5ABVXU6CX5rC3uae6sx9piFQxEd1lCkkUialEMka0BJC
-         KsUg==
-X-Gm-Message-State: AOAM533I8zfTQBINcTHFN4SsQkq/O+4+hYW/4rHaWL7+rw7rbWGtaUZW
-        ClVDyPtHuffQ+b0wWGj5YWc=
-X-Google-Smtp-Source: ABdhPJwvBfUmqwK9rfS2jeAGA7uvk8UX3yAunbKvOTQM+QhppJvvPmT+e/wpWG2NQevnNdYHxurrng==
-X-Received: by 2002:a05:6808:1719:b0:2f9:ab58:73db with SMTP id bc25-20020a056808171900b002f9ab5873dbmr974460oib.201.1649324442287;
-        Thu, 07 Apr 2022 02:40:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r6-20020a0568301ac600b005cdbc6e62a9sm7665966otc.39.2022.04.07.02.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:40:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 7 Apr 2022 02:40:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc2 review
-Message-ID: <20220407094040.GC3041848@roeck-us.net>
-References: <20220406133013.264188813@linuxfoundation.org>
- <fce71421-6afc-9f8c-31a2-a71fccb3259d@roeck-us.net>
- <CADVatmPpDpcX-0NYBUgVjNtgB_EjXL7GO5bfuTH2yGR6DB5_jg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z7zJJ3dVoUtJLqxQIGYbqRajy422RRa0RyqoMndHc4s=;
+        b=bX2iztkQz1bTOnoAnkFlXdgRCSIdObHfzyRQ1nlrqEiIZpWhNKwn70VeAqNozAIhQW
+         qztgjNy7VWAMzaLbVXaEOKfCMMTSiO4pVXmo44esRaalDV5LAh9tYHN0IL4NXO9zhGAO
+         ZRBKSQDPevUhnglsJMlWPKB8gBX3HpsniNJD3Oi4LPMXFFJ0Ew3tKjAB7GCIlIIkg2Ky
+         2oF3+IkoSnVc5UPf4GWobIyi5EkZ1cd520o5SvYiR4YO+viO6TvgGv0dkrhYQgZnJA2u
+         Gifeng2rJ2/Y6OP6kIrt5xD7m/J/DqDwmjNsMLUBiYtcLZzurwZGWNZhxKbUXyJ02nDT
+         BG6w==
+X-Gm-Message-State: AOAM531zgv/XzuUhXqI7llwTdyzQDjkghHEniJkn5stS0a5afNAzUP/w
+        Wb+eIftQ9t4fyNRVg57jRZ4wZ1uNVKtDhAmkRB2y8g==
+X-Google-Smtp-Source: ABdhPJznbN/TbVfynuU05EKXVCH2yRC1wZVWoNNxhWpZNDl5eLfDeRuTca6WXDt0On9YhbPtyNMup3nQhkj5pv50cFM=
+X-Received: by 2002:a05:6102:3753:b0:325:c20e:4b1c with SMTP id
+ u19-20020a056102375300b00325c20e4b1cmr4264725vst.84.1649324486928; Thu, 07
+ Apr 2022 02:41:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmPpDpcX-0NYBUgVjNtgB_EjXL7GO5bfuTH2yGR6DB5_jg@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220407031525.2368067-1-yuzhao@google.com> <CAOUHufZ8x5B-e+Wwgrh+qWryf8dAbfMWVEE0s-AfwZ-H7DouQg@mail.gmail.com>
+ <20220407183112.2cb5b627@canb.auug.org.au>
+In-Reply-To: <20220407183112.2cb5b627@canb.auug.org.au>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 7 Apr 2022 03:41:15 -0600
+Message-ID: <CAOUHufbaPR3H2KcYywCf0ycFWh=2Nf1PwiO4t8tO6TXB9U1MwA@mail.gmail.com>
+Subject: Re: [PATCH v10 00/14] Multi-Gen LRU Framework
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:35:27AM +0100, Sudip Mukherjee wrote:
-> On Thu, Apr 7, 2022 at 10:10 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, Apr 7, 2022 at 2:31 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Yu,
+>
+> On Wed, 6 Apr 2022 21:24:27 -0600 Yu Zhao <yuzhao@google.com> wrote:
 > >
-> > On 4/6/22 06:43, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.10.110 release.
-> > > There are 597 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> > > Anything received after that time might be too late.
-> > >
+> > Can you please include this patchset in linux-next? Git repo for you to fetch:
 > >
-> > I still see the same build error. This is with v5.10.109-600-g45fdcc9dc72a.
-> 
-> 45fdcc9dc72a was rc1.
-> 
-> rc2 is f8a7d8111f45 which is v5.10.109-598-gf8a7d8111f45
+> > https://linux-mm.googlesource.com/mglru for-linux-next
+>
+> I get a message saying "This repository is empty. Push to it to show
+> branches and history." :-(
 
-Hmm, you are correct, but I just tried v5.10.109-598-gf8a7d8111f45 and
-get (almost) the same error.
+Sorry about this. It should work now.
 
-fs/binfmt_elf.c: In function 'fill_note_info':
-fs/binfmt_elf.c:2056:53: error: 'regs' undeclared
+> > My goal is to get additional test coverage before I send a pull
+> > request for 5.19 to Linus.
+>
+> Good idea :-)
+>
+> > I've explored all avenues, but ultimately I've failed to rally
+> > substantial support from the MM stakeholders [1]. There are no pending
+> > technical issues against this patchset [2]. What is more concerning
+> > are the fundamental disagreements on priorities, methodologies, etc.
+> > that are not specific to this patchset and have been hindering our
+> > progress as a collective. (Cheers to the mutual dissatisfaction.)
+>
+> I have not been following the discussion as I am not an mm person, but
+> this is not a good sign.
+>
+> > While we plan to discuss those issues during the LSFMM next month, it
+> > doesn't seem reasonable to leave this patchset hanging in the air,
+> > since it has reached its maturity a while ago and there are strong
+> > demands from downstream kernels as well as a large user base. Thus I
+> > sent that pull request to Linus a couple of weeks ago, implying that
+> > he would have to make the final decision soon.
+> >
+> > I hope this gives enough background about what's been going on with
+> > this patchset. If you decide to take it and it causes you any
+> > troubles, please feel free to yell at me.
+> >
+> > Thanks!
+> >
+> > [1] https://lore.kernel.org/r/20220104202227.2903605-1-yuzhao@google.com/
+> > [2] https://lore.kernel.org/r/20220326010003.3155137-1-yuzhao@google.com/
+>
+> I had a look at those threads and I guess things are better that your
+> comment above implies.
+>
+> So, a couple of questions:
+>
+> Have you done a trial merge with a current linux-next tree to see what
+> sort of mess/pain we may already be in?
 
-I'll restart my build server; it seems to have missed some of the changes.
+Yes, the repo I prepared for you is based on the latest linux-next.
+There shouldn't be any conflicts.
 
-Guenter
+> Is it all stable enough now that it could be sent as a patch series for
+> Andrew to include in mmotm (with perhaps just smallish followup patches)?
+
+Yes, on multiple occasions, e.g., [1][2][3], I've claimed this
+patchset has an unprecedented test coverage and nobody has proven
+otherwise so far.
+
+Andrew suggested a cycle in linux-next [4]. So here we are :)
+
+[1] https://lore.kernel.org/all/YdSuSHa%2FVjl6bPkg@google.com/
+[2] https://lore.kernel.org/r/YdiKVJlClB3h1Kmg@google.com/
+[3] https://lore.kernel.org/r/YgR+MfXjpg82QyBT@google.com/
+[4] https://lore.kernel.org/r/20220326134928.ad739eeecd5d0855dbdc6257@linux-foundation.org/

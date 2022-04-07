@@ -2,161 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4E04F78AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE584F7882
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiDGICF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S242505AbiDGIAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242581AbiDGICB (ORCPT
+        with ESMTP id S242489AbiDGH76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:02:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E2B1560B3;
-        Thu,  7 Apr 2022 01:00:01 -0700 (PDT)
-X-UUID: dc3e5c70a1bd40ebb28d7fc0286e050b-20220407
-X-UUID: dc3e5c70a1bd40ebb28d7fc0286e050b-20220407
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 314671451; Thu, 07 Apr 2022 15:59:55 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 7 Apr 2022 15:59:53 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 7 Apr 2022 15:59:51 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        Thu, 7 Apr 2022 03:59:58 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF1111DC0;
+        Thu,  7 Apr 2022 00:57:59 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2377id9e045432;
+        Thu, 7 Apr 2022 15:44:39 +0800 (GMT-8)
+        (envelope-from dylan_hung@aspeedtech.com)
+Received: from DylanHung-PC.aspeed.com (192.168.2.216) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 7 Apr
+ 2022 15:56:00 +0800
+From:   Dylan Hung <dylan_hung@aspeedtech.com>
+To:     <robh+dt@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <p.zabel@pengutronix.de>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <yong.wu@mediatek.com>,
-        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
-        <xueqi.zhang@mediatek.com>, <yen-chang.chen@mediatek.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Subject: [PATCH v6 14/34] iommu/mediatek: Add SUB_COMMON_3BITS flag
-Date:   Thu, 7 Apr 2022 15:57:06 +0800
-Message-ID: <20220407075726.17771-15-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220407075726.17771-1-yong.wu@mediatek.com>
-References: <20220407075726.17771-1-yong.wu@mediatek.com>
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <BMC-SW@aspeedtech.com>
+Subject: [PATCH v3 0/3] Add reset deassertion for Aspeed MDIO
+Date:   Thu, 7 Apr 2022 15:57:31 +0800
+Message-ID: <20220407075734.19644-1-dylan_hung@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.216]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2377id9e045432
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In prevous SoC, the sub common id occupy 2 bits. the mt8195's sub common
-id has 3bits. Add a new flag for this. and rename the previous flag to
-_2BITS. For readable, I put these two flags together, then move the
-other flags. no functional change.
+Add missing reset deassertion for Aspeed MDIO bus controller. The reset
+is asserted by the hardware when power-on so the driver only needs to
+deassert it. To be able to work with the old DT blobs, the reset is
+optional since it may be deasserted by the bootloader or the previous
+kernel.
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/iommu/mtk_iommu.c | 26 ++++++++++++++++----------
- drivers/iommu/mtk_iommu.h |  2 +-
- 2 files changed, 17 insertions(+), 11 deletions(-)
+V3:
+- remove reset property from the required list of the device tree
+  bindings
+- remove "Cc: stable@vger.kernel.org" from the commit messages
+- add more description in the commit message of the dt-binding
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index d59f6857a9df..84d661e0b371 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -105,6 +105,8 @@
- #define REG_MMU1_INT_ID				0x154
- #define F_MMU_INT_ID_COMM_ID(a)			(((a) >> 9) & 0x7)
- #define F_MMU_INT_ID_SUB_COMM_ID(a)		(((a) >> 7) & 0x3)
-+#define F_MMU_INT_ID_COMM_ID_EXT(a)		(((a) >> 10) & 0x7)
-+#define F_MMU_INT_ID_SUB_COMM_ID_EXT(a)		(((a) >> 7) & 0x7)
- #define F_MMU_INT_ID_LARB_ID(a)			(((a) >> 7) & 0x7)
- #define F_MMU_INT_ID_PORT_ID(a)			(((a) >> 2) & 0x1f)
- 
-@@ -116,13 +118,14 @@
- #define HAS_VLD_PA_RNG			BIT(2)
- #define RESET_AXI			BIT(3)
- #define OUT_ORDER_WR_EN			BIT(4)
--#define HAS_SUB_COMM			BIT(5)
--#define WR_THROT_EN			BIT(6)
--#define HAS_LEGACY_IVRP_PADDR		BIT(7)
--#define IOVA_34_EN			BIT(8)
--#define SHARE_PGTABLE			BIT(9) /* 2 HW share pgtable */
--#define DCM_DISABLE			BIT(10)
--#define NOT_STD_AXI_MODE		BIT(11)
-+#define HAS_SUB_COMM_2BITS		BIT(5)
-+#define HAS_SUB_COMM_3BITS		BIT(6)
-+#define WR_THROT_EN			BIT(7)
-+#define HAS_LEGACY_IVRP_PADDR		BIT(8)
-+#define IOVA_34_EN			BIT(9)
-+#define SHARE_PGTABLE			BIT(10) /* 2 HW share pgtable */
-+#define DCM_DISABLE			BIT(11)
-+#define NOT_STD_AXI_MODE		BIT(12)
- 
- #define MTK_IOMMU_HAS_FLAG(pdata, _x) \
- 		((((pdata)->flags) & (_x)) == (_x))
-@@ -290,9 +293,12 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
- 	fault_pa |= (u64)pa34_32 << 32;
- 
- 	fault_port = F_MMU_INT_ID_PORT_ID(regval);
--	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM)) {
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM_2BITS)) {
- 		fault_larb = F_MMU_INT_ID_COMM_ID(regval);
- 		sub_comm = F_MMU_INT_ID_SUB_COMM_ID(regval);
-+	} else if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM_3BITS)) {
-+		fault_larb = F_MMU_INT_ID_COMM_ID_EXT(regval);
-+		sub_comm = F_MMU_INT_ID_SUB_COMM_ID_EXT(regval);
- 	} else {
- 		fault_larb = F_MMU_INT_ID_LARB_ID(regval);
- 	}
-@@ -1069,7 +1075,7 @@ static const struct mtk_iommu_plat_data mt2712_data = {
- 
- static const struct mtk_iommu_plat_data mt6779_data = {
- 	.m4u_plat      = M4U_MT6779,
--	.flags         = HAS_SUB_COMM | OUT_ORDER_WR_EN | WR_THROT_EN |
-+	.flags         = HAS_SUB_COMM_2BITS | OUT_ORDER_WR_EN | WR_THROT_EN |
- 			 NOT_STD_AXI_MODE,
- 	.inv_sel_reg   = REG_MMU_INV_SEL_GEN2,
- 	.iova_region   = single_domain,
-@@ -1107,7 +1113,7 @@ static const struct mtk_iommu_plat_data mt8183_data = {
- 
- static const struct mtk_iommu_plat_data mt8192_data = {
- 	.m4u_plat       = M4U_MT8192,
--	.flags          = HAS_BCLK | HAS_SUB_COMM | OUT_ORDER_WR_EN |
-+	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS | OUT_ORDER_WR_EN |
- 			  WR_THROT_EN | IOVA_34_EN | NOT_STD_AXI_MODE,
- 	.inv_sel_reg    = REG_MMU_INV_SEL_GEN2,
- 	.iova_region    = mt8192_multi_dom,
-diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-index dc868fce0d2a..f41e32252056 100644
---- a/drivers/iommu/mtk_iommu.h
-+++ b/drivers/iommu/mtk_iommu.h
-@@ -20,7 +20,7 @@
- #include <dt-bindings/memory/mtk-memory-port.h>
- 
- #define MTK_LARB_COM_MAX	8
--#define MTK_LARB_SUBCOM_MAX	4
-+#define MTK_LARB_SUBCOM_MAX	8
- 
- #define MTK_IOMMU_GROUP_MAX	8
- 
+V2:
+- add reset property in the device tree bindings
+- add reset assertion in the error path and driver remove
+
+Dylan Hung (3):
+  dt-bindings: net: add reset property for aspeed, ast2600-mdio binding
+  net: mdio: add reset control for Aspeed MDIO
+  ARM: dts: aspeed: add reset properties into MDIO nodes
+
+ .../bindings/net/aspeed,ast2600-mdio.yaml         |  5 +++++
+ arch/arm/boot/dts/aspeed-g6.dtsi                  |  4 ++++
+ drivers/net/mdio/mdio-aspeed.c                    | 15 ++++++++++++++-
+ 3 files changed, 23 insertions(+), 1 deletion(-)
+
 -- 
-2.18.0
+2.25.1
 

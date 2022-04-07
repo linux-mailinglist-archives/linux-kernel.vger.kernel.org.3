@@ -2,188 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A334F8139
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AE44F8140
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240559AbiDGOFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S244529AbiDGOF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiDGOFF (ORCPT
+        with ESMTP id S229494AbiDGOF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:05:05 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21569D9EB7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:03:04 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id u3so8034730wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Yez/wOgS2wGIwd8n8IZ3uYevPlJ/v5ArOMM4z5S2Ndg=;
-        b=T4EZ03WqYGu4YI/VvHId+EDY0bU01pqcKiPmsOqHb54jAO+NHZMQDjRR1QarkAy+vN
-         xn1T9jOxXarlTTEq/8EsClZrslDVQI9KLZZUCER5BotLTh/jkRXwkra1Os+Gj2Dy+an4
-         D8K2xb1mfTYt0j4wC/tLiFbtmj7rZi34q9f/60FtbZ+nrIUIaHZjL8TvJ8pNAJheEvs/
-         OnIcttPMU66BZ5WsnFM7Raqxi5xOJHS8DxuCo2+nb1foMXG7Ks6FGT7p1HLnyTEUibda
-         JQv+SJNcx8o3xR7ywZ68YDcfszUEPVcYicPGE/afFp11tjrBY89LXSfTSjob9GO2GiIL
-         ZNfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Yez/wOgS2wGIwd8n8IZ3uYevPlJ/v5ArOMM4z5S2Ndg=;
-        b=IjXNhcJShxiLdzdmq1GKN4IqkUEJHEn2MnMYdu1spYSaMpLivrRX/SwXXDtjL53ZAF
-         00Wtzch0IFhuCB0KQKoV1R+JTo459m98k/5JRQLtDK7Gndt4LHY5P+YlAJhzXmrDR2gi
-         llu8YpiR9o7EnLT+iwEGlJhi3seDfYOWGFklxeGUqVqoWLcxbF+OlzqYFghso08y2WQv
-         1bu3o4h6GVWtJxw//9OAi7oZTsB1jhjZDx0cTCMWCRol5zYDitlUPR0wOK/L3Y1Nyrkf
-         q4P2RJL0b7IwkzThJcp9FaVhj+/mGmkaSpJaK6nSBgPskIXsN8a34r9tknEssQJTT56m
-         ozww==
-X-Gm-Message-State: AOAM530c6EfHc8raE7WHRWwscPi7cif26gwpHt1312DbGZaziMMqOFT1
-        TaoI0WwHYGIexq6S2o9+mdf2xX6OtcLm8exr
-X-Google-Smtp-Source: ABdhPJyTSyAhQPnkr/lCtybwrnyNOglgocgsV+yActqtpl7PefGTEkGKJ2kjdDsApqaF9gaKCXOSBQ==
-X-Received: by 2002:a5d:6d8d:0:b0:206:966:5f8 with SMTP id l13-20020a5d6d8d000000b00206096605f8mr11410626wrs.498.1649340182567;
-        Thu, 07 Apr 2022 07:03:02 -0700 (PDT)
-Received: from [10.1.3.188] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id d20-20020a05600c34d400b0038caf684679sm9953386wmq.0.2022.04.07.07.03.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 07:03:02 -0700 (PDT)
-Message-ID: <bedff186-8ce4-3cfd-aa67-f0375daf29b4@baylibre.com>
-Date:   Thu, 7 Apr 2022 16:03:01 +0200
+        Thu, 7 Apr 2022 10:05:56 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16996E09A5;
+        Thu,  7 Apr 2022 07:03:52 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 22:03:04
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.181.226.201]
+Date:   Thu, 7 Apr 2022 22:03:04 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jiri Slaby" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com, jgg@ziepe.ca,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
+        linux-xtensa@linux-xtensa.org, linux-rdma@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
+        linma@zju.edu.cn, rmk@flint.arm.linux.org.uk
+Subject: Re: Re: [PATCH 01/11] drivers: tty: serial: Fix deadlock in
+ sa1100_set_termios()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
+ <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] tty: serial: meson: Added 12Mhz as the clock source
- for calculating baud rate
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220407081355.13602-1-yu.tu@amlogic.com>
- <20220407081355.13602-3-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220407081355.13602-3-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <2ad5aaaf.3fa1d.1800455f764.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgBnFvIY705iKQ2UAQ--.29015W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMNAVZdtZE8AAAFsb
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 10:13, Yu Tu wrote:
-> Starting with the g12A chip, add a 12Mhz clock to calculate the baud
-> rate, since the BT module uses 3Mhz baud rate. 8Mhz calculations can
-> lead to baud rate bias, causing some problems.
-
-The commit message isn't clear enough, 12MHz is a new intermediate clock
-rate, not a new clock source of the UART module.
-
-Please explain a /2 divider over XTAL was introduced since G12A, and
-is preferred to be used over the still present /3 divider since it
-provides much closer frequencies vs the request baudrate.
-
-> 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 25 +++++++++++++++++++++++--
->   1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 8e59624935af..7e77693a1318 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -68,6 +68,7 @@
->   #define AML_UART_BAUD_MASK		0x7fffff
->   #define AML_UART_BAUD_USE		BIT(23)
->   #define AML_UART_BAUD_XTAL		BIT(24)
-> +#define AML_UART_BAUD_XTAL_DIV2		BIT(27)
->   
->   #define AML_UART_PORT_NUM		12
->   #define AML_UART_PORT_OFFSET		6
-> @@ -80,6 +81,10 @@ static struct uart_driver meson_uart_driver;
->   
->   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
->   
-> +struct meson_uart_data {
-> +	bool has_xtal_div2;
-> +};
-> +
->   static void meson_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
->   {
->   }
-> @@ -293,13 +298,20 @@ static int meson_uart_startup(struct uart_port *port)
->   
->   static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
->   {
-> -	u32 val;
-> +	struct meson_uart_data *private_data = port->private_data;
-> +	u32 val = 0;
->   
->   	while (!meson_uart_tx_empty(port))
->   		cpu_relax();
->   
->   	if (port->uartclk == 24000000) {
-> -		val = DIV_ROUND_CLOSEST(port->uartclk / 3, baud) - 1;
-> +		unsigned int xtal_div = 3;
-> +
-> +		if (private_data->has_xtal_div2) {
-> +			xtal_div = 2;
-> +			val |= AML_UART_BAUD_XTAL_DIV2;
-> +		}
-> +		val |= DIV_ROUND_CLOSEST(port->uartclk / xtal_div, baud) - 1;
->   		val |= AML_UART_BAUD_XTAL;
->   	} else {
->   		val =  DIV_ROUND_CLOSEST(port->uartclk / 4, baud) - 1;
-> @@ -691,6 +703,7 @@ static int meson_uart_probe_clocks(struct platform_device *pdev,
->   
->   static int meson_uart_probe(struct platform_device *pdev)
->   {
-> +	struct meson_uart_data *private_data;
->   	struct resource *res_mem;
->   	struct uart_port *port;
->   	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
-> @@ -733,6 +746,13 @@ static int meson_uart_probe(struct platform_device *pdev)
->   	if (!port)
->   		return -ENOMEM;
->   
-> +	private_data = devm_kzalloc(&pdev->dev, sizeof(struct meson_uart_data), GFP_KERNEL);
-> +	if (!private_data)
-> +		return -ENOMEM;
-> +
-> +	if ((bool)device_get_match_data(&pdev->dev))
-> +		private_data->has_xtal_div2 = true;
-
-It should be much cleaner to pass meson_uart_data to meson_uart_dt_match .data,
-and then you can retrieve device_get_match_data() and put the result into
-port->private_data.
-This will avoid a devm_kzalloc().
-
-Then in meson_uart_change_speed() change the test to check for NULL private_data:
-if (private_data && private_data->has_xtal_div2)
-
-> +
->   	ret = meson_uart_probe_clocks(pdev, port);
->   	if (ret)
->   		return ret;
-> @@ -749,6 +769,7 @@ static int meson_uart_probe(struct platform_device *pdev)
->   	port->x_char = 0;
->   	port->ops = &meson_uart_ops;
->   	port->fifosize = fifosize;
-> +	port->private_data = private_data;
->   
->   	meson_ports[pdev->id] = port;
->   	platform_set_drvdata(pdev, port);
-
-Neil
+SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMDk6MDI6MDUgKzAyMDAgSmlyaSBTbGFieSB3cm90
+ZToKCj4gPiBUaGVyZSBpcyBhIGRlYWRsb2NrIGluIHNhMTEwMF9zZXRfdGVybWlvcygpLCB3aGlj
+aCBpcyBzaG93bgo+ID4gYmVsb3c6Cj4gPiAKPiA+ICAgICAoVGhyZWFkIDEpICAgICAgICAgICAg
+ICB8ICAgICAgKFRocmVhZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgc2Ex
+MTAwX2VuYWJsZV9tcygpCj4gPiBzYTExMDBfc2V0X3Rlcm1pb3MoKSAgICAgICB8ICBtb2RfdGlt
+ZXIoKQo+ID4gICBzcGluX2xvY2tfaXJxc2F2ZSgpIC8vKDEpIHwgICh3YWl0IGEgdGltZSkKPiA+
+ICAgLi4uICAgICAgICAgICAgICAgICAgICAgICB8IHNhMTEwMF90aW1lb3V0KCkKPiA+ICAgZGVs
+X3RpbWVyX3N5bmMoKSAgICAgICAgICB8ICBzcGluX2xvY2tfaXJxc2F2ZSgpIC8vKDIpCj4gPiAg
+ICh3YWl0IHRpbWVyIHRvIHN0b3ApICAgICAgfCAgLi4uCj4gPiAKPiA+IFdlIGhvbGQgc3BvcnQt
+PnBvcnQubG9jayBpbiBwb3NpdGlvbiAoMSkgb2YgdGhyZWFkIDEgYW5kCj4gPiB1c2UgZGVsX3Rp
+bWVyX3N5bmMoKSB0byB3YWl0IHRpbWVyIHRvIHN0b3AsIGJ1dCB0aW1lciBoYW5kbGVyCj4gPiBh
+bHNvIG5lZWQgc3BvcnQtPnBvcnQubG9jayBpbiBwb3NpdGlvbiAoMikgb2YgdGhyZWFkIDIuIEFz
+IGEgcmVzdWx0LAo+ID4gc2ExMTAwX3NldF90ZXJtaW9zKCkgd2lsbCBibG9jayBmb3JldmVyLgo+
+ID4gCj4gPiBUaGlzIHBhdGNoIGV4dHJhY3RzIGRlbF90aW1lcl9zeW5jKCkgZnJvbSB0aGUgcHJv
+dGVjdGlvbiBvZgo+ID4gc3Bpbl9sb2NrX2lycXNhdmUoKSwgd2hpY2ggY291bGQgbGV0IHRpbWVy
+IGhhbmRsZXIgdG8gb2J0YWluCj4gPiB0aGUgbmVlZGVkIGxvY2suCj4gPiAKPiA+IFNpZ25lZC1v
+ZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiAgIGRy
+aXZlcnMvdHR5L3NlcmlhbC9zYTExMDAuYyB8IDIgKysKPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDIg
+aW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL3Nh
+MTEwMC5jIGIvZHJpdmVycy90dHkvc2VyaWFsL3NhMTEwMC5jCj4gPiBpbmRleCA1ZmU2Y2NjZmMx
+YS4uM2E1ZjEyY2VkMGIgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvc2ExMTAw
+LmMKPiA+ICsrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9zYTExMDAuYwo+ID4gQEAgLTQ3Niw3ICs0
+NzYsOSBAQCBzYTExMDBfc2V0X3Rlcm1pb3Moc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0
+IGt0ZXJtaW9zICp0ZXJtaW9zLAo+ID4gICAJCQkJVVRTUjFfVE9fU00oVVRTUjFfUk9SKTsKPiA+
+ICAgCX0KPiA+ICAgCj4gPiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnNwb3J0LT5wb3J0Lmxv
+Y2ssIGZsYWdzKTsKPiAKPiBVbmxvY2tpbmcgdGhlIGxvY2sgYXQgdGhpcyBwb2ludCBkb2Vzbid0
+IGxvb2sgc2FmZSBhdCBhbGwuIE1heWJlIG1vdmluZyAKPiB0aGUgdGltZXIgZGVsZXRpb24gYmVm
+b3JlIHRoZSBsb2NrPyBUaGVyZSBpcyBubyBjdXJyZW50IG1haW50YWluZXIgdG8gCj4gYXNrLiBN
+b3N0IG9mIHRoZSBkcml2ZXIgb3JpZ2luYXRlcyBmcm9tIHJtay4gQ2NpbmcgaGltIGp1c3QgaW4g
+Y2FzZS4KClRoYW5rcyBhIGxvdCBmb3IgeW91ciB0aW1lIGFuZCBhZHZpY2UuIEkgdGhpbmsgbW92
+aW5nIHRoZSBkZWxfdGltZXJfc3luYygpCmJlZm9yZSB0aGUgbG9jayBpcyBnb29kLiBCZWNhdXNl
+IHdlIG1heSB1c2UgInNhMTEwMF9lbmFibGVfbXMoJnNwb3J0LT5wb3J0KSIKdG8gc3RhcnQgdGhl
+IHRpbWVyIGFmdGVyIHdlIGhhdmUgc2V0IHRlcm1pb3MuCgo+IEZXSVcgdGhlIGxvY2sgd2FzIG1v
+dmVkIGJ5IHRoaXMgY29tbWl0IGFyb3VuZCBsaW51eCAyLjUuNTUgKGZyb20gCj4gZnVsbC1oaXN0
+b3J5LWxpbnV4IFsxXSkKPiBjb21taXQgZjM4YWVmM2U2MmMyNmEzM2VhMzYwYTg2ZmRlOWIyN2Ux
+ODNhMzc0OAo+IEF1dGhvcjogUnVzc2VsbCBLaW5nIDxybWtAZmxpbnQuYXJtLmxpbnV4Lm9yZy51
+az4KPiBEYXRlOiAgIEZyaSBKYW4gMyAxNTo0MjowOSAyMDAzICswMDAwCj4gCj4gICAgICBbU0VS
+SUFMXSBDb252ZXJ0IGNoYW5nZV9zcGVlZCgpIHRvIHNldHRlcm1pb3MoKQo+IAo+IFsxXSAKPiBo
+dHRwczovL2FyY2hpdmUub3JnL2Rvd25sb2FkL2dpdC1oaXN0b3J5LW9mLWxpbnV4L2Z1bGwtaGlz
+dG9yeS1saW51eC5naXQudGFyCj4gCj4gPiAgIAlkZWxfdGltZXJfc3luYygmc3BvcnQtPnRpbWVy
+KTsKPiA+ICsJc3Bpbl9sb2NrX2lycXNhdmUoJnNwb3J0LT5wb3J0LmxvY2ssIGZsYWdzKTsKPiA+
+ICAgCj4gPiAgIAkvKgo+ID4gICAJICogVXBkYXRlIHRoZSBwZXItcG9ydCB0aW1lb3V0LgoKCkJl
+c3QgcmVnYXJkcywKRHVvbWluZyBaaG91

@@ -2,145 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007804F7BC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF094F7BCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243845AbiDGJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S231863AbiDGJkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiDGJjB (ORCPT
+        with ESMTP id S230334AbiDGJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:39:01 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B969642A;
-        Thu,  7 Apr 2022 02:37:02 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id q189so5041971oia.9;
-        Thu, 07 Apr 2022 02:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9Js/h/Y3FN3Q2Mue3vOpoiO+5qrHRwvsvpWy7TYX9ck=;
-        b=EuIuV+UhKpbr7tvQW/ucwzX6zcL6XIal7jdbc4DTK7D6scsu7SG2sJAATAcBgO5YDL
-         7xTSIZ60YiGFGrlKTDSSlJC9srTW/RX/ZEAN3BBNZXQIlcUfh2qjl5ctnww19uByIj55
-         40++jxmP1APHU2CDuqeiIaPqjLAXdF67xqJ7VTyp/txVrgs3B65MoroW7oX14/b9aHJE
-         s6US4JAtybbfxySUPt1Xlud2EThIKG8CHCNNygBWX9DeDALBJgRFoyxsJVSCSkd8Utmw
-         3MfNSDMG4BH5q6829/aLmLxAsvS0wQF1aMND55FYQFT7NGHbPtjrGRfIu69+JCncH9Tj
-         Bfqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9Js/h/Y3FN3Q2Mue3vOpoiO+5qrHRwvsvpWy7TYX9ck=;
-        b=pgbPYuNotfdMlK8iDU3/qaZL7LEuFrJVjRxx5U6UXIhoBeXuKLlOKe1U7Xy7Ytg7cl
-         F49bptf3F3J8eGo9PJx4g465KYju2+tiIonfs0fsfyyShYcFPsRSD9CRM/Fy7AC06cHz
-         xiZNeDOB0HPBegKGxaIdzS1qJnCBWjINokij5rHg2re83XGphyOifGV6wEsZ1G4KInla
-         53XJE1IBL+VI75RGbKo4xc2Zw5LnoZRFGkyOGHHsFVv0flBnw/JmpRBWsMtQxZsGvT0V
-         niaDNnzrNPpmO0kYf0Lgp18FvtFNZi1jYrQeThnMpn55ox1tYsVP1UcAvgwo+Wy0rK8u
-         vKew==
-X-Gm-Message-State: AOAM531NsBP9/+EmMzVYykPj4CJHIiKI9unDHzFLNrV0l9yn3BRXZcjB
-        zDCNPIdnhKH7rNV5oh91AIs=
-X-Google-Smtp-Source: ABdhPJwjdr8SqwEVR2lcIXyMPsLlPOOFLqBztvVxyVocQ1pEET6mjRK6dwh8Rc4orpzt+okv6QAjFA==
-X-Received: by 2002:a05:6808:305:b0:2ef:904d:a8e3 with SMTP id i5-20020a056808030500b002ef904da8e3mr5290537oie.297.1649324221454;
-        Thu, 07 Apr 2022 02:37:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm7689212ota.70.2022.04.07.02.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:37:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 7 Apr 2022 02:36:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc2 review
-Message-ID: <20220407093659.GB3041848@roeck-us.net>
-References: <20220406133013.264188813@linuxfoundation.org>
+        Thu, 7 Apr 2022 05:40:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8D0642A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9275E61864
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2EA1C385A0;
+        Thu,  7 Apr 2022 09:38:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649324283;
+        bh=YcV0evLf+R2U300KOktMd4Hf1IaExnGql5B24JONj8c=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dmVt+wmB5GFyh77APZAqJOfAJ6ZzPTtEdXt8zZTVefYGipNY3fWLpxmdKf/0u28wl
+         w1YBGnyMrCMjPG0Ox1DdIjzI+RXTsN3FmxdNW0MzfDFp+UOEH2URcerY0ovnAAgbLK
+         FArBG1ajD+mk2LNzAcQmKFxtrTOajj1k9EjB+RWDwTpJr74liiuhn3JvOjiD7I8ihn
+         sfBbh7vvRGGXAIWtNxSA2jBMBrxj/C6kbSo77v06wWo4/0OAAOR6d33NcVvnPL6BSG
+         lURiY4eTMWNrfeutrB9e2OvHJZpj/KDYupQ9fmUtvTptkUACvg4CQbB8d7V2Ichb9Q
+         8g7Pc2U6wZ5Sw==
+From:   Mark Brown <broonie@kernel.org>
+To:     tiwai@suse.com, perex@perex.cz, nizhen@uniontech.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220310065354.14493-1-nizhen@uniontech.com>
+References: <20220310065354.14493-1-nizhen@uniontech.com>
+Subject: Re: [PATCH] ASoC: Intel: boards: Use temporary variable for struct device
+Message-Id: <164932428242.3844153.12708508204017781920.b4-ty@kernel.org>
+Date:   Thu, 07 Apr 2022 10:38:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406133013.264188813@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:43:51PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.110 release.
-> There are 597 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, 10 Mar 2022 14:53:54 +0800, Zhen Ni wrote:
+> Use temporary variable for struct device to make code neater.
 > 
-> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
-> Anything received after that time might be too late.
 > 
 
-Build results:
-	total: 161 pass: 150 fail: 11
-Failed builds:
-	alpha:defconfig
-	alpha:allmodconfig
-	csky:defconfig
-	m68k:defconfig
-	m68k:allmodconfig
-	m68k:sun3_defconfig
-	m68k_nommu:m5475evb_defconfig
-	microblaze:mmu_defconfig
-	nds32:defconfig
-	nds32:allmodconfig
-	um:defconfig
-Qemu test results:
-	total: 477 pass: 448 fail: 29
-Failed tests:
-	alpha:defconfig:initrd
-	alpha:defconfig:devtmpfs:ide:net,e1000:rootfs
-	alpha:defconfig:devtmpfs:sdhci:mmc:net,ne2k_pci:rootfs
-	alpha:defconfig:devtmpfs:usb-ohci:net,pcnet:rootfs
-	alpha:defconfig:devtmpfs:usb-ehci:net,virtio-net:rootfs
-	alpha:defconfig:devtmpfs:pci-bridge:usb-xhci:net,pcnet:rootfs
-	alpha:defconfig:devtmpfs:usb-uas-ehci:net,e1000:rootfs
-	alpha:defconfig:devtmpfs:usb-uas-xhci:net,e1000:rootfs
-	alpha:defconfig:devtmpfs:pci-bridge:scsi[AM53C974]:net,tulip:rootfs
-	alpha:defconfig:devtmpfs:scsi[DC395]:net,e1000-82545em:rootfs
-	alpha:defconfig:devtmpfs:scsi[MEGASAS]:net,rtl8139:rootfs
-	alpha:defconfig:devtmpfs:scsi[MEGASAS2]:net,e1000-82544gc:rootfs
-	alpha:defconfig:devtmpfs:scsi[FUSION]:net,usb-ohci:rootfs
-	alpha:defconfig:devtmpfs:nvme:net,e1000:rootfs
-	q800:m68040:mac_defconfig:initrd
-	q800:m68040:mac_defconfig:rootfs
-	microblaze:petalogix-s3adsp1800:initrd
-	microblaze:petalogix-s3adsp1800:rootfs
-	microblaze:petalogix-ml605:initrd
-	microblaze:petalogix-ml605:rootfs
-	microblazeel:petalogix-s3adsp1800:initrd
-	microblazeel:petalogix-s3adsp1800:rootfs
-	microblazeel:petalogix-ml605:initrd
-	microblazeel:petalogix-ml605:rootfs
-	s390:defconfig:nolocktests:smp2:net,default:initrd
-	s390:defconfig:nolocktests:smp2:virtio-blk-ccw:net,virtio-net-pci:rootfs
-	s390:defconfig:nolocktests:smp2:scsi[virtio-ccw]:net,default:rootfs
-	s390:defconfig:nolocktests:virtio-pci:net,virtio-net-pci:rootfs
-	s390:defconfig:nolocktests:scsi[virtio-pci]:net,default:rootfs
+Applied to
 
-Errors:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-fs/binfmt_elf.c: In function 'fill_note_info':
-fs/binfmt_elf.c:2050:45: error: 'siginfo' undeclared
-fs/binfmt_elf.c:2056:53: error: 'regs' undeclared
+Thanks!
 
-Plus there are the same s390 crashes as with -rc1.
+[1/1] ASoC: Intel: boards: Use temporary variable for struct device
+      commit: 8b3520f7f6f6b54bb6b6e50b88f707a6b8113887
 
-No idea what I am missing here, but the failures are exactly the same as for -rc1.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Guenter
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964224F7EC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935094F7EC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiDGMMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S238618AbiDGMOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiDGMMv (ORCPT
+        with ESMTP id S232700AbiDGMOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:12:51 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82880118606
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:10:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso8709514pju.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=aqpPueWPNxzXBHHxJyXiIz6ra+hEX3sVHFaudIBqTWU=;
-        b=2DL2TMXKvODXCmBbujyS6l/pZDnDTZc+ey2Xnf1zD2wEV4IlFyH8lvtx01eKv9x+rG
-         aD1N4AxqGK60pgBuRZ58NSTZx2eif3LUcDa6VRNUUMKEkdT/WL3aJ3XNDWZkeW5YlP4E
-         NlQXsptgN3eguxnvyin1IuUbY53mboBwxfArTY6MvXZgvDvcg8zo/QBDXEk58i2jY90u
-         +E9gLXAG5efmwlHs9OiKpUsf56h8TH0G3ZrE3wRGusLay/pYz852c5kbLmjYB/2ixEAw
-         7rSYxvH2ZGjm5TY/OPSbC4ikUIwTlTawealj7jFEI2czS7lTw79w+peUvUEhIynlFNgi
-         XOlQ==
+        Thu, 7 Apr 2022 08:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0BFF1E95E2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649333552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DGcIcM8gJ4Iu3qQi5hlBAso8Rq25Z0euqo8ngas0nfY=;
+        b=QzRiiR3t0pGg9Y9OArnXVw55pTeHjQdL4sEYCq2CZq46B/kXZGP1N6m8FWol45JeQeyjvT
+        adDi3V5rgnrM0KWtF/PXt6yuf3gAwGqXl23zsYj09Txf6ozbAYwHurdHaDwh0ffMQ5MeW7
+        bUE4VO98rFe9lR9Xbr03C47ER5FasAk=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-aUuK4ZNwOPeU6ZngMwthXw-1; Thu, 07 Apr 2022 08:12:31 -0400
+X-MC-Unique: aUuK4ZNwOPeU6ZngMwthXw-1
+Received: by mail-ed1-f69.google.com with SMTP id bc9-20020a056402204900b0041cc2b0bff3so2856551edb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:12:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=aqpPueWPNxzXBHHxJyXiIz6ra+hEX3sVHFaudIBqTWU=;
-        b=xj7awYgCatxS9oE9WSD050HCrHmCcqtuAoNWEtw73iDayV+c0IxitbmcpjB73i5eUS
-         rySLsDPd0QXLGbxI48v/ra0mU/YQe7h67XX+fB4YF7+xXDqzzUfNh8zYDdr0zA4qk/Ew
-         kfjD/z1WsALc6I5YuHblYFKxtjQxiH6qrQ1eQdp7F/Z7BuqxzEIkbQyXAT5TlNi9nb94
-         4JbI0abOtnGH8VOOm217ns5RyXedD76Snb0QzDAmOo6TnqX1Vtm1v7cJikILNHIx+tnK
-         dFijLsGV+t7rSTmmMtg3urxnbZlmwCWIJSLBnDL2FnvCCFyb/jk1LF32/PphkTzxwjaN
-         H3zQ==
-X-Gm-Message-State: AOAM532BTXVOp/gbEBsT97fCnV52PrOodl9rv26YA7bEGHK3Bh3iDESG
-        +dJgOOndgI1Ur7DZC+TPuMJpyg==
-X-Google-Smtp-Source: ABdhPJxygEAgUieNSz9kdAgidLjC5IHFf7mloWvF+BsA1T7rAwdhmOSZZQSW29M5jes+IkmxOj1RDw==
-X-Received: by 2002:a17:90b:38c7:b0:1c7:6afb:fac6 with SMTP id nn7-20020a17090b38c700b001c76afbfac6mr15455966pjb.198.1649333446047;
-        Thu, 07 Apr 2022 05:10:46 -0700 (PDT)
-Received: from mahak-Inspiron-7570.iitr.ac.in ([103.37.201.168])
-        by smtp.googlemail.com with ESMTPSA id t14-20020a056a00138e00b004fb1d833668sm24095458pfg.33.2022.04.07.05.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 05:10:45 -0700 (PDT)
-From:   Mahak Gupta <mahak_g@cs.iitr.ac.in>
-To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Cc:     Mahak Gupta <mahak_g@cs.iitr.ac.in>
-Subject: [PATCH] staging: rtl8712: fix camel case in function r8712_generate_ie
-Date:   Thu,  7 Apr 2022 17:39:45 +0530
-Message-Id: <20220407120945.31030-1-mahak_g@cs.iitr.ac.in>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DGcIcM8gJ4Iu3qQi5hlBAso8Rq25Z0euqo8ngas0nfY=;
+        b=XTx2rgNt8B1Oyi/inrZDnB93+eHwEpTwCZMreqt5Ojo4neR2Qb/l5n7YjtJqIdHgGt
+         fITeiejQP28Q2fz1T7VVV11X4v08AVvnDUfGADCEpjWe4L/aYbK3HCdluHBnTeQrgAPc
+         NsrNHxgIFjIMuwk9AeYN8zPhydQ1gfWGTG344GuA4saO1HOvQyRZZ/zLMB/KfUIrHyaN
+         vIQC1lXNPc4urSX8LxV4b11sXWRREYTuK12D/sYTiGaMct0jLkxjSwdF40B2a7/77bG3
+         Dcu3US8ynqhndxignrX0ZW5Y2yL00B6OKmaZVzaNu8Rub1jL9aKzq+HkR5ifEOXR2tmr
+         UWPw==
+X-Gm-Message-State: AOAM53222SAqLhHJf1Kg1VXbzG2Vv3SXWUbsmpsq5yWAYC07baj57EOv
+        wxFsfklTluM4XEyXteqI73pmxxToD95OhEG/McYK7I9brP/im6ull8oiCUEAjd2mYhBSvBCMX8S
+        xprEl6bh7wOW3mL8M880q16DQ
+X-Received: by 2002:aa7:d311:0:b0:419:443b:6222 with SMTP id p17-20020aa7d311000000b00419443b6222mr13675488edq.161.1649333550542;
+        Thu, 07 Apr 2022 05:12:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxl+xQ1ipUlMGquPKy+T2ZIFLwAwclwboSbty4izLi6yxlztoj7nwo020S5K2gVDdlVcMlaZA==
+X-Received: by 2002:aa7:d311:0:b0:419:443b:6222 with SMTP id p17-20020aa7d311000000b00419443b6222mr13675475edq.161.1649333550365;
+        Thu, 07 Apr 2022 05:12:30 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id k12-20020a170906054c00b006e8289dc23csm1302658eja.9.2022.04.07.05.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 05:12:29 -0700 (PDT)
+Message-ID: <f13f2736-626a-267b-db38-70a81872a325@redhat.com>
+Date:   Thu, 7 Apr 2022 14:12:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 101/104] KVM: TDX: Silently ignore INIT/SIPI
+Content-Language: en-US
+To:     Xiaoyao Li <xiaoyao.li@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <d0eb8fa53e782a244397168df856f9f904e4d1cd.1646422845.git.isaku.yamahata@intel.com>
+ <efbe06a7-3624-2a5a-c1c4-be86f63951e3@redhat.com>
+ <48ab3a81-a353-e6ee-7718-69c260c9ea17@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <48ab3a81-a353-e6ee-7718-69c260c9ea17@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to linux kernel coding style.
+On 4/7/22 13:09, Xiaoyao Li wrote:
+> On 4/5/2022 11:48 PM, Paolo Bonzini wrote:
+>> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+>>> +        if (kvm_init_sipi_unsupported(vcpu->kvm))
+>>> +            /*
+>>> +             * TDX doesn't support INIT.  Ignore INIT event.  In the
+>>> +             * case of SIPI, the callback of
+>>> +             * vcpu_deliver_sipi_vector ignores it.
+>>> +             */
+>>>               vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+>>> -        else
+>>> -            vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+>>> +        else {
+>>> +            kvm_vcpu_reset(vcpu, true);
+>>> +            if (kvm_vcpu_is_bsp(apic->vcpu))
+>>> +                vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+>>> +            else
+>>> +                vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+>>> +        }
+>>
+>> Should you check vcpu->arch.guest_state_protected instead of 
+>> special-casing TDX? 
+> 
+> We cannot use vcpu->arch.guest_state_protected because TDX supports 
+> debug TD, of which the states are not protected.
+> 
+> At least we need another flag, I think.
 
-Reported by checkpatch:
+Let's add .deliver_init to the kvm_x86_ops then.
 
-CHECK: Avoid CamelCase: <beaconPeriod>
-
-Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
----
- drivers/staging/rtl8712/ieee80211.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/rtl8712/ieee80211.c b/drivers/staging/rtl8712/ieee80211.c
-index f926809b1021..7d8f1a29d18a 100644
---- a/drivers/staging/rtl8712/ieee80211.c
-+++ b/drivers/staging/rtl8712/ieee80211.c
-@@ -162,13 +162,13 @@ int r8712_generate_ie(struct registry_priv *registrypriv)
- 	uint sz = 0;
- 	struct wlan_bssid_ex *dev_network = &registrypriv->dev_network;
- 	u8 *ie = dev_network->IEs;
--	u16 beaconPeriod = (u16)dev_network->Configuration.BeaconPeriod;
-+	u16 beacon_period = (u16)dev_network->Configuration.BeaconPeriod;
- 
- 	/*timestamp will be inserted by hardware*/
- 	sz += 8;
- 	ie += sz;
- 	/*beacon interval : 2bytes*/
--	*(__le16 *)ie = cpu_to_le16(beaconPeriod);
-+	*(__le16 *)ie = cpu_to_le16(beacon_period);
- 	sz += 2;
- 	ie += 2;
- 	/*capability info*/
--- 
-2.17.1
+Paolo
 

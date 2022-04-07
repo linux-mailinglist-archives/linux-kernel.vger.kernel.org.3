@@ -2,46 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B624F791C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA38C4F7929
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbiDGIKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S242732AbiDGILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243185AbiDGIIx (ORCPT
+        with ESMTP id S242877AbiDGILW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:08:53 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E940613FA4
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:06:54 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 82B3868AFE; Thu,  7 Apr 2022 10:06:51 +0200 (CEST)
-Date:   Thu, 7 Apr 2022 10:06:51 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        Zhi Wang <zhi.a.wang@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Subject: Re: [PATCH v9 1/3] i915/gvt: Separate the MMIO tracking table from
- GVT-g
-Message-ID: <20220407080651.GA16455@lst.de>
-References: <20220407071945.72148-1-zhi.a.wang@intel.com> <20220407071945.72148-2-zhi.a.wang@intel.com>
+        Thu, 7 Apr 2022 04:11:22 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6E51B74FD;
+        Thu,  7 Apr 2022 01:08:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R751e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V9PrYA0_1649318908;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V9PrYA0_1649318908)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 07 Apr 2022 16:08:38 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     clm@fb.com
+Cc:     josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH 2/2] btrfs: Fix kernel-doc
+Date:   Thu,  7 Apr 2022 16:08:21 +0800
+Message-Id: <20220407080822.74018-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407071945.72148-2-zhi.a.wang@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,7 +42,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The whole series looks good and works fine on by Kaby Lake Thinkpad:
+Fix the following W=1 kernel warnings:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Christoph Hellwig <hch@lst.de>
+fs/btrfs/space-info.c:1601: warning: This comment starts with '/**', but
+isn't a kernel-doc comment. Refer
+Documentation/doc-guide/kernel-doc.rst.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ fs/btrfs/space-info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 2dd8754cb990..bd9ac89c9d6e 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -1598,7 +1598,7 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
+ }
+ 
+ /**
+- * Trye to reserve metadata bytes from the block_rsv's space
++ * btrfs_reserve_metadata_bytes() - Trye to reserve metadata bytes from the block_rsv's space
+  *
+  * @fs_info:    the filesystem
+  * @block_rsv:  block_rsv we're allocating for
+-- 
+2.20.1.7.g153144c
+

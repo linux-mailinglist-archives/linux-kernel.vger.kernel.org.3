@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1403A4F7AEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508434F7AF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243561AbiDGJEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S233539AbiDGJFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243765AbiDGJD3 (ORCPT
+        with ESMTP id S230140AbiDGJFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:03:29 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AA68164F;
-        Thu,  7 Apr 2022 02:01:30 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id t19so7580710qtc.4;
-        Thu, 07 Apr 2022 02:01:30 -0700 (PDT)
+        Thu, 7 Apr 2022 05:05:25 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D87718E00
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:03:24 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id g20so5612623edw.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7k9wHjGCmirLGQtDNZunWvATfCdcYy0H3Z1yCUnVVgo=;
-        b=eoSQ6dFjX7ebCs11Jl1ZGRgtLmSxbNl8ge+CP32X1ALfHiAP2IqJsNz2PI1FytMYUG
-         wUlrBhsUyB8iWdbxQvx7SEou0vURFav0N5dpZmkhWn1epeWwsbtahWixJ+DvtrgxM7O1
-         cAyCa3JpyK47O59pZ7QhhwWLIWuO1h3ttFuePmUQSOpK4UesJik8t17h7x/b1PySd85y
-         W1hb6lPqoW6xpJx88rax1kgFmWI8v/12R9K4AU+Y8W6Vs3STD1QjVe0nB0w5ZedFy8Ql
-         94sSm72kvl24tKaaqoNkeiKR56ArK91gf6jWl5bv1YLhOjabEm6zcLamLIAsZFavr8sQ
-         VyMw==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W+1rOYPnAZkSAoFE9WFZU5G0otnwYX5qic+yQYdsVYw=;
+        b=ikVAtHHNfS1qoYViGuL94fCuQ8C+sS0IgCobHN4E5+VSj6BZL+yj96oOWGAUUkJR6j
+         NRB1pT3xl3CiOTSvTd6VKHK50u0XaKBOmFDpQNAb1T85d611C2juxICUAgCCXG7prKLe
+         nXmGV880tstI6aOa/b2NvPHEJAJZP0kATx3Sg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7k9wHjGCmirLGQtDNZunWvATfCdcYy0H3Z1yCUnVVgo=;
-        b=JaBvADIcdcoid7PhhANHYlwxuU77kIVTbGnYp+Qvky8E43hwY2s25PLc9xXdLFPJDN
-         vWL7N/1wO1urQLv7tasFJP6ChgWKfaGpTJDXVQ9TdqgXk2dpOS7nzllmC3aJsuBhStg/
-         8nV80SSzGHxnLVhm65IT28qK/hCrNLKDycxnxMFWBNF8vsM9GK41wKMC5wGnDmvpgU2U
-         sDjjkKsMdasciL88jOJoLv8zjcRA1bEImbj60QSVOST6K6AYKYA5yvkeasP+/LEhvFFK
-         pRn29dnaJjqH+gRJdy8WCnL4gVIUGZ+r8EXjkfMFy860JMu0hp7G9AKqds5y5aoMzXm6
-         Yudw==
-X-Gm-Message-State: AOAM532Jb60/tJ5HrCdCHJRdR13FdNNYW6ouB13tT0Rt1MY+JrjVQWGM
-        QHSxUcgisi3aMiWAXV8DV9U=
-X-Google-Smtp-Source: ABdhPJyt6Mnnqh0FTkOo1W8dKin7q9bCtIm4dDnlr76kyfZvugnPP3KPcRcXj0jwBM7EhC3Ss1VxKQ==
-X-Received: by 2002:a05:622a:653:b0:2e1:c046:4825 with SMTP id a19-20020a05622a065300b002e1c0464825mr11178669qtb.430.1649322089296;
-        Thu, 07 Apr 2022 02:01:29 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o21-20020ac85a55000000b002e16389b501sm15031194qta.96.2022.04.07.02.01.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=W+1rOYPnAZkSAoFE9WFZU5G0otnwYX5qic+yQYdsVYw=;
+        b=qteXlEZgYA/pw5rwI6qBNqfsB2C6+76cUn/zssNsw39IIsjyJA8gWw6TBAHouvP8NU
+         ScGKk3mJD5iVSE4cZgjsqDdopLO/LWDogDA8BgdXWYBPuY3KzlrpFKiLX4o2cgeyB0Oz
+         Z1axkl0lViI4ng0ncasfSDs3nGZUWkU4kJzs6vTaogTbwAMa6XEg1yG4MXAES89FWJoD
+         DnvPz/R7lL9ldJ6yt7TZvQYIvoHgl2lixdw3Nq6HMDUxtIaAcmS7LVpjsgR2qADKDUrO
+         R/cPrmFmMb2WEETnnCxfWkbm/orXTrtt5aMxZgQGnU+cyBY424HfpvGqhoplH2rfevOq
+         bCsQ==
+X-Gm-Message-State: AOAM530NTH0/knoOr5mMh4nLCuA6uBtQSm3Nm6Ue4+4sEowF552a6kAe
+        fm8oavndYPNGEYtsUsEUYO0l8nd809VYa7HGhzY=
+X-Google-Smtp-Source: ABdhPJwiSCGjhBdoXYK5Nvas9Re2eGRnUUUVEvu1QLTjngawJF0jewMmPTqZfm9TwzhKEP8c0Pm7GQ==
+X-Received: by 2002:a05:6402:438d:b0:419:4550:d52b with SMTP id o13-20020a056402438d00b004194550d52bmr12998429edc.83.1649322203124;
+        Thu, 07 Apr 2022 02:03:23 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id f13-20020a50bf0d000000b0041cdd9c9147sm3857173edk.40.2022.04.07.02.03.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 02:01:29 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     s.hauer@pengutronix.de, kernel@pengutronix.de
-Cc:     deller@gmx.de, shawnguo@kernel.org, festevam@gmail.com,
-        linux-imx@nxp.com, linux-fbdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] video: fbdev:  Fix missing of_node_put in imxfb_probe
-Date:   Thu,  7 Apr 2022 09:01:22 +0000
-Message-Id: <20220407090122.2491922-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 07 Apr 2022 02:03:22 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 11:03:20 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Borislav Petkov <bp@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miaoqian Lin <linmq006@gmail.com>
+Subject: Re: [RESEND RFC PATCH 1/5] firmware: sysfb: Make
+ sysfb_create_simplefb() return a pdev pointer
+Message-ID: <Yk6o2MzkMQeSAcsb@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Borislav Petkov <bp@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miaoqian Lin <linmq006@gmail.com>
+References: <20220406213919.600294-1-javierm@redhat.com>
+ <20220406213919.600294-2-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406213919.600294-2-javierm@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +81,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On Wed, Apr 06, 2022 at 11:39:15PM +0200, Javier Martinez Canillas wrote:
+> This function just returned 0 on success or an errno code on error, but it
+> could be useful to sysfb_init() to get a pointer to the device registered.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-of_parse_phandle returns node pointer with refcount incremented,
-use of_node_put() on it when done.
+You need to rebase this onto 202c08914ba5 ("firmware: sysfb: fix
+platform-device leak in error path") which fixes the same error path leak
+you are fixing in here too. Or we just have a neat conflict when merging
+:-) But in that case please mention that you fix the error path leak too
+so it's less confusing when Linus or someone needs to resolve the
+conflict.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/video/fbdev/imxfb.c | 2 ++
- 1 file changed, 2 insertions(+)
+Anyway Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-index 68288756ffff..a2f644c97f28 100644
---- a/drivers/video/fbdev/imxfb.c
-+++ b/drivers/video/fbdev/imxfb.c
-@@ -925,10 +925,12 @@ static int imxfb_probe(struct platform_device *pdev)
- 				sizeof(struct imx_fb_videomode), GFP_KERNEL);
- 		if (!fbi->mode) {
- 			ret = -ENOMEM;
-+			of_node_put(display_np);
- 			goto failed_of_parse;
- 		}
- 
- 		ret = imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
-+		of_node_put(display_np);
- 		if (ret)
- 			goto failed_of_parse;
- 	}
+> ---
+> 
+>  drivers/firmware/sysfb.c          |  4 ++--
+>  drivers/firmware/sysfb_simplefb.c | 24 +++++++++++++++---------
+>  include/linux/sysfb.h             | 10 +++++-----
+>  3 files changed, 22 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/firmware/sysfb.c b/drivers/firmware/sysfb.c
+> index 2bfbb05f7d89..b032f40a92de 100644
+> --- a/drivers/firmware/sysfb.c
+> +++ b/drivers/firmware/sysfb.c
+> @@ -46,8 +46,8 @@ static __init int sysfb_init(void)
+>  	/* try to create a simple-framebuffer device */
+>  	compatible = sysfb_parse_mode(si, &mode);
+>  	if (compatible) {
+> -		ret = sysfb_create_simplefb(si, &mode);
+> -		if (!ret)
+> +		pd = sysfb_create_simplefb(si, &mode);
+> +		if (!IS_ERR(pd))
+>  			return 0;
+>  	}
+>  
+> diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
+> index 76c4abc42a30..c42648ed3aad 100644
+> --- a/drivers/firmware/sysfb_simplefb.c
+> +++ b/drivers/firmware/sysfb_simplefb.c
+> @@ -57,8 +57,8 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
+>  	return false;
+>  }
+>  
+> -__init int sysfb_create_simplefb(const struct screen_info *si,
+> -				 const struct simplefb_platform_data *mode)
+> +__init struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
+> +						     const struct simplefb_platform_data *mode)
+>  {
+>  	struct platform_device *pd;
+>  	struct resource res;
+> @@ -76,7 +76,7 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+>  		base |= (u64)si->ext_lfb_base << 32;
+>  	if (!base || (u64)(resource_size_t)base != base) {
+>  		printk(KERN_DEBUG "sysfb: inaccessible VRAM base\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	/*
+> @@ -93,7 +93,7 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+>  	length = mode->height * mode->stride;
+>  	if (length > size) {
+>  		printk(KERN_WARNING "sysfb: VRAM smaller than advertised\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  	length = PAGE_ALIGN(length);
+>  
+> @@ -104,25 +104,31 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+>  	res.start = base;
+>  	res.end = res.start + length - 1;
+>  	if (res.end <= res.start)
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  
+>  	pd = platform_device_alloc("simple-framebuffer", 0);
+>  	if (!pd)
+> -		return -ENOMEM;
+> +		return ERR_PTR(-ENOMEM);
+>  
+>  	sysfb_apply_efi_quirks(pd);
+>  
+>  	ret = platform_device_add_resources(pd, &res, 1);
+>  	if (ret) {
+>  		platform_device_put(pd);
+> -		return ret;
+> +		return ERR_PTR(ret);
+>  	}
+>  
+>  	ret = platform_device_add_data(pd, mode, sizeof(*mode));
+>  	if (ret) {
+>  		platform_device_put(pd);
+> -		return ret;
+> +		return ERR_PTR(ret);
+>  	}
+>  
+> -	return platform_device_add(pd);
+> +	ret = platform_device_add(pd);
+> +	if (ret) {
+> +		platform_device_put(pd);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return pd;
+>  }
+> diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
+> index b0dcfa26d07b..708152e9037b 100644
+> --- a/include/linux/sysfb.h
+> +++ b/include/linux/sysfb.h
+> @@ -72,8 +72,8 @@ static inline void sysfb_apply_efi_quirks(struct platform_device *pd)
+>  
+>  bool sysfb_parse_mode(const struct screen_info *si,
+>  		      struct simplefb_platform_data *mode);
+> -int sysfb_create_simplefb(const struct screen_info *si,
+> -			  const struct simplefb_platform_data *mode);
+> +struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
+> +					      const struct simplefb_platform_data *mode);
+>  
+>  #else /* CONFIG_SYSFB_SIMPLE */
+>  
+> @@ -83,10 +83,10 @@ static inline bool sysfb_parse_mode(const struct screen_info *si,
+>  	return false;
+>  }
+>  
+> -static inline int sysfb_create_simplefb(const struct screen_info *si,
+> -					 const struct simplefb_platform_data *mode)
+> +static inline struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
+> +							    const struct simplefb_platform_data *mode)
+>  {
+> -	return -EINVAL;
+> +	return ERR_PTR(-EINVAL);
+>  }
+>  
+>  #endif /* CONFIG_SYSFB_SIMPLE */
+> -- 
+> 2.35.1
+> 
+
 -- 
-2.25.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

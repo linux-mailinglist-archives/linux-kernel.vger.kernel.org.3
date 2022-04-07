@@ -2,100 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35B04F86B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B824F86BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346667AbiDGR7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S1346670AbiDGR77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiDGR7b (ORCPT
+        with ESMTP id S1346669AbiDGR75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:59:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F3CA15D3B2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649354249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=O+vrRrqMFJ6b+4wLQ7xCWgEu9n79uQKRvZqKAsaERm8=;
-        b=JDOTIFBlhu7NCWOq6/Olacm2Ki0hLzBKuN1XfvSjdSq2t/gCnZCcY7josb4lluGCpt16+u
-        KPB75h00iSFTzKqZas9eDRu/KGbR+oZro4qwo8Uk7fMU2E2o7/vy8jvEMQp+tgW4iwBwLW
-        qmuXWM3gdAX8Mhh9E8OoCLpy3laBnVA=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-_ljffqeaNbackdCX-SRr1Q-1; Thu, 07 Apr 2022 13:57:28 -0400
-X-MC-Unique: _ljffqeaNbackdCX-SRr1Q-1
-Received: by mail-pj1-f71.google.com with SMTP id m8-20020a17090aab0800b001cb1320ef6eso1561596pjq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:57:27 -0700 (PDT)
+        Thu, 7 Apr 2022 13:59:57 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CAF22FD8F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:57:57 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id n8so5709630plh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Zrw2cU/GtraplrRpyw0HC5Ztjhcisc45ECf7qfFu5hw=;
+        b=gZKwhG4AbEvuAbeS/YyjUMtMmpXdiDK5czIevURvnBK/LO4IZRlGpkhqVOoqhH7UOl
+         /GR5qKZ6Y+lXbPl4PNvClAFOR1FxQw3x2JJKeqEcF47fiw9lfXqlrw01AcTCecEd550A
+         DN9AgKR6vZczlVIlJC+uCJS1LW4EQK9T4p27Ym96+OtrC/nCIUJ9Y5x9MbrHkXYLLr+j
+         2fAXu68fb+3l/vrvIfVX5Oum27VB9PMB8qKxPo2x5ZZDNO1FCAdCq49PfjNijNCxwtCP
+         Is2RVvMlvYcu1En6KlhpRXmYdXlWavPZZ65cRNUbDOJet2RWG1iZlXMjhJUi0H39rJLo
+         licQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O+vrRrqMFJ6b+4wLQ7xCWgEu9n79uQKRvZqKAsaERm8=;
-        b=DzSKkiiXftXl5hmsIQ/wzY+6qsbxXgBaAMiVsfoExi19Bkpt0l+r6qehKMgxpkOJTB
-         lRACrBPMddjBdQpL5zALfe73kCv/659WrhbGjudojnrVVwiKtdvwVMt8MtFLQfnn8hAM
-         I9RsR26kQLLB6oQOQzJ1lDQ5ftv6sOE3n4QSrJrd5JAP84bJtXqb1Bb+qwOzwYBH8qaa
-         kjDnrsxW+HKf5YkWXGqAV0YeSNp8HUTIngj1byRZL/uGc+klopAES5Eswf+NOiPRL6TY
-         c3fhucG9gdyWPA5ljyn8A+Ym/LRXOU+V9w4vhyYHTsAlFT1Zu64uzibpARomgAYj5O2X
-         fN7g==
-X-Gm-Message-State: AOAM530XtyoRANh6EgNLumo0xcGzrjHurp2XHvAi5wXZOXcAQapotV+l
-        4NccpOZW8RvDxWH2UNR3nBlGWjuKDYixJak6sxt48VtfeMB7+pOk1ZB5uReqr1cYQCHveNAgSnV
-        trpyrgC6lOGmjtQk2ahmOFF50
-X-Received: by 2002:a17:902:b696:b0:156:b63:6bed with SMTP id c22-20020a170902b69600b001560b636bedmr15170877pls.24.1649354246891;
-        Thu, 07 Apr 2022 10:57:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwNzTcYdHFGPl0COruEjo6CBToCwrgo4PXx1tooB7gWfGh27A2vqET7wjpjd/MxtAvdfg/cYw==
-X-Received: by 2002:a17:902:b696:b0:156:b63:6bed with SMTP id c22-20020a170902b69600b001560b636bedmr15170865pls.24.1649354246675;
-        Thu, 07 Apr 2022 10:57:26 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id gb5-20020a17090b060500b001c6d46f7e75sm10013363pjb.30.2022.04.07.10.57.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zrw2cU/GtraplrRpyw0HC5Ztjhcisc45ECf7qfFu5hw=;
+        b=tSqstor/CdLehpB8T8ndQnIasS434YadQpaZTMDT+7xAcz0q7X9ipZbS7tGTQevgAH
+         bSyQca1zw+gN/7RSVQNgroLRAg/kCj1tUHta0CmiJ4RP0JZxaVwHigwleJ38+px+SKgG
+         M1dgvH3rqUNuAD2p6pehhk/+K3Xe97zPYfJvoAFTVH2vvzdhwputhoey4ny7gOPWCkBU
+         VE9KNj9LoNh5+rUo7PtixYXhi+35nJvi0fS8gc2NQu3D/OWGz4agylZzMQ0snzd6Pdg1
+         /SZeFjCCxLV3b3UoEbzojQ737zmfaPjzX+DsmRKjj9db785Vk7JiDqh5MthNslWtBMia
+         yDtA==
+X-Gm-Message-State: AOAM533jd9REf87O5W6PHbiRTkZQuCAubeHEFTtImxu94J6JePCpioHQ
+        +A2UsLt5LkcddWvYIDpn2lV1wQ==
+X-Google-Smtp-Source: ABdhPJzpx8DCg6/7sFzsb5rVN86uadU6Yohzv+JmgkKo35oWR7wDLKJGdYhchW8DRqNO+5l6sW7tZw==
+X-Received: by 2002:a17:90a:2a0f:b0:1ca:842a:b82 with SMTP id i15-20020a17090a2a0f00b001ca842a0b82mr17255696pjd.37.1649354276277;
+        Thu, 07 Apr 2022 10:57:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 12-20020a17090a08cc00b001cb11ab01ffsm3085840pjn.8.2022.04.07.10.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:57:26 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] MAINTAINERS: add self as clang reviewer
-Date:   Thu,  7 Apr 2022 13:57:15 -0400
-Message-Id: <20220407175715.3378998-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 07 Apr 2022 10:57:55 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 17:57:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/31] KVM: x86: hyper-v: Create a separate ring for
+ Direct TLB flush
+Message-ID: <Yk8mHwUm9FtmgjzA@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-8-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407155645.940890-8-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have been helping with build breaks and
-other clang things and would like to help
-with the reviews.
+On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> To handle Direct TLB flush requests from L2 KVM needs to use a
+> separate ring from regular Hyper-V TLB flush requests: e.g. when a
+> request to flush something in L2 is made, the target vCPU can
+> transition from L2 to L1, receive a request to flush a GVA for L1 and
+> then try to enter L2 back. The first request needs to be processed
+> then. Similarly, requests to flush GVAs in L1 must wait until L2
+> exits to L1.
+> 
+> No functional change yet as KVM doesn't handle Direct TLB flush
+> requests from L2 yet.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  3 ++-
+>  arch/x86/kvm/hyperv.c           |  7 ++++---
+>  arch/x86/kvm/hyperv.h           | 17 ++++++++++++++---
+>  3 files changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 15d798fe280d..b8d7c1422da6 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -617,7 +617,8 @@ struct kvm_vcpu_hv {
+>  		u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
+>  	} cpuid_cache;
+>  
+> -	struct kvm_vcpu_hv_tlbflush_ring tlb_flush_ring;
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Probably feedback for a prior patch, but please be consistent in tlbflush vs
+tlb_flush.  I prefer the tlb_flush variant.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9ebfc93d8f0d..8da670067a34 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4797,6 +4797,7 @@ F:	.clang-format
- CLANG/LLVM BUILD SUPPORT
- M:	Nathan Chancellor <nathan@kernel.org>
- M:	Nick Desaulniers <ndesaulniers@google.com>
-+R:	Tom Rix <trix@redhat.com>
- L:	llvm@lists.linux.dev
- S:	Supported
- W:	https://clangbuiltlinux.github.io/
--- 
-2.27.0
+> +	/* Two rings for regular Hyper-V TLB flush and Direct TLB flush */
+> +	struct kvm_vcpu_hv_tlbflush_ring tlb_flush_ring[2];
 
+Use an enum, then the magic numbers go away, e.g.
+
+enum hv_tlb_flush_rings {
+	HV_L1_TLB_FLUSH_RING,
+	HV_L2_TLB_FLUSH_RING,
+	HV_NR_TLB_FLUSH_RINGS,
+}
+
+>  };
+>  
+>  /* Xen HVM per vcpu emulation context */
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 918642bcdbd0..16cbf41b5b7b 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -956,7 +956,8 @@ static int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+>  
+>  	hv_vcpu->vp_index = vcpu->vcpu_idx;
+>  
+> -	spin_lock_init(&hv_vcpu->tlb_flush_ring.write_lock);
+> +	spin_lock_init(&hv_vcpu->tlb_flush_ring[0].write_lock);
+> +	spin_lock_init(&hv_vcpu->tlb_flush_ring[1].write_lock);
+
+Or
+
+	for (i = 0; i < ARRAY_SIZE(&hv_vcpu->tlb_flush_ring); i++)
+		spin_lock_init(&hv_vcpu->tlb_flush_ring[i].write_lock)
+
+or replace ARRAY_SIZE() with HV_NR_TLB_FLUSH_RINGS.
+
+>  
+>  	return 0;
+>  }
+> @@ -1860,7 +1861,7 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu, bool flush_all,
+>  	if (!hv_vcpu)
+>  		return;
+>  
+> -	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +	tlb_flush_ring = &hv_vcpu->tlb_flush_ring[0];
+
+The [0] is gross, and it only gets worse in future patches that take @direct,
+though this is slightly less gross:
+
+	/* Here's a comment explaining why this is hardcoded to L1's ring. */
+	tlb_flush_ring = &hv_vcpu->tlb_flush_ring[HV_L1_TLB_FLUSH_RING];
+
+More thoughts in the patch that adds @direct.
+
+>  	spin_lock_irqsave(&tlb_flush_ring->write_lock, flags);
+>  
+> @@ -1920,7 +1921,7 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  		return;
+>  	}
+>  
+> -	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
+>  	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
+>  	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
+>  
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index 6847caeaaf84..448877b478ef 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -22,6 +22,7 @@
+>  #define __ARCH_X86_KVM_HYPERV_H__
+>  
+>  #include <linux/kvm_host.h>
+> +#include "x86.h"
+>  
+>  /*
+>   * The #defines related to the synthetic debugger are required by KDNet, but
+> @@ -147,15 +148,25 @@ int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
+>  int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>  		     struct kvm_cpuid_entry2 __user *entries);
+>  
+> +static inline struct kvm_vcpu_hv_tlbflush_ring *kvm_hv_get_tlb_flush_ring(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +	if (!is_guest_mode(vcpu))
+> +		return &hv_vcpu->tlb_flush_ring[0];
+
+Maybe this?
+
+	int i = !is_guest_mode(vcpu) ? HV_L1_TLB_FLUSH_RING :
+				       HV_L2_TLB_FLUSH_RING;
+
+	return &hv_vcpu->tlb_flush_ring[i];
+
+Though shouldn't this be a WARN condition as of this patch?  I.e. shouldn't it be
+impossible to request a flush for L2 at this point?
+
+> +
+> +	return &hv_vcpu->tlb_flush_ring[1];
+> +}
+>  
+>  static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+>  {
+> -	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
+>  
+> -	if (!hv_vcpu)
+> +	if (!to_hv_vcpu(vcpu))
+>  		return;
+>  
+> -	hv_vcpu->tlb_flush_ring.read_idx = hv_vcpu->tlb_flush_ring.write_idx;
+> +	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
+> +	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+>  }
+>  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
+>  
+> -- 
+> 2.35.1
+> 

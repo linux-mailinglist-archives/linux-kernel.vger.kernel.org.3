@@ -2,72 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918324F7D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7114F7D1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244494AbiDGKjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S244401AbiDGKj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244784AbiDGKhr (ORCPT
+        with ESMTP id S244943AbiDGKiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:37:47 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5391B74F0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:35:07 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so3562296ilj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 03:35:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zrfjJ9AqnJS4u7tsoccOffIN2MqZ0+E316J+0XXCUng=;
-        b=zTnIVedeO+UmObZ30GGuy+tEIz9RsKo9vSRU+QQ+pOVDfXiA1pkjXmoWFHhtOKmq3O
-         7OA6+Xo8Mqak/sQy346uhFkiZLTo68ANlZ/gc90EMkT/YHHQokPpB8aTdvugxLeysZ5R
-         hE1TYrfHal39Q7/J094EfRnplCeUbe/T8F/TQuny3BBcqxvFRZ0fV2yuPnKadN+XGwdI
-         zKJApYMcRSb6wCJaZadQdCvIlsWjFjE0loNYWRt84pWpeg6B5kiOQeXZK3UbCTV5D9NY
-         nhY91s8apKinE9C8hlTEy0vR34M8RbTn2qd4779q7yL0D2L5a5Fzmd+0rdxN5f9XHngi
-         ig7A==
-X-Gm-Message-State: AOAM530NyhieoaAR//b7ETr1MpA+ru2WUk9qZ6P2CaaAaaIcoQmVr/bt
-        SkLyh1hwd8uVhL544MwKJMvJHcdagqiPRYMDDXkfcs1qM687
-X-Google-Smtp-Source: ABdhPJxDx9+uaE82iP59rk7ZoD2MwPcPKnzXnxD4oLawj1Bh2H+JZ5VfVyFI0MGCNQvxkkeMMC74gxCihBR3S1lBC9+Omsyb/Va6
+        Thu, 7 Apr 2022 06:38:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14F4B18F22B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649327769;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9tmb94Vnr/m1iiTombsEjR+CsqwafFX61UIDruzVV9I=;
+        b=Bl64EKsuTlIuV9mtVAm6THZSeXS3E+VHmplGkGRKGHsGxTr+J3KLU0HCozp7qDcU3XaZfh
+        NGYvz/vrfatqH9E8BC85yiX8zfnvXNwcT7lpAie6a+CobhYqBhGH3iaMCDLqQZ811ST7NF
+        geEM3RaEILEDYrZophJH3b5dHDFSTG8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-m1pDVn1JM7SgfIYbB3R6ug-1; Thu, 07 Apr 2022 06:36:06 -0400
+X-MC-Unique: m1pDVn1JM7SgfIYbB3R6ug-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24CE11066680;
+        Thu,  7 Apr 2022 10:36:05 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 74C117B7C;
+        Thu,  7 Apr 2022 10:36:04 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 0721218000B3; Thu,  7 Apr 2022 12:36:03 +0200 (CEST)
+Date:   Thu, 7 Apr 2022 12:36:02 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/4] virt: Add efi_secret module to expose
+ confidential computing secrets
+Message-ID: <20220407103602.5hblcyz4zzocjgcw@sirius.home.kraxel.org>
+References: <20220331215607.3182232-1-dovmurik@linux.ibm.com>
+ <20220331215607.3182232-3-dovmurik@linux.ibm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:be03:0:b0:64c:edbb:6b95 with SMTP id
- o3-20020a6bbe03000000b0064cedbb6b95mr6094090iof.46.1649327707023; Thu, 07 Apr
- 2022 03:35:07 -0700 (PDT)
-Date:   Thu, 07 Apr 2022 03:35:07 -0700
-In-Reply-To: <20220407102312.5923-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000186c3e05dc0e083d@google.com>
-Subject: Re: [syzbot] INFO: task hung in nbd_add_socket (2)
-From:   syzbot <syzbot+cbb4b1ebc70d0c5a8c29@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331215607.3182232-3-dovmurik@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 31, 2022 at 09:56:05PM +0000, Dov Murik wrote:
+> The new efi_secret module exposes the confidential computing (coco)
+> EFI secret area via securityfs interface.
+> 
+> When the module is loaded (and securityfs is mounted, typically under
+> /sys/kernel/security), a "secrets/coco" directory is created in
+> securityfs.  In it, a file is created for each secret entry.  The name
+> of each such file is the GUID of the secret entry, and its content is
+> the secret data.
+> 
+> This allows applications running in a confidential computing setting to
+> read secrets provided by the guest owner via a secure secret injection
+> mechanism (such as AMD SEV's LAUNCH_SECRET command).
+> 
+> Removing (unlinking) files in the "secrets/coco" directory will zero out
+> the secret in memory, and remove the filesystem entry.  If the module is
+> removed and loaded again, that secret will not appear in the filesystem.
+> 
+> Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
 
-Reported-and-tested-by: syzbot+cbb4b1ebc70d0c5a8c29@syzkaller.appspotmail.com
+take care,
+  Gerd
 
-Tested on:
-
-commit:         3e732ebf Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a7f265af816d9f4d
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbb4b1ebc70d0c5a8c29
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=155e3dc3700000
-
-Note: testing is done by a robot and is best-effort only.

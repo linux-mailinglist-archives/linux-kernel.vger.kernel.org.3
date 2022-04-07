@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB0B4F8182
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E464F8184
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343894AbiDGOYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S1343898AbiDGO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241283AbiDGOYi (ORCPT
+        with ESMTP id S229533AbiDGO0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:24:38 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EDCA0182AC1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:22:37 -0700 (PDT)
-Received: (qmail 223203 invoked by uid 1000); 7 Apr 2022 10:22:37 -0400
-Date:   Thu, 7 Apr 2022 10:22:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Message-ID: <Yk7zrRWDwJsMvX6s@rowland.harvard.edu>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
- <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
- <YkxoHY2SVomGwGdh@rowland.harvard.edu>
- <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
- <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
- <bd43807d-a2d7-5742-4253-c443cdf5c2f0@zhaoxin.com>
+        Thu, 7 Apr 2022 10:26:18 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC3A182AC1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:24:04 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id kl29so5070009qvb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vlSZXPc/WWB6O0Ntn/+6VGgM4mQ/P1gNa/KkL6kCL7M=;
+        b=oeGPjNgtHVvKBxNMhG8G4Q8QuOtzWGHoB4yEDz/eqEuoLw4MoKrJV0Cu3zGSYz9kKw
+         HVroEobn9e+OLjnrG12dG9ZFzIfqeETZYJZxwSrKNz7g0IG8De4hOMEkfSHY/z0Zejfj
+         H1JlCxOss9whUG21mymflAK/TnzsF6V7KXt+IyKDTNevlzVXa2wn+6I48Nh6SdUCVmjd
+         aiNXnTtKVoinWgCb2wJ7v3Qi0EOZlwzRriDJb7MKWBJ0CnXgrVJYJLMXgdiyy+v5tHHh
+         41RpzdJsqTxqfiMUA/+gw2XoYaVRuDwkFqVtwMLYuXJ4pf560ZK2xU2By+QSLoO4DrjQ
+         Ga+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vlSZXPc/WWB6O0Ntn/+6VGgM4mQ/P1gNa/KkL6kCL7M=;
+        b=3+eOtKbDoFGJUZQBUO8MvW3nYB9Ci+kxWfJRNYV+SlTiytGtcBxKhLzOXVYKWj6MqZ
+         We+FHvi+nOzaC/ZBOifRLNEaFTBRyG5oM/Hjyd2ktRo8GjA+EgGdEKhOHumU/W1xNJxq
+         sfuEWD4tRCHuVSwrm0Ju9XF1JH2bBp8RTXsq18ceUVNjEOMxHN8n839i+X8A4jqTkvYm
+         fEyWBSbMoykT2OQEyj9+2ZIyLhNFihslkPkELr+7eHxA/R0xSCpSiZL4RRQ/9WZX2qXZ
+         9sZu/QkQCVyGq8uwqEnXKslH/HSliwwG/3McaIKA+ExDtkK5uzwKS4BsTQOJp/e9PDBX
+         KA0g==
+X-Gm-Message-State: AOAM532yIKQRU+WWZq0p4vc9+0pF/EudPk16geRzo2zd96EygF+bwvbK
+        kzVqhd+9IM0hHiJyiuHPryrsmg==
+X-Google-Smtp-Source: ABdhPJwBTVSbg6sLzWrCS9NGMS5EzxPSS5wkz2ckXLOjrhXFly+LUsn4jydlD/Qq90o6V5TmAN5lHw==
+X-Received: by 2002:a0c:a942:0:b0:443:a395:cc1f with SMTP id z2-20020a0ca942000000b00443a395cc1fmr11910876qva.68.1649341438080;
+        Thu, 07 Apr 2022 07:23:58 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a0b0300b00699c6a9b2d1sm7135084qkg.32.2022.04.07.07.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 07:23:57 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ncT3D-00EF1o-Ui; Thu, 07 Apr 2022 11:23:55 -0300
+Date:   Thu, 7 Apr 2022 11:23:55 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     duoming@zju.edu.cn
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: Re: [PATCH 09/11] drivers: infiniband: hw: Fix deadlock in
+ irdma_cleanup_cm_core()
+Message-ID: <20220407142355.GV64706@ziepe.ca>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <4069b99042d28c8e51b941d9e698b99d1656ed33.1649310812.git.duoming@zju.edu.cn>
+ <20220407112455.GK3293@kadam>
+ <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd43807d-a2d7-5742-4253-c443cdf5c2f0@zhaoxin.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:15:29PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2022/4/7 00:20, Alan Stern wrote:
-> > On Wed, Apr 06, 2022 at 10:38:28AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> > > On 2022/4/6 00:02, Alan Stern wrote:
-> > > > In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
-> > > > it does:
-> > > > 
-> > > > 	The resume kernel boots;
-> > > > 
-> > > > 	If your patch causes STS_PCD to be set at this point, the flag
-> > > > 	should get cleared shortly afterward by ehci_irq;
-> > > > 
-> > > > 	ehci-hcd goes into runtime suspend;
-> > > > 
-> > > > 	The kernel reads the system image that was stored earlier when
-> > > > 	hibernation began;
-> > > > 
-> > > > 	After the image is loaded, the system goes into the freeze
-> > > > 	state (this does not call any routines in ehci-hcd);
-> > > On this phase, pci_pm_freeze will be called for pci device. In this
-> > > function, pm_runtime_resume will be called to resume already
-> > > runtime-suspend devices. which will cause ehci_resume to be called.
-> > > Thus STS_PCD flag will be set in ehci_resume function.
+On Thu, Apr 07, 2022 at 08:54:13PM +0800, duoming@zju.edu.cn wrote:
+> > > diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
+> > > index dedb3b7edd8..019dd8bfe08 100644
+> > > +++ b/drivers/infiniband/hw/irdma/cm.c
+> > > @@ -3252,8 +3252,11 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
+> > >  		return;
+> > >  
+> > >  	spin_lock_irqsave(&cm_core->ht_lock, flags);
+> > > -	if (timer_pending(&cm_core->tcp_timer))
+> > > +	if (timer_pending(&cm_core->tcp_timer)) {
+> > > +		spin_unlock_irqrestore(&cm_core->ht_lock, flags);
+> > >  		del_timer_sync(&cm_core->tcp_timer);
+> > > +		spin_lock_irqsave(&cm_core->ht_lock, flags);
+> > > +	}
+> > >  	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
 > > 
-> > Aha!  I was missing that piece of information, thanks.
-> > 
-> > But this still doesn't explain why check_root_hub_suspended is failing.
-> > That routine checks the HCD_RH_RUNNING bit, which gets set in
-> > hcd_bus_resume.  hcd_bus_resume gets called as part of resuming the root
-> > hub, and in ehci-hcd this happens when ehci_irq sees that STS_PCD is set
-> > and calls usb_hcd_resume_root_hub.  That routine queues a wakeup request
-> > on the pm_wq work queue, which is then supposed to run hcd_resume_work
-> > to actually restart the root hub.
-> > 
-> > But pm_wq is a freezable work queue!  While the system is in the freeze
-> > state, the work queue isn't running.  This means that the root hub
-> > should remain suspended until the end of the freeze phase, and so the
-> > call to check_root_hub_suspended should succeed.
-> > 
-> > Can you check to see what's really happening on your system?  Something
-> > must be wrong with my analysis, but I can't tell what it is.  I'm still
-> > puzzled.
-> > 
-> > Alan Stern
-> Your analysis is right, my test platform's kernel version is not the
-> latest, this kernel not call freeze_kernel_threads on software_resume
-> function.
-> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/power/hibernate.c?h=v5.18-rc1&id=2351f8d295ed63393190e39c2f7c1fee1a80578f)
-> So pm_wq is active and can handle root hub power events.
-> Update my kernel to fix the issue in the url above, system hibernation
-> test was successful with our patch(not clear STS_PCD bit).
-> Thanks for your clarification.
+> > This lock doesn't seem to be protecting anything.  Also do we need to
+> > check timer_pending()?  I think the del_timer_sync() function will just
+> > return directly if there isn't a pending lock?
+> 
+> Thanks a lot for your advice, I will remove the timer_pending() and the
+> redundant lock.
 
-Great!  I'm glad we sorted that out.
+Does del_timer_sync work with a self-rescheduling timer like this has?
 
-So check_root_hub_suspended doesn't need any changes, and the patch you 
-already submitted takes care of everything.
-
-Alan Stern
+Jason

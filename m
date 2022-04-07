@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5314F85B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1C54F85BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346051AbiDGRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S1346056AbiDGRVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiDGRU0 (ORCPT
+        with ESMTP id S229662AbiDGRV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:20:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EF26FA0A;
-        Thu,  7 Apr 2022 10:18:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AA302212CA;
-        Thu,  7 Apr 2022 17:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649351903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IImX9u7hyHMtT/465kPC3r5ZAKcGOJ6gEaqJKDZXu+4=;
-        b=u/kLU55iYahiedriKEFkcAQ8KFcb4vhyT05qsST6PrHv8vtLgwKrg6EFn9frww2zlDJd5V
-        W6MsikanQWB9VYdWMTeOy8DQtiWgMGziiQs88kPhkNNpe6+wAXc/kOd3dhUYKakDQMll9I
-        4WDDYSr85bnBgYT1w/DNjrIJErGrJ6Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649351903;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IImX9u7hyHMtT/465kPC3r5ZAKcGOJ6gEaqJKDZXu+4=;
-        b=Q+80xPDcUy3Afcej8bwNXUBIzcuuqTLgnS0kSiHH6ZFmwQCAkTh+vrPzAYyNDY0oTggTd+
-        +Etqhrux+iN7qzBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C07A013485;
-        Thu,  7 Apr 2022 17:18:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HZOKJN4cT2J8IwAAMHmgww
-        (envelope-from <colyli@suse.de>); Thu, 07 Apr 2022 17:18:22 +0000
-Message-ID: <7b796b3e-2fd9-00bc-5410-1097512162be@suse.de>
-Date:   Fri, 8 Apr 2022 01:18:20 +0800
+        Thu, 7 Apr 2022 13:21:26 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFABA129;
+        Thu,  7 Apr 2022 10:19:25 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id q129so6324109oif.4;
+        Thu, 07 Apr 2022 10:19:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ktg803HSeOu69hHwdv/GSEMNaBLrm32ku7UIeeZTNoE=;
+        b=jAtHQaYdNh22fDh5w8rSBMuAID1JSn3j+B2Dx2HcsJ6XG4W9QU+Ux7kxfaab6vZbJm
+         l5WpNCedk8a+wotVs2qjc+Zs6z1XW/nvLYlegIMNDZ5xMphI3ERGvTdjjjAPFUXuQlwb
+         wN7w9KG5ra5f8qekHhSaykEPEq/mng/CvstfovI7mRBFpF4fqeplqd9GkessClsUxVr8
+         yR7/5C9eaR4On44eYe73+tutPwmSnCJT3BRgpEQ6/UBnhlLHvXBkLNskZ1F8E6z2q8hT
+         WhFV2C0zTpzKh1Z9Px04+RCZyNDJUiBIothIrrU15dgWbtlOgHKsaGB7YdyToHaktcHq
+         nOWw==
+X-Gm-Message-State: AOAM530ugPnPvKyznpuXgB0Gpz1GTb4WXIg4Z9YGLrGRNGu9HAEVgWDX
+        WCj3uK/Nyxyt72GmCiwvgb5f+iNIvg==
+X-Google-Smtp-Source: ABdhPJy3RB++miojvSNpZgfUKy3/Jsrd3acxBFRmHtQUm7UVXoBZujvvsh09xoAZhSAs2J7MN6rRTQ==
+X-Received: by 2002:a05:6808:191c:b0:2f9:4621:641a with SMTP id bf28-20020a056808191c00b002f94621641amr6157578oib.226.1649351965058;
+        Thu, 07 Apr 2022 10:19:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s26-20020a4ac81a000000b00322a2b5d943sm7471279ooq.37.2022.04.07.10.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 10:19:24 -0700 (PDT)
+Received: (nullmailer pid 1475775 invoked by uid 1000);
+        Thu, 07 Apr 2022 17:19:24 -0000
+Date:   Thu, 7 Apr 2022 12:19:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
+ mirror node on MT7622
+Message-ID: <Yk8dHLDG8EHKtl54@robh.at.kernel.org>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-6-nbd@nbd.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v2] md: bcache: check the return value of kzalloc() in
- detached_dev_do_request()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     linux-bcache@vger.kernel.org, kent.overstreet@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20220303015544.32186-1-baijiaju1990@gmail.com>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220303015544.32186-1-baijiaju1990@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405195755.10817-6-nbd@nbd.name>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 9:55 AM, Jia-Ju Bai wrote:
-> The function kzalloc() in detached_dev_do_request() can fail, so its
-> return value should be checked.
->
-> Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+On Tue, Apr 05, 2022 at 09:57:46PM +0200, Felix Fietkau wrote:
+> From: Lorenzo Bianconi <lorenzo@kernel.org>
+> 
+> This patch adds the pcie mirror document bindings for MT7622 SoC.
+> The feature is used for intercepting PCIe MMIO access for the WED core
+> Add related info in mediatek-net bindings.
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 > ---
-> v2:
-> * Fix the error handling code when ddip is NULL.
->    Thank Coly for good advice.
->
-> ---
->   drivers/md/bcache/request.c | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-> index d15aae6c51c1..673a680240a9 100644
-> --- a/drivers/md/bcache/request.c
-> +++ b/drivers/md/bcache/request.c
-> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
->   	 * which would call closure_get(&dc->disk.cl)
->   	 */
->   	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-> +	if (!ddip) {
-> +		bio->bi_status = BLK_STS_RESOURCE;
-> +		bio->bi_end_io(bio);
-> +		return;
-> +	}
+>  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
+>  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+> new file mode 100644
+> index 000000000000..9fbeb626ab23
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
->   	ddip->d = d;
->   	/* Count on the bcache device */
->   	ddip->orig_bdev = orig_bdev;
+> +title: MediaTek PCIE Mirror Controller for MT7622
+> +
+> +maintainers:
+> +  - Lorenzo Bianconi <lorenzo@kernel.org>
+> +  - Felix Fietkau <nbd@nbd.name>
+> +
+> +description:
+> +  The mediatek PCIE mirror provides a configuration interface for PCIE
+> +  controller on MT7622 soc.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt7622-pcie-mirror
+> +      - const: syscon
 
-Added into my testing queue.
+This doesn't sound like a syscon to me. Are there multiple clients or 
+functions in this block? A 'syscon' property is not the only way to 
+create a regmap if that's what you need.
 
-Thanks.
-
-
-Coly Li
-
+Rob

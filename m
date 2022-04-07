@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1378D4F87EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8813F4F87F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 21:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiDGTSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 15:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S231793AbiDGTTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 15:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiDGTSJ (ORCPT
+        with ESMTP id S230170AbiDGTTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:18:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D7313F5F;
-        Thu,  7 Apr 2022 12:16:06 -0700 (PDT)
+        Thu, 7 Apr 2022 15:19:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA491E95E2;
+        Thu,  7 Apr 2022 12:17:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18D2361E24;
-        Thu,  7 Apr 2022 19:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5521C385A6;
-        Thu,  7 Apr 2022 19:16:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68C06B82970;
+        Thu,  7 Apr 2022 19:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5072C385A6;
+        Thu,  7 Apr 2022 19:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649358965;
-        bh=f00Btqo5DlYfrezMEow0LHeltiwKLZP1dw5RpNj8PqU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pmV6UORIfcoZ35qmnWfNUmbsgdEf6q+0/d3cbYHdOrPBecDHPOzFSZ++wVLcdeeg7
-         4feOXerToNzwVYBQcs9s55GVMo5o8bGJQxOV1Oln/zYbOf0bprZpaod8JR8Q+zwtkH
-         pbQ5p3OsnJqVlS5O+t3BO6Mzi1vRSRQMFL+zb98amlDxIbY2zDXfjyXgHavFDxUmgx
-         XngXE3QqZkyYv+iSae8+b/JrJublzOcnRWGFsDILbtmVoF7zj1o7PBgJbPwkV3c0RL
-         5zIZRJIl90va2X5MhCAdU+UoGldEstst38KJkOtqkJevrgM3pvobbmkVfM6LiAFg1v
-         Hws4fdNOKvMfg==
-Message-ID: <66740f5e59d52b600d5033a07b794b78dfaf3c18.camel@kernel.org>
-Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Xiubo Li <xiubli@redhat.com>,
-        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 07 Apr 2022 15:16:03 -0400
-In-Reply-To: <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
-References: <20220407151521.7968-1-lhenriques@suse.de>
-         <385d353d-56d8-8f2a-b468-2aae048f59ef@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        s=k20201202; t=1649359038;
+        bh=FFCCGVSnknPcSGQEt20l5gj9HymHETqLW15RaE75gKw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=th/y6FLTxXotjaQlPStq/a162X1xZUWyGAW5XUrAx3JxehwphlWayv2XOPoJAU5t2
+         dyjePnBC2PH9rXgLmzJJmEgQMxIB9jdmPDwHBYxaHlL/7z2IviRGedkqYeZ/lfePtW
+         XOcki+N9ZjHQkOBlGlCOSHBkVcYkHYw+Mg/aBmMlPNZy/3UT/QMgIn9SrN83JB50d5
+         fu+EoG1I7zYo95GdloqFvsmd5+bRhTJ6alXEwKqR/Uq/5vEy9fd4REq79+M+Q8Ffw1
+         Gy8kVtqixjS2oQnc+kclYS/0J/z7DXI0wAGc+D+HK1Msvnv4lv9INJnMhzGmIqcAJy
+         lpcZ3mWij8Q/g==
+Date:   Thu, 7 Apr 2022 14:17:15 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org
+Subject: Re: [PATCH v5 1/2] PCI: ACPI: Support Microsoft's "DmaProperty"
+Message-ID: <20220407191715.GA254460@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325184609.4059963-1-rajatja@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,100 +68,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 03:03 +0800, Xiubo Li wrote:
-> On 4/7/22 11:15 PM, Luís Henriques wrote:
-> > When doing a direct/sync write, we need to invalidate the page cache in
-> > the range being written to.  If we don't do this, the cache will include
-> > invalid data as we just did a write that avoided the page cache.
-> > 
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> >   fs/ceph/file.c | 19 ++++++++++++++-----
-> >   1 file changed, 14 insertions(+), 5 deletions(-)
-> > 
-> > Changes since v3:
-> > - Dropped initial call to invalidate_inode_pages2_range()
-> > - Added extra comment to document invalidation
-> > 
-> > Changes since v2:
-> > - Invalidation needs to be done after a write
-> > 
-> > Changes since v1:
-> > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
-> > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
-> > 
-> > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> > index 5072570c2203..97f764b2fbdd 100644
-> > --- a/fs/ceph/file.c
-> > +++ b/fs/ceph/file.c
-> > @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> >   		return ret;
-> >   
-> >   	ceph_fscache_invalidate(inode, false);
-> > -	ret = invalidate_inode_pages2_range(inode->i_mapping,
-> > -					    pos >> PAGE_SHIFT,
-> > -					    (pos + count - 1) >> PAGE_SHIFT);
-> > -	if (ret < 0)
-> > -		dout("invalidate_inode_pages2_range returned %d\n", ret);
-> >   
-> >   	while ((len = iov_iter_count(from)) > 0) {
-> >   		size_t left;
-> > @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> >   			break;
-> >   		}
-> >   		ceph_clear_error_write(ci);
-> > +
-> > +		/*
-> > +		 * we need to invalidate the page cache here, otherwise the
-> > +		 * cache will include invalid data in direct/sync writes.
-> > +		 */
-> > +		ret = invalidate_inode_pages2_range(
+In subject,
+
+  PCI/ACPI: ...
+
+would be consistent with previous history (at least things coming
+through the PCI tree :)).
+
+On Fri, Mar 25, 2022 at 11:46:08AM -0700, Rajat Jain wrote:
+> The "DmaProperty" is supported and documented by Microsoft here:
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
+
+Here's a more specific link (could probably be referenced below to
+avoid cluttering the text here):
+
+https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+
+> They use this property for DMA protection:
+> https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
 > 
-> IMO we'd better use truncate_inode_pages_range() after write. The above 
-> means it's possibly will write the dirty pagecache back, which will 
-> overwrite and corrupt the disk data just wrote.
+> Support the "DmaProperty" with the same semantics. This is useful for
+> internal PCI devices that do not hang off a PCIe rootport, but offer
+> an attack surface for DMA attacks (e.g. internal network devices).
+
+Same semantics as what?
+
+The MS description of "ExternalFacingPort" says:
+
+  This ACPI object enables the operating system to identify externally
+  exposed PCIe hierarchies, such as Thunderbolt.
+
+and "DmaProperty" says:
+
+  This ACPI object enables the operating system to identify internal
+  PCIe hierarchies that are easily accessible by users (such as,
+  Laptop M.2 PCIe slots accessible by way of a latch) and require
+  protection by the OS Kernel DMA Protection mechanism.
+
+I don't really understand why they called out "laptop M.2 PCIe slots"
+here.  Is the idea that those are more accessible than a standard
+internal PCIe slot?  Seems like a pretty small distinction to me.
+
+I can understand your example of internal network devices adding an
+attack surface.  But I don't see how "DmaProperty" helps identify
+those.  Wouldn't a NIC in a standard internal PCIe slot add the same
+attack surface?
+
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+> v5: * Reorder the patches in the series
+> v4: * Add the GUID. 
+>     * Update the comment and commitlog.
+> v3: * Use Microsoft's documented property "DmaProperty"
+>     * Resctrict to ACPI only
 > 
-
-I disagree. We call filemap_write_and_wait_range at the start of this,
-so any data that was dirty when we called write() will be written back
-before the sync write.
-
-If we truncate the range, then we'll potentially lose writes that came
-in after write was issued but before truncate_inode_pages_range. I think
-we'd rather let what we just wrote be clobbered in this situation than
-lose a write altogether.
-
-All of this is somewhat academic though. If you're mixing buffered and
-direct writes like this without some sort of locking, then you're just
-asking for trouble. The aim here is "sane behavior to the best of our
-ability", but we can't expect it to always be sane when people do insane
-things. ;)
-
-> Though it seems impossible that these pagecaches will be marked dirty, 
-> but this call is misleading ?
+>  drivers/acpi/property.c |  3 +++
+>  drivers/pci/pci-acpi.c  | 16 ++++++++++++++++
+>  2 files changed, 19 insertions(+)
 > 
+> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> index d0986bda2964..20603cacc28d 100644
+> --- a/drivers/acpi/property.c
+> +++ b/drivers/acpi/property.c
+> @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
+>  	/* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
+>  	GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
+>  		  0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
+> +	/* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
+> +	GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
+> +		  0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
+>  };
+>  
+>  /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 1f15ab7eabf8..378e05096c52 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1350,12 +1350,28 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+>  		dev->external_facing = 1;
+>  }
+>  
+> +static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
 
-Not impossible at all. You can open a file O_DIRECT and then mmap the fd
-for PROT_WRITE (or just open the file a second time and do it).
+I try to avoid function names like *_check_*() because they don't give
+any hint about whether there's a side effect or what direction things
+are going.  I prefer things that return a value or make sense when
+used as a predicate.  Maybe something like this?
 
-We definitely recommend against mixing buffered and direct I/O, but
-nothing really prevents someone from doing it. If the user is properly
-using file locking, then there's really no reason it shouldn't work.
+  int pci_dev_has_dma_property(struct pci_dev *dev)
 
+  dev->untrusted |= pci_dev_has_dma_property(pci_dev);
+
+> +{
+> +	u8 val;
+> +
+> +	/*
+> +	 * Property also used by Microsoft Windows for same purpose,
+> +	 * (to implement DMA protection from a device, using the IOMMU).
+> +	 */
+> +	if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
+
+The MS web page says a _DSD with this property must be implemented in
+the Root Port device scope, but we don't enforce that here.  We *do*
+enforce it in pci_acpi_set_untrusted().  Shouldn't we do the same
+here?
+
+We currently look at three properties from the same _DSD:
+
+  DmaProperty
+  ExternalFacingPort
+  HotPlugSupportInD3
+
+For "HotPlugSupportInD3", we check that "value == 1".  For
+"ExternalFacingPort", we check that it's non-zero.  The MS doc isn't
+explicit about the values, but shows "1" in the sample ASL.  I think
+we should handle all three cases the same.
+
+The first two use device_property_read_u8(); the last uses
+acpi_dev_get_property().  Again, I think they should all be the same.
+
+acpi_dev_get_property() is easier for me to read because there are
+slightly fewer layers of abstraction between _DSD and
+acpi_dev_get_property().
+
+But IIUC, device_property_read_u8() works for either ACPI or DT
+properties, and maybe there is interest in using this for DT systems.
+None of these appear in any in-tree DTs, but maybe it is important to
+handle these in DTs?
+
+If that's the case, this code would no longer be specific to ACPI and
+should be moved to somewhere that's compiled even when CONFIG_ACPI
+isn't set.
+
+> +		return;
+> +
+> +	if (val)
+> +		dev->untrusted = 1;
+> +}
+> +
+>  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+>  {
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  
+>  	pci_acpi_optimize_delay(pci_dev, adev->handle);
+>  	pci_acpi_set_external_facing(pci_dev);
+> +	pci_acpi_check_for_dma_protection(pci_dev);
+>  	pci_acpi_add_edr_notifier(pci_dev);
+>  
+>  	pci_acpi_add_pm_notifier(adev, pci_dev);
+> -- 
+> 2.35.1.1021.g381101b075-goog
 > 
-> > +				inode->i_mapping,
-> > +				pos >> PAGE_SHIFT,
-> > +				(pos + len - 1) >> PAGE_SHIFT);
-> > +		if (ret < 0) {
-> > +			dout("invalidate_inode_pages2_range returned %d\n",
-> > +			     ret);
-> > +			ret = 0;
-> > +		}
-> >   		pos += len;
-> >   		written += len;
-> >   		dout("sync_write written %d\n", written);
-> > 
-> 
-
--- 
-Jeff Layton <jlayton@kernel.org>

@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E5E4F7DDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A72A4F7DE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244722AbiDGLVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S234165AbiDGLWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbiDGLVb (ORCPT
+        with ESMTP id S244850AbiDGLWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:21:31 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A381959F0;
-        Thu,  7 Apr 2022 04:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649330357;
-        bh=1zrH+Ig9KZGn6a8jMH9j/YTpYklf3j0vedc54T6FD0M=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Cy5icd4tSFxtPW3R2ttANLK793/56WcdmmVC/yQAJ5+i3l8/lzx1WsbmzJ7J0eIgf
-         K6JDeAIi9Cxgq8NUmGNd1CaeX0Tc9BKRqSMPFNFzYTI1emvvt0qhnwLcuwuiNtr/7g
-         BGvebzDwZy5ofeUAznJRAV2DQYs57N7wkQkUvQNo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.2.23]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8QWA-1ngq0q3K3U-004WEt; Thu, 07
- Apr 2022 13:19:16 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        =robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        p.rosenberger@kunbus.com, lukas@wunner.de,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: [PATCH 5/5] tpm: tpm_tis_spi_slb_9670: implement set_reset and unset_reset functions
-Date:   Thu,  7 Apr 2022 13:18:49 +0200
-Message-Id: <20220407111849.5676-6-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
-References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
+        Thu, 7 Apr 2022 07:22:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2E91B932A;
+        Thu,  7 Apr 2022 04:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80CF461E38;
+        Thu,  7 Apr 2022 11:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9AAC385A0;
+        Thu,  7 Apr 2022 11:20:32 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 12:20:29 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, maz@kernel.org,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>, Rob Herring <robh@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] cpufreq: CPPC: Add per_cpu efficiency_class
+Message-ID: <Yk7I/YMpNkVpVG3n@arm.com>
+References: <20220407081620.1662192-1-pierre.gondois@arm.com>
+ <20220407081620.1662192-3-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:FzMuKNvm6dS35SO6rkbhftmjLdUeXo2aqe2ZmdcqrQqrf0MokiI
- shHN1DzUjcnCv78nR1ksVywGQmCb5tjnexe8hVPeubK5GlAwxVPP3q9jqhMfCboQ60TO2I1
- Gg8xYp6+2keopdrgJZwLSZZHLrTGRCZLsZ5Xt982SK2jxoPsXwCaxw0Jijm5KxfMn1MZw9H
- 6U1XuqVNTewXGyYcrqShw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RIsNoZL7xWc=:8ygGBqWgNrkvYQpNvAyFzl
- OdpNnF52cSDMXnvcn5h57tBlwfo2L90zLjgUpyRnvIcBN4rNYEkKIgSazM3v6jDxwDsoyWYKc
- TcodKbGjPav5EZPnTv34v1zHjcP+W2k0jauNR5Kerqis4rXC4KDBhIUBRhm+aX+sXiK6xhlhb
- QuRK+yFCGDtXJSS6ylaSeW5dOqzHsPgyJFwHdfsAM8+3hvuKh6/E/cn7UQrDlBVgdTJXUeQbY
- nqkDFfHCd4RhHtloNCV0SkTbSSu4IOgaVy8XmAfwU6QMOWPRZGbrY2xPSk91RmAl4hlM3duK0
- Qp8ufMIiG6576XG8MeF8MD38UfhMXDid6Vi45iQgFY2GNKaaHEgu8xjTYwLbnqVb9cYaDeN42
- FQjqhw1I/HJGCSyK4Jt9+zPofk11htqq063x8yZaBQdqJbaRzkrNnE5K0betp94X/Tf/uRfRn
- M7nZ8ePilYcKCjZ+ZUH8OI9bDYweXKoiR5r4yY9F5VKywqAIRjG4bx4ogUvOIaJIQYjEr2ewz
- BILMDNQAdzK28m7HVsR+MvAbrr4uyuJaSuLuDyJdlA/f5P6PnGQJzn0InFcbu05K53kQjwV3Q
- saOpu7m6QENjujWkN6bCoi5tiVNLxrln2tGMaLWTBm7W3hNdaxmUv3rqJa6qVHPfFedoFekYZ
- mZymW4UaaP04cCjzXylnE+YMtEMJVzJq910oKTTW3Xg1nTribr18Ivk0xbVyn4v58+HuaIqmE
- 0rd6eNfqAVMl/Yp5bLcHc4YvYJ4USGvvOeLrio7ZK3Mmoomd1Xs5Mi6AGx8gPWxjH8evXbTaU
- NR9WTylJl83LJIvIWsgvHlshhYrBkFGCAbaOVwgMHVM8jQiv3QQELOl7+qR764bOZfU/cstzH
- D/DWtzyOz2XGHopShDd0iFegqRpeUzH841T8xmdbrwhAmGdk2CEupOJL69zF6luhisWZ3U/yj
- 3ezj8dYuyxST5nOHcLwDtomAh1t6N5/oi3qV7byA8UXHx09W7vD5QAgLYWRnWhfd0I3pZZ76Z
- /ULt0+nKxC8vPP+bXvfkGwFkh/FeQbsA4yDhaV3HwXHeJDVQxykKMnEfqXkBHj0lL2K1rKltH
- zj94hhKx+OQ98o=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407081620.1662192-3-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,103 +54,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UHJvdmlkZSBpbXBsZW1lbnRhdGlvbnMgZm9yIHRoZSB0cG0gcGh5IG9wZXJhdGlvbnMgc2V0X3Jl
-c2V0IGFuZAp1bnNldF9yZXNldC4gVGFraW5nIHRoZSBjaGlwIG91dCBvZiByZXNldCByZXF1aXJl
-cyBhIGNlcnRhaW4gc2VxdWVuY2Ugb2YKbGluZSBhc3NlcnRpb25zIGFuZCBkZWFzc2VydGlvbnMg
-d2l0aCByZXNwZWN0aXZlIG1pbmltdW0gd2FpdCBpbnRlcnZhbHM6CgoJZGVhc3NlcnQgUlNUCgl3
-YWl0IGF0IGxlYXN0IDYwIG1zCglhc3NlcnQgUlNUCgl3YWl0IGF0IGxlYXN0IDIgdXNlY3MKCWRl
-YXNzZXJ0IFJTVAoJd2FpdCBhdCBsZWFzdCA2MCBtcwoJYXNzZXJ0IFJTVAoJd2FpdCBhdCBsZWFz
-dCAyIHVzZWNzCglkZWFzc2VydCBSU1QKCXdhaXQgYXQgbGVhc3QgNjAgbXMgYmVmb3JlIGlzc3Vp
-bmcgdGhlIGZpcnN0IFRQTSBjb21tYW5kCgpBY2NvcmRpbmcgdG8gdGhlIEluZmluZW9uIFNMQiA5
-NjcwVlEyLjAgZGF0YXNoZWV0IHRoaXMgc2VxdWVuY2UgaXMgbmVlZGVkCnRvIGF2b2lkIHRyaWdn
-ZXJpbmcgdGhlIGNoaXBzIGRlZmVuc2UgbW9kZXMgaW4gd2hpY2ggaXQgcHJvdGVjdHMgaXRzZWxm
-CmZyb20gZGljdGlvbmFyeSBhdHRhY2tzIGluIGNvbmp1bmN0aW9uIHdpdGggcmVzZXRzLgoKU2lu
-Y2UgdGhlIGdlbmVyaWMgcHJvYmUgZnVuY3Rpb24gdHBtX3Rpc19zcGlfcHJvYmUgb25seSBzZXRz
-IHRoZQpub24tb3B0aW9uYWwgcGh5IG9wcyBwcm92aWRlIGEgY3VzdG9tIHZlcnNpb24gaW4gd2hp
-Y2ggYWxzbyBzZXRfcmVzZXQgYW5kCnVuc2V0X3Jlc2V0IGFyZSBhc3NpZ25lZC4gTW92ZSB0aGUg
-aW1wbGVtZW50YXRpb24gb2YgdGhlc2UgZnVuY3Rpb25zIGludG8gYQpuZXcgZmlsZSB0byBzZXBh
-cmF0ZSB0aGUgU0xCOTY3MCBzcGVjaWZpYyBjb2RlIGZyb20gdGhlIGdlbmVyaWMgY29kZS4KClNp
-Z25lZC1vZmYtYnk6IExpbm8gU2FuZmlsaXBwbyA8TGlub1NhbmZpbGlwcG9AZ214LmRlPgotLS0K
-IGRyaXZlcnMvY2hhci90cG0vTWFrZWZpbGUgICAgICAgICAgICAgIHwgIDEgKwogZHJpdmVycy9j
-aGFyL3RwbS90cG1fdGlzX3NwaS5oICAgICAgICAgfCAgMiArCiBkcml2ZXJzL2NoYXIvdHBtL3Rw
-bV90aXNfc3BpX21haW4uYyAgICB8ICA0ICstCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfc3Bp
-X3NsYjk2NzAuYyB8IDgyICsrKysrKysrKysrKysrKysrKysrKysrKysrCiA0IGZpbGVzIGNoYW5n
-ZWQsIDg3IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-ZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3NwaV9zbGI5NjcwLmMKCmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2NoYXIvdHBtL01ha2VmaWxlIGIvZHJpdmVycy9jaGFyL3RwbS9NYWtlZmlsZQppbmRleCA2
-NmQzOWVhNmJkMTAuLjIyYzgyZWI0ZTM4MiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS9N
-YWtlZmlsZQorKysgYi9kcml2ZXJzL2NoYXIvdHBtL01ha2VmaWxlCkBAIC0yNSw2ICsyNSw3IEBA
-IG9iai0kKENPTkZJR19UQ0dfVElTX1NZTlFVQUNFUikgKz0gdHBtX3Rpc19zeW5xdWFjZXIubwog
-CiBvYmotJChDT05GSUdfVENHX1RJU19TUEkpICs9IHRwbV90aXNfc3BpLm8KIHRwbV90aXNfc3Bp
-LXkgOj0gdHBtX3Rpc19zcGlfbWFpbi5vCit0cG1fdGlzX3NwaS15ICs9IHRwbV90aXNfc3BpX3Ns
-Yjk2NzAubwogdHBtX3Rpc19zcGktJChDT05GSUdfVENHX1RJU19TUElfQ1I1MCkgKz0gdHBtX3Rp
-c19zcGlfY3I1MC5vCiAKIG9iai0kKENPTkZJR19UQ0dfVElTX0kyQ19DUjUwKSArPSB0cG1fdGlz
-X2kyY19jcjUwLm8KZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGkuaCBi
-L2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGkuaAppbmRleCA4ZjQzMzFkOGE0ZGQuLmI5MDg0
-ODgzMmRhNCAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3NwaS5oCisrKyBi
-L2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGkuaApAQCAtNTEsNiArNTEsOCBAQCBzdGF0aWMg
-aW5saW5lIGludCBjcjUwX3NwaV9wcm9iZShzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpKQogfQogI2Vu
-ZGlmCiAKK2V4dGVybiBpbnQgc2xiOTY3MF9zcGlfcHJvYmUoc3RydWN0IHNwaV9kZXZpY2UgKnNw
-aSk7CisKICNpZiBkZWZpbmVkKENPTkZJR19QTV9TTEVFUCkgJiYgZGVmaW5lZChDT05GSUdfVENH
-X1RJU19TUElfQ1I1MCkKIGV4dGVybiBpbnQgdHBtX3Rpc19zcGlfcmVzdW1lKHN0cnVjdCBkZXZp
-Y2UgKmRldik7CiAjZWxzZQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3Nw
-aV9tYWluLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfc3BpX21haW4uYwppbmRleCBiMmQx
-M2I4NDQ2NTkuLjUwZGExZjZlZWFlYSAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1f
-dGlzX3NwaV9tYWluLmMKKysrIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3NwaV9tYWluLmMK
-QEAgLTI2NCw3ICsyNjQsNyBAQCBzdGF0aWMgdm9pZCB0cG1fdGlzX3NwaV9yZW1vdmUoc3RydWN0
-IHNwaV9kZXZpY2UgKmRldikKIAogc3RhdGljIGNvbnN0IHN0cnVjdCBzcGlfZGV2aWNlX2lkIHRw
-bV90aXNfc3BpX2lkW10gPSB7CiAJeyAic3QzM2h0cG0tc3BpIiwgKHVuc2lnbmVkIGxvbmcpdHBt
-X3Rpc19zcGlfcHJvYmUgfSwKLQl7ICJzbGI5NjcwIiwgKHVuc2lnbmVkIGxvbmcpdHBtX3Rpc19z
-cGlfcHJvYmUgfSwKKwl7ICJzbGI5NjcwIiwgKHVuc2lnbmVkIGxvbmcpc2xiOTY3MF9zcGlfcHJv
-YmUgfSwKIAl7ICJ0cG1fdGlzX3NwaSIsICh1bnNpZ25lZCBsb25nKXRwbV90aXNfc3BpX3Byb2Jl
-IH0sCiAJeyAidHBtX3Rpcy1zcGkiLCAodW5zaWduZWQgbG9uZyl0cG1fdGlzX3NwaV9wcm9iZSB9
-LAogCXsgImNyNTAiLCAodW5zaWduZWQgbG9uZyljcjUwX3NwaV9wcm9iZSB9LApAQCAtMjc0LDcg
-KzI3NCw3IEBAIE1PRFVMRV9ERVZJQ0VfVEFCTEUoc3BpLCB0cG1fdGlzX3NwaV9pZCk7CiAKIHN0
-YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIG9mX3Rpc19zcGlfbWF0Y2hbXSA9IHsKIAl7
-IC5jb21wYXRpYmxlID0gInN0LHN0MzNodHBtLXNwaSIsIC5kYXRhID0gdHBtX3Rpc19zcGlfcHJv
-YmUgfSwKLQl7IC5jb21wYXRpYmxlID0gImluZmluZW9uLHNsYjk2NzAiLCAuZGF0YSA9IHRwbV90
-aXNfc3BpX3Byb2JlIH0sCisJeyAuY29tcGF0aWJsZSA9ICJpbmZpbmVvbixzbGI5NjcwIiwgLmRh
-dGEgPSBzbGI5NjcwX3NwaV9wcm9iZSB9LAogCXsgLmNvbXBhdGlibGUgPSAidGNnLHRwbV90aXMt
-c3BpIiwgLmRhdGEgPSB0cG1fdGlzX3NwaV9wcm9iZSB9LAogCXsgLmNvbXBhdGlibGUgPSAiZ29v
-Z2xlLGNyNTAiLCAuZGF0YSA9IGNyNTBfc3BpX3Byb2JlIH0sCiAJe30KZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGlfc2xiOTY3MC5jIGIvZHJpdmVycy9jaGFyL3RwbS90
-cG1fdGlzX3NwaV9zbGI5NjcwLmMKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAw
-MDAwLi5iYTljZDU0ZThiZmYKLS0tIC9kZXYvbnVsbAorKysgYi9kcml2ZXJzL2NoYXIvdHBtL3Rw
-bV90aXNfc3BpX3NsYjk2NzAuYwpAQCAtMCwwICsxLDgyIEBACisvLyBTUERYLUxpY2Vuc2UtSWRl
-bnRpZmllcjogR1BMLTIuMC1vbmx5CisvKgorICogdHBtX3Rpc19zcGlfc2xiOTY3MC5jCisgKgor
-ICogQ29weXJpZ2h0IChDKSAyMDIyIEtVTkJVUyBHbWJICisgKgorICovCisKKyNpbmNsdWRlIDxs
-aW51eC9ncGlvL2NvbnN1bWVyLmg+CisjaW5jbHVkZSA8bGludXgvc3BpL3NwaS5oPgorI2luY2x1
-ZGUgPGxpbnV4L2RlbGF5Lmg+CisKKyNpbmNsdWRlICJ0cG1fdGlzX2NvcmUuaCIKKyNpbmNsdWRl
-ICJ0cG1fdGlzX3NwaS5oIgorCisvKgorICogVGltZSBpbnRlcnZhbHMgdXNlZCBpbiB0aGUgcmVz
-ZXQgc2VxdWVuY2UuCisgKiBSU1RJTjogbWluaW11bSB0aW1lIHRvIGhvbGQgdGhlIHJlc2V0IGxp
-bmUgZGVhc3NlcnRlZC4KKyAqIFdSU1Q6IG1pbmltdW0gdGltZSB0byBob2xkIHRoZSByZXNldCBs
-aW5lIGFzc2VydGVkLgorICovCisjZGVmaW5lIFNMQjk2NzBfVElNRV9SU1RJTgk2MCAvKiB0aW1l
-IGluIG1zICovCisjZGVmaW5lIFNMQjk2NzBfVElNRV9XUlNUCTIgIC8qIHRpbWUgaW4gdXNlY3Mg
-Ki8KKworaW50IHNsYjk2NzBfc3BpX3Vuc2V0X3Jlc2V0KHN0cnVjdCB0cG1fdGlzX2RhdGEgKmRh
-dGEpCit7CisJLyoKKwkgKiBQZXJmb3JtIHRoZSByZXNldCBzZXF1ZW5jZTogd2UgaGF2ZSB0byBk
-ZWFzc2VydCBhbmQgYXNzZXJ0IHRoZSByZXNldAorCSAqIGxpbmUgdHdvIHRpbWVzIGFuZCB3YWl0
-IHRoZSByZXNwZWN0aXZlIHRpbWUgaW50ZXJ2YWxzLgorCSAqIEFmdGVyIGEgbGFzdCB3YWl0IGlu
-dGVydmFsIG9mIFJTVElOIHRoZSBjaGlwIGlzIHJlYWR5IHRvIHJlY2VpdmUgdGhlCisJICogZmly
-c3QgY29tbWFuZC4KKwkgKi8KKwlncGlvZF9zZXRfdmFsdWUoZGF0YS0+cmVzZXRfZ3BpbywgMCk7
-CisJbXNsZWVwKFNMQjk2NzBfVElNRV9SU1RJTik7CisJZ3Bpb2Rfc2V0X3ZhbHVlKGRhdGEtPnJl
-c2V0X2dwaW8sIDEpOworCXVkZWxheShTTEI5NjcwX1RJTUVfV1JTVCk7CisJZ3Bpb2Rfc2V0X3Zh
-bHVlKGRhdGEtPnJlc2V0X2dwaW8sIDApOworCW1zbGVlcChTTEI5NjcwX1RJTUVfUlNUSU4pOwor
-CWdwaW9kX3NldF92YWx1ZShkYXRhLT5yZXNldF9ncGlvLCAxKTsKKwl1ZGVsYXkoU0xCOTY3MF9U
-SU1FX1dSU1QpOworCWdwaW9kX3NldF92YWx1ZShkYXRhLT5yZXNldF9ncGlvLCAwKTsKKwltc2xl
-ZXAoU0xCOTY3MF9USU1FX1JTVElOKTsKKworCXJldHVybiAwOworfQorCitpbnQgc2xiOTY3MF9z
-cGlfc2V0X3Jlc2V0KHN0cnVjdCB0cG1fdGlzX2RhdGEgKmRhdGEpCit7CisJZ3Bpb2Rfc2V0X3Zh
-bHVlKGRhdGEtPnJlc2V0X2dwaW8sIDEpOworCXJldHVybiAwOworfQorCitzdGF0aWMgY29uc3Qg
-c3RydWN0IHRwbV90aXNfcGh5X29wcyBzbGI5NjcwX3NwaV9waHlfb3BzID0geworCS5yZWFkX2J5
-dGVzID0gdHBtX3Rpc19zcGlfcmVhZF9ieXRlcywKKwkud3JpdGVfYnl0ZXMgPSB0cG1fdGlzX3Nw
-aV93cml0ZV9ieXRlcywKKwkucmVhZDE2ID0gdHBtX3Rpc19zcGlfcmVhZDE2LAorCS5yZWFkMzIg
-PSB0cG1fdGlzX3NwaV9yZWFkMzIsCisJLndyaXRlMzIgPSB0cG1fdGlzX3NwaV93cml0ZTMyLAor
-CS5zZXRfcmVzZXQgPSBzbGI5NjcwX3NwaV9zZXRfcmVzZXQsCisJLnVuc2V0X3Jlc2V0ID0gc2xi
-OTY3MF9zcGlfdW5zZXRfcmVzZXQsCit9OworCitpbnQgc2xiOTY3MF9zcGlfcHJvYmUoc3RydWN0
-IHNwaV9kZXZpY2UgKnNwaSkKK3sKKwlzdHJ1Y3QgdHBtX3Rpc19zcGlfcGh5ICpwaHk7CisJaW50
-IGlycTsKKworCXBoeSA9IGRldm1fa3phbGxvYygmc3BpLT5kZXYsIHNpemVvZihzdHJ1Y3QgdHBt
-X3Rpc19zcGlfcGh5KSwKKwkJCSAgIEdGUF9LRVJORUwpOworCWlmICghcGh5KQorCQlyZXR1cm4g
-LUVOT01FTTsKKworCXBoeS0+Zmxvd19jb250cm9sID0gdHBtX3Rpc19zcGlfZmxvd19jb250cm9s
-OworCisJLyogSWYgdGhlIFNQSSBkZXZpY2UgaGFzIGFuIElSUSB0aGVuIHVzZSB0aGF0ICovCisJ
-aWYgKHNwaS0+aXJxID4gMCkKKwkJaXJxID0gc3BpLT5pcnE7CisJZWxzZQorCQlpcnEgPSAtMTsK
-KworCWluaXRfY29tcGxldGlvbigmcGh5LT5yZWFkeSk7CisJcmV0dXJuIHRwbV90aXNfc3BpX2lu
-aXQoc3BpLCBwaHksIGlycSwgJnNsYjk2NzBfc3BpX3BoeV9vcHMpOworfQotLSAKMi4zNS4xCgo=
+On Thu, Apr 07, 2022 at 10:16:17AM +0200, Pierre Gondois wrote:
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index 27df5c1e6baa..67243011279d 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -512,6 +512,7 @@ struct acpi_madt_generic_interrupt *acpi_cpu_get_madt_gicc(int cpu)
+>  {
+>  	return &cpu_madt_gicc[cpu];
+>  }
+> +EXPORT_SYMBOL_GPL(acpi_cpu_get_madt_gicc);
+
+For this arm64 change:
+
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+
+(I haven't looked at the other patches)

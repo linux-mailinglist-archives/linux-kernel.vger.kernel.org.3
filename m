@@ -2,153 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C994F7D54
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039754F7D5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244595AbiDGK62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S244603AbiDGK7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244674AbiDGK6Q (ORCPT
+        with ESMTP id S231424AbiDGK7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:58:16 -0400
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316CA78FE8;
-        Thu,  7 Apr 2022 03:56:14 -0700 (PDT)
-Received: from [IPV6:2a01:e35:39f2:1220:bf15:70c6:368e:e3ba] (unknown [IPv6:2a01:e35:39f2:1220:bf15:70c6:368e:e3ba])
-        by smtp1-g21.free.fr (Postfix) with ESMTPS id D1822B0057F;
-        Thu,  7 Apr 2022 12:56:05 +0200 (CEST)
-Message-ID: <8a87957e-4d33-9351-ae74-243441cb03cd@opteya.com>
-Date:   Thu, 7 Apr 2022 12:56:05 +0200
+        Thu, 7 Apr 2022 06:59:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228DBD0825;
+        Thu,  7 Apr 2022 03:57:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649329036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cK/2bkoA02UyzP4mMhmuqQ/iW/61hv9fi4vsvs8ceCU=;
+        b=TfW9zlJRKaDll5Jy+B33MGMmjIDAdRs0zOJo6bfLMzAlQ04oXktXoRg+amsZx1WleMd8uP
+        FenTKCJ1Y39Hs9fGhZ0V+SOLXFxeUF0CLOOSXXZNUEDajKsAfWCu7WT183lMnZ/eJHh+JY
+        vFa79b7fOQVCDjLAwFqj8c+GBykf+o0hBiab2B8JGEMA7lMq9OJBi4kV6mdNdcbR8lKxbg
+        jTSflHsb1/Q2IA4KZLJEJ7+FM2C8m23OHXhAfSedfCGD/ElJ1WOIrDDoqE5KX+hNUjhvRz
+        PCxFnIsyl00yXApO4+Nw5NXjxpuQEJIHjRxuWakNwnv/HeuCxlhCR3Z/dVuvDA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649329036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cK/2bkoA02UyzP4mMhmuqQ/iW/61hv9fi4vsvs8ceCU=;
+        b=h6JLYSTQ62JWr8RAJ7YLStxO5ydQ6a5Fd3Yg89BAmXhr8wypFathLq3Ks7YDGJt6nHI1ew
+        26gZ4oPMOYbQ05BQ==
+To:     Liao Chang <liaochang1@huawei.com>, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com, liaochang1@huawei.com,
+        clg@kaod.org, nitesh@redhat.com, edumazet@google.com,
+        peterz@infradead.org, joshdon@google.com, masahiroy@kernel.org,
+        nathan@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        gustavoars@kernel.org, arnd@arndb.de, chris@chrisdown.name,
+        dmitry.torokhov@gmail.com, linux@rasmusvillemoes.dk,
+        daniel@iogearbox.net, john.ogness@linutronix.de, will@kernel.org,
+        dave@stgolabs.net, frederic@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        heying24@huawei.com, guohanjun@huawei.com, weiyongjun1@huawei.com
+Subject: Re: [RFC 0/3] softirq: Introduce softirq throttling
+In-Reply-To: <20220406025241.191300-1-liaochang1@huawei.com>
+References: <20220406025241.191300-1-liaochang1@huawei.com>
+Date:   Thu, 07 Apr 2022 12:57:15 +0200
+Message-ID: <87bkxdjh4k.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] af_unix: Escape abstract unix socket address
-Content-Language: fr-FR
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
-References: <20220406102213.2020784-1-ydroneaud@opteya.com>
- <20220406145941.728b4cb5@hermes.local>
-From:   Yann Droneaud <ydroneaud@opteya.com>
-Organization: OPTEYA
-In-Reply-To: <20220406145941.728b4cb5@hermes.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Apr 06 2022 at 10:52, Liao Chang wrote:
 
-Le 06/04/2022 à 23:59, Stephen Hemminger a écrit :
-> On Wed,  6 Apr 2022 12:22:13 +0200
-> Yann Droneaud <ydroneaud@opteya.com> wrote:
->
->> Abstract unix socket address are bytes sequences up to
->> 108 bytes (UNIX_PATH_MAX == sizeof(struct sockaddr_un) -
->> offsetof(struct sockaddr_un, sun_path)).
->>
->> As with any random string of bytes, printing them in
->> /proc/net/unix should be done with caution to prevent
->> misbehavior.
->>
->> It would have been great to use seq_escape_mem() to escape
->> the control characters in a reversible way.
->>
->> Unfortunately userspace might expect that NUL bytes are
->> replaced with '@' characters as it's done currently.
->>
->> So this patch implements the following scheme: any control
->> characters, including NUL, in the abstract unix socket
->> addresses is replaced by '@' characters.
->>
->> Sadly, with such non reversible escape scheme, abstract
->> addresses such as "\0\0", "\0\a", "\0\b", "\0\t", etc.
->> will have the same representation: "@@".
->>
->> But will prevent "cat /proc/net/unix" from messing with
->> terminal, and will prevent "\n" in abstract address from
->> messing with parsing the list of Unix sockets.
->>
->> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
->> ---
->>   net/unix/af_unix.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
->> index e71a312faa1e..8021efd92301 100644
->> --- a/net/unix/af_unix.c
->> +++ b/net/unix/af_unix.c
->> @@ -3340,7 +3340,8 @@ static int unix_seq_show(struct seq_file *seq, void *v)
->>   				i++;
->>   			}
->>   			for ( ; i < len; i++)
->> -				seq_putc(seq, u->addr->name->sun_path[i] ?:
->> +				seq_putc(seq, !iscntrl(u->addr->name->sun_path[i]) ?
->> +					 u->addr->name->sun_path[i] :
->>   					 '@');
->>   		}
->>   		unix_state_unlock(s);
-> Unfortunately, you will break userspace ABI with this.
+Why are you sending this twice within a few hours? See
+Documentation/process/
 
-It's a wanted side effect.
+Thanks,
 
-Consider the following program
-
-
-#include <stddef.h>
-#include <stdio.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <unistd.h>
-
-#define ADDRESS "\0\n0000000000000000: 00000003 00000000 00000000 0001 03 1234567890 /bin/true"
-
-int main(void)
-{
-	static const struct sockaddr_un un = {
-		.sun_family = AF_UNIX,
-		.sun_path = ADDRESS,
-	};
-	int s;
-
-	s = socket(AF_UNIX, SOCK_STREAM, 0);
-	if (s < 0) {
-		perror("socket");
-		return 1;
-	}
-
-	if (bind(s, (const struct sockaddr *)&un, offsetof(struct sockaddr_un,sun_path) + sizeof(ADDRESS) - 1) < 0) {
-		perror("bind");
-		return 1;
-	}
-
-	while (1)
-		pause();
-
-	return 0;
-}
-
-
-This confuses
-- cat /proc/net/unix
-- netstat -x
-
-Only ss -xl doesn't take /bin/true as a Unix socket (but ss output is broken because it doesn't escape \n in unix addresses)
-
-
-Regards.
-
--- 
-Yann Droneaud
-OPTEYA
-
+        tglx

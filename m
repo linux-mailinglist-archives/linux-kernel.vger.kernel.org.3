@@ -2,186 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2894F74BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293294F74EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 06:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiDGEdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 00:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S240756AbiDGEox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 00:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238524AbiDGEdX (ORCPT
+        with ESMTP id S240737AbiDGEoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 00:33:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E001DE6DD;
-        Wed,  6 Apr 2022 21:31:24 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2373WoLV012544;
-        Thu, 7 Apr 2022 04:31:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=QSi5KF4EVpiVkn0nM4Tr/gK4hZ/Tb8VpB9Cb+HtikqM=;
- b=bMfG8rJho1OVEvqkGrnBkh6bWdufeazqM3l3svB6IsesIv3xuGIzEpZttLcCBamfeeU+
- WxBMLJMCibuYg7krlTELuv4GN+7uTl29v7hXaU/C9GkfI6zIApB1KjwghXU9p2nMeOzx
- PdWwEdU9+diea9jDhONgWB7p7BxZKDj/OzaL/BVy3Z0NmamMr0WTdOLEU1F0OhFVuo4S
- g6yQABbcm85fqs2bZXCe9qVyCoE5Ez51rPje2b1PFicpw5XDYoVkJKxbrJlu+nGJjsuE
- ku3tS1XeNjXeRl67o50bIEGF2wpGv2bmHVQpy8ej06LEtPLiIjNhxS5yHrArwhPlmVnR Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f977c5hvx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 04:31:18 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2374RN7P029647;
-        Thu, 7 Apr 2022 04:31:18 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f977c5hvd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 04:31:18 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2374RY3X003085;
-        Thu, 7 Apr 2022 04:31:16 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3f6e48qe72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 04:31:16 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2374VD2h36241770
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Apr 2022 04:31:13 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE42FA405C;
-        Thu,  7 Apr 2022 04:31:12 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51A7BA405F;
-        Thu,  7 Apr 2022 04:31:08 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.211.112.159])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  7 Apr 2022 04:31:07 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH v2 0/4] Fix perf bench numa, futex and epoll to work with
- machines having #CPUs > 1K
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <CAP-5=fXRphB0gU6CxAuj9Fy40sbwub23RbLLo=5LEY=-_D=3+g@mail.gmail.com>
-Date:   Thu, 7 Apr 2022 10:01:07 +0530
-Cc:     maddy@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, jolsa@kernel.org,
-        kjain@linux.ibm.com, disgoel@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <CF7DB310-9E7C-4084-9A7C-317D4D4004EF@linux.vnet.ibm.com>
-References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
- <CAP-5=fXRphB0gU6CxAuj9Fy40sbwub23RbLLo=5LEY=-_D=3+g@mail.gmail.com>
-To:     Ian Rogers <irogers@google.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7En33JMFO49I6DpXScy3mtrcWslMh1Lr
-X-Proofpoint-ORIG-GUID: 4oiGc0K7R0gZiaeBlwhzDjYKrYD72QSu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_13,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204070023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 00:44:44 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318BBA27E6;
+        Wed,  6 Apr 2022 21:42:45 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ot30so8264146ejb.12;
+        Wed, 06 Apr 2022 21:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=acLDo8DvtRc0LQ4dU1pQe3jeqr8dn2AMIrJhaE36LaE=;
+        b=biNJItkBtuQUq6sxZIIxp09bvf7hkNQiHphB1nIIZ4XtB8D4ZGXySxYoNxEgkyw+w1
+         VcKHiE3ojnprf43+FQmNutvBiY4rkEYqYNb99n6q9k11DykIJ9xholkyS5X136ShJJIh
+         fTx0at4QB+dIxFHcqjN0NjcyzM3s2KfylT3vMd02aLAkXuIcoz7e6rVC0RuxUF56YHey
+         o4yB9XNladBaLfx8WCINT3UI5X32sEUkw7rec9IakYK89wsGVl7Zlhjzt7munQ/TCYYa
+         mf1rrGEvVOvfKe3jeTGi7olvXRQwMdJqIonZh3lokeTZCrjUOuzlpfL1SDGQrJsZrtBY
+         ZwBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=acLDo8DvtRc0LQ4dU1pQe3jeqr8dn2AMIrJhaE36LaE=;
+        b=c4S9bA5SPUKRHYxAU3NcP3lHYoh+MgveVT3zmEi8cyI8ZkS9ENefjX0FXqrSOyjxs1
+         M8I9LzGuX8xnS6UdBnhg5GOyyeCUqyB2h1RnMhXEWUr/IXuBktaKiWcd13UwVoUOFers
+         XqtJFw5tL+8HhoKiqJzICICdQ/897WSZypdw6rGsRwsGyDw4URWHG1ySo0tLEF3nFAf6
+         rpOL2yRBiStZzJmxTlrJ8H13r397qMSGC6ELTwXj1NlVu7qUcdoEnO33zGA6cCeC5Zta
+         4fj3WQ+veTTAGmDGZ6Yat9a4LO4b4zGGUlDrWf/3Kd1Wtiokq/aHdkLS3ZHN/ki6Omwi
+         0d0Q==
+X-Gm-Message-State: AOAM532iUiJVX2IdHpxyZ/whSfD0D9VcrSsRO5KWjl6JkAgEBHFT7Sfp
+        UFWrmLuVa3pmUDonFSKFvwE=
+X-Google-Smtp-Source: ABdhPJzdPACgzyhMOYJVL/u/+HkvrlNZrm1s76+STb8mPZmG4bVbVeDYJmfD/ZDL+vp5iXueEEhCGQ==
+X-Received: by 2002:a17:906:6a1a:b0:6e1:87a:151f with SMTP id qw26-20020a1709066a1a00b006e1087a151fmr11291245ejc.715.1649306563752;
+        Wed, 06 Apr 2022 21:42:43 -0700 (PDT)
+Received: from anparri.mshome.net (host-87-11-75-174.retail.telecomitalia.it. [87.11.75.174])
+        by smtp.gmail.com with ESMTPSA id e3-20020a170906374300b006e7f060bf6asm4199455ejc.207.2022.04.06.21.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 21:42:43 -0700 (PDT)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [PATCH 0/2] storvsc, netvsc: Improve logging
+Date:   Thu,  7 Apr 2022 06:40:32 +0200
+Message-Id: <20220407044034.379971-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Two small (and independent) patches to augment and "standardize" the error
+messages.
 
+Thanks,
+  Andrea
 
-> On 07-Apr-2022, at 6:05 AM, Ian Rogers <irogers@google.com> wrote:
-> 
-> On Wed, Apr 6, 2022 at 10:51 AM Athira Rajeev
-> <atrajeev@linux.vnet.ibm.com> wrote:
->> 
->> The perf benchmark for collections: numa, futex and epoll
->> hits failure in system configuration with CPU's more than 1024.
->> These benchmarks uses "sched_getaffinity" and "sched_setaffinity"
->> in the code to work with affinity.
->> 
->> Example snippet from numa benchmark:
->> <<>>
->> perf: bench/numa.c:302: bind_to_node: Assertion `!(ret)' failed.
->> Aborted (core dumped)
->> <<>>
->> 
->> bind_to_node function uses "sched_getaffinity" to save the cpumask.
->> This fails with EINVAL because the default mask size in glibc is 1024.
->> 
->> Similarly in futex and epoll benchmark, uses sched_setaffinity during
->> pthread_create with affinity. And since it returns EINVAL in such system
->> configuration, benchmark doesn't run.
->> 
->> To overcome this 1024 CPUs mask size limitation of cpu_set_t,
->> change the mask size using the CPU_*_S macros ie, use CPU_ALLOC to
->> allocate cpumask, CPU_ALLOC_SIZE for size, CPU_SET_S to set mask bit.
->> 
->> Fix all the relevant places in the code to use mask size which is large
->> enough to represent number of possible CPU's in the system.
->> 
->> Fix parse_setup_cpu_list function in numa bench to check if input CPU
->> is online before binding task to that CPU. This is to fix failures where,
->> though CPU number is within max CPU, it could happen that CPU is offline.
->> Here, sched_setaffinity will result in failure when using cpumask having
->> that cpu bit set in the mask.
->> 
->> Patch 1 and Patch 2 address fix for perf bench futex and perf bench
->> epoll benchmark. Patch 3 and Patch 4 address fix in perf bench numa
->> benchmark
->> 
->> Athira Rajeev (4):
->>  tools/perf: Fix perf bench futex to correct usage of affinity for
->>    machines with #CPUs > 1K
->>  tools/perf: Fix perf bench epoll to correct usage of affinity for
->>    machines with #CPUs > 1K
->>  tools/perf: Fix perf numa bench to fix usage of affinity for machines
->>    with #CPUs > 1K
->>  tools/perf: Fix perf bench numa testcase to check if CPU used to bind
->>    task is online
->> 
->> Changelog:
->> From v1 -> v2:
->> Addressed review comment from Ian Rogers to do
->> CPU_FREE in a cleaner way.
->> Added Tested-by from Disha Goel
-> 
-> 
-> The whole set:
-> Acked-by: Ian Rogers <irogers@google.com>
+Andrea Parri (Microsoft) (2):
+  scsi: storvsc: Print value of invalid ID in
+    storvsc_on_channel_callback()
+  hv_netvsc: Print value of invalid ID in
+    netvsc_send_{completion,tx_complete}()
 
-Thanks for checking Ian.
+ drivers/net/hyperv/netvsc.c | 8 ++++----
+ drivers/scsi/storvsc_drv.c  | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-Athira.
-> 
-> Thanks,
-> Ian
-> 
->> tools/perf/bench/epoll-ctl.c           |  25 ++++--
->> tools/perf/bench/epoll-wait.c          |  25 ++++--
->> tools/perf/bench/futex-hash.c          |  26 ++++--
->> tools/perf/bench/futex-lock-pi.c       |  21 +++--
->> tools/perf/bench/futex-requeue.c       |  21 +++--
->> tools/perf/bench/futex-wake-parallel.c |  21 +++--
->> tools/perf/bench/futex-wake.c          |  22 ++++--
->> tools/perf/bench/numa.c                | 105 ++++++++++++++++++-------
->> tools/perf/util/header.c               |  43 ++++++++++
->> tools/perf/util/header.h               |   1 +
->> 10 files changed, 242 insertions(+), 68 deletions(-)
->> 
->> --
->> 2.35.1
+-- 
+2.25.1
 

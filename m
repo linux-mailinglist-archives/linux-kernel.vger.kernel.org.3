@@ -2,246 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772274F713A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACBA4F716D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239264AbiDGB2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
+        id S239523AbiDGB2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240440AbiDGBUA (ORCPT
+        with ESMTP id S240447AbiDGBUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Apr 2022 21:20:00 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5521868B3
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 18:16:23 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id b6-20020a62a106000000b0050564d6fd75so513363pff.22
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 18:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=sZzi0rGdgJkCGIDpvKSzqmkP39vnJT5GVLY2t/+Hx7I=;
-        b=kFcy+MlhCPSUvC2/eIFEfrKqXEgAhzG8SuEz4cKkq4UpAsicZH5piGJdx5E1FM9twW
-         lgz00oLwnKSwwGr0uzWb2YBXjDWsV7enA6uNA4DRgjWCbAHp7PBUr6giTkKgF3adNhMI
-         YIEP7FiT1UbsyudcEzsATHgPrBONiknIRCXTPbMlmsB1vHSiT9azAP0fO5a4zHRGNRTt
-         lOKy5c5OOm73fj8+BoZAp+z8aXTV9WcGnFKORc6Qsm9iAh8GMgOT8eE/xdKk62xPp1qr
-         mZvkGWccHs1HiD4ZpjlijhP30BJZljX0nXKUt6igg2GhE1Q76QkbP2qPn/NbjVE4nHyU
-         vULw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=sZzi0rGdgJkCGIDpvKSzqmkP39vnJT5GVLY2t/+Hx7I=;
-        b=3cj9xkjR5H6ZUSZafh968Fjq8mwcbzZQn7ulB7YVVorS+qwWdNkG09K/4dfmAihHA7
-         eHxTwaUvfO98J8ngbvmLTfCW3NlXXn82SCZPtsqaBf+p25Oj+Vw+zu+uW07mKQnar21w
-         rgVRHCYe2t+62Fq1sp+l8j0lzmqkQYnZ1rtCpR4Cjetcs7QOsBPmrSqlEV1pJw7RO4po
-         emCxdGwgaV+XFLBl16jdYQAOfjJa1/qqBV+UtcYi5Pg6JDqF9aaO+Yh/WcEtdK8/yLue
-         gcIEyo427GoUsU7kvQHfiRqziim1pL6VSEMAZKN2hzmAeKu2ADHB0B5WZdNvrzTKdUFF
-         umZg==
-X-Gm-Message-State: AOAM533+TBBGu+J0CTO520DVIIuJZ2D/WKLVggSWD8MVC4h1SzjrIogi
-        OFJ7d8wCiP5MWc1gYO5Vd1Q9yC9zY1rI
-X-Google-Smtp-Source: ABdhPJxS1S3WOfB/+bY8DNzv+0Agfvjz0GNWWPblYzPcAP14PTDhmmsKSMEJsrBrH6h3+S9EHGCyF5NClbX9
-X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
- (user=rananta job=sendgmr) by 2002:a17:902:d5cd:b0:156:6263:bbc7 with SMTP id
- g13-20020a170902d5cd00b001566263bbc7mr11652741plh.160.1649294182899; Wed, 06
- Apr 2022 18:16:22 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 01:16:01 +0000
-In-Reply-To: <20220407011605.1966778-1-rananta@google.com>
-Message-Id: <20220407011605.1966778-7-rananta@google.com>
-Mime-Version: 1.0
-References: <20220407011605.1966778-1-rananta@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v5 06/10] Docs: KVM: Add doc for the bitmap firmware registers
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461DA1817B7;
+        Wed,  6 Apr 2022 18:16:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF85761DAE;
+        Thu,  7 Apr 2022 01:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8404C385A1;
+        Thu,  7 Apr 2022 01:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649294184;
+        bh=KuFUgf9ktp4busrSOKUHZR6BbW7z2IoxN0dCsE+i6NY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GT+X6ggM3ugPDDantv4kdwnJQWjjvVsAVwuWhtIHtYcUe/JbIbUfCFxbWLMqWArpZ
+         ZBHcU7UH4ctTF3zRKyoQl+PZQtCIGCdFYWsoi5QFYxcg3NvtyYE4gExrXcUAyFsMfN
+         3HzVBLFdpzm8VIKjcRj0P3GbcvBsxlnIOB0y0IqFw7UvuKITegTM99T71XSDw1mDZf
+         Sxb/YuN1ommGLeHlG3SceRq6LedDXXwvBbI22Lm85QfcS/GNk7hQQ3qtxgAdOL1asb
+         J/3neZCvj4h6mhZkUSng9sqC7pxGgVz6593gzUQvOczgDzBTcBlT8OmSXAtzhR8heB
+         Pk4Zu00yJ37AA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-input@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 05/11] Input: stmfts - fix reference leak in stmfts_input_open
+Date:   Wed,  6 Apr 2022 21:16:02 -0400
+Message-Id: <20220407011609.115258-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
+References: <20220407011609.115258-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the documentation for the bitmap firmware registers in
-hypercalls.rst and api.rst. This includes the details for
-KVM_REG_ARM_STD_BMAP, KVM_REG_ARM_STD_HYP_BMAP, and
-KVM_REG_ARM_VENDOR_HYP_BMAP registers.
+From: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-Since the document is growing to carry other hypercall related
-information, make necessary adjustments to present the document
-in a generic sense, rather than being PSCI focused.
+[ Upstream commit 26623eea0da3476446909af96c980768df07bbd9 ]
 
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+pm_runtime_get_sync() will increment pm usage counter even it
+failed. Forgetting to call pm_runtime_put_noidle will result
+in reference leak in stmfts_input_open, so we should fix it.
+
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Link: https://lore.kernel.org/r/20220317131604.53538-1-zhengyongjun3@huawei.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/virt/kvm/api.rst            | 17 ++++
- Documentation/virt/kvm/arm/hypercalls.rst | 95 ++++++++++++++++++-----
- 2 files changed, 94 insertions(+), 18 deletions(-)
+ drivers/input/touchscreen/stmfts.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index d13fa6600467..e0107b157965 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -2542,6 +2542,23 @@ arm64 firmware pseudo-registers have the following bit pattern::
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index cd8805d71d97..be1dd504d5b1 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -339,11 +339,11 @@ static int stmfts_input_open(struct input_dev *dev)
  
-   0x6030 0000 0014 <regno:16>
+ 	err = pm_runtime_get_sync(&sdata->client->dev);
+ 	if (err < 0)
+-		return err;
++		goto out;
  
-+arm64 bitmap feature firmware pseudo-registers have the following bit pattern::
-+
-+  0x6030 0000 0016 <regno:16>
-+
-+The bitmap feature firmware registers exposes the hypercall services that are
-+available for userspace to configure. The set bits corresponds to the services
-+that are available for the guests to access. By default, KVM sets all the
-+supported bits during VM initialization. The userspace can discover the
-+available services via KVM_GET_ONE_REG, and write-back the bitmap corresponding
-+to the features that it wishes guests to see via KVM_SET_ONE_REG.
-+
-+Note: These registers are immutable once any of the vCPUs of the VM has run at
-+least once. A KVM_SET_ONE_REG in such a scenario will return a -EBUSY to userspace.
-+If there's no change in the value that's being written, 0 (success) is returned.
-+
-+(See Documentation/virt/kvm/arm/hypercalls.rst for more details.)
-+
- arm64 SVE registers have the following bit patterns::
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+ 	if (err)
+-		return err;
++		goto out;
  
-   0x6080 0000 0015 00 <n:5> <slice:5>   Zn bits[2048*slice + 2047 : 2048*slice]
-diff --git a/Documentation/virt/kvm/arm/hypercalls.rst b/Documentation/virt/kvm/arm/hypercalls.rst
-index d52c2e83b5b8..ccda9fc2d253 100644
---- a/Documentation/virt/kvm/arm/hypercalls.rst
-+++ b/Documentation/virt/kvm/arm/hypercalls.rst
-@@ -1,32 +1,32 @@
- .. SPDX-License-Identifier: GPL-2.0
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,7 +366,9 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
  
--=========================================
--Power State Coordination Interface (PSCI)
--=========================================
-+=======================
-+ARM Hypercall Interface
-+=======================
+-	return 0;
++out:
++	pm_runtime_put_noidle(&sdata->client->dev);
++	return err;
+ }
  
--KVM implements the PSCI (Power State Coordination Interface)
--specification in order to provide services such as CPU on/off, reset
--and power-off to the guest.
-+KVM handles the hypercall services as requested by the guests. New hypercall
-+services are regularly made available by the ARM specification or by KVM (as
-+vendor services) if they make sense from a virtualization point of view.
- 
--The PSCI specification is regularly updated to provide new features,
--and KVM implements these updates if they make sense from a virtualization
--point of view.
--
--This means that a guest booted on two different versions of KVM can
--observe two different "firmware" revisions. This could cause issues if
--a given guest is tied to a particular PSCI revision (unlikely), or if
--a migration causes a different PSCI version to be exposed out of the
--blue to an unsuspecting guest.
-+This means that a guest booted on two different versions of KVM can observe
-+two different "firmware" revisions. This could cause issues if a given guest
-+is tied to a particular version of a hypercall service, or if a migration
-+causes a different version to be exposed out of the blue to an unsuspecting
-+guest.
- 
- In order to remedy this situation, KVM exposes a set of "firmware
- pseudo-registers" that can be manipulated using the GET/SET_ONE_REG
- interface. These registers can be saved/restored by userspace, and set
--to a convenient value if required.
-+to a convenient value as required.
- 
--The following register is defined:
-+The following registers are defined:
- 
- * KVM_REG_ARM_PSCI_VERSION:
- 
-+  KVM implements the PSCI (Power State Coordination Interface)
-+  specification in order to provide services such as CPU on/off, reset
-+  and power-off to the guest.
-+
-   - Only valid if the vcpu has the KVM_ARM_VCPU_PSCI_0_2 feature set
-     (and thus has already been initialized)
-   - Returns the current PSCI version on GET_ONE_REG (defaulting to the
-@@ -74,4 +74,63 @@ The following register is defined:
-     KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED:
-       The workaround is always active on this vCPU or it is not needed.
- 
--.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
-+
-+Bitmap Feature Firmware Registers
-+---------------------------------
-+
-+Contrary to the above registers, the following registers exposes the hypercall
-+services in the form of a feature-bitmap to the userspace. This bitmap is
-+translated to the services that are available to the guest. There is a register
-+defined per service call owner and can be accessed via GET/SET_ONE_REG interface.
-+
-+By default, these registers are set with the upper limit of the features that
-+are supported. This way userspace can discover all the electable hypercall services
-+via GET_ONE_REG. The user-space can write-back the desired bitmap back via
-+SET_ONE_REG. The features for the registers that are untouched, probably because
-+userspace isn't aware of them, will be exposed as is to the guest.
-+
-+Note that KVM would't allow the userspace to configure the registers anymore once
-+any of the vCPUs has run at least once. Instead, it will return a -EBUSY. However,
-+if there's no change in the incoming value, it simply returns a success.
-+
-+The psuedo-firmware bitmap register are as follows:
-+
-+* KVM_REG_ARM_STD_BMAP:
-+    Controls the bitmap of the ARM Standard Secure Service Calls.
-+
-+  The following bits are accepted:
-+
-+    Bit-0: KVM_REG_ARM_STD_BIT_TRNG_V1_0:
-+      The bit represents the services offered under v1.0 of ARM True Random
-+      Number Generator (TRNG) specification, ARM DEN0098.
-+
-+* KVM_REG_ARM_STD_HYP_BMAP:
-+    Controls the bitmap of the ARM Standard Hypervisor Service Calls.
-+
-+  The following bits are accepted:
-+
-+    Bit-0: KVM_REG_ARM_STD_HYP_BIT_PV_TIME:
-+      The bit represents the Paravirtualized Time service as represented by
-+      ARM DEN0057A.
-+
-+* KVM_REG_ARM_VENDOR_HYP_BMAP:
-+    Controls the bitmap of the Vendor specific Hypervisor Service Calls.
-+
-+  The following bits are accepted:
-+
-+    Bit-0: KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT
-+      The bit represents the ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID
-+      function-id
-+
-+    Bit-1: KVM_REG_ARM_VENDOR_HYP_BIT_PTP:
-+      The bit represents the Precision Time Protocol KVM service.
-+
-+Errors:
-+
-+    =======  =============================================================
-+    -ENOENT   Unknown register accessed.
-+    -EBUSY    Attempt a 'write' to the register after the VM has started.
-+    -EINVAL   Invalid bitmap written to the register.
-+    =======  =============================================================
-+
-+.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
-\ No newline at end of file
+ static void stmfts_input_close(struct input_dev *dev)
 -- 
-2.35.1.1094.g7c7d902a7c-goog
+2.35.1
 

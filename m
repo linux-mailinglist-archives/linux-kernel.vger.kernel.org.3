@@ -2,172 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1AB4F7706
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE53D4F7736
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241534AbiDGHQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S234490AbiDGHUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241528AbiDGHQh (ORCPT
+        with ESMTP id S230112AbiDGHUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:16:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739D4EBACA;
-        Thu,  7 Apr 2022 00:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649315677; x=1680851677;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bAC8aL9e/0LILDQFClOv/cegcCjwM75fiVQah+k2yEQ=;
-  b=Xan8vT5ozby/qaykeJc0rLt7IQpeJSqZJlesNegamvSxpPxzEuGN6sQU
-   6JD58MhfEnVSRMtpDNmLqLWQkDdl1GP6VJNFxINd8RLDV8SMb7O/7TLt8
-   CNablCmuCyM3wQM7E+uMRsWRN1evSvSNh1Q+fAuceU0EPp1yWBi5ap0O6
-   0hPv2/fS0aZZnOD/SOmyim+hr1rdnskCpHUD545/vUVDJX/JLGuaBC5Rj
-   9MHCzOsz7KjhsZulxdRNJbPopNGGDD82APHJgRFXJ2W85hLaRBs5/4KsZ
-   0DZme4yJB8Cd738Zk8Pq2yeg/ZhlyFCptw8zEpUQnag/v2P/gfHaQ41jv
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
-   d="scan'208";a="151841252"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2022 00:14:36 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Apr 2022 00:14:35 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 7 Apr 2022 00:14:34 -0700
-Date:   Thu, 7 Apr 2022 09:17:43 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <michael@walle.cc>
-Subject: Re: [PATCH net-next v3 3/4] net: lan966x: Add FDMA functionality
-Message-ID: <20220407071743.rsipmaq6xnucrlcw@soft-dev3-1.localhost>
-References: <20220404130655.4004204-1-horatiu.vultur@microchip.com>
- <20220404130655.4004204-4-horatiu.vultur@microchip.com>
- <20220405211230.4a1a868d@kernel.org>
- <20220406112115.6kira24azizz6z2b@soft-dev3-1.localhost>
- <20220406103738.42a37033@kernel.org>
+        Thu, 7 Apr 2022 03:20:47 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCAD188A00
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:18:48 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so5454484fac.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
+        b=oQ1HJeQCQC5n4qCBU2DXCCVkwUX12Rt3xib0qn1D9v+Vr4OJP2gxh2o4gm5R/pGj9f
+         YNvt9HlCxHLgYJLh/EHM6+KGaIBk6MSYamfbSBtIHhzh2goqMEiWIOyyw4DfkwJce0Hf
+         vHhrQk1/hob+b4mYT2BFF+mA5rlDRFuTgF7hB1R7osvQcJpe73AVVzQcFY775BWaLB5Q
+         nknirBp+4Wbc4rtxd9qahyM0e16+x4spXyVW7tKFpn99qWo3K+PS2yb9Y6f0VSnwZW6X
+         hcjv3snZVrQHECdvtqQNfSq1ePlGzIh+xixdGXmaMB4KDihEZhy4A7qyH7i9TOlPMRE/
+         kFzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
+        b=5ZcTEzdAmdixueQB5HU9vYP8qAf9FtJN0C1998SMXUqw+tgMCn5IqERprnDnlXYGtS
+         yALD54OLb27geFchwyZux4RASJADDaMvShvuNVJARVp3jMs6OmsqL2Ng5mpFqUdKGP5u
+         FFFgVKj+e78PzvtqSoUrJffbaV6t0omQrAICNRbwi7k7QaHOEj1QaXWtF8dEQwQug+2N
+         HWI7tBEmDwqXD5XaUFsZ0qf3QrkITRqc7zZdHq83ZKFLL83D60F7A2+M8O/i214D2AW6
+         knlJIT2/92Tim9YYC1rcESM+PA0s45cNERybi/kdpjuSySF4A573vkHyPTmPxRfBegXv
+         sqgA==
+X-Gm-Message-State: AOAM532R9FNrNtIamzKo8saAdRD+HL2jkTMOizvOupt5XCMoxBAFnc6w
+        5cUDTUzr5cLHYyj2MNXhw4Yidc1+ZQCaWAAQosvmsQ==
+X-Google-Smtp-Source: ABdhPJwE5SJa9B0V0BpKDtoeMPTYGxl+ueDIC4EtAGMY2EXeynZBq31t3MsHu4SvzUk6ntBQp+9uCDgpxvmtJSdAuE8=
+X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
+ h20-20020a056870d25400b000db12b50da3mr5773981oac.211.1649315927305; Thu, 07
+ Apr 2022 00:18:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220406103738.42a37033@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <000000000000008dae05dbfebd85@google.com> <7108f263-5cda-d91d-792b-d3f18b63c6d7@redhat.com>
+ <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
+In-Reply-To: <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 7 Apr 2022 09:18:36 +0200
+Message-ID: <CACT4Y+ZB4oBVks7hF5shnW8FDH2c6O6UWoLVtyZ1ccp8AJhmcw@mail.gmail.com>
+Subject: Re: [syzbot] upstream build error (17)
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        syzbot <syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        mingo@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/06/2022 10:37, Jakub Kicinski wrote:
-> 
-> On Wed, 6 Apr 2022 13:21:15 +0200 Horatiu Vultur wrote:
-> > > > +static int lan966x_fdma_tx_alloc(struct lan966x_tx *tx)
-> > > > +{
-> > > > +     struct lan966x *lan966x = tx->lan966x;
-> > > > +     struct lan966x_tx_dcb *dcb;
-> > > > +     struct lan966x_db *db;
-> > > > +     int size;
-> > > > +     int i, j;
-> > > > +
-> > > > +     tx->dcbs_buf = kcalloc(FDMA_DCB_MAX, sizeof(struct lan966x_tx_dcb_buf),
-> > > > +                            GFP_ATOMIC);
-> > > > +     if (!tx->dcbs_buf)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     /* calculate how many pages are needed to allocate the dcbs */
-> > > > +     size = sizeof(struct lan966x_tx_dcb) * FDMA_DCB_MAX;
-> > > > +     size = ALIGN(size, PAGE_SIZE);
-> > > > +     tx->dcbs = dma_alloc_coherent(lan966x->dev, size, &tx->dma, GFP_ATOMIC);
-> > >
-> > > This functions seems to only be called from probe, so GFP_KERNEL
-> > > is better.
+On Wed, 6 Apr 2022 at 20:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Apr 6, 2022 at 10:33 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 > >
-> > But in the next patch of this series will be called while holding
-> > the lan966x->tx_lock. Should I still change it to GFP_KERNEL and then
-> > in the next one will change to GFP_ATOMIC?
-> 
-> Ah, I missed that. You can keep the GFP_ATOMIC then.
-> 
-> But I think the reconfig path may be racy. You disable Rx, but don't
-> disable napi. NAPI may still be running and doing Rx while you're
-> trying to free the rx skbs, no?
-
-Yes, it is possible to have race conditions there. Even though I disable
-the HW and make sure the RX FDMA is disabled. It could be that a frame
-is received and then we get an interrupt and we just call napi_schedule.
-At this point we change the MTU, and once we disable the HW and the RX
-FDMA, then the napi_poll is called.
-So I will make sure call napi_synchronize and napi_disable.
-
-> 
-> Once napi is disabled you can disable Tx and then you have full
-> ownership of the Tx side, no need to hold the lock during
-> lan966x_fdma_tx_alloc(), I'd think.
-
-I can do that. The only thing is that I need to disable the Tx for all
-the ports. Because the FDMA is shared by all the ports.
-
-> 
-> > > > +int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
-> > > > +{
-> > > > +     struct lan966x_port *port = netdev_priv(dev);
-> > > > +     struct lan966x *lan966x = port->lan966x;
-> > > > +     struct lan966x_tx_dcb_buf *next_dcb_buf;
-> > > > +     struct lan966x_tx_dcb *next_dcb, *dcb;
-> > > > +     struct lan966x_tx *tx = &lan966x->tx;
-> > > > +     struct lan966x_db *next_db;
-> > > > +     int needed_headroom;
-> > > > +     int needed_tailroom;
-> > > > +     dma_addr_t dma_addr;
-> > > > +     int next_to_use;
-> > > > +     int err;
-> > > > +
-> > > > +     /* Get next index */
-> > > > +     next_to_use = lan966x_fdma_get_next_dcb(tx);
-> > > > +     if (next_to_use < 0) {
-> > > > +             netif_stop_queue(dev);
-> > > > +             return NETDEV_TX_BUSY;
-> > > > +     }
-> > > > +
-> > > > +     if (skb_put_padto(skb, ETH_ZLEN)) {
-> > > > +             dev->stats.tx_dropped++;
-> > > > +             return NETDEV_TX_OK;
-> > > > +     }
-> > > > +
-> > > > +     /* skb processing */
-> > > > +     needed_headroom = max_t(int, IFH_LEN * sizeof(u32) - skb_headroom(skb), 0);
-> > > > +     needed_tailroom = max_t(int, ETH_FCS_LEN - skb_tailroom(skb), 0);
-> > > > +     if (needed_headroom || needed_tailroom || skb_header_cloned(skb)) {
-> > > > +             err = pskb_expand_head(skb, needed_headroom, needed_tailroom,
-> > > > +                                    GFP_ATOMIC);
-> > > > +             if (unlikely(err)) {
-> > > > +                     dev->stats.tx_dropped++;
-> > > > +                     err = NETDEV_TX_OK;
-> > > > +                     goto release;
-> > > > +             }
-> > > > +     }
-> > > > +
-> > > > +     skb_tx_timestamp(skb);
+> > On 4/6/22 18:20, syzbot wrote:
+> > > Hello,
 > > >
-> > > This could move down after the dma mapping, so it's closer to when
-> > > the devices gets ownership.
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    3e732ebf7316 Merge tag 'for_linus' of git://git.kernel.org..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10ca0687700000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=eba855fbe3373b4f
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6b36bab98e240873fd5a
+> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com
+> > >
+> > > arch/x86/kvm/emulate.c:3332:5: error: stack frame size (2552) exceeds limit (2048) in function 'emulator_task_switch' [-Werror,-Wframe-larger-than]
+> > > drivers/block/loop.c:1524:12: error: stack frame size (2648) exceeds limit (2048) in function 'lo_ioctl' [-Werror,-Wframe-larger-than]
 > >
-> > The problem is that, if I move this lower, then the SKB is changed
-> > because the IFH is added to the frame. So now if we do timestamping in
-> > the PHY then when we call classify inside 'skb_clone_tx_timestamp'
-> > will always return PTP_CLASS_NONE so the PHY will never get the frame.
-> > That is the reason why I have move it back.
-> 
-> Oh, I see, makes sense!
+> > I spot-checked these two and the stack frame is just 144 and 320 bytes
+> > respectively on a normal compile.  This is probably just the effect of
+> > some of the sanitizer options.
+>
+> Yep.
+> $ wget -q https://syzkaller.appspot.com/x/.config\?x\=eba855fbe3373b4f
+> -O - | grep CONFIG_KASAN=y
+> CONFIG_KASAN=y
+> https://github.com/ClangBuiltLinux/linux/issues/39 (our oldest still-open issue)
 
--- 
-/Horatiu
+
+The issue is due to:
+
+commit b9080ba4a6ec56447f263082825a4fddb873316b
+Date:   Wed Mar 23 12:21:10 2022 +0100
+    x86/defconfig: Enable WERROR
+
+Marco has disabled it in syzbot configs:
+https://github.com/google/syzkaller/commit/53c67432e69b0df4ff64448b944cbffaecec20f4
+
+#syz invalid

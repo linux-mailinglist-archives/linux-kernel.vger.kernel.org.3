@@ -2,326 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1D24F851F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D674F8520
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbiDGQp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S1345817AbiDGQqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241664AbiDGQp5 (ORCPT
+        with ESMTP id S1345813AbiDGQqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:45:57 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C63F1C1E46
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:43:49 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so2325566pja.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ua13KjJ44TnzMW/JsRGbxh5MdZZs5pUlw2C+XLDEQAU=;
-        b=kmDrfwgHcJfDO6CqJKi8wbwaQKrr9LHOWNheZWqSFdFeL5ZuSgD/YmQiUhFyOVy0uC
-         DBgRoipvJ6c+7bzP67Ywn7+E+dMJO/70nCuF9MA7VAN0nq4x1nOsZ2iW3RwcUxwv3K3A
-         uJ1qPh4r7v36KtvUEx9Ql+TtTyVbVd94RSdwA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ua13KjJ44TnzMW/JsRGbxh5MdZZs5pUlw2C+XLDEQAU=;
-        b=pvR+YycyG7P4MwZ9bW04s2bv4ehKQbIC9TmqfPU4L7jNXm30YxgndqjDXLMZgNqEOj
-         Ib9ag+TyE+J382Ok2lSLXYPxr2NUZT2uzly0tO87fr4aLCQaTFKRuKmJ4gL/OlZUCH3l
-         gm+4nFknxMZauqYziZN0gG/enk0shjV0TJ7vzJqPAN54BlVzGRZf7PSTx3sF0EbM1PfJ
-         pHzDJxC4jCDSkVW7mM+DwUez8v3+jI22UIxbnJw7BB5DsBpnzXIe3fHpsIG38+APsHeE
-         X6CvLNjGfZXPY8qjPwIusqP0kQqDBiIwbGoZTfxpuvtQOC3dRR6LV1pRL1tVaRY2rzOx
-         SmKA==
-X-Gm-Message-State: AOAM530mPYLYfdPu1rYUXyZAeSWtcSSG0LXpt6TgG50INfKaP9+aDwaX
-        EdLvv9WcdAGECMhsRQovOj0vKg==
-X-Google-Smtp-Source: ABdhPJwD9ZPPEfmsluDZxDBfd5nSYo8Z7c3H37FzPDzr6bIxpBhX5zCHgKTIjg7w21SQZT7dKdhNLw==
-X-Received: by 2002:a17:90b:915:b0:1ca:b584:8241 with SMTP id bo21-20020a17090b091500b001cab5848241mr16878815pjb.46.1649349828860;
-        Thu, 07 Apr 2022 09:43:48 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:693e:9ca0:42a0:6bf7])
-        by smtp.gmail.com with UTF8SMTPSA id q7-20020a056a00084700b004fb205947c7sm24520071pfk.131.2022.04.07.09.43.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 09:43:48 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 09:43:46 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
-Cc:     agross@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2]arm64: dts: qcom: Add sc7180-gelarshie
-Message-ID: <Yk8Uws1/Uia1B4Ok@google.com>
-References: <20220407075427.41141-1-chenxiangrui@huaqin.corp-partner.google.com>
+        Thu, 7 Apr 2022 12:46:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7711C1E6A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:44:04 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 237B51F85A;
+        Thu,  7 Apr 2022 16:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649349843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qqPzhZ3IRiMem1hQol0HyQl1hPa6KU1MVkQbSghKsiE=;
+        b=WVI8rxzxZuEB661yjwfgXJUG+Eu+cVBE61uzdRiSiqy5kLVusdoGE38iZZECHfxSB8aBGS
+        qESMVlpQyN1J1slGy4cm7pYNrerRrFzfzWzuy7eo5SrktFAVHDqA+KmYn7w4JcqGhXf4Uu
+        1fTtGzLdqeCLyY/K5q9JJpZ1wAFUryE=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C4064A3BA6;
+        Thu,  7 Apr 2022 16:44:02 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 18:43:59 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: start/stop: was: Re: [PATCH printk v2 10/12] printk: add kthread
+ console printers
+Message-ID: <Yk8UzzWTbfsPQNx5@alley>
+References: <20220405132535.649171-1-john.ogness@linutronix.de>
+ <20220405132535.649171-11-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407075427.41141-1-chenxiangrui@huaqin.corp-partner.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220405132535.649171-11-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 03:54:26PM +0800, Mars Chen wrote:
-
-> Subject: [PATCH] [v2]arm64: dts: qcom: Add sc7180-gelarshie
-
-Krzysztof already pointed out that the subject is incorrect. Besides that
-the version number also looks wrong. This is at least v3:
-
-v3: this patch
-v2 dupe (?): https://patchwork.kernel.org/project/linux-arm-msm/patch/20220406094156.3191-1-chenxiangrui@huaqin.corp-partner.google.com/
-v2 dupe (?): https://patchwork.kernel.org/project/linux-arm-msm/patch/20220406074707.2393-1-chenxiangrui@huaqin.corp-partner.google.com/
-v2: https://patchwork.kernel.org/project/linux-arm-msm/patch/20220406073756.2041-1-chenxiangrui@huaqin.corp-partner.google.com/
-v1: https://patchwork.kernel.org/project/linux-arm-msm/patch/20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com/
-
-> Add device tree for Gelarshie, a trogdor variant
+On Tue 2022-04-05 15:31:33, John Ogness wrote:
+> Create a kthread for each console to perform console printing. During
+> normal operation (@system_state == SYSTEM_RUNNING), the kthread
+> printers are responsible for all printing on their respective
+> consoles.
 > 
-> Signed-off-by: Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sc7180-trogdor-gelarshie-r0.dts  |  15 +
->  .../dts/qcom/sc7180-trogdor-gelarshie.dtsi    | 280 ++++++++++++++++++
->  3 files changed, 296 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+> During non-normal operation, console printing is done as it has been:
+> within the context of the printk caller or within irq work triggered
+> by the printk caller.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index f9e6343acd03..cf8f88b065c3 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -57,6 +57,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3-lte.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-gelarshie-r0.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r4.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
-> new file mode 100644
-> index 000000000000..027d6d563a5f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Gelarshie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
+> Console printers synchronize against each other and against console
+> lockers by taking the console lock for each message that is printed.
+> 
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index 258d02cff140..a3b8b984c9aa 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2988,6 +3028,10 @@ void console_start(struct console *console)
+>  	console_lock();
+>  	console->flags |= CON_ENABLED;
+>  	console_unlock();
 > +
-> +/dts-v1/;
-> +
-> +#include "sc7180-trogdor-gelarshie.dtsi"
-> +
-> +/ {
-> +	model = "Google Gelarshie (rev0+)";
-> +	compatible = "google,gelarshie", "qcom,sc7180";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
-> new file mode 100644
-> index 000000000000..8758cafb2d89
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
->
-> ...
->
-> +&sound {
-> +	compatible = "google,sc7180-gelarshie";
+> +	/* Wake the newly enabled kthread printer. */
+> +	wake_up_klogd();
 
-There is currently no device tree binding for this compatible string. Is
-the gelarshie audio config different from that of coachz? If not the
-compatible string "google,sc7180-coachz" should be used.
+wake_up_klogd() will wake the kthread only when PRINTK_PENDING_OUTPUT
+is set. But this particular console might be far behind the other
+kthreads.
 
-> +	model = "sc7180-adau7002-max98357a";
-> +	audio-routing = "PDM_DAT", "DMIC";
+I think that we always want to wake up the kthread. In the worst case,
+it will just realize that there is nothing to do and will go back to sleep.
+
 > +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&dmic_clk_en>;
-> +};
+>  	__pr_flush(console, 1000, true);
+>  }
+>  EXPORT_SYMBOL(console_start);
+ @@ -3196,6 +3240,8 @@ void register_console(struct console *newcon)
+>  		/* Begin with next message. */
+>  		newcon->seq = prb_next_seq(prb);
+>  	}
+> +	if (printk_kthreads_available)
+> +		printk_start_kthread(newcon);
+>  	console_unlock();
+>  	console_sysfs_notify();
+>  
+> @@ -3222,6 +3268,7 @@ EXPORT_SYMBOL(register_console);
+>  
+>  int unregister_console(struct console *console)
+>  {
+> +	struct task_struct *thd = console->thread;
+>  	struct console *con;
+>  	int res;
+>  
+> @@ -3233,6 +3280,11 @@ int unregister_console(struct console *console)
+>  	if (res > 0)
+>  		return 0;
+>  
+> +	if (thd) {
+> +		console->thread = NULL;
+> +		kthread_stop(thd);
+
+This feels racy against parallel register_console() and
+unregister_console() calls. I guess that it is not much
+realistic in the real life but ...
+
+Anyway, printk_start_kthread(newcon) is called under console_lock().
+It would be great to stop it under the lock as well so that we
+do not need to worry about races.
+
+Hmm, it might cause deadlock at this stage because the kthread
+take console_lock() in the main loop.
+
+It should work after introducing the per-console mutexes. They might
+be taken when console_lock() is taken. But the kthread will
+not do the printing when the console_lock() is taken by anyone else.
+
+A solution might be to add a comment that there is a non-realistic
+race that will be removed by introducing per-console mutexes.
+And fix it later.
+
+Nit: Also I would prefer to create printk_stop_kthread()
+     so that it is easy to find the counterparts.
+
+
+> +	}
 > +
-> +&sound_multimedia0_codec {
-> +	sound-dai = <&adau7002>;
-> +};
+>  	res = -ENODEV;
+>  	console_lock();
+>  	if (console_drivers == console) {
+
+[...]
+
+> +static int printk_kthread_func(void *data)
+> +{
+> +	struct console *con = data;
+> +	char *dropped_text = NULL;
+> +	char *ext_text = NULL;
+> +	bool handover;
+> +	u64 seq = 0;
+> +	char *text;
+> +	int error;
 > +
-> +/* PINCTRL - modifications to sc7180-trogdor.dtsi */
+> +	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
+> +	if (!text) {
+> +		printk_console_msg(con, KERN_ERR, "failed to allocate text buffer");
+> +		printk_fallback_preferred_direct();
+> +		goto out;
+> +	}
 > +
-> +&en_pp3300_dx_edp {
-> +	pinmux  {
-> +		pins = "gpio67";
-> +	};
+> +	if (con->flags & CON_EXTENDED) {
+> +		ext_text = kmalloc(CONSOLE_EXT_LOG_MAX, GFP_KERNEL);
+> +		if (!ext_text) {
+> +			printk_console_msg(con, KERN_ERR, "failed to allocate ext_text buffer");
+> +			printk_fallback_preferred_direct();
+> +			goto out;
+> +		}
+> +	} else {
+> +		dropped_text = kmalloc(DROPPED_TEXT_MAX, GFP_KERNEL);
+> +		if (!dropped_text) {
+> +			printk_console_msg(con, KERN_ERR,
+> +					   "failed to allocate dropped_text buffer");
+> +			printk_fallback_preferred_direct();
+> +			goto out;
+> +		}
+> +	}
 > +
-> +	pinconf {
-> +		pins = "gpio67";
-> +	};
-> +};
+> +	printk_console_msg(con, KERN_INFO, "printing thread started");
 > +
-> +&ts_reset_l {
-> +	pinconf {
+> +	for (;;) {
 > +		/*
-> +		 * We want reset state by default and it will be up to the
-> +		 * driver to disable this when it's ready.
+> +		 * Guarantee this task is visible on the waitqueue before
+> +		 * checking the wake condition.
+> +		 *
+> +		 * The full memory barrier within set_current_state() of
+> +		 * prepare_to_wait_event() pairs with the full memory barrier
+> +		 * within wq_has_sleeper().
+> +		 *
+> +		 * See __wake_up_klogd:A for the pairing memory barrier.
 > +		 */
-> +		output-low;
-> +	};
-> +};
+> +		error = wait_event_interruptible(log_wait,
+> +				printer_should_wake(con, seq)); /* LMM(printk_kthread_func:A) */
 > +
-> +/* PINCTRL - board-specific pinctrl */
-> +
-> +&tlmm {
-> +	gpio-line-names = "HUB_RST_L",
+> +		if (kthread_should_stop() || !printk_kthreads_available)
+> +			break;
 
-nit: to make this list more digestible you could add comments with
-pin numbers for every 10th pin and an empty line to separate the
-'pin groups'  even more visually. See sc7280-herobrine-herobrine-r1.dts
-for an example.
+printk_fallback_preferred_direct() is an interesting trick. But I am
+not sure if it is a good idea. This approach leaves con->kthread
+pointing to exited kthreads.
 
-> +			  "AP_RAM_ID0",
-> +			  "AP_SKU_ID2",
-> +			  "AP_RAM_ID1",
-> +			  "WF_CAM_EN2",
-> +			  "AP_RAM_ID2",
-> +			  "UF_CAM_EN",
-> +			  "WF_CAM_EN",
-> +			  "TS_RESET_L",
-> +			  "TS_INT_L",
-> +			  "",
-> +			  "EDP_BRIJ_IRQ",
-> +			  "AP_EDP_BKLTEN",
-> +			  "UF_CAM_MCLK",
-> +			  "WF_CAM_MCLK",
-> +			  "EDP_BRIJ_I2C_SDA",
-> +			  "EDP_BRIJ_I2C_SCL",
-> +			  "UF_CAM_SDA",
-> +			  "UF_CAM_SCL",
-> +			  "WF_CAM_SDA",
-> +			  "WF_CAM_SCL",
-> +			  "",
-> +			  "",
-> +			  "AMP_EN",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "WF_CAM_RST_L",
-> +			  "UF_CAM_RST_L",
-> +			  "AP_BRD_ID2",
-> +			  "BRIJ_SUSPEND",
-> +			  "AP_BRD_ID0",
-> +			  "AP_H1_SPI_MISO",
-> +			  "AP_H1_SPI_MOSI",
-> +			  "AP_H1_SPI_CLK",
-> +			  "AP_H1_SPI_CS_L",
-> +			  "BT_UART_CTS",
-> +			  "BT_UART_RTS",
-> +			  "BT_UART_TXD",
-> +			  "BT_UART_RXD",
-> +			  "H1_AP_INT_ODL",
-> +			  "",
-> +			  "UART_AP_TX_DBG_RX",
-> +			  "UART_DBG_TX_AP_RX",
-> +			  "",
-> +			  "",
-> +			  "FORCED_USB_BOOT",
-> +			  "AMP_BCLK",
-> +			  "AMP_LRCLK",
-> +			  "AMP_DIN",
-> +			  "",
-> +			  "HP_BCLK",
-> +			  "HP_LRCLK",
-> +			  "HP_DOUT",
-> +			  "",
-> +			  "",
-> +			  "AP_SKU_ID0",
-> +			  "AP_EC_SPI_MISO",
-> +			  "AP_EC_SPI_MOSI",
-> +			  "AP_EC_SPI_CLK",
-> +			  "AP_EC_SPI_CS_L",
-> +			  "AP_SPI_CLK",
-> +			  "AP_SPI_MOSI",
-> +			  "AP_SPI_MISO",
-> +			  /*
-> +			   * AP_FLASH_WP_L is crossystem ABI. Schematics
-> +			   * call it BIOS_FLASH_WP_L.
-> +			   */
-> +			  "AP_FLASH_WP_L",
-> +			  "EN_PP3300_DX_EDP",
-> +			  "AP_SPI_CS0_L",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "WLAN_SW_CTRL",
-> +			  "BOOT_CONFIG_0",
-> +			  "REPORT_SWITCH",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "DMIC_CLK_EN",
-> +			  "HUB_EN",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "AP_SKU_ID1",
-> +			  "AP_RST_REQ",
-> +			  "",
-> +			  "AP_BRD_ID1",
-> +			  "AP_EC_INT_L",
-> +			  "BOOT_CONFIG_1",
-> +			  "",
-> +			  "",
-> +			  "BOOT_CONFIG_4",
-> +			  "BOOT_CONFIG_2",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "EDP_BRIJ_EN",
-> +			  "",
-> +			  "",
-> +			  "BOOT_CONFIG_3",
-> +			  "WCI2_LTE_COEX_TXD",
-> +			  "WCI2_LTE_COEX_RXD",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "FORCED_USB_BOOT_POL",
-> +			  "AP_TS_PEN_I2C_SDA",
-> +			  "AP_TS_PEN_I2C_SCL",
-> +			  "DP_HOT_PLUG_DET",
-> +			  "EC_IN_RW_ODL";
-> +
-> +	dmic_clk_en: dmic_clk_en {
+The following looks cleaner and should work:
 
-node names should use dashes as separators, i.e.:
-	dmic_clk_en: dmic-clk-en {
+void printk_stop_kthread(struct console *con)
+{
+	struct task_struct *thread = con->thread;
 
-> +		pinmux {
-> +			pins = "gpio83";
-> +			function = "gpio";
-> +		};
-> +
-> +		pinconf {
-> +			pins = "gpio83";
-> +			drive-strength = <8>;
-> +			bias-pull-up;
-> +		};
-> +	};
-> +};
+	if (!thread)
+		return;
+
+	console->thread = NULL;
+	kthread_stop(thread);
+}
+
+void printk_deactivate_kthreas()
+{
+	struct console *con;
+
+	console_lock();
+	printk_kthreads_available = false;
+	console_unlock();
+
+	for_each_console(con)
+		printk_stop_kthread(con);
+}
+
+And we could move printk_stop_kthread() under console lock
+after introducing the per-console mutex.
+
+
+Best Regards,
+Petr

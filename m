@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA294F8493
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1C74F8495
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345789AbiDGQKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S1345803AbiDGQKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiDGQKR (ORCPT
+        with ESMTP id S1345797AbiDGQKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:10:17 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D880A94D9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:08:15 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w127so6068100oig.10
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:08:15 -0700 (PDT)
+        Thu, 7 Apr 2022 12:10:35 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C710A56F6
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:08:30 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id z16so5869888pfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 09:08:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WZc922TCkE49F8hGZOnYik1JaLOlZX3dBUSjrkm78qo=;
-        b=ef8hjGCXAvHCiEwP6/S3w3yGSEbo8Mowe/AtutAkNNHKu0/c/vnFP35yO+oTCmSXzv
-         7CcwjhjDaDUQBc7Qbw9hvKlzTLlSrsskExp4bs12YtSgM9cRoDazvi7w51bbpe2E0rvz
-         sgOAHUj1aIDePV8roZ1gK6DDwg8Hj+hsfCHCn2tpUni/RrBz8aHMJfqUaJxl0T/pVaqa
-         taEKsGaudGSREFpHiLeIaBB5n6PCsKOPnMBZPKbQSiz3myMpqjFk4NkCdq+VqC6Ld3HR
-         a8Gvyp53Ju7Qiczm5KgjH4fBESrXXwgNmrWI/oAfbkInLUZM3JRJ1Y7hQiXTH1Ves/Fs
-         OF+A==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hZYvN1HtpiMWFnNuQjMBXb03gZgQM/PZsPG90Kr0xZ4=;
+        b=G5m5k4vQXUwL1k+L0eJSqU5MDgQfzgDVie8hMWVBvOwKPK0MPeq3Uw7smawUjYYmXZ
+         C5VyAER0920ta43X8fpVnjeRGq5sHWMfWXgZrtQJKGED38+6CAnXw8jBo/5p2G/76qoO
+         GD7j1kN3/HbBq9/VBZufLoXfI7gHFNN0iGxQeSERHEtWYsmiWdQOQfqrx79jV3ByWVId
+         58glwc+Myxl4sngQ6KXGcu9rMDrS3QDFmeK+zT3/xZakxZvFc0RT8prt99hyN0nCp5LT
+         FJjYJ9uFnCbHmlOkhbIGkbXmLl6pAKGxpCV2+L6ECJ8cx/v9i2iWZR+XMworgwKI9dCG
+         r7XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WZc922TCkE49F8hGZOnYik1JaLOlZX3dBUSjrkm78qo=;
-        b=zXUu36a05W7xjogNYMb6pPjzZ0YE1K2vO+DHktrfuFNPGkDt/GmQQk4sKr0F1QOE/y
-         Eg4CAKrOBiNiq2a+FzDMCSg76OQj+ypBNqoIiy2ahE5HtM3HSUCbvfNOObFRKzh/GtZn
-         EdHFue+uAEVXOt/1j36uDuz1cDMrWKnhX/CIHVSv4+t+VkmyCVDo8PPoPLRNmYEtdfXJ
-         J3/mbHs+t8rEcqSO6joioQY2dNEMgouWzHP7iZW64tdUBVVtNujQ41CJSPr4yXRQwLqQ
-         2+9royF1k54kw8wYegf+qM+J0qQ0fHJ108Arr7+B2NvBp7uFTNtjM3461TpWkWPtAF4f
-         qbtA==
-X-Gm-Message-State: AOAM531vzvK4Lam2ETOLicxEQv+6xxkd9Jvigy+Ago6DrJF2YiKeTEKz
-        W0QfSUeiFVlN88bZtfvSmNDvzbunxs1nmIYXjPk=
-X-Google-Smtp-Source: ABdhPJzIL4EpK3DQnR+LNMct9rhw7zo1YuFYfIGktjGBWN36b1ZLz75mvni1P6FT0iILO3UJhNrH8W9NdLLOwXv14oY=
-X-Received: by 2002:aca:6006:0:b0:2f9:c685:f4e2 with SMTP id
- u6-20020aca6006000000b002f9c685f4e2mr317231oib.200.1649347678620; Thu, 07 Apr
- 2022 09:07:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hZYvN1HtpiMWFnNuQjMBXb03gZgQM/PZsPG90Kr0xZ4=;
+        b=xI/F5Vo8LqsS/QB+8cp+nFeLsRVrU7c3B751qxV0wKpQEt9qhZCPj9uw9YtIHoaFK4
+         OiDpeDVEIm1ug4GZsMS5PXMhuyDyHQvhL3lYsrOlPxvDHOowB5R0pWSFRHc1wt5pSnZI
+         HEyWpL8dA6QhCCKEfzg+F8u9kMhAYd7+oG5gVzAcNo6U7Y8lqfAqr0GNVthHptL209vx
+         qwKm93nbcPif3VB2DpmBqhONjkraUyJ7MX+NaHTQZhERY7KpcfWziPIF7TvgFM9TdEev
+         JqAF62+YLxMLksti+7LiTanAYzFM/pUKoHp3mhgBtnQTAn2QeiY0hjJKYRCkDJ+VmMyi
+         3MEQ==
+X-Gm-Message-State: AOAM532L1YzR9BY3hdTG7pRTh8z7zUeOGJUj6xncaad9E/EwR+AbGoIH
+        PUQM8kcnxRAlBAFnSn4Qs87tRw==
+X-Google-Smtp-Source: ABdhPJzDMgA0eAdeiuBlSIjIz5dT4QwAPRd0qqCxgTtRtMrnGJI9OhKCqbXfxGtGb/pO3q7COLjQTw==
+X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr14947659pft.14.1649347709341;
+        Thu, 07 Apr 2022 09:08:29 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 83-20020a621556000000b004fe5d8c5cf3sm5054446pfv.156.2022.04.07.09.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 09:08:28 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 16:08:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
+Message-ID: <Yk8MeSuKuiNJHTgI@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
+ <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
+ <Yk79A4EdiZoVQMsV@google.com>
+ <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
 MIME-Version: 1.0
-References: <1649311250-17077-1-git-send-email-baihaowen@meizu.com>
- <bb7635cf-461e-7abd-6092-4be67099c846@amd.com> <CADnq5_Ogke7XuVsQaB8pskreXam1ASTE2jna=U6iuKuuyR4r-Q@mail.gmail.com>
-In-Reply-To: <CADnq5_Ogke7XuVsQaB8pskreXam1ASTE2jna=U6iuKuuyR4r-Q@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 7 Apr 2022 12:07:47 -0400
-Message-ID: <CADnq5_Phw7SvfdtX_RN7N4xEzceYpZLvRv971y3YyOdrg5Lz_w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Fix indenting mistakes in dcn10_hw_sequencer.c
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Haowen Bai <baihaowen@meizu.com>, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,62 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually this just causes another warning.  Dropped for now.  More below.
+On Thu, Apr 07, 2022, Paolo Bonzini wrote:
+> On 4/7/22 17:02, Sean Christopherson wrote:
+> > On Thu, Apr 07, 2022, Paolo Bonzini wrote:
+> > > On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> > > > +	bool interrupt_disabled = tdvmcall_p1_read(vcpu);
+> > > 
+> > > Where is R12 documented for TDG.VP.VMCALL<Instruction.HLT>?
+> > > 
+> > > > +		 * Virtual interrupt can arrive after TDG.VM.VMCALL<HLT> during
+> > > > +		 * the TDX module executing.  On the other hand, KVM doesn't
+> > > > +		 * know if vcpu was executing in the guest TD or the TDX module.
+> > > 
+> > > I don't understand this; why isn't it enough to check PI.ON or something
+> > > like that as part of HLT emulation?
+> > 
+> > Ooh, I think I remember what this is.  This is for the case where the virtual
+> > interrupt is recognized, i.e. set in vmcs.RVI, between the STI and "HLT".  KVM
+> > doesn't have access to RVI and the interrupt is no longer in the PID (because it
+> > was "recognized".  It doesn't get delivered in the guest because the TDCALL
+> > completes before interrupts are enabled.
+> > 
+> > I lobbied to get this fixed in the TDX module by immediately resuming the guest
+> > in this case, but obviously that was unsuccessful.
+> 
+> So the TDX module sets RVI while in an STI interrupt shadow.  So far so
+> good.  Then:
+> 
+> - it receives the HLT TDCALL from the guest.  The interrupt shadow at this
+> point is gone.
+> 
+> - it knows that there is an interrupt that can be delivered (RVI > PPR &&
+> EFLAGS.IF=1, the other conditions of 29.2.2 don't matter)
+> 
+> - it forwards the HLT TDCALL nevertheless, to a clueless hypervisor that has
+> no way to glean either RVI or PPR?
+> 
+> It's absurd that this be treated as anything but a bug.
 
-On Thu, Apr 7, 2022 at 11:52 AM Alex Deucher <alexdeucher@gmail.com> wrote:
->
-> Applied.  Thanks!
->
-> Alex
->
-> On Thu, Apr 7, 2022 at 10:18 AM Harry Wentland <harry.wentland@amd.com> wrote:
-> >
-> >
-> >
-> > On 2022-04-07 02:00, Haowen Bai wrote:
-> > > Smatch reports the following:
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2174
-> > > dcn10_enable_vblanks_synchronization() warn: if statement not indented
-> > >
-> > > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> >
-> > Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-> >
-> > Harry
-> >
-> > > ---
-> > >  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 14 +++++++-------
-> > >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> > > index ee22f4422d26..3c338b85040c 100644
-> > > --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> > > +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> > > @@ -2172,13 +2172,13 @@ void dcn10_enable_vblanks_synchronization(
-> > >       if (master >= 0) {
-> > >               for (i = 0; i < group_size; i++) {
-> > >                       if (i != master && !grouped_pipes[i]->stream->has_non_synchronizable_pclk)
-> > > -                     grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
-> > > -                             grouped_pipes[master]->stream_res.tg,
-> > > -                             grouped_pipes[i]->stream_res.tg,
-> > > -                             grouped_pipes[master]->stream->timing.pix_clk_100hz,
-> > > -                             grouped_pipes[i]->stream->timing.pix_clk_100hz,
-> > > -                             get_clock_divider(grouped_pipes[master], false),
-> > > -                             get_clock_divider(grouped_pipes[i], false));
-> > > +                             grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
-> > > +                                     grouped_pipes[master]->stream_res.tg,
-> > > +                                     grouped_pipes[i]->stream_res.tg,
-> > > +                                     grouped_pipes[master]->stream->timing.pix_clk_100hz,
-> > > +                                     grouped_pipes[i]->stream->timing.pix_clk_100hz,
-> > > +                                     get_clock_divider(grouped_pipes[master], false),
-> > > +                                     get_clock_divider(grouped_pipes[i], false));
-> > >                               grouped_pipes[i]->stream->vblank_synchronized = true;
-
-@Harry Wentland should this last statement be part of the if clause or
-the for loop?
-
-Alex
-
-> > >               }
-> > >               grouped_pipes[master]->stream->vblank_synchronized = true;
-> >
+That's what I said!  :-)

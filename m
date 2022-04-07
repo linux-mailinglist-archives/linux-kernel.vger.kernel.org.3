@@ -2,101 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C014F81BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66DF4F81D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbiDGOeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 10:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S1344045AbiDGOfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344006AbiDGOeW (ORCPT
+        with ESMTP id S1344082AbiDGOfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:34:22 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9688D198526;
-        Thu,  7 Apr 2022 07:32:12 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZ3gw30svz681Z4;
-        Thu,  7 Apr 2022 22:30:20 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 16:32:10 +0200
-Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
- 2022 15:32:09 +0100
-Message-ID: <3e1914a8-5f6b-8fcf-7fb3-2d1edb9766e1@huawei.com>
-Date:   Thu, 7 Apr 2022 15:32:07 +0100
+        Thu, 7 Apr 2022 10:35:34 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815E01B7572
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 07:33:19 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id bq8so11225827ejb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 07:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZhILZayX6pXffknKnd7HfQgbBKm0wpl0VHuQYrvMsZ0=;
+        b=oW2QY6FhGdQmhBgp/MADoYPdud7e2/D0LNs/qdWYbhbNaEcAPcVX5b3hhAJY3VQ5b2
+         7gC62rgwdrtW0dN34ZqnDI949PTioIaYWOmD8g9DRjeJOFGDNtUkU/2K+DkcBusmwsHh
+         qgNCoe8enlFYxi3NEz+kwrxqVILx9Ub4fvDS3bmFlkjWL8vnmVpp069M6FBYtVW5xyrE
+         HZjS6fs5ZQEKL5sl4QfpEkSJ6vRUmOJhHjbOOO/pm+eRDIIpCcBvIsH/6KT27ZMUg4Ee
+         2y+5/E5s2YMnRNLGT8OS6ZwKzo3/BQIwG8BulPimXxSeVP3UoSNxqEA6Kbr4TzFqlNZg
+         4/OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZhILZayX6pXffknKnd7HfQgbBKm0wpl0VHuQYrvMsZ0=;
+        b=U6QKoM0NzyKrpk6fFoS5pDlDsnEguj6SKdnUJ25plenwCLyPKBqSvsHN4qjn0eu5PZ
+         Ai4IW93IXGXohRTA9loKxDYpsvKjAWGlTjzrkvfUBlXgyhdFMInX0dROvsXD966LkYnA
+         VuQOm9HfTRIkkj3spO/jBpJVGHduAIW6LCqDa7edY5vtIWD3fU8qnOCgtJmX4gF4b+Uv
+         3khXagAVDVRljnkb2dNTb2FIwT2QgPC0HynibZL8cfk6KeRPZdGBbz0hVX+f9xrVfDLP
+         ayuhC/AyMIKMGGW4yQI+jtpWNhPysSBQqUg743BV3trnjcu4h+uhVKJdY4ymqDKPnenu
+         uSFw==
+X-Gm-Message-State: AOAM531bxEVyxx/mOSkIcziycuhWV+5GKGOT3gcAatih4i9WFqCkQHVh
+        Tx9eGc62vgpFXAqY2x7TbwZGEw==
+X-Google-Smtp-Source: ABdhPJzuh9XHvvGbe8ZPu/7duVfCJ0rW8LwjHVbbAzHzQRh2mnP/nQ+KvF7KNjIa4gr2QrU8GxcQVw==
+X-Received: by 2002:a17:907:3f92:b0:6e7:2ad3:a92b with SMTP id hr18-20020a1709073f9200b006e72ad3a92bmr14282064ejc.239.1649341936092;
+        Thu, 07 Apr 2022 07:32:16 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm9602135edx.97.2022.04.07.07.32.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 07:32:15 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] ARM: dts: broadcom: align SPI NOR node name with dtschema
+Date:   Thu,  7 Apr 2022 16:32:10 +0200
+Message-Id: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 03/11] libata: Send internal commands through the block
- layer
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
-        <hare@suse.de>, <chenxiang66@hisilicon.com>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <dm-devel@redhat.com>, <beanhuo@micron.com>
-References: <1647945585-197349-1-git-send-email-john.garry@huawei.com>
- <1647945585-197349-4-git-send-email-john.garry@huawei.com>
- <20220322112057.GC29270@lst.de>
-In-Reply-To: <20220322112057.GC29270@lst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.80.129]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 11:20, Christoph Hellwig wrote:
-> On Tue, Mar 22, 2022 at 06:39:37PM +0800, John Garry wrote:
->> When SCSI HBA device drivers are required to process an ATA internal
->> command they still need a tag for the IO. This often requires the driver
->> to set aside a set of tags for these sorts of IOs and manage the tags
->> themselves.
->>
->> If we associate a SCSI command (and request) with an ATA internal command
->> then the tag is already provided, so introduce the change to send ATA
->> internal commands through the block layer with a set of custom blk-mq ops.
->>
->> note: I think that the timeout handling needs to be fixed up.
+The node names should be generic and SPI NOR dtschema expects "flash".
 
-Hi Christoph,
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts | 2 +-
+ arch/arm/boot/dts/bcm958522er.dts                 | 2 +-
+ arch/arm/boot/dts/bcm958525er.dts                 | 2 +-
+ arch/arm/boot/dts/bcm958525xmc.dts                | 2 +-
+ arch/arm/boot/dts/bcm958622hr.dts                 | 2 +-
+ arch/arm/boot/dts/bcm958623hr.dts                 | 2 +-
+ arch/arm/boot/dts/bcm958625hr.dts                 | 2 +-
+ arch/arm/boot/dts/bcm958625k.dts                  | 2 +-
+ arch/arm/boot/dts/bcm988312hr.dts                 | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-> Any reason to not just send them through an ATA_16 passthrough CDB and
-> just use all the normal SCSI command handling?
+diff --git a/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts b/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
+index 2e7fda9b998c..975f854f652f 100644
+--- a/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
++++ b/arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts
+@@ -34,7 +34,7 @@ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+ 
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		compatible = "m25p80";
+ 		reg = <0>;
+ 		#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/bcm958522er.dts b/arch/arm/boot/dts/bcm958522er.dts
+index 60376b62cd5f..15f023656df0 100644
+--- a/arch/arm/boot/dts/bcm958522er.dts
++++ b/arch/arm/boot/dts/bcm958522er.dts
+@@ -136,7 +136,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958525er.dts b/arch/arm/boot/dts/bcm958525er.dts
+index 8eeb319f5b54..9b9c225a1fb3 100644
+--- a/arch/arm/boot/dts/bcm958525er.dts
++++ b/arch/arm/boot/dts/bcm958525er.dts
+@@ -136,7 +136,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958525xmc.dts b/arch/arm/boot/dts/bcm958525xmc.dts
+index dc86d5a91292..ca9311452739 100644
+--- a/arch/arm/boot/dts/bcm958525xmc.dts
++++ b/arch/arm/boot/dts/bcm958525xmc.dts
+@@ -152,7 +152,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958622hr.dts b/arch/arm/boot/dts/bcm958622hr.dts
+index c457e53d886e..9db3c851451a 100644
+--- a/arch/arm/boot/dts/bcm958622hr.dts
++++ b/arch/arm/boot/dts/bcm958622hr.dts
+@@ -140,7 +140,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958623hr.dts b/arch/arm/boot/dts/bcm958623hr.dts
+index c06871915a1c..32786e7c4e12 100644
+--- a/arch/arm/boot/dts/bcm958623hr.dts
++++ b/arch/arm/boot/dts/bcm958623hr.dts
+@@ -144,7 +144,7 @@ &sata_phy0 {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958625hr.dts b/arch/arm/boot/dts/bcm958625hr.dts
+index b22fc6624ae4..74263d98de73 100644
+--- a/arch/arm/boot/dts/bcm958625hr.dts
++++ b/arch/arm/boot/dts/bcm958625hr.dts
+@@ -151,7 +151,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm958625k.dts b/arch/arm/boot/dts/bcm958625k.dts
+index 0183f8965a74..69ebc7a913a7 100644
+--- a/arch/arm/boot/dts/bcm958625k.dts
++++ b/arch/arm/boot/dts/bcm958625k.dts
+@@ -155,7 +155,7 @@ &pwm {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+diff --git a/arch/arm/boot/dts/bcm988312hr.dts b/arch/arm/boot/dts/bcm988312hr.dts
+index 007e34715956..e96bc3f2d5cf 100644
+--- a/arch/arm/boot/dts/bcm988312hr.dts
++++ b/arch/arm/boot/dts/bcm988312hr.dts
+@@ -140,7 +140,7 @@ nand_sel: nand_sel {
+ &qspi {
+ 	status = "okay";
+ 	bspi-sel = <0>;
+-	flash: m25p80@0 {
++	flash: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "m25p80";
+-- 
+2.32.0
 
-I had a go at implementing this but I have come up against a few issues:
-
-- ATA_16 handling translates the passthrough CDB to a ATA TF. However 
-ata_exec_internal_sg() is passed a TF already. So what to do? Change the 
-callers to generate a ATA_16 CDB? I guess not. Otherwise we could put 
-the already-generated TF in the SCSI cmd CDB somehow and use directly.
-
-- We may have no SCSI device (yet) for the target when issuing an 
-internal command, but only the ATA port+dev. So need a method to pass 
-these pointers to ATA_16 handling
-
-- we would need to change ata_scsi_translate(), ata_scsi_pass_thru() and 
-other friends to deal with ATA_TAG_INTERNAL and its peculiarities - 
-today it just deals with regular qc's.
-
-It still does seem a reasonable idea to use ATA_16, but it looks like 
-significant modifications would be required....
-
-Thanks,
-John

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AF34F85DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA85D4F85EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346209AbiDGRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S1346151AbiDGRYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346123AbiDGRYH (ORCPT
+        with ESMTP id S1346118AbiDGRYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Apr 2022 13:24:07 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84C21AF37;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06782186DC;
         Thu,  7 Apr 2022 10:22:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=rfpeReUyOakDeWgnZ8ReEXJWBQv5CMxmL/J4NdHYak8=; b=KJx+vBhsS5uHJB+cFfcY8I4WEr
-        z+w4X0fM9q1jvM/Y7cAT34U+WeameXar9PjOaz+JtAyvBezDyiFDM5fxl3Cie6jkDI+PjQN5UtqMW
-        UiLNR3JuCB6hMXKaE29X2AvMp48vhsZ6OQpyaOxBQdTmBV0ovKcawR8282QLCbkxR+eenuj/PGTTf
-        mSi7D73PIzVKk+Vbb6UmJ2PhY6fZGdl0y9mgbip/5Rde/Cw5qlGFfk2yLWFJc120VtSiswhxkr2Rh
-        AlUTDTuzZmrPbVpP/HfIb/c5SwZS4diYS+GQiU3FJmFhM7BoeUue63YFsNRJGKPVGLGDDrfDSdcpZ
-        1nTPdd8g==;
+        bh=S+r51FPP6n10yfgtvgNM7cq5++cCBWiReTm/0uolfQY=; b=rYlQCuelx0cDeN85iw8hh4CWvr
+        LMbonNjYra2S9eW+CNjQD9KXGqbRr1Fb7DDvNPeI4frDJYTUjbAOJoy4GOqOdRnzt2m53OE1r3feS
+        OpHYXB4oqTP9wITJxILkMQ11xCDerUtvyOpdf7Najb5IqOJsOOcHBorNqxl3SMMXryX5PoAYZ2MMh
+        /lDd/oo1/lOeRjSqpoWhqvXSEdmid8zPpElTxESUaLWkGh7qNgzVIu86v3xp10cJ9g4BB3psd01T4
+        u80uTGSE+00er1CVhP+/dQwDPBJvwOYtL4r2wDxDeYc9eZ2tCUA4dVdlFtO+R4x84gmeoGPiHgOif
+        9WzlcTNA==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1ncVG1-002CHl-9u; Thu, 07 Apr 2022 10:45:18 -0600
+        id 1ncVG1-002CHm-9u; Thu, 07 Apr 2022 10:45:19 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1ncVFz-0002Db-UX; Thu, 07 Apr 2022 10:45:16 -0600
+        id 1ncVG0-0002De-41; Thu, 07 Apr 2022 10:45:16 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -41,8 +41,8 @@ Cc:     Shaohua Li <shli@kernel.org>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu,  7 Apr 2022 10:45:04 -0600
-Message-Id: <20220407164511.8472-2-logang@deltatee.com>
+Date:   Thu,  7 Apr 2022 10:45:05 -0600
+Message-Id: <20220407164511.8472-3-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220407164511.8472-1-logang@deltatee.com>
 References: <20220407164511.8472-1-logang@deltatee.com>
@@ -58,155 +58,50 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-Subject: [PATCH v1 1/8] md/raid5: Refactor raid5_make_request loop
+Subject: [PATCH v1 2/8] md/raid5: Move stripe_add_to_batch_list() call out of add_stripe_bio()
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Break immediately if raid5_get_active_stripe() returns NULL and deindent
-the rest of the loop. Annotate this check with an unlikely().
+stripe_add_to_batch_list() is better done in the loop in make_request
+instead of inside add_stripe_bio(). This is clearer and allows for
+storing the batch_head state outside the loop in a subsequent patch.
 
-This makes the code easier to read and reduces the indentation level.
+The call to add_stripe_bio() in retry_aligned_read() is for a read only
+and thus wouldn't have added the batch anyway.
 
 No functional changes intended.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- drivers/md/raid5.c | 111 +++++++++++++++++++++++----------------------
- 1 file changed, 56 insertions(+), 55 deletions(-)
+ drivers/md/raid5.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 351d341a1ffa..b794253efd15 100644
+index b794253efd15..e3c75b3b8923 100644
 --- a/drivers/md/raid5.c
 +++ b/drivers/md/raid5.c
-@@ -5868,69 +5868,70 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 
- 		sh = raid5_get_active_stripe(conf, new_sector, previous,
- 				       (bi->bi_opf & REQ_RAHEAD), 0);
--		if (sh) {
--			if (unlikely(previous)) {
--				/* expansion might have moved on while waiting for a
--				 * stripe, so we must do the range check again.
--				 * Expansion could still move past after this
--				 * test, but as we are holding a reference to
--				 * 'sh', we know that if that happens,
--				 *  STRIPE_EXPANDING will get set and the expansion
--				 * won't proceed until we finish with the stripe.
--				 */
--				int must_retry = 0;
--				spin_lock_irq(&conf->device_lock);
--				if (mddev->reshape_backwards
--				    ? logical_sector >= conf->reshape_progress
--				    : logical_sector < conf->reshape_progress)
--					/* mismatch, need to try again */
--					must_retry = 1;
--				spin_unlock_irq(&conf->device_lock);
--				if (must_retry) {
--					raid5_release_stripe(sh);
--					schedule();
--					do_prepare = true;
--					goto retry;
--				}
--			}
--			if (read_seqcount_retry(&conf->gen_lock, seq)) {
--				/* Might have got the wrong stripe_head
--				 * by accident
--				 */
--				raid5_release_stripe(sh);
--				goto retry;
--			}
-+		if (unlikely(!sh)) {
-+			/* cannot get stripe, just give-up */
-+			bi->bi_status = BLK_STS_IOERR;
-+			break;
-+		}
- 
--			if (test_bit(STRIPE_EXPANDING, &sh->state) ||
--			    !add_stripe_bio(sh, bi, dd_idx, rw, previous)) {
--				/* Stripe is busy expanding or
--				 * add failed due to overlap.  Flush everything
--				 * and wait a while
--				 */
--				md_wakeup_thread(mddev->thread);
-+		if (unlikely(previous)) {
-+			/*
-+			 * Expansion might have moved on while waiting for a
-+			 * stripe, so we must do the range check again.
-+			 * Expansion could still move past after this
-+			 * test, but as we are holding a reference to
-+			 * 'sh', we know that if that happens,
-+			 *  STRIPE_EXPANDING will get set and the expansion
-+			 * won't proceed until we finish with the stripe.
-+			 */
-+			int must_retry = 0;
-+			spin_lock_irq(&conf->device_lock);
-+			if (mddev->reshape_backwards
-+			    ? logical_sector >= conf->reshape_progress
-+			    : logical_sector < conf->reshape_progress)
-+				/* mismatch, need to try again */
-+				must_retry = 1;
-+			spin_unlock_irq(&conf->device_lock);
-+			if (must_retry) {
- 				raid5_release_stripe(sh);
- 				schedule();
- 				do_prepare = true;
- 				goto retry;
- 			}
--			if (do_flush) {
--				set_bit(STRIPE_R5C_PREFLUSH, &sh->state);
--				/* we only need flush for one stripe */
--				do_flush = false;
--			}
-+		}
-+		if (read_seqcount_retry(&conf->gen_lock, seq)) {
-+			/* Might have got the wrong stripe_head by accident */
-+			raid5_release_stripe(sh);
-+			goto retry;
-+		}
- 
--			set_bit(STRIPE_HANDLE, &sh->state);
--			clear_bit(STRIPE_DELAYED, &sh->state);
--			if ((!sh->batch_head || sh == sh->batch_head) &&
--			    (bi->bi_opf & REQ_SYNC) &&
--			    !test_and_set_bit(STRIPE_PREREAD_ACTIVE, &sh->state))
--				atomic_inc(&conf->preread_active_stripes);
--			release_stripe_plug(mddev, sh);
--		} else {
--			/* cannot get stripe for read-ahead, just give-up */
--			bi->bi_status = BLK_STS_IOERR;
--			break;
-+		if (test_bit(STRIPE_EXPANDING, &sh->state) ||
-+		    !add_stripe_bio(sh, bi, dd_idx, rw, previous)) {
-+			/*
-+			 * Stripe is busy expanding or add failed due to
-+			 * overlap. Flush everything and wait a while.
-+			 */
-+			md_wakeup_thread(mddev->thread);
-+			raid5_release_stripe(sh);
-+			schedule();
-+			do_prepare = true;
-+			goto retry;
- 		}
-+
-+		if (do_flush) {
-+			set_bit(STRIPE_R5C_PREFLUSH, &sh->state);
-+			/* we only need flush for one stripe */
-+			do_flush = false;
-+		}
-+
-+		set_bit(STRIPE_HANDLE, &sh->state);
-+		clear_bit(STRIPE_DELAYED, &sh->state);
-+		if ((!sh->batch_head || sh == sh->batch_head) &&
-+		    (bi->bi_opf & REQ_SYNC) &&
-+		    !test_and_set_bit(STRIPE_PREREAD_ACTIVE, &sh->state))
-+			atomic_inc(&conf->preread_active_stripes);
-+
-+		release_stripe_plug(mddev, sh);
+@@ -3504,8 +3504,6 @@ static int add_stripe_bio(struct stripe_head *sh, struct bio *bi, int dd_idx,
  	}
- 	finish_wait(&conf->wait_for_overlap, &w);
+ 	spin_unlock_irq(&sh->stripe_lock);
  
+-	if (stripe_can_batch(sh))
+-		stripe_add_to_batch_list(conf, sh);
+ 	return 1;
+ 
+  overlap:
+@@ -5918,6 +5916,9 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 			goto retry;
+ 		}
+ 
++		if (stripe_can_batch(sh))
++			stripe_add_to_batch_list(conf, sh);
++
+ 		if (do_flush) {
+ 			set_bit(STRIPE_R5C_PREFLUSH, &sh->state);
+ 			/* we only need flush for one stripe */
 -- 
 2.30.2
 

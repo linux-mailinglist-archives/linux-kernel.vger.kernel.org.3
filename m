@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091464F7B5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4101F4F7B64
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243692AbiDGJRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S243727AbiDGJR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243704AbiDGJRQ (ORCPT
+        with ESMTP id S243708AbiDGJRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:17:16 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D17FDE3E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:15:16 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ot30so9423022ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=unQfTgqeQZWyCG4CKIwW81rtnRzgcWAQJNa676fN02I=;
-        b=LUII6HZ52R2BXGsCinwoXA7ZKD8j3+HdDEHYyZpvvKf/cBjymjr0XA+PSMIiSXwDB6
-         +3STtlNbNTEM7dhW/DwEVx9m30IM5tDu0Qm0uKkIVO3EdnHmyWxxI25Gwz5LtYMYXrne
-         Wr2v5W+DwP+Cs3qjDREIp+lNi1BLAOCYHfQ0gWD8qq1e40/YT9T0yhN+GEsAPsS6pvov
-         7ep8L30sxWe1ySj3kyaihN9UdfM3JBtgFYJ1u4fQxXtV52f6+knvuy9pAgUMNimt5qMd
-         fvhYjVYErWg/O6qn6X6eh+VhP9K4cRiVY9ZHPg4RaP6zEhv9ow4aGxm/C74s0bF9glON
-         IIkg==
+        Thu, 7 Apr 2022 05:17:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFA2ADFF90
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649322951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CmxBb4M+/kdbgcE8GirSAAcAN2ciEIElRp8Y7WJjwMM=;
+        b=ClUsExMA3Hv2YdBjwSAujpHk8sALX5OTLuKeEiOilgvmXqr+6bfnEUGcigRHN4r7f+WDoV
+        3Nl681C+rP2A0LFBGi5s4MTa3XHldUbLJpdD4nNwRVUlX9pdBeQpwkoHhJFg9ZqjhEoxpt
+        QZGXW783b/TGiiY3c8IC9sm96F5HQ3o=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-427-NocZqh7-M4elSAOJKSk4pA-1; Thu, 07 Apr 2022 05:15:50 -0400
+X-MC-Unique: NocZqh7-M4elSAOJKSk4pA-1
+Received: by mail-wm1-f70.google.com with SMTP id v62-20020a1cac41000000b0038cfe6edf3fso4303904wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 02:15:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=unQfTgqeQZWyCG4CKIwW81rtnRzgcWAQJNa676fN02I=;
-        b=qOgK4niyDCx+inRac3rI1OZN5yn20mwIlFP001j2N+mQVymcPSXYFAmONIhIQjAihl
-         gckKsFm+apkSaKBUPXiMaQL22RP9VqhQjI48VL515gg8SS4NahpcUtAbTlmO3QopBL8Q
-         jTp7FpJJFBCsMvHH6rjDiMwUduY9V8RkezoLoY9duY0XSt4pib2fD0fjinHzxz/95IQQ
-         pBuVwzHjvB/S3BNjbFN9sfQsyP+zqZW6FkKIwpIXnxe4BFgmrR5ZCmtTECd775W+uTEo
-         6q6ee0U79bUhSjlikIN5EyaeQ0oilVgcC3y9OEzxSS33KdcO7ag7M+fjeC6+55GbF16i
-         XPCg==
-X-Gm-Message-State: AOAM533oo8kQktibMMH3381vLZDO6hDXfA8j3ZUl2ZXtzvMV/WW3PQHD
-        rQO2qPrvJdTb+jmKuBPEwWYR2g==
-X-Google-Smtp-Source: ABdhPJzX7Qq8MseVUYhFiZ5y/Q8CYtiMgJnoYcI3cdxQ15X5vk2KJaRQOYRMPmRopxQLQi34LCtLPA==
-X-Received: by 2002:a17:907:1b07:b0:6e4:b202:db8f with SMTP id mp7-20020a1709071b0700b006e4b202db8fmr12350681ejc.76.1649322914960;
-        Thu, 07 Apr 2022 02:15:14 -0700 (PDT)
-Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b0041934547989sm9085028edp.55.2022.04.07.02.15.14
+        bh=CmxBb4M+/kdbgcE8GirSAAcAN2ciEIElRp8Y7WJjwMM=;
+        b=GSAa8VHdy8PwwOh85bQqhbte+Zi+kOJMMdhP7FTZ4W3MBn2CauD4mEdAXjUv07Lg2a
+         EqY+vW9YHz5y4GSnMNU/eT9GXOJZeJktQw06g0S8ITNg91Ay60qZ0GfhpUzpf/ZOZ7ZN
+         a29LwsW5+jZyqFpozBVlboVpdBKTjSaSCyzUijBDryyK22mAepnKjZ0Dfr19QFVVjjcN
+         3KeZYelXVDVJuHs58pRaAxPDO4OjH1PN6H+oe9ZkbxQtgjVhYGcr7amqjuF21+hD0Ov8
+         SzOgq+PN5QPHXoVpQHlpUxf+TLQlr/D2e1SbK7NYK9HI22CIfnlWGFxrZvl3tJuTFK8Z
+         TZjA==
+X-Gm-Message-State: AOAM5327efWIwCezqmC2hjg5U1K/fTaNyN9kDsWC8rrz2FrrpJ/c+Bvm
+        BSpZqI/aZjxHXZCO1k9CznC2X0AvEtMts5hk4xDy/exd+CFqDj3crGIK6vg5pfeBtJxkfqpjRM/
+        8yi5GIHJxhWan/SwBngb8KrpXdc6VlNoHFjaDoSmZBNUeqMVNy1Ih2FefohfDVLm9HK0YmUTXWO
+        s=
+X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr11418272wmq.139.1649322948634;
+        Thu, 07 Apr 2022 02:15:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzR+LYKbt9u3VokYFVPcbGSqCBhtUuOTFAakMiYXEbr6yt5DBwUZeDZJFTJ+SKPtiP285isGg==
+X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr11418242wmq.139.1649322948426;
+        Thu, 07 Apr 2022 02:15:48 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id s10-20020adf978a000000b002060c258514sm11680472wrb.23.2022.04.07.02.15.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 02:15:14 -0700 (PDT)
-Message-ID: <84fbf3d8-7066-6c4d-0980-5ca803605a0d@linaro.org>
-Date:   Thu, 7 Apr 2022 11:15:13 +0200
+        Thu, 07 Apr 2022 02:15:48 -0700 (PDT)
+Message-ID: <31932dda-bfd2-01ca-8ff4-9239ce0b0dd4@redhat.com>
+Date:   Thu, 7 Apr 2022 11:15:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] phy: samsung: fix missing of_node_put()
+Subject: Re: [RESEND RFC PATCH 4/5] fbdev: Fix some race conditions between
+ fbmem and sysfb
 Content-Language: en-US
-To:     cgel.zte@gmail.com, kishon@ti.com, vkoul@kernel.org
-Cc:     alim.akhtar@samsung.com, lv.ruyi@zte.com.cn,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220407085958.2491783-1-lv.ruyi@zte.com.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407085958.2491783-1-lv.ruyi@zte.com.cn>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-fbdev@vger.kernel.org
+References: <20220406213919.600294-1-javierm@redhat.com>
+ <20220406213919.600294-5-javierm@redhat.com>
+ <Yk6qwiP2kEh2M3Fm@phenom.ffwll.local>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <Yk6qwiP2kEh2M3Fm@phenom.ffwll.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 10:59, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On 4/7/22 11:11, Daniel Vetter wrote:
+> On Wed, Apr 06, 2022 at 11:39:18PM +0200, Javier Martinez Canillas wrote:
+
+[snip]
+
 > 
-> of_parse_phandle returns node pointer with refcount incremented,
-> use of_node_put() on it when done.
+> Yeah it's disappointing, but no worse than the piles of hacks we have now.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> With the bikesheds addressed above:
+>
 
-Ah, now I found, that this was already fixed:
-https://lore.kernel.org/all/3eed8d0c-e009-2daa-ba66-899fe8f48a90@canonical.com/
+Agree with all your comments and will address in the next version.
+ 
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>
 
+Thanks for reviewing these patches so quickly!
 
+-- 
 Best regards,
-Krzysztof
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1394F86D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302BB4F86D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346733AbiDGSEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S1346743AbiDGSFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343571AbiDGSEk (ORCPT
+        with ESMTP id S229612AbiDGSFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:04:40 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681A1BD895
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:02:40 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id m30so9073753wrb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZI2zq9mkd2prXmULME2LtrcZkY8ywRvQtGF9At1AEMM=;
-        b=liamQE/kdVhSCuAi5OWNzVoQ3g4xNM16YZqC0W7s0Aq7ZJNeiP06CAqHQ+hSc4MVM6
-         UjOOz1zh1WxpOU+yHJEZoS4DAbmODPzE84f8QLMP3ZkUON9vU3JglbB/Zvg2m91ibbbP
-         Uqt/5ENtb8hY0DuQgmMhzUXb8Tm4keng/c9bPZi9L2hfRJSSpoTbMYIQSKJd57h1BOVd
-         6XUeDR4VzJcSEtAfy4v6dSJlw4gf6CrqrxQXUnfDvBjfuJQGn+etz4xcotMOCMAsCHho
-         XfC+N710MMlJ1Dm9r+2+7bcYkhsLAIiDxIqVmRsuFVJ44EiYRVGxTj2vl4nivmFA7hdw
-         o0Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZI2zq9mkd2prXmULME2LtrcZkY8ywRvQtGF9At1AEMM=;
-        b=Qp1LMUs02oHLlqcnuwsq2mXy/uR66Tf0rFVoMRgE9yL+s2TUsYo8WONtkP55wbQZcW
-         o7TU81BfE5yuu7u0qfsedyZ6hRSZ8XSxaT4iEV8sBrrlCZ5ZZX6yyXf9NYLx89lUg+vX
-         PsVmiQ7Ik4ZBOp6B9YlXlhMgbhx7fPwzehfDqmWChOn4iFfM1O+ufyv4N8CiHBY3Y4gp
-         1RnpDOBFhOnz8qIG0XLf8Koi9x6XjsTK8rnYuPb4r9pbas6z4wiiYyqe7zrjbfbUHkLk
-         jnZN0t6mmPSfIL+erR0eWaGoMTU+qlum9yJyLeekllzEIIAnh+PDnpY54IELMnJJ5cMP
-         w/QA==
-X-Gm-Message-State: AOAM533HL8W/nrgwQ3ZyZxL4F8om6fg4tEmoH1bx9l1CSlR3KgexxSyc
-        F5Jb5HzABLeLPOJEQ9keWEU=
-X-Google-Smtp-Source: ABdhPJzQka+xTNU7ql8arJI82ehOltbzm2rvGQHJA9CwS4HmmPHVaxrgpjhgiXExl+NTmFEefB9ASQ==
-X-Received: by 2002:a5d:55c8:0:b0:206:f52:902e with SMTP id i8-20020a5d55c8000000b002060f52902emr11330443wrw.597.1649354558824;
-        Thu, 07 Apr 2022 11:02:38 -0700 (PDT)
-Received: from [192.168.1.14] ([197.57.231.245])
-        by smtp.gmail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm20030480wrb.101.2022.04.07.11.02.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:02:38 -0700 (PDT)
-Message-ID: <96a1de63-5b66-b6a6-731e-d7263f3328a5@gmail.com>
-Date:   Thu, 7 Apr 2022 20:02:37 +0200
+        Thu, 7 Apr 2022 14:05:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75838CD644
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:03:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1144B61874
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FABC385A4;
+        Thu,  7 Apr 2022 18:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649354585;
+        bh=+yMtJUm6feZXxZqTlDnWwouUGLx0qcjo0z4uDWA8UyY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q3uWEl+mmqyGILtDhV3tico+Pa5LYwylnlSPAYjjJAdreKmdVbxliuwon2JYO8BLh
+         3LV8FKBQnHUQ0pAnYKdidtAXqJJ1yYdukD7TlZ6JCVPmr/WB3Kknp20uT/8G0WK+yz
+         c8k0C+QUkNDWlI3Xu73w3pqcHCBWf7+6r9ja78Us8RMxRB5IalL5wBsgR8v3vEi7tC
+         J0eSZI1/92t09vdy6pFLh3KkLvLxjK0OtJTZ6nAdG27hcW0GBtiN6rKpxhlhmC+ZCO
+         L3hi1jIB5eMUs9Pv0VAqbSIytp62TIOvpm+JHLjwkNtVvgnmmanlGDOz4m+g3AGt2S
+         ZvXRL23/W0Big==
+Date:   Thu, 7 Apr 2022 11:03:03 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] MAINTAINERS: add self as clang reviewer
+Message-ID: <Yk8nV1kBngon+o6N@dev-arch.thelio-3990X>
+References: <20220407175715.3378998-1-trix@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4] staging: rtl8712: remove unnecessary parentheses
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        florian.c.schilhabel@googlemail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220407125947.8525-1-eng.alaamohamedsoliman.am@gmail.com>
- <Yk8jbTSjvsHXpX2U@kroah.com>
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-In-Reply-To: <Yk8jbTSjvsHXpX2U@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407175715.3378998-1-trix@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 07, 2022 at 01:57:15PM -0400, Tom Rix wrote:
+> I have been helping with build breaks and
+> other clang things and would like to help
+> with the reviews.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-On ٧‏/٤‏/٢٠٢٢ ١٩:٤٦, Greg KH wrote:
-> On Thu, Apr 07, 2022 at 02:59:47PM +0200, Alaa Mohamed wrote:
->> Reported by checkpatch:
->>
->> Remove unnecessary parentheses around structure field references
->>
->> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->> ---
->> Changes in v2:
->> 	- Edit commit subject
->> 	- Edit commit message
->> 	- Fix the same check in more lines
->> 	- Remove space before '.skey' in
->> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86.
->> ---
->> Changes in v3:
->> 	return the space before '.skey' in
->> "memcpy(psta->tkiptxmickey.skey," in lines 84 and 86
->> ---
->> Changes in v4:
->> 	edit commit message to be clearer.
->> ---
-> Why did you send this patch twice?
-That was by mistake , sorry
->
+Thanks a lot Tom!
+
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+I think we might need to CC Andrew Morton for this, as we do not
+currently pick up patches ourselves.
+
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9ebfc93d8f0d..8da670067a34 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4797,6 +4797,7 @@ F:	.clang-format
+>  CLANG/LLVM BUILD SUPPORT
+>  M:	Nathan Chancellor <nathan@kernel.org>
+>  M:	Nick Desaulniers <ndesaulniers@google.com>
+> +R:	Tom Rix <trix@redhat.com>
+>  L:	llvm@lists.linux.dev
+>  S:	Supported
+>  W:	https://clangbuiltlinux.github.io/
+> -- 
+> 2.27.0
+> 
+> 

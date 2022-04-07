@@ -2,223 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AAD4F76BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8308D4F76BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239873AbiDGHEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S240183AbiDGHFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiDGHEf (ORCPT
+        with ESMTP id S233159AbiDGHF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:04:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456A22835D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649314955; x=1680850955;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M+V40WE+kYDuiNwugfWzf0qQ86G/RlSPWEGv/TCbofk=;
-  b=TMLCYshXlZNe8g0PN0Dj7kYcsGaNJKLxzZtv1Br4/heTyYUR3ubm1Hac
-   251wzKW7hf1eVGML763LW6qwSLUMo5yRZPZI5bx3cLri8KbRRwDOd3uSh
-   BrIsSYv8UmU+eqdAlQvZbGf0YhnktRJamOMU3+M+my+V2ugQYCVW13iDN
-   BmLavCb6f/qr6mToFO+Pl/6AsBAYmjFy+m03ElB6K2EQW6x+KCb1iI9yf
-   QF4+PtKnlMTTTokHkeSf3M379FM7H2jPiU6NwRXOoTr3i/yd+LhhQKZtj
-   tHISDHiUWjI23Ixlf0SrVImsWUnNlYvxJHbFj9vZonu/tdPABAXTHsvSI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="347687728"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="347687728"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:02:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="549894270"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 00:02:32 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncMA3-0005AU-M1;
-        Thu, 07 Apr 2022 07:02:31 +0000
-Date:   Thu, 7 Apr 2022 15:02:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused
- variable 'ksz9477_dt_ids'
-Message-ID: <202204071418.9ByMEtlP-lkp@intel.com>
+        Thu, 7 Apr 2022 03:05:27 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6943723577E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:03:27 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2eb46d33db9so51234167b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 00:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PewzL0T7zp3uXi+3vnmrAWa37j+c658Ndu06ubgZsdY=;
+        b=mBjShBy17sHWzFHSTl6RYyi7Qnb/1+klY+K5AjE43pHLuIF6zo9d64jk1NUNFGU9xz
+         8ufrzLyGJTtvqdSy7fuC7qdoZHO/xFUhLt8Hox5EVniTokgkDwDZQY5EG/+omm13nF9k
+         FP8FWDhgaceqOk8fIw2rdAZKkejLz9tBhSxDcHnRnsROVvry2I1AdRc76yUisliDtRMn
+         DMKL5UQUmD7fd3RXAi8vFBCXPDe3mtxG+PLDjz6K4XzXpVD/qyFD3vU96pI37Gri3XYk
+         VpjEhqh3oXtcRLDRsWGlTbEKvrirv6tgsjLZQs3IK8eFGECFrDiEG2PAJb7UhdK1Rg+B
+         IZjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PewzL0T7zp3uXi+3vnmrAWa37j+c658Ndu06ubgZsdY=;
+        b=0KGMXbWkw9dVUrC0sByry3YZUCBOieLG/PeI9FFirwSrq5FLFXKd9aQ3WkTl/X98FR
+         04ku23d+DqyhRFdjLOWqL17+k1A6AoB355gAS23WIKKp4VlJGaiTpXdvtb4tsdLejzHb
+         xeb1/xv+fN/kvQvbMOwHm09Qbpu2euEmz3KnCIDXqTA+ko94d6TCWUPNSI51HenLxV5o
+         /GiPmDV6OpVQK9gkgN8nbV0H7fbkff4JhNOBDXZCfhYOX/K6xQzAcb3S1aJ+aaWQ4jlh
+         6sI5IHxytUIZ8J6/dJbSvCURatpIiy1r5l7h0Sg8SnoOIpwU6jg3jdWzy9yl//1WqSrK
+         6pdQ==
+X-Gm-Message-State: AOAM530JVfulS3/NLSMrWeXNIWcSxSnF4D7hlcq685ag8OBmXarVJ5lM
+        wraYgSiEn2MZpqhVPpSxncLyWUJaair18jJ3K3w=
+X-Google-Smtp-Source: ABdhPJw6Q/sZ0KkUbTBRfa00hknzCPVTMSuaQ0Add5x7Irpt2WzgGdyT1yYEd7FGXN+sPPfEEc7brJGxkqrHiaHeWeY=
+X-Received: by 2002:a81:1a03:0:b0:2eb:5222:5e40 with SMTP id
+ a3-20020a811a03000000b002eb52225e40mr10191705ywa.231.1649314999558; Thu, 07
+ Apr 2022 00:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318143016.124387-1-jiangshanlai@gmail.com>
+ <20220318143016.124387-2-jiangshanlai@gmail.com> <Yk3jVrXoVpxuR0Mp@zn.tnic>
+In-Reply-To: <Yk3jVrXoVpxuR0Mp@zn.tnic>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 7 Apr 2022 15:03:08 +0800
+Message-ID: <CAJhGHyBFbtyUs-nf0+gWm2a3hiS5BxZ3jk=sbGNw-4ShB8AtzQ@mail.gmail.com>
+Subject: Re: [PATCH V4 1/7] x86/traps: Move pt_regs only in fixup_bad_iret()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Tai <thomas.tai@oracle.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Thu, Apr 7, 2022 at 3:00 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Fri, Mar 18, 2022 at 10:30:10PM +0800, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> >
+> > fixup_bad_iret() and sync_regs() have similar arguments and do similar
+> > work that copies full or partial pt_regs to a place and switches stack
+> > after return.  They are quite the same, but fixup_bad_iret() not only
+> > copies the pt_regs but also the return address of error_entry() while
+>
+> What return address of error_entry()? You lost me here.
 
-First bad commit (maybe != root cause):
+"return address" is the return address of a function which is
+error_entry() here.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   1 year, 1 month ago
-config: s390-randconfig-c005-20220407 (https://download.01.org/0day-ci/archive/20220407/202204071418.9ByMEtlP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
+https://gcc.gnu.org/onlinedocs/gcc/Return-Address.html
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id ksz9477_dt_ids[] = {
-                                    ^
-   21 warnings generated.
+Or error_entry_ret in struct bad_iret_stack which is being removed
+in the change.
 
 
-vim +/ksz9477_dt_ids +86 drivers/net/dsa/microchip/ksz9477_spi.c
+>
+> So fixup_bad_iret() gets the stack ptr passed in by doing:
+>
+>         mov     %rsp, %rdi
+>         call    fixup_bad_iret
+>         mov     %rax, %rsp
+>
+>
+> and error_regs()
+>
+>         movq    %rsp, %rdi                      /* arg0 = pt_regs pointer */
+>         call    sync_regs
+>         movq    %rax, %rsp                      /* switch stack */
+>
+> the same way.
 
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  85  
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20 @86  static const struct of_device_id ksz9477_dt_ids[] = {
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  87  	{ .compatible = "microchip,ksz9477" },
-45316818371d1f drivers/net/dsa/microchip/ksz_spi.c     Lad, Prabhakar     2018-08-15  88  	{ .compatible = "microchip,ksz9897" },
-8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  89  	{ .compatible = "microchip,ksz9893" },
-8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  90  	{ .compatible = "microchip,ksz9563" },
-d9033ae95cf445 drivers/net/dsa/microchip/ksz9477_spi.c Razvan Stefanescu  2019-08-30  91  	{ .compatible = "microchip,ksz8563" },
-9b2d9f05cddfee drivers/net/dsa/microchip/ksz9477_spi.c George McCollister 2019-09-10  92  	{ .compatible = "microchip,ksz9567" },
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  93  	{},
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  94  };
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  95  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  96  
+They are not the same way.
 
-:::::: The code at line 86 was first introduced by commit
-:::::: c2e866911e2540677c31ee009d8f75cdb4c023aa net: dsa: microchip: break KSZ9477 DSA driver into two files
+sync_regs() is called before the return address of error_entry()
+popped into %r12 while fixup_bad_iret() is called with the return
+address of error_entry() still on the stack.  And the primitives of
+fixup_bad_iret() and sync_regs() are different which also means
+they are not the same way.
 
-:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+After this change, they become the same way.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+IMO, sync_regs() is grace while fixup_bad_iret() is a bad C function
+or is not a pure C function because it is handling the return address
+of its parent function which is better done by the compiler or ASM
+code.
+
+>
+> Confused.
+>
+> > It is prepared for later patch to do the stack switch after the
+> > error_entry() which simplifies the code further.
+>
+> Looking at your next patch, is all this dance done just so that you can
+> do
+>
+>         leaq    8(%rsp), %rdi
+>
+> in order to pass in pt_regs to both functions?
+>
+> And get rid of the saving/restoring %r12?
+>
+> Is that what the whole noise is about?
+
+The point is to make fixup_bad_iret() a normal C function and
+the same as sync_regs() in calling.
+
+The next patch makes error_entry() as a bunch of ASM code compiled
+from a C function and pave the road to really convert it to a C
+function.
+
+Getting rid of the saving/restoring the return address in %r12
+is necessary since a C function can't save/restore the return
+address.
+
+Thanks
+Lai
+
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+I'm sorry for using top-posting and "This patch".  I remember it.

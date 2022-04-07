@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC3E4F79EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF85F4F79F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243181AbiDGIix convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Apr 2022 04:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S243185AbiDGIlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243200AbiDGIiu (ORCPT
+        with ESMTP id S231842AbiDGIk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:38:50 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5ED75B3D5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 01:36:49 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-150-biPwcOwTPaWt3B8QWNnyjQ-1; Thu, 07 Apr 2022 09:36:47 +0100
-X-MC-Unique: biPwcOwTPaWt3B8QWNnyjQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 7 Apr 2022 09:36:46 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 7 Apr 2022 09:36:46 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Michael Straube' <straube.linux@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/5] staging: r8188eu: use round_up() instead of
- _RND8()
-Thread-Topic: [PATCH v2 3/5] staging: r8188eu: use round_up() instead of
- _RND8()
-Thread-Index: AQHYSe9WHJ0PlHBcbUCkUmsQoIffn6zkIJaQ
-Date:   Thu, 7 Apr 2022 08:36:46 +0000
-Message-ID: <b00d9bc1cbe24fe4b0f83706427b84db@AcuMS.aculab.com>
-References: <20220406172219.15565-1-straube.linux@gmail.com>
- <20220406172219.15565-4-straube.linux@gmail.com>
-In-Reply-To: <20220406172219.15565-4-straube.linux@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 7 Apr 2022 04:40:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C011A545;
+        Thu,  7 Apr 2022 01:38:55 -0700 (PDT)
+X-UUID: 9a1d0fb835094fb4a348b1ab21a58e9b-20220407
+X-UUID: 9a1d0fb835094fb4a348b1ab21a58e9b-20220407
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1173894335; Thu, 07 Apr 2022 16:38:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 7 Apr 2022 16:38:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Apr 2022 16:38:50 +0800
+Message-ID: <e8f85610ab27403aa2b0689ecb70714c5a33e479.camel@mediatek.com>
+Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: Correct disp_aal
+ binding for MT8183
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <chunkuang.hu@kernel.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <yongqiang.niu@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <nancy.lin@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 7 Apr 2022 16:38:50 +0800
+In-Reply-To: <594c124d-403f-56f1-b9fb-f48042d7056b@linaro.org>
+References: <20220406094654.29722-1-rex-bc.chen@mediatek.com>
+         <20220406094654.29722-2-rex-bc.chen@mediatek.com>
+         <397e30c2-18c3-93d6-16f5-b113be77f51a@linaro.org>
+         <c9a54f1c9350d63489a0f85443f5623fe5d7fe1d.camel@mediatek.com>
+         <594c124d-403f-56f1-b9fb-f48042d7056b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Straube
-> Sent: 06 April 2022 18:22
+On Thu, 2022-04-07 at 08:49 +0200, Krzysztof Kozlowski wrote:
+> On 07/04/2022 08:22, Rex-BC Chen wrote:
+> > On Wed, 2022-04-06 at 16:44 +0200, Krzysztof Kozlowski wrote:
+> > > On 06/04/2022 11:46, Rex-BC Chen wrote:
+> > > > The driver data of MT8183 and MT8173 are different.
+> > > > The value of has_gamma for MT8173 is true while the value of
+> > > > MT8183
+> > > > is
+> > > > false. Therefore, the compatible of disp_aal for MT8183 is not
+> > > > suitable
+> > > > for the compatible for MT8173.
+> > > 
+> > > Just because one feature is not supported, it does not mean they
+> > > are
+> > > incompatible, which you claim in the patch below. Are you sure
+> > > they
+> > > are
+> > > really incompatible and MT8173 fallback cannot be used?
+> > > 
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> > 
+> > Hello Krzysztof,
+> > 
+> > Thanks for your review.
+> > 
+> > The difference of disp_aal for each MediaTek SoCs is "has_gamma".
+> > And we only control this variable for different MediaTek SoCs.
+> > 
+> > The value of has_gamma for MT8173 is true.
+> > The value of has_gamma for MT8183 is false. (Moreover, the driver
+> > data
+> > is null for MT8183)
+> > 
+> > From this situation, I think it's not compatible between MT8173 and
+> > MT8183.
 > 
-> Use in-kernel round_up() instead of custom _RND8().
-...
-> diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-> b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-...
-> @@ -488,7 +488,7 @@ bool rtl8188eu_xmitframe_complete(struct adapter *adapt, struct xmit_priv *pxmit
+> You repeated the commit msg without bringing any new information...
+> but
+> let it be, I assume setting gamma on MTT8183 is incorrect or produces
+> wrong results.
 > 
->  		len = xmitframe_need_length(pxmitframe) + TXDESC_SIZE + (pxmitframe->pkt_offset *
-> PACKET_OFFSET_SZ);
 > 
-> -		if (_RND8(pbuf + len) > MAX_XMITBUF_SZ) {
-> +		if (round_up(pbuf + len, 8) > MAX_XMITBUF_SZ) {
+> Best regards,
+> Krzysztof
 
-It can't be necessary to round_up there.
-It is equivalent to:
-		if (pbuf + len > (MAX_XMITBUF_SZ & ~7))
-and the limit is/should be a multiple of 8.
+Hello Krzysztof,
 
-	David
+Sorry for this.
+I can explain more detailed.
 
->  			pxmitframe->agg_num = 1;
->  			pxmitframe->pkt_offset = 1;
->  			break;
+For MT8173, the gamma module is inside disp_aal. When we need to adjust
+gamma value, we need to use "has_gamma" to control gamma function
+inside disp_aal to adjust gamma value.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Since MT8183 (MT8192/MT8195/MT8186), display gamma is seperated from
+disp_aal. We just need to control disp_gamma directly and we don't need
+to control gamma function inside disp_aal.
+
+I will add these comments to commit message in next version to explain
+it.
+
+BRs,
+Rex
 

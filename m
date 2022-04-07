@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F0C4F77B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875DB4F77BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241920AbiDGHi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S241932AbiDGHjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiDGHiv (ORCPT
+        with ESMTP id S241935AbiDGHjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:38:51 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF7A20BE3;
-        Thu,  7 Apr 2022 00:36:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 1E7591F45C08
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649317011;
-        bh=7Je/8cXZrAUAMV/Vs6keOEtTMh+F8tUpJAXYFyvKubI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=NmAMtm7dmW+9OB6nmudtIjt39GO+zKfyMpOV8ZJ3K27WJ6h7IizoIAvwJiBOaHzYW
-         28qiaatmP0mzUaCTLWKFHr3TiPDnpAVrNSKGht4WFSOl91UXOz9xZ6ph++17Q/Xooj
-         QWKYY6cBb5Cze88Jt3MESCbhsPPK/y3yIWLQKi86sWr6iy+RXZNYYbVjh0U/XLSFoD
-         hDN6gkw/IKZFda6VsAn1Hb8zL0TKUUJ0uriAA/v/A0CI1voYzS0RBItzHRN/M3e9bS
-         nuvUovGLU4+rdzg8JLYvckejvRlxDZN9uLFLJjofLJt7MNTH1p7hCzkX4/G4Fo2t93
-         O0eLrVajHPocA==
-Message-ID: <abe69993-0180-a04c-56d5-10b80d339596@collabora.com>
-Date:   Thu, 7 Apr 2022 12:36:41 +0500
+        Thu, 7 Apr 2022 03:39:43 -0400
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF81853E2E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1649317056;
+        bh=qIYpRIIGIZS6wznmSd1MMDOKoS66e0FCfSniC9O6YO8=;
+        h=From:To:Cc:Subject:Date;
+        b=k9/DIsZFXTUX3VT2nhO6wT5hRErr6YLuQJVBWohdxPNGuNxx9myjxQ3nhqw2vcyY/
+         t+1Fc4uF4IHuAhTHNgYn+60n4E+qSqDUp6FIBfna6Cmpvx1OuXYulqNi4fQd/B/G21
+         +mkPcenZAoej0BPuYt9bj8iBDgixaCMD4kp/0dYU=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
+        id 95F9B854; Thu, 07 Apr 2022 15:37:31 +0800
+X-QQ-mid: xmsmtpt1649317051tejii460c
+Message-ID: <tencent_27FF59903EE6AB5C0D0E6D0A8E7059A59007@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iC6dVTi0w/K2/r2cPQgQ2DFLTrf+BMVpkat8EXSvi5QcmiBXXBxE
+         +EbsXIPZxYM48llGGFI7YiycvP3J39n27EiKyTjwnpV0pmzpFuh1Ydrrk7FRzwPiIyG+WGId3y1v
+         +87S3ViPl0ujHBcpvBgRUvvqphw1l5z93+AD1g81EF5iAxX1i97wWBSAqoeiruyhdMQQBGrs7h9f
+         K1ofMxYadZpJ+yyepf8yiqd+vT41kYRqK6fjkjwjUq90vYAB6/qDJYZ2yZ9mhAsIj8K8hZcCp95l
+         HKVO/nulyPJYtvBmMAYWZ5f64BfnD+fCJGUAW/uYtU86LIdUGlgOvSeBRxWsiVrhLz1z/JETwykH
+         SCoqiVKCHEjSWCW3mv/WlLZU3rPD43SlkK5r79/wZcF1yIDUyMKirLli+uVKUutIYWe5ZAWAEUjI
+         LtLZWAIOjM2pqHd9rhaycpgC6vdYWIcFXNJPXmwXW21302b6FTwpngn5DbglMKBWEs0/PDRtxoqH
+         QbkEpZFJsquywnE4rbPsC0FdPuzHnvTZEtwSmMet8fMhcyt4W4pAvxdnV95gGSee1R4RDekvmDqn
+         dhf7rSpmJHoCyEdt76YPM4XqcMIpF4mZMOEdhI2aiGWnBTF7QHo3KJZSkcuKwBp8wFs+ro2PLR2a
+         3+0dApzm9QX4pd4WjkJl6Ye7A6NJR+tTm7a1ZdCjZ14NF6+HP4B44RSsJzghT9PjN26BYxvOtb52
+         VP8zlP6DdjAi0ucYtFI6TNEicLH946xf7zCQMzPpe+9Rx3k0n9KnLnabAChR7kiqpvRxia5su1TH
+         b8ht0JAGUuC1tc7v9VguXoxh7ddmVLimy480C0N2E0ZQqA7DPJWI21/9mujBXBYgaSoRggn6b0lu
+         fmuhLGKK0VVnhT6AzGcS0CaAR45EbK+9XOw7HwXYB/s23Nw8i863ALaYwHPpcQkIE/EFrYLWXZOb
+         BwUgadjM5L6e05Is013V/KXlRIJxf9
+From:   xkernel.wang@foxmail.com
+To:     abel.vesa@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] clk: imx: scu: fix a potential memory leak in __imx_clk_gpr_scu()
+Date:   Thu,  7 Apr 2022 15:37:22 +0800
+X-OQ-MSGID: <20220407073722.13934-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
-        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v5] platform: x86: Add ChromeOS ACPI device driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <Yk6ODSxQTiGOrTj/@debian-BULLSEYE-live-builder-AMD64>
- <Yk6Pip7f3iUsIHTr@kroah.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Yk6Pip7f3iUsIHTr@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 12:15 PM, Greg Kroah-Hartman wrote:
-> On Thu, Apr 07, 2022 at 12:09:01PM +0500, Enric Balletbo i Serra wrote:
->> --- /dev/null
->> +++ b/drivers/platform/x86/chromeos_acpi.c
->> @@ -0,0 +1,515 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * ChromeOS specific ACPI extensions
->> + *
->> + * Copyright 2011 Google, Inc.
->> + * Copyright 2020 Google LLC
-> 
-> You haven't touched this file in 2 years?
-This file has been changed. I'll discuss and update this. I'll also
-correct this patch's From and authorship. It got messed up.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
+In __imx_clk_gpr_scu(), if imx_scu_clk_is_valid(rsrc_id) fails, then
+`clk_node` which is allocated by kzalloc() is not properly released,
+which may lead to memory leak.
+So this patch added kfree(clk_node) on the above error path before
+return ERR_PTR(-EINVAL).
+
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/clk/imx/clk-scu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
+index 083da31..ed3c01d 100644
+--- a/drivers/clk/imx/clk-scu.c
++++ b/drivers/clk/imx/clk-scu.c
+@@ -837,8 +837,10 @@ struct clk_hw *__imx_clk_gpr_scu(const char *name, const char * const *parent_na
+ 	if (!clk_node)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	if (!imx_scu_clk_is_valid(rsrc_id))
++	if (!imx_scu_clk_is_valid(rsrc_id)) {
++		kfree(clk_node);
+ 		return ERR_PTR(-EINVAL);
++	}
+ 
+ 	clk = kzalloc(sizeof(*clk), GFP_KERNEL);
+ 	if (!clk) {
 -- 
-Muhammad Usama Anjum

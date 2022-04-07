@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6F64F778C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D7B4F7784
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241804AbiDGHeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S241791AbiDGHd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiDGHeB (ORCPT
+        with ESMTP id S234761AbiDGHdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:34:01 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1298541BF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:32:02 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 149EB32009E5;
-        Thu,  7 Apr 2022 03:32:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 07 Apr 2022 03:32:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=A2uzp1VB6qZPb9v+8
-        i65Ac3fQAGNJ0BYUHWC15GyxfQ=; b=OUk4rI03fHtv6kIgxgfmeIX3tHzmfemxg
-        KFBHtlRVYjKaCgH6ekKV0jrMbRkICFT0WPfLCsHaDk62uaR8xXs4TUOew/O3lVI7
-        3RBy9IC/rMNEboLdPBzMTrQgppSrq22KmyoeUfKtnLWvlP1sWlKam2motp6imT5A
-        RflsV5/zRNAt452+QimRdT2EXbtlRs226T/kjlspQgVOrsOv0faPdxg+25++LOyf
-        8GYlIGALKnUxrFwAy8TR0qh2td26Q9Ii+PC9YYpt3TBeNE9ytyYx2DQvHd/W6FjN
-        8tAX+mTKKQALdHelQw7cKwSeWXDyiInqajol1yq7HbyZkXMHaYgMw==
-X-ME-Sender: <xms:bpNOYszjB3nKKKA0xMPFOHdihootxN1s9LBteo1H2-xOURBxeObI2g>
-    <xme:bpNOYgRiC88WpcWZ5KPc2kKgtXaQ157ck0VCHxWuykXVUvdbEJ5k2PIGgYOqQxxK9
-    9pZ2ojYcdttEuvPiZ4>
-X-ME-Received: <xmr:bpNOYuWr-Cz9BxR2rbcTcP_wTadj_etgKPwfGmv_s6ZwjY4ZfJSkEC9pICbgrFlLLjnU4rPkaJWI07K-dZDI1-hfxlkjR1LvONE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejjedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeffudfhgeefvdeitedugfelueegheekkeefveffhfeiveetledvhfdtveff
-    teeuudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:bpNOYqhaUOIh_7ORD6SOs3eKYlST4yOp3aHFbcXlDdnU11FDZKJJaA>
-    <xmx:bpNOYuBNzQzOHRum7i7F15freBvK3Nc1-ksfI81iTwXmcvztZSzNNg>
-    <xmx:bpNOYrIEyHJVR_o3Mu-H61HRX5v6AcJ4_ixmNuNdtHIYrjUDInnP2A>
-    <xmx:b5NOYq1X7lewgIgPuglWsbZfAXyTy1yACogGCfWDLM3658WyLIeAqg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Apr 2022 03:31:56 -0400 (EDT)
-Date:   Thu, 7 Apr 2022 17:31:03 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] macintosh: fix via-pmu and via-cuda build errors
-In-Reply-To: <20220407023700.7216-1-rdunlap@infradead.org>
-Message-ID: <7ddb26a1-be89-813f-8dcc-4bebaf8f5636@linux-m68k.org>
-References: <20220407023700.7216-1-rdunlap@infradead.org>
+        Thu, 7 Apr 2022 03:33:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A356745AE8;
+        Thu,  7 Apr 2022 00:31:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AC3361E09;
+        Thu,  7 Apr 2022 07:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C62C385AD;
+        Thu,  7 Apr 2022 07:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649316684;
+        bh=ivR8k8w9kZFOITTBTeYpwlLHjNVj0hGTLW0NW/yZSVU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iYpJqdwj20zoDmfLo9h28pBJ++sP0GCoavfG6fhyWeqsGbQf4nfwF4r7hkHA+4YN9
+         g4Ix4oiSQzkJKRqUV8gWDLWLc1LMjnb2oODf7RQMMMPmGVtJrTlwFJbwiSnNgRk3o6
+         fZ+MuFynNBX6w+z5DHixR9TmCG7ONXCaarj6iJ3NCjpMmi5pIz4ENSosVXO1xTDBv9
+         RMn9TGHcfExjQ7/mMk3MnUnTF9sD6BvyZC5TewP/KWUf67QQcqMs7q21W2qxncArWX
+         7G8UJDW3ujeaHzgVMyi4h4Rd9eYFXQfGbKBTHZpqxUMsARGYWCCa7YnecHl/CeZIO0
+         SeetcY+ic4s2w==
+Received: by mail-wm1-f49.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so3105700wme.0;
+        Thu, 07 Apr 2022 00:31:24 -0700 (PDT)
+X-Gm-Message-State: AOAM533PFN3L8JKchO4peF7eqianFBmygT/reNPwoiNhVlBlj5dA99Yk
+        SGKcUqdd8dGeIm/vPuPtu4P5cEJpfi6g+0Vdq1o=
+X-Google-Smtp-Source: ABdhPJwjAHv/Ka95Vf9n+iGHaRSlH25AJIPsPhtwH0Gh++m1tNbjpZbBagwdF9/ezrXtsZ8x/PvfIi5tLJBz7CdJ0tU=
+X-Received: by 2002:a05:600c:4ecc:b0:38e:354d:909 with SMTP id
+ g12-20020a05600c4ecc00b0038e354d0909mr11230435wmq.33.1649316682523; Thu, 07
+ Apr 2022 00:31:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405091750.3076973-1-arnd@kernel.org> <e39d4d71-6ef3-b2b4-3697-1babbadab2ab@linaro.org>
+In-Reply-To: <e39d4d71-6ef3-b2b4-3697-1babbadab2ab@linaro.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 7 Apr 2022 09:31:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0ZYbNKyN7gjoQE4pu_ePE+0Y=tSwvdOHo6GraVokEJmw@mail.gmail.com>
+Message-ID: <CAK8P3a0ZYbNKyN7gjoQE4pu_ePE+0Y=tSwvdOHo6GraVokEJmw@mail.gmail.com>
+Subject: Re: [PATCH 00/12] ARM: ARMv5 multiplatform conversions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>, patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022, Randy Dunlap wrote:
+On Thu, Apr 7, 2022 at 9:07 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 05/04/2022 11:17, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > I revisited some patches from a few years back, to see what
+> > is needed forsome of the remaining platforms to become part of
+> > CONFIG_ARCH_MULTIPLATFORM.
+> >
+> > A few things happened since I last looked at this, which helps to make
+> > this easier:
+> >
+> >  - The ixp4xx platform saw a large scale cleanup
+> >
+> >  - The ep93xx platform lost support for MaverickCrunch FPUs and
+> >    gained support for the common clock subsystem
+> >
+> >  - The OMAP1 platform has a proposed patch for the common
+> >    clock subsystem.
+> >
+> >  - The generic IRQ entry code is now used everywhere, including
+> >    on IOP32x.
+> >
+> >  - The s3c24xx platform is scheduled for removal next year
+>
+> Discussion [1] actually did not end with conclusion, but through all the
+> time there were no other votes for the platform to stay.
 
-> When CONFIG_RTC_CLASS is not set, rtc_tm_to_time64() is not defined.
-> 
-> ...
-> 
-> m68k-linux-ld: drivers/macintosh/via-pmu.o: in function `pmu_set_rtc_time':
-> drivers/macintosh/via-pmu.c:1758: undefined reference to `rtc_tm_to_time64'
-> m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
-> drivers/macintosh/via-cuda.c:797: undefined reference to `rtc_tm_to_time64'
-> 
-> ...
-> This is a big hammer type of patch. We could possibly do (a) some
-> conditional code blocks for RTC_CLASS 
+Ok, thanks for the clarification, I misremembered the outcome
+of the discussion. I've updated the reference in the mach/io.h
+to no longer refer to that, but I still think it's safe to break
+readw/writew on BAST ISA devices.
 
-rtc_tm_to_time64() call sites also appear in several other files without 
-conditionals:
+If we finish the multiplatform conversion for all ARMv5, I care
+less about dropping s3c24xx entirely as an intermediate step,
+but I definitely still like to see any board files and SoCs dropped
+that have no users and are just a maintenance burden.
 
-arch/powerpc/kernel/time.c
-arch/powerpc/platforms/8xx/m8xx_setup.c
-arch/powerpc/platforms/maple/time.c
-arch/powerpc/platforms/powermac/time.c
+> I will resend my above [1] patch to mention the coming removal.
 
-Why not use mktime64() instead? That seems to be a common pattern for this 
-kind of thing (without needing conditional code).
+Ok, thanks!
+
+          Arnd

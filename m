@@ -2,130 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360C64F71AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DE24F71AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiDGBpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S230326AbiDGBqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238932AbiDGBoh (ORCPT
+        with ESMTP id S238768AbiDGBpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:44:37 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2320D1226E1;
-        Wed,  6 Apr 2022 18:41:53 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id q19so3698023pgm.6;
-        Wed, 06 Apr 2022 18:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OOMAfdi8D5EciZ02glPhlmpRgH66ew4WPzL5EDA2QJY=;
-        b=Z791tYA6TNVIW3YGkEphF+I4hP02mwTPc+2B0nG1717AE3f3/lVLDkbFrzCefMaQ1a
-         PTLvLfGLTt2LBu5AU6wUOq8QRl2Eu/diz4r2wtYxAbWKB0YaNB3ZopHroD6on/u7Q/Lw
-         Gn24QLtQs9T6p6dNf6okTWosueuf8D+VAA++nBWcQUe9NKfD8hiILvBPVwWl3fI7r7HD
-         J3ysgfoKbjSrd/B21ryRnsibDrpIH8pEBy+HsowTgv2QOF0yJBCCKbOpK/gbcS5nMFGs
-         38kW2NOM1b2/W1uvRfEssd454x8l+ueJfxB+PEnsQdMDgGv08wsDO0jmunEjSWLXCw3C
-         jdfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OOMAfdi8D5EciZ02glPhlmpRgH66ew4WPzL5EDA2QJY=;
-        b=WFq1NhT/BJYhGUhpqVUWGNQJA6eh0exSDRd1lALpQaiswNODcl1aPGxzbVNNt+ep31
-         if49Y03bapm//HD1i2bxKeybnoCGWrWotBkyeQ2rdbGMFxfrSRGHf/X/1v0EjXkELQlx
-         oxI686xwahtRYgZY6oZChDjQYeBfDKnrkNl8Fm6JgOKuEgXwyNqXa9qsti55arkIlmuE
-         VB8ZqZ4Qj5uaItd6KT8jn7X1bwaab0makSIjdB1DJC3YBRn7jL8yA89Mi/0/yuieLowH
-         IG4VDsx864lwGt5kNVT9J/abFr3KhPAjNoAJkkrx9FNJjT1/dpPAubAFUtYSTzwwBVZK
-         SGkA==
-X-Gm-Message-State: AOAM531G4IcpCmx5aei1RnIlWiB5MdDLAq3DTy+zPWKUPeNrCE6iI54t
-        xwbjKtGSke1o6h59yogY8bY=
-X-Google-Smtp-Source: ABdhPJzsOCvxtL4tJ1+aiT8bXf9mdB/oFcWv5YQ7cYdVBiyLPDWJbCu5KcSrziyfwmCxC6QNJnKNQA==
-X-Received: by 2002:a63:3185:0:b0:39c:c854:34ae with SMTP id x127-20020a633185000000b0039cc85434aemr469773pgx.13.1649295712626;
-        Wed, 06 Apr 2022 18:41:52 -0700 (PDT)
-Received: from [10.11.37.162] ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id e10-20020a17090a630a00b001c685cfd9d1sm6720441pjj.20.2022.04.06.18.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 18:41:52 -0700 (PDT)
-Message-ID: <732eed82-18eb-c57b-fca1-e1f33f1f0499@gmail.com>
-Date:   Thu, 7 Apr 2022 09:41:41 +0800
+        Wed, 6 Apr 2022 21:45:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D661946B09;
+        Wed,  6 Apr 2022 18:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649295796; x=1680831796;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OrrvVbgQhhyjCQNOwSRQWiJz/QiX7QYhKrIZ0LbfRzA=;
+  b=l4MqDp48zz+8TC/53Op4fYyNqGtPqCwElOVznE+1Avbj7L3nEWDfrwfp
+   IOjYpZZrUOUoi12nshKilsq7fPrbCEeydm+YTATOf+cS0NYjEkruL8+Qa
+   aaK/uKZYMcaYSnSyHPL2v5Nau6oI8u2n8O+Za+lPwsI4a5yGE6YXfcChK
+   N69ntDfR+rWblvsjGf67TDpWVooS+uZ9SqJzGVC8aRy/xuKPCuSokHdPB
+   A7spkzS6JXzRvUNO78FmCmODQ+e5/XXRrzyTFwijZdAaD6aQTvKGeh6R5
+   nyvbeo598tUPXvsK5GQlvbqa5SGDLY/3ZlhFD/8/89euwTbWIG63gUtud
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286179808"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="286179808"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:43:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="621052715"
+Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:43:13 -0700
+Message-ID: <fc935cdeea2547e27eb8a3ce8778e62aa3753b0e.camel@intel.com>
+Subject: Re: [RFC PATCH v5 054/104] KVM: x86/tdp_mmu: Keep PRIVATE_PROHIBIT
+ bit when zapping
+From:   Kai Huang <kai.huang@intel.com>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Thu, 07 Apr 2022 13:43:11 +1200
+In-Reply-To: <772b20e270b3451aea9714260f2c40ddcc4afe80.1646422845.git.isaku.yamahata@intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <772b20e270b3451aea9714260f2c40ddcc4afe80.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] usb: usbip: fix a refcount leak in stub_probe()
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, khoroshilov@ispras.ru
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406061713.18938-1-hbh25y@gmail.com>
- <4341150b-195c-a896-1f6a-8715bbb539e2@linuxfoundation.org>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <4341150b-195c-a896-1f6a-8715bbb539e2@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks. I will send a v2.
+On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> SPTE_PRIVATE_PROHIBIT specifies the share or private GPA is allowed or not.
+> It needs to be kept over zapping the EPT entry.  Currently the EPT entry is
+> initialized shadow_init_value unconditionally to clear
+> SPTE_PRIVATE_PROHIBIT bit.  To carry SPTE_PRIVATE_PROHIBIT bit, introduce a
+> helper function to get initial value for zapped entry with
+> SPTE_PRIVATE_PROHIBIT bit.  Replace shadow_init_value with it.
 
-On 2022/4/7 02:13, Shuah Khan wrote:
-> On 4/6/22 12:17 AM, Hangyu Hua wrote:
->> usb_get_dev is called in stub_device_alloc. When stub_probe fails after
->> that, usb_put_dev needs to be used.
->>
+Isn't it better to merge patch 53-55, especially 54-55 together? 
+
 > 
-> Thank you for the patch. Please include details on how you found
-> this problem.
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
 > 
-> Nit: Change this to:
-> 
-> usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
-> after that, usb_put_dev() needs to be called to release the reference.
-> 
->> Fix this by moving usb_put_dev() to sdev_free
->>
-> 
-> Nit: Change this to:
-> 
-> Fix this by moving usb_put_dev() to sdev_free error path handling.
-> 
->> Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   drivers/usb/usbip/stub_dev.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
->> index d8d3892e5a69..3c6d452e3bf4 100644
->> --- a/drivers/usb/usbip/stub_dev.c
->> +++ b/drivers/usb/usbip/stub_dev.c
->> @@ -393,7 +393,6 @@ static int stub_probe(struct usb_device *udev)
->>   err_port:
->>       dev_set_drvdata(&udev->dev, NULL);
->> -    usb_put_dev(udev);
->>       /* we already have busid_priv, just lock busid_lock */
->>       spin_lock(&busid_priv->busid_lock);
->> @@ -408,6 +407,7 @@ static int stub_probe(struct usb_device *udev)
->>       put_busid_priv(busid_priv);
->>   sdev_free:
->> +    usb_put_dev(udev);
->>       stub_device_free(sdev);
->>       return rc;
->>
-> 
-> With the above addressed:
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> thanks,
-> -- Shuah
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 1949f81027a0..6d750563824d 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -610,6 +610,12 @@ static inline bool tdp_mmu_set_spte_atomic(struct kvm *kvm,
+>  	return true;
+>  }
+>  
+> +static u64 shadow_init_spte(u64 old_spte)
+> +{
+> +	return shadow_init_value |
+> +		(is_private_prohibit_spte(old_spte) ? SPTE_PRIVATE_PROHIBIT : 0);
+> +}
+> +
+>  static inline bool tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+>  					   struct tdp_iter *iter)
+>  {
+> @@ -641,7 +647,8 @@ static inline bool tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+>  	 * shadow_init_value (which sets "suppress #VE" bit) so it
+>  	 * can be set when EPT table entries are zapped.
+>  	 */
+> -	WRITE_ONCE(*rcu_dereference(iter->sptep), shadow_init_value);
+> +	WRITE_ONCE(*rcu_dereference(iter->sptep),
+> +		shadow_init_spte(iter->old_spte));
+>  
+>  	return true;
+>  }
+
+In this and next patch (54-55), in all the code path, you already have the iter-
+>sptep, from which you can get the sp->private_sp, and check using
+is_private_sp().  Why do we need this SPTE_PRIVATE_PRORHIBIT bit?
+
+Are you suggesting we can have mixed private/shared mapping under a private_sp?
+
+> @@ -853,7 +860,8 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>  
+>  		if (!shared) {
+>  			/* see comments in tdp_mmu_zap_spte_atomic() */
+> -			tdp_mmu_set_spte(kvm, &iter, shadow_init_value);
+> +			tdp_mmu_set_spte(kvm, &iter,
+> +					shadow_init_spte(iter.old_spte));
+>  			flush = true;
+>  		} else if (!tdp_mmu_zap_spte_atomic(kvm, &iter)) {
+>  			/*
+> @@ -1038,11 +1046,14 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+>  		new_spte = make_mmio_spte(vcpu,
+>  				tdp_iter_gfn_unalias(vcpu->kvm, iter),
+>  				pte_access);
+> -	else
+> +	else {
+>  		wrprot = make_spte(vcpu, sp, fault->slot, pte_access,
+>  				tdp_iter_gfn_unalias(vcpu->kvm, iter),
+>  				fault->pfn, iter->old_spte, fault->prefetch,
+>  				true, fault->map_writable, &new_spte);
+> +		if (is_private_prohibit_spte(iter->old_spte))
+> +			new_spte |= SPTE_PRIVATE_PROHIBIT;
+> +	}
+>  
+>  	if (new_spte == iter->old_spte)
+>  		ret = RET_PF_SPURIOUS;
+> @@ -1335,7 +1346,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>  	 * invariant that the PFN of a present * leaf SPTE can never change.
+>  	 * See __handle_changed_spte().
+>  	 */
+> -	tdp_mmu_set_spte(kvm, iter, shadow_init_value);
+> +	tdp_mmu_set_spte(kvm, iter, shadow_init_spte(iter->old_spte));
+>  
+>  	if (!pte_write(range->pte)) {
+>  		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
+

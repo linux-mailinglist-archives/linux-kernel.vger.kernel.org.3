@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1484F7BCB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE53D4F7BD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiDGJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 05:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S236429AbiDGJkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiDGJkI (ORCPT
+        with ESMTP id S233532AbiDGJkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:40:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1726FA0A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:09 -0700 (PDT)
+        Thu, 7 Apr 2022 05:40:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148A6BC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:38:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18ABAB826EB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7021C385A0;
-        Thu,  7 Apr 2022 09:38:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2A3EB826E9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:38:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532E0C385A6;
+        Thu,  7 Apr 2022 09:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649324286;
-        bh=EaqmE97NIIa4sM3p+EV1eVdSo70pdZ7fkuMKWkXPHS8=;
+        s=k20201202; t=1649324288;
+        bh=uw1feJokQltBbli7YY6WbUK0xdsIbLRNhwNOSSxDNWo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UfgRO1FU/E3ryPPJ7II/axF1s2btYE02c+S0bDAS4Juj8cOZoKBag7nvYmQlrjjKE
-         e6MoTZyE8D8V83FPlciADPFZmWdTJHkMEC3rXQgjbh9FF823TTblseCuHXeAwjBRlw
-         YKxZ7FbOyA9DQ37u7oGVIe7UNmmTUUB9Lwy2KneNljKt4jcntaBEG+/cQGyYMzbT+G
-         fMEV78DxjWxjOC0SDwyfCzfaVSG++Md41FMgzy7nfDzlOW0bW4LZfduronubnEUl7i
-         1E6IFSFzl1DRd6y0a/1/SSU4dBdBirv5E0+zCWOyrvikrvECkaJ1X4BegBmK98sAhV
-         hTZTdTy3L0qiQ==
+        b=W2fj4rtdIr2o4J7BoVSxY4sL5fhEBkEb6Aab+m657Te/DOa+XvBLsYiTBJ/QEpcw1
+         ZMwSmDJ1lYt2YSpKBorT0mlX4cgMol/gzykaJf4K6wgee8Bv12u5J9n5FHlJnU91Kz
+         khaqRzILl8nbT3anzKITVgJKNoszk9CoY8zH57HizLOooBqFK75UoeOTDfpY/CKrAh
+         k8dk6Yx1kvvm9nwlIpgcmY7/iiOI4dvQdSY7bXBaYjoEL8IFqGp4oqcjq+3YcQwpnd
+         XKWY9OGMRjOgmfaIXv6qmJKNFEyAOlAxp8GIzyCTKMkU4awFrwjjApiOpd/1j5iTVI
+         DsD2/tDaEl3ig==
 From:   Mark Brown <broonie@kernel.org>
-To:     steve@sk2.org, lgirdwood@gmail.com, oder_chiou@realtek.com
+To:     steven.eckhoff.opensource@gmail.com, steve@sk2.org,
+        lgirdwood@gmail.com
 Cc:     wsa@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220405130326.2107293-1-steve@sk2.org>
-References: <20220405130326.2107293-1-steve@sk2.org>
-Subject: Re: [PATCH] ASoC: rt*: use simple i2c probe function
-Message-Id: <164932428553.3844153.17964591394155571578.b4-ty@kernel.org>
-Date:   Thu, 07 Apr 2022 10:38:05 +0100
+In-Reply-To: <20220405163400.2156631-1-steve@sk2.org>
+References: <20220405163400.2156631-1-steve@sk2.org>
+Subject: Re: [PATCH] ASoC: tscs*: use simple i2c probe function
+Message-Id: <164932428705.3844153.6005825259522988105.b4-ty@kernel.org>
+Date:   Thu, 07 Apr 2022 10:38:07 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,7 +54,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 15:03:26 +0200, Stephen Kitt wrote:
+On Tue, 5 Apr 2022 18:34:00 +0200, Stephen Kitt wrote:
 > The i2c probe functions here don't use the id information provided in
 > their second argument, so the single-parameter i2c probe function
 > ("probe_new") can be used instead.
@@ -69,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: rt*: use simple i2c probe function
-      commit: 35b8885805002564906086cbd691e88850257294
+[1/1] ASoC: tscs*: use simple i2c probe function
+      commit: f950ef9180351f73c319ca81e612c4cc98c07cbd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

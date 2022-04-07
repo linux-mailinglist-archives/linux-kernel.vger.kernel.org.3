@@ -2,63 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D964F8297
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F20F4F8243
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 16:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiDGPRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S1344362AbiDGO7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 10:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344544AbiDGPRf (ORCPT
+        with ESMTP id S238723AbiDGO7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:17:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944771F9FF6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:15:33 -0700 (PDT)
-Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KZ4F83dNvz1HBLx;
-        Thu,  7 Apr 2022 22:55:40 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 22:56:08 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 22:56:07 +0800
-Message-ID: <afd5285b-9d8b-3c58-111e-095d1e5b74f8@huawei.com>
-Date:   Thu, 7 Apr 2022 22:56:00 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH -next V2 7/7] arm64: add pagecache reading to machine
- check safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Thu, 7 Apr 2022 10:59:33 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (unknown [40.107.244.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A27D1EF5F9;
+        Thu,  7 Apr 2022 07:57:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VDWRjJaRTBFnel5loemcx6IHnFblgVIe7385CfjMgrGzEWH04nePIw5H2i1/pdQKMPyUmks8Tj0LzmmMTTJ/VGchUx54lsYacc7SmZGhdSpNdXogL0sHsJhq+Uh/mmXkjA75oiWgKJmC7yqziNssJKB6qGoCeYn9TUw8khD/aFMPblVmS0YyqKAgS/yMnK5rwGlj2H+9mbNvdb2GSAjO9p8xVvQFQtzGuSmE9qxH8QKPv87aW2+AStMLqaQUATce+V0R6bOTyqMUj/UAyESdG/mh0T/I4og55PAf0ABN4rsrpaRe9VO9pt1UV+KgzdIkwirCucj1dxPum7vPnakE8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H2P+OLgVp3XnlsPW6YnpOujLSjKXqCG3omraTih1D38=;
+ b=ZVbTVV7GWsWngbPcxIfCOHl2bBkvIjESCPO0HQ9CO+4IOZGQJcEW6E1joIZ4LV2//tSUoS4pbmMnW90JeH8CZ7fTIeK1/hMwDot+nLvpGtx0bytkXV8KVi36XCKTI1PPHa5YU91AszO3i/+syA+yXpblaqYFcZogjHyZPY6NiQfdPAYJ7FfcpNhSMfZaWkbvUI7in3SaYmsbLD/MZZ3Rg14TTgzmree9Unv7l/GbyHzUPYHT6IhYrZQ0SVw8GXrXBpENc1N/YarR2m062HOBFrE8zGT9r1x2p0QCCleT7UqrkCSPQbP2nQNdF9+0mGfmdvk/ERXXUIP/1Ye6XxorjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H2P+OLgVp3XnlsPW6YnpOujLSjKXqCG3omraTih1D38=;
+ b=zEY4JmE4ToAE/zEmYN/Km74uwe/27zsezEVFueR2GJDce7yDHDCV1UNwFmXBc5u0aw1wnrF1gN9ys1Kf5GPK8FiaBZllSc+uYGdNtaDVzLedDHkG+Avvy94QgLTsEAudpiLiZj4u+lwJ42Vc4skuxFpXl6Dr9K3lcZS0Vm1d7Yc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by DM4PR12MB5230.namprd12.prod.outlook.com (2603:10b6:5:399::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
+ 2022 14:57:29 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::d957:4025:eebd:5107]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::d957:4025:eebd:5107%3]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
+ 14:57:27 +0000
+Message-ID: <91ed3c18-6cff-c6d4-a628-81f1f71b21dc@amd.com>
+Date:   Thu, 7 Apr 2022 09:57:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     brijesh.singh@amd.com, Ingo Molnar <mingo@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
- <20220406091311.3354723-8-tongtiangen@huawei.com>
- <Yk15Fex1+fg6ZQrX@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yk15Fex1+fg6ZQrX@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 29/46] x86/boot: Add Confidential Computing type to
+ setup_data
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-30-brijesh.singh@amd.com> <87v8vlzz8x.ffs@tglx>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+In-Reply-To: <87v8vlzz8x.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0418.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::19) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9462e515-0a71-44fa-f611-08da18a6ee8a
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5230:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB523091F1D1EE1BC50D9418A7E5E69@DM4PR12MB5230.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bKsl20Rah8j7emqSzGVQEmZ9yCT/gJeC/sNfwm3cgKXmSennqIaBLgUp7JGh9coKdBh0h8fg/8Lptk+iY0NXlfz9kFOpUxI3zvmB8/Rt0PJDD00Ox1H6GYbRqY2PuxJvQk+eOfivoSihqQ5oSAXFKs0eD0bc0g+rgQaqQ4wVWgOas4Vp7E9i4e1TPyhRfmWh2MymQ2ZzRh7bt70WLXuLBQSujlYiYDzXAQeXRGIr4SzXIOInMmVjaonpcHYhgUsP2z6G4bybYaMrveAxMe4XWvSoOVEn1R5zPnyqLbiq1hFFv2sIgQeJWYD1r8dptj2X4jkJgrbz147t/DkI3ZULmzGuPa0Ew6c/ugFSpTw/5O1mdXeOE6/o4aSNEVgbgBZcwRNEx0uGL+mmlEewSnFQdF2dKcA9Fn1ldNdu3vpEa21NBsOrnw7nvP0yoMhdK+oRQ34obUFVococxSloalBHmj8Xsl3qb5SrQzvsSnvI1D05j/z/UFwQqImMulwTwEX0/VL8RJKl9/lD8VwZ30u9y6oER4f1T+bXbVZizuYYSGChCM0v+koA5WxliqhMFldrLk/aNkD51MOn8G8TJc/TvuQ7Hfb1NKGVs0s2JXulgm4epBX++23H5DsckO7sTPuzX6ticUmTvapcMtn/5lAa5d+aN8s5RbXHvQUbhdhbwEanb7ypLIf0wrpCf2lcgEsYNbmjITA54CKUPSB+DkAY89aglbj1FtdKfNFUqIsfXQHI39WCLA6uvcRrs4qN1yCEfdaEbN2yfZfT4aSx8eeTndFkb7J7zf+qeVmem2bDlQpzHi4bxOAcJQGmoLsqiK8H
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(186003)(508600001)(966005)(4744005)(54906003)(8936002)(6666004)(44832011)(26005)(7406005)(7416002)(2616005)(31686004)(6486002)(2906002)(66946007)(66556008)(66476007)(5660300002)(4326008)(8676002)(38100700002)(6506007)(316002)(6512007)(86362001)(31696002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWpGdE5HMUo5T3pUSDc2R1BINDdFUVJ0a2xyTWFCSFVld05xNlEyTmJVTVNC?=
+ =?utf-8?B?SzVuc0hWM0t1Q2lqL0paN0RNTE5kT2FMNm00NjZPKzgvYWUzSFEzNUZVMHFF?=
+ =?utf-8?B?bHEyd200RmVRam4yZU9HSjIxTWt3bWJMTXdHcmJGVXhGYm5hdHdnOTVSZ2Ju?=
+ =?utf-8?B?RW50eTdPQzJCd1RXTTlJMytra0dmUml5Y2pPZ3B6TzMzYWJCaTJUUVNST0pn?=
+ =?utf-8?B?aGhLN2l3VGJnQXYwQm5FbUZuclk0Wm9aVmRHNHVLSU4vS3Foa0pyZE5oUkxP?=
+ =?utf-8?B?bnNCczNsbHlKZGQvWDcvRUJpT1FWT0QwSzluNGp0R2RJUS92eTMrcVhhMzYy?=
+ =?utf-8?B?VlNlZk5Lbk9TbzB1OW8wdFJOUnY2WHZGRzY4MHZQckl4SnZObjVTWkxHVkRl?=
+ =?utf-8?B?ZE9MNkxrVTNYOVdIVlFWbUsrRUtSVjdqOEFiZDAxSGJ6ejNNK1lhS3hTSGlx?=
+ =?utf-8?B?WGtJRGc2ZlBrU2VmUHM1ZGh4NG96UE1ndjBaTHo5ZHlkVU1VVVdBVkhCd21t?=
+ =?utf-8?B?WDZMWkt5VnFLN3V0aGpDSmdwaGxVU2hiR0ZqWUluWDRGSHNWaVpmNnJ2dXMr?=
+ =?utf-8?B?UEtCOFhuZ3VTU1lKNGRPbmgxb2JwWWxZWGtBRVAvbnM1YjFyUTRUbkNlaFEv?=
+ =?utf-8?B?cEgvNGMyd09xVnVzejBKVS9BRU16RHp4M2JpN0p4TEt6RzAveUdiRlB3bEhk?=
+ =?utf-8?B?MkFIUXFXcXlUK2ExWm8wbUsxdi9PUE4raHhxTUFzbStCU011VU1BOGpDTFlv?=
+ =?utf-8?B?R2xzVXNjS3RiK1hnYXFhdS9VQzc5cXF6UDl5b0kxTXdON2JubEdRSW4vY2VS?=
+ =?utf-8?B?Wjk0c1FScFozT1lFall6NkJiVGVXWVJ3Qi96R1pDNE1tVTlKamRCb3NjdVMv?=
+ =?utf-8?B?aVQvSlJackdhdmxKWjlqQ1FZQTZsMURRL2Q0UDRUVnl5Mk1mWjgwWGVBNzNr?=
+ =?utf-8?B?S0JteTQyY3FCOTg2YnpTV3gzTVdUcjZRQ2NnQmVXZXRScE03eFNSRXhRV2ww?=
+ =?utf-8?B?VjZ4STZuSEsyRVB5RVROT1hya2RTSkVlQVBsWHh2bEg0TjRSUkxpdGlTZDJ4?=
+ =?utf-8?B?Zk5aU3c4TEkxalpWd0xrbXVZblFhUnY3Ry9QQldlVWliS0JPdXd3Q21lV1ow?=
+ =?utf-8?B?YUFQc2RaY3gvNkZNOWVQYmhxai9MdVZwV0NjOGZuL3RNQXNIckVBalBHK1FS?=
+ =?utf-8?B?VDRaUWZhS2dnNDhERGlTQVBzNDNhOU5GbE5teUMzeThRV2Z6K0FqNTFQM05E?=
+ =?utf-8?B?WFFIMmYydW5KdkN0azUvdGJtMi9RaTlxUFNLcU56YnhLZVBMK3NGSXVoUmxK?=
+ =?utf-8?B?Y0dxbG1VR3V3Z1kxZXVKMVpIRERta3BZOVVHWTQwcS9VWU1hYmMzVUwxQ2Rz?=
+ =?utf-8?B?eldhMnQzNGh5MTIreXlBM3RLU1NJVTNSVUF6bGZ4SzlhaStPelBQa2NaVTF0?=
+ =?utf-8?B?TjVsVkFWOEFHQXVFVGRPMDVqWGtuVUxFNW91amRrMFV2QjhQQ1pMaXBsOGdm?=
+ =?utf-8?B?Z1RlbXUvTlV0WXI2V1RxSnZoSmhUZHJXN014UkNpbi84aElhamlMZHcxWE1B?=
+ =?utf-8?B?NENnOGQvUkhwVVk5ZXdQU21DaENEcGtBVE5iVHBlS0pjZmNKUGl2T05vNXVB?=
+ =?utf-8?B?UGRnWDlTMU1SR1FrcWQwRnlzNmVzcVdJWXoxckFRdDRvL0dFWkhwYzdmdDFW?=
+ =?utf-8?B?ZDFYdWRVSWYveUFTNzkybUlnWGg1YzYwS1pRVFc0c1lZVmNBRFZxY2lVRXAy?=
+ =?utf-8?B?bW5hU1dOTm9OSlNIV3YyVVh6NFpoQ29DczJBbW9LLzliMElFbktBQUNzNlgw?=
+ =?utf-8?B?MzZBWllPMW03R01iRFYrMkg5eVdiVVVKdllYZExDZ2ZmV0NmNWFnYkNaVmEr?=
+ =?utf-8?B?TTJsOVVTbjFvMGZQREdVWjdnbVFGTkxZZVFpWDVNK1daSGtmNnAxRkJYN2pM?=
+ =?utf-8?B?VzB6dW5Rem9KOGt3Z0VpTXJSUFlQY2JsMEd0bWgyQVVaMGZsQ3FuR0I4Mmpx?=
+ =?utf-8?B?UVZQVlJzemplSWJobkRGVVhaL3NraUlrbkNFVTRzUGFsdUZ1RTNRcVFGN3RZ?=
+ =?utf-8?B?bWwwQmdreTB1YzVVbk50NHU0VU5VZHV2dnpKMmZUUFhyVDE0K2F6T1dEVVd6?=
+ =?utf-8?B?QUM3NGFjeVZtSzFQR2l5RERsdlFycm51cGtlR3NGWmV5SnBmSGVvVXVuTkpX?=
+ =?utf-8?B?NGFPUTUxVnlVemdrNi9pV0Z6VjlidTFYY2RFcGFaWWtSSmNnQU5JQTg0VDRh?=
+ =?utf-8?B?WHdydzlpTmgyREtpQ2J5WStHUlBwNkc2dDd6bHpGZ25Ja2dDVmR6WXRwVEla?=
+ =?utf-8?B?QmV6SitrMlNicTBCcGdMdlBMcEFVelhMTkNDZ05BM0lZMUxhOGhidz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9462e515-0a71-44fa-f611-08da18a6ee8a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 14:57:27.4412
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p9wgeYsQsh5n04T2pRtOqrPYxLsJIWfzAamT8NVDRl++28INLDZqsBZSS+0VkSBb7O5+9bPukQ/YdKAXCgaT6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5230
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,378 +157,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/4/6 19:27, Mark Rutland 写道:
-> On Wed, Apr 06, 2022 at 09:13:11AM +0000, Tong Tiangen wrote:
->> When user process reading file, the data is cached in pagecache and
->> the data belongs to the user process, When machine check error is
->> encountered during pagecache reading, killing the user process and
->> isolate the user page with hardware memory errors is a more reasonable
->> choice than kernel panic.
->>
->> The __arch_copy_mc_to_user() in copy_to_user_mc.S is largely borrows
->> from __arch_copy_to_user() in copy_to_user.S and the main difference
->> is __arch_copy_mc_to_user() add the extable entry to support machine
->> check safe.
-> 
-> As with prior patches, *why* is the distinction necessary?
-> 
-> This patch adds a bunch of conditional logic, but *structurally* it doesn't
-> alter the handling to be substantially different for the MC and non-MC cases.
-> 
-> This seems like pointless duplication that just makes it harder to maintain
-> this code.
-> 
-> Thanks,
-> Mark.
-
-Agreed, The implementation here looks a little ugly and harder to maintain.
-
-The purpose of my doing this is not all copy_to_user can be recovered.
-
-A memory error is consumed when reading pagecache using copy_to_user.
-I think in this scenario, only the process is affected because it can't read
-pagecache data correctly. Just kill the process and don't need the whole
-kernel panic.
-
-So I need two different copy_to_user implementation, one is existing 
-__arch_copy_to_user,
-this function will panic when consuming memory errors. The other one is 
-this new helper
-__arch_copy_mc_to_user, this interface is used when reading pagecache. 
-It can recover from
-consume memory error.
-
-In future, if find a scenario use copy_to_user can also be recovered, we 
-can also use this mc
-safe helper instead it.
-
-Thanks,
-Tong.
-
-> 
->> In _copy_page_to_iter(), machine check safe only considered ITER_IOVEC
->> which is used by pagecache reading.
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   arch/arm64/include/asm/uaccess.h | 15 ++++++
->>   arch/arm64/lib/Makefile          |  2 +-
->>   arch/arm64/lib/copy_to_user_mc.S | 78 +++++++++++++++++++++++++++++
->>   include/linux/uio.h              |  9 +++-
->>   lib/iov_iter.c                   | 85 +++++++++++++++++++++++++-------
->>   5 files changed, 170 insertions(+), 19 deletions(-)
->>   create mode 100644 arch/arm64/lib/copy_to_user_mc.S
->>
->> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
->> index 24b662407fbd..f0d5e811165a 100644
->> --- a/arch/arm64/include/asm/uaccess.h
->> +++ b/arch/arm64/include/asm/uaccess.h
->> @@ -448,6 +448,21 @@ extern long strncpy_from_user(char *dest, const char __user *src, long count);
+On 4/6/22 16:19, Thomas Gleixner wrote:
+> On Mon, Mar 07 2022 at 15:33, Brijesh Singh wrote:
 >>   
->>   extern __must_check long strnlen_user(const char __user *str, long n);
->>   
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +extern unsigned long __must_check __arch_copy_mc_to_user(void __user *to,
->> +							 const void *from, unsigned long n);
->> +static inline unsigned long __must_check
->> +copy_mc_to_user(void __user *to, const void *from, unsigned long n)
->> +{
->> +	uaccess_ttbr0_enable();
->> +	n = __arch_copy_mc_to_user(__uaccess_mask_ptr(to), from, n);
->> +	uaccess_ttbr0_disable();
->> +
->> +	return n;
->> +}
->> +#define copy_mc_to_user copy_mc_to_user
->> +#endif
->> +
->>   #ifdef CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE
->>   struct page;
->>   void memcpy_page_flushcache(char *to, struct page *page, size_t offset, size_t len);
->> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
->> index 29c578414b12..9b3571227fb4 100644
->> --- a/arch/arm64/lib/Makefile
->> +++ b/arch/arm64/lib/Makefile
->> @@ -23,4 +23,4 @@ obj-$(CONFIG_ARM64_MTE) += mte.o
->>   
->>   obj-$(CONFIG_KASAN_SW_TAGS) += kasan_sw_tags.o
->>   
->> -obj-$(CONFIG_ARCH_HAS_CPY_MC) += copy_page_mc.o
->> +obj-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o copy_to_user_mc.o
->> diff --git a/arch/arm64/lib/copy_to_user_mc.S b/arch/arm64/lib/copy_to_user_mc.S
->> new file mode 100644
->> index 000000000000..9d228ff15446
->> --- /dev/null
->> +++ b/arch/arm64/lib/copy_to_user_mc.S
->> @@ -0,0 +1,78 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
 >> +/*
->> + * Copyright (C) 2012 ARM Ltd.
+>> + * AMD SEV Confidential computing blob structure. The structure is
+>> + * defined in OVMF UEFI firmware header:
+>> + * https://github.com/tianocore/edk2/blob/master/OvmfPkg/Include/Guid/ConfidentialComputingSevSnpBlob.h
 >> + */
->> +
->> +#include <linux/linkage.h>
->> +
->> +#include <asm/asm-uaccess.h>
->> +#include <asm/assembler.h>
->> +#include <asm/cache.h>
->> +
->> +/*
->> + * Copy to user space from a kernel buffer (alignment handled by the hardware)
->> + *
->> + * Parameters:
->> + *	x0 - to
->> + *	x1 - from
->> + *	x2 - n
->> + * Returns:
->> + *	x0 - bytes not copied
->> + */
->> +	.macro ldrb1 reg, ptr, val
->> +	1000: ldrb  \reg, [\ptr], \val;
->> +	_asm_extable_mc 1000b, 9998f;
->> +	.endm
->> +
->> +	.macro strb1 reg, ptr, val
->> +	user_ldst_mc 9998f, sttrb, \reg, \ptr, \val
->> +	.endm
->> +
->> +	.macro ldrh1 reg, ptr, val
->> +	1001: ldrh  \reg, [\ptr], \val;
->> +	_asm_extable_mc 1001b, 9998f;
->> +	.endm
->> +
->> +	.macro strh1 reg, ptr, val
->> +	user_ldst_mc 9997f, sttrh, \reg, \ptr, \val
->> +	.endm
->> +
->> +	.macro ldr1 reg, ptr, val
->> +	1002: ldr \reg, [\ptr], \val;
->> +	_asm_extable_mc 1002b, 9998f;
->> +	.endm
->> +
->> +	.macro str1 reg, ptr, val
->> +	user_ldst_mc 9997f, sttr, \reg, \ptr, \val
->> +	.endm
->> +
->> +	.macro ldp1 reg1, reg2, ptr, val
->> +	1003: ldp \reg1, \reg2, [\ptr], \val;
->> +	_asm_extable_mc 1003b, 9998f;
->> +	.endm
->> +
->> +	.macro stp1 reg1, reg2, ptr, val
->> +	user_stp 9997f, \reg1, \reg2, \ptr, \val
->> +	.endm
->> +
->> +end	.req	x5
->> +srcin	.req	x15
->> +SYM_FUNC_START(__arch_copy_mc_to_user)
->> +	add	end, x0, x2
->> +	mov	srcin, x1
->> +#include "copy_template.S"
->> +	mov	x0, #0
->> +	ret
->> +
->> +	// Exception fixups
->> +9997:	cbz	x0, 9998f			// Check machine check exception
->> +	cmp	dst, dstin
->> +	b.ne	9998f
->> +	// Before being absolutely sure we couldn't copy anything, try harder
->> +	ldrb	tmp1w, [srcin]
->> +USER(9998f, sttrb tmp1w, [dst])
->> +	add	dst, dst, #1
->> +9998:	sub	x0, end, dst			// bytes not copied
->> +	ret
->> +SYM_FUNC_END(__arch_copy_mc_to_user)
->> +EXPORT_SYMBOL(__arch_copy_mc_to_user)
->> diff --git a/include/linux/uio.h b/include/linux/uio.h
->> index 739285fe5a2f..539d9ee9b032 100644
->> --- a/include/linux/uio.h
->> +++ b/include/linux/uio.h
->> @@ -147,10 +147,17 @@ size_t _copy_to_iter(const void *addr, size_t bytes, struct iov_iter *i);
->>   size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i);
->>   size_t _copy_from_iter_nocache(void *addr, size_t bytes, struct iov_iter *i);
->>   
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, size_t bytes,
->> +			    struct iov_iter *i);
->> +#else
->> +#define copy_mc_page_to_iter copy_page_to_iter
->> +#endif
->> +
->>   static inline size_t copy_folio_to_iter(struct folio *folio, size_t offset,
->>   		size_t bytes, struct iov_iter *i)
->>   {
->> -	return copy_page_to_iter(&folio->page, offset, bytes, i);
->> +	return copy_mc_page_to_iter(&folio->page, offset, bytes, i);
->>   }
->>   
->>   static __always_inline __must_check
->> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
->> index 6dd5330f7a99..2c5f3bb6391d 100644
->> --- a/lib/iov_iter.c
->> +++ b/lib/iov_iter.c
->> @@ -157,6 +157,19 @@ static int copyout(void __user *to, const void *from, size_t n)
->>   	return n;
->>   }
->>   
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +static int copyout_mc(void __user *to, const void *from, size_t n)
->> +{
->> +	if (access_ok(to, n)) {
->> +		instrument_copy_to_user(to, from, n);
->> +		n = copy_mc_to_user((__force void *) to, from, n);
->> +	}
->> +	return n;
->> +}
->> +#else
->> +#define copyout_mc copyout
->> +#endif
->> +
->>   static int copyin(void *to, const void __user *from, size_t n)
->>   {
->>   	if (should_fail_usercopy())
->> @@ -169,7 +182,7 @@ static int copyin(void *to, const void __user *from, size_t n)
->>   }
->>   
->>   static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t bytes,
->> -			 struct iov_iter *i)
->> +			 struct iov_iter *i, bool mc_safe)
->>   {
->>   	size_t skip, copy, left, wanted;
->>   	const struct iovec *iov;
->> @@ -194,7 +207,10 @@ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t b
->>   		from = kaddr + offset;
->>   
->>   		/* first chunk, usually the only one */
->> -		left = copyout(buf, from, copy);
->> +		if (mc_safe)
->> +			left = copyout_mc(buf, from, copy);
->> +		else
->> +			left = copyout(buf, from, copy);
->>   		copy -= left;
->>   		skip += copy;
->>   		from += copy;
->> @@ -204,7 +220,10 @@ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t b
->>   			iov++;
->>   			buf = iov->iov_base;
->>   			copy = min(bytes, iov->iov_len);
->> -			left = copyout(buf, from, copy);
->> +			if (mc_safe)
->> +				left = copyout_mc(buf, from, copy);
->> +			else
->> +				left = copyout(buf, from, copy);
->>   			copy -= left;
->>   			skip = copy;
->>   			from += copy;
->> @@ -223,7 +242,10 @@ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t b
->>   
->>   	kaddr = kmap(page);
->>   	from = kaddr + offset;
->> -	left = copyout(buf, from, copy);
->> +	if (mc_safe)
->> +		left = copyout_mc(buf, from, copy);
->> +	else
->> +		left = copyout(buf, from, copy);
->>   	copy -= left;
->>   	skip += copy;
->>   	from += copy;
->> @@ -232,7 +254,10 @@ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t b
->>   		iov++;
->>   		buf = iov->iov_base;
->>   		copy = min(bytes, iov->iov_len);
->> -		left = copyout(buf, from, copy);
->> +		if (mc_safe)
->> +			left = copyout_mc(buf, from, copy);
->> +		else
->> +			left = copyout(buf, from, copy);
->>   		copy -= left;
->>   		skip = copy;
->>   		from += copy;
->> @@ -674,15 +699,6 @@ size_t _copy_to_iter(const void *addr, size_t bytes, struct iov_iter *i)
->>   EXPORT_SYMBOL(_copy_to_iter);
->>   
->>   #ifdef CONFIG_ARCH_HAS_COPY_MC
->> -static int copyout_mc(void __user *to, const void *from, size_t n)
->> -{
->> -	if (access_ok(to, n)) {
->> -		instrument_copy_to_user(to, from, n);
->> -		n = copy_mc_to_user((__force void *) to, from, n);
->> -	}
->> -	return n;
->> -}
->> -
->>   static size_t copy_mc_pipe_to_iter(const void *addr, size_t bytes,
->>   				struct iov_iter *i)
->>   {
->> @@ -846,10 +862,10 @@ static inline bool page_copy_sane(struct page *page, size_t offset, size_t n)
->>   }
->>   
->>   static size_t __copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
->> -			 struct iov_iter *i)
->> +			 struct iov_iter *i, bool mc_safe)
->>   {
->>   	if (likely(iter_is_iovec(i)))
->> -		return copy_page_to_iter_iovec(page, offset, bytes, i);
->> +		return copy_page_to_iter_iovec(page, offset, bytes, i, mc_safe);
->>   	if (iov_iter_is_bvec(i) || iov_iter_is_kvec(i) || iov_iter_is_xarray(i)) {
->>   		void *kaddr = kmap_local_page(page);
->>   		size_t wanted = _copy_to_iter(kaddr + offset, bytes, i);
->> @@ -878,7 +894,7 @@ size_t copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
->>   	offset %= PAGE_SIZE;
->>   	while (1) {
->>   		size_t n = __copy_page_to_iter(page, offset,
->> -				min(bytes, (size_t)PAGE_SIZE - offset), i);
->> +				min(bytes, (size_t)PAGE_SIZE - offset), i, false);
->>   		res += n;
->>   		bytes -= n;
->>   		if (!bytes || !n)
->> @@ -893,6 +909,41 @@ size_t copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
->>   }
->>   EXPORT_SYMBOL(copy_page_to_iter);
->>   
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +/**
->> + * copy_mc_page_to_iter - copy page to iter with source memory error exception handling.
->> + *
->> + * The filemap_read deploys this for pagecache reading and the main differences between
->> + * this and typical copy_page_to_iter() is call __copy_page_to_iter with mc_safe true.
->> + *
->> + * Return: number of bytes copied (may be %0)
->> + */
->> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, size_t bytes,
->> +			 struct iov_iter *i)
->> +{
->> +	size_t res = 0;
->> +
->> +	if (unlikely(!page_copy_sane(page, offset, bytes)))
->> +		return 0;
->> +	page += offset / PAGE_SIZE; // first subpage
->> +	offset %= PAGE_SIZE;
->> +	while (1) {
->> +		size_t n = __copy_page_to_iter(page, offset,
->> +				min(bytes, (size_t)PAGE_SIZE - offset), i, true);
->> +		res += n;
->> +		bytes -= n;
->> +		if (!bytes || !n)
->> +			break;
->> +		offset += n;
->> +		if (offset == PAGE_SIZE) {
->> +			page++;
->> +			offset = 0;
->> +		}
->> +	}
->> +	return res;
->> +}
->> +#endif
->> +
->>   size_t copy_page_from_iter(struct page *page, size_t offset, size_t bytes,
->>   			 struct iov_iter *i)
->>   {
->> -- 
->> 2.18.0.huawei.25
->>
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> .
+>> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
+>> +struct cc_blob_sev_info {
+>> +	u32 magic;
+>> +	u16 version;
+>> +	u16 reserved;
+>> +	u64 secrets_phys;
+>> +	u32 secrets_len;
+>> +	u32 rsvd1;
+>> +	u64 cpuid_phys;
+>> +	u32 cpuid_len;
+>> +	u32 rsvd2;
+>> +};
+> 
+> Shouldn't this be packed?
+> 
+
+Yep, to avoid any additional compiler alignment we should pack it.
+
+thanks

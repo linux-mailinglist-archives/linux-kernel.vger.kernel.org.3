@@ -2,271 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F1F4F7964
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D1E4F7950
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 10:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242790AbiDGIUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 04:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S241309AbiDGISk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 04:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242852AbiDGIUm (ORCPT
+        with ESMTP id S242795AbiDGISg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 04:20:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F37C21E511;
-        Thu,  7 Apr 2022 01:18:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23E0911FB;
-        Thu,  7 Apr 2022 01:18:42 -0700 (PDT)
-Received: from e126645.nice.arm.com (e126645.nice.arm.com [10.34.129.54])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6D9E43F5A1;
-        Thu,  7 Apr 2022 01:18:38 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com,
-        Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com, maz@kernel.org,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 3/3] cpufreq: CPPC: Register EM based on efficiency class information
-Date:   Thu,  7 Apr 2022 10:16:18 +0200
-Message-Id: <20220407081620.1662192-4-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407081620.1662192-1-pierre.gondois@arm.com>
-References: <20220407081620.1662192-1-pierre.gondois@arm.com>
+        Thu, 7 Apr 2022 04:18:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2097D208C03;
+        Thu,  7 Apr 2022 01:16:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C45241F85B;
+        Thu,  7 Apr 2022 08:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649319395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lDpImFu5Uivn4DfGJlYiz9vYuz2Nv72UWNvkXkuJYGg=;
+        b=oLP9PRfRRD7mxq5x7xCJN137uit6q+YNNoudexrZzYyD6+eW+cdU3RXM5iX/XE0sf4Egxi
+        fMTd+UAD0c6NXGlbpqt0l8d8ZlhW/0nICmkqzbw3SdkLBy09hjEqOXcvdPjbEm5J9EwiVs
+        fZ5hgwB5240MWjviQqGlg33RLCDgVnE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649319395;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lDpImFu5Uivn4DfGJlYiz9vYuz2Nv72UWNvkXkuJYGg=;
+        b=piEcFzuoq1oygxpi1MEykg2vUI/TY9iYqgx83RkZZRzcJNEIcqCe2t0JkJ25EeU//hq+l+
+        qEoICyqK/U13eXDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08D6613485;
+        Thu,  7 Apr 2022 08:16:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wRyrM+CdTmLMCAAAMHmgww
+        (envelope-from <colyli@suse.de>); Thu, 07 Apr 2022 08:16:32 +0000
+Message-ID: <24bb310e-6ce2-88c9-ebdc-59d49c609d77@suse.de>
+Date:   Thu, 7 Apr 2022 16:16:31 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.com>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+References: <20220406061228.410163-1-hch@lst.de>
+ <20220406061228.410163-5-hch@lst.de>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20220406061228.410163-5-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+On 4/6/22 2:12 PM, Christoph Hellwig wrote:
+> Remove the magic autofree semantics and require the callers to explicitly
+> call bio_init to initialize the bio.
+>
+> This allows bio_free to catch accidental bio_put calls on bio_init()ed
+> bios as well.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   block/bio.c                        | 47 ++++++++++++------------------
+>   block/blk-crypto-fallback.c        | 14 +++++----
+>   block/blk-map.c                    | 42 ++++++++++++++++----------
+>   drivers/block/pktcdvd.c            | 25 ++++++++--------
+>   drivers/md/bcache/debug.c          | 10 ++++---
+>   drivers/md/dm-bufio.c              |  9 +++---
+>   drivers/md/raid1.c                 | 12 +++++---
+>   drivers/md/raid10.c                | 21 ++++++++-----
+>   drivers/target/target_core_pscsi.c | 10 +++----
+>   fs/squashfs/block.c                | 15 +++++-----
+>   include/linux/bio.h                |  2 +-
+>   11 files changed, 112 insertions(+), 95 deletions(-)
+[snipped]
+> diff --git a/drivers/md/bcache/debug.c b/drivers/md/bcache/debug.c
+> index 6230dfdd9286e..7510d1c983a5e 100644
+> --- a/drivers/md/bcache/debug.c
+> +++ b/drivers/md/bcache/debug.c
+> @@ -107,15 +107,16 @@ void bch_btree_verify(struct btree *b)
+>   
+>   void bch_data_verify(struct cached_dev *dc, struct bio *bio)
+>   {
+> +	unsigned int nr_segs = bio_segments(bio);
+>   	struct bio *check;
+>   	struct bio_vec bv, cbv;
+>   	struct bvec_iter iter, citer = { 0 };
+>   
+> -	check = bio_kmalloc(GFP_NOIO, bio_segments(bio));
+> +	check = bio_kmalloc(nr_segs, GFP_NOIO);
+>   	if (!check)
+>   		return;
+> -	bio_set_dev(check, bio->bi_bdev);
+> -	check->bi_opf = REQ_OP_READ;
+> +	bio_init(check, bio->bi_bdev, check->bi_inline_vecs, nr_segs,
+> +		 REQ_OP_READ);
+>   	check->bi_iter.bi_sector = bio->bi_iter.bi_sector;
+>   	check->bi_iter.bi_size = bio->bi_iter.bi_size;
+>   
+> @@ -146,7 +147,8 @@ void bch_data_verify(struct cached_dev *dc, struct bio *bio)
+>   
+>   	bio_free_pages(check);
+>   out_put:
+> -	bio_put(check);
+> +	bio_uninit(check);
+> +	kfree(check);
+>   }
+>   
+>   #endif
 
-Performance states and energy consumption values are not advertised
-in ACPI. In the GicC structure of the MADT table, the "Processor
-Power Efficiency Class field" (called efficiency class from now)
-allows to describe the relative energy efficiency of CPUs.
+[snipped]
 
-To leverage the EM and EAS, the CPPC driver creates a set of
-artificial performance states and registers them in the Energy Model
-(EM), such as:
-- Every 20 capacity unit, a performance state is created.
-- The energy cost of each performance state gradually increases.
-No power value is generated as only the cost is used in the EM.
+For bcache part,
 
-During task placement, a task can raise the frequency of its whole
-pd. This can make EAS place a task on a pd with CPUs that are
-individually less energy efficient.
-As cost values are artificial, and to place tasks on CPUs with the
-lower efficiency class, a gap in cost values is generated for adjacent
-efficiency classes.
-E.g.:
-- efficiency class = 0, capacity is in [0-1024], so cost values
-  are in [0: 51] (one performance state every 20 capacity unit)
-- efficiency class = 1, capacity is in [0-1024], cost values
-  are in [1*gap+0: 1*gap+51].
+Acked-by: Coly Li <colyli@suse.de>
 
-The value of the cost gap is chosen to absorb a the energy of 4 CPUs
-at their maximum capacity. This means that between:
-1- a pd of 4 CPUs, each of them being used at almost their full
-   capacity. Their efficiency class is N.
-2- a CPU using almost none of its capacity. Its efficiency class is
-   N+1
-EAS will choose the first option.
 
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 142 +++++++++++++++++++++++++++++++++
- 1 file changed, 142 insertions(+)
+Coly Li
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 67a9f48939b6..181d49de669d 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -425,6 +425,129 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
- static bool efficiency_class_populated;
- static DEFINE_PER_CPU(unsigned int, efficiency_class);
- 
-+/* Create an artificial performance state every CPPC_EM_CAP_STEP capacity unit. */
-+#define CPPC_EM_CAP_STEP	(20)
-+/* Increase the cost value by CPPC_EM_COST_STEP every performance state. */
-+#define CPPC_EM_COST_STEP	(1)
-+/* Add a cost gap correspnding to the energy of 4 CPUs. */
-+#define CPPC_EM_COST_GAP	(4 * SCHED_CAPACITY_SCALE * CPPC_EM_COST_STEP \
-+				/ CPPC_EM_CAP_STEP)
-+
-+static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
-+{
-+	struct cppc_perf_caps *perf_caps;
-+	unsigned int min_cap, max_cap;
-+	struct cppc_cpudata *cpu_data;
-+	int cpu = policy->cpu;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu);
-+	min_cap = div_u64(max_cap * perf_caps->lowest_perf, perf_caps->highest_perf);
-+	if ((min_cap == 0) || (max_cap < min_cap))
-+		return 0;
-+	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
-+}
-+
-+/*
-+ * The cost is defined as:
-+ *   cost = power * max_frequency / frequency
-+ */
-+static inline unsigned long compute_cost(int cpu, int step)
-+{
-+	return CPPC_EM_COST_GAP * per_cpu(efficiency_class, cpu) +
-+			step * CPPC_EM_COST_STEP;
-+}
-+
-+static int cppc_get_cpu_power(struct device *cpu_dev,
-+		unsigned long *power, unsigned long *KHz)
-+{
-+	unsigned long perf_step, perf_prev, perf, perf_check;
-+	unsigned int min_step, max_step, step, step_check;
-+	unsigned long prev_freq = *KHz;
-+	unsigned int min_cap, max_cap;
-+
-+	struct cppc_perf_caps *perf_caps;
-+	struct cppc_cpudata *cpu_data;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu_dev->id);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-+	min_cap = div_u64(max_cap * perf_caps->lowest_perf,
-+			perf_caps->highest_perf);
-+
-+	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-+	min_step = min_cap / CPPC_EM_CAP_STEP;
-+	max_step = max_cap / CPPC_EM_CAP_STEP;
-+
-+	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+	step = perf_prev / perf_step;
-+
-+	if (step > max_step)
-+		return -EINVAL;
-+
-+	if (min_step == max_step) {
-+		step = max_step;
-+		perf = perf_caps->highest_perf;
-+	} else if (step < min_step) {
-+		step = min_step;
-+		perf = perf_caps->lowest_perf;
-+	} else {
-+		step++;
-+		if (step == max_step)
-+			perf = perf_caps->highest_perf;
-+		else
-+			perf = step * perf_step;
-+	}
-+
-+	*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-+	perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+	step_check = perf_check / perf_step;
-+
-+	/*
-+	 * To avoid bad integer approximation, check that new frequency value
-+	 * increased and that the new frequency will be converted to the
-+	 * desired step value.
-+	 */
-+	while ((*KHz == prev_freq) || (step_check != step)) {
-+		perf++;
-+		*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-+		perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+		step_check = perf_check / perf_step;
-+	}
-+
-+	/*
-+	 * With an artificial EM, only the cost value is used. Still the power
-+	 * is populated such as 0 < power < EM_MAX_POWER. This allows to add
-+	 * more sense to the artificial performance states.
-+	 */
-+	*power = compute_cost(cpu_dev->id, step);
-+
-+	return 0;
-+}
-+
-+static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-+		unsigned long *cost)
-+{
-+	unsigned long perf_step, perf_prev;
-+	struct cppc_perf_caps *perf_caps;
-+	struct cppc_cpudata *cpu_data;
-+	unsigned int max_cap;
-+	int step;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu_dev->id);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-+
-+	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, KHz);
-+	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-+	step = perf_prev / perf_step;
-+
-+	*cost = compute_cost(cpu_dev->id, step);
-+
-+	return 0;
-+}
-+
- static int populate_efficiency_class(void)
- {
- 	struct acpi_madt_generic_interrupt *gicc;
-@@ -461,6 +584,21 @@ static int populate_efficiency_class(void)
- 	return 0;
- }
- 
-+static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-+{
-+	struct cppc_cpudata *cpu_data;
-+	struct em_data_callback em_cb =
-+		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-+
-+	if (!efficiency_class_populated)
-+		return;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(policy->cpu);
-+	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-+			get_perf_level_count(policy), &em_cb,
-+			cpu_data->shared_cpu_map, 0);
-+}
-+
- #else
- 
- static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
-@@ -471,6 +609,9 @@ static int populate_efficiency_class(void)
- {
- 	return 0;
- }
-+static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-+{
-+}
- #endif
- 
- 
-@@ -742,6 +883,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.init = cppc_cpufreq_cpu_init,
- 	.exit = cppc_cpufreq_cpu_exit,
- 	.set_boost = cppc_cpufreq_set_boost,
-+	.register_em = cppc_cpufreq_register_em,
- 	.attr = cppc_cpufreq_attr,
- 	.name = "cppc_cpufreq",
- };
--- 
-2.25.1
+
 

@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBF54F86F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A484F86FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 20:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346790AbiDGSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 14:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S1346807AbiDGSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 14:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiDGSNs (ORCPT
+        with ESMTP id S235105AbiDGSOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:13:48 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48DE1DFDEA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:11:47 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d15so5715111pll.10
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 11:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gFTZbohyu/8p0m2uDVkoq5Xi+CtqAPyNZuEuTStjgLw=;
-        b=Q0dPWbdN0nv0dKw79003/9fFAxPKvcaowcm7jlclYg/Vj4xPGoGVoQAXoHbHMXOcnQ
-         hAwP0xPZdWxvRlcN/Z04XY+71Hdbcsrs6xStD07ZNa39aEA7gJ52mwKzQPiajdNjx1bx
-         MqdmryCgbw07EFt37XhANvUorW1hqkvhItGvWdksWwqvtlGI24kxy8KZJDOhSk1FRbAN
-         qLu/dM2/FWRFVfp2t+RrJLkdSRyfyzgclA3rNkdlsQLVgl3LA22fxEsAuXqEAfEfPF8M
-         5fpPKnjanWRnqG5CpyzXoWPaA8O5dEkcFwVGNxRFWeVJE89wILIr3wOGHP+fpvn4yxMS
-         yxYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gFTZbohyu/8p0m2uDVkoq5Xi+CtqAPyNZuEuTStjgLw=;
-        b=fxbvFW537OQ/hOO/uyoericG/J7V4YJ1iIh1HXbo9xVzGAh49F7U59kRS2Hx9mc5ta
-         iw7r5wiDerzskJjj8mvvxnFtOFp1cxKjFKi8XHGSbMMQTiZaahT+MtrvJtGGYemrSrB5
-         gqhKZB/YcYHpO5mXF/F1JsTllb7N3C7H+dj60DnMKBN6j8NCBYDiIipj0o2RhyTLPkvO
-         NjgDEMzgvFZ94l2i0rFPBEpW/9fF4VJXNRGAO+o1/0OOeey5Dm3doNUvNnNyeFd23nPl
-         WvlTl7DfEu55N4FgRX98AbzT4piZuMz6qutOjqqAh0v9OIQgtDey0vr8/XFWXfqXgQFd
-         UJxA==
-X-Gm-Message-State: AOAM531r0xUuJo/q+i6miwH7/pYVl8xDISBoJfs7G7EhAVxTUr/HrC/i
-        11BxWaQmCXTjX8eCUnokmTLFTg==
-X-Google-Smtp-Source: ABdhPJzKwyvDkL4Jt5SJPcSZcH57a/q231m6NrkQ5Nit7QmvSubLzm5C46IIfYmddPJNx1JfLUlqbA==
-X-Received: by 2002:a17:902:d5d7:b0:156:1968:8b2f with SMTP id g23-20020a170902d5d700b0015619688b2fmr15132620plh.97.1649355107125;
-        Thu, 07 Apr 2022 11:11:47 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s22-20020a056a00179600b004fb28a97abdsm26057745pfg.12.2022.04.07.11.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 11:11:46 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 18:11:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 089/104] KVM: TDX: Add a placeholder for handler
- of TDX hypercalls (TDG.VP.VMCALL)
-Message-ID: <Yk8pX8jweGu745Uj@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b84fcd9927e49716de913b0fe910018788aaba46.1646422845.git.isaku.yamahata@intel.com>
- <3042130fce467c30f07e58581da966fc405a4c6c.camel@intel.com>
- <23189be4-4410-d47e-820c-a3645d5b9e6d@redhat.com>
- <Yk73ta7nwuI1NnlC@google.com>
- <6f1169f1-6205-c4d3-1ab0-2e11808f9b10@redhat.com>
+        Thu, 7 Apr 2022 14:14:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6BB82128EF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 11:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649355143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=YuAxLAgmvKMBQBwK85qk9slVwH48ebauOcjJTTF6T00=;
+        b=c5N5i7Uz7NWztcsOG4GwNvRpfr1hT7FA0Ugwk41r+8zCaW11oCjxDSNqAJEsOHoHndJqDZ
+        i6nRbE921YZhdMtdGVYuSfmc/Nmyqo2JTib+6Do9cPnbPpPgV9dj0+6LEvYSr447zGIqsc
+        NJZN56OX3UEfUq8QAUqCzMt5CmvW9fc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-MBXjcZLcNGeg6b9Rrjdtzg-1; Thu, 07 Apr 2022 14:12:19 -0400
+X-MC-Unique: MBXjcZLcNGeg6b9Rrjdtzg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0088B3C01DB2;
+        Thu,  7 Apr 2022 18:12:19 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-51.bos.redhat.com [10.18.17.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BF009C27E86;
+        Thu,  7 Apr 2022 18:12:18 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: [PATCH] sched/headers: fix redundant include of autogroup.h
+Date:   Thu,  7 Apr 2022 14:12:17 -0400
+Message-Id: <20220407181217.20487-1-pauld@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f1169f1-6205-c4d3-1ab0-2e11808f9b10@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Paolo Bonzini wrote:
-> On 4/7/22 16:39, Sean Christopherson wrote:
-> > On Thu, Apr 07, 2022, Paolo Bonzini wrote:
-> > > On 4/7/22 06:15, Kai Huang wrote:
-> > > > > +static int handle_tdvmcall(struct kvm_vcpu *vcpu)
-> > > > > +{
-> > > > > +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> > > > > +
-> > > > > +	if (unlikely(tdx->tdvmcall.xmm_mask))
-> > > > > +		goto unsupported;
-> > > > Put a comment explaining this logic?
-> > > > 
-> > > 
-> > > This only seems to be necessary for Hyper-V hypercalls, which however are
-> > > not supported by this series in TDX guests (because the kvm_hv_hypercall
-> > > still calls kvm_*_read, likewise for Xen).
-> > > 
-> > > So for now this conditional can be dropped.
-> > 
-> > I'd prefer to keep the sanity check, it's a cheap and easy way to detect a clear
-> > cut guest bug.
-> 
-> I don't think it's necessarily a guest bug, just silly but valid behavior.
+In kernel/sched/core.c there are two #include "autogroup.h" lines
+in a row. Remove one.
 
-It's a bug from a security perspective given that letting the host unnecessarily
-manipulate register state is an exploit waiting to happen.
+Fixes: e66f6481a8c7 ("Reorganize, clean up and optimize kernel/sched/core.c dependencies")
+Signed-off-by: Phil Auld <pauld@redhat.com>
+---
+ kernel/sched/core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Though for KVM to reject the TDVMCALLs, the GHCI should really be updated to state
-that exposing more state than is required _may_ be considered invalid ("may" so
-that KVM isn't required to check the mask on every exit, which IMO is beyond tedious).
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d575b4914925..45447fa386e4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -80,8 +80,6 @@
+ 
+ #include "sched.h"
+ #include "stats.h"
+-#include "autogroup.h"
+-
+ #include "autogroup.h"
+ #include "pelt.h"
+ #include "smp.h"
+-- 
+2.18.0
+

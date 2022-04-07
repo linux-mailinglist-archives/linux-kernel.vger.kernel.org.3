@@ -2,136 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691B64F76B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AAD4F76BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 09:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238423AbiDGHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 03:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S239873AbiDGHEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 03:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbiDGHEK (ORCPT
+        with ESMTP id S232479AbiDGHEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:04:10 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4591EF9DB;
-        Thu,  7 Apr 2022 00:02:09 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id c42so5290241edf.3;
-        Thu, 07 Apr 2022 00:02:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=46G4DElr2lTCJKQvU2NBw5+Ku6Z9RIMMPeVF6jkEn4U=;
-        b=O8v6DuJ263WlV1eGdk/1DSkiR8EoXqVEWtmXFaX/ODGTAScxC8MPLn6yFO9u2up9JG
-         PzozbZSyxn7s5jGRHKIsSko1ySx8uIKmlqwonX37Jjn1zYaBjdJAen6OyS+BwolkUPvL
-         kXzz0k6slYzccH59O/iHsGAUH8d8F97fK1EqeZRDO/ZeWJFijv4hGhhFzvf2QIdYa6wC
-         Wl1UCOGIIKw3SGlgsy/BK2eScAa6okEZ2BRCfpGFxeaSQsAzhS3fNVFQxPKfJL+LukgS
-         s2/ODsQnbPAH7PwErJMwh3KF1T1blebX0IBjlysPo/QCZGkhCfiVOfPKwSK78Fd1023L
-         rzfQ==
-X-Gm-Message-State: AOAM530SpzQT3aatvWZcWbiBh8KknO2B7rDWElAuuFAxQsA934PzeFtI
-        DKZxJKy5LBn8gUmP1eqJD81KTGwrIUt5eg==
-X-Google-Smtp-Source: ABdhPJyVCanP2uW7lJxkIPHF3GlJ1OHZfNBFV6sC53moBL0MR5YRphUv/uvWzQu3TDqz1ql0BUTMLw==
-X-Received: by 2002:a05:6402:5243:b0:419:52a1:a743 with SMTP id t3-20020a056402524300b0041952a1a743mr12778753edd.269.1649314927858;
-        Thu, 07 Apr 2022 00:02:07 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50da83000000b0041cdd6e92b1sm3870276edj.27.2022.04.07.00.02.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 00:02:07 -0700 (PDT)
-Message-ID: <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
-Date:   Thu, 7 Apr 2022 09:02:05 +0200
+        Thu, 7 Apr 2022 03:04:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456A22835D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 00:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649314955; x=1680850955;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M+V40WE+kYDuiNwugfWzf0qQ86G/RlSPWEGv/TCbofk=;
+  b=TMLCYshXlZNe8g0PN0Dj7kYcsGaNJKLxzZtv1Br4/heTyYUR3ubm1Hac
+   251wzKW7hf1eVGML763LW6qwSLUMo5yRZPZI5bx3cLri8KbRRwDOd3uSh
+   BrIsSYv8UmU+eqdAlQvZbGf0YhnktRJamOMU3+M+my+V2ugQYCVW13iDN
+   BmLavCb6f/qr6mToFO+Pl/6AsBAYmjFy+m03ElB6K2EQW6x+KCb1iI9yf
+   QF4+PtKnlMTTTokHkeSf3M379FM7H2jPiU6NwRXOoTr3i/yd+LhhQKZtj
+   tHISDHiUWjI23Ixlf0SrVImsWUnNlYvxJHbFj9vZonu/tdPABAXTHsvSI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="347687728"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="347687728"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:02:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="549894270"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 00:02:32 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncMA3-0005AU-M1;
+        Thu, 07 Apr 2022 07:02:31 +0000
+Date:   Thu, 7 Apr 2022 15:02:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused
+ variable 'ksz9477_dt_ids'
+Message-ID: <202204071418.9ByMEtlP-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 01/11] drivers: tty: serial: Fix deadlock in
- sa1100_set_termios()
-Content-Language: en-US
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
-        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        linux-xtensa@linux-xtensa.org, linux-rdma@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        Russell King - ARM Linux <linux@armlinux.org.uk>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 04. 22, 8:33, Duoming Zhou wrote:
-> There is a deadlock in sa1100_set_termios(), which is shown
-> below:
-> 
->     (Thread 1)              |      (Thread 2)
->                             | sa1100_enable_ms()
-> sa1100_set_termios()       |  mod_timer()
->   spin_lock_irqsave() //(1) |  (wait a time)
->   ...                       | sa1100_timeout()
->   del_timer_sync()          |  spin_lock_irqsave() //(2)
->   (wait timer to stop)      |  ...
-> 
-> We hold sport->port.lock in position (1) of thread 1 and
-> use del_timer_sync() to wait timer to stop, but timer handler
-> also need sport->port.lock in position (2) of thread 2. As a result,
-> sa1100_set_termios() will block forever.
-> 
-> This patch extracts del_timer_sync() from the protection of
-> spin_lock_irqsave(), which could let timer handler to obtain
-> the needed lock.
-> 
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->   drivers/tty/serial/sa1100.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-> index 5fe6cccfc1a..3a5f12ced0b 100644
-> --- a/drivers/tty/serial/sa1100.c
-> +++ b/drivers/tty/serial/sa1100.c
-> @@ -476,7 +476,9 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
->   				UTSR1_TO_SM(UTSR1_ROR);
->   	}
->   
-> +	spin_unlock_irqrestore(&sport->port.lock, flags);
+Hi Alexander,
 
-Unlocking the lock at this point doesn't look safe at all. Maybe moving 
-the timer deletion before the lock? There is no current maintainer to 
-ask. Most of the driver originates from rmk. Ccing him just in case.
+First bad commit (maybe != root cause):
 
-FWIW the lock was moved by this commit around linux 2.5.55 (from 
-full-history-linux [1])
-commit f38aef3e62c26a33ea360a86fde9b27e183a3748
-Author: Russell King <rmk@flint.arm.linux.org.uk>
-Date:   Fri Jan 3 15:42:09 2003 +0000
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   1 year, 1 month ago
+config: s390-randconfig-c005-20220407 (https://download.01.org/0day-ci/archive/20220407/202204071418.9ByMEtlP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
 
-     [SERIAL] Convert change_speed() to settermios()
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1] 
-https://archive.org/download/git-history-of-linux/full-history-linux.git.tar
+All warnings (new ones prefixed by >>):
 
->   	del_timer_sync(&sport->timer);
-> +	spin_lock_irqsave(&sport->port.lock, flags);
->   
->   	/*
->   	 * Update the per-port timeout.
+   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id ksz9477_dt_ids[] = {
+                                    ^
+   21 warnings generated.
 
-thanks,
+
+vim +/ksz9477_dt_ids +86 drivers/net/dsa/microchip/ksz9477_spi.c
+
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  85  
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20 @86  static const struct of_device_id ksz9477_dt_ids[] = {
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  87  	{ .compatible = "microchip,ksz9477" },
+45316818371d1f drivers/net/dsa/microchip/ksz_spi.c     Lad, Prabhakar     2018-08-15  88  	{ .compatible = "microchip,ksz9897" },
+8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  89  	{ .compatible = "microchip,ksz9893" },
+8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  90  	{ .compatible = "microchip,ksz9563" },
+d9033ae95cf445 drivers/net/dsa/microchip/ksz9477_spi.c Razvan Stefanescu  2019-08-30  91  	{ .compatible = "microchip,ksz8563" },
+9b2d9f05cddfee drivers/net/dsa/microchip/ksz9477_spi.c George McCollister 2019-09-10  92  	{ .compatible = "microchip,ksz9567" },
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  93  	{},
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  94  };
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  95  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  96  
+
+:::::: The code at line 86 was first introduced by commit
+:::::: c2e866911e2540677c31ee009d8f75cdb4c023aa net: dsa: microchip: break KSZ9477 DSA driver into two files
+
+:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
 -- 
-js
-suse labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

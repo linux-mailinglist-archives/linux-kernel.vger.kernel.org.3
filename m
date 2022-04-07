@@ -2,64 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF904F71A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE954F71A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238764AbiDGBon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S231145AbiDGBoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239009AbiDGBoa (ORCPT
+        with ESMTP id S239107AbiDGBob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:44:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070F212C269;
-        Wed,  6 Apr 2022 18:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649295602; x=1680831602;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=D0WRSzNQWw6rXo4ORoZh1NsPHO0DeyRTI/AM0fyWzNQ=;
-  b=cSFkR5jCoZdutjGTwjNNjr7g/UXf7lTV0gz7sO33jC1a9xqyo2ItpHdi
-   BASfeHjj3z9Gbh8XFCP7Vnyf0YPTZf9zNPx0ltSuTlP9sx3WxdwrRfRUu
-   Oe1OH5k9UU6iaTsMHp3XfeO6pVkXLx0qGskKE0/Hnr0CyZXzJPuyhnHbw
-   wisjk+QS0lFz0zOfDbk5wWb38lNpr5QqfktA60JLPOTbYc4ku2HpG7UD0
-   2vz52HNP3meG6+jbTQm1ogpBRFdJIUbWTlcer1AcGElwC69SGUyaTHS3Q
-   IHGSnooDxCSqAZAGJUYNMT9N3oGFa667YyYje6Yu4PKbwO3r2KcA0j3lO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248725933"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="248725933"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:40:01 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="570829283"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.31.165]) ([10.255.31.165])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:39:59 -0700
-Message-ID: <69656438-8b9a-000b-0702-02dc480639f9@linux.intel.com>
-Date:   Thu, 7 Apr 2022 09:39:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] perf stat: add rusage utime and stime events
+        Wed, 6 Apr 2022 21:44:31 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EB1E9CB3;
+        Wed,  6 Apr 2022 18:40:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iiglgNT7j7aRTiPqkEZ9tJ8rPBJUEJFgMFfAOjwL/R/KFHA4yhqSNM+RueTkyBddW0GZj2kNs2ZrLhGPOvsLDhJYWmfLWBElM0LH6mwUojLSW+fd9NvmhcXtMBX9a4FT9iNgb4gdhYrx/d7yBLtk2OxbKj/8rzLm3qiE5SQ4d2OlVe7vp0ihFrg+ZqJ6dUmj4quhZ237GvzAzIov6a0NQ/9Zq0S3/kqL04p8M5wx6ftkZEeB2E/E56hYRAAgFtpta33tegHoaVb/inb/3iIZgOlw1NIgzjQikEicA88EZ2YKCQ5JguGgXL96yfgQYtqKOd3+99BR6eYz5QOXjgUmgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UkMLMyR1jltJdA8lEbIf8SlcEo+FnDGxjqoZxM7breA=;
+ b=V222wQ5fqRQen4MD/f/QibR/O6MuPliUW/BDFCnWP1EUeUIMdgNZ5q6eGh//+zQHajR1W3deQ3CxFQohOfLrCzq3sfDPRKmeI5PIfgUVsekSnT3fzukUAHHYDQf5rNc8pu/sbG+nS+kKu0VHO+xDCI+yw9b3yKpUvKRwcTvvZvxmCInoZb6eR0/Za4qcSql5CnDgoZswj3tCcl/uQYsSNyXuJj/YLZQMTrgOVQzgwGE9mPwMISjAk8QNcVFzvGPyYyg+cX0FbKxvsgLHIxedB8cdDR3CuGbV4vbFeut1RNfkKvpBGNEOHQzbgMDFQ/3XoS1mnAxZPPebBkM6XF67YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UkMLMyR1jltJdA8lEbIf8SlcEo+FnDGxjqoZxM7breA=;
+ b=N5A/CAgVVfU5Gvymv3gYcnKibAoqiyMsZ57BsoETp1q/TPN/u2OmsDPsM5z4Bc01gCaj8MYz3A3LaFjPyMKuQINkIT6i3vevCaPIp9CoRZv+mNprJdsPjXYcOWgFt/M2FLy9OhHqhrLb4VKVHNjzysn7yi3Sf3ovd0NS7ROXZAtibnOuBMNv/eOTiyyZqlPWN53Rdxym92qocxypFNeT+i1EMPCatqhrwjwwsQeHJUTO2qaBqBLjHqsiM7iG0SLxdzqW0GKShsozI4YZAANTlaV/z+88u32UtkbM1Ts4uMcRJozcuNY9dDmXnbokigxFNCTmzM7ro/u8c6PgJNysyw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by DS7PR12MB5717.namprd12.prod.outlook.com (2603:10b6:8:70::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Thu, 7 Apr
+ 2022 01:40:26 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c%7]) with mapi id 15.20.5144.021; Thu, 7 Apr 2022
+ 01:40:26 +0000
+Message-ID: <35e1a5da-a35a-cbaa-f70b-44c2f98c63ac@nvidia.com>
+Date:   Wed, 6 Apr 2022 18:40:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 04/11] dt-bindings: Add HTE bindings
 Content-Language: en-US
-To:     Florian Fischer <florian.fischer@muhq.space>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Florian Schmaus <flow@cs.fau.de>
-References: <YkybjsCKyWkDZGX+@kernel.org>
- <20220406072839.107519-1-florian.fischer@muhq.space>
- <20220406072839.107519-3-florian.fischer@muhq.space>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220406072839.107519-3-florian.fischer@muhq.space>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rob Herring <robh@kernel.org>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        smangipudi@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        warthog618@gmail.com, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220329054521.14420-1-dipenp@nvidia.com>
+ <20220329054521.14420-5-dipenp@nvidia.com>
+ <YkOVgRBtXX0k9zr1@robh.at.kernel.org>
+ <3b0f3430-bc1c-26df-c93f-517ba395d9e3@nvidia.com>
+ <YkRtzJjHQvmYNlK8@robh.at.kernel.org>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <YkRtzJjHQvmYNlK8@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-ClientProxiedBy: BY5PR20CA0026.namprd20.prod.outlook.com
+ (2603:10b6:a03:1f4::39) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56cb9a6e-d3b0-46df-e6c1-08da183796ab
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5717:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR12MB571740B699A77DC0930ADD77AEE69@DS7PR12MB5717.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1SuZU0scXcyNnXQLabe5VzrBb/bJYOCzqa1XP+y3QSdJkyx9F/A5LYLhJuwsQBpPG5cpVBPKadyXtqpq0lKfn7ph3auGaehEYqC0FpqUUIRo8sldsWQpaFoKrK5jldCDenn1zqVJzPcqfakKYl1EjMFZcrGPv9M1/bzeDd2PbxdO4Wh+53khMqdUTxpv94X4Fcd6F5OpvOsvQNiRi+Ms0fJYOQ6yOwbFXtxUURHpBFd4Tt/ZchdzyIAMa+FUBtzp1WhzVuZTGXMIlssuelhi1vnrpYZwaBwYE26RC3LLYJmSYjvQ6im9lZESrvP7NNOSknOmFIXa6jXE7fDShxjUwOWsVJ9j4oBltmTxg6n2aj3tHimX7yitCaVHd4QoxYaNylpS5FgUKwyPx4UL144AHBZOGduqM6RuEf586amPIF5XXD9ZQtMMXSny0KqbtNFWwP/2jOPwozB3aV4+utBop6RYGNuxzS3UWaGRUYENfQmYSmoAIchIb6yJNpWvVJG12icOWwI/+4JhSATl19A53trh7XW7zJbtAFdbDvAMfmU2u6o3vGzM4sK6SVrm5uGKDzhlV/1RL68Yr69Z9bX7jaoO6lhTkDv1sQkVb2foeHn/qZpY7Idaoijl8sBuUs0bW1+VTCl+xJ1zu9Ge9Zu3DSd1L41kZ10cZE4yX85HDVzO/jepUMrURkl0fuEfN5aZgUtz5qa+L+cjgKUj2e5nUyZHD6AYYfhzUJ9O4JnSdDpQvhMY+oA/2827ad4QAn+ID7c7bs5YbjrCs0HmCCoHqiW3EHDJPx7dXNC8cnbTdtu/Vxl3EqtInTMPagXlClEhj82onF68ud2qg+aDTuS82ZAlWuhMS+nMl//eiop0K21QUQEvUtyiQj8hqXg3fPeL
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(45080400002)(6916009)(2616005)(6666004)(86362001)(31696002)(38100700002)(26005)(31686004)(36756003)(186003)(966005)(2906002)(6486002)(508600001)(5660300002)(4326008)(53546011)(8676002)(66556008)(66476007)(6512007)(83380400001)(8936002)(66946007)(7416002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WGk1QnJ5bjNWWWd6OXQ3eitYWUo4MjFMRkREenFsZHlndnhwT3ArL25rK3Q5?=
+ =?utf-8?B?eGtzRWJjdGs3Vno5TURLaURUY1ZhTTdkV0YyYXBiVDl5S1ZWOGcrY3lySVdG?=
+ =?utf-8?B?ME1OMFV0emJkRXVUbEQvRGtDM0t3LzlxTXNOaVNUUU5vNTEyV1QrZG5PdXhH?=
+ =?utf-8?B?eTdnK0g5d1ZqSUNhMFlsSjd5KzNCTzErMklkUXo4TWRvV1FEb2NNMm14SkVR?=
+ =?utf-8?B?ZGxGeXB0WUF3TE10cnN1V0hKRC9yeFJtcHhwQVNuaU5lL2MzNnNYRnNrbjhZ?=
+ =?utf-8?B?d05oMm1tbFUyUjNuZ0tGWWs5OEllWEtoMEhtbWJxelBDZlF5b3hpd2ZrUGgx?=
+ =?utf-8?B?MzZwb0Z0aHRXM0NzTlg2SC9GeEtiWG5Ua2FlQ2x4bTh6a2owYmQva1JKT0dr?=
+ =?utf-8?B?Yks4Y1BtMnppU216RlVYMWtHUTlGZVh1ZVRvOWNvMHFpb0NXa3RWNlBFUlRh?=
+ =?utf-8?B?OGxLZmUwbEZ2VGhHdnNNOHFhNTVjNU0xVEl4ZHg3NUZOM3I2UE1GSTRhRXIy?=
+ =?utf-8?B?WlRCdzVMN01UR3lHbWZZci9jZkdpL3BaWEtjR3J2U2ltNnBjcDUyZTF6TTFP?=
+ =?utf-8?B?VmVxSldiL04vK3BuS2tQMUw4MnRja2V6bjBhM0NmSG55dG9iTWdTREJ4NTZp?=
+ =?utf-8?B?RnZOaU5HZi9CM3hwSjFRZnhlV0xtNlNOMUV4djFkam5jdGZqVEpRZk9LSmtE?=
+ =?utf-8?B?OFpuTHdWVWZEbHE4NnFNbWdGMVcyNFo2dExKQlZrc0x2OGV6SmFueGlXTE1C?=
+ =?utf-8?B?QnFqRDVObGlmN291Ym42Sk9KczBxOVJML0VjM1R2Z3laYWN6NFRrVWZKSnpR?=
+ =?utf-8?B?MnQxMVVFS2ZTN082dGtmSFZaelZKUWJseVJrY044Umd0SWdqTENRN1BuTDB6?=
+ =?utf-8?B?c2daMW9sRDZxeW5qb05aNXBpd1VXb3hhWWZJd25DYWxkMkVqRjRnOGFvYjhJ?=
+ =?utf-8?B?VzNESjNNWUFoa282MnRGL01WUnN2ekpIbmVGV1A1NlB2QlhKZUNXSjg0czV5?=
+ =?utf-8?B?MFJUZytHdkNsMmZ5Y1IxS1VNQjg1aExYQTAvN2o0UW1hTldybzZUQmdiWlFi?=
+ =?utf-8?B?cDZRbUxYSWFhMnZ5OFBicTVnVTQ4S2tPbmJIS040MjVxRlJBR0JkSjE5TElV?=
+ =?utf-8?B?dCticTVMWTYyU3ZSOUd4OW54Zy85aDErL3AyRnA1eS9DNVF4eHBVM3VSVC9z?=
+ =?utf-8?B?TklSa2dIMVBMNU1GelJlczhOOGRCZ0FrOGVOODgrNDJVTjFUMUhsWG01ODVi?=
+ =?utf-8?B?Ym5TWnBrYWRrVUdDT09iMnA2bW5NQjdhVVkvTDAxcld0R3dnVDZ2MWkzNUVl?=
+ =?utf-8?B?VU1MSVRBR1dlYTg2ZC9sNlRmODBvc0VtdnlkWGJpcWhRQkNKZndmVHcyRWJy?=
+ =?utf-8?B?N3UrME0rQzJoTU5YNnZVZjJIK0tqanFJaHZxamtGZ3lJeHNtT0tGMmUwS3BV?=
+ =?utf-8?B?bFhIT0VNMjVEb29QTjBwUGc4TXF3NFozVW96OEZWbVB0ME9kOHhnK1FyQkFO?=
+ =?utf-8?B?RmNoZlM1WllaVnZuTEhYaDZSUG9GY0JXSzMzUXNKQStyODBIRWlNZnFRcTd4?=
+ =?utf-8?B?WGlrcFArQklzUmFMaC9McG5qcUVqNGFaTHN5d3ZRaGhYWkhNV0N4U1VNRzZh?=
+ =?utf-8?B?czU4cGRRTE1td1V1SU1teFlIUzFOK3NacDYvbGJua0x5ZVdyZURxL1FUUWdr?=
+ =?utf-8?B?blU3RTQycFZLUWlFUWFlSUREdHA0RWdkVUtlb3JXaVc2K0lNWHpsQ1pNSGFW?=
+ =?utf-8?B?MVh6OHgzTDJaVm5YcXpnU2JvUmVnYitNZjBRbjRCbmx2bzBGdGx5QVE5bE1C?=
+ =?utf-8?B?K0Uyek1hNHhCbVpzK0FJdzVLTSs0MUJWNXlRQndmZHNVY3Q0WWlaQUY4RmlH?=
+ =?utf-8?B?L0ZtdHkwMTI3ZWFWYWRORFhpaXEvTXI0MVJ3UDZwZjRUa3EwcVRqZ01jVDZy?=
+ =?utf-8?B?Z1l2T2RDKzhLYnVSSDJQQWlValFKa2c1M2t3bklXM1NlOVFqMkRmUFQ4VnNR?=
+ =?utf-8?B?eWdDS0d0c25kZDBQc2MyRm5vYUhvTExPM0piMlEwUXdFSzFMVXM1c3VDRG50?=
+ =?utf-8?B?NDhLZ0VqckEzOFA2aFF6RFZGWWQwRmRIeFNNZ1BLdWRkbWRmeHhVVkQxNisx?=
+ =?utf-8?B?RENPcWdzVlJHbUZQVzJGZGNMZ3MwTW5vdTk0S0dDQ1NkbW1nNThHS00wamQy?=
+ =?utf-8?B?MUFnOFVMOXVYd2pjaExzNTEzWHp4MDFQRVJHSGREKzhqMjJKTloyZzcyTHZU?=
+ =?utf-8?B?S3QrcEpNWDcydUxWRzVPMHo3Y1lEUi9ieWVXaktscVkzWC82ODlLN2JVWHNu?=
+ =?utf-8?B?dGtyakUzUUhoRytYMWJUeEk2aUZsbmxleUU4dGUxRS9tTDI4WnZpUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56cb9a6e-d3b0-46df-e6c1-08da183796ab
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 01:40:25.9419
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UzxybCjJ4Tp/EPkzIij7mTdbZpGlTbfu24fjv16jY/vI8x9FJzik0ktSoxGKKAcgTi83XtTfxt/RqVXblxNV2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5717
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,150 +140,135 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 3/30/22 7:48 AM, Rob Herring wrote:
+> On Tue, Mar 29, 2022 at 05:19:10PM -0700, Dipen Patel wrote:
+>> Hi,
+>>
+>> On 3/29/22 4:25 PM, Rob Herring wrote:
+>>> On Mon, Mar 28, 2022 at 10:45:14PM -0700, Dipen Patel wrote:
+>>>> Introduces HTE devicetree binding details for the HTE subsystem. It
+>>>> includes examples for the consumers, binding details for the providers
+>>>> and specific binding details for the Tegra194 based HTE providers.
+>>>>
+>>>> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+>>>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>>> ---
+>>>> Changes in v2:
+>>>> - Replace hte with hardware-timestamp for property names
+>>>> - Renamed file
+>>>> - Removed example from the common dt binding file.
+>>>>
+>>>> Changes in v3:
+>>>> - Addressed grammatical errors.
+>>>> - Removed double plural from the respective properties.
+>>>> - Added dual license.
+>>>> - Prefixed "nvidia" in nvidia specific properties.
+>>>>
+>>>> Changes in v4:
+>>>> - Corrected make dt_binding_check error.
+>>>>
+>>>> Changes in v5:
+>>>> - Addressed review comments.
+>>>>
+>>>>  .../hte/hardware-timestamps-common.yaml       | 29 +++++++
+>>>>  .../devicetree/bindings/hte/hte-consumer.yaml | 43 ++++++++++
+>>>>  .../bindings/hte/nvidia,tegra194-hte.yaml     | 82 +++++++++++++++++++
+>>>>  3 files changed, 154 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+>>>>  create mode 100644 Documentation/devicetree/bindings/hte/hte-consumer.yaml
+>>>>  create mode 100644 Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..e8a69ceccd56
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+>>>> @@ -0,0 +1,29 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fhte%2Fhardware-timestamps-common.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C0e094f6ae7b642c970f308da125c64d4%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637842485301457320%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=4UcTV375zNF44HeIpQcDV%2Bp3VJXdtjomZYGWWsUJf%2FA%3D&amp;reserved=0
+>>>> +$schema: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C0e094f6ae7b642c970f308da125c64d4%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637842485301457320%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=fGoLuKpVFMNOsh%2BbJ6dLhpky63Y6zQ1oNkiOHDQ%2Bud0%3D&amp;reserved=0
+>>>> +
+>>>> +title: Hardware timestamp providers
+>>>> +
+>>>> +maintainers:
+>>>> +  - Dipen Patel <dipenp@nvidia.com>
+>>>> +
+>>>> +description:
+>>>> +  Some devices/SoCs have hardware time stamping engines which can use hardware
+>>>> +  means to timestamp entity in realtime. The entity could be anything from
+>>>> +  GPIOs, IRQs, Bus and so on. The hardware timestamp engine (HTE) present
+>>>> +  itself as a provider with the bindings described in this document.
+>>>> +
+>>>> +properties:
+>>>> +  $nodename:
+>>>> +    pattern: "^hardware-timestamp(@.*|-[0-9a-f])?$"
+>>>> +
+>>>> +  "#hardware-timestamp-cells":
+>>>> +    description:
+>>>> +      Number of cells in a HTE specifier.
+>>>> +
+>>>> +required:
+>>>> +  - "#hardware-timestamp-cells"
+>>>> +
+>>>> +additionalProperties: true
+>>>> diff --git a/Documentation/devicetree/bindings/hte/hte-consumer.yaml b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..be69f63aa8c3
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+>>>> @@ -0,0 +1,43 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fhte%2Fhte-consumer.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C0e094f6ae7b642c970f308da125c64d4%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637842485301457320%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=E3fspCvDDE5%2F6opK%2FdtpaY5%2FscsPURvDV7O7%2B%2FdbtEQ%3D&amp;reserved=0
+>>>> +$schema: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C0e094f6ae7b642c970f308da125c64d4%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637842485301457320%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=fGoLuKpVFMNOsh%2BbJ6dLhpky63Y6zQ1oNkiOHDQ%2Bud0%3D&amp;reserved=0
+>>>> +
+>>>> +title: HTE Consumer Device Tree Bindings
+>>>> +
+>>>> +maintainers:
+>>>> +  - Dipen Patel <dipenp@nvidia.com>
+>>>> +
+>>>> +select: true
+>>>> +
+>>>> +description:
+>>>> +  HTE properties should be named "hardware-timestamps". The exact meaning of
+>>>> +  each hardware-timestamps property must be documented in the device tree
+>>> The meaning of the cells needs to be documented. You are documenting the 
+>>> meaning of 'hardware-timestamps' here.
+>> This is for the consumer side, meaning of the cells will be documented in the provider
+>>
+>> binding document.
+> Right cells are opaque to the consumer. What bothered me is 
+> hardware-timestamps already has an 'exact meaning'. You need to me more 
+> exact as to what should be documented. We don't want what 
+> 'hardware-timestamps' is described again. What needs to be documented is 
+> how many entries, what each entry is (for the consumer), and the order.
+>
+>
+>>>> +  binding for each device. An optional property "hardware-timestamp-names" may
+>>>> +  contain a list of strings to label each of the HTE devices listed in the
+>>>> +  "hardware-timestamps" property.
+>>>> +
+>>>> +properties:
+>>>> +  hardware-timestamps:
+>>> I'm wondering if we should just drop 'hardware'. What other kind of 
+>>> timestamps are we going to have in DT? software-timestamps? No.
+>> I believe this makes it explicit and leaves no room for second guess. If
+>>
+>> only timestamps, ambiguity then will be which timestamp it is i.e. through hardware
+>>
+>> engine, pps, ptp and so on...
+> Those aren't hardware timestamps, too? If those needed a similar 
+> binding, couldn't they use this binding? PTP at least is sometimes an 
+> separate, external chip IIRC.
 
-On 4/6/2022 3:28 PM, Florian Fischer wrote:
-> It bothered me that during benchmarking using perf stat (to collect
-> for example CPU cache events) I could not simultaneously retrieve the
-> times spend in user or kernel mode in a machine readable format.
-> 
-> When running perf stat the output for humans contains the times
-> reported by rusage and wait4.
-> 
-> $ perf stat -e cache-misses:u -- true
-> 
->   Performance counter stats for 'true':
-> 
->               4,206      cache-misses:u
-> 
->         0.001113619 seconds time elapsed
-> 
->         0.001175000 seconds user
->         0.000000000 seconds sys
-> 
-> But perf stat's machine-readable format does not provide this information.
-> 
-> $ perf stat -x, -e cache-misses:u -- true
-> 4282,,cache-misses:u,492859,100.00,,
-> 
-> I found no way to retrieve this information using the available events
-> while using machine-readable output.
-> 
-> This patch adds two new tool internal events 'rusage_user_time'
-> and 'rusage_system_time' as well as their aliases 'ru_utime' and
-> 'ru_stime', similarly to the already present 'duration_time' event.
-> 
-> Both events use the already collected rusage information obtained by wait4
-> and tracked in the global ru_stats.
-> 
-> Examples presenting cache-misses and rusage information in both human and
-> machine-readable form:
-> 
-> $ ./perf stat -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time .
-> 
->   Performance counter stats for 'grep -q -r duration_time .':
-> 
->          67,422,542 ns   duration_time:u
->              50,517 us   ru_utime:u
->              16,839 us   ru_stime:u
->              30,937      cache-misses:u
+I am fine with this idea of dropping "hardware" prefix, will update the patch.
 
-Duration_time unit is "ns", while "ru_utime" and "ru_stime" unit is 
-"us",  I think they should use the same time unit.
+I believe this will be applicable to all other properties for example hardware-timestamp-cell
 
-> 
->         0.067422542 seconds time elapsed
-> 
->         0.050517000 seconds user
->         0.016839000 seconds sys
-> 
-> $ ./perf stat -x, -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time .
-> 72134524,ns,duration_time:u,72134524,100.00,,
-> 65225,us,ru_utime:u,65225,100.00,,
-> 6865,us,ru_stime:u,6865,100.00,,
-> 38705,,cache-misses:u,71189328,100.00,,
-> 
-> Signed-off-by: Florian Fischer <florian.fischer@muhq.space>
-> ---
->   tools/perf/builtin-stat.c      | 36 ++++++++++++++++++++++++++--------
->   tools/perf/util/evsel.h        |  3 +++
->   tools/perf/util/parse-events.l |  2 ++
->   3 files changed, 33 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 61faffb535f5..c73afc8f6da5 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -342,15 +342,35 @@ static int evsel__write_stat_event(struct evsel *counter, int cpu_map_idx, u32 t
->   static int read_single_counter(struct evsel *counter, int cpu_map_idx,
->   			       int thread, struct timespec *rs)
->   {
-> -	if (counter->tool_event == PERF_TOOL_DURATION_TIME) {
-> -		u64 val = rs->tv_nsec + rs->tv_sec*1000000000ULL;
-> -		struct perf_counts_values *count =
-> -			perf_counts(counter->counts, cpu_map_idx, thread);
-> -		count->ena = count->run = val;
-> -		count->val = val;
-> -		return 0;
-> +	switch(counter->tool_event) {
-> +		case PERF_TOOL_DURATION_TIME: {
-> +			u64 val = rs->tv_nsec + rs->tv_sec*1000000000ULL;
-> +			struct perf_counts_values *count =
-> +				perf_counts(counter->counts, cpu_map_idx, thread);
-> +			count->ena = count->run = val;
-> +			count->val = val;
-> +			return 0;
-> +		}
-> +		case PERF_TOOL_RU_UTIME:
-> +		case PERF_TOOL_RU_STIME: {
-> +			u64 val;
-> +			struct perf_counts_values *count =
-> +				perf_counts(counter->counts, cpu_map_idx, thread);
-> +			if (counter->tool_event == PERF_TOOL_RU_UTIME)
-> +				val = ru_stats.ru_utime_usec_stat.mean;
-> +			else
-> +				val = ru_stats.ru_stime_usec_stat.mean;
-> +			count->ena = count->run = val;
-> +			count->val = val;
-> +			return 0;
-> +		}
-> +		default:
-> +		case PERF_TOOL_NONE:
-> +			return evsel__read_counter(counter, cpu_map_idx, thread);
-> +		case PERF_TOOL_LAST:
-> +			/* this case should never be reached */
-> +			return 0;
->   	}
-> -	return evsel__read_counter(counter, cpu_map_idx, thread);
->   }
->   
->   /*
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 041b42d33bf5..e89b1224ae61 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -30,6 +30,9 @@ typedef int (evsel__sb_cb_t)(union perf_event *event, void *data);
->   enum perf_tool_event {
->   	PERF_TOOL_NONE		= 0,
->   	PERF_TOOL_DURATION_TIME = 1,
-> +	PERF_TOOL_RU_UTIME = 2,
-> +	PERF_TOOL_RU_STIME = 3,
-> +	PERF_TOOL_LAST
->   };
->   
->   /** struct evsel - event selector
-> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-> index 5b6e4b5249cf..3c7227b8035c 100644
-> --- a/tools/perf/util/parse-events.l
-> +++ b/tools/perf/util/parse-events.l
-> @@ -353,6 +353,8 @@ alignment-faults				{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_AL
->   emulation-faults				{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_EMULATION_FAULTS); }
->   dummy						{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_DUMMY); }
->   duration_time					{ return tool(yyscanner, PERF_TOOL_DURATION_TIME); }
-> +rusage_user_time|ru_utime	{ return tool(yyscanner, PERF_TOOL_RU_UTIME); }
-> +rusage_system_time|ru_stime	{ return tool(yyscanner, PERF_TOOL_RU_STIME); }
->   bpf-output					{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_BPF_OUTPUT); }
->   cgroup-switches					{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_CGROUP_SWITCHES); }
->   
+as well, right?
 
--- 
-Zhengjun Xing
+>
+> Rob

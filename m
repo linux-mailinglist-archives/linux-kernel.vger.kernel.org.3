@@ -2,156 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6126E4F7EC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21314F7EC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238732AbiDGMOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S239489AbiDGMPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiDGMOn (ORCPT
+        with ESMTP id S238848AbiDGMPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:14:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 787C61EC624
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649333562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=He8h+g9gcpriqclLdlbV5LzBn0WlLmTvUFHHwXaoICE=;
-        b=GxmHoz3mvqVkuOjk50fkuE1bi4h4MZKOWFLKa8nWsAp4YZeFb+45Jq3XxZW8Ch4/bqxTCH
-        NiSizmijzHDzMGDBd2VjGmFse/ElX8XZmscI9WhNXKHw3EiJQhL/mgoijBx40taApubI6I
-        /svwLnGe2oH6OIOks9qZNBG3rOYe4mg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-fvGS0D6-O8moFqeOc5V4ag-1; Thu, 07 Apr 2022 08:12:41 -0400
-X-MC-Unique: fvGS0D6-O8moFqeOc5V4ag-1
-Received: by mail-wm1-f69.google.com with SMTP id n17-20020a05600c501100b0038e731cf5e1so2896590wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:12:40 -0700 (PDT)
+        Thu, 7 Apr 2022 08:15:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFFE23CC7A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 05:13:20 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id n6so10339159ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 05:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4RwpkSUqDB0l6cKt7wHht/Va+r9VAPBwORUmjbKGxuI=;
+        b=IOjkHAnh1pWx6/i2VRl8VGFDhbScmVYeMIT7FQPJoRzzulxXx7xtZflL8hK5uQ+WGG
+         hwmFpuXCO3RlaeFY4Sp2HsozUwO2zXvPz7ojFWxUkDTyt2qAh3bh0bplhRsb751HrrhS
+         qXUM9D8p6nSO/JESUbR8jY5csiffSvzwvnSSCo9HFJMKGq9NK9p1m0cuA2mTggZQUn/k
+         ki/Q6Y+PBOYR6Y7gmzwn0A0MbhNE7pHbG/08lRfNlD2Mqbq5TXsXiE6rqdslZtOvTM++
+         sNB0PxwFcjgKkF7U58yM9jxghqBDMcXUDwMAmC0/U/5pQSyZps/oGxn7W1kRsKAp2joz
+         YX/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=He8h+g9gcpriqclLdlbV5LzBn0WlLmTvUFHHwXaoICE=;
-        b=5vbh5B/9U6ts6cEvrKqjmojVv0aNUR1PaJDzpMQvapE5/0Td4Wp4g5ejDx02CM3GW0
-         uwcUktR2dRGCRMbTeDia0y4+HoXmvu16KmG/C+eURmI/n5E1aYjGFAQ4prbpSriy32Bn
-         hW4vJSTxvNrl+efQEX5pT4jnpCwscAALcZ/1yRqCwoP8zItRKwkJJKXFPkl3ESEe3g2L
-         yMBb1CcogTaITzztyEkZ6IWP1q5kespdPUnvxWu3aI5rHgmwanIRcvmVhHNL+G9Ak5L6
-         aOCgSoYgZzn86U/8B0VyX//33CkeerQJZr2Aun2sJ6Jd+nZY/w6rn/JQti/ZyAjia8Sm
-         CmnA==
-X-Gm-Message-State: AOAM530xIUwWfHMBpsQl4YdmgaudBpJX7RsJFOyXIbYw283pD7seUTA4
-        1LeKz85FAJ3Y5lsLHk5dD9as31RaWi0F1WCoXmBAZ9ZFlJniYoT4PJEGKNfFmuoy7iA2fAQl9Q7
-        rArobu0AVTBQjvOl500ZPlD+y
-X-Received: by 2002:a05:600c:4f08:b0:38c:93fd:570f with SMTP id l8-20020a05600c4f0800b0038c93fd570fmr12048356wmq.136.1649333559851;
-        Thu, 07 Apr 2022 05:12:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx8VD2jmyYCLdT1LS37dFQHExBQz5m/CcSM2lhqIzro2UScARspuOQOmGyPtwzTU/phPmvvNw==
-X-Received: by 2002:a05:600c:4f08:b0:38c:93fd:570f with SMTP id l8-20020a05600c4f0800b0038c93fd570fmr12048327wmq.136.1649333559539;
-        Thu, 07 Apr 2022 05:12:39 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
-        by smtp.gmail.com with ESMTPSA id b8-20020a05600c4e0800b0038c6c37efc3sm7370765wmq.12.2022.04.07.05.12.38
+        bh=4RwpkSUqDB0l6cKt7wHht/Va+r9VAPBwORUmjbKGxuI=;
+        b=SGJ3JHhW6D7CskSWF750teRdsesg24dPQdOpXjRf3Ccmv4qpjC4QKsUPG7fWp/YXIO
+         dL0eOI/31qDuP6RXJTKOUqA+OUoByq30gMAl6lSSULzbVbIJ2E7qQJX6KtnkArGBVwJ8
+         /jJELRIPwnqrnB0yKZ5uyFikucMSWTmzF+Zg2jCCqR7WUYn7IV37D+XJyrXLgHo0hnix
+         E4eVqxzRr5wV52y9cFtKUG6FxssN3cmauHzx9VX4G0ti++9Epaf+Idu52I58b7X3dbz6
+         1Lnz2JHmcmVeUvc14+E/aIvKg+CUqZxEZEvthFtnjWDs5oDVAf9hGCCQY+3o18pgXB+k
+         Og6w==
+X-Gm-Message-State: AOAM530f9tklY/HvuV1M2dwQedILlEhotSEVR+SYW9tlckYpCYezSLSh
+        BD3XXYRpQcnI+vLunJ03bFrALg==
+X-Google-Smtp-Source: ABdhPJxEFc3pwxCcjRWWqquRyplf/LckBfH88Uh/n2MY+jXL0K8uHf+M5WVvVNwnNRb8aMHBq4N6Tw==
+X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr13597295ejy.463.1649333594458;
+        Thu, 07 Apr 2022 05:13:14 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id d12-20020a50cf4c000000b0041cc12dc1f3sm6484690edk.71.2022.04.07.05.13.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 05:12:38 -0700 (PDT)
-Message-ID: <ca22625e-b72c-059a-9242-f10b291be4fe@redhat.com>
-Date:   Thu, 7 Apr 2022 14:12:38 +0200
+        Thu, 07 Apr 2022 05:13:13 -0700 (PDT)
+Message-ID: <1369ae65-5455-f217-c770-570e2472ba47@linaro.org>
+Date:   Thu, 7 Apr 2022 14:13:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] ARM: dts: lan966x-pcb8291: Add QSPI0 and SPI NOR
+ memory nodes
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>, Mel Gorman <mgorman@suse.de>
-References: <20220407093221.1090-1-jgross@suse.com>
- <Yk6+QBacbb6oI8lW@dhcp22.suse.cz>
- <f08c1493-9238-0009-56b4-dc0ab3571b33@suse.com>
- <Yk7F2KzRrhLjYw4Z@dhcp22.suse.cz>
- <5e97a7f5-1fc9-d0b4-006e-6894d5653c06@suse.com>
- <Yk7NqTlw7lmFzpKb@dhcp22.suse.cz>
- <770d8283-4315-3d83-4f8b-723308fffe5c@redhat.com>
- <Yk7TMKBAkuSVZRLT@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Yk7TMKBAkuSVZRLT@dhcp22.suse.cz>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        arnd@arndb.de, robh+dt@kernel.org, krzk+dt@kernel.org,
+        alexandre.belloni@bootlin.com, olof@lixom.net, soc@kernel.org,
+        nicolas.ferre@microchip.com
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        tudor.ambarus@microchip.com, Manohar.Puri@microchip.com
+References: <20220407105835.10962-1-kavyasree.kotagiri@microchip.com>
+ <20220407105835.10962-3-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407105835.10962-3-kavyasree.kotagiri@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.04.22 14:04, Michal Hocko wrote:
-> On Thu 07-04-22 13:58:44, David Hildenbrand wrote:
-> [...]
->>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>> index 3589febc6d31..130a2feceddc 100644
->>> --- a/mm/page_alloc.c
->>> +++ b/mm/page_alloc.c
->>> @@ -6112,10 +6112,8 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
->>>  	do {
->>>  		zone_type--;
->>>  		zone = pgdat->node_zones + zone_type;
->>> -		if (managed_zone(zone)) {
->>> -			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
->>> -			check_highest_zone(zone_type);
->>> -		}
->>> +		zoneref_set_zone(zone, &zonerefs[nr_zones++]);
->>> +		check_highest_zone(zone_type);
->>>  	} while (zone_type);
->>>  
->>>  	return nr_zones;
->>
->> I don't think having !populated zones in the zonelist is a particularly
->> good idea. Populated vs !populated changes only during page
->> onlininge/offlining.
->>
->> If I'm not wrong, with your patch we'd even include ZONE_DEVICE here ...
+On 07/04/2022 12:58, Kavyasree Kotagiri wrote:
+> Enable QSPI0 controller and sst26vf016b SPI-NOR flash present on it.
 > 
-> What kind of problem that would cause? The allocator wouldn't see any
-> pages at all so it would fallback to the next one. Maybe kswapd would
-> need some tweak to have a bail out condition but as mentioned in the
-> thread already. !populated or !managed for that matter are not all that
-> much different from completely depleted zones. The fact that we are
-> making that distinction has led to some bugs and I suspect it makes the
-> code more complex without a very good reason.
-
-I assume performance problems. Assume you have an ordinary system with
-multiple NUMA nodes and no MOVABLE memory. Most nodes will only have
-ZONE_NORMAL. Yet, you'd include ZONE_DMA* and ZONE_MOVABLE that will
-always remain empty to be traversed on each and every allocation
-fallback. Of course, we could measure, but IMHO at least *that* part of
-memory onlining/offlining is not the complicated part :D
-
-Populated vs. !populated is under pretty good control via page
-onlining/offlining. We have to be careful with "managed pages", because
-that's a moving target, especially with memory ballooning. And I assume
-that's the bigger source of bugs.
-
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  arch/arm/boot/dts/lan966x-pcb8291.dts | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
->> I'd vote for going with the simple fix first, which should be good
->> enough AFAIKT.
-> 
-> yes, see the other reply
-> 
+> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> index 3281af90ac6d..99d96d46661d 100644
+> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
+> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> @@ -62,3 +62,18 @@
+>  &watchdog {
+>  	status = "okay";
+>  };
+> +
+> +&qspi0 {
+> +	status = "okay";
+> +
+> +	spi-flash@0 {
 
-I think we were composing almost simultaneously :)
+Just "flash" please (to be generic).
 
--- 
-Thanks,
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0>;
+> +		spi-max-frequency = <20000000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
 
-David / dhildenb
+Why do you need address/size cells here? You don't have any children.
 
+> +		spi-tx-bus-width = <4>;
+> +		spi-rx-bus-width = <4>;
+> +		m25p,fast-read;
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof

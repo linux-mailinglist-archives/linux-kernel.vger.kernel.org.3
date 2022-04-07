@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530FE4F8B00
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2874F8B1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbiDGX0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 19:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S232526AbiDGX3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 19:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiDGX0G (ORCPT
+        with ESMTP id S230329AbiDGX3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 19:26:06 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A713C14B01F;
-        Thu,  7 Apr 2022 16:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649373845; x=1680909845;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=O1b7WIeGUo0TmUs3OQt7Z4FLbzIJnxs4mxV2Cjhvoh0=;
-  b=c/UiCojz08sBfVgqHXN6V9WkkLAxKpcUzYykqc8WMttrwQ6/zeRfbFm6
-   Hos96jsSmJRwS9pURKygrFnectqET6ulqYHn3xM5BX8ms30/s2NTAjZD6
-   95agqFUnjKplfj9eFM/wndMQrX2iZA9q/FT01TXjIkasAhqy2SSbhFD+3
-   g6c4ushPhPMnbW/j3YyuMPgx60Zt+2TRGVZtiW+loyt5/Dh5UZevV98a5
-   wwNbw+R+MKl9f0uUpRWrN8RKHDyE0XqXmtO5TUja5VNgvOO9iHnODq6Zj
-   XpcV/Nw/pqdEkCIzlNyGcPYVOPCVp2BoVIiqE490gr2aqnmcAx3MQAPua
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322152346"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="322152346"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:24:05 -0700
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="524571247"
-Received: from asaini1-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.28.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:24:02 -0700
-Message-ID: <4515f55c1717e963989e3d5e8640636d5ed2f25f.camel@intel.com>
-Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
- struct kvm_mmu_page
-From:   Kai Huang <kai.huang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 08 Apr 2022 11:24:00 +1200
-In-Reply-To: <7dabd2a6-bc48-6ada-f2f1-f9e30370be2f@redhat.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-         <a439dc1542539340e845d177be911c065a4e8d97.camel@intel.com>
-         <ec5ffd8b-acc6-a529-6241-ad96a6cf2f88@redhat.com>
-         <05b1d51b69f14bb794024f13ef4703ad1c888717.camel@intel.com>
-         <7dabd2a6-bc48-6ada-f2f1-f9e30370be2f@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 7 Apr 2022 19:29:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9D1267F9B;
+        Thu,  7 Apr 2022 16:27:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649374017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=16Wm5toPM4kAJCuxIXvu2q58XH/MGF2r50DMfTvAbJ0=;
+        b=zQl8Xb55m/PzcH1z8OBaTXDEGh5P6zp4UoiI3CayAWBXEexzQamzky/2SoF2mHwvaXTJLz
+        6wh0Rd67vsU1mor8dFkySo069KqTF+u7gfGY0Ej2TpzLNifuY7u/ZOSp+WmzB4VQJMMJ0b
+        LrSJqF5LV803fxPHRFr0JPFMqhTfQ79QXJiwny1TG0TSAsonCH3BGhd9I6YiXE5xvfSYKy
+        YzNus3AKevUD9PfwRNlcI49Dt7YUozcXf3J2iKqSt0DU3Gdlwbl2K2zkdKqeLsLzKi/5rg
+        CB+yhcmjN5M5hgj/ve7H8445eGQBR5yiobGMoDVWvRwaEd4GQ2xHOh+AVAwKGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649374017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=16Wm5toPM4kAJCuxIXvu2q58XH/MGF2r50DMfTvAbJ0=;
+        b=HGCCE5bNMMDMKUM8JNgVXr0Khy3LhmuSUKwD0Ngo4ahODDcqfgiO0xtBl5wrGLdava0d9r
+        VV7vpDL8D7NqYuCg==
+To:     Artem Savkov <asavkov@redhat.com>
+Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        netdev@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] timer: add a function to adjust timeouts to be
+ upper bound
+In-Reply-To: <Yk1i3WrcVIICAiF0@samus.usersys.redhat.com>
+References: <YkfzZWs+Nj3hCvnE@sparkplug.usersys.redhat.com>
+ <871qyb35q4.ffs@tglx> <Yk1i3WrcVIICAiF0@samus.usersys.redhat.com>
+Date:   Fri, 08 Apr 2022 01:26:56 +0200
+Message-ID: <8735iolbjz.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 01:03 +0200, Paolo Bonzini wrote:
-> On 4/8/22 00:53, Kai Huang wrote:
-> > > 
-> > Do you mean below reply?
-> > 
-> > "I think use of kvm_gfn_stolen_mask() should be minimized anyway.  I
-> > would rename it to to kvm_{gfn,gpa}_private_mask and not return bool."
-> > 
-> > I also mean we should not use kvm_gfn_stolen_mask().  I don't have opinion on
-> > the new name.  Perhaps kvm_is_protected_vm() is my preference though.
-> 
-> But this is one of the case where it would survive, even with the 
-> changed name.
-> 
-> Paolo
-> 
+On Wed, Apr 06 2022 at 11:52, Artem Savkov wrote:
 
-Perhaps I confused you (sorry about that).  Yes we do need the check here.  I
-just dislike the function name.
+> On Tue, Apr 05, 2022 at 05:33:23PM +0200, Thomas Gleixner wrote:
+>> On Sat, Apr 02 2022 at 08:55, Artem Savkov wrote:
+>> > Is it possible to determine the upper limit of error margin here? My
+>> > assumption is it shouldn't be very big, so maybe it would be enough to
+>> > account for this when adjusting timeout at the edge of a level.
+>> > I know this doesn't sound good but I am running out of ideas here.
+>> 
+>> Let's just take a step back.
+>> 
+>> So we know, that the maximal error margin in the wheel is 12.5%, right?
+>> That means, if you take your relative timeout and subtract 12.5% then
+>> you are in the right ballpark and the earliest expiry will not be before
+>> that point obviously, but it's also guaranteed not to expire later than
+>> the original timeout. Obviously this will converge towards the early
+>> expiry the longer the timeouts are, but it's bound.
+>
+> Ok, I was trying to avoid a "hole" where any timeout < LVL_GRAN(lvl)
+> would be always substantially (LVL_GRAN(lvl) - LVL_GRAN(lvl - 1)) early
+> but looks like this is unavoidable with this approach.
 
--- 
+Right, but where is the problem you are trying to solve? Does it matter
+whether the keepalive timer fires after 28 minutes or after 30 minutes?
+
+Not really. All you are about that it does not fire 2 minutes late. So
+what?
+
+>> Also due to the properties of the wheel, the lag of base::clk will
+>> obviously only affect those levels where lag >= LVL_GRAN(level).
+>
+> Is this true? Won't it be enough for the lag to be just
+> lag >= (LVL_START(lvl) - adjusted_timeout) for the cases when we cross
+> level boundary on adjustment?
+
+The corner case is at the next boundary level. The resulting worst case
+there is one jiffy, which is below noise level :)
+
 Thanks,
--Kai
 
-
+        tglx

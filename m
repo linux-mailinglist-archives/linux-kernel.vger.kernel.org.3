@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A764F8A1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4B94F8962
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiDGU7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 16:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S230232AbiDGVA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiDGU7h (ORCPT
+        with ESMTP id S230211AbiDGVA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 16:59:37 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B14915D146
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:57:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id bx5so6742059pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:57:37 -0700 (PDT)
+        Thu, 7 Apr 2022 17:00:26 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA2C15E88F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 13:58:18 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so7850142edw.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 13:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=CKYV2+BOeygabDWWYM3k9yKXDg5LNdMlEhRMDocH4vM=;
-        b=sNy6P7Z9PPHEij16rq25DMXRwWaR2YxbobbeZTREOTz9H+CGo4KgEu4tsp0tLJ5mJX
-         HOOe7KTzWrfYIe6ijUGgF1mYdtKnNW+rsuwI4s853Bh4FXJhg1GXGaHgLGSqImjp6eSg
-         KH1jSYJqfZeXjkYiRZWh/eqszpyJb4205humllhG91AdZ0uxdIYm745L6u+E75Vclm/k
-         9T81FE3LAb++gmSk0L4l91wcFkuUnAWubkZKwyofZlSqXLuS+ImqfQULAwHKrL73tep/
-         5hf3UwrI2bqmA6qtpgpBJvMSrdVl+hdRoifVaNNnWnecOCzz/C/2dB+ZhLlq9H/uTnBX
-         XtHA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=LtV+LimrEebMzUK1IOhvEXGb2ymNgMZl7qh+Db0K2zNRN9P2+inYAeLmBHYB2w6OkO
+         mn/kik52wDH8tc8FUpvnPbCEntUH62DwQiMG6ydiIqlYKJmkEYvdOUC8WI9fYcl0ysB1
+         H6FwSKAovj274rvZkqlyUAzRkERYk49kh8aZUoMkYXZSgZxVakbuGIBuJ5MwSay6PeWy
+         mzuQZ7aln0oPp2FhclYJyvKN5snzc2HBQQSTWgLAs7rRk1QNqx4VpUvRU2ENIa5w2Yxt
+         4cczopCH7g7pzQE8kYQ/fYdIrqeKWaHCjByr9giggQf34469Y2UAfBvapmZcmSD+hqiH
+         /fjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=CKYV2+BOeygabDWWYM3k9yKXDg5LNdMlEhRMDocH4vM=;
-        b=f/jSKuyVaHHLqU637pFd+eNM9v4b1j+NHfBweVLTOetSJlnokohLfeA+pEyAeZAGlM
-         j/YtllGKNVLe+utApzeqF6SV4rScpiYSBvt7BIc4qFqjFGF8TrLiQyqj9oUjD6IJ9GDm
-         lBtB/vflbojbf6xxYUn+N+FeY1+po7U1/rLHqvxZQqtKSwy7nkdOTZgezymAxUuM/M6b
-         FoCT/ySUlSS2qAjfu0oiSetyj3SBFMr7XnfrQQKjdfXBPMyQZDvjIoKZcVkilBUsT8iY
-         7P1XCVFaAdqWuQ3x8bKk23vhn05qD1YZTjyU1KoOJpNP1H/OT3saxYIQheJ8T0eJ1PWN
-         dDWA==
-X-Gm-Message-State: AOAM531P/l6mgxDEWKfboyvIuE9LDXgAfnprVwPNC+eJnqb9R102NUnp
-        D8bkGfQCHSq4AOX86lPpWGeVdw==
-X-Google-Smtp-Source: ABdhPJwiLuFOp9QQv0Cr0pBDuRj68HPy20U93X0oj9/Qcu8kU7dTRL62dOEwPehpd8r+byA7KS9KQA==
-X-Received: by 2002:a17:90a:b903:b0:1ca:be37:1d41 with SMTP id p3-20020a17090ab90300b001cabe371d41mr18127082pjr.9.1649365056380;
-        Thu, 07 Apr 2022 13:57:36 -0700 (PDT)
-Received: from bsegall-linux.svl.corp.google.com.localhost ([2620:15c:2cd:202:ca7d:71e3:d0a7:79b7])
-        by smtp.gmail.com with ESMTPSA id gb5-20020a17090b060500b001c6d46f7e75sm10218686pjb.30.2022.04.07.13.57.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 13:57:34 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com
-Subject: Re: [PATCH 1/2] sched/fair: Fix cfs_rq_clock_pelt() for throttled
- cfs_rq
-References: <20220407021729.16655-1-zhouchengming@bytedance.com>
-Date:   Thu, 07 Apr 2022 13:57:26 -0700
-In-Reply-To: <20220407021729.16655-1-zhouchengming@bytedance.com> (Chengming
-        Zhou's message of "Thu, 7 Apr 2022 10:17:28 +0800")
-Message-ID: <xm26tub4vcg9.fsf@bsegall-linux.svl.corp.google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=0ZnPgwW/2RtecoJ5mDGIh++3mFgEEeRw7yWxi95jCSL9daz9eeEhfXSg4abNb0v7yQ
+         wdkfBK79cZV16ufL8gzw+8MwXeKgh+FSFryOhLKc8S4eOn/ac58ytF/J1VRLsDzki+sy
+         45hygOd+qH8uCJDnDgWlEaROKAVJGRJWkyUlieLSUd2D19l1GCfsUe3H9mp2XWs6ij7Z
+         b6KYpqrLz9vuP1dQbHwl9MMPutwTBLHmbmTPFm4tFDs5IJGD4X2NDkXD7xlrGIpITJQD
+         wjb8gPojju09Ox2+0TjvhBVPgdSmU1AgU23KkYyCwgLo+QQAVsKk0FA9S8l+dkGiQv3P
+         ZbMw==
+X-Gm-Message-State: AOAM530p4A079J0AOCGZefjDbx0Mv7KagSIX+y04IgTj5oDODIZx8l9m
+        UrZS1Z9A1DDJvYGEf0XHMcPjIA==
+X-Google-Smtp-Source: ABdhPJzKZKgo7bJk0AYUXlwb2y8mbmmQYcn7Gd1R46cDu+04zIt7arhMKkYnlMab8y4eU6cP1/Q3hg==
+X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id el4-20020a056402360400b0041cc4e62988mr16115607edb.157.1649365097189;
+        Thu, 07 Apr 2022 13:58:17 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b11-20020a17090630cb00b006e83fb1e6b1sm738450ejb.100.2022.04.07.13.58.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 13:58:16 -0700 (PDT)
+Message-ID: <827e5f9c-13ef-08fb-d167-80c6c4ea5631@linaro.org>
+Date:   Thu, 7 Apr 2022 22:58:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-12-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,58 +80,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chengming Zhou <zhouchengming@bytedance.com> writes:
-
-> Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
-> change to use rq_clock_pelt() instead of rq_clock_task(), we should also
-> use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
-> accounting.
-
-I think this patch is indeed what we want, despite the confusing
-interactions between pelt slowdown+skipping and throttle_clock_task
-trying to freeze time.
-
-I think it would be slightly better to rename
-throttled_clock_task(_time) to be clock_pelt rather than clock_task, but
-that's minor.
-
-Reviewed-by: Ben Segall <bsegall@google.com>
-
->
-> Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On 07/04/2022 01:36, Brad Larson wrote:
+> Add Pensando common and Elba SoC specific device nodes
+> 
+> Signed-off-by: Brad Larson <brad@pensando.io>
 > ---
->  kernel/sched/fair.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299d67ab..e6fa5d1141b4 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4846,7 +4846,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
->  
->  	cfs_rq->throttle_count--;
->  	if (!cfs_rq->throttle_count) {
-> -		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
-> +		cfs_rq->throttled_clock_task_time += rq_clock_pelt(rq) -
->  					     cfs_rq->throttled_clock_task;
->  
->  		/* Add cfs_rq with load or one or more already running entities to the list */
-> @@ -4864,7 +4864,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
->  
->  	/* group is entering throttled state, stop time */
->  	if (!cfs_rq->throttle_count) {
-> -		cfs_rq->throttled_clock_task = rq_clock_task(rq);
-> +		cfs_rq->throttled_clock_task = rq_clock_pelt(rq);
->  		list_del_leaf_cfs_rq(cfs_rq);
->  	}
->  	cfs_rq->throttle_count++;
-> @@ -5308,7 +5308,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
->  	pcfs_rq = tg->parent->cfs_rq[cpu];
->  
->  	cfs_rq->throttle_count = pcfs_rq->throttle_count;
-> -	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
-> +	cfs_rq->throttled_clock_task = rq_clock_pelt(cpu_rq(cpu));
->  }
->  
->  /* conditionally throttle active cfs_rq's from put_prev_entity() */
+> Change from V3:
+> - Changed to dual copyright (GPL-2.0+ OR MIT)
+> - Minor changes from review input
+
+Thank you for your patch. There is something to discuss/improve.
+
+(...)
+
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +	rtc@51 {
+> +		compatible = "nxp,pcf85263";
+> +		reg = <0x51>;
+> +	};
+> +};
+> +
+> +&spi0 {
+> +	num-cs = <4>;
+> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
+> +		   <&porta 7 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+> +	spi0_cs0@0 {
+
+Generic node name needed matching the class of a devicxe.
+
+> +		compatible = "semtech,sx1301";	/* Enable spidev */
+
+This comment is a bit odd... did you just use random compatible from
+spidev instead of defining proper compatible?
+
+
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+
+Why address/size cells?
+
+> +		spi-max-frequency = <12000000>;
+> +		reg = <0>;
+
+Please put reg just after compatible. It's the most common pattern.
+
+> +	};
+> +
+> +	spi0_cs1@1 {
+> +		compatible = "semtech,sx1301";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <12000000>;
+> +		reg = <1>;
+> +	};
+> +
+
+(...)
+
+> +
+> +		emmc: mmc@30440000 {
+> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
+> +			clocks = <&emmc_clk>;
+> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg = <0x0 0x30440000 0x0 0x10000>,
+> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
+> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
+> +			cdns,phy-input-delay-legacy = <0x4>;
+> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
+> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
+> +			mmc-ddr-1_8v;
+> +			status = "disabled";
+> +		};
+> +
+> +		mssoc: mssoc@307c0000 {
+
+Generic node name.
+
+> +			compatible = "syscon", "simple-mfd";
+
+This does not look correct. Syscon is okay, but why do you need
+simple-mfd (there are no children here)?
+
+> +			reg = <0x0 0x307c0000 0x0 0x3000>;
+> +		};
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof

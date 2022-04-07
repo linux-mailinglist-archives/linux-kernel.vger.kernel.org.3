@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B09A4F6F5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 02:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964934F6F61
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbiDGA6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 20:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S232975AbiDGBCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiDGA6c (ORCPT
+        with ESMTP id S230047AbiDGBCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 20:58:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE85FC9B68;
-        Wed,  6 Apr 2022 17:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44CCB61D73;
-        Thu,  7 Apr 2022 00:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC90C385A3;
-        Thu,  7 Apr 2022 00:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649292993;
-        bh=Xy8Cf+XOsCMJS3zqWOHPAsptjXbizJteN5uf2mtD8SI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u/NP4XCYxnKR/NalBRnfLkM/AJVcg2nyj5fYgQbFmk1Qrs7IVRMsA6vzxAQ5xTW/Y
-         WiIxkBssB90B65WU/GOX9TeYNSX1hIqWmlVamDSh3qmCAyp1g/jHZNArymA9tiPLu5
-         o/1xzrHbeQ6S2YIX7MuKOcEcbsKOiFIKLN+Gh9Q2S1ujZq+FwqyMEP/9yxkZ1IlOIF
-         dJujodSyADUe0RPCuFbHEMexeZk6MXaHNUO4j0o3WljwCYv/G95EhchO0gPAV2p5fp
-         ziclcxhSYKQ5Fyld8zuLAGXQSnB8j32ArLZXOtk994cNya8tySUMtjgTHHKaCEjFsH
-         DF5Y7gPe9VqpQ==
-Date:   Thu, 7 Apr 2022 00:56:29 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, nfraprado@collabora.com,
-        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [v9 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-Message-ID: <Yk42vX7gSZp9l8yW@google.com>
-References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
- <20220406100514.11269-3-jiaxin.yu@mediatek.com>
+        Wed, 6 Apr 2022 21:02:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65BEAC99;
+        Wed,  6 Apr 2022 18:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649293250; x=1680829250;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9Xr/aMM/aBRiUNqncfjg8FGIVBvzbGhbRBKe75kPJqs=;
+  b=Sl3LZQN7tAFTHLEdcw/ZK9zvcYKihmVqMOft5DdlxKhXJckJruLIl18+
+   ReD4kfMIaI0bdkv5ksG+gD9znjTRhjm1teRAWHbQ+A9yfQSgwfwsXERmA
+   ZrNN+XRbUkD/H5GuhTKJLG7G4r/+3clefQvIpfwFsubVMYm4C+YPwEPjF
+   CEosn58eBTIsjSLYHWIpp5Y0PYUKV5pa1oACsqeVsnZZ+IECaVewc/iKX
+   fysG4TJRFN4lL+5O/Pf30givkpceR6hWezxljZuQNu4BVuHZgeuR4hswW
+   V4evBWAOb6lm3Ok5xLzsqUKiXKgeVXo353XxNRx3iGk+f+VrguwRkitLV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241788577"
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="241788577"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:00:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
+   d="scan'208";a="570818409"
+Received: from mgailhax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.55.23])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:00:46 -0700
+Message-ID: <0a717d253785b3b6ea5f889d7399ad06ca465896.camel@intel.com>
+Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
+ allocate/free MKTME keyid
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Thu, 07 Apr 2022 13:00:44 +1200
+In-Reply-To: <cec13fb656f05d8c9d231c225587072076448d71.camel@intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
+         <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
+         <20220331201550.GC2084469@ls.amr.corp.intel.com>
+         <cec13fb656f05d8c9d231c225587072076448d71.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406100514.11269-3-jiaxin.yu@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 06:05:12PM +0800, Jiaxin Yu wrote:
-> MT8192 platform will use rt1015 or rt1015p codec, so through the
-> snd_soc_of_get_dai_link_codecs() to complete the configuration
-> of dai_link's codecs.
 > 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> > 
+> > Also export the global TDX private host key id that is used to encrypt TDX
+> > module, its memory and some dynamic data (e.g. TDR).  
+> > 
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Sorry I was replying too quick.
+
+This sentence is not correct.  Hardware doesn't use global KeyID to encrypt TDX
+module itself.  In current generation of TDX, global KeyID is used to encrypt
+TDX memory metadata (PAMTs) and TDRs.
+
+
+> > When VMM releasing
+> > encrypted page to reuse it, the page needs to be flushed with the used host
+> > key id.  VMM needs the global TDX private host key id to flush such pages
+> > TDX module accesses with the global TDX private host key id.
+> > 
+> > 
+> 
+> Find to me.
+> 
+

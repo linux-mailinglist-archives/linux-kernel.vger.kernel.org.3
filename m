@@ -2,119 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB074F852D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62534F8531
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 18:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345822AbiDGQvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 12:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S1345832AbiDGQve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 12:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238015AbiDGQvM (ORCPT
+        with ESMTP id S1345833AbiDGQvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 12:51:12 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23D0B61;
-        Thu,  7 Apr 2022 09:49:11 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id c24-20020a9d6c98000000b005e6b7c0a8a8so822518otr.2;
-        Thu, 07 Apr 2022 09:49:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W9Hs+gnhjn+YVFkRSWJCDbSOkGyWB/bGPp9Wsa3Ssvo=;
-        b=y3G9GyvZ3A8QzOl2MdfqS5ZAZhmvOrJDwsA9CTfoGhVXxTmkvVLebqgc7ybRtX4Cnp
-         xX2GknR4v0G8VM5NKkWaSMKBFpVg0Wvm7yqA70uWKLsM/RTU4B2eIzhREMwhPiFv3Lcd
-         x12wJoTOAoSDMtQqxPjsyHM0X0H/fMuvqAxRfeohDfVJ64jkkEa1MurY2iFiaUaCgAx+
-         N91Saq9REQ7CtH1diaOsa7iYJu3NWnHtxc4M08dQqWwDRSBt722GqwUlAQJ0xkNfa9uh
-         aG3Qzq4YldSfIlwcnt5/AOzpCGgAuFWoy7ZYaWITXlknKMC9BKwULZKKoy2UoKNVPQk5
-         ffXg==
-X-Gm-Message-State: AOAM532L0tDe5a0sa1eibe/JqHj/lsd4eF/6VvDMiODDJe7hvfUf/rxW
-        rX1HC5ywU45t5nNV/nM4ig==
-X-Google-Smtp-Source: ABdhPJwtMm69VAvbQPAQ41G9xgsuOi4yyFdqa/5hxgMvXOSvRMkU3dG5e/0MEKC0tS0NXw25Es2XZw==
-X-Received: by 2002:a9d:20e2:0:b0:5c9:2edb:af8e with SMTP id x89-20020a9d20e2000000b005c92edbaf8emr5228736ota.325.1649350150961;
-        Thu, 07 Apr 2022 09:49:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q11-20020a05683033cb00b005e686fd52d6sm4950701ott.17.2022.04.07.09.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 09:49:10 -0700 (PDT)
-Received: (nullmailer pid 1386536 invoked by uid 1000);
-        Thu, 07 Apr 2022 16:49:09 -0000
-Date:   Thu, 7 Apr 2022 11:49:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabio Baltieri <fabiobaltieri@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: update google,cros-ec-pwm
- documentation
-Message-ID: <Yk8WBXBH53rtZsBF@robh.at.kernel.org>
-References: <20220331125818.3776912-1-fabiobaltieri@chromium.org>
- <20220331125818.3776912-4-fabiobaltieri@chromium.org>
- <Yk20uTE/Vdm2c6jI@robh.at.kernel.org>
- <Yk73f9yyxy5LBC+V@google.com>
+        Thu, 7 Apr 2022 12:51:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8214ABF7F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 09:49:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2DA4A1F85E;
+        Thu,  7 Apr 2022 16:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649350161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uBE8fJw4zie33LCbR+57169pkVLHawLVnL4hY5+yeRE=;
+        b=l+833uwnLTunhnm4JDrrsAefFgKIba+JRcfyOlb9gzp50hHqJQY56fBKJSWv7cct68aDoG
+        xd6S4L5VBVITJD6EySNOgXASIozwaH+WRaUgzwdlC/+gY2NUkGmavTtsrEMHUUtblCnJ8J
+        nA6F51QAbYeJb0qm8cbt/+FHXrpG6LE=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0B08EA3B8A;
+        Thu,  7 Apr 2022 16:49:21 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 18:49:19 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: console_is_usable() check: was: Re: [PATCH printk v2 10/12] printk:
+ add kthread console printers
+Message-ID: <Yk8WD2vZEm880fo4@alley>
+References: <20220405132535.649171-1-john.ogness@linutronix.de>
+ <20220405132535.649171-11-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk73f9yyxy5LBC+V@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220405132535.649171-11-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:38:55PM +0000, Fabio Baltieri wrote:
-> Hi Rob,
+On Tue 2022-04-05 15:31:33, John Ogness wrote:
+> Create a kthread for each console to perform console printing. During
+> normal operation (@system_state == SYSTEM_RUNNING), the kthread
+> printers are responsible for all printing on their respective
+> consoles.
 > 
-> On Wed, Apr 06, 2022 at 10:41:45AM -0500, Rob Herring wrote:
-> > On Thu, Mar 31, 2022 at 12:58:17PM +0000, Fabio Baltieri wrote:
-> > > Update google,cros-ec-pwm node documentation to mention the
-> > > google,use_pwm_type property.
-> > > 
-> > > Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
-> > > ---
-> > >  .../devicetree/bindings/pwm/google,cros-ec-pwm.yaml         | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > > index 4cfbffd8414a..9c895c990ed8 100644
-> > > --- a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > > +++ b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
-> > > @@ -19,6 +19,12 @@ description: |
-> > >  properties:
-> > >    compatible:
-> > >      const: google,cros-ec-pwm
-> > > +
-> > > +  google,use-pwm-type:
-> > > +    description:
-> > > +      Use PWM types (CROS_EC_PWM_DT_<...>) instead of generic channels.
-> > > +    type: boolean
-> > 
-> > Either do a new compatible string if the cell interpretation is mutually 
-> > exclusive (channel number vs. type) or split the number space for the 
-> > 1st cell between type and channel number. IOW, set a bit (31?) to 
-> > signify the number is a type, not a channel.
+> During non-normal operation, console printing is done as it has been:
+> within the context of the printk caller or within irq work triggered
+> by the printk caller.
 > 
-> Split the number space was my first (tentative) implementation as well,
-> but it turns out that the PWM subsystem really wants channels to be
-> zero-based[1], so I don't think flags or bitmasks are really an option.
+> Console printers synchronize against each other and against console
+> lockers by taking the console lock for each message that is printed.
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> +static bool printer_should_wake(struct console *con, u64 seq)
+> +{
+> +	short flags;
+> +
+> +	if (kthread_should_stop() || !printk_kthreads_available)
+> +		return true;
+> +
+> +	if (console_suspended)
+> +		return false;
+> +
+> +	if (!con->write)
+> +		return false;
 
-Fix the PWM subsystem then...
+Hmm, the kthread for such consoles will never wake up. It probably
+does not make sense to create it at all.
 
-> New compatible sounds good though, I'll rework a v3 with that change.
-> 
-> Thanks!
-> Fabio
-> 
-> [1] https://elixir.bootlin.com/linux/v5.17/source/drivers/pwm/core.c#L423
-> 
-> -- 
-> Fabio Baltieri
+On the other hand, it is not a big deal. And we have "bigger" problem
+how to make these checks in sync with console_is_usable(), see below.
+
+> +	/*
+> +	 * This is an unsafe read to con->flags, but a false positive is not
+> +	 * a problem. Worst case it would allow the printer to wake up even
+> +	 * when it is disabled. But the printer will notice that itself when
+> +	 * attempting to print and instead go back to sleep.
+> +	 */
+> +	flags = data_race(READ_ONCE(con->flags));
+> +	if (!(flags & CON_ENABLED))
+> +		return false;
+> +
+> +	if (atomic_read(&printk_prefer_direct))
+> +		return false;
+> +
+> +	return prb_read_valid(prb, seq, NULL);
+> +}
+> +
+> +static int printk_kthread_func(void *data)
+> +{
+> +	struct console *con = data;
+> +	char *dropped_text = NULL;
+> +	char *ext_text = NULL;
+> +	bool handover;
+> +	u64 seq = 0;
+> +	char *text;
+> +	int error;
+> +
+> +	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
+> +	if (!text) {
+> +		printk_console_msg(con, KERN_ERR, "failed to allocate text buffer");
+> +		printk_fallback_preferred_direct();
+> +		goto out;
+> +	}
+> +
+> +	if (con->flags & CON_EXTENDED) {
+> +		ext_text = kmalloc(CONSOLE_EXT_LOG_MAX, GFP_KERNEL);
+> +		if (!ext_text) {
+> +			printk_console_msg(con, KERN_ERR, "failed to allocate ext_text buffer");
+> +			printk_fallback_preferred_direct();
+> +			goto out;
+> +		}
+> +	} else {
+> +		dropped_text = kmalloc(DROPPED_TEXT_MAX, GFP_KERNEL);
+> +		if (!dropped_text) {
+> +			printk_console_msg(con, KERN_ERR,
+> +					   "failed to allocate dropped_text buffer");
+> +			printk_fallback_preferred_direct();
+> +			goto out;
+> +		}
+> +	}
+> +
+> +	printk_console_msg(con, KERN_INFO, "printing thread started");
+> +
+> +	for (;;) {
+> +		/*
+> +		 * Guarantee this task is visible on the waitqueue before
+> +		 * checking the wake condition.
+> +		 *
+> +		 * The full memory barrier within set_current_state() of
+> +		 * prepare_to_wait_event() pairs with the full memory barrier
+> +		 * within wq_has_sleeper().
+> +		 *
+> +		 * See __wake_up_klogd:A for the pairing memory barrier.
+> +		 */
+> +		error = wait_event_interruptible(log_wait,
+> +				printer_should_wake(con, seq)); /* LMM(printk_kthread_func:A) */
+> +
+> +		if (kthread_should_stop() || !printk_kthreads_available)
+> +			break;
+> +
+> +		if (error)
+> +			continue;
+> +
+> +		console_lock();
+> +
+> +		if (console_suspended) {
+> +			__console_unlock();
+> +			continue;
+> +		}
+> +
+> +		if (!console_is_usable(con)) {
+> +			__console_unlock();
+> +			continue;
+> +		}
+
+This smells with a busy loop. We should make sure that the same
+condition will make printk_kthread_func() return false. The current
+approach is hard to maintain.
+
+Hmm, it is not easy because console_is_usable(con) is supposed
+to be called under console_lock().
+
+I do not have a good solution for this. But the current approach looks
+error prone. What about the following?
+
+static inline bool __console_is_usable(struct console *con)
+{
+	short flags;
+
+	if (!con->write)
+		return false;
+
+	/* Make flags checks consistent when called without console_lock. */
+	flags = READ_ONCE(con->flags);
+
+	if (!(con->flags & CON_ENABLED))
+		return false;
+
+	/*
+	 * Console drivers may assume that per-cpu resources have been
+	 * allocated. So unless they're explicitly marked as being able to
+	 * cope (CON_ANYTIME) don't call them until this CPU is officially up.
+	 */
+	if (!cpu_online(raw_smp_processor_id()) &&
+	    !(con->flags & CON_ANYTIME))
+		return false;
+
+	return true;
+}
+
+static inline bool console_is_usable(struct console *con)
+{
+	WARN_ON_ONCE(!lockdep_assert_held(&console_sem));
+
+	__console_is_usable();
+}
+
+Note that we could not use lockdep_assert_held() because we will
+later need to check both console_sem and con->mutex. Either of
+them will be enough.
+
+> +
+> +		/*
+> +		 * Even though the printk kthread is always preemptible, it is
+> +		 * still not allowed to call cond_resched() from within
+> +		 * console drivers. The task may become non-preemptible in the
+> +		 * console driver call chain. For example, vt_console_print()
+> +		 * takes a spinlock and then can call into fbcon_redraw(),
+> +		 * which can conditionally invoke cond_resched().
+> +		 */
+> +		console_may_schedule = 0;
+> +		console_emit_next_record(con, text, ext_text, dropped_text, &handover);
+> +		if (handover)
+> +			continue;
+> +
+> +		seq = con->seq;
+> +
+> +		__console_unlock();
+> +	}
+> +
+> +	printk_console_msg(con, KERN_INFO, "printing thread stopped");
+> +out:
+> +	kfree(dropped_text);
+> +	kfree(ext_text);
+> +	kfree(text);
+> +	return 0;
+> +}
+
+Best Regards,
+Petr

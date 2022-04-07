@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02C44F8B90
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE1F4F8B6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiDGWkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 18:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S232240AbiDGWow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 18:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiDGWkq (ORCPT
+        with ESMTP id S232228AbiDGWou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 18:40:46 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C5F14F129
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:38:34 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id bk12so3455574qkb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 15:38:34 -0700 (PDT)
+        Thu, 7 Apr 2022 18:44:50 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7CA152823
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 15:42:48 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id x3-20020a17090a6c0300b001cab7230b41so4264616pjj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 15:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uqhxauvR8mCQfoS6i8uwjBu35yp97nhbeSWZ8vnrwZY=;
-        b=bV88Cr4N/znjGzgB7rGsAMSx7HMUtAsLuyAIexD78fMOdCSuQ4MWuJ6OWLMzjvmh27
-         B6cXdE4QcijqPh4lAqbIFQ/biCEolBwl/UxDmX9z5aUx0c0ovN49h0qKtiOm/SmUy5Z5
-         IEpDqqhlkjAtOwgomHhNLK4qkn5julTyvpYtfEIWo6dsgQ5ivqU4W4ufglNIlUTwYGpB
-         LvVjmvxW1ov4qozfnpoxVU8VcObOqTF+yubspktLowPr5W+rm1f+o06nEbTryAi0JGoO
-         KfsMn8WLSmCtqFxHdzrjnRtrQBJrclEILUxOTHtjeC5LTx8obNvyFuRJEbMhgG55vpe0
-         tmxQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6TC/fcsrdvkufWtZCTMpd2QTNgth1gYBFeUR7KMTO3o=;
+        b=LTNa5mWxit+bHznZj3tr4HARnvMRLGMcNuJSn+VXMiSstVWYzjo8RrN+E1ms6VTeiU
+         nFOM753PV0ux/FjpS7u2I8H53Ls+iBrNQ2VqMkJ4/013wYWzOkTOMvmPlfAViGmsT7JI
+         wz5hfFfmebTV4K8w6FLtQJbWTKHCf1RVY3yK5HCK8UW5AxATe0Hhq4JXxY2zummMacbw
+         7WdJ0FJA8Bcsx0SQlqs5lD1wWFqEVYOi93AQ+e8nhUdpDGM/3Zb7Qs408eH4czs6r98a
+         v6ypkffmKqRINf6d0u5JEFrGrfWgcL+egNOTvvTXneQR/WkDoHb0cWVv6VuyGlMHSD9n
+         t4YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uqhxauvR8mCQfoS6i8uwjBu35yp97nhbeSWZ8vnrwZY=;
-        b=pkktEUPntBEFiXkOMONDiEciYOlyVikepdCt1UZ/00KT5idFzhD6hOpH5vJSr0Knyn
-         a8uJx+UWhCplkvtG4+gB1Yb5/1J6RbvewFCDN6ag4b4LGvgnRejBVIr9P8ty9cN7er1P
-         6Z+yrha+1EsgmFkk3eTah+m/rq6xvrAftZpfI7Xrs7Extffo8hZ0nmUEt+dXLPlKHXmh
-         tBg79Vcv5lf9ua+ackcNdxm2e85KCAc7HcnKyXmHre2yJFN94mv6PYh0wnPBFZIy7DFz
-         0TnSCi8ufsIItK7pQALdFhFeAADPtGRxO96t1CEofw9UzWwFSM3RDimMZOd21DTjMMno
-         RlDw==
-X-Gm-Message-State: AOAM532Y7dzJnGyCQroQV2RcFmYh3H8tIWcviXQshH433IJw5oyX4EM/
-        s3/V+6KdILBWV4lDr9TbuaLCkw==
-X-Google-Smtp-Source: ABdhPJxoGTF+jmO49F17rm1r53RiWDqavHKmNkl6FMddkvgVQv8x1rO57QH8eX2rdEH2xyqRsdrSKw==
-X-Received: by 2002:a05:620a:290d:b0:67d:b5f5:302a with SMTP id m13-20020a05620a290d00b0067db5f5302amr10625916qkp.399.1649371113127;
-        Thu, 07 Apr 2022 15:38:33 -0700 (PDT)
-Received: from [192.168.0.189] (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id h6-20020ac85e06000000b002e1e8a98abbsm17018685qtx.41.2022.04.07.15.38.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 15:38:32 -0700 (PDT)
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
- interconnect fields
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220407172145.31903-1-jonathan@marek.ca>
- <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
- <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <f1fb2d71-4adf-bcc7-76b3-c7102ab9f2e9@marek.ca>
-Date:   Thu, 7 Apr 2022 18:38:34 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6TC/fcsrdvkufWtZCTMpd2QTNgth1gYBFeUR7KMTO3o=;
+        b=MydfHOzytN45zYCyo3TgdPQL0i9S5DrPivGyskIXC3laQdjJpTRSNx2pkYR8N6U399
+         2EPs58m+Yo6uvWhszRAhY2Xui6oVel1VujHvUb3+fWtdJ4wlt5d+la0kHP2xb82AF5OS
+         x1LHZczMHIFIUbS3t8evBI10w9O4dHMLGcSA7FO81hlieH9uGxzIFY+6wnGwSI3Mz0x3
+         Y9HE4SBQCmoJVfur8HkICtn3T/oj2HAE7urniuZzSny7qeIFQiuKC2WhW5KfONcyN9OF
+         zKtdSifd61P2QcyceChoI1KfVF24pyargvXOXSw8kSubzZ5nGKN7l/FLm9G2mvuzGpcR
+         x0Zw==
+X-Gm-Message-State: AOAM532AE9i/Us0RFAXLi0WsT990qJ8NRMw1NHLBXL/7qiYdDpYzXLx6
+        n0OaBoNIiEmTaiN8X8Um/no2npff4dP7EQC4
+X-Google-Smtp-Source: ABdhPJwlNJ+NsHyswmzk8S8aUJPENy0C4JQyTzYFWx7UJ9STkknW1VVVp9zPNMHpVNXpn76wXS46DNMY8mlzVMZv
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a65:4b8f:0:b0:39c:c85d:7e7a with SMTP
+ id t15-20020a654b8f000000b0039cc85d7e7amr4074145pgq.324.1649371368364; Thu,
+ 07 Apr 2022 15:42:48 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 22:42:40 +0000
+Message-Id: <20220407224244.1374102-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v2 0/4] memcg: introduce per-memcg proactive reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, Huang@google.com,
+        Ying <ying.huang@intel.com>,
+        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 5:16 PM, Krzysztof Kozlowski wrote:
-> On 07/04/2022 21:40, Vladimir Zapolskiy wrote:
->> On 4/7/22 20:21, Jonathan Marek wrote:
->>> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
->>> Ignored and undocumented with upstream UFS driver so delete for now.
-> 
-> This is the upstream and they are documented here, although as pointed
-> by Vladimir this was rather a reverse-documentation. The documentation
-> might be incorrect, but then the bindings should be corrected instead of
-> only modifying the DTS.
-> 
->>
->> Basically the description was added by a commit 462c5c0aa798 ("dt-bindings: ufs:
->> qcom,ufs: convert to dtschema").
->>
->> It's questionable, if an example in the new yaml file is totally correct
->> in connection to the discussed issue.
-> 
-> To be honest - the example probably is not correct, because it was based
-> on existing DTS without your patch. :)
-> 
-> Another question is whether the interconnect properties are here correct
-> at all. I assumed that DTS is correct because it should describe the
-> hardware, even if driver does not use it. However maybe that was a false
-> assumption...
-> 
+This patch series adds a memory.reclaim proactive reclaim interface.
+The rationale behind the interface and how it works are in the first
+patch.
 
-writing-bindings.rst says it is OK to document even if it isn't used by 
-the driver (seems wrong to me, at least for interconnects which are a 
-firmware abstraction and not hardware).
+---
 
-462c5c0aa798 wasn't in my 5.17+ tree pulled after dts changes were 
-merged (I guess doc changes come later), so my commit message is 
-incorrect, but I think it makes more sense to have the documentation 
-reflect the driver. Its also not an important issue, so I'll let others 
-sort it out.
+Changes in V2:
+- Add the interface to root as well.
+- Added a selftest.
+- Documented the interface as a nested-keyed interface, which makes
+  adding optional arguments in the future easier (see doc updates in the
+  first patch).
+- Modified the commit message to reflect changes and add a timeout
+  argument as a suggested possible extension
+- Return -EAGAIN if the kernel fails to reclaim the full requested
+  amount.
 
-> 
-> Best regards,
-> Krzysztof
-> 
+---
+
+Shakeel Butt (1):
+  memcg: introduce per-memcg reclaim interface
+
+Yosry Ahmed (3):
+  selftests: cgroup: return the errno of write() in cg_write() on
+    failure
+  selftests: cgroup: fix alloc_anon_noexit() instantly freeing memory
+  selftests: cgroup: add a selftest for memory.reclaim
+
+ Documentation/admin-guide/cgroup-v2.rst       | 21 +++++
+ mm/memcontrol.c                               | 37 ++++++++
+ tools/testing/selftests/cgroup/cgroup_util.c  | 11 ++-
+ .../selftests/cgroup/test_memcontrol.c        | 94 ++++++++++++++++++-
+ 4 files changed, 156 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1.1178.g4f1659d476-goog
+

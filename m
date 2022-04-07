@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C994F8643
+	by mail.lfdr.de (Postfix) with ESMTP id 3C44B4F8642
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346425AbiDGRdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S1346488AbiDGRdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346840AbiDGRc7 (ORCPT
+        with ESMTP id S1346870AbiDGRdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:32:59 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A663F10DA5D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:30:04 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZ7cs0T8dz67XcG;
-        Fri,  8 Apr 2022 01:27:57 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Apr 2022 19:30:01 +0200
-Received: from [10.47.95.175] (10.47.95.175) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
- 2022 18:30:00 +0100
-Message-ID: <b14b61cc-ab47-e90d-7f81-f05197645dc6@huawei.com>
-Date:   Thu, 7 Apr 2022 18:29:58 +0100
+        Thu, 7 Apr 2022 13:33:01 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CE518B24;
+        Thu,  7 Apr 2022 10:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=i5967/a5oK0EGt/wrkemwwnhICguU6R5xviUzoKD7O8=; b=pOhYtIBmMilhtrc+5FBGc4SuH8
+        YuC62mIwfZJzk3lKGHpaGHkD407+t2JCSVto8KRmiOVP+nZz4lGVAEL50VrfqVyNts7Y4EHQVhuXu
+        fIONIhWZ41KxsGfZXDZ7xOrgna5/0lDeoPJIrBN+LEsIhd6nYvlU7q51Zv26NlWvW2j8=;
+Received: from p200300daa70ef200411eb61494300c34.dip0.t-ipconnect.de ([2003:da:a70e:f200:411e:b614:9430:c34] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1ncVxI-0007Or-HM; Thu, 07 Apr 2022 19:30:00 +0200
+Message-ID: <f9d76e22-0400-24fa-e4c4-af4b03ed5f8f@nbd.name>
+Date:   Thu, 7 Apr 2022 19:29:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 0/3] genirq: Managed affinity fixes
-To:     Marc Zyngier <maz@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        David Decotigny <ddecotig@google.com>
-References: <20220405185040.206297-1-maz@kernel.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220405185040.206297-1-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
+ mirror node on MT7622
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        netdev@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-6-nbd@nbd.name>
+ <4bafe244-6a3d-d0ec-59d3-3f3f00e71caf@linaro.org>
+ <318163cb-c771-c7eb-73ba-35c66f7d0e68@nbd.name>
+ <Yk8chzNBsRZR8e1q@robh.at.kernel.org>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <Yk8chzNBsRZR8e1q@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.95.175]
-X-ClientProxiedBy: lhreml738-chm.china.huawei.com (10.201.108.188) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 19:50, Marc Zyngier wrote:
-> John (and later on David) reported[1] a while ago that booting with
-> maxcpus=1, managed affinity devices would fail to get the interrupts
-> that were associated with offlined CPUs.
-> 
-> Similarly, Xiongfeng reported[2] that the GICv3 ITS would sometime use
-> non-housekeeping CPUs instead of the affinity that was passed down as
-> a parameter.
-> 
-> [1] can be fixed by not trying to activate these interrupts if no CPU
-> that can satisfy the affinity is present (a patch addressing this was
-> already posted[3])
-> 
-> [2] is a consequence of affinities containing non-online CPUs being
-> passed down to the interrupt controller driver and the ITS driver
-> trying to paper over that by ignoring the affinity parameter and doing
-> its own (stupid) thing. It would be better to (a) get the core code to
-> remove the offline CPUs from the affinity mask at all times, and (b)
-> fix the drivers so that they can trust the core code not to trip them.
-> 
-> This small series, based on 5.18-rc1, addresses the above.
 
-Hi Marc,
+On 07.04.22 19:16, Rob Herring wrote:
+> On Wed, Apr 06, 2022 at 01:01:06PM +0200, Felix Fietkau wrote:
+>> 
+>> On 06.04.22 10:20, Krzysztof Kozlowski wrote:
+>> > On 05/04/2022 21:57, Felix Fietkau wrote:
+>> > > From: Lorenzo Bianconi <lorenzo@kernel.org>
+>> > > 
+>> > > This patch adds the pcie mirror document bindings for MT7622 SoC.
+>> > > The feature is used for intercepting PCIe MMIO access for the WED core
+>> > > Add related info in mediatek-net bindings.
+>> > > 
+>> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>> > > Signed-off-by: Felix Fietkau <nbd@nbd.name>
+>> > > ---
+>> > >  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
+>> > 
+>> > Eh, I wanted to ask to not put it inside arm/, but judging by your usage
+>> > - you did not create drivers for both of these (WED and PCIe mirror).
+>> > 
+>> > You only need them to expose address spaces via syscon.
+>> > 
+>> > This actually looks hacky. Either WED and PCIe mirror are part of
+>> > network driver, then add the address spaces via "reg". If they are not,
+>> > but instead they are separate blocks, why you don't have drivers for them?
+>> The code that uses the WED block is built into the Ethernet driver, but not
+>> all SoCs that use this ethernet core have it. Also, there are two WED
+>> blocks, and I'm not sure if future SoCs might have a different number of
+>> them at some point.
+>> The WED code also needs to access registers of the ethernet MAC.
+>> One reason for having a separate device is this:
+>> As long as WED is not in use, ethernet supports coherent DMA for increased
+>> performance. When the first wireless device attaches to WED, IO coherency
+>> gets disabled and the ethernet DMA rings are cleaned up and allocated again,
+>> this time with the struct device of WED (which doesn't have the dma-coherent
+>> property).
+> 
+> I'm pretty sure there are assumptions in the driver core that coherency
+> is not changing on the fly. In any case, if it is, using 'dma-coherent'
+> is not appropriate. You obviously have another method to determine
+> whether you are coherent or not.
+It's not really on the fly. Before changing coherency, all DMA memory is 
+freed, and the subsequent reallocation uses the struct device of the WED 
+core, which does not have the dma-coherent property.
 
-Please let me know if you require anything more from me on this one. I 
-was hoping that Xiongfeng would verify that his "housekeeping" issues 
-were fixed.
-
-Cheers
-
-> 
-> Thanks,
-> 
-> 	M.
-> 
->>From v2 [4]:
->    - Rebased on 5.18-rc1
-> 
-> [1] https://lore.kernel.org/r/78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com
-> [2] https://lore.kernel.org/r/20220124073440.88598-1-wangxiongfeng2@huawei.com
-> [3] https://lore.kernel.org/r/20220307190625.254426-1-maz@kernel.org
-> [4] https://lore.kernel.org/r/20220321193608.975495-1-maz@kernel.org
-> 
-> Marc Zyngier (3):
->    genirq/msi: Shutdown managed interrupts with unsatifiable affinities
->    genirq: Always limit the affinity to online CPUs
->    irqchip/gic-v3: Always trust the managed affinity provided by the core
->      code
-> 
->   drivers/irqchip/irq-gic-v3-its.c |  2 +-
->   kernel/irq/manage.c              | 25 +++++++++++++++++--------
->   kernel/irq/msi.c                 | 15 +++++++++++++++
->   3 files changed, 33 insertions(+), 9 deletions(-)
-> 
-
+- Felix

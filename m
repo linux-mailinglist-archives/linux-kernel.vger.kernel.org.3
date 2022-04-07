@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47F24F7C1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447244F7C16
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 11:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243998AbiDGJtM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Apr 2022 05:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S243954AbiDGJsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 05:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237429AbiDGJtJ (ORCPT
+        with ESMTP id S231882AbiDGJsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 05:49:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC59110FDDE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 02:47:08 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOix-0007d3-0T; Thu, 07 Apr 2022 11:46:43 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOix-001aNC-5z; Thu, 07 Apr 2022 11:46:41 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ncOiv-0004Dh-5U; Thu, 07 Apr 2022 11:46:41 +0200
-Message-ID: <b9cc064d124bc767c6ea3f3fa39eeb82d291ca0e.camel@pengutronix.de>
-Subject: Re: [PATCH v2 07/10] power: reset: at91-reset: add
- reset_controller_dev support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux@armlinux.org.uk, sre@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org
-Date:   Thu, 07 Apr 2022 11:46:41 +0200
-In-Reply-To: <20220407071708.3848812-8-claudiu.beznea@microchip.com>
-References: <20220407071708.3848812-1-claudiu.beznea@microchip.com>
-         <20220407071708.3848812-8-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Thu, 7 Apr 2022 05:48:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41A4DB2EE;
+        Thu,  7 Apr 2022 02:46:45 -0700 (PDT)
+Date:   Thu, 07 Apr 2022 09:46:42 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649324803;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DbcNs/iB+XHJ6Q7gAFJap5zTd8ARrfJfHlYKmBThiXE=;
+        b=yS2L3KDCPdDnM1D+svjkOqGnCGy+g/T+BW7rt79b64zOGMbnxb4L78BL2rIFzxGXjtQbkb
+        cozBd4ez5LQQTcqTHK6GU1vy8EZvVgu456SSeelQ7FeMzAHkDD0Qka+GNNRPPWw4lX5jV+
+        9r9WGXmDjo++ugGQWfyFzZCsWw71Ip5bfbiPYMlq7opuymJcu+GQThbUXe3QZ4hJ9KDtlZ
+        pt6QRuMMBk5vh3Jcpp2n5Na0NSMlEP8L++E13SWq34WJNmcxIkRNaLdFvgsYpNCpRtDPdN
+        Gi5q9nLRdIMrvOP//QPo5X3yZdZmMAojSLN5W9nVfukLf9XDzZYTK61BDb4DJg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649324803;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DbcNs/iB+XHJ6Q7gAFJap5zTd8ARrfJfHlYKmBThiXE=;
+        b=nFn9IhC+LEQo8j6MKUVQ7N9LkK9Y7US2MlV3tVCIh2O+oLGvtrBgc8bhLFKenMuGj2B7Ww
+        Qda4RmOOKjyPBbDA==
+From:   "tip-bot2 for Nick Desaulniers" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/extable: Prefer local labels in .set directives
+Cc:     Bernardo Meurer Costa <beme@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220329202148.2379697-1-ndesaulniers@google.com>
+References: <20220329202148.2379697-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Message-ID: <164932480205.389.17976490285637093019.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,72 +67,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Do, 2022-04-07 at 10:17 +0300, Claudiu Beznea wrote:
-> SAMA7G5 reset controller has 5 extra lines that goes to different devices
-> (3 lines to USB PHYs, 1 line to DDR controller, 1 line to DDR PHY
-> controller). These reset lines could be requested by different controller
-> drivers (e.g. USB PHY driver) and these controllers' drivers could
-> assert/deassert these lines when necessary. Thus add support for
-> reset_controller_dev which brings this functionality.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  drivers/power/reset/at91-reset.c | 107 +++++++++++++++++++++++++++++--
->  1 file changed, 103 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
-> index 1b2aca3f490d..a6f65ac430cd 100644
-> --- a/drivers/power/reset/at91-reset.c
-> +++ b/drivers/power/reset/at91-reset.c
-[...]
-> +static int at91_reset_update(struct reset_controller_dev *rcdev,
-> +			     unsigned long id, bool assert)
-> +{
-> +	struct at91_reset *reset = to_at91_reset(rcdev);
-> +	u32 val;
-> +
-> +	spin_lock(&reset->lock);
+The following commit has been merged into the x86/urgent branch of tip:
 
-Use spin_lock_irqsave. We don't know where we are called from and this
-isn't a time critical path.
+Commit-ID:     334865b2915c33080624e0d06f1c3e917036472c
+Gitweb:        https://git.kernel.org/tip/334865b2915c33080624e0d06f1c3e917036472c
+Author:        Nick Desaulniers <ndesaulniers@google.com>
+AuthorDate:    Tue, 29 Mar 2022 13:21:45 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 07 Apr 2022 11:27:02 +02:00
 
-> +	val = readl_relaxed(reset->dev_base);
-> +	if (assert)
-> +		val |= BIT(id);
-> +	else
-> +		val &= ~BIT(id);
-> +	writel_relaxed(val, reset->dev_base);
-> +	spin_unlock(&reset->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int at91_reset_assert(struct reset_controller_dev *rcdev,
-> +			     unsigned long id)
-> +{
-> +	return at91_reset_update(rcdev, id, true);
-> +}
-> +
-> +static int at91_reset_deassert(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	return at91_reset_update(rcdev, id, false);
-> +}
-> +
-> +static int at91_reset_dev_status(struct reset_controller_dev *rcdev,
-> +				 unsigned long id)
-> +{
-> +	struct at91_reset *reset = to_at91_reset(rcdev);
-> +	u32 val;
-> +
-> +	spin_lock(&reset->lock);
+x86/extable: Prefer local labels in .set directives
 
-Locking is not necessary here. If the read is racing against an update,
-it either returns the register value before or after the update, same
-as without a lock.
+Bernardo reported an error that Nathan bisected down to
+(x86_64) defconfig+LTO_CLANG_FULL+X86_PMEM_LEGACY.
 
-With those changes,
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+    LTO     vmlinux.o
+  ld.lld: error: <instantiation>:1:13: redefinition of 'found'
+  .set found, 0
+              ^
 
-regards
-Philipp
+  <inline asm>:29:1: while in macro instantiation
+  extable_type_reg reg=%eax, type=(17 | ((0) << 16))
+  ^
+
+This appears to be another LTO specific issue similar to what was folded
+into commit 4b5305decc84 ("x86/extable: Extend extable functionality"),
+where the `.set found, 0` in DEFINE_EXTABLE_TYPE_REG in
+arch/x86/include/asm/asm.h conflicts with the symbol for the static
+function `found` in arch/x86/kernel/pmem.c.
+
+Assembler .set directive declare symbols with global visibility, so the
+assembler may not rename such symbols in the event of a conflict. LTO
+could rename static functions if there was a conflict in C sources, but
+it cannot see into symbols defined in inline asm.
+
+The symbols are also retained in the symbol table, regardless of LTO.
+
+Give the symbols .L prefixes making them locally visible, so that they
+may be renamed for LTO to avoid conflicts, and to drop them from the
+symbol table regardless of LTO.
+
+Fixes: 4b5305decc84 ("x86/extable: Extend extable functionality")
+Reported-by: Bernardo Meurer Costa <beme@google.com>
+Debugged-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20220329202148.2379697-1-ndesaulniers@google.com
+---
+ arch/x86/include/asm/asm.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/include/asm/asm.h b/arch/x86/include/asm/asm.h
+index c878fed..fbcfec4 100644
+--- a/arch/x86/include/asm/asm.h
++++ b/arch/x86/include/asm/asm.h
+@@ -154,24 +154,24 @@
+ 
+ # define DEFINE_EXTABLE_TYPE_REG \
+ 	".macro extable_type_reg type:req reg:req\n"						\
+-	".set found, 0\n"									\
+-	".set regnr, 0\n"									\
++	".set .Lfound, 0\n"									\
++	".set .Lregnr, 0\n"									\
+ 	".irp rs,rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15\n"		\
+ 	".ifc \\reg, %%\\rs\n"									\
+-	".set found, found+1\n"									\
+-	".long \\type + (regnr << 8)\n"								\
++	".set .Lfound, .Lfound+1\n"								\
++	".long \\type + (.Lregnr << 8)\n"							\
+ 	".endif\n"										\
+-	".set regnr, regnr+1\n"									\
++	".set .Lregnr, .Lregnr+1\n"								\
+ 	".endr\n"										\
+-	".set regnr, 0\n"									\
++	".set .Lregnr, 0\n"									\
+ 	".irp rs,eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d\n"	\
+ 	".ifc \\reg, %%\\rs\n"									\
+-	".set found, found+1\n"									\
+-	".long \\type + (regnr << 8)\n"								\
++	".set .Lfound, .Lfound+1\n"								\
++	".long \\type + (.Lregnr << 8)\n"							\
+ 	".endif\n"										\
+-	".set regnr, regnr+1\n"									\
++	".set .Lregnr, .Lregnr+1\n"								\
+ 	".endr\n"										\
+-	".if (found != 1)\n"									\
++	".if (.Lfound != 1)\n"									\
+ 	".error \"extable_type_reg: bad register argument\"\n"					\
+ 	".endif\n"										\
+ 	".endm\n"

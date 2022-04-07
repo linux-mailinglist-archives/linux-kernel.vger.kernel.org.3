@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F124F8672
+	by mail.lfdr.de (Postfix) with ESMTP id EE7C74F8674
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237325AbiDGRqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S1346536AbiDGRqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346524AbiDGRpy (ORCPT
+        with ESMTP id S1346533AbiDGRqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:45:54 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8136228D02;
-        Thu,  7 Apr 2022 10:43:52 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 602E320DFDAB; Thu,  7 Apr 2022 10:43:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 602E320DFDAB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649353432;
-        bh=EoJK1cBRSxo9Ig4qPEGnpUnvdRWX31TX6ZeHZVK0Sw0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XqTrtOYyF1p+M94p4/7WCsFlHG51vKhNy4mvHF4IgNrX88YCoKDmGlber6C+PU7Je
-         gm7T1wrWqdvjjNBzFQIkbv2z3IsbJSfObH0naSckjoJTo6dyU9tRsbwEomKpsOlzGX
-         10snADbS+QSCPY6kQMgDFDAXyqvFMlVEJ759PBSU=
-Date:   Thu, 7 Apr 2022 10:43:52 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Deepak Rawat <drawat.floss@gmail.com>
-Cc:     ssengar@microsoft.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>
-Subject: Re: [PATCH v2] drm/hyperv: Added error message for fb size greater
- then allocated
-Message-ID: <20220407174352.GA10647@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1649312827-728-1-git-send-email-ssengar@linux.microsoft.com>
- <CAHFnvW2V0tz25D4YMxYMNqYs5uMkbjEoc6p93e6naBhvybzmoQ@mail.gmail.com>
+        Thu, 7 Apr 2022 13:46:18 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED46B22C1C1;
+        Thu,  7 Apr 2022 10:44:17 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id w17-20020a056830111100b005b22c584b93so4376715otq.11;
+        Thu, 07 Apr 2022 10:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iOmaGvSY3sNiCGul1zIbS6aLQalKU4+HuWoR1U7SG0M=;
+        b=hsDUetQPYoAK5U6TbthwBdVp+Xh9SKjYl1nBV1wTCzjUl+DY5aDvgwD1yvu5ey2aj0
+         4Lkl0djKYjy3n0xvpQnhKLKfSFO97Akqe/EKliMA+RihY8rpphxqVrGSDhHKM8Qoi/X9
+         SZuOADlbR6xPW4O2bZTbrnNXvRWahzlycyi58hekpJZc1etmdYdBRmr7YoHPaVanO73m
+         BwvFuZHDYJVTn33IwKjAhweICLkYhpJ4Wl8xqoOzrDWnCWZU4CnEKVYxuj62C/OLjuLy
+         TKuZhtLd7ln2hsRjb+T0kSsJfbO08JD7g4iYPRCcDg71UsHBQlz2wVL0DKi4Cz7DIGW8
+         0ddw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=iOmaGvSY3sNiCGul1zIbS6aLQalKU4+HuWoR1U7SG0M=;
+        b=HpU65Xfnr9NyeiMAkMwug5tHSN6nW+G2tLdNGHpxwd4lUFzZPIwPeCD2RMHWsQPgtp
+         c1pzCdWna9jy5YMt3QfjXLRMjLpW7/nIh4+p0cIb+3KTo9eU4r0gOyFpXRfix01njAGp
+         6F7/62lJa7YjrkfeMxMF87KVkzWVL/afcaBt61cw783CdCxXPrDMbdL1pJRVk76I3/uk
+         40qTvB4yVb8zfgwCbroupanT/XaNezO1xSIBpC3M+JdBshheNSGPlV+abz6FI4xDexsZ
+         z5fPXdMCHkCWb6fGaxgu0miv47hFbgqSyvsln4oig2omxaeCsHhF73O+dBUg9h2KZEvA
+         Iygg==
+X-Gm-Message-State: AOAM531PvZu+OdHxhmm9eO8EVQj6jEKMAvYa6wRCtv2ogrJD4io5QPAb
+        O8npo9d6muabv/1hFzdXMFw=
+X-Google-Smtp-Source: ABdhPJwVdHTvCPJEdmoLOVj2BbC0PrkyGlmpkbTU8prjKmhtnb7PXJpSDNqK8RWTD0xUijtU4Xfepg==
+X-Received: by 2002:a9d:6447:0:b0:5b2:35ae:7ad6 with SMTP id m7-20020a9d6447000000b005b235ae7ad6mr5138430otl.275.1649353454994;
+        Thu, 07 Apr 2022 10:44:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f50-20020a9d03b5000000b005c959dd643csm8244683otf.3.2022.04.07.10.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 10:44:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 7 Apr 2022 10:44:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 0000/1014] 5.16.19-rc2 review
+Message-ID: <20220407174412.GB1827081@roeck-us.net>
+References: <20220406133109.570377390@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHFnvW2V0tz25D4YMxYMNqYs5uMkbjEoc6p93e6naBhvybzmoQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220406133109.570377390@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 09:28:53AM -0700, Deepak Rawat wrote:
-> On Wed, Apr 6, 2022 at 11:27 PM Saurabh Sengar
-> <ssengar@linux.microsoft.com> wrote:
-> >
-> > Added error message when the size of requested framebuffer is more then
-> > the allocated size by vmbus mmio region for framebuffer
-> >
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> > v1 -> v2 : Corrected Sign-off
-> >
-> >  drivers/gpu/drm/hyperv/hyperv_drm_modeset.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-> > index e82b815..92587f0 100644
-> > --- a/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-> > +++ b/drivers/gpu/drm/hyperv/hyperv_drm_modeset.c
-> > @@ -123,8 +123,11 @@ static int hyperv_pipe_check(struct drm_simple_display_pipe *pipe,
-> >         if (fb->format->format != DRM_FORMAT_XRGB8888)
-> >                 return -EINVAL;
-> >
-> > -       if (fb->pitches[0] * fb->height > hv->fb_size)
-> > +       if (fb->pitches[0] * fb->height > hv->fb_size) {
-> > +               drm_err(&hv->dev, "hv->hdev, fb size requested by process %s for %d X %d (pitch %d) is greater then allocated size %ld\n",
-> > +               current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
+On Wed, Apr 06, 2022 at 03:44:28PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.19 release.
+> There are 1014 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Any reason to add an error message here. Since this function is called
-> whenever there is an update, avoid printing an error here.
-
-Recently we hit an issue where userspace application was programing the bigger size buffer then the actual allocated size for framebuffer by hyperv vmbus. This resulted in black screen, and there was no error message it was failing silently and took a
- while to debug this issue. Although the function will be called in each update but this error is printed only in fatal case where pipeline is fail to set the crtc for desired resolution.
-
+> Responses should be made by Fri, 08 Apr 2022 13:27:53 +0000.
+> Anything received after that time might be too late.
 > 
-> >                 return -EINVAL;
-> > +       }
-> >
-> >         return 0;
-> >  }
-> > --
-> > 1.8.3.1
-> >
+
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 488 pass: 488 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

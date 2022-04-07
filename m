@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA644F7F88
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C34F4F7F8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245487AbiDGMy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S245496AbiDGMzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245481AbiDGMys (ORCPT
+        with ESMTP id S245372AbiDGMzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:54:48 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C826259B58;
-        Thu,  7 Apr 2022 05:52:47 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:35::e2d])
+        Thu, 7 Apr 2022 08:55:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCFF259B58;
+        Thu,  7 Apr 2022 05:53:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5390B30D;
-        Thu,  7 Apr 2022 12:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5390B30D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1649335966; bh=J6fsWhcIYdB09wzvgZi6AxYIXSAJzCGBEqivzfR46Ss=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jFKLQQekMDOtJN8dSbnDT5H9DpIjIII0a4/YX7BVTC3rl1zbWzFfWP5DoYkuu+aah
-         89Aw6rqW2QCQ/lMvN07sgjpylKtwLogEsnD9MmwftsfJCN3zwbE7tGfrAmuqRjDAxx
-         bsby11D9TfvO/ca6L7q/ixVgU8WODgk/5FSv97GwkQSRspBu3GQEz/4JfgSDn0qoOn
-         R6qeOk4Wn3MMOtAZO0pbE2EDX3lnXZ4fpMNByp66gx4nHmFf5h0wC4C/5Ntczpb5hJ
-         ZwaLdmte38V7t+sv+XIPJAX+eRpQj+cbdaStVYOyeDdlCRhmuISUmgPFGAe1+6hbu6
-         MAYN2RjDBgysw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, page-reclaim@google.com,
-        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 14/14] mm: multi-gen LRU: design doc
-In-Reply-To: <5ea69d84-be0c-2e9b-02b5-92d9442c8aff@gmail.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
- <20220407031525.2368067-15-yuzhao@google.com>
- <5ea69d84-be0c-2e9b-02b5-92d9442c8aff@gmail.com>
-Date:   Thu, 07 Apr 2022 06:52:45 -0600
-Message-ID: <87wng1838i.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FF0161366;
+        Thu,  7 Apr 2022 12:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1672CC385A7;
+        Thu,  7 Apr 2022 12:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649335979;
+        bh=yyt0fkY+OiU6yD+EkfeH4xIYmR/qozETlEVmaOo3eWc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XLPs56zj2KFjCgl3aufO8uTuY6UuttnvDpQhSv9IM3z4T3KILbsMium+G5WoHUXro
+         n33yIeWltQ1unN6/Vn0BUfrUz38ntDANNZUgpDTwyBnTzh+z69HnL4yodgZmeME6Gz
+         Y7gJRRuU5vBOXhk0rYrH0CQqCVALHDnfKt0X1SyhL6qWoQsW9BLUZs1thLQI2KaHy/
+         9n7vzqc0odLXL+4DCHSqw/3MTqo67gYnc8Ponb9WmXD5wydUDkQ2Yr/2Ar47ELV9rj
+         ueIVvN36TTtzEM3UFOOw0fF40k4yYI8jcMtilaXsjj3Qlx27rg5bVcE/vLWjwtQ1gr
+         vm4ahJUQuIXYA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, u0084500@gmail.com
+Cc:     linux-kernel@vger.kernel.org, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        lgirdwood@gmail.com
+In-Reply-To: <1648294788-11758-1-git-send-email-u0084500@gmail.com>
+References: <1648294788-11758-1-git-send-email-u0084500@gmail.com>
+Subject: Re: [PATCH v2 0/2] Add Richtek RT5759 buck converter support
+Message-Id: <164933597780.2466529.16895833631668270427.b4-ty@kernel.org>
+Date:   Thu, 07 Apr 2022 13:52:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On Sat, 26 Mar 2022 19:39:46 +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> This patch series add Richtek RT5759 buck converter support.
+> 
+> since V2
+> - Fix typo in title description.
+> - Put allOf and if/then to be together.
+> - Change node name to generic 'regulator'.
+> - Remove seperate wdt_enable variable.
+> - Add of_match_ptr in struct driver of_match_table declaration.
+> 
+> [...]
 
-> On 07/04/22 10.15, Yu Zhao wrote:
->> Add a design doc.
->> 
->
-> Why is this design documentation added?
+Applied to
 
-...because perhaps other developers might want to understand the design
-of this complex mechanism?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Bagas, it is hard enough to get people to write useful documentation as
-it is.  Could I ask you to please stop adding useless friction to the
-process?
+Thanks!
+
+[1/2] dt-bindings: regulator: Add binding for Richtek RT5759 DCDC converter
+      commit: 2a826d9c4251e4a64aa79113aac8cedf7cd0ff57
+[2/2] regulator: rt5759: Add support for Richtek RT5759 DCDC converter
+      commit: 7b36ddb208bd1744f4769f11e530bc08c3701964
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-jon
+Mark

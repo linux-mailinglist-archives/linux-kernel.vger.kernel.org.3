@@ -2,150 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1079C4F8261
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983AD4F8260
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 17:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344411AbiDGPFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 11:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S1344402AbiDGPFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 11:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344404AbiDGPFx (ORCPT
+        with ESMTP id S242225AbiDGPFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 11:05:53 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21A1903EB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 08:03:52 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2eafabbc80aso64435207b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 08:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GIG8eITub5ogM33DPsV6tmuNTcczx7G73Grseyf/5Co=;
-        b=FLez84DFS+Q/p+XWcJvWc5GDQ8rqVivTZkQ3ETtGZvt5iSXcjOUnfpFnZGkIn8J8la
-         fpfOqEkZWpSguThsYcB/LPft8jiUEHkRl8IA9cCrZohWHVbzz6UMHKSv57KNbuYb1iU2
-         NttKMVjOlcrh2prhKLcJXNkPWyvA3Mo6nPrB1p1d0kZH5ZSnF1RdisGm8OVXX9NtWQUk
-         Ilc6Z6BRZQxE1QTiDh8vC4FQ94pgmcwkCZYb6wjMfSEcVjnOrc4og98vY5xx8dQK+mmQ
-         lVblTImyXA+3XMOte8xoeQdQOUWrUmpNxZtd2s+NTRb/fMxochIYuOVlewgLGPFP4A2U
-         aRPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GIG8eITub5ogM33DPsV6tmuNTcczx7G73Grseyf/5Co=;
-        b=MW8gbxF2p24vljh7vPPvgOD4Hp4grh/9ECmSdGhDj989UAQDCYf1DclmfngNAOwfp7
-         POiRdIK0Y084PwaRE8r4utLwR4AV1jErdL0Qr56z2WYb/WJN9KKLIBkMN2eAbEweXikO
-         oAzRLhoLPOCI2P+fRShseaNa4I+xf54bF5flOXFMJsoRvgf87tPAtlhSAFfnv689Vr2f
-         nRhzTmB7PIIELPDLFlHKgNEf+La6b7iDVr0nzCSZV5zzmKxCYm1RxwyanCPRLumM6nJB
-         SdizGGzbrcECP5SePveXTzS6LEEK/KjeO9iyICBQNeCrJf7+i/hkOwwGC1au4jOVnMus
-         l2bg==
-X-Gm-Message-State: AOAM531B+AdvUz7XgaX6dXLH1J8qVtdyBh/gvGLo69xRTioAvPxdh74I
-        xVofrWQyWTemFij4N28PNalekonEBHQwFdmvc/6eTF/q627KT35L
-X-Google-Smtp-Source: ABdhPJxeUEHVfts2fspg79ZAgfj8jTrrFsDIHIROyfSbclEZlOXiXVBpwsf+uE8fRplGdoUuYMdlKiNL5J3M1gT6jjg=
-X-Received: by 2002:a81:18d7:0:b0:2eb:553e:f3ee with SMTP id
- 206-20020a8118d7000000b002eb553ef3eemr11732195ywy.393.1649343831843; Thu, 07
- Apr 2022 08:03:51 -0700 (PDT)
+        Thu, 7 Apr 2022 11:05:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC424591;
+        Thu,  7 Apr 2022 08:03:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 979EF1F85E;
+        Thu,  7 Apr 2022 15:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649343793; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P2Y60UUpdzO4c/QznoyK437PUhA6xIvNYdqt68NitxY=;
+        b=kYgeAbzpzunMhckxZibDJdHxuJ601n8vSHGYrrxwCDMG8e1Bmg/7jm+dO7Yrt0mP0nyPD+
+        1gl2sOGYqMba6AQtRLIZWan0+yDxIEwOXeJiq1S/i5PkZU6kmJBA5Vt3wi4W5q07GXKhsP
+        cVs3g2qvXAHPQf20Zkc9mIGfXu7uuFM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649343793;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P2Y60UUpdzO4c/QznoyK437PUhA6xIvNYdqt68NitxY=;
+        b=heBsnwuHmVko6H1Zte3P++6tL4z/CdhC6qQnFfXHE9UlbUvWyJrBm7wz9xQLyjv5OK8v5Y
+        +Mx0ZOYcycuverDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 47DEC13485;
+        Thu,  7 Apr 2022 15:03:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p6oNDzH9TmKVZAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 07 Apr 2022 15:03:13 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id e89d1ce4;
+        Thu, 7 Apr 2022 15:03:36 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ceph: invalidate pages when doing direct/sync writes
+References: <20220407143834.7516-1-lhenriques@suse.de>
+        <96a44a4224b67b9ec36198bc0586064df5c4ad2a.camel@kernel.org>
+Date:   Thu, 07 Apr 2022 16:03:36 +0100
+In-Reply-To: <96a44a4224b67b9ec36198bc0586064df5c4ad2a.camel@kernel.org> (Jeff
+        Layton's message of "Thu, 07 Apr 2022 10:42:57 -0400")
+Message-ID: <87k0c17x6f.fsf@brahms.olymp>
 MIME-Version: 1.0
-References: <20220407094313.2880-1-srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220407094313.2880-1-srinivas.kandagatla@linaro.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Thu, 7 Apr 2022 20:33:15 +0530
-Message-ID: <CAMi1Hd3v3KPVP15KLriDWsQFOuToee5F7JVDpMNrY-nnnXCnYQ@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: codecs: wcd934x: do not switch off SIDO Buck when
- codec is in use
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 at 15:13, Srinivas Kandagatla
-<srinivas.kandagatla@linaro.org> wrote:
->
-> SIDO(Single-Inductor Dual-Ouput) Buck powers up both analog and digital
-> circuits along with internal memory, powering off this is the last thing
-> that codec should do when going to very low power.
->
-> Current code was powering off this Buck if there are no users of sysclk,
-> which is not correct. Powering off this buck will result in no register access.
-> This code path was never tested until recently after adding pm support
-> in SoundWire controller. Fix this by removing the buck poweroff when the
-> codec is active and also the code that is not used.
->
-> Without this patch all the read/write transactions will never complete and
-> results in SLIMBus Errors like:
->
-> qcom,slim-ngd qcom,slim-ngd.1: Tx:MT:0x0, MC:0x60, LA:0xcf failed:-110
-> wcd934x-codec wcd934x-codec.1.auto: ASoC: error at soc_component_read_no_lock
->         on wcd934x-codec.1.auto for register: [0x00000d05] -110
-> qcom,slim-ngd-ctrl 171c0000.slim: Error Interrupt received 0x82000000
->
+Jeff Layton <jlayton@kernel.org> writes:
 
-Thanks Srinivas. It fixes the above regression I see on DB845c and
-Xiaomi Pocophone F1 running AOSP with v5.18-rc1.
+> On Thu, 2022-04-07 at 15:38 +0100, Lu=C3=ADs Henriques wrote:
+>> When doing a direct/sync write, we need to invalidate the page cache in
+>> the range being written to.  If we don't do this, the cache will include
+>> invalid data as we just did a write that avoided the page cache.
+>>=20
+>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+>> ---
+>>  fs/ceph/file.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>=20
+>> Ok, here's a new attempt.  After discussion in this thread and on IRC, I
+>> think this is the right fix.  generic/647 now passes with and without
+>> encryption.  Thanks!
+>>=20
+>> Changes since v2:
+>> - Invalidation needs to be done after a write
+>>=20
+>> Changes since v1:
+>> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+>> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>>=20
+>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+>> index 5072570c2203..63e67eb60310 100644
+>> --- a/fs/ceph/file.c
+>> +++ b/fs/ceph/file.c
+>> @@ -1938,6 +1938,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_it=
+er *from, loff_t pos,
+>>  			break;
+>>  		}
+>>  		ceph_clear_error_write(ci);
+>> +		ret =3D invalidate_inode_pages2_range(
+>> +				inode->i_mapping,
+>> +				pos >> PAGE_SHIFT,
+>> +				(pos + len - 1) >> PAGE_SHIFT);
+>> +		if (ret < 0) {
+>> +			dout("invalidate_inode_pages2_range returned %d\n",
+>> +			     ret);
+>> +			ret =3D 0;
+>> +		}
+>>  		pos +=3D len;
+>>  		written +=3D len;
+>>  		dout("sync_write written %d\n", written);
+>
+> Looks good. I suspect we can also remove the
+> invalidate_indode_pages2_range call earlier in this function too. I may
+> roll that into this patch.
 
-Tested-by: Amit Pundir <amit.pundir@linaro.org>
+Right, that occurred to me as well but I wasn't really sure that would be
+safe.
 
-> Reported-by: Amit Pundir <amit.pundir@linaro.org>
-> Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  sound/soc/codecs/wcd934x.c | 26 +-------------------------
->  1 file changed, 1 insertion(+), 25 deletions(-)
->
-> diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-> index 1e75e93cf28f..6298ebe96e94 100644
-> --- a/sound/soc/codecs/wcd934x.c
-> +++ b/sound/soc/codecs/wcd934x.c
-> @@ -1274,29 +1274,7 @@ static int wcd934x_set_sido_input_src(struct wcd934x_codec *wcd, int sido_src)
->         if (sido_src == wcd->sido_input_src)
->                 return 0;
->
-> -       if (sido_src == SIDO_SOURCE_INTERNAL) {
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
-> -                                  WCD934X_ANA_BUCK_HI_ACCU_EN_MASK, 0);
-> -               usleep_range(100, 110);
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
-> -                                  WCD934X_ANA_BUCK_HI_ACCU_PRE_ENX_MASK, 0x0);
-> -               usleep_range(100, 110);
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_RCO,
-> -                                  WCD934X_ANA_RCO_BG_EN_MASK, 0);
-> -               usleep_range(100, 110);
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
-> -                                  WCD934X_ANA_BUCK_PRE_EN1_MASK,
-> -                                  WCD934X_ANA_BUCK_PRE_EN1_ENABLE);
-> -               usleep_range(100, 110);
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
-> -                                  WCD934X_ANA_BUCK_PRE_EN2_MASK,
-> -                                  WCD934X_ANA_BUCK_PRE_EN2_ENABLE);
-> -               usleep_range(100, 110);
-> -               regmap_update_bits(wcd->regmap, WCD934X_ANA_BUCK_CTL,
-> -                                  WCD934X_ANA_BUCK_HI_ACCU_EN_MASK,
-> -                                  WCD934X_ANA_BUCK_HI_ACCU_ENABLE);
-> -               usleep_range(100, 110);
-> -       } else if (sido_src == SIDO_SOURCE_RCO_BG) {
-> +       if (sido_src == SIDO_SOURCE_RCO_BG) {
->                 regmap_update_bits(wcd->regmap, WCD934X_ANA_RCO,
->                                    WCD934X_ANA_RCO_BG_EN_MASK,
->                                    WCD934X_ANA_RCO_BG_ENABLE);
-> @@ -1382,8 +1360,6 @@ static int wcd934x_disable_ana_bias_and_syclk(struct wcd934x_codec *wcd)
->         regmap_update_bits(wcd->regmap, WCD934X_CLK_SYS_MCLK_PRG,
->                            WCD934X_EXT_CLK_BUF_EN_MASK |
->                            WCD934X_MCLK_EN_MASK, 0x0);
-> -       wcd934x_set_sido_input_src(wcd, SIDO_SOURCE_INTERNAL);
-> -
->         regmap_update_bits(wcd->regmap, WCD934X_ANA_BIAS,
->                            WCD934X_ANA_BIAS_EN_MASK, 0);
->         regmap_update_bits(wcd->regmap, WCD934X_ANA_BIAS,
-> --
-> 2.21.0
->
+> I'll give this an xfstests run with fscrypt enabled and see how it does.
+
+I'll do the same here, I just run a few tests on a vstart cluster.  But
+I'll definitely give it some more testing.
+
+Cheers,
+--=20
+Lu=C3=ADs

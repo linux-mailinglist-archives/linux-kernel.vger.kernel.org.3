@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387814F7C84
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2094F7C80
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240083AbiDGKRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S236357AbiDGKPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiDGKRY (ORCPT
+        with ESMTP id S230034AbiDGKPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:17:24 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831DC5A16E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 03:15:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 58DA15C0231;
-        Thu,  7 Apr 2022 06:15:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 07 Apr 2022 06:15:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
-        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ZjQ0U+
-        QYU3GVU9/vZxUDNkx5L3+KNfvJqan0Hjjw7QY=; b=UT/vr5QhXuq2tSG74A46kZ
-        8tsYpygO+byeFCoVc1WvhCR09de+foGpc17LdN+kDfHT8kZ1FjkGAQy7HGVTx1SE
-        T6BtRYIQuniSQm/e4Ow1YzVC6QAKpfUkPoOPq0sFpJl+5c5C0xRUcDypd/nhc3lA
-        xFUf1/aqKXEOOT1DQRmbM3B/63i0TSg3y5yFFjUHacB4dwjZLwtIUcV0GAEBTlJG
-        kw+aKjkDBa9kzoWcoXW5gOXL/vxDvxKUHoH7Iw+pQN+OTdhKQjkq/h2DsWfMe6JZ
-        oDaFgMtmDp8Nhm+QgmDb+0Oe49AJq5V9KXiAVAjCd64JiD3IuSR6oOh7UG8+kr9A
-        ==
-X-ME-Sender: <xms:t7lOYslaS6bacDasFfwlAQlTypkrJNlPKX5pVYT42aSRceYbw3QhQw>
-    <xme:t7lOYr1Z6MjHfX5z7UqoV8r7cOrKmSPe9FaH6d2aeyeoTkV22b7lEJMKZIkfNQCyZ
-    SXdgSnISYjOZF2ItC0>
-X-ME-Received: <xmr:t7lOYqpbKuMQUk_JcjgNk9doMN-hvS5GuF_bEjEjvTtTOxA07Q-EH7nYN1pLGaXPa8VyUtjsaWtTAqWqd3aDzwR1H-CRr4kN4Xg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvffkhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
-    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
-    eptdelteekleekkedvueejheekgfdvtdehhefhteeitefhteefgefhudehveevleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
-    hnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:t7lOYokv__jw68BwjAp_Y3vzwrJ74SiobMWbKMKvsPKI-rnVW8-eJA>
-    <xmx:t7lOYq0X7CVZYji4OPXooBdewBXQLO7I_CeK8bKSV0NgQmorxjtjoA>
-    <xmx:t7lOYvseLp1AsxRZQNWE4W1PjOeZjSdOSNPXxGWKpj5bXq_MjyK9hA>
-    <xmx:uLlOYvxIHy0N4IndHwcD-FYYgp5gBsS1IPjnAY8h8KomgWowS86dQA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Apr 2022 06:15:18 -0400 (EDT)
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Message-Id: <5edbe76ce68227f71e09af4614cc4c1bd61c7ec8.1649326292.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v2] macintosh/via-pmu: Fix build failure when CONFIG_INPUT is
- disabled
-Date:   Thu, 07 Apr 2022 20:11:32 +1000
+        Thu, 7 Apr 2022 06:15:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0AA46143;
+        Thu,  7 Apr 2022 03:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649326398;
+        bh=NzbJ6LCovM7vad+GoSqmD1yRVSeHyd9Cr+QnKLRutCo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=UHTLyZknjq/Lwysg1lfr1ofEeO/1/nQYoI09NvqfynS06FGp1kE4sMsluuYH7279I
+         hWBQbrci3PyLV7qf6yz3pbmkvg/aAmONviwB9PoTQ9LhVdWObNXC8nDf1sXE2T1nX+
+         w7rjYHCeqyKyAM9mT2xJK1qQ4wY6o9uzsWi3yc9Y=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MDhlf-1njneT1zPj-00AjHx; Thu, 07 Apr 2022 12:13:18 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     zheyuma97@gmail.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (adt7470) Fix warning on module removal
+Date:   Thu,  7 Apr 2022 12:13:12 +0200
+Message-Id: <20220407101312.13331-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3ovxuFu8CEf0F/03MIBREb5S34SEezFsSkmtGRm0P10lTl2Oeu5
+ XbexovcfCSCv/9/3le3RFlkFuN95u0B01kzYugjm8KH8K0tVaSzPBIn0Nw4kNWFJtvT/DNK
+ 2t1cKD0dF3dO1j7VjpVMdnYFbN38b1db8CCuP/7XoY7ZNDSdw03jR6hZPm8hjkhZOrc+ITB
+ WrAnpEs5Ks7Aeo3ivfpcw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ic4wrSCOd88=:lTToyKaCXOpBWmB1zpEV1l
+ +BoD+IgPTXSM3xxgJHGQKpT89Yw5DH4411051A09xNtIwtpGUcfqlZ8noywCCqyiZtH8BUgHw
+ 6pfx5OJ6JBgSu2PlmShYAR3s/ze4BsOWxHnlW8QdVEPMoMmVjCbVrTXY1EQ8lrZM45AQ4k8Dy
+ RA6vN7EO9xuanqNTBtFnILoAN11RfKCvx/41pR87l5KsYGgKdq/piySYOt+SHvcinnTK+4k/V
+ pl54w7b1jv+u5FVRaq9CvZjJsulcrmzqubaICZomijRKeAfk6of0bagCbFw6fuQdqXypLo2k4
+ g6hqpghhbHw1lAlEY4SPhWbI33vxs3oN4GX2cxlp2YAPkfeTHosS80B7VODMpQX77eurVWlPD
+ SFtHQeiH1rBGSEuOY0jiFHkGJbKuOEFe1uucliHcGG3PK0v+/wunOm6xOVC/g2Y+B2q1Skq58
+ QXCI1CuA5+k7Iq1j+Ajfytrg9GsVoiwR9Qlq6+FNKCQjvawwJewjCRG5OIthhzd7W8dVcykWT
+ 1lsOzoAg7/iYNk0uH6mie1e74Sa0tDDK3/2qi3eKL5BlmzqIOi2MO6RXNQ667wkMyULSCmSeC
+ phC6F58CVv+yhvmJiaI9Z6SXyJ2OaAZJFT8e2JW0tUx0hZAw4v+g1xRphs2tpSjoQqNuC0MPw
+ NTwPX1OzoJfM3/hsSxEEzE32AV5QQqYLUyvLXbqdIRtIsmdVKhNeSlF6fxnVzCPWwCFvz2DPH
+ iYID2qfW5lWT9udET+PiEurk56qUPxR2AtwXMQ2CQNRmgfmB2ewjZUsSZPB3yOjs6ybP+O+jw
+ odtVYkOJ2/q+tq/OgPYCofgUNR3TV2CdLtW6Xgp8HFNjJZ8wED5ryV5GSNtuA08LocaseyDHP
+ 4s8vhFAQ8QyFnKeE36UVYif7LFjclw0N58tY3z+urilmTkQgN2KXLA92dznJIGOWcCgnNZqI7
+ 24ziY+E2FCRnRziC3V/6alAVAN1wZSJKMlPLTPI5reMYbxroIDUziW+cBfmwGlLEbUNS8X0Gz
+ lzuCc0SG4QKwfNlvBDkowrOMWlp3JvkiSc9ncPENLxINv3AvHcfrZaCW4OBBu97qcPZTYlZ0v
+ 555ROtZojEwM8I=
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,78 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
-via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
-via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
-via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
-via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
-via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
-make[1]: *** [Makefile:1155: vmlinux] Error 1
-make: *** [Makefile:350: __build_one_by_one] Error 2
+When removing the adt7470 module, a warning might be printed:
 
-Don't call into the input subsystem unless CONFIG_INPUT is built-in.
+do not call blocking ops when !TASK_RUNNING; state=3D1
+set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
 
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-Changed since v1:
- - Adopted IS_ENABLED to avoid an ifdef as suggested by Christophe.
- - Added the ADB_PMU_EVENT symbol as suggested by Geert, though this
-   adds a new Kconfig symbol for little gain AFAICS.
----
- drivers/macintosh/Kconfig   | 4 ++++
- drivers/macintosh/Makefile  | 3 ++-
- drivers/macintosh/via-pmu.c | 2 +-
- 3 files changed, 7 insertions(+), 2 deletions(-)
+This happens because adt7470_update_thread() can leave the kthread in
+TASK_INTERRUPTIBLE state when the kthread is being stopped before
+the call of set_current_state(). Since kthread_exit() might sleep in
+exit_signals(), the warning is printed.
+Fix that by using schedule_timeout_interruptible() and removing
+the call of set_current_state().
+This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
+which might cause the kthread to exit.
 
-diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
-index 5cdc361da37c..3942db15a2b8 100644
---- a/drivers/macintosh/Kconfig
-+++ b/drivers/macintosh/Kconfig
-@@ -67,6 +67,10 @@ config ADB_PMU
- 	  this device; you should do so if your machine is one of those
- 	  mentioned above.
- 
-+config ADB_PMU_EVENT
-+	def_bool y
-+	depends on ADB_PMU && INPUT=y
-+
- config ADB_PMU_LED
- 	bool "Support for the Power/iBook front LED"
- 	depends on PPC_PMAC && ADB_PMU
-diff --git a/drivers/macintosh/Makefile b/drivers/macintosh/Makefile
-index 49819b1b6f20..712edcb3e0b0 100644
---- a/drivers/macintosh/Makefile
-+++ b/drivers/macintosh/Makefile
-@@ -12,7 +12,8 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)	+= mac_hid.o
- obj-$(CONFIG_INPUT_ADBHID)	+= adbhid.o
- obj-$(CONFIG_ANSLCD)		+= ans-lcd.o
- 
--obj-$(CONFIG_ADB_PMU)		+= via-pmu.o via-pmu-event.o
-+obj-$(CONFIG_ADB_PMU)		+= via-pmu.o
-+obj-$(CONFIG_ADB_PMU_EVENT)	+= via-pmu-event.o
- obj-$(CONFIG_ADB_PMU_LED)	+= via-pmu-led.o
- obj-$(CONFIG_PMAC_BACKLIGHT)	+= via-pmu-backlight.o
- obj-$(CONFIG_ADB_CUDA)		+= via-cuda.o
-diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
-index 399074306a74..495fd35b11de 100644
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -1463,7 +1463,7 @@ pmu_handle_data(unsigned char *data, int len)
- 		pmu_pass_intr(data, len);
- 		/* len == 6 is probably a bad check. But how do I
- 		 * know what PMU versions send what events here? */
--		if (len == 6) {
-+		if (IS_ENABLED(CONFIG_ADB_PMU_EVENT) && len == 6) {
- 			via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
- 			via_pmu_event(PMU_EVT_LID, data[1]&1);
- 		}
--- 
-2.32.0
+Compile-tested only.
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/adt7470.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index fb6d14d213a1..c67cd037a93f 100644
+=2D-- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -19,6 +19,7 @@
+ #include <linux/log2.h>
+ #include <linux/kthread.h>
+ #include <linux/regmap.h>
++#include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/util_macros.h>
+
+@@ -294,11 +295,10 @@ static int adt7470_update_thread(void *p)
+ 		adt7470_read_temperatures(data);
+ 		mutex_unlock(&data->lock);
+
+-		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
+
+-		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
++		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_inter=
+val));
+ 	}
+
+ 	return 0;
+=2D-
+2.30.2
 

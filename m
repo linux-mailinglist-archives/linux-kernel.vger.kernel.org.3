@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C632F4F7DA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF304F7DAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 13:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244668AbiDGLMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 07:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S240782AbiDGLOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 07:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244680AbiDGLMB (ORCPT
+        with ESMTP id S230383AbiDGLOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 07:12:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C390D64E8;
-        Thu,  7 Apr 2022 04:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649329793; x=1680865793;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EQGzKLPkMKM4S+AjnO1qx/YQtzyW0JHeQb2G2zJJxgA=;
-  b=DAUufCwV31fU6M1MrDQHZzhX3+UYl+kKkdv+2OPhTRycEJydlRA9wN7o
-   ziarUu7ao2t06Pyf5+HEzNZKnPzygeqlw7wBKmQxnGTL7LCramO1wVHu5
-   uWUlffYwTkH8LZn5krzQJCehKL0oKsR5agDWwdpWDQ3e+pKBUk2U8K8ji
-   cedfnFS/4EvbWWln4fcqsvAf9oKNJySgjN3lBKA2JI4gqzEJD1DJRYM3P
-   k7pRae0XHnqjCPxKpUMqwoOrcjr5cZOyAeGTUpVnQffMIpS2WtxIZYOF6
-   3bk8SKa4qfk1gWnC5w8PEs0hCdUfNHs7LoXsWrQMiVq81bGdx1MULnzQz
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="324455542"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="324455542"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 04:09:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="722919033"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.125]) ([10.255.28.125])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 04:09:38 -0700
-Message-ID: <48ab3a81-a353-e6ee-7718-69c260c9ea17@intel.com>
-Date:   Thu, 7 Apr 2022 19:09:36 +0800
+        Thu, 7 Apr 2022 07:14:43 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85F5713F00;
+        Thu,  7 Apr 2022 04:12:40 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 19:12:17
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.181.226.201]
+Date:   Thu, 7 Apr 2022 19:12:17 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Sergey Shtylyov" <s.shtylyov@omp.ru>
+Cc:     linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com, jgg@ziepe.ca,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linma@zju.edu.cn
+Subject: Re: Re: [PATCH 11/11] arch: xtensa: platforms: Fix deadlock in
+ rs_close()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <1195e776-328d-12fe-d1f8-22085dc77b44@omp.ru>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
+ <1195e776-328d-12fe-d1f8-22085dc77b44@omp.ru>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 101/104] KVM: TDX: Silently ignore INIT/SIPI
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <d0eb8fa53e782a244397168df856f9f904e4d1cd.1646422845.git.isaku.yamahata@intel.com>
- <efbe06a7-3624-2a5a-c1c4-be86f63951e3@redhat.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <efbe06a7-3624-2a5a-c1c4-be86f63951e3@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Message-ID: <6728929.3f2bf.18003b99de6.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgDnXmIRx05icIeRAQ--.17700W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkNAVZdtZExngAIsP
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,35 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/2022 11:48 PM, Paolo Bonzini wrote:
-> On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
->> +        if (kvm_init_sipi_unsupported(vcpu->kvm))
->> +            /*
->> +             * TDX doesn't support INIT.  Ignore INIT event.  In the
->> +             * case of SIPI, the callback of
->> +             * vcpu_deliver_sipi_vector ignores it.
->> +             */
->>               vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
->> -        else
->> -            vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
->> +        else {
->> +            kvm_vcpu_reset(vcpu, true);
->> +            if (kvm_vcpu_is_bsp(apic->vcpu))
->> +                vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
->> +            else
->> +                vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
->> +        }
-> 
-> Should you check vcpu->arch.guest_state_protected instead of 
-> special-casing TDX? 
-
-We cannot use vcpu->arch.guest_state_protected because TDX supports 
-debug TD, of which the states are not protected.
-
-At least we need another flag, I think.
-
-> KVM_APIC_INIT is not valid for SEV-ES either, if I 
-> remember correctly.
-> 
-> Paolo
-
+SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTI6NDI6MzEgKzAzMDAgU2VyZ2V5IFNodHlseW92
+IHdyb3RlOgoKPiA+IFRoZXJlIGlzIGEgZGVhZGxvY2sgaW4gcnNfY2xvc2UoKSwgd2hpY2ggaXMg
+c2hvd24KPiA+IGJlbG93Ogo+ID4gCj4gPiAgICAoVGhyZWFkIDEpICAgICAgICAgICAgICB8ICAg
+ICAgKFRocmVhZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCByc19vcGVuKCkK
+PiA+IHJzX2Nsb3NlKCkgICAgICAgICAgICAgICAgIHwgIG1vZF90aW1lcigpCj4gPiAgc3Bpbl9s
+b2NrX2JoKCkgLy8oMSkgICAgICB8ICAod2FpdCBhIHRpbWUpCj4gPiAgLi4uICAgICAgICAgICAg
+ICAgICAgICAgICB8IHJzX3BvbGwoKQo+ID4gIGRlbF90aW1lcl9zeW5jKCkgICAgICAgICAgfCAg
+c3Bpbl9sb2NrKCkgLy8oMikKPiA+ICAod2FpdCB0aW1lciB0byBzdG9wKSAgICAgIHwgIC4uLgo+
+ID4gCj4gPiBXZSBob2xkIHRpbWVyX2xvY2sgaW4gcG9zaXRpb24gKDEpIG9mIHRocmVhZCAxIGFu
+ZAo+ID4gdXNlIGRlbF90aW1lcl9zeW5jKCkgdG8gd2FpdCB0aW1lciB0byBzdG9wLCBidXQgdGlt
+ZXIgaGFuZGxlcgo+ID4gYWxzbyBuZWVkIHRpbWVyX2xvY2sgaW4gcG9zaXRpb24gKDIpIG9mIHRo
+cmVhZCAyLgo+ID4gQXMgYSByZXN1bHQsIHJzX2Nsb3NlKCkgd2lsbCBibG9jayBmb3JldmVyLgo+
+ID4gCj4gPiBUaGlzIHBhdGNoIGV4dHJhY3RzIGRlbF90aW1lcl9zeW5jKCkgZnJvbSB0aGUgcHJv
+dGVjdGlvbiBvZgo+ID4gc3Bpbl9sb2NrX2JoKCksIHdoaWNoIGNvdWxkIGxldCB0aW1lciBoYW5k
+bGVyIHRvIG9idGFpbgo+ID4gdGhlIG5lZWRlZCBsb2NrLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0tLQo+ID4gIGFyY2gveHRl
+bnNhL3BsYXRmb3Jtcy9pc3MvY29uc29sZS5jIHwgNCArKystCj4gPiAgMSBmaWxlIGNoYW5nZWQs
+IDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
+aC94dGVuc2EvcGxhdGZvcm1zL2lzcy9jb25zb2xlLmMgYi9hcmNoL3h0ZW5zYS9wbGF0Zm9ybXMv
+aXNzL2NvbnNvbGUuYwo+ID4gaW5kZXggODFkN2M3ZThmN2UuLmQ0MzFiNjFhZTNjIDEwMDY0NAo+
+ID4gLS0tIGEvYXJjaC94dGVuc2EvcGxhdGZvcm1zL2lzcy9jb25zb2xlLmMKPiA+ICsrKyBiL2Fy
+Y2gveHRlbnNhL3BsYXRmb3Jtcy9pc3MvY29uc29sZS5jCj4gPiBAQCAtNTEsOCArNTEsMTAgQEAg
+c3RhdGljIGludCByc19vcGVuKHN0cnVjdCB0dHlfc3RydWN0ICp0dHksIHN0cnVjdCBmaWxlICog
+ZmlscCkKPiA+ICBzdGF0aWMgdm9pZCByc19jbG9zZShzdHJ1Y3QgdHR5X3N0cnVjdCAqdHR5LCBz
+dHJ1Y3QgZmlsZSAqIGZpbHApCj4gPiAgewo+ID4gIAlzcGluX2xvY2tfYmgoJnRpbWVyX2xvY2sp
+Owo+ID4gLQlpZiAodHR5LT5jb3VudCA9PSAxKQo+ID4gKwlpZiAodHR5LT5jb3VudCA9PSAxKSB7
+Cj4gPiArCQlzcGluX3VubG9ja19iaCgmdGltZXJfbG9jayk7Cj4gPiAgCQlkZWxfdGltZXJfc3lu
+Yygmc2VyaWFsX3RpbWVyKTsKPiA+ICsJfQo+ID4gIAlzcGluX3VubG9ja19iaCgmdGltZXJfbG9j
+ayk7Cj4gCj4gICAgRG91YmxlIHVubG9jayBpZmYgdHR5LT5jb3VudCA9PSAxPwoKWWVzLCBUaGFu
+a3MgYSBsb3QgZm9yIHlvdXIgdGltZXIgYW5kIGFkdmljZS4gSSBmb3VuZCB0aGVyZSBpcyBubyBy
+YWNlIGNvbmRpdGlvbgpiZXR3ZWVuIHJzX2Nsb3NlIGFuZCByc19wb2xsKHRpbWVyIGhhbmRsZXIp
+LCBJIHRoaW5rIHdlIGNvdWxkIHJlbW92ZSB0aGUgdGltZXJfbG9jawppbiByc19jbG9zZSgpLCBy
+c19vcGVuKCkgYW5kIHJzX3BvbGwoKS4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91

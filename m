@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3194E4F764F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA6D4F7645
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241286AbiDGGi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S241268AbiDGGix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241258AbiDGGit (ORCPT
+        with ESMTP id S241240AbiDGGij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:38:49 -0400
+        Thu, 7 Apr 2022 02:38:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE43592D3D;
-        Wed,  6 Apr 2022 23:36:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389D88EB4A;
+        Wed,  6 Apr 2022 23:36:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6D2D61D67;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F76761D5B;
         Thu,  7 Apr 2022 06:36:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE4FC385AC;
-        Thu,  7 Apr 2022 06:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3D5C385A9;
+        Thu,  7 Apr 2022 06:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649313398;
-        bh=y8Hzh6X4ov/pWCwdyVdXH8J0X9JbXxB31XioMauX8I0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gSRWIyM3zCcHxW0KEvgIQOePA23ryzGrMJh6y33avUH9lLcLrtTQbZxSylSSYUeVE
-         gQWdDTSap7/UqEXOOufd5NcOPqgdymPNRdXk7dKn8L5FGrktzXbDwNt0VF0+dN7z9L
-         cy6o+LnitEiQm+05Itm9yK6HOOVzirB+SWsPD1QS4g02xD2fvLXJu6pnJNznL8w4y8
-         G3AF5EPP8SW3SMZKuGyFOeWEFraKTJM3h/U92wkO8GNTwwoQMlMp/s4kAinGXaLlIY
-         wK//amQjSkVwz786YWzyA9xQ9hlxTrjPKBCMSRBXe36441jcNImZXJVN4bNTQOg2v/
-         j5lylyQFMb16g==
-Received: by mail-ua1-f54.google.com with SMTP id n9so3146534uaj.5;
-        Wed, 06 Apr 2022 23:36:38 -0700 (PDT)
-X-Gm-Message-State: AOAM530dwVMx2aG/KAjAacOPQ+9ER65ETKyRCENsr9XQP+N8PxCevCGh
-        a6H1yKCsJKHhIqtMQWA1KhonxXPEbhatWklbwnc=
-X-Google-Smtp-Source: ABdhPJydzCgTxScgqH3neRJgDnYZjHcS9lgL73MhlBIqhRB6tjH5OZPFpm4siyD9r6yxEwjcjdMCGPb4oXGfY4egEzI=
-X-Received: by 2002:a9f:2048:0:b0:352:9b4f:ac98 with SMTP id
- 66-20020a9f2048000000b003529b4fac98mr3551530uam.12.1649313397262; Wed, 06 Apr
- 2022 23:36:37 -0700 (PDT)
+        s=k20201202; t=1649313397;
+        bh=8uwDrdT/rAtS3qmkIgZ5IYHNiw59FST1McQcPgyt7MI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wd3Ux118X5M+RL+44A+6MKkElKcpBe4L+yqGu0Cj4p9pyVkeFxPxRVQsEVCUVLul7
+         mSySVH5wJakKTIPZzlztrkvZRIYgtOj9d63eyX5Wwsso5ciQV9KooPo5DyPqd9J7oY
+         Qb+IrgzxF6vm5U0xYAXpIAmoCzAWrnPcz5TYi5AhhW7pnqcBIYbGmaOm4D1Ps18Y8k
+         nmwWXth9G2XpHC54VKXI9KZaqqAbzv4VLDnxslKLO/dvt4KgTwQDXhGhgOJKNfulZv
+         cka9WINzFR3Ja4H9oC+iD20oxfu31HW34SG/zjQJ9Wj9u31z3fFKaki1BsiIQgkaFH
+         N0x0WMi4YYALQ==
+Date:   Thu, 7 Apr 2022 08:36:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Document R-Car
+ H3/M3/E3 support
+Message-ID: <Yk6GcjtYcqnH6T7c@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-References: <Yk3YUFfvEszb+cXT@kroah.com> <mhng-492e449b-ad90-4725-86a0-d5d84e4c35be@palmer-mbp2014>
-In-Reply-To: <mhng-492e449b-ad90-4725-86a0-d5d84e4c35be@palmer-mbp2014>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 7 Apr 2022 14:36:26 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS_W6NyA4mhHm4fsCsbAGaEb8XN-k=Aq=SCdOEP-kuy9g@mail.gmail.com>
-Message-ID: <CAJF2gTS_W6NyA4mhHm4fsCsbAGaEb8XN-k=Aq=SCdOEP-kuy9g@mail.gmail.com>
-Subject: Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yA7mIVcGHpaFnB3t"
+Content-Disposition: inline
+In-Reply-To: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,52 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 3:06 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> On Wed, 06 Apr 2022 11:13:36 PDT (-0700), Greg KH wrote:
-> > On Wed, Apr 06, 2022 at 10:16:49PM +0800, guoren@kernel.org wrote:
-> >> From: Guo Ren <guoren@linux.alibaba.com>
-> >>
-> >> These patch_text implementations are using stop_machine_cpuslocked
-> >> infrastructure with atomic cpu_count. The original idea: When the
-> >> master CPU patch_text, the others should wait for it. But current
-> >> implementation is using the first CPU as master, which couldn't
-> >> guarantee the remaining CPUs are waiting. This patch changes the
-> >> last CPU as the master to solve the potential risk.
-> >>
-> >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> >> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> >> Cc: <stable@vger.kernel.org>
-> >> ---
-> >>  arch/riscv/kernel/patch.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > What commit id does this change fix?
->
-> I think it's been there since the beginning of our text patching, so
->
-> Fixes: 043cb41a85de ("riscv: introduce interfaces to patch kernel code")
-Yes, it the riscv origin.
 
->
-> seems like the best bet, but I'll go take another look before merging
-> it.  That's confusing here, as I acked it, but that was for an earlier
-> version that touched more than one arch so it was more ambiguous as to
-> which tree it was going through (IIRC I said one of those "LMK if you
-> want it through my tree, but here's an Ack in case someone else wants to
-> take it" sort of things, as I usually do when it's ambiguous).
-Thx for the clarification, I would remove the acked in the next version.
+--yA7mIVcGHpaFnB3t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> Without a changelog, cover letter, or the other patches in the set it's
-> kind of hard to tell, though ;)
-Okay, I should add a changelog for the patch with cover letter.
+On Tue, Mar 29, 2022 at 11:38:03AM +0200, Geert Uytterhoeven wrote:
+> Document support for the SPI Multi I/O Bus Controller (RPC-IF) in the
+> R-Car H3, M3-W, M3-W+, M3-N, and E3 SoCs.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
--- 
-Best Regards
- Guo Ren
+--yA7mIVcGHpaFnB3t
+Content-Type: application/pgp-signature; name="signature.asc"
 
-ML: https://lore.kernel.org/linux-csky/
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJOhm4ACgkQFA3kzBSg
+KbZc5Q/8D/HrD8s7Ole+CGOFemu+BxNlEqin0mYgn67gkxzUcXcM+y4Nnvq4Rz+X
+MPktd7ovJRosDSwtbZcANiT5gn1BwoCB+dU5/vA7+2Ym5QXeuTXUPLGrK89n+llB
+9B5QFfRaXkKk83fvLQHYQcYUzx4p6RLY78h3Mxhb8kPtXebvsZs8BKQq7KiHtDyU
+Ygtmof5dZ06qRDY/4y4NtXbjCUOEy3+7aRwfnpcmGE0pjXhjRjFdgja7W42/Vv7z
+lzB7tmyZbXAiiw32jVhrlng1j8jS6v9AERm9JmxHm8uNE9OZ8GNf5FMlbapN4p5Z
+5rI9HW0pU0jbsFAFqpK8QJ1o2ll7qzuX3TZ5lyH5BkHhtNnYZ9d3AG86pC3ino3M
+fKTsJtLm4Pk/RyEWAjerMYVBlhJgwzAXjZlDYPwd43C5m0vkqGM9BSsFQf7z6z2x
+SR4S3QPQuBHWQbLgMYDC1djqxZEn6LyRonK3k64nl4Hi3wgHG13ac7FAgNNnmrqr
+GkAUP+XoGchzF0Twnlg+NOnzJTkNK4bIFOCy34vy/dH7imUpNc17HEsnZ1cIICw0
+9CMWbv+xqDIq023X4PdcKByiiMLsaQ4osYePhbo0WTclrWlV3bzB35XsbYDHmCMN
+hqgTd9GTXGCGklr8KafND8qTK4N6drWTqSq5c8buGlZBrNB6zKk=
+=x8UI
+-----END PGP SIGNATURE-----
+
+--yA7mIVcGHpaFnB3t--

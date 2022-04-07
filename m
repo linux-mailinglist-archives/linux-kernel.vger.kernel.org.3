@@ -2,67 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FAA4F769E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363224F7696
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 08:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240205AbiDGG5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 02:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S241392AbiDGGvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 02:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiDGG5b (ORCPT
+        with ESMTP id S241384AbiDGGvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 02:57:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098626553;
-        Wed,  6 Apr 2022 23:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649314532; x=1680850532;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8cY/HD592AL6q7NPOD/NPQfxvapMBjLaxqhPPMiIjWY=;
-  b=FJ+rFRaoxc+6chNKcjTcFCthS4PQnwcUv+WymW9Wg60QM594b/bczNMp
-   3SZBEOtWKZG9+sVKbToXTLsmkouitjH0VmMGcWawyVzbuOwKAtBUQ++xM
-   COYZO7FDPmcxNsOeU3hH/Vr+du1gp8oggkGkOPjFZb2ojd2yv+Em/HlbF
-   U5V0gg7LE79XuXhMpXujSsYaN29FN73+HsR9bjYHuHWcaoNRv3YAu+1OA
-   zNSxI7iAVogwD2lXbuRVCD6UpEv7bWApa7anoPg1hU/LHLp3lRjPPjyam
-   FRrRnq3Ziv+Blzh6PlkSNSPI7U2gGAXCW+KmkvFvMbW5QdW9xtwVkUDlh
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="260081841"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="260081841"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="570921063"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 06 Apr 2022 23:55:28 -0700
-Date:   Thu, 7 Apr 2022 14:48:07 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <navam@xilinx.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
-Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
-  description
-Message-ID: <20220407064807.GA256966@yilunxu-OptiPlex-7050>
-References: <20220403051641.3867610-1-nava.manne@xilinx.com>
- <20220403051641.3867610-6-nava.manne@xilinx.com>
- <20220405053547.GA249845@yilunxu-OptiPlex-7050>
- <SN6PR02MB45766BEFCA6532873271099FC2E69@SN6PR02MB4576.namprd02.prod.outlook.com>
+        Thu, 7 Apr 2022 02:51:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974D9E6C5F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Apr 2022 23:49:03 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id n6so8713703ejc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Apr 2022 23:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ig1etyDF68tf5y4+B0bKhTRY5wsKZ9GD0NtPhkq4h5I=;
+        b=xrLUcHHwKuNTh4APSk1UhhZeFKYx5/K1fJIzae4MIT/Bg1RYnwCOSqstuf/ZYismFz
+         3CE2yBy2HCiEUJAT/uhluRStnRmtIzabcvauHCUnncDJ8Tef7BPXRE24Slg8eoVuPEed
+         Gjt/OGqI/n7/B0coJmgJrd9Sxx2WmltbunSffJZ7Avw2PXYdaqFgGx6F1GEcu7Rd9r+i
+         Fw3vnDg6Ki+RhIKBcblCZ0hVP5wkbBQBAwZTDUoZVPnkzJZad9y/K6Q/zJlo6TuTbnoe
+         lrCllXvX3vtSI0HhWwYw6WHEmtKRUglMA43DnsjdHGD2e2igUDPwa5MqXOMJ5ezBnman
+         /JbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ig1etyDF68tf5y4+B0bKhTRY5wsKZ9GD0NtPhkq4h5I=;
+        b=dFKTULZgA6ABzSHfNs2rYtoKPE7qQq27HZgaVivWou2oThB05vHUxekJZCgC9PmtY2
+         5UdoVFSYbaoBJVV6CwtBVl7aMqKfFDdY8D9Jz7JEd4eot6Dot4SpQPKg4BKmD6gt9cRr
+         tiTBBrXXegUZ3MjyX6i+SIWUufY5OEQzmhwtkZJ+ZzuL30fOcCo2yJaLHiW6VHa+lXLd
+         K7wPdm6gkzAloR0f0M3zCAjXALRElH15QYPbjcub/M22tsl05xsazjjX2/RzufASTync
+         EQKfEByY3aLL8Q8YDQ+zB4aKEXyyx8xy1R9BOCm7F+D/JtOXZzV+ypcCjNap16Mm/MVd
+         Vr+w==
+X-Gm-Message-State: AOAM532Zq/AC5B127jw1NmY2wSxgHRluM9Wtfh09QPwinZnIAuvLiFE9
+        QkzdFqhHmEuyPgiNm+HzXCuE3Tz2C4ixHO5u
+X-Google-Smtp-Source: ABdhPJyI+a19I669vtBg9dpBsKeqt/6i1D7etaTUE8OFw7G4q33l4BRlM1qJgUjqaoH0PJSjKLZYdA==
+X-Received: by 2002:a17:907:608d:b0:6e7:f1d1:ff42 with SMTP id ht13-20020a170907608d00b006e7f1d1ff42mr12405023ejc.620.1649314142185;
+        Wed, 06 Apr 2022 23:49:02 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id s10-20020a50daca000000b0041cc361b1c9sm5877690edj.68.2022.04.06.23.49.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 23:49:01 -0700 (PDT)
+Message-ID: <594c124d-403f-56f1-b9fb-f48042d7056b@linaro.org>
+Date:   Thu, 7 Apr 2022 08:49:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB45766BEFCA6532873271099FC2E69@SN6PR02MB4576.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: Correct disp_aal
+ binding for MT8183
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     matthias.bgg@gmail.com, p.zabel@pengutronix.de, airlied@linux.ie,
+        yongqiang.niu@mediatek.com, jason-jh.lin@mediatek.com,
+        nancy.lin@mediatek.com, allen-kh.cheng@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220406094654.29722-1-rex-bc.chen@mediatek.com>
+ <20220406094654.29722-2-rex-bc.chen@mediatek.com>
+ <397e30c2-18c3-93d6-16f5-b113be77f51a@linaro.org>
+ <c9a54f1c9350d63489a0f85443f5623fe5d7fe1d.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c9a54f1c9350d63489a0f85443f5623fe5d7fe1d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +84,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:31:39AM +0000, Nava kishore Manne wrote:
-> Hi Yilun,
+On 07/04/2022 08:22, Rex-BC Chen wrote:
+> On Wed, 2022-04-06 at 16:44 +0200, Krzysztof Kozlowski wrote:
+>> On 06/04/2022 11:46, Rex-BC Chen wrote:
+>>> The driver data of MT8183 and MT8173 are different.
+>>> The value of has_gamma for MT8173 is true while the value of MT8183
+>>> is
+>>> false. Therefore, the compatible of disp_aal for MT8183 is not
+>>> suitable
+>>> for the compatible for MT8173.
+>>
+>> Just because one feature is not supported, it does not mean they are
+>> incompatible, which you claim in the patch below. Are you sure they
+>> are
+>> really incompatible and MT8173 fallback cannot be used?
+>>
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> 	Thanks for providing the review comments.
-> Please find my response inline.
+> Hello Krzysztof,
 > 
-> > -----Original Message-----
-> > From: Xu Yilun <yilun.xu@intel.com>
-> > Sent: Tuesday, April 5, 2022 11:06 AM
-> > To: Nava kishore Manne <navam@xilinx.com>
-> > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
-> > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
-> > <git@xilinx.com>
-> > Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
-> > description
-> > 
-> > On Sun, Apr 03, 2022 at 10:46:41AM +0530, Nava kishore Manne wrote:
-> > > Fixed the warnings: No description found for return value of 'xxx'
-> > 
-> > The commit message is not clear. There are descriptions for some functions,
-> > but not in right format.
-> > 
-> I agree for some functions has description but not in the right format.
-> The "Description Not exits" and  "Description not in the right format" in both cases the tool will report the same warning ie; " warnings: No description found for return value of 'xxx'"
-
-Thanks for the info. It would be better we describe the root cause in commit
-message along with the robot reports.
-
-And also change the subject please.
-
-> This patch address the above warning. So to make it relevant I have added the same in the commit msg.
-
-Adding the same commit message may not be a good way, for this case you could
-just combine them into one commit.
-
-Thanks,
-Yilun
-
+> Thanks for your review.
 > 
-> Regards,
-> Navakishore.
+> The difference of disp_aal for each MediaTek SoCs is "has_gamma".
+> And we only control this variable for different MediaTek SoCs.
+> 
+> The value of has_gamma for MT8173 is true.
+> The value of has_gamma for MT8183 is false. (Moreover, the driver data
+> is null for MT8183)
+> 
+> From this situation, I think it's not compatible between MT8173 and
+> MT8183.
+
+You repeated the commit msg without bringing any new information... but
+let it be, I assume setting gamma on MTT8183 is incorrect or produces
+wrong results.
+
+
+Best regards,
+Krzysztof

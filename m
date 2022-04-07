@@ -2,128 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0DD4F8A27
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001774F8A3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 00:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiDGVfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 17:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S231704AbiDGVhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 17:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbiDGVft (ORCPT
+        with ESMTP id S229634AbiDGVhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 17:35:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D510FDED
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649367228; x=1680903228;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pQ2l2Yft622tiVLDWS1dgPrfgqMkrlfQmixJxbng0kA=;
-  b=Xi8cj3UYIG6H/Y8ZmjLqDYEiZwbsr4o+SmKnxSsUYsyLa6YGsWZIRXEe
-   fyCS7+34lrm1PGfVn36axVCEUVvOvl3Y6rDmyXjIy+aH9xTVLZrl0ha0E
-   trg3BalOWDid76iPQ9EMw9d7m+5gFQILgNScYtsL88a0fT3CGPJV6oRQQ
-   ygSoH+rkwb9U8ppYQurvCS5lwhMBXdRIiSbOJ/Che//FB0uWwmPyI/aOC
-   g6yEwg7CdN0z+MH+Y8LZBBU/ZA7HJSKmeO9rlA6TvhteXCfR7Vae1IYb8
-   XMK+mVJvioHCK3XUFwMg/34IEp0jC0JYKuAVZEbZdnAH878biIZwzWdZF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261138626"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="261138626"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 14:33:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="524542097"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 07 Apr 2022 14:33:47 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncZlC-0005nf-Am;
-        Thu, 07 Apr 2022 21:33:46 +0000
-Date:   Fri, 8 Apr 2022 05:33:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v2 19/20] drivers/opp/core.c:898:33:
- error: 'const struct opp_table' has no member named 'clk'; did you mean
- 'clks'?
-Message-ID: <202204080548.RCEpmt1c-lkp@intel.com>
+        Thu, 7 Apr 2022 17:37:00 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5AB19FF7E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 14:34:59 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id x131so11834692ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 14:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=yaGos3SERrC2jdiQiJ/85vABo3kZeiwvqRtqI7sWR/o=;
+        b=UnoHu1EK+12NpKKA6uHxlvH9RUZbPSgYKriZSpsoZk125w5ipGaiJ7sTtSTGJbeMdp
+         Di350AKk06PeKhYE+MJWSKTJDYk4A7TfEFWKJ92lqYXLXG0/bkkDCtMSY4ru7ns8Cs30
+         0NIEgnHab0r5/k/hTOZPAKpTGMTGQGQyTK33Uukp8gs2IzZlnPz6LrjMGmCnCqLwUZ25
+         18itwsp3ELXHwK29xjTTLEMg8uzfg7NH4o8JLk0FisLvmB12XKsQ7g2lpr3Ncu5s+INw
+         N+bbiivMFNquAbOtNEkdbNn0yw4WP/NnDLWLnUCQIm4OAwysRaQ56esx+QbJW1tI3C1l
+         7+hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=yaGos3SERrC2jdiQiJ/85vABo3kZeiwvqRtqI7sWR/o=;
+        b=ntjt7vzjFNjVxX7xMxLl5Lj5F0hAdHLHO+JQdNKcaP1G3AxhZboEcrzQyn4Dw+WIbr
+         CLmmUeyVjGDdsk7z/3UFwmZyKnduKmAcZobZk45Xs0MC9zYqSN4uyaOEAu6NPwOeKtEv
+         oY4391Sqx8bgoU9tjQIjUaYPQ3Bg7iQhgdz6xvxXlFneV3hE1hMLE/NmM2CZ+1v0g1xb
+         pg529Rorpc2uSRuIInbdM6AyCObM/xhkUjlxHIFpv64hMtp5q6DWgIzU/MyQZbd8xNW/
+         +t7SgxUUBJF2OBo3p4HtJztj/Utsb5g9XK7AELEvU5f4OHZ2RYMiVNb29czQt7lXf2d5
+         YZXw==
+X-Gm-Message-State: AOAM532B1VKh1gg2rJT05euS7Aq74X0gUYxnmIl5WTjV+ssp6fKk7ibG
+        xin0bcWpUmO86nyKd3jLCx80iBBHEzPXyDNfE6/w2Q==
+X-Google-Smtp-Source: ABdhPJwJEywGIqQdg8hh0sUZXnA5G8Sb7DVlb0w1/35HRGGNTC17jceSOFtlb3SQWN4PMoqW6FMkZ+50oK/6iZFFy60=
+X-Received: by 2002:a25:e689:0:b0:63e:4f58:d27 with SMTP id
+ d131-20020a25e689000000b0063e4f580d27mr4753250ybh.341.1649367298317; Thu, 07
+ Apr 2022 14:34:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a81:10a:0:0:0:0:0 with HTTP; Thu, 7 Apr 2022 14:34:57 -0700 (PDT)
+In-Reply-To: <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
+References: <20220311072859.2174624-1-brendanhiggins@google.com>
+ <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org> <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Thu, 7 Apr 2022 18:34:57 -0300
+Message-ID: <CAKgze5bCf+v4PoS92XCDV2cD7d0iUvCvxHbPqAnLoW8pwoKbtQ@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
+ init code
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
+        davidgow@google.com, dlatypov@google.com,
+        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, jk@codeconstruct.com.au
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
-head:   e10a6c68219eb9b5d79c2f447d8df698c38e5853
-commit: ea240d6e8f1e8a618de2d76ff2e89a1cc3d39971 [19/20] pm wip
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220408/202204080548.RCEpmt1c-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/krzk/linux/commit/ea240d6e8f1e8a618de2d76ff2e89a1cc3d39971
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
-        git checkout ea240d6e8f1e8a618de2d76ff2e89a1cc3d39971
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+On 4/4/22, Brendan Higgins <brendanhiggins@google.com> wrote:
+> On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org>
+> wrote:
+>>
+>> Hi Brendan,
+>>
+>> On 3/11/22 12:28 AM, Brendan Higgins wrote:
+>> > Add support for a new kind of kunit_suite registration macro called
+>> > kunit_test_init_suite(); this new registration macro allows the
+>> > registration of kunit_suites that reference functions marked __init and
+>> > data marked __initdata.
+>> >
+>> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+>> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>> > Reviewed-by: David Gow <davidgow@google.com>
+>> > ---
+>> >
+>>
+>> I almost applied it ...
+>>
+>> > This is a follow-up to the RFC here[1].
+>> >
+>> > This patch is in response to a KUnit user issue[2] in which the user
+>> > was
+>> > attempting to test some init functions; although this is a functional
+>> > solution as long as KUnit tests only run during the init phase, we will
+>> > need to do more work if we ever allow tests to run after the init phase
+>> > is over; it is for this reason that this patch adds a new registration
+>> > macro rather than simply modifying the existing macros.
+>> >
+>> > Changes since last version:
+>> >   - I added more to the kunit_test_init_suites() kernel-doc comment
+>> >     detailing "how" the modpost warnings are suppressed in addition to
+>> >     the existing information regarding "why" it is OK for the modpost
+>> >     warnings to be suppressed.
+>> >
+>> > [1]
+>> > https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
+>> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
+>> >
+>> > ---
+>> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
+>> >   1 file changed, 26 insertions(+)
+>> >
+>> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+>> > index b26400731c02..7f303a06bc97 100644
+>> > --- a/include/kunit/test.h
+>> > +++ b/include/kunit/test.h
+>> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
+>> >
+>> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
+>> >
+>> > +/**
+>> > + * kunit_test_init_suites() - used to register one or more &struct
+>> > kunit_suite
+>> > + *                         containing init functions or init data.
+>> > + *
+>> > + * @__suites: a statically allocated list of &struct kunit_suite.
+>> > + *
+>> > + * This functions identically as &kunit_test_suites() except that it
+>> > suppresses
+>> > + * modpost warnings for referencing functions marked __init or data
+>> > marked
+>> > + * __initdata; this is OK because currently KUnit only runs tests upon
+>> > boot
+>> > + * during the init phase or upon loading a module during the init
+>> > phase.
+>> > + *
+>> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after
+>> > boot, these
+>> > + * tests must be excluded.
+>> > + *
+>> > + * The only thing this macro does that's different from
+>> > kunit_test_suites is
+>> > + * that it suffixes the array and suite declarations it makes with
+>> > _probe;
+>> > + * modpost suppresses warnings about referencing init data for symbols
+>> > named in
+>> > + * this manner.
+>> > + */
+>> > +#define kunit_test_init_suites(__suites...)                          \
+>> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
+>> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
+>> > +                         ##__suites)
+>> > +
+>> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
+>> > +
+>> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
+>> >       for (test_case = suite->test_cases; test_case->run_case;
+>> > test_case++)
+>> >
+>> >
+>>
+>> The naming of the function and macro are rather confusing and can become
+>> error prone. Let's find better naming scheme.
+>
+> Yeah, I wasn't sure about the name. I didn't have any better ideas
+> initially though. Any suggestions?
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+What about kunit_test_init_section_suite?
 
-All errors (new ones prefixed by >>):
-
-   drivers/opp/core.c: In function '_set_opp_custom':
->> drivers/opp/core.c:898:33: error: 'const struct opp_table' has no member named 'clk'; did you mean 'clks'?
-     898 |         data->clk = (opp_table->clk ? opp_table->clks[0] : NULL);
-         |                                 ^~~
-         |                                 clks
-
-
-vim +898 drivers/opp/core.c
-
-   875	
-   876	static int _set_opp_custom(const struct opp_table *opp_table,
-   877				   struct device *dev, struct dev_pm_opp *opp,
-   878				   unsigned long freq)
-   879	{
-   880		struct dev_pm_set_opp_data *data = opp_table->set_opp_data;
-   881		struct dev_pm_opp *old_opp = opp_table->current_opp;
-   882		int size;
-   883	
-   884		/*
-   885		 * We support this only if dev_pm_opp_set_regulators() was called
-   886		 * earlier.
-   887		 */
-   888		if (opp_table->sod_supplies) {
-   889			size = sizeof(*old_opp->supplies) * opp_table->regulator_count;
-   890			memcpy(data->old_opp.supplies, old_opp->supplies, size);
-   891			memcpy(data->new_opp.supplies, opp->supplies, size);
-   892			data->regulator_count = opp_table->regulator_count;
-   893		} else {
-   894			data->regulator_count = 0;
-   895		}
-   896	
-   897		data->regulators = opp_table->regulators;
- > 898		data->clk = (opp_table->clk ? opp_table->clks[0] : NULL);
-   899		data->dev = dev;
-   900		data->old_opp.rate = old_opp->rate;
-   901		data->new_opp.rate = freq;
-   902	
-   903		return opp_table->set_opp(data);
-   904	}
-   905	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+>> >
+>>
+>> thanks,
+>> -- Shuah
+>

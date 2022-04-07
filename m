@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B6C4F7F5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874744F7F60
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 14:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245365AbiDGMoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 08:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S245379AbiDGMpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 08:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiDGMoM (ORCPT
+        with ESMTP id S245371AbiDGMpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 08:44:12 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D7C7B11E;
-        Thu,  7 Apr 2022 05:42:13 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso6383718pjb.0;
-        Thu, 07 Apr 2022 05:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mB8SsRiMpROsDXNQItiMSlnh+Lyw1uf41AvKn9tE3dU=;
-        b=oxzclEJzWFrYJnCBAIhhbeRMs7tHHrALQRomPVvNE1RkyO5yDBKwD6gPeVAQuevj/D
-         qxYvUsv+NVVR+k3Y3sVcaQL9gXMoc8kNtwmJkohZoC9kEtGNAhaznveNOeATAeBzs/5I
-         bDIu8jCWibokzkSIM6Mdi/cOosuZUmbdtgmjWH4WtzL8wt/NsX8UzmY1Hg9HzFCQkXEH
-         +AA9Eth9cVfxFuqeuyHxXYhvfyIT4hGFl3cl++XamiCshB3taPMSAD4zj7HKXHhlO6hV
-         dNXpJOU0vPIxn95dZuCu+hDsYCIILYSG15SL6pwL54CLEHU+lhwvoCW6LWxi6cVtJfCk
-         h/wA==
+        Thu, 7 Apr 2022 08:45:08 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B98AD13D;
+        Thu,  7 Apr 2022 05:43:07 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id q12so1704447pla.9;
+        Thu, 07 Apr 2022 05:43:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mB8SsRiMpROsDXNQItiMSlnh+Lyw1uf41AvKn9tE3dU=;
-        b=AO9U6G7ttnmiPAcYXKALGSv7vFw8ZTOQfZR5T3sPgeNfy/tVukr8N4ZmeKaxEfV36s
-         AwfyvDksET3bgLudhoH7twRSChgbt0aUcWsZGilTgIcwzB37SQde6CcpTbhnPu5sLaJg
-         S1hgpn9MH9uDP9gkVzT7g0yRaozSs3KmagnkfNhNyl1AKvWqM2H5aOLOZc7PntIpyVUI
-         RZ5k0h8mV5N6UpB+sieCwhmLE6Ce4MPvHsn1F8AqN6I7klHbqwvkmFVL1sbidYe4N0lz
-         1fX1KWC651t2NyTS7mQ8C2YrM2H33BS/oO6jF61YZwQD3S6RELRCFn1V2fg4kDsr7piK
-         JTCQ==
-X-Gm-Message-State: AOAM531N+L1zkxs4Pw4WDh3TzVzsQ6cpTl4MeSRidPGBcKDd6VN6LVSQ
-        k5PdTQFjukJVbq0so9EmHAI+PyLBWcHwsuE2
-X-Google-Smtp-Source: ABdhPJzWmt8WRjQU499EV+dELfJK/w4qDUfFpTg8LsS0VN/D9hqOLaRttBxaJO+s8N4e0wyRQXYQcA==
-X-Received: by 2002:a17:902:b092:b0:156:a40f:f716 with SMTP id p18-20020a170902b09200b00156a40ff716mr13682902plr.72.1649335333331;
-        Thu, 07 Apr 2022 05:42:13 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-65.three.co.id. [180.214.233.65])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056a00180500b004faac109225sm24507168pfa.179.2022.04.07.05.42.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 05:42:13 -0700 (PDT)
-Message-ID: <5ea69d84-be0c-2e9b-02b5-92d9442c8aff@gmail.com>
-Date:   Thu, 7 Apr 2022 19:41:59 +0700
+        bh=djDttX67eYTaV+Ltmm65GSmGkKnWz/VB8DEpNLaANO4=;
+        b=Ya6tvFKwsIKPcEszlbAyvRiZMuZCAJgeEuKpY+BK0UIWW8vNRAALW6NI4Kw5TPzSlP
+         nF0Z99LvAwC5EsB78hCebEYL+BBZWW7hVN0mixi6MbSb2ztZ2uXW7NL6Aj2j9hew4Kqz
+         iCRbq0sJ/DT9HoOOt+ZV3THKOyzko/gMlK8aaEL4N/IV4TkFEwF1WOpL9uQPh+BqMOPi
+         Ua00e/uD0Lv2hNC145b+aCur7j2f2TmeWavmO3cfw+JWTlDD7SgushZ5WpT7Cpg1HpFx
+         u3IUkrujfaOMaEK8A8+kVTJQM2Rzbi4Om2KPkPfAhe0/WJZK946pNpv8CSDkv6IVTpYn
+         J3AQ==
+X-Gm-Message-State: AOAM533GNqtChafq7IqyS/WgddGfF7CCvLilAc06xHdc1LXuDpzlVRh5
+        CmTq5Fb9wrIn8/mJh8ZvK1A=
+X-Google-Smtp-Source: ABdhPJzu2hVm+E8WdgrMkf4gu1dT/NXXL5NpK9h7OQ7uwd3BcRp7NMDbPV4w3EmrimUPZwyH3vLQOg==
+X-Received: by 2002:a17:902:ea11:b0:157:514:2239 with SMTP id s17-20020a170902ea1100b0015705142239mr3419961plg.95.1649335386608;
+        Thu, 07 Apr 2022 05:43:06 -0700 (PDT)
+Received: from lunar.aeonazure.com.www.tendawifi.com ([182.0.134.124])
+        by smtp.gmail.com with ESMTPSA id bx22-20020a056a00429600b004fa936a64b0sm20938572pfb.196.2022.04.07.05.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 05:43:05 -0700 (PDT)
+From:   Shaun Tancheff <shaun.tancheff@hpe.com>
+To:     shaun@tancheff.com, "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org (open list:EXT4 FILE SYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>
+Subject: [PATCH] Shrink fast commit buffer when not used
+Date:   Thu,  7 Apr 2022 19:42:44 +0700
+Message-Id: <20220407124244.2014497-1-shaun.tancheff@hpe.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v10 14/14] mm: multi-gen LRU: design doc
-Content-Language: en-US
-To:     Yu Zhao <yuzhao@google.com>, Stephen Rothwell <sfr@rothwell.id.au>,
-        linux-mm@kvack.org
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, page-reclaim@google.com,
-        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
- <20220407031525.2368067-15-yuzhao@google.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220407031525.2368067-15-yuzhao@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/22 10.15, Yu Zhao wrote:
-> Add a design doc.
-> 
+Shrink the fast-commit buffer when the feature is not
+enabled. By default the fast-commit buffer will allocate 256
+blocks if s_num_fc_blks is 0. Set s_num_fc_blks to a smaller
+value (> 0) to avoid allocating a large unused buffer, this
+also makes more journal credits available when fast commit
+is not used.
 
-Why is this design documentation added?
+Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+---
+ fs/ext4/super.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 81749eaddf4c..d2df10dc7cc3 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4222,6 +4222,14 @@ static int count_overhead(struct super_block *sb, ext4_group_t grp,
+ 		ext4_count_free(buf, EXT4_CLUSTERS_PER_GROUP(sb) / 8);
+ }
+ 
++static void strink_journal_fc_buffer(struct super_block *ext4_sb)
++{
++	journal_t *journal = EXT4_SB(ext4_sb)->s_journal;
++	journal_superblock_t *sb = journal->j_superblock;
++
++	sb->s_num_fc_blks = cpu_to_be32(8);
++}
++
+ /*
+  * Compute the overhead and stash it in sbi->s_overhead
+  */
+@@ -5189,6 +5197,13 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 		goto failed_mount_wq;
+ 	}
+ 
++	/* Since fast-commit is disabled, shrink it's dedicated memory
++	 * and it's share of the journal space so we can use the extra
++	 * credits
++	 */
++	if (!test_opt2(sb, JOURNAL_FAST_COMMIT))
++		strink_journal_fc_buffer(sb);
++
+ 	if (!set_journal_csum_feature_set(sb)) {
+ 		ext4_msg(sb, KERN_ERR, "Failed to set journal checksum "
+ 			 "feature set");
 -- 
-An old man doll... just what I always wanted! - Clara
+2.32.0
+

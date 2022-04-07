@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2094F7C80
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23624F7C7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 12:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiDGKPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 06:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S234176AbiDGKPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 06:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiDGKPf (ORCPT
+        with ESMTP id S230034AbiDGKPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:15:35 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0AA46143;
-        Thu,  7 Apr 2022 03:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649326398;
-        bh=NzbJ6LCovM7vad+GoSqmD1yRVSeHyd9Cr+QnKLRutCo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=UHTLyZknjq/Lwysg1lfr1ofEeO/1/nQYoI09NvqfynS06FGp1kE4sMsluuYH7279I
-         hWBQbrci3PyLV7qf6yz3pbmkvg/aAmONviwB9PoTQ9LhVdWObNXC8nDf1sXE2T1nX+
-         w7rjYHCeqyKyAM9mT2xJK1qQ4wY6o9uzsWi3yc9Y=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MDhlf-1njneT1zPj-00AjHx; Thu, 07 Apr 2022 12:13:18 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     zheyuma97@gmail.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (adt7470) Fix warning on module removal
-Date:   Thu,  7 Apr 2022 12:13:12 +0200
-Message-Id: <20220407101312.13331-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 7 Apr 2022 06:15:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE8FF7D;
+        Thu,  7 Apr 2022 03:13:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3359261331;
+        Thu,  7 Apr 2022 10:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B024EC385A0;
+        Thu,  7 Apr 2022 10:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649326398;
+        bh=kv4VPfhv936hoI5/MSPdmDXKBAIHMAivA8NCZwL5fhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qLb1Ou9D1Q+b6fYnbgsJLBuKduQ1/LUFVFt/v8xSIWrzM+YK8Bd7VcfX3k0QO2Lqv
+         ObjVoWt7r0vgCn886+RoA7A6mVs2OFRD8189cF4nXn4hyJAIHYxy4mBz5P5A/rCZvJ
+         1gV7ddFRhG4QGo06up4yFY6JskokcA/frnTHb5SUFc1v4bTXqBp9wZKxBiB+wKvuwo
+         Ok0//mxjGHh1mebahBwSUJLUV0tdAQfhnJSNqhcmhHfLNeSlf0JWDzU1Gc5q390V9/
+         fSISez990QT6WO9nD5HRRj0IqG0JNq30QsckrWeP64TKFsuHRT1SP9+kf4WS9cRO0Y
+         Ceiux4ACF4vlA==
+Date:   Thu, 7 Apr 2022 13:14:27 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jes B. Klinke" <jbk@chromium.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: cr50: Add new device/vendor ID 0x504a6666
+Message-ID: <Yk65g6frcMRyOPTK@kernel.org>
+References: <20220405173741.4023216-1-jbk@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3ovxuFu8CEf0F/03MIBREb5S34SEezFsSkmtGRm0P10lTl2Oeu5
- XbexovcfCSCv/9/3le3RFlkFuN95u0B01kzYugjm8KH8K0tVaSzPBIn0Nw4kNWFJtvT/DNK
- 2t1cKD0dF3dO1j7VjpVMdnYFbN38b1db8CCuP/7XoY7ZNDSdw03jR6hZPm8hjkhZOrc+ITB
- WrAnpEs5Ks7Aeo3ivfpcw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ic4wrSCOd88=:lTToyKaCXOpBWmB1zpEV1l
- +BoD+IgPTXSM3xxgJHGQKpT89Yw5DH4411051A09xNtIwtpGUcfqlZ8noywCCqyiZtH8BUgHw
- 6pfx5OJ6JBgSu2PlmShYAR3s/ze4BsOWxHnlW8QdVEPMoMmVjCbVrTXY1EQ8lrZM45AQ4k8Dy
- RA6vN7EO9xuanqNTBtFnILoAN11RfKCvx/41pR87l5KsYGgKdq/piySYOt+SHvcinnTK+4k/V
- pl54w7b1jv+u5FVRaq9CvZjJsulcrmzqubaICZomijRKeAfk6of0bagCbFw6fuQdqXypLo2k4
- g6hqpghhbHw1lAlEY4SPhWbI33vxs3oN4GX2cxlp2YAPkfeTHosS80B7VODMpQX77eurVWlPD
- SFtHQeiH1rBGSEuOY0jiFHkGJbKuOEFe1uucliHcGG3PK0v+/wunOm6xOVC/g2Y+B2q1Skq58
- QXCI1CuA5+k7Iq1j+Ajfytrg9GsVoiwR9Qlq6+FNKCQjvawwJewjCRG5OIthhzd7W8dVcykWT
- 1lsOzoAg7/iYNk0uH6mie1e74Sa0tDDK3/2qi3eKL5BlmzqIOi2MO6RXNQ667wkMyULSCmSeC
- phC6F58CVv+yhvmJiaI9Z6SXyJ2OaAZJFT8e2JW0tUx0hZAw4v+g1xRphs2tpSjoQqNuC0MPw
- NTwPX1OzoJfM3/hsSxEEzE32AV5QQqYLUyvLXbqdIRtIsmdVKhNeSlF6fxnVzCPWwCFvz2DPH
- iYID2qfW5lWT9udET+PiEurk56qUPxR2AtwXMQ2CQNRmgfmB2ewjZUsSZPB3yOjs6ybP+O+jw
- odtVYkOJ2/q+tq/OgPYCofgUNR3TV2CdLtW6Xgp8HFNjJZ8wED5ryV5GSNtuA08LocaseyDHP
- 4s8vhFAQ8QyFnKeE36UVYif7LFjclw0N58tY3z+urilmTkQgN2KXLA92dznJIGOWcCgnNZqI7
- 24ziY+E2FCRnRziC3V/6alAVAN1wZSJKMlPLTPI5reMYbxroIDUziW+cBfmwGlLEbUNS8X0Gz
- lzuCc0SG4QKwfNlvBDkowrOMWlp3JvkiSc9ncPENLxINv3AvHcfrZaCW4OBBu97qcPZTYlZ0v
- 555ROtZojEwM8I=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405173741.4023216-1-jbk@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When removing the adt7470 module, a warning might be printed:
+On Tue, Apr 05, 2022 at 10:37:41AM -0700, Jes B. Klinke wrote:
+> Accept one additional numerical value of DID:VID for next generation
+> Google TPM, to be used in future Chromebooks.
+> 
+> This patch touches more lines than may seem necessary, as a result of
+> the need to move the error case to sit after the two recognized cases.
+> 
+> Signed-off-by: Jes B. Klinke <jbk@chromium.org>
+> ---
+> 
+>  drivers/char/tpm/tpm_tis_i2c_cr50.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> index f6c0affbb4567..bf54ebd6724b0 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> @@ -31,6 +31,7 @@
+>  #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
+>  #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
+>  #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
+> +#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
+>  #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
+>  #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
+>  #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
+> @@ -742,16 +743,20 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+>  	}
+>  
+>  	vendor = le32_to_cpup((__le32 *)buf);
+> -	if (vendor != TPM_CR50_I2C_DID_VID) {
+> -		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+> -		tpm_cr50_release_locality(chip, true);
+> -		return -ENODEV;
+> +	if (vendor == TPM_CR50_I2C_DID_VID) {
+> +		dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +			 client->addr, client->irq, vendor >> 16);
+> +		return tpm_chip_register(chip);
+> +	}
+> +	if (vendor == TPM_TI50_I2C_DID_VID) {
+> +		dev_info(dev, "ti50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +			 client->addr, client->irq, vendor >> 16);
+> +		return tpm_chip_register(chip);
+>  	}
+>  
+> -	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> -		 client->addr, client->irq, vendor >> 16);
+> -
+> -	return tpm_chip_register(chip);
+> +	dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+> +	tpm_cr50_release_locality(chip, true);
+> +	return -ENODEV;
+>  }
+>  
+>  /**
+> -- 
+> 2.35.1.1094.g7c7d902a7c-goog
+> 
 
-do not call blocking ops when !TASK_RUNNING; state=3D1
-set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-This happens because adt7470_update_thread() can leave the kthread in
-TASK_INTERRUPTIBLE state when the kthread is being stopped before
-the call of set_current_state(). Since kthread_exit() might sleep in
-exit_signals(), the warning is printed.
-Fix that by using schedule_timeout_interruptible() and removing
-the call of set_current_state().
-This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
-which might cause the kthread to exit.
-
-Compile-tested only.
-
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/adt7470.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-index fb6d14d213a1..c67cd037a93f 100644
-=2D-- a/drivers/hwmon/adt7470.c
-+++ b/drivers/hwmon/adt7470.c
-@@ -19,6 +19,7 @@
- #include <linux/log2.h>
- #include <linux/kthread.h>
- #include <linux/regmap.h>
-+#include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/util_macros.h>
-
-@@ -294,11 +295,10 @@ static int adt7470_update_thread(void *p)
- 		adt7470_read_temperatures(data);
- 		mutex_unlock(&data->lock);
-
--		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
-
--		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
-+		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_inter=
-val));
- 	}
-
- 	return 0;
-=2D-
-2.30.2
-
+BR, Jarkko

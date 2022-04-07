@@ -2,108 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153DD4F863B
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA944F863C
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 19:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiDGRb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 13:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S241150AbiDGRbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 13:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346362AbiDGRao (ORCPT
+        with ESMTP id S1346421AbiDGRao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Apr 2022 13:30:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EA928E25
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EF329C9E
         for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 10:28:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00BC9B82865
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 17:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4FAC385A0;
-        Thu,  7 Apr 2022 17:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649352464;
-        bh=7jEWQBatP4qMkllGYiCARw7scemPqLCpGQ4Sm2/XdwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+24MmDd6m6A0atgn6EHNkZdE441HSmZ47SaWHIhZMUqgayvMTrP+gQiGpbmZDs1R
-         3haw9SNoQpbIwrDR6qwQq2DKKq9rx0ETiVWYeqsWvbqm5K2YusiLGxBLrmwo1++PP8
-         DXwWE4sX/715P+oddIJ9nBZ7Bea9naeA+L6nfuDxCcSL95gnbGNpIrXaROS1utiCJe
-         30qSaK6f5PJsZo9sGMW2SchSySvv0mH8oW91FXQGwSvgibvSqWTeX7H8SkJDtHSNrd
-         LWTsigjXBtArDgAJQJEYA3wMJGxAySFNDA9QgCZ/mhtjDDklMfG9+c1kATn12lFYB3
-         639ottZGUgz2g==
-Date:   Thu, 7 Apr 2022 18:27:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH] ASoC: rt5682: Add jack kcontrol
-Message-ID: <Yk8fCoA7W2nX261U@sirena.org.uk>
-References: <20220407141316.5099-1-akihiko.odaki@gmail.com>
- <Yk7+jbQ0KBM0zVh9@sirena.org.uk>
- <96dae189-c0ff-4054-3d00-41c3b44c2cd6@gmail.com>
- <Yk8Ktyyt0veW4g+j@sirena.org.uk>
- <f86a10e1-b5a7-5c59-8e53-cec65d97234b@gmail.com>
- <Yk8TLUnEHRKstyxq@sirena.org.uk>
- <57747e9a-10e0-e4f6-0644-5225396802f9@gmail.com>
+Received: by mail-pl1-x629.google.com with SMTP id o20so5580277pla.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 10:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HPJ/gxwWTPMsjVq1wqt/856o/PLEpZi5P1LCQp3vihA=;
+        b=b0Fftw2gYiSz51wMYQnmyWiSCHVpRn1cZ2/G1Tb72pQ9W/97f89BBukh/dVUpOTJiD
+         k4psjM6QujlBWLsJ7MjiCngT/pCWFjO7Y7wjEtK8+Iqsaotw1ekB0brOF+mo9/r44Bld
+         tX+zELWubhSNeeQdAf6ydkz8LmwPLvMUJaKduE7leSwYi4nH06HrCbW1Zdi9MH78J2x6
+         //KLsIz9xT/XZYKDMqRh0Ufc4P69lRMPTA5DN8idndiqK2hrf7Kb8GyxlhhTHVpCBApx
+         xwRFpcGrksg3DskkJPZkPRytVgCyNxVw7Fmq6SqgR+sZrIiHNF+xX7vPp+vOsNvvLLfw
+         yMJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HPJ/gxwWTPMsjVq1wqt/856o/PLEpZi5P1LCQp3vihA=;
+        b=Rj7dMvT8iOsTf/FOFizqhqqTVKz0PYiZtF3LoWdgW9gkVctRfbLjKkRK5SRfgeB+2Q
+         q8Doom7aKuQbxeXS+LifLTamwzqlqJ/174LatfOlu0cRHYZPBIwnMnqsO+XJXIDsIv4a
+         LZWjevChsVzp0qO6jGS2ymTex+4UncO0FrzvKjgbFT1Qf1IoCoXq9x9bcGo/6AHNaCxS
+         i7mZB1pnb2N6s7MOVkCZrz6BqdXb2yQV6AAjEuSlt5drZAITgplC1QFIzRe+XjRJjn+I
+         1CrPZgQJ4fsR7ba5gevPO0v4iPWG4x0S/hiITf/Kcc2HYPW1tI1CDLYWVoYvahGAVBre
+         xiAw==
+X-Gm-Message-State: AOAM531bSos6mW9Dm8KkHmtK/HcrloZN7vSW1nYN8F9kONP9iJtUosoH
+        PP1DdjVXaNnDxUgwfTvKLJIleEZKdT/A8dL39Nc=
+X-Google-Smtp-Source: ABdhPJyBfPqYUFav5ezxzPl+JV/tc6dKIYnkPoGCeq8d25sJyX8RW8GzYLZdqrWJnXesr4888MzMP04wf1DyVwL40t8=
+X-Received: by 2002:a17:90a:5298:b0:1ca:7fb3:145 with SMTP id
+ w24-20020a17090a529800b001ca7fb30145mr17083799pjh.200.1649352482048; Thu, 07
+ Apr 2022 10:28:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PNzrJ3fuz+E/xXQQ"
-Content-Disposition: inline
-In-Reply-To: <57747e9a-10e0-e4f6-0644-5225396802f9@gmail.com>
-X-Cookie: Look ere ye leap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407020953.475626-1-shy828301@gmail.com> <Yk6YKwZR5JjBokOs@dhcp22.suse.cz>
+In-Reply-To: <Yk6YKwZR5JjBokOs@dhcp22.suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 7 Apr 2022 10:27:50 -0700
+Message-ID: <CAHbLzkpYJTRO5AsUYt+C3f+FJO2CQeTAzaNnzu-TxXn8j0ZuqA@mail.gmail.com>
+Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aaron Lu <aaron.lu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 7, 2022 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> [Cc Aaron who has introduced the per node swap changes]
+>
+> On Wed 06-04-22 19:09:53, Yang Shi wrote:
+> > The swap devices are linked to per node priority lists, the swap device
+> > closer to the node has higher priority on that node's priority list.
+> > This is supposed to improve I/O latency, particularly for some fast
+> > devices.  But the current code gets nid by calling numa_node_id() which
+> > actually returns the nid that the reclaimer is running on instead of the
+> > nid that the page belongs to.
+> >
+> > Pass the page's nid dow to get_swap_pages() in order to pick up the
+> > right swap device.  But it doesn't work for the swap slots cache which
+> > is per cpu.  We could skip swap slots cache if the current node is not
+> > the page's node, but it may be overkilling. So keep using the current
+> > node's swap slots cache.  The issue was found by visual code inspection
+> > so it is not sure how much improvement could be achieved due to lack of
+> > suitable testing device.  But anyway the current code does violate the
+> > design.
+>
+> Do you have any perf numbers for this change?
 
---PNzrJ3fuz+E/xXQQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+No, it was found by visual code inspection and offline discussion with
+Huang Ying.
 
-On Fri, Apr 08, 2022 at 02:16:41AM +0900, Akihiko Odaki wrote:
-> On 2022/04/08 1:37, Mark Brown wrote:
-
-> > Look at how other devices with jack detection hardware handle this and
-> > follow a similar pattern.
-
-> The situation actually seems quite a mess. You can find many drivers not
-> using DAPM pins by searching for snd_soc_card_jack_new() calls with num_pins
-> argument is 0. ams-delta-audio is exceptional as it adds DAPM pins later
-> with snd_soc_jack_add_pins().
-
-Sure, I'm not surprised there's some buggy drivers.
-
-> They do not have kcontrols for the jacks. The only exception is
-> skl_hda_dsp_generic which calls snd_jack_add_new_kctl() as my patch does.
-> Looking at other devices is probably not helpful to find an alternative in
-> this case.
-
-The first driver I randomly picked when searching was
-sound/soc/intel/boards/skl_rt286.c which seems to DTRT here, you can
-also see sound/soc/samsung/speyside.c for another example.
-
---PNzrJ3fuz+E/xXQQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJPHwkACgkQJNaLcl1U
-h9AKpgf+PmAjxKxErqduPaAaLQiWMGfcHxz4FSuc77R0RvDkTX0DUQHA7Y24wFL1
-GjjVgyNSSEV7k6Eko0b1g/CK5KSZMiC0ZnaKsB/kBgHsN2xfuvqXNI7hBHWi27SB
-KmcrURD8hWHhp2wz/lMAoAK7V61gFpkhUfBzWLpfdEdqUY9/Xz3ilI9fAy0qFQoO
-yOky8dyASa69oTiMgNQJOW9PZ9N6B0RiaM8ZrbHbP/WQXYRlUP6qssJXJ0IgMYBf
-MgEURslJFPyeuxjoWxnAPMaNtqDQCsAEfEHlcCYfEUwHfqxc76g9WThiM46NqzVn
-IBV7CSMjfEKJD0vV2yD+sV2Ko3RfQg==
-=p8iA
------END PGP SIGNATURE-----
-
---PNzrJ3fuz+E/xXQQ--
+>
+> > Cc: Huang Ying <ying.huang@intel.com>
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  include/linux/swap.h | 3 ++-
+> >  mm/swap_slots.c      | 7 ++++---
+> >  mm/swapfile.c        | 5 ++---
+> >  3 files changed, 8 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/include/linux/swap.h b/include/linux/swap.h
+> > index 27093b477c5f..e442cf6b61ea 100644
+> > --- a/include/linux/swap.h
+> > +++ b/include/linux/swap.h
+> > @@ -497,7 +497,8 @@ extern void si_swapinfo(struct sysinfo *);
+> >  extern swp_entry_t get_swap_page(struct page *page);
+> >  extern void put_swap_page(struct page *page, swp_entry_t entry);
+> >  extern swp_entry_t get_swap_page_of_type(int);
+> > -extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size);
+> > +extern int get_swap_pages(int n, swp_entry_t swp_entries[], int entry_size,
+> > +                       int node);
+> >  extern int add_swap_count_continuation(swp_entry_t, gfp_t);
+> >  extern void swap_shmem_alloc(swp_entry_t);
+> >  extern int swap_duplicate(swp_entry_t);
+> > diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+> > index 2b5531840583..a1c5cf6a4302 100644
+> > --- a/mm/swap_slots.c
+> > +++ b/mm/swap_slots.c
+> > @@ -264,7 +264,7 @@ static int refill_swap_slots_cache(struct swap_slots_cache *cache)
+> >       cache->cur = 0;
+> >       if (swap_slot_cache_active)
+> >               cache->nr = get_swap_pages(SWAP_SLOTS_CACHE_SIZE,
+> > -                                        cache->slots, 1);
+> > +                                        cache->slots, 1, numa_node_id());
+> >
+> >       return cache->nr;
+> >  }
+> > @@ -305,12 +305,13 @@ swp_entry_t get_swap_page(struct page *page)
+> >  {
+> >       swp_entry_t entry;
+> >       struct swap_slots_cache *cache;
+> > +     int nid = page_to_nid(page);
+> >
+> >       entry.val = 0;
+> >
+> >       if (PageTransHuge(page)) {
+> >               if (IS_ENABLED(CONFIG_THP_SWAP))
+> > -                     get_swap_pages(1, &entry, HPAGE_PMD_NR);
+> > +                     get_swap_pages(1, &entry, HPAGE_PMD_NR, nid);
+> >               goto out;
+> >       }
+> >
+> > @@ -342,7 +343,7 @@ swp_entry_t get_swap_page(struct page *page)
+> >                       goto out;
+> >       }
+> >
+> > -     get_swap_pages(1, &entry, 1);
+> > +     get_swap_pages(1, &entry, 1, nid);
+> >  out:
+> >       if (mem_cgroup_try_charge_swap(page, entry)) {
+> >               put_swap_page(page, entry);
+> > diff --git a/mm/swapfile.c b/mm/swapfile.c
+> > index 63c61f8b2611..151fffe0fd60 100644
+> > --- a/mm/swapfile.c
+> > +++ b/mm/swapfile.c
+> > @@ -1036,13 +1036,13 @@ static void swap_free_cluster(struct swap_info_struct *si, unsigned long idx)
+> >       swap_range_free(si, offset, SWAPFILE_CLUSTER);
+> >  }
+> >
+> > -int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
+> > +int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size,
+> > +                int node)
+> >  {
+> >       unsigned long size = swap_entry_size(entry_size);
+> >       struct swap_info_struct *si, *next;
+> >       long avail_pgs;
+> >       int n_ret = 0;
+> > -     int node;
+> >
+> >       /* Only single cluster request supported */
+> >       WARN_ON_ONCE(n_goal > 1 && size == SWAPFILE_CLUSTER);
+> > @@ -1060,7 +1060,6 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
+> >       atomic_long_sub(n_goal * size, &nr_swap_pages);
+> >
+> >  start_over:
+> > -     node = numa_node_id();
+> >       plist_for_each_entry_safe(si, next, &swap_avail_heads[node], avail_lists[node]) {
+> >               /* requeue si to after same-priority siblings */
+> >               plist_requeue(&si->avail_lists[node], &swap_avail_heads[node]);
+> > --
+> > 2.26.3
+>
+> --
+> Michal Hocko
+> SUSE Labs

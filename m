@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919484F71C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEDA4F71C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Apr 2022 03:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiDGBzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Apr 2022 21:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S236448AbiDGB5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Apr 2022 21:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiDGBzu (ORCPT
+        with ESMTP id S237626AbiDGB5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Apr 2022 21:55:50 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5419B07C;
-        Wed,  6 Apr 2022 18:53:52 -0700 (PDT)
+        Wed, 6 Apr 2022 21:57:32 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF3D56214;
+        Wed,  6 Apr 2022 18:55:29 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id s11so3585729pla.8;
+        Wed, 06 Apr 2022 18:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649296431; x=1680832431;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GfoMu1rSQjLGCY+LsK9hopMjy06xNe7EDG2XcdKQJC8=;
-  b=Zcz6IYvCo8Xe7I+WwsAv90jpPUK7K2+AlbM/ZxnF8VM0Js2bhVmjm04Z
-   7mFKwqNwmEwYmk3HUlFL2TyGo7DFtMDrRvrokxPwHsC32XrycErK494aA
-   I44T3ZcK9NGZ4PL2/K6ivXtXagQ32I7z65teNu3UnKgrUeqi7vLVplt98
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Apr 2022 18:53:51 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:53:51 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 18:53:50 -0700
-Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Apr 2022 18:53:49 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH] usb: dwc3: EP clear halt leading to incorrect submission of delayed_status
-Date:   Wed, 6 Apr 2022 18:53:36 -0700
-Message-ID: <20220407015336.19455-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.33.1
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DrQ8myrgq6MEVkmz5TpFrXmjtowwa39P+bCoekdBxVE=;
+        b=Vvs78fDjKnaTzkc8DhazEaySnLMRglZMdQ3ymE8ruclCpJVzrkAVc91eZjE+A98x3Y
+         HFWHe7Cwvh51UiWhqa3NNA9Rg7AMMwN96GuthD1Hyl/1Ufoz9btW4l6MqV6AT2r5n/h4
+         23JDCL39aoVF/mvJYWRvEAvFQtCA9mLL+qMLuDthH6G6ectZx+NnCjl7xIHRxJn63Lfi
+         0HmGzKeT5KPVrXozKmFqg8tzRkbU75PORW6FElYzGeyBng7k8Ut846CBC6XWsSGXXlqe
+         wqMZXP4j8kxtJ90VPCzJ2hBW1jmzfAX+DR7gdpX4CrdXCkM3WbZtvE+D/l1tiPEOerLY
+         kNRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DrQ8myrgq6MEVkmz5TpFrXmjtowwa39P+bCoekdBxVE=;
+        b=nP2PIobYzoioV5JkpxpoDufXHc5WPVmBFyhtkvVPJ/QrQr2+EM7yh4SbVkrSH3LBay
+         +6WeVi//bkaeNCaBCVrpNqRsywTDdwDMjiQAg0esORPXyCZtAQeqhbxjBWUu4Mq2eh3r
+         aePCcBgjs6iDXTzF9L4yKo4G7F2K+ctbbvAX7oOvaCGff0b2ue4WJTfzA8gon5VSD4n5
+         kI0mLDJK+0pPpRmnGD60yip2yN3K84jHuCRqq9gUTmgkqwElgl79BikZ63Gedr058/kC
+         F9VfDeOinqfES7Pfof5BZya//xRgSgBg1tut4S/vvHKYI6TPf3ScYMuZHAt3G6m9N9JB
+         0q1Q==
+X-Gm-Message-State: AOAM530GtXkwfy8s8qyH8KgEJ4bBvQEU7+FpZRFTT7caa41AFTYkcF5v
+        3GmEd83q/bRbyzctpusTRUnQZGWc7fmtZiqD
+X-Google-Smtp-Source: ABdhPJxKB65n6mZAXewuN0v0uyKShCuBNBqEvPZKwquEMGoLROfaAZaGaEC19y2Wl5u0T9MEh53usg==
+X-Received: by 2002:a17:903:124a:b0:154:c860:6d52 with SMTP id u10-20020a170903124a00b00154c8606d52mr11597409plh.159.1649296529212;
+        Wed, 06 Apr 2022 18:55:29 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm7012202pjj.56.2022.04.06.18.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 18:55:28 -0700 (PDT)
+Message-ID: <4d0652cd-e3ca-4319-b012-142a110efe15@gmail.com>
+Date:   Thu, 7 Apr 2022 09:55:23 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] usb: misc: fix improper handling of refcount in
+ uss720_probe()
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+        mudongliangabcd@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406073349.22203-1-hbh25y@gmail.com>
+ <f90522c4-f7d6-3068-9789-8c6d893f2768@suse.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <f90522c4-f7d6-3068-9789-8c6d893f2768@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb_ep_clear_halt() API can be called from the function driver, and
-translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
-the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
-protocol argument.  If the following sequence occurs, there can be a
-situation where the delayed_status flag is improperly cleared for the wrong
-SETUP transaction:
+Oh, i sorry. Thank you for your reminder. I will remake a patch carefully.
 
-1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
-2. DWC3 gadget sets dwc->delayed_status to '1'.
-3. Another function driver issues a usb_ep_clear_halt() call.
-4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
-   DWC3_EP_PENDING_CLEAR_STALL.
-5. EP command complete interrupt triggers for the end transfer, and
-   dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
-   is '1' due to step#1.
-6. STATUS phase is sent, and delayed_status is cleared.
-7. Vendor specific control transfer is finished being handled, and issues
-   usb_composite_setup_continue().  This results in queuing of a data
-   phase.
-
-Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
-is due to a SETUP request from the host versus when it is sourced from a
-function driver.  This allows for the EP command complete interrupt to know
-if it needs to issue a delayed status phase.
-
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/core.h   | 1 +
- drivers/usb/dwc3/ep0.c    | 1 +
- drivers/usb/dwc3/gadget.c | 3 ++-
- 3 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 5c9d467195a6..55f98485c54c 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1272,6 +1272,7 @@ struct dwc3 {
- 	unsigned		connected:1;
- 	unsigned		softconnect:1;
- 	unsigned		delayed_status:1;
-+	unsigned		clear_stall_protocol:1;
- 	unsigned		ep0_bounced:1;
- 	unsigned		ep0_expect_in:1;
- 	unsigned		has_hibernation:1;
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 1064be5518f6..aa8476da222d 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
- 	unsigned int direction = !dwc->ep0_expect_in;
- 
- 	dwc->delayed_status = false;
-+	dwc->clear_stall_protocol = 0;
- 
- 	if (dwc->ep0state != EP0_STATUS_PHASE)
- 		return;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ab725d2262d6..c427ddae016f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2152,6 +2152,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
- 		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
- 		    (dep->flags & DWC3_EP_DELAY_STOP)) {
- 			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
-+			dwc->clear_stall_protocol = protocol;
- 			return 0;
- 		}
- 
-@@ -3483,7 +3484,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
- 		}
- 
- 		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
--		if (dwc->delayed_status)
-+		if (dwc->clear_stall_protocol)
- 			dwc3_ep0_send_delayed_status(dwc);
- 	}
- 
+On 2022/4/6 19:47, Oliver Neukum wrote:
+> 
+> 
+> On 06.04.22 09:33, Hangyu Hua wrote:
+>> usb_put_dev shouldn't be called when uss720_probe succeeds because of
+>> priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
+>> before destroy_priv in uss720_disconnect because usb_put_dev is in
+>> destroy_priv.
+> 
+> Hi,
+> 
+> I am sorry, but that's a clear NACK.
+>> @@ -754,13 +753,13 @@ static void uss720_disconnect(struct usb_interface *intf)
+>>   	usb_set_intfdata(intf, NULL);
+>>   	if (pp) {
+>>   		priv = pp->private_data;
+>> -		priv->usbdev = NULL;
+>>   		priv->pp = NULL;
+>>   		dev_dbg(&intf->dev, "parport_remove_port\n");
+>>   		parport_remove_port(pp);
+>>   		parport_put_port(pp);
+>>   		kill_all_async_requests_priv(priv);
+>>   		kref_put(&priv->ref_count, destroy_priv);
+>> +		priv->usbdev = NULL;
+> 
+> That is a clear use after free The patch is no good in this state..
+> 
+>      HTH
+>          Oliver
+> 

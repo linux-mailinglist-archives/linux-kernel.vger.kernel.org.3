@@ -2,135 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725C24F8F65
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08BE4F8F4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiDHHUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S229585AbiDHHPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiDHHU2 (ORCPT
+        with ESMTP id S229761AbiDHHPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:20:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636FA21FF6B;
-        Fri,  8 Apr 2022 00:18:25 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZV2V2tf8zdZm3;
-        Fri,  8 Apr 2022 15:17:54 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 15:18:23 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 8 Apr 2022 15:18:23 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mkubecek@suse.cz>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>, <wangjie125@huawei.com>
-Subject: [PATCH net-next 3/3] net: hns3: add tx push support in hns3 ring param process
-Date:   Fri, 8 Apr 2022 15:12:45 +0800
-Message-ID: <20220408071245.40554-4-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220408071245.40554-1-huangguangbin2@huawei.com>
-References: <20220408071245.40554-1-huangguangbin2@huawei.com>
+        Fri, 8 Apr 2022 03:15:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD3521404E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:13:27 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id bg10so15506558ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7EjkArby+YXeQWnUCkFmhxaHZGauplRCYZjUw5rv+0E=;
+        b=P3LNs91PmjyMcGXqs/1qd6aAe2pOkmQxK2rpdZbLEkBXDUDRk1fTEc9BkEXcXU5Vb3
+         /dJlnetRZAdhTIaUdabV8GVVwltmE/N2sndujl+MwI3vTYlyDtARgSTA76FwOFTSVdTN
+         6Atdx5uuBt5qm+yTZJAkE5VhEmA8DHYlFY2qFFJWJyHusu21pSV/r5l60d8DS2bAApbq
+         FzF6c+PqaqkBuH+Xz24uigvxKPryBg3zRM8mEPhDjFB3f5CTxMTdPf9oZlDPKXgU7z/i
+         29Et5h7AetTRIOOB4m6cDydCNGMqD53CSbGV5M6LLC5x9qODa4fivDnEIwns/yTKVeNo
+         CVjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7EjkArby+YXeQWnUCkFmhxaHZGauplRCYZjUw5rv+0E=;
+        b=GX9LcOkOYgi+lldgGKl6eV87L5n+P+JHCApt70v8tepDpWMfWDz61Ye2Naui369Ymz
+         oiuSe7rS4U1GQEVNE1MgfaSHVVArid8FMwTN7H3JfcE/wx9rmRUUYSu2JnVmlTFsuCwE
+         fvfOUVn80eho8xqibW27G4Q0gCyqvsokLBD9v0OR3boNZgynDye6wIzqn9gTbu4mkjot
+         oueBrkt0Lt+silHlJ6csXIXeWEYyX8u7MWTv0cMvF8HPTXoWv0vJhuxu1fciCnYH5nC2
+         zvrsyGaLUrRIOAHck056rpNZfOASplwt2E00y68MLjfBS0XgCWDQnsVm+P3YkELLdNW5
+         HJ9Q==
+X-Gm-Message-State: AOAM532fEo/eWXR2F8+UE3fsORC9qn8yTI4S6nivFotc1mapWQjwxQaF
+        paNrPO4SUvhPZFO8Vbz0dyZjzZpK3scZG3Ea
+X-Google-Smtp-Source: ABdhPJzgnGNDsxiLx/GHTVMUuI/MW9bJw8r0RLq06fINFbNAkHJSZCT3Ee2wL1N2t9btbxnWKy/woA==
+X-Received: by 2002:a17:906:c108:b0:6e4:a223:1af9 with SMTP id do8-20020a170906c10800b006e4a2231af9mr10017771ejc.441.1649402005890;
+        Fri, 08 Apr 2022 00:13:25 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056402120b00b004196059efd1sm10428943edw.75.2022.04.08.00.13.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 00:13:25 -0700 (PDT)
+Message-ID: <be7fd7be-c65a-215c-df96-5a6eed52b5e7@linaro.org>
+Date:   Fri, 8 Apr 2022 09:13:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts
+ support
+Content-Language: en-US
+To:     Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220407210411.8167-1-tharvey@gateworks.com>
+ <20220407210411.8167-2-tharvey@gateworks.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407210411.8167-2-tharvey@gateworks.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On 07/04/2022 23:04, Tim Harvey wrote:
+> The Gateworks GW7400 is an ARM based single board computer (SBC)
+> featuring:
+>  - i.MX8M Plus SoC
+>  - LPDDR4 DRAM
+>  - eMMC FLASH
 
-This patch adds tx push param to hns3 ring param and adapts the set and get
-API of ring params. So users can set it by cmd ethtool -G and get it by cmd
-ethtool -g.
+Thank you for your patch. There is something to discuss/improve.
 
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- .../ethernet/hisilicon/hns3/hns3_ethtool.c    | 33 ++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+(...)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index f4da77452126..9f4111fd2986 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -664,6 +664,8 @@ static void hns3_get_ringparam(struct net_device *netdev,
- 	param->tx_pending = priv->ring[0].desc_num;
- 	param->rx_pending = priv->ring[rx_queue_index].desc_num;
- 	kernel_param->rx_buf_len = priv->ring[rx_queue_index].buf_size;
-+	kernel_param->tx_push = test_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE,
-+					 &priv->state);
- }
- 
- static void hns3_get_pauseparam(struct net_device *netdev,
-@@ -1120,6 +1122,30 @@ static int hns3_change_rx_buf_len(struct net_device *ndev, u32 rx_buf_len)
- 	return 0;
- }
- 
-+static int hns3_set_tx_push(struct net_device *netdev, u32 tx_push)
-+{
-+	struct hns3_nic_priv *priv = netdev_priv(netdev);
-+	struct hnae3_handle *h = hns3_get_handle(netdev);
-+	struct hnae3_ae_dev *ae_dev = pci_get_drvdata(h->pdev);
-+	u32 old_state = test_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+
-+	if (!test_bit(HNAE3_DEV_SUPPORT_TX_PUSH_B, ae_dev->caps) && tx_push)
-+		return -EOPNOTSUPP;
-+
-+	if (tx_push == old_state)
-+		return 0;
-+
-+	netdev_dbg(netdev, "Changing tx push from %s to %s\n",
-+		   old_state ? "on" : "off", tx_push ? "on" : "off");
-+
-+	if (tx_push)
-+		set_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+	else
-+		clear_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+
-+	return 0;
-+}
-+
- static int hns3_set_ringparam(struct net_device *ndev,
- 			      struct ethtool_ringparam *param,
- 			      struct kernel_ethtool_ringparam *kernel_param,
-@@ -1139,6 +1165,10 @@ static int hns3_set_ringparam(struct net_device *ndev,
- 	if (ret)
- 		return ret;
- 
-+	ret = hns3_set_tx_push(ndev, kernel_param->tx_push);
-+	if (ret)
-+		return ret;
-+
- 	/* Hardware requires that its descriptors must be multiple of eight */
- 	new_tx_desc_num = ALIGN(param->tx_pending, HNS3_RING_BD_MULTIPLE);
- 	new_rx_desc_num = ALIGN(param->rx_pending, HNS3_RING_BD_MULTIPLE);
-@@ -1858,7 +1888,8 @@ static int hns3_set_tunable(struct net_device *netdev,
- 				 ETHTOOL_COALESCE_MAX_FRAMES |		\
- 				 ETHTOOL_COALESCE_USE_CQE)
- 
--#define HNS3_ETHTOOL_RING	ETHTOOL_RING_USE_RX_BUF_LEN
-+#define HNS3_ETHTOOL_RING	(ETHTOOL_RING_USE_RX_BUF_LEN |		\
-+				 ETHTOOL_RING_USE_TX_PUSH)
- 
- static int hns3_get_ts_info(struct net_device *netdev,
- 			    struct ethtool_ts_info *info)
--- 
-2.33.0
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/linux-event-codes.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +#include "imx8mp.dtsi"
+> +
+> +/ {
+> +	model = "Gateworks Venice GW74xx i.MX8MP board";
+> +	compatible = "gw,imx8mp-gw74xx", "fsl,imx8mp";
 
+Deprecated vendor prefix.
+
+> +
+> +	aliases {
+> +		ethernet0 = &eqos;
+> +		ethernet1 = &fec;
+> +		ethernet2 = &lan1;
+> +		ethernet3 = &lan2;
+> +		ethernet4 = &lan3;
+> +		ethernet5 = &lan4;
+> +		ethernet6 = &lan5;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	memory@40000000 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x40000000 0 0x80000000>;
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		user-pb {
+
+Generic node names please, so "key-0" or "user-pb-key" (although adding
+specific parts is really not needed, because you have the label).
+
+> +			label = "user_pb";
+> +			gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
+> +			linux,code = <BTN_0>;
+> +		};
+> +
+> +		user-pb1x {
+> +			label = "user_pb1x";
+> +			linux,code = <BTN_1>;
+> +			interrupt-parent = <&gsc>;
+> +			interrupts = <0>;
+> +		};
+> +
+> +		key-erased {
+> +			label = "key_erased";
+> +			linux,code = <BTN_2>;
+> +			interrupt-parent = <&gsc>;
+> +			interrupts = <1>;
+> +		};
+> +
+> +		eeprom-wp {
+> +			label = "eeprom_wp";
+> +			linux,code = <BTN_3>;
+> +			interrupt-parent = <&gsc>;
+> +			interrupts = <2>;
+> +		};
+> +
+> +		tamper {
+> +			label = "tamper";
+> +			linux,code = <BTN_4>;
+> +			interrupt-parent = <&gsc>;
+> +			interrupts = <5>;
+> +		};
+> +
+> +		switch-hold {
+> +			label = "switch_hold";
+> +			linux,code = <BTN_5>;
+> +			interrupt-parent = <&gsc>;
+> +			interrupts = <7>;
+> +		};
+> +	};
+> +
+> +	led-controller {
+> +		compatible = "gpio-leds";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_gpio_leds>;
+> +
+> +		led-0 {
+> +			function = LED_FUNCTION_STATUS;
+
+LED_FUNCTION_HEARTBEAT
+
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			gpios = <&gpio2 15 GPIO_ACTIVE_HIGH>;
+> +			default-state = "on";
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +
+> +		led-1 {
+> +			function = LED_FUNCTION_STATUS;
+> +			color = <LED_COLOR_ID_RED>;
+> +			gpios = <&gpio2 16 GPIO_ACTIVE_HIGH>;
+> +			default-state = "off";
+> +		};
+> +	};
+> +
+> +	pps {
+> +		compatible = "pps-gpio";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_pps>;
+> +		gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+> +		status = "okay";
+
+No need for status.
+
+> +	};
+> +
+
+Best regards,
+Krzysztof

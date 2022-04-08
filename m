@@ -2,140 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDAA4F8ED2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1E14F8EE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiDHGZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S232864AbiDHG10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiDHGZR (ORCPT
+        with ESMTP id S232371AbiDHG1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:25:17 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFACAD
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:23:14 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id l9so633657plg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 23:23:14 -0700 (PDT)
+        Fri, 8 Apr 2022 02:27:23 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB616CE6F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:25:17 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id l9so636874plg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 23:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=geQ/KYaC6Z1QkN4BxN0MGOhNfu4u8jgolEpjQjjs6lw=;
-        b=rkgjqsrLnEiB6FUAL9CYfCZCnVqJET8nRlPxaS0vomUxUYp/ey+b8Nl9QuoWhRGLvq
-         lvgp8gG3SPZhRBRfQo7hqmN2n0QyprJ8e8zFaddGqIU6iSVSHgMYV+STZkcZ8Apy9EIh
-         lCD+oExwjhAz/9NaNFnP1yGWi0HU14nzeOersWj0JEPsLsMQX7r8xZ5R8QGDZ9Jpwo8K
-         Mw8dnxbYgO/XmYKFXGJ8f+01H+TcSLkGvYWz0I+ZpXeP8k6FsNrRx0nej3z9DZ5sQzCq
-         tNCK2zF0OrkPNQZ8sDn4YflsLq+lLj6rVzqNve5W6nbpztBJ6cj47OWuFUgozpKHt0fa
-         9Xrw==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gpTt04knjFi7/r4rdhBFpeWlnWTTiUe1d93mQq2Do3I=;
+        b=MAz6RPib3bcwbnw7VOzDKsX4M+0+QU+QgCQSRlXjmf8Y1j5E82C3MrTGAgpPQP7x2/
+         7b9XV/2KcaXsvw+GrapP/fImELYl5GNzN9cbv9exuPksDfOeysAV7CzrjAFcCFLdpyD4
+         cv20aVQbMuVGhrrBsMZl3Y8jzXtJorYiwaZ6s95JJpE0/CNVsbKtdGQ2lozCaCX2Z2jj
+         aCCws8x6/Q4nlxvNHMQu8EzHC848KqfeK37XWl/JO83aKLXIaLW6At4fR5a2AYuvw90o
+         YBWxQySI3dDSIpAkhSAUDAIqcG8Am5xjHEv3dQvB8v6T2tmLMTp34RjSYln0W0Mrb2aR
+         fI4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=geQ/KYaC6Z1QkN4BxN0MGOhNfu4u8jgolEpjQjjs6lw=;
-        b=pXD9ehkvU21piUdkQKehd5ilTv4VU3Vk7zjvB2F1bEt1feHAxol5NWYpTaaThu+TJj
-         lLVSyFxG0FRAO+PuGi69Jtc6SpidSPFX9IcIWzemc11wqZcWgwotBqD8ZQApKIGyPg78
-         4c8akGVkG5EGvNETAcv2AelFRdt5i4pThE4fpN3mUl4ObTDi/ZzCGZEZskDQRezGLEcY
-         0eLlIfGa/qfK0j59NFvB63URtXtpq7ug8zBes/7QzJv3lsvBwuAVXDS5jKGiTULMcGI1
-         Z7fji0eqbvMP5KQKXnvJcQdm8+ZoyJ6sPkYz2kGExTDuJCHyauC5xOPp3ZcWaCbq0+d8
-         2Q3g==
-X-Gm-Message-State: AOAM532ILCU/KzJ4Pj5Sh9PkCUYPHfBD27gu7U/nwiSZTSfSnBqk6XcY
-        cLAwvLUf0GG85eXGZilRpWgxkA==
-X-Google-Smtp-Source: ABdhPJx3htSqcke6EbXNUh2XhkRjjIJ+u1h5fQfUvumoNHKzEMdLGaMqbqwCjz5amcXry7ITs26x8w==
-X-Received: by 2002:a17:902:7006:b0:156:3cbe:6b04 with SMTP id y6-20020a170902700600b001563cbe6b04mr17331918plk.68.1649398993897;
-        Thu, 07 Apr 2022 23:23:13 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6c:f010:ad54:3135:7c62:394f? ([2409:8a28:e6c:f010:ad54:3135:7c62:394f])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056a00240600b004e17ab23340sm25998725pfh.177.2022.04.07.23.23.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 23:23:13 -0700 (PDT)
-Message-ID: <04e7c9aa-da4f-55ba-f329-5ac236dd5a6b@bytedance.com>
-Date:   Fri, 8 Apr 2022 14:23:00 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gpTt04knjFi7/r4rdhBFpeWlnWTTiUe1d93mQq2Do3I=;
+        b=gKPU7ZXNlRHTmI2jEHXksNIpXcx4hBRx0rYyHLWUgQqRizKyOmnOVhuUlEw4ETnBo4
+         V3RPST2/JBrbpYirbFoQWd7nfW0hxwce4jxnugSuc1khC9s/95UiqRw97pfzASfXI/da
+         avjrjoglIvrkGli3o7UL7l8GpjBFsAB0BVlci6pVVa/H2gq8Acv+sobiKJS+9DWE0Hvo
+         TM96HmAhMHiuywfdM0P1bnvrJMxDVRaA5VVEn/eJgX7f3i00Y0aE64Q4dUrJcMDX4hh8
+         1KGnV7md/102q9C7h9eCLcQNcdJclPyeOo9I6mzWftonrOPfcem4QIIy2kFXDRjtbpfC
+         qdQQ==
+X-Gm-Message-State: AOAM531abSNFrmX1qsl6O9REAJLuQMVjiZjsKCeW5oe33Y4SPMCXtD3h
+        vrzD+anPFVKmP3vbhggv0QV0MiHlatInyjudGCrm/Q==
+X-Google-Smtp-Source: ABdhPJzID/VraWAFCvRtOjZrpYKIIRqJ1ed+REfBAOD4Tjags0hA+q9Oe2WNNyfILt9xFCTGNazEpbsu/uJg2gJ2j9Y=
+X-Received: by 2002:a17:90a:c083:b0:1c6:a164:fd5d with SMTP id
+ o3-20020a17090ac08300b001c6a164fd5dmr20043007pjs.8.1649399116938; Thu, 07 Apr
+ 2022 23:25:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH 1/2] sched/fair: Fix cfs_rq_clock_pelt()
- for throttled cfs_rq
-Content-Language: en-US
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com
-References: <20220407021729.16655-1-zhouchengming@bytedance.com>
- <xm26tub4vcg9.fsf@bsegall-linux.svl.corp.google.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <xm26tub4vcg9.fsf@bsegall-linux.svl.corp.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-8-ruansy.fnst@fujitsu.com> <YkPyBQer+KRiregd@infradead.org>
+In-Reply-To: <YkPyBQer+KRiregd@infradead.org>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 7 Apr 2022 23:25:06 -0700
+Message-ID: <CAPcyv4g5V-0bUXQEJjqxLg=Q-t4jzgx5XNO--iRuHiLkUvgcBQ@mail.gmail.com>
+Subject: Re: [PATCH v11 7/8] xfs: Implement ->notify_failure() for XFS
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/8 04:57, Benjamin Segall wrote:
-> Chengming Zhou <zhouchengming@bytedance.com> writes:
-> 
->> Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
->> change to use rq_clock_pelt() instead of rq_clock_task(), we should also
->> use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
->> accounting.
-> 
-> I think this patch is indeed what we want, despite the confusing
-> interactions between pelt slowdown+skipping and throttle_clock_task
-> trying to freeze time.
-> 
-> I think it would be slightly better to rename
-> throttled_clock_task(_time) to be clock_pelt rather than clock_task, but
-> that's minor.
+On Tue, Mar 29, 2022 at 11:01 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> > @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
+> >       list_lru_destroy(&btp->bt_lru);
+> >
+> >       blkdev_issue_flush(btp->bt_bdev);
+> > +     if (btp->bt_daxdev)
+> > +             dax_unregister_holder(btp->bt_daxdev, btp->bt_mount);
+> >       fs_put_dax(btp->bt_daxdev);
+> >
+> >       kmem_free(btp);
+> > @@ -1939,6 +1942,7 @@ xfs_alloc_buftarg(
+> >       struct block_device     *bdev)
+> >  {
+> >       xfs_buftarg_t           *btp;
+> > +     int                     error;
+> >
+> >       btp = kmem_zalloc(sizeof(*btp), KM_NOFS);
+> >
+> > @@ -1946,6 +1950,14 @@ xfs_alloc_buftarg(
+> >       btp->bt_dev =  bdev->bd_dev;
+> >       btp->bt_bdev = bdev;
+> >       btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
+> > +     if (btp->bt_daxdev) {
+> > +             error = dax_register_holder(btp->bt_daxdev, mp,
+> > +                             &xfs_dax_holder_operations);
+> > +             if (error) {
+> > +                     xfs_err(mp, "DAX device already in use?!");
+> > +                     goto error_free;
+> > +             }
+> > +     }
+>
+> It seems to me that just passing the holder and holder ops to
+> fs_dax_get_by_bdev and the holder to dax_unregister_holder would
+> significantly simply the interface here.
+>
+> Dan, what do you think?
 
-It's a good suggestion, will do and send v2.
+Yes, makes sense, just like the optional holder arguments to blkdev_get_by_*().
 
-Thanks.
+>
+> > +#if IS_ENABLED(CONFIG_MEMORY_FAILURE) && IS_ENABLED(CONFIG_FS_DAX)
+>
+> No real need for the IS_ENABLED.  Also any reason to even build this
+> file if the options are not set?  It seems like
+> xfs_dax_holder_operations should just be defined to NULL and the
+> whole file not supported if we can't support the functionality.
+>
+> Dan: not for this series, but is there any reason not to require
+> MEMORY_FAILURE for DAX to start with?
 
-> 
-> Reviewed-by: Ben Segall <bsegall@google.com>
-> 
->>
->> Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->> ---
->>  kernel/sched/fair.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index d4bd299d67ab..e6fa5d1141b4 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -4846,7 +4846,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
->>  
->>  	cfs_rq->throttle_count--;
->>  	if (!cfs_rq->throttle_count) {
->> -		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
->> +		cfs_rq->throttled_clock_task_time += rq_clock_pelt(rq) -
->>  					     cfs_rq->throttled_clock_task;
->>  
->>  		/* Add cfs_rq with load or one or more already running entities to the list */
->> @@ -4864,7 +4864,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
->>  
->>  	/* group is entering throttled state, stop time */
->>  	if (!cfs_rq->throttle_count) {
->> -		cfs_rq->throttled_clock_task = rq_clock_task(rq);
->> +		cfs_rq->throttled_clock_task = rq_clock_pelt(rq);
->>  		list_del_leaf_cfs_rq(cfs_rq);
->>  	}
->>  	cfs_rq->throttle_count++;
->> @@ -5308,7 +5308,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
->>  	pcfs_rq = tg->parent->cfs_rq[cpu];
->>  
->>  	cfs_rq->throttle_count = pcfs_rq->throttle_count;
->> -	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
->> +	cfs_rq->throttled_clock_task = rq_clock_pelt(cpu_rq(cpu));
->>  }
->>  
->>  /* conditionally throttle active cfs_rq's from put_prev_entity() */
+Given that DAX ties some storage semantics to memory and storage
+supports EIO I can see an argument to require memory_failure() for
+DAX, and especially for DAX on CXL where hotplug is supported it will
+be necessary. Linux currently has no facility to consult PCI drivers
+about removal actions, so the only recourse for a force removed CXL
+device is mass memory_failure().
+
+>
+> > +
+> > +     ddev_start = mp->m_ddev_targp->bt_dax_part_off;
+> > +     ddev_end = ddev_start +
+> > +             (mp->m_ddev_targp->bt_bdev->bd_nr_sectors << SECTOR_SHIFT) - 1;
+>
+> This should use bdev_nr_bytes.
+>
+> But didn't we say we don't want to support notifications on partitioned
+> devices and thus don't actually need all this?
+
+Right.

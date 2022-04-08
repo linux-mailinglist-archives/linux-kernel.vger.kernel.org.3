@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2994F4F98EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7754F98E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbiDHPC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S237336AbiDHPEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237413AbiDHPCy (ORCPT
+        with ESMTP id S236468AbiDHPEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:02:54 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C491931C40C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:00:49 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id t6so1743028plg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:00:49 -0700 (PDT)
+        Fri, 8 Apr 2022 11:04:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39D13BD24B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:02:06 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id h16so5698609wmd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HRWUAlNBur3Yy5C0NRAoK2xdzrJ+Jexf+aRU2zrKWJc=;
-        b=bf3suufmkspeWIJ1fa0tczHNYnLVzf8qgkWOY7NpPyLB3Rb08foLy5byCD4zs0v+qi
-         1oLoJtCuS2OlMoGaeO34Gbl2+HLaUlHo2ymX+6d7SH6eKLpe/RKiqbMtF0MoP5gcYNBy
-         K2oZ6T7d6by0XhvAq4hIy3cMTZjsmag6UR9s7y5LBhSemBQ5RPwTvbfNGAzPMXKXs6vt
-         zGkaPMMzwxCx+P2WdIJVwu4DzrnG2uwU2Zhdz/Kniuvxxa9YCvBwkow4rZlQX0QFHQ3z
-         zBOmOnLPJKGGp96kNae9MY9rE+4FJON/OOXGVaCVau4GbqMKBF/5i+7QJs+0sv41qlAz
-         6W7Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iz+c1WD+2kFnJShyZVo2mhzJoonjpk5NKsWkeEnebGQ=;
+        b=y9ibWseywVkczs7jv5ix8tRuxiKUjgfy4DezaUm/nwfvBNH2KSmqMIZdDbd9Mxvv7Q
+         7d6lbxe8qJxKshaiQTWrOHkXpVrOESzVp7N88yLH8SVEFx/tMn+C5FvL9SQuW4Ay3+Yg
+         kSi8XOTA4wjkMuNLadheSj28sSDK5z38Ee1DcrcVQbj2Tp4RAw4jX4mO4u8u3PotdWP+
+         4rwzqeiKpc/NRLnCjb7gzfPM5Xo+lIiaadoAqFt2SGcXiW6HFApmYmbg1YR/aTboB9b0
+         pvDHwdri2n3mKhUfpnyIMM/KIZc/KMielcqidnee3d1WMhqUTDnXHyblKRaaoaI47zkA
+         ekMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HRWUAlNBur3Yy5C0NRAoK2xdzrJ+Jexf+aRU2zrKWJc=;
-        b=FACKHDU4jBdVKFgOE7Bfldc1kNMEgeHcZ2avMbz8g3AJ5tU4n+Jjqhap8VHo+8dGHA
-         vZPK/Z3P46KCaJkZBvWRAzZzHntIGCRNIgy0VxQ4xRsT5f7OW6N1dKiwYvKnJkRewNDZ
-         c5uzFdsBtmaa+ucR4KmdqD7kqVYKHjeuRh11WAyJbxj99kG47v0YjRbXnLeAgwny1xBR
-         DkUl1HIXReLy7unJKnvLIbXFfDRnMf3Ihko40dV6nK9my9yk/Qgu4v7yDwhjm6G1NflI
-         hPtHXlFWmlLcOfwhVmwoW2T18p811unN7yyYTcQGD4kKqf7cebP/JaUY9oJOg1Ju8RVy
-         zeBQ==
-X-Gm-Message-State: AOAM5316IZEYPI0UdapniAJG8va2X5w40I7o4rWd/9ddVgvaSEMqHdcd
-        Sp5JAcGrqaUxomat+cPMx9TO
-X-Google-Smtp-Source: ABdhPJy72wqAoAwBFvzJmgBCIEukHMQLwiiNKaYUPf4htSfYlBfB92ze7uyzufyeXBx3xOxeYOLhMw==
-X-Received: by 2002:a17:90b:1c03:b0:1c7:5523:6a27 with SMTP id oc3-20020a17090b1c0300b001c755236a27mr22325188pjb.29.1649430048703;
-        Fri, 08 Apr 2022 08:00:48 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.100.79])
-        by smtp.gmail.com with ESMTPSA id s35-20020a056a001c6300b004fb20b5d6c1sm26214636pfw.40.2022.04.08.08.00.44
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iz+c1WD+2kFnJShyZVo2mhzJoonjpk5NKsWkeEnebGQ=;
+        b=gwymdP/guKW0+jJL5WHujgCndZY+htJ1e6FqoafYBt8wIBYdNI8Lqc2N7IJe4j5jf1
+         M4AWVylGAKJPk/6Pp54MNR0eNkCLPJnmuLVNOI9h9t+ghxxdWZT0HUiC0kVEnK4QLVfF
+         gbDQL1pM52FprRng+MAvVbf1VdUiQkfl3eZewtSl6VaM4CMKP3YxkfdPZojycjAcWbLE
+         eLBmS7+DrUX+OHMM2G63WUVVbRIFzlf7GW6+T9LLPWESlh3VB6hPf1qSu9v66COkRSW+
+         8RJwU25S7SLdHV/dGAaxSMFoFcvJqv4vmMLOx9z1MfZLVoCEXdNlMsnJxfR9FcUuSRVt
+         Tp1Q==
+X-Gm-Message-State: AOAM533z2LdQUrGsrgsx7n2rm+5rKMsRUP59k/S3JcwZCq+USL+ggFCb
+        qUAk0Mg6jAYYfg4utxRKvKOiHQ==
+X-Google-Smtp-Source: ABdhPJySCidxaQPfz8lG3tCiCVWv3xpUiU9+LN8RUHhf594sVG3Xhb9svnvuZsqc2c0PWxIs36RpWA==
+X-Received: by 2002:a7b:ce84:0:b0:37c:52fe:a3ff with SMTP id q4-20020a7bce84000000b0037c52fea3ffmr17153661wmj.48.1649430125474;
+        Fri, 08 Apr 2022 08:02:05 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id f13-20020a5d64cd000000b0020787751295sm4287477wri.35.2022.04.08.08.02.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:00:48 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mhi@lists.linux.dev
-Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loic.poulain@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] bus: mhi: host: pci_generic: Flush recovery worker during freeze
-Date:   Fri,  8 Apr 2022 20:30:39 +0530
-Message-Id: <20220408150039.17297-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 08 Apr 2022 08:02:04 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 16:02:02 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mike Travis <mike.travis@hpe.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
+ driver
+Message-ID: <20220408150202.yhn3qppqwm7wzmo3@maple.lan>
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com>
+ <YkWVTEG5oFO82GPL@kroah.com>
+ <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+ <20220408133246.fyw5554lgli4olvg@maple.lan>
+ <CAK8P3a0u2xa9BFmakG+f4kyLsqNZQbE6KQ6jz2356Fyen=1EHw@mail.gmail.com>
+ <YlBE6hZHmLo9/wrU@kroah.com>
+ <CAK8P3a3v4+AO5avGoxeZSyNTOWqk8YS95xQLWSBZ=yV_3DKggg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3v4+AO5avGoxeZSyNTOWqk8YS95xQLWSBZ=yV_3DKggg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -71,38 +92,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that the recovery work might be running while the freeze
-gets executed (during hibernation etc.,). Currently, we don't powerdown
-the stack if it is not up but if the recovery work completes after freeze,
-then the device will be up afterwards. This will not be a sane situation.
+On Fri, Apr 08, 2022 at 04:49:31PM +0200, Arnd Bergmann wrote:
+> On Fri, Apr 8, 2022 at 4:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Apr 08, 2022 at 04:17:16PM +0200, Arnd Bergmann wrote:
+> > > On Fri, Apr 8, 2022 at 3:32 PM Daniel Thompson
+> > > <daniel.thompson@linaro.org> wrote:
+> > > > On Thu, Mar 31, 2022 at 05:44:55PM +0200, Arnd Bergmann wrote:
+> > > >
+> > > > There is some prior art for this sort of feature. AFAICT SGI UV has a
+> > > > similar mechanism that can send an NMI-with-no-side-channel to the
+> > > > kernel. The corresponding driver offers a range of actions using a
+> > > > module parameter:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/platform/uv/uv_nmi.c#n180
+> > > >
+> > > > I don't think a hardcoded 'c' makes any sense. With a hardcoded argument
+> > > > it is just obfuscation. However it is certainly seems attractive to be
+> > > > able to reuse handle_sysrq() to provide a more powerful set of actions.
+> > >
+> > > How about a module parameter that allows picking a sysrq character then?
+> >
+> > Module parameters are so 1990, as this is a platform device, why not get
+> > it from DT?
+> 
+> This machine doesn't use DT. I suppose the same could be done with an EFI
+> variable, but with a module parameter you get the added benefit of having both
+> a boot time kernel command line argument, and the option to override it at
+> run time.
 
-So let's flush the recovery worker before trying to powerdown the device.
+Pushing the decision on what action to take into firmware (whether that
+is DT or ACPI) implies that the firmware is well positioned to make a
+decision.  I don't think that is true here.
 
-Cc: stable@vger.kernel.org
-Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
-Reported-by: Bhaumik Vasav Bhatt <quic_bbhatt@quicinc.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+To me, it seems more like an admin choice... and admins are conditioned
+to use kernel arguments.
 
-Changes in v2:
+If these type of diagnostics request were more common then perhaps we'd
+be looking at a sysctl and call to handle_diagnostic_sysrq().
 
-* Switched to flush_work() as the workqueue used is global one.
 
- drivers/bus/mhi/host/pci_generic.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index ef85dbfb3216..541ced27d941 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -1060,6 +1060,7 @@ static int __maybe_unused mhi_pci_freeze(struct device *dev)
- 	 * the intermediate restore kernel reinitializes MHI device with new
- 	 * context.
- 	 */
-+	flush_work(&mhi_pdev->recovery_work);
- 	if (test_and_clear_bit(MHI_PCI_DEV_STARTED, &mhi_pdev->status)) {
- 		mhi_power_down(mhi_cntrl, true);
- 		mhi_unprepare_after_power_down(mhi_cntrl);
--- 
-2.25.1
-
+Daniel.

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82FD4F9006
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51B84F900D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiDHIAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S230169AbiDHIAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiDHIA1 (ORCPT
+        with ESMTP id S230110AbiDHIAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:00:27 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC461169797;
-        Fri,  8 Apr 2022 00:58:24 -0700 (PDT)
+        Fri, 8 Apr 2022 04:00:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9582816E205;
+        Fri,  8 Apr 2022 00:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649404705; x=1680940705;
+  t=1649404708; x=1680940708;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WJKyd+Fl6YLBO12mh2a443xCDWtg4F7sbnlIRNccMxc=;
-  b=h4up6pMraM4eGneg+TxCKOg+pCZdjdfZ3yJWSQ89acXyS0k7QixUzLSH
-   P+oMV1YohwjRbhAjf8iv3PB7W+JoTmSlZoATFwU2hSMg71rDdvb7sP9Ip
-   KT61+55bWlqUUCUPRTqdVEGSlVCzJgugk+g+hli7VIGSs4bWhJsoK2VTT
-   2uYI25pUUCxZ/hXcJthq64/ES2+k9DivEzBVcp2NHW8PyAszrFCqcJXeP
-   tICQiv1dz5IDQRhu2KTtL1Holo8pdSyhW6hv5wta5J3lFg3ZwFtKeLEy5
-   3ADv1Q+6E7Wbd3H2ZjMbwPiEMcRa1/WySbp4SxN+ryRmHKnds1+HlSOlx
+  bh=o5AzebHFW+wKVCswo1mni6dGq0V0+Rg/eIh7HzLox4c=;
+  b=SQHi70LsC1wyDIOvmBwcZNx2V7b8tiRa34GzM2N+MIja4bXcynZFDQfi
+   GlmlcHnwuLrNpzhl07fi7MNpFgRn7zFYWvWpZ27+nyfhgJQnxKur7JEGO
+   MZ8qYHMzPNVwbMargUQN+DzPj8ZjQv9Qg9CRNqHJ79MZaZlwS1/XSshO9
+   GeLoMG8dT0kyz1GNkcYWvMYaA7XJmS0XYG6bzablMuEhJxeQ20kkjRyFJ
+   rdfm5CiCj2aOg3PDWpXXToS1fCV6KbWrUtGtAzqcizVYsNl4k4Ig8lf5H
+   DzCjOgLl3yw8tAcaCHozRMX+OxnlZffqvH2yMqZm7nM2Jwh19zTiwzin1
    g==;
 X-IronPort-AV: E=Sophos;i="5.90,244,1643698800"; 
-   d="scan'208";a="151988423"
+   d="scan'208";a="159403651"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Apr 2022 00:58:24 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Apr 2022 00:58:28 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Apr 2022 00:58:23 -0700
+ 15.1.2375.17; Fri, 8 Apr 2022 00:58:27 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 8 Apr 2022 00:58:19 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 8 Apr 2022 00:58:24 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>,
         <alexandre.belloni@bootlin.com>, <p.zabel@pengutronix.de>,
@@ -48,9 +48,9 @@ CC:     <cristian.birsan@microchip.com>, <linux-pm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 02/10] dt-bindings: reset: convert Atmel/Microchip reset controller to YAML
-Date:   Fri, 8 Apr 2022 11:00:23 +0300
-Message-ID: <20220408080031.2527232-3-claudiu.beznea@microchip.com>
+Subject: [PATCH v3 03/10] dt-bindings: reset: atmel,at91sam9260-reset: add sama7g5 bindings
+Date:   Fri, 8 Apr 2022 11:00:24 +0300
+Message-ID: <20220408080031.2527232-4-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220408080031.2527232-1-claudiu.beznea@microchip.com>
 References: <20220408080031.2527232-1-claudiu.beznea@microchip.com>
@@ -68,97 +68,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Atmel/Microchip reset controller to YAML.
+Add documentation for SAMA7G5 reset controller. Compared with previous
+versions of reset controllers this one contains support for resetting
+in SoC devices (e.g. USB PHYs).
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/arm/atmel-sysregs.txt | 15 ------
- .../reset/atmel,at91sam9260-reset.yaml        | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 15 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+ .../reset/atmel,at91sam9260-reset.yaml        | 23 +++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index 16eef600d599..ab1b352344ae 100644
---- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-+++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -25,21 +25,6 @@ System Timer (ST) required properties:
- Its subnodes can be:
- - watchdog: compatible should be "atmel,at91rm9200-wdt"
- 
--RSTC Reset Controller required properties:
--- compatible: Should be "atmel,<chip>-rstc".
--  <chip> can be "at91sam9260", "at91sam9g45", "sama5d3" or "samx7"
--  it also can be "microchip,sam9x60-rstc"
--- reg: Should contain registers location and length
--- clocks: phandle to input clock.
--
--Example:
--
--	rstc@fffffd00 {
--		compatible = "atmel,at91sam9260-rstc";
--		reg = <0xfffffd00 0x10>;
--		clocks = <&clk32k>;
--	};
--
- RAMC SDRAM/DDR Controller required properties:
- - compatible: Should be "atmel,at91rm9200-sdramc", "syscon"
- 			"atmel,at91sam9260-sdramc",
 diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-new file mode 100644
-index 000000000000..34c40b875e20
---- /dev/null
+index 34c40b875e20..98465d26949e 100644
+--- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
 +++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reset/atmel,at91sam9260-reset.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -10,7 +10,8 @@ maintainers:
+   - Claudiu Beznea <claudiu.beznea@microchip.com>
+ 
+ description: |
+-  The system reset controller can be used to reset the CPU.
++  The system reset controller can be used to reset the CPU. In case of
++  SAMA7G5 it can also reset some devices (e.g. USB PHYs).
+ 
+ properties:
+   compatible:
+@@ -21,21 +22,39 @@ properties:
+               - atmel,at91sam9g45-rstc
+               - atmel,sama5d3-rstc
+               - microchip,sam9x60-rstc
++              - microchip,sama7g5-rstc
+       - items:
+           - const: atmel,sama5d3-rstc
+           - const: atmel,at91sam9g45-rstc
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    items:
++      - description: base registers for system reset control
++      - description: registers for device specific reset control
+ 
+   clocks:
+     maxItems: 1
+ 
++  "#reset-cells":
++    const: 1
 +
-+title: Atmel/Microchip System Reset Controller
+ required:
+   - compatible
+   - reg
+   - clocks
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - microchip,sama7g5-rstc
++    then:
++      required:
++        - "#reset-cells"
 +
-+maintainers:
-+  - Claudiu Beznea <claudiu.beznea@microchip.com>
-+
-+description: |
-+  The system reset controller can be used to reset the CPU.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - atmel,at91sam9260-rstc
-+              - atmel,at91sam9g45-rstc
-+              - atmel,sama5d3-rstc
-+              - microchip,sam9x60-rstc
-+      - items:
-+          - const: atmel,sama5d3-rstc
-+          - const: atmel,at91sam9g45-rstc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/at91.h>
-+
-+    reset-controller@fffffd00 {
-+        compatible = "atmel,at91sam9260-rstc";
-+        reg = <0xfffffd00 0x10>;
-+        clocks = <&pmc PMC_TYPE_CORE PMC_SLOW>;
-+    };
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.32.0
 

@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF9E4F9C4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EB94F9C4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234696AbiDHSP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S237331AbiDHSPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiDHSP0 (ORCPT
+        with ESMTP id S230479AbiDHSP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 14:15:26 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4F313E0D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:13:21 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-deb9295679so10540319fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bhP3eIOYqFQ1TLSj31wqQTbMB1cCk1qoaWt6+VR4BLw=;
-        b=Qu1oWRu2JGHe24zZhQ4F0+ypq/DSujSGxjFiCTEtij0J1fAO2oFUTpnr9B9qfHoWTm
-         756Lo5Sh/3bLUXO8RxhWd6obNcOrETC75QRMjwLBYClfaffoygf2/v/YfxyLHKTl5ecJ
-         nVNsJzxjkHMySUYQB1ak4nnoY/U56GCcuvW8Cg04SKviYKoi3iLwj5z6nE97qGjCCtGF
-         KQorSYoGfOvuJvEmLg0qYNnuV9mYVRn2i7oJIVOb69Im5NS+7sgpUEkBfuDPBLbBa26t
-         UvXUWISkiodiQJDHZlbxcv/CGUUkM8gAj0ylpoOiDPy51El4YHmG/B2XsL9/siOSOnTk
-         t0zQ==
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46EC3A73F;
+        Fri,  8 Apr 2022 11:13:21 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id b43so12488129ljr.10;
+        Fri, 08 Apr 2022 11:13:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bhP3eIOYqFQ1TLSj31wqQTbMB1cCk1qoaWt6+VR4BLw=;
-        b=5XCuRV2nHk8JTcdy21O84VQgEA1dZuSrxmrJnLcCGe+xhh1aez/APO3HmJYt+9IHai
-         IhDvQYSlbzaWD6Arq+sdnzCJSpOgY5dW/E0EcrRmoyq/boeXlpbk/MK8ZzKt7bE99HLQ
-         bG9R+rViRY0vOD0vvo4i+cl9Bq4nCuG4jct6FV4Ef5tRkVT2L50GE8QiZq3ogE1ikfHz
-         mky06LR2Enj1AzzQ7v0Rv6yuUcyFnLJF8r1KqPd6Q87OI7WleETF5pcjQbQlmBGqiez0
-         Up/mKzD1DiSAgYWiFdoz13LVzZLmJoesMm+yemCE3+1nEwOVEyigpe5AZR9GhIkXCtSe
-         IN9w==
-X-Gm-Message-State: AOAM530RP3fNkX2bBVAKNTZaMcXmciapIZypbI8pJqj0BcBYpgcCKpAS
-        A0+Qv/54BEiTcypjdNdgEojv0CYj1aC79UI8Ub9XHH/p
-X-Google-Smtp-Source: ABdhPJy/5j7dhpq7nAlYcXWuJYra1eFEi2YT/D5jTr+unwf6/PZglehZSAX76bFE1Mri4dpLdCIaFYQn1dd+nnZttqo=
-X-Received: by 2002:a05:6870:d683:b0:de:eaa2:3550 with SMTP id
- z3-20020a056870d68300b000deeaa23550mr9582559oap.253.1649441599543; Fri, 08
- Apr 2022 11:13:19 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=UW/raEK33bMCD3gBOPjdzCnBvwCLiC4EtDuZoVDwoUo=;
+        b=BEi6l/+AVzYTy+p+eOrjTHN6l78Hhs+F4Qo4JFeLD+usf2WppmkjKWQ/Af4zh4EiuO
+         kvqzzObpjn1ilpB2QfF82MhfkPduuaMKlbc94Kv5W1tIrpzwvS8wUgWYHVVFXsIzM3zT
+         nrRzo6II5Dbf3TDVV6tgVCDm+Vm+60odmTohe3AdJndSl296q5q84D5IDQxt1c2alR+g
+         QtlmCenGdj1LQRxk894ERbXrvVtABM9RdiSAVi7dJ3gB/utBJNsbYOQX4WIeRnrnWvg7
+         kgj/L3ZLSuzfyPtaQmhN8fvLYHvM8hlMxNf7fuVzW2B4f1lUwlPyaqu2yAYoPbPQcuJo
+         v2lA==
+X-Gm-Message-State: AOAM531cPDKRJ2DwlYyNJl1Xu0qzs1r6BxKZMTtyVVyHZEJFJo4Wyrun
+        FhX0yq1fXPdWJeVpb9bcJgD0YYDKUGwy4fQCy6COC7Zq
+X-Google-Smtp-Source: ABdhPJxZz2QW83b88KtmPfLvVm/xo/NWOAt+tfuxfy6sASdOaHHrjCgrRzI54XMME2ryEQkX3IzV9X2KZ6g4D9kfQlg=
+X-Received: by 2002:a05:651c:248:b0:245:5b3d:9abb with SMTP id
+ x8-20020a05651c024800b002455b3d9abbmr12436620ljn.366.1649441600116; Fri, 08
+ Apr 2022 11:13:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220408154447.3519453-1-richard.gong@amd.com>
- <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
- <CADnq5_PmxGxrJG5uZkkFXQ1YbJbDZTvAqb2oYqdCE=NtqBojqw@mail.gmail.com> <2603fe3e-2b8b-0161-2812-6c1f21eda02b@amd.com>
-In-Reply-To: <2603fe3e-2b8b-0161-2812-6c1f21eda02b@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 8 Apr 2022 14:13:08 -0400
-Message-ID: <CADnq5_PLwkm9tKc7Hh3WOo9nKJEeTcKGdYtVtfGVoVq6gGo1sg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-To:     "Gong, Richard" <richard.gong@amd.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220408144056.1955535-1-james.clark@arm.com>
+In-Reply-To: <20220408144056.1955535-1-james.clark@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 8 Apr 2022 11:13:09 -0700
+Message-ID: <CAM9d7cji=xSAy673sXGf2GXFsKKsR7=pNKJceLtHX1sFFUZcKg@mail.gmail.com>
+Subject: Re: [PATCH] perf: arm-spe: Fix perf report --mem-mode
+To:     James Clark <james.clark@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        leo.yan@linaro.com, German Gomez <German.Gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 12:15 PM Gong, Richard <richard.gong@amd.com> wrote:
->
-> Hi Alex,
->
-> On 4/8/2022 10:54 AM, Alex Deucher wrote:
-> > On Fri, Apr 8, 2022 at 11:47 AM Limonciello, Mario
-> > <Mario.Limonciello@amd.com> wrote:
-> >> [Public]
-> >>
-> >>
-> >>
-> >>> -----Original Message-----
-> >>> From: Gong, Richard <Richard.Gong@amd.com>
-> >>> Sent: Friday, April 8, 2022 10:45
-> >>> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
-> >>> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> >>> airlied@linux.ie; daniel@ffwll.ch
-> >>> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; l=
-inux-
-> >>> kernel@vger.kernel.org; Limonciello, Mario <Mario.Limonciello@amd.com=
->;
-> >>> Gong, Richard <Richard.Gong@amd.com>
-> >>> Subject: [PATCH] drm/amdgpu: disable ASPM for legacy products that do=
-n't
-> >>> support ASPM
-> >>>
-> >>> Active State Power Management (ASPM) feature is enabled since kernel
-> >>> 5.14.
-> >>> However there are some legacy products (WX3200 and RX640 are examples=
-)
-> >>> that
-> >>> do not support ASPM. Use them as video/display output and system woul=
-d
-> >>> hang
-> >>> during suspend/resume.
-> >>>
-> >>> Add extra check to disable ASPM for old products that don't have
-> >>> ASPM support.
-> > The patch description is incorrect.  ASPM works just fine on these
-> > GPUs.  It's more of an issue with whether the underlying platform
-> > supports ASPM or not.  Rather than disabling a chip family, I would
-> > prefer to add a check for problematic platforms and disable ASPM on
-> > those platforms.
->
-> I thought that initially.
->
-> But I found out that suspend/resume works just fine on the "problematic"
-> platform (Dell Precision 3660, Intel ADL based) + AMD W6400 GFX card.
-> With WX3200 or RX640, suspend/resume works only when ASPM was disabled.
-> Both WX3200 and RX640 are from CHIP_POLARIS12 family.
->
-> This is why I take chip family approach.
+Hello,
 
-Sure, but you could put those polaris12 boards into a different system
-and they work just fine with ASPM enabled.
+On Fri, Apr 8, 2022 at 7:41 AM James Clark <james.clark@arm.com> wrote:
+>
+> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+> is not available") "perf mem report" and "perf report --mem-mode" don't
+> allow opening the file unless one of the events has PERF_SAMPLE_DATA_SRC
+> set.
+>
+> SPE doesn't have this set even though synthetic memory data is generated
+> after it is decoded. Fix this issue by setting DATA_SRC on SPE events.
+> This has no effect on the data collected because the SPE driver doesn't
+> do anything with that flag and doesn't generate samples.
+>
+> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Alex
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
+Thanks,
+Namhyung
+
+
+> ---
+>  tools/perf/arch/arm64/util/arm-spe.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 >
-> Regards,
+> diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
+> index 86e2e926aa0e..a1419e6341c0 100644
+> --- a/tools/perf/arch/arm64/util/arm-spe.c
+> +++ b/tools/perf/arch/arm64/util/arm-spe.c
+> @@ -239,6 +239,12 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
+>                 arm_spe_set_timestamp(itr, arm_spe_evsel);
+>         }
 >
-> Richard
+> +       /*
+> +        * Set this only so that perf report knows that SPE generates memory info. It has no effect
+> +        * on the opening of the event or the SPE data produced.
+> +        */
+> +       evsel__set_sample_bit(arm_spe_evsel, DATA_SRC);
+> +
+>         /* Add dummy event to keep tracking */
+>         err = parse_events(evlist, "dummy:u", NULL);
+>         if (err)
+> @@ -523,6 +529,5 @@ struct perf_event_attr
 >
-> > Alex
-> >
-> >>> Signed-off-by: Richard Gong <richard.gong@amd.com>
-> >>> Link: https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%=
-2F%2Fgitlab.freedesktop.org%2Fdrm%2Famd%2F-%2Fissues%2F1885&amp;data=3D04%7=
-C01%7CRichard.Gong%40amd.com%7C96f8f686f75f43abb5ed08da19780fab%7C3dd8961fe=
-4884e608e11a82d994e183d%7C0%7C0%7C637850300760921285%7CUnknown%7CTWFpbGZsb3=
-d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000=
-&amp;sdata=3DxVKC0Q16ho5Y2GDuN%2Fnx68wm6NzOIyR5xJbiXPgqPpQ%3D&amp;reserved=
-=3D0
-> >>> ---
-> >>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 4 ++++
-> >>>   1 file changed, 4 insertions(+)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> index bb1c025d9001..8987107f41ee 100644
-> >>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> @@ -2012,6 +2012,10 @@ static int amdgpu_pci_probe(struct pci_dev
-> >>> *pdev,
-> >>>        if (amdgpu_aspm =3D=3D -1 && !pcie_aspm_enabled(pdev))
-> >>>                amdgpu_aspm =3D 0;
-> >>>
-> >>> +     /* disable ASPM for the legacy products that don't support ASPM=
- */
-> >>> +     if ((flags & AMD_ASIC_MASK) =3D=3D CHIP_POLARIS12)
-> >>> +             amdgpu_aspm =3D 0;
-> >>> +
-> >> I think it's problematic to disable it for the entire driver.  There m=
-ight be multiple
-> >> AMDGPUs in the system, and others may support ASPM.
-> >>
-> >> Can it be done just as part of probe for Polaris?
-> >>
-> >>>        if (amdgpu_virtual_display ||
-> >>>            amdgpu_device_asic_has_dc_support(flags & AMD_ASIC_MASK))
-> >>>                supports_atomic =3D true;
-> >>> --
-> >>> 2.25.1
+>         arm_spe_pmu->selectable = true;
+>         arm_spe_pmu->is_uncore = false;
+> -
+>         return attr;
+>  }
+> --
+> 2.28.0
+>

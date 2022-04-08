@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDB74F91D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8104F91C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbiDHJQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S233624AbiDHJPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiDHJMD (ORCPT
+        with ESMTP id S232892AbiDHJMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 05:12:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7071E86AF;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF361E86BE;
         Fri,  8 Apr 2022 02:09:09 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:09:06 -0000
+Date:   Fri, 08 Apr 2022 09:09:07 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408947;
+        s=2020; t=1649408948;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=81Dl+NL4i86EUD/tDxKsulOhMJAcoi2yESqh2e3S44U=;
-        b=xGsY6jF4wLeK5IozVrZG6lBbW/XFdUV/xMBbn0lfC0nh0ThSP2ajsJeOUmuaPpGtk3umAD
-        2gcoUT19kXUBqz80SFZOLXiNsChKy/a1BxKh+vKLeuUuHF1RGwsaSHvODLWWOVcfiRXNng
-        CpGWUpDGw1F72wX9S/hxKYaMLcyqXKu2x+xJMQl5GUMTpM6EQISj+TJFT39K+tk+tdI2v4
-        qDirJheAKFIpa1VgsT7XazCGj1Ce6bV1owPfO853u5DlX7SabdUtu+gWzSW0MBGPLDgskl
-        ZPc4L9JT6fPVedLZKHac1KVHZQQkRYAiGKoVFYkj6O1igf21JxnGDzUS7MP1VA==
+        bh=7zVJxZmTkeFBH8xY0eIsdhqZxrT9IdulUaaEJaYUEDg=;
+        b=2bvgesqa0+GDb31z3s0KT4zVKyPobnJwMOXZGPAOq/m9XahnazPkk/ObHpLZ0/NWnA/ZOW
+        0uVpmcwZlUXn1bjr0R4DU5svK/Ub9y/0OaA6OpbJ4iYlkXtbft1E+58xJso7Wio7zl6Ym1
+        Cyam9yqJDyAjclF12om2bPepYAlbVEW9eC6JEL/wBeGK2YuEKIW3Unkc8PHOmWrl3Ywfdn
+        RdIF1iU97XoxQlkwrK51Nc4TAImZpezZGHHFOOUhok9zT87nD7A0XEaA6JCIefctd4M/bl
+        jHmbDWVLr93WiqEfChZY8wfat9JPR5oH5vdty9jOCCIiZv2d64DUWzNG3XJY2Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408947;
+        s=2020e; t=1649408948;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=81Dl+NL4i86EUD/tDxKsulOhMJAcoi2yESqh2e3S44U=;
-        b=KH+U8nS5LWBUNs2gF3jb/qoG5EU5zWNZ4aAFrEYRmqp3FGGAZy8X8Wl/+wrXe0iFS9GHzG
-        yCyZkeITFLDGbQCA==
+        bh=7zVJxZmTkeFBH8xY0eIsdhqZxrT9IdulUaaEJaYUEDg=;
+        b=SJ8mrd+eptObALeWz1ajDTVfURlCvge22L66KlT+d4N2uc8a1NTWB19/jkK2gwBSa16Bud
+        tFgfRMmpuK4s+IBA==
 From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/compressed: Add helper for validating pages in the
- decompression stage
+Subject: [tip: x86/sev] x86/sev: Check the VMPL level
 Cc:     Brijesh Singh <brijesh.singh@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-16-brijesh.singh@amd.com>
-References: <20220307213356.2797205-16-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-15-brijesh.singh@amd.com>
+References: <20220307213356.2797205-15-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940894646.389.17136891705750729768.tip-bot2@tip-bot2>
+Message-ID: <164940894730.389.11280397008447131834.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,208 +67,138 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     4f9c403e44e5e88feb27d5e617d1adc9cc7ef684
-Gitweb:        https://git.kernel.org/tip/4f9c403e44e5e88feb27d5e617d1adc9cc7ef684
+Commit-ID:     81cc3df9a90e7817494421ecc48ede6bd5e8132b
+Gitweb:        https://git.kernel.org/tip/81cc3df9a90e7817494421ecc48ede6bd5e8132b
 Author:        Brijesh Singh <brijesh.singh@amd.com>
-AuthorDate:    Wed, 09 Feb 2022 12:10:09 -06:00
+AuthorDate:    Wed, 09 Feb 2022 12:10:08 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 13:10:40 +02:00
+CommitterDate: Wed, 06 Apr 2022 13:10:34 +02:00
 
-x86/compressed: Add helper for validating pages in the decompression stage
+x86/sev: Check the VMPL level
 
-Many of the integrity guarantees of SEV-SNP are enforced through the
-Reverse Map Table (RMP). Each RMP entry contains the GPA at which a
-particular page of DRAM should be mapped. The VMs can request the
-hypervisor to add pages in the RMP table via the Page State Change
-VMGEXIT defined in the GHCB specification.
+The Virtual Machine Privilege Level (VMPL) feature in the SEV-SNP
+architecture allows a guest VM to divide its address space into four
+levels. The level can be used to provide hardware isolated abstraction
+layers within a VM. VMPL0 is the highest privilege level, and VMPL3 is
+the least privilege level. Certain operations must be done by the VMPL0
+software, such as:
 
-Inside each RMP entry is a Validated flag; this flag is automatically
-cleared to 0 by the CPU hardware when a new RMP entry is created for a
-guest. Each VM page can be either validated or invalidated, as indicated
-by the Validated flag in the RMP entry. Memory access to a private page
-that is not validated generates a #VC. A VM must use the PVALIDATE
-instruction to validate a private page before using it.
+* Validate or invalidate memory range (PVALIDATE instruction)
+* Allocate VMSA page (RMPADJUST instruction when VMSA=1)
 
-To maintain the security guarantee of SEV-SNP guests, when transitioning
-pages from private to shared, the guest must invalidate the pages before
-asking the hypervisor to change the page state to shared in the RMP table.
+The initial SNP support requires that the guest kernel is running at
+VMPL0. Add such a check to verify the guest is running at level 0 before
+continuing the boot. There is no easy method to query the current VMPL
+level, so use the RMPADJUST instruction to determine whether the guest
+is running at the VMPL0.
 
-After the pages are mapped private in the page table, the guest must
-issue a page state change VMGEXIT to mark the pages private in the RMP
-table and validate them.
-
-Upon boot, BIOS should have validated the entire system memory.
-During the kernel decompression stage, early_setup_ghcb() uses
-set_page_decrypted() to make the GHCB page shared (i.e. clear encryption
-attribute). And while exiting from the decompression, it calls
-set_page_encrypted() to make the page private.
-
-Add snp_set_page_{private,shared}() helpers that are used by
-set_page_{decrypted,encrypted}() to change the page state in the RMP
-table.
-
-  [ bp: Massage commit message and comments. ]
+  [ bp: Massage commit message. ]
 
 Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-16-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-15-brijesh.singh@amd.com
 ---
- arch/x86/boot/compressed/ident_map_64.c | 18 ++++++++-
- arch/x86/boot/compressed/misc.h         |  4 ++-
- arch/x86/boot/compressed/sev.c          | 46 ++++++++++++++++++++++++-
- arch/x86/include/asm/sev-common.h       | 26 ++++++++++++++-
- 4 files changed, 93 insertions(+), 1 deletion(-)
+ arch/x86/boot/compressed/sev.c    | 28 ++++++++++++++++++++++++++--
+ arch/x86/include/asm/sev-common.h |  1 +
+ arch/x86/include/asm/sev.h        | 16 ++++++++++++++++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
-index f7213d0..613367e 100644
---- a/arch/x86/boot/compressed/ident_map_64.c
-+++ b/arch/x86/boot/compressed/ident_map_64.c
-@@ -275,15 +275,31 @@ static int set_clr_page_flags(struct x86_mapping_info *info,
- 	 * Changing encryption attributes of a page requires to flush it from
- 	 * the caches.
- 	 */
--	if ((set | clr) & _PAGE_ENC)
-+	if ((set | clr) & _PAGE_ENC) {
- 		clflush_page(address);
- 
-+		/*
-+		 * If the encryption attribute is being cleared, change the page state
-+		 * to shared in the RMP table.
-+		 */
-+		if (clr)
-+			snp_set_page_shared(__pa(address & PAGE_MASK));
-+	}
-+
- 	/* Update PTE */
- 	pte = *ptep;
- 	pte = pte_set_flags(pte, set);
- 	pte = pte_clear_flags(pte, clr);
- 	set_pte(ptep, pte);
- 
-+	/*
-+	 * If the encryption attribute is being set, then change the page state to
-+	 * private in the RMP entry. The page state change must be done after the PTE
-+	 * is updated.
-+	 */
-+	if (set & _PAGE_ENC)
-+		snp_set_page_private(__pa(address & PAGE_MASK));
-+
- 	/* Flush TLB after changing encryption attribute */
- 	write_cr3(top_level_pgt);
- 
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 23e0e39..01cc13c 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -124,6 +124,8 @@ static inline void console_init(void)
- void sev_enable(struct boot_params *bp);
- void sev_es_shutdown_ghcb(void);
- extern bool sev_es_check_ghcb_fault(unsigned long address);
-+void snp_set_page_private(unsigned long paddr);
-+void snp_set_page_shared(unsigned long paddr);
- #else
- static inline void sev_enable(struct boot_params *bp) { }
- static inline void sev_es_shutdown_ghcb(void) { }
-@@ -131,6 +133,8 @@ static inline bool sev_es_check_ghcb_fault(unsigned long address)
- {
- 	return false;
- }
-+static inline void snp_set_page_private(unsigned long paddr) { }
-+static inline void snp_set_page_shared(unsigned long paddr) { }
- #endif
- 
- /* acpi.c */
 diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index eb42178..5f2c268 100644
+index 5b38931..eb42178 100644
 --- a/arch/x86/boot/compressed/sev.c
 +++ b/arch/x86/boot/compressed/sev.c
-@@ -116,6 +116,52 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
- /* Include code for early handlers */
- #include "../../kernel/sev-shared.c"
+@@ -199,6 +199,26 @@ finish:
+ 		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
+ }
  
-+static inline bool sev_snp_enabled(void)
++static void enforce_vmpl0(void)
 +{
-+	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
-+}
-+
-+static void __page_state_change(unsigned long paddr, enum psc_op op)
-+{
-+	u64 val;
-+
-+	if (!sev_snp_enabled())
-+		return;
++	u64 attrs;
++	int err;
 +
 +	/*
-+	 * If private -> shared then invalidate the page before requesting the
-+	 * state change in the RMP table.
++	 * RMPADJUST modifies RMP permissions of a lesser-privileged (numerically
++	 * higher) privilege level. Here, clear the VMPL1 permission mask of the
++	 * GHCB page. If the guest is not running at VMPL0, this will fail.
++	 *
++	 * If the guest is running at VMPL0, it will succeed. Even if that operation
++	 * modifies permission bits, it is still ok to do so currently because Linux
++	 * SNP guests are supported only on VMPL0 so VMPL1 or higher permission masks
++	 * changing is a don't-care.
 +	 */
-+	if (op == SNP_PAGE_STATE_SHARED && pvalidate(paddr, RMP_PG_SIZE_4K, 0))
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
-+
-+	/* Issue VMGEXIT to change the page state in RMP table. */
-+	sev_es_wr_ghcb_msr(GHCB_MSR_PSC_REQ_GFN(paddr >> PAGE_SHIFT, op));
-+	VMGEXIT();
-+
-+	/* Read the response of the VMGEXIT. */
-+	val = sev_es_rd_ghcb_msr();
-+	if ((GHCB_RESP_CODE(val) != GHCB_MSR_PSC_RESP) || GHCB_MSR_PSC_RESP_VAL(val))
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
-+
-+	/*
-+	 * Now that page state is changed in the RMP table, validate it so that it is
-+	 * consistent with the RMP entry.
-+	 */
-+	if (op == SNP_PAGE_STATE_PRIVATE && pvalidate(paddr, RMP_PG_SIZE_4K, 1))
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
++	attrs = 1;
++	if (rmpadjust((unsigned long)&boot_ghcb_page, RMP_PG_SIZE_4K, attrs))
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_NOT_VMPL0);
 +}
 +
-+void snp_set_page_private(unsigned long paddr)
-+{
-+	__page_state_change(paddr, SNP_PAGE_STATE_PRIVATE);
-+}
-+
-+void snp_set_page_shared(unsigned long paddr)
-+{
-+	__page_state_change(paddr, SNP_PAGE_STATE_SHARED);
-+}
-+
- static bool early_setup_ghcb(void)
+ void sev_enable(struct boot_params *bp)
  {
- 	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
+ 	unsigned int eax, ebx, ecx, edx;
+@@ -242,8 +262,12 @@ void sev_enable(struct boot_params *bp)
+ 	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
+ 	 * features.
+ 	 */
+-	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED && !(get_hv_features() & GHCB_HV_FT_SNP))
+-		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
++	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED) {
++		if (!(get_hv_features() & GHCB_HV_FT_SNP))
++			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
++
++		enforce_vmpl0();
++	}
+ 
+ 	sme_me_mask = BIT_ULL(ebx & 0x3f);
+ }
 diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 7ac5842..fe7fe16 100644
+index 6f037c2..7ac5842 100644
 --- a/arch/x86/include/asm/sev-common.h
 +++ b/arch/x86/include/asm/sev-common.h
-@@ -57,6 +57,32 @@
- #define GHCB_MSR_AP_RESET_HOLD_REQ	0x006
- #define GHCB_MSR_AP_RESET_HOLD_RESP	0x007
+@@ -89,6 +89,7 @@
+ #define GHCB_TERM_REGISTER		0	/* GHCB GPA registration failure */
+ #define GHCB_TERM_PSC			1	/* Page State Change failure */
+ #define GHCB_TERM_PVALIDATE		2	/* Pvalidate failure */
++#define GHCB_TERM_NOT_VMPL0		3	/* SNP guest is not running at VMPL-0 */
  
-+/*
-+ * SNP Page State Change Operation
-+ *
-+ * GHCBData[55:52] - Page operation:
-+ *   0x0001	Page assignment, Private
-+ *   0x0002	Page assignment, Shared
-+ */
-+enum psc_op {
-+	SNP_PAGE_STATE_PRIVATE = 1,
-+	SNP_PAGE_STATE_SHARED,
-+};
+ #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
+ 
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index 4ee9897..e374518 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -63,6 +63,9 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+ /* Software defined (when rFlags.CF = 1) */
+ #define PVALIDATE_FAIL_NOUPDATE		255
+ 
++/* RMP page size */
++#define RMP_PG_SIZE_4K			0
 +
-+#define GHCB_MSR_PSC_REQ		0x014
-+#define GHCB_MSR_PSC_REQ_GFN(gfn, op)			\
-+	/* GHCBData[55:52] */				\
-+	(((u64)((op) & 0xf) << 52) |			\
-+	/* GHCBData[51:12] */				\
-+	((u64)((gfn) & GENMASK_ULL(39, 0)) << 12) |	\
-+	/* GHCBData[11:0] */				\
-+	GHCB_MSR_PSC_REQ)
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ extern struct static_key_false sev_es_enable_key;
+ extern void __sev_es_ist_enter(struct pt_regs *regs);
+@@ -90,6 +93,18 @@ extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+ 					  struct es_em_ctxt *ctxt,
+ 					  u64 exit_code, u64 exit_info_1,
+ 					  u64 exit_info_2);
++static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
++{
++	int rc;
 +
-+#define GHCB_MSR_PSC_RESP		0x015
-+#define GHCB_MSR_PSC_RESP_VAL(val)			\
-+	/* GHCBData[63:32] */				\
-+	(((u64)(val) & GENMASK_ULL(63, 32)) >> 32)
++	/* "rmpadjust" mnemonic support in binutils 2.36 and newer */
++	asm volatile(".byte 0xF3,0x0F,0x01,0xFE\n\t"
++		     : "=a"(rc)
++		     : "a"(vaddr), "c"(rmp_psize), "d"(attrs)
++		     : "memory", "cc");
 +
- /* GHCB Hypervisor Feature Request/Response */
- #define GHCB_MSR_HV_FT_REQ		0x080
- #define GHCB_MSR_HV_FT_RESP		0x081
++	return rc;
++}
+ static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate)
+ {
+ 	bool no_rmpupdate;
+@@ -114,6 +129,7 @@ static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { ret
+ static inline void sev_es_nmi_complete(void) { }
+ static inline int sev_es_efi_map_ghcbs(pgd_t *pgd) { return 0; }
+ static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate) { return 0; }
++static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
+ #endif
+ 
+ #endif

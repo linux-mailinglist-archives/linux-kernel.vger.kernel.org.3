@@ -2,136 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C08A4F8FCC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F254F8FCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiDHHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S229989AbiDHHvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiDHHu5 (ORCPT
+        with ESMTP id S229471AbiDHHvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:50:57 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897311DF64C;
-        Fri,  8 Apr 2022 00:48:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=An9LknCaIBV/4mUYKipjokP6kNFc3aLMAWnb5gIG7sqUImV95n72O5T5mnCxyHO4PR9pZZc0+4+qvODc7ErEseIFUqd97SCRY/8z+pljRwU85OnJN4ei411/misV6ArsIwaIQXPexDdUa8VCLufjRGLQh8mtjugPAcLP/+VJ2ODqzklqp1cudlZGhJ17lxD8JIOX1LC5g1kH9JPwZT8bnwwxs5nkBSvbYLIHU0RSaJDurEzTmyTZd9IA7RiFoR4flTs7AirS5dsfRR23d6U6vUhpthMT5g77Y/hp9iD+8/jRRgZF2gmZLQ8oWP3Kj99ENwCI99Rwiex7Wf9q//omIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9splyA4jhzASwvavqRwEHc+51Ew2h0hDuP4b+Yp1UaM=;
- b=h0nyrs8ImSNCS64ZwQ4+a3D+F0XNl2nN6y4eNrOvUkt8qMsUCF6voc0Mr7P+y/fyOTSIZn4wX/OdpMO1ggrAyKeV0e+LFgBgeYMbNF4NkN8mR+ErI736bjzwGxnks3h2DGjsKrOHzdN9vGRpA/rgErkTLtC51peDyxUw8dXwJnbxpvNAiBqb++gzkBaxGNt5x1jTjHgn/oc87yP/VnyxOhGa9e0caj016eJ+4Zr1XhefhbedzjKvU4wvFqQu70qv0aXF5/FjE7QMhyoE31lAascULyowHIy2pJDUTr5uzmeh30iOlA673E6MafxGRYoOIyEIRn2Tub7xEfW6dLt4Sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9splyA4jhzASwvavqRwEHc+51Ew2h0hDuP4b+Yp1UaM=;
- b=shb5JLgmds1ABA15/dRrWwG+GVw629Gc3CEjuh7m+j20qOuaTSyIzCNV2U37Ys8o4EvuiCR5Feu8A3RjWSqF2x9U0uMft+Ve2MRFW2s9c39xRJ6NZG22vXtuixLYQiqoeTALxdYBDLFy6s0cRiNSbSvoruGA7uZgOlSgf2TaDaQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB2869.namprd12.prod.outlook.com (2603:10b6:a03:132::30)
- by CH0PR12MB5187.namprd12.prod.outlook.com (2603:10b6:610:ba::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
- 2022 07:48:50 +0000
-Received: from BYAPR12MB2869.namprd12.prod.outlook.com
- ([fe80::482f:9ad2:91d9:ddf4]) by BYAPR12MB2869.namprd12.prod.outlook.com
- ([fe80::482f:9ad2:91d9:ddf4%7]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 07:48:50 +0000
-Subject: Re: [RFC PATCH 5/5] x86/mce: Handle AMD threshold interrupt storms
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20220406063542.183946-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220406063542.183946-6-Smita.KoralahalliChannabasappa@amd.com>
- <b140590dadea411ca3641b0537bfcd9f@intel.com>
-From:   "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-Message-ID: <30c01863-85ef-4cd4-9e73-340e2d98b9bf@amd.com>
-Date:   Fri, 8 Apr 2022 02:48:47 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
-In-Reply-To: <b140590dadea411ca3641b0537bfcd9f@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: BYAPR05CA0088.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::29) To BYAPR12MB2869.namprd12.prod.outlook.com
- (2603:10b6:a03:132::30)
+        Fri, 8 Apr 2022 03:51:16 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DFC1DF66E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:49:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id p189so4922160wmp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=SWpszhyEBEa7rNr2Yt/uZaQzpgwI+84JhC50zBu0zwo=;
+        b=C5iJj/Boy7aENXH76q+tpOfcaNGntAIY81YRiAH0SO0XEbTSMGp+0nIY7wak9PT8Ce
+         xK2Cgi8uvYVjygdDAl3TZ0D2TOu2fBY9kEsXTQdhEIKG9P1R8NzRr5GTxgssds6BoiPh
+         k581K2cVCqaRRcpCc0FTVojbS1DarOPsdx4NUlfH1bYhMX2lWnfE2K2c26Iv0PV9J1ce
+         bH89DtLRxetafk7Y3Yc2ZPOiJCdc8svK0Y/0pW6tmwDxP68D0tWvbNWBUgXtPAhIvnDI
+         OPVirjFeyBBrn5Yk8Dfby2oOPicOfEfBYsjhnkW7YOUNzpyZoYiYodSHUmUcF/euPCvc
+         K0FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=SWpszhyEBEa7rNr2Yt/uZaQzpgwI+84JhC50zBu0zwo=;
+        b=ZoXNR6KXtgl0elclfgpg3FldIOpxPsTcYj3CeIeDuVHtRYtX7QMOgH79OEPodGJ6JX
+         BcjgP5LvbDRThPYvh89ORCAk2Z7H/h5UjVGvYp409PmDSE9zYLpMNMTbrg2Jkj9LxHaF
+         2X+U1Yq6FAG6hEPuCbJNP9rMKF7aX5IW0ZT7I1hhsFLrt9Ni2H9IGzd1gi23kmv/xRSY
+         F/LvCxWw7sAYy/n8dAL1K0PaRF/kqd0djKaRZhgBaavU//KiMYQcNTbKfFOXVXDlPo+G
+         Ak7iMLmqyT1lHbmbFaiRdag0XehhAr/GE83OlE92JFjqU6u44bUBtGDWCApUiXYgJWto
+         WdTQ==
+X-Gm-Message-State: AOAM533h4yIH/hTXuLxUwZnf5dmgFG2meBpOFLB10hn278dfk2fKpbbM
+        RfesMFkdUKSwZydK+idfgQnD3sukoPA+cHEr
+X-Google-Smtp-Source: ABdhPJxEUP0kNqnBesTvyWuNSGfhjJhVPnNDnp1rOA+CchP4oe+GBkjWnIcA5Xc7hb7jvlr467WQ9Q==
+X-Received: by 2002:a7b:cb83:0:b0:37e:bc50:3c6b with SMTP id m3-20020a7bcb83000000b0037ebc503c6bmr16133169wmi.67.1649404152364;
+        Fri, 08 Apr 2022 00:49:12 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:eacd:ce6:e294:acd1? ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
+        by smtp.gmail.com with ESMTPSA id 3-20020a5d47a3000000b0020412ba45f6sm22710462wrb.8.2022.04.08.00.49.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 00:49:11 -0700 (PDT)
+Message-ID: <58e38622-a041-3e5c-3dca-fa95cd5f59be@baylibre.com>
+Date:   Fri, 8 Apr 2022 09:49:10 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c9909f0-399d-4d01-f2f1-08da1934382e
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5187:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR12MB5187C1D9EFF5CCE9DF0A3E2F90E99@CH0PR12MB5187.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9jYw8Tf6q09Twg7gSp3Sonf5fb6/6H+Mna693r01YMTNLpKDeJ5xeQkPMgeZcjmOxEDxDccdg34Hvs7GtiQZhjYpxWM9b7SGwpdwrBgUJjzmUPT7NkE/0mRWMy2qweBTBpPk6EFKEcRtxLagxFqG3DzJ4QqL5zJKRhHZK9c/vSaWL9HeVqxh/aNjwtHUF6wbbxSMgkXhEEVC+SJcqkAYU0BjMlmwHcXtIij0hCTJ8Ie8d/JcNNqDMskd5Sn5ADYDXANchy2T+qZIlDF8xAJbGthwLqVqJvm3e5eEaeXowkGnbMYGWmJeFdOU1v0vW3ur3KdPaMyAxoRRjjVJEYFK9wHxXLMFHkS9n5hgVp7WgPFjVzCjdDsk5I6PQkA69OaX17onoetwmDepi/vu1tdpHhtBL3HWcipuIaJiuyUk8vcT5utvcx7KI7pwCzEfuWcHi1sdG0G2yr/4xJiuMYuktDlInSsW7BJ5titmOjnamd92A8Z6Zwz4Za8q9cXFSquGosTI14999Gt2V/0qlmOfn26nEC7vRSQKdeIsSdxDdMp5bnKTPpB/Qd+56wd62DjiPaQb2/sPh+/r6UiBO+EsTyn2lz/jlDnloK4ge4V/hcdMV7tfq5DOgQG60R1FO9wmttl0qItHHlG7R6NeK7V7ik/okYmA4hzxIgyrqn+sJvnnKbWBLdfhXsw2zyBiQQL0FJ6IQxJcI+OUUak+s03arh9RS45FIa34J80Cukjw4d0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(4744005)(38100700002)(2616005)(186003)(110136005)(54906003)(508600001)(6666004)(6486002)(6512007)(53546011)(4326008)(316002)(6506007)(8676002)(83380400001)(66476007)(66946007)(66556008)(2906002)(31686004)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEJLNWNIZ2FiOUxVdXdIMTl3Q0FzK2ErL3VsSDlIU0RKRGJPRGNRd00yR0Jr?=
- =?utf-8?B?V25UUHpkamF3eXppQU9QVyt0NVFRWU00MGVMYTJEdHVRbDM1UWp5V3ViTmNo?=
- =?utf-8?B?UWRBTXJVcXFXbjBLMlZUS1FWODhBYnozZmNHeklnd3ZqQ3pTNkZFWE5vRnhH?=
- =?utf-8?B?OWw1RzlUSVRGaWMxeEVER2V6MExYNmt3aHBmcG5CeEYxRGRYWlhyS3hGTFd2?=
- =?utf-8?B?VHg5SVk4Q0E2c1ltOVZnWWhSU3gwK3RtYkRwbGJyQUloWml3ei9OcEg0SFg5?=
- =?utf-8?B?ODM2WmN3NEZEVHcvYlcvVXFma3RDd1NwODl3L0xwb2pGTHNXMEU3cDFJbDBX?=
- =?utf-8?B?MUhMZ2dRcGk0K3FoQmxtWGZqbzdPQU9JQ0tPWkY2M0h5UG9BUHNVN0phU3ZH?=
- =?utf-8?B?U2xtMndGU3JaSFNZYmJpNlJ6NlFIVkU3YTVVWWNEUXNQU1pDTnhJNW16WUd2?=
- =?utf-8?B?MGZWZGJQWUxnUWF2aUo5a2VwUDZWWERpRWhuMkdPdXJZbkQ3Z0hRQko4bWVK?=
- =?utf-8?B?cU40UmZGaFIzRGJMT08xRmM1YmZFbEVWSU1xcDBJRU56YmdtZnZBWEdLWHFG?=
- =?utf-8?B?cHFaVERvc04zUWkya21zeDFVSVlpN1JFV0N1cmRvTkRZT3JPdmRHSzVqRHEy?=
- =?utf-8?B?bndjdVplbWpLczUzMk9uUVFReEZzNmhERjI2NnA2VzNOb2dxR3lDN1orc1Ft?=
- =?utf-8?B?Ty92dmUxWDVQVXdVbHZhVkxsZE5xT0tSRGlJYXA3bytnV0Fxd00xUUtnUkFl?=
- =?utf-8?B?ZmtPMnZISGVRN3JDdSsxVkFxWSs5QkprUDB0bEVHeExxeERwYjNpZkd1bHJ4?=
- =?utf-8?B?YjRDNm9yZG5NUWI4WXRmcko1cjZVZFRxY2p3L0c5V01IaFZjRjBDRFg1ME9r?=
- =?utf-8?B?Tm80bzREYXFQNW9BV29PZmFINHZIQ0h5eFIvZkdhQmEwcXZHMEwza1JpdWpT?=
- =?utf-8?B?SGJGUEdLWFZPMXhMVzBvN2hmeU1xekNhN1BYaHRweVh6c0MzcVU5RjNnMnVR?=
- =?utf-8?B?V3JZYjdsRXpvQlNZS1ZPbG45Y2dlSXh1TEkyMUxScnNpY2hjQ1dOc0hGMG15?=
- =?utf-8?B?R3YzbS9rTTczaVRYc2w3MC9KRDZBbnBRZ2M0MW1GN1ppRXhibVhCSzlYYkNp?=
- =?utf-8?B?OElwYXQ4ZkFjeWRqTUx5UU4zYmE5RVFvd3hBY1QvcDFXNDk0c3J5WFBlK0Zu?=
- =?utf-8?B?WFltMWFLVk1wYnkwWTdsZ0tEVEhyUUlQQnBJeDRvMGNsaVIzYWxKY1ZWcVBn?=
- =?utf-8?B?b0JubkxMVFg5VjJHWStoV2JPcUk3SVJnWkZ5ZERKWVI5VjFPZXJyYkFzbzNO?=
- =?utf-8?B?SnJqNktGcnRWQUJYNkQwNHJyckVPRGtRRnVvU2JOUUhSWlMwYWxUemJWRmkx?=
- =?utf-8?B?NWhkZEhhbElCS0lYRWx1OU9EOUN2cmJaQkFwTUt3bFhEWHR4VlFNUGpvc0tW?=
- =?utf-8?B?UXI1NnJwKzBSVVlCSzVDWEJEM2ZKb0hkd3BJNXJjcHozRm9vdzI3d1BvdHdt?=
- =?utf-8?B?aGFMNEtTTWhIVCs3S1A1UHZkQUtIZXNxdExFQlpFL1c0UWd5S3E1MmZwWUdF?=
- =?utf-8?B?MkxkWkY0TURlWjNqWnFwVFh1VnozUXFVV3NpL2lZay9KSTBINVhvWG5nUnI4?=
- =?utf-8?B?aGVOQ2lNaEkrOVcyckFQU29CVCtwYlF2Ti8yR2hwNXFSaGk1Q2xmS3k0RlFU?=
- =?utf-8?B?Zk9kYjNGOVdnY3VZSjJVcUt0b0NJMVY2NnE0Y2VQaXFaUk8vdENVNThWclNI?=
- =?utf-8?B?WmkrTUxHNDBmRDJ0VE1mcnBlZU9ITldEWHNyU1NQT0t2K0txTFNiVWZHSncw?=
- =?utf-8?B?YkJNZGdTNG5vM3hPa2NleVQxYU1mbEhrNDZSYVZqaFVBaTNFNkh0S0srVlNM?=
- =?utf-8?B?b0ZPWjdZa05udkNHYlBob0gybTdLQnFibDZyUmthUTVMVDlML01HaXR5dFBa?=
- =?utf-8?B?UjNJeWJEQkFvMklsRHltdUdtQmwvRjR2SzdtTHEyb2Z6S25qeUhKVE5UU2Vu?=
- =?utf-8?B?TWNSV0s0T2kxOUx1Y3hocGdiSHU3VHZTekRxTE1TTERvaWlzZS8wMzJDVDYr?=
- =?utf-8?B?dDlVWjVza1IwWFdqek9neEM4MUJkN0cvSklaTE1DcmJaTGd4KzlPSEs3bEFX?=
- =?utf-8?B?VFFJaDcveGtSRXB0Wm13ODFBRzYrek1uZ3VGdWMvVHVyTm9aWDlFRm1iekdQ?=
- =?utf-8?B?d01WdSthaEVjL1NETDZqVG1XbUxxV3k1b0VoMlNVc3Q5cnlKak1VMk43OE1B?=
- =?utf-8?B?cnQybmRxVDNPVDJOdkpsaVRCRk9lWEJGTkRJWHVySmtvbFpZekNOVkxPWEZm?=
- =?utf-8?B?TG5xeE9Hejh2dU0rTGhpUXpqdHg4aENCQk03elJwYVJkekxiS3BPWWhmb0ty?=
- =?utf-8?Q?wexHgshG9c3qjs/PYm0L7Qv0wQhoQfa70bLOXVRwMlbvi?=
-X-MS-Exchange-AntiSpam-MessageData-1: N8WKptld5d5nJA==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c9909f0-399d-4d01-f2f1-08da1934382e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 07:48:49.9972
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xtu3ZdC7HLYBEBN7YoYV5Uviu1Z3mKJTtsStNLSUrd1a4f+YcFrq0x8UZzSqkJxXfo8UEoxKGdxCeNRWS02BZw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5187
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/5] drm/solomon: Move device info from ssd130x-i2c to the
+ core driver
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Chen-Yu Tsai <wens@kernel.org>, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220407200205.28838-1-javierm@redhat.com>
+ <20220407200205.28838-5-javierm@redhat.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220407200205.28838-5-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -140,25 +82,244 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 4/6/22 5:44 PM, Luck, Tony wrote:
+On 07/04/2022 22:02, Javier Martinez Canillas wrote:
+> These are declared in the ssd130x-i2c transport driver but the information
+> is not I2C specific and could be used by other SSD130x transport drivers.
+> 
+> Move them to the ssd130x core driver and just set the OF device entries to
+> an ID that could be used to lookup the correct device into from an array.
+> 
+> While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
+> bytes. Since even though are used by the I2C interface, it could also be
+> useful for other transport protocols such as SPI.
+> 
+> Suggested-by: Chen-Yu Tsai <wens@kernel.org>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+>   drivers/gpu/drm/solomon/ssd130x-i2c.c | 51 ++++-------------------
+>   drivers/gpu/drm/solomon/ssd130x.c     | 60 +++++++++++++++++++++++++--
+>   drivers/gpu/drm/solomon/ssd130x.h     | 13 ++++++
+>   3 files changed, 78 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/solomon/ssd130x-i2c.c b/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> index a469679548f8..aa6cc2cb54f9 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> @@ -53,76 +53,43 @@ static void ssd130x_i2c_shutdown(struct i2c_client *client)
+>   	ssd130x_shutdown(ssd130x);
+>   }
+>   
+> -static struct ssd130x_deviceinfo ssd130x_sh1106_deviceinfo = {
+> -	.default_vcomh = 0x40,
+> -	.default_dclk_div = 1,
+> -	.default_dclk_frq = 5,
+> -	.page_mode_only = 1,
+> -};
+> -
+> -static struct ssd130x_deviceinfo ssd130x_ssd1305_deviceinfo = {
+> -	.default_vcomh = 0x34,
+> -	.default_dclk_div = 1,
+> -	.default_dclk_frq = 7,
+> -};
+> -
+> -static struct ssd130x_deviceinfo ssd130x_ssd1306_deviceinfo = {
+> -	.default_vcomh = 0x20,
+> -	.default_dclk_div = 1,
+> -	.default_dclk_frq = 8,
+> -	.need_chargepump = 1,
+> -};
+> -
+> -static struct ssd130x_deviceinfo ssd130x_ssd1307_deviceinfo = {
+> -	.default_vcomh = 0x20,
+> -	.default_dclk_div = 2,
+> -	.default_dclk_frq = 12,
+> -	.need_pwm = 1,
+> -};
+> -
+> -static struct ssd130x_deviceinfo ssd130x_ssd1309_deviceinfo = {
+> -	.default_vcomh = 0x34,
+> -	.default_dclk_div = 1,
+> -	.default_dclk_frq = 10,
+> -};
+> -
+>   static const struct of_device_id ssd130x_of_match[] = {
+>   	{
+>   		.compatible = "sinowealth,sh1106-i2c",
+> -		.data = &ssd130x_sh1106_deviceinfo,
+> +		.data = SH1106_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1305-i2c",
+> -		.data = &ssd130x_ssd1305_deviceinfo,
+> +		.data = (void *)SSD1305_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1306-i2c",
+> -		.data = &ssd130x_ssd1306_deviceinfo,
+> +		.data = (void *)SSD1306_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1307-i2c",
+> -		.data = &ssd130x_ssd1307_deviceinfo,
+> +		.data = (void *)SSD1307_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1309-i2c",
+> -		.data = &ssd130x_ssd1309_deviceinfo,
+> +		.data = (void *)SSD1309_ID,
+>   	},
+>   	/* Deprecated but remain for backward compatibility */
+>   	{
+>   		.compatible = "solomon,ssd1305fb-i2c",
+> -		.data = &ssd130x_ssd1305_deviceinfo,
+> +		.data = (void *)SSD1305_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1306fb-i2c",
+> -		.data = &ssd130x_ssd1306_deviceinfo,
+> +		.data = (void *)SSD1306_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1307fb-i2c",
+> -		.data = &ssd130x_ssd1307_deviceinfo,
+> +		.data = (void *)SSD1307_ID,
+>   	},
+>   	{
+>   		.compatible = "solomon,ssd1309fb-i2c",
+> -		.data = &ssd130x_ssd1309_deviceinfo,
+> +		.data = (void *)SSD1309_ID,
+>   	},
+>   	{ /* sentinel */ }
+>   };
+> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+> index a7e784518c69..1f00fd3c0023 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+> @@ -39,11 +39,9 @@
+>   #define DRIVER_MAJOR	1
+>   #define DRIVER_MINOR	0
+>   
+> -#define SSD130X_DATA				0x40
+> -#define SSD130X_COMMAND				0x80
+> -
+>   #define SSD130X_PAGE_COL_START_LOW		0x00
+>   #define SSD130X_PAGE_COL_START_HIGH		0x10
+> +
+>   #define SSD130X_SET_ADDRESS_MODE		0x20
+>   #define SSD130X_SET_COL_RANGE			0x21
+>   #define SSD130X_SET_PAGE_RANGE			0x22
+> @@ -94,6 +92,55 @@
+>   
+>   #define MAX_CONTRAST 255
+>   
+> +static struct ssd130x_deviceinfo ssd130x_variants[] =  {
+> +	{
+> +		.default_vcomh = 0x40,
+> +		.default_dclk_div = 1,
+> +		.default_dclk_frq = 5,
+> +		.page_mode_only = 1,
+> +	},
 
-> +		/* Return early on an interrupt storm */
-> +		if (this_cpu_read(bank_storm[bank]))
-> +			return;
->
-> Is you reasoning for early return that you already have plenty of
-> logged errors from this bank, so OK to skip additional processing
-> of this one?
+Why not [SH1106_ID] = {
 
-The idea behind this was: Once, the interrupts are turned off by
-track_cmci_storm() on a storm, (which is called before this "if
-statement") logging and handling of subsequent corrected errors
-will be taken care by machine_check_poll(). Hence, no need to
-redo this again in the handler....
+and later:
 
-Let me know what are your thoughts on this?
+if (variant < NR_SSD130X_VARIANTS)
+	ssd130x->device_info = ssd130x_variants[variant];
 
->
-> -Tony
+instead of less efficient ssd13x_variant_to_info ?
 
+> +	{
+> +		.variant = SSD1305_ID,
+> +		.default_vcomh = 0x34,
+> +		.default_dclk_div = 1,
+> +		.default_dclk_frq = 7,
+> +	},
+> +	{
+> +		.variant = SSD1306_ID,
+> +		.default_vcomh = 0x20,
+> +		.default_dclk_div = 1,
+> +		.default_dclk_frq = 8,
+> +		.need_chargepump = 1,
+> +	},
+> +	{
+> +		.variant = SSD1307_ID,
+> +		.default_vcomh = 0x20,
+> +		.default_dclk_div = 2,
+> +		.default_dclk_frq = 12,
+> +		.need_pwm = 1,
+> +	},
+> +	{
+> +		.variant = SSD1309_ID,
+> +		.default_vcomh = 0x34,
+> +		.default_dclk_div = 1,
+> +		.default_dclk_frq = 10,
+> +	}
+> +};
+> +
+> +static const struct ssd130x_deviceinfo *ssd13x_variant_to_info(enum ssd130x_variants variant)
+> +{
+> +	int i;
+> +	const struct ssd130x_deviceinfo *info;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ssd130x_variants); i++) {
+> +		info = &ssd130x_variants[i];
+> +		if (info->variant == variant)
+> +			return info;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>   static inline struct ssd130x_device *drm_to_ssd130x(struct drm_device *drm)
+>   {
+>   	return container_of(drm, struct ssd130x_device, drm);
+> @@ -846,6 +893,7 @@ static int ssd130x_get_resources(struct ssd130x_device *ssd130x)
+>   struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap)
+>   {
+>   	struct ssd130x_device *ssd130x;
+> +	enum ssd130x_variants variant;
+>   	struct backlight_device *bl;
+>   	struct drm_device *drm;
+>   	int ret;
+> @@ -860,7 +908,11 @@ struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap)
+>   
+>   	ssd130x->dev = dev;
+>   	ssd130x->regmap = regmap;
+> -	ssd130x->device_info = device_get_match_data(dev);
+> +
+> +	variant = (enum ssd130x_variants)device_get_match_data(dev);
+> +	ssd130x->device_info = ssd13x_variant_to_info(variant);
+> +	if (!ssd130x->device_info)
+> +		return ERR_PTR(-EINVAL);
+>   
+>   	if (ssd130x->device_info->page_mode_only)
+>   		ssd130x->page_address_mode = 1;
+> diff --git a/drivers/gpu/drm/solomon/ssd130x.h b/drivers/gpu/drm/solomon/ssd130x.h
+> index f5b062576fdf..4e0b62a41aa3 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x.h
+> +++ b/drivers/gpu/drm/solomon/ssd130x.h
+> @@ -18,7 +18,20 @@
+>   
+>   #include <linux/regmap.h>
+>   
+> +#define SSD130X_DATA				0x40
+> +#define SSD130X_COMMAND				0x80
+> +
+> +enum ssd130x_variants {
+> +	SH1106_ID,
+> +	SSD1305_ID,
+> +	SSD1306_ID,
+> +	SSD1307_ID,
+> +	SSD1309_ID,
+> +	NR_SSD130X_VARIANTS
+> +};
+> +
+>   struct ssd130x_deviceinfo {
+> +	enum ssd130x_variants variant;
+>   	u32 default_vcomh;
+>   	u32 default_dclk_div;
+>   	u32 default_dclk_frq;
 
+Neil

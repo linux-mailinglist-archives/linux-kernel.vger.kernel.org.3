@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438F44F9B40
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D08A4F9B43
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237977AbiDHRDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S237991AbiDHRES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiDHRDa (ORCPT
+        with ESMTP id S231248AbiDHREO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:03:30 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779261A6E59
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:01:26 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y8so3709148pfw.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eWqSaaArcKpWGewd/PpIagLrNxnVfrX7eeJw2V+0bsU=;
-        b=e/45W54vRn2wXoqJKapVjNEBlsEKPzVALK2ZnAsyFTU2/VLcvfFN2z/PxuDrnf5yYr
-         wzIZFXscKl8tHOtv/5026QUqf5dZEVpW5xXL+BJhaMbKHsMcXaLbg3UDu/MPSYtSCJpD
-         NStDS1RhCtWJEloYe2nnA9d03udZ98pC6ACDsUDlQiTQARKIv5X7uaNW5SFBVwO/MRUA
-         le3GLs6AS9o+aCulMgFQ/uPSlx88/hkf0J7s+PGqEP08qCYcHxEd+xmJzW+0539J/wiV
-         XZmLF7RhSiYxp0yJxVQXu2Fh70FpHZTcMsLNb16H5o5qr/tR61TwEg60MtEePoW/jwCf
-         t7qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eWqSaaArcKpWGewd/PpIagLrNxnVfrX7eeJw2V+0bsU=;
-        b=ZdSFCug4q9Msap9O8iiJWyyTBcx+eY0bUUEZgyeiQin8OGic3vE9rP3cAfvIrt+A2L
-         rd13cHs2K5Vctk1gFEXS3s2S7oaQv/i4Ew4xrLTLKrZPRoYtaEy4PAtU4Pu4TVk9uanI
-         ISRhYf4+fUXJn4ZX3+IWugmfexkDaB6OwRcUKB0n9UH2Uq0K/y42VGQrEGe2z8IxUbM2
-         B1y5/5auOY1U37BlnkwirmDd5OCFebqV3p77Tlz7rpqD/F27Z8Af6VDwxRvhiTE+IRB2
-         rbm1WDWxwVZfYV11Xy124u+/vkILyL72vTzOCNU6QQdfaW2AjdkjejdBDmoaRZKJQJJO
-         JOGA==
-X-Gm-Message-State: AOAM533vigMijZXVCdF/wJU95qMXmkep7skbMhWjEjuzcLcq6SQqMnAB
-        9aPvTtm+KlpnV8Sf3JjBZ3mWdiIVambcNw==
-X-Google-Smtp-Source: ABdhPJx61Cp20UincZxmgyHkjllgAkxu7q8n+OznXbv79pEtVaCAbT28ENVjE8GnNMEUjlgOP6uBfg==
-X-Received: by 2002:a05:6a00:1312:b0:4e1:58c4:ddfd with SMTP id j18-20020a056a00131200b004e158c4ddfdmr20443717pfu.65.1649437285741;
-        Fri, 08 Apr 2022 10:01:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm22268448pgn.83.2022.04.08.10.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 10:01:25 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 17:01:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Message-ID: <YlBqYcXFiwur3zmo@google.com>
-References: <20220407210233.782250-1-pgonda@google.com>
- <Yk+kNqJjzoJ9TWVH@google.com>
- <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
+        Fri, 8 Apr 2022 13:04:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ABB1C315F;
+        Fri,  8 Apr 2022 10:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649437330; x=1680973330;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=yyWbXS/ISGdNNtqxbp6nrln8YxFisMQHA7t8fOE4CaE=;
+  b=kGWxqI14Rdj8uUEl5Ddx57f8Eh6hNx9RN+bNmra8odOaxFnYrMqJb92h
+   L1tobUskA9CLiXgJAml1dkMxjseAJbtxje42CCfA3OXo+U+U3YXWjq4W8
+   91XY3bo+fFWWfkRmYhob2fvwVNtPgRLoMyM6EbLSOXHV2WnsJ15banOUC
+   xZqMjgTsv9WPiC38hVSwBwslNPZ+CuEWVXnOPnVh6sExrf83vIulgXj9g
+   l1+x0MIrFK0vGxTzbzH3Z6mHGP5vpFVNb1cTNHluo4VrMmVzyLxoIv79i
+   1+Ra1p+axv1uz/rZhi8eO/D4OPm5lL3IDrZJfHjh1qXEK95GlSU7Bk87b
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="348076956"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="348076956"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:02:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="525448716"
+Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:02:09 -0700
+Message-ID: <95eabe79-a13b-79b1-1196-407920531f20@intel.com>
+Date:   Fri, 8 Apr 2022 10:02:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 0/8] mm, x86/cc: Implement support for unaccepted memory
+In-Reply-To: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Anup and Will
+On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> Patches 1-6/7 are generic and don't have any dependencies on TDX. They
+> should serve AMD SEV needs as well. TDX-specific code isolated in the
+> last patch.
 
-On Fri, Apr 08, 2022, Peter Gonda wrote:
-> On Thu, Apr 7, 2022 at 8:55 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Thu, Apr 07, 2022, Peter Gonda wrote:
-> > > If an SEV-ES guest requests termination, exit to userspace with
-> > > KVM_EXIT_SYSTEM_EVENT and a dedicated SEV_TERM type instead of -EINVAL
-> > > so that userspace can take appropriate action.
-> > >
-> > > See AMD's GHCB spec section '4.1.13 Termination Request' for more details.
-> >
-> > Maybe it'll be obvious by the lack of compilation errors, but the changelog should
-> > call out the flags => ndata+data shenanigans, otherwise this looks like ABI breakage.
-> 
-> Hmm I am not sure we can do this change anymore given that we have two
-> call sites using 'flags'
-> 
-> arch/arm64/kvm/psci.c:184
-> arch/riscv/kvm/vcpu_sbi.c:97
-> 
-> I am not at all familiar with ARM and RISC-V but some quick reading
-> tells me these archs also require 64-bit alignment on their 64-bit
-> accesses. If thats correct, should I fix this call sites up by
-> proceeding with this ndata + data[] change and move whatever they are
-> assigning to flags into data[0] like I am doing here? It looks like
-> both of these changes are not in a kernel release so IIUC we can still
-> fix the ABI here?
+Oh, that's quite nice.  Are the SEV-SNP folks planning on using this?
+If they are, acks/reviews would be much appreciated.
 
-Yeah, both came in for v5.18.  Given that there will be multiple paths that need
-to set data, it's worth adding a common helper to the dirty work.
-
-Anup and Will,
-
-system_event.flags is broken (at least on x86) due to the prior 'type' field not
-being propery padded, e.g. userspace will read/write garbage if the userspace
-and kernel compilers pad structs differently.
-
-		struct {
-			__u32 type;
-			__u64 flags;
-		} system_event;
-
-Our plan to unhose this is to change the struct as follows and use bit 31 in the
-'type' to indicate that ndata+data are valid.
-
-		struct {
-                        __u32 type;
-			__u32 ndata;
-			__u64 data[16];
-                } system_event;
-
-Any objection to updating your architectures to use a helper to set the bit and
-populate ndata+data accordingly?  It'll require a userspace update, but v5.18
-hasn't officially released yet so it's not kinda sort not ABI breakage.

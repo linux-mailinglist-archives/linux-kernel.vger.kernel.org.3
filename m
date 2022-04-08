@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AA14F9E3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F27A4F9E44
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239531AbiDHUgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S239526AbiDHUib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232768AbiDHUgU (ORCPT
+        with ESMTP id S233905AbiDHUi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:36:20 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1901DB20
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:34:15 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id e25-20020a0568301e5900b005b236d5d74fso6918514otj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:34:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1tb7nkyFqE34RRTlLRoG1km8bVnXOaIVICbmcAyGpqE=;
-        b=qf9hwC2ZAJUrQGucNvdkwy9P94NQ8YUJKTc9ftTiIAGVg717G2CRCsPSbCJ6QXaTXD
-         Tfik5F8Aj4fWdkSr6sqTytj3f1nNXEl68b/Omv/Z0IVPiIvoaj8yu1XUunLvc7vIDCy7
-         WLS2UOttB/CajtlOwArqft/vqJADfdcI2w/oJ7lavxpUUBs8qPjllbYetqPL+qKS3m0G
-         LTvU8HnLXpA4CHfIK8aOJD18DAhupXBkF38Gs5CsKD+uztRVHTS7+aAX+6N40pfTtYMO
-         HkaO1YkTBu8JCTMtGYHJlwdf4omD+PZiC9s25xrG2JylL3BkdUajNJy91RrzFXVD+ynp
-         wglg==
-X-Gm-Message-State: AOAM5312g33euLzxTMWECruGgSuPISuy0sz713BzFNzHKaYCoU46Lze5
-        Pfn6+AcQXJWnsTiDVM2CpeL50Ul9Yg==
-X-Google-Smtp-Source: ABdhPJzMzXVe63JufD0lQqPJtXEdj/NUIeQfYjOCpnAqM1V6RIgd/08z+V5fG3uzYd8mxZdcPLL19w==
-X-Received: by 2002:a9d:51c4:0:b0:5e6:af95:d553 with SMTP id d4-20020a9d51c4000000b005e6af95d553mr4192298oth.133.1649450054362;
-        Fri, 08 Apr 2022 13:34:14 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a056808020c00b002da28c240dfsm8968219oie.16.2022.04.08.13.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 13:34:14 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     Al Grant <al.grant@arm.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm_pmu: Validate single/group leader events
-Date:   Fri,  8 Apr 2022 15:33:30 -0500
-Message-Id: <20220408203330.4014015-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 8 Apr 2022 16:38:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331761C4B2D;
+        Fri,  8 Apr 2022 13:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=h1s1cl/MNWphmQvefqBf/suSv8LXWFq0XUy8/QL01ko=; b=jCxIh0U5Itm6wOdVKyoTPtDOmS
+        h+xliojQYmGDxuMt7M/9qtH5lpWyHy+sZh5kGgFJcTL1SaLniX+SW9Q1KkcQHr2HdJLtY4K1uusNv
+        Vd+BEfUdTBp71B0R1yPRkIMIHJyIzaSZ6JIwHlSQBAygnO4PtZbBxEVf6+gHQXV0hWzKpIcNMHR7m
+        pD+b63I50huejCCym8GfCY5otCjl29tettWJF2m3zC60B6HLqD0rSg1v1zNire5ydOkZGQda05K65
+        d+Uqmd3FikSfKx2thSw+WadvnXURMtWqEosxjAa1jjjeDlbkvrAYlZXbhmzetrwgetYvAVaLLy6p4
+        AprZ4NFQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncvKy-0033Qr-GE; Fri, 08 Apr 2022 20:36:09 +0000
+Message-ID: <81585705-6ed8-12e5-1355-332a6a5d2b17@infradead.org>
+Date:   Fri, 8 Apr 2022 13:36:02 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of
+ warning
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Yann Droneaud <ydroneaud@opteya.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com>
+ <20220408084607.106468-1-ydroneaud@opteya.com>
+ <CAK7LNAQZLt_OecOogOQiSu5snW+sffsMoFgVcjPTx_idj_=_tQ@mail.gmail.com>
+ <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the case where there is only a cycle counter available (i.e.
-PMCR_EL0.N is 0) and an event other than CPU cycles is opened, the open
-should fail as the event can never possibly be scheduled. However, the
-event validation when an event is opened is skipped when the group
-leader is opened. Fix this by always validating the group leader events.
 
-Reported-by: Al Grant <al.grant@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/perf/arm_pmu.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 9694370651fa..59d3980b8ca2 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -400,6 +400,9 @@ validate_group(struct perf_event *event)
- 	if (!validate_event(event->pmu, &fake_pmu, leader))
- 		return -EINVAL;
- 
-+	if (event == leader)
-+		return 0;
-+
- 	for_each_sibling_event(sibling, leader) {
- 		if (!validate_event(event->pmu, &fake_pmu, sibling))
- 			return -EINVAL;
-@@ -489,12 +492,7 @@ __hw_perf_event_init(struct perf_event *event)
- 		local64_set(&hwc->period_left, hwc->sample_period);
- 	}
- 
--	if (event->group_leader != event) {
--		if (validate_group(event) != 0)
--			return -EINVAL;
--	}
--
--	return 0;
-+	return validate_group(event);
- }
- 
- static int armpmu_event_init(struct perf_event *event)
+On 4/8/22 13:29, Nick Desaulniers wrote:
+> On Fri, Apr 8, 2022 at 4:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>>
+>> On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
+>>>
+>>> When developing new code/feature, CONFIG_WERROR is most
+>>> often turned off, especially for people using make W=12 to
+>>> get more warnings.
+>>>
+>>> In such case, turning on -Werror temporarily would require
+>>> switching on CONFIG_WERROR in the configuration, building,
+>>> then switching off CONFIG_WERROR.
+>>>
+>>> For this use case, this patch introduces a new 'e' modifier
+>>> to W= as a short hand for KCFLAGS+=-Werror" so that -Werror
+>>> got added to the kernel (built-in) and modules' CFLAGS.
+>>>
+>>> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
+>>> ---
+>>>  Makefile                   |  1 +
+>>>  scripts/Makefile.extrawarn | 13 +++++++++++--
+>>>  2 files changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>> Changes since v0[0]:
+>>>
+>>>  - rebase on top of commit 64a91907c896 ("kbuild: refactor scripts/Makefile.extrawarn")
+>>>  - document use case after commit 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
+>>>
+>>> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email-ydroneaud@opteya.com/
+>>
+>>
+>> I remembered the previous submission, I liked it, but I had lost it.
+>>
+>> It seems already 7 years ago, (before I became the Kbuild maintainer).
+>> Thanks for coming back to this.
+>>
+>>
+>> I like this, but I will wait some time for review comments.
+> 
+> Dunno, this seems pretty simple:
+> 
+> $ ./scripts/config -e WERROR
+> $ make ... W=12
+
+Yeah, that's about what I was thinking too..
+
 -- 
-2.32.0
-
+~Randy

@@ -2,117 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A63F4F9876
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4E64F9879
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbiDHOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S237063AbiDHOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237036AbiDHOqc (ORCPT
+        with ESMTP id S237067AbiDHOqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:46:32 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CFFFABE4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:44:28 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id d29so13161672wra.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4x/upSoWHiog4isXgyEOmPfG0ImFBqCVE6uW1bG0IPk=;
-        b=EQ935yiFvjCehYb9frNX6P21JAaTBgnRMF4VC64YzYGDjyJmMoF7rk0IL/tLlp+vcZ
-         galZCnkCYTKrz4vqZBOTVxxBa4Om1jSOiCo2jnDkD0nokKAMFaL0SXAIHijkkzVnGR2H
-         Af5XQ8aJJ9+Yyj8q6kO8awGTXKZ2iI4VYvCO9U+u7YKzTIs8GSm44TjLXnr7CVIfl2RL
-         BtMEGj/UNdeVhp6B8NSFaoQa4SUmguLqphfT2dHdDICAXbBHtvwkQWWHvksqbSfgl9xz
-         UMY3A/67I9ZNPaKLbs7mSu4uS9xh51EFpNXCv2kx+mSN5c+OUHN4s4HKW6S6g79eKAeL
-         Iwcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4x/upSoWHiog4isXgyEOmPfG0ImFBqCVE6uW1bG0IPk=;
-        b=dHNFcZJvAut18WM2zoBwKW/lnT8csJYcDcddNmc6SyaOaJqy+4j+xFd3CGTYQeoQQ3
-         SZsHr5K6RMPDuVoYBi8cwdmUaqimr7mxbyFPoYUHbnErQL6iLsM1jA9FeXyNR2NQWznU
-         FOvNq8zc2/8KvL5Sk8ITdBOAbl4qg0wecF9eAsBj1boba9KBS5TY6WxkPH3jKCs6CLa7
-         1hnLYiBBGqg72lBA7Jrffsoz0XPNMsvt0nshIm5qnfm6f9pJ5Kav7IcR4vJEAXR4cDnF
-         uBM4edlGW2XxkifukWe6Zh7Y4KqF1BRHSwY1ynBsHN1t09HBxkVvAgFPgrLftBnpO9iv
-         VATA==
-X-Gm-Message-State: AOAM531p34GAXKV8jNkWbDNpRYSS5GmBO94ICkVwZWsU8vnGBTwNUj7X
-        bCXb0nc/3bgLAFaep28iXXiOJg==
-X-Google-Smtp-Source: ABdhPJwAlPDRFgSScU2FS28hlbqjFhs06rEn6gMszy6CYMDp7CRzwGmxAoN5ZCZHh7cqWO0JQSLtTQ==
-X-Received: by 2002:a05:6000:2cd:b0:204:1bf4:e4f8 with SMTP id o13-20020a05600002cd00b002041bf4e4f8mr15235444wry.682.1649429066390;
-        Fri, 08 Apr 2022 07:44:26 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:3c94:dc25:f0c5:7ff7? ([2a01:e34:ed2f:f020:3c94:dc25:f0c5:7ff7])
-        by smtp.googlemail.com with ESMTPSA id o19-20020a05600c511300b0038d0d8f67e5sm10533343wms.16.2022.04.08.07.44.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 07:44:23 -0700 (PDT)
-Message-ID: <4035e567-7096-eda5-5a22-4c6e7a0f7514@linaro.org>
-Date:   Fri, 8 Apr 2022 16:44:18 +0200
+        Fri, 8 Apr 2022 10:46:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 272D1FC100;
+        Fri,  8 Apr 2022 07:44:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E05B0113E;
+        Fri,  8 Apr 2022 07:44:41 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C0C63F73B;
+        Fri,  8 Apr 2022 07:44:40 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 15:44:34 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Message-ID: <YlBKUtLN5+wpuyLi@lakrids>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+ <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 05/10] dt-bindings: thermal: tsens: Add SM6350 compatible
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-pm@vger.kernel.org, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-References: <20211213082614.22651-1-luca.weiss@fairphone.com>
- <20211213082614.22651-6-luca.weiss@fairphone.com>
- <YbpLqwFJI/nfvxd9@robh.at.kernel.org> <CJ4TKNHK955X.2YYNAV248UMK8@otso>
- <YlBGfqNex49CgXze@robh.at.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YlBGfqNex49CgXze@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 16:28, Rob Herring wrote:
-> On Fri, Apr 08, 2022 at 01:25:26PM +0200, Luca Weiss wrote:
->> Hi all,
->>
->> On Wed Dec 15, 2021 at 9:10 PM CET, Rob Herring wrote:
->>> On Mon, 13 Dec 2021 09:26:06 +0100, Luca Weiss wrote:
->>>> Add devicetree compatible for tsens on SM6350 SoC.
->>>>
->>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>> ---
->>>>   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->>>>   1 file changed, 1 insertion(+)
->>>>
->>>
->>> Acked-by: Rob Herring <robh@kernel.org>
->>
->> It looks like this patch hasn't been applied yet. Could the responsible
->> maintainer please pick it up?
+On Mon, Mar 07, 2022 at 10:51:38AM -0600, Madhavan T. Venkataraman wrote:
+> Hey Mark Rutland, Mark Brown,
 > 
-> Normally that should be the thermal maintainers, but I've applied this.
+> Could you please review the rest of the patches in the series when you can?
 
-Right, I missed it, thanks for taking care of the patch.
+Sorry, I was expecting a new version with some of my comments
+addressed, in case that had effects on subsequent patches.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> Also, many of the patches have received a Reviewed-By from you both.
+> So, after I send the next version out, can we upstream those ones?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I would very much like to upstream the ones I have given a Reviewed-by.
+
+Given those were conditional on some adjustments (e.g. actually filling
+out comments), do you mind if I pick those into a series now?
+
+Then, once that's picked, you can rebase the rest atop, and we can
+review that.
+
+Thanks,
+Mark.
+
+> On 2/15/22 07:39, Mark Rutland wrote:
+> > On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
+> >> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> >>
+> >> Rename the arguments to unwind() for better consistency. Also, use the
+> >> typedef stack_trace_consume_fn for the consume_entry function as it is
+> >> already defined in linux/stacktrace.h.
+> >>
+> >> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> > 
+> > How about: 
+> > 
+> > | arm64: align with common stracktrace naming
+> > |
+> > | For historical reasons, the naming of parameters and their types in the arm64
+> > | stacktrace code differs from that used in generic code and other
+> > | architectures, even though the types are equivalent.
+> > |
+> > | For consistency and clarity, use the generic names.
+> > 
+> > Either way:
+> > 
+> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> > 
+> > Mark.
+> > 
+> >> ---
+> >>  arch/arm64/kernel/stacktrace.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> >> index 1b32e55735aa..f772dac78b11 100644
+> >> --- a/arch/arm64/kernel/stacktrace.c
+> >> +++ b/arch/arm64/kernel/stacktrace.c
+> >> @@ -181,12 +181,12 @@ static int notrace unwind_next(struct unwind_state *state)
+> >>  NOKPROBE_SYMBOL(unwind_next);
+> >>  
+> >>  static void notrace unwind(struct unwind_state *state,
+> >> -			   bool (*fn)(void *, unsigned long), void *data)
+> >> +			   stack_trace_consume_fn consume_entry, void *cookie)
+> >>  {
+> >>  	while (1) {
+> >>  		int ret;
+> >>  
+> >> -		if (!fn(data, state->pc))
+> >> +		if (!consume_entry(cookie, state->pc))
+> >>  			break;
+> >>  		ret = unwind_next(state);
+> >>  		if (ret < 0)
+> >> -- 
+> >> 2.25.1
+> >>

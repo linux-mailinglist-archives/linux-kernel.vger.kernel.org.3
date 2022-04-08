@@ -2,186 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2504F9D9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223E64F9D9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239226AbiDHTVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S235907AbiDHTXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbiDHTVk (ORCPT
+        with ESMTP id S231718AbiDHTXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:21:40 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14DC25C70
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:19:35 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id u14so9528263pjj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:19:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tDKnd76iowiARu70hpPXTSfbM05bvUgBVtd1F6alPd8=;
-        b=8J9ULcptVk5OE/KA9Ty3b8EvFEx13EcMoLzzojYJI73BwYITHJ26K2wDdqbLjmPt4F
-         LPxF8Y3NWhTBIUg/nfNKBotfw9aAALyoaghxXEATugGKnan2OYn+EEv8H8dBobeO+mvz
-         g9nsIkH4orzifvDbkNo8X8+OirkEZhq8WxRNz5nUAZHfZW453ht/8LpFvv8eYj+dqrfW
-         01GouCO/TtG3n67GL86r0WQkOcdI67E96ONiDr4InG9fhmqihDmWMElT+oVPMU6veJpJ
-         djwFEEPXluMWuEG9jQs8n/IG594bDwf4BFZX040r/rqL53hbzdMHQq5/4lP3iPGYmgWr
-         2sqA==
-X-Gm-Message-State: AOAM532E1+8gol0+8k66PkxydkPGgqDX+9jcTaU/gOOZrcB2ywc5ZKbd
-        1WuE2pyhPT70KLd8YKYMDsU=
-X-Google-Smtp-Source: ABdhPJwzh1zfo0olyhzYtdXafDW9fS/eYLXPQn5BiO7ZnSmz0n42s0aD7Uu1sR8Zqq6gRH/HTTm/+w==
-X-Received: by 2002:a17:90b:352:b0:1c6:77e:a4f7 with SMTP id fh18-20020a17090b035200b001c6077ea4f7mr23215674pjb.77.1649445575118;
-        Fri, 08 Apr 2022 12:19:35 -0700 (PDT)
-Received: from fedora ([4.14.106.147])
-        by smtp.gmail.com with ESMTPSA id y11-20020aa793cb000000b004fb597d85b2sm26515562pff.160.2022.04.08.12.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 12:19:34 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 12:19:32 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, cl@linux.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com,
-        songmuchun@bytedance.com
-Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
- completes
-Message-ID: <YlCKxBufsHgexguy@fedora>
-References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
- <YlBzsakUloG4nS7W@slm.duckdns.org>
+        Fri, 8 Apr 2022 15:23:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860931DF84C;
+        Fri,  8 Apr 2022 12:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649445677; x=1680981677;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=an1kgKT916kkjGguwaSRlVUu2JyLvI48Hqx3SubWWec=;
+  b=hdoUuMjvrFk1liUS+EtEi8aSu2HUvXnNmgolDnNQfI9Ep9t3L+IisXhu
+   3s9MnWqQbxY66M1h9HDqjFkfLug/C6F1GgjFRryxb9PP0z8hTz4BuJAQn
+   1DA4VkhpTC12RSHbjhi671j/Th0z+Y6T/ij+pI1zI0xPEnaRIK46hKeK5
+   hnMbpCxInCckM+scRHph5aGKnhFnWPh+6l3JYoXwvmSbBvDGrGPW5j/Yq
+   ikR6dZOS4k1ihI7BC/GS1ZL/56kLuejFJ9a4vxQoOaDutRymdA+pyF5L/
+   rI7bgVunQXxsylTXCyF01Z5Ccx8P5JQgd3KuaQi574ELN4znWzsMARve4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348106442"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="348106442"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:21:17 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="525495656"
+Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:21:15 -0700
+Message-ID: <0e366406-9a3a-0bf3-e073-272279f6abf2@intel.com>
+Date:   Fri, 8 Apr 2022 12:21:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlBzsakUloG4nS7W@slm.duckdns.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-7-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 6/8] x86/mm: Provide helpers for unaccepted memory
+In-Reply-To: <20220405234343.74045-7-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 07:41:05AM -1000, Tejun Heo wrote:
-> Hello,
-> 
-> On Thu, Apr 07, 2022 at 06:33:35PM +0800, Qi Zheng wrote:
-> > In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
-> > before calling percpu_ref_put(), which will cause the value of
-> > percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
-> > returns.
-> > 
-> > 	CPU0				CPU1
-> > 
-> > percpu_ref_switch_to_atomic_sync(&ref)
-> > --> percpu_ref_switch_to_atomic(&ref)
-> >     --> percpu_ref_get(ref);	/* put after confirmation */
-> > 	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
-> > 
-> > 					percpu_ref_switch_to_atomic_rcu
-> > 					--> percpu_ref_call_confirm_rcu
-> > 					    --> data->confirm_switch = NULL;
-> > 						wake_up_all(&percpu_ref_switch_waitq);
-> > 
-> >     /* here waiting to wake up */
-> >     wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
-> > 						(A)percpu_ref_put(ref);
-> > /* The value of &ref is unstable! */
-> > percpu_ref_is_zero(&ref)
-> > 						(B)percpu_ref_put(ref);
-> > 
-> > As shown above, assuming that the counts on each cpu add up to 0 before
-> > calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
-> > to atomic mode, percpu_ref_is_zero() can return true. But actually it will
-> > return different values in the two cases of A and B, which is not what
-> > we expected.
-> > 
-> > Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
-> > just to ensure that the conversion to atomic mode is completed, but it
-> > should not return with an extra reference count.
-> > 
-> > Calling wake_up_all() after percpu_ref_put() ensures that the value of
-> > percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
-> > So just do it.
-> > 
-> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> > ---
-> >  lib/percpu-refcount.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
-> > index af9302141bcf..b11b4152c8cd 100644
-> > --- a/lib/percpu-refcount.c
-> > +++ b/lib/percpu-refcount.c
-> > @@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
-> >  
-> >  	data->confirm_switch(ref);
-> >  	data->confirm_switch = NULL;
-> > -	wake_up_all(&percpu_ref_switch_waitq);
-> >  
-> >  	if (!data->allow_reinit)
-> >  		__percpu_ref_exit(ref);
-> >  
-> >  	/* drop ref from percpu_ref_switch_to_atomic() */
-> >  	percpu_ref_put(ref);
-> > +
-> > +	wake_up_all(&percpu_ref_switch_waitq);
-> 
-> The interface, at least originally, doesn't give any guarantee over whether
-> there's gonna be a residual reference on it or not. There's nothing
-> necessarily wrong with guaranteeing that but it's rather unusual and given
-> that putting the base ref in a percpu_ref is a special "kill" operation and
-> a ref in percpu mode always returns %false on is_zero(), I'm not quite sure
-> how such semantics would be useful. Do you care to explain the use case with
-> concrete examples?
+On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> +void accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	unsigned long *unaccepted_memory;
+> +	unsigned long flags;
+> +	unsigned int rs, re;
+> +
+> +	if (!boot_params.unaccepted_memory)
+> +		return;
+> +
+> +	unaccepted_memory = __va(boot_params.unaccepted_memory);
+> +	rs = start / PMD_SIZE;
+> +
+> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+> +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
+> +				   DIV_ROUND_UP(end, PMD_SIZE)) {
+> +		/* Platform-specific memory-acceptance call goes here */
+> +		panic("Cannot accept memory");
+> +		bitmap_clear(unaccepted_memory, rs, re - rs);
+> +	}
+> +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
+> +}
 
-block/blk-pm.c has:
-        percpu_ref_switch_to_atomic_sync(&q->q_usage_counter);
-        if (percpu_ref_is_zero(&q->q_usage_counter))
+Just to reiterate: this is a global spinlock.  It's disabling
+interrupts.  "Platform-specific memory-acceptance call" will soon become:
 
-> 
-> Also, the proposed patch is racy. There's nothing preventing
-> percpu_ref_switch_to_atomic_sync() from waking up early between
-> confirm_switch clearing and the wake_up_all, so the above change doesn't
-> guarantee what it tries to guarantee. For that, you'd have to move
-> confirm_switch clearing *after* percpu_ref_put() but then, you'd be
-> accessing the ref after its final ref is put which can lead to
-> use-after-free.
-> 
+	tdx_accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
 
-Sad that is my bad missing that.
+which is a page-by-page __tdx_module_call():
 
-> In fact, the whole premise seems wrong. The switching needs a reference to
-> the percpu_ref because it is accessing it asynchronously. The switching side
-> doesn't know when the ref is gonna go away once it puts its reference and
-> thus can't signal that they're done after putting their reference.
-> 
+> +	for (i = 0; i < (end - start) / PAGE_SIZE; i++) {
+> +		if (__tdx_module_call(TDACCEPTPAGE, start + i * PAGE_SIZE,
+> +				      0, 0, 0, NULL)) {
+> +			error("Cannot accept memory: page accept failed\n");
+> +		}
+> +	}
 
-I read it as 2 usages of percpu_ref. 1 is as the tie a lifetime to an
-object, the 2nd is just as a raw reference counter which md and
-request_queue use.
+Each __tdx_module_call() involves a privilege transition that also
+surely includes things like changing CR3.  It can't be cheap.  It also
+is presumably touching the memory and probably flushing it out of the
+CPU caches.  It's also unbounded:
 
-In the first use case, I don't think it makes any sense to call
-percpu_ref_switch_to_atomic_sync(). And if you did, wouldn't
-percpu_ref_switch_to_atomic_sync() to percpu_ref_is_zero() either be
-use-after-free or always false.
+	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+	for (i = 0; i < (end - start) / PAGE_SIZE; i++)
+		// thousands?  tens-of-thousands of cycles??
+	spin_lock_irqsave(&unaccepted_memory_lock, flags);
 
-I feel like the 2nd use case is fair game though because if you're using
-percpu_ref_switch_to_atomic_*(), the lifetime of percpu_ref has to be
-guaranteed outside of the kill callback.
+How far apart can end and start be?  It's at *least* 2MB in the page
+allocator, which is on the order of a millisecond.  Are we sure there
+aren't any callers that want to do this at a gigabyte granularity?  That
+would hold the global lock and disable interrupts on the order of a second.
 
-> We *can* make that work by putting the whole thing in its own critical
-> section so that we can make confirm_switch clearing atomic with the possibly
-> final put, but that's gonna add some complexity and begs the question why
-> we'd need such a thing.
-> 
-> Andrew, I don't think the patch as proposed makes much sense. Maybe it'd be
-> better to keep it out of the tree for the time being?
-> 
-> Thanks.
-> 
-
-Thanks,
-Dennis
+Do we want to bound the time that the lock can be held?  Or, should we
+just let the lockup detectors tell us that we're being naughty?

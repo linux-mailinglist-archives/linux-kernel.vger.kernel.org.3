@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCCF4F96AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313D64F96B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiDHNbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S236280AbiDHNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbiDHNbb (ORCPT
+        with ESMTP id S232120AbiDHNb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:31:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4CB1FA5D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649424567; x=1680960567;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r+Y4yo0fhOPVDHnETehVvG2Q7wiOkr4Na3uhKyK78Qw=;
-  b=Gzqe0Ui/67iDnYQpU72Gxh+KkDLun07yFfSUsHY2yOs+pfJd1ipsVkme
-   JtOPJy3XOOKeFbxdMsj7PYOheDvuBshzUGMWM27d/uLgl1gLFZKhj2ccV
-   KABfMPEaVHESnQAjxjy8DKvFuogwzfm1CGB70tgkBSAKz2JCHbxug7Yor
-   3VHJ0TxAn4Ok2tQi+C+WL6t/3cinihnqH8kA+V/aDtRGeJIsgcSwlyykP
-   nk4RMbk4rbPhjRnZYwxvE58DDp93oc5YzP5Jy+vhHdCWzZTG/z6FcSMyz
-   LR1a12AtoOvdgUk+h3iYveAzjTP9YxTRbDBYR1fMwWkMkNfgRDCxFzUUe
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="242185755"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="242185755"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:29:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="524774971"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 08 Apr 2022 06:29:26 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncog1-0000IB-Cm;
-        Fri, 08 Apr 2022 13:29:25 +0000
-Date:   Fri, 8 Apr 2022 21:28:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Elwell <phil@raspberrypi.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 49/887] drivers/tty/serial/amba-pl011.c:1683:15:
- warning: no previous prototype for 'pl011_clk_round'
-Message-ID: <202204082132.LLpePoZa-lkp@intel.com>
+        Fri, 8 Apr 2022 09:31:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C233ADD60;
+        Fri,  8 Apr 2022 06:29:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3D26B829D8;
+        Fri,  8 Apr 2022 13:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2C3C385A1;
+        Fri,  8 Apr 2022 13:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649424592;
+        bh=ZYBCD+SPuaGoxrvq8XHNiTRw9xSpDQGJOvCPXfOLPQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N1lQ5PFIN1NRAsqYA4S6/bjVaNjL4bLs1G19GAvsgRWJL8/UjLVc7xD/rpTa2ysZC
+         DyEhFeJYZshOf/8vVNnZN15nT7yWHYTgUAwbdWyAqbRzREeO3FGea9v0A/FwzJWJXk
+         Fxbyz/Uoal++MJCQx04x+damhnPtRzgHUpQUi7dmbutgq+ZzFrol6Df5WE08Fyf3ZZ
+         t3ceR3WHO6Ugksnyt5nMaiCiglr2fvREbh8dXI6EARox6Dx0aQdxQEQQqdft0XAG46
+         0Up7E87EknJBEpyjXc+gOGxU91HuyJiF9Hdmpotj/fZ60rU34/eXAPdRERvMvfc5/g
+         rGapS3feISiCQ==
+Date:   Fri, 8 Apr 2022 18:59:41 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Sricharan Ramabadhran <sricharan@codeaurora.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        pragalla@codeaurora.org, ~postmarketos/upstreaming@lists.sr.ht,
+        martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
+        bbhatt@codeaurora.org, hemantk@codeaurora.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
+Message-ID: <20220408132941.GA12635@thinkpad>
+References: <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
+ <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
+ <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
+ <20220201145204.54646475@xps13>
+ <d79bf21d-5a90-0074-cef6-896f66e80d28@somainline.org>
+ <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
+ <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
+ <6b839237-74f0-7270-2f33-f5c17e6b59de@somainline.org>
+ <2fb9d943-d6c8-06b1-08cc-b0c3a8256082@codeaurora.org>
+ <b428593e-a4db-984b-df7f-7cd14795d5e2@somainline.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b428593e-a4db-984b-df7f-7cd14795d5e2@somainline.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +75,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: 6772a88f41ecca42cf47b805ddf28483377792fd [49/887] amba_pl011: Round input clock up
-config: arm-randconfig-c002-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082132.LLpePoZa-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/6772a88f41ecca42cf47b805ddf28483377792fd
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 6772a88f41ecca42cf47b805ddf28483377792fd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/tty/serial/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Mar 11, 2022 at 10:22:51PM +0100, Konrad Dybcio wrote:
+> 
+>
 
-All warnings (new ones prefixed by >>):
+[...]
+ 
+> I have 3 logs for you:
+> 
+> [1] is KASAN=y, with this patch
+> [2] is KASAN=y, WITHOUT this patch (should die, but doesn't - does KASAN prevent it from doing something stupid?)
+> [3] is KASAN=n, WITHOUT this patch (dies as expected)
+> 
 
->> drivers/tty/serial/amba-pl011.c:1683:15: warning: no previous prototype for 'pl011_clk_round' [-Wmissing-prototypes]
-    1683 | unsigned long pl011_clk_round(unsigned long clk)
-         |               ^~~~~~~~~~~~~~~
+We reproduced the same issue on SDX65-MTP board and your hack worked :)
+Since this board is available inside Qcom, now Sadre and Sricharan should be
+able to investigate it properly.
 
+Thanks,
+Mani
 
-vim +/pl011_clk_round +1683 drivers/tty/serial/amba-pl011.c
-
-  1682	
-> 1683	unsigned long pl011_clk_round(unsigned long clk)
-  1684	{
-  1685		unsigned long scaler;
-  1686	
-  1687		/*
-  1688		 * If increasing a clock by less than 0.1% changes it
-  1689		 * from ..999.. to ..000.., round up.
-  1690		 */
-  1691		scaler = 1;
-  1692		while (scaler * 100000 < clk)
-  1693			scaler *= 10;
-  1694		if ((clk + scaler - 1)/scaler % 1000 == 0)
-  1695			clk = (clk/scaler + 1) * scaler;
-  1696	
-  1697		return clk;
-  1698	}
-  1699	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Looks like there's a lot happening..
+> 
+> 
+> Konrad
+> > 
+> > Regards,
+> >   Sricharan
+> > 
+> > 
+> 
+> [1] https://paste.debian.net/1233873/
+> [2] https://paste.debian.net/1233874/
+> [3] https://paste.debian.net/1233878/

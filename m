@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4523A4F8F59
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241B54F8F69
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiDHHTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S229795AbiDHHVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiDHHTr (ORCPT
+        with ESMTP id S229726AbiDHHUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:19:47 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0460021DF22
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:17:43 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id r13so15518586ejd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0n61blmIAkKQaBF3fgsPecQx9lDeya+dROG3fR+36zM=;
-        b=rDO9wCF+y70cv/4I1pJUnF98waE70HN2mn7xOtAJ9/6tJr21SWhOZql1eQ2iIIAceV
-         SouBBS6HQQvDLfzFgnyLqOzIVFl74VSfOqOqLJcXsV/b5g3OJxI6OSGuxKFVvxboDHuU
-         dfcG7kxNFAm5pcNpnO+IOiXjDVjG73fGtM9xmBqIFuuPVrhbHvI7AQm8L0ota6qOyL3x
-         /3tWERQE7Ufrx//4MJWfnvyL49HaAS3AHb9RPVKBBLG8uBkomK6Ky0gFcm8h8w6I6CK4
-         l+cO5AMMgSgJhqe8hB6QpRdhcHJ/zsDOfoSawHbFzY8fLYM2K/+TyRlRhoTe6sVTxkYB
-         Gg9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0n61blmIAkKQaBF3fgsPecQx9lDeya+dROG3fR+36zM=;
-        b=k0UBZmeCI9dXnZQVTEVkRiHrJJHuq0ZeQ+l+z9K4JsqpKtUqQRID2uSUh0JjbShmPx
-         7/DAb2GlfXXq4ujS9HnT+T9tQNr0BR8Byxh4miiixiaAyUVdM1rQs+d9GjBNGZdzS0IX
-         oXTm5t+mgzaZovEzWIJgiORU40KUAly6JJcXphSWDFZ8FYB85Q06m6/GWdoMxb2ulMTp
-         FKPb4avyubGLosSvnQ2fpBLRlHTmEH9lA6zeAYdXRdEIz68M3z56IPy0kq9mURFp1Ips
-         HMAVn6P3NhE+1cB7DmzSePzvbeTxtZdsYhFU0KOlHgD+ddFLC0+WDs3R0DzBJXmyZ/lF
-         2czw==
-X-Gm-Message-State: AOAM530umyyHRIqbGqqhwWcOdj0VRZ2DtAVZrgyhhLEZ9R4gsDcMRBj/
-        cezTI1coz5+I037RlTKA7fQrRg==
-X-Google-Smtp-Source: ABdhPJxnIy7zF7uE8xRHZ/boIh9E4X89WLB9SMQMnABLEB9K24hPdos6iUbx2cmBnQl1AWhRIsKFYA==
-X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr16390976ejm.70.1649402262518;
-        Fri, 08 Apr 2022 00:17:42 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bl24-20020a170906c25800b006e809b6bf89sm3720393ejb.221.2022.04.08.00.17.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 00:17:42 -0700 (PDT)
-Message-ID: <9d6ba801-6ad1-80aa-a92a-bfc06c1cf1df@linaro.org>
-Date:   Fri, 8 Apr 2022 09:17:41 +0200
+        Fri, 8 Apr 2022 03:20:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E578721FC62
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649402308; x=1680938308;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1iiz65dkewXFVU2JVgR+NgxlENZAlIxCKHCCdhdsNGI=;
+  b=MaO7jxSlL7ZMwNtaVqNSaSFDchqPxuv5pD1KxYhrgjSg0HPtWoF64kDc
+   AsB+rPuFm0mpgBKQ4E/TOEy4mvvk15MwIal0FoINAmrkAmEgWH899OYdd
+   SBZojPsn8VTXubSKjk1mTnrEkO4lftcKy6jc5H3C1N4P8sRHN7lGrBpVy
+   qR/JAWsO0cB4DhJJFY+TotLbu+e9CMC4BUxkP1oSGPbcwDCcRIN/M+LKu
+   o2WdFNLPdGC+vN+kEWjjF2o6ySirX7NuKZ7hvg0IjP0UlvAURYwFDdyKP
+   bvRuHMHdzYy9EHeaYxQlImcyGikZJLZWBtVXdCouM41aGiUHIs5vYqqdc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="286521195"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="286521195"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:18:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="653155830"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 00:18:25 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncisy-00069w-Ht;
+        Fri, 08 Apr 2022 07:18:24 +0000
+Date:   Fri, 8 Apr 2022 15:17:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gabe Teeger <gabe.teeger@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Subject: [agd5f:drm-next 16/132]
+ drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubp.c:57:6: warning:
+ no previous prototype for 'hubp31_program_extended_blank'
+Message-ID: <202204081535.oinzrfCs-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/4] clocksource/drivers/exynos_mct: Support frc-shared
- property
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        tglx@linutronix.de, daniel.lezcano@linaro.org
-Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, alim.akhtar@samsung.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-References: <20220407074432.424578-1-vincent.whitchurch@axis.com>
- <20220407074432.424578-3-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407074432.424578-3-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 09:44, Vincent Whitchurch wrote:
-> When the FRC is shared with another main processor, the other processor
-> is assumed to have started it and this processor should not write to the
-> global registers.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
-> 
-> Notes:
->     v3:
->     - Split FRC sharing handling from local timer indices handling
->     - Remove addition of global variable.
-> 
->  drivers/clocksource/exynos_mct.c | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-> 
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   49aa98ca30cd186ab33fc5802066e2024d3bfa39
+commit: e5fc78252ccd8dfc260f87d83905e9dffff6d975 [16/132] drm/amd/display: Add support for zstate during extended vblank
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220408/202204081535.oinzrfCs-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout e5fc78252ccd8dfc260f87d83905e9dffff6d975
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
-Looks correct and I hope it works correct. :) I did not test it though.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubp.c:57:6: warning: no previous prototype for 'hubp31_program_extended_blank' [-Wmissing-prototypes]
+      57 | void hubp31_program_extended_blank(struct hubp *hubp, unsigned int min_dst_y_next_start_optimized)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Best regards,
-Krzysztof
+vim +/hubp31_program_extended_blank +57 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubp.c
+
+    56	
+  > 57	void hubp31_program_extended_blank(struct hubp *hubp, unsigned int min_dst_y_next_start_optimized)
+    58	{
+    59		struct dcn20_hubp *hubp2 = TO_DCN20_HUBP(hubp);
+    60	
+    61		REG_SET(BLANK_OFFSET_1, 0, MIN_DST_Y_NEXT_START, min_dst_y_next_start_optimized);
+    62	}
+    63	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

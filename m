@@ -2,175 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97AC4F9393
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6C94F939E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiDHLQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S230249AbiDHLTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiDHLQR (ORCPT
+        with ESMTP id S229452AbiDHLTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:16:17 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58CB3632F;
-        Fri,  8 Apr 2022 04:14:13 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 238BDcR5122754;
-        Fri, 8 Apr 2022 06:13:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649416418;
-        bh=+SNjO1IUOnRYTs23vqywM5c9gOYSHSLoyH11tDb5yOk=;
-        h=From:To:CC:Subject:Date;
-        b=MgooNM0+tVkvtFTMNkxHRB0uFY9BfyfabOgZebe4K/7PxBZXjjn3q8S7dPLJhN+dd
-         0g/Z/rT+Nsponu1ySqHLn0fxKlOdBjP+3rB4gK35Z/vWTzE8S3hX5PeZKaN4lp2oV6
-         1+p/6UiEXNV4JineYzcTfFc4p2Sqcdg8S7ms9RSo=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 238BDcqZ026182
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 8 Apr 2022 06:13:38 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
- Apr 2022 06:13:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 8 Apr 2022 06:13:37 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 238BDYJi018497;
-        Fri, 8 Apr 2022 06:13:35 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Aswath Govindraju <a-govindraju@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-can@vger.kernel.org>
-Subject: [PATCH v5] phy: phy-can-transceiver: Add support for setting mux
-Date:   Fri, 8 Apr 2022 16:43:16 +0530
-Message-ID: <20220408111316.21189-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 8 Apr 2022 07:19:35 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1662E36A46C;
+        Fri,  8 Apr 2022 04:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649416651; x=1680952651;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=usisW7gEVCH6B82tOzUls9nDBMS9O5ZuEj4fCzYNQNc=;
+  b=RhjcVQfpviZ9qvAKBdx0nRfyT8+zexNtvJUXsz+8aWm56Ig+WxABDhtr
+   i/xfcnDptQM6dSvwPe+rhgFKj7dCsRzbGAe6EjsIHCyy29R8uc/U9mGD9
+   I3SNxPWE+x6IXpsWylBKe3swFlODVEhB6danjs1kGMQElcMXC7szQ5tNC
+   E=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Apr 2022 04:17:30 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 04:17:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Apr 2022 04:17:29 -0700
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Apr 2022 04:17:25 -0700
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     <arnd@arndb.de>
+CC:     <quic_saipraka@quicinc.com>, <catalin.marinas@arm.com>,
+        <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <rostedt@goodmis.org>, <will@kernel.org>
+Subject: Re: [PATCHv10 0/6] lib/rwmmio/arm64: Add support to trace register reads/writes
+Date:   Fri, 8 Apr 2022 16:47:07 +0530
+Message-ID: <20220408111707.2488-1-quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1644824638.git.quic_saipraka@quicinc.com>
+References: <cover.1644824638.git.quic_saipraka@quicinc.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some boards, for routing CAN signals from controller to transceiver,
-muxes might need to be set. Therefore, add support for setting the mux by
-reading the mux-states property from the device tree node.
+Hi Arnd,
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
+On 2/24/2022 11:37 AM, Sai Prakash Ranjan wrote:
+> Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+> are typically used to read/write from/to memory mapped registers
+> and can cause hangs or some undefined behaviour in following cases,
+>
+> * If the access to the register space is unclocked, for example: if
+>   there is an access to multimedia(MM) block registers without MM
+>   clocks.
+>
+> * If the register space is protected and not set to be accessible from
+>   non-secure world, for example: only EL3 (EL: Exception level) access
+>   is allowed and any EL2/EL1 access is forbidden.
+>
+> * If xPU(memory/register protection units) is controlling access to
+>   certain memory/register space for specific clients.
+>
+> and more...
+>
+> Such cases usually results in instant reboot/SErrors/NOC or interconnect
+> hangs and tracing these register accesses can be very helpful to debug
+> such issues during initial development stages and also in later stages.
+>
+> So use ftrace trace events to log such MMIO register accesses which
+> provides rich feature set such as early enablement of trace events,
+> filtering capability, dumping ftrace logs on console and many more.
+>
+> Sample output:
+>
+> rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+> rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+> rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+> rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+>
+> This series is a follow-up for the series [1] and a recent series [2] making use
+> of both.
+>
+> [1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
+> [2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
+>
+> Note in previous v4 version, Arnd suggested to benchmark and compare size with callback
+> based implementation, please see [3] for more details on that with brief comparison below.
+>
+>
+> **Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+> $ size vmlinux
+>    text           data             bss     dec             hex         filename
+>  23884219        14284468         532568 38701255        24e88c7        vmlinux
+>
+> **Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+> $ size vmlinux
+>     text          data             bss     dec             hex        filename
+>  24108179        14279596         532568 38920343        251e097       vmlinux
+>
+> $ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
+> add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
+> Total: Before=25812612, After=26043292, chg +0.89%
+>
+> [3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
+>
+> Changes in v10:
+>  * Use GENMASK(31, 0) for -Woverflow warning in irqchip tegra driver (Marc).
+>  * Convert ETM4x ARM64 driver to use asm-generic IO memory barriers (Catalin).
+>  * Collect ack from Catalin for arm64 change.
+>
+> Changes in v9:
+>  * Use TRACE_EVENT_CLASS for rwmmio_write and post_write (Steven Rostedt).
+>
+> Changes in v8:
+>  * Fix build error reported by kernel test robot.
+>
+> Changes in v7:
+>  * Use lib/ instead of kernel/trace/ based on review comment by Steven Rostedt.
+>
+> Changes in v6:
+>  * Implemented suggestions by Arnd Bergmann:
+>    - Use arch independent IO barriers in arm64/asm
+>    - Add ARCH_HAVE_TRACE_MMIO_ACCESS
+>    - Add post read and post write logging support
+>    - Remove tracepoint_active check
+>  * Fix build error reported by kernel test robot.
+>
+> Changes in v5:
+>  * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
+>  * Add inline logging for MMIO relaxed and non-relaxed accessors.
+>  * Move nVHE KVM comment to makefile (Marc).
+>  * Fix overflow warning due to switch to inline accessors instead of macro.
+>  * Modify trace event field to include caller and parent details for more detailed logs.
+>
+> Changes in v4:
+>  * Drop dynamic debug based filter support since that will be developed later with
+>    the help from Steven (Ftrace maintainer).
+>  * Drop value passed to writel as it is causing hangs when tracing is enabled.
+>  * Code cleanup for trace event as suggested by Steven for earlier version.
+>  * Fixed some build errors reported by 0-day bot.
+>
+> Changes in v3:
+>  * Create a generic mmio header for instrumented version (Earlier suggested in [1]
+>    by Will Deacon and recently [2] by Greg to have a generic version first).
+>  * Add dynamic debug support to filter out traces which can be very useful for targeted
+>    debugging specific to subsystems or drivers.
+>  * Few modifications to the rwmmio trace event fields to include the mmio width and print
+>    addresses in hex.
+>  * Rewrote commit msg to explain some more about usecases.
+>
+> Prasad Sodagudi (1):
+>   lib: Add register read/write tracing support
+>
+> Sai Prakash Ranjan (5):
+>   arm64: io: Use asm-generic high level MMIO accessors
+>   coresight: etm4x: Use asm-generic IO memory barriers
+>   irqchip/tegra: Fix overflow implicit truncation warnings
+>   drm/meson: Fix overflow implicit truncation warnings
+>   asm-generic/io: Add logging support for MMIO accessors
+>
+>  arch/Kconfig                                  |  3 +
+>  arch/arm64/Kconfig                            |  1 +
+>  arch/arm64/include/asm/io.h                   | 41 ++------
+>  arch/arm64/kvm/hyp/nvhe/Makefile              |  7 +-
+>  drivers/gpu/drm/meson/meson_viu.c             | 22 ++---
+>  .../coresight/coresight-etm4x-core.c          |  8 +-
+>  drivers/hwtracing/coresight/coresight-etm4x.h |  8 +-
+>  drivers/irqchip/irq-tegra.c                   | 10 +-
+>  include/asm-generic/io.h                      | 82 +++++++++++++++-
+>  include/trace/events/rwmmio.h                 | 97 +++++++++++++++++++
+>  lib/Kconfig                                   |  7 ++
+>  lib/Makefile                                  |  2 +
+>  lib/trace_readwrite.c                         | 47 +++++++++
+>  13 files changed, 273 insertions(+), 62 deletions(-)
+>  create mode 100644 include/trace/events/rwmmio.h
+>  create mode 100644 lib/trace_readwrite.c
+>
+>
+> base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
 
-Changes since v4:
-- Rebased on top of latest next head.
+Gentle ping, could you please take a look at this, would appreciate your reviews.
 
-Changes since v3:
-- Rebased on top of the linux-next head
-- Dependencies are now merged in linux next.
-  84564481bc45 (mux: Add support for reading mux state from consumer DT node)
-- Dropped bindings patch from the series since it has been
-  picked up from the earlier version
-  https://lore.kernel.org/all/YieG22mgIzsL7TMn@robh.at.kernel.org/
-
-Changes since v2:
-- Fixed the bindings removing the description about
-  the arguments in mux-states property
-
-Changes since v1:
-- Fixed the description for mux-states property in bindings
-  file
-- appended declaration of variable ret in the end
-
- drivers/phy/Kconfig               |  1 +
- drivers/phy/phy-can-transceiver.c | 24 +++++++++++++++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 82b63e60c5a2..300b0f2b5f84 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -64,6 +64,7 @@ config USB_LGM_PHY
- config PHY_CAN_TRANSCEIVER
- 	tristate "CAN transceiver PHY"
- 	select GENERIC_PHY
-+	select MULTIPLEXER
- 	help
- 	  This option enables support for CAN transceivers as a PHY. This
- 	  driver provides function for putting the transceivers in various
-diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
-index 6f3fe37dee0e..95c6dbb52da7 100644
---- a/drivers/phy/phy-can-transceiver.c
-+++ b/drivers/phy/phy-can-transceiver.c
-@@ -10,6 +10,7 @@
- #include<linux/module.h>
- #include<linux/gpio.h>
- #include<linux/gpio/consumer.h>
-+#include <linux/mux/consumer.h>
- 
- struct can_transceiver_data {
- 	u32 flags;
-@@ -21,13 +22,22 @@ struct can_transceiver_phy {
- 	struct phy *generic_phy;
- 	struct gpio_desc *standby_gpio;
- 	struct gpio_desc *enable_gpio;
-+	struct mux_state *mux_state;
- };
- 
- /* Power on function */
- static int can_transceiver_phy_power_on(struct phy *phy)
- {
- 	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
--
-+	int ret;
-+
-+	if (can_transceiver_phy->mux_state) {
-+		ret = mux_state_select(can_transceiver_phy->mux_state);
-+		if (ret) {
-+			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
-+			return ret;
-+		}
-+	}
- 	if (can_transceiver_phy->standby_gpio)
- 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
- 	if (can_transceiver_phy->enable_gpio)
-@@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
- 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
- 	if (can_transceiver_phy->enable_gpio)
- 		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
-+	if (can_transceiver_phy->mux_state)
-+		mux_state_deselect(can_transceiver_phy->mux_state);
- 
- 	return 0;
- }
-@@ -95,6 +107,16 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
- 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
- 	drvdata = match->data;
- 
-+	if (of_property_read_bool(dev->of_node, "mux-states")) {
-+		struct mux_state *mux_state;
-+
-+		mux_state = devm_mux_state_get(dev, NULL);
-+		if (IS_ERR(mux_state))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(mux_state),
-+					     "failed to get mux\n");
-+		can_transceiver_phy->mux_state = mux_state;
-+	}
-+
- 	phy = devm_phy_create(dev, dev->of_node,
- 			      &can_transceiver_phy_ops);
- 	if (IS_ERR(phy)) {
--- 
-2.17.1
-
+Thanks,
+Sai

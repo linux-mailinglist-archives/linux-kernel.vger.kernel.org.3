@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEFE4F95F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656304F95F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbiDHMmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S233459AbiDHMpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiDHMmg (ORCPT
+        with ESMTP id S232498AbiDHMp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:42:36 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3A295252
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:40:29 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so7465457wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JtXxBqYHvoARiWzEnaLQz1KM8jdVHYhcJ4+dJSrCNho=;
-        b=DaN6uMg1mWoy0sJAV0g1YvUeexSJXdw69mB/G8cDTl88B7hvvTMuHBQkKlxH+KxDBa
-         H81GzezGvpaDopE334/4Okotf/kCCXHz0vTpmLLKEx+Bku9pLOU5FLpp5gk3GohhXLd2
-         zblz1C20kzVUnt868ukX1W9mV9hWWq59Ym5miWpnU+vOc0PlqLBFpI4eiVEtZciOwdpN
-         9oRD1RByZh4b3H8vb6DNYjQgBx23gDCP7JeF9fdpNoGmFL1sUyzTBxx/b2Te50F26SqH
-         T5Cz05dVjRAjbO/3D1xZCcCuQgILdFS7HDXoHATbCKG4OH8TImR3t40881bgVzivKS3t
-         mUHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JtXxBqYHvoARiWzEnaLQz1KM8jdVHYhcJ4+dJSrCNho=;
-        b=VZBfg/gcQj6T3S6XPjd4x7jJyE8GqxVkDlGbnJF5VpkfE3/D/MjWHq2HPepjbIDrxJ
-         3lPnxQ2zsbWbReVceu2Mom2pNYstk2/Oh198EWtHhS4CwLwqe2WGWNWvRXNXmJVdlonA
-         6s1GGEJ2yLLSXOg1TEVzzpKIQgyO1iIEvaf5vRJFByPOBXd+jxaVpb9L8fyZPa+QvlFM
-         AuGBly8g05NLS6kxmUjvQ6BQ2ulyayWHdlGMgv4EQR434Z2Jut/1yg58Al/FKYiJPUlH
-         U7YBtd6/5VMQu55GuKAIr+8sWiyjE2sd7XaLOAMb238d47N5mwhzfJyE7xcxGz1NL4xW
-         oJxQ==
-X-Gm-Message-State: AOAM531D4wqsF9hBuyt6SSvEBWOjNo4avd9GaDY8SImnoivVtPfyURZ3
-        aq2IYmKx3QjljKDVgKFHPCINMw==
-X-Google-Smtp-Source: ABdhPJwoCjsjihXGrySnrwKn6BzJl3Dg6+P50meXlcaikWCGLEuuq9Lafl4Wwjjb/OVp8TTTx0TyAg==
-X-Received: by 2002:a05:600c:3d86:b0:38d:581:89ad with SMTP id bi6-20020a05600c3d8600b0038d058189admr17088800wmb.42.1649421627958;
-        Fri, 08 Apr 2022 05:40:27 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:eacd:ce6:e294:acd1? ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b0038cc9aac1a3sm11597138wmq.23.2022.04.08.05.40.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 05:40:27 -0700 (PDT)
-Message-ID: <25ca3826-44ee-ca6f-fb6b-1ef62f6da456@baylibre.com>
-Date:   Fri, 8 Apr 2022 14:40:23 +0200
+        Fri, 8 Apr 2022 08:45:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA9B329AF;
+        Fri,  8 Apr 2022 05:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649421804; x=1680957804;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=shRsTxOu6z1fDTWKAhDb9aMsN+c5kKMrzbCJid69zTk=;
+  b=Udwj9oiZf10ZVTP7hjVPkBB7s5gb9I5Ol5/MwZqVsfhmod5axAXNogWf
+   35cmTD2/jVx8oqTXrCNW7xBBzCuACQDZna0RaPUW0aWMfvVJfChCHl8ma
+   BAWj/y0wjMYOyhyeUsFIe2hBoxMR4Y5od23CD+DgpXKA2jqExxUV3IL9I
+   yBFTb2tpC5T8Pkp3dlqdinYgZTtM5mX/Yo/zDokhScyzRxC0Q+PAr6QKQ
+   RxMxwZpo4pzusfNZtztE2hH8egT/2UKHdSa45rQsFBk7uqUJ5ToMAlusd
+   hN++pSLaNNjc7Qy8+73m1axWC2Y7iS6FHLJyOXrDxshIhIHPO/BJrLQws
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260417696"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="260417696"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:24 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="550489494"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:21 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 08 Apr 2022 15:43:18 +0300
+Date:   Fri, 8 Apr 2022 15:43:18 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH v1 1/2] PCI: PM: Avoid leaving devices in
+ D0-uninitialized in pci_power_up()
+Message-ID: <YlAt5he5B1SlORMh@lahna>
+References: <4198163.ejJDZkT8p0@kreacher>
+ <3623886.MHq7AAxBmi@kreacher>
+ <YkwRjI0KvpmiJjvK@lahna>
+ <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/5] drm: bridge: dw_hdmi: Enable GCP only for Deep
- Color
-Content-Language: en-US
-To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl
-Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
-        harry.wentland@amd.com
-References: <cover.1649412256.git.Sandor.yu@nxp.com>
- <a0f9def7e7438592f78ef0a16cd0a560be0e6133.1649412256.git.Sandor.yu@nxp.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <a0f9def7e7438592f78ef0a16cd0a560be0e6133.1649412256.git.Sandor.yu@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 12:32, Sandor Yu wrote:
-> HDMI1.4b specification section 6.5.3:
-> Source shall only send GCPs with non-zero CD to sinks
-> that indicate support for Deep Color.
+Hi Rafael,
+
+On Thu, Apr 07, 2022 at 09:01:59PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Mon, Apr 04, 2022 at 05:41:13PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > In theory, pci_power_up() may leave a device in D0-uninitialized
+> > > during a transition from D3cold to D0.
+> > >
+> > > Say, a PCIe device depending on some ACPI power resources is put into
+> > > D3cold, so the power resources in question are all turned off.  Then,
+> > > pci_power_up() is called to put it into D0.
+> > >
+> > > It first calls pci_platform_power_transition() which invokes
+> > > platform_pci_set_power_state() to turn on the ACPI power resources
+> > > depended on by the device and, if that is successful, it calls
+> > > pci_update_current_state() to update the current_state field of
+> > > the PCI device object.  If the device's configuration space is
+> > > accessible at this point, which is the case if
+> > > platform_pci_set_power_state() leaves it in D0-uninitialized (and
+> > > there's nothing to prevent it from doing so), current_state will be
+> > > set to PCI_D0 and the pci_raw_set_power_state() called subsequently
+> > > will notice that the device is in D0 already and do nothing.
+> > > However, that is not correct, because it may be still necessary to
+> > > restore the device's BARs at this point.
+> > >
+> > > To address this issue, set current_state temporarily to PCI_D3hot
+> > > in the cases in which pci_raw_set_power_state() may need to do more
+> > > than just changing the power state of the device.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > 
-> DW HDMI GCP default enabled, clear gpc_auto bit for 24-bit color depth.
-
-It's right because we do not handle AVMUTE, Pixel Packing nor Default_Phase.
-
+> Thanks, but on second thought, I'm not sure if this is the best way to
+> address the issue.
 > 
-> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> ---
->   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 02d8f7e08814..5a7ec066e37a 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -1108,6 +1108,8 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
->   	unsigned int output_select = HDMI_VP_CONF_OUTPUT_SELECTOR_PP;
->   	struct hdmi_data_info *hdmi_data = &hdmi->hdmi_data;
->   	u8 val, vp_conf;
-> +	u8 clear_gcp_auto = 0;
-> +
->   
->   	if (hdmi_bus_fmt_is_rgb(hdmi->hdmi_data.enc_out_bus_format) ||
->   	    hdmi_bus_fmt_is_yuv444(hdmi->hdmi_data.enc_out_bus_format) ||
-> @@ -1117,6 +1119,7 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
->   		case 8:
->   			color_depth = 4;
->   			output_select = HDMI_VP_CONF_OUTPUT_SELECTOR_BYPASS;
-> +			clear_gcp_auto = 1;
->   			break;
->   		case 10:
->   			color_depth = 5;
-> @@ -1136,6 +1139,7 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
->   		case 0:
->   		case 8:
->   			remap_size = HDMI_VP_REMAP_YCC422_16bit;
-> +			clear_gcp_auto = 1;
->   			break;
->   		case 10:
->   			remap_size = HDMI_VP_REMAP_YCC422_20bit;
-> @@ -1160,6 +1164,14 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
->   		HDMI_VP_PR_CD_DESIRED_PR_FACTOR_MASK);
->   	hdmi_writeb(hdmi, val, HDMI_VP_PR_CD);
->   
-> +	val = hdmi_readb(hdmi, HDMI_FC_DATAUTO3);
-> +	if (clear_gcp_auto == 1)
-> +		/* disable Auto GCP when 24-bit color */
+> Basically, pci_power_up() is called in two places, in
+> pci_set_power_state() (for the transitions to D0) and in
+> pci_pm_default_resume_early().  In the latter case,
+> pci_restore_state() is called right after it and that covers BARs
+> restoration, so nothing more needs to be done in that case.
 
-Maybe add a new define for HDMI_FC_DATAUTO3_GCP_AUTO bit and use it here.
+I see.
 
-> +		val &= ~0x4;
-> +	else
-> +		val |= 0x4;
-> +	hdmi_writeb(hdmi, val, HDMI_FC_DATAUTO3);
+> This means that pci_set_power_state() is the only place needing to
+> restore the BARs when going into D0 from D3hot or deeper and it is
+> better to move BARs restoration directly into it.  I'll update the
+> series accordingly and resend.
 
-Please also add a comment explaining we clear GCP because we only
-transmit CD and do not handle AVMUTE, PP nor Default_Phase (yet).
+Okay sounds good.
 
-> +
->   	hdmi_modb(hdmi, HDMI_VP_STUFF_PR_STUFFING_STUFFING_MODE,
->   		  HDMI_VP_STUFF_PR_STUFFING_MASK, HDMI_VP_STUFF);
->   
+> I also think that the mandatory delay is not needed at all when
+> pci_raw_set_power_state() is called for transitions D3cold -> D0,
+> because in that case either the device has been powered up via
+> platform_pci_set_power_state(), or via the bridge resume which takes
+> the delay into account.
 
-Thanks,
-Neil
+I agree.

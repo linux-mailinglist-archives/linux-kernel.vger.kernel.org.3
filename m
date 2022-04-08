@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36694F8C5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E974F8C8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbiDHBPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S233349AbiDHBRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbiDHBPE (ORCPT
+        with ESMTP id S230169AbiDHBRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:15:04 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9012C9DD
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:13:03 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id c24-20020a9d6c98000000b005e6b7c0a8a8so1648877otr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:13:03 -0700 (PDT)
+        Thu, 7 Apr 2022 21:17:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A3927147;
+        Thu,  7 Apr 2022 18:15:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8162795pjk.4;
+        Thu, 07 Apr 2022 18:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g1Kle3EQr1/CPSHsj2wGFWYkLo1imKPjNuOAYNOExHs=;
-        b=UFGH/oIFlHTTJQozUrkXJKx7CPyl9/4A2J2k+KuS6wljCHDWMr4GNoPjm9TMSc2d+5
-         Wz/iTpOA2hnbvguleQgxhxycamUICCHpdxLfu6T7YsGjFTkLMubpnQTU5bCO7T8pQzF6
-         BbVdLtSzpsq/8++edOSOco+p4nbZB38+mAuO1XOpQ+Ckcc9gk21WhK5nJhwibKNmL5df
-         KSBUFHBSq7ux69Lo/oJUm+4P38ZYDi2vIEOGA8Ccd1ay+j85CQC44LpXKDCGoUp8y/0Y
-         t1tN2qeZHIODOJUix+Eudc8Gbf9xd+vkhu2/98xEvqaOUAu0MK217JEXVXNVgF9sxnu/
-         lvHg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
+        b=SiN06LPFjNlk0fqA/8xabk/HLDehtoLlkMWHLQZ4sGuFgvMH8Pr8eGl6cS0w3RVL1q
+         7LHZBJ5UcWX0gil6p3MzSW31TLOepSndhqSGv654TqM8YEsQeLX9nvjfJogAepQ9DSlc
+         +XtxjqzcZ6HeqYifVin5lBPuSXMa29v4OO1wsqIuBQjs8jFbdHUE69pAXK5w9gubegFL
+         2Q+Kjcm9UrvbGbn0tiffkVUH3sO3TqukQ17SKwjMMNWIpb6N79CXMoTzZm0E0375tF4d
+         FFHLKML5X+2xhyB0hS9KcthjKBzxMfc2FKSTKOTWRgagz6P+QzqPjD4AX++VqXQ/jwAZ
+         L58w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g1Kle3EQr1/CPSHsj2wGFWYkLo1imKPjNuOAYNOExHs=;
-        b=zyu+ZGdamQqE9eDHB6xNeXNddZlLpmCwt1PVgZ9QADzx2XsADhsZkJMdpSEvuLTit5
-         FGfj3my9yhi9k0pk8nI0WCQnNoUKjtd6OyeLy4cHl9ge28+1B+xEhsipzNfJsOLJrHQe
-         vSXF6ajCUEhhb9w4oG+tr/dC12e9A/GOXXG/wM4brisSSLO7APmItvQHggkFWhKcRgWZ
-         6ewWgzqS+u5rA22Un5ib8xCcXm6kBTxhAQ/TFIp0Ki6PobHX3E8apA+b4/w4lcWnM+Em
-         S/R3B1K48ZSC3RszBm6MldTdWa74vxi91470tZekfOvcOwVWK7bhj1Hlz2yexcc/hKJ3
-         gcLw==
-X-Gm-Message-State: AOAM532EIkpMSTN4S2eAhzvHrv6QXGtGEt/Fl8sQlC6CNbAITht05lgE
-        Qbbn8/yly+snQay7iPNoLsXkmhgs9MgDDg==
-X-Google-Smtp-Source: ABdhPJxA8Gat5vXXgIRovYAAo79QdQpB+QXY0jkhdAEwFcyrXxNjPRcfY0o6rJkCIwNpV0iPlknIVA==
-X-Received: by 2002:a05:6830:11d6:b0:5b2:5a37:3cc7 with SMTP id v22-20020a05683011d600b005b25a373cc7mr5731636otq.381.1649380382380;
-        Thu, 07 Apr 2022 18:13:02 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm9085214oae.33.2022.04.07.18.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 18:13:02 -0700 (PDT)
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 2/2] staging: rtl8192u: use min_t/max_t macros instead of if else
-Date:   Thu,  7 Apr 2022 20:12:51 -0500
-Message-Id: <65518c0b366bf199903c6c530774c61ba6087165.1649378587.git.remckee0@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1649378587.git.remckee0@gmail.com>
-References: <cover.1649378587.git.remckee0@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
+        b=2Gypk81W6lPN3zgsQOMzFpPkz3Mn9MrWPfsWrdDLMlrtlUud1CdeLMQjS7QWYOCrmr
+         OCmrccyeAFKDXd2WAehTS9i383rQxdkfzEHIn5eXkk8hha2W4vn+KrPmLsRLlb2/89fv
+         Ee8uUsqMregZ8XmVNL7/BcDDEiU5JZMpEYN6d9NKttDFYITz5gsgI9Fe27nT1QluCuH7
+         3iGFJpwDG02BU2RUJwbWBxEn40juza+H1zJ88lkcq5V1DVCcuhn11b7R9UAbvyDmp917
+         VxVO2hO8bSZ1JutO45kZLQURZzuCvSrIhrc+nqhG47kCL0RMiPBsndUZMLNt2tDyv6E/
+         TQGg==
+X-Gm-Message-State: AOAM532N4pagUYdI9zi4JsZDxKjPkAxZedc46fY0iFyXP6RH/jK1lN3D
+        yw3BCXeZGKsSI+ql3wbArx7SbQt7PleecZkX
+X-Google-Smtp-Source: ABdhPJyCX3ztY5bfjruQrRVJxAW56nV269fJn/l3lQt8OkK1msBDS+Hq505xUIIgXdyRwAR2RGdKIA==
+X-Received: by 2002:a17:90b:224f:b0:1c9:949e:2202 with SMTP id hk15-20020a17090b224f00b001c9949e2202mr18808604pjb.56.1649380505412;
+        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
+Received: from [192.168.1.5] ([110.78.142.75])
+        by smtp.googlemail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm10270319pjl.39.2022.04.07.18.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
+Message-ID: <3b8a8497-df41-8bf4-6816-f4419cb7f950@gmail.com>
+Date:   Fri, 8 Apr 2022 08:15:00 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 2/2] net: usb: cdc_ether: Add Fibocom MA510 modem
+Content-Language: en-US
+To:     sven@svenschwermer.de, linux-usb@vger.kernel.org
+Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        linux-kernel@vger.kernel.org, oliver@neukum.org
+References: <20220407074745.74195-1-sven@svenschwermer.de>
+ <20220407074745.74195-2-sven@svenschwermer.de>
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20220407074745.74195-2-sven@svenschwermer.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +75,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace if else statement with min_t or max_t macros to increase
-readability and conform to Linux kernel coding style. The _t versions
-of the macros must be used to avoid applying typeof to the bit fields
-pPeerHTCap->MaxRxAMPDUFactor, and pPeerHTCap->MPDUDensity.
+On 4/7/2022 14:47, sven@svenschwermer.de wrote:
+> From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+> 
+> +GTUSBMODE: 31
+> --------------
+> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#= 99 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=0106 Rev= 0.00
+> S:  Manufacturer=Fibocom MA510 Modem
+> S:  Product=Fibocom MA510 Modem
+> S:  SerialNumber=55e2695b
+> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+> A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+> E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+> E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> +GTUSBMODE: 32
+> --------------
+> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=100 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=010a Rev= 0.00
+> S:  Manufacturer=Fibocom MA510 Modem
+> S:  Product=Fibocom MA510 Modem
+> S:  SerialNumber=55e2695b
+> C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+> A:  FirstIf#= 2 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> I:  If#= 3 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> I:* If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+> ---
+>   drivers/net/usb/cdc_ether.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+> index b09b5567aea2..c9367587698e 100644
+> --- a/drivers/net/usb/cdc_ether.c
+> +++ b/drivers/net/usb/cdc_ether.c
+> @@ -1005,6 +1005,18 @@ static const struct usb_device_id	products[] = {
+>   				      USB_CDC_SUBCLASS_ETHERNET,
+>   				      USB_CDC_PROTO_NONE),
+>   	.driver_info = (unsigned long)&wwan_info,
+> +}, {
+> +	/* Fibocom MA510 (+GTUSBMODE=31) */
+> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0106, USB_CLASS_COMM,
+> +				      USB_CDC_SUBCLASS_ETHERNET,
+> +				      USB_CDC_PROTO_NONE),
+> +	.driver_info = (unsigned long)&wwan_info,
+> +}, {
+> +	/* Fibocom MA510 (+GTUSBMODE=32) */
+> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010a, USB_CLASS_COMM,
+> +				      USB_CDC_SUBCLASS_ETHERNET,
+> +				      USB_CDC_PROTO_NONE),
+> +	.driver_info = (unsigned long)&wwan_info,
+>   }, {
+>   	USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET,
+>   			USB_CDC_PROTO_NONE),
 
-Using u32 assures the reader that the value with not be truncated
-without having to look up the types of the variables involved.
-Found with minmax coccinelle script.
+Why do you add this modem to the whitelist?
+The net interface has the correct cdc_ether attributes so the cdc_ether 
+driver should bind automagically without any need for the modem to be in 
+the whitelist.
 
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-index dba3f2db9f48..358c35d9589c 100644
---- a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-@@ -940,10 +940,8 @@ void HTOnAssocRsp(struct ieee80211_device *ieee)
- 			else
- 				pHTInfo->CurrentAMPDUFactor = HT_AGG_SIZE_64K;
- 		} else {
--			if (pPeerHTCap->MaxRxAMPDUFactor < HT_AGG_SIZE_32K)
--				pHTInfo->CurrentAMPDUFactor = pPeerHTCap->MaxRxAMPDUFactor;
--			else
--				pHTInfo->CurrentAMPDUFactor = HT_AGG_SIZE_32K;
-+			pHTInfo->CurrentAMPDUFactor = min_t(u32, pPeerHTCap->MaxRxAMPDUFactor,
-+							    HT_AGG_SIZE_32K);
- 		}
- 	}
- 
-@@ -951,10 +949,9 @@ void HTOnAssocRsp(struct ieee80211_device *ieee)
- 	 * <2> Set AMPDU Minimum MPDU Start Spacing
- 	 * 802.11n 3.0 section 9.7d.3
- 	 */
--	if (pHTInfo->MPDU_Density > pPeerHTCap->MPDUDensity)
--		pHTInfo->CurrentMPDUDensity = pHTInfo->MPDU_Density;
--	else
--		pHTInfo->CurrentMPDUDensity = pPeerHTCap->MPDUDensity;
-+	pHTInfo->CurrentMPDUDensity = max_t(u32, pHTInfo->MPDU_Density,
-+					    pPeerHTCap->MPDUDensity);
-+
- 	if (ieee->pairwise_key_type != KEY_TYPE_NA)
- 		pHTInfo->CurrentMPDUDensity	= 7; // 8us
- 	// Force TX AMSDU
--- 
-2.32.0
-
+thanks
+Lars

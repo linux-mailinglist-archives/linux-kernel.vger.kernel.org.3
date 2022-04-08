@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE2C4F8CC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA064F8CCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbiDHBWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
+        id S233393AbiDHBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbiDHBWG (ORCPT
+        with ESMTP id S233384AbiDHBZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:22:06 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590CD14F137
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:20:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so14343046ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:20:04 -0700 (PDT)
+        Thu, 7 Apr 2022 21:25:19 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29BB1560B4;
+        Thu,  7 Apr 2022 18:23:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g20so8396185edw.6;
+        Thu, 07 Apr 2022 18:23:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CpBl2AGd626FECD+GIqEV6PBhceN/t8eGFzx+f7coUk=;
-        b=3cPiceV6hD/ZvOf4gFgz+/Zbbb1qxTfbkNm4XV6V5+xHRZD/OwWXS0rT8rsxbHD5AA
-         IXmkMGgR23uopQ7vhW5gxFcqnpbiYaxhY71cDh75hcRDbB3kJ98qpB6i+HBgSHyaFoAw
-         poQe6uB/Nk6A7T1dk7kws1/GpzkcuhWzby3KtcTalLTu92PLzXSIfw+wihYnHcDRomq3
-         XiVAzl5h9QxfyyG9nyGkjDICoKwRhiOjGRjpGaQPn70KJgqmpq99q4226V6jiemKN9kt
-         Tc+H08w49VdTo/MxPl0R+CwjOzZO2Y/ATnGJGomCoLfbdpSKA6lue/maVB9gdrRAnUCm
-         U7cg==
+         :cc;
+        bh=q6GIjfl38828TDx/Er/l1ydNAbsDZX6DyamisKv9xlI=;
+        b=O8z6RVsDroCjPfHv/rRZ7ILks4hW8GgdUuvtwRzcLa7aaepbm3bE6m+mpb2Tik4RCh
+         b/0ka341wHE+Mpxj72S95ZIxb7gnMPbKDSVercfbkn6nKVJ3QnSzXuiZ45s4C9/AraOA
+         YFrDlA0bUoxTRDAVDZ38CkhO7TD8ROjmnFYTVT5y7ur8q+49njhBxooxb29brEqcVjrH
+         zM45MKYK+MTJ41h0BznFCDIpl74lZ4qqVaB3iSLoDr6CT18gNXWMTA+f9WzZhRaiVXv2
+         0JdvTHfmtLcxifq6sBUpXFdo97AkszWt2pTn/8ITXzulkiogiZLj8Rq+PLZg/6uy+vDG
+         ZFMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CpBl2AGd626FECD+GIqEV6PBhceN/t8eGFzx+f7coUk=;
-        b=WjHW7PNUq1mYOTZQNlINa6XG7Yp5I2/OntEwbfN4fzu0fDcPA85D6IgFWlZP9HXj2U
-         GbJrS2kx8dzhXkBwX1CT/Pex7lWIujlr8dAKy9vVjC5ctFLvI0rOqQZUmXvqcECiYlZO
-         lOG4j0AB/t5BGdtLZZcvyWZsV2M58/VwqmuXCPSL2eo9lPInGXyTGQPAw6sb1vPm2bGV
-         PkNJSOZq5OrG56hcXyXNgB8GL+FUSkGCdy+aLlU4FE75GqZs3f99KeEaAGQRiYDg6/+P
-         /NLzSLfNUVtA7zcIOpN6bE/Na3/I0JkmAw5fvtGLqx/wbLVHurfgC2JJkBZm9EvfSNRv
-         dipQ==
-X-Gm-Message-State: AOAM533jK4a+NKWsz2maUkJ/09tED47jLdLq1g0vvzqZnCwI9GeCD1dL
-        R7hIpVgXXvRskIdLVd9epHEOGavx4dedLLumXtAJ
-X-Google-Smtp-Source: ABdhPJwNkET74mR679RYTNFG2h05EKTSAGXbm9p/d1NNz5+zhishf2TSABELSlkCZxkK0XW+Qj9Ih8VcPHPiYGE0eec=
-X-Received: by 2002:a17:907:9803:b0:6db:ab21:738e with SMTP id
- ji3-20020a170907980300b006dbab21738emr15515948ejc.112.1649380802771; Thu, 07
- Apr 2022 18:20:02 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=q6GIjfl38828TDx/Er/l1ydNAbsDZX6DyamisKv9xlI=;
+        b=yjI1JglrfmrXrTl5aeNIxS62oEjLK6ZaZbg4j1Ydyi+iGuqseY8nTJpjGdIG/9OFR7
+         BxaLB4iIri4sR+zknApqzSfnlLIIS/gy4OLUxr+4mEP4+mUobsX+KjkDSzJkRB86QSuE
+         GZmS0aOzMi3pdXxlUupkvK6zfdaOCWnEzM42MGWnDJQwqVvaeESKws4XQ3jc1iXaKMbp
+         QNqBXGkuG95QImCRpVD7UggbkNIlFfLvrjC8BdTKcbdN65HaT2khF2Yabjjmqgp6jKxu
+         pwUge+RoM2tJZxF1pz2/zQniGCgWRi1iAW3GrTGM2L2faJuzK4La/qj2tv1rVEIMH098
+         eE5A==
+X-Gm-Message-State: AOAM533jd9R4mAII6p0yyP+e1jnXgtMcKs+hNYMK0KbFGsD614FqDacf
+        aWfVw6Wr6Uol13ZEO9FrY1Y6tqQMrSylwodHOSw=
+X-Google-Smtp-Source: ABdhPJxz/9ig7zQdygj91MyAfQi9EI8Vsso7YJ4STSYEAI15UX+5nGgqlSfnECcaXfW9w6++A479MAK1M3k/ugQkZt8=
+X-Received: by 2002:a05:6402:190d:b0:41b:a70d:1367 with SMTP id
+ e13-20020a056402190d00b0041ba70d1367mr16907289edz.155.1649380996125; Thu, 07
+ Apr 2022 18:23:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-7-mic@digikod.net>
-In-Reply-To: <20220329125117.1393824-7-mic@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 7 Apr 2022 21:19:51 -0400
-Message-ID: <CAHC9VhQg0R5ddC_aLSAFyyf9OPs6wSyj3tqh1hwoN=RPpoDFuQ@mail.gmail.com>
-Subject: Re: [PATCH v2 06/12] LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+References: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
+In-Reply-To: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 7 Apr 2022 22:23:03 -0300
+Message-ID: <CAOMZO5CbTUTkoFCKwrpT5h7CfHxbLtci1qAtMwkAi_LD_5yeyQ@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: imx-sdma: fix regression with uart scripts
+To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Robin Gong <yibin.gong@nxp.com>, dmaengine@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->
-> In order to be able to identify a file exchange with renameat2(2) and
-> RENAME_EXCHANGE, which will be useful for Landlock [1], propagate the
-> rename flags to LSMs.  This may also improve performance because of the
-> switch from two set of LSM hook calls to only one, and because LSMs
-> using this hook may optimize the double check (e.g. only one lock,
-> reduce the number of path walks).
->
-> AppArmor, Landlock and Tomoyo are updated to leverage this change.  This
-> should not change the current behavior (same check order), except
-> (different level of) speed boosts.
->
-> [1] https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
->
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Acked-by: John Johansen <john.johansen@canonical.com>
-> Acked-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Link: https://lore.kernel.org/r/20220329125117.1393824-7-mic@digikod.net
-> ---
->
-> Changes since v1:
-> * Import patch from
->   https://lore.kernel.org/r/20220222175332.384545-1-mic@digikod.net
-> * Add Acked-by: Tetsuo Handa.
-> * Add Acked-by: John Johansen.
-> ---
->  include/linux/lsm_hook_defs.h |  2 +-
->  include/linux/lsm_hooks.h     |  1 +
->  security/apparmor/lsm.c       | 30 +++++++++++++++++++++++++-----
->  security/landlock/fs.c        | 12 ++++++++++--
->  security/security.c           |  9 +--------
->  security/tomoyo/tomoyo.c      | 11 ++++++++++-
->  6 files changed, 48 insertions(+), 17 deletions(-)
+Hi Kevin,
 
-Seems like a nice improvement to me, and while I'm not an AppArmor,
-Tomoyo, or Landlock expert the changes looked pretty straightforward.
+On Wed, Apr 6, 2022 at 7:48 PM Kevin Groeneveld
+<kgroeneveld@lenbrook.com> wrote:
+>
+> Commit b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script") broke
+> uart rx on imx5 when using sdma firmware from older Freescale 2.6.35
+> kernel. In this case reading addr->uartXX_2_mcu_addr was going out of
+> bounds of the firmware memory and corrupting the uart script addresses.
+>
+> Simply adding a bounds check before accessing addr->uartXX_2_mcu_addr
+> does not work as the uartXX_2_mcu_addr members are now beyond the size
+> of the older firmware and the uart addresses would never be populated
+> in that case. There are other ways to fix this but overall the logic
+> seems clearer to me to revert the uartXX_2_mcu_ram_addr structure
+> entries back to uartXX_2_mcu_addr, change the newer entries to
+> uartXX_2_mcu_rom_addr and update the logic accordingly.
+>
+> Fixes: b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script")
+> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+Thanks for the fix:
 
---=20
-paul-moore.com
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

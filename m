@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C20F4F9099
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B234F909D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiDHIUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S231497AbiDHIVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiDHIUn (ORCPT
+        with ESMTP id S231534AbiDHIVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:20:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47037C7B3
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:18:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ncjp5-0001Q8-SX; Fri, 08 Apr 2022 10:18:27 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ncjp2-0002vy-IV; Fri, 08 Apr 2022 10:18:24 +0200
-Date:   Fri, 8 Apr 2022 10:18:24 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "huangguangbin (A)" <huangguangbin2@huawei.com>,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
-        chenhao288@hisilicon.com
-Subject: Re: [PATCH] net: phy: genphy_loopback: fix loopback failed when
- speed is unknown
-Message-ID: <20220408081824.GF25348@pengutronix.de>
-References: <20220331114819.14929-1-huangguangbin2@huawei.com>
- <YkWdTpCsO8JhiSaT@lunn.ch>
- <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
- <YkW6J9rM6O/cb/lv@lunn.ch>
- <20220401064006.GB4449@pengutronix.de>
- <YkbsraBQ5ynYG9wz@lunn.ch>
- <d42ae21a-6136-5340-6851-e3108759937a@huawei.com>
- <Yk7475EJ622D1Ty/@lunn.ch>
+        Fri, 8 Apr 2022 04:21:07 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8597E09C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:19:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3CE601F46C62
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649405942;
+        bh=n3PZ5EP+atv7EGkUpF8rFTDvYYK90dAfeWT4ALjfgCk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AGaSlQ5GwsYXwaRRFXeblbG7SziGG7emykikpIAfxEU0y7PwcVwq+u6+VC78eN7ac
+         dvw4nM8YN/wlDXzinoeJexXRkswap/l5Ls4ByFmjq/HeK24G2a+ei3E/QPHNlU+kb0
+         FACQyoSJTpUN6/Qwc7zjRsdxlPDWzX/WDlEMy/6m4XewBkGSzAmTCCLqrY3gX6T3hj
+         I96FsuASNPhaQ76uG7hfT1gtyOnHu5KrRh3XnPIl3aQoVUBLlIbyAfSs8KB68bB0ZK
+         EkXH2Wm3jvEvoVccIPRgGHjU+2jhsf2pcMh5mSC8js3K5Of3XDs8yFPmkJJr5iHzGr
+         Z0TDgO0kfr0gA==
+Message-ID: <ba1d3b7b-9bcf-9c45-c487-91da767b83f5@collabora.com>
+Date:   Fri, 8 Apr 2022 10:18:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yk7475EJ622D1Ty/@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:16:38 up 8 days, 20:46, 67 users,  load average: 0.19, 0.26, 0.25
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] drm/mediatek: dpi: Use mt8183 output formats for
+ mt8192
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220408013950.674477-1-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220408013950.674477-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 04:45:03PM +0200, Andrew Lunn wrote:
-> > Hi Andrew,
-> > The PHY we test is RTL8211F, it supports 10 half. This problem actually is,
-> > our board has MAC connected with PHY, when loopback test, packet flow is
-> > MAC->PHY->MAC, it needs speed of MAC and PHY should be same when they work.
-> > 
-> > If PHY speed is unknown when PHY goes down, we will not set MAC speed in
-> > adjust_link interface. In this case, we hope that PHY speed should not be
-> > changed, as the old code of function genphy_loopback() before patch
-> > "net: phy: genphy_loopback: add link speed configuration".
-> > 
-> > If PHY has never link, MAC speed has never be set in adjust_link interface,
-> > yeah, in this case, MAC and PHY may has different speed, and they can not work.
-> > I think we can accept this situation.
-> > 
-> > I think it is general problem if there is MAC connected with PHY.
+Il 08/04/22 03:39, Nícolas F. R. A. Prado ha scritto:
+> The configuration for mt8192 was incorrectly using the output formats
+> from mt8173. Since the output formats for mt8192 are instead the same
+> ones as for mt8183, which require two bus samples per pixel, the
+> pixelclock and DDR edge setting were misconfigured. This made external
+> displays unable to show the image.
 > 
-> Thanks for investigating. Looks like we are getting close the real
-> solution. And it is a generic problem, that the MAC and PHY might not
-> be using the same configuration.
+> Fix the issue by correcting the output format for mt8192 to be the same
+> as for mt8183, fixing the usage of external displays for mt8192.
 > 
-> So it looks like if the link is down, or speed is UNKNOWN, we need to
-> set phydev->link true, speed 10, duplex half...
+> Fixes: be63f6e8601f ("drm/mediatek: dpi: Add output bus formats to driver data")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
 
-Hm, i was thinking, is it impossible to run loopback test on half duplex link.
-Do I missing something?
+Lovely!
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

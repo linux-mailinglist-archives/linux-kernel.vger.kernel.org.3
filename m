@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2623E4F9E35
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4194F9E33
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239504AbiDHUdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S236998AbiDHUcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiDHUdT (ORCPT
+        with ESMTP id S233397AbiDHUcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:33:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979EE2E684
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649449874; x=1680985874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i6C1YHz4CoMucEU8uKLQckY9GDlu3SWjU153tDHE6bs=;
-  b=PZC2nQr/F8xVDvREJsnWyrWXe8dJlZ18WpSnsE2KBA/5C/R97Zhsx5Sv
-   F28Fn5T4PrebIahbgKTvqn80l8uNUthzqelNe4mMMDwutCezAPztSZadO
-   x88qPTX0HuJL1ijV1PKOTTt6R5eT4nXHbEByW0yRgKyGiuSGCv/UGMdvU
-   9WFA8jTqyCNEQOOZe5FqOuwKs0ibg/P3yT4YW+30vLNo9z9wgwJ27Zrpf
-   AYH1bbi26VG3oPkOyysyJ4AjXG3PUWMYP0olNS0M+Taq4sIeweGKM70V2
-   +vxifLmewrlYMRvVnz8KssTggLRhUwmzWnMbMdJcXMCvvZLctcFzjuaV+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348117040"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="348117040"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:31:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="659615368"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 13:31:13 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncvGC-0000c9-Bb;
-        Fri, 08 Apr 2022 20:31:12 +0000
-Date:   Sat, 9 Apr 2022 04:30:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [l1k:smsc95xx_5.17 118/201]
- drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: error: initialized field
- overwritten
-Message-ID: <202204090433.lPMYm4fL-lkp@intel.com>
+        Fri, 8 Apr 2022 16:32:52 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD077340FC;
+        Fri,  8 Apr 2022 13:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649449846; x=1680985846;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ScFBd6ng2QrtUCP/bpsILqIYheFSc3NhuBQ1NA/h5ow=;
+  b=GvPsLeAGuIfiCl6wQza0yAL6jML5LLz9AkAlpD9mwEzhDFCFcBObO6oK
+   jh2eY/j7YHUIx9RNs4tgo2fEhThw1/7ISAqMI8Y7HjQlGfVZpMiK30l1D
+   VbJNQnFExdRVBFKQPn3XBiu/n5gxvrEiAHr4ZFIMLf+kPMzKIwBOSAk3f
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 08 Apr 2022 13:30:46 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:30:45 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Apr 2022 13:30:45 -0700
+Received: from [10.110.92.113] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Apr 2022
+ 13:30:44 -0700
+Message-ID: <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
+Date:   Fri, 8 Apr 2022 13:30:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
+ pending_timeout handle
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
+ <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,61 +73,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   240f56c27361c195cd502d95aba51c6b8e5b808c
-commit: 326d4dbb40e05881260d64be29e4cca96443ef1a [118/201] kbuild: Cross-compile binaries to build modules on target
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090433.lPMYm4fL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/l1k/linux/commit/326d4dbb40e05881260d64be29e4cca96443ef1a
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 326d4dbb40e05881260d64be29e4cca96443ef1a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/8/2022 5:27 AM, Dmitry Baryshkov wrote:
+> On 07/04/2022 00:28, Kuogee Hsieh wrote:
+>> dp_hpd_plug_handle() is responsible for setting up main link and send
+>> uevent to notify user space framework to start video stream. Similarly,
+>> dp_hdp_unplug_handle is responsible to send uevent to notify user space
+>> framework to stop video stream and then tear down main link.
+>> However there are rare cases, such as in the middle of system 
+>> suspending,
+>> that uevent could not be delivered to user space framework. Therefore
+>> some kind of recover mechanism armed by timer need to be in place in the
+>> case of user space framework does not respond to uevent.
+>
+> Hmm, how does userpsace 'respond' to the uevent? The driver should 
+> send hotplug notifications to userspace, but it must not expect any 
+> particular reaction. The userspace might be as simple, as fbdev 
+> emulation, but the driver still should function correctly.
 
-All errors (new ones prefixed by >>):
+yes, driver is function correctly by setting up main link. but it does 
+not know which resolution to display.
 
->> drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: error: initialized field overwritten [-Werror=override-init]
-     109 |         .fb_set_par = intel_fbdev_set_par,
-         |                       ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: note: (near initialization for 'intelfb_ops.fb_set_par')
-   drivers/gpu/drm/i915/display/intel_fbdev.c:113:27: error: initialized field overwritten [-Werror=override-init]
-     113 |         .fb_pan_display = intel_fbdev_pan_display,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_fbdev.c:113:27: note: (near initialization for 'intelfb_ops.fb_pan_display')
-   drivers/gpu/drm/i915/display/intel_fbdev.c:114:21: error: initialized field overwritten [-Werror=override-init]
-     114 |         .fb_blank = intel_fbdev_blank,
-         |                     ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_fbdev.c:114:21: note: (near initialization for 'intelfb_ops.fb_blank')
-   cc1: all warnings being treated as errors
+It send hotplug notification through uevent to framework after main link 
+is ready.
+
+Framework  is responsible to set up MDP timing engine to start video stream.
 
 
-vim +109 drivers/gpu/drm/i915/display/intel_fbdev.c
+However it does not know which
 
-d9a946b52350bb drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-05-28  105  
-b6ff753a0ca0d2 drivers/gpu/drm/i915/display/intel_fbdev.c Jani Nikula   2019-12-03  106  static const struct fb_ops intelfb_ops = {
-79e539453b34e3 drivers/gpu/drm/i915/intel_fb.c            Jesse Barnes  2008-11-07  107  	.owner = THIS_MODULE,
-a36384dd941b48 drivers/gpu/drm/i915/intel_fbdev.c         Stefan Christ 2016-11-14  108  	DRM_FB_HELPER_DEFAULT_OPS,
-e991077ec67e08 drivers/gpu/drm/i915/intel_fbdev.c         Daniel Vetter 2014-06-18 @109  	.fb_set_par = intel_fbdev_set_par,
-21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  110  	.fb_fillrect = drm_fb_helper_cfb_fillrect,
-21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  111  	.fb_copyarea = drm_fb_helper_cfb_copyarea,
-21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  112  	.fb_imageblit = drm_fb_helper_cfb_imageblit,
-d9a946b52350bb drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-05-28  113  	.fb_pan_display = intel_fbdev_pan_display,
-03e515f7f8949c drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-03-09  114  	.fb_blank = intel_fbdev_blank,
-785b93ef8c3097 drivers/gpu/drm/i915/intel_fb.c            Dave Airlie   2009-08-28  115  };
-785b93ef8c3097 drivers/gpu/drm/i915/intel_fb.c            Dave Airlie   2009-08-28  116  
 
-:::::: The code at line 109 was first introduced by commit
-:::::: e991077ec67e08bd345fcee4f810e59740359da5 drm/i915: Properly track domain of the fbcon fb
-
-:::::: TO: Daniel Vetter <daniel.vetter@ffwll.ch>
-:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+>> This patch have both dp_conenct_pending_timeout and
+>> dp_disconnect_pending_timeout are used to stop video stream and tear 
+>> down
+>> main link and eventually restore DP driver state to known default
+>> DISCONNECTED state in the case of timer fired due to framework does not
+>> respond to uevent so that DP driver can recover itself gracefully at 
+>> next
+>> dongle unplug followed by plugin event.
+>>
+>> Changes in v2:
+>> -- replace dp_display_usbpd_disconnect_cb with 
+>> dp_display_notify_disconnect
+>>
+>> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on 
+>> Snapdragon Chipsets")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 36 ++++++++++++++++++++-----
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  1 +
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 54 
+>> ++++++++++++++++++++++++++++---------
+>>   3 files changed, 72 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
+>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> index dcd0126..48990fb 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> @@ -1910,15 +1910,12 @@ int dp_ctrl_off_link_stream(struct dp_ctrl 
+>> *dp_ctrl)
+>>       return ret;
+>>   }
+>>   -int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
+>> +int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl)
+>>   {
+>>       struct dp_ctrl_private *ctrl;
+>>       struct dp_io *dp_io;
+>>       struct phy *phy;
+>> -    int ret = 0;
+>> -
+>> -    if (!dp_ctrl)
+>> -        return -EINVAL;
+>> +    int ret;
+>>         ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>>       dp_io = &ctrl->parser->io;
+>> @@ -1926,7 +1923,34 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
+>>         dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
+>>   -    dp_catalog_ctrl_reset(ctrl->catalog);
+>> +    ret = dp_power_clk_enable(ctrl->power, DP_CTRL_PM, false);
+>> +    if (ret) {
+>> +        DRM_ERROR("Failed to disable link clocks. ret=%d\n", ret);
+>> +    }
+>> +
+>> +    DRM_DEBUG_DP("Before, phy=%p init_count=%d power_on=%d\n",
+>> +        phy, phy->init_count, phy->power_count);
+>> +
+>> +    phy_power_off(phy);
+>> +
+>> +    DRM_DEBUG_DP("After, phy=%p init_count=%d power_on=%d\n",
+>> +        phy, phy->init_count, phy->power_count);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
+>> +{
+>> +    struct dp_ctrl_private *ctrl;
+>> +    struct dp_io *dp_io;
+>> +    struct phy *phy;
+>> +    int ret;
+>> +
+>> +    ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>> +    dp_io = &ctrl->parser->io;
+>> +    phy = dp_io->phy;
+>> +
+>> +    dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
+>>         ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, false);
+>>       if (ret)
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h 
+>> b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> index 2433edb..ffafe17 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> @@ -22,6 +22,7 @@ struct dp_ctrl {
+>>   int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+>>   int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
+>>   int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+>> +int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
+>>   int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+>>   void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
+>>   void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
+>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 178b774..a6200a5 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -451,11 +451,14 @@ static int dp_display_usbpd_configure_cb(struct 
+>> device *dev)
+>>     static int dp_display_usbpd_disconnect_cb(struct device *dev)
+>>   {
+>> +    return 0;
+>> +}
+>> +
+>> +static void dp_display_notify_disconnect(struct device *dev)
+>> +{
+>>       struct dp_display_private *dp = dev_get_dp_display_private(dev);
+>>         dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
+>> -
+>> -    return 0;
+>>   }
+>>     static void dp_display_handle_video_request(struct 
+>> dp_display_private *dp)
+>> @@ -593,10 +596,16 @@ static int dp_connect_pending_timeout(struct 
+>> dp_display_private *dp, u32 data)
+>>         mutex_lock(&dp->event_mutex);
+>>   +    /*
+>> +     * main link had been setup but video is not ready yet
+>> +     * only tear down main link
+>> +     */
+>>       state = dp->hpd_state;
+>>       if (state == ST_CONNECT_PENDING) {
+>> -        dp->hpd_state = ST_CONNECTED;
+>>           DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
+>> +        dp_ctrl_off_link(dp->ctrl);
+>> +        dp_display_host_phy_exit(dp);
+>> +        dp->hpd_state = ST_DISCONNECTED;
+>>       }
+>>         mutex_unlock(&dp->event_mutex);
+>> @@ -645,6 +654,7 @@ static int dp_hpd_unplug_handle(struct 
+>> dp_display_private *dp, u32 data)
+>>           if (dp->link->sink_count == 0) {
+>>               dp_display_host_phy_exit(dp);
+>>           }
+>> +        dp_display_notify_disconnect(&dp->pdev->dev);
+>>           mutex_unlock(&dp->event_mutex);
+>>           return 0;
+>>       }
+>> @@ -661,19 +671,22 @@ static int dp_hpd_unplug_handle(struct 
+>> dp_display_private *dp, u32 data)
+>>           return 0;
+>>       }
+>>   -    dp->hpd_state = ST_DISCONNECT_PENDING;
+>> -
+>>       /* disable HPD plug interrupts */
+>>       dp_catalog_hpd_config_intr(dp->catalog, 
+>> DP_DP_HPD_PLUG_INT_MASK, false);
+>>         /*
+>>        * We don't need separate work for disconnect as
+>>        * connect/attention interrupts are disabled
+>> -     */
+>> -    dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
+>> +    */
+>> +    dp_display_notify_disconnect(&dp->pdev->dev);
+>>   -    /* start sentinel checking in case of missing uevent */
+>> -    dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, 
+>> DP_TIMEOUT_5_SECOND);
+>> +    if (state == ST_DISPLAY_OFF) {
+>> +        dp->hpd_state = ST_DISCONNECTED;
+>> +    } else {
+>> +        /* start sentinel checking in case of missing uevent */
+>> +        dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, 
+>> DP_TIMEOUT_5_SECOND);
+>> +        dp->hpd_state = ST_DISCONNECT_PENDING;
+>> +    }
+>>         /* signal the disconnect event early to ensure proper 
+>> teardown */
+>>       dp_display_handle_plugged_change(&dp->dp_display, false);
+>> @@ -695,10 +708,16 @@ static int dp_disconnect_pending_timeout(struct 
+>> dp_display_private *dp, u32 data
+>>         mutex_lock(&dp->event_mutex);
+>>   +    /*
+>> +     * main link had been set up and video is ready
+>> +     * tear down main link, video stream and phy
+>> +     */
+>>       state =  dp->hpd_state;
+>>       if (state == ST_DISCONNECT_PENDING) {
+>> -        dp->hpd_state = ST_DISCONNECTED;
+>>           DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
+>> +        dp_ctrl_off(dp->ctrl);
+>> +        dp_display_host_phy_exit(dp);
+>> +        dp->hpd_state = ST_DISCONNECTED;
+>>       }
+>>         mutex_unlock(&dp->event_mutex);
+>> @@ -1571,6 +1590,12 @@ int msm_dp_display_enable(struct msm_dp *dp, 
+>> struct drm_encoder *encoder)
+>>         mutex_lock(&dp_display->event_mutex);
+>>   +    state = dp_display->hpd_state;
+>> +    if (state == ST_DISCONNECTED) {
+>> +        mutex_unlock(&dp_display->event_mutex);
+>> +        return rc;
+>> +    }
+>> +
+>>       /* stop sentinel checking */
+>>       dp_del_event(dp_display, EV_CONNECT_PENDING_TIMEOUT);
+>>   @@ -1588,8 +1613,6 @@ int msm_dp_display_enable(struct msm_dp *dp, 
+>> struct drm_encoder *encoder)
+>>           return rc;
+>>       }
+>>   -    state =  dp_display->hpd_state;
+>> -
+>>       if (state == ST_DISPLAY_OFF)
+>>           dp_display_host_phy_init(dp_display);
+>>   @@ -1638,13 +1661,18 @@ int msm_dp_display_disable(struct msm_dp 
+>> *dp, struct drm_encoder *encoder)
+>>       /* stop sentinel checking */
+>>       dp_del_event(dp_display, EV_DISCONNECT_PENDING_TIMEOUT);
+>>   +    state = dp_display->hpd_state;
+>> +    if (state == ST_DISCONNECTED || state == ST_DISPLAY_OFF) {
+>> +        mutex_unlock(&dp_display->event_mutex);
+>> +        return rc;
+>> +    }
+>> +
+>>       dp_display_disable(dp_display, 0);
+>>         rc = dp_display_unprepare(dp);
+>>       if (rc)
+>>           DRM_ERROR("DP display unprepare failed, rc=%d\n", rc);
+>>   -    state =  dp_display->hpd_state;
+>>       if (state == ST_DISCONNECT_PENDING) {
+>>           /* completed disconnection */
+>>           dp_display->hpd_state = ST_DISCONNECTED;
+>
+>

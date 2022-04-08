@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0850B4F8C8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E34B4F8CC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbiDHBcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S233491AbiDHBcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiDHBcO (ORCPT
+        with ESMTP id S233434AbiDHBco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:32:14 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2452706C6;
-        Thu,  7 Apr 2022 18:30:11 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 8 Apr
- 2022 09:30:09 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 8 Apr
- 2022 09:30:08 +0800
-Message-ID: <2c29b3cd-ec23-f9c8-ae9f-d713ce3dd4f0@meizu.com>
-Date:   Fri, 8 Apr 2022 09:30:07 +0800
+        Thu, 7 Apr 2022 21:32:44 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFDA2BC545
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:30:41 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id D66171F46B10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649381440;
+        bh=8LfnufoqbKLUJpGpQ0uLp1AtFcRy4BBDR+hZk2BoruU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UVnRobzp+GkWSGygXxshTcnDIxRCggP8nBMb2/Hb9ojxq110fq/bxKpkSitWGctou
+         wOzAH3kTK/dYNHRBWDiQL5zpkAhT3Gy0FHMM6jR4+Rdlyh/bAsAfI64ctQWJp/JJpL
+         ti8bRdsEnpkIjs5Nwzp2kb93oUljPfLqPsCgLz3r45brTj/wppegYVmVvzsuqIXIHq
+         iPapPYOFlf8O8JSf0P3JR9kJWKTiqhO7N2jHMbBGd70WpOuH2OuV/d3zMv7hKj1HCC
+         +WLZY17aQYG5SpnsJW+iSFhI7ajfSfvOwRQXayldGtMEL/opVU//piwDEeyLZ1h8/G
+         1LWxl9bbRAezg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Pi-Hsun Shih <pihsun@chromium.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: anx7625: Use uint8 for lane-swing arrays
+Date:   Thu,  7 Apr 2022 21:30:34 -0400
+Message-Id: <20220408013034.673418-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] libbpf: potential NULL dereference in
- usdt_manager_attach_usdt()
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1649299098-2069-1-git-send-email-baihaowen@meizu.com>
- <CAEf4BzbByQ8OUuACyLEHewPsFjfUpH8Yr1x2+Db5xtGgnPXhrQ@mail.gmail.com>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <CAEf4BzbByQ8OUuACyLEHewPsFjfUpH8Yr1x2+Db5xtGgnPXhrQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 4/8/22 3:04 AM, Andrii Nakryiko 写道:
-> On Wed, Apr 6, 2022 at 7:38 PM Haowen Bai <baihaowen@meizu.com> wrote:
->> link could be null but still dereference bpf_link__destroy(&link->link)
->> and it will lead to a null pointer access.
->>
->> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
->> ---
->>  tools/lib/bpf/usdt.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
->> index 1bce2eab5e89..b02ebc4ba57c 100644
->> --- a/tools/lib/bpf/usdt.c
->> +++ b/tools/lib/bpf/usdt.c
->> @@ -996,7 +996,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
->>         link = calloc(1, sizeof(*link));
->>         if (!link) {
->>                 err = -ENOMEM;
->> -               goto err_out;
->> +               goto link_err;
-> this is not a complete fix because there are two more similar goto
-> err_out; above which you didn't fix. I think better fix is to just add
-> if (link) check before bpf_link__destroy(), which is what I did
-> locally when applying.
->
->
->>         }
->>
->>         link->usdt_man = man;
->> @@ -1072,7 +1072,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
->>
->>  err_out:
->>         bpf_link__destroy(&link->link);
->> -
->> +link_err:
->>         free(targets);
->>         hashmap__free(specs_hash);
->>         if (elf)
->> --
->> 2.7.4
->>
-Thank you for your kindness help. :)
+As defined in the anx7625 dt-binding, the analogix,lane0-swing and
+analogix,lane1-swing properties are uint8 arrays. Yet, the driver was
+reading the array as if it were of uint32 and masking to 8-bit before
+writing to the registers. This means that a devicetree written in
+accordance to the dt-binding would have its values incorrectly parsed.
 
+Fix the issue by reading the array as uint8 and storing them as uint8
+internally, so that we can also drop the masking when writing the
+registers.
+
+Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+ drivers/gpu/drm/bridge/analogix/anx7625.h | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 6516f9570b86..19a1a90ccff3 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -1486,12 +1486,12 @@ static void anx7625_dp_adjust_swing(struct anx7625_data *ctx)
+ 	for (i = 0; i < ctx->pdata.dp_lane0_swing_reg_cnt; i++)
+ 		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
+ 				  DP_TX_LANE0_SWING_REG0 + i,
+-				  ctx->pdata.lane0_reg_data[i] & 0xFF);
++				  ctx->pdata.lane0_reg_data[i]);
+ 
+ 	for (i = 0; i < ctx->pdata.dp_lane1_swing_reg_cnt; i++)
+ 		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
+ 				  DP_TX_LANE1_SWING_REG0 + i,
+-				  ctx->pdata.lane1_reg_data[i] & 0xFF);
++				  ctx->pdata.lane1_reg_data[i]);
+ }
+ 
+ static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
+@@ -1598,7 +1598,7 @@ static int anx7625_get_swing_setting(struct device *dev,
+ 			num_regs = DP_TX_SWING_REG_CNT;
+ 
+ 		pdata->dp_lane0_swing_reg_cnt = num_regs;
+-		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
++		of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
+ 					   pdata->lane0_reg_data, num_regs);
+ 	}
+ 
+@@ -1608,7 +1608,7 @@ static int anx7625_get_swing_setting(struct device *dev,
+ 			num_regs = DP_TX_SWING_REG_CNT;
+ 
+ 		pdata->dp_lane1_swing_reg_cnt = num_regs;
+-		of_property_read_u32_array(dev->of_node, "analogix,lane1-swing",
++		of_property_read_u8_array(dev->of_node, "analogix,lane1-swing",
+ 					   pdata->lane1_reg_data, num_regs);
+ 	}
+ 
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+index edbbfe410a56..e257a84db962 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.h
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+@@ -426,9 +426,9 @@ struct anx7625_platform_data {
+ 	int mipi_lanes;
+ 	int audio_en;
+ 	int dp_lane0_swing_reg_cnt;
+-	int lane0_reg_data[DP_TX_SWING_REG_CNT];
++	u8 lane0_reg_data[DP_TX_SWING_REG_CNT];
+ 	int dp_lane1_swing_reg_cnt;
+-	int lane1_reg_data[DP_TX_SWING_REG_CNT];
++	u8 lane1_reg_data[DP_TX_SWING_REG_CNT];
+ 	u32 low_power_mode;
+ 	struct device_node *mipi_host_node;
+ };
 -- 
-Haowen Bai
+2.35.1
 

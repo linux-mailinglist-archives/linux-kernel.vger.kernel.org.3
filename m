@@ -2,107 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1466F4F9946
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A27F4F994B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237487AbiDHPXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S237501AbiDHPYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiDHPXs (ORCPT
+        with ESMTP id S237494AbiDHPYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:23:48 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A9510709F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:21:44 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id w134so15646675ybe.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:21:44 -0700 (PDT)
+        Fri, 8 Apr 2022 11:24:30 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EBB108741
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:22:25 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c7so13503282wrd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:22:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rARwp4JxtbGtTKS2McwI+fd9OeZSQmaskuxhRCfKtcg=;
-        b=oNcOEGJeEM6+C/nhpF6J8+VP4jutRRk8+sSDAxBNhh8a6EXN9CvJqj/DoZ31GjFY8b
-         E8fWg/fMP9c0xnpkkmQUB2zybOURwhFqnChsD1OpmDKfQ7SEXjCCD7JWCvhjt5seHZQf
-         7cFNgk4FKt7LG4SRpC9N3KBp1QWWZPllT3eMNYTmAT34FJPntVkpo6+s/t5o25atpLMO
-         5CnZvFAhZgMSJm3aCbYnt0m5SVkiyE1Ro8HamvZuTyNuutmj9CS+MG5XpsuPMiENc6IL
-         Tsfr8/fDQPgVXDb6qJBO0pz9zA2XvkilOHhsocoXiVQ8PE57zd6KP19DRuVy+hebGyAm
-         025w==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sPygLbD1B7EQ520hW5RQW4mGJJ5DO7vPlVdwf9z6NxI=;
+        b=rnNZUmsDC25DLs3861xbnitTubGbaLpRp0g4SSNU90qrEH3Em2POjR8w4Wc+PNhH+N
+         x2k51skqLe1F+lNYA9yvKLgAqtBISBFL6XVsgUZcRPfauhPI80VDFulZpkt5bmLpVDYY
+         ZtcQhj39tTE2VqLciTtIybGXe+9YaHlgWcLqIkY0nOkMJZBBMOlSvxWId5Ha6vVxvmYz
+         7xnHdPudHX8+SFOLpTAwifky/xUbZjXnyx5436vJaaC0pZeTZxL3DQb4xvQz3KJUXv9q
+         L9x98EaoaCIDFhQ0BAtDJvGbbNLRFinrYxieLx/dCD5jaTsZlGT4ryA5e8iHSxWZ89Kc
+         mMPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rARwp4JxtbGtTKS2McwI+fd9OeZSQmaskuxhRCfKtcg=;
-        b=YvWF+Qt7VpLRTx7X87XzTm5hdNN5s84ZoHfsH1LuEZhfXdUnOkY0L2tfeYsIERi9Xw
-         /ZVvB0OxZFhntnN3tWsCAiZQ9wEWd0KumCqMK1spPeVt0NX3QHldqbahnuE4oKqgobbX
-         mMntnUQrApQxP4Hd5HOZWzIhc/9WcOgeOcNnt61p/fNeoI5xxISM4tOU4qdtSp6iO41I
-         ebcoqv0WygBmG99UM1B4nvUsKaHHLdRXu26oX9/DYtYRXr5WV7tg0/z8lRxdkM0JN5Mt
-         LBAtU5jyZp0orktPBVPaY2tx8deJGnz3jlQ01id+hBNvFDCnMniRr7Px3qD2gJupvAf8
-         o28g==
-X-Gm-Message-State: AOAM531rw+lnc3r03FHmTtVceYNcgLMic8Oai12vflk8SXJTn0cHSDTm
-        mNGjesVQKx9zZhdMmTOZNBBVJGeXRLxN954H2vDUDg==
-X-Google-Smtp-Source: ABdhPJx68hCF4vUhuIp51kdWz+tAGehjCiR66J/VDn3Ou3yAhliWQJiG4Tjsa0u6rXA88y+JQI2a0P77hcEoIlCDDk0=
-X-Received: by 2002:a25:e905:0:b0:641:cf9:9522 with SMTP id
- n5-20020a25e905000000b006410cf99522mr1688463ybd.132.1649431303689; Fri, 08
- Apr 2022 08:21:43 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sPygLbD1B7EQ520hW5RQW4mGJJ5DO7vPlVdwf9z6NxI=;
+        b=KlthSRaqEDO0OOsf2eV8ORzd08jwJM6Y8Lodjbs2prFtVUB00jHwmn7fIRQsI0sk9P
+         mtTgG8/rfsjWlAOY7Ftenl6VlK/+6CRzvx2tPBycfC8P+15mcMH3nO6oWbkwF+pkpG2W
+         LrOm/LYUJEnvcH1Fk2qQhExXKsq2QvRi4VOANX8TpJSA54pVQoxtjoJqk5qg/PrROjb/
+         bT3kvx2AnSyF9XmYCsvTOrXqM7yYn96QNFGtTeE+l5MpZvwHl9h7+2p7XE2P8RDZfAAB
+         fw50lH1bf+BkZWNhVBmKTAfLLDS/MVWb/RgJKzqXuO0svz14HS2UAUGSSOqR8h36eEUl
+         Pw+A==
+X-Gm-Message-State: AOAM5316136MqK21GwCBnJcYnHtOsShJxg9JstjmHAwNoZ8vvBcf0lz+
+        Rz/Ic50hUKj0edoED3L25WAL5w==
+X-Google-Smtp-Source: ABdhPJxGPNgXgsufUjB8Lp8JJWbca8cu17Hg8qjIbnxCrticuxKM/31Uln39Sz96BlX1M76FBt7ZIw==
+X-Received: by 2002:a5d:6dac:0:b0:204:12ba:45ef with SMTP id u12-20020a5d6dac000000b0020412ba45efmr14920479wrs.416.1649431343717;
+        Fri, 08 Apr 2022 08:22:23 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id r4-20020a1c2b04000000b0038a0e15ee13sm10714642wmr.8.2022.04.08.08.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 08:22:23 -0700 (PDT)
+Message-ID: <d1f873c6-150f-5f4d-7aa8-7bb15823d991@linaro.org>
+Date:   Fri, 8 Apr 2022 17:22:21 +0200
 MIME-Version: 1.0
-References: <20220401025905.49771-1-songmuchun@bytedance.com>
-In-Reply-To: <20220401025905.49771-1-songmuchun@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 8 Apr 2022 23:21:07 +0800
-Message-ID: <CAMZfGtV7Uf3Z1G-0WQNe_DukPz4t5HuxPRrNMVLJ1GVST9jQpA@mail.gmail.com>
-Subject: Re: [PATCH] NFSv4.2: Fix missing removal of SLAB_ACCOUNT on
- kmem_cache allocation
-To:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>, NeilBrown <neilb@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 05/13] pinctrl: samsung: Switch to use
+ for_each_gpiochip_node() helper
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+ <20220401103604.8705-6-andriy.shevchenko@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401103604.8705-6-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping
+On 01/04/2022 12:35, Andy Shevchenko wrote:
+> Switch the code to use for_each_gpiochip_node() helper.
+> 
 
-Could someone be willing to help merge this?
+(...)
 
-On Fri, Apr 1, 2022 at 10:59 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The commit 5c60e89e71f8 ("NFSv4.2: Fix up an invalid combination of memory
-> allocation flags") has stripped GFP_KERNEL_ACCOUNT down to GFP_KERNEL,
-> however, it forgot to remove SLAB_ACCOUNT from kmem_cache allocation.
-> It means that memory is still limited by kmemcg.  This patch also fix a
-> NULL pointer reference issue [1] reported by NeilBrown.
->
-> Link: https://lore.kernel.org/all/164870069595.25542.17292003658915487357@noble.neil.brown.name/ [1]
-> Fixes: 5c60e89e71f8 ("NFSv4.2: Fix up an invalid combination of memory allocation flags")
-> Fixes: 5abc1e37afa0 ("mm: list_lru: allocate list_lru_one only when needed")
-> Reported-by: NeilBrown <neilb@suse.de>
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
->  fs/nfs/nfs42xattr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-> index ad3405c64b9e..e7b34f7e0614 100644
-> --- a/fs/nfs/nfs42xattr.c
-> +++ b/fs/nfs/nfs42xattr.c
-> @@ -997,7 +997,7 @@ int __init nfs4_xattr_cache_init(void)
->
->         nfs4_xattr_cache_cachep = kmem_cache_create("nfs4_xattr_cache_cache",
->             sizeof(struct nfs4_xattr_cache), 0,
-> -           (SLAB_RECLAIM_ACCOUNT|SLAB_MEM_SPREAD|SLAB_ACCOUNT),
-> +           (SLAB_RECLAIM_ACCOUNT|SLAB_MEM_SPREAD),
->             nfs4_xattr_cache_init_once);
->         if (nfs4_xattr_cache_cachep == NULL)
->                 return -ENOMEM;
-> --
-> 2.11.0
->
+>  /*
+>   * Iterate over all driver pin banks to find one matching the name of node,
+>   * skipping optional "-gpio" node suffix. When found, assign node to the bank.
+>   */
+> -static void samsung_banks_of_node_get(struct device *dev,
+> -				      struct samsung_pinctrl_drv_data *d,
+> -				      struct device_node *node)
+> +static void samsung_banks_node_get(struct device *dev, struct samsung_pinctrl_drv_data *d)
+
+This is worth simplification anyway, so please split it to separate patch.
+
+>  {
+>  	const char *suffix = "-gpio-bank";
+>  	struct samsung_pin_bank *bank;
+> -	struct device_node *child;
+> +	struct fwnode_handle *child;
+>  	/* Pin bank names are up to 4 characters */
+>  	char node_name[20];
+>  	unsigned int i;
+> @@ -1038,17 +1037,17 @@ static void samsung_banks_of_node_get(struct device *dev,
+>  			continue;
+>  		}
+>  
+> -		for_each_child_of_node(node, child) {
+> -			if (!of_find_property(child, "gpio-controller", NULL))
+> -				continue;
+
+This does not look equivalent. There are nodes without this property.
+
+> -			if (of_node_name_eq(child, node_name))
+> +		for_each_gpiochip_node(dev, child) {
+> +			struct device_node *np = to_of_node(child);
+> +
+> +			if (of_node_name_eq(np, node_name))
+>  				break;
+> -			else if (of_node_name_eq(child, bank->name))
+> +			if (of_node_name_eq(np, bank->name))
+>  				break;
+>  		}
+
+This patch has to wait till someone provides you a tested-by. I might do
+it around next week.
+
+Best regards,
+Krzysztof

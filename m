@@ -2,172 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64AE4F98D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E34F98D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiDHPBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S233827AbiDHPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiDHPBf (ORCPT
+        with ESMTP id S237315AbiDHPBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:01:35 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E27F24CECE
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:59:31 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CPIlm006371;
-        Fri, 8 Apr 2022 14:59:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
- b=0VB4y/aovcWeOWiOZgF9Bm5mK5IiG0Gr9xPK+Oad/DUQihftO+SF+tNN6wBXQa+aQE+h
- V+AZc4DaAKqyfAk+TsJSaDMByRpFIYrnZD/Pba96cSggM0JtO+7RMrZbtYIhc1FsIcKP
- O2pOz3RSGBYJzYF/UtxMq0MuZvVpRwCHxFkjv/riHqvhOBBTHKdJkzwipfnzCCoGL5uT
- iortM6vc/mBVbWXIAyREI9k/rqrJpLdN02Z+ymsF9XAFCTZSeOFCwCLQaDTpiKeQ3CLq
- Ce6HBaRst33K4IXaR0cR1BjBj9BVKgfcr6OyaufZMijLnz+hRWncEoDoIuN+CJuraye4 bQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31qfnj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Apr 2022 14:59:13 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 238DUqIp030686;
-        Fri, 8 Apr 2022 14:59:11 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f9805byw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Apr 2022 14:59:11 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHOqRGKpl/nVIcJ3AsLIQ5zqjS0mgwAwV85dMwV3NHH2h58LvxDNTRcgFH3V/YAkIMLlzYvFtN0kjuKF9m29fWu0PiT5cIFkwJ4qs4bAhLn15RwAQATpn+XfSUmeS/kj8XDI6LIG07Gz1nQAS3fr62XNYQ/UQIY7LRTqGUm6ev2BjhdEX/zzdbfmxbHH0Ch+HOTGNkpCnThi5Sbqj3BntAsACZq5Py5hqr8pXeMvxZtEJDWdMkjvoscgY6V89uoGUKdraQvS5l6pioAzHvYx/ErsJIJFbxMqg1ymHi8GpLpKy6dekYyf7qu5O62xDoMaZ3MpYSSDBz42GPzU2Yjuzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
- b=XSNXxO2/yN5sLUo+k6hUsyEXJV4T4noWMSWh3Es8hEhEnp4xWhZVY39/5XlrVLtt2scWIDQg3fJ7WEnVBlHe/5tD+kMkdmUsX+IPh37if9B4e8doGVXpphxxVh3+oLoT2HAN1J/H7bPJPCyvgR+JJveUl9+TQDijjEMmkkZ/6TYesZTgRmCfuCtyUWpyLzaUh+5Rebi+DsZ1QUbzMjBdABNGbn+oGUqiPXvQBkbqyjLeiJLug+66fUzL2omeUc+dfMLyHrAFs/1VWBplTN2/QdJEE07KWPKc07QeGmv16uVk+NB/jUOJbUCIzVneGaEjS0GLpd2GePX0HAZwo+RhlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
- b=X7BtX3x9X9JwIPsdft3wWON3OGDYIg3ynKFTXm8fwEq1lmeVFkuT2EEzkPSLGD3jnqDm4BjsAtx23bRaBaAG9nMLzl6KU7qgG4qBTw9Dqc9n4IijU3j8KVlvw1IDO/FaWMeGvmnl3JKOinOLw89jdvrawbOTVCcS0BTprfG+G3k=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CY4PR1001MB2134.namprd10.prod.outlook.com
- (2603:10b6:910:49::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
- 2022 14:58:59 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 14:58:58 +0000
-Date:   Fri, 8 Apr 2022 17:58:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bryan Brattlof <hello@bryanbrattlof.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel@vivo.com
-Subject: Re: [PATCH v3] staging: rtl8723bs: tidy up error handling
-Message-ID: <20220408145836.GV3293@kadam>
-References: <20220408144442.17611-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408144442.17611-1-hanyihao@vivo.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0017.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::22)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Fri, 8 Apr 2022 11:01:51 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 02BA3261336
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:59:45 -0700 (PDT)
+Received: (qmail 258066 invoked by uid 1000); 8 Apr 2022 10:59:45 -0400
+Date:   Fri, 8 Apr 2022 10:59:45 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+References: <20220406092445.215288-1-mdevaev@gmail.com>
+ <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+ <20220406195234.4f63cb4a@reki>
+ <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
+ <20220406213634.104cae45@reki>
+ <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
+ <20220407204553.35cead72@reki>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d5f1071c-f47e-4d3f-5a32-08da19704f60
-X-MS-TrafficTypeDiagnostic: CY4PR1001MB2134:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1001MB21343FFE1171F012085287FB8EE99@CY4PR1001MB2134.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aQCNivOcG2mopvsdqBHMmpL4uWz28EyzSAguuNj4ZBOrWqiK9oPU4N4c/tKdklXgtbjdXShsmt8uauIm+YUXeO22yOxznEGEl+7K/R0v7obx+teR59qctf/VQAHftP3/hcg6tFwTVxYpmVYME0GLLlvb38Y3irRGeii5CrKFNmSWu+j+7brzd3Q4DmdhVKF25GlohsW7NiI1fW/uhckHyv1/hIknsGj0MT8yV+V0sxAX9YqlL7QQQH9mf38z1nEkwVbDlgqmLP6uTk1ZmcbPM8Desi7uQTOHN5GqOwb6cvo5ogP4zzTuZ+3XH9hsHCsMa6yA16gGuji0kN8bPZYW2F0+Pt3NFKCUVJi1O0On9963S4Jdb2S/3aHc4rOQg7A0gveygQr0UAnwweonauhzD9Qp+cOrGLzei+HYNN6NP/7D8ZegKPQniSV6Av3/FSbTmQtPZdFS09GaBjGgrOgJpSXcqTN94cr5cY7LIPBUP03CRHQb65YNiwJPXeH5JB6uYOVgK4Nz4/KTskxTT3PTMj+kwG4FA562W5DvY8oKiNRpNkPIhn4OAiZxbv1+x1M/TQCyjFOr61DYfVvYHtiyiQVTxVpoLNDGu9CAFD07A5fxSih9cVnXiI8e4aJh8fNkIQoJ1dSJJNgL067cfOVBCJiJ3YVXF8+um6CsMideUW0y46MldIyqDgRAcKn+FCTugY9DbIIDJ5fqwdlexs5y4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(7416002)(508600001)(6506007)(44832011)(26005)(33716001)(6666004)(6486002)(83380400001)(1076003)(33656002)(52116002)(186003)(54906003)(8936002)(4744005)(66946007)(66556008)(2906002)(66476007)(8676002)(9686003)(6512007)(4326008)(86362001)(38350700002)(38100700002)(5660300002)(316002)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VxSIuQZwA/+BJyJU6pEmKo46hrxrlE6p2l/yri3Czqms3ixRvnMD2pStmztD?=
- =?us-ascii?Q?ZRFsTV50be/7CtRxxSnaiz8EGQOzF7QEqoF/eWliQekvmi0SK9EmyEvHkYOR?=
- =?us-ascii?Q?tInq89j1HJRINugHfkwSf/lDUBjZpQx5+WsrEef99YiOYENc3xpx7r8Vy3iA?=
- =?us-ascii?Q?QtnXwdIKy/EHNr/3qAR/HQEbVEyGjgK0iWJ3XXLFjIz5AWjPtNZadZrv+cqt?=
- =?us-ascii?Q?l1JZNcH2NRQfLnKfKvbl9eAXYrUgSBW2mLRmoy2mKH8nDPOE3xzUTwjhVC6z?=
- =?us-ascii?Q?oqHO/Z1mBhumfKEIN0a3QqnZMT0zCS98/vaOi5w847wiW0OzgczA+MzPOJ5X?=
- =?us-ascii?Q?FUwvKv7vI9heKjNuME1DctwJe1XZwJYvFABYZ0Zgx4W6h9b+4ESZlxuE1q54?=
- =?us-ascii?Q?X7jk+bswBCNpUNsrE/DwplWF80Beq9GoTUlOCrwEhj9Gp3ghraH4RzL9iBla?=
- =?us-ascii?Q?eP/aLI0REeb30GoJT6dhPptu4hbt8t38gCAu1/hhkoljqdxTpQrb36W0FA31?=
- =?us-ascii?Q?t9OxPHtjYgPBAs1MztUE6G7arnhUfq+b7UaNP7oxAyg8jZEJysXYIr/FAB8Y?=
- =?us-ascii?Q?v+/17IhoNWG6+kvOVmmpRQ9XiwGxiZuQsSQqOAmwKbJ7qGjqm6qPJr0Hlpd4?=
- =?us-ascii?Q?ZHeb9wufv/jJFs7qVJ+5v0P71hwupOdBduZTlzMttsFI1ILJcdKTrQWm4AUu?=
- =?us-ascii?Q?gJNVhORlovo8qMbo17kARx7mwqdlMnpW7bz35malHemGe6QvvXusheW4WMQD?=
- =?us-ascii?Q?sXmvRe0EX8zEH2y0TptvIAuvTc3oYarmX0etETVJkheFgN9XEfRzAR44DmmR?=
- =?us-ascii?Q?zRfubJfQYuYlFhqtMapn/ux1JENrJQsGkSV97tf8/GvSSwAZjmRwVKF75we8?=
- =?us-ascii?Q?tjow/XtgwDXRpxb+zcIahJke8UVgmEktJ1GJkAnJqV8YiOOPuPVQSSiH90UX?=
- =?us-ascii?Q?QTgK/blXia/+RuqH4h54m6GahO9J4QPZPkuEPEmzGc2GtQI0hU75aXdwMMww?=
- =?us-ascii?Q?9FikWRMUyDhPdHEgsVsrL+470/aTMcl2eWmvGQ0nA1PdmYdPIoHE7iFkof9x?=
- =?us-ascii?Q?C59Hu63lsVYcf34FOupWY70UBWgLUDaI57kp7a+P/LgSgXrrGfScxNjQEOKX?=
- =?us-ascii?Q?aumFGfrRaVRsxFG5lCu4qTPHa3z7hFiEMXf4rouk6nFHNYHzQz3q0TGscNRv?=
- =?us-ascii?Q?TRK+yf4cxROIzfKQapPtqu8NEDZFzH0CeRzCb/xqlZXunC7Qsl7uAx52s4fa?=
- =?us-ascii?Q?VsQMRssIjCRFmJzJByrgWxWlVZi3yHOZeZdbKaydOVcfrPVTL0mbZIERMHRU?=
- =?us-ascii?Q?ul2rJncbTHvNssPNo2JhmiSWWqA5rPaBXkeKnm05PcNnFfnES/otkXGzh/XR?=
- =?us-ascii?Q?jGWf7ouuJPDR7rImABS4+T+LWmHY0uY+x3RrtZH1eKrTnzkzZnv7VmdM1buG?=
- =?us-ascii?Q?FhgyvxUZ+laFZlWsAGzjXRj1mIIFqeWWMANFBFgNVy5MqLWTOyM3PhpKlFSN?=
- =?us-ascii?Q?9s9VRPljaHzBxk7uJ0cLIdj+TRwG3Dqam8eGXg4iwhUO6ZlgslGpNla3TCbp?=
- =?us-ascii?Q?RyUyWZ44LSKnzH07WVocC65HcQuFL0xHLS3T09KIXH1/1E48lHDc14YtA1Dn?=
- =?us-ascii?Q?AylyOLNr3hp8r+bDggwVZfrw3tETL4cZU5XFCuHiCkhhAixG1/qzcTyg0aPg?=
- =?us-ascii?Q?GoFew4RGH7mwnzqIMYY57eZ4gyCTwYJJfqNYizWnL76ljYiflnv9ip9VLKTL?=
- =?us-ascii?Q?Uq6Vk8RzIMgC0hY5gMx1m+90eskK3Hs=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5f1071c-f47e-4d3f-5a32-08da19704f60
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 14:58:58.7748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FmgDDCbUHEIIl/trq9KmLIYhLRvLTW4BpnRGGIoZSYqO9ttCtguRbWQgCcFigokkCAUVLosc8ezHpqPYDCD+iWg0wqWqZKp/lBiq/QkAyek=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2134
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
- definitions=2022-04-08_04:2022-04-08,2022-04-08 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204080058
-X-Proofpoint-GUID: U_5GUDpeei0Qv1ft3tzo2kt2m3XKCVl4
-X-Proofpoint-ORIG-GUID: U_5GUDpeei0Qv1ft3tzo2kt2m3XKCVl4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220407204553.35cead72@reki>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 07:44:40AM -0700, Yihao Han wrote:
-> The check for if rtw_skb_alloc() fails is done twice and is written
-> in a confusing way.  Move the "if (!recvbuf->pskb)" right after
-> the allocation.  The "if (recvbuf->pskb)" check can now be deleted
-> and the code pulled in one tab.
+On Thu, Apr 07, 2022 at 08:47:13PM +0300, Maxim Devaev wrote:
+> В Thu, 7 Apr 2022 12:06:01 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
 > 
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
-> v2: more extensive cleanup
-> v3: edit commit message
+> > On Wed, Apr 06, 2022 at 09:36:34PM +0300, Maxim Devaev wrote:
+> > > В Wed, 6 Apr 2022 13:51:40 -0400
+> > > Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >   
+> > > > On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote:  
+> > > > > > It's not clear to me how breaking I/O operations allows you to do a 
+> > > > > > "force eject".  It seems that what you would need is something like 
+> > > > > > fsg_store_file() that omits the curlun->prevent_medium_removal check.
+> > > > > > Interrupting a lengthy I/O operation doesn't really have anything to do 
+> > > > > > with this.    
+> > > > > 
+> > > > > Perhaps I chose the wrong path, it's just how my userspace code works now.
+> > > > > If the drive is connected to a Linux host, then in order to clear
+> > > > > the "file" and extract the image, I sent a SIGUSR1 signal to the "file-storage"
+> > > > > thread. This interrupted long IO operations, reset curlun->prevent_medium_removal
+> > > > > and I got the ability to extract.    
+> > > > 
+> > > > Oh, I see.  That's kind of an unintended side effect of not calling 
+> > > > raise_exception().
+> > > > 
+> > > > And while it does interrupt long I/O operations, it does so in 
+> > > > non-sanctioned way.  To the host it will appear as though the gadget's 
+> > > > firmware has crashed, since the gadget will stop sending or receiving 
+> > > > data.  Eventually the host will time out and reset the gadget.
+> > > > 
+> > > > Maybe that's the sort of thing you want, but I rather doubt it.  
+> > > 
+> > > It's hard to say how it actually should work in case of force removing.
+> > > At least the currect approach with SIGUSR1 is really working on thousands
+> > > systems and with Linux, Mac and Windows. I believe that the criterion
+> > > of the experiment is quite important here. I know of several other utilities
+> > > that use SIGUSR1 for similar purposes.  
+> > 
+> > This merely means that the current unintended behavior of userspace USR1 
+> > signals must not be changed.  But it doesn't mean you have to continue 
+> > to rely on that behavior; you can implement something better.
+> 
+> So I suggest break_io :) I haven't come up with anything better.
 
-Thanks!
+But breaking an I/O doesn't do all that you want.  That is, interrupting an 
+I/O request (causing an executing command to terminate early) doesn't in 
+itself change the prevent/allow status.  Those are two separate operations.  
+The fact that sending a USR1 signal does both is merely a coincidence.
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Furthermore, it's not clear just what you mean when you say KVM needs to 
+"turn it off immediately".  How soon is "immediately"?  Even a USR1 signal 
+doesn't work instantaneously.  You may find that a forced eject without an 
+I/O interruption works quickly enough.
 
-regards,
-dan carpenter
+> > > > > Will masking the curlun->prevent_medium_removal flag be enough?    
+> > > > 
+> > > > I think so.  But it will be blocked to some extent by long-running I/O 
+> > > > operations, because those operations acquire the filesem rw-semaphore 
+> > > > for reading.
+> > > > 
+> > > > More precisely, each individual command holds the rw-semaphore.  But the 
+> > > > semaphore is dropped between commands, and a long-running I/O operation 
+> > > > typically consists of many separate commands.  So the blocking may be 
+> > > > acceptable.  
+> > > 
+> > > It is very important for KVM-over-IP to be able to command "turn it off immediately".  
+> > 
+> > Why is this?  A lot of actual devices (DVD drives, for instance) don't 
+> > give you the ability to eject the media when the host has prevented it.  
+> > Why should f-mass-storage be different?
+> 
+> The DVD drive has the ability to physically eject the disc.
 
+You mean by sticking an unfolded paperclip into the manual-eject hole?
+
+>  It's not too good
+> for the drive itself, but it's just there. We can also urgently remove
+> the USB flash drive.
+
+Removing a USB flash drive is not a media-eject operation; it's a 
+disconnect operation.  (That is, it removes the entire device, not just the 
+media.)  By contrast, taking an SD card out from a USB card reader _is_ an 
+example of a media ejection.  But card readers do not claim to support the 
+prevent/allow mechanism.
+
+> At least there is one situation where the behavior of f_mass_storage differs
+> from the behavior of a real drive. What happens when you click on the physical
+> "eject" button?
+
+If the host has prevented ejection, nothing happens.  Otherwise the disc 
+gets ejected.
+
+> Yes, the OS can block this, but the problem is that we don't have
+> an "eject" here.
+
+What do you mean?  Writing an empty string to the sysfs "file" attribute 
+is the virtual analog of pressing the eject button.
+
+> If I connect the gadget to the Linux host and don't even mount
+> the image, Linux won't let me change the image in the "file", since the gadget
+> will be constantly busy with some IO.
+
+What I/O are you referring to?  Why would a Linux host want to do constant 
+I/O to an unmounted device?
+
+Besides, constant I/O shouldn't prevent you from ejecting or changing the 
+backing storage.  The eject or change can take place between I/O requests.
+
+> But I believe creating a virtual "eject" button is a separate task that
+> does not depend on "break_io".
+
+Do you mean "eject" or "forced eject"?  I agree that a virtual "forced 
+eject" is separate from "break_io", and it's probably a lot closer to what 
+you really want.
+
+> > > In this context, I would prefer "break_io" rather than "allow_force_remove".  
+> > 
+> > Okay.  But what about the 30-second host timeout I mentioned above?  
+> > Does this actually happen with your approach?  It seems like the kind of 
+> > thing you don't want in a "turn it off immediately" situation.  (I 
+> > haven't tried doing this myself -- maybe I should.)
+> 
+> Neither I nor my users noticed any problems related to this. After extracting
+> the image using SIGUSR1/"file", I can just assign a new "file"image
+> and everything will work.
+
+I will try it for myself and see what happens.
+
+> > > > > > You should not call send_sig_info() directly; instead call 
+> > > > > > raise_exception().  It already does the work you need (including some 
+> > > > > > things you left out).    
+> > > > > 
+> > > > > raise_exception() assumes the setting of a new state, and I did not want to do this,
+> > > > > since the same does not happen when throwing a signal from userspace.    
+> > > > 
+> > > > Userspace isn't supposed to send the USR1 signal, only the INT, TERM, or 
+> > > > KILL signals.  USR1 is supposed to be reserved for the driver's internal 
+> > > > use.  Unfortunately, AFAIK there's no way to allow the driver to send a 
+> > > > signal to itself without also allowing the signal to be sent by 
+> > > > userspace.  :-(  
+> > > 
+> > > It's funny that you actually helped me solve my problem thanks to this undocumented
+> > > behavior. If it were not for the ability to send a signal, I would not be able to make
+> > > the necessary code, and my software would always be waiting for the completion of IO.
+> > > 
+> > > So here I am grateful to you - I didn't have to patch the kernel a few years ago,
+> > > and now I just want to turn it into a clear feature :)
+> > > 
+> > > Given the needs of the userspace code, maybe the suggested "break_io"
+> > > would be the best choice?  
+> > 
+> > It sounds like what you really want is a combination of both "interrupt 
+> > I/O" and "forced eject".
+> 
+> Indeed. But I didn't want to introduce some complex entities into the "file" attribute
+> or make magic prefixes for the image name or something. So I suggested
+> "echo > break_io && echo > file". This will not break the current behavior of the drive.
+
+Does the host continue to issue "constant" I/O after the broken command?  If 
+so, wouldn't that prevent your forced ejection from happening "immediately"?  
+If not, why not?
+
+> > > > And sending the signal _does_ set a new state, whether you intended to 
+> > > > or not.  Although in this case, the new state is always the same as the 
+> > > > old state, i.e., FSG_STATE_NORMAL.  
+> > > 
+> > > So I could call raise_exception(fsg->common, FSG_STATE_NORMAL) instead of sending
+> > > the signal from break_io handler. There will be a slight difference
+> > > in exception_req_tag and exception_arg, but it does not seem to cause any side effects.
+> > > Please correct me if I'm wrong.  
+> > 
+> > In fact, the best approach would be to introduce a new state (let's call 
+> > it FSG_STATE_FORCED_EJECT) with priority just above
+> > FSG_STATE_ABORT_BULK_OUT.  You would call raise_exception with 
+> > FSG_STATE_FORCED_EJECT, not FSG_STATE_NORMAL.  handle_exceptions() would 
+> > treat this state partially like ABORT_BULK_OUT in that it would avoid 
+> > resetting all the LUN data values and would call send_status_common() if 
+> > a command had been underway.  But in addition it would do the forced 
+> > eject.
+> 
+> Do you mean something like this?
+> 
+>     if (old_state != FSG_STATE_ABORT_BULK_OUT) {
+>         for (i = 0; i < ARRAY_SIZE(common->luns); ++i) {
+>             curlun = common->luns[i];
+>             if (!curlun)
+>                 continue;
+>             curlun->prevent_medium_removal = 0;
+>             if (old_state != FSG_STATE_FORCED_EJECT) {
+>                 curlun->sense_data = SS_NO_SENSE;
+>                 curlun->unit_attention_data = SS_NO_SENSE;
+>                 curlun->sense_data_info = 0;
+>                 curlun->info_valid = 0;
+>             }
+>         }
+>     }
+
+Sort of.
+
+> > Also, the sysfs routine should be careful to see whether the command 
+> > currently being executed is for the LUN being ejected.  I guess you 
+> > have never tried issuing your USR1 signal to a mass-storage gadget 
+> > running more than one LUN.  If you did, you would find that it clears 
+> > the prevent_medium_removal flag for all of them, not just the one that 
+> > you wanted.
+> 
+> I haven't tried it, but I figured it out along the way when I discovered
+> the SIGUSR1 feature. I perceive it as something that should work that way.
+> Like, we hit the whole device.
+
+But that's not how real devices work.  If you have a multi-LUN DVD drive, 
+for instance, sticking an unfolded paperclip into one of the manual-eject 
+holes will eject only one of the discs, not all of them.
+
+Alan Stern

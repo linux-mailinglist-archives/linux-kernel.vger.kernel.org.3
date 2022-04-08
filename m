@@ -2,208 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2604F9D6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6EA4F9D6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbiDHTFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S239107AbiDHTG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiDHTFe (ORCPT
+        with ESMTP id S238869AbiDHTGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:05:34 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863B7F896D;
-        Fri,  8 Apr 2022 12:03:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oMaIw9ca5CITHXVja7f0CYsXFb+lbS1cKYZT0teXzrSfab+U+HJT3dHGbg9R9AFcEOEa4MFsGGyuxHGRrUSNVn1oYm67Fy7KXnPTZLwcizjJLpFnb5iT+5XxF/+JwP5e/SuLDQaN74pQsdETTEX/mlZdjy59cn6s976yWaywSkRFIVt5NgBfhUABT76TnvUhskglr8E0iFenUlGmcbbQ4M6unri1sFv/pUnXHiH2k0EFBSpNalDVXHSXtv7QTrRaGxHEvaqz2NrRLsw4fCciC5EhBCTz3QZUV7VlCPhHZDzojAZhaBkjqpADEl7U8GlpKJxGBYL7knQ9oecHYHnaOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PQrl34pvmPbLwI6YEhKOwefcfloYF9zwlMcf6ewN7LQ=;
- b=aUPUOPG2CR8GgXLvzGWJT1RinF0L3azlYLjTDPBZO+W/6HZ5qW0Fvz3Acab8Hv8YnKtVS0km9awU5CGWrYh4ISs6Vctsx0YJ1lVvV7yTldA6POqCT212xa3TbP/raPqHzRcXbz5rDXsIFwQC5c/XaELpWHxgusduxzCF2crbZVd3hDuZct+wDSUOUCeAZm0vDyowEOxWjK94F2s/eZV52IsVcBBRJ1u1nscDATk0jx+8t82DFUJMuDUcJEYApvN74dkyfkdUkYgr2a4g8bqhKDxeERAjoowU3koEGzaEVbQ79n8CAmCrao/hBqtp4ZF4KpNFj+8oWm/8dm4KYhW6DQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PQrl34pvmPbLwI6YEhKOwefcfloYF9zwlMcf6ewN7LQ=;
- b=p9rza6jg3MxWRp7ti7lKVAs4k6UdnkL+SMjCyIHmGggv7x4ldbSQzMVk+R7tAqjxhx86bInk3Noa2jnmr5HfV4boR7Namufa5wCB63FPwA8/+bTKKbbYAgiU/4kATk4fnTpXhgs5aD+AGRhu2Rhvc37F3rzur48vPGs2VY7fFmZwcL+3TxQH2STsLgrDACp6JhGE3c9bb1lhjGa4Ch/X8qD6GsS1Aq2ikWZN9pns9Oj7ZQJDS10T3ZikQGsN9mhSZQNt5UdG3y3d3vOSaA4FsNMsG6jyT/mrSqvR2zyBdKgpXKWj87ICAmhs5m91vTsJR9uAtTRLdr/tS7kyHsj1xA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN7PR12MB2673.namprd12.prod.outlook.com (2603:10b6:408:27::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
- 2022 19:03:28 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
- 19:03:28 +0000
-Date:   Fri, 8 Apr 2022 16:03:26 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Please pull RDMA subsystem changes
-Message-ID: <20220408190326.GA3698843@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
-Content-Disposition: inline
-X-ClientProxiedBy: MN2PR05CA0057.namprd05.prod.outlook.com
- (2603:10b6:208:236::26) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 8 Apr 2022 15:06:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0EDF94FE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:04:18 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id dr20so19032390ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4rHGD3PoFwL+nB4RQq7j9aGht0hUkl4t6Erm9eBYAxo=;
+        b=YsHLti3LKEtuuI4cKwjbPzSTusGPZZx1XbNGIHygbTntEkwqUL6G+VU4mEaO323Gy2
+         jMp5qBNSl8scs0iftHUH2fWSLiCkT30fxcbsdOnjPyQ2HnRE8DaLMWgZPkK/zPilHRnj
+         W/FwFsNLtS4UKF3Eh9fZiYg4w0ApKjdKCrkiRF8cPHBqOTk/2s4JQ53X0hj68VKRnd3O
+         UmVdSKO0abUUF6C6VR+2DFdkVW/wa5hbTIRs5IUyHciqzh9afQGf3L7Kjw4Ze5MECgY8
+         CiXhioEJn6JSZ6Cbn3uAvBSCE/7fHfeSPAj7MsW4um6Rp4oHilW4FvTFJM+d8JUUkww6
+         I/wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4rHGD3PoFwL+nB4RQq7j9aGht0hUkl4t6Erm9eBYAxo=;
+        b=0+LaTUPVp6FJkUtF2tj6JqTjE471cZ5urAZA0bid2Uj2nLtqx0LqqUsdYc75vG1sxI
+         F0Fp3486JluB0a2+yu06hTVdU0vHHoo23rlNxc8/XfVif1AC8wLEyWTDbl3kvMYkCGfW
+         r8HHbCJcKFYb+jeTJFXTJ5Ph6A7HE4TrC/6Y8bBnmX5Vi2O7siqCOtzECR+WICKV9Eev
+         vMU5bOQEq8TWsIv+77TO2DJNUyfbi4siViPlf4b5LsOuWNbX7DUPmHHlkPAi429V9337
+         FeIpG218xPtYC8Pxg7kjnj8DwYD6Zf4hTxejLvSSjH+DwT+7E9Yf0fKeWunr1IHJfe93
+         xILw==
+X-Gm-Message-State: AOAM530Gh4d//VyU2NBk/0mofXVCRBnk3smG3KWSE+b20+HvEuYUAi22
+        SDN5bdbzbeL7o1Da/P8QX5Oew+CvHD0feq/6yE7IYA==
+X-Google-Smtp-Source: ABdhPJzuTD8lGVC9WsX3DoSaWaE1gcO0BreSCSSb7v406i3EgLAy2ifm0g/gB9FjnVbYnbabeuKq/C7fMy8S3tEq+/8=
+X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id
+ by2-20020a170906a2c200b006e7efc217f2mr18810277ejb.542.1649444657126; Fri, 08
+ Apr 2022 12:04:17 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 861eea8e-89dc-4296-ec0b-08da199276fe
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2673:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB26739210C1140B3957270BE7C2E99@BN7PR12MB2673.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rt8mmLvhTaIe0Gt8o1EByZqHjywFcXtvSI5JJEVL3p2xX89fyAm5kZ/mP1QggVF9kFpXUcoLKaDXtHD6MAt1U5vNKOnV9omQgvZ9D32czm8HfPRNCeMpZy47VJpsHgAUNAgwAfqU3hxj+KI0dAoSd33WP52Xqp57kVs0CS8pFqUmVbZw7CjaOtmO/s20I4Zv+D9Tl3xAMc1+uEA+fbTkkjPoQ+ej+ApbygNfe6ouPOqGIGCDJIqcGhH1n7tz6tKEXzNXTAg9bIdlM3QhDrJY+LPR+sVCt2BIoqEK80RDuz6t/HP10wHZnwHQX3b59cRgiS8JBOGKpaMyNrqqspYy1X/bMZ8Q30bhFvfpgpy/q/oXNSqMG4MaU0enZKw2VXzH34gzCyeYlnJ8EStL1ZSgaUtH4D2gBclYxGLl9rQI9s615GlRsWDOKkp2OvdZLupsyxRl2hBvST7tHP9D0vYEcWKfp6v03i7jerFJWVD1Oah5Y77hA3JgEsBFFw3k4FYKNlZc1e9ptyBbfz9JoyeneARdqFQ/yERd+9d0mSMbsJTTYQ93ASTbulefkTVrYycWiMev7/78im5Am8VilDHmUnlrnxRpy8LJygjGWZtks3gcV5MkH6shwCfchGgGcdsQlfZaWj+HE4+hm7Qp1NFR10JeUVtGxtwU3T8Q3BDUWvIBcCUIWqzE1QsA/8zE77lnPbOe1OgkcJzxHaHj9+Rf8w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(21480400003)(44144004)(26005)(186003)(2906002)(66946007)(1076003)(2616005)(6916009)(33656002)(38100700002)(6506007)(6486002)(6512007)(36756003)(8936002)(83380400001)(86362001)(508600001)(316002)(5660300002)(8676002)(66476007)(66556008)(4326008)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dXYleWnhsccSRf1e1Lk3ViXEI6LsdIvQ2XcYwC0YLBRksuy7Kyv+ni5sipnK?=
- =?us-ascii?Q?VL1ktNZL4k0Teo8Ws0VCizrhlZ2RWt6PtSjZXOEXls7euUh68AHoG0swgFhs?=
- =?us-ascii?Q?wJtaGaIluTPo7CKyuF6GzHAd0nhWKzUJCwu/QYHjDSZVq4ADwCoATHOVYRdY?=
- =?us-ascii?Q?trNAEYZNZsNy4kmci/L9PeamK3J8pO1yMt+nQqrVUMpDAKT7bsim5sONrwLQ?=
- =?us-ascii?Q?8s7MC8t0h52tAABc/ubYT65C5fVqEoAQo4C0HmiUEgmmHYXGv902+wn/d9q2?=
- =?us-ascii?Q?BDSylW6bDmbuhcDgyMbCPhtyNHw9fSAEEz5CUzLJntofm4u7y3IsylOA5lKI?=
- =?us-ascii?Q?o3FKofEHswHeMOK7Wn9fQmiU4xqeUvfkVdaU+nRo52Y/vmkxOcQhVRg9hWJm?=
- =?us-ascii?Q?vJXbvNzb29gfEpodRsXuCUOnlJPsY+vlFRfGQ8RcTwz8ub+8IcKIIHch4FUO?=
- =?us-ascii?Q?gyQrBm6dstGma/+Z7Osusr5yb4b240N8CqsG0ZgMzDmcECpgrk/Q/WKfIvvs?=
- =?us-ascii?Q?abt5UqRElEJOP3zk1lZJbIoXj7fc6Ry1J+9mnLlJBCZoKBgAFCcpR8ihvd0Q?=
- =?us-ascii?Q?G0mOGmTaZ5dkZiKmwxPNwtset1Ml7kw2LfzAQHgnN6EjXhclIxKDs00H8AOW?=
- =?us-ascii?Q?4chWm7pzcOmhryzcsJr0tKKTW2OE0edYLmrnMZFnhAfUjz3F2rdtlbeXMsRO?=
- =?us-ascii?Q?EPwvcr3CdRt/b1x+S13CDQY3altLcUBo676FJARA269esAyESVkxzoCUkolu?=
- =?us-ascii?Q?UHsyBsEgP++OkUY9hT2zHmpwmUITHJ7i04Lv3LmwvKgBxzR05Mdwug56qJVh?=
- =?us-ascii?Q?CDDcGEJrZwDNkAqkkIOV2gEAxIfqLt8PaStIqmomGrmIeW5nwo+E48AuJfA+?=
- =?us-ascii?Q?CdiCFDxTw5nn8rh+wMSdW5/rgsk2lObOvZjT/VNrsBEPADxtlYBbxkb+10ZQ?=
- =?us-ascii?Q?u2zHux5lacvVnrxxono93wriLfqGrrJs/d9xTUpd8ndjLjMOIXmCywLdjWL1?=
- =?us-ascii?Q?u5z2iDF5E41g+lIHZh6yNhsIDlyyq4MF/KYNnea/1FNOnVnLOw/br6AAGSg3?=
- =?us-ascii?Q?sq4U2cWNehcTMn9UUgm+TAUNaOjNF5jYQnO4RE969hHlr+Xy5+s4EjuY6+9w?=
- =?us-ascii?Q?y7jDulDm50Ab5aHgauIFSakF8xcoLBuhYyrLK38S2Nqx/OMQ8m7KFA81X2qP?=
- =?us-ascii?Q?JtRTbJe1nlGWVDMWI9ubeUFF68lCeeKjVZWZ6+/V/oejKze5BAGsyjXJAOX9?=
- =?us-ascii?Q?jFNVaEPbye8FIwKSDhJwgjGNNUBsA8nD2M/9GDAq+HxhJBv165bZ4USzb/oZ?=
- =?us-ascii?Q?3K2On4j8KpOfbwx/aFm9DoClltAS7B9SkkS2TdTyX7Y5hfA3MDEZVD8j97Tj?=
- =?us-ascii?Q?lRSshk/G5v4WM2TgyprbQEkoQua4s+KTIo+KCe/I3jIkWdA6DK4tiyLOosv5?=
- =?us-ascii?Q?bc7lUmo4/0GnM3NSopG2Ew/TIprnbY2kNmw8IGDVTAxirptBhTYWjdE4+MMm?=
- =?us-ascii?Q?3fnkSF3oUnOV0Brxc+5rrVN5kuvi15q971hZ+Sc/e+IiOXxE1n/z8FxeNPA7?=
- =?us-ascii?Q?pFg0b53Wu/Gwp+qP8I49AnFY8dPxTI7ksiTjay6PIR1sMG9/E4tIndwKatNG?=
- =?us-ascii?Q?5KbzKCnlgsQTj5y6y/MJTiMmCGJ99qChvW4b8o6NzNCEWpTsmkEwls2c3N2A?=
- =?us-ascii?Q?TsWTrYgJBl3UoXs8ycKOymJGhcMmCAgfw8iiy98vGJWH8+LnY79SjktQFE71?=
- =?us-ascii?Q?BuG16IcHgw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 861eea8e-89dc-4296-ec0b-08da199276fe
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 19:03:28.0246
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ud0ltGyBjz3Ue4h7Ts1FFlZtJWJFtTVP0Z6obDhnlfK7VDI1k2136PcdvU7jgETR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2673
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220407223019.2066361-1-dlatypov@google.com> <20220408034848.2081355-1-davidgow@google.com>
+ <CAGS_qxrNOPq+akyt2Ee4NXySP+Zxqis2H5CwKs_kNWNvJ+bo5A@mail.gmail.com> <CABVgOSkKuHCkfpQhzNmzufaVw_6qO-Ve_t5oTub1JeweTiC9RQ@mail.gmail.com>
+In-Reply-To: <CABVgOSkKuHCkfpQhzNmzufaVw_6qO-Ve_t5oTub1JeweTiC9RQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 8 Apr 2022 14:04:06 -0500
+Message-ID: <CAGS_qxqmbgy6KOp1bPF4Pk5SZT+r8L7ASqEyNWF9BtCS2JgXaw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Print a total count of tests.
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---PNTmBPCT7hxwcZjr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+)On Thu, Apr 7, 2022 at 11:18 PM David Gow <davidgow@google.com> wrote:
+>
+> On Fri, Apr 8, 2022 at 11:59 AM 'Daniel Latypov' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > On Thu, Apr 7, 2022 at 10:48 PM 'David Gow' via KUnit Development
+> > <kunit-dev@googlegroups.com> wrote:
+> > >
+> > > Add a count of the total number of tests run (including skipped tests,
+> > > which do run a little bit until they decide to skip themselves) to the
+> > > summary line.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > >
+> > > This patch depends on:
+> > > https://lore.kernel.org/linux-kselftest/20220407223019.2066361-1-dlatypov@google.com/
+> > >
+> > >  tools/testing/kunit/kunit_parser.py | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> > > index 957907105429..da01998d29b1 100644
+> > > --- a/tools/testing/kunit/kunit_parser.py
+> > > +++ b/tools/testing/kunit/kunit_parser.py
+> > > @@ -96,7 +96,7 @@ class TestCounts:
+> > >                 """
+> > >                 statuses = [('Passed', self.passed), ('Failed', self.failed),
+> > >                         ('Crashed', self.crashed), ('Skipped', self.skipped),
+> > > -                       ('Errors', self.errors)]
+> > > +                       ('Errors', self.errors), ('Total', self.total())]
+> >
+> > Hmm, I've never really felt the need for a total to be printed out.
+> > We've had few enough tests and different statuses that the mental
+> > addition is easy enough.
+>
+> It's useful just often enough as a sanity check (were those failures /
+> skipped tests fixed, or did we just stop running them): having one
+> number to check for "did some more tests run at all" is quite
+> convenient. Particularly when dealing with nasty dependency chains and
+> "all tests" builds.
+>
+> This is also particularly useful when running on setups where
+> scrollback is more of a pain, as the summary line is absolutely
+> invaluable there.
 
-Hi Linus,
+Ack. My point was about the summary line.
+We have so few tests that only a handful statuses, that adding up 2-3
+small numbers always felt simple enough.
+Esp. since the previous patch skips printing out the statues with 0s,
+that becomes even easier.
 
-Small rc1 update, there is a new regression in rxe that is still being
-looked into.
+But I'm not against having the total.
+I just personally find the current output looks very awkward and would
+prefer the status-quo over that specific output format.
 
-Leon has agreed to help with the maintenance work. He will send you
-some pull requests from time to time to ensure everything is setup
-well.
+>
+> >
+> > Bikeshedding:
+> > This current output of
+> >   Passed: 40, Skipped: 2, Total: 42
+> > feels a bit awkward to me.
+> > If we did print one out, I think it should probably go first, e.g.
+> >   Ran 42 tests: 40 passed, 2 skipped.
+> >
+> > Wdyt?
+>
+> I personally don't find having "Total" at the end awkward -- putting
+> the sum at the end has been done on ledgers for years -- but do admit
+> it's even more convenient to have it first (so it's at the same place
+> on the screen every run, regardless of the rest). So "Ran 42 tests: 40
+> passed..." would emphasise the "total" over the "passed" count here.
+> Personally, I think that's probably a good thing: I think what most
+> people really want at a glance is effectively "Failed / Total" (or,
 
-Thanks,
-Jason
+I think a reader can already easily note the difference between
+  Ran 42 tests: 40 passed, 2 skipped.
+and
+  Ran 42 tests: 20 passed, 20 failed, 2 skipped.
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+I.e. the mere existence of a second or third number in the breakdown
+after "XX passed" feels like enough of an affordance.
+(This is perhaps naively assuming that tests are kept healthy)
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> more realistically a sort-of "Problems / Total", where problems is
+> Failed + Error). But the combination of the colour (did it pass
+> overall) and the total are the things I'd usually want to look for
+> first.
+>
+> So, tl;dr: I'd be all for the "Ran n tests: a passed, b failed, etc" wording.
 
-are available in the Git repository at:
+Ack.
+Let's see if Brendan or others on the list have a preference.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+If we want to go down that route, it might be easier if I combine this
+in the previous patch
+(https://lore.kernel.org/linux-kselftest/20220407223019.2066361-1-dlatypov@google.com/
 
-for you to fetch changes up to 2bbac98d0930e8161b1957dc0ec99de39ade1b3c:
+E.g. I get this output
+Ran 173 tests: passed: 137, skipped: 36
 
-  RDMA/hfi1: Fix use-after-free bug for mm struct (2022-04-08 15:40:06 -0300)
+with a new combined patch of
 
-----------------------------------------------------------------
-v5.18 first rc pull request
+diff --git a/tools/testing/kunit/kunit_parser.py
+b/tools/testing/kunit/kunit_parser.py
+index 807ed2bd6832..de1c0b7e14ed 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -94,11 +94,11 @@ class TestCounts:
+        def __str__(self) -> str:
+                """Returns the string representation of a TestCounts object.
+                """
+-               return ('Passed: ' + str(self.passed) +
+-                       ', Failed: ' + str(self.failed) +
+-                       ', Crashed: ' + str(self.crashed) +
+-                       ', Skipped: ' + str(self.skipped) +
+-                       ', Errors: ' + str(self.errors))
++               statuses = [('passed', self.passed), ('failed', self.failed),
++                       ('crashed', self.crashed), ('skipped', self.skipped),
++                       ('errors', self.errors)]
++               return f'Ran {self.total()} tests: ' + \
++                       ', '.join(f'{s}: {n}' for s, n in statuses if n > 0)
 
-Several bug fixes for old bugs:
+        def total(self) -> int:
+                """Returns the total number of test cases within a test
 
-- Welcome Leon as co-maintainer for RDMA so we are back to having two
-  people
-
-- Some corner cases are fixed in mlx5's MR code
-
-- Long standing CM bug where a DREQ at the wrong time can result in a long
-  timeout
-
-- Missing locking and refcounting in hf1
-
-----------------------------------------------------------------
-Aharon Landau (2):
-      RDMA/mlx5: Don't remove cache MRs when a delay is needed
-      RDMA/mlx5: Add a missing update of cache->last_add
-
-Dennis Dalessandro (1):
-      MAINTAINERS: Update qib and hfi1 related drivers
-
-Douglas Miller (1):
-      RDMA/hfi1: Fix use-after-free bug for mm struct
-
-Jason Gunthorpe (1):
-      MAINTAINERS: Add Leon Romanovsky to RDMA maintainers
-
-Mark Zhang (1):
-      IB/cm: Cancel mad on the DREQ event when the state is MRA_REP_RCVD
-
-Niels Dossche (1):
-      IB/rdmavt: add lock to call to rvt_error_qp to prevent a race condition
-
- MAINTAINERS                         | 5 +----
- drivers/infiniband/core/cm.c        | 3 +--
- drivers/infiniband/hw/hfi1/mmu_rb.c | 6 ++++++
- drivers/infiniband/hw/mlx5/mr.c     | 5 ++++-
- drivers/infiniband/sw/rdmavt/qp.c   | 6 +++++-
- 5 files changed, 17 insertions(+), 8 deletions(-)
-
---PNTmBPCT7hxwcZjr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfB7FMLh+8QxL+6i3OG33FX4gmxoFAmJQhvwACgkQOG33FX4g
-mxqT/A//clPxTaovNGo3xUDEufN9zOuRnxeqLXUkuB3CdwD5FJxNQRNWWC6Ap/Wv
-s3Jj3Mk6j702JNPIXpWnbjiBKqRvOn+LIav/2j74RH2kWZ6gmS5sEuyIjyNsbChq
-yGTzvy39cPb3xQSxFmpxI6fRLLvCpFge38k0cuGq5iUplWtMlj32i/BsGN4S+W59
-tGeXusk7NWgumzs10lT88L9rGDbXjnWonmEz9Nc2yCzz+f2EinGxGh5IMD+dFw2U
-HInRDf8Y2hnr32OdydpXsIHWP3lFsCEr2qw9E79OpKkv1MKivsHE3i9tJHURK/ea
-mPqRvH6dUr3I5vmtRO5dT9NRsGka7SwLFvoUVJqgnPCDVbCkmP+O/JAR9AK2itQD
-ce4JZWvabKQh23z2mQFbQD7/2gbd5Abp/Ta7GScLNqsd/8GHKSV6hmWUwnkgAYqD
-VTQfnlKXi9qKYMEfd7L1Xq7hvybZWjvtVvs9qIJ4SOK1+rlvVyscZWb5qIXSm4sr
-kjHvuz3BDO4huFe6BVWIMF1zc5AdENoqrylTFUcHcprKr0tec1AdIgl24SA1dMMn
-66K5U9IJ6EXs0Ewr5jXQegmpzzQR8T5lqdagkzH5SVGDo8j9Dd5MA+Rhous7MkFi
-Wt9hjSnPoyK6to64bWqKAzuGTenR1JDO2pk7Z5N9glgpZ7Sjiro=
-=DqAb
------END PGP SIGNATURE-----
-
---PNTmBPCT7hxwcZjr--
+>
+> Cheers,
+> -- David

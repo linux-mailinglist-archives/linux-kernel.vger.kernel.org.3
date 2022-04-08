@@ -2,226 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBC44F9298
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD924F929E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiDHKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S233738AbiDHKMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiDHKME (ORCPT
+        with ESMTP id S232944AbiDHKMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:12:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030C4A207D;
-        Fri,  8 Apr 2022 03:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649412601; x=1680948601;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9N0ZWNAd9mIyPI9EhwvOQXkX/MDUGG76apuykOonzGU=;
-  b=zWmDqrs6VQl8KrJ/aa0APBepBz6NAeFzFsERmNPaMgnPc+I3NCcIfe2q
-   OATaReo9AiXtSI+QXQDWABdudAtgC835pPCXleLqbc9DU65dSbeQ0q3De
-   7s+RgQ4bp8gNFjUIJ0ZXui62t8/xt1nXPFgpFiuYiqYhY7cfniyqeC+M4
-   SFdX5dDazG3hEL+/gTjttGeE9p5LlvEULVrBNZGYgNdojOXBojQKW3lxk
-   2BtyuJ4noFqW4ut6WO9nf+iuAzR0MG3zYhyV3dG7a9cgHj+7Lu5OQDpJg
-   GEVuYDumXip9B2kCFpQwVip+HUvJKxR0HKYnSN/5QjLu9OvDS436BChhS
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,244,1643698800"; 
-   d="scan'208";a="152002989"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Apr 2022 03:10:01 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Apr 2022 03:09:59 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Apr 2022 03:09:58 -0700
-From:   <conor.dooley@microchip.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 1/1] hwrng: mpfs - add polarfire soc hwrng support
-Date:   Fri, 8 Apr 2022 10:09:12 +0000
-Message-ID: <20220408100911.1638478-2-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220408100911.1638478-1-conor.dooley@microchip.com>
-References: <20220408100911.1638478-1-conor.dooley@microchip.com>
+        Fri, 8 Apr 2022 06:12:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB4AAB49
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:10:10 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZYrf4MJYzdZnh;
+        Fri,  8 Apr 2022 18:09:38 +0800 (CST)
+Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
+ (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
+ 2022 18:10:07 +0800
+From:   Li Zhengyu <lizhengyu3@huawei.com>
+To:     <palmer@dabbelt.com>, <liaochang1@huawei.com>
+CC:     <alex@ghiti.fr>, <aou@eecs.berkeley.edu>, <bjorn.topel@gmail.com>,
+        <ebiederm@xmission.com>, <guoren@linux.alibaba.com>,
+        <jszhang@kernel.org>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <mick@ics.forth.gr>, <paul.walmsley@sifive.com>,
+        <penberg@kernel.org>, <sunnanyong@huawei.com>,
+        <wangkefeng.wang@huawei.com>
+Subject: [PATCH v3 -next 4/6] RISC-V: Support for kexec_file on panic
+Date:   Fri, 8 Apr 2022 18:09:12 +0800
+Message-ID: <20220408100914.150110-5-lizhengyu3@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220408100914.150110-1-lizhengyu3@huawei.com>
+References: <20220408100914.150110-1-lizhengyu3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.174.157]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+This patch adds support for loading a kexec on panic (kdump) kernel.
+It has been tested with vmcore-dmesg on riscv64 QEMU on both an smp
+and a non-smp system.
 
-Add a driver to access the hardware random number generator on the
-Polarfire SoC. The hwrng can only be accessed via the system controller,
-so use the mailbox interface the system controller exposes to access the
-hwrng.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
 ---
- drivers/char/hw_random/Kconfig    |  13 ++++
- drivers/char/hw_random/Makefile   |   1 +
- drivers/char/hw_random/mpfs-rng.c | 104 ++++++++++++++++++++++++++++++
- 3 files changed, 118 insertions(+)
- create mode 100644 drivers/char/hw_random/mpfs-rng.c
+ arch/riscv/kernel/elf_kexec.c | 119 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 118 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
-index a087156a5818..c3a9f17bf31c 100644
---- a/drivers/char/hw_random/Kconfig
-+++ b/drivers/char/hw_random/Kconfig
-@@ -385,6 +385,19 @@ config HW_RANDOM_PIC32
+diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+index 2d442a849871..911d65d5a123 100644
+--- a/arch/riscv/kernel/elf_kexec.c
++++ b/arch/riscv/kernel/elf_kexec.c
+@@ -18,6 +18,8 @@
+ #include <linux/of.h>
+ #include <linux/libfdt.h>
+ #include <linux/types.h>
++#include <linux/memblock.h>
++#include <asm/setup.h>
  
- 	  If unsure, say Y.
+ static int riscv_kexec_elf_load(struct kimage *image, struct elfhdr *ehdr,
+ 				struct kexec_elf_info *elf_info, unsigned long old_pbase,
+@@ -97,6 +99,79 @@ static int elf_find_pbase(struct kimage *image, unsigned long kernel_len,
+ 	return ret;
+ }
  
-+config HW_RANDOM_POLARFIRE_SOC
-+	tristate "Microchip PolarFire SoC Random Number Generator support"
-+	depends on HW_RANDOM && POLARFIRE_SOC_SYS_CTRL
-+	help
-+	  This driver provides kernel-side support for the Random Number
-+	  Generator hardware found on PolarFire SoC (MPFS).
-+
-+	  To compile this driver as a module, choose M here. The
-+	  module will be called mfps_rng.
-+
-+	  If unsure, say N.
-+
-+
- config HW_RANDOM_MESON
- 	tristate "Amlogic Meson Random Number Generator support"
- 	depends on HW_RANDOM
-diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
-index 584d47ba32f7..3e948cf04476 100644
---- a/drivers/char/hw_random/Makefile
-+++ b/drivers/char/hw_random/Makefile
-@@ -46,3 +46,4 @@ obj-$(CONFIG_HW_RANDOM_CCTRNG) += cctrng.o
- obj-$(CONFIG_HW_RANDOM_XIPHERA) += xiphera-trng.o
- obj-$(CONFIG_HW_RANDOM_ARM_SMCCC_TRNG) += arm_smccc_trng.o
- obj-$(CONFIG_HW_RANDOM_CN10K) += cn10k-rng.o
-+obj-$(CONFIG_HW_RANDOM_POLARFIRE_SOC) += mpfs-rng.o
-diff --git a/drivers/char/hw_random/mpfs-rng.c b/drivers/char/hw_random/mpfs-rng.c
-new file mode 100644
-index 000000000000..5813da617a48
---- /dev/null
-+++ b/drivers/char/hw_random/mpfs-rng.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Microchip PolarFire SoC (MPFS) hardware random driver
-+ *
-+ * Copyright (c) 2020-2022 Microchip Corporation. All rights reserved.
-+ *
-+ * Author: Conor Dooley <conor.dooley@microchip.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/hw_random.h>
-+#include <linux/platform_device.h>
-+#include <soc/microchip/mpfs.h>
-+
-+#define CMD_OPCODE	0x21
-+#define CMD_DATA_SIZE	0U
-+#define CMD_DATA	NULL
-+#define MBOX_OFFSET	0U
-+#define RESP_OFFSET	0U
-+#define RNG_RESP_BYTES	32U
-+
-+struct mpfs_rng {
-+	struct mpfs_sys_controller *sys_controller;
-+	struct hwrng rng;
-+};
-+
-+static int mpfs_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
++static int get_nr_ram_ranges_callback(struct resource *res, void *arg)
 +{
-+	struct mpfs_rng *rng_priv = container_of(rng, struct mpfs_rng, rng);
-+	u32 response_msg[RNG_RESP_BYTES / sizeof(u32)];
-+	unsigned int count = 0, copy_size_bytes;
-+	int ret;
++	unsigned int *nr_ranges = arg;
 +
-+	struct mpfs_mss_response response = {
-+		.resp_status = 0U,
-+		.resp_msg = (u32 *)response_msg,
-+		.resp_size = RNG_RESP_BYTES
-+	};
-+	struct mpfs_mss_msg msg = {
-+		.cmd_opcode = CMD_OPCODE,
-+		.cmd_data_size = CMD_DATA_SIZE,
-+		.response = &response,
-+		.cmd_data = CMD_DATA,
-+		.mbox_offset = MBOX_OFFSET,
-+		.resp_offset = RESP_OFFSET
-+	};
-+
-+	while (count < max) {
-+		ret = mpfs_blocking_transaction(rng_priv->sys_controller, &msg);
-+		if (ret)
-+			return ret;
-+
-+		copy_size_bytes = max - count > RNG_RESP_BYTES ? RNG_RESP_BYTES : max - count;
-+		memcpy(buf + count, response_msg, copy_size_bytes);
-+
-+		count += copy_size_bytes;
-+		if (!wait)
-+			break;
-+	}
-+
-+	return count;
++	(*nr_ranges)++;
++	return 0;
 +}
 +
-+static int mpfs_rng_probe(struct platform_device *pdev)
++static int prepare_elf64_ram_headers_callback(struct resource *res, void *arg)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct mpfs_rng *rng_priv;
-+	int ret;
++	struct crash_mem *cmem = arg;
 +
-+	rng_priv = devm_kzalloc(dev, sizeof(*rng_priv), GFP_KERNEL);
-+	if (!rng_priv)
-+		return -ENOMEM;
-+
-+	rng_priv->sys_controller =  mpfs_sys_controller_get(&pdev->dev);
-+	if (IS_ERR(rng_priv->sys_controller))
-+		return dev_err_probe(dev, PTR_ERR(rng_priv->sys_controller),
-+				     "Failed to register system controller hwrng sub device\n");
-+
-+	rng_priv->rng.read = mpfs_rng_read;
-+	rng_priv->rng.name = pdev->name;
-+	rng_priv->rng.quality = 1024;
-+
-+	platform_set_drvdata(pdev, rng_priv);
-+
-+	ret = devm_hwrng_register(&pdev->dev, &rng_priv->rng);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to register MPFS hwrng\n");
-+
-+	dev_info(&pdev->dev, "Registered MPFS hwrng\n");
++	cmem->ranges[cmem->nr_ranges].start = res->start;
++	cmem->ranges[cmem->nr_ranges].end = res->end;
++	cmem->nr_ranges++;
 +
 +	return 0;
 +}
 +
-+static struct platform_driver mpfs_rng_driver = {
-+	.driver = {
-+		.name = "mpfs-rng",
-+	},
-+	.probe = mpfs_rng_probe,
-+};
-+module_platform_driver(mpfs_rng_driver);
++static int prepare_elf_headers(void **addr, unsigned long *sz)
++{
++	struct crash_mem *cmem;
++	unsigned int nr_ranges;
++	int ret;
 +
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
-+MODULE_DESCRIPTION("PolarFire SoC (MPFS) hardware random driver");
++	nr_ranges = 1; /* For exclusion of crashkernel region */
++	walk_system_ram_res(0, -1, &nr_ranges, get_nr_ram_ranges_callback);
++
++	cmem = kmalloc(struct_size(cmem, ranges, nr_ranges), GFP_KERNEL);
++	if (!cmem)
++		return -ENOMEM;
++
++	cmem->max_nr_ranges = nr_ranges;
++	cmem->nr_ranges = 0;
++	ret = walk_system_ram_res(0, -1, cmem, prepare_elf64_ram_headers_callback);
++	if (ret)
++		goto out;
++
++	/* Exclude crashkernel region */
++	ret = crash_exclude_mem_range(cmem, crashk_res.start, crashk_res.end);
++	if (!ret)
++		ret = crash_prepare_elf64_headers(cmem, true, addr, sz);
++
++out:
++	kfree(cmem);
++	return ret;
++}
++
++static char *setup_kdump_cmdline(struct kimage *image, char *cmdline,
++				 unsigned long cmdline_len)
++{
++	int elfcorehdr_strlen;
++	char *cmdline_ptr;
++
++	cmdline_ptr = kzalloc(COMMAND_LINE_SIZE, GFP_KERNEL);
++	if (!cmdline_ptr)
++		return NULL;
++
++	elfcorehdr_strlen = sprintf(cmdline_ptr, "elfcorehdr=0x%lx ",
++		image->elf_load_addr);
++
++	if (elfcorehdr_strlen + cmdline_len > COMMAND_LINE_SIZE) {
++		pr_err("Appending elfcorehdr=<addr> exceeds cmdline size\n");
++		kfree(cmdline_ptr);
++		return NULL;
++	}
++
++	memcpy(cmdline_ptr + elfcorehdr_strlen, cmdline, cmdline_len);
++	/* Ensure it's nul terminated */
++	cmdline_ptr[COMMAND_LINE_SIZE - 1] = '\0';
++	return cmdline_ptr;
++}
++
+ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ 			    unsigned long kernel_len, char *initrd,
+ 			    unsigned long initrd_len, char *cmdline,
+@@ -106,10 +181,12 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ 	unsigned long old_kernel_pbase = ULONG_MAX;
+ 	unsigned long new_kernel_pbase = 0UL;
+ 	unsigned long initrd_pbase = 0UL;
+-	void *fdt;
++	unsigned long headers_sz;
++	void *fdt, *headers;
+ 	struct elfhdr ehdr;
+ 	struct kexec_buf kbuf;
+ 	struct kexec_elf_info elf_info;
++	char *modified_cmdline = NULL;
+ 
+ 	ret = kexec_build_elf_info(kernel_buf, kernel_len, &ehdr, &elf_info);
+ 	if (ret)
+@@ -130,6 +207,45 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ 	kbuf.image = image;
+ 	kbuf.buf_min = new_kernel_pbase + kernel_len;
+ 	kbuf.buf_max = ULONG_MAX;
++
++	/* Add elfcorehdr */
++	if (image->type == KEXEC_TYPE_CRASH) {
++		ret = prepare_elf_headers(&headers, &headers_sz);
++		if (ret) {
++			pr_err("Preparing elf core header failed\n");
++			goto out;
++		}
++
++		kbuf.buffer = headers;
++		kbuf.bufsz = headers_sz;
++		kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
++		kbuf.memsz = headers_sz;
++		kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
++		kbuf.top_down = true;
++
++		ret = kexec_add_buffer(&kbuf);
++		if (ret) {
++			vfree(headers);
++			goto out;
++		}
++		image->elf_headers = headers;
++		image->elf_load_addr = kbuf.mem;
++		image->elf_headers_sz = headers_sz;
++
++		pr_debug("Loaded elf core header at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
++			 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
++
++		/* Setup cmdline for kdump kernel case */
++		modified_cmdline = setup_kdump_cmdline(image, cmdline,
++						       cmdline_len);
++		if (!modified_cmdline) {
++			pr_err("Setting up cmdline for kdump kernel failed\n");
++			ret = -EINVAL;
++			goto out;
++		}
++		cmdline = modified_cmdline;
++	}
++
+ 	/* Add the initrd to the image */
+ 	if (initrd != NULL) {
+ 		kbuf.buffer = initrd;
+@@ -170,6 +286,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ out_free_fdt:
+ 	kvfree(fdt);
+ out:
++	kfree(modified_cmdline);
+ 	kexec_free_elf_info(&elf_info);
+ 	return ret ? ERR_PTR(ret) : NULL;
+ }
 -- 
-2.35.1
+2.17.1
 

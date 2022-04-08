@@ -2,135 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926C24F9B95
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A0F4F9B98
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbiDHRZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S238145AbiDHRZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbiDHRZR (ORCPT
+        with ESMTP id S234331AbiDHRZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:25:17 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50E715FC6;
-        Fri,  8 Apr 2022 10:23:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SjJ/ZU/JbLKwfH18iYQRwsSwmhCu7NDUOX3K4fbkOqMNwJyPOddIWpxy6+LdTyEHkfAZ0fa/k6dNystt0vJijTJ8AnRXeA6WC1NMS649XIoQ/pNGgcUVs/YbQFJZz/9Sny32x89cNFfrFLG+sAuGcn5Mx2iF2VU6v/h3yMICKwyKi5lt2j3c2pyP9netQ61fI9Y8mVm7nut3rGixtIaMY90UwdTa5mgQpZFxuT6ana32O/E8uWprB3/MfJ3EigCDOKcK/F1QD3L/egW+mHAyhy5yc+LegblxmYBdgu3FV+7KolVQLx3LZfoHVt4BU1lQPmlNJNq3kC8i6x3xVEeVJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PFFSBP0L6O2YZ4eZ4TBmERFfujY10FxotNxezTuso70=;
- b=I3KanT4hsSMx07gXFccRiM+5LfAtGN4O2g0UHydy64z0GC3g8wdZOAP9RiXc3/v3kPTTL7DfIKkgYgx62Xu2KfzAWZ16V99DVOXWpJ1mGoSqnZrifP1U5hiQ7XjXfaQ5n42CNffb4Q+QjH//2KWS76+UBMqzzCvO4UERLDUmwdBjz5JsnJI1RWc2e3N0XxS/Z7VL2qR5e+ZWEny8ADBCFDdRr+YHOqkjxALxgVJbhT1MGDSmTlw16ZqHzdfvrDyNcS5CvifNtTp+SzQVFnoAjzApYkjXVLaCUha86ZHBPDAC7XjZUjcIDAGJJ8nJbQEcuHgL8SMm+I4wSBuvkv0ajg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PFFSBP0L6O2YZ4eZ4TBmERFfujY10FxotNxezTuso70=;
- b=cIJOIZac/NlP2DpvwL5/XoCbkT4zARgXcT3wry9y2Tj2QV/hfkgntzSKL99cVePSt6TndEHfReHXo7VAhvx5m5YEZ4YEDLRcB/gL1/siUdOnTFj0864Yy91JAyGaZyJfQqiQiPql4OThR6slIS7z9cSNUQcooO1STrC3aE/YI3YTOkGgYOr6nvNULu84IRizb/8/iEkUaw7yhMaQxbBdafmkfgPD6zDAZGaFsbqls3OcnSQPvBlHMUUfa0jK7swMjXI3ymujzHRBsyoh4CuaT2vLhoOks72xo6I5kUZRRNPqQfKJJtIJeeIM0LYbBzTQ6Xg3JwW/lLbrm/xMnNjnrg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB3262.namprd12.prod.outlook.com (2603:10b6:208:102::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
- 2022 17:23:02 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
- 17:23:02 +0000
-Date:   Fri, 8 Apr 2022 14:23:00 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     benve@cisco.com, neescoba@cisco.com, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/usnic: Refactor usnic_uiom_alloc_pd()
-Message-ID: <20220408172300.GC3637956@nvidia.com>
-References: <ef607cb3f5a09920b86971b8c8e60af8c647457e.1649169359.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef607cb3f5a09920b86971b8c8e60af8c647457e.1649169359.git.robin.murphy@arm.com>
-X-ClientProxiedBy: BL1PR13CA0420.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::35) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 8 Apr 2022 13:25:33 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD7E15FC6;
+        Fri,  8 Apr 2022 10:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649438609; x=1680974609;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aa5sCfirQTu8in8E9d3/He4tgrCReFZ3CgCEUVvEwHo=;
+  b=Zom5E9ESdRO37HNAzAxF/vwo4nxl+JOtYmBQXKTe/vd2h+Qdeki6nQjD
+   2yNhOhYbzpH4MIosszYtpDFa9/snTmmhTSXw8M+BjO7WJdJt8YdkB8hgK
+   KIJ4awuTJRyJhApAqiQp8VWEPPjcxwDV+ZSl0NVV6lLBA9w4zr/4siezJ
+   M=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Apr 2022 10:23:29 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:23:28 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Apr 2022 10:23:28 -0700
+Received: from [10.111.161.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Apr 2022
+ 10:23:24 -0700
+Message-ID: <e91f4f18-020b-7919-0a82-0b733cdc2de2@quicinc.com>
+Date:   Fri, 8 Apr 2022 10:23:22 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a9bf9452-0e89-4164-3d5b-08da19846f1b
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3262:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB32625949229942120D06811EC2E99@MN2PR12MB3262.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8HhpQlrPFDvoWRt+Awy94PO7pjoi0FRe7qZvBNbkLPEEbhhT7g8qgutWQNLWIUAMw9n15ANHpZfGsBgqP3/yG7SLggZuLTKYROrSCMehOzi9wptkn1fybvQJHzThIKL/HjLJNIrwxktqQn1rLZbdneg58mQAkVIpf4kHvpDqvivfdmB5J4DJgjO4oeI6O44ZOalRj/12DbKdXjA3o+TOlAUN5HJOndjrbP9vLOzyt5B5rR/yekmBzqvQH0GhrImXMeCHhGvYS45I2f6J11hLXljwNDrYO5bZIUefyujPwVcfO41RXrZqxHTqrjTMi966Nhsf4iABAkhNuqAmznnxtwRz2ioKa6l73ZKBLuV4HvDFipszppOYc7uZkkI04z+YEcI4k52/grxT9J+i0NHnBWsfpHIikd3npjPIv7hKGepiUB8Bjlrn/Ufv16iyg9FzFQlVvqt+qWudn5MWkFUuoenFPZty764RU5pwftR/w8DVg/FSR+EJbkJOzJz+evEvmtfze4jCn4eRt3t0bCcfNOO8WCr4ZVLEfBDQXUYcve1FKXfPWmAUZthqflgdUXPHXI6zFNiqIRqaQbprasRtzjRr0h3OGVJQ0wNtJoHdXgwR/HAOFaCJmFJ5DkzjAmrU4dSpLiNN8JRqj4o1hX6dCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(66476007)(66556008)(66946007)(8676002)(5660300002)(8936002)(4744005)(186003)(2616005)(1076003)(83380400001)(36756003)(6486002)(26005)(33656002)(2906002)(508600001)(38100700002)(6916009)(316002)(6506007)(6512007)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TgsUOb7uZuiQtK4auy3FCF2w67uV2cMYF5dptHxMNSGm5HldNWzamet/UN0Y?=
- =?us-ascii?Q?wbszWHgf78/CD21a7yPM7x/axzQxKoXax1x9udomgCzTsfxCj1Pan5fp5ltF?=
- =?us-ascii?Q?Bv+AywGYavdUYZxjq0HEa2XOho8sVK36yQas5s/T6kJwnnl/TvACDZmYAhL5?=
- =?us-ascii?Q?VHVfp61i0uAt7fZjyPUt3UfTBk2b6XfKmZDnRI8PGt8HFtkhNCQYCfcugF7/?=
- =?us-ascii?Q?zOtH0eBa1rbjskq7/3rjzu1dp2HhuGU8o+gMjNeL6CpFm9Ycpmj+PdtSIl4/?=
- =?us-ascii?Q?txsoC3lGkKDS8+5gZemuV4NFNATqWjaiwUD+J8Qwb5PJaooqwnCRqgEPR7mo?=
- =?us-ascii?Q?jsO/I4vFxCSHG+AaDe+0WXCwzGCm6vpaTqBZf09E2nTynyLwvPLaO5EhhW5k?=
- =?us-ascii?Q?UfvnUxC3bRYpxLlNIVUyCPQDQsnN1Pw6dwPIS3lz9qG5W9KHi5VaBXx+pgLE?=
- =?us-ascii?Q?j4OATWZHjbkvQq+b96HOZw/G4A10SjQOeqZcpt0nZn8nuvuQ7JBHj8SXkS66?=
- =?us-ascii?Q?d8RjX+nWcwFUvMv7r8GJIDJN1fWX73/a9r1tTI82+ksNt8rZ05o6Zn1IZ+Nf?=
- =?us-ascii?Q?LxRRfSNZvIpEdpPtIedYR2HRiznyCsCs3n5zkoUUQTnkFw00VjzamJ0p3llT?=
- =?us-ascii?Q?SH5JFtTB3QO11rq0XtYnirkK3gmwG944uNys/Kngyo7Mj2r9EdPudEPxMfcn?=
- =?us-ascii?Q?yJLAODYsyOV2zCLCSJkKb33LKguvxTdWICxibTow3/bSq7w5I77BaswZXvdZ?=
- =?us-ascii?Q?eRjjKqr96tik7cGN64VAYRRctrWWQeeInMh16RyMKUGJjOOZ0FzFdnYC+yOm?=
- =?us-ascii?Q?8JRBfUtpg44vQgMDddSxtl91YnJkx4LUuBchz+euJA/O7Lp0QRxH+wC2YVJH?=
- =?us-ascii?Q?lwbL/rddRd0Kt4X8XQWSSoPNz9nspiHQ15Q9H4SKOpYKqNpP0XsMe5DAMQo8?=
- =?us-ascii?Q?GZvqehC0nMw+KwbJbDcwW63p2CQMEVlA7PpTMv7gLhSpfQWXdDrOHQynft+/?=
- =?us-ascii?Q?lJuRGAnopvmKCfeoc4qyQN4VGVyt9eWrGNRpKogNZnS7YZ7HpWTbHZ69qMzh?=
- =?us-ascii?Q?zBsb1KS0Aqk4re89/F407vMKZpVYrAsHeEap11x8i5VY+eggi5yKJOEuA40T?=
- =?us-ascii?Q?aSESDu4aJOBUUdN/xyHEM3yWIYhmesd4aFnDkAFv1eZQFoFEaDx+Cdho2jKl?=
- =?us-ascii?Q?j+ggeE+F69MVL2pbY2yx+DSK6ajQ0/5g2iuqGXhxcEe5xy3qB+ETFnENcPo8?=
- =?us-ascii?Q?ax6fULN0QtzesQq4HRVVpE8SIaAk7hp1anbCewrN8N3fHI5O42idWAqWGBfu?=
- =?us-ascii?Q?6eF4gCpKSOQNshkiZ77Iw/Jyl/YLzbaEBFR47b/1+zH/vnh3nIz54Cp3WXqV?=
- =?us-ascii?Q?S8ArAl98wnR7oITbmFnP7Wgf4rvs657NuI9UxF441Wx/+/Q8FF9Qi1g4smZr?=
- =?us-ascii?Q?Eyr5QGY8GNw36yetljiAE5Bv0c8Ci9k/rY4Plx2QDIjmVw695odykp3y2nfr?=
- =?us-ascii?Q?/zRCq50mxjIdkPL67gJPh9+nZtn6YmeozgQIEH5vAGwbi/uhHdGI21+iOmdZ?=
- =?us-ascii?Q?xICYcPBn2/wm+a89m/EgUzrdXqODFJU3lY2z29THtmFgZZqtTJF8eDlLYgWy?=
- =?us-ascii?Q?s4BgtWBOt81A1aJCLMuIXJ/Dj2hzsgwQarU54ufF5R7SJjJAyOcarVlgvgYL?=
- =?us-ascii?Q?OVZOWFQZjRZIW/mjL6sL7TQCpMoFV5v+ivVRKpeXGlNZDTC8H1I2sEG/Sqqw?=
- =?us-ascii?Q?ry0QIsNExQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9bf9452-0e89-4164-3d5b-08da19846f1b
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 17:23:02.0373
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c56qayiLvKDz5ZLKWSGnSMzUOO1yVSHtYxGIGbrcdNvN0swmBixZk4KEYEPjWura
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3262
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Doug Anderson <dianders@chromium.org>
+CC:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
+ <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org>
+ <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
+ <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
+ <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
+ <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com>
+ <CAD=FV=UmU_BVUaL_X75yOEvQPtGUBTR5-jiVWBHq7uSRt6HM4Q@mail.gmail.com>
+ <225d2c0a-42ec-28ad-688c-e7e9e2035ee1@quicinc.com>
+ <CAD=FV=W=WjSACHvRDFBnkLUp-LU2c4XMu3=FTzTx=zexNF5PAw@mail.gmail.com>
+ <CAA8EJpqLZ9up4euGEbhf5QyBqm4tJuLcHi7D+0Si7ak9Jej52w@mail.gmail.com>
+ <CAD=FV=XwOzsRf7RnvyBjr5TtedMhC0LJFKoK9tp-kw1eEyuJmQ@mail.gmail.com>
+ <CAA8EJprb5UF24WRNvGaY_hSqW--NPd=9=8AaPYWSMbUumNn+dQ@mail.gmail.com>
+ <CAD=FV=UG7k4A+hMXxwju-0mLddD1oJdGngXMkMA-dO3AxOx0rQ@mail.gmail.com>
+ <CAA8EJprLRiWrkqLG09UG1arDmo1fuq917ztfxts66p+AaYcYbA@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAA8EJprLRiWrkqLG09UG1arDmo1fuq917ztfxts66p+AaYcYbA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 03:35:59PM +0100, Robin Murphy wrote:
-> Rather than hard-coding pci_bus_type, pass the PF device through to
-> usnic_uiom_alloc_pd() and retrieve its bus there. This prepares for
-> iommu_domain_alloc() changing to take a device rather than a bus_type.
+Hi Doug and Dmitry
+
+On 4/8/2022 7:58 AM, Dmitry Baryshkov wrote:
+> On Fri, 8 Apr 2022 at 16:43, Doug Anderson <dianders@chromium.org> wrote:
+>>
+>> Hi,
+>>
+>> On Fri, Apr 8, 2022 at 5:20 AM Dmitry Baryshkov
+>> <dmitry.baryshkov@linaro.org> wrote:
+>>>
+>>>> I guess my thought was that in DP you could still create the AUX bus
+>>>> at probe time. Then for DP you just return an instant "transfer
+>>>> failed" from the AUX bus if HPD isn't asserted. For eDP (as discussed
+>>>> elsewhere) when we try to do an AUX transfer then we delay until HPD
+>>>> is there.
+>>>
+>>> I think panel-edp would already handle the delay, so we do not need to
+>>> have this logic in the DP driver.
+>>
+>> There's a whole discussion about this between Stephen and me in patch
+>> #5 ("drm/msm/dp: wait for hpd high before any sink interaction").
+>> Basically:
+>>
+>> * If panel HPD is hooked up to the dedicated HPD pin on the eDP
+>> controller then the panel driver doesn't have a way to read it.
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/infiniband/hw/usnic/usnic_ib_verbs.c | 3 +--
->  drivers/infiniband/hw/usnic/usnic_uiom.c     | 5 ++---
->  drivers/infiniband/hw/usnic/usnic_uiom.h     | 2 +-
->  3 files changed, 4 insertions(+), 6 deletions(-)
+> I refreshed that dialog. I must admit, I have missed the fact that the
+> HPD pin might not be visible as the GPIO pin.
+> 
+>> * We can't leverage the existing "HPD" query functions in DRM because
+>> those indicate whether a panel is _physically_ connected. For eDP, it
+>> always is.
+> 
+> Yes, I was thinking about (mis)using the
+> drm_bridge_connector_hpd_notify() for generic HPD-related
+> notifications (to tell eDP that it should check the current state). I
+> have abandoned that idea.
+> 
+>> For now the rule is that the AUX transfer function is in charge of
+>> waiting for HPD for eDP if the dedicated HPD pin is used. If we want
+>> to re-invent this we could, but that system works, isn't _too_ ugly,
+>> and we're already making big enough changes in this series.
+> 
+> The is_hpd_asserted() looks like a good callback for the aux bus.
+> It will allow the panel driver to check if the panel is powered up (in
+> the absence of the GPIO pin).
+> 
+>>>> So we can still acquire resources (clocks, PHY, io maps, etc) at probe
+>>>> time for DP and create the AUX bus, right? It will just return
+>>>> "-ENODEV" if HPD isn't asserted and you're DP?
+>>>
+>>> Yes, please. I still suppose that we'd need a separate case to
+>>> power_on eDP's PHY during the probe time. Maybe I'm mistaken here.
+>>
+>> I think the ideal way is to do it like Kieran's proposal for sn65dsi86:
+>>
+>> https://lore.kernel.org/r/20220317131250.1481275-4-kieran.bingham+renesas@ideasonboard.com/
+>>
+>> * When enabling HPD (physical hot plug detect) in the hpd_enable()
+>> callback you do a pm_runtime_get(). You do the
+>> pm_runtime_put_autosuspend() when disabling. This is only used for DP
+>> since we only provide DRM_BRIDGE_OP_HPD for DP, not for eDP.
+>>
+>> * We do a pm_runtime_get() / pm_runtime_put_autosuspend() in the AUX
+>> transfer routine. While holding the pm_runtime reference we check HPD.
+>> For DP we return immediately if HPD isn't asserted. For eDP, we delay.
+>>
+>> * We do the pm_runtime_get() in pre_enable and the pm_runtime_put() in
+>> post_disable. For DP this will add a 2nd refcount (since we probably
+>> were holding the reference for HPD). For eDP this will cause us to
+>> power on.
+>>
+>> * If there's any other time we need to read HW registers, and we
+>> aren't guaranteed to already have a pm_runtime reference (like during
+>> probe), we can do a temporary pm_runtime_get() /
+>> pm_runtime_put_autosuspend().
+> 
+> This looks good. I'd be more than welcome to review such series.
+> 
+> Note: I think this would require using
+> drm_bridge_connector_enable_hpd() in the DP code.
+> Hopefully at some point we would be able to move all
+> drm_bridge_connector calls to the core msm layer.
+> --
+> With best wishes
+> Dmitry
 
-Applied to for-next, thanks
 
-Jason
+Thanks for the proposals.
+
+In general I would break up this task as follows:
+
+1) Re-factoring dp/edp parsing code to move it to probe ( its currently
+done in bind ). So not sure what dependencies we will uncover there.
+Nonetheless, lets assume for now it can be done.
+
+2) Then bind all the power resources needed for AUX in pm_runtime_ops
+
+3) Handle EPROBE_DEFER cases of the panel-eDP aux device
+
+4) Probably the biggest from our point of view --- makes sure none of 
+this breaks DP/eDP
+
+Since QC will be taking ownership of all of this, I would still suggest 
+land this series first so that basic display functionality on sc7280
+chromebooks works, unblocks more developers and this program and we can
+internally evaluate all of this and post the changes as-and-when ready
+for review.
+
+So, I suggest/request acking this current one after
+fixing the other comments (unrelated to this re-factor) which have been 
+given so far ofcourse, as we all agree this is not breaking and seems 
+pretty reasonable short term.
+
+Doug, you can track this re-factor with a different bug so that all this 
+discussion remains intact.
+
+Thanks
+
+Abhinav
+
+

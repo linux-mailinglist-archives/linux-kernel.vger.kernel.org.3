@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273E94F9184
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AD14F917F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiDHJLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S232797AbiDHJLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbiDHJKs (ORCPT
+        with ESMTP id S232697AbiDHJKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 05:10:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A7105AB2;
-        Fri,  8 Apr 2022 02:08:44 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:08:41 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C587100764;
+        Fri,  8 Apr 2022 02:08:45 -0700 (PDT)
+Date:   Fri, 08 Apr 2022 09:08:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408922;
+        s=2020; t=1649408923;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CzPVVFUo8TuPgGereZMvL+A1ibQCd4jFEELtppx3i3Y=;
-        b=21La6cqMZfUZOwJHZaOleMwx2UDfUHQ6zReqH6eOKlw4xPYnYtqhA9JslyZ+wEWt+1NsUl
-        hgaAHZSOhtA9Ad+DrUVequxP4g6tOKPu9WghZ/i/QRQEqgS/avm3VP/v+OufnqPGx1FLGx
-        j3Y8t1AIQIgF65lFDf40BYg7fyZOOEo+e/P3uQms9VtZ2nHfb4S6ky1RAhVz0+HG+Wy5E8
-        MMGA9k9VmWdEwhBkGRV58DtuCRsmKFKgBJwFWuASUJBiIy1Q1zu9zd3oocEB90KtvGrMs8
-        4A8qAjLHZyrJMjdyFLsNM5Y+0+4R/jOhuIndLM4mOcGFo9SCJoPxOQYLtfOPzA==
+        bh=OCo7CpYdO08GaahQt+H4dK5eLkrrUSaNyjBnuvdVLI8=;
+        b=ugfoz7M3p4i+IBuQCrhqlG9UWFU5GWxkxGsZ8lpl9emULRKqeu0IVS6+WtFtTcN3nQe8ze
+        pD7A6YqeJmC4TxXH0+UzX6rwynzt57tsf0tRbRG8y/eLR1Jj7mcK/MAqn8JNc9I8s9zW1M
+        e5QIOylZsE+XAo/v8+z3m61IV5VcXeYr5pVaurtXSvNtcTsCI3rsCYxZRuAMshpOeYFN9W
+        mKAUCuqsZD/o8hBB8YezqFt3IeD1rugxJ0oUj5JnTchNxvvdM0jk6Qrx/jOO9uO+iUXr0W
+        wCTroqVe3dAjKd44Uk7BbEFoIQ/LrFL6Gd1mCdoPcWQKHsfv3rC72rg7s1pxZQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408922;
+        s=2020e; t=1649408923;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CzPVVFUo8TuPgGereZMvL+A1ibQCd4jFEELtppx3i3Y=;
-        b=m+ZLk0DY3ZlSrTNGdOIppuMpSVOOVuLHh4fvyl13Yh55BMTDR6O+WT3BqumnDJG+8SupPW
-        pDvvn/Mw8rPLcLDw==
-From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
+        bh=OCo7CpYdO08GaahQt+H4dK5eLkrrUSaNyjBnuvdVLI8=;
+        b=55x8jqQDOD69YycxMW+UFpRWej8elnrtv+UJ6GiYRc6/fmLcRxaaSUPwCW7L4jidF2P4nq
+        eYUHar+70JDG7pCg==
+From:   "tip-bot2 for Michael Roth" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Provide support for SNP guest request NAEs
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+Subject: [tip: x86/sev] x86/sev: Add a sev= cmdline option
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-42-brijesh.singh@amd.com>
-References: <20220307213356.2797205-42-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-41-brijesh.singh@amd.com>
+References: <20220307213356.2797205-41-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940892163.389.17769861371376066698.tip-bot2@tip-bot2>
+Message-ID: <164940892265.389.9709721824909968252.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,171 +68,135 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     d5af44dde5461d125d1602ac913ab5c6bdf09b8b
-Gitweb:        https://git.kernel.org/tip/d5af44dde5461d125d1602ac913ab5c6bdf09b8b
-Author:        Brijesh Singh <brijesh.singh@amd.com>
-AuthorDate:    Mon, 07 Mar 2022 15:33:51 -06:00
+Commit-ID:     ba37a1438aeb540cc48722d629f4b2e7e4398466
+Gitweb:        https://git.kernel.org/tip/ba37a1438aeb540cc48722d629f4b2e7e4398466
+Author:        Michael Roth <michael.roth@amd.com>
+AuthorDate:    Mon, 07 Mar 2022 15:33:50 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 07 Apr 2022 16:47:12 +02:00
 
-x86/sev: Provide support for SNP guest request NAEs
+x86/sev: Add a sev= cmdline option
 
-Version 2 of GHCB specification provides SNP_GUEST_REQUEST and
-SNP_EXT_GUEST_REQUEST NAE that can be used by the SNP guest to
-communicate with the PSP.
+For debugging purposes it is very useful to have a way to see the full
+contents of the SNP CPUID table provided to a guest. Add an sev=debug
+kernel command-line option to do so.
 
-While at it, add a snp_issue_guest_request() helper that will be used by
-driver or other subsystem to issue the request to PSP.
+Also introduce some infrastructure so that additional options can be
+specified via sev=option1[,option2] over time in a consistent manner.
 
-See SEV-SNP firmware and GHCB spec for more details.
+  [ bp: Massage, simplify string parsing. ]
 
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-42-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-41-brijesh.singh@amd.com
 ---
- arch/x86/include/asm/sev-common.h |  3 ++-
- arch/x86/include/asm/sev.h        | 14 +++++++-
- arch/x86/include/uapi/asm/svm.h   |  4 ++-
- arch/x86/kernel/sev.c             | 57 ++++++++++++++++++++++++++++++-
- 4 files changed, 78 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt |  2 +-
+ Documentation/x86/x86_64/boot-options.rst       | 14 +++++-
+ arch/x86/kernel/sev.c                           | 44 ++++++++++++++++-
+ 3 files changed, 60 insertions(+)
 
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 0759af9..b8357d6 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -128,6 +128,9 @@ struct snp_psc_desc {
- 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
- } __packed;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e..48ad2ec 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5308,6 +5308,8 @@
  
-+/* Guest message request error code */
-+#define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
+ 	serialnumber	[BUGS=X86-32]
+ 
++	sev=option[,option...] [X86-64] See Documentation/x86/x86_64/boot-options.rst
 +
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
- #define GHCB_MSR_TERM_REASON_SET_MASK	0xf
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 84d3d51..c63a1d4 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -87,6 +87,14 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+ 	shapers=	[NET]
+ 			Maximal number of shapers.
  
- #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
- 
-+/* SNP Guest message request */
-+struct snp_req_data {
-+	unsigned long req_gpa;
-+	unsigned long resp_gpa;
-+	unsigned long data_gpa;
-+	unsigned int data_npages;
-+};
+diff --git a/Documentation/x86/x86_64/boot-options.rst b/Documentation/x86/x86_64/boot-options.rst
+index 07aa000..4efb1fa 100644
+--- a/Documentation/x86/x86_64/boot-options.rst
++++ b/Documentation/x86/x86_64/boot-options.rst
+@@ -310,3 +310,17 @@ Miscellaneous
+     Do not use GB pages for kernel direct mappings.
+   gbpages
+     Use GB pages for kernel direct mappings.
 +
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-@@ -154,6 +162,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void snp_abort(void);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -173,6 +182,11 @@ static inline void snp_set_memory_private(unsigned long vaddr, unsigned int npag
- static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
-+static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
-+					  unsigned long *fw_err)
-+{
-+	return -ENOTTY;
-+}
- #endif
- 
- #endif
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index cfea5e8..f69c168 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -109,6 +109,8 @@
- #define SVM_VMGEXIT_SET_AP_JUMP_TABLE		0
- #define SVM_VMGEXIT_GET_AP_JUMP_TABLE		1
- #define SVM_VMGEXIT_PSC				0x80000010
-+#define SVM_VMGEXIT_GUEST_REQUEST		0x80000011
-+#define SVM_VMGEXIT_EXT_GUEST_REQUEST		0x80000012
- #define SVM_VMGEXIT_AP_CREATION			0x80000013
- #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
- #define SVM_VMGEXIT_AP_CREATE			1
-@@ -225,6 +227,8 @@
- 	{ SVM_VMGEXIT_AP_HLT_LOOP,	"vmgexit_ap_hlt_loop" }, \
- 	{ SVM_VMGEXIT_AP_JUMP_TABLE,	"vmgexit_ap_jump_table" }, \
- 	{ SVM_VMGEXIT_PSC,		"vmgexit_page_state_change" }, \
-+	{ SVM_VMGEXIT_GUEST_REQUEST,	"vmgexit_guest_request" }, \
-+	{ SVM_VMGEXIT_EXT_GUEST_REQUEST, "vmgexit_ext_guest_request" }, \
- 	{ SVM_VMGEXIT_AP_CREATION,	"vmgexit_ap_creation" }, \
- 	{ SVM_VMGEXIT_HV_FEATURES,	"vmgexit_hypervisor_feature" }, \
- 	{ SVM_EXIT_ERR,         "invalid_guest_state" }
++
++AMD SEV (Secure Encrypted Virtualization)
++=========================================
++Options relating to AMD SEV, specified via the following format:
++
++::
++
++   sev=option1[,option2]
++
++The available options are:
++
++   debug
++     Enable debug messages.
 diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 70ecc6e..7237b41 100644
+index c873372..70ecc6e 100644
 --- a/arch/x86/kernel/sev.c
 +++ b/arch/x86/kernel/sev.c
-@@ -2106,3 +2106,60 @@ static int __init init_sev_config(char *str)
- 	return 1;
+@@ -112,6 +112,13 @@ DEFINE_STATIC_KEY_FALSE(sev_es_enable_key);
+ 
+ static DEFINE_PER_CPU(struct sev_es_save_area *, sev_vmsa);
+ 
++struct sev_config {
++	__u64 debug		: 1,
++	      __reserved	: 63;
++};
++
++static struct sev_config sev_cfg __read_mostly;
++
+ static __always_inline bool on_vc_stack(struct pt_regs *regs)
+ {
+ 	unsigned long sp = regs->sp;
+@@ -2042,6 +2049,23 @@ void __init snp_abort(void)
+ 	sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
  }
- __setup("sev=", init_sev_config);
-+
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
+ 
++static void dump_cpuid_table(void)
 +{
-+	struct ghcb_state state;
-+	struct es_em_ctxt ctxt;
-+	unsigned long flags;
-+	struct ghcb *ghcb;
-+	int ret;
++	const struct snp_cpuid_table *cpuid_table = snp_cpuid_get_table();
++	int i = 0;
 +
-+	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+		return -ENODEV;
++	pr_info("count=%d reserved=0x%x reserved2=0x%llx\n",
++		cpuid_table->count, cpuid_table->__reserved1, cpuid_table->__reserved2);
 +
-+	if (!fw_err)
-+		return -EINVAL;
++	for (i = 0; i < SNP_CPUID_COUNT_MAX; i++) {
++		const struct snp_cpuid_fn *fn = &cpuid_table->fn[i];
 +
-+	/*
-+	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
-+	 * a per-CPU GHCB.
-+	 */
-+	local_irq_save(flags);
-+
-+	ghcb = __sev_get_ghcb(&state);
-+	if (!ghcb) {
-+		ret = -EIO;
-+		goto e_restore_irq;
++		pr_info("index=%3d fn=0x%08x subfn=0x%08x: eax=0x%08x ebx=0x%08x ecx=0x%08x edx=0x%08x xcr0_in=0x%016llx xss_in=0x%016llx reserved=0x%016llx\n",
++			i, fn->eax_in, fn->ecx_in, fn->eax, fn->ebx, fn->ecx,
++			fn->edx, fn->xcr0_in, fn->xss_in, fn->__reserved);
 +	}
-+
-+	vc_ghcb_invalidate(ghcb);
-+
-+	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST) {
-+		ghcb_set_rax(ghcb, input->data_gpa);
-+		ghcb_set_rbx(ghcb, input->data_npages);
-+	}
-+
-+	ret = sev_es_ghcb_hv_call(ghcb, true, &ctxt, exit_code, input->req_gpa, input->resp_gpa);
-+	if (ret)
-+		goto e_put;
-+
-+	if (ghcb->save.sw_exit_info_2) {
-+		/* Number of expected pages are returned in RBX */
-+		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
-+		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
-+			input->data_npages = ghcb_get_rbx(ghcb);
-+
-+		*fw_err = ghcb->save.sw_exit_info_2;
-+
-+		ret = -EIO;
-+	}
-+
-+e_put:
-+	__sev_put_ghcb(&state);
-+e_restore_irq:
-+	local_irq_restore(flags);
-+
-+	return ret;
 +}
-+EXPORT_SYMBOL_GPL(snp_issue_guest_request);
++
+ /*
+  * It is useful from an auditing/testing perspective to provide an easy way
+  * for the guest owner to know that the CPUID table has been initialized as
+@@ -2059,6 +2083,26 @@ static int __init report_cpuid_table(void)
+ 	pr_info("Using SNP CPUID table, %d entries present.\n",
+ 		cpuid_table->count);
+ 
++	if (sev_cfg.debug)
++		dump_cpuid_table();
++
+ 	return 0;
+ }
+ arch_initcall(report_cpuid_table);
++
++static int __init init_sev_config(char *str)
++{
++	char *s;
++
++	while ((s = strsep(&str, ","))) {
++		if (!strcmp(s, "debug")) {
++			sev_cfg.debug = true;
++			continue;
++		}
++
++		pr_info("SEV command-line option '%s' was not recognized\n", s);
++	}
++
++	return 1;
++}
++__setup("sev=", init_sev_config);

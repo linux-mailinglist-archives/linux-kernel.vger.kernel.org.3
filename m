@@ -2,84 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1D44F8E8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68204F8D96
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbiDHEWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S234276AbiDHEZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiDHEWQ (ORCPT
+        with ESMTP id S231654AbiDHEZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:22:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DB6A0;
-        Thu,  7 Apr 2022 21:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 185D461E4B;
-        Fri,  8 Apr 2022 04:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 671C2C385AB;
-        Fri,  8 Apr 2022 04:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649391612;
-        bh=u7ZMh83fqnYFtsF3Tn7eFF996YlGLimcmWlos4xrW0s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fi4BfkAcaFodrBZy02fD7nGFH8DpdqdJmT7ImOolvm1c2osddp2Lv0Q6PGxY1nNP3
-         k4s4Ef5Ea1xBJWD9Muu3ANdgnnSLXBbFYI71fjnP7cG5FxMdSPJuuFw52ba9Ju9tbl
-         86S5oTdoRUixjOUChfAV1E6Dts2Uk0eoSJOGMtsv+38jk6olcyW8lEYnV9WWRCXUe/
-         hzvgy/EC/05L1+LespA5UkiU/9n2wBJBRWrjTpPbnXpuPoH7FUXYqM5Txr3MLMgFsy
-         it4qrbldgTP7UlsHnQqv1rJC3PMheIGu1LnFhpPzvtVQuBiGU59zViZrK1r2ywylGC
-         2zPzHKY49wp7Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4807DE8DBDD;
-        Fri,  8 Apr 2022 04:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 8 Apr 2022 00:25:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B8BB19C18;
+        Thu,  7 Apr 2022 21:23:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 573E211FB;
+        Thu,  7 Apr 2022 21:23:52 -0700 (PDT)
+Received: from [10.163.37.138] (unknown [10.163.37.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FA423F718;
+        Thu,  7 Apr 2022 21:23:48 -0700 (PDT)
+Message-ID: <e95dfce9-23a1-7722-7f36-f7ca350e492d@arm.com>
+Date:   Fri, 8 Apr 2022 09:54:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: mpls: fix memdup.cocci warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164939161228.2784.17655995105945101146.git-patchwork-notify@kernel.org>
-Date:   Fri, 08 Apr 2022 04:20:12 +0000
-References: <20220406114629.182833-1-gongruiqi1@huawei.com>
-In-Reply-To: <20220406114629.182833-1-gongruiqi1@huawei.com>
-To:     GONG@ci.codeaurora.org, Ruiqi <gongruiqi1@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangweiyang2@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] Documentation: arch_pgtable_helpers: demote pgtable
+ list headings
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220407045830.181514-1-bagasdotme@gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220407045830.181514-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, 6 Apr 2022 19:46:29 +0800 you wrote:
-> Simply use kmemdup instead of explicitly allocating and copying memory.
+On 4/7/22 10:28, Bagas Sanjaya wrote:
+> All page title headings in arch_pgtable_helpers.txt except
+> "Architecture Page Table Helpers" should have been subheadings instead.
 > 
-> Generated by: scripts/coccinelle/api/memdup.cocci
+> Demote them to chapter headings.
 > 
-> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > ---
->  net/mpls/af_mpls.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  Changes since v1 [1]: 
+>    - Rebased on v5.18-rc1
+>    - Describe why the patch do the job
 
-Here is the summary with links:
-  - net: mpls: fix memdup.cocci warning
-    https://git.kernel.org/netdev/net-next/c/27a5a5685d37
+I am neutral on this patch, dont have a strong opinion either way.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
+>  [1]: https://lore.kernel.org/linux-doc/20220326131313.691027-1-bagasdotme@gmail.com/
+>  Documentation/vm/arch_pgtable_helpers.rst | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/vm/arch_pgtable_helpers.rst b/Documentation/vm/arch_pgtable_helpers.rst
+> index f8b225fc919047..cbaee9e592410f 100644
+> --- a/Documentation/vm/arch_pgtable_helpers.rst
+> +++ b/Documentation/vm/arch_pgtable_helpers.rst
+> @@ -13,7 +13,7 @@ Following tables describe the expected semantics which can also be tested during
+>  boot via CONFIG_DEBUG_VM_PGTABLE option. All future changes in here or the debug
+>  test need to be in sync.
+>  
+> -======================
+> +
+>  PTE Page Table Helpers
+>  ======================
+>  
+> @@ -79,7 +79,7 @@ PTE Page Table Helpers
+>  | ptep_set_access_flags     | Converts into a more permissive PTE              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -======================
+> +
+>  PMD Page Table Helpers
+>  ======================
+>  
+> @@ -153,7 +153,7 @@ PMD Page Table Helpers
+>  | pmdp_set_access_flags     | Converts into a more permissive PMD              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -======================
+> +
+>  PUD Page Table Helpers
+>  ======================
+>  
+> @@ -209,7 +209,7 @@ PUD Page Table Helpers
+>  | pudp_set_access_flags     | Converts into a more permissive PUD              |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -==========================
+> +
+>  HugeTLB Page Table Helpers
+>  ==========================
+>  
+> @@ -235,7 +235,7 @@ HugeTLB Page Table Helpers
+>  | huge_ptep_set_access_flags  | Converts into a more permissive HugeTLB        |
+>  +---------------------------+--------------------------------------------------+
+>  
+> -========================
+> +
+>  SWAP Page Table Helpers
+>  ========================
+>  
+> 
+> base-commit: 3123109284176b1532874591f7c81f3837bbdc17

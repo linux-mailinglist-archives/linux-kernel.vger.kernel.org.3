@@ -2,155 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFD14F9DB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7A44F9DB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiDHTeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S232465AbiDHTnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbiDHTd6 (ORCPT
+        with ESMTP id S230264AbiDHTnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:33:58 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1422A26C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:31:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so10623512pjk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nAhd+e1VLA336/mZCn3lDY8+NbNK0VdRPAd/7u4RqTQ=;
-        b=XWdQa8qAEH5VB1ontDMQ52QfzbJoWBgxn/ohqzG1cUID42xFznBlPqmi98x6fjmoQR
-         pMpEwW7K/05nnyuOWCpKicD8pdy6+TuRFTr0G55Pf77IQhTNs/TMO0aI/DiYB8TffBKg
-         C2+InvQcJvq69nnBxZbJaSgbsEHXLuYWrtXlCMe1b9vImxzGDriVrk9MlY8Hf3iCOpM7
-         OijSKtBYXwqC5wavGdFLebbz59Z5Dp45XpYCOJ/zClLDdb7VR1Sr+OOX/QAfUhlQEndj
-         sKv/IjiKk58Wzx2WU1BKKUC+M9icvtcNxmGmeKqqZMfZ1WYTrJb+lffiSHfB/snTQVg/
-         dqGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nAhd+e1VLA336/mZCn3lDY8+NbNK0VdRPAd/7u4RqTQ=;
-        b=lMbP0vCICUzQ9gKY2aTg6X3Ub92VbV9NBPTb1QiXIyuaFBTI4iMlRSb3n2XEpu/eBQ
-         Iblj7GmCdE173MB4e0fnHxS20E+07F7kvCCMYPvyI5Aa6UKuQXKi8XLJezrV/K/1Rbhx
-         2XTe+0BX7YpOKrGLI+iYd3wjH6blB6TiduQdcfOgRLfVFSVb7tbpsE1tjsvSThxMiRXX
-         UfsNZbSOaFyxBDt9wobNz6YLEJXpP6GFQr9gue9TBPbCejjTA+0QLZgWcqqY4GH76Od0
-         LiRAHfOO7HStB/yfL3Hy+dP+iavVbo7MOzDGWs17Jk6T8HGJUuJwStDDcQPzS/IHH890
-         aWYQ==
-X-Gm-Message-State: AOAM533eEu0t3ZMhydfoaGvxeXdxOI8E+SNOMzGmHOqO8XHzcWFSWP/l
-        BlKcmU7jnWncAMYtGPsR8LyS4w==
-X-Google-Smtp-Source: ABdhPJzq04lr8ySKICE/znS41U3/sMfGzYTNu890ARARttOSfPftZr6YYDT1YQiY6wh6UcRu823deA==
-X-Received: by 2002:a17:902:dac7:b0:154:4899:85db with SMTP id q7-20020a170902dac700b00154489985dbmr21232112plx.9.1649446313147;
-        Fri, 08 Apr 2022 12:31:53 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm12977460pjb.23.2022.04.08.12.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 12:31:52 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 19:31:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2] KVM: x86/mmu: Update number of zapped pages even if
- page list is stable
-Message-ID: <YlCNpQ9nkD1ToY13@google.com>
-References: <20211129235233.1277558-1-seanjc@google.com>
+        Fri, 8 Apr 2022 15:43:16 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EF01A801
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:41:11 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:42746)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ncuTk-00C3Ie-SS; Fri, 08 Apr 2022 13:41:08 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:42862 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ncuTi-007Kjk-MT; Fri, 08 Apr 2022 13:41:08 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <Yh/b19JikC+Vnm8i@linutronix.de>
+        <20220314185429.GA30364@redhat.com> <YjBO8yzxdmjTGNiy@linutronix.de>
+        <20220315142944.GA22670@redhat.com> <YkW55u6u2fo5QmV7@linutronix.de>
+        <20220405101026.GB34954@worktop.programming.kicks-ass.net>
+        <20220405102849.GA2708@redhat.com>
+        <Ykwn0MpcrZ/N+LOG@hirez.programming.kicks-ass.net>
+        <20220407121340.GA2762@worktop.programming.kicks-ass.net>
+        <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
+        <20220408090908.GO2731@worktop.programming.kicks-ass.net>
+Date:   Fri, 08 Apr 2022 14:40:42 -0500
+In-Reply-To: <20220408090908.GO2731@worktop.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Fri, 8 Apr 2022 11:09:08 +0200")
+Message-ID: <874k332wjp.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129235233.1277558-1-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1ncuTi-007Kjk-MT;;;mid=<874k332wjp.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18gdPkKSpj7Z7VBxZ2y31rC9yKS9HjfR0w=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Peter Zijlstra <peterz@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1429 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 13 (0.9%), b_tie_ro: 11 (0.8%), parse: 0.97
+        (0.1%), extract_message_metadata: 11 (0.8%), get_uri_detail_list: 1.54
+        (0.1%), tests_pri_-1000: 11 (0.8%), tests_pri_-950: 1.17 (0.1%),
+        tests_pri_-900: 0.96 (0.1%), tests_pri_-90: 85 (5.9%), check_bayes: 83
+        (5.8%), b_tokenize: 8 (0.5%), b_tok_get_all: 8 (0.6%), b_comp_prob:
+        2.6 (0.2%), b_tok_touch_all: 62 (4.3%), b_finish: 0.85 (0.1%),
+        tests_pri_0: 1288 (90.1%), check_dkim_signature: 0.54 (0.0%),
+        check_dkim_adsp: 2.4 (0.2%), poll_dns_idle: 0.49 (0.0%), tests_pri_10:
+        4.1 (0.3%), tests_pri_500: 11 (0.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on PREEMPT_RT.
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Very high latency ping, this is still problematic and still applies cleanly.
+Peter Zijlstra <peterz@infradead.org> writes:
 
-On Mon, Nov 29, 2021, Sean Christopherson wrote:
-> When zapping obsolete pages, update the running count of zapped pages
-> regardless of whether or not the list has become unstable due to zapping
-> a shadow page with its own child shadow pages.  If the VM is backed by
-> mostly 4kb pages, KVM can zap an absurd number of SPTEs without bumping
-> the batch count and thus without yielding.  In the worst case scenario,
-> this can cause a soft lokcup.
-> 
->  watchdog: BUG: soft lockup - CPU#12 stuck for 22s! [dirty_log_perf_:13020]
->    RIP: 0010:workingset_activation+0x19/0x130
->    mark_page_accessed+0x266/0x2e0
->    kvm_set_pfn_accessed+0x31/0x40
->    mmu_spte_clear_track_bits+0x136/0x1c0
->    drop_spte+0x1a/0xc0
->    mmu_page_zap_pte+0xef/0x120
->    __kvm_mmu_prepare_zap_page+0x205/0x5e0
->    kvm_mmu_zap_all_fast+0xd7/0x190
->    kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
->    kvm_page_track_flush_slot+0x5c/0x80
->    kvm_arch_flush_shadow_memslot+0xe/0x10
->    kvm_set_memslot+0x1a8/0x5d0
->    __kvm_set_memory_region+0x337/0x590
->    kvm_vm_ioctl+0xb08/0x1040
-> 
-> Fixes: fbb158cb88b6 ("KVM: x86/mmu: Revert "Revert "KVM: MMU: zap pages in batch""")
-> Reported-by: David Matlack <dmatlack@google.com>
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-> 
-> v2:
->  - Rebase to kvm/master, commit 30d7c5d60a88 ("KVM: SEV: expose...")
->  - Collect Ben's review, modulo bad splat.
->  - Copy+paste the correct splat and symptom. [David].
-> 
-> @David, I kept the unstable declaration out of the loop, mostly because I
-> really don't like putting declarations in loops, but also because
-> nr_zapped is declared out of the loop and I didn't want to change that
-> unnecessarily or make the code inconsistent.
-> 
->  arch/x86/kvm/mmu/mmu.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 0c839ee1282c..208c892136bf 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5576,6 +5576,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
->  {
->  	struct kvm_mmu_page *sp, *node;
->  	int nr_zapped, batch = 0;
-> +	bool unstable;
->  
->  restart:
->  	list_for_each_entry_safe_reverse(sp, node,
-> @@ -5607,11 +5608,12 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
->  			goto restart;
->  		}
->  
-> -		if (__kvm_mmu_prepare_zap_page(kvm, sp,
-> -				&kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
-> -			batch += nr_zapped;
-> +		unstable = __kvm_mmu_prepare_zap_page(kvm, sp,
-> +				&kvm->arch.zapped_obsolete_pages, &nr_zapped);
-> +		batch += nr_zapped;
-> +
-> +		if (unstable)
->  			goto restart;
-> -		}
->  	}
->  
->  	/*
-> -- 
-> 2.34.0.rc2.393.gf8c9666880-goog
+> On Thu, Apr 07, 2022 at 05:50:39PM -0500, Eric W. Biederman wrote:
 
+>> Given that fundamentally TASK_WAKEKILL must be added in ptrace_stop and
+>> removed in ptrace_attach I don't see your proposed usage of jobctl helps
+>> anything fundamental.
+>> 
+>> I suspect somewhere there is a deep trade-off between complicating
+>> the scheduler to have a very special case for what is now
+>> TASK_RTLOCK_WAIT, and complicating the rest of the code with having
+>> TASK_RTLOCK_WAIT in __state and the values that should be in state
+>> stored somewhere else.
+>
+> The thing is; ptrace is a special case. I feel very strongly we should
+> not complicate the scheduler/wakeup path for something that 'never'
+> happens.
+
+I was going to comment that I could not understand how the saved_state
+mechanism under PREEMPT_RT works.  Then I realized that wake_up_process
+and wake_up_state call try_to_wake_up which calls ttwu_state_match which
+modifies saved_state.
+
+
+The options appear to be that either ptrace_freeze_traced modifies
+__state/state to remove TASK_KILLABLE.  Or that something clever happens
+in ptrace_freeze_traced that guarantees the task does not wake
+up.  Something living in kernel/sched/* like wait_task_inactive.
+
+
+I can imagine adding add a loop around freezable_schedule in
+ptrace_stop.  That does something like:
+
+	do {
+        	freezable_schedule();
+        } while (current->jobctl & JOBCTL_PTRACE_FREEZE);
+
+Unfortunately after a SIGKILL is delivered the process will never sleep
+unless there is a higher priority process to preempt it.  So I don't
+think that is a viable solution.
+
+
+What ptrace_freeze_traced and ptrace_unfreeze_traced fundamentally need
+is that the process to not do anything interesting, so that the tracer
+process can modify the process and it's task_struct.
+
+
+That need is the entire reason ptrace does questionable things with
+with __state.
+
+So if we can do something better perhaps with a rewritten freezer it
+would be a general code improvement.
+
+
+The ptrace code really does want TASK_KILLABLE semantics the entire time
+a task is being manipulated by the ptrace system call.   The code in
+ptrace_unfreeze_traced goes through some gymnastics to detect if a
+process was killed while traced (AKA to detect a missed SIGKILL)
+and to use wake_up_state to make the task runnable instead of putting
+it back in TASK_TRACED.
+
+So really all that is required is a way to ask the scheduler to just
+not schedule the process until the ptrace syscall completes and calls
+ptrace_unfreeze_traced.
+
+Eric

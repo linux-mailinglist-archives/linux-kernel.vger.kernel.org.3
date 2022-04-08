@@ -2,86 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D171D4F8EAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089664F8DE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiDHFL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 01:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S234679AbiDHFMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 01:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbiDHFLy (ORCPT
+        with ESMTP id S234662AbiDHFME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 01:11:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E3325C5B5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 22:09:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D448B8182C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:09:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C06AC385A1;
-        Fri,  8 Apr 2022 05:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649394589;
-        bh=wW/WiXjDRjhOQJ2j+/wUQxXY5ErhWXLkWm2Z+gRGVpo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RZ962WN+gcwZp4+6kLgbFVwSQUcskTC7E+dJhstGSXlDM6KOos100DfkNDYFDtCF8
-         M6hjRtMqQzWPcmgAcQ5JQPJt6kpyDVna2e3zMboGa+S5fjAj+gXXIEgUJqWdYe703u
-         BzwI3H7x9JHHvgr3+LHj/0I/PEa6pFYIQpjnULVM=
-Date:   Fri, 8 Apr 2022 07:09:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] staging: rtl8192u: replace ternary statement with
- if and assignment
-Message-ID: <Yk/Dmy7PYqn532M+@kroah.com>
-References: <cover.1649378587.git.remckee0@gmail.com>
- <36059ec66a2f3d58a8e339aa4f262772eabd3ef0.1649378587.git.remckee0@gmail.com>
- <alpine.DEB.2.22.394.2204080614400.2199@hadrien>
+        Fri, 8 Apr 2022 01:12:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E8825E31E;
+        Thu,  7 Apr 2022 22:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=f829VuQmLDhhtfCeHdn2ZYZ3JK
+        sPEhknnsSofLiiT2341kU3DBDhNcLEhr7L1UedhWGft7aTpZY40VHuXcAN2acLZETtinIJ6Q8pDXp
+        xq+ItMWT2amfZy55wlGouwDpkzM88GcaOZ91n40Hl9ZCLUQYDYGcMvry06l5ChEWvtldfdJDK9Ll6
+        f3hKkXFGuOPE7z3LYZYALShDuf/mx7stWXYiIB7eWz7PoXzttgsIhe0QP3rxib7H94DF9cIIASVh7
+        cYCFEvjtv0LM8WV9nO4+BimV1bf0WBj9LvXYXnjdBQwa9iL+74+nTQRVOx+aIsrJcmguvk2ao7DZD
+        foVkO3TA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncgsf-00F1T9-AO; Fri, 08 Apr 2022 05:09:57 +0000
+Date:   Thu, 7 Apr 2022 22:09:57 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
+        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>
+Subject: Re: [PATCH v3 1/2] block: add sync_blockdev_range()
+Message-ID: <Yk/DpSwR8kGKWJYl@infradead.org>
+References: <HK2PR04MB3891FCECADD7AECEEF5DD63081E99@HK2PR04MB3891.apcprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2204080614400.2199@hadrien>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <HK2PR04MB3891FCECADD7AECEEF5DD63081E99@HK2PR04MB3891.apcprd04.prod.outlook.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 06:15:14AM +0200, Julia Lawall wrote:
-> 
-> 
-> On Thu, 7 Apr 2022, Rebecca Mckeever wrote:
-> 
-> > Replace ternary statement with an if statement followed by an assignment
-> > to increase readability and make error handling more obvious.
-> > Found with minmax coccinelle script.
-> >
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >  drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
-> > index 78cc8f357bbc..9885917b9199 100644
-> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
-> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
-> > @@ -470,7 +470,9 @@ int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
-> >  		return 0;
-> >  	}
-> >  	len = crypt->ops->get_key(keybuf, SCM_KEY_LEN, NULL, crypt->priv);
-> > -	erq->length = (len >= 0 ? len : 0);
-> > +	if (len < 0)
-> > +		len = 0;
-> > +	erq->length = len;
-> 
-> Maybe you could use max here?
+Looks good:
 
-Dan said to not do this on based on the first submission :)
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
